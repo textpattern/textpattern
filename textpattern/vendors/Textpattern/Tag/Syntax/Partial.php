@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -34,16 +34,29 @@ class Partial
     /**
      * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
      *
+     * @param  array  $atts
+     * @param  string $thing
      * @return string
      */
 
-    public static function renderYield()
+    public static function renderYield($atts, $thing = null)
     {
         global $yield;
 
-        $inner = end($yield);
+        extract(lAtts(array(
+            'name'    => '',
+            'default' => null,
+        ), $atts));
 
-        return isset($inner) ? $inner : '';
+        if (isset($yield[$name])) {
+            $inner = end($yield[$name]);
+        }
+
+        if (!isset($inner)) {
+            $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
+        }
+
+        return $inner;
     }
 
     /**
@@ -54,16 +67,17 @@ class Partial
      * @return string
      */
 
-    public static function renderIfYield($atts, $thing)
+    public static function renderIfYield($atts, $thing = null)
     {
         global $yield;
 
         extract(lAtts(array(
+            'name'  => '',
             'value' => null,
         ), $atts));
 
-        $inner = end($yield);
+        $inner = isset($yield[$name]) ? end($yield[$name]) : null;
 
-        return parse(EvalElse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value)));
+        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
     }
 }

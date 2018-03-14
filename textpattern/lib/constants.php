@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -38,20 +38,6 @@ if (!defined('TXP_DEBUG')) {
 
     define('TXP_DEBUG', 0);
 }
-
-/**
- * Trace log constants.
- *
- * @since   4.6.0
- * @package Debug
- * @see     trace_log()
- */
-
-define('TEXTPATTERN_TRACE_START',   0x1);
-define('TEXTPATTERN_TRACE_DISPLAY', 0x2);
-define('TEXTPATTERN_TRACE_RESULT',  0x4);
-define('TEXTPATTERN_TRACE_QUIET',   0x8);
-
 
 /**
  * Comment spam status.
@@ -176,14 +162,6 @@ if (!defined('REGEXP_UTF8')) {
 
     define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
 }
-
-/**
- * NULL datetime for use in an SQL statement.
- *
- * @package DB
- */
-
-define('NULLDATETIME', '\'0000-00-00 00:00:00\'');
 
 /**
  * Permlink URL mode.
@@ -355,7 +333,7 @@ if (!defined('PASSWORD_LENGTH')) {
      * define('PASSWORD_LENGTH', 14);
      */
 
-    define('PASSWORD_LENGTH', 10);
+    define('PASSWORD_LENGTH', 16);
 }
 
 if (!defined('PASSWORD_COMPLEXITY')) {
@@ -396,10 +374,87 @@ if (!defined('PASSWORD_SYMBOLS')) {
      * @since   4.6.0
      * @see     generate_password()
      * @example
-     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
+     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */
 
-    define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
+    define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz_-!?.');
+}
+
+if (!defined('HASHING_ALGORITHM')) {
+    /**
+     * Algorithm to use for hashing passwords/reset requests.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @see     PHP's hash_algos() function
+     * @example
+     * define('HASHING_ALGORITHM', 'whirlpool');
+     */
+
+    define('HASHING_ALGORITHM', 'ripemd256');
+}
+
+if (!defined('SALT_LENGTH')) {
+    /**
+     * Length of salt/selector hashes.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('SALT_LENGTH', '80');
+     */
+
+    define('SALT_LENGTH', '64');
+}
+
+if (!defined('RESET_EXPIRY_MINUTES')) {
+    /**
+     * Length of time (in minutes) that a password reset request remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     * Values under 60 may fall foul of DST changeover times, but meh.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('RESET_EXPIRY_MINUTES', '120');
+     */
+
+    define('RESET_EXPIRY_MINUTES', '90');
+}
+
+if (!defined('RESET_RATE_LIMIT_MINUTES')) {
+    /**
+     * Minutes during which multiple user-submitted password reset requests are ignored.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('RESET_RATE_LIMIT_MINUTES', '15');
+     */
+
+    define('RESET_RATE_LIMIT_MINUTES', '5');
+}
+
+if (!defined('ACTIVATION_EXPIRY_HOURS')) {
+    /**
+     * Length of time (in hours) that a password activation (new account) link remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('ACTIVATION_EXPIRY_HOURS', '48');
+     */
+
+    define('ACTIVATION_EXPIRY_HOURS', '168');
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
@@ -432,19 +487,17 @@ if (!defined('X_FRAME_OPTIONS')) {
     define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
-if (!defined('X_UA_COMPATIBLE')) {
+if (!defined('CONTENT_SECURITY_POLICY')) {
     /**
-     * Sets X-UA-Compatible HTTP header's value.
+     * Sets Content-Security-Policy HTTP header's value.
      *
      * This constant can be overridden from the config.php.
      *
-     * @since   4.6.0
-     * @package HTML
-     * @example
-     * define('X_UA_COMPATIBLE', 'IE=IE9');
+     * @since   4.7.0
+     * @package CSRF
      */
 
-    define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
+    define('CONTENT_SECURITY_POLICY', "frame-ancestors 'self'");
 }
 
 if (!defined('AJAX_TIMEOUT')) {
@@ -613,7 +666,7 @@ define('INPUT_TINY', 2);
  * @package Form
  */
 
-define('TEXTAREA_HEIGHT_LARGE', 24);
+define('TEXTAREA_HEIGHT_LARGE', 32);
 
 /**
  * Textarea height regular.
@@ -796,6 +849,27 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 
 define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
+if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
+    /**
+     * The default/fallback language identifier.
+     *
+     * @since   4.7.0
+     * @package L10n
+     */
+
+    define('TEXTPATTERN_DEFAULT_LANG', 'en');
+}
+
+/**
+ * Language flags;
+ *
+ * @since    4.7.0
+ * @package  L10n
+ */
+define('TEXTPATTERN_LANG_ACTIVE', 0x1);
+define('TEXTPATTERN_LANG_INSTALLED', 0x2);
+define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
+
 /**
  * Strip empty values.
  *
@@ -804,9 +878,10 @@ define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
  * @see     join_atts(), do_list_unique()
  */
 
-define('TEXTPATTERN_STRIP_NONE',         0);
-define('TEXTPATTERN_STRIP_EMPTY',        0x1);
+define('TEXTPATTERN_STRIP_NONE', 0);
+define('TEXTPATTERN_STRIP_EMPTY', 0x1);
 define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
+define('TEXTPATTERN_STRIP_TXP', 0x4);
 
 /**
  * Sends an adaptive announcement.
@@ -852,3 +927,15 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
  */
 
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
+
+/**
+ * Define the default JSON option for json_encode()
+ *
+ * @since   4.7.0
+ */
+
+if (defined('JSON_UNESCAPED_UNICODE')) {
+    define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} else {
+    define('TEXTPATTERN_JSON', 0);
+}

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,14 +18,25 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $txpcfg, $thisversion, $dbversion, $txp_using_svn, $dbupdatetime;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode, $event;
+
+$dbupdates = array(
+    '1.0.0',
+    '4.0.2', '4.0.3', '4.0.4', '4.0.5', '4.0.6', '4.0.7', '4.0.8',
+    '4.2.0',
+    '4.3.0',
+    '4.5.0', '4.5.7',
+    '4.6.0',
+    '4.7.0',
+    '4.8.0',
+);
 
 function newest_file()
 {
@@ -43,7 +54,16 @@ function newest_file()
     return $newest;
 }
 
-if ($txp_using_svn && (newest_file() <= $dbupdatetime)) {
+if (($dbversion == '') ||
+    (strpos($dbversion, 'g1') === 0) ||
+    (strpos($dbversion, '1.0rc') === 0)) {
+    $dbversion = '0.9.9';
+}
+
+$dbversion_target = $thisversion;
+
+if ($dbversion == $dbversion_target ||
+    ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
 }
 
@@ -52,119 +72,78 @@ assert_system_requirements();
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-// Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-// On 4.1 or greater use utf8-tables, if that is configures in config.php.
-$mysqlversion = mysqli_get_server_info($DB->link);
-$tabletype = (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $mysqlversion))
-    ? " ENGINE = MyISAM "
-    : " TYPE = MyISAM ";
-
-if (isset($txpcfg['dbcharset']) && (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.[1-9]#', $mysqlversion))) {
-    $tabletype .= " CHARACTER SET = ".$txpcfg['dbcharset']." ";
-}
-
 // Wipe out the last update check setting so the next visit to Diagnostics
 // forces an update check, which resets the message. Without this, people who
 // upgrade in future may still see a "new version available" message for some
 // time after upgrading.
 safe_delete('txp_prefs', "name = 'last_update_check'");
 
-// Update to 4.0.
-if (($dbversion == '') ||
-    (strpos($dbversion, 'g1') === 0) ||
-    (strpos($dbversion, '1.0rc') === 0)) {
-    if ((include txpath.DS.'update'.DS.'_to_1.0.0.php') !== false) {
-        $dbversion = '4.0';
+set_error_handler("updateErrorHandler");
+
+$updates = array_fill_keys($dbupdates, true);
+
+if (!isset($updates[$dbversion_target])) {
+    $updates[$dbversion_target] = false;
+}
+
+try {
+    foreach ($updates as $dbupdate => $update) {
+        if (version_compare($dbversion, $dbupdate, '<')) {
+            if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
+                trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
+            }
+
+            if (!($txp_is_dev && $dbversion_target == $dbupdate)) {
+                $dbversion = $dbupdate;
+            }
+        }
+    }
+
+    // Keep track of updates for SVN users.
+    safe_delete('txp_prefs', "name = 'dbupdatetime'");
+    safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+} catch (Exception $e) {
+    // Nothing to do here, the goal was just to abort the update scripts
+    // Error message already communicated via updateErrorHandler
+}
+
+// Update any out-of-date installed languages.
+// Have to refresh the cache first by reloading everything.
+$txpLang = Txp::get('\Textpattern\L10n\Lang');
+$installed_langs = $txpLang->available(
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE,
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_AVAILABLE
+);
+
+foreach ($installed_langs as $lang_code => $info) {
+    // Reinstall all languages and update the DB stamps in the cache,
+    // just in case we're on the Languages panel so it doesn't report
+    // the languages as being stale.
+    $txpLang->installFile($lang_code);
+    $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
+
+    if (get_pref('language_ui') === $lang_code) {
+        load_lang($lang_code, $event);
     }
 }
 
-if (version_compare($dbversion, '4.0.2', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.2.php') !== false) {
-        $dbversion = '4.0.2';
-    }
-}
+restore_error_handler();
 
-if (version_compare($dbversion, '4.0.3', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.3.php') !== false) {
-        $dbversion = '4.0.3';
-    }
-}
+// Update version if not dev.
+if (!$txp_is_dev) {
+    remove_pref('version', 'publish');
+    create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
 
-if (version_compare($dbversion, '4.0.4', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.4.php') !== false) {
-        $dbversion = '4.0.4';
-    }
-}
-
-if (version_compare($dbversion, '4.0.5', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.5.php') !== false) {
-        $dbversion = '4.0.5';
-    }
-}
-
-if (version_compare($dbversion, '4.0.6', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.6.php') !== false) {
-        $dbversion = '4.0.6';
-    }
-}
-
-if (version_compare($dbversion, '4.0.7', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.7.php') !== false) {
-        $dbversion = '4.0.7';
-    }
-}
-
-if (version_compare($dbversion, '4.0.8', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.0.8.php') !== false) {
-        $dbversion = '4.0.8';
-    }
-}
-
-if (version_compare($dbversion, '4.2.0', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.2.0.php') !== false) {
-        $dbversion = '4.2.0';
-    }
-}
-
-if (version_compare($dbversion, '4.3.0', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.3.0.php') !== false) {
-        $dbversion = '4.3.0';
-    }
-}
-
-if (version_compare($dbversion, '4.4.0', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.4.0.php') !== false) {
-        $dbversion = '4.4.0';
-    }
-}
-
-if (version_compare($dbversion, '4.4.1', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.4.1.php') !== false) {
-        $dbversion = '4.4.1';
-    }
-}
-
-if (version_compare($dbversion, '4.5.4', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.5.0.php') !== false) {
-        $dbversion = '4.5.4';
-    }
-}
-
-if (version_compare($dbversion, '4.5.7', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.5.7.php') !== false) {
-        $dbversion = '4.5.7';
-    }
-}
-
-if (version_compare($dbversion, '4.6.0', '<')) {
-    if ((include txpath.DS.'update'.DS.'_to_4.6.0.php') !== false) {
-;#        $dbversion = '4.6.0';
+    if (isset($txpcfg['multisite_root_path'])) {
+        Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
+    } else {
+        Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
     }
 }
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
-// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)
+// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.io/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
 $files = glob(txpath.'/update/custom/post-update*.php');
 
@@ -174,19 +153,22 @@ if (is_array($files)) {
     }
 }
 
-// Keep track of updates for SVN users.
-safe_delete('txp_prefs', "name = 'dbupdatetime'");
-safe_insert('txp_prefs', "prefs_id = 1, name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+$js = <<<EOS
+    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
+EOS;
 
-// Update version.
-safe_delete('txp_prefs', "name = 'version'");
-safe_insert('txp_prefs', "prefs_id = 1, name = 'version', val = '$dbversion', type = '2'");
+if ($app_mode == 'async') {
+    send_script_response($js);
+} else {
+    script_js($js, false);
+}
 
-// Updated, baby. So let's get the fresh prefs and send them to languages.
+// Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
-$event = 'lang';
-$step = 'list_languages';
 
 $prefs = get_prefs();
-
 extract($prefs);
+/*
+$event = 'diag';
+$step = 'update';
+*/

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -28,7 +28,7 @@ if (!defined('TXP_UPDATE')) {
 safe_create_index('txp_plugin', 'status, type', 'status_type_idx');
 
 // Preserve old tag behaviour during upgrades.
-safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:if_section>', '<txp:if_section name=\"\">')", '1 = 1');
-safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:if_category name=\"\">', '<txp:if_category>')", '1 = 1');
-safe_update('txp_form', "Form = REPLACE(Form, '<txp:if_section>', '<txp:if_section name=\"\">')", '1 = 1');
-safe_update('txp_form', "Form = REPLACE(Form, '<txp:if_category name=\"\">', '<txp:if_category>')", '1 = 1');
+safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:if_section>', '<txp:if_section name=\"\">')", "1 = 1");
+safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:if_category name=\"\">', '<txp:if_category>')", "1 = 1");
+safe_update('txp_form', "Form = REPLACE(Form, '<txp:if_section>', '<txp:if_section name=\"\">')", "1 = 1");
+safe_update('txp_form', "Form = REPLACE(Form, '<txp:if_category name=\"\">', '<txp:if_category>')", "1 = 1");

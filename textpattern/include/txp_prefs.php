@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -41,11 +40,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "":
-        case "prefs_list":
+        case '':
+        case 'prefs_list':
             prefs_list();
             break;
-        case "prefs_save":
+        case 'prefs_save':
             prefs_save();
             break;
     }
@@ -65,7 +64,7 @@ function prefs_save()
     set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
     $sql = array();
-    $sql[] = "prefs_id = 1 AND event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
+    $sql[] = "event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -87,7 +86,7 @@ function prefs_save()
     }
 
     if (!empty($post['file_max_upload_size'])) {
-        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size'], false);
     }
 
     if (isset($post['auto_dst'])) {
@@ -99,14 +98,17 @@ function prefs_save()
     }
 
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
-    if (isset($post['timezone_key'])) {
+    if (!empty($post['timezone_key'])) {
         $key = $post['timezone_key'];
         $tzd = Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
 
         if (isset($tzd[$key])) {
             $prefs['timezone_key'] = $timezone_key = $key;
-            $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+
+            if ($auto_dst) {
+                $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
+                $post['is_dst'] = $prefs['is_dst'] = $is_dst = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+            }
         }
     }
 
@@ -121,6 +123,10 @@ function prefs_save()
             continue;
         }
 
+        if (is_array($post[$name])) {
+            $post[$name] = implode(',', array_diff($post[$name], array('')));
+        }
+
         if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val) {
             safe_truncate('txp_log');
         }
@@ -133,6 +139,7 @@ function prefs_save()
     }
 
     update_lastmod('preferences_saved');
+    $prefs = get_prefs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -158,17 +165,14 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="prefs_container" class="txp-container">'.
-        n.'<form method="post" class="prefs-form" action="index.php">'.
-        n.'<div class="txp-layout-textbox">';
+    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
 
     $sql = array();
-    $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
+    $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -183,35 +187,62 @@ function prefs_list($message = '')
         join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
     );
 
-    $last_event = null;
+    $last_event = $last_sub_event = null;
     $out = array();
+    $build = array();
+    $groupOut = array();
 
     if (numRows($rs)) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+
         while ($a = nextRow($rs)) {
+            $eventParts = explode('.', $a['event']);
+            $mainEvent = $eventParts[0];
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
+
             if (!has_privs('prefs.'.$a['event'])) {
                 continue;
             }
 
-            if ($a['event'] !== $last_event) {
+            if ($mainEvent !== $last_event) {
                 if ($last_event !== null) {
-                    echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+                    $build[] = tag(
+                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        join(n, $out), 'section', array(
+                            'class'           => 'txp-tabs-vertical-group',
+                            'id'              => 'prefs_group_'.$last_event,
+                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                        )
+                    );
+
+                    $groupOut[] = n.tag(href(
+                            gTxt($last_event),
+                            '#prefs_group_'.$last_event,
+                            array(
+                                'data-txp-pane'  => $last_event,
+                                'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
+                            )),
+                        'li');
                 }
 
-                $last_event = $a['event'];
+                $last_event = $mainEvent;
                 $out = array();
             }
 
-            $label = '';
-
-            if (!in_array($a['html'], array('yesnoradio', 'is_dst'))) {
-                $label = $a['name'];
+            switch ($a['html']) {
+                case 'yesnoradio':
+                case 'is_dst':
+                    $label = '';
+                    break;
+                case 'gmtoffset_select':
+                    $label = 'tz_timezone';
+                    break;
+                default:
+                    $label = $a['name'];
+                    break;
             }
 
-            // TODO: remove exception when custom fields move to meta store.
-            $help = '';
-            if (strpos($a['name'], 'custom_') === false) {
-                $help = $a['name'];
-            }
+            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
             if ($a['html'] == 'text_input') {
                 $size = INPUT_REGULAR;
@@ -219,33 +250,76 @@ function prefs_list($message = '')
                 $size = '';
             }
 
+            if ($subEvent !== '' && $last_sub_event !== $subEvent) {
+                $out[] = hed(gTxt($subEvent), 3);
+                $last_sub_event = $subEvent;
+            }
+
             $out[] = inputLabel(
                 $a['name'],
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
-                $help,
-                array('id' => 'prefs-'.$a['name'])
+                array($help, 'instructions_'.$a['name']),
+                array(
+                    'class' => 'txp-form-field',
+                    'id'    => 'prefs-'.$a['name'],
+                )
             );
         }
     }
 
     if ($last_event === null) {
-        echo graf(gTxt('no_preferences'));
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_preferences'),
+            array('class' => 'alert-block information')
+        );
     } else {
-        echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = tag(
+            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            join(n, $out), 'section', array(
+                'class'           => 'txp-tabs-vertical-group',
+                'id'              => 'prefs_group_'.$last_event,
+                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+            )
+        );
+
+        $groupOut[] = n.tag(href(
+                gTxt($last_event),
+                '#prefs_group_'.$last_event,
+                array(
+                    'data-txp-pane'  => $last_event,
+                    'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
+                )),
+            'li').n;
+
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading txp-heading-tight')),
+                'div', array('class' => 'txp-layout-1col')
+            ).
+            n.tag_start('div', array('class' => 'txp-layout-4col-alt')).
+            wrapGroup(
+                'all_preferences',
+                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
+                'all_preferences'
+            );
+
+        if ($last_event !== null) {
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+        }
+
+        echo n.tag_end('div'). // End of .txp-layout-4col-alt.
+            n.tag_start('div', array('class' => 'txp-layout-4col-3span')).
+            join(n, $build).
+            n.tag_end('div'). // End of .txp-layout-4col-3span.
+            sInput('prefs_save').
+            eInput('prefs').
+            tInput();
     }
 
-    echo n.'</div>'.
-        sInput('prefs_save').
-        eInput('prefs').
-        hInput('prefs_id', '1').
-        tInput();
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
-
-    echo n.'</form>'.n.'</div>';
+    echo n.'</div>'. // End of .txp-layout.
+        n.'</form>';
 }
 
 /**
@@ -263,7 +337,7 @@ function pref_func($func, $name, $val, $size = '')
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
     } else {
-        $string = new \Textpattern\Type\String($func);
+        $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
         if (!is_callable($func)) {
@@ -335,8 +409,7 @@ function gmtoffset_select($name, $val)
         $key = (string) Txp::get('\Textpattern\Date\Timezone')->getTimezone();
     }
 
-    $tz = new timezone;
-    $ui = $tz->selectInput('timezone_key', $key, false, '', 'gmtoffset');
+    $ui = timezoneSelectInput('timezone_key', $key, false, '', 'gmtoffset');
 
     return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 }
@@ -354,27 +427,41 @@ function gmtoffset_select($name, $val)
 
 function is_dst($name, $val)
 {
+    global $timezone_key, $auto_dst;
+
+    if ($auto_dst) {
+        $val = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
+    }
+
     $ui = yesnoRadio($name, $val).
     script_js(<<<EOS
         $(document).ready(function ()
         {
-            var radio = $("#prefs-is_dst input");
-            if (radio) {
-                if ($("#auto_dst-1").prop("checked")) {
-                    radio.prop("disabled", "disabled");
+            var radio = $("#prefs-is_dst");
+            var radioInput = radio.find('input');
+            var radioLabel = radio.find('.txp-form-field-label');
+            var dstOn = $("#auto_dst-1");
+            var dstOff = $("#auto_dst-0");
+
+            if (radio.length) {
+                if (dstOn.prop("checked")) {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 }
 
-                $("#auto_dst-0").click(function () {
-                    radio.removeProp("disabled");
+                dstOff.click(function () {
+                    radioInput.prop("disabled", null);
+                    radioLabel.removeClass('disabled');
                 });
 
-                $("#auto_dst-1").click(function () {
-                    radio.prop("disabled", "disabled");
+                dstOn.click(function () {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 });
             }
         });
 EOS
-    );
+    , false);
 
     return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 }
@@ -415,7 +502,7 @@ function permlinkmodes($name, $val)
         'year_month_day_title' => gTxt('year_month_day_title'),
         'section_title'        => gTxt('section_title'),
         'title_only'           => gTxt('title_only'),
-        // 'category_subcategory' => gTxt('category_subcategory')
+        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -533,6 +620,24 @@ function dateformats($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of content permlink options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlink_format($name, $val)
+{
+    $vals = array(
+        '0' => gTxt('permlink_intercapped'),
+        '1' => gTxt('permlink_hyphenated'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
@@ -578,7 +683,7 @@ function default_event($name, $val)
         }
     }
 
-    return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
+    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
         join('', $out).
         n.'</select>';
 }
@@ -632,16 +737,7 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = \Textpattern\Admin\Theme::names();
-    foreach ($themes as $t) {
-        $theme = \Textpattern\Admin\Theme::factory($t);
-        if ($theme) {
-            $m = $theme->manifest();
-            $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
-            $vals[$t] = $title;
-            unset($theme);
-        }
-    }
+    $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
     return pluggable_ui('prefs_ui', 'theme_name',
@@ -660,8 +756,8 @@ function themename($name, $val)
 function doctypes($name, $val)
 {
     $vals = array(
-        'xhtml' => gTxt('XHTML'),
-        'html5' => gTxt('HTML5'),
+        'xhtml' => 'XHTML',
+        'html5' => 'HTML5',
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -682,43 +778,19 @@ function defaultPublishStatus($name, $val)
 }
 
 /**
- * Gets the maximum allowed file upload size.
+ * Renders a HTML &lt;select&gt; list of module_pophelp options.
  *
- * Computes the maximum acceptable file size to the application if the
- * user-selected value is larger than the maximum allowed by the current PHP
- * configuration.
- *
- * @param  int $user_max Desired upload size supplied by the administrator
- * @return int Actual value; the lower of user-supplied value or system-defined value
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
  */
 
-function real_max_upload_size($user_max)
+function module_pophelp($name, $val)
 {
-    // The minimum of the candidates, is the real max. possible size
-    $candidates = array($user_max,
-                        ini_get('post_max_size'),
-                        ini_get('upload_max_filesize'), );
-    $real_max = null;
-    foreach ($candidates as $item) {
-        $val = trim($item);
-        $modifier = strtolower(substr($val, -1));
-        switch ($modifier) {
-            // The 'G' modifier is available since PHP 5.1.0
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
-        }
-        if ($val > 1) {
-            if (is_null($real_max)) {
-                $real_max = $val;
-            } elseif ($val < $real_max) {
-                $real_max = $val;
-            }
-        }
-    }
+    $vals = array(
+        '0' => gTxt('none'),
+        '1' => gTxt('pophelp'),
+    );
 
-    return $real_max;
+    return selectInput($name, $vals, $val, '', '', $name);
 }

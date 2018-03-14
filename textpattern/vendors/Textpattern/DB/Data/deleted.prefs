@@ -1,0 +1,21 @@
+{
+    "global": [
+        "textile_links",
+        "edit_raw_css_by_default",
+        "allow_raw_php_scripting",
+        "article_list_pageby",
+        "author_list_pageby",
+        "comment_list_pageby",
+        "file_list_pageby",
+        "image_list_pageby",
+        "link_list_pageby",
+        "log_list_pageby",
+        "ping_textpattern_com",
+        "ping_weblogsdotcom",
+        "lastmod_keepalive",
+        "show_article_category_count",
+        "prefs_id",
+        "skin_base_path"
+    ],
+    "private": []
+}

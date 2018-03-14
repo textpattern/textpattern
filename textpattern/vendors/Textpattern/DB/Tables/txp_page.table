@@ -1,0 +1,6 @@
+name      VARCHAR(255) NOT NULL DEFAULT '',
+user_html TEXT         NOT NULL,
+skin      VARCHAR(63)  NOT NULL DEFAULT 'default',
+lastmod   DATETIME         NULL DEFAULT NULL,
+
+UNIQUE name_skin (name(63), skin(63))

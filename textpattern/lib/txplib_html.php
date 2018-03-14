@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -83,10 +83,11 @@ function end_page()
 
     if ($app_mode != 'async' && $event != 'tag') {
         callback_event('admin_side', 'main_content_end');
-        echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
+        echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-        echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
@@ -108,7 +109,16 @@ function end_page()
 
 function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 {
-    return column_multi_head(array(array(
+    if (is_array($value)) {
+        extract($value);
+    }
+
+    $options = (isset($options) ? (array) $options : array()) + array(
+        'class'    => $class,
+        'data-col' => $sort,
+    );
+
+    $head_items = array(
         'value'   => $value,
         'sort'    => $sort,
         'event'   => $event,
@@ -117,7 +127,9 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         'dir'     => $dir,
         'crit'    => $crit,
         'method'  => $method,
-    )), $class);
+    );
+
+    return column_multi_head(array($head_items), $options);
 }
 
 /**
@@ -166,10 +178,9 @@ function column_multi_head($head_items, $class = '')
         }
     }
 
-    return hCell($o, '', array(
-        'scope' => 'col',
-        'class' => $class,
-    ));
+    $extra_atts = is_array($class) ? $class : array('class' => $class);
+
+    return hCell($o, '', $extra_atts + array('scope' => 'col'));
 }
 
 /**
@@ -224,10 +235,11 @@ function sLink($event, $step, $linktext, $class = '')
  * @param  string $thing2   URL parameter key #2
  * @param  string $val2     URL parameter value #2
  * @param  string $title    Anchor title
+ * @param  string $class    HTML class attribute
  * @return string HTML
  */
 
-function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
+function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = '', $class = '')
 {
     if ($title) {
         $title = gTxt($title);
@@ -246,6 +258,7 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
+        'class' => $class,
         'title' => $title,
     ));
 }
@@ -260,17 +273,18 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
  * @param  string $step  Step
  * @param  string $thing URL parameter key
  * @param  string $value URL parameter value
+ * @param  string $class HTML class attribute
  * @return string HTML
  */
 
-function wLink($event, $step = '', $thing = '', $value = '')
+function wLink($event, $step = '', $thing = '', $value = '', $class = '')
 {
     return href(sp.'!'.sp, array(
         'event'      => $event,
         'step'       => $step,
         $thing       => $value,
         '_txp_token' => form_token(),
-    ), array('class' => 'dlink'));
+    ), array('class' => $class));
 }
 
 /**
@@ -305,7 +319,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         }
 
         if ($remember) {
-            return href('×', array(
+            return href(gTxt('delete'), array(
                 'event'         => $event,
                 'step'          => $step,
                 $thing          => $value,
@@ -317,20 +331,20 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
                 'crit'          => $crit,
                 'search_method' => $search_method,
             ), array(
-                'class'       => 'dlink destroy',
+                'class'       => 'destroy ui-icon ui-icon-close',
                 'title'       => gTxt('delete'),
                 'data-verify' => $verify,
             ));
         }
 
-        return href('×', array(
-            'event'         => $event,
-            'step'          => $step,
-            $thing          => $value,
-            $thing2         => $thing2val,
-            '_txp_token'    => form_token(),
+        return href(gTxt('delete'), array(
+            'event'      => $event,
+            'step'       => $step,
+            $thing       => $value,
+            $thing2      => $thing2val,
+            '_txp_token' => form_token(),
         ), array(
-            'class'       => 'dlink destroy',
+            'class'       => 'destroy ui-icon ui-icon-close',
             'title'       => gTxt('delete'),
             'data-verify' => $verify,
         ));
@@ -338,16 +352,21 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
 
     return join('', array(
         n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
-        fInput('submit', '', '×', 'destroy', gTxt('delete')),
+        tag(
+            span(gTxt('delete'), array('class' => 'ui-icon ui-icon-close')),
+            'button',
+            array(
+                'class'      => 'destroy',
+                'type'       => 'submit',
+                'title'      => gTxt('delete'),
+                'aria-label' => gTxt('delete'),
+            )
+        ),
         eInput($event).
         sInput($step),
         hInput($thing, $value),
         ($thing2) ? hInput($thing2, $thing2val) : '',
-        ($remember) ? hInput('page', $page) : '',
-        ($remember) ? hInput('sort', $sort) : '',
-        ($remember) ? hInput('dir', $dir) : '',
-        ($remember) ? hInput('crit', $crit) : '',
-        ($remember) ? hInput('search_method', $search_method) : '',
+        ($remember) ? hInput(compact('page', 'sort', 'dir', 'crit', 'search_method')) : '',
         tInput(),
         n.'</form>',
     ));
@@ -421,14 +440,25 @@ function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
 
 function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 {
-    return href($label, array(
-        'event'         => $event,
-        'step'          => $step,
-        'page'          => (int) $page,
-        'dir'           => $dir,
-        'crit'          => $crit,
-        'search_method' => $search_method,
-    ), array('class' => 'navlink', 'rel' => $type));
+    $theClass = ($type === 'next') ? 'ui-icon-arrowthick-1-e' : 'ui-icon-arrowthick-1-w';
+
+    return href(
+        span(
+            $label,
+            array('class' => 'ui-icon '.$theClass)
+        ), array(
+            'event'         => $event,
+            'step'          => $step,
+            'page'          => (int) $page,
+            'dir'           => $dir,
+            'crit'          => $crit,
+            'search_method' => $search_method,
+        ), array(
+            'rel'        => $type,
+            'title'      => $label,
+            'aria-label' => $label,
+        )
+    );
 }
 
 /**
@@ -452,7 +482,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 {
     $out = array();
 
-    if ($crit != '' && $total > 1) {
+    if ($numPages > 1 && $crit && $crit != '1') {
         $out[] = announce(
             gTxt('showing_search_results', array(
                 '{from}'  => (($page - 1) * $limit) + 1,
@@ -463,95 +493,72 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         );
     }
 
-    if ($numPages > 1) {
-        $nav = array();
-        $list--;
-        $page = max(min($page, $numPages), 1);
-        $start = max(1, min($numPages - $list, $page - floor($list/2)));
-        $end = min($numPages, $start + $list);
+    $nav = array();
+    $list--;
+    $page = max(min($page, $numPages), 1);
 
-        $parameters = array(
-            'event'         => $event,
-            'step'          => $step,
-            'dir'           => $dir,
-            'crit'          => $crit,
-            'search_method' => $search_method,
+    $parameters = array(
+        'event'         => $event,
+        'step'          => $step,
+        'dir'           => $dir,
+        'crit'          => $crit,
+        'search_method' => $search_method,
+    );
+
+    // Previous page.
+    if ($page > 1) {
+        $nav[] = n.PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
+    } else {
+        $nav[] = n.span(
+            span(gTxt('prev'), array('class' => 'ui-icon ui-icon-arrowthick-1-w')),
+            array(
+                'class'         => 'disabled',
+                'aria-disabled' => 'true',
+                'aria-label'    => gTxt('prev'),
+            )
         );
-
-        // Previous page.
-
-        if ($page > 1) {
-            $nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
-        } else {
-            $nav[] = span(gTxt('prev'), array(
-                'class'         => 'navlink-disabled',
-                'aria-disabled' => 'true',
-            ));
-        }
-
-        // Jump to the first page.
-
-        if ($start > 1) {
-            $nav[] = href(1, $parameters + array('page' => 1), array(
-                'class' => 'navlink',
-            ));
-        }
-
-        // Jump to mid.
-
-        if ($start > 2) {
-            $between = ceil($start/2);
-            $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
-                'class' => 'navlink',
-                'title' => $between,
-            ));
-        }
-
-        // Page links.
-
-        for ($i = $start; $i <= $end; $i++) {
-            if ($i == $page) {
-                $class = 'navlink-active';
-            } else {
-                $class = 'navlink';
-            }
-
-            $nav[] = href($i, $parameters + array('page' => $i), array(
-                'class' => $class,
-            ));
-        }
-
-        // Jump to mid.
-
-        if ($end < $numPages - 1) {
-            $between = $end + floor(($numPages-$end) / 2);
-            $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
-                'class' => 'navlink',
-                'title' => $between,
-            ));
-        }
-
-        // Jump to the last page.
-
-        if ($end < $numPages) {
-            $nav[] = href($numPages, $parameters + array('page' => $numPages), array(
-                'class' => 'navlink',
-            ));
-        }
-
-        // Next page.
-
-        if ($page < $numPages) {
-            $nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
-        } else {
-            $nav[] = span(gTxt('next'), array(
-                'class'         => 'navlink-disabled',
-                'aria-disabled' => 'true',
-            ));
-        }
-
-        $out[] = n.tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
     }
+
+
+    $nav[] = form(
+        n.tag(gTxt('page'), 'label', array('for' => 'current-page')).
+        n.tag_void('input', array(
+            'class'     => 'current-page',
+            'id'        => 'current-page',
+            'name'      => 'page',
+            'type'      => 'text',
+            'size'      => INPUT_XSMALL,
+            'inputmode' => 'numeric',
+            'pattern'   => '[0-9]+',
+            'value'     => $page,
+        )).
+        n.gTxt('of').
+        n.span($numPages, array('class' => 'total-pages')).
+        eInput($event).
+        hInput(compact('sort', 'dir', 'crit', 'search_method')),
+        '',
+        '',
+        'get'
+    );
+
+    // Next page.
+    if ($page < $numPages) {
+        $nav[] = n.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
+    } else {
+        $nav[] = n.span(
+            span(gTxt('next'), array('class' => 'ui-icon ui-icon-arrowthick-1-e')),
+            array(
+                'class'         => 'disabled',
+                'aria-disabled' => 'true',
+                'aria-label'    => gTxt('next'),
+            )
+        );
+    }
+
+    $out[] = n.tag(join($nav).n, 'nav', array(
+        'class' => 'prev-next',
+        'style' => ($numPages > 1 ? false : 'display:none'),
+    ));
 
     return join('', $out);
 }
@@ -565,25 +572,23 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
  * @param  string $label     L10n label name
  * @param  string $pane      Pane reference for maintaining toggle state in prefs. Prefixed with 'pane_', suffixed with '_visible'
  * @param  string $class     CSS class name to apply to wrapper
- * @param  string $role      ARIA role name
  * @param  string $help      Help text item
  * @return string HTML
  * @since  4.6.0
  */
 
-function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
+function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '', $visible = null)
 {
     global $event;
     $label = $label ? gTxt($label) : null;
 
     if ($anchor_id && $pane) {
-        $visible = get_pref('pane_'.$pane.'_visible');
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'role'  => 'group',
-            'id'    => $anchor_id,
             'class' => 'toggle',
-            'style' => $visible ? 'display: block' : 'display: none',
+            'id'    => $anchor_id,
+            'role'  => 'group',
+            'style' => $visible ? '' : 'display:none',
         );
 
         $label = href($label, '#'.$anchor_id, array(
@@ -595,24 +600,21 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
         $help = '';
     } else {
         $heading_class = '';
-        $display_state = array(
-            'role' => $role == 'region' ? 'group' : '',
-        );
+        $display_state = array('role' => 'group');
     }
 
     if ($content) {
         $content =
             hed($label.popHelp($help), 3, array(
-                'id'             => $id.'-label',
-                'class'          => $heading_class,
+                'class' => $heading_class,
+                'id'    => $id.'-label',
             )).
             n.tag($content.n, 'div', $display_state).n;
     }
 
     return n.tag($content, 'section', array(
-        'role'            => $role,
-        'id'              => $id,
         'class'           => trim('txp-details '.$class),
+        'id'              => $id,
         'aria-labelledby' => $content ? $id.'-label' : '',
     ));
 }
@@ -632,20 +634,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
 
 function wrapGroup($id, $content, $label, $class = '', $help = '')
 {
-    return wrapRegion($id, $content, '', $label, '', $class, 'region', $help);
-}
-
-/**
- * Renders start of a layout &lt;table&gt; element.
- *
- * @return     string HTML
- * @deprecated in 4.4.0
- */
-
-function startSkelTable()
-{
-    return
-    '<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
+    return wrapRegion($id, $content, '', $label, '', $class, $help);
 }
 
 /**
@@ -667,12 +656,12 @@ function startSkelTable()
 function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
 {
     $atts = join_atts(array(
-        'id'          => $id,
-        'align'       => $align,
         'class'       => $class,
+        'id'          => $id,
         'cellpadding' => (int) $p,
         'width'       => (int) $w,
-    ));
+        'align'       => $align,
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     return n.'<table'.$atts.'>';
 }
@@ -720,13 +709,20 @@ function stackRows()
  * @return string HTML
  */
 
-function td($content = '', $width = 0, $class = '', $id = '')
+function td($content = '', $width = null, $class = '', $id = '')
 {
-    return tda($content, array(
-        'width' => (int) $width,
+    $opts = array(
         'class' => $class,
         'id'    => $id,
-    ));
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    } elseif (is_array($width)) {
+        $opts = array_merge($opts, $width);
+    }
+
+    return tda($content, $opts);
 }
 
 /**
@@ -785,13 +781,18 @@ function tr($content, $atts = '')
  * @return string HTML
  */
 
-function tdcs($content, $span, $width = 0, $class = '')
+function tdcs($content, $span, $width = null, $class = '')
 {
-    return tda($content, array(
-        'colspan' => (int) $span,
-        'width'   => (int) $width,
+    $opts = array(
         'class'   => $class,
-    ));
+        'colspan' => (int) $span,
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    }
+
+    return tda($content, $opts);
 }
 
 /**
@@ -804,13 +805,18 @@ function tdcs($content, $span, $width = 0, $class = '')
  * @return string HTML
  */
 
-function tdrs($content, $span, $width = 0, $class = '')
+function tdrs($content, $span, $width = null, $class = '')
 {
-    return tda($content, array(
-        'rowspan' => (int) $span,
-        'width'   => (int) $width,
+    $opts = array(
         'class'   => $class,
-    ));
+        'rowspan' => (int) $span,
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    }
+
+    return tda($content, $opts);
 }
 
 /**
@@ -860,22 +866,23 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  *
  * @param  string       $name        Input name
  * @param  string       $input       Complete input control widget
- * @param  string       $label       Label
- * @param  string       $help        Help text item
- * @param  string|array $atts        Class name (for b/c) | attribute pairs to assign to graf()
- * @param  string       $wraptag_val Tag to wrap the value in, or empty string to omit
+ * @param  string|array $label       Label text | array (label text, HTML block to append to label)
+ * @param  string|array $help        Help text item | array(help text item, inline help text)
+ * @param  string|array $atts        Class name | attribute pairs to assign to container div
+ * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  * @example
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wraptag_val = 'span')
+function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'))
 {
     global $event;
 
     $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
-    $fallback_class = 'edit-'.str_replace('_', '-', $name);
+    $fallback_class = 'txp-form-field edit-'.str_replace('_', '-', $name);
+    $tools = '';
 
     if ($atts && is_string($atts)) {
         $atts = array('class' => $atts);
@@ -885,19 +892,54 @@ function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wr
         $atts['class'] = $fallback_class;
     }
 
-    if ($label) {
-        $label = tag(gTxt($label), 'label', array('for' => $name));
+    if (!is_array($help)) {
+        $help = array($help);
+    }
+
+    if (is_array($label)) {
+        if (isset($label[1])) {
+            $tools = (string) $label[1];
+        }
+
+        $label = (string) $label[0];
+    }
+
+    if (empty($help)) {
+        $help = array(
+            0 => '',
+            1 => '',
+        );
+    }
+
+    $inlineHelp = (isset($help[1])) ? $help[1] : '';
+
+    if ($label !== '') {
+        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
-        $label = gTxt($name);
+        $labelContent = gTxt($name).popHelp($help[0]).$tools;
     }
 
-    if ($wraptag_val) {
-        $input = tag($input, $wraptag_val, array('class' => 'txp-value'));
+    if (!is_array($wraptag_val)) {
+        $wraptag_val = array($wraptag_val, $wraptag_val);
     }
 
-    $out = graf(
-        tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
-        n.$input, $atts);
+    if ($wraptag_val[0]) {
+        $input = n.tag($input, $wraptag_val[0], array('class' => 'txp-form-field-value'));
+    }
+
+    if (isset($wraptag_val[1]) && $wraptag_val[1]) {
+        $labeltag = n.tag($labelContent, $wraptag_val[1], array('class' => 'txp-form-field-label'));
+    } else {
+        $labeltag = $labelContent;
+    }
+
+    $out = n.tag(
+        $labeltag.
+        fieldHelp($inlineHelp).
+        $input.n,
+        'div',
+        $atts
+    );
 
     return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 }
@@ -915,7 +957,7 @@ function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wr
 
 function tag($content, $tag, $atts = '')
 {
-    return ('' !== $content) ? '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>' : '';
+    return empty($tag) || $content === '' ? $content : '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>';
 }
 
 /**
@@ -993,7 +1035,7 @@ function graf($item, $atts = '')
 
 function hed($item, $level, $atts = '')
 {
-    return n.tag($item, 'h'.$level, $atts);
+    return n.tag($item, 'h'.$level, $atts).n;
 }
 
 /**
@@ -1076,7 +1118,7 @@ function htmlPre($item, $atts = '')
 
 function comment($item)
 {
-    return '<!-- '.str_replace('-->', '&shy;&shy;>', $item).' -->';
+    return '<!-- '.str_replace('--', '- - ', $item).' -->';
 }
 
 /**
@@ -1141,26 +1183,76 @@ function assHead()
  * @param  int    $width    Popup window width
  * @param  int    $height   Popup window height
  * @param  string $class    HTML class
+ * @param  string $inline   Inline pophelp
  * @return string HTML
  */
 
-function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
+function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline = '')
+{
+    global $txp_user, $prefs;
+
+    if (empty($help_var) || empty($prefs['module_pophelp'])) {
+        return '';
+    }
+
+    $url = filter_var($help_var, FILTER_VALIDATE_URL);
+
+    $atts = array(
+        'rel'    => 'help',
+        'target' => '_blank',
+        'title'  => gTxt('help'),
+        'role'   => 'button',
+    );
+
+    if ($url === false) {
+        $atts['class'] = $class;
+        $url = '#';
+        if (! empty($inline)) {
+            $atts['data-item'] = $inline;
+        } elseif (empty($txp_user)) {
+            // Use inline pophelp, if unauthorized user or setup stage
+            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+        } else {
+            $url = '?event=help&step=pophelp&item='.urlencode($help_var);
+        }
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
+    } else {
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
+    }
+
+    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+}
+
+/**
+ * Renders inline help text.
+ *
+ * The help topic is the name of a string that can be found in txp_lang.
+ *
+ * The rendered link can be customised via a 'admin_help_field > {$help_var}'
+ * pluggable UI callback event.
+ *
+ * @param  string $help_var   Help topic
+ * @return string HTML
+ */
+
+function fieldHelp($help_var)
 {
     if (!$help_var) {
         return '';
     }
 
-    $ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
-        'role'       => 'button',
-        'rel'        => 'help',
-        'target'     => '_blank',
-        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-        'class'      => $class,
-        'title'      => gTxt('help'),
-        'aria-label' => gTxt('help'),
-    ));
+    $help_text = gTxt($help_var);
 
-    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+    // If rendered string is the same as the input string, either the l10n
+    // doesn't exist or the string is missing from txp_lang.
+    // Either way, no instruction text, no render.
+    if ($help_var === $help_text) {
+        return '';
+    }
+
+    $ui = n.tag($help_text, 'div', array('class' => 'txp-form-field-instructions'));
+
+    return pluggable_ui('admin_help_field', $help_var, $ui, compact('help_var'));
 }
 
 /**
@@ -1181,46 +1273,22 @@ function popHelpSubtle($help_var, $width = 0, $height = 0)
 }
 
 /**
- * Renders a link that opens a popup tag help window.
+ * Renders a link that opens a popup tag area.
  *
- * @param  string $var    Tag name
- * @param  string $text   Link text
- * @param  int    $width  Popup window width
- * @param  int    $height Popup window height
+ * @param  string $var   Tag name
+ * @param  string $text  Link text
+ * @param  array  $atts  Attributes to add to the link
  * @return string HTML
  */
 
-function popTag($var, $text, $width = 0, $height = 0)
+function popTag($var, $text, $atts = array())
 {
-    return href($text, array(
+    $opts = array(
         'event'    => 'tag',
         'tag_name' => $var,
-    ), array(
-        'target'  => '_blank',
-        'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-    ));
-}
+    ) + $atts;
 
-/**
- * Renders a list of tag builder links.
- *
- * @param  string $type Tag type
- * @return string HTML
- */
-
-function popTagLinks($type)
-{
-    include txpath.'/lib/taglib.php';
-
-    $arname = $type.'_tags';
-
-    $out = array();
-
-    foreach ($$arname as $a) {
-        $out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
-    }
-
-    return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
+    return href($text, $opts, array('class' => 'txp-tagbuilder-link'));
 }
 
 /**
@@ -1230,6 +1298,7 @@ function popTagLinks($type)
  * @param  string $thething Predicate (strong)
  * @param  string $action   Object
  * @return string HTML
+ * @deprecated in 4.7.0
  */
 
 function messenger($thing, $thething = '', $action = '')
@@ -1296,7 +1365,9 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
         ($sort ? hInput('sort', $sort).hInput('dir', $dir) : '').
         ($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
         join('', $html).
-        fInput('submit', '', gTxt('go')), 'div', array('class' => 'multi-edit'));
+        fInput('submit', '', gTxt('go')),
+        'div', array('class' => 'multi-edit')
+    );
 }
 
 /**
@@ -1309,102 +1380,104 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
  * @param  int         $val   Current setting
  * @param  string|null $step  Step
  * @return string HTML
+ * @deprecated in 4.7.0
  */
 
 function pageby_form($event, $val, $step = null)
 {
-    $vals = array(15, 25, 50, 100);
-    callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
-
-    if ($step === null) {
-        $step = $event.'_change_pageby';
-    }
-
-    $out = array();
-
-    foreach ($vals as $qty) {
-        if ($qty == $val) {
-            $class = 'navlink-active';
-            $aria_pressed = 'true';
-        } else {
-            $class = 'navlink';
-            $aria_pressed = 'false';
-        }
-
-        $out[] = href($qty, array(
-            'event'      => $event,
-            'step'       => $step,
-            'qty'        => $qty,
-            '_txp_token' => form_token(),
-        ), array(
-            'class'        => $class,
-            'title'        => gTxt('view_per_page', array('{page}' => $qty)),
-            'aria-pressed' => $aria_pressed,
-            'role'         => 'button',
-        ));
-    }
-
-    return graf(join('', $out), array('class' => 'nav-tertiary pageby'));
+    return Txp::get('\Textpattern\Admin\Paginator', $event, $step)->render();
 }
 
 /**
- * Renders a file upload form.
+ * Renders an upload form.
  *
  * The rendered form can be customised via the '{$event}_ui > upload_form'
  * pluggable UI callback event.
  *
- * @param  string $label         File name label. May be empty
- * @param  string $pophelp       Help item
- * @param  string $step          Step
- * @param  string $event         Event
- * @param  string $id            File id
- * @param  int    $max_file_size Maximum allowed file size
- * @param  string $label_id      HTML id attribute for the filename input element
- * @param  string $class         HTML class attribute for the form element
+ * @param  string       $label         File name label. May be empty
+ * @param  string       $pophelp       Help item
+ * @param  string       $step          Step
+ * @param  string       $event         Event
+ * @param  string       $id            File id
+ * @param  int          $max_file_size Maximum allowed file size
+ * @param  string       $label_id      HTML id attribute for the filename input element
+ * @param  string       $class         HTML class attribute for the form element
+ * @param  string|array $wraptag_val   Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
 {
-    extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+    extract(gpsa(array(
+        'page',
+        'sort',
+        'dir',
+        'crit',
+        'search_method',
+    )));
 
-    if (!$label_id) {
-        $p_class = 'edit-'.$event.'-upload';
-        $label_id = $event.'-upload';
-    } else {
-        $p_class = 'edit-'.str_replace('_', '-', $label_id);
+    if (is_array($search_method)) {
+        $search_method = join(',', $search_method);
     }
 
+    if (!$label_id) {
+        $label_id = $event.'-upload';
+    }
+
+    if ($wraptag_val) {
+        $wraptag_class = 'txp-form-field file-uploader';
+    } else {
+        $wraptag_class = 'inline-file-uploader';
+    }
+
+    if ($multiple = (bool) preg_match('/^.+\[\]$/', $step)) {
+        $step = substr($step, 0, -2);
+    }
+
+    $name = 'thefile'.($multiple ? '[]' : '');
     $argv = func_get_args();
 
-    return pluggable_ui($event.'_ui', 'upload_form',
+    return pluggable_ui(
+        $event.'_ui',
+        'upload_form',
         n.tag(
-
-        (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
-        eInput($event).
-        sInput($step).
-        hInput('id', $id).
-
-        hInput('sort', $sort).
-        hInput('dir', $dir).
-        hInput('page', $page).
-        hInput('search_method', $search_method).
-        hInput('crit', $crit).
-
-        graf(
-            tag($label, 'label', array('for' => $label_id)).
-            popHelp($pophelp).
-            fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-            fInput('submit', '', gTxt('upload')), array('class' => $p_class)).
-
-        tInput().n,
-
-        'form', array(
-            'class'   => $class,
-            'method'  => 'post',
-            'enctype' => 'multipart/form-data',
-            'action'  => 'index.php',
-        )), $argv);
+            (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
+            eInput($event).
+            sInput($step).
+            hInput('id', $id).
+//            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
+            tInput().n.
+            inputLabel(
+                $label_id,
+                tag_void('input', array(
+                    'name'     => $name,
+                    'type'     => 'file',
+                    'required' => true,
+                    'id'       => $label_id,
+                    'multiple' => $multiple,
+                )).
+                (isset($extra['postinput']) ? $extra['postinput'] : '').
+                fInput('reset', '', gTxt('reset')).
+                fInput('submit', '', gTxt('upload')),
+                $label,
+                array($pophelp, 'instructions_'.$pophelp),
+                $wraptag_class,
+                $wraptag_val
+            ).
+            tag(null, 'progress', array(
+                'class' => 'txp-upload-progress',
+                'style' =>  'display:none',
+            )),
+            'form', array(
+                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
+                'method'  => 'post',
+                'enctype' => 'multipart/form-data',
+                'action'  => "index.php?event=$event&step=$step",
+                'style'   => 'position:relative',
+            )
+        ),
+        $argv
+    );
 }
 
 /**
@@ -1431,7 +1504,8 @@ function search_form($event, $step, $crit, $methods, $method, $default_method)
             eInput($event).
             sInput($step).
             fInput('submit', 'search', gTxt('go'))
-        ), '', '', 'get', 'search-form');
+        ), '', '', 'get', 'search-form'
+    );
 }
 
 /**
@@ -1482,83 +1556,68 @@ EOF;
 /**
  * Renders a &lt:script&gt; element.
  *
+ * The $route parameter allows script_js() to be included in fixed page
+ * locations (e.g. prior to the &lt;/body&gt; tag) but to only render
+ * its content if the event / step match.
+ *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
+ * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
+ * @param  array      $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
  * @example
  * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
  */
 
-function script_js($js, $flags = '')
+function script_js($js, $flags = '', $route = array())
 {
-    if (is_int($flags)) {
-        if ($flags & TEXTPATTERN_SCRIPT_URL) {
-            if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
-                $ext = pathinfo($js, PATHINFO_EXTENSION);
+    static $store = '';
+    global $event, $step;
 
-                if ($ext) {
-                    $js = substr($js, 0, (strlen($ext) + 1) * -1);
-                    $ext = '.'.$ext;
+    $targetEvent = empty($route[0]) ? null : (array)$route[0];
+    $targetStep = empty($route[1]) ? null : (array)$route[1];
+
+    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
+        if (is_int($flags)) {
+            if ($flags & TEXTPATTERN_SCRIPT_URL) {
+                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
+                    $ext = pathinfo($js, PATHINFO_EXTENSION);
+
+                    if ($ext) {
+                        $js = substr($js, 0, (strlen($ext) + 1) * -1);
+                        $ext = '.'.$ext;
+                    }
+
+                    $js .= '.v'.txp_version.$ext;
                 }
 
-                $js .= '.v'.txp_version.$ext;
+                return n.tag(null, 'script', array('src' => $js));
             }
-
-            return n.tag(null, 'script', array('src' => $js));
         }
+
+        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
+
+        if (is_bool($flags)) {
+            if (!$flags) {
+                $store .= n.$js;
+
+                return;
+            } else {
+                $js = $store.n.$js;
+                $store = '';
+            }
+        }
+
+        $js = trim($js);
+        $out = $js ? n.tag(n.$js.n, 'script') : '';
+
+        if ($flags && $flags !== true) {
+            $out .= n.tag(n.trim($flags).n, 'noscript');
+        }
+
+        return $out;
     }
 
-    $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
-
-    $out = n.tag(n.trim($js).n, 'script');
-
-    if ($flags) {
-        $out .= n.tag(n.trim($flags).n, 'noscript');
-    }
-
-    return $out;
-}
-
-/**
- * Renders a "Details" toggle checkbox.
- *
- * @param  string $classname Unique identfier. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element
- * @return string HTML
- */
-
-function toggle_box($classname, $form = false)
-{
-    $name = 'cb_toggle_'.$classname;
-    $id = escape_js($name);
-    $class = escape_js($classname);
-
-    $out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
-        n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
-
-    $js = <<<EOF
-        $(function ()
-        {
-            $('input')
-                .filter(function () {
-                    if ($(this).attr('id') === '{$id}') {
-                        setClassDisplay('{$class}', $(this).is(':checked'));
-                        return true;
-                    }
-                })
-                .change(function () {
-                    toggleClassRemember('{$class}');
-                });
-        });
-EOF;
-
-    $out .= script_js($js);
-
-    if ($form) {
-        return form($out);
-    }
-
-    return $out;
+    return '';
 }
 
 /**
@@ -1698,14 +1757,27 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
+    global $txp_atts;
+    static $import = array('breakby', 'breakclass');
+
     if (!$list) {
         return '';
     }
 
-    if ($id) {
-        $atts .= ' id="'.txpspecialchars($id).'"';
+    if (is_array($break)) {
+        extract($break + array('break' => ''));
+    }
+
+    foreach ($import as $global) {
+        if (!isset($$global) && isset($txp_atts[$global])) {
+            $$global = $txp_atts[$global];
+        }
+    }
+
+    if ($html_id) {
+        $atts .= ' id="'.txpspecialchars($html_id).'"';
     }
 
     if ($class) {
@@ -1716,13 +1788,36 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
+    if ($break && !empty($breakby)) { // array_merge to reindex
+        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
+
+        switch ($count = count($breakby)) {
+            case 0:
+                break;
+            case 1:
+                if ($breakby[0] > 0) {
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
+                    break;
+                }
+            default:
+                $newlist = array();
+
+                for ($i = 0; count($list); $i = ($i + 1)%$count) {
+                    $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
+                }
+
+        }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
+    }
+
     // Non-enclosing breaks.
-    if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
-        if ($break == 'br' or $break == 'hr') {
+    if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
+        if ($break == 'br' || $break == 'hr') {
             $break = "<$break $breakatts/>".n;
         }
 
-        return ($wraptag) ?    tag(join($break, $list), $wraptag, $atts) :    join($break, $list);
+        return ($wraptag) ? tag(join($break, $list), $wraptag, $atts) : join($break, $list);
     }
 
     return ($wraptag)
@@ -1750,16 +1845,16 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
 
 function doTag($content, $tag, $class = '', $atts = '', $id = '')
 {
+    if (!$tag) {
+        return $content;
+    }
+
     if ($id) {
         $atts .= ' id="'.txpspecialchars($id).'"';
     }
 
     if ($class) {
         $atts .= ' class="'.txpspecialchars($class).'"';
-    }
-
-    if (!$tag) {
-        return $content;
     }
 
     return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";

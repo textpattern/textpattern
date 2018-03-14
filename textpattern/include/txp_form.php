@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -28,70 +27,73 @@
  * @package Admin\Form
  */
 
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Form;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-/**
- * List of essential forms.
- *
- * @global array $essential_forms
- */
-
-$essential_forms = array(
-    'comments',
-    'comments_display',
-    'comment_form',
-    'default',
-    'plainlinks',
-    'files',
-);
-
-/**
- * List of form types.
- *
- * @global array $form_types
- */
-
-$form_types = array(
-    'article'  => gTxt('article'),
-    'misc'     => gTxt('misc'),
-    'comment'  => gTxt('comment'),
-    'category' => gTxt('category'),
-    'file'     => gTxt('file'),
-    'link'     => gTxt('link'),
-    'section'  => gTxt('section'),
-);
-
 if ($event == 'form') {
     require_privs('form');
 
+    $instance = Txp::get('Textpattern\Skin\Form');
+
+    /**
+     * List of essential forms.
+     *
+     * @global array $essential_forms
+     */
+
+    $essential_forms = $instance->getEssential('name');
+
+    /**
+     * List of form types.
+     *
+     * @global array $form_types
+     */
+
+    $form_types = array();
+
+    foreach ($instance->getTypes() as $type) {
+        $form_types[$type] = gTxt($type);
+    }
+
     bouncer($step, array(
-        'form_edit'       => false,
-        'form_create'     => false,
-        'form_delete'     => true,
-        'form_multi_edit' => true,
-        'form_save'       => true,
+        'form_edit'        => false,
+        'form_create'      => false,
+        'form_delete'      => true,
+        'form_multi_edit'  => true,
+        'form_save'        => true,
+        'form_skin_change' => true,
+        'tagbuild'         => false,
     ));
 
     switch (strtolower($step)) {
-        case "":
+        case '':
             form_edit();
             break;
-        case "form_edit":
+        case 'form_edit':
             form_edit();
             break;
-        case "form_create":
+        case 'form_create':
             form_create();
             break;
-        case "form_delete":
+        case 'form_delete':
             form_delete();
             break;
-        case "form_multi_edit":
+        case 'form_multi_edit':
             form_multi_edit();
             break;
-        case "form_save":
+        case 'form_save':
             form_save();
+            break;
+        case "form_skin_change":
+            $instance->selectEdit();
+            form_edit();
+            break;
+        case 'tagbuild':
+            echo form_tagbuild();
             break;
     }
 }
@@ -102,15 +104,15 @@ if ($event == 'form') {
  * This function returns a list of form templates, wrapped in a multi-edit
  * form widget.
  *
- * @param  string $curname The selected form
+ * @param  array  $current The selected form info
  * @return string HTML
  */
 
-function form_list($curname)
+function form_list($current)
 {
     global $essential_forms, $form_types;
 
-    $criteria = 1;
+    $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
     $rs = safe_rows_start(
@@ -121,17 +123,19 @@ function form_list($curname)
 
     if ($rs) {
         $prev_type = null;
-        $group_out = array();
+
+        // Add a hidden field, in case only one skin is in use and mult-edit is the
+        // first action performed. This way, the value is propagated and saved, even
+        // if the skin select list is not rendered or a Form is not saved first.
+        $out[] = hInput('skin', $current['skin']);
 
         while ($a = nextRow($rs)) {
             extract($a);
-            $active = ($curname === $name);
+            $active = ($current['name'] === $name);
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
-                    $group_out = tag(n.join(n, $group_out).n, 'ul', array(
-                        'class' => 'switcher-list',
-                    ));
+                    $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
                     $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
                 }
@@ -140,11 +144,7 @@ function form_list($curname)
                 $group_out = array();
             }
 
-            if ($active) {
-                $editlink = txpspecialchars($name);
-            } else {
-                $editlink = eLink('form', 'form_edit', 'name', $name, $name);
-            }
+            $editlink = eLink('form', 'form_edit', 'name', $name, $name);
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(
@@ -153,27 +153,28 @@ function form_list($curname)
                 $modbox = '';
             }
 
-            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array(
-                'class' => $active ? 'active' : '',
-            ));
+            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
         if ($prev_type !== null) {
-            $group_out = tag(n.join(n, $group_out).n, 'ul', array(
-                'class' => 'switcher-list',
-            ));
+            $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
             $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
         }
+
+        $out = tag(implode('', $out), 'div', array(
+            'id'   => 'allforms_form_sections',
+            'role' => 'region',
+        ));
 
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
             'delete'     => gTxt('delete'),
         );
 
-        $out[] = multi_edit($methods, 'form', 'form_multi_edit');
+        $out .= multi_edit($methods, 'form', 'form_multi_edit');
 
-        return form(join('', $out), '', '', 'post', '', '', 'allforms_form');
+        return form($out, '', '', 'post', '', '', 'allforms_form');
     }
 }
 
@@ -185,21 +186,24 @@ function form_multi_edit()
 {
     $method = ps('edit_method');
     $forms = ps('selected_forms');
+    $skin = ps('skin');
     $affected = array();
+    $message = '';
+
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
             foreach ($forms as $name) {
-                if (form_delete($name)) {
+                if (form_delete($name, $skin)) {
                     $affected[] = $name;
                 }
             }
 
-            callback_event('forms_deleted', '', 0, $affected);
+            callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
+            update_lastmod('form_deleted', $affected);
 
-            $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
+            $message = gTxt('form_deleted', array('{list}' => join(', ', $affected)));
         }
 
         if ($method == 'changetype') {
@@ -211,13 +215,11 @@ function form_multi_edit()
                 }
             }
 
-            $message = gTxt('forms_updated', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
+            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
         }
-    } else {
-        form_edit();
     }
+
+    form_edit($message);
 }
 
 /**
@@ -235,147 +237,202 @@ function form_create()
 /**
  * Renders the main Form editor panel.
  *
- * @param string|array $message The activity message
+ * @param string|array $message          The activity message
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
-function form_edit($message = '')
+function form_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step, $essential_forms;
+    global $instance, $event, $step;
 
-    pagetop(gTxt('edit_forms'), $message);
+    /*
+    $partials is an array of:
+    $key => array (
+        'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
+        'selector' => $DOM_selector or array($selector, $fragment, $script) of $DOM_selectors,
+         'cb' => $callback_function,
+         'html' => $return_value_of_callback_function (need not be intialised here)
+    )
+    */
+    $partials = array(
+        // Form list.
+        'list' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#allforms_form_sections',
+            'cb'       => 'form_list',
+        ),
+        // Name field.
+        'name' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'div.name',
+            'cb'       => 'form_partial_name',
+        ),
+        // Name value.
+        'name_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#new_form,input[name=name]',
+            'cb'       => 'form_partial_name_value',
+        ),
+        // Type field.
+        'type' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '.type',
+            'cb'       => 'form_partial_type',
+        ),
+        // Type value.
+        'type_value' => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '[name=type]',
+            'cb'       => 'form_partial_type_value',
+        ),
+        // Textarea.
+        'template' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.template',
+            'cb'       => 'form_partial_template',
+        ),
+    );
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
-    $name = sanitizeForPage(assert_string(gps('name')));
+    $name = Form::sanitize(assert_string(gps('name')));
     $type = assert_string(gps('type'));
-    $newname = sanitizeForPage(assert_string(gps('newname')));
+    $newname = Form::sanitize(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : null;
+    $class = 'async';
+
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
-        $name = 'default';
-    } elseif (((($copy || $savenew) && $newname) || ($newname && $newname !== $name)) && !$save_error) {
+        $name = get_pref('last_form_saved', 'default');
+    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
+    } elseif ((($newname && ($newname != $name)) || $step === 'form_create') && !$save_error) {
+        $name = $newname;
+        $class = '';
+    } elseif ($savenew && $save_error) {
+        $class = '';
     }
 
     $Form = gps('Form');
 
     if (!$save_error) {
-        $rs = safe_row("*", 'txp_form', "name = '".doSlash($name)."'");
-        extract($rs);
+        if (!extract(safe_row('*', 'txp_form', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'"))) {
+            $name = '';
+        }
     }
 
-    if (in_array($name, $essential_forms)) {
-        $name_widgets = span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
-            span($name, array('class' => 'txp-value-fixed'));
-
-        $type_widgets = span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
-            span($type, array('class' => 'txp-value-fixed'));
-    } else {
-        $name_widgets = tag(gTxt('form_name'), 'label', 'for="new_form"').br.
-            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
-
-        $type_widgets = tag(gTxt('form_type'), 'label', 'for="type"').br.
-            formTypes($type, false);
-    }
-
-    $buttons = href(gTxt('duplicate'), '#', array(
-        'id'    => 'txp_clone',
-        'class' => 'clone',
-        'title' => gTxt('form_clone'),
-    ));
+    $actionsExtras = '';
 
     if ($name) {
-        $name_widgets .= n.span($buttons, array('class' => 'txp-actions'));
-    } else {
-        $name_widgets .= hInput('savenew', 'savenew');
+        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+            'class'     => 'txp-clone',
+            'data-form' => 'form_form',
+        ));
     }
 
-    // Generate the tagbuilder links.
-    // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
-    $tagbuild_items = array(
-        'article' => array(
-            'articles',
-            'article-tags',
-        ),
-        'link' => array(
-            'links',
-            'link-tags',
-        ),
-        'comment' => array(
-            'comments',
-            'comment-tags',
-        ),
-        'comment_details' => array(
-            'comment_details',
-            'comment-detail-tags',
-        ),
-        'comment_form' => array(
-            'comment_form',
-            'comment-form-tags',
-        ),
-        'search_result' => array(
-            'search_results_form',
-            'search-result-tags',
-        ),
-        'file_download' => array(
-            'file_download_tags',
-            'file-tags',
-        ),
-        'category' => array(
-            'category_tags',
-            'category-tags',
-        ),
-        'section' => array(
-            'section_tags',
-            'section-tags',
-        ),
+    $actions = graf(
+        sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
+        $actionsExtras,
+        array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $tagbuild_links = '';
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
-    foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
+    $buttons = graf(
+        tag_void('input', array(
+            'class'  => 'publish',
+            'type'   => 'submit',
+            'method' => 'post',
+            'value'  =>  gTxt('save'),
+        )), ' class="txp-save"'
+    );
+
+    $listActions = graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'allforms_form',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'allforms_form',
+        )), array('class' => 'txp-actions')
+    );
+
+    $rs = array(
+        'name'    => $name,
+        'newname' => $newname,
+        'type'    => $type,
+        'skin'    => $skin,
+        'form'    => $Form,
+        );
+
+    // Get content for volatile partials.
+    $partials = updatePartials($partials, $rs, array(PARTIAL_VOLATILE, PARTIAL_VOLATILE_VALUE));
+
+    if ($refresh_partials) {
+        $response[] = announce($message);
+        $response = array_merge($response, updateVolatilePartials($partials));
+        send_script_response(join(";\n", $response));
+
+        // Bail out.
+        return;
     }
 
-    echo hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading'));
+    // Get content for static partials.
+    $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
+
+    pagetop(gTxt('tab_forms'), $message);
+
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading txp-heading-tight')),
+            'div', array('class' => 'txp-layout-1col')
+        );
+
+    // Forms create/switcher column.
     echo n.tag(
-
-        n.tag(
-            hed(gTxt('tagbuilder'), 2).
-            $tagbuild_links.n, 'div', array(
-            'id'    => 'tagbuild_links',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).
-
-        n.tag(
-            form(
-                graf($name_widgets).
-                graf(
-                    tag(gTxt('form_code'), 'label', array('for' => 'form')).
-                    br.'<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>'
-                ).
-                graf($type_widgets).
-                graf(
-                    fInput('submit', 'save', gTxt('save'), 'publish').
-                    eInput('form').sInput('form_save').
-                    hInput('name', $name)
-                ), '', '', 'post', 'edit-form', '', 'form_form').n, 'div', array(
-            'id'    => 'main_content',
-            'class' => 'txp-layout-cell txp-layout-2-4',
-        )).
-
-        n.tag(
-            graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
-            form_list($name).n, 'div', array(
+        $skinBlock.$listActions.n.
+        $partials['list']['html'].n,
+        'div', array(
+            'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n, 'div', array(
-        'id'    => $event.'_container',
-        'class' => 'txp-layout-grid',
-    ));
+            'role'  => 'region',
+        )
+    );
+
+    // Forms code columm.
+    echo n.tag(
+        form(
+            $actions.
+            $partials['name']['html'].
+            $partials['type']['html'].
+            $partials['template']['html'].
+            $buttons, '', '', 'post', $class, '', 'form_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
+            'role'  => 'region',
+        )
+    );
+
+    // Tag builder dialog placeholder.
+    echo n.tag(
+        '&nbsp;',
+        'div', array(
+            'class'      => 'txp-tagbuilder-content',
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+        ));
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -384,24 +441,27 @@ function form_edit($message = '')
 
 function form_save()
 {
-    global $essential_forms, $form_types;
+    global $essential_forms, $form_types, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
         'Form',
         'type',
         'copy',
+        'skin',
     )))));
 
-    $name = sanitizeForPage(assert_string(ps('name')));
-    $newname = sanitizeForPage(assert_string(ps('newname')));
+    $name = Form::sanitize(assert_string(ps('name')));
+    $newname = Form::sanitize(assert_string(ps('newname')));
+
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
 
     if (in_array($name, $essential_forms)) {
         $newname = $name;
-        $type = fetch('type', 'txp_form', 'name', $newname);
+        $type = safe_field('type', 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
         $_POST['newname'] = $newname;
     }
 
@@ -418,26 +478,33 @@ function form_save()
                 $_POST['newname'] = $newname;
             }
 
-            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."'");
+            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
 
             if ($newname !== $name && $exists !== false) {
                 $message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
+
                 if ($savenew) {
                     $_POST['newname'] = '';
                 }
 
                 $save_error = true;
             } else {
+                $safe_skin = doSlash($skin);
+
                 if ($savenew or $copy) {
                     if ($newname) {
                         if (safe_insert(
-                                'txp_form',
-                                "Form = '$Form',
-                                type = '$type',
-                                name = '".doSlash($newname)."'"
+                            'txp_form',
+                            "Form = '$Form',
+                            type = '$type',
+                            skin = '$safe_skin',
+                            name = '".doSlash($newname)."'"
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
-                            $message = gTxt('form_created', array('{name}' => $newname));
+
+                            $message = gTxt('form_created', array('{list}' => $newname));
+
+                            callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
                             $save_error = true;
@@ -448,14 +515,18 @@ function form_save()
                     }
                 } else {
                     if (safe_update(
-                            'txp_form',
-                            "Form = '$Form',
-                            type = '$type',
-                            name = '".doSlash($newname)."'",
-                            "name = '".doSlash($name)."'"
+                        'txp_form',
+                        "Form = '$Form',
+                        type = '$type',
+                        skin = '$safe_skin',
+                        name = '".doSlash($newname)."'",
+                        "name = '".doSlash($name)."' AND skin = '$safe_skin'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
-                        $message = gTxt('form_updated', array('{name}' => $name));
+
+                        $message = gTxt('form_updated', array('{list}' => $newname));
+
+                        callback_event('form_updated', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('form_save_failed'), E_ERROR);
                         $save_error = true;
@@ -468,30 +539,52 @@ function form_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        set_pref('last_form_saved', $newname, 'form', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         callback_event('form_saved', '', 0, $name, $newname);
     }
 
-    form_edit($message);
+    form_edit($message, ($app_mode === 'async') ? true : false);
 }
 
 /**
  * Deletes a form template with the given name.
  *
  * @param  string $name The form template
+ * @param  string $skin The form skin in use
  * @return bool FALSE on error
  */
 
-function form_delete($name)
+function form_delete($name, $skin)
 {
-    global $essential_forms;
+    global $prefs, $essential_forms;
 
     if (in_array($name, $essential_forms)) {
         return false;
+    } elseif ($name === get_pref('last_form_saved')) {
+        unset($prefs['last_form_saved']);
+        remove_pref('last_form_saved', 'form');
     }
 
     $name = doSlash($name);
+    $skin = doSlash($skin);
 
-    return safe_delete('txp_form', "name = '$name'");
+    return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
+}
+
+/**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
+ */
+
+function form_skin_change($skin = null)
+{
+    Txp::get('Textpattern\Skin\Form')->selectEdit($skin);
+
+    return true;
 }
 
 /**
@@ -512,8 +605,9 @@ function form_set_type($name, $type)
 
     $name = doSlash($name);
     $type = doSlash($type);
+    $skin = doSlash(get_pref('skin_editing', 'default'));
 
-    return safe_update('txp_form', "type = '$type'", "name = '$name'");
+    return safe_update('txp_form', "type = '$type'", "name = '$name' AND skin = '$skin'");
 }
 
 /**
@@ -522,13 +616,144 @@ function form_set_type($name, $type)
  * @param  string $type        The selected option
  * @param  bool   $blank_first If TRUE, the list defaults to an empty selection
  * @param  string $id          HTML id attribute value
+ * @param  bool   $disabled    If TRUE renders the select disabled
  * @return string HTML
  * @access private
  */
 
-function formTypes($type, $blank_first = true, $id = 'type')
+function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 {
     global $form_types;
 
-    return selectInput('type', $form_types, $type, $blank_first, '', $id);
+    return selectInput('type', $form_types, $type, $blank_first, '', $id, false, $disabled);
+}
+
+/**
+ * Renders form name field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_name($rs)
+{
+    global $essential_forms;
+
+    $name = $rs['name'];
+    $skin = $rs['skin'];
+
+    if (in_array($name, $essential_forms)) {
+        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+    } else {
+        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+    }
+
+    $name_widgets = inputLabel(
+        'new_form',
+        $nameInput,
+        'form_name',
+        array('', 'instructions_form_name'),
+        array('class' => 'txp-form-field name')
+    );
+
+    if ($name === '') {
+        $name_widgets .= hInput('savenew', 'savenew');
+    } else {
+        $name_widgets .= hInput('name', $name);
+    }
+
+    $name_widgets .= hInput('skin', $skin).
+        eInput('form').sInput('form_save');
+
+    return $name_widgets;
+}
+
+/**
+ * Renders form type field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_type($rs)
+{
+    global $essential_forms;
+
+    $name = $rs['name'];
+    $type = $rs['type'];
+    $type_widgets = '';
+
+    if (in_array($name, $essential_forms)) {
+        $typeInput = formTypes($type, false, 'type', true);
+        $type_widgets .= hInput('type', $type);
+    } else {
+        $typeInput = formTypes($type, false);
+    }
+
+    $type_widgets .= inputLabel(
+        'type',
+        $typeInput,
+        'form_type',
+        array('', 'instructions_form_type'),
+        array('class' => 'txp-form-field type')
+    );
+
+    return $type_widgets;
+}
+
+/**
+ * Renders form name value.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_name_value($rs)
+{
+    return $rs['name'];
+}
+
+/**
+ * Renders form type value.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_type_value($rs)
+{
+    return $rs['type'];
+}
+
+/**
+ * Renders form textarea field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_template($rs)
+{
+    global $event;
+
+    $out = inputLabel(
+        'form',
+        '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['form']).'</textarea>',
+        array(
+            'form_code',
+            n.span(
+                href(
+                    span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
+                    array('event' => 'tag', 'panel' => $event),
+                    array('class' => 'txp-tagbuilder-dialog')
+                ),
+                array('class' => 'txp-textarea-options')
+            )
+        ),
+        array('', 'instructions_form_code'),
+        array('class' => 'txp-form-field template'),
+        array('div', 'div')
+    );
+
+    return $out;
 }

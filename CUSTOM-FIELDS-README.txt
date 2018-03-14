@@ -43,6 +43,6 @@ ROADMAP
 * Write plugin to migrate non-text_input data types from glz_custom_fields.
 ** Hook into a new pre-upgrade callback? Probably just needs to provide a mapping
    of glz's data type names to Txp's data_type names. Then, when such columns are
-   encountered during upgrade, Textpattern_Meta_Field()'s save routine can
+   encountered during upgrade, Textpattern\Meta\Field()'s save routine can
    create the tables of the relevant types and pull data into them.
 

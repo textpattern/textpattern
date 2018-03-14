@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (@ini_get('register_globals')) {
@@ -35,7 +34,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
     // down, we must remove any potentially identical-named global from the list of global names here.
@@ -63,8 +63,9 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.6-dev';
-$txp_using_svn = true; // Set false for releases.
+$thisversion = '4.7.0-dev';
+// $txp_using_svn deprecated in 4.7.0.
+$txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
 ob_start(null, 2048);
 
@@ -76,14 +77,15 @@ if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
 }
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-Type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
+$trace->start('[PHP includes]');
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -97,7 +99,7 @@ include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/admin_config.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
@@ -111,8 +113,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // content, such as custom fields, and also allows a dedicated time
     // value to be passed to SQL queries, alleviating NOW().
     $txpnow = time();
-
-    $dbversion = $version;
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
@@ -148,11 +148,40 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         define('ihu', hu);
     }
 
+    // HTTP address of Textpattern admin URL.
+    if (!defined('ahu')) {
+        if (empty($txpcfg['admin_url'])) {
+            $adminurl = hu.'textpattern/';
+        } else {
+            $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
+        }
+
+        define('ahu', $adminurl);
+    }
+
+    // Shared admin and public cookie_domain when using multisite admin URL (use main domain if not set).
+    if (!defined('cookie_domain')) {
+        if (!isset($txpcfg['cookie_domain'])) {
+            if (empty($txpcfg['admin_url'])) {
+                $txpcfg['cookie_domain'] = '';
+            } else {
+                $txpcfg['cookie_domain'] = rtrim(substr($txpcfg['admin_url'], strpos($txpcfg['admin_url'], '.') + 1), '/');
+            }
+        }
+
+        define('cookie_domain', $txpcfg['cookie_domain']);
+    }
+
     if (!empty($locale)) {
         setlocale(LC_ALL, $locale);
     }
 
-    $textarray = load_lang(LANG);
+    // For backwards-compatibility (sort of) with plugins that expect the
+    // $textarray global to be present.
+    // Will remove in future.
+    $textarray = array();
+
+    load_lang(LANG, 'admin');
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
@@ -163,6 +192,16 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Add private preferences.
     $prefs = array_merge(get_prefs($txp_user), $prefs);
     extract($prefs);
+
+    $dbversion = $version;
+
+    $event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
+    $step = trim(gps('step'));
+    $app_mode = trim(gps('app_mode'));
+
+    // Reload string pack using per-user language.
+    $lang_ui = (empty($language_ui)) ? $language : $language_ui;
+    load_lang($lang_ui, $event);
 
     /**
      * @ignore
@@ -180,7 +219,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn) {
+    if (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }
@@ -193,6 +232,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         textpattern();
         exit;
     }
+
+    // Register modules
+    register_callback('\Textpattern\Module\Help\HelpAdmin::init', 'help');
 
     if (!empty($admin_side_plugins) and gps('event') != 'plugin') {
         load_plugins(1);
@@ -220,15 +262,22 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     end_page();
 
-    if ($app_mode != 'async') {
-        trace_log(TEXTPATTERN_TRACE_DISPLAY);
-    } else {
-        $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
-        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
-        header('X-Textpattern-Queries: ' . @$trace['queries']);
+    if ($production_status !== 'live') {
+        if ($app_mode != 'async') {
+            echo $trace->summary();
+
+            if ($production_status === 'debug') {
+                echo $trace->result();
+            }
+        } else {
+            foreach ($trace->summary(true) as $key => $value) {
+                header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+            }
+        }
     }
 } else {
-    txp_die('DB-Connect was successful, but the textpattern-table was not found.',
-        '503 Service Unavailable');
+    txp_die(
+        'Database connection was successful, but the <code>textpattern</code> table was not found.',
+        '503 Service Unavailable'
+    );
 }

@@ -1,0 +1,22 @@
+{
+    "site": {
+        "language_code": "en",
+        "public_url": "www.example.com",
+        "admin_theme": "",
+        "public_theme": "",
+        "content_directory": ""
+    },
+    "database": {
+        "user": "",
+        "password": "",
+        "host": "localhost",
+        "db_name": "",
+        "table_prefix": ""
+    },
+    "user": {
+        "full_name": "",
+        "email": "",
+        "login_name": "",
+        "password": ""
+    }
+}

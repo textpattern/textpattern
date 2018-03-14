@@ -1,0 +1,18 @@
+name         VARCHAR(64)       NOT NULL DEFAULT '',
+status       INT               NOT NULL DEFAULT '1',
+author       VARCHAR(128)      NOT NULL DEFAULT '',
+author_uri   VARCHAR(128)      NOT NULL DEFAULT '',
+version      VARCHAR(255)      NOT NULL DEFAULT '1.0',
+description  TEXT              NOT NULL,
+help         MEDIUMTEXT        NOT NULL,
+code         MEDIUMTEXT        NOT NULL,
+code_restore MEDIUMTEXT        NOT NULL,
+code_md5     VARCHAR(32)       NOT NULL DEFAULT '',
+textpack     MEDIUMTEXT        NOT NULL,
+data         MEDIUMTEXT        NOT NULL,
+type         INT               NOT NULL DEFAULT '0',
+load_order   TINYINT  UNSIGNED NOT NULL DEFAULT '5',
+flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
+
+UNIQUE name            (name),
+INDEX  status_type_idx (status, type)

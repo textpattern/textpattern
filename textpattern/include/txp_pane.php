@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpinterface')) {
@@ -42,7 +42,8 @@ class Textpattern_Admin_Pane
         global $step;
 
         $steps = array(
-            'visible' => true,
+            'visible'    => true,
+            'tabVisible' => true,
         );
 
         if ($step && bouncer($step, $steps) && has_privs(ps('origin'))) {
@@ -83,7 +84,29 @@ class Textpattern_Admin_Pane
             return;
         }
 
-        trigger_error('invalid_pane', E_USER_WARNING);
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
+    }
+
+    /**
+     * Saves tab visibility.
+     */
+
+    public function tabVisible()
+    {
+        extract(psa(array(
+            'pane',
+            'origin',
+        )));
+
+        send_xml_response();
+
+        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane)) {
+            set_pref("pane_{$origin}_visible", ($pane), $origin, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+
+            return;
+        }
+
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
     }
 }
 

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -206,28 +206,31 @@ class Timezone
 
     public function isDst($timestamp = null, $timezone = null)
     {
+        static $DTZones = array();
+
         if (!$timezone) {
             $timezone = $this->getTimeZone();
         }
 
-        try {
-            $timezone = new \DateTimeZone($timezone);
-
-            if ($timestamp !== null) {
-                if ((string)intval($timestamp) !== (string)$timestamp) {
-                    $timestamp = strtotime($timestamp);
-                }
-
-                $timestamp = date('Y-m-d H:m:s', $timestamp);
+        if ($timestamp === null) {
+            $timestamp = time();
+        } else {
+            if ((string)intval($timestamp) !== (string)$timestamp) {
+                $timestamp = strtotime($timestamp);
             }
-
-            $dateTime = new \DateTime($timestamp, $timezone);
-
-            return (bool)$dateTime->format('I');
-        } catch (\Exception $e) {
         }
 
-        return false;
+        try {
+            if (!isset($DTZones[$timezone])) {
+                $DTZones[$timezone] = new \DateTimeZone($timezone);
+            }
+            $transition = $DTZones[$timezone]->getTransitions($timestamp, $timestamp);
+            $isdst = $transition[0]['isdst'];
+        } catch (\Exception $e) {
+            $isdst = false;
+        }
+
+        return (bool)$isdst;
     }
 
     /**
@@ -249,7 +252,7 @@ class Timezone
      *     (
      *         [ts] => 1396141200
      *         [time] => 2014-03-30T01:00:00+0000
-     *        [offset] => 10800
+     *         [offset] => 10800
      *         [isdst] => 1
      *         [abbr] => EEST
      *     )

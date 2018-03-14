@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -111,12 +111,12 @@ class FileIterator implements \Iterator
     /**
      * Returns the current element.
      *
-     * @return \Textpattern\Type\String
+     * @return \Textpattern\Type\StringType
      */
 
     public function current()
     {
-        return new \Textpattern\Type\String($this->current);
+        return new \Textpattern\Type\StringType($this->current);
     }
 
     /**

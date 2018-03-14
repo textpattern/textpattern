@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -32,9 +32,9 @@
  * properly. See RPC Server implementation to view an example of the required
  * files and predefined variables.
  *
- * @link      http://txp.kusor.com/wrapper
- * @author    Pedro Palazon - http://kusor.net/
- * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
+ * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
+ * @author    Pedro Palazón
+ * @copyright 2005-2008 The Textpattern Development Team
  */
 
 if (!defined('txpath')) {
@@ -387,7 +387,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($sections = $wrapper->getSectionsList())
      * {
-     *     foreach($sections as $section)
+     *     foreach ($sections as $section)
      *     {
      *         echo $section['title'];
      *     }
@@ -439,7 +439,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($categories = $wrapper->getCategoryList())
      * {
-     *     foreach($categories as $category)
+     *     foreach ($categories as $category)
      *     {
      *         echo $category['title'];
      *     }
@@ -754,12 +754,12 @@ class TXP_Wrapper
             }
 
             $incoming = $this->_check_keys($incoming, array(
-                'AuthorID' => $this->txp_user,
-                'Annotate' => $comments_on_default,
-                'AnnotateInvite' => $comments_default_invite,
-                'textile_body' => $use_textile,
+                'AuthorID'        => $this->txp_user,
+                'Annotate'        => $comments_on_default,
+                'AnnotateInvite'  => $comments_default_invite,
+                'textile_body'    => $use_textile,
                 'textile_excerpt' => $use_textile,
-                'url_title' => stripSpace($incoming['Title']),
+                'url_title'       => stripSpace($incoming['Title']),
             ));
 
             // Build the SQL query.
@@ -802,7 +802,6 @@ class TXP_Wrapper
 
             if (($incoming['Status'] >= 4 && !$article_id) || ($oldstatus != 4 && $article_id)) {
                 safe_update('txp_prefs', "val = NOW()", "name = 'lastmod'");
-                //@$this->_sendPings();
             }
 
             return $article_id;
@@ -830,34 +829,13 @@ class TXP_Wrapper
 
         if ($r) {
             // Update the last access time.
-            $safe_user = addslashes($user);
+            $safe_user = doSlash($user);
             safe_update('txp_users', "last_access = NOW()", "name = '$safe_user'");
 
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Pings Ping-O-Matic when an article is published.
-     *
-     * This is duplicated code from txp_article.php.
-     *
-     * @access private
-     */
-
-    public function _sendPings()
-    {
-        global $prefs, $txpcfg;
-        extract($prefs);
-
-        include_once txpath.'/lib/IXRClass.php';
-
-        if ($ping_weblogsdotcom == 1) {
-            $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-            $wl_client->query('weblogUpdates.ping', $sitename, hu);
-        }
     }
 
     /**
@@ -920,7 +898,7 @@ class TXP_Wrapper
         }
 
         if ($incoming['textile_body'] == USE_TEXTILE) {
-            $incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
+            $incoming['Title'] = $textile->textileThis($incoming['Title'], '', 1);
         }
 
         $incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
@@ -950,7 +928,7 @@ class TXP_Wrapper
                 $html = nl2br(trim($field));
                 break;
             case USE_TEXTILE:
-                $html = $textile->TextileThis($field);
+                $html = $textile->textileThis($field);
                 break;
         }
 

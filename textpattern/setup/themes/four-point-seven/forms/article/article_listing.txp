@@ -1,0 +1,29 @@
+<li class="article" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <h4 itemprop="headline">
+        <a href="<txp:permlink />" itemprop="url mainEntityOfPage">
+            <txp:title />
+        </a>
+    </h4>
+
+    <!-- if the article has an excerpt, display that -->
+    <txp:if_excerpt>
+        <div itemprop="description">
+            <txp:excerpt />
+        </div>
+    </txp:if_excerpt>
+
+    <p class="footnote">
+        <txp:text item="posted" />
+        <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
+            <txp:posted />
+        </time>
+        <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
+        &#183;
+        <txp:text item="author" />
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <txp:author link="1" this_section="1" />
+            </span>
+        </span>
+    </p>
+</li>

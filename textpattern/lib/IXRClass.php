@@ -401,7 +401,7 @@ class IXR_Server
 
             global $HTTP_RAW_POST_DATA;
             if (empty($HTTP_RAW_POST_DATA)) {
-                // workaround for a bug in PHP 5.2.2 - http://bugs.php.net/bug.php?id=41293
+                // workaround for a bug in PHP 5.2.2 - https://bugs.php.net/bug.php?id=41293.
                 $data = file_get_contents('php://input');
             } else {
                 $data =& $HTTP_RAW_POST_DATA;

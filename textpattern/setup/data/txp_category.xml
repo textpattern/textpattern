@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <category>
+        <item>
+            <name>everything-is-going-to-be-alright</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Everything is going to be alright</title>
+            <description></description>
+        </item>
+        <item>
+            <name>hope-for-the-future</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Hope for the future</title>
+            <description></description>
+        </item>
+        <item>
+            <name>meaningful-labor</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Meaningful labor</title>
+            <description></description>
+        </item>
+        <item>
+            <name>reciprocal-affection</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Reciprocal affection</title>
+            <description></description>
+        </item>
+        <item>
+            <name>textpattern</name>
+            <type>link</type>
+            <parent>root</parent>
+            <title>Textpattern</title>
+            <description></description>
+        </item>
+    </category>
+</resources>

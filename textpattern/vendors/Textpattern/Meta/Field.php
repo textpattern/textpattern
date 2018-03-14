@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,11 +24,13 @@
 /**
  * A custom field.
  *
- * @since   4.6.0
+ * @since   4.8.0
  * @package CustomField
  */
 
-class Textpattern_Meta_Field
+namespace Textpattern\Meta;
+
+class Field
 {
     /**
      * Meta field definition.
@@ -176,7 +178,7 @@ class Textpattern_Meta_Field
                     }
                 }
 
-                $type = Txp::get('Textpattern_Meta_DataTypes')->get();
+                $type = \Txp::get('\Textpattern\Meta\DataType')->get();
 
                 // @todo what if the type isn't in the list? Choose a default type? Throw an exception?
                 if (isset($type[$this->definition['render']])) {
@@ -200,7 +202,7 @@ class Textpattern_Meta_Field
 
     public function loadContent($ref = null, $force = false)
     {
-        if ($this->content === null || (count($this->content === 1 && $this->content[0] === null)) || $force) {
+        if ($this->content === null || (count($this->content) === 1 && isset($this->content[0]) && $this->content[0] === null) || $force) {
             $fieldCol = $this->getValueField();
 
             $content = safe_rows(
@@ -209,14 +211,15 @@ class Textpattern_Meta_Field
                 "meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR content_id = '" .$ref. "'") . ")"
             );
 
-            // content_id values with index="-1" contain 'default' entries.
+            // content_id values with index="-1" contain 'default' entries that need removing.
             foreach ($content as $idx => $row) {
-                $content[$idx]['label'] = gTxt($this->getOptionReference($row[$this->getValueField()]));
-
                 if ($row['content_id'] == '-1') {
                     $this->default = $row[$fieldCol];
                     unset($content[$idx]);
+                    continue;
                 }
+
+                $content[$idx]['label'] = gTxt($this->getOptionReference($row[$this->getValueField()]));
             }
 
             // @Todo What if the value needs to be 0 or empty?
@@ -274,9 +277,10 @@ class Textpattern_Meta_Field
         global $txp_user, $txpnow;
 
         $table_prefix = 'txp_meta_value_';
-        $sqlnow = strftime('%Y-%m-%d %T', $txpnow);
-        $data_types = Txp::get('Textpattern_Meta_DataTypes')->get();
+        $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
+        $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
         $this->set($data);
+        $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
 
         extract(doSlash($data));
 
@@ -291,12 +295,13 @@ class Textpattern_Meta_Field
         $constraints = array();
 
         $created = (empty($created)) ? $sqlnow : $created;
+        $expires = (empty($expires)) ? "NULL" : "'".$expires."'";
         $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['text_input'];
 
         $has_textfilter = ($textfilter !== '' && $data_type['textfilter']);
 
         callback_event_ref('meta_ui', 'validate_save', 0, $this->definition, $constraints);
-        $validator = new Validator($constraints);
+        $validator = new \Textpattern\Validator\Validator($constraints);
 
         if ($name === '') {
             $name = $labelStr;
@@ -322,7 +327,7 @@ class Textpattern_Meta_Field
                         ordinal      = '$ordinal',
                         created      = '$created',
                         modified     = '$sqlnow',
-                        expires      = '$expires'",
+                        expires      = $expires",
                         "id = $id"
                     );
                 } else {
@@ -336,7 +341,7 @@ class Textpattern_Meta_Field
                         ordinal      = '$ordinal',
                         created      = '$created',
                         modified     = '$sqlnow',
-                        expires      = '$expires'"
+                        expires      = $expires"
                     );
 
                     if ($ok) {
@@ -358,12 +363,12 @@ class Textpattern_Meta_Field
                             $has_textfilter_orig = ($data_type_orig['textfilter']);
 
                             // Create destination table if required.
-                            $table_def = "`meta_id` int(12) NOT NULL DEFAULT 0,
-                                `content_id` int(12) NOT NULL DEFAULT 0,
-                                `value_id` tinyint(4) NOT NULL DEFAULT 0,
-                                " . ( $has_textfilter ? '`value_raw` ' . $colspec . ' DEFAULT NULL,' : '') . "
-                                `value` " . $colspec . " DEFAULT NULL,
-                                UNIQUE KEY `meta_content` (`meta_id`,`content_id`,`value_id`)";
+                            $table_def = "meta_id int(12) NOT NULL DEFAULT 0,
+                                content_id int(12) NOT NULL DEFAULT 0,
+                                value_id tinyint(4) NOT NULL DEFAULT 0,
+                                " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
+                                value " . $colspec . " DEFAULT NULL,
+                                UNIQUE KEY meta_content (meta_id,content_id,value_id)";
 
                             safe_create($table_name, $table_def);
 
@@ -389,7 +394,7 @@ class Textpattern_Meta_Field
                         $rows = safe_rows('content_id, value_id, value_raw', $table_name, "meta_id = '$id'");
 
                         foreach ($rows as $row) {
-                            $filtered = Txp::get('Textpattern_Textfilter_Registry')->filter(
+                            $filtered = \Txp::get('Textpattern\Textfilter\Registry')->filter(
                                 $textfilter,
                                 $row['value_raw'],
                                 array(
@@ -424,12 +429,12 @@ class Textpattern_Meta_Field
 
                         $nv = do_list($opt, '=>');
 
-                        // If just labels given, create URL-safe names.
+                        // If just labels given, create appropriate URL-safe keys.
                         if (empty($nv[1])) {
                             $nv[1] = $nv[0];
                         }
 
-                        $nv[0] = strtolower(sanitizeForUrl($nv[0]));
+                        $nv[0] = $data_type['type'] === 'varchar' ? strtolower(sanitizeForUrl($nv[0])) : $idx;
 
                         $insertList[] = "('$id', '$nv[0]', '$idx')";
                         $optLabelList[$this->getOptionReference($nv[0])] = $nv[1];
@@ -452,7 +457,7 @@ class Textpattern_Meta_Field
                             array(
                                 'name'  => $key,
                                 'event' => $content_type,
-                                'lang'  => LANG,
+                                'lang'  => $thisLang,
                             )
                         );
                     }
@@ -470,7 +475,7 @@ class Textpattern_Meta_Field
                         array(
                             'name'  => $orig_label_name,
                             'event' => $content_type,
-                            'lang'  => LANG,
+                            'lang'  => $thisLang,
                         )
                     );
 
@@ -487,7 +492,7 @@ class Textpattern_Meta_Field
                         array(
                             'name'  => $orig_help_name,
                             'event' => $content_type,
-                            'lang'  => LANG,
+                            'lang'  => $thisLang,
                         )
                     );
 
@@ -747,7 +752,6 @@ class Textpattern_Meta_Field
      * @param  array        $atts    Attribute pairs to assign to wrapper
      * @param  array        $wraptag Tag(s) to wrap the value / label in, or empty to omit
      * @return HTML
-     * @todo Inline help when admin-layout-update branch is merged to master
      * @since  4.6.0
      */
 
@@ -826,7 +830,7 @@ class Textpattern_Meta_Field
                 break;
         }
 
-        // @Todo: Use inputLabel() when admin-layout-update is rolled into core.
+        // @Todo: Use inputLabel().
         return graf('<label for="'.$id.'">'.gTxt($labelRef).'</label>'.br.$widget);
     }
 }

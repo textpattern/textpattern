@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,117 +27,103 @@
  * Whereas a field's name can be reused between content types, each field
  * has a custom_N id, which is unique across ALL types.
  *
- * @since   4.6.0
+ * @since   4.8.0
  * @package CustomField
  */
 
-class Textpattern_Meta_FieldSet implements IteratorAggregate
+namespace Textpattern\Meta;
+
+class FieldSet implements \IteratorAggregate, \Textpattern\Container\ReusableInterface
 {
     /**
-     * Collection of Meta_Field entities by content type and timestamp.
+     * Collection of Meta_Field entities by content type.
      *
      * @var array
      */
-    protected static $collection = array();
+
+    protected $collection = array();
+
+    /**
+     * Filtered collection of Meta_Field entities by content type.
+     *
+     * @var array
+     */
+
+    protected $filterCollection = array();
 
     /**
      * Constructor for the field set.
      *
-     * @param string $type  Content type to load
-     * @param string $when  DateTime from which the fields are to be loaded (null = now)
+     * @param string $type Content type to load
      */
 
-    public function __construct($type = 'article', $when = null)
+    public function __construct($type = 'article')
     {
-        $clause = '';
-
-        if ($when === null) {
-            assert_int($when);
-            $clause = " AND (expires IS NULL OR expires = '" . NULLDATETIME . "' OR expires > '" . doSlash(strftime('%F %T', $when)) ."')";
-        }
+        $type = (string)$type;
 
         // Haz cache?
-        if (!isset(self::$collection[$type][$when])) {
-            $cfs = safe_rows('
-                `id`,
-                `name`,
-                `content_type`,
-                `data_type`,
-                `render`,
-                `family`,
-                `textfilter`,
-                `ordinal`,
-                `created`,
-                `modified`,
-                `expires`',
+        if (!isset($this->collection[$type])) {
+            $cfs = safe_rows(
+                "id,
+                name,
+                content_type,
+                data_type,
+                render,
+                family,
+                textfilter,
+                ordinal,
+                created,
+                modified,
+                expires",
                 'txp_meta',
-                "content_type = '" . doSlash($type) . "'" . $clause . "
+                "content_type = '".doSlash($type)."'
                 ORDER BY family, ordinal"
             );
 
-            if (!isset(self::$collection[$type])) {
-                self::$collection[$type] = array();
+            if (!isset($this->collection[$type])) {
+                $this->collection[$type] = array();
             }
 
-            // @Todo: Fields don't appear on the Write panel in ordinal order as they're
-            // indexed by ID here.
             foreach ($cfs as $def) {
-                self::$collection[$type][$def['id']] = new Textpattern_Meta_Field($def);
+                $this->collection[$type][$def['id']] = new Field($def);
             }
+
+            $this->filterCollection = $this->collection[$type];
         }
     }
 
     /**
-     * Get the given collection.
+     * Set the given collection indexed by the given property. Chainable.
      *
      * @param  string $type Content type
-     * @param  string $by   The method by which to extract the collection
-     *                      (id, name, field, type, callback, textfilter)
+     * @param  string $by   The key by which to index the collection (id, name, field)
      * @return array
      */
 
-    public function getCollection($type, $by = null)
+    public function filterCollection($type, $by = null)
     {
-        $out = array();
+        if (isset($this->collection[$type])) {
+            $this->filterCollection = array();
 
-        if (isset(self::$collection[$type])) {
             if ($by === null) {
-                $out = self::$collection[$type];
+                $this->filterCollection = $this->collection[$type];
             } else {
                 switch ($by) {
                     case 'id':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type][$def->get('id')] = $def->get('name');
+                        foreach ($this->collection[$type] as $idx => $def) {
+                            $this->filterCollection[$def->get('id')] = $def;
                         }
 
                         break;
                     case 'name':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type][$def->get('name')] = $def->get('id');
+                        foreach ($this->collection[$type] as $idx => $def) {
+                            $this->filterCollection[$def->get('name')] = $def;
                         }
 
                         break;
                     case 'field':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type]['custom_' . $def->get('id')] = $def->get('name');
-                        }
-
-                        break;
-                    case 'type':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type][$def->get('id')] = $def->get('data_type');
-                        }
-
-                        break;
-                    case 'callback':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type][$def->get('id')] = $def->get('render');
-                        }
-
-                        break;
-                    case 'textfilter':
-                        foreach (self::$collection[$type] as $def) {
-                            $out[$type][$def->get('id')] = $def->get('textfilter');
+                        foreach ($this->collection[$type] as $idx => $def) {
+                            $this->filterCollection['custom_' . $def->get('id')] = $def;
                         }
 
                         break;
@@ -146,18 +132,18 @@ class Textpattern_Meta_FieldSet implements IteratorAggregate
             }
         }
 
-        return $out;
+        return $this;
     }
 
     /**
-     * Get the given collection items that are still "in date".
+     * Filter the given collection items that are still "in date" at a specified timestamp. Chainable.
      *
      * @param  string $type Content type
      * @param  int    $when UNIX timestamp cutoff point at which the field becomes invalid
      * @return array
      */
 
-    public function getCollectionByExpiry($type, $when = null)
+    public function filterCollectionAt($type, $when = null)
     {
         global $txpnow;
 
@@ -167,31 +153,34 @@ class Textpattern_Meta_FieldSet implements IteratorAggregate
 
         assert_int($when);
 
-        $out = array();
+        $this->filterCollection = array();
 
-        foreach (self::$collection[$type] as $def) {
-            if ($def['expires'] === NULLDATETIME || $def['expires'] <= strftime('%F %T', $when)) {
-                $out[$type][$def->get('id')] = $def->get('expires');
+        foreach ($this->collection[$type] as $idx => $def) {
+            $createStamp = safe_strtotime($def->get('created'));
+            $expires = $def->get('expires');
+            $expireStamp = empty($expires) ? 0 : safe_strtotime($expires);
+
+            if ($when >= $createStamp && (empty($expireStamp) || $when <= $expireStamp)) {
+                $this->filterCollection[$def->get('id')] = $def;
             }
         }
 
-        return $out;
+        return $this;
     }
 
 
     /**
-     * Stash the value of each field in the collection.
+     * Stash the value of each field in the collection. Chainable.
      */
 
-    public function store($varray, $contentType, $contentId)
+    public function store($varray, $contentType, $contentId, $all = false)
     {
         assert_int($contentId);
 
         $cfq = array();
-        $ret = '';
 
-        if (isset(self::$collection[$contentType])) {
-            foreach (self::$collection[$contentType] as $id => $def) {
+        if (isset($this->collection[$contentType])) {
+            foreach ($this->collection[$contentType] as $id => $def) {
                 $cf_type = $def->get('data_type');
                 $custom_x = "custom_{$id}";
                 $raw = array();
@@ -216,7 +205,7 @@ class Textpattern_Meta_FieldSet implements IteratorAggregate
                     if ($filter === null) {
                         $cfq[$cf_type][$id][] = "value = '" . doSlash($rawVal) . "'";
                     } else {
-                        $cooked = Txp::get('Textpattern_Textfilter_Registry')->filter(
+                        $cooked = \Txp::get('Textpattern\Textfilter\Registry')->filter(
                             $filter,
                             $rawVal,
                             array('field' => $custom_x, 'options' => array('lite' => false), 'data' => array())
@@ -235,13 +224,52 @@ class Textpattern_Meta_FieldSet implements IteratorAggregate
                 safe_delete($tableName, "meta_id = '" . doSlash($metaId) . "' AND content_id = $contentId");
 
                 foreach ($content as $valueId => $set) {
-                    $set .= ", meta_id = '" . doSlash($metaId) . "', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
-                    $ret = safe_insert($tableName, $set);
+                    if ($all || isset($this->filterCollection[$metaId])) {
+                        $set .= ", meta_id = '" . doSlash($metaId) . "', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
+                        safe_insert($tableName, $set);
+                    }
                 }
             }
         }
 
-        return $ret;
+        return $this;
+    }
+
+    /**
+     * Reorder the collection by the given attribute. Chainable.
+     *
+     * @todo
+     */
+
+    public function orderBy($property)
+    {
+        return $this;
+    }
+
+    /**
+     * Reset any filters back to the full collection. Chainable.
+     */
+
+    public function reset($type)
+    {
+        $this->filterCollection = $this->collection[$type];
+
+        return $this;
+    }
+
+    /**
+     * Fetch the given item from the collection.
+     *
+     * @param  string $item The key of the item to retrieve
+     */
+
+    public function getItem($item)
+    {
+        if (isset($this->filterCollection[$item])) {
+            return $this->filterCollection[$item];
+        }
+
+        return array();
     }
 
     /**
@@ -253,7 +281,6 @@ class Textpattern_Meta_FieldSet implements IteratorAggregate
 
     public function getIterator()
     {
-        return new ArrayIterator(self::$collection);
+        return new \ArrayIterator($this->filterCollection);
     }
-
 }

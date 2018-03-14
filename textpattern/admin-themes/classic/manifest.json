@@ -1,0 +1,8 @@
+{
+  "title": "Classic",
+  "txp-type": "textpattern-admin-theme",
+  "version": "4.7.0-beta",
+  "description": "Textpattern CMS Classic admin theme.",
+  "author": "Phil Wareham",
+  "author_uri": "https://github.com/philwareham/textpattern-classic-admin-theme"
+}

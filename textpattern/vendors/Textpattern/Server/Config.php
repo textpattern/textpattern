@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,14 +18,14 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
  * Access server configuration variables.
  *
  * <code>
- * Txp::get('Textpattern\Server\Config')->getVariable('REQUEST_URI');
+ * Txp::get('\Textpattern\Server\Config')->getVariable('REQUEST_URI');
  * </code>
  *
  * @since   4.6.0

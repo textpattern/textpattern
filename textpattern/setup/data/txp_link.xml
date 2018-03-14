@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <link>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://textpattern.com/</url>
+            <linkname>Textpattern website</linkname>
+            <linksort>10</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://docs.textpattern.io/</url>
+            <linkname>Textpattern user documentation</linkname>
+            <linksort>20</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://textpattern.com/github</url>
+            <linkname>Textpattern on GitHub</linkname>
+            <linksort>30</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://textpattern.com/@textpattern</url>
+            <linkname>Textpattern on Twitter</linkname>
+            <linksort>40</linksort>
+            <description></description>
+            <author></author>
+        </item>
+    </link>
+</resources>

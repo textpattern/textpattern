@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -63,14 +63,14 @@ class Textile extends Base implements TextfilterInterface
         parent::filter($thing, $options);
 
         if (($this->options['restricted'])) {
-            return $this->textile->TextileRestricted(
+            return $this->textile->textileRestricted(
                 $thing,
                 $this->options['lite'],
                 $this->options['noimage'],
                 $this->options['rel']
             );
         } else {
-            return $this->textile->TextileThis(
+            return $this->textile->textileThis(
                 $thing,
                 $this->options['lite'],
                 '',
@@ -82,49 +82,13 @@ class Textile extends Base implements TextfilterInterface
     }
 
     /**
-     * Help for Textile syntax.
-     *
-     * Gives some basic Textile syntax examples, wrapped in an &lt;ul&gt;.
+     * Help link for Textile syntax.
      *
      * @return string HTML
      */
 
     public function getHelp()
     {
-        return
-            n.'<ul class="textile plain-list">'.
-            n.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.
-            popHelpSubtle('header', 400, 400).'</li>'.
-            n.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.
-            popHelpSubtle('blockquote', 400, 400).'</li>'.
-            n.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.
-            popHelpSubtle('numeric', 400, 400).'</li>'.
-            n.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.
-            popHelpSubtle('bulleted', 400, 400).'</li>'.
-            n.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.
-            popHelpSubtle('definition', 400, 400).'</li>'.
-            n.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.
-            popHelpSubtle('italic', 400, 400).'</li>'.
-            n.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.
-            popHelpSubtle('bold', 400, 400).'</li>'.
-            n.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.
-            popHelpSubtle('cite', 500, 300).'</li>'.
-            n.'<li>'.'-'.gTxt('deleted_text').'-'.
-            popHelpSubtle('delete', 400, 300).'</li>'.
-            n.'<li>'.'+'.gTxt('inserted_text').'+'.
-            popHelpSubtle('insert', 400, 300).'</li>'.
-            n.'<li>'.'^'.gTxt('superscript').'^'.
-            popHelpSubtle('super', 400, 300).'</li>'.
-            n.'<li>'.'~'.gTxt('subscript').'~'.
-            popHelpSubtle('subscript', 400, 400).'</li>'.
-            n.'<li>'.'"'.gTxt('linktext').'"'.
-            popHelpSubtle('link', 400, 300).'</li>'.
-            n.'<li>'.'!'.gTxt('imageurl').'!'.
-            popHelpSubtle('image', 400, 400).'</li>'.
-            n.'</ul>'.
-
-            graf(
-                href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" rel="external" target="_blank"')
-            );
+        return 'https://textpattern.com/textile-sandbox';
     }
 }

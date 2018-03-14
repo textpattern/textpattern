@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -33,12 +33,13 @@ namespace Textpattern\Tag;
 class Registry implements \Textpattern\Container\ReusableInterface
 {
     /**
-     * Stores registered tags.
+     * Stores registered tags and attributes.
      *
      * @var array
      */
 
     private $tags = array();
+    private $atts = array();
 
     /**
      * Registers a tag.
@@ -54,6 +55,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function register($callback, $tag = null)
     {
+        // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
                 $tag = $callback;
@@ -68,18 +70,70 @@ class Registry implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Registers an attribute.
+     *
+     * <code>
+     * Txp::get('\Textpattern\Tag\Registry')->registerAtt(array('class', 'method'), 'tag');
+     * </code>
+     *
+     * @param  callback    $callback The attribute callback
+     * @param  string|null $tag      The attribute name
+     * @return \Textpattern\Tag\Registry
+     */
+
+    public function registerAttr($callback, $tag = null)
+    {
+        // is_callable only checks syntax here to avoid autoloading
+        if (is_bool($callback)) {
+            foreach (do_list_unique($tag) as $tag) {
+                $this->atts[$tag] = $callback;
+            }
+        } elseif ($callback && is_callable($callback, true)) {
+            if ($tag === null && is_string($callback)) {
+                $this->atts[$callback] = $callback;
+            } else {
+                foreach (do_list_unique($tag) as $tag) {
+                    $this->atts[$tag] = $callback;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Processes a tag by name.
      *
      * @param  string      $tag   The tag
-     * @param  array       $atts  An array of Attributes
+     * @param  array|null  $atts  An array of Attributes
      * @param  string|null $thing The contained statement
-     * @return string|null The tag's results
+     * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return call_user_func($this->tags[$tag], (array)$atts, $thing);
+            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Processes an attribute by name.
+     *
+     * @param  string      $tag   The attribute
+     * @param  string|null $atts  The value of attribute
+     * @param  string|null $thing The processed statement
+     * @return string|bool The tag's results (string) or FALSE on unknown tags
+     */
+
+    public function processAttr($tag, $atts = null, $thing = null)
+    {
+        if ($this->isRegisteredAttr($tag)) {
+            return (string) call_user_func($this->atts[$tag], $atts, $thing);
+        } else {
+            return false;
         }
     }
 
@@ -92,17 +146,30 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegistered($tag)
     {
-        return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
+        return isset($this->tags[$tag]) && is_callable($this->tags[$tag]);
+    }
+
+    /**
+     * Checks if an attribute is registered.
+     *
+     * @param  string $tag The tag
+     * @return bool TRUE if the tag exists
+     */
+
+    public function isRegisteredAttr($tag)
+    {
+        return isset($this->atts[$tag]) && is_callable($this->atts[$tag]);
     }
 
     /**
      * Lists registered tags.
      *
+     * @param  bool $is_attr  tag or attr?
      * @return array
      */
 
-    public function getRegistered()
+    public function getRegistered($is_attr = false)
     {
-        return $this->tags;
+        return $is_attr ? $this->atts : $this->tags;
     }
 }

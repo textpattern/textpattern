@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<articles>
+<article>
+    <title>Welcome to your site</title>
+    <section>articles</section>
+    <category>hope-for-the-future</category>
+    <category>meaningful-labor</category>
+    <body format="textile"><![CDATA[
+h3. What do you want to do next?
+
+* Modify or delete this article? The "article list":adminurl/index.php?event=list is the place to start.
+* Change this site's name, or modify the style of the URLs? It's all up to your "preferences":adminurl/index.php?event=prefs.
+* Get yourself acquainted with Textile, the humane markup generator which comes with Textpattern? The basics are "simple":https://textpattern.com/textile-sandbox. If you want to learn more, you can dig into an "extensive manual":https://textpattern.com/textile-reference-manual later.
+* Be guided through your "Textpattern first steps":https://textpattern.com/textpattern-first-steps by completing some basic tasks?
+* Study the "Textpattern Semantic Model?":https://textpattern.com/textpattern-semantic-model
+* Add "another user":adminurl/index.php?event=admin, or extend the capabilities with "third party plugins":adminurl/index.php?event=plugin you discovered from the "Textpattern plugin directory?":https://textpattern.com/plugins
+* Dive in and learn by trial and error? Then please note:
+** When you "write":adminurl/index.php?event=article an article you assign it to a section of your site.
+** Sections use a "page template":adminurl/index.php?event=page and a "style":adminurl/index.php?event=css as an output scaffold.
+** Page templates use HTML(HyperText Markup Language) and Textpattern tags (like this: @<txp:article />@) to build the markup.
+** Some Textpattern tags use "forms":adminurl/index.php?event=form, which are building blocks for reusable snippets of code and markup you may build and use at your discretion.
+
+"Textpattern tags":https://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":https://docs.textpattern.io/, where you will also find valuable tips and tutorials.
+
+There's also a crowd of friendly, helpful people over at the "Textpattern support forum":https://forum.textpattern.io/. Come and pay a visit!
+]]></body>
+    <excerpt format="textile"><![CDATA[
+This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarize an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.
+]]></excerpt>
+    <comment>
+        <name>Donald Swain</name>
+        <email>donald-swain@example.com</email>
+        <web>https://docs.textpattern.io/brand/donald-swain</web>
+        <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
+    </comment>
+</article>
+</articles>
+
+</resources>

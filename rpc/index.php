@@ -2,13 +2,13 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * XML-RPC Server for Textpattern 4.0.x
- * http://txp.kusor.com/rpc-api
+ * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2005-2006, 2015 The Textpattern Development Team
- * Author: Pedro Palazón - http://kusor.com
+ * Copyright (C) 2018 The Textpattern Development Team
+ * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
  *
@@ -22,13 +22,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
+// TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs? See https://github.com/textpattern/textpattern/issues/1012
 error_reporting(E_ALL & ~E_NOTICE);
 
-// TODO: if display_errors is set to 0... who will ever see errors?
+// TODO: if display_errors is set to 0... who will ever see errors? See https://github.com/textpattern/textpattern/issues/1012
 ini_set("display_errors", "0");
 
 if (@ini_get('register_globals')) {
@@ -44,7 +44,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -72,10 +73,23 @@ define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface', 'xmlrpc');
 
 require_once txpath.'/config.php';
+require_once txpath.'/lib/class.trace.php';
+
+$trace = new Trace();
+
 require_once txpath.'/lib/txplib_db.php';
 require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
+
+require_once txpath.'/vendors/Textpattern/Loader.php';
+
+$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader->register();
+
+$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader->register();
+
 
 if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // TODO: where is dbversion used?

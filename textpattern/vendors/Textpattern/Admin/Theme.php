@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -34,7 +34,7 @@ if (!defined('THEME')) {
      * Relative path to themes directory.
      */
 
-    define('THEME', 'theme/');
+    define('THEME', 'admin-themes'.DS);
 }
 
 /**
@@ -42,6 +42,7 @@ if (!defined('THEME')) {
  *
  * @package Admin\Theme
  */
+
 abstract class Theme
 {
     /**
@@ -67,6 +68,9 @@ abstract class Theme
      */
 
     public $url;
+
+    public $cssPath;
+    public $jsPath;
 
     /**
      * Just a popup window.
@@ -99,6 +103,8 @@ abstract class Theme
         $this->url = THEME.rawurlencode($name).'/';
         $this->is_popup = false;
         $this->message = '';
+        $this->cssPath = 'assets'.DS.'css';
+        $this->jsPath = 'assets'.DS.'js';
     }
 
     /**
@@ -164,7 +170,11 @@ abstract class Theme
 
         if (!$instance) {
             set_pref('theme_name', 'hive');
-            die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => Theme::path($name))));
+            die(gTxt('cannot_instantiate_theme', array(
+                '{name}'  => $name,
+                '{class}' => "{$name}_theme",
+                '{path}'  => Theme::path($name),
+            )));
         }
 
         return $instance;
@@ -173,31 +183,39 @@ abstract class Theme
     /**
      * Get a list of all theme names.
      *
-     * @return array Alphabetically sorted array of all available theme names
+     * @param  int $format
+     *   0 - names
+     *   1 - name => title              Used for selectInput
+     *   2 - name => manifest(array)    Now not used, reserved
+     *
+     * @return array of all available theme names
      */
 
-    public static function names()
+    public static function names($format = 0)
     {
-        $dirs = glob(txpath.DS.THEME.'*');
+        $out = array();
 
-        if (is_array($dirs)) {
-            foreach ($dirs as $d) {
-                // Extract trailing directory name.
-                preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
-                $name = $m[2];
+        if ($files = glob(txpath.DS.THEME.'*'.DS.'manifest.json')) {
+            $DS = preg_quote(DS);
 
-                // Accept directories containing an equally named .php file.
-                if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php')) {
-                    $out[] = $name;
+            foreach ($files as $file) {
+                $file = realpath($file);
+                if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                    if (@$manifest['txp-type'] == 'textpattern-admin-theme' && is_file($mm[1].DS.$mm[2].'.php')) {
+                        $manifest['title'] = empty($manifest['title']) ? ucwords($mm[2]) : $manifest['title'];
+                        if ($format == 1) {
+                            $out[$mm[2]] = $manifest['title'];
+                        } elseif ($format == 2) {
+                            $out[$mm[2]] = $manifest;
+                        } else {
+                            $out[] = $mm[2];
+                        }
+                    }
                 }
             }
-
-            sort($out, SORT_STRING);
-
-            return $out;
         }
 
-        return array();
+        return $out;
     }
 
     /**
@@ -216,7 +234,11 @@ abstract class Theme
             set_pref('theme_name', 'hive');
 
             if ($production_status === 'debug') {
-                echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => Theme::path($name)));
+                echo gTxt('cannot_instantiate_theme', array(
+                    '{name}'  => $name,
+                    '{class}' => "{$name}_theme",
+                    '{path}'  => Theme::path($name),
+                ));
             }
 
             return false;
@@ -283,7 +305,11 @@ abstract class Theme
                             $this->menu[$ar]['event'] = $dflt_tab;
                         }
 
-                        $i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
+                        $i_[] = array(
+                            'label'  => $a,
+                            'event'  => $b,
+                            'active' => ($b == $event),
+                        );
                     }
                 }
 
@@ -311,6 +337,53 @@ abstract class Theme
      */
 
     abstract public function html_head();
+
+    /**
+     * HTML &lt;head&gt; custom section.
+     *
+     */
+
+    public function html_head_custom()
+    {
+        $out = '';
+        $prefs = $this->manifest('prefs');
+
+        if (!empty($prefs['textpattern'])) {
+            $content = json_encode($prefs['textpattern'], TEXTPATTERN_JSON);
+            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
+        }
+
+        if (!empty($prefs['style'])) {
+            $content = $prefs['style'];
+            $out .= "<style>\n{$content}\n</style>".n;
+        }
+
+        // Custom CSS (see theme README for usage instructions).
+        if (defined('admin_custom_css')) {
+            $custom_css = admin_custom_css;
+        } else {
+            $custom_css = 'custom.css';
+        }
+
+        $custom = empty($this->cssPath) ? $custom_css : $this->cssPath.DS.$custom_css;
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+            $out .= '<link rel="stylesheet" href="'.$this->url.$custom.'">'.n;
+        }
+
+        // Custom JavaScript (see theme README for usage instructions).
+        if (defined('admin_custom_js')) {
+            $custom_js = admin_custom_js;
+        } else {
+            $custom_js = 'custom.js';
+        }
+
+        $custom = empty($this->jsPath) ? $custom_js : $this->jsPath.DS.$custom_js;
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+            $out .= '<script src="'.$this->url.$custom.'"></script>'.n;
+        }
+
+        return $out;
+    }
 
     /**
      * Draw the theme's header.
@@ -341,7 +414,7 @@ abstract class Theme
 
     public function announce($thing = array('', 0), $modal = false)
     {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+        return $this->_announce($thing, false, $modal);
     }
 
     /**
@@ -360,26 +433,48 @@ abstract class Theme
 
     public function announce_async($thing = array('', 0), $modal = false)
     {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+        return $this->_announce($thing, true, $modal);
     }
 
     /**
-     * Define bureaucratic details of this theme.
+     * Output notification message for synchronous HTML and asynchronous JavaScript views.
+     *
+     */
+
+    private function _announce($thing, $async, $modal)
+    {
+        // $thing[0]: message text.
+        // $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
+
+        if ($thing === '') {
+            return '';
+        }
+
+        if (!is_array($thing) || !isset($thing[1])) {
+            $thing = array($thing, 0);
+        }
+
+        if ($modal) {
+            $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
+        } else {
+            // Try to inject $html into the message pane no matter when _announce()'s output is printed.
+            $thing = json_encode($thing, TEXTPATTERN_JSON);
+            $js = "textpattern.Console.addMessage({$thing})";
+        }
+
+        return $async ? $js : script_js(str_replace('</', '<\/', $js));
+    }
+
+    /**
+     * Return details of this theme.
      *
      * All returned items are optional.
      *
      * @return array
      */
 
-    public function manifest()
+    public function manifest($type = 'manifest')
     {
-        return array(
-            'title'       => '', // Human-readable title of this theme. No HTML, keep it short.
-            'author'      => '', // Name(s) of this theme's creator(s).
-            'author_uri'  => '', // URI of the theme's site. Decent vanity is accepted.
-            'version'     => '', // Version numbering. Mind version_compare().
-            'description' => '', // Human readable short description. No HTML.
-            'help'        => '', // URI of the theme's help and docs. Strictly optional.
-        );
+        return @json_decode(file_get_contents($this->url.$type.'.json'), true);
     }
 }

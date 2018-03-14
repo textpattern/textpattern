@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 // Make sure we display all errors that occur during initialisation.
@@ -38,7 +38,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -62,7 +63,9 @@ if (@ini_get('register_globals')) {
     }
 }
 
-define("txpinterface", "public");
+if (!defined('txpinterface')) {
+    define('txpinterface', 'public');
+}
 
 if (!defined('txpath')) {
     define("txpath", dirname(__FILE__).'/textpattern');
@@ -82,9 +85,18 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+// Permit a unified "now" time to be referenced irrespective of how
+// long it takes to load the page. This harmonises time-based
+// content, such as custom fields, and also allows a dedicated time
+// value to be passed to SQL queries, alleviating NOW().
+$txpnow = time();
+
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
+$trace->start('[PHP includes, stage 1]');
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-trace_log(TEXTPATTERN_TRACE_START);
+$trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {
     txp_status_header('503 Service Unavailable');
@@ -93,10 +105,27 @@ if (!isset($txpcfg['table_prefix'])) {
 
 // Custom caches, etc?
 if (!empty($txpcfg['pre_publish_script'])) {
-    trace_add("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
+    $trace->start("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
     require $txpcfg['pre_publish_script'];
+    $trace->stop();
 }
 
 include txpath.'/publish.php';
-textpattern();
-trace_log(TEXTPATTERN_TRACE_DISPLAY);
+
+switch (txpinterface) {
+    case 'css':
+        $n = gps('n');
+        $t = gps('t');
+        output_css($s, $n, $t);
+        break;
+    default:
+        textpattern();
+
+        if ($production_status !== 'live') {
+            echo $trace->summary();
+        }
+}
+
+if ($production_status === 'debug') {
+    echo txpinterface === 'css' ? n.'/*'.$trace->result().n.'*/'.n : $trace->result();
+}

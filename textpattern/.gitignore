@@ -1,1 +1,5 @@
 /config.php
+/tmp/*
+/tmp/!.gitignore
+/plugin-cache
+/setup/.default.json

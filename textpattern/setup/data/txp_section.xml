@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <section>
+        <item>
+            <name>articles</name>
+            <page>archive</page>
+            <css>default</css>
+            <description></description>
+            <in_rss>1</in_rss>
+            <on_frontpage>1</on_frontpage>
+            <searchable>1</searchable>
+            <title>Articles</title>
+        </item>
+    </section>
+</resources>
