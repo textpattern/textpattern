@@ -6590,12 +6590,12 @@ function install_textpack($textpack, $add_new_langs = false)
 
 function form_token()
 {
-    static $token;
+    static $token = null;
     global $txp_user;
 
     // Generate a ciphered token from the current user's nonce (thus valid for
     // login time plus 30 days) and a pinch of salt from the blog UID.
-    if (empty($token)) {
+    if ($token === null && $txp_user) {
         $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
         $token = md5($nonce.get_pref('blog_uid'));
     }
