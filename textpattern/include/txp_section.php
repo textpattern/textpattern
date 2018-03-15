@@ -654,9 +654,9 @@ function section_save()
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
-                on_frontpage = $on_frontpage,
-                in_rss       = $in_rss,
-                searchable   = $searchable
+                on_frontpage = '$on_frontpage',
+                in_rss       = '$in_rss',
+                searchable   = '$searchable'
                 ", "name = '$safe_old_name'");
 
             // Manually maintain referential integrity.
@@ -671,9 +671,9 @@ function section_save()
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
-                on_frontpage = $on_frontpage,
-                in_rss       = $in_rss,
-                searchable   = $searchable");
+                on_frontpage = '$on_frontpage',
+                in_rss       = '$in_rss',
+                searchable   = '$searchable'");
         }
     }
 

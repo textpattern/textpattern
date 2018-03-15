@@ -164,8 +164,7 @@ class Paginator
     {
         global $prefs;
 
-        $qty = gps('qty');
-        assert_int($qty);
+        $qty = intval(gps('qty'));
         $GLOBALS[$this->prefKey] = $prefs[$this->prefKey] = $qty;
 
         set_pref($this->prefKey, $qty, $this->event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);

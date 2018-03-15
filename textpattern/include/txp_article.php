@@ -205,7 +205,7 @@ function article_save()
 
     extract(doSlash($incoming));
     $ID = intval($ID);
-    assert_int($Status);
+    $Status = assert_int($Status);
 
     if (!has_privs('article.publish') && has_status_group($Status, 'published')) {
         $Status = STATUS_PENDING;
@@ -318,7 +318,7 @@ function article_save()
             Keywords        = '$Keywords',
             description     = '$description',
             Image           = '$Image',
-            Status          =  $Status,
+            Status          = '$Status',
             Posted          =  $whenposted,
             Expires         =  $whenexpires,
             LastMod         =  NOW(),

@@ -365,7 +365,7 @@ function link_edit($message = '')
 
     if ($is_edit) {
         $id = assert_int($id);
-        $rs = safe_row("*", 'txp_link', "id = $id");
+        $rs = safe_row("*", 'txp_link', "id = '$id'");
 
         if ($rs) {
             extract($rs);
@@ -562,7 +562,7 @@ function link_multi_edit()
 {
     global $txp_user, $all_link_cats, $all_link_authors;
 
-    // Empty entry to permit clearing the category
+    // Empty entry to permit clearing the category.
     $categories = array('');
 
     foreach ($all_link_cats as $row) {
@@ -571,13 +571,15 @@ function link_multi_edit()
 
     $selected = ps('selected');
 
-    if (!$selected or !is_array($selected)) {
+    if (!$selected || !is_array($selected)) {
         link_list();
 
         return;
     }
 
+    // Fetch and remove bogus (false) entries to prevent SQL syntax errors being thrown.
     $selected = array_map('assert_int', $selected);
+    $selected = array_filter($selected);
     $method = ps('edit_method');
     $changed = array();
     $key = '';
@@ -585,14 +587,15 @@ function link_multi_edit()
     switch ($method) {
         case 'delete':
             if (!has_privs('link.delete')) {
-                if (has_privs('link.delete.own')) {
+                if ($selected && has_privs('link.delete.own')) {
                     $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
                 } else {
                     $selected = array();
                 }
             }
+
             foreach ($selected as $id) {
-                if (safe_delete('txp_link', "id = $id")) {
+                if (safe_delete('txp_link', "id = '$id'")) {
                     $changed[] = $id;
                 }
             }
@@ -622,16 +625,16 @@ function link_multi_edit()
     }
 
     if (!has_privs('link.edit')) {
-        if (has_privs('link.edit.own')) {
+        if ($selected && has_privs('link.edit.own')) {
             $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
         } else {
             $selected = array();
         }
     }
 
-    if ($selected and $key) {
+    if ($selected && $key) {
         foreach ($selected as $id) {
-            if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = $id")) {
+            if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = '$id'")) {
                 $changed[] = $id;
             }
         }

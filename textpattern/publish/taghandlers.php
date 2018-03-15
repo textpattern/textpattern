@@ -5161,6 +5161,7 @@ function txp_escape($atts, $thing = '')
                 }
 
                 $thing = $textile->textileThis($tidy ? ' '.$thing : $thing);
+                !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";

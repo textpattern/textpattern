@@ -485,11 +485,13 @@ function image_multi_edit()
 
     $selected = ps('selected');
 
-    if (!$selected or !is_array($selected)) {
+    if (!$selected || !is_array($selected)) {
         return image_list();
     }
 
+    // Fetch and remove bogus (false) entries to prevent SQL syntax errors being thrown.
     $selected = array_map('assert_int', $selected);
+    $selected = array_filter($selected);
     $method = ps('edit_method');
     $changed = array();
     $key = '';
@@ -517,16 +519,16 @@ function image_multi_edit()
     }
 
     if (!has_privs('image.edit')) {
-        if (has_privs('image.edit.own')) {
+        if ($selected && has_privs('image.edit.own')) {
             $selected = safe_column("id", 'txp_image', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
         } else {
             $selected = array();
         }
     }
 
-    if ($selected and $key) {
+    if ($selected && $key) {
         foreach ($selected as $id) {
-            if (safe_update('txp_image', "$key = '".doSlash($val)."'", "id = $id")) {
+            if (safe_update('txp_image', "$key = '".doSlash($val)."'", "id = '$id'")) {
                 $changed[] = $id;
             }
         }
@@ -557,7 +559,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_image', "id = $id");
+    $rs = safe_row("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -679,7 +681,7 @@ function image_edit($message = '', $id = '')
 
         echo n.'<div class="txp-layout">'.
             n.tag(
-                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading txp-heading-tight')),
+                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')),
                 'div', array('class' => 'txp-layout-1col')
             ).
             n.tag(
@@ -834,7 +836,7 @@ function image_replace()
     global $txp_user;
 
     $id = assert_int(gps('id'));
-    $rs = safe_row("*", 'txp_image', "id = $id");
+    $rs = safe_row("*", 'txp_image', "id = '$id'");
 
     if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
         require_privs('image.edit');
@@ -872,7 +874,7 @@ function thumbnail_insert()
     global $extensions, $txp_user;
 
     $id = assert_int(gps('id'));
-    $author = fetch('author', 'txp_image', 'id', $id);
+    $author = fetch('author', 'txp_image', 'id', '$id');
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
         require_privs('image.edit');
@@ -900,7 +902,7 @@ function thumbnail_insert()
             image_edit(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
-            safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");
+            safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = '$id'");
 
             $message = gTxt('image_uploaded', array('{name}' => $name));
             update_lastmod('thumbnail_created', compact('id', 'w', 'h'));
@@ -945,7 +947,7 @@ function image_save()
         category = '$category',
         alt      = '$alt',
         caption  = '$caption'",
-        "id = $id"
+        "id = '$id'"
     )) {
         $message = gTxt('image_updated', array('{name}' => doStrip($name)));
         update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
@@ -966,11 +968,14 @@ function image_delete($ids = array())
 {
     global $txp_user, $event;
 
-    $ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
     $message = '';
 
+    // Fetch ids and remove bogus (false) entries to prevent SQL syntax errors being thrown.
+    $ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+    $ids = array_filter($ids);
+
     if (!has_privs('image.delete')) {
-        if (has_privs('image.delete.own')) {
+        if ($ids && has_privs('image.delete.own')) {
             $ids = safe_column("id", 'txp_image', "id IN (".join(',', $ids).") AND author = '".doSlash($txp_user)."'");
         } else {
             $ids = array();
@@ -988,7 +993,7 @@ function image_delete($ids = array())
                 // Notify plugins of pending deletion, pass image's $id.
                 callback_event('image_deleted', $event, false, $id);
 
-                $rsd = safe_delete('txp_image', "id = $id");
+                $rsd = safe_delete('txp_image', "id = '$id'");
                 $ul = false;
 
                 if (is_file(IMPATH.$id.$ext)) {

@@ -884,7 +884,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     if (shift_uploaded_file($file, $newpath) == false) {
         if (!empty($rs)) {
-            safe_delete('txp_image', "id = $id");
+            safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
         }
 
@@ -2977,7 +2977,7 @@ function event_multi_edit($table, $id_key)
             foreach ($selected as $id) {
                 $id = assert_int($id);
 
-                if (safe_delete($table, "$id_key = $id")) {
+                if (safe_delete($table, "$id_key = '$id'")) {
                     $ids[] = $id;
                 }
             }
@@ -4203,9 +4203,9 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 
     // Remove any previous activation tokens and insert the new one.
     $safe_type = doSlash($type);
-    safe_delete("txp_token", "reference_id = $ref AND type = '$safe_type'");
+    safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
     safe_insert("txp_token",
-            "reference_id = $ref,
+            "reference_id = '$ref',
             type = '$safe_type',
             selector = '".doSlash($selector)."',
             token = '".doSlash($token)."',
@@ -4498,9 +4498,9 @@ function fetch_section_title($name)
 function update_comments_count($id)
 {
     $id = assert_int($id);
-    $thecount = safe_field("COUNT(*)", 'txp_discuss', "parentid = ".$id." AND visible = ".VISIBLE);
+    $thecount = safe_field("COUNT(*)", 'txp_discuss', "parentid = '".$id."' AND visible = ".VISIBLE);
     $thecount = assert_int($thecount);
-    $updated = safe_update('textpattern', "comments_count = ".$thecount, "ID = ".$id);
+    $updated = safe_update('textpattern', "comments_count = ".$thecount, "ID = '".$id."'");
 
     return ($updated) ? true : false;
 }
@@ -4515,24 +4515,28 @@ function update_comments_count($id)
 function clean_comment_counts($parentids)
 {
     $parentids = array_map('assert_int', $parentids);
-    $rs = safe_rows_start("parentid, COUNT(*) AS thecount", 'txp_discuss', "parentid IN (".implode(',', $parentids).") AND visible = ".VISIBLE." GROUP BY parentid");
+    $parentids = array_filter($parentids);
 
-    if (!$rs) {
-        return;
-    }
+    if ($parentids) {
+        $rs = safe_rows_start("parentid, COUNT(*) AS thecount", 'txp_discuss', "parentid IN (".implode(',', $parentids).") AND visible = ".VISIBLE." GROUP BY parentid");
 
-    $updated = array();
+        if (!$rs) {
+            return;
+        }
 
-    while ($a = nextRow($rs)) {
-        safe_update('textpattern', "comments_count = ".$a['thecount'], "ID = ".$a['parentid']);
-        $updated[] = $a['parentid'];
-    }
+        $updated = array();
 
-    // We still need to update all those, that have zero comments left.
-    $leftover = array_diff($parentids, $updated);
+        while ($a = nextRow($rs)) {
+            safe_update('textpattern', "comments_count = ".$a['thecount'], "ID = ".$a['parentid']);
+            $updated[] = $a['parentid'];
+        }
 
-    if ($leftover) {
-        safe_update('textpattern', "comments_count = 0", "ID IN (".implode(',', $leftover).")");
+        // We still need to update all those, that have zero comments left.
+        $leftover = array_diff($parentids, $updated);
+
+        if ($leftover) {
+            safe_update('textpattern', "comments_count = 0", "ID IN (".implode(',', $leftover).")");
+        }
     }
 }
 
@@ -6586,12 +6590,12 @@ function install_textpack($textpack, $add_new_langs = false)
 
 function form_token()
 {
-    static $token;
+    static $token = null;
     global $txp_user;
 
     // Generate a ciphered token from the current user's nonce (thus valid for
     // login time plus 30 days) and a pinch of salt from the blog UID.
-    if (empty($token)) {
+    if ($token === null && $txp_user) {
         $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
         $token = md5($nonce.get_pref('blog_uid'));
     }
