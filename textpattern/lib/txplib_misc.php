@@ -6595,7 +6595,7 @@ function form_token()
 
     // Generate a ciphered token from the current user's nonce (thus valid for
     // login time plus 30 days) and a pinch of salt from the blog UID.
-    if ($token === null && $txp_user) {
+    if ($token === null) {
         $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
         $token = md5($nonce.get_pref('blog_uid'));
     }
