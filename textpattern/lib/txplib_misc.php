@@ -884,7 +884,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     if (shift_uploaded_file($file, $newpath) == false) {
         if (!empty($rs)) {
-            safe_delete('txp_image', "id = $id");
+            safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
         }
 
@@ -2977,7 +2977,7 @@ function event_multi_edit($table, $id_key)
             foreach ($selected as $id) {
                 $id = assert_int($id);
 
-                if (safe_delete($table, "$id_key = $id")) {
+                if (safe_delete($table, "$id_key = '$id'")) {
                     $ids[] = $id;
                 }
             }
@@ -4203,9 +4203,9 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 
     // Remove any previous activation tokens and insert the new one.
     $safe_type = doSlash($type);
-    safe_delete("txp_token", "reference_id = $ref AND type = '$safe_type'");
+    safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
     safe_insert("txp_token",
-            "reference_id = $ref,
+            "reference_id = '$ref',
             type = '$safe_type',
             selector = '".doSlash($selector)."',
             token = '".doSlash($token)."',
@@ -4498,9 +4498,9 @@ function fetch_section_title($name)
 function update_comments_count($id)
 {
     $id = assert_int($id);
-    $thecount = safe_field("COUNT(*)", 'txp_discuss', "parentid = ".$id." AND visible = ".VISIBLE);
+    $thecount = safe_field("COUNT(*)", 'txp_discuss', "parentid = '".$id."' AND visible = ".VISIBLE);
     $thecount = assert_int($thecount);
-    $updated = safe_update('textpattern', "comments_count = ".$thecount, "ID = ".$id);
+    $updated = safe_update('textpattern', "comments_count = ".$thecount, "ID = '".$id."'");
 
     return ($updated) ? true : false;
 }
