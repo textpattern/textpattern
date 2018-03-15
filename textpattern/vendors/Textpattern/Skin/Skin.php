@@ -1485,6 +1485,7 @@ namespace Textpattern\Skin {
                        .n.tag_end('table')
                        .n.tag_end('div')
                        .n.self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
+                       .tInput()
                        .n.tag_end('form');
 
             }
