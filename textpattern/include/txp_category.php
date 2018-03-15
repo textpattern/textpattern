@@ -153,7 +153,7 @@ function cat_parent_pop($name, $type, $id)
 {
     if ($id) {
         $id = assert_int($id);
-        list($lft, $rgt) = array_values(safe_row("lft, rgt", 'txp_category', "id = $id"));
+        list($lft, $rgt) = array_values(safe_row("lft, rgt", 'txp_category', "id = '$id'"));
 
         $rs = getTree('root', $type, "lft NOT BETWEEN $lft AND $rgt");
     } else {
@@ -284,7 +284,9 @@ function cat_category_multiedit()
     $things = ps('selected');
 
     if (is_array($things) and $things and in_array($type, array('article', 'image', 'link', 'file'))) {
+        // Fetch selected ites and remove bogus (false) entries to prevent SQL syntax errors.
         $things = array_map('assert_int', $things);
+        $things = array_filter($things);
 
         if ($method == 'delete' || $method == 'deleteforce') {
             if ($type === 'article') {
@@ -536,7 +538,7 @@ function cat_event_category_edit($evname, $message = '')
     $id     = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
 
-    $row = safe_row("*", 'txp_category', "id = $id");
+    $row = safe_row("*", 'txp_category', "id = '$id'");
 
     if ($row) {
         pagetop(gTxt('edit_category'), $message);
@@ -616,7 +618,7 @@ function cat_event_category_save($event, $table_name)
 
     $message = array(gTxt('category_save_failed'), E_ERROR);
 
-    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = $id") &&
+    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'") &&
         safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {
         rebuild_tree_full($event);
 

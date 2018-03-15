@@ -532,7 +532,7 @@ function file_multi_edit()
 
     $selected = ps('selected');
 
-    if (!$selected or !is_array($selected)) {
+    if (!$selected || !is_array($selected)) {
         return file_list();
     }
 
@@ -576,17 +576,20 @@ function file_multi_edit()
             break;
     }
 
+    // Remove bogus (false) entries to prevent SQL syntax errors being thrown.
+    $selected = array_filter($selected);
+
     if (!has_privs('file.edit')) {
-        if (has_privs('file.edit.own')) {
+        if ($selected && has_privs('file.edit.own')) {
             $selected = safe_column("id", 'txp_file', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
         } else {
             $selected = array();
         }
     }
 
-    if ($selected and $key) {
+    if ($selected && $key) {
         foreach ($selected as $id) {
-            if (safe_update('txp_file', "$key = '".doSlash($val)."'", "id = $id")) {
+            if (safe_update('txp_file', "$key = '".doSlash($val)."'", "id = '$id'")) {
                 $changed[] = $id;
             }
         }
@@ -631,7 +634,7 @@ function file_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(modified) AS modified", 'txp_file', "id = $id");
+    $rs = safe_row("*, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(modified) AS modified", 'txp_file', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -914,8 +917,8 @@ function file_insert()
                 $id = assert_int($id);
 
                 if (!shift_uploaded_file($tmp_name, $newpath)) {
-                    safe_delete('txp_file', "id = $id");
-                    safe_alter('txp_file', "auto_increment = $id");
+                    safe_delete('txp_file', "id = '$id'");
+                    safe_alter('txp_file', "auto_increment = '$id'");
                     $messages[] = array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR);
                 } else {
                     file_set_perm($newpath);
@@ -973,7 +976,7 @@ function file_replace()
     global $txp_user, $file_base_path;
 
     $id = assert_int(gps('id'));
-    $rs = safe_row("filename, author", 'txp_file', "id = $id");
+    $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
 
     if (!$rs) {
         file_list(array(gTxt('invalid_id', array('{id}' => $id)), E_ERROR));
@@ -1021,7 +1024,7 @@ function file_replace()
             now('created', true);
 
             if ($size = filesize($newpath)) {
-                safe_update('txp_file', "size = $size, modified = NOW()", "id = $id");
+                safe_update('txp_file', "size = $size, modified = NOW()", "id = '$id'");
             }
 
             file_edit(gTxt('file_uploaded', array('{name}' => $name)), $id);
@@ -1074,7 +1077,7 @@ function file_save()
 
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
-    $rs = safe_row("filename, author", 'txp_file', "id = $id");
+    $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
 
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
@@ -1126,7 +1129,7 @@ function file_save()
         status = '$status',
         size = '$size',
         modified = NOW()"
-        .($created ? ", created = $created" : ''), "id = $id");
+        .($created ? ", created = $created" : ''), "id = '$id'");
 
     if (!$rs) {
         // Update failed, rollback name.
@@ -1152,10 +1155,12 @@ function file_delete($ids = array())
 {
     global $file_base_path, $txp_user;
 
-    $ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+    // Fetch ids and remove bogus (false) entries to prevent SQL syntax errors being thrown.
+    $ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+    $ids = array_filter($ids);
 
     if (!has_privs('file.delete')) {
-        if (has_privs('file.delete.own')) {
+        if ($ids && has_privs('file.delete.own')) {
             $ids = safe_column("id", 'txp_file', "id IN (".join(',', $ids).") AND author = '".doSlash($txp_user)."'");
         } else {
             $ids = array();
@@ -1170,13 +1175,13 @@ function file_delete($ids = array())
         if ($rs) {
             while ($a = nextRow($rs)) {
                 extract($a);
-
+                $id = assert_int($id);
                 $filepath = build_file_path($file_base_path, $filename);
 
                 // Notify plugins of pending deletion, pass file's id and path.
                 callback_event('file_deleted', '', false, $id, $filepath);
 
-                $rsd = safe_delete('txp_file', "id = $id");
+                $rsd = safe_delete('txp_file', "id = '$id'");
                 $ul = false;
 
                 if ($rsd && is_file($filepath)) {

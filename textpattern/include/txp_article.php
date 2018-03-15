@@ -197,7 +197,7 @@ function article_save()
 
     extract(doSlash($incoming));
     $ID = intval($ID);
-    assert_int($Status);
+    $Status = assert_int($Status);
 
     if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
         $Status = STATUS_PENDING;
@@ -306,7 +306,7 @@ function article_save()
             Keywords        = '$Keywords',
             description     = '$description',
             Image           = '$Image',
-            Status          =  $Status,
+            Status          = '$Status',
             LastMod         = '".$sqlnow."',
             Posted          =  $whenposted,
             Expires         =  $whenexpires,
