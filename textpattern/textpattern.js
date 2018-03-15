@@ -29,7 +29,8 @@ textpattern.version = '4.7.0'
  * Ascertain the page direction (LTR or RTL) as a variable.
  */
 
-var langdir = document.documentElement.dir;
+var langdir = document.documentElement.dir,
+    dir = langdir === 'rtl' ? 'left' : 'right';
 
 /**
  * Checks if HTTP cookies are enabled.
@@ -1556,7 +1557,7 @@ $(document).keydown(function (e) {
 });
 
 jQuery.fn.txpMenu = function(button) {
-    var menu = this, dir = langdir === 'rtl' ? 'left' : 'right'
+    var menu = this
 
     menu.on('click focusin', function (e) {
         e.stopPropagation()
@@ -1600,7 +1601,6 @@ jQuery.fn.txpMenu = function(button) {
 function txp_search()
 {
     var $ui = $('.txp-search'),
-        dir = langdir === 'rtl' ? 'left' : 'right',
         button = $ui.find('.txp-search-options').button({
             showLabel: false,
             icon: 'ui-icon-triangle-1-s'
@@ -1632,6 +1632,7 @@ function txp_search()
         'confirmation': false
     });
 }
+
 /**
  * Column manipulation tool.
  *
@@ -1795,6 +1796,7 @@ jQuery.fn.restorePanes = function () {
  *
  * @since 4.7.0
  */
+
 jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
@@ -2441,12 +2443,13 @@ $(document).ready(function () {
     $('.txp-sortable').txpSortable();
 
 
-
     // TODO: integrate jQuery UI stuff properly --------------------------------
 
 
     // Selectmenu
-    $('.jquery-ui-selectmenu').selectmenu();
+    $('.jquery-ui-selectmenu').selectmenu({
+        position: { my: dir+' top', at: dir+' bottom' }
+    });
 
     // Button
     $('.jquery-ui-button').button();
@@ -2456,6 +2459,7 @@ $(document).ready(function () {
 
 
     // TODO: end integrate jQuery UI stuff properly ----------------------------
+
 
     // Async lists navigation
     $('#txp-list-container').closest('main').on('submit', 'nav.prev-next form', function(e) {
