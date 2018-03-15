@@ -548,7 +548,9 @@ function list_multi_edit()
         return list_list();
     }
 
+    // Fetch ids and remove bogus (false) entries to prevent SQL syntax errors being thrown.
     $selected = array_map('assert_int', $selected);
+    $selected = array_filter($selected);
 
     // Empty entry to permit clearing the categories.
     $categories = array('');
@@ -564,7 +566,7 @@ function list_multi_edit()
         // Delete.
         case 'delete':
             if (!has_privs('article.delete')) {
-                if (has_privs('article.delete.own')) {
+                if ($selected && has_privs('article.delete.own')) {
                     $allowed = safe_column_num(
                         "ID",
                         'textpattern',
@@ -635,11 +637,13 @@ function list_multi_edit()
             break;
     }
 
-    $selected = safe_rows(
-        "ID, AuthorID, Status",
-        'textpattern',
-        "ID IN (".join(',', $selected).")"
-    );
+    if ($selected) {
+        $selected = safe_rows(
+            "ID, AuthorID, Status",
+            'textpattern',
+            "ID IN (".join(',', $selected).")"
+        );
+    }
 
     foreach ($selected as $item) {
         if (

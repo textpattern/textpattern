@@ -241,7 +241,7 @@ function css_edit($message = '', $refresh_partials = false)
 
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading txp-heading-tight')),
+            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')),
             'div', array('class' => 'txp-layout-1col')
         );
 

@@ -325,7 +325,7 @@ function doTxpValidate()
                     $message = array(gTxt('token_expired'), E_ERROR);
                 } else {
                     $uid = assert_int($tokenInfo['reference_id']);
-                    $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = $uid");
+                    $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = '$uid'");
 
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
@@ -335,7 +335,7 @@ function doTxpValidate()
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 
                             // Invalidate all tokens in the wild for this user.
-                            safe_delete("txp_token", "reference_id = $uid AND type IN ('password_reset', 'account_activation')");
+                            safe_delete("txp_token", "reference_id = '$uid' AND type IN ('password_reset', 'account_activation')");
                         }
                     } else {
                         $message = array(gTxt('invalid_token'), E_ERROR);
