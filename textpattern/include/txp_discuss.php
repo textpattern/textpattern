@@ -637,9 +637,9 @@ function discuss_multi_edit()
                 'visible'     => VISIBLE,
             );
 
-            $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".$idList.")", 1);
+            $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".$idList.")");
 
-            $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".$idList.")", 1);
+            $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".$idList.")");
 
             while ($row = nextRow($rs)) {
                 extract($row);
@@ -660,7 +660,7 @@ function discuss_multi_edit()
                     if ($visState !== null && safe_update('txp_discuss',
                         "visible = ".$visState,
                         "discussid = '$id'"
-                    , 1)) {
+                    )) {
                         $done[] = $id;
                     }
                 }
