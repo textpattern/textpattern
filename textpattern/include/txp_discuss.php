@@ -500,7 +500,7 @@ function discuss_edit()
 
     $discussid = assert_int($discussid);
 
-    $rs = safe_row("*, UNIX_TIMESTAMP(posted) AS uPosted", 'txp_discuss', "discussid = $discussid");
+    $rs = safe_row("*, UNIX_TIMESTAMP(posted) AS uPosted", 'txp_discuss', "discussid = '$discussid'");
 
     if ($rs) {
         extract($rs);
@@ -618,47 +618,51 @@ function discuss_multi_edit()
     $method = ps('edit_method');
     $done = array();
 
-    if ($selected and is_array($selected)) {
+    if ($selected && is_array($selected)) {
         // Get all articles for which we have to update the count.
+        $ids = array();
+
         foreach ($selected as $id) {
             $ids[] = assert_int($id);
         }
-        $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
 
-        $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
+        // Remove bogus (false) entries to prevent SQL syntax errors being thrown.
+        $ids = array_filter($ids);
 
-        while ($row = nextRow($rs)) {
-            extract($row);
-            $id = assert_int($discussid);
-            $parentids[] = $parentid;
+        if ($ids) {
+            $idList = implode(',', $ids);
+            $visStates = array(
+                'spam'        => SPAM,
+                'unmoderated' => MODERATE,
+                'visible'     => VISIBLE,
+            );
 
-            if ($method == 'delete') {
-                // Delete and, if successful, update comment count.
-                if (safe_delete('txp_discuss', "discussid = $id")) {
-                    $done[] = $id;
-                }
+            $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".$idList.")", 1);
 
-                callback_event('discuss_deleted', '', 0, $done);
-            } elseif ($method == 'spam') {
-                if (safe_update('txp_discuss',
-                    "visible = ".SPAM,
-                    "discussid = $id"
-                )) {
-                    $done[] = $id;
-                }
-            } elseif ($method == 'unmoderated') {
-                if (safe_update('txp_discuss',
-                    "visible = ".MODERATE,
-                    "discussid = $id"
-                )) {
-                    $done[] = $id;
-                }
-            } elseif ($method == 'visible') {
-                if (safe_update('txp_discuss',
-                    "visible = ".VISIBLE,
-                    "discussid = $id"
-                )) {
-                    $done[] = $id;
+            $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".$idList.")", 1);
+
+            while ($row = nextRow($rs)) {
+                extract($row);
+
+                $id = assert_int($discussid);
+                $parentids[] = $parentid;
+
+                if ($method == 'delete') {
+                    // Delete and, if successful, update comment count.
+                    if (safe_delete('txp_discuss', "discussid = '$id'")) {
+                        $done[] = $id;
+                    }
+
+                    callback_event('discuss_deleted', '', 0, $done);
+                } else {
+                    $visState = (isset($visStates[$method])) ? $visStates[$method] : null;
+
+                    if ($visState !== null && safe_update('txp_discuss',
+                        "visible = ".$visState,
+                        "discussid = '$id'"
+                    , 1)) {
+                        $done[] = $id;
+                    }
                 }
             }
         }

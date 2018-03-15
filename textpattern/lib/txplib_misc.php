@@ -4515,24 +4515,28 @@ function update_comments_count($id)
 function clean_comment_counts($parentids)
 {
     $parentids = array_map('assert_int', $parentids);
-    $rs = safe_rows_start("parentid, COUNT(*) AS thecount", 'txp_discuss', "parentid IN (".implode(',', $parentids).") AND visible = ".VISIBLE." GROUP BY parentid");
+    $parentids = array_filter($parentids);
 
-    if (!$rs) {
-        return;
-    }
+    if ($parentids) {
+        $rs = safe_rows_start("parentid, COUNT(*) AS thecount", 'txp_discuss', "parentid IN (".implode(',', $parentids).") AND visible = ".VISIBLE." GROUP BY parentid");
 
-    $updated = array();
+        if (!$rs) {
+            return;
+        }
 
-    while ($a = nextRow($rs)) {
-        safe_update('textpattern', "comments_count = ".$a['thecount'], "ID = ".$a['parentid']);
-        $updated[] = $a['parentid'];
-    }
+        $updated = array();
 
-    // We still need to update all those, that have zero comments left.
-    $leftover = array_diff($parentids, $updated);
+        while ($a = nextRow($rs)) {
+            safe_update('textpattern', "comments_count = ".$a['thecount'], "ID = ".$a['parentid']);
+            $updated[] = $a['parentid'];
+        }
 
-    if ($leftover) {
-        safe_update('textpattern', "comments_count = 0", "ID IN (".implode(',', $leftover).")");
+        // We still need to update all those, that have zero comments left.
+        $leftover = array_diff($parentids, $updated);
+
+        if ($leftover) {
+            safe_update('textpattern', "comments_count = 0", "ID IN (".implode(',', $leftover).")");
+        }
     }
 }
 
