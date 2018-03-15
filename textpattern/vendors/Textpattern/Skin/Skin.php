@@ -1483,7 +1483,10 @@ namespace Textpattern\Skin {
                 return $out
                        .n.tag_end('tbody')
                        .n.tag_end('table')
-                       .n.tag_end('div');
+                       .n.tag_end('div')
+                       .n.self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
+                       .n.tag_end('form');
+
             }
         }
 
@@ -1498,8 +1501,7 @@ namespace Textpattern\Skin {
         {
             extract($data);
 
-            return self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
-                   .$this->getPaginator()->render()
+            return $this->getPaginator()->render()
                    .nav_form($this->getEvent(), $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
         }
 
