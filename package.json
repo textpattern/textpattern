@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "phplint": "~2",
-    "uglify-js": "3.3.14"
+    "uglify-js": "3.3.15"
   },
   "dependencies": {
     "blueimp-file-upload": "9.21.0",

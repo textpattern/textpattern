@@ -516,7 +516,7 @@ function author_edit($message = '', $fullEdit = false)
     if (has_privs('admin.edit')) {
         if ($user_id) {
             $user_id = assert_int($user_id);
-            $rs = safe_row("*", 'txp_users', "user_id = $user_id");
+            $rs = safe_row("*", 'txp_users', "user_id = '$user_id'");
 
             extract($rs);
             $is_edit = true;
@@ -673,7 +673,7 @@ function admin_multi_edit()
     $changed = array();
     $msg = '';
 
-    if (!$selected or !is_array($selected)) {
+    if (!$selected || !is_array($selected)) {
         return author_list();
     }
 
