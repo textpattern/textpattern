@@ -2191,8 +2191,11 @@ textpattern.Route.add('diag', function () {
 
 textpattern.Route.add('lang', function () {
     $('.txp-grid-lang').on('click', 'button', function (ev) {
-        var $me = $(this);
-        $me.attr('disabled', true).closest('form').find('input[name=step]').val($me.attr('name'));
+        ev.preventDefault();
+        var $me = $(this), $form = $me.closest('form');
+        $form.find('input[name=step]').val($me.attr('name'));
+        $('.txp-grid-lang').find('button').attr('disabled', true);
+        $form.submit();
     })
 });
 
