@@ -2187,6 +2187,15 @@ textpattern.Route.add('diag', function () {
     $('#diag_clear_private').change();
 });
 
+// Languages panel.
+
+textpattern.Route.add('lang', function () {
+    $('.txp-grid-lang').on('click', 'button', function (ev) {
+        var $me = $(this);
+        $me.attr('disabled', true).closest('form').find('input[name=step]').val($me.attr('name'));
+    })
+});
+
 // Images edit panel.
 
 textpattern.Route.add('image', function () {
