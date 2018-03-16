@@ -2194,7 +2194,7 @@ textpattern.Route.add('lang', function () {
         ev.preventDefault();
         var $me = $(this), $form = $me.closest('form');
         $form.find('input[name=step]').val($me.attr('name'));
-        $('.txp-grid-lang').find('button').attr('disabled', true);
+        $(ev.delegateTarget).addClass('disabled').find('button').attr('disabled', true);
         $form.submit();
     })
 });
