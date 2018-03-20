@@ -1385,7 +1385,7 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
 
 function pageby_form($event, $val, $step = null)
 {
-    return Txp::get('\Textpattern\Admin\Paginator', $event, $step)->render();
+    return Txp::get('\Textpattern\Admin\Paginator', $event, $step)->render($val);
 }
 
 /**

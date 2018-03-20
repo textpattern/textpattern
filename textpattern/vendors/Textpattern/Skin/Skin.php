@@ -1360,7 +1360,7 @@ namespace Textpattern\Skin {
                     $out = graf(
                         span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                         gTxt('no_'.$event.'_recorded'),
-                        array('class' => 'alert-block error')
+                        array('class' => 'alert-block information')
                     );
                 }
 
@@ -1485,6 +1485,7 @@ namespace Textpattern\Skin {
                        .n.tag_end('table')
                        .n.tag_end('div')
                        .n.self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
+                       .tInput()
                        .n.tag_end('form');
 
             }

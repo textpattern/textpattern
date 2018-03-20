@@ -859,7 +859,7 @@ class BuilderTags
     {
         $vals = array(
             '{att_empty}' => '',
-            'html'        => 'html',
+            'html'        => 'HTML',
         );
 
         return ' '.selectInput('escape', $vals, $value, false, '', 'escape');
