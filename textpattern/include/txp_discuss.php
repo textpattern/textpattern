@@ -137,14 +137,14 @@ function discuss_list($message = '')
             $sort = 'date';
         }
 
-        set_pref('discuss_sort_column', $sort, 'discuss', 2, '', 0, PREF_PRIVATE);
+        set_pref('discuss_sort_column', $sort, 'discuss', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('discuss_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
+        set_pref('discuss_sort_dir', $dir, 'discuss', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {

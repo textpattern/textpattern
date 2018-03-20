@@ -87,14 +87,14 @@ function link_list($message = '')
             $sort = 'name';
         }
 
-        set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
+        set_pref('link_sort_column', $sort, 'link', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('link_sort_dir', 'asc');
     } else {
         $dir = ($dir == 'desc') ? "desc" : "asc";
-        set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
+        set_pref('link_sort_dir', $dir, 'link', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {

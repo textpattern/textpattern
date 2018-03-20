@@ -94,14 +94,14 @@ function image_list($message = '')
             $sort = 'id';
         }
 
-        set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
+        set_pref('image_sort_column', $sort, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
+        set_pref('image_sort_dir', $dir, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
@@ -1067,9 +1067,9 @@ function thumbnail_create()
     $prefs['thumb_crop'] = $crop;
 
     // Hidden prefs.
-    set_pref('thumb_w', $width, 'image', 2);
-    set_pref('thumb_h', $height, 'image', 2);
-    set_pref('thumb_crop', $crop, 'image', 2);
+    set_pref('thumb_w', $width, 'image', PREF_HIDDEN);
+    set_pref('thumb_h', $height, 'image', PREF_HIDDEN);
+    set_pref('thumb_crop', $crop, 'image', PREF_HIDDEN);
 
     if ($width === '' && $height === '') {
         image_edit(array(gTxt('invalid_width_or_height'), E_ERROR), $id);

@@ -1175,7 +1175,7 @@ namespace Textpattern\Skin {
 
                 in_array($sort, $sortOpts) or $sort = 'name';
 
-                set_pref($event.'_sort_column', $sort, $event, 2, '', 0, PREF_PRIVATE);
+                set_pref($event.'_sort_column', $sort, $event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
             }
 
             if ($dir === '') {
@@ -1183,7 +1183,7 @@ namespace Textpattern\Skin {
             } else {
                 $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-                set_pref($event.'_sort_dir', $dir, $event, 2, '', 0, PREF_PRIVATE);
+                set_pref($event.'_sort_dir', $dir, $event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
             }
 
             $searchOpts = array();

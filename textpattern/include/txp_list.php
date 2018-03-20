@@ -89,14 +89,14 @@ function list_list($message = '', $post = '')
             $sort = 'posted';
         }
 
-        set_pref('article_sort_column', $sort, 'list', 2, '', 0, PREF_PRIVATE);
+        set_pref('article_sort_column', $sort, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('article_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
+        set_pref('article_sort_dir', $dir, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     $sesutats = array_flip($statuses);
