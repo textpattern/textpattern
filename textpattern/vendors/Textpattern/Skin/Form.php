@@ -34,11 +34,45 @@ namespace Textpattern\Skin {
 
     class Form extends AssetBase implements FormInterface
     {
+        /**
+         * {@inheritdoc}
+         */
+
         protected static $dir = 'forms';
+
+        /**
+         * {@inheritdoc}
+         */
+
         protected static $subdirField = 'type';
-        protected static $subdirValues = array('article', 'category', 'comment', 'file', 'link', 'section', 'misc');
+
+        /**
+         * The expected subdirs for this asset type.
+         *
+         * Note the order of the values is the order the blocks appear in the
+         * Presentation->Forms panel.
+         *
+         * @var array
+         */
+
+        protected static $subdirValues = array('article', 'misc', 'category', 'comment', 'file', 'link', 'section');
+
+        /**
+         * {@inheritdoc}
+         */
+
         protected static $defaultSubdir = 'misc';
+
+        /**
+         * {@inheritdoc}
+         */
+
         protected static $fileContentsField = 'Form';
+
+        /**
+         * {@inheritdoc}
+         */
+
         protected static $essential = array(
             array(
                 'name' => 'comments',
