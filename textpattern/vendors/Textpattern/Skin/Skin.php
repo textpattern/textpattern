@@ -1527,7 +1527,7 @@ namespace Textpattern\Skin {
                            .popHelp($event.'_'.$pref);
 
             $methods = array(
-                'import'    => array('label' => gTxt('override'), 'html' => $sync),
+                'import'    => array('label' => gTxt('Resynchronize'), 'html' => $sync),
                 'duplicate' => gTxt('duplicate'),
                 'export'    => array('label' => gTxt('export'), 'html' => $sync),
                 'delete'    => array('label' => gTxt('delete'), 'html' => $sync),
