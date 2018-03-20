@@ -1509,7 +1509,7 @@ namespace Textpattern\Skin {
         /**
          * Render a multi-edit form option.
          *
-         * @param  int  $label The textpack related string to use.
+         * @param  string $label The textpack related string to use.
          * @return HTML
          */
 
