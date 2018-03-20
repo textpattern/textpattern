@@ -1279,7 +1279,7 @@ namespace Textpattern\Skin {
                             'method' => 'post',
                             'action' => 'index.php',
                         ))
-                        .tag(gTxt('import_'.$event), 'label', array('for' => $event.'_import'))
+                        .tag(gTxt('import_from_disk'), 'label', array('for' => $event.'_import'))
                         .popHelp($event.'_import')
                         .selectInput('skins', $new, '', true, false, 'skins')
                         .eInput($this->getEvent())
@@ -1507,6 +1507,20 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Render a multi-edit form option.
+         *
+         * @param  int  $label The textpack related string to use.
+         * @return HTML
+         */
+
+        protected function getMultiEditOption($label)
+        {
+            return checkbox2('sync', get_pref('synchronize', true), 0, 'sync')
+                   .n.tag(gtxt($label), 'label', array('for' => 'sync'))
+                   .popHelp($label);
+        }
+
+        /**
          * Render a multi-edit form widget.
          *
          * @param  int    $page          The current page number
@@ -1519,18 +1533,20 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $event = $this->getEvent();
-            $pref = 'synchronize';
-
-            $sync = checkbox2('sync', get_pref($pref, true), 0, 'sync')
-                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'sync'))
-                           .popHelp($event.'_'.$pref);
-
             $methods = array(
-                'import'    => array('label' => gTxt('Resynchronize'), 'html' => $sync),
+                'import'    => array(
+                    'label' => gTxt('update_from_disk'),
+                    'html'  => $this->getMultiEditOption('skin_delete_from_database')
+                ),
                 'duplicate' => gTxt('duplicate'),
-                'export'    => array('label' => gTxt('export'), 'html' => $sync),
-                'delete'    => array('label' => gTxt('delete'), 'html' => $sync),
+                'export'    => array(
+                    'label' => gTxt('export_to_disk'),
+                    'html'  => $this->getMultiEditOption('skin_delete_from_disk')
+                ),
+                'delete'    => array(
+                    'label' => gTxt('delete'),
+                    'html'  => $this->getMultiEditOption('skin_delete_entirely')
+                ),
             );
 
             return multi_edit($methods, $this->getEvent(), 'multi_edit', $page, $sort, $dir, $crit, $search_method);
