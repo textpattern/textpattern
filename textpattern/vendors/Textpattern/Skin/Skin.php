@@ -773,7 +773,8 @@ namespace Textpattern\Skin {
         public function import($sync = false, $override = false)
         {
             $event = $this->getEvent();
-            $sync == $this->getSyncPref() or $this->switchSyncPref();
+            $syncPref = 'skin_delete_from_database';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $done = array();
@@ -838,7 +839,8 @@ namespace Textpattern\Skin {
 
         public function export($sync = false, $override = false)
         {
-            $sync == $this->getSyncPref() or $this->switchSyncPref();
+            $syncPref = 'skin_delete_from_disk';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
 
             $event = $this->getEvent();
             $names = $this->getNames();
@@ -917,6 +919,9 @@ namespace Textpattern\Skin {
 
         public function delete($sync = false)
         {
+            $syncPref = 'skin_delete_entirely';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
+
             $event = $this->getEvent();
             $names = $this->getNames();
             $callbackExtra = compact('names');
@@ -1089,7 +1094,7 @@ namespace Textpattern\Skin {
                         )));
 
                         if (!$selected || !is_array($selected)) {
-                            return;
+                            return $this->render($step);
                         }
 
                         $this->setNames(ps('selected'));
@@ -1175,7 +1180,7 @@ namespace Textpattern\Skin {
 
                 in_array($sort, $sortOpts) or $sort = 'name';
 
-                set_pref($event.'_sort_column', $sort, $event, 2, '', 0, PREF_PRIVATE);
+                set_pref($event.'_sort_column', $sort, $event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
             }
 
             if ($dir === '') {
@@ -1183,7 +1188,7 @@ namespace Textpattern\Skin {
             } else {
                 $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-                set_pref($event.'_sort_dir', $dir, $event, 2, '', 0, PREF_PRIVATE);
+                set_pref($event.'_sort_dir', $dir, $event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
             }
 
             $searchOpts = array();
@@ -1279,7 +1284,7 @@ namespace Textpattern\Skin {
                             'method' => 'post',
                             'action' => 'index.php',
                         ))
-                        .tag(gTxt('import_'.$event), 'label', array('for' => $event.'_import'))
+                        .tag(gTxt('import_from_disk'), 'label', array('for' => $event.'_import'))
                         .popHelp($event.'_import')
                         .selectInput('skins', $new, '', true, false, 'skins')
                         .eInput($this->getEvent())
@@ -1507,6 +1512,20 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Get a multi-edit checkbox.
+         *
+         * @param  string $label The textpack related string to use.
+         * @return HTML
+         */
+
+        protected function getMultiEditCheckbox($label)
+        {
+            return checkbox2('sync', get_pref($label, true), 0, 'sync')
+                   .n.tag(gtxt($label), 'label', array('for' => 'sync'))
+                   .popHelp($label);
+        }
+
+        /**
          * Render a multi-edit form widget.
          *
          * @param  int    $page          The current page number
@@ -1519,18 +1538,20 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $event = $this->getEvent();
-            $pref = 'synchronize';
-
-            $sync = checkbox2('sync', get_pref($pref, true), 0, 'sync')
-                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'sync'))
-                           .popHelp($event.'_'.$pref);
-
             $methods = array(
-                'import'    => array('label' => gTxt('override'), 'html' => $sync),
+                'import'    => array(
+                    'label' => gTxt('update_from_disk'),
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database')
+                ),
+                'export'    => array(
+                    'label' => gTxt('export_to_disk'),
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk')
+                ),
                 'duplicate' => gTxt('duplicate'),
-                'export'    => array('label' => gTxt('export'), 'html' => $sync),
-                'delete'    => array('label' => gTxt('delete'), 'html' => $sync),
+                'delete'    => array(
+                    'label' => gTxt('delete'),
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely')
+                ),
             );
 
             return multi_edit($methods, $this->getEvent(), 'multi_edit', $page, $sort, $dir, $crit, $search_method);

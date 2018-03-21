@@ -61,7 +61,7 @@ function prefs_save()
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
     $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE ".safe_pfx('textpattern'))));
-    set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
+    set_pref('max_custom_fields', $max_custom_fields, 'publish', PREF_HIDDEN);
 
     $sql = array();
     $sql[] = "event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";

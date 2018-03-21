@@ -89,14 +89,14 @@ function sec_section_list($message = '')
             $sort = 'name';
         }
 
-        set_pref('section_sort_column', $sort, 'section', 2, '', 0, PREF_PRIVATE);
+        set_pref('section_sort_column', $sort, 'section', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('section_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('section_sort_dir', $dir, 'section', 2, '', 0, PREF_PRIVATE);
+        set_pref('section_sort_dir', $dir, 'section', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
