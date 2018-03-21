@@ -55,6 +55,7 @@ Changes in 4.7.0
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
   before <txp:article /> tag.
 * Changed: <txp:site_url /> tag accepts 'type' attribute.
+* Changed: <txp:newer /> and <txp:older /> tags accept 'rel' attribute.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
 * Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
@@ -91,6 +92,7 @@ Changes in 4.7.0
   will be removed entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
+* Changed: Admin theme layout improvements on small devices.
 * Developer: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
   authors please use ahu in place of hu.'textpattern'.
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
