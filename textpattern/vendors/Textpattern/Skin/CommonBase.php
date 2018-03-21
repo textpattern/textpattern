@@ -313,6 +313,7 @@ namespace Textpattern\Skin {
         /**
          * Get the 'synchronize' preference value.
          *
+         * @param  string $name Pref name.
          * @return bool
          */
 
@@ -333,7 +334,8 @@ namespace Textpattern\Skin {
          * Switch the 'synchronize' preference value
          * and its related global variable.
          *
-         * @return bool FALSE on error.
+         * @param  string $name Pref name.
+         * @return bool         FALSE on error.
          */
 
         protected function switchSyncPref($name)
