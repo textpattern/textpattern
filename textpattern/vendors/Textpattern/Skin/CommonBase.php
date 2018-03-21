@@ -316,15 +316,14 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        protected function getSyncPref()
+        protected function getSyncPref($name)
         {
             global $prefs;
 
-            $pref = 'synchronize';
-            $value = get_pref($pref, true);
+            $value = get_pref($name, true);
 
-            if (!isset($prefs[$pref])) {
-                $prefs[$pref] = $value;
+            if (!isset($prefs[$name])) {
+                $prefs[$name] = $value;
             }
 
             return $value;
@@ -337,11 +336,9 @@ namespace Textpattern\Skin {
          * @return bool FALSE on error.
          */
 
-        protected function switchSyncPref()
+        protected function switchSyncPref($name)
         {
             global $prefs;
-
-            $name = 'synchronize';
 
             return set_pref(
                 $name,

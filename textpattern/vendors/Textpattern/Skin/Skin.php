@@ -773,7 +773,8 @@ namespace Textpattern\Skin {
         public function import($sync = false, $override = false)
         {
             $event = $this->getEvent();
-            $sync == $this->getSyncPref() or $this->switchSyncPref();
+            $syncPref = 'skin_delete_from_database';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $done = array();
@@ -838,7 +839,8 @@ namespace Textpattern\Skin {
 
         public function export($sync = false, $override = false)
         {
-            $sync == $this->getSyncPref() or $this->switchSyncPref();
+            $syncPref = 'skin_delete_from_disk';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
 
             $event = $this->getEvent();
             $names = $this->getNames();
@@ -917,6 +919,9 @@ namespace Textpattern\Skin {
 
         public function delete($sync = false)
         {
+            $syncPref = 'skin_delete_entirely';
+            $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
+
             $event = $this->getEvent();
             $names = $this->getNames();
             $callbackExtra = compact('names');
@@ -1515,7 +1520,7 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditCheckbox($label)
         {
-            return checkbox2('sync', get_pref('synchronize', true), 0, 'sync')
+            return checkbox2('sync', get_pref($label, true), 0, 'sync')
                    .n.tag(gtxt($label), 'label', array('for' => 'sync'))
                    .popHelp($label);
         }
