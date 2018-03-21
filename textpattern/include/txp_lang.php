@@ -131,18 +131,16 @@ function list_languages($message = '')
                 $cellclass = 'warning';
             }
 
-            $removeLink = href('<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove')), array(
-                'event'      => 'lang',
-                'step'       => 'remove_language',
-                'lang_code'  => $langname,
-                '_txp_token' => form_token(),
-            ), array('class' => 'txp-button'));
+            $removeText = '<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove'));
 
             $btnRemove = (
                 array_key_exists($langname, $active_lang)
                     ? ''
                     : (has_privs('lang.edit')
-                        ? $removeLink
+                        ? tag($removeText, 'button', array(
+                            'type' => 'submit',
+                            'name' => 'remove_language',
+                            ))
                         : '')
             );
         } else {
@@ -153,26 +151,29 @@ function list_languages($message = '')
 
         $installLink = ($disabled
             ? span($btnText, array('class' => 'txp-button disabled'))
-            : href($btnText, array(
-                'event'      => 'lang',
-                'step'       => 'get_language',
-                'lang_code'  => $langname,
-                '_txp_token' => form_token(),
-            ), array('class' => 'txp-button')));
+            : tag($btnText, 'button', array(
+                'type'      => 'submit',
+                'name'      => 'get_language',
+            )));
 
         $grid .= tag(
-            graf(
-                ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
-                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
-                tag($langname, 'code', array('dir' => 'ltr')).
-                ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
-            ).
-            graf(
-                (has_privs('lang.edit')
-                    ? $installLink
-                    : '')
-                .n. $btnRemove
-            ),
+            form(
+                graf(
+                    ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
+                    tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
+                    tag($langname, 'code', array('dir' => 'ltr')).
+                    ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+                ).
+                graf(
+                    (has_privs('lang.edit')
+                        ? $installLink
+                        : '')
+                    .n. $btnRemove
+                ).
+                hInput('lang_code', $langname).
+                eInput('lang').
+                sInput(null)
+            , '', '', 'post'),
             'li',
             array('class' => 'txp-grid-cell txp-grid-cell-lang'.($cellclass ? ' '.$cellclass : ''))
         ).n;
@@ -299,7 +300,7 @@ function save_language_ui()
 
 function get_language()
 {
-    $lang_code = gps('lang_code');
+    $lang_code = ps('lang_code');
     $langName = fetchLangName($lang_code);
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $installed = $txpLang->installed();
@@ -390,7 +391,7 @@ function remove_language()
 
     require_privs('lang.edit');
 
-    $lang_code = gps('lang_code');
+    $lang_code = ps('lang_code');
     $langName = fetchLangName($lang_code);
 
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");

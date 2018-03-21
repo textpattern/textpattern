@@ -202,16 +202,20 @@ class Parser
             // Translation.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
                 if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
-                    $langToStore = $language ? $language : $this->language;
-                    $this->packs[$langToStore][] = array(
-                        'name'    => $m[1],
-                        'lang'    => $langToStore,
-                        'data'    => $m[2],
-                        'event'   => $event,
-                        'owner'   => $owner,
-                        'version' => $version,
-                        'lastmod' => $lastmod,
-                    );
+                    $langGiven = $language ? $language : $this->language;
+                    $langList = do_list_unique($langGiven);
+
+                    foreach ($langList as $langToStore) {
+                        $this->packs[$langToStore][] = array(
+                            'name'    => $m[1],
+                            'lang'    => $langToStore,
+                            'data'    => $m[2],
+                            'event'   => $event,
+                            'owner'   => $owner,
+                            'version' => $version,
+                            'lastmod' => $lastmod,
+                        );
+                    }
                 }
             }
         }

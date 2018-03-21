@@ -94,14 +94,14 @@ function image_list($message = '')
             $sort = 'id';
         }
 
-        set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
+        set_pref('image_sort_column', $sort, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
+        set_pref('image_sort_dir', $dir, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
@@ -208,7 +208,15 @@ function image_list($message = '')
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
-                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'image_category')).$categories : ''))),
+                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '',
+                    array('postinput' => ($categories
+                        ? n.tag(
+                            n.tag(gTxt('category'), 'label', array('for' => 'image_category')).$categories.n,
+                            'span',
+                            array('class' => 'inline-file-uploader-actions'))
+                        : ''
+                    ))
+                ),
                 'div', array('class' => 'txp-control-panel')
             );
     }
@@ -1067,9 +1075,9 @@ function thumbnail_create()
     $prefs['thumb_crop'] = $crop;
 
     // Hidden prefs.
-    set_pref('thumb_w', $width, 'image', 2);
-    set_pref('thumb_h', $height, 'image', 2);
-    set_pref('thumb_crop', $crop, 'image', 2);
+    set_pref('thumb_w', $width, 'image', PREF_HIDDEN);
+    set_pref('thumb_h', $height, 'image', PREF_HIDDEN);
+    set_pref('thumb_crop', $crop, 'image', PREF_HIDDEN);
 
     if ($width === '' && $height === '') {
         image_edit(array(gTxt('invalid_width_or_height'), E_ERROR), $id);

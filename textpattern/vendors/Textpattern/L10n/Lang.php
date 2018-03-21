@@ -501,11 +501,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Fetch the given language's strings from the database as an array.
      *
-     * If no $events is specified, only appropriate strings for the current context
-     * are returned. If 'txpinterface' constant equals 'admin' all strings are
-     * returned. Otherwise, only strings from events 'common' and 'public'.
-     *
-     * If $events is FALSE, returns all strings.
+     * If no $events are specified, only appropriate strings for the current context
+     * are returned. If the 'txpinterface' constant is 'public' only strings from
+     * events 'common' and 'public' are returned.
      *
      * Note the returned array includes the language if the fallback has been used.
      * This ensures (as far as possible) a full complement of strings, regardless of
@@ -513,11 +511,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * Any holes can be mopped up by the default language.
      *
      * @param   string            $lang_code The language code
-     * @param   array|string|bool $events    An array of loaded events
+     * @param   array|string|bool $events    An array of loaded events to extract
      * @return  array
      */
 
-    public function load($lang_code, $events = null)
+    public function extract($lang_code, $events = null)
     {
         $where = array(
             "lang = '".doSlash($lang_code)."'",
@@ -557,6 +555,26 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
         }
 
+        return $out;
+    }
+
+    /**
+     * Load the given language's strings from the database into the class.
+     *
+     * Note the returned array includes the language if the fallback has been used.
+     * This ensures (as far as possible) a full complement of strings, regardless of
+     * the degree of translation that's taken place in the desired $lang code.
+     * Any holes can be mopped up by the default language.
+     *
+     * @param   string            $lang_code The language code
+     * @param   array|string|bool $events    An array of loaded events to load
+     * @see  extract()
+     * @return  array
+     */
+
+    public function load($lang_code, $events = null)
+    {
+        $out = $this->extract($lang_code, $events);
         $this->strings = $out;
 
         return $this->strings;

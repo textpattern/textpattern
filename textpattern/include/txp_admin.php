@@ -273,14 +273,14 @@ function author_list($message = '')
                 $sort = 'name';
             }
 
-            set_pref('admin_sort_column', $sort, 'admin', 2, '', 0, PREF_PRIVATE);
+            set_pref('admin_sort_column', $sort, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
 
         if ($dir === '') {
             $dir = get_pref('admin_sort_dir', 'asc');
         } else {
             $dir = ($dir == 'desc') ? "desc" : "asc";
-            set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
+            set_pref('admin_sort_dir', $dir, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
 
         $sort_sql = $sort.' '.$dir;
