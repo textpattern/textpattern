@@ -288,8 +288,8 @@ function article_save()
     if (empty($url_title)
         || (($wasUnpublished)
         && ($oldArticle['url_title'] === $url_title)
-        && ($oldArticle['url_title'] === stripSpace($oldArticle['Title'], 1))
         && ($oldArticle['Title'] !== $Title)
+        && ($oldArticle['url_title'] === stripSpace($oldArticle['Title'], 1))
     )) {
         $url_title = stripSpace($Title_plain, 1);
     }
@@ -342,10 +342,11 @@ function article_save()
             || !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
         ) {
             if ($is_clone) {
+                $url_title = stripSpace($Title_plain.' ('.$rs['ID'].')', 1);
                 safe_update(
                     'textpattern',
                     "Title = CONCAT(Title, ' (', ".$rs['ID'].", ')'),
-                    url_title = CONCAT(url_title, '-', ".$rs['ID'].")",
+                    url_title = '$url_title'",
                     "ID = ".$rs['ID']
                 );
             }
@@ -386,7 +387,7 @@ function article_save()
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $event, $view;
+    global $vars, $txp_user, $prefs, $step, $view;
 
     extract($prefs);
 
@@ -584,33 +585,30 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     extract(gpsa(array(
         'view',
         'from_view',
-        'step',
     )));
+
+    if ($step !== 'create') {
+        $step = "edit";
+    }
 
     // Newly-saved article.
     if (!empty($GLOBALS['ID'])) {
         $ID = $GLOBALS['ID'];
-        $step = 'edit';
     } else {
-        $ID = gps('ID');
+        $ID = $step === 'create' ? 0 : intval(gps('ID'));
     }
 
     // Switch to 'text' view upon page load and after article post.
-    if (!$view || gps('save') || gps('publish')) {
+    if (!$view) {
         $view = 'text';
     }
 
-    if (!$step) {
-        $step = "edit";
-    }
-
-    if ($step == "edit"
-        && $view == "text"
+    if ($view == 'text'
         && !empty($ID)
         && $from_view != 'preview'
         && $from_view != 'html'
         && !$concurrent) {
-        $pull = true; // It's an existing article - off we go to the database.
+        // It's an existing article - off we go to the database.
         $ID = assert_int($ID);
 
         $rs = safe_row(
@@ -626,9 +624,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         $rs['reset_time'] = $rs['publish_now'] = $rs['expire_now'] = false;
-    } else {
-        $pull = false; // Assume they came from post.
 
+        if (gps('copy') && !gps('publish')) {
+            $rs['ID'] = $rs['url_title'] = '';
+            $rs['Status'] = get_pref('default_publish_status', STATUS_LIVE);
+        }
+    } else {
+        // Assume they came from post.
         if ($from_view == 'preview' or $from_view == 'html') {
             $store_out = array();
             $store = json_decode(base64_decode(ps('store')), true);
@@ -639,7 +641,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 }
             }
         } else {
-            $store_out = gpsa($vars);
+            $store_out = array('ID' => $ID) + gpsa($vars);
 
             if ($concurrent) {
                 $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
@@ -694,8 +696,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    $GLOBALS['step'] = $step;
-
     if ($ID && isset($sPosted)) {
         // Previous record?
         $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
@@ -741,16 +741,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     pagetop($page_title, $message);
 
-    $class = array();
+    $class = array('async');
 
     if (has_status_group($Status, 'published')) {
         $class[] = 'published';
     } elseif ($ID) {
         $class[] = 'saved';
-    }
-
-    if ($step !== 'create') {
-        $class[] = 'async';
     }
 
     echo n.tag_start('form', array(

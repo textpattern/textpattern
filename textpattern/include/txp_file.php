@@ -214,7 +214,15 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '',
+                array('postinput' => ($categories
+                    ? n.tag(
+                        n.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories.n,
+                        'span',
+                        array('class' => 'inline-file-uploader-actions'))
+                    : ''
+                ))
+            );
 
         if ($existing_files = get_filenames()) {
             $selected = count($existing_files) >= 5 ? array() : null;

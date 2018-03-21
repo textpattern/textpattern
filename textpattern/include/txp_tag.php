@@ -858,7 +858,7 @@ class BuilderTags
     private function tbEscapePop($value)
     {
         $vals = array(
-            '{att_empty}' => gTxt('custom'),
+            '{att_empty}' => '',
             'html'        => 'HTML',
         );
 
