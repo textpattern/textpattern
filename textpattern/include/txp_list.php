@@ -89,14 +89,14 @@ function list_list($message = '', $post = '')
             $sort = 'posted';
         }
 
-        set_pref('article_sort_column', $sort, 'list', 2, '', 0, PREF_PRIVATE);
+        set_pref('article_sort_column', $sort, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('article_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
+        set_pref('article_sort_dir', $dir, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     $sesutats = array_flip($statuses);
@@ -405,7 +405,11 @@ function list_list($message = '', $post = '')
                         ), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        eLink('article', 'edit', 'ID', $ID, $ID), '', array(
+                        eLink('article', 'edit', 'ID', $ID, $ID)
+                            .sp.span('&#124;', array('role' => 'separator')).sp
+                            .href(gTxt('copy'), "index.php?event=article&copy=1&ID=$ID"),
+                        '',
+                        array(
                             'class' => '',
                             'scope' => 'row',
                         )

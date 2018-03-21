@@ -80,14 +80,14 @@ function log_list($message = '')
             $sort = 'time';
         }
 
-        set_pref('log_sort_column', $sort, 'log', 2, '', 0, PREF_PRIVATE);
+        set_pref('log_sort_column', $sort, 'log', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('log_sort_dir', 'desc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
+        set_pref('log_sort_dir', $dir, 'log', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     $expire_logs_after = assert_int($expire_logs_after);

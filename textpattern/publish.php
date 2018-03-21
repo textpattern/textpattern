@@ -178,6 +178,11 @@ if (!empty($locale)) {
 // Initialise the current user.
 $txp_user = null;
 
+// For backwards-compatibility (sort of) with plugins that expect the
+// $textarray global to be present.
+// Will remove in future.
+$textarray = array();
+
 // i18n.
 if (txpinterface !== 'css') {
     load_lang(LANG);

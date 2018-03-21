@@ -6451,7 +6451,7 @@ function janitor()
 
         if ($is_dst != $prefs['is_dst']) {
             $prefs['is_dst'] = $is_dst;
-            set_pref('is_dst', $is_dst, 'publish', 2);
+            set_pref('is_dst', $is_dst, 'publish', PREF_HIDDEN);
         }
     }
 }

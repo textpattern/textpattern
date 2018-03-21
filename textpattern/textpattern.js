@@ -2221,6 +2221,18 @@ textpattern.Route.add('diag', function () {
     $('#diag_clear_private').change();
 });
 
+// Languages panel.
+
+textpattern.Route.add('lang', function () {
+    $('.txp-grid-lang').on('click', 'button', function (ev) {
+        ev.preventDefault();
+        var $me = $(this), $form = $me.closest('form');
+        $form.find('input[name=step]').val($me.attr('name'));
+        $(ev.delegateTarget).addClass('disabled').find('button').attr('disabled', true);
+        $form.submit();
+    })
+});
+
 // Images edit panel.
 
 textpattern.Route.add('image', function () {
