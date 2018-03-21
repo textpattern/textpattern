@@ -208,7 +208,7 @@ function image_list($message = '')
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
-                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? n.tag(gTxt('category'), 'label', array('for' => 'image_category')).n.$categories.n : ''))),
+                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? n.tag(gTxt('category'), 'label', array('for' => 'image_category')).$categories.n : ''))),
                 'div', array('class' => 'txp-control-panel')
             );
     }
