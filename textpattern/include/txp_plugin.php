@@ -76,14 +76,14 @@ function plugin_list($message = '')
             $sort = 'name';
         }
 
-        set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
+        set_pref('plugin_sort_column', $sort, 'plugin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('plugin_sort_dir', 'asc');
     } else {
         $dir = ($dir == 'desc') ? "desc" : "asc";
-        set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
+        set_pref('plugin_sort_dir', $dir, 'plugin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     $sort_sql = "$sort $dir";

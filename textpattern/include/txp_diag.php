@@ -165,8 +165,8 @@ function check_tables($tables, $type = 'FAST', $warnings = 0)
 function diag_msg_wrap($msg, $type = 'e')
 {
     $classMap = array(
-        'i' => 'information',
         'e' => 'error',
+        'i' => 'information',
         'w' => 'warning',
     );
 
@@ -498,7 +498,7 @@ function doDiagnostics()
                 $pfcStrings[$lang][] = graf(nl2br(join(n, $not_readable).($langCounter > 0 ? popHelp('dir_not_writable') : '')));
             }
         } else {
-            $pfcStrings[$lang][] = graf(diag_msg_wrap(gTxt('all_checks_passed'), 'i'));
+            $pfcStrings[$lang][] = graf('<span class="ui-icon ui-icon-check"></span>'.sp.gTxt('all_checks_passed'), array('class' => 'success'));
         }
 
         $langCounter++;

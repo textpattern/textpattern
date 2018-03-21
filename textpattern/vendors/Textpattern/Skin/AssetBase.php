@@ -35,7 +35,7 @@ namespace Textpattern\Skin {
     abstract class AssetBase extends CommonBase implements AssetInterface
     {
         /**
-         * Asset related directory.
+         * The directory in the themes folder in which assets of a particular type can be found.
          *
          * @var string Directory name.
          * @see        setDir(), getDir().
@@ -71,6 +71,8 @@ namespace Textpattern\Skin {
         protected static $fileContentsField;
 
         /**
+         * Forms that Textpattern expects to exist for smooth tag operation.
+         *
          * Asset related essential rows as an associative array of the following
          * fields and their value: 'name', ($subdirField, ) $fileContentsField.
          *
