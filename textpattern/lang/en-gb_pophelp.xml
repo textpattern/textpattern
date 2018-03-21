@@ -963,7 +963,7 @@
 <p>The theme description is limited to a maximum of 255 characters.</p>
         ]]></item>
         <item id="skin_import" title="Import theme"><![CDATA[
-<h2>Import theme</h2>
+<h2>Import theme from disk</h2>
 <p>This form allows you to import a theme into the Textpattern database from your themes directory.</p>
 <p>An importable theme must be composed of a readable parent folder using the theme name as the folder name, and within the folder a readable <code>manifest.json</code> file in the expected format. The theme folder should also contain pages, forms and styles into eponym subfolders.</p>
 <p>While pages and forms should use the <code>.txp</code> extension, stylesheets are expected to be <code>.css</code> files. Forms should also be grouped by type into dedicated directories. Textpattern will create any missing essential templates on import.</p>
