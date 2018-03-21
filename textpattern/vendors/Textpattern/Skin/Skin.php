@@ -1094,7 +1094,7 @@ namespace Textpattern\Skin {
                         )));
 
                         if (!$selected || !is_array($selected)) {
-                            return;
+                            return $this->render($step);
                         }
 
                         $this->setNames(ps('selected'));
