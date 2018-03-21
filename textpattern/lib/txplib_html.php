@@ -1446,10 +1446,10 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             sInput($step).
             hInput('id', $id).
 //            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
-            tInput().n.
+            tInput().
             inputLabel(
                 $label_id,
-                tag_void('input', array(
+                n.tag_void('input', array(
                     'name'     => $name,
                     'type'     => 'file',
                     'required' => true,
@@ -1457,9 +1457,9 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                     'multiple' => $multiple,
                 )).
                 (isset($extra['postinput']) ? $extra['postinput'] : '').
-                tag(
+                n.tag(
                     fInput('reset', '', gTxt('reset')).
-                    fInput('submit', '', gTxt('upload')),
+                    fInput('submit', '', gTxt('upload')).n,
                     'span',
                     array('class' => 'inline-file-uploader-actions')
                 ),
