@@ -20,6 +20,7 @@ Changes in 4.7.0
 * Added: <txp:if_logged_in /> tag.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
   and 'time' attributes.
+* Added: 'rel' attribute to <txp:newer /> and <txp:older /> tags.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
