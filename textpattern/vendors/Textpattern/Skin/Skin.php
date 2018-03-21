@@ -1507,13 +1507,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Render a multi-edit form option.
+         * Get a multi-edit checkbox.
          *
          * @param  string $label The textpack related string to use.
          * @return HTML
          */
 
-        protected function getMultiEditOption($label)
+        protected function getMultiEditCheckbox($label)
         {
             return checkbox2('sync', get_pref('synchronize', true), 0, 'sync')
                    .n.tag(gtxt($label), 'label', array('for' => 'sync'))
@@ -1536,16 +1536,16 @@ namespace Textpattern\Skin {
             $methods = array(
                 'import'    => array(
                     'label' => gTxt('update_from_disk'),
-                    'html'  => $this->getMultiEditOption('skin_delete_from_database')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database')
                 ),
                 'duplicate' => gTxt('duplicate'),
                 'export'    => array(
                     'label' => gTxt('export_to_disk'),
-                    'html'  => $this->getMultiEditOption('skin_delete_from_disk')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk')
                 ),
                 'delete'    => array(
                     'label' => gTxt('delete'),
-                    'html'  => $this->getMultiEditOption('skin_delete_entirely')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely')
                 ),
             );
 
