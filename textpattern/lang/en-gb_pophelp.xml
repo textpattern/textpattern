@@ -944,6 +944,19 @@
 <h2>Theme website</h2>
 <p>The URL where full information and/or latest versions of this theme can be found (optional).</p>
         ]]></item>
+        <item id="skin_delete_entirely" title="Delete theme templates from disk too"><![CDATA[
+<h2>Delete theme templates from disk too</h2>
+<p>If checked, all template files in the selected theme(s) will be permanently deleted from disk. However, themes-related directories and their subdirectories will not be deleted if any other files (such as JavaScript, images, ...) exist within them.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Delete unused templates from database on import"><![CDATA[
+<h2>Delete unused templates from database on import</h2>
+<p>If checked, each template in the selected theme(s) that does not have a corresponding file on disk will be permanently deleted from the database. The result after completion of the action will be that your database templates will reflect what is on disk as far as possible.</p>
+<p>Note that if you have removed template files that Textpattern requires, empty versions will be created for you in the database.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Delete unused templates from disk on export"><![CDATA[
+<h2>Delete unused templates from disk on export</h2>
+<p>If checked, each template file in the selected theme(s) that does not have a corresponding item in the database will be permanently deleted from the disk-based theme. The result after completion of the action will be that your file system templates will reflect exactly what is in the database.</p>
+        ]]></item>
         <item id="skin_description" title="Theme description"><![CDATA[
 <h2>Theme description</h2>
 <p>A brief summary of this theme design/layout can be provided (optional).</p>
@@ -973,14 +986,6 @@
 <p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool's <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
 <p>Once there, you can package it up and distribute it. Others may unpackage themes into their own directory and use the <em>import</em> tool to bring the assets into their database. From there, they may switch to the theme and use that as their working theme, permitting preview of assets within the site and, ultimately, assignment of assets to Sections as described above.</p>
 <p>The ability to export themes also allows you to make a backup, edit asset contents on disk in your text editor and/or apply version control to them. Remember: there is <em>no link</em> between your public site and the disk-based version of your assets. In order for visitors to see the changes, you must first import alterations into your database and ensure that one or more Sections are using the assets from the theme.</p>
-        ]]></item>
-        <item id="skin_synchronize" title="Synchronize template/file lists"><![CDATA[
-<h2>Synchronise template/file lists</h2>
-<p>If checked, this option allows you to synchronise the template-related database and files.</p>
-<p><strong>Note:</strong> Synchronization is mainly related to the obsolete template rows or files deletion which is, in most cases, a destructive and permanent process. Please use with caution.</p>
-<p>When this option is selected, on override/re-import each template which is not part of the processed import will be deleted from the database while on export, template files will be deleted if they are not part of the processed export.</p>
-<p>If, for any reason, import or export fails for a defined template it would not be considered as part of the current process and will be deleted from the database or the theme directory.</p>
-<p>On deletion each dropped template-related file should be deleted. However, themes-related directories and their subdirectories will not be deleted if any other files exist within them.</p>
         ]]></item>
         <item id="skin_title" title="Theme title"><![CDATA[
 <h2>Theme title</h2>
