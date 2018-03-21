@@ -1543,11 +1543,11 @@ namespace Textpattern\Skin {
                     'label' => gTxt('update_from_disk'),
                     'html'  => $this->getMultiEditCheckbox('skin_delete_from_database')
                 ),
-                'duplicate' => gTxt('duplicate'),
                 'export'    => array(
                     'label' => gTxt('export_to_disk'),
                     'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk')
                 ),
+                'duplicate' => gTxt('duplicate'),
                 'delete'    => array(
                     'label' => gTxt('delete'),
                     'html'  => $this->getMultiEditCheckbox('skin_delete_entirely')
