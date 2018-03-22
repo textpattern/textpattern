@@ -5571,10 +5571,6 @@ function permlinkurl($article_array)
         $now = strftime('%F %T');
     }
 
-    if (!isset($uposted)) {
-        $uposted = $posted;
-    }
-
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
         $production_status != 'live' &&
@@ -5603,7 +5599,7 @@ function permlinkurl($article_array)
             }
             break;
         case 'year_month_day_title':
-            list($y, $m, $d) = explode("-", date("Y-m-d", $uposted));
+            list($y, $m, $d) = explode("-", date("Y-m-d", isset($uposted) ? $uposted : $posted));
             $out =  hu."$y/$m/$d/$url_title";
             break;
         case 'id_title':
