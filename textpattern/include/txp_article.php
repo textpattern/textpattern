@@ -342,7 +342,7 @@ function article_save()
                 $url_title = stripSpace($Title_plain.' ('.$rs['ID'].')', 1);
                 safe_update(
                     'textpattern',
-                    "Title = CONCAT(Title, ' (', ".$rs['ID'].", ')'),
+                    "Title = CONCAT(Title, ' (', ID, ')'),
                     url_title = '$url_title'",
                     "ID = ".$rs['ID']
                 );

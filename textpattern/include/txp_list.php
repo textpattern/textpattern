@@ -670,6 +670,7 @@ function list_multi_edit()
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
+                    $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
                     $a['AuthorID'] = $txp_user;
@@ -685,10 +686,11 @@ function list_multi_edit()
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
+                        $url_title = stripSpace($title." ($id)", 1);
                         safe_update(
                             'textpattern',
-                            "Title     = CONCAT(Title, ' (', $id, ')'),
-                             url_title = CONCAT(url_title, '-', $id),
+                            "Title     = CONCAT(Title, ' (', ID, ')'),
+                             url_title = '$url_title',
                              LastMod   = NOW(),
                              feed_time = NOW()",
                             "ID = $id"

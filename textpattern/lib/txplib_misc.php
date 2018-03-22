@@ -2234,7 +2234,6 @@ function sanitizeForUrl($text)
         return $out;
     }
 
-    $in = $text;
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
     // Remove all characters except letter, number, dash, space and backslash
