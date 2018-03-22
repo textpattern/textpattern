@@ -158,16 +158,16 @@ function article_save()
     }
 
     if ($incoming['ID']) {
-        $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+        $oldArticle = safe_row("Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
             UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
             UNIX_TIMESTAMP(Posted) AS sPosted,
             UNIX_TIMESTAMP(Expires) AS sExpires",
             'textpattern', "ID = ".(int) $incoming['ID']);
 
         if (!($oldArticle['Status'] >= STATUS_LIVE && has_privs('article.edit.published')
-            || $oldArticle['Status'] >= STATUS_LIVE && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
+            || $oldArticle['Status'] >= STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
             || $oldArticle['Status'] < STATUS_LIVE && has_privs('article.edit')
-            || $oldArticle['Status'] < STATUS_LIVE && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
+            || $oldArticle['Status'] < STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
             // Not allowed, you silly rabbit, you shouldn't even be here.
             // Show default editing screen.
             article_edit();
@@ -1102,17 +1102,19 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
  * @return string HTML
  */
 
-function status_display($status)
+function status_display($status = 0)
 {
     global $statuses;
 
     if (!$status) {
-        $status = get_pref('default_publish_status', STATUS_LIVE);
+        $status = has_privs('article.publish') ? get_pref('default_publish_status', STATUS_LIVE) : STATUS_DRAFT;
     }
+
+    $disabled = has_privs('article.publish') ? false : array(STATUS_LIVE, STATUS_STICKY);
 
     return inputLabel(
         'status',
-        selectInput('Status', $statuses, $status, false, '', 'status'),
+        selectInput('Status', $statuses, $status, false, '', 'status', false, $disabled),
         'status',
         array('status', 'instructions_status'),
         array('class' => 'txp-form-field status')
