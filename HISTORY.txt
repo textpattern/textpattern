@@ -26,6 +26,7 @@ Changes in 4.7.0
 * Added: Per-user admin panel language preference (decoupled from site language
   preference).
 * Added: All users can administer their own key biographical info.
+* Added: Ability to copy an article without enforced save.
 * Added: Button to swap width and height values on image edit thumbnail
   generator.
 * Added: Ctrl+S/Cmd+S keyboard shortcuts for Submit buttons on any admin panel.
@@ -101,6 +102,7 @@ Changes in 4.7.0
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
+* Fixed: URL handling for /title and /year/month/day/title (thanks, planeth44).
 * Removed: zxcvbn password strength meter.
 * Textile 3.6.
 * jQuery 3.3.1.
