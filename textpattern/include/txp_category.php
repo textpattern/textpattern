@@ -331,16 +331,16 @@ function cat_category_multiedit()
         } elseif ($method == 'changeparent') {
             $new_parent = ps('new_parent');
 
-            $rs = safe_rows("id, name", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'");
+            $rs = safe_rows("id, name, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'");
 
             if ($rs) {
-                $exists = safe_field("name", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
-                $parent = ($exists === false) ? 'root' : $exists;
+                $exists = safe_row("name, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
+                $parent = empty($exists) ? 'root' : $exists['name'];
                 $to_change = $affected = array();
 
                 foreach ($rs as $cat) {
-                    // Cannot assign parent to itself.
-                    if ($cat['name'] != $new_parent) {
+                    // Cannot assign parent to a child.
+                    if ($cat['lft']>$exists['lft'] || $cat['rgt']<$exists['rgt']) {
                         $to_change[] = doSlash($cat['name']);
                         $affected[] = $cat['name'];
                     }
@@ -351,11 +351,13 @@ function cat_category_multiedit()
                 if ($ret) {
                     rebuild_tree_full($type);
 
-                    $message = gTxt('categories_set_parent', array(
-                        '{type}'   => gTxt($type),
-                        '{parent}' => $parent,
-                        '{list}'   => join(', ', $affected),
-                    ));
+                    $message = !empty($affected)
+                        ? gTxt('categories_set_parent', array(
+                            '{type}'   => gTxt($type),
+                            '{parent}' => $parent,
+                            '{list}'   => join(', ', $affected),
+                        ))
+                        : array(gTxt('category_save_failed'), E_ERROR);
 
                     return cat_category_list($message);
                 }
