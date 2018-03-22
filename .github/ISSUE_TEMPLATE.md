@@ -9,3 +9,7 @@
 ### Steps to reproduce
 
 {Please write here}
+
+#### Additional information
+
+Textpattern version: {Please write here}
