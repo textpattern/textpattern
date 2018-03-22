@@ -839,7 +839,7 @@ function chopUrl($req)
     $n = max(4, count($r));
 
     for ($i = 0; $i < $n; $i++) {
-        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : '';
+        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
     }
 
     return $o;
