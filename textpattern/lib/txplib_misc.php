@@ -5552,6 +5552,7 @@ function permlinkurl($article_array)
         'url_title' => null,
         'section'   => null,
         'posted'    => null,
+        'uposted'   => null,
         'expires'   => null,
         'uexpires'  => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
@@ -5568,6 +5569,10 @@ function permlinkurl($article_array)
 
     if (!isset($now)) {
         $now = strftime('%F %T');
+    }
+
+    if (!isset($uposted)) {
+        $uposted = $posted;
     }
 
     if (empty($prefs['publish_expired_articles']) &&
@@ -5598,7 +5603,7 @@ function permlinkurl($article_array)
             }
             break;
         case 'year_month_day_title':
-            list($y, $m, $d) = explode("-", date("Y-m-d", $posted));
+            list($y, $m, $d) = explode("-", date("Y-m-d", $uposted));
             $out =  hu."$y/$m/$d/$url_title";
             break;
         case 'id_title':
