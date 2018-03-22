@@ -1654,6 +1654,10 @@ function article_partial_article_view($rs)
     extract($rs);
 
     if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
+        if (!has_privs('article.preview')) {
+            return;
+        }
+
         $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
     } else {
         include_once txpath.'/publish/taghandlers.php';
