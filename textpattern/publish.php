@@ -373,7 +373,12 @@ function preText($s, $prefs)
                             break;
 
                         case 'title_only':
-                            $title = $u1;
+                            if (isset($u2)) {
+                                $out['s'] = $u1;
+                                $title = trim($u2) === '' ? null : $u2;
+                            } else {
+                                $title = $u1;
+                            }
 
                             break;
 
