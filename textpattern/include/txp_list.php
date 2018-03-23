@@ -506,7 +506,8 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
     $sections = $all_sections ? selectInput('Section', $all_sections, '', true) : '';
     $comments = onoffRadio('Annotate', get_pref('comments_on_default'));
-    $status = selectInput('Status', $statuses, '', true);
+    $disabled = has_privs('article.publish') ? false : array(STATUS_LIVE, STATUS_STICKY);
+    $status = selectInput('Status', $statuses, '', true, '', '', false, $disabled);
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
 
     $methods = array(

@@ -622,7 +622,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         if (gps('copy') && !gps('publish')) {
             $rs['ID'] = $rs['url_title'] = '';
-            $rs['Status'] = get_pref('default_publish_status', STATUS_LIVE);
+            $rs['Status'] = STATUS_DRAFT;
         }
     } else {
         // Assume they came from post.
