@@ -805,7 +805,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'class' => 'language-markup',
                     'dir'   => 'ltr',
                 )),
-                'pre', array('class' => 'body line-numbers')
+                'pre', array('class' => 'body')
             );
     } else {
         echo $partials['body']['html'];
@@ -825,7 +825,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                         'class' => 'language-markup',
                         'dir'   => 'ltr',
                     )),
-                    'pre', array('class' => 'excerpt line-numbers')
+                    'pre', array('class' => 'excerpt')
                 );
         } else {
             echo $partials['excerpt']['html'];
