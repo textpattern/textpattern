@@ -331,18 +331,19 @@ function cat_category_multiedit()
         } elseif ($method == 'changeparent') {
             $new_parent = ps('new_parent') or $new_parent = 'root';
 
-            $exists = safe_row("name, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
-            $rs = $exists ? safe_rows("id, name, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'") : false;
+            $exists = safe_row("name, title, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
+            $rs = $exists ? safe_rows("id, name, title, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'") : false;
 
             if ($rs) {
                 $parent = $exists['name'];
+                $title = $exists['title'];
                 $to_change = $affected = array();
 
                 foreach ($rs as $cat) {
                     // Cannot assign parent to a child.
                     if ($cat['lft']>$exists['lft'] || $cat['rgt']<$exists['rgt']) {
                         $to_change[] = doSlash($cat['name']);
-                        $affected[] = $cat['name'];
+                        $affected[] = $cat['title'];
                     }
                 }
 
@@ -354,7 +355,7 @@ function cat_category_multiedit()
                     $message = !empty($affected)
                         ? gTxt('categories_set_parent', array(
                             '{type}'   => gTxt($type),
-                            '{parent}' => $parent,
+                            '{parent}' => $title,
                             '{list}'   => join(', ', $affected),
                         ))
                         : array(gTxt('category_save_failed'), E_ERROR);
