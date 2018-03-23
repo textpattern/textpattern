@@ -225,7 +225,7 @@ function list_list($message = '', $post = '')
 
     $createBlock = array();
 
-    if (has_privs('article.edit')) {
+    if (has_privs('article.edit.own')) {
         $createBlock[] =
             n.tag(
                 sLink('article', '', gTxt('add_new_article'), 'txp-button'),
