@@ -1107,7 +1107,8 @@ function status_display($status = 0)
     global $statuses;
 
     if (!$status) {
-        $status = has_privs('article.publish') ? get_pref('default_publish_status', STATUS_LIVE) : STATUS_DRAFT;
+        $status = get_pref('default_publish_status', STATUS_LIVE);
+        has_privs('article.publish') or $status = min($status, STATUS_PENDING);
     }
 
     $disabled = has_privs('article.publish') ? false : array(STATUS_LIVE, STATUS_STICKY);
