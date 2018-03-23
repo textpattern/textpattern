@@ -331,10 +331,10 @@ function cat_category_multiedit()
         } elseif ($method == 'changeparent') {
             $new_parent = ps('new_parent') or $new_parent = 'root';
 
-            $rs = safe_rows("id, name, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'");
+            $exists = safe_row("name, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
+            $rs = $exists ? safe_rows("id, name, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'") : false;
 
             if ($rs) {
-                $exists = safe_row("name, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
                 $parent = $exists['name'];
                 $to_change = $affected = array();
 
