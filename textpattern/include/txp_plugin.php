@@ -417,7 +417,7 @@ function plugin_verify()
         echo form(
             hed(gTxt('previewing_plugin'), 2).
             tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-            hed(gTxt('plugin_help').':', 2).
+            hed(gTxt('plugin_help'), 2).
             tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
             $sub.
             sInput('plugin_install').
