@@ -603,6 +603,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function txt($var, $atts = array(), $escape = 'html')
     {
+        global $textarray; // deprecated since 4.7
+
         if (!is_array($atts)) {
             $atts = array();
         }
@@ -617,10 +619,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];
+        } else {
+            $out = isset($textarray[$v]) ? $textarray[$v] : '';
+        }
 
-            if ($out !== '') {
-                return strtr($out, $atts);
-            }
+        if ($out !== '') {
+            return $atts ? strtr($out, $atts) : $out;
         }
 
         if ($atts) {
