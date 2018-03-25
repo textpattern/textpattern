@@ -403,11 +403,17 @@ function plugin_verify()
 
     if ($plugin = Txp::get('\Textpattern\Plugin\Plugin')->extract($plugin64)) {
         $source = '';
+        $textpack = '';
+
         if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
             $textile = new \Textpattern\Textile\Parser();
             $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
         } else {
-            $help_source = highlight_string($plugin['help'], true);
+            $help_source = $plugin['help'] ? highlight_string($plugin['help'], true) : '';
+        }
+
+        if (isset($plugin['textpack'])) {
+            $textpack = $plugin['textpack'];
         }
 
         $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
@@ -421,8 +427,8 @@ function plugin_verify()
         echo form(
             hed(gTxt('previewing_plugin'), 2).
             tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-            hed(gTxt('plugin_help').':', 2).
-            tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
+            ($help_source ? hed(gTxt('plugin_help'), 2).tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"') : '').
+            ($textpack ? hed(tag('Textpack', 'bdi', array('dir' => 'ltr')), 2).tag(nl2br($textpack), 'div', ' class="code" id="preview-textpack" dir="ltr"') : '').
             $sub.
             sInput('plugin_install').
             eInput('plugin').
