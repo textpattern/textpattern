@@ -119,7 +119,7 @@ function prefs_save()
     while ($a = nextRow($prefnames)) {
         extract($a);
 
-        if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
+        if (!isset($post[$name]) || (!has_privs('prefs.'.$event) && $user_name === '')) {
             continue;
         }
 
@@ -200,7 +200,7 @@ function prefs_list($message = '')
             $mainEvent = $eventParts[0];
             $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
 
-            if (!has_privs('prefs.'.$a['event'])) {
+            if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
             }
 
@@ -774,7 +774,10 @@ function doctypes($name, $val)
 
 function defaultPublishStatus($name, $val)
 {
-    return selectInput($name, status_list(), $val, '', '', $name);
+    $statuses = status_list();
+    $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
+
+    return selectInput($name, $statusa, $val, '', '', $name);
 }
 
 /**

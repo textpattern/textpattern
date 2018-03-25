@@ -1427,16 +1427,17 @@ function getTreePath($target, $type, $tbl = 'txp_category')
 
 function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 {
-    $left = assert_int($left);
+    $left = intval($left);
     $right = $left + 1;
 
+    $parents[] = $parent;
     $parent = doSlash($parent);
-    $type = doSlash($type);
+    $stype = doSlash($type);
 
     $result = safe_column(
         "name",
         $tbl,
-        "parent = '$parent' AND type = '$type' ORDER BY name"
+        "parent = '$parent' AND type = '$stype' ORDER BY name"
     );
 
     foreach ($result as $row) {
@@ -1446,7 +1447,7 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
     safe_update(
         $tbl,
         "lft = $left, rgt = $right",
-        "name = '$parent' AND type = '$type'"
+        "name = '$parent' AND type = '$stype'"
     );
 
     return $right + 1;
@@ -1464,10 +1465,17 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 
 function rebuild_tree_full($type, $tbl = 'txp_category')
 {
+    $stype = doSlash($type);
     // Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
-    safe_update($tbl, "parent = ''", "type = '".doSlash($type)."' AND name = 'root'");
-    safe_update($tbl, "parent = 'root'", "type = '".doSlash($type)."' AND parent = name");
+    safe_update($tbl, "parent = ''", "type = '".$stype."' AND name = 'root'");
+    safe_update($tbl, "lft = 0, rgt = 0", "type = '".$stype."'");
     rebuild_tree('root', 1, $type, $tbl);
+
+    // Attach lost nodes to root
+    if (safe_count($tbl, "type = '".$stype."' AND rgt = 0")) {
+        safe_update($tbl, "parent = 'root'", "type = '".$stype."' AND rgt = 0");
+        rebuild_tree('root', 1, $type, $tbl);
+    }
 }
 
 /**

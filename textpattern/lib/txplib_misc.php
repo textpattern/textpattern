@@ -2234,7 +2234,6 @@ function sanitizeForUrl($text)
         return $out;
     }
 
-    $in = $text;
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
     // Remove all characters except letter, number, dash, space and backslash
@@ -5592,10 +5591,6 @@ function permlinkurl($article_array)
         $now = strftime('%F %T');
     }
 
-    if (!isset($uposted)) {
-        $uposted = $posted;
-    }
-
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
         $production_status != 'live' &&
@@ -5624,7 +5619,7 @@ function permlinkurl($article_array)
             }
             break;
         case 'year_month_day_title':
-            list($y, $m, $d) = explode("-", date("Y-m-d", $uposted));
+            list($y, $m, $d) = explode("-", date("Y-m-d", isset($uposted) ? $uposted : $posted));
             $out =  hu."$y/$m/$d/$url_title";
             break;
         case 'id_title':
