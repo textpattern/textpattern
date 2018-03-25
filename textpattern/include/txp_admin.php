@@ -529,9 +529,9 @@ function author_edit($message = '', $fullEdit = false)
         $is_edit = true;
     }
 
-    if (has_privs('admin.edit') && !$is_edit) {
+    if (!$is_edit) {
         $out[] = hed(gTxt('add_new_author'), 2);
-    } elseif (has_privs('admin.edit')) {
+    } else {
         $out[] = hed(gTxt('edit_author'), 2);
     }
 

@@ -225,7 +225,7 @@ function list_list($message = '', $post = '')
 
     $createBlock = array();
 
-    if (has_privs('article.edit')) {
+    if (has_privs('article.edit.own')) {
         $createBlock[] =
             n.tag(
                 sLink('article', '', gTxt('add_new_article'), 'txp-button'),
@@ -504,7 +504,8 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
     $sections = $all_sections ? selectInput('Section', $all_sections, '', true) : '';
     $comments = onoffRadio('Annotate', get_pref('comments_on_default'));
-    $status = selectInput('Status', $statuses, '', true);
+    $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
+    $status = selectInput('Status', $statusa, '', true);
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
 
     $methods = array(
@@ -668,6 +669,7 @@ function list_multi_edit()
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
+                    $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
                     $a['AuthorID'] = $txp_user;
@@ -683,10 +685,11 @@ function list_multi_edit()
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
+                        $url_title = stripSpace($title." ($id)", 1);
                         safe_update(
                             'textpattern',
-                            "Title     = CONCAT(Title, ' (', $id, ')'),
-                             url_title = CONCAT(url_title, '-', $id),
+                            "Title     = CONCAT(Title, ' (', ID, ')'),
+                             url_title = '$url_title',
                              LastMod   = NOW(),
                              feed_time = NOW()",
                             "ID = $id"

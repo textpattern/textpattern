@@ -158,7 +158,7 @@ function article_save()
     }
 
     if ($incoming['ID']) {
-        $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+        $oldArticle = safe_row("Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
             UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
             UNIX_TIMESTAMP(Posted) AS sPosted,
             UNIX_TIMESTAMP(Expires) AS sExpires",
@@ -180,9 +180,9 @@ function article_save()
     $wasUnpublished = has_status_group($oldArticle['Status'], 'unpublished');
 
     if (!(($wasPublished && has_privs('article.edit.published'))
-        || ($wasPublished && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own.published'))
+        || ($wasPublished && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own.published'))
         || ($wasUnpublished && has_privs('article.edit'))
-        || ($wasUnpublished && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own')))) {
+        || ($wasUnpublished && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own')))) {
         // Not allowed, you silly rabbit, you shouldn't even be here.
         // Show default editing screen.
         article_edit();
@@ -345,7 +345,7 @@ function article_save()
                 $url_title = stripSpace($Title_plain.' ('.$rs['ID'].')', 1);
                 safe_update(
                     'textpattern',
-                    "Title = CONCAT(Title, ' (', ".$rs['ID'].", ')'),
+                    "Title = CONCAT(Title, ' (', ID, ')'),
                     url_title = '$url_title'",
                     "ID = ".$rs['ID']
                 );
@@ -627,7 +627,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         if (gps('copy') && !gps('publish')) {
             $rs['ID'] = $rs['url_title'] = '';
-            $rs['Status'] = get_pref('default_publish_status', STATUS_LIVE);
+            $rs['Status'] = STATUS_DRAFT;
         }
     } else {
         // Assume they came from post.
@@ -810,7 +810,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'class' => 'language-markup',
                     'dir'   => 'ltr',
                 )),
-                'pre', array('class' => 'body line-numbers')
+                'pre', array('class' => 'body')
             );
     } else {
         echo $partials['body']['html'];
@@ -830,7 +830,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                         'class' => 'language-markup',
                         'dir'   => 'ltr',
                     )),
-                    'pre', array('class' => 'excerpt line-numbers')
+                    'pre', array('class' => 'excerpt')
                 );
         } else {
             echo $partials['excerpt']['html'];
@@ -1107,17 +1107,20 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
  * @return string HTML
  */
 
-function status_display($status)
+function status_display($status = 0)
 {
     global $statuses;
 
     if (!$status) {
         $status = get_pref('default_publish_status', STATUS_LIVE);
+        has_privs('article.publish') or $status = min($status, STATUS_PENDING);
     }
+
+    $disabled = has_privs('article.publish') ? false : array(STATUS_LIVE, STATUS_STICKY);
 
     return inputLabel(
         'status',
-        selectInput('Status', $statuses, $status, false, '', 'status'),
+        selectInput('Status', $statuses, $status, false, '', 'status', false, $disabled),
         'status',
         array('status', 'instructions_status'),
         array('class' => 'txp-form-field status')
@@ -1657,6 +1660,10 @@ function article_partial_article_view($rs)
     extract($rs);
 
     if (has_status_group($Status, 'unpublished')) {
+        if (!has_privs('article.preview')) {
+            return;
+        }
+
         $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
     } else {
         include_once txpath.'/publish/taghandlers.php';
