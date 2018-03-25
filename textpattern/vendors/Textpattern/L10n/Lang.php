@@ -510,8 +510,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
      *
-     * @param   string            $lang_code The language code
-     * @param   array|string|bool $events    An array of loaded events to extract
+     * @param   string       $lang_code The language code
+     * @param   array|string $events    A list of loaded events to extract
      * @return  array
      */
 
@@ -530,7 +530,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $admin_events = array('admin-side', 'common');
 
             if ($events) {
-                $admin_events = array_merge($admin_events, (array) $events);
+                $list = (is_array($events) ? $events : do_list_unique($events));
+                $admin_events = array_merge($admin_events, $list);
             }
 
             $events = $admin_events;
@@ -566,8 +567,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
      *
-     * @param   string            $lang_code The language code
-     * @param   array|string|bool $events    An array of loaded events to load
+     * @param   string       $lang_code The language code
+     * @param   array|string $events    A list of loaded events to load
      * @see  extract()
      * @return  array
      */
