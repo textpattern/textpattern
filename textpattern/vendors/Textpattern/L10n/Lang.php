@@ -330,12 +330,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * Set/overwrite the language strings. Chainable.
      *
      * @param array $strings Set of strings to use
-     * @param bool  $append  Whether to append the strings (true) or replace them entirely (false)
+     * @param bool  $merge   Whether to merge the strings (true) or replace them entirely (false)
      */
 
-    public function setPack(array $strings, $append = false)
+    public function setPack(array $strings, $merge = false)
     {
-        if ((bool)$append) {
+        if ((bool)$merge) {
             $this->strings = array_merge($this->strings, (array)$strings);
         } else {
             $this->strings = (array)$strings;
