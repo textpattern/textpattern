@@ -295,7 +295,45 @@ class Plugin
             if (!isset($allpacks[$lang])) {
                 $langpack = $allpacks[$fallback];
             } else {
-                $langpack = array_merge($allpacks[$fallback], $allpacks[$lang]);
+                $langpack = array();
+                $done = array();
+
+                // Manual merge since array_merge/array_merge_recursive don't work as expected
+                // on these muti-dimensional structures.
+                // There must be a more efficent way to do this...
+                foreach ($allpacks[$fallback] as $idx => $packEntry) {
+                    if (isset($allpacks[$lang][$idx]['name']) && $allpacks[$lang][$idx]['name'] === $packEntry['name']) {
+                        // Great! keys in the same order.
+                        $done[] = $idx;
+                        $langpack[] = $allpacks[$lang][$idx];
+                    } else {
+                        // Drat, gotta search for it.
+                        $found = false;
+
+                        foreach ($allpacks[$lang] as $offset => $packSet) {
+                            if (in_array($offset, $done)) {
+                                continue;
+                            }
+
+                            if ($packSet['name'] === $packEntry['name']) {
+                                $langpack[] = $packSet;
+                                $found = true;
+                                $done[] = $offset;
+                                break;
+                            }
+                        }
+
+                        if (!$found) {
+                            $langpack[] = $packEntry;
+                        }
+                    }
+                }
+            }
+
+            // Ensure the language code in the pack, which may contain fallback strings,
+            // reflects the desired (to be installed) language code.
+            foreach ($langpack as $idx => $packBlock) {
+                $langpack[$idx]['lang'] = $lang;
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
