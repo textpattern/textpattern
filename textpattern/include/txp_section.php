@@ -679,6 +679,7 @@ function section_save()
 
     if ($ok) {
         update_lastmod('section_saved', compact('name', 'title', 'page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable'));
+        Txp::get('Textpattern\Skin\Skin')->setEditing($safe_skin);
     }
 
     if ($ok) {
@@ -928,6 +929,10 @@ function section_multi_edit()
             )
         ) {
             sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));
+
+            if ($edit_method === 'changepagestyle') {
+                Txp::get('Textpattern\Skin\Skin')->setEditing(doSlash($nameVal['skin']));
+            }
 
             return;
         }

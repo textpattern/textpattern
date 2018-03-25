@@ -142,6 +142,13 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $value = (string) $value;
     }
 
+    if (is_array($disabled)) {
+        $disable = $disabled;
+        $disabled = false;
+    } else {
+        $disable = array();
+    }
+
     foreach ($array as $avalue => $alabel) {
         if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
             $sel = ' selected="selected"';
@@ -149,6 +156,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         } else {
             $sel = '';
         }
+
+        $sel .= in_array($avalue, $disable) ? ' disabled="disabled"' : '';
 
         $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.' dir="auto">'.txpspecialchars($alabel).'</option>';
     }
