@@ -334,7 +334,7 @@ function plugin_edit_form($name = '')
     return
         form(
             hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-            graf('<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
+            '<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>'.
             graf(
                 sLink('plugin', '', gTxt('cancel'), 'txp-button').
                 fInput('submit', '', gTxt('save'), 'publish'),
@@ -342,7 +342,7 @@ function plugin_edit_form($name = '')
             ).
             eInput('plugin').
             sInput('plugin_save').
-            hInput('name', $name), '', '', 'post', '', '', 'plugin_details');
+            hInput('name', $name), '', '', 'post', 'edit-plugin-code', '', 'plugin_details');
 }
 
 /**
