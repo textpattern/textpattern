@@ -457,7 +457,7 @@ function author_list($message = '')
                 tInput().
                 n.tag_end('form').
                 n.tag_start('div', array(
-                    'class' => 'txp-navigation',
+                    'class' => 'txp-layout-cell-row txp-navigation',
                     'id'    => 'users_navigation',
                 )).
                 $paginator->render().

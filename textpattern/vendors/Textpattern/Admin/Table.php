@@ -95,7 +95,7 @@ class Table
 
         $out .= $content;
         $out .= n.tag_start('div', array(
-                'class' => 'txp-navigation',
+                'class' => 'txp-layout-cell-row txp-navigation',
                 'id'    => $event.'_navigation',
                 'style' => $total < 1 ? 'display:none' : false,
             )).
