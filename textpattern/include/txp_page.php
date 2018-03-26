@@ -157,14 +157,16 @@ function page_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
-            'class'     => 'txp-clone',
-            'data-form' => 'page_form',
-        ));
+        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new')
+        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', 
+            array(
+                'class'     => 'txp-clone',
+                'data-form' => 'page_form',
+            )
+        );
     }
 
     $actions = graf(
-        sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new').
         $actionsExtras,
         array('class' => 'txp-actions txp-actions-inline')
     );
