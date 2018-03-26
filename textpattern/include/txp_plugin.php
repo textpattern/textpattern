@@ -391,11 +391,7 @@ function status_link($status, $name, $linktext)
 
 function plugin_verify()
 {
-    if (ps('txt_plugin')) {
-        $plugin64 = join("\n", file($_FILES['theplugin']['tmp_name']));
-    } else {
-        $plugin64 = assert_string(ps('plugin'));
-    }
+    $plugin64 = assert_string(ps('plugin'));
 
     if ($plugin = Txp::get('\Textpattern\Plugin\Plugin')->extract($plugin64)) {
         $source = '';
@@ -405,14 +401,14 @@ function plugin_verify()
             $textile = new \Textpattern\Textile\Parser();
             $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
         } else {
-            $help_source = $plugin['help'] ? highlight_string($plugin['help'], true) : '';
+            $help_source = $plugin['help'] ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
         }
 
         if (isset($plugin['textpack'])) {
             $textpack = $plugin['textpack'];
         }
 
-        $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
+        $source .= txpspecialchars($plugin['code']);
         $sub = graf(
             sLink('plugin', '', gTxt('cancel'), 'txp-button').
             fInput('submit', '', gTxt('install'), 'publish'),
@@ -422,9 +418,31 @@ function plugin_verify()
         pagetop(gTxt('verify_plugin'));
         echo form(
             hed(gTxt('previewing_plugin'), 2).
-            tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-            ($help_source ? hed(gTxt('plugin_help'), 2).tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"') : '').
-            ($textpack ? hed(tag('Textpack', 'bdi', array('dir' => 'ltr')), 2).tag(nl2br($textpack), 'div', ' class="code" id="preview-textpack" dir="ltr"') : '').
+            tag(
+                tag($source, 'code', array(
+                    'class' => 'language-php',
+                    'dir'   => 'ltr',
+                )),
+                'pre', array('id' => 'preview-plugin')
+            ).
+            ($help_source
+                ? hed(gTxt('plugin_help'), 2).
+                    tag(
+                        tag($help_source, 'code', array(
+                            'class' => 'language-markup',
+                            'dir'   => 'ltr',
+                        )),
+                        'pre', array('id' => 'preview-help')
+                    )
+                : ''
+            ).
+            ($textpack
+                ? hed(tag('Textpack', 'bdi', array('dir' => 'ltr')), 2).
+                    tag(
+                        tag($textpack, 'code', array('dir' => 'ltr')), 'pre', array('id' => 'preview-textpack')
+                    )
+                : ''
+            ).
             $sub.
             sInput('plugin_install').
             eInput('plugin').
