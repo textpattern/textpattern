@@ -511,12 +511,30 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
 
     $methods = array(
-        'changesection'   => array('label' => gTxt('changesection'),   'html' => $sections),
-        'changecategory1' => array('label' => gTxt('changecategory1'), 'html' => $category1),
-        'changecategory2' => array('label' => gTxt('changecategory2'), 'html' => $category2),
-        'changestatus'    => array('label' => gTxt('changestatus'),    'html' => $status),
-        'changecomments'  => array('label' => gTxt('changecomments'),  'html' => $comments),
-        'changeauthor'    => array('label' => gTxt('changeauthor'),    'html' => $authors),
+        'changestatus'    => array(
+            'label' => gTxt('changestatus'),
+            'html' => $status,
+        ),
+        'changesection'   => array(
+            'label' => gTxt('changesection'),
+            'html' => $sections,
+        ),
+        'changecategory1' => array(
+            'label' => gTxt('changecategory1'),
+            'html' => $category1,
+        ),
+        'changecategory2' => array(
+            'label' => gTxt('changecategory2'),
+            'html' => $category2,
+        ),
+        'changecomments'  => array(
+            'label' => gTxt('changecomments'),
+            'html' => $comments,
+        ),
+        'changeauthor'    => array(
+            'label' => gTxt('changeauthor'),
+            'html' => $authors,
+        ),
         'duplicate'       => gTxt('duplicate'),
         'delete'          => gTxt('delete'),
     );

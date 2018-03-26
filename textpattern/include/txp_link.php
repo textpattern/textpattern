@@ -536,8 +536,14 @@ function link_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $authors = $all_link_authors ? selectInput('author', $all_link_authors, '', true) : '';
 
     $methods = array(
-        'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
-        'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
+        'changecategory' => array(
+            'label' => gTxt('changecategory'),
+            'html' => $categories
+        ),
+        'changeauthor'   => array(
+            'label' => gTxt('changeauthor'),
+            'html' => $authors
+        ),
         'delete'         => gTxt('delete'),
     );
 

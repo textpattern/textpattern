@@ -1541,16 +1541,16 @@ namespace Textpattern\Skin {
             $methods = array(
                 'import'    => array(
                     'label' => gTxt('update_from_disk'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database'),
                 ),
                 'export'    => array(
                     'label' => gTxt('export_to_disk'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk'),
                 ),
                 'duplicate' => gTxt('duplicate'),
                 'delete'    => array(
                     'label' => gTxt('delete'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely'),
                 ),
             );
 

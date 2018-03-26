@@ -168,7 +168,10 @@ function form_list($current)
         ));
 
         $methods = array(
-            'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
+            'changetype' => array(
+                'label' => gTxt('changetype'),
+                'html' => formTypes('', false, 'changetype'),
+            ),
             'delete'     => gTxt('delete'),
         );
 
