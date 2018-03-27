@@ -67,7 +67,6 @@ class Table
     public function render($data = array(), $search = null, $create = null, $content = null, $footer = null)
     {
         $event = $this->event;
-        $out = '';
         extract($data + array(
             'heading'  => 'tab_'.$event,
             'total'    => 0,
@@ -76,7 +75,7 @@ class Table
             'help'     => null,
         ));
 
-        $out .= n.'<div class="txp-layout">'.
+        $out = n.'<div class="txp-layout">'.
             n.tag(
                 hed(gTxt($heading).($help ? popHelp($help) : ''), 1, array('class' => 'txp-heading')),
                 'div', array('class' => 'txp-layout-4col-alt')

@@ -1214,8 +1214,7 @@ namespace Textpattern\Skin {
             return $table->render(
                 compact('total', 'criteria') + array('html_id' => false, 'help' => 'skin_overview'),
                 $this->getSearchBlock($search),
-                '',
-                $this->getCreateBlock(). // Create block is here to be loaded async.
+                $this->getCreateBlock(),
                 $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
                 $this->getFootBlock(compact('limit', 'numPages', 'total', 'crit', 'search_method', 'page', 'sort', 'dir'))
             );
