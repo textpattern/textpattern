@@ -480,11 +480,7 @@ function toggleColumn(sel, $sel, vis)
 {
 //    $sel = $(sel);
     if ($sel.length) {
-        if (!!vis) {
-            $sel.show();
-        } else {
-            $sel.hide();
-        }
+        $sel.toggle(!!vis);
 
         // Send state of toggle pane to localStorage.
         var data = new Object;
@@ -1648,11 +1644,11 @@ jQuery.fn.txpColumnize = function ()
 {
     var $table = $(this), items = [], selectAll = true, stored = true,
         $headers = $table.find('thead tr>th');
-
-    if ($table.closest('form').find('.txp-list-options').length) {
+/*
+    if ($table.closest('.txp-layout-1col').find('.txp-list-options').length) {
         return this
     }
-
+*/
     $headers.each(function (index) {
         var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
 
@@ -1695,13 +1691,22 @@ jQuery.fn.txpColumnize = function ()
         return this
     }
 
-    var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
-    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
+    var $container = $table.closest('.txp-layout-1col')
+    var $ui = $container.find('.txp-list-options')
+
+    if (!$ui.length) {
+        $ui = $('<div class="txp-list-options"></div>');
+    } else {
+        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove()
+    }
+
+    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
+        $button = $('<a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a>')
 
     $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
-    $ui.append($menu)
-    $menu.txpMenu($ui.find('.txp-list-options-button'))
+    $ui.append($button).append($menu)
+    $menu.txpMenu($button)
 
     $ui.txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
@@ -1711,7 +1716,13 @@ jQuery.fn.txpColumnize = function ()
         'confirmation': false
     });
 
-    $(this).closest('form').prepend($ui);
+    var $panel = $container.find('.txp-control-panel')
+
+    if ($panel.length) {
+        $panel.after($ui);
+    } else {
+        $table.closest('form').prepend($ui)
+    }
 
     return this
 }
