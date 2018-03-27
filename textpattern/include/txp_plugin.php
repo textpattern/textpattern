@@ -102,12 +102,15 @@ function plugin_list($message = '')
         n.tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_rows_start(
-        "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags",
+        "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
         'txp_plugin',
         "1 = 1 ORDER BY $sort_sql"
     );
 
     if ($rs and numRows($rs) > 0) {
+        $publicOn = get_pref('use_plugins');
+        $adminOn = get_pref('admin_side_plugins');
+
         echo
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
@@ -208,6 +211,10 @@ function plugin_list($message = '')
 
             $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
+            $statusLink = status_link($status, $name, yes_no($status));
+            $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
+                ? tag($statusLink, 's')
+                : $statusLink;
 
             echo tr(
                 td(
@@ -229,7 +236,7 @@ function plugin_list($message = '')
                     $description, '', 'txp-list-col-description'
                 ).
                 td(
-                    status_link($status, $name, yes_no($status)), '', 'txp-list-col-status'
+                    $statusDisplay, '', 'txp-list-col-status'
                 ).
                 td(
                     $load_order, '', 'txp-list-col-load-order'
