@@ -1691,24 +1691,26 @@ jQuery.fn.txpColumnize = function ()
         return this
     }
 
-    var $container = $table.closest('.txp-layout-1col')
-    var $ui = $container.find('.txp-list-options')
-
-    if (!$ui.length) {
-        $ui = $('<div class="txp-list-options"></div>');
-    } else {
-        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove()
-    }
-
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
         $button = $('<a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a>')
 
     $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
+    var $container = $table.closest('.txp-layout-1col')
+    var $ui = $container.find('.txp-list-options')
+    var $panel = $container.find('.txp-control-panel')
+
+    if (!$ui.length) {
+        $ui = $('<div class="txp-list-options"></div>');
+    } else {
+        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove()
+        $panel = false
+    }
+
     $ui.append($button).append($menu)
     $menu.txpMenu($button)
 
-    $ui.txpMultiEditForm({
+    $ui.data('_txpMultiEdit', null).txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
         'selectAll'  : 'input[data-name="select_all"][type=checkbox]',
         'row'        : '.txp-dropdown li',
@@ -1716,11 +1718,9 @@ jQuery.fn.txpColumnize = function ()
         'confirmation': false
     });
 
-    var $panel = $container.find('.txp-control-panel')
-
     if ($panel.length) {
         $panel.after($ui);
-    } else {
+    } else if ($panel !== false) {
         $table.closest('form').prepend($ui)
     }
 

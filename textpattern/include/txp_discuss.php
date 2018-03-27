@@ -469,7 +469,7 @@ function discuss_list($message = '')
         }
     }
 
-    $createBlock = '<div class="txp-control-panel"></div>'.tag(
+    $createBlock = tag(
         cookie_box('show_spam'),
         'div', array('class' => 'txp-list-options'));
     $pageBlock = $paginator->render().
