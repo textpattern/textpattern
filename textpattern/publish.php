@@ -921,7 +921,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs);
+            $custom = buildCustomSql($customFields, $customPairs, $exclude);
         }
     }
 
