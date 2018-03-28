@@ -2493,7 +2493,7 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {list: '#txp-list-container', url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()})
     }).on('submit', 'form[name="longform"]', function(e) {
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
+        textpattern.Relay.callback('updateList', {list: '#messagepane, #txp-list-container, #skin_control_panel', data: $(this).serializeArray()})
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault()
         if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden')

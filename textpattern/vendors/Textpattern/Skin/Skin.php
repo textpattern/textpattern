@@ -1212,7 +1212,7 @@ namespace Textpattern\Skin {
             $table = \Txp::get('Textpattern\Admin\Table');
 
             return $table->render(
-                compact('total', 'criteria') + array('html_id' => false, 'help' => 'skin_overview'),
+                compact('total', 'criteria') + array('help' => 'skin_overview'),
                 $this->getSearchBlock($search),
                 $this->getCreateBlock(),
                 $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
@@ -1254,7 +1254,7 @@ namespace Textpattern\Skin {
                 return tag(
                     $this->getCreateButton().$this->getImportForm(),
                     'div',
-                    array('class' => 'txp-control-panel')
+                    array('class' => 'txp-control-panel', 'id' => 'skin_control_panel')
                 );
             }
         }
