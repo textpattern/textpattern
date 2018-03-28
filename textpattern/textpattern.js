@@ -877,7 +877,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadEnd', function (event, data) {
     $('progress.txp-upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '#messagepane, #txp-list-container',
+    var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
         callback = data.callback || function(event) {
             textpattern.Console.announce(event)
@@ -886,8 +886,13 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             if (html) {
                 $html = $(html)
                 $.each(list.split(','), function(index, value) {
-                    $(value).replaceWith($html.find(value)).remove()
-                    $(value).trigger('updateList')
+                    $(value).each(function() {
+                        var id = this.id
+                        if (id) {
+                            $(this).replaceWith($html.find('#'+id)).remove()
+                            $('#'+id).trigger('updateList')
+                        }
+                    })
                 })
 
                 $html.remove()
@@ -2493,7 +2498,7 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {list: '#txp-list-container', url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()})
     }).on('submit', 'form[name="longform"]', function(e) {
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {list: '#messagepane, #txp-list-container, #skin_control_panel', data: $(this).serializeArray()})
+        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault()
         if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden')
