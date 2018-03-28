@@ -99,7 +99,9 @@ function plugin_list($message = '')
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
         )).
-        n.tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
+        n.'<div class="txp-layout-cell-row txp-list-head">'.
+            tag(plugin_form(), 'div', array('class' => 'txp-control-panel')).
+        n.'</div>';
 
     $rs = safe_rows_start(
         "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",

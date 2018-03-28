@@ -85,7 +85,7 @@ class Table
                 'class' => 'txp-layout-1col',
                 'id'    => $event.'_container',
             )).
-            n.'<div class="txp-layout-cell-row txp-list-head">'.$create.'</div>';
+            n.tag($create, 'div', array('class' => 'txp-layout-cell-row txp-list-head'));
 
         $out .= n.tag_start('div', array('id' => $html_id));
 
