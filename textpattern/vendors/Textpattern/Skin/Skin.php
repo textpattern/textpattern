@@ -1254,7 +1254,7 @@ namespace Textpattern\Skin {
                 return tag(
                     $this->getCreateButton().$this->getImportForm(),
                     'div',
-                    array('class' => 'txp-control-panel', 'id' => 'skin_control_panel')
+                    array('class' => 'txp-control-panel txp-async-update', 'id' => 'skin_control_panel')
                 );
             }
         }

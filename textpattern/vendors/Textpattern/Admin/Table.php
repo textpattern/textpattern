@@ -87,7 +87,7 @@ class Table
             )).
             n.tag($create, 'div', array('class' => 'txp-layout-cell-row txp-list-head'));
 
-        $out .= n.tag_start('div', array('id' => $html_id));
+        $out .= n.tag_start('div', array('id' => $html_id, 'class' => $html_id ? 'txp-async-update' : false));
 
         if ($total >= 1) {
             $out .= script_js('$(".txp-search").show()');
