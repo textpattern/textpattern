@@ -3,7 +3,7 @@
 URL="https://codeload.github.com";
 AUTHOR="textpattern";
 REPO="textpattern-default-theme";
-EXTRACT="textpattern/setup/themes/four-point-seven";
+EXTRACT="textpattern/setup/themes";
 
 
 TAG="master";
@@ -13,5 +13,5 @@ fi
 
 echo "Get repo: $REPO :: $TAG";
 echo "-------------------------------------------------------------------------------";
-rm -rf $EXTRACT/*;
-curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=3 --directory=$EXTRACT $REPO-$TAG/dist/four-point-seven
+rm -rf $EXTRACT/four-point*;
+curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/dist
