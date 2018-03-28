@@ -1644,11 +1644,7 @@ jQuery.fn.txpColumnize = function ()
 {
     var $table = $(this), items = [], selectAll = true, stored = true,
         $headers = $table.find('thead tr>th');
-/*
-    if ($table.closest('.txp-layout-1col').find('.txp-list-options').length) {
-        return this
-    }
-*/
+
     $headers.each(function (index) {
         var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
 
@@ -2504,7 +2500,9 @@ $(document).ready(function () {
         else $(this).find('.txp-search-clear').addClass('ui-helper-hidden')
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('updateList', '#txp-list-container', function() {
-        $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
+        if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {
+            $(this).closest('.txp-layout-1col').find('.txp-list-options-button').hide()
+        }
     })
 
     // Find and open associated dialogs.
