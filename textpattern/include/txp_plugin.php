@@ -43,6 +43,7 @@ if ($event == 'plugin') {
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
+        'plugin_change_pageby' => true,
     );
 
     if ($step && bouncer($step, $available_steps)) {
@@ -65,8 +66,11 @@ function plugin_list($message = '')
     pagetop(gTxt('tab_plugins'), $message);
 
     extract(gpsa(array(
-        'sort',
-        'dir',
+            'page',
+            'sort',
+            'dir',
+            'crit',
+            'search_method',
     )));
 
     if ($sort === '') {
@@ -87,33 +91,29 @@ function plugin_list($message = '')
     }
 
     $sort_sql = "$sort $dir";
-
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        ).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        )).
-        n.'<div class="txp-layout-cell-row txp-list-head">'.
-            tag(plugin_form(), 'div', array('class' => 'txp-control-panel')).
-        n.'</div>';
+    $searchBlock = '';
+    $createBlock = tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
+    $contentBlock = '';
 
-    $rs = safe_rows_start(
-        "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
-        'txp_plugin',
-        "1 = 1 ORDER BY $sort_sql"
-    );
+    $total = getCount('txp_plugin', '1');
+    $paginator = new \Textpattern\Admin\Paginator($event, 'plugin');
+    $limit = $paginator->getLimit();
 
-    if ($rs and numRows($rs) > 0) {
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
+
+    if ($total > 0) {
+        $rs = safe_rows_start(
+            "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
+            'txp_plugin',
+            "1 = 1 ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
+
         $publicOn = get_pref('use_plugins');
         $adminOn = get_pref('admin_side_plugins');
 
-        echo
+        $contentBlock .=
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'plugin_form',
@@ -218,7 +218,7 @@ function plugin_list($message = '')
                 ? tag($statusLink, 's')
                 : $statusLink;
 
-            echo tr(
+            $contentBlock .= tr(
                 td(
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
@@ -249,10 +249,10 @@ function plugin_list($message = '')
                 $status ? ' class="active"' : ''
             );
 
-            unset($name, $page, $deletelink);
+            unset($name);
         }
 
-        echo
+        $contentBlock .=
             n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div'). // End of .txp-listtables.
@@ -261,8 +261,11 @@ function plugin_list($message = '')
             n.tag_end('form');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    $pageBlock = $paginator->render().
+    nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+    $table = new \Textpattern\Admin\Table();
+    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_plugins'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**
@@ -492,6 +495,18 @@ function plugin_form()
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+}
+
+/**
+ * Updates pageby value.
+ */
+
+function plugin_change_pageby()
+{
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'plugin')->change();
+    plugin_list();
 }
 
 /**

@@ -1089,14 +1089,16 @@ jQuery.fn.txpAsyncForm = function (options) {
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncHref = function (options) {
+jQuery.fn.txpAsyncHref = function (options, selector) {
     options = $.extend({
         dataType: 'text',
         success : null,
         error   : null
     }, options);
 
-    this.on('click.txpAsyncHref', function (event) {
+    selector = !!selector ? selector : null
+
+    this.on('click.txpAsyncHref', selector, function (event) {
         event.preventDefault();
         var $this = $(this);
         var url = this.search.replace('?', '') + '&' + $.param({value: $this.text()});
@@ -2433,11 +2435,11 @@ $(document).ready(function () {
     });
 
     // Set up asynchronous links.
-    $('a.async').txpAsyncHref($.extend({
+    $('body').txpAsyncHref($.extend({
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    }, $(this).hasClass('script') ? {dataType: 'script'} : {}));
+    }, $(this).hasClass('script') ? {dataType: 'script'} : {}), 'a.async');
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
