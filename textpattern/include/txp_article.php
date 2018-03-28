@@ -1415,7 +1415,7 @@ function article_partial_actions($rs)
         ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('add_new_article'), 'index.php?event=article', array('class' => 'txp-new'))
         .article_partial_article_clone($rs)
         .article_partial_article_view($rs)
-        : gTxt('add_new_article'),
+        : null,
         array(
             'class' => 'txp-actions',
             'id'    => 'txp-article-actions',

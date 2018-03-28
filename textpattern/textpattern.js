@@ -1971,9 +1971,9 @@ textpattern.Route.add('article', function () {
         }
     );
 
-    var status = $('select[name=Status]'), form = status.parents('form'), submitButton = form.find('input[type=submit]');
+    var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
 
-    status.change(function () {
+    $('#article_form').on('change', status, function () {
         if (!form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
