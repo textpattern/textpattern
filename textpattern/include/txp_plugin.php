@@ -27,6 +27,8 @@
  * @package Admin\Plugin
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -93,21 +95,93 @@ function plugin_list($message = '')
     $sort_sql = "$sort $dir";
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $searchBlock = '';
+    $search = new Filter($event,
+        array(
+            'name' => array(
+                'column' => 'txp_plugin.name',
+                'label'  => gTxt('plugin'),
+            ),
+            'author' => array(
+                'column' => 'txp_plugin.author',
+                'label'  => gTxt('author'),
+            ),
+            'author_uri' => array(
+                'column' => 'txp_plugin.author_uri',
+                'label'  => gTxt('website'),
+            ),
+            'description' => array(
+                'column' => 'txp_plugin.description',
+                'label'  => gTxt('description'),
+            ),
+            'code' => array(
+                'column' => 'txp_plugin.code',
+                'label'  => gTxt('code'),
+            ),
+            'help' => array(
+                'column' => 'txp_plugin.help',
+                'label'  => gTxt('help'),
+            ),
+            'textpack' => array(
+                'column' => 'txp_plugin.textpack',
+                'label'  => 'Textpack',
+            ),
+            'status' => array(
+                'column' => 'txp_plugin.status',
+                'label'  => gTxt('active'),
+                'type'   => 'boolean',
+            ),
+            'type' => array(
+                'column' => 'txp_plugin.type',
+                'label'  => gTxt('type'),
+                'type'   => 'numeric',
+            ),
+            'load_order' => array(
+                'column' => 'txp_plugin.load_order',
+                'label'  => gTxt('order'),
+                'type'   => 'numeric',
+            ),
+        )
+    );
+
+    $alias_yes = '1, Yes';
+    $alias_no = '0, No';
+    $search->setAliases('status', array($alias_no, $alias_yes));
+
+    list($criteria, $crit, $search_method) = $search->getFilter();
+
+    $search_render_options = array('placeholder' => 'search_plugins');
+    $total = safe_count('txp_plugin', $criteria);
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('plugin', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => $event.'_control',
+            )
+        );
+
     $createBlock = tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
     $contentBlock = '';
 
-    $total = getCount('txp_plugin', '1');
     $paginator = new \Textpattern\Admin\Paginator($event, 'plugin');
     $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    if ($total > 0) {
+    if ($total < 1) {
+        if ($criteria != 1) {
+            $contentBlock .= graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_results_found'),
+                array('class' => 'alert-block information')
+            );
+        }
+    } else {
         $rs = safe_rows_start(
             "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
             'txp_plugin',
-            "1 = 1 ORDER BY $sort_sql LIMIT $offset, $limit"
+            "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
         $publicOn = get_pref('use_plugins');
@@ -256,7 +330,7 @@ function plugin_list($message = '')
             n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div'). // End of .txp-listtables.
-            plugin_multiedit_form('', $sort, $dir, '', '').
+            plugin_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form');
     }
