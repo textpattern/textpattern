@@ -1583,9 +1583,11 @@ jQuery.fn.txpMenu = function(button) {
             of: this
         }).focus().menu('focus', null, menu.find('.ui-menu-item:first'))
 
-        $(document).one('blur click focusin', function (e) {
-            menu.hide();
-        })
+        if (menu.is(':visible')) {
+            $(document).one('blur click focusin', function (e) {
+                menu.hide();
+            })
+        }
 
         return false
     }).on('focusin', function(e) {
@@ -1608,7 +1610,8 @@ function txp_search()
             showLabel: false,
             icon: 'ui-icon-triangle-1-s'
         }),
-        menu = $ui.find('.txp-dropdown')
+        menu = $ui.find('.txp-dropdown'),
+        crit = $ui.find('input[name="crit"]')
 
     menu.hide().txpMenu(button)
 
@@ -1616,6 +1619,7 @@ function txp_search()
         showLabel: false,
         icon: 'ui-icon-search'
     }).click(function (e) {
+        e.stopPropagation()
         e.preventDefault()
         $ui.submit()
     });
@@ -1624,7 +1628,7 @@ function txp_search()
 
     $ui.find('.txp-search-clear').click(function(e) {
         e.preventDefault()
-        $ui.find('input[name="crit"]').val('')
+        crit.val('')
         $ui.submit()
     })
 
@@ -1634,6 +1638,21 @@ function txp_search()
         'highlighted': '.txp-dropdown li',
         'confirmation': false
     });
+
+    $ui.submit(function(e) {
+        var empty = crit.val() !== ''
+
+        if (empty) {
+            menu.find('input[name="search_method[]"]').each(function() {
+                empty = empty && !$(this).is(':checked')
+            })
+        }
+
+        if(empty) {
+            button.click()
+            return false
+        }
+    })
 }
 
 /**
