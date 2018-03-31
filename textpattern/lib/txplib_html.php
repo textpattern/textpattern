@@ -957,7 +957,19 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
 function tag($content, $tag, $atts = '')
 {
-    return empty($tag) || $content === '' ? $content : '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>';
+    if (empty($tag) || $content === '') {
+        return $content;
+    }
+
+    $atts = $atts ? join_atts($atts) : '';
+
+    if (preg_match('/^[\w\-\.\:]+$/', $tag)) {
+        return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
+    } else {
+        list($prepend, $append) = explode('<+>', $tag.'<+>'.$tag);
+
+        return $prepend.$atts.$content.$append;
+    }
 }
 
 /**
@@ -1821,12 +1833,16 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
             $break = "<$break $breakatts/>".n;
         }
 
-        return ($wraptag) ? tag(join($break, $list), $wraptag, $atts) : join($break, $list);
+        $content = join($break, $list);
+    } else {
+        $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
 
-    return ($wraptag)
-        ? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts)
-        : tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
+    if (empty($wraptag)) {
+        return $content;
+    } else {
+        return tag($content, $wraptag, $atts);
+    }
 }
 
 /**
@@ -1861,7 +1877,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return $content ? tag($content, $tag, $atts) : "<$tag $atts />";
 }
 
 /**

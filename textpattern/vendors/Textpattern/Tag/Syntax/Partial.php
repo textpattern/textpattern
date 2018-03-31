@@ -41,7 +41,7 @@ class Partial
 
     public static function renderYield($atts, $thing = null)
     {
-        global $yield;
+        global $yield, $txp_yield;
 
         extract(lAtts(array(
             'name'    => '',
@@ -50,6 +50,7 @@ class Partial
 
         if (isset($yield[$name])) {
             $inner = end($yield[$name]);
+            !isset($txp_yield[$name]) or $txp_yield[$name][key($yield[$name])] = true;
         }
 
         if (!isset($inner)) {

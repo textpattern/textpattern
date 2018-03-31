@@ -425,7 +425,7 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $txp_atts, $yield;
+    global $txp_atts, $yield, $txp_yield;
 
     if (empty($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
@@ -439,9 +439,7 @@ function output_form($atts, $thing = null)
         $to_yield = $atts['yield'];
         unset($atts['form'], $atts['yield']);
 
-        if ($to_yield === true) {
-            $txp_atts = null;
-        } else {
+        if ($to_yield !== true) {
             $to_yield = array_fill_keys(do_list_unique($to_yield), false);
             $atts = array_intersect_key($atts, lAtts($to_yield, $atts));
         }
@@ -458,15 +456,21 @@ function output_form($atts, $thing = null)
     foreach ($atts as $name => $value) {
         if (!isset($yield[$name])) {
             $yield[$name] = array();
+            $name === '' or $txp_yield[$name] = array();
         }
 
         $yield[$name][] = $value;
+        $name === '' or $txp_yield[$name][] = false;
     }
 
     $out = parse_form($form);
 
     foreach ($atts as $name => $value) {
         array_pop($yield[$name]);
+
+        if (isset($txp_yield[$name]) && array_pop($txp_yield[$name])) {
+            unset($txp_atts[$name]);
+        }
     }
 
     return $out;
