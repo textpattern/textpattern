@@ -77,7 +77,7 @@ class Partial
             'value' => null,
         ), $atts));
 
-        $inner = isset($yield[$name]) ? end($yield[$name]) : null;
+        $inner = !empty($yield[$name]) ? end($yield[$name]) : null;
 
         return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
     }
