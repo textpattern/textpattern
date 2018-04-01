@@ -48,12 +48,10 @@ class Partial
             'default' => null,
         ), $atts));
 
-        if (isset($yield[$name])) {
+        if (!empty($yield[$name])) {
             $inner = end($yield[$name]);
             !isset($txp_yield[$name]) or $txp_yield[$name][key($yield[$name])] = true;
-        }
-
-        if (!isset($inner)) {
+        } else {
             $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
         }
 
@@ -77,7 +75,7 @@ class Partial
             'value' => null,
         ), $atts));
 
-        $inner = !empty($yield[$name]) ? end($yield[$name]) : null;
+        $inner = empty($yield[$name]) ? null : end($yield[$name]);
 
         return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
     }

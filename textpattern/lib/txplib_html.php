@@ -965,10 +965,10 @@ function tag($content, $tag, $atts = '')
 
     if (preg_match('/^[\w\-\.\:]+$/', $tag)) {
         return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
+    } elseif (strpos($tag, '<+>') === false) {
+        return $tag.$content.$tag;
     } else {
-        list($prepend, $append) = explode('<+>', $tag, 2) + array(null, $tag);
-
-        return $prepend.$content.$append;
+        return str_replace('<+>', $content, $tag);
     }
 }
 
