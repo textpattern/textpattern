@@ -441,7 +441,7 @@ function parse($thing, $condition = true)
                 $else[$level] = $count[$level];
             } elseif ($tag[$level][1] === 'txp:') {
                 // Handle <txp::shortcode />.
-                $tag[$level][3] = "yield form='".$tag[$level][2]."'".$tag[$level][3];
+                $tag[$level][3] = 'form="'.$tag[$level][2].'"'.$tag[$level][3];
                 $tag[$level][2] = 'output_form';
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.

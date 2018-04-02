@@ -434,21 +434,12 @@ function output_form($atts, $thing = null)
     }
 
     $form = $atts['form'];
+    $to_yield = isset($atts['yield']) ? $atts['yield'] : true;
+    unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
-    if (!empty($atts['yield'])) {
-        $to_yield = $atts['yield'];
-        unset($atts['form'], $atts['yield']);
-
-        if ($to_yield !== true) {
-            $to_yield = array_fill_keys(do_list_unique($to_yield), false);
-            $atts = array_intersect_key($atts, lAtts($to_yield, $atts));
-        }
-    } else {
-        lAtts(array(
-            'form'  => '',
-            'yield' => '',
-        ), $atts);
-        $atts = array();
+    if ($to_yield !== true) {
+        $to_yield = array_fill_keys(do_list_unique($to_yield), false);
+        $atts = array_intersect_key($atts, lAtts($to_yield, $atts));
     }
 
     $atts += array('' => $thing ? parse($thing) : $thing);
@@ -468,7 +459,7 @@ function output_form($atts, $thing = null)
     foreach ($atts as $name => $value) {
         array_pop($yield[$name]);
 
-        if (isset($txp_yield[$name]) && array_pop($txp_yield[$name])) {
+        if (!empty($txp_yield[$name]) && array_pop($txp_yield[$name])) {
             unset($txp_atts[$name]);
         }
     }
