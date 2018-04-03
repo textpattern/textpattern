@@ -48,10 +48,14 @@ class Partial
             'default' => null,
         ), $atts));
 
-        if (!empty($yield[$name])) {
-            $inner = end($yield[$name]);
-            !isset($txp_yield[$name]) or $txp_yield[$name][key($yield[$name])] = true;
-        } else {
+        if ($name === '') {
+            $inner = end($yield);
+        } elseif (!empty($txp_yield[$name])) {
+            list($inner) = end($txp_yield[$name]);
+            $txp_yield[$name][key($txp_yield[$name])][1] = true;
+        }
+
+        if (!isset($inner)) {
             $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
         }
 
@@ -68,15 +72,21 @@ class Partial
 
     public static function renderIfYield($atts, $thing = null)
     {
-        global $yield;
+        global $yield, $txp_yield;
 
         extract(lAtts(array(
             'name'  => '',
             'value' => null,
         ), $atts));
 
-        $inner = empty($yield[$name]) ? null : end($yield[$name]);
+        if ($name === '') {
+            $inner = empty($yield) ? null : end($yield);
+        } elseif (empty($txp_yield[$name])) {
+            $inner = null;
+        } else {
+            list($inner) = end($txp_yield[$name]);
+        }
 
-        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
+        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
     }
 }
