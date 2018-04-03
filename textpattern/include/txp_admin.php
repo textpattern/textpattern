@@ -459,7 +459,7 @@ function author_edit_buttons()
 
     // New author button.
     if (has_privs('admin.edit')) {
-        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
+        $buttons[] = sLink('admin', 'author_edit', gTxt('create_author'), 'txp-button');
     }
 
     // Change password button.
@@ -506,7 +506,7 @@ function author_edit($message = '', $fullEdit = false)
     }
 
     if (!$is_edit) {
-        $out[] = hed(gTxt('add_new_author'), 2);
+        $out[] = hed(gTxt('create_author'), 2);
     } else {
         $out[] = hed(gTxt('edit_author'), 2);
     }
@@ -521,7 +521,7 @@ function author_edit($message = '', $fullEdit = false)
         $out[] = inputLabel(
             'login_name',
             fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
-            'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
+            'login_name', 'create_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
 

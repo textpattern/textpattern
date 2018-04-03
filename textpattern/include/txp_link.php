@@ -187,7 +187,7 @@ function link_list($message = '')
     if (has_privs('link.edit')) {
         $createBlock[] =
             n.tag(
-                sLink('link', 'link_edit', gTxt('add_new_link'), 'txp-button'),
+                sLink('link', 'link_edit', gTxt('create_link'), 'txp-button'),
                 'div', array('class' => 'txp-control-panel')
             );
     }
@@ -381,7 +381,7 @@ function link_edit($message = '')
     }
 
     if (has_privs('link.edit') || has_privs('link.edit.own')) {
-        $caption = gTxt($is_edit ? 'edit_link' : 'add_new_link');
+        $caption = gTxt($is_edit ? 'edit_link' : 'create_link');
 
         echo form(
             hed($caption, 2).

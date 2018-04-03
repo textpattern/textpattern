@@ -228,7 +228,7 @@ function list_list($message = '', $post = '')
     if (has_privs('article.edit.own')) {
         $createBlock[] =
             n.tag(
-                sLink('article', '', gTxt('add_new_article'), 'txp-button'),
+                sLink('article', '', gTxt('create_article'), 'txp-button'),
                 'div', array('class' => 'txp-control-panel')
             );
     }

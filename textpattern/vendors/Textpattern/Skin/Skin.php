@@ -1335,7 +1335,7 @@ namespace Textpattern\Skin {
         {
             $event = $this->getEvent();
 
-            return sLink($event, 'edit', gTxt('create_'.$event), 'txp-button');
+            return sLink($event, 'edit', gTxt('create_skin'), 'txp-button');
         }
 
         /**
