@@ -334,7 +334,7 @@ function form_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new')
+        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('new'), 'txp-new')
         .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'form_form',

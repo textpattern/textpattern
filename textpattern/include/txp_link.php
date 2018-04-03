@@ -187,7 +187,7 @@ function link_list($message = '')
     if (has_privs('link.edit')) {
         $createBlock[] =
             n.tag(
-                sLink('link', 'link_edit', gTxt('add_new_link'), 'txp-button'),
+                sLink('link', 'link_edit', gTxt('new'), 'txp-button'),
                 'div', array('class' => 'txp-control-panel')
             );
     }
