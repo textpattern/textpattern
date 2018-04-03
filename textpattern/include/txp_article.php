@@ -1412,7 +1412,7 @@ function article_partial_author($rs)
 function article_partial_actions($rs)
 {
     return graf($rs['ID']
-        ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('new'), 'index.php?event=article', array('class' => 'txp-new'))
+        ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('add_new_article'), 'index.php?event=article', array('class' => 'txp-new'))
         .article_partial_article_clone($rs)
         .article_partial_article_view($rs)
         : null,

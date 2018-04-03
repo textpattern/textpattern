@@ -157,7 +157,7 @@ function page_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('new'), 'txp-new')
+        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new')
         .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', 
             array(
                 'class'     => 'txp-clone',

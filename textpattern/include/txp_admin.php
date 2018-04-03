@@ -459,7 +459,7 @@ function author_edit_buttons()
 
     // New author button.
     if (has_privs('admin.edit')) {
-        $buttons[] = sLink('admin', 'author_edit', gTxt('new'), 'txp-button');
+        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
     }
 
     // Change password button.

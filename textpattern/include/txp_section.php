@@ -204,7 +204,7 @@ function sec_section_list($message = '')
     if (has_privs('section.edit')) {
         $createBlock[] =
             n.tag(
-                sLink('section', 'section_edit', gTxt('new'), 'txp-button').
+                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
                 n.tag_start('form', array(
                     'class'  => 'async',
                     'id'     => 'default_section_form',
