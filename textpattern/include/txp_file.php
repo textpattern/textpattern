@@ -494,6 +494,10 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $status = selectInput('status', $file_statuses, '', true);
 
     $methods = array(
+        'changestatus'   => array(
+            'label' => gTxt('changestatus'),
+            'html'  => $status,
+        ),
         'changecategory' => array(
             'label' => gTxt('changecategory'),
             'html'  => $categories,
@@ -501,10 +505,6 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'changeauthor'   => array(
             'label' => gTxt('changeauthor'),
             'html'  => $authors,
-        ),
-        'changestatus'   => array(
-            'label' => gTxt('changestatus'),
-            'html'  => $status,
         ),
         'changecount'    => array('label' => gTxt('reset_download_count')),
         'delete'         => gTxt('delete'),
