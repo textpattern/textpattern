@@ -75,7 +75,7 @@
     <li>can manage pages, forms and style</li>
 </ul>
         ]]></item>
-        <item id="add_new_author" title="Create author"><![CDATA[
+        <item id="create_author" title="Create author"><![CDATA[
 <h2>Add new author</h2>
 <p>A password, welcome message and login instructions will be emailed to the new author.</p>
         ]]></item>

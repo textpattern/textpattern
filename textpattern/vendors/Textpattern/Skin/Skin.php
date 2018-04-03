@@ -1212,10 +1212,9 @@ namespace Textpattern\Skin {
             $table = \Txp::get('Textpattern\Admin\Table');
 
             return $table->render(
-                compact('total', 'criteria') + array('html_id' => false, 'help' => 'skin_overview'),
+                compact('total', 'criteria') + array('help' => 'skin_overview'),
                 $this->getSearchBlock($search),
-                '',
-                $this->getCreateBlock(). // Create block is here to be loaded async.
+                $this->getCreateBlock(),
                 $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
                 $this->getFootBlock(compact('limit', 'numPages', 'total', 'crit', 'search_method', 'page', 'sort', 'dir'))
             );
@@ -1255,7 +1254,7 @@ namespace Textpattern\Skin {
                 return tag(
                     $this->getCreateButton().$this->getImportForm(),
                     'div',
-                    array('class' => 'txp-control-panel')
+                    array('class' => 'txp-control-panel txp-async-update', 'id' => 'skin_control_panel')
                 );
             }
         }
@@ -1336,7 +1335,7 @@ namespace Textpattern\Skin {
         {
             $event = $this->getEvent();
 
-            return sLink($event, 'edit', gTxt('create_'.$event), 'txp-button');
+            return sLink($event, 'edit', gTxt('create_skin'), 'txp-button');
         }
 
         /**
@@ -1541,16 +1540,16 @@ namespace Textpattern\Skin {
             $methods = array(
                 'import'    => array(
                     'label' => gTxt('update_from_disk'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_database'),
                 ),
                 'export'    => array(
                     'label' => gTxt('export_to_disk'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_from_disk'),
                 ),
                 'duplicate' => gTxt('duplicate'),
                 'delete'    => array(
                     'label' => gTxt('delete'),
-                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely')
+                    'html'  => $this->getMultiEditCheckbox('skin_delete_entirely'),
                 ),
             );
 
