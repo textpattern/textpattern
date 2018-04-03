@@ -57,7 +57,7 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 $txp_current_tag = '';
-$txp_parsed = $txp_else = array();
+$txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
 
 // Get all prefs as an array.
@@ -921,7 +921,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs);
+            $custom = buildCustomSql($customFields, $customPairs, $exclude);
         }
     }
 

@@ -527,7 +527,7 @@ function commentmode($name, $val)
 }
 
 /**
- * Renders a HTML &lt;select&gt; list of comment popup modes.
+ * Renders a HTML &lt;select&gt; list of new comment validity periods.
  *
  * Can be altered by plugins via the 'prefs_ui > weeks'
  * pluggable UI callback event.

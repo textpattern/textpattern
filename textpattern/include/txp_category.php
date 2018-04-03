@@ -388,7 +388,7 @@ function cat_event_category_list($event)
     $out = hed(gTxt($heading).popHelp($event.'_category'), 2).
         form(
             graf(
-                tag(gTxt('create_new_category'), 'label', array('for' => $event.'_category_new')).br.
+                tag(gTxt('create_category'), 'label', array('for' => $event.'_category_new')).br.
                 fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new', false, true)
             ).
             (($rs)

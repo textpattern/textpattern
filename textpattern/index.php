@@ -224,6 +224,12 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     if (isset($_GET['txpreview'])) {
         include txpath.'/publish.php';
         textpattern();
+        echo $trace->summary();
+
+        if ($production_status === 'debug') {
+            echo $trace->result();
+        }
+
         exit;
     }
 

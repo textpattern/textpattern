@@ -480,11 +480,7 @@ function toggleColumn(sel, $sel, vis)
 {
 //    $sel = $(sel);
     if ($sel.length) {
-        if (!!vis) {
-            $sel.show();
-        } else {
-            $sel.hide();
-        }
+        $sel.toggle(!!vis);
 
         // Send state of toggle pane to localStorage.
         var data = new Object;
@@ -881,7 +877,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadEnd', function (event, data) {
     $('progress.txp-upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '#messagepane, #txp-list-container',
+    var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
         callback = data.callback || function(event) {
             textpattern.Console.announce(event)
@@ -890,8 +886,13 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             if (html) {
                 $html = $(html)
                 $.each(list.split(','), function(index, value) {
-                    $(value).replaceWith($html.find(value)).remove()
-                    $(value).trigger('updateList')
+                    $(value).each(function() {
+                        var id = this.id
+                        if (id) {
+                            $(this).replaceWith($html.find('#'+id)).remove()
+                            $('#'+id).trigger('updateList')
+                        }
+                    })
                 })
 
                 $html.remove()
@@ -1088,14 +1089,16 @@ jQuery.fn.txpAsyncForm = function (options) {
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncHref = function (options) {
+jQuery.fn.txpAsyncHref = function (options, selector) {
     options = $.extend({
         dataType: 'text',
         success : null,
         error   : null
     }, options);
 
-    this.on('click.txpAsyncHref', function (event) {
+    selector = !!selector ? selector : null
+
+    this.on('click.txpAsyncHref', selector, function (event) {
         event.preventDefault();
         var $this = $(this);
         var url = this.search.replace('?', '') + '&' + $.param({value: $this.text()});
@@ -1580,9 +1583,11 @@ jQuery.fn.txpMenu = function(button) {
             of: this
         }).focus().menu('focus', null, menu.find('.ui-menu-item:first'))
 
-        $(document).one('blur click focusin', function (e) {
-            menu.hide();
-        })
+        if (menu.is(':visible')) {
+            $(document).one('blur click focusin', function (e) {
+                menu.hide();
+            })
+        }
 
         return false
     }).on('focusin', function(e) {
@@ -1605,7 +1610,8 @@ function txp_search()
             showLabel: false,
             icon: 'ui-icon-triangle-1-s'
         }),
-        menu = $ui.find('.txp-dropdown')
+        menu = $ui.find('.txp-dropdown'),
+        crit = $ui.find('input[name="crit"]')
 
     menu.hide().txpMenu(button)
 
@@ -1613,6 +1619,7 @@ function txp_search()
         showLabel: false,
         icon: 'ui-icon-search'
     }).click(function (e) {
+        e.stopPropagation()
         e.preventDefault()
         $ui.submit()
     });
@@ -1621,7 +1628,7 @@ function txp_search()
 
     $ui.find('.txp-search-clear').click(function(e) {
         e.preventDefault()
-        $ui.find('input[name="crit"]').val('')
+        crit.val('')
         $ui.submit()
     })
 
@@ -1631,6 +1638,21 @@ function txp_search()
         'highlighted': '.txp-dropdown li',
         'confirmation': false
     });
+
+    $ui.submit(function(e) {
+        var empty = crit.val() !== ''
+
+        if (empty) {
+            menu.find('input[name="search_method[]"]').each(function() {
+                empty = empty && !$(this).is(':checked')
+            })
+        }
+
+        if(empty) {
+            button.click()
+            return false
+        }
+    })
 }
 
 /**
@@ -1648,10 +1670,6 @@ jQuery.fn.txpColumnize = function ()
 {
     var $table = $(this), items = [], selectAll = true, stored = true,
         $headers = $table.find('thead tr>th');
-
-    if ($table.closest('form').find('.txp-list-options').length) {
-        return this
-    }
 
     $headers.each(function (index) {
         var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
@@ -1695,15 +1713,26 @@ jQuery.fn.txpColumnize = function ()
         return this
     }
 
-    var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
-    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
+    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
+        $button = $('<a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a>')
 
     $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
-    $ui.append($menu)
-    $menu.txpMenu($ui.find('.txp-list-options-button'))
+    var $container = $table.closest('.txp-layout-1col')
+    var $ui = $container.find('.txp-list-options')
+    var $panel = $container.find('.txp-control-panel')
 
-    $ui.txpMultiEditForm({
+    if (!$ui.length) {
+        $ui = $('<div class="txp-list-options"></div>');
+    } else {
+        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove()
+        $panel = false
+    }
+
+    $ui.append($button).append($menu)
+    $menu.txpMenu($button)
+
+    $ui.data('_txpMultiEdit', null).txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
         'selectAll'  : 'input[data-name="select_all"][type=checkbox]',
         'row'        : '.txp-dropdown li',
@@ -1711,7 +1740,11 @@ jQuery.fn.txpColumnize = function ()
         'confirmation': false
     });
 
-    $(this).closest('form').prepend($ui);
+    if ($panel.length) {
+        $panel.after($ui);
+    } else if ($panel !== false) {
+        $table.closest('form').prepend($ui)
+    }
 
     return this
 }
@@ -1964,9 +1997,9 @@ textpattern.Route.add('article', function () {
         }
     );
 
-    var status = $('select[name=Status]'), form = status.parents('form'), submitButton = form.find('input[type=submit]');
+    var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
 
-    status.change(function () {
+    $('#article_form').on('change', status, function () {
         if (!form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
@@ -2421,11 +2454,11 @@ $(document).ready(function () {
     });
 
     // Set up asynchronous links.
-    $('a.async').txpAsyncHref($.extend({
+    $('body').txpAsyncHref($.extend({
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    }, $(this).hasClass('script') ? {dataType: 'script'} : {}));
+    }, $(this).hasClass('script') ? {dataType: 'script'} : {}), 'a.async');
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
@@ -2493,7 +2526,9 @@ $(document).ready(function () {
         else $(this).find('.txp-search-clear').addClass('ui-helper-hidden')
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('updateList', '#txp-list-container', function() {
-        $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
+        if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {
+            $(this).closest('.txp-layout-1col').find('.txp-list-options-button').hide()
+        }
     })
 
     // Find and open associated dialogs.

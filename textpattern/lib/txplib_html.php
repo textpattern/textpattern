@@ -482,7 +482,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 {
     $out = array();
 
-    if ($numPages > 1 && $crit && $crit != '1') {
+    if ($numPages > 1 && $crit !== '') {
         $out[] = announce(
             gTxt('showing_search_results', array(
                 '{from}'  => (($page - 1) * $limit) + 1,
@@ -957,7 +957,19 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
 function tag($content, $tag, $atts = '')
 {
-    return empty($tag) || $content === '' ? $content : '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>';
+    if (empty($tag) || $content === '') {
+        return $content;
+    }
+
+    $atts = $atts ? join_atts($atts) : '';
+
+    if (preg_match('/^[\w\-\.\:]+$/', $tag)) {
+        return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
+    } elseif (strpos($tag, '<+>') === false) {
+        return $tag.$content.$tag;
+    } else {
+        return str_replace('<+>', $content, $tag);
+    }
 }
 
 /**
@@ -1829,12 +1841,16 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
             $break = "<$break $breakatts/>".n;
         }
 
-        return ($wraptag) ? tag(join($break, $list), $wraptag, $atts) : join($break, $list);
+        $content = join($break, $list);
+    } else {
+        $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
 
-    return ($wraptag)
-        ? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts)
-        : tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
+    if (empty($wraptag)) {
+        return $content;
+    } else {
+        return tag($content, $wraptag, $atts);
+    }
 }
 
 /**
@@ -1869,7 +1885,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return $content ? tag($content, $tag, $atts) : "<$tag $atts />";
 }
 
 /**
