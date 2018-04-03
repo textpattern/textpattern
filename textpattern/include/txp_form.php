@@ -745,10 +745,13 @@ function form_partial_template($rs)
         array(
             'form_code',
             n.span(
-                href(
-                    span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
-                    array('event' => 'tag', 'panel' => $event),
-                    array('class' => 'txp-tagbuilder-dialog')
+                (has_privs('tag')
+                    ? href(
+                        span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
+                        array('event' => 'tag', 'panel' => $event),
+                        array('class' => 'txp-tagbuilder-dialog')
+                    )
+                    : ''
                 ),
                 array('class' => 'txp-textarea-options')
             )
