@@ -425,7 +425,7 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $txp_atts, $yield;
+    global $txp_atts, $yield, $txp_yield;
 
     if (empty($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
@@ -434,39 +434,33 @@ function output_form($atts, $thing = null)
     }
 
     $form = $atts['form'];
+    $to_yield = isset($atts['yield']) ? $atts['yield'] : true;
+    unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
-    if (!empty($atts['yield'])) {
-        $to_yield = $atts['yield'];
-        unset($atts['form'], $atts['yield']);
-
-        if ($to_yield === true) {
-            $txp_atts = null;
-        } else {
-            $to_yield = array_fill_keys(do_list_unique($to_yield), false);
-            $atts = array_intersect_key($atts, lAtts($to_yield, $atts));
-        }
-    } else {
-        lAtts(array(
-            'form'  => '',
-            'yield' => '',
-        ), $atts);
-        $atts = array();
+    if ($to_yield !== true) {
+        $to_yield = $to_yield ? array_fill_keys(do_list_unique($to_yield), null) : array();
+        $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
-    $atts += array('' => $thing ? parse($thing) : $thing);
 
     foreach ($atts as $name => $value) {
-        if (!isset($yield[$name])) {
-            $yield[$name] = array();
+        if (!isset($txp_yield[$name])) {
+            $txp_yield[$name] = array();
         }
 
-        $yield[$name][] = $value;
+        $txp_yield[$name][] = array($value, false);
     }
 
+    $yield[] = $thing ? parse($thing) : $thing;
     $out = parse_form($form);
+    array_pop($yield);
 
     foreach ($atts as $name => $value) {
-        array_pop($yield[$name]);
+        $result = array_pop($txp_yield[$name]);
+
+        if (!empty($result[1])) {
+            unset($txp_atts[$name]);
+        }
     }
 
     return $out;

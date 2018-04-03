@@ -41,15 +41,18 @@ class Partial
 
     public static function renderYield($atts, $thing = null)
     {
-        global $yield;
+        global $yield, $txp_yield;
 
         extract(lAtts(array(
             'name'    => '',
             'default' => null,
         ), $atts));
 
-        if (isset($yield[$name])) {
-            $inner = end($yield[$name]);
+        if ($name === '') {
+            $inner = end($yield);
+        } elseif (!empty($txp_yield[$name])) {
+            list($inner) = end($txp_yield[$name]);
+            $txp_yield[$name][key($txp_yield[$name])][1] = true;
         }
 
         if (!isset($inner)) {
@@ -69,15 +72,21 @@ class Partial
 
     public static function renderIfYield($atts, $thing = null)
     {
-        global $yield;
+        global $yield, $txp_yield;
 
         extract(lAtts(array(
             'name'  => '',
             'value' => null,
         ), $atts));
 
-        $inner = isset($yield[$name]) ? end($yield[$name]) : null;
+        if ($name === '') {
+            $inner = empty($yield) ? null : end($yield);
+        } elseif (empty($txp_yield[$name])) {
+            $inner = null;
+        } else {
+            list($inner) = end($txp_yield[$name]);
+        }
 
-        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
+        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
     }
 }
