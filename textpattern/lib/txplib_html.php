@@ -963,7 +963,7 @@ function tag($content, $tag, $atts = '')
 
     $atts = $atts ? join_atts($atts) : '';
 
-    if (preg_match('/^[\w\-\.\:]+$/', $tag)) {
+    if (preg_match('/^\w[\w\-\.\:]*$/', $tag)) {
         return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
     } elseif (strpos($tag, '<+>') === false) {
         return $tag.$content.$tag;
