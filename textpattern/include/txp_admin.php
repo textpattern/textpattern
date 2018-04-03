@@ -317,12 +317,6 @@ function author_list($message = '')
 
         $total = getCount('txp_users', $criteria);
 
-        echo n.'<div class="txp-layout">'.
-            n.tag(
-                hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-                'div', array('class' => 'txp-layout-4col-alt')
-            );
-
         $searchBlock =
             n.tag(
                 $search->renderForm('author_list', $search_render_options),
@@ -332,141 +326,123 @@ function author_list($message = '')
                 )
             );
 
-        $createBlock = array();
+        $createBlock = n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
 
-        $createBlock[] = n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
-
-        $contentBlockStart = n.tag_start('div', array(
-                'class' => 'txp-layout-1col',
-                'id'    => 'users_container',
-            ));
-
-        $createBlock = implode(n, $createBlock);
-
-        if ($total < 1) {
-            if ($criteria != 1) {
-                echo $searchBlock.
-                    $contentBlockStart.
-                    $createBlock.
-                    graf(
-                        span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                        gTxt('no_results_found'),
-                        array('class' => 'alert-block information')
-                    ).
-                    n.tag_end('div'). // End of .txp-layout-1col.
-                    n.'</div>'; // End of .txp-layout.
-            }
-
-            return;
-        }
+        $contentBlock = '';
 
         $paginator = new \Textpattern\Admin\Paginator($event, 'author');
         $limit = $paginator->getLimit();
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
+        if ($total < 1) {
+            if ($criteria != 1) {
+                $contentBlock .=
+                    graf(
+                        span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                        gTxt('no_results_found'),
+                        array('class' => 'alert-block information')
+                    );
+            }
+        } else {
+            $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
-        echo $searchBlock.$contentBlockStart.$createBlock;
+            $rs = safe_rows_start(
+                "*, UNIX_TIMESTAMP(last_access) AS last_login",
+                'txp_users',
+                "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+            );
 
-        $rs = safe_rows_start(
-            "*, UNIX_TIMESTAMP(last_access) AS last_login",
-            'txp_users',
-            "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-        );
+            if ($rs) {
+                $contentBlock .=
+                    n.tag_start('form', array(
+                        'class'  => 'multi_edit_form',
+                        'id'     => 'users_form',
+                        'name'   => 'longform',
+                        'method' => 'post',
+                        'action' => 'index.php',
+                    )).
+                    n.tag_start('div', array('class' => 'txp-listtables')).
+                    n.tag_start('table', array('class' => 'txp-list')).
+                    n.tag_start('thead').
+                    tr(
+                        (
+                            ($use_multi_edit)
+                            ? hCell(
+                                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                                    '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                            )
+                            : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"')
+                        ).
+                        column_head(
+                            'login_name', 'name', 'admin', true, $switch_dir, '', '',
+                                (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
+                        ).
+                        column_head(
+                            'real_name', 'RealName', 'admin', true, $switch_dir, '', '',
+                                (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
+                        ).
+                        column_head(
+                            'email', 'email', 'admin', true, $switch_dir, '', '',
+                                (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
+                        ).
+                        column_head(
+                            'privileges', 'privs', 'admin', true, $switch_dir, '', '',
+                                (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
+                        ).
+                        column_head(
+                            'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
+                                (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
+                        )
+                    ).
+                    n.tag_end('thead').
+                    n.tag_start('tbody');
 
-        if ($rs) {
-            echo
-                n.tag_start('form', array(
-                    'class'  => 'multi_edit_form',
-                    'id'     => 'users_form',
-                    'name'   => 'longform',
-                    'method' => 'post',
-                    'action' => 'index.php',
-                )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
-                n.tag_start('table', array('class' => 'txp-list')).
-                n.tag_start('thead').
-                tr(
+                while ($a = nextRow($rs)) {
+                    extract(doSpecial($a));
+
+                    $contentBlock .= tr(
+                        td(
+                            ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
+                        ).
+                        hCell(
+                            ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
+                        ).
+                        td(
+                            $RealName, '', 'txp-list-col-real-name name'
+                        ).
+                        td(
+                            href($email, 'mailto:'.$email), '', 'txp-list-col-email'
+                        ).
+                        td(
+                            get_priv_level($privs), '', 'txp-list-col-privs'
+                        ).
+                        td(
+                            ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
+                        )
+                    );
+                }
+
+                $contentBlock .=
+                    n.tag_end('tbody').
+                    n.tag_end('table').
+                    n.tag_end('div'). // End of .txp-listtables.
                     (
                         ($use_multi_edit)
-                        ? hCell(
-                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                                '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                        )
-                        : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"')
+                        ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
+                        : ''
                     ).
-                    column_head(
-                        'login_name', 'name', 'admin', true, $switch_dir, '', '',
-                            (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
-                    ).
-                    column_head(
-                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '',
-                            (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
-                    ).
-                    column_head(
-                        'email', 'email', 'admin', true, $switch_dir, '', '',
-                            (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
-                    ).
-                    column_head(
-                        'privileges', 'privs', 'admin', true, $switch_dir, '', '',
-                            (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
-                    ).
-                    column_head(
-                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
-                            (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
-                    )
-                ).
-                n.tag_end('thead').
-                n.tag_start('tbody');
-
-            while ($a = nextRow($rs)) {
-                extract(doSpecial($a));
-
-                echo tr(
-                    td(
-                        ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
-                    ).
-                    hCell(
-                        ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
-                    ).
-                    td(
-                        $RealName, '', 'txp-list-col-real-name name'
-                    ).
-                    td(
-                        href($email, 'mailto:'.$email), '', 'txp-list-col-email'
-                    ).
-                    td(
-                        get_priv_level($privs), '', 'txp-list-col-privs'
-                    ).
-                    td(
-                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                    )
-                );
+                    tInput().
+                    n.tag_end('form');
             }
-
-            echo
-                n.tag_end('tbody').
-                n.tag_end('table').
-                n.tag_end('div'). // End of .txp-listtables.
-                (
-                    ($use_multi_edit)
-                    ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
-                    : ''
-                ).
-                tInput().
-                n.tag_end('form').
-                n.tag_start('div', array(
-                    'class' => 'txp-navigation',
-                    'id'    => 'users_navigation',
-                )).
-                $paginator->render().
-                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-                n.tag_end('div');
         }
 
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
+        $pageBlock = $paginator->render().
+        nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+        $table = new \Textpattern\Admin\Table('users');
+        echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_site_admin'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
+
     } elseif (has_privs('admin.edit.own')) {
         echo author_edit($message, true);
     } else {
@@ -481,13 +457,13 @@ function author_edit_buttons()
 {
     $buttons = array();
 
-    // Change password button.
-    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
-
     // New author button.
     if (has_privs('admin.edit')) {
-        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
+        $buttons[] = sLink('admin', 'author_edit', gTxt('create_author'), 'txp-button');
     }
+
+    // Change password button.
+    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
 
     return $buttons;
 }
@@ -530,7 +506,7 @@ function author_edit($message = '', $fullEdit = false)
     }
 
     if (!$is_edit) {
-        $out[] = hed(gTxt('add_new_author'), 2);
+        $out[] = hed(gTxt('create_author'), 2);
     } else {
         $out[] = hed(gTxt('edit_author'), 2);
     }
@@ -545,7 +521,7 @@ function author_edit($message = '', $fullEdit = false)
         $out[] = inputLabel(
             'login_name',
             fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
-            'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
+            'login_name', 'create_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
 

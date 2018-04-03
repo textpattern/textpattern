@@ -5100,15 +5100,17 @@ function getCustomFields()
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs)
+function buildCustomSql($custom, $pairs, $exclude = array())
 {
     if ($pairs) {
         $pairs = doSlash($pairs);
 
         foreach ($pairs as $k => $v) {
-            if (in_array($k, $custom)) {
-                $no = array_keys($custom, $k);
-                $out[] = "and custom_".$no[0]." like '$v'";
+            $no = array_search($k, $custom);
+
+            if ($no !== false) {
+                $not = ($exclude === true || in_array($k, $exclude)) ? ' not' : '';
+                $out[] = "and custom_".$no.$not." like '$v'";
             }
         }
     }

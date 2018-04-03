@@ -248,7 +248,7 @@ class Plugin
      * Install/update a plugin Textpack.
      *
      * The process may be intercepted (for example, to fetch data from the
-     * filesystem) via the "api.plugin > textpack.fetch" callback.
+     * filesystem) via the "txp.plugin > textpack.fetch" callback.
      *
      * @param  string  $name   Plugin name
      * @param  boolean $reset  Delete old strings
@@ -262,8 +262,8 @@ class Plugin
             safe_delete('txp_lang', "owner = '{$owner}'");
         }
 
-        if (has_handler('api.plugin', 'textpack.fetch')) {
-            $textpack = callback_event('api.plugin', 'textpack.fetch', false, compact('name'));
+        if (has_handler('txp.plugin', 'textpack.fetch')) {
+            $textpack = callback_event('txp.plugin', 'textpack.fetch', false, compact('name'));
         } else {
             $textpack = safe_field('textpack', 'txp_plugin', "name = '{$owner}'");
         }
@@ -359,7 +359,7 @@ class Plugin
      * Fetch the plugin's 'data' field.
      *
      * The call can be intercepted (for example, to fetch data from the
-     * filesystem) via the "api.plugin > data.fetch" callback.
+     * filesystem) via the "txp.plugin > data.fetch" callback.
      *
      * @param  string $name The plugin
      * @return string
@@ -367,8 +367,8 @@ class Plugin
 
     public function fetchData($name)
     {
-        if (has_handler('api.plugin', 'data.fetch')) {
-            $data = callback_event('api.plugin', 'data.fetch', false, compact('name'));
+        if (has_handler('txp.plugin', 'data.fetch')) {
+            $data = callback_event('txp.plugin', 'data.fetch', false, compact('name'));
         } else {
             $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
         }

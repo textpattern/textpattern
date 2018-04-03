@@ -309,10 +309,7 @@ function discuss_list($message = '')
         );
 
         if ($rs) {
-            $contentBlock .= n.tag(
-                    cookie_box('show_spam'),
-                    'div', array('class' => 'txp-list-options')).
-                n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'discuss_form',
                     'name'   => 'longform',
@@ -472,11 +469,14 @@ function discuss_list($message = '')
         }
     }
 
+    $createBlock = tag(
+        cookie_box('show_spam'),
+        'div', array('class' => 'txp-list-options'));
     $pageBlock = $paginator->render().
         nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
-    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, '', $contentBlock, $pageBlock);
+    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**
