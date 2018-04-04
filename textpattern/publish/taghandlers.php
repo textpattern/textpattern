@@ -442,7 +442,6 @@ function output_form($atts, $thing = null)
         $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
-
     foreach ($atts as $name => $value) {
         if (!isset($txp_yield[$name])) {
             $txp_yield[$name] = array();
@@ -5161,7 +5160,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                $thing = preg_replace('@(<('.($tidy ? preg_quote($attr) : $attr).')\b[^<>]*(?:(?<!/)>((?:(?!(?:<\2\b)).|(?1))*)</\2>|/>))@Usi', '$3', $thing);
+                $thing = preg_replace('@(<('.($tidy ? preg_quote($attr) : $attr).')\b[^<>]*(?:(?<!/)>((?>[^<]|<(?!\2\b)|(?1))*)</\2>|/>))@Usi', '$3', $thing);
         }
     }
 
