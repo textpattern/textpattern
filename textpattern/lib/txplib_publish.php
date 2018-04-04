@@ -192,7 +192,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         'expired' => true,
         'sortdir' => 'desc',
     );
-    $id = $time = $keywords = $custom = '';
+
+    $id = $time = $keywords = $customColumns = $customTables = '';
 
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
@@ -224,8 +225,12 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
             }
         }
 
+        $customFieldData = getCustomFields('article', null, null);
+
         if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs);
+            $customData = buildCustomSql($customFieldData, $customPairs);
+            $customTables = $customData ? $customData['tables'] : false;
+            $customColumns = $customData ? $customData['columns'] : false;
         }
     }
 
@@ -262,12 +267,11 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "SELECT *, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod FROM $safe_name
+        "SELECT *, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns." FROM $safe_name $customTables
             WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
         ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
-        $custom,
         $keywords,
         "AND Status = $status",
         "ORDER BY $sortby",
@@ -441,7 +445,7 @@ function parse($thing, $condition = true)
                 $else[$level] = $count[$level];
             } elseif ($tag[$level][1] === 'txp:') {
                 // Handle <txp::shortcode />.
-                $tag[$level][3] = "yield form='".$tag[$level][2]."'".$tag[$level][3];
+                $tag[$level][3] .= ' form="'.$tag[$level][2].'"';
                 $tag[$level][2] = 'output_form';
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.

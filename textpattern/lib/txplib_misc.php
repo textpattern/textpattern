@@ -5096,9 +5096,14 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
             $out[$when]['by_name'][$thisName] = $thisId;
             $out[$when]['by_field']['custom_' . $thisId] = $thisName;
             $out[$when]['by_type'][$thisId] = $def->get('data_type');
+            $out[$when]['by_content'][$thisId] = $def->get('content_type');
             $out[$when]['by_callback'][$thisId] = $def->get('render');
-            $out[$when]['by_ordinal'][$thisId] = $def->get('ordinal');
+            $out[$when]['by_family'][$thisId] = $def->get('family');
             $out[$when]['by_textfilter'][$thisId] = $def->get('textfilter');
+            $out[$when]['by_ordinal'][$thisId] = $def->get('ordinal');
+            $out[$when]['by_created'][$thisId] = $def->get('created');
+            $out[$when]['by_modified'][$thisId] = $def->get('modified');
+            $out[$when]['by_expires'][$thisId] = $def->get('expires');
         }
     }
 
@@ -5120,21 +5125,42 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs)
+function buildCustomSql($custom, $pairs, $exclude = array())
 {
+    static $contentTypeMap = null;
+
+    if ($contentTypeMap === null) {
+        $contentTypeMap = \Txp::get('\Textpattern\Meta\ContentType')->get();
+    }
+
     if ($pairs) {
         $pairs = doSlash($pairs);
 
         foreach ($pairs as $k => $v) {
-            if (array_key_exists($k, $custom)) {
-                $tableName = 'txp_meta_value_' . $custom[$k];
-                $out[] = "and ($tableName.meta_id = '".$k."' and
-                    $tableName.value like '$v')";
+            if (isset($custom['by_type'])) {
+                $no = array_search($k, $custom['by_id']);
+
+                if ($no !== false) {
+                    $tableAlias = 't_'.$k;
+                    $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
+                    $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
+                    $columns[] = "$tableAlias.value AS $k";
+                    $query = " AND ($tableAlias.meta_id = '".$no."' AND
+                        $tableAlias.value".$not." LIKE '$v')";
+                    $tables[] = ' JOIN '.$tableName.' AS '.$tableAlias.' ON ('.$tableAlias.'.content_id = '.$contentTypeMap[$custom['by_content'][$no]]['column'].$query.')';
+                }
             }
         }
     }
 
-    return !empty($out) ? ' '.join(' ', $out).' ' : false;
+    if (!empty($query)) {
+       $ret['columns'] = ', '. join(', ', $columns).' ';
+       $ret['tables'] = join(' ', $tables);
+
+       return $ret;
+    }
+
+    return false;
 }
 
 /**

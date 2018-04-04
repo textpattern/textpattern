@@ -45,40 +45,70 @@ class ContentType implements \IteratorAggregate
     /**
      * General constructor for the map.
      *
-     * The map can be extended with a 'content.type > types' callback event.
-     * Callback functions get passed three arguments: '$event', '$step' and
-     * '$content_list', which contains a reference to an array of
-     * 'content_name => label' pairs.
+     * The map can be extended or altered with a 'txp.meta > content.types' callback.
+     * Callback functions get passed three arguments: '$event', '$step' and '$map'
+     * that contains a reference to a nested array of:
+     *    content_identifier:
+     *        key    => content+_identifier (for array_column() support)
+     *        label  => internationalised label
+     *        column => the table.column that contains its ID
      *
-     * @param array List of content type keys to exclude
+     * @todo Section is going to prove tricky as it doesn't have a numerical ID,
+     * yet the meta store assumes integer identifiers to provide matches.
      */
 
-    public function __construct($exclude = array())
+    public function __construct()
     {
         $this->contentTypeMap = array(
-            'article'  => gTxt('article'),
-            'image'    => gTxt('image'),
-            'file'     => gTxt('file'),
-            'link'     => gTxt('link'),
-            'user'     => gTxt('author'),
-            'category' => gTxt('category'),
-            'section'  => gTxt('section'),
+            'article' => array(
+                'key'    => 'article',
+                'label'  => gTxt('article'),
+                'column' => PFX.'textpattern.ID',
+            ),
+            'image' => array(
+                'key'    => 'image',
+                'label'  => gTxt('image'),
+                'column' => PFX.'txp_image.id',
+            ),
+            'file' => array(
+                'key'    => 'file',
+                'label'  => gTxt('file'),
+                'column' => PFX.'txp_file.id',
+            ),
+            'link' => array(
+                'key'    => 'link',
+                'label'  => gTxt('link'),
+                'column' => PFX.'txp_link.id',
+            ),
+            'user' => array(
+                'key'    => 'user',
+                'label'  => gTxt('author'),
+                'column' => PFX.'txp_users.user_id',
+            ),
+            'category' => array(
+                'key'    => 'category',
+                'label'  => gTxt('category'),
+                'column' => PFX.'txp_category.id',
+            ),
+            'section' => array(
+                'key'    => 'section',
+                'label'  => gTxt('section'),
+                'column' => PFX.'section.name',
+            ),
         );
 
-        $map = $this->get($exclude);
-
-        callback_event_ref('content.type', 'types', 0, $map);
+        callback_event_ref('txp.meta', 'content.types', 0, $this->contentTypeMap);
     }
 
     /**
-     * Return a list of content types and their associated names.
+     * Return a list of content types.
      *
-     * @param   array List of content keys to exclude
-     * @return  array A content types array
-     * @since   4.6.0
+     * @param   string Item to retrive from the array (null = everything)
+     * @param   array  List of content keys to exclude
+     * @return  array  A content types array
      */
 
-    public function get($exclude = array())
+    protected function getItem($item = null, $exclude = array())
     {
         $map = $this->contentTypeMap;
 
@@ -90,7 +120,43 @@ class ContentType implements \IteratorAggregate
             unset($map[$remove]);
         }
 
-        return $map;
+        return array_column($map, $item, 'key');
+    }
+
+    /**
+     * Return a list of content types and their associated names.
+     *
+     * @param   array List of content keys to exclude
+     * @return  array A content types array
+     */
+
+    public function getLabel($exclude = array())
+    {
+        return $this->getItem('label', $exclude);
+    }
+
+    /**
+     * Return a list of content types and their associated column identifiers.
+     *
+     * @param   array List of content keys to exclude
+     * @return  array A content types array
+     */
+
+    public function getColumn($exclude = array())
+    {
+        return $this->getItem('column', $exclude);
+    }
+
+    /**
+     * Return the entire list of content types and their associated data.
+     *
+     * @param   array List of content keys to exclude
+     * @return  array A content types array
+     */
+
+    public function get($exclude = array())
+    {
+        return $this->getItem(null, $exclude);
     }
 
     /**

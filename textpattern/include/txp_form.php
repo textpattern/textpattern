@@ -168,7 +168,10 @@ function form_list($current)
         ));
 
         $methods = array(
-            'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
+            'changetype' => array(
+                'label' => gTxt('changetype'),
+                'html' => formTypes('', false, 'changetype'),
+            ),
             'delete'     => gTxt('delete'),
         );
 
@@ -331,14 +334,14 @@ function form_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_form'), 'txp-new')
+        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'form_form',
         ));
     }
 
     $actions = graf(
-        sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
         $actionsExtras,
         array('class' => 'txp-actions txp-actions-inline')
     );
@@ -742,10 +745,13 @@ function form_partial_template($rs)
         array(
             'form_code',
             n.span(
-                href(
-                    span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
-                    array('event' => 'tag', 'panel' => $event),
-                    array('class' => 'txp-tagbuilder-dialog')
+                (has_privs('tag')
+                    ? href(
+                        span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
+                        array('event' => 'tag', 'panel' => $event),
+                        array('class' => 'txp-tagbuilder-dialog')
+                    )
+                    : ''
                 ),
                 array('class' => 'txp-textarea-options')
             )

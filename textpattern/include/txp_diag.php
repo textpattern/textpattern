@@ -391,7 +391,17 @@ function doDiagnostics()
 
     $active_plugins = array();
 
-    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 ORDER BY name")) {
+    if (!$use_plugins && !$admin_side_plugins) {
+        $showTypes = '2';
+    } elseif (!$admin_side_plugins) {
+        $showTypes = '0, 2, 5';
+    } elseif (!$use_plugins) {
+        $showTypes = '1, 2, 3, 4, 5';
+    } else {
+        $showTypes = '0, 1, 2, 3, 4, 5';
+    }
+
+    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 AND type IN (".$showTypes.") ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
 

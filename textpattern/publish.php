@@ -57,7 +57,7 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 $txp_current_tag = '';
-$txp_parsed = $txp_else = array();
+$txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
 
 // Get all prefs as an array.
@@ -911,7 +911,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $timeq .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
-    $custom = '';
+    $customColumns = $customTables = '';
 
     if ($customFields) {
         foreach ($customFields as $cField) {
@@ -920,8 +920,13 @@ function doArticles($atts, $iscustom, $thing = null)
             }
         }
 
+        // Fetch all custom field data, not just name=>values.
+        $customFieldData = getCustomFields('article', null, null);
+
         if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs);
+            $customData = buildCustomSql($customFieldData, $customPairs, $exclude);
+            $customTables = $customData ? $customData['tables'] : false;
+            $customColumns = $customData ? $customData['columns'] : false;
         }
     }
 
@@ -949,7 +954,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = "1 = 1".$statusq.$timeq.
-        $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
+        $search.$id.$category.$section.$excerpted.$author.$keywords.$frontpage;
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {
@@ -957,7 +962,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
         if (empty($thispage)) {
-            $grand_total = safe_count('textpattern', $where);
+            $grand_total = getThing("SELECT COUNT(*) FROM textpattern".$customTables." WHERE $where GROUP BY textpattern.ID");
             $total = $grand_total - $offset;
             $numPages = ceil($total / $pageby);
 
@@ -978,7 +983,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     } else {
         if ($pgonly) {
-            $total = safe_count('textpattern', $where) - $offset;
+            $total = getThing("SELECT COUNT(*) FROM textpattern".$customTables." WHERE $where GROUP BY textpattern.ID ") - $offset;
             return ceil($total / $pageby);
         }
 
@@ -992,10 +997,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
-        'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    $rs = startRows("SELECT textpattern.*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score.$customColumns.
+        " FROM textpattern".$customTables." WHERE $where GROUP BY textpattern.ID ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
     // Get the form name.

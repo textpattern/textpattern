@@ -63,7 +63,7 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.7.0-dev';
+$thisversion = '4.8.0-dev';
 // $txp_using_svn deprecated in 4.7.0.
 $txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
@@ -230,6 +230,12 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     if (isset($_GET['txpreview'])) {
         include txpath.'/publish.php';
         textpattern();
+        echo $trace->summary();
+
+        if ($production_status === 'debug') {
+            echo $trace->result();
+        }
+
         exit;
     }
 

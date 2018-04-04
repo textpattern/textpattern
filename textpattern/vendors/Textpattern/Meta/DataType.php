@@ -119,7 +119,7 @@ class DataType implements \IteratorAggregate
     /**
      * General constructor for the map.
      *
-     * The map can be extended with a 'meta.map > types' callback event.
+     * The map can be extended with a 'txp.meta > data.types' callback event.
      * Callback functions get passed three arguments: '$event', '$step' and
      * '$meta_list'. The third parameter contains a reference to an array of
      * 'html_renderer => data_type' attributes.
@@ -131,7 +131,7 @@ class DataType implements \IteratorAggregate
     {
         $map = $this->get($exclude);
 
-        callback_event_ref('meta.map', 'types', 0, $map);
+        callback_event_ref('txp.meta', 'data.types', 0, $map);
     }
 
     /**
@@ -139,7 +139,6 @@ class DataType implements \IteratorAggregate
      *
      * @param  string|array List of meta data keys to exclude
      * @return array        A meta data types map array
-     * @since  4.6.0
      */
 
     public function get($exclude = array())

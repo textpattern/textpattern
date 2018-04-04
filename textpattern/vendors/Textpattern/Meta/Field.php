@@ -752,7 +752,6 @@ class Field
      * @param  array        $atts    Attribute pairs to assign to wrapper
      * @param  array        $wraptag Tag(s) to wrap the value / label in, or empty to omit
      * @return HTML
-     * @since  4.6.0
      */
 
     public function render()

@@ -53,7 +53,7 @@ if ($event == 'meta') {
     );
 
     global $all_content_types, $all_render_types;
-    $all_content_types = Txp::get('\Textpattern\Meta\ContentType')->get();
+    $all_content_types = Txp::get('\Textpattern\Meta\ContentType')->getLabel();
     $dataMap = Txp::get('\Textpattern\Meta\DataType')->get();
     $all_render_types = array_combine(array_keys($dataMap), array_keys($dataMap));
 
@@ -209,7 +209,7 @@ function meta_list($message = '')
 
     $createBlock[] =
         n.tag(
-            sLink('meta', 'meta_edit', gTxt('add_new_meta'), 'txp-button'),
+            sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button'),
             'div', array('class' => 'txp-control-panel')
         );
 
@@ -431,7 +431,7 @@ function meta_edit($message = '')
     $option_map = implode("','", $option_types);
 
     if (has_privs('meta')) {
-        $caption = gTxt(($is_edit) ? 'edit_meta' : 'add_new_meta');
+        $caption = gTxt(($is_edit) ? 'edit_meta' : 'create_meta');
         $helpTxt = (gTxt($help_ref) === $help_ref) ? '' : gTxt($help_ref);
 
         echo script_js(<<<EOJS
