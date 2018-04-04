@@ -442,7 +442,6 @@ function output_form($atts, $thing = null)
         $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
-
     foreach ($atts as $name => $value) {
         if (!isset($txp_yield[$name])) {
             $txp_yield[$name] = array();
