@@ -1,8 +1,8 @@
 Changes in 4.7.0
 
 * In memory of Dean Allen, creator of Textpattern CMS.
-* Added: Support for website themes, stored within the database (accessed via
-  the Themes panel) and available as physical flat file templates for easier
+* Added: Support for website themes, markup stored within the database (accessed
+  via the Themes panel) and available as physical flat file templates for easier
   versioning, portability and installation (many many thanks, NicolasGraph).
 * Added: Support for installation on Nginx web servers.
 * Added: Support for automated installation from CLI.
@@ -14,12 +14,12 @@ Changes in 4.7.0
 * Added: Optional short tags.
 * Added: Tag global attributes: 'breakby', 'breakclass', 'class', 'escape',
   'html_id', 'not' and 'wraptag'.
+* Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
+  and 'time' attributes.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:header /> tag allows optional setting of HTML headers on page
   output.
 * Added: <txp:if_logged_in /> tag.
-* Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
-  and 'time' attributes.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
@@ -29,46 +29,50 @@ Changes in 4.7.0
 * Added: Ability to copy an article without enforced save.
 * Added: Button to swap width and height values on image edit thumbnail
   generator.
-* Added: Ctrl+S/Cmd+S keyboard shortcuts for Submit buttons on any admin panel.
+* Added: Ctrl+S/Cmd+S keyboard shortcuts for Submit, Publish and Save buttons
+  on any admin panel.
 * Added: Multiple files upload with progress meter.
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
 * Added: Diagnostics can optionally suppress sensitive path data.
 * Added: 'Expire now' checkbox on Write panel.
-* Added: Automatic TOC generation for well-structured plugin help text.
+* Added: Automatic table of contents generation for well-structured plugin help
+  text.
 * Changed: Revised multi-site installation routine and symbolic linking.
 * Changed: Pages, Forms and Styles panels save some changes without page
   refreshes (Ajax). Last used Page/Form/Stylesheet remembered.
-* Changed: Articles panel performs searches/pagination without refresh (Ajax).
-* Changed: Forms can recursively (up to 15 deep) call themselves.
-* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
+* Changed: Articles panel performs searches/pagination without page refreshes
+  (Ajax).
+* Changed: Forms can recursively (up to 15 levels deep) call themselves.
+* Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
+  attribute.
+* Changed: <txp:category_list /> can output nested lists.
+* Changed: <txp:if_category /> accepts 'parent' attribute.
+* Changed: <txp:image_author /> tag accepts 'id' and 'name' attributes.
+* Changed: Reinstate <txp:keywords> tag and add 'wraptag', 'class' and 'break'
+  attributes.
+* Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
+  <txp:image /> and <txp:images />, respectively, instead.
+* Changed: <txp:newer /> and <txp:older /> tags accept 'rel' attribute.
 * Changed: <txp:output_form yield /> tag supports user-defined attributes,
   coupled with <txp:yield> changes above this allows for '<txp::shortcode />'
   -like tags.
 * Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
-* Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
-  attribute.
-* Changed: <txp:category_list /> can output nested lists.
-* Changed: <txp:if_category /> accepts 'parent' attribute.
+* Changed: <txp:site_url /> tag accepts 'type' attribute.
+* Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
+* Changed: <txp:yield> tag accepts 'name' and 'default' attributes.
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
   before <txp:article /> tag.
-* Changed: <txp:site_url /> tag accepts 'type' attribute.
-* Changed: <txp:newer /> and <txp:older /> tags accept 'rel' attribute.
-* Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
-* Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
-* Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
-* Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
-  <txp:image /> and <txp:images />, respectively, instead.
 * Changed: Image Edit panel for all users - read-only to some (thanks, phiw13).
 * Changed: Textfilter options and help topics moved inline with their textareas.
   Write panel 'sidehelp' twisty and article>sidehelp callback removed.
 * Changed: Categories moved from Sort & Display subpanel to their own twisty.
   Override Form (if used) moved to 'Sort and display' subpanel. 'Advanced'
   twisty and its callback removed.
-* Changed: Languages also updated automatically on upgrade.
+* Changed: Languages are updated automatically on upgrade.
 * Changed: Further improvements to RTL language support.
 * Changed: Language Textpacks included in core instead of using legacy RPC
   server.
@@ -97,8 +101,8 @@ Changes in 4.7.0
 * Changed: Admin theme layout improvements on small devices.
 * Changed: Plugin preview page syntax highlighting and layout improvements.
   Also show Textpack string additions preview (if applicable).
-* Changed: Pages/Forms/styles panels - removed 'Create ...' links when viewing
-  a new, unsaved page/form/style.
+* Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when viewing
+  a new, unsaved Page/Form/Style.
 * Developer: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
   authors please use ahu in place of hu.'textpattern'.
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
