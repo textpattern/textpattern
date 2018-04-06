@@ -1852,11 +1852,12 @@ jQuery.fn.txpFileupload = function (options) {
 
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadStart')
+                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
             }
 
             if(!uploadErrors.length) {
                 data.submit()
+                form.uploadCount++
             }
         },/*
         done: function (e, data) {
@@ -1873,11 +1874,15 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        textpattern.Console.announce('uploadStart')
+        form.uploadCount = 0
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
         fileInput.val('')
+
+        if (!form.uploadCount) {
+            textpattern.Console.announce('uploadEnd')
+        }
     }).bind('fileuploadsubmit', function (e, data) {
         data.formData = $.merge([], options.formData)
         $.merge(data.formData, form.serializeArray())
