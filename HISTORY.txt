@@ -16,8 +16,7 @@ Changes in 4.7.0
   <txp::shortcode /> tags.
 * Added: Tag global attributes: 'breakby', 'breakclass', 'class', 'escape',
   'html_id', 'not' and 'wraptag'.
-* Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
-  'exclude' and 'time' attributes.
+* Added: <txp:article_custom /> tag can count pages.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:header /> tag allows optional setting of HTML headers on page
   output.
@@ -48,6 +47,8 @@ Changes in 4.7.0
 * Changed: Forms can recursively (up to 15 levels deep) call themselves.
 * Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
   attribute.
+* Changed: Enhanced <txp:article_custom /> 'month', 'expired', 'exclude' and
+  'time' attributes.
 * Changed: <txp:category_list /> can output nested lists.
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: <txp:image_author /> tag accepts 'id' and 'name' attributes.
