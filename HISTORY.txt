@@ -1,4 +1,4 @@
-Changes in 4.7.0
+Changes in 4.7.0 (as of beta 3)
 
 * In memory of Dean Allen, creator of Textpattern CMS.
 * Added: Support for website themes, markup stored within the database (accessed
