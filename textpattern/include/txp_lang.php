@@ -175,7 +175,7 @@ function list_languages($message = '')
                 sInput(null)
             , '', '', 'post'),
             'li',
-            array('class' => 'txp-grid-cell txp-grid-cell-lang'.($cellclass ? ' '.$cellclass : ''))
+            array('class' => 'txp-grid-cell txp-grid-cell-2span'.($cellclass ? ' '.$cellclass : ''))
         ).n;
 
         $done[] = $langname;
