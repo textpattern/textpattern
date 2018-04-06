@@ -11,11 +11,13 @@ Changes in 4.7.0
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
-* Added: Optional short tags.
+* Added: Optional short-tags.
+* Added: Ability to use Forms as tags via <txp:output_form /> or
+  <txp::shortcode /> tags.
 * Added: Tag global attributes: 'breakby', 'breakclass', 'class', 'escape',
   'html_id', 'not' and 'wraptag'.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
-  and 'time' attributes.
+  'exclude' and 'time' attributes.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:header /> tag allows optional setting of HTML headers on page
   output.
@@ -40,10 +42,9 @@ Changes in 4.7.0
 * Added: Automatic table of contents generation for well-structured plugin help
   text.
 * Changed: Revised multi-site installation routine and symbolic linking.
-* Changed: Pages, Forms and Styles panels save some changes without page
-  refreshes (Ajax). Last used Page/Form/Stylesheet remembered.
-* Changed: Articles panel performs searches/pagination without page refreshes
-  (Ajax).
+* Changed: Most panels perform saves/searches/pagination without page
+  refreshes (Ajax).
+* Changed: Last used Page/Form/Stylesheet remembered.
 * Changed: Forms can recursively (up to 15 levels deep) call themselves.
 * Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
   attribute.
@@ -55,13 +56,13 @@ Changes in 4.7.0
 * Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
   <txp:image /> and <txp:images />, respectively, instead.
 * Changed: <txp:newer /> and <txp:older /> tags accept 'rel' attribute.
-* Changed: <txp:output_form yield /> tag supports user-defined attributes,
-  coupled with <txp:yield> changes above this allows for '<txp::shortcode />'
-  -like tags.
-* Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
+* Changed: <txp:output_form /> tag supports user-defined attributes,
+  coupled with <txp:yield>.
+* Changed: <txp:page_url /> tag can return more URL paths via 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
-* Changed: <txp:site_url /> tag accepts 'type' attribute.
+* Changed: <txp:site_url /> tag accepts 'type' attribute to return admin-side
+  URL.
 * Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
 * Changed: <txp:yield> tag accepts 'name' and 'default' attributes.
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
@@ -99,10 +100,16 @@ Changes in 4.7.0
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
 * Changed: Admin theme layout improvements on small devices.
+* Changed: Pagination and search added to Plugins panel.
 * Changed: Plugin preview page syntax highlighting and layout improvements.
   Also show Textpack string additions preview (if applicable).
 * Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when viewing
-  a new, unsaved Page/Form/Style.
+  a new, unsaved Page/Form/Style (thanks, adi).
+* Changed: Categories can no longer reassign the parent of a child element to its
+  children! Avoids infinite tree loops.
+* Changed: Article preview shows debug info.
+* Changed: 'wraptag' attribute can prepend/append content using special '<+>'
+  syntax.
 * Developer: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
   authors please use ahu in place of hu.'textpattern'.
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
@@ -112,6 +119,8 @@ Changes in 4.7.0
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
 * Fixed: URL handling for /title and /year/month/day/title (thanks, planeth44).
+* Fixed: Panel layout improvements across all privilege levels.
+* Fixed: Per-user preferences exposed to all users (thanks, gaekwad).
 * Removed: zxcvbn password strength meter.
 * Textile 3.6.
 * jQuery 3.3.1.
