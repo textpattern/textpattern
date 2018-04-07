@@ -5160,7 +5160,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b.*>@Usi', '', $thing);
+                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
         }
     }
 
