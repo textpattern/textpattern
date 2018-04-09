@@ -526,7 +526,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = array('public', 'common');
         }
 
-        if (txpinterface === 'admin') {
+        if (txpinterface === 'admin' && $events !== false) {
             $admin_events = array('admin-side', 'common');
 
             if ($events) {
@@ -544,6 +544,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // Longer term, when all plugins have caught up with the event
             // naming convention, the owner clause can be removed.
             $where[] = "(event IN (".join(',', quote_list((array) $events)).") OR owner != '')";
+        } else {
+            // Load all core strings
+            $where[] = "owner = ''";
         }
 
         $out = array();
@@ -605,6 +608,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     public function txt($var, $atts = array(), $escape = 'html')
     {
         global $textarray; // deprecated since 4.7
+        static $loaded = false; // deprecated soon
 
         if (!is_array($atts)) {
             $atts = array();
@@ -616,23 +620,25 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
         }
 
+        $out = '';
         $v = strtolower($var);
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];
-        } else {
-            $out = isset($textarray[$v]) ? $textarray[$v] : '';
+        } elseif (isset($textarray[$v])) {
+            $out = $textarray[$v];
+        } elseif (!$loaded) {
+            $strings = $this->extract(get_pref('language_ui', LANG), false);
+            $this->setPack($strings, true);
+            $loaded = true;
+            $out = isset($this->strings[$v]) ? $this->strings[$v] : '';
         }
 
         if ($out !== '') {
             return $atts ? strtr($out, $atts) : $out;
         }
 
-        if ($atts) {
-            return $var.': '.join(', ', $atts);
-        }
-
-        return $var;
+        return $atts ? $var.': '.join(', ', $atts) : $var;
     }
 
     /**
