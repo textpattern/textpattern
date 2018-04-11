@@ -1,5 +1,9 @@
+/admin-themes/*
+!/admin-themes/classic/
+!/admin-themes/hive/
+!/admin-themes/hiveneutral/
 /config.php
-/tmp/*
-/tmp/!.gitignore
 /plugin-cache
 /setup/.default.json
+/tmp/*
+/tmp/!.gitignore

@@ -292,8 +292,11 @@ function image_list($message = '')
                         'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
                             (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                     ).
-                    hCell(
-                        gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
+                    (has_privs('tag')
+                        ? hCell(
+                            gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
+                        )
+                        : ''
                     ).
                     column_head(
                         'category', 'category', 'image', true, $switch_dir, $crit, $search_method,
@@ -393,8 +396,11 @@ function image_list($message = '')
                     td(
                         pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                     ).
-                    td(
-                        $tagbuilder, '', 'txp-list-col-tag-build'
+                    (has_privs('tag')
+                        ? td(
+                            $tagbuilder, '', 'txp-list-col-tag-build'
+                        )
+                        : ''
                     ).
                     td(
                         $category, '', 'txp-list-col-category category'.$vc

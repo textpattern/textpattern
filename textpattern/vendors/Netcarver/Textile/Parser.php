@@ -2027,7 +2027,7 @@ class Parser
 
     protected function parseAttribsToArray($in, $element = '', $include_id = true, $autoclass = '')
     {
-        $style = '';
+        $style = array();
         $class = '';
         $lang = '';
         $colspan = '';
@@ -2186,8 +2186,8 @@ class Parser
                 }
             }
 
-            $style = trim(str_replace(array("\n", ';;'), array('', ';'), $so));
-            $o['style'] = $style;
+            $styleOut = trim(str_replace(array("\n", ';;'), array('', ';'), $so));
+            $o['style'] = $styleOut;
         }
 
         if ($width) {
@@ -2528,6 +2528,7 @@ class Parser
     {
         $text = preg_split('/\n(?=[*#;:])/m', $m[0]);
         $pt = '';
+        $out = array();
 
         foreach ($text as $nr => $line) {
             $nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
@@ -4469,6 +4470,7 @@ class Parser
         $text = preg_replace('/"\z/', "\" ", $text);
         $text = preg_split("@(<[\w/!?].*>)@Us".$this->regex_snippets['mod'], $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         $i = 0;
+        $glyph_out = array();
 
         foreach ($text as $line) {
             // Text tag text tag text ...
