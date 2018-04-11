@@ -34,7 +34,7 @@
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:blueimp-file-upload": "uglifyjs -c -m -o textpattern/vendors/blueimp/fileupload/jquery.fileupload.js node_modules/blueimp-file-upload/js/jquery.fileupload.js node_modules/blueimp-md5/js/md5.js",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
-    "copy:prismjs": "uglifyjs -c -m -o textpattern/vendors/PrismJS/prism/prism.js node_modules/prismjs/prism.js node_modules/prismjs/components/prism-json.js node_modules/prismjs/components/prism-markdown.js node_modules/prismjs/components/prism-php.js node_modules/prismjs/components/prism-textile.js",
+    "copy:prismjs": "uglifyjs -c -m -o textpattern/vendors/PrismJS/prism/prism.js node_modules/prismjs/prism.js node_modules/prismjs/components/prism-bash.js node_modules/prismjs/components/prism-json.js node_modules/prismjs/components/prism-markdown.js node_modules/prismjs/components/prism-php.js node_modules/prismjs/components/prism-textile.js",
     "copy:textile": "sh .github/copy-textile.sh",
     "get-dependencies": "npm run copy:blueimp-file-upload && npm run copy:jquery && npm run copy:prismjs && npm run copy:textile v3.6.0",
     "get-pophelp": "sh .github/get-pophelp.sh",
