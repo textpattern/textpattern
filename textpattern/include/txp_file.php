@@ -309,8 +309,11 @@ function file_list($message = '', $ids = array())
                         'category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                             (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                     ).
-                    hCell(gTxt(
-                        'tags'), '', ' class="txp-list-col-tag-build" scope="col"'
+                    (has_privs('tag')
+                        ? hCell(gTxt(
+                            'tags'), '', ' class="txp-list-col-tag-build" scope="col"'
+                        )
+                        : ''
                     ).
                     hCell(gTxt(
                         'status'), '', ' class="txp-list-col-status" scope="col"'
@@ -432,12 +435,16 @@ function file_list($message = '', $ids = array())
                     td(
                         $category, '', 'txp-list-col-category category'.$vc
                     ).
-                    td(
-                        popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build').
+                    (has_privs('tag')
+                        ? td(
+                            popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
+                            sp.span('&#124;', array('role' => 'separator')).
+                            sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
+                            sp.span('&#124;', array('role' => 'separator')).
+                            sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build'
+                        )
+                        : ''
+                    ).
                     td(
                         $status, '', 'txp-list-col-status'
                     ).

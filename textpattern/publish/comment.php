@@ -121,7 +121,7 @@ function destroyCookies()
     setcookie("txp_email", '', $cookietime, "/");
     setcookie("txp_web", '', $cookietime, "/");
     setcookie("txp_last", '', $cookietime, "/");
-    setcookie("txp_remember", '0', $cookietime + (365 * 25 * 3600), "/");
+    setcookie("txp_remember", '', $cookietime, "/");
 }
 
 /**

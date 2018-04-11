@@ -337,6 +337,10 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
     }
 
+    if ($type === 'password') {
+        $atts .= join_atts(array('autocomplete' => 'off'));
+    }
+
     return n.tag_void('input', $atts);
 }
 

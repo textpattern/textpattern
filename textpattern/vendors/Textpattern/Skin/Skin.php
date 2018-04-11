@@ -776,7 +776,7 @@ namespace Textpattern\Skin {
             $syncPref = 'skin_delete_from_database';
             $sync == $this->getSyncPref($syncPref) or $this->switchSyncPref($syncPref);
             $names = $this->getNames();
-            $callbackExtra = compact('names');
+            $callbackExtra = compact('names', 'sync');
             $done = array();
 
             callback_event('txp.'.$event, 'import', 1, $callbackExtra);
@@ -844,7 +844,7 @@ namespace Textpattern\Skin {
 
             $event = $this->getEvent();
             $names = $this->getNames();
-            $callbackExtra = compact('names');
+            $callbackExtra = compact('names', 'sync');
             $ready = $done = array();
 
             callback_event('txp.'.$event, 'export', 1, $callbackExtra);
@@ -924,7 +924,7 @@ namespace Textpattern\Skin {
 
             $event = $this->getEvent();
             $names = $this->getNames();
-            $callbackExtra = compact('names');
+            $callbackExtra = compact('names', 'sync');
             $ready = $done = array();
 
             callback_event('txp.'.$event, 'delete', 1, $callbackExtra);
