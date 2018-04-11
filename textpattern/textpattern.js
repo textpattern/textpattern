@@ -2326,7 +2326,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     if ($intro.length) {
         $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="' + sectIdPrefix + 'intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
-        tabs += '<li><a data-txp-pane="intro" href="#' + sectIdPrefix + 'intro">' + textpattern.gTxt('introduction') + '</a></li>';
+        tabs += '<li><a data-txp-pane="intro" href="#' + sectIdPrefix + 'intro">' + textpattern.gTxt('documentation') + '</a></li>';
     }
 
     $sectHeads.each(function(i, sectHead) {
