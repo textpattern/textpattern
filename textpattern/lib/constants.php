@@ -841,8 +841,6 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 /**
  * The localised string is owned by the individual site.
  *
- * The string will not be updated from the remote language server.
- *
  * @since   4.6.0
  * @package L10n
  */
