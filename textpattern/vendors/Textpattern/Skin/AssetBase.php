@@ -561,7 +561,7 @@ namespace Textpattern\Skin {
             $Skin = $this->getSkin();
             $skin = $Skin !== null ? $Skin->getName() : $this->getSkin()->getEditing();
             $names = $this->getNames();
-            $callbackExtra = compact('skin', 'names');
+            $callbackExtra = compact('skin', 'names', 'sync');
             $done = array();
             $dirIsReadable = is_readable($dirPath);
 
@@ -623,7 +623,7 @@ namespace Textpattern\Skin {
             $Skin = $this->getSkin();
             $skin = $Skin !== null ? $Skin->getName() : $this->getSkin()->getEditing();
             $names = $this->getNames();
-            $callbackExtra = compact('skin', 'names');
+            $callbackExtra = compact('skin', 'names', 'sync');
             $done = array();
 
             callback_event('txp.'.$event, 'export', 1, $callbackExtra);

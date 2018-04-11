@@ -2263,29 +2263,21 @@ function comment_remember($atts)
     if (!ps('preview')) {
         $rememberCookie = cs('txp_remember');
 
-        if ($rememberCookie === '') {
+        if (!$rememberCookie) {
             $checkbox_type = 'remember';
-            $remember = 1;
-        } elseif ($rememberCookie == 1) {
-            $checkbox_type = 'forget';
         } else {
-            $checkbox_type = 'remember';
+            $checkbox_type = 'forget';
+        }
+
+        // Inhibit default remember.
+        if ($forget == 1 || (string) $rememberCookie === '0') {
+            destroyCookies();
         }
     }
 
     if ($checkbox_type == 'forget') {
-        // Inhibit default remember.
-        if ($forget == 1) {
-            destroyCookies();
-        }
-
         $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
     } else {
-        // Inhibit default remember.
-        if ($remember != 1) {
-            destroyCookies();
-        }
-
         $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
     }
 
@@ -5160,7 +5152,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                $thing = preg_replace('@(<('.($tidy ? preg_quote($attr) : $attr).')\b[^<>]*(?:(?<!/)>((?>[^<]|<(?!\2\b)|(?1))*)</\2>|/>))@Usi', '$3', $thing);
+                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
         }
     }
 
