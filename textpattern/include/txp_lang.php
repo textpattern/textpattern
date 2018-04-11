@@ -59,7 +59,7 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
-    global $txp_user;
+    global $txp_user, $prefs;
 
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
     $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
@@ -193,6 +193,10 @@ function list_languages($message = '')
             'class' => 'txp-layout-1col',
             'id'    => 'language_container',
         ));
+
+    if (!empty($prefs['module_pophelp'])) {
+        echo graf(gTxt('language_preamble'), array('class' => 'txp-layout-textbox'));
+    }
 
     if (isset($msg) && $msg) {
         echo graf('<span class="ui-icon ui-icon-alert"></span> '.$msg, array('class' => 'alert-block error'));
