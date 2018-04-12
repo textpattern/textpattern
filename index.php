@@ -110,7 +110,7 @@ switch (txpinterface) {
     case 'css':
         $n = gps('n');
         $t = gps('t');
-        output_css($s, $n, $t);
+        output_css($s, $n, $t, gps('e'));
         break;
     default:
         textpattern();

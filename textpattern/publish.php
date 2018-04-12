@@ -597,8 +597,21 @@ function textpattern()
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '', $t = '')
+function output_css($s = '', $n = '', $t = '', $e = '')
 {
+    static $mimetypes = [
+        'txt'  => 'text/plain',
+        'csv'  => 'text/csv',
+        'htm'  => 'text/html',
+        'html' => 'text/html',
+        'css'  => 'text/css',
+        'js'   => 'application/javascript',
+        'json' => 'application/json',
+        'xml'  => 'application/xml',
+        // Images
+        'svg'  => 'image/svg+xml'
+    ];
+
     $order = '';
     $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
@@ -607,8 +620,9 @@ function output_css($s = '', $n = '', $t = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list_unique($n);
-        $cssname = join("','", doSlash($n));
+        $extension = ($e ? '.'.doSlash($e) : '');
+        $n = do_list_unique(doSlash($n));
+        $cssname = join($extension."','", $n).$extension;
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
@@ -623,8 +637,10 @@ function output_css($s = '', $n = '', $t = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
+        $extension = $n && $e ? $e : 'css';
+        $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
-        @header('Content-Type: text/css; charset=utf-8');
+        @header('Content-Type: '.$mimetype.'; charset=utf-8');
         echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
         restore_error_handler();
     }
