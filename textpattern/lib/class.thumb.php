@@ -361,9 +361,10 @@ class wet_thumb
         // GIF or PNG destination, set the transparency up.
         if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3) {
             $trans_idx = imagecolortransparent($this->_SRC['image']);
+            $pallet_size = imagecolorstotal($this->_SRC['image']);
 
             // Is there a specific transparent colour?
-            if ($trans_idx >= 0) {
+            if ($trans_idx >= 0 && ($trans_idx < $pallet_size)) {
                 $trans_color = imagecolorsforindex($this->_SRC['image'], $trans_idx);
                 $trans_idx = imagecolorallocate(
                     $this->_DST['image'],
