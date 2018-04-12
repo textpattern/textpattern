@@ -160,9 +160,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get essential templates infos form the $essential property value.
+         * Get essential templates infos from the $essential property value.
          *
-         * @param  string $key      $essential property key for whhich you want to get the value.
+         * @param  string $key      $essential property key for which you want to get the value.
          * @param  string $whereKey $essential property key to check against the $valueIn value.
          * @param  array  $valueIn  Values to check against the $whereKey values.
          * @return array            $essential property value if $key is null, filtered infos otherwise.

@@ -1223,7 +1223,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
             $atts['data-item'] = $inline;
         } elseif (empty($txp_user)) {
             // Use inline pophelp, if unauthorized user or setup stage
-            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+            if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
+                $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+            }
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
         }

@@ -193,7 +193,11 @@ function prefs_list($message = '')
     $groupOut = array();
 
     if (numRows($rs)) {
-        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+        if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
+            $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+        } else {
+            $pophelp_keys = array();
+        }
 
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
