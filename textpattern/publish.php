@@ -806,10 +806,16 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $pageby = (empty($pageby) ? $limit : $pageby);
+    $issticky = false;
 
     // Treat sticky articles differently wrt search filtering, etc.
-    $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
-    $issticky = ($status == STATUS_STICKY);
+    if (!$status || $status === true) {
+        $status = array(STATUS_LIVE, STATUS_STICKY);
+    } else {
+        $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
+        $issticky = ($status == STATUS_STICKY);
+        $status = array($status);
+    }
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
@@ -951,14 +957,14 @@ function doArticles($atts, $iscustom, $thing = null)
     } elseif ($id) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } else {
-        $statusq = " AND Status = ".intval($status);
+        $statusq = " AND Status IN (".implode(',', $status).")";
     }
 
     $where = "1 = 1".$statusq.$timeq.
         $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
-    if (!$iscustom and !$issticky) {
+    if (!$iscustom && !$issticky) {
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
@@ -1081,15 +1087,17 @@ function doArticle($atts, $thing = null)
         $thing = '';
     }
 
-    if ($status) {
-        $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
+    if (!$status || $status === true) {
+        $status = array(STATUS_LIVE, STATUS_STICKY);
+    } else {
+        $status = array(in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE);
     }
 
     if (empty($thisarticle) or $thisarticle['thisid'] != $id) {
         $id = assert_int($id);
         $thisarticle = null;
 
-        $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
+        $q_status = "AND Status IN (".implode(',', $status).")";
 
         $rs = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
@@ -1103,7 +1111,7 @@ function doArticle($atts, $thing = null)
         }
     }
 
-    if (!empty($thisarticle) && ($thisarticle['status'] == $status || gps('txpreview'))) {
+    if (!empty($thisarticle) && (in_array($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = 1;
         $thisarticle['is_last'] = 1;
