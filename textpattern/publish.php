@@ -599,19 +599,9 @@ function textpattern()
 // -------------------------------------------------------------
 function output_css($s = '', $n = '', $t = '', $e = '')
 {
-    static $mimetypes = [
-        'txt'  => 'text/plain',
-        'csv'  => 'text/csv',
-        'htm'  => 'text/html',
-        'html' => 'text/html',
-        'css'  => 'text/css',
-        'js'   => 'application/javascript',
-        'json' => 'application/json',
-        'xml'  => 'application/xml',
-        // Images
-        'svg'  => 'image/svg+xml'
-    ];
+    static $mimetypes = null;
 
+    isset($mimetypes) or $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
     $order = '';
     $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
