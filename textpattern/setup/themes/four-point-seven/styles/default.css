@@ -296,7 +296,7 @@ nav ol::after,
  */
   html {
     font-size: 16px;
-    line-height: 1.5em;
+    line-height: 1.5;
   }
   /**
  * Global font and text colour.
@@ -326,36 +326,36 @@ nav ol::after,
   }
   h1 {
     margin: 0.6315789em 0;
-    font-size: 2.375em;
+    font-size: 2.375rem;
     letter-spacing: -0.25px;
-    line-height: 1.1842105em;
+    line-height: 1.1842105;
   }
   h2 {
     margin: 0.8em 0;
-    font-size: 1.875em;
+    font-size: 1.875rem;
     letter-spacing: -0.25px;
-    line-height: 1.2666667em;
+    line-height: 1.2666667;
   }
   h3 {
     margin: 1em 0;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     letter-spacing: -0.25px;
-    line-height: 1.3333333em;
+    line-height: 1.3333333;
   }
   h4 {
     margin: 1em 0;
-    font-size: 1.25em;
-    line-height: 1.4em;
+    font-size: 1.25rem;
+    line-height: 1.4;
   }
   h5 {
     margin: 1em 0;
-    font-size: 1.125em;
-    line-height: 1.4444444em;
+    font-size: 1.125rem;
+    line-height: 1.4444444;
   }
   h6 {
     margin: 1em 0;
-    font-size: 1em;
-    line-height: 1.5em;
+    font-size: 1rem;
+    line-height: 1.5;
   }
   /**
  * Add the correct font weight in Chrome, Edge, and Safari.
@@ -375,9 +375,9 @@ nav ol::after,
  */
   blockquote {
     margin: 0.8em 0;
-    font-size: 1.25em;
+    font-size: 1.25rem;
     font-style: italic;
-    line-height: 1.4em;
+    line-height: 1.4;
     text-align: center;
   }
   /**
@@ -413,8 +413,8 @@ nav ol::after,
     background-color: #f7f7f7;
     color: #333333;
     font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 0.875em;
-    line-height: 1.5em;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
   code,
   kbd,
@@ -478,8 +478,8 @@ nav ol::after,
   figcaption,
   tfoot,
   .footnote {
-    font-size: 0.75em;
-    line-height: 1.5em;
+    font-size: 0.75rem;
+    line-height: 1.5;
   }
   figcaption,
   tfoot,
@@ -834,8 +834,8 @@ nav ol::after,
     color: #000000;
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /* 3 */
-    font-size: 1em;
-    line-height: 1.375em;
+    font-size: 1rem;
+    line-height: 1.375;
     box-sizing: border-box;
     vertical-align: baseline;
   }
@@ -1296,7 +1296,7 @@ nav ol::after,
      * Enlarge baseline text size.
      */
   html {
-    font-size: 112.5%;
+    font-size: 1.125rem;
   }
 }
 
@@ -1316,14 +1316,19 @@ nav ol::after,
     box-shadow: none !important;
   }
   /**
- * Use a print-friendly font and size.
+ * Use a print-friendly font size.
+ */
+  html {
+    font-size: 8pt;
+    line-height: 1.5;
+  }
+  /**
+ * Use a print-friendly font family.
  */
   body {
     margin: 0.5cm;
     padding: 2em 5em;
     font-family: "Helvetica Neue", sans-serif;
-    font-size: 8pt;
-    line-height: 1.5;
   }
   /**
  * Visually separate header from body.
