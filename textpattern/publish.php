@@ -809,7 +809,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $issticky = false;
 
     // Treat sticky articles differently wrt search filtering, etc.
-    if (!$status || $status === true) {
+    if ($status === true) {
         $status = array(STATUS_LIVE, STATUS_STICKY);
     } else {
         $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
@@ -1087,7 +1087,7 @@ function doArticle($atts, $thing = null)
         $thing = '';
     }
 
-    if (!$status || $status === true) {
+    if ($status === true) {
         $status = array(STATUS_LIVE, STATUS_STICKY);
     } else {
         $status = array(in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE);
