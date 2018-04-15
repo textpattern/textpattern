@@ -52,7 +52,6 @@ namespace Textpattern\Skin {
             'js'   => 'application/javascript',
             'json' => 'application/json',
             'xml'  => 'application/xml',
-            // Images
             'svg'  => 'image/svg+xml'
         );
 

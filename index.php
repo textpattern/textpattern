@@ -120,6 +120,6 @@ switch (txpinterface) {
         }
 }
 
-if ($production_status === 'debug') {
-    echo txpinterface === 'css' ? n.'/*'.$trace->result().n.'*/'.n : $trace->result();
+if ($production_status === 'debug' && txpinterface !== 'css') {
+    echo $trace->result();
 }

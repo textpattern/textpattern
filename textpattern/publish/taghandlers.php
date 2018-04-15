@@ -243,29 +243,71 @@ function css($atts)
         'rel'    => 'stylesheet',
         'theme'  => $pretext['skin'],
         'title'  => '',
+        'type'   => '',
     ), $atts));
 
     if (empty($name)) {
         $name = 'default';
     }
 
+    $out = '';
+    list($mode, $format) = explode('.', $format.'.'.$format);
+
     if (has_handler('css.url')) {
         $url = callback_event('css.url', '', false, compact('name', 'theme'));
+    } elseif ($mode === 'flat') {
+        $url = array();
+        $skin_dir = urlencode(get_pref('skin_dir'));
+
+        foreach(do_list_unique($name) as $n) {
+            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/styles/'.urlencode($n).'.'.($type ? urlencode($type) : 'css');
+        }
     } else {
-        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
+        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme).($type ? '&e='.urlencode($type) : '');
     }
 
-    if ($format == 'link') {
-        return tag_void('link', array(
-            'rel'   => $rel,
-            'type'  => $doctype != 'html5' ? 'text/css' : '',
-            'media' => $media,
-            'title' => $title,
-            'href'  => $url,
-        ));
+    if ($format === 'link') {
+        switch ($type) {
+            case '': case 'css':
+                foreach ((array)$url as $href) {
+                    $out .= tag_void('link', array(
+                        'rel'   => $rel,
+                        'type'  => $doctype != 'html5' ? 'text/css' : '',
+                        'media' => $media,
+                        'title' => $title,
+                        'href'  => $href,
+                    )).n;
+                }
+                break;
+            case 'js':
+                foreach ((array)$url as $href) {
+                    $out .= tag(null, 'script', array(
+                        'title' => $title,
+                        'type'  => $doctype != 'html5' ? 'application/javascript' : '',
+                        'src'  => $href,
+                    )).n;
+                }
+                break;
+            case 'svg':
+                foreach ((array)$url as $href) {
+                    $out .= tag_void('img', array(
+                        'title' => $title,
+                        'src'  => $href,
+                    )).n;
+                }
+                break;
+            default:
+                foreach ((array)$url as $href) {
+                    $out .= href($title ? $title : $href, $href, array(
+                        'rel'   => $rel,
+                    )).n;
+                }
+        }
+    } else {
+        $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
     }
 
-    return txpspecialchars($url);
+    return $out;
 }
 
 // -------------------------------------------------------------
