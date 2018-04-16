@@ -186,11 +186,11 @@
 <p>The category description is limited to a maximum of 255 characters. Note that some search engines place character limits on the length of a page’s <code>meta description</code> for practicality of display in search engine results pages (SERPs) and this may be less than the 255 character limit in Textpattern.</p>
         ]]></item>
         <item id="file_category" title="Files"><![CDATA[
-<h2>Categories: Files</h2>
+<h2>Files</h2>
 <p>File categories are optional, and are useful if you want to group certain uploaded files together.</p>
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
-<h2>Categories: Images</h2>
+<h2>Images</h2>
 <p>Image categories are useful both for internal organization, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
@@ -472,7 +472,7 @@
 
     <group id="prefs" title="Preferences panel">
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
-<h1>Use admin-side plugins?</h1>
+<h2>Use admin-side plugins?</h2>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
 <p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="http://docs.textpattern.io/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="http://docs.textpattern.io/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> site.</p>
         ]]></item>
@@ -503,16 +503,16 @@
 <p>This setting will attach a automatically-generated version of the article title to the URL. It is either generated automatically or can be manually overridden in ‘URL-only title’ when editing an article.</p>
 <p>The setting will only have an effect when you are using clean URLs. For certain languages this may result in long and ugly URLs, in which case you probably want to set this to ‘Off’.</p>
         ]]></item>
-        <item id="auto_dst" title="Automatically adjust Daylight Saving Time setting?"><![CDATA[
-<h2>Automatically adjust Daylight Saving Time setting?</h2>
+        <item id="auto_dst" title="Automatically adjust Daylight Saving Time?"><![CDATA[
+<h2>Automatically adjust Daylight Saving Time?</h2>
 <p>This setting allows Textpattern to alter when DST (Daylight Savings Time) occurs in your locale. If this is set to ‘No’, you will be able to change the ‘DST enabled’ preference manually.</p>
         ]]></item>
         <item id="comment_means_site_updated" title="New comment means site updated?"><![CDATA[
 <h2>New comment means site updated?</h2>
 <p>The Textpattern database keeps track of when the most recent change to your site took place. When this setting is set to ‘Yes’, a new comment will also update this value. This value is used for example for <code>"Send Last-Modified header"</code> functionality.</p>
         ]]></item>
-        <item id="comment_nofollow" title="Apply rel=nofollow to comments?"><![CDATA[
-<h2>Apply rel=nofollow to comments?</h2>
+        <item id="comment_nofollow" title="Apply rel=&quot;nofollow&quot; to comments?"><![CDATA[
+<h2>Apply rel="nofollow" to comments?</h2>
 <p>If set to ‘Yes’, this will add an additional attribute to the links made in comments. It is intended to be a measure that takes away the incentive for comment spammers and was initiated by a range of search engines and software developers. You can find out more by reading <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’s announcement <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p><strong>Note:</strong> This setting does not influence the functionality of your site. It may prevent or diminish the influence of your comments when some search engines rank sites linked to from those comments.</p>
         ]]></item>
@@ -546,8 +546,8 @@
 <h2>Comments disabled after</h2>
 <p>Use this to set the amount of time after which commenting will be turned off for articles (can be set to ‘Never’ to allow indefinite time to comment).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Strip user images from comments?"><![CDATA[
-<h2>Strip user images from comments?</h2>
+        <item id="comments_disallow_images" title="Strip commenter‘s images from comments?"><![CDATA[
+<h2>Strip commenter‘s images from comments?</h2>
 <p>With this option set to ‘Yes’, any images included in comments will be stripped out.</p>
         ]]></item>
         <item id="comments_mode" title="Comments mode"><![CDATA[
@@ -619,8 +619,8 @@
 <h2>Doctype</h2>
 <p>Select which HTML doctype you wish to use (either HTML5 or XHTML). This affects comment input forms, Textile rendering of <code>&lt;abbr&gt;</code> or <code>&lt;acronym&gt;</code>, and <code>&lt;link&gt;</code> tags generated by <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
-        <item id="enable_short_tags" title="Enable short tags"><![CDATA[
-<h2>Enable short tags</h2>
+        <item id="enable_short_tags" title="Enable short tag support?"><![CDATA[
+<h2>Enable short tag support?</h2>
 <p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the <code>txp:</code> may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
 <ul>
     <li><code>&lt;txp:article_id /&gt;</code> becomes <code>&lt;article::id /&gt;</code></li>
@@ -663,8 +663,8 @@
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>images</code>.</p>
         ]]></item>
-        <item id="include_email_atom" title="Include email in Atom feeds?"><![CDATA[
-<h2>Include email in Atom feeds?</h2>
+        <item id="include_email_atom" title="Include email address in Atom feeds?"><![CDATA[
+<h2>Include email address in Atom feeds?</h2>
 <p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
         ]]></item>
         <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
@@ -688,8 +688,8 @@
 <h2>Display admin-side inline help links?</h2>
 <p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to ‘None’.</p>
         ]]></item>
-        <item id="never_display_email" title="Hide commenter email address?"><![CDATA[
-<h2>Hide commenter email address?</h2>
+        <item id="never_display_email" title="Hide commenter‘s email address?"><![CDATA[
+<h2>Hide commenter‘s email address?</h2>
 <p>This setting controls whether the email address of a commenter should be shown publicly.</p>
 <p>It’s recommended that email addresses should not be shown, as courtesy to your users, but there may be certain situations when showing commenter email addresses is desirable.</p>
         ]]></item>
@@ -708,8 +708,8 @@
 <p>When permalink title URL pattern option is set to ‘Intercapped (TitleLikeThis)’, the URL for the article would be:</p>
 <pre><code>http://example.com/AnnandBobeatcake</code></pre>
         ]]></item>
-        <item id="permlink_mode" title="URL pattern"><![CDATA[
-<h2>URL pattern</h2>
+        <item id="permlink_mode" title="Article URL pattern"><![CDATA[
+<h2>Article URL pattern</h2>
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
@@ -766,8 +766,8 @@
 <p>This is the maximum number of current articles to be syndicated at a time, in RSS and Atom formats.</p>
 <p>A low value, such as <code>5</code> through <code>15</code> is recommended.</p>
         ]]></item>
-        <item id="send_lastmod" title="Send Last-Modified Header?"><![CDATA[
-<h2>Send Last-Modified Header?</h2>
+        <item id="send_lastmod" title="Send &quot;Last-Modified&quot; header?"><![CDATA[
+<h2>Send "Last-Modified" header?</h2>
 <p>When set, Textpattern will read a visitor’s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor’s browser to use its cached version of the page.</p>
 <p>This can reduce bandwidth consumption, page load times, and web server load.</p>
         ]]></item>
@@ -810,7 +810,7 @@
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
-<h2>Syndicate article excerpt only?</h2>
+<h2>Syndicate article excerpt <strong>only</strong>?</h2>
 <p>If this is set to ‘No’, feed items will contain the full article bodies.</p>
 <p>If this is set to ‘Yes’, feed items will contain the article excerpt instead of the article body where it is available.</p>
         ]]></item>
@@ -836,8 +836,8 @@
 <h2>Use DNS lookup in visitor logs?</h2>
 <p>This setting only has an effect when ‘Logging’ is turned on. Using DNS will, where possible, translate IP addresses in your logs to hostnames. In some instances this might slow down your site, in which case you might want to set this to ‘No’.</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs?"><![CDATA[
-<h2>Use email address to construct feed IDs?</h2>
+        <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs (default is site URL)?"><![CDATA[
+<h2>Use email address to construct feed IDs (default is site URL)?</h2>
 <p>Items in an Atom feed require a unique ID.</p>
 <p>To generate IDs unique to your site, Textpattern allows you to choose between either an email address or your domain name to include in these IDs. The email address will be the first one used when creating the site. Unless you are likely to be changing your domain name in the future, it is probably safe to set this to ‘No’.</p>
         ]]></item>
@@ -980,10 +980,10 @@
 <p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
 <h3>Previewing theme assets</h3>
 <p>All the while you are working on a theme, Textpattern will permit you (and only you) to preview the assets in that theme. Just visit the public website while you are still logged in to the administration area. Provided Textpattern can locate an asset with the same name as the one that is already assigned to the public Section of the site you are visiting, it will show you what your site will look like by using the working theme as a preview.</p>
-<p>This allows you to rapidly see changes to your theme's assets and continue to alter items prior to making them available to the public. At any time, switching your working theme from the administration area will allow you to preview those assets.</p>
+<p>This allows you to rapidly see changes to your theme‘s assets and continue to alter items prior to making them available to the public. At any time, switching your working theme from the administration area will allow you to preview those assets.</p>
 <p>When you are satisfied with the results, assign assets from any theme(s) to one or more Sections of your site. This will make those assets live, and visible to any site visitors.</p>
 <h3>Exporting and importing</h3>
-<p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool's <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
+<p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool‘s <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
 <p>Once there, you can package it up and distribute it. Others may unpackage themes into their own directory and use the <em>import</em> tool to bring the assets into their database. From there, they may switch to the theme and use that as their working theme, permitting preview of assets within the site and, ultimately, assignment of assets to Sections as described above.</p>
 <p>The ability to export themes also allows you to make a backup, edit asset contents on disk in your text editor and/or apply version control to them. Remember: there is <em>no link</em> between your public site and the disk-based version of your assets. In order for visitors to see the changes, you must first import alterations into your database and ensure that one or more Sections are using the assets from the theme.</p>
         ]]></item>
