@@ -195,10 +195,17 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $id = $time = $keywords = $custom = '';
 
     extract($atts);
-    $expired = ($expired && ($prefs['publish_expired_articles']));
-    $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
+    $expired = $expired && $prefs['publish_expired_articles'];
     $customFields = getCustomFields();
     $thisid = isset($thisid) ? intval($thisid) : 0;
+
+    if (!isset($status)) {
+        $status = array(STATUS_LIVE);
+    } elseif ($status === true) {
+        $status = array(STATUS_LIVE, STATUS_STICKY);
+    } else {
+        $status = array(intval($status) == STATUS_STICKY || strtolower($status) === 'sticky' ? STATUS_STICKY : STATUS_LIVE);
+    }
 
     // Building query parts; lifted from publish.php.
     $id = (!$id) ? '' : " AND ID IN (".join(',', array_map('intval', do_list($id))).")";
@@ -269,7 +276,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $time,
         $custom,
         $keywords,
-        "AND Status = $status",
+        "AND Status IN (".implode(',', $status).")",
         "ORDER BY $sortby",
         ($type == '<') ? "DESC" : "ASC",
         ', ID '.($type == '<' ? 'DESC' : 'ASC'),
@@ -860,7 +867,9 @@ function filterAtts($atts = null)
     global $prefs, $trace;
     static $out = array();
 
-    if (is_array($atts)) {
+    if ($atts === false) {
+        $out = array();
+    } elseif (is_array($atts)) {
         if (empty($out)) {
             $out = lAtts(array(
                 'sort'     => 'Posted desc',
@@ -868,6 +877,7 @@ function filterAtts($atts = null)
                 'expired'  => $prefs['publish_expired_articles'],
                 'id'       => '',
                 'time'     => 'past',
+                'status'   => STATUS_LIVE,
             ), $atts, 0);
             $trace->log('[filterAtts accepted]');
         } else {

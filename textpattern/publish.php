@@ -1073,9 +1073,6 @@ function doArticle($atts, $thing = null)
     ), $atts, 0);
     extract($theAtts);
 
-    // Save *all* atts to get hold of the current article filter criteria.
-    filterAtts($atts);
-
     // No output required.
     if ($pgonly) {
         return '';
@@ -1112,6 +1109,9 @@ function doArticle($atts, $thing = null)
     }
 
     if (!empty($thisarticle) && (in_array($thisarticle['status'], $status) || gps('txpreview'))) {
+        // Save *all* atts to get hold of the current article filter criteria.
+        filterAtts($atts);
+
         extract($thisarticle);
         $thisarticle['is_first'] = 1;
         $thisarticle['is_last'] = 1;
