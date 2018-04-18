@@ -1234,7 +1234,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
     }
 
-    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class', 'inline'));
 }
 
 /**

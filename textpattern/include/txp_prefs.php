@@ -192,13 +192,13 @@ function prefs_list($message = '')
     $build = array();
     $groupOut = array();
 
-    if (numRows($rs)) {
-        if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
-            $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
-        } else {
-            $pophelp_keys = array();
-        }
+    if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+    } else {
+        $pophelp_keys = array();
+    }
 
+    if (numRows($rs)) {
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
@@ -210,8 +210,9 @@ function prefs_list($message = '')
 
             if ($mainEvent !== $last_event) {
                 if ($last_event !== null) {
+                    $overview_help = in_array($last_event.'_overview', $pophelp_keys, true) ? $last_event.'_overview' : '';
                     $build[] = tag(
-                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        hed(gTxt($last_event).popHelp($overview_help), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
                         join(n, $out), 'section', array(
                             'class'           => 'txp-tabs-vertical-group',
                             'id'              => 'prefs_group_'.$last_event,
@@ -279,8 +280,9 @@ function prefs_list($message = '')
             array('class' => 'alert-block information')
         );
     } else {
+        $overview_help = in_array($last_event.'_overview', $pophelp_keys, true) ? $last_event.'_overview' : '';
         $build[] = tag(
-            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            hed(gTxt($last_event).popHelp($overview_help), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
             join(n, $out), 'section', array(
                 'class'           => 'txp-tabs-vertical-group',
                 'id'              => 'prefs_group_'.$last_event,
