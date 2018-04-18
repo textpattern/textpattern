@@ -689,8 +689,8 @@
     <li><strong>Referrers only:</strong> Textpattern will only log visits referred from other sites</li>
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
-<p>If you enable logging of any kind, visitor IP address information will be collected if the browser passes it along. Please take every precaution to use the data in accordance with any international laws, such as GDPR, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised in any way.</p>
-<p>It is strongly advised that you leave this setting at its default, 'none', unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
+<p>If you enable logging of any kind, visitor IP address information will be collected if the browser provides it. Please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
+<p>It is strongly advised that you leave this setting at its default, 'None', unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
 <h2>Maximum URL length (in characters)</h2>
@@ -810,7 +810,7 @@
 <p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you’ve installed Textpattern (i.e. if your website is <code>http://example.com</code>, you might use <code>you@example.com</code>).</p>
 <p>For those interested in the technical details:</p>
 <ul>
-    <li>On UNIX/Mac OS servers, the entered email address is used as the 4th parameter (prefixed with "-f") for the PHP <code>mail()</code> function</li>
+    <li>On UNIX-like/macOS servers, the entered email address is used as the 4th parameter (prefixed with "-f") for the PHP <code>mail()</code> function</li>
     <li>On Windows servers, the entered email address is used to set (or override) the <code>sendmail_from</code> php.ini setting</li>
 </ul>
 <p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you’ve entered here, which is a requirement for sending email on some web servers.</p>
