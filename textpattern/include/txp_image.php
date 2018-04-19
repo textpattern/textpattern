@@ -215,7 +215,8 @@ function image_list($message = '')
                             'span',
                             array('class' => 'inline-file-uploader-actions'))
                         : ''
-                    ))
+                    )),
+                    'image/*'
                 ),
                 'div', array('class' => 'txp-control-panel')
             );

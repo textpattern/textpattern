@@ -1417,10 +1417,12 @@ function pageby_form($event, $val, $step = null)
  * @param  string       $label_id      HTML id attribute for the filename input element
  * @param  string       $class         HTML class attribute for the form element
  * @param  string|array $wraptag_val   Tag to wrap the value / label in, or empty to omit
+ * @param  array        $extra         array('postinput' => $categories ...)
+ * @param  string|array $accept        Comma separated list of allowed file types, or empty to omit
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null, $accept = '')
 {
     extract(gpsa(array(
         'page',
@@ -1469,6 +1471,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                     'required' => true,
                     'id'       => $label_id,
                     'multiple' => $multiple,
+                    'accept'   => $accept,
                 )).
                 (isset($extra['postinput']) ? $extra['postinput'] : '').
                 n.tag(
