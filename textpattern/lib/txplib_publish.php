@@ -870,7 +870,7 @@ function filterAtts($atts = null, $iscustom = null)
         'id'            => '',
         'exclude'       => '',
         'excerpted'     => ''
-    ) + $customlAtts + $extralAtts, $atts);
+    ) + $extralAtts + $customlAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -906,7 +906,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = do_list_unique($match);
-    $category !== true or $category = category(array());
+    $category !== true or $category = parse('<txp:category />');
     $category  = join("','", doSlash(do_list_unique($category)));
     $categories = array();
 
@@ -918,18 +918,18 @@ function filterAtts($atts = null, $iscustom = null)
         $categories[] = "Category2 IN ('$category')";
     }
 
-    $not = $exclude === true || in_array('category', $exclude) ? '!' : '';
+    $not = $issticky && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
     $categories = join(" OR ", $categories);
     $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
 
     // Section
-    $not = $exclude === true || in_array('section', $exclude) ? 'NOT' : '';
-    $section !== true or $section = section(array());
+    $not = $issticky && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
+    $section !== true or $section = parse('<txp:section />');
     $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
-    $not = $exclude === true || in_array('author', $exclude) ? 'NOT' : '';
-    $author !== true or $author = author(array('escape' => false, 'title' => false));
+    $not = $issticky && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
+    $author !== true or $author = parse('<txp:author escape="" title="" />');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     // ID
@@ -941,16 +941,18 @@ function filterAtts($atts = null, $iscustom = null)
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
-    $timeq = '';
-
     if ($time === null || $month || !$expired || $expired == '1') {
-        $timeq .= buildTimeSql($month, $time === null ? 'past' : $time);
+        $not = ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
+        $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
+        $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
+    } else {
+        $timeq = '';
     }
 
     if ($expired && $expired != '1') {
-        $timeq .= buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
+        $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
     } elseif (!$expired) {
-        $timeq .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
+        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
     }
 
     if ($q && $searchsticky || $id) {
@@ -964,7 +966,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($customFields) {
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField];
+                $customPairs[$cField] = $atts[$cField] === true ? parse('<txp:custom_field name="'.$cField.'" escape="" />') : $atts[$cField];
             }
         }
 
@@ -974,7 +976,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = keywords(array());
+    $keywords !== true or $keywords = parse('<txp:keywords />');
 
     if ($keywords) {
         $keyparts = array();
@@ -990,8 +992,8 @@ function filterAtts($atts = null, $iscustom = null)
 
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
-    $theAtts['*'] = '1=1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
-    $theAtts['sort'] = preg_replace('/\#|\-{2,}/', '', $sort);
+    $theAtts['sort'] = sanitizeForSort($sort);
+    $theAtts['*'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
 
     if (!$iscustom) {
         $out = array_diff_key($theAtts, $extralAtts);
