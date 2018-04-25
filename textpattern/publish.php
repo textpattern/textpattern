@@ -56,15 +56,15 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
-$txp_current_tag = '';
-$txp_parsed = $txp_else = $txp_yield = $yield = array();
-$txp_atts = null;
-
 // Get all prefs as an array.
 $prefs = get_prefs();
 
 // Add prefs to globals.
 extract($prefs);
+
+$txp_current_tag = '';
+$txp_parsed = $txp_else = $txp_yield = $yield = array();
+$txp_atts = null;
 
 // Check the size of the URL request.
 bombShelter();
@@ -840,9 +840,9 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($id) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(id, ".$id."), ".doSlash($sort);
+        $safe_sort = "FIELD(ID, ".$id."), ".$sort;
     } else {
-        $safe_sort = doSlash($sort);
+        $safe_sort = $sort;
     }
 
     $rs = safe_rows_start(
@@ -949,7 +949,7 @@ function doArticle($atts, $thing = null)
         return $article;
     } else {
         // Restore atts to the previous article filter criteria.
-        filterAtts($oldAtts);
+        filterAtts($oldAtts ? $oldAtts : false);
 
         return parse($thing, false);
     }
