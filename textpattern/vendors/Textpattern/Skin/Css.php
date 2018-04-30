@@ -43,6 +43,17 @@ namespace Textpattern\Skin {
                 'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.io/tags/css */'
             ),
         );
+        protected static $mimeTypes = array(
+            'txt'  => 'text/plain',
+            'csv'  => 'text/csv',
+            'htm'  => 'text/html',
+            'html' => 'text/html',
+//            'css'  => 'text/css',
+            'js'   => 'application/javascript',
+            'json' => 'application/json',
+            'xml'  => 'application/xml',
+            'svg'  => 'image/svg+xml'
+        );
 
         /**
          * {@inheritdoc}
