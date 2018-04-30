@@ -202,7 +202,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $skin property setter.
+         * $dir property setter.
          *
          * @return object $this The current class object (chainable).
          */
