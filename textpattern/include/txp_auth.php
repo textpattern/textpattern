@@ -50,7 +50,7 @@ function doAuth()
     $message = doTxpValidate();
 
     if (!$txp_user) {
-        if (trim(ps('app_mode')) == 'async') {
+        if (trim(gps('app_mode')) == 'async') {
             echo 'if (confirm("'.escape_js(gTxt('login_to_textpattern')).'"))'.n.
                 '{window.location.assign("index.php")}';
             exit();
