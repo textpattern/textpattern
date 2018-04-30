@@ -1223,7 +1223,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
             $atts['data-item'] = $inline;
         } elseif (empty($txp_user)) {
             // Use inline pophelp, if unauthorized user or setup stage
-            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+            if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
+                $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+            }
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
         }
@@ -1232,7 +1234,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
     }
 
-    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+    return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class', 'inline'));
 }
 
 /**
@@ -1415,10 +1417,12 @@ function pageby_form($event, $val, $step = null)
  * @param  string       $label_id      HTML id attribute for the filename input element
  * @param  string       $class         HTML class attribute for the form element
  * @param  string|array $wraptag_val   Tag to wrap the value / label in, or empty to omit
+ * @param  array        $extra         array('postinput' => $categories ...)
+ * @param  string|array $accept        Comma separated list of allowed file types, or empty to omit
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null, $accept = '')
 {
     extract(gpsa(array(
         'page',
@@ -1467,6 +1471,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                     'required' => true,
                     'id'       => $label_id,
                     'multiple' => $multiple,
+                    'accept'   => $accept,
                 )).
                 (isset($extra['postinput']) ? $extra['postinput'] : '').
                 n.tag(
