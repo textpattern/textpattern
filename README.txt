@@ -7,7 +7,7 @@ Includes contributions licensed under the GNU Lesser General Public License.
 See textpattern/lib/LICENSE-LESSER.txt for terms and conditions.
 
 Includes contributions licensed under the New BSD License.
-See LICENSE-BSD-3.txt for terms and conditions.
+See textpattern/lib/LICENSE-BSD-3.txt for terms and conditions.
 
 
 == About ==

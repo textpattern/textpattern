@@ -79,6 +79,14 @@ namespace Textpattern\Skin {
         protected static $extension = 'txp';
 
         /**
+         * Asset mimetypes.
+         *
+         * @var array Associative array of 'extension' => 'mimetype'
+         */
+
+        protected static $mimeTypes = array();
+
+        /**
          * Skin/template name to work with.
          *
          * @var string Name.
@@ -172,6 +180,17 @@ namespace Textpattern\Skin {
         protected static function getNamePattern()
         {
             return self::$namePattern;
+        }
+
+        /**
+         * $mimeTypes property getter.
+         *
+         * @return $this->skin The asset related skin object.
+         */
+
+        public function getMimeTypes()
+        {
+            return static::$mimeTypes;
         }
 
         /**
@@ -469,7 +488,8 @@ namespace Textpattern\Skin {
 
         protected function getFiles($names = null, $maxDepth = null)
         {
-            $filter = $names ? $names : '#^'.self::getNamePattern().'.'.self::getExtension().'$#';
+            $extensions = implode('|', array_keys(static::$mimeTypes + array(self::getExtension() => null)));
+            $filter = $names ? $names : '#^'.self::getNamePattern().'\.'."(?:$extensions)".'$#';
             $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
             $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files, $filter);
             $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
@@ -739,8 +759,10 @@ namespace Textpattern\Skin {
             $isAsset = property_exists($this, 'skin');
             $thing = $isAsset ? 'skin' : 'title';
             $things .= ', '.$thing;
+            $extensions = array_keys(static::$mimeTypes);
+            $where = $extensions ? "name NOT LIKE '%".implode("' AND name NOT LIKE '%", doSlash($extensions))."'" : '1';
 
-            $rows = $this->getRows($things, '1=1 ORDER BY name');
+            $rows = $this->getRows($things, $where.' ORDER BY name');
 
             $this->installed = array();
 

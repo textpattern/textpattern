@@ -243,29 +243,71 @@ function css($atts)
         'rel'    => 'stylesheet',
         'theme'  => $pretext['skin'],
         'title'  => '',
+        'type'   => '',
     ), $atts));
 
     if (empty($name)) {
         $name = 'default';
     }
 
+    $out = '';
+    list($mode, $format) = explode('.', $format.'.'.$format);
+
     if (has_handler('css.url')) {
         $url = callback_event('css.url', '', false, compact('name', 'theme'));
+    } elseif ($mode === 'flat') {
+        $url = array();
+        $skin_dir = urlencode(get_pref('skin_dir'));
+
+        foreach(do_list_unique($name) as $n) {
+            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/styles/'.urlencode($n).'.'.($type ? urlencode($type) : 'css');
+        }
     } else {
-        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
+        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme).($type ? '&e='.urlencode($type) : '');
     }
 
-    if ($format == 'link') {
-        return tag_void('link', array(
-            'rel'   => $rel,
-            'type'  => $doctype != 'html5' ? 'text/css' : '',
-            'media' => $media,
-            'title' => $title,
-            'href'  => $url,
-        ));
+    if ($format === 'link') {
+        switch ($type) {
+            case '': case 'css':
+                foreach ((array)$url as $href) {
+                    $out .= tag_void('link', array(
+                        'rel'   => $rel,
+                        'type'  => $doctype != 'html5' ? 'text/css' : '',
+                        'media' => $media,
+                        'title' => $title,
+                        'href'  => $href,
+                    )).n;
+                }
+                break;
+            case 'js':
+                foreach ((array)$url as $href) {
+                    $out .= tag(null, 'script', array(
+                        'title' => $title,
+                        'type'  => $doctype != 'html5' ? 'application/javascript' : '',
+                        'src'  => $href,
+                    )).n;
+                }
+                break;
+            case 'svg':
+                foreach ((array)$url as $href) {
+                    $out .= tag_void('img', array(
+                        'title' => $title,
+                        'src'  => $href,
+                    )).n;
+                }
+                break;
+            default:
+                foreach ((array)$url as $href) {
+                    $out .= href($title ? $title : $href, $href, array(
+                        'rel'   => $rel,
+                    )).n;
+                }
+        }
+    } else {
+        $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
     }
 
-    return txpspecialchars($url);
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -661,7 +703,7 @@ function linklist($atts, $thing = null)
 
     $qparts = array(
         $where,
-        'ORDER BY '.doSlash($sort),
+        'ORDER BY '.sanitizeForSort($sort),
         ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
     );
 
@@ -1000,7 +1042,7 @@ function recent_comments($atts, $thing = null)
             t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
         WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
-        ORDER BY ".doSlash($sort)."
+        ORDER BY ".sanitizeForSort($sort)."
         LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
@@ -1228,7 +1270,7 @@ function category_list($atts, $thing = null)
     $multiple = count($roots) > 1;
     $root = implode(',', $roots);
     $children = $children === true ? PHP_INT_MAX : intval(is_numeric($children) ? $children : !empty($children));
-    $sql_query = "type = '".doSlash($type)."'".($sort ? ' order by '.doSlash($sort) : ($categories ? " order by FIELD(name, ".implode(',', quote_list($categories)).")": ''));
+    $sql_query = "type = '".doSlash($type)."'".($sort ? ' order by '.sanitizeForSort($sort) : ($categories ? " order by FIELD(name, ".implode(',', quote_list($categories)).")": ''));
     $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
     $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
@@ -1368,7 +1410,7 @@ function section_list($atts, $thing = null)
     ), $atts));
 
     $sql_limit = '';
-    $sql_sort = doSlash($sort);
+    $sql_sort = sanitizeForSort($sort);
     $sql = array();
     $sql[] = 1;
 
@@ -2368,7 +2410,7 @@ function comments($atts, $thing = null)
 
     $qparts = array(
         "parentid = ".intval($thisid)." AND visible = ".VISIBLE,
-        "ORDER BY ".doSlash($sort),
+        "ORDER BY ".sanitizeForSort($sort),
         ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
 
@@ -3324,7 +3366,7 @@ function images($atts, $thing = null)
         'sort'        => 'name ASC',
     ), $atts));
 
-    $safe_sort = doSlash($sort);
+    $safe_sort = sanitizeForSort($sort);
     $where = array();
     $has_content = $thing || $form;
     $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
@@ -4177,11 +4219,13 @@ function if_last_section($atts, $thing = null)
 
 function php($atts = null, $thing = null)
 {
-    global $is_article_body, $thisarticle, $prefs;
+    global $is_article_body, $thisarticle, $prefs, $pretext;
 
     $error = null;
 
-    if (empty($is_article_body)) {
+    if (!empty($pretext['secondpass'])) {
+        $error = 'php_code_disabled_page';
+    } elseif (empty($is_article_body)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
@@ -4609,7 +4653,7 @@ function file_download_list($atts, $thing = null)
     if (!empty($atts['id']) && empty($atts['sort'])) {
         $safe_sort = "FIELD(id, ".join(',', $ids).")";
     } else {
-        $safe_sort = doSlash($sort);
+        $safe_sort = sanitizeForSort($sort);
     }
 
     $qparts = array(
@@ -5094,6 +5138,10 @@ function txp_escape($atts, $thing = '')
     global $locale;
     static $textile = null, $format = null, $tr = array("'" => "',\"'\",'");
     $tidy = false;
+
+    if (empty($atts['escape'])) {
+        return $thing;
+    }
 
     extract(lAtts(array('escape' => true), $atts, false));
 
