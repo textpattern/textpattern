@@ -1,5 +1,5 @@
 <header class="site-header">
-    <h1><txp:link_to_home><txp:site_name /></txp:link_to_home></h1>
+    <h2><txp:link_to_home><txp:site_name /></txp:link_to_home></h2>
     <txp:evaluate>
         <h3><txp:site_slogan /></h3>
     </txp:evaluate>

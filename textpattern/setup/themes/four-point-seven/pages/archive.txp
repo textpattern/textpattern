@@ -91,9 +91,7 @@
 
                 <txp:if_article_list>
 
-                    <h1 itemprop="name">
-                        <txp:section title="1" />
-                    </h1>
+                    <h1 itemprop="name"><txp:section title="1" /></h1>
                     <txp:article class="article-list" form="article_listing" limit="10" wraptag="ul" />
                     <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
 

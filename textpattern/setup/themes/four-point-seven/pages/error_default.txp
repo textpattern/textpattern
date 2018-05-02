@@ -30,12 +30,8 @@
 
             <!-- Main content -->
             <main aria-label="<txp:text item="main_content" />">
-                <h1 class="error-status">
-                    <txp:error_status />
-                </h1>
-                <p class="error-msg">
-                    <txp:error_message />
-                </p>
+                <h1 class="error-status"><txp:error_status /></h1>
+                <p class="error-msg"><txp:error_message /></p>
             </main>
 
             <txp:output_form form="body_aside" />
