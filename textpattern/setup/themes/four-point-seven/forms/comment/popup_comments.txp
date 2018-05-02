@@ -11,7 +11,7 @@
 
     <!-- CSS -->
     <txp:css format="link" media="" />
-    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
+    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:page_url type="theme_path" />/styles/default.css"> -->
 
     <meta name="generator" content="Textpattern CMS">
     <meta name="robots" content="noindex, follow">

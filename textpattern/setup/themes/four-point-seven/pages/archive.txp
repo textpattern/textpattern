@@ -14,17 +14,28 @@
     <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:page_url type="theme_path" />/styles/default.css"> -->
 
     <meta name="generator" content="Textpattern CMS">
-    <txp:meta_description />
-    <txp:meta_keywords separator="," />
 
-    <txp:if_individual_article>
-        <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
-        <link rel="canonical" href="<txp:permlink />">
-        <txp:meta_author title="1" />
-    <txp:else />
+    <txp:if_author>
         <meta name="robots" content="noindex, follow">
-        <link rel="canonical" href="<txp:section url="1" />">
-    </txp:if_individual_article>
+    <txp:else />
+        <txp:meta_description />
+        <txp:if_article_list>
+            <txp:article pgonly="1" limit="10" />
+            <txp:variable name="page" value='<txp:page_url type="pg" />' />
+            <txp:if_variable name="page" value="1">
+                <meta name="robots" content="index, follow">
+                <link rel="canonical" href="<txp:section url="1" />">
+            <txp:else />
+                <meta name="robots" content="noindex, follow">
+                <link rel="canonical" href="<txp:section url="1" />?pg=<txp:page_url type="pg" />">
+            </txp:if_variable>
+        <txp:else />
+            <txp:meta_keywords separator="," />
+            <txp:meta_author title="1" />
+            <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
+            <link rel="canonical" href="<txp:permlink />">
+        </txp:if_article_list>
+    </txp:if_author>
 
     <!-- content feeds -->
     <txp:feed_link flavor="atom" format="link" label="Atom" />
@@ -50,7 +61,7 @@
                     <h1 itemprop="name">
                         <txp:section title="1" />
                     </h1>
-                    <txp:article class="article-list" form="article_listing" limit="5" wraptag="ul" />
+                    <txp:article class="article-list" form="article_listing" limit="10" wraptag="ul" />
                     <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
 
                     <!-- add pagination links to foot of article listings if there are more articles available -->
