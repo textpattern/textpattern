@@ -25,8 +25,14 @@
             <txp:if_category>
                 <meta name="robots" content="noindex, follow">
             <txp:else />
-                <meta name="robots" content="index, follow">
-                <link rel="canonical" href="<txp:site_url />">
+                <txp:article pgonly="1" limit="5" />
+                <txp:variable name="page" value='<txp:page_url type="pg" />' />
+                <txp:if_variable name="page" value="1">
+                    <meta name="robots" content="index, follow">
+                    <link rel="canonical" href="<txp:site_url />">
+                <txp:else />
+                    <meta name="robots" content="noindex, follow">
+                </txp:if_variable>
                 <txp:variable name="front-page" value="1" />
             </txp:if_category>
         </txp:if_author>
@@ -57,81 +63,43 @@
 
                 <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.txp instead) -->
                 <txp:if_search>
-
-                    <h1 itemprop="name">
-                        <txp:text item="search_results" />
-                    </h1>
+                    <h1 itemprop="name"><txp:text item="search_results" /></h1>
                     <txp:output_form form="search_results" />
 
                 <txp:else />
-
-                    <!-- else is this an article category list? -->
-                    <txp:if_category>
-
-                        <h1 itemprop="name">
-                            <txp:text item="category" />
-                            <txp:category title="1" />
-                        </h1>
-                        <txp:article form="article_listing" limit="5" wraptag="ul" class="article-list" />
+                    <!-- else is this the front page? -->
+                    <txp:if_variable name="front-page">
+                        <!-- links by default to form: 'default.txp' unless you specify a different form -->
+                        <txp:article limit="5" />
 
                     <txp:else />
-
                         <!-- else is this an article author list? -->
                         <txp:if_author>
+                            <h1 itemprop="name"><txp:text item="author" /> <txp:author /></h1>
 
-                            <h1 itemprop="name">
-                                <txp:text item="author" />
-                                <txp:author />
-                            </h1>
-                            <txp:article form="article_listing" limit="5" wraptag="ul" class="article-list" />
-
-                        <!-- else display articles normally -->
                         <txp:else />
-
-                            <!-- links by default to form: 'default.txp' unless you specify a different form -->
-                            <txp:article limit="5" />
-
+                            <!-- else is this an article category list? -->
+                            <txp:if_category>
+                                <h1 itemprop="name"><txp:text item="category" /> <txp:category title="1" /></h1>
+                            </txp:if_category>
                         </txp:if_author>
-                    </txp:if_category>
+                        <txp:article form="article_listing" limit="10" wraptag="ul" class="article-list" />
+                    </txp:if_variable>
 
-                    <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
+                    <!-- add pagination links to foot of front page/author listings/category listings if there are more articles available -->
                     <txp:evaluate wraptag="p" class="paginator">
                         <txp:newer rel="prev">
                             <txp:text item="newer" />
                         </txp:newer>
-
                         <txp:older rel="next">
                             <txp:text item="older" />
                         </txp:older>
                     </txp:evaluate>
-
                 </txp:if_search>
 
             </main>
 
-            <!-- Complementary content -->
-            <aside class="complementary-content">
-
-                <!-- feed links, default flavor is RSS, so we don't need to specify a flavor on the first feed_link -->
-                <p>
-                    <txp:feed_link class="feed-rss" label="RSS" />
-                    /
-                    <txp:feed_link class="feed-atom" flavor="atom" label="Atom" />
-                </p>
-
-                <!-- if links exist, renders a links list -->
-                <txp:evaluate test="linklist">
-                    <section>
-                        <h4>
-                            <txp:text item="links" />
-                        </h4>
-
-                        <!-- links by default to form: 'plainlinks.txp' unless you specify a different form -->
-                        <txp:linklist wraptag="ul" break="li" />
-                    </section>
-                </txp:evaluate>
-
-            </aside>
+            <txp:output_form form="body_aside" />
 
         </div> <!-- /.container -->
     </div> <!-- /.wrapper -->
