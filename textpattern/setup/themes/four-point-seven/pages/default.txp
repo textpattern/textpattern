@@ -30,6 +30,15 @@
                 <txp:if_variable name="page" value="1">
                     <meta name="robots" content="index, follow">
                     <link rel="canonical" href="<txp:site_url />">
+                    <script type="application/ld+json">
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "WebSite",
+                            "headline": "<txp:site_name escape="json" />",
+                            <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
+                            "url": "<txp:site_url />"
+                        }
+                    </script>
                 <txp:else />
                     <meta name="robots" content="noindex, follow">
                 </txp:if_variable>

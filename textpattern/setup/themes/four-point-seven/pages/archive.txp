@@ -25,6 +25,15 @@
             <txp:if_variable name="page" value="1">
                 <meta name="robots" content="index, follow">
                 <link rel="canonical" href="<txp:section url="1" />">
+                <script type="application/ld+json">
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "Blog",
+                        "headline": "<txp:section title="1" escape="json" />",
+                        <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
+                        "url": "<txp:section url="1" />"
+                    }
+                </script>
             <txp:else />
                 <meta name="robots" content="noindex, follow">
             </txp:if_variable>
@@ -33,6 +42,31 @@
             <txp:meta_author title="1" />
             <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
             <link rel="canonical" href="<txp:permlink />">
+            <meta property="og:site_name" content="<txp:site_name />">
+            <meta property="og:type" content="article">
+            <meta property="og:title" content="<txp:title />">
+            <txp:if_description><meta property="og:description" content="<txp:meta_description format="" />"></txp:if_description>
+            <meta property="og:url" content="<txp:permlink />">
+            <txp:if_article_image>
+                <txp:images limit="1">
+                    <meta property="og:image" content="<txp:image_url />">
+                    <meta property="og:image:width" content="<txp:image_info type="w" />">
+                    <meta property="og:image:height" content="<txp:image_info type="h" />">
+                    <meta property="og:image:alt" content="<txp:image_info type="alt" />">
+                </txp:images>
+            </txp:if_article_image>
+            <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Blog",
+                    "blogPost": [{
+                        "@type": "BlogPosting",
+                        "headline": "<txp:title escape="json" />",
+                        <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
+                        "url": "<txp:permlink />"
+                    }]
+                }
+            </script>
         </txp:if_article_list>
     </txp:if_author>
 
@@ -83,7 +117,6 @@
                         <txp:link_to_prev>
                             <txp:text item="prev" />
                         </txp:link_to_prev>
-
                         <txp:link_to_next>
                             <txp:text item="next" />
                         </txp:link_to_next>

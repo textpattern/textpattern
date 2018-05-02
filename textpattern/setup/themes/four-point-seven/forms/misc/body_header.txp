@@ -1,6 +1,8 @@
 <header class="site-header">
     <h1><txp:link_to_home><txp:site_name /></txp:link_to_home></h1>
-    <h3><txp:site_slogan /></h3>
+    <txp:evaluate>
+        <h3><txp:site_slogan /></h3>
+    </txp:evaluate>
 </header>
 
 <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
