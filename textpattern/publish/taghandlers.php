@@ -260,7 +260,7 @@ function css($atts)
         $skin_dir = urlencode(get_pref('skin_dir'));
 
         foreach(do_list_unique($name) as $n) {
-            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/styles/'.urlencode($n).'.'.($type ? urlencode($type) : 'css');
+            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.Txp::get('Textpattern\Skin\Css')->getDir().'/'.urlencode($n).'.'.($type ? urlencode($type) : 'css');
         }
     } else {
         $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme).($type ? '&e='.urlencode($type) : '');

@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Css extends AssetBase implements CssInterface
+    class Css extends AssetBase implements CssInterface, \Textpattern\Container\ReusableInterface
     {
         protected static $extension = 'css';
         protected static $dir = 'styles';
@@ -43,17 +43,16 @@ namespace Textpattern\Skin {
                 'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.io/tags/css */'
             ),
         );
-        protected static $mimeTypes = array(
-            'txt'  => 'text/plain',
-            'csv'  => 'text/csv',
-            'htm'  => 'text/html',
-            'html' => 'text/html',
-//            'css'  => 'text/css',
-            'js'   => 'application/javascript',
-            'json' => 'application/json',
-            'xml'  => 'application/xml',
-            'svg'  => 'image/svg+xml'
-        );
+
+        /**
+         * Constructor
+         */
+
+        public function __construct()
+        {
+            parent::__construct();
+            static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes'))));
+        }
 
         /**
          * {@inheritdoc}
