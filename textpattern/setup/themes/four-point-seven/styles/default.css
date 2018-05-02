@@ -118,6 +118,11 @@ nav ol::after,
   }
   .site-header h3 {
     margin: 0.5em 0 0;
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: normal;
+    line-height: 1.4;
   }
   /**
  * Additional styling for child content within site footer.
