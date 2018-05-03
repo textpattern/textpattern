@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Css extends AssetBase implements CssInterface, \Textpattern\Container\ReusableInterface
+    class Css extends AssetBase implements CssInterface, \Textpattern\Container\FactorableInterface
     {
         protected static $extension = 'css';
         protected static $dir = 'styles';
@@ -48,10 +48,11 @@ namespace Textpattern\Skin {
          * Constructor
          */
 
-        public function __construct()
+        public function getInstance()
         {
-            parent::__construct();
             static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes'))));
+
+            return $this;
         }
 
         /**
