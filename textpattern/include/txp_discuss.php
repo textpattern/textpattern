@@ -61,7 +61,7 @@ if ($event == 'discuss') {
 
 function discuss_save()
 {
-    $varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message', 'ip')));
+    $varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message')));
     $varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
     extract(doSlash($varray));
 
@@ -86,7 +86,7 @@ function discuss_save()
         "discussid = $discussid"
     )) {
         update_comments_count($parentid);
-        update_lastmod('discuss_saved', compact('discussid', 'email', 'name', 'web', 'message', 'ip', 'visible', 'parentid'));
+        update_lastmod('discuss_saved', compact('discussid', 'email', 'name', 'web', 'message', 'visible', 'parentid'));
         $message = gTxt('comment_updated', array('{id}' => $discussid));
     } else {
         $message = array(gTxt('comment_save_failed'), E_ERROR);
@@ -133,7 +133,7 @@ function discuss_list($message = '')
     if ($sort === '') {
         $sort = get_pref('discuss_sort_column', 'date');
     } else {
-        if (!in_array($sort, array('id', 'ip', 'name', 'email', 'website', 'message', 'status', 'parent'))) {
+        if (!in_array($sort, array('id', 'name', 'email', 'website', 'message', 'status', 'parent'))) {
             $sort = 'date';
         }
 
@@ -150,9 +150,6 @@ function discuss_list($message = '')
     switch ($sort) {
         case 'id':
             $sort_sql = "txp_discuss.discussid $dir";
-            break;
-        case 'ip':
-            $sort_sql = "txp_discuss.ip $dir";
             break;
         case 'name':
             $sort_sql = "txp_discuss.name $dir";
@@ -210,10 +207,6 @@ function discuss_list($message = '')
             'website' => array(
                 'column' => 'txp_discuss.web',
                 'label'  => gTxt('website'),
-            ),
-            'ip' => array(
-                'column' => 'txp_discuss.ip',
-                'label'  => 'IP',
             ),
             'visible' => array(
                 'column' => 'txp_discuss.visible',
@@ -293,7 +286,6 @@ function discuss_list($message = '')
                 txp_discuss.name,
                 txp_discuss.email,
                 txp_discuss.web,
-                txp_discuss.ip,
                 txp_discuss.message,
                 txp_discuss.visible,
                 UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
@@ -347,10 +339,6 @@ function discuss_list($message = '')
                     column_head(
                         'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
                             (('website' == $sort) ? "$dir " : '').'txp-list-col-website'
-                    ).
-                    column_head(
-                        'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
-                            (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
                     ).
                     column_head(
                         'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -442,12 +430,6 @@ function discuss_list($message = '')
                         txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website'
                     ).
                     td(
-                        href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
-                            'rel'    => 'external',
-                            'target' => '_blank',
-                        )), '', 'txp-list-col-ip'
-                    ).
-                    td(
                         $view, '', 'txp-list-col-status'
                     ).
                     td(
@@ -532,14 +514,6 @@ function discuss_edit()
                     'name', '', array('class' => 'txp-form-field edit-comment-name')
                 ).
                 inputLabel(
-                    'IP',
-                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
-                        'rel'    => 'external',
-                        'target' => '_blank',
-                    )),
-                    '', '', array('class' => 'txp-form-field edit-comment-ip')
-                ).
-                inputLabel(
                     'email',
                     fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'),
                     'email', '', array('class' => 'txp-form-field edit-comment-email')
@@ -572,7 +546,6 @@ function discuss_edit()
                 hInput('search_method', $search_method).
                 hInput('discussid', $discussid).
                 hInput('parentid', $parentid).
-                hInput('ip', $ip).
                 eInput('discuss').
                 sInput('discuss_save'),
             '', '', 'post', 'txp-edit', '', 'discuss_edit_form');

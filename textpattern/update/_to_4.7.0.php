@@ -30,6 +30,13 @@ Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'..', array('LICENSE
 Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'vendors', 'dropbox');
 Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'lang', 'en-gb.txt');
 
+// Drop the ip column in txp_discuss
+$cols = getThings("DESCRIBE `".PFX."txp_discuss`");
+
+if (in_array('ip', $cols)) {
+    safe_alter('txp_discuss', "DROP ip");
+}
+
 // Drop the prefs_id column in txp_prefs
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
 
