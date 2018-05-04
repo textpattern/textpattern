@@ -43,6 +43,14 @@ namespace Textpattern\Skin {
         public function getEvent();
 
         /**
+         * $mimeTypes property getter.
+         *
+         * @return $this->mimeTypes The asset related mimeTypes array.
+         */
+
+        public function getMimeTypes();
+
+        /**
          * $names property setter/sanitizer.
          *
          * @param  array  $names Multiple skin or template names to work with related methods.

@@ -77,7 +77,6 @@ function logit($r = '', $status = 200)
         return;
     }
 
-    $host = $ip = (string) remote_addr();
     $protocol = false;
     $referer = serverSet('HTTP_REFERER');
 
@@ -103,24 +102,10 @@ function logit($r = '', $status = 200)
         return;
     }
 
-    if (!empty($prefs['use_dns'])) {
-        // A crude rDNS cache.
-        if (($h = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
-            $host = $h;
-        } else {
-            // Double-check the rDNS.
-            $host = @gethostbyaddr($ip);
-
-            if ($host !== $ip && @gethostbyname($host) !== $ip) {
-                $host = $ip;
-            }
-        }
-    }
-
     insert_logit(array(
         'uri'    => $pretext['request_uri'],
-        'ip'     => $ip,
-        'host'   => $host,
+        'ip'     => '',
+        'host'   => '',
         'status' => $status,
         'method' => serverSet('REQUEST_METHOD'),
         'ref'    => $referer,

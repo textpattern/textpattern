@@ -235,7 +235,7 @@ function saveComment()
                  name     = '".doSlash($name)."',
                  email    = '".doSlash($email)."',
                  web      = '".doSlash($web)."',
-                 ip       = '".doSlash($ip)."',
+                 ip       = '',
                  message  = '".doSlash($message2db)."',
                  visible  = ".intval($visible).",
                  posted   = NOW()"
