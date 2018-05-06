@@ -41,6 +41,7 @@ if (in_array('ip', $cols)) {
 $cols = getThings("DESCRIBE `".PFX."txp_log`");
 
 if (in_array('ip', $cols)) {
+    safe_drop_index('txp_log', 'ip');
     safe_alter('txp_log', "DROP ip");
 }
 
