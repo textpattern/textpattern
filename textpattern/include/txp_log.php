@@ -118,6 +118,10 @@ function log_list($message = '')
     $search = new Filter(
         $event,
         array(
+            'time' => array(
+                'column' => 'txp_log.time',
+                'label'  => gTxt('time'),
+            ),
             'page' => array(
                 'column' => 'txp_log.page',
                 'label'  => gTxt('page'),

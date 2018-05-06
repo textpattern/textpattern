@@ -104,8 +104,6 @@ function logit($r = '', $status = 200)
 
     insert_logit(array(
         'uri'    => $pretext['request_uri'],
-        'ip'     => '',
-        'host'   => '',
         'status' => $status,
         'method' => serverSet('REQUEST_METHOD'),
         'ref'    => $referer,
@@ -115,7 +113,7 @@ function logit($r = '', $status = 200)
 /**
  * Inserts a log record into the database.
  *
- * @param array $in Input array consisting 'uri', 'ip', 'host', 'ref', 'status', 'method'
+ * @param array $in Input array consisting 'uri', 'ref', 'status', 'method'
  * @see   log_hit()
  */
 
@@ -125,6 +123,6 @@ function insert_logit($in)
     extract($in);
     safe_insert(
         'txp_log',
-        "time = NOW(), page = '$uri', ip = '$ip', host = '$host', refer = '$ref', status = '$status', method = '$method'"
+        "time = NOW(), page = '$uri', refer = '$ref', status = '$status', method = '$method'"
     );
 }

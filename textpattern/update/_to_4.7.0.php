@@ -37,6 +37,19 @@ if (in_array('ip', $cols)) {
     safe_alter('txp_discuss', "DROP ip");
 }
 
+// Drop the ip and host column in txp_log
+$cols = getThings("DESCRIBE `".PFX."txp_log`");
+
+if (in_array('ip', $cols)) {
+    safe_alter('txp_log', "DROP ip");
+}
+
+if (in_array('host', $cols)) {
+    safe_alter('txp_log', "DROP host");
+}
+
+safe_delete('txp_prefs', "name='use_dns'");
+
 // Drop the prefs_id column in txp_prefs
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
 
