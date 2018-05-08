@@ -77,7 +77,6 @@ function logit($r = '', $status = 200)
         return;
     }
 
-    $host = $ip = (string) remote_addr();
     $protocol = false;
     $referer = serverSet('HTTP_REFERER');
 
@@ -103,24 +102,8 @@ function logit($r = '', $status = 200)
         return;
     }
 
-    if (!empty($prefs['use_dns'])) {
-        // A crude rDNS cache.
-        if (($h = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
-            $host = $h;
-        } else {
-            // Double-check the rDNS.
-            $host = @gethostbyaddr($ip);
-
-            if ($host !== $ip && @gethostbyname($host) !== $ip) {
-                $host = $ip;
-            }
-        }
-    }
-
     insert_logit(array(
         'uri'    => $pretext['request_uri'],
-        'ip'     => $ip,
-        'host'   => $host,
         'status' => $status,
         'method' => serverSet('REQUEST_METHOD'),
         'ref'    => $referer,
@@ -130,7 +113,7 @@ function logit($r = '', $status = 200)
 /**
  * Inserts a log record into the database.
  *
- * @param array $in Input array consisting 'uri', 'ip', 'host', 'ref', 'status', 'method'
+ * @param array $in Input array consisting 'uri', 'ref', 'status', 'method'
  * @see   log_hit()
  */
 
@@ -140,6 +123,6 @@ function insert_logit($in)
     extract($in);
     safe_insert(
         'txp_log',
-        "time = NOW(), page = '$uri', ip = '$ip', host = '$host', refer = '$ref', status = '$status', method = '$method'"
+        "time = NOW(), page = '$uri', refer = '$ref', status = '$status', method = '$method'"
     );
 }

@@ -220,7 +220,7 @@ namespace Textpattern\Skin {
          * @return string static::$dir.
          */
 
-        protected static function getDir()
+        public static function getDir()
         {
             return static::$dir;
         }
@@ -533,7 +533,7 @@ namespace Textpattern\Skin {
 
                     $this->setName($name);
 
-                    if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
+                    if (!$nameNotIn || !in_array($name, $nameNotIn)) {
                         unlink($file->getPathname()) or $notRemoved[] = $name;
 
                         !$hasSubdir or $subdirPaths[] = $file->getPath();

@@ -192,7 +192,6 @@ class TxpXML
                         web             = '".doSlash($c->web)."',
                         message         = '".doSlash($c->message)."',
                         posted          = NOW(),
-                        ip              = '127.0.0.1',
                         visible         = 1"
                     );
                 }
