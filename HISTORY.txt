@@ -41,12 +41,11 @@ Changes in 4.7.0 (in development)
 * Added: Automatic table of contents generation for well-structured plugin help
   text.
 * Added: JSON-LD and Open Graph metadata scaffold included with default theme.
-* Changed: Removal of involuntary Personally Identifiable Information collection
-  from comments (IP address) and logging (IP address and host) - for GDPR
-  compliance.
-* Changed: Removal of any pre-existing IP addresses stored in comments database
-  table - for GDPR compliance.
-* Changed: Comments 'Remember me' option is now an opt-in instead of opt-out,
+* Removed: Involuntary Personally Identifiable Information within comments (IP
+  address) and logs (IP address/host) no longer collected - for GDPR compliance.
+* Removed: Any pre-existing IP addresses stored in comments database table are
+  deleted upon upgrade to 4.7 (and not stored in future) - for GDPR compliance.
+* Changed: Comments 'Remember me?' option is now an opt-in instead of opt-out,
   setting stored in `localStorage` instead of as a cookie - for GDPR compliance.
 * Changed: Revised multi-site installation routine and symbolic linking (thanks,
   jools-r).
