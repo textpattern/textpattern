@@ -56,15 +56,15 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
-$txp_current_tag = '';
-$txp_parsed = $txp_else = $txp_yield = $yield = array();
-$txp_atts = null;
-
 // Get all prefs as an array.
 $prefs = get_prefs();
 
 // Add prefs to globals.
 extract($prefs);
+
+$txp_current_tag = '';
+$txp_parsed = $txp_else = $txp_yield = $yield = array();
+$txp_atts = null;
 
 // Check the size of the URL request.
 bombShelter();
@@ -597,8 +597,11 @@ function textpattern()
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '', $t = '')
+function output_css($s = '', $n = '', $t = '', $e = '')
 {
+    static $mimetypes = null;
+
+    isset($mimetypes) or $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
     $order = '';
     $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
@@ -607,8 +610,9 @@ function output_css($s = '', $n = '', $t = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list_unique($n);
-        $cssname = join("','", doSlash($n));
+        $extension = ($e ? '.'.doSlash($e) : '');
+        $n = do_list_unique(doSlash($n));
+        $cssname = join($extension."','", $n).$extension;
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
@@ -623,8 +627,10 @@ function output_css($s = '', $n = '', $t = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
+        $extension = $n && $e ? $e : 'css';
+        $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
-        @header('Content-Type: text/css; charset=utf-8');
+        @header('Content-Type: '.$mimetype.'; charset=utf-8');
         echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
         restore_error_handler();
     }
@@ -728,82 +734,16 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage;
     extract($pretext);
-    $customFields = getCustomFields();
-    $customlAtts = array_null(array_flip($customFields));
 
     if ($iscustom) {
         // Custom articles must not render search results.
         $q = '';
-
-        $extralAtts = array(
-            'category'  => '',
-            'section'   => '',
-            'excerpted' => '',
-            'author'    => '',
-            'month'     => '',
-            'expired'   => get_pref('publish_expired_articles'),
-            'id'        => '',
-            'exclude'   => '',
-        );
-    } else {
-        $extralAtts = array(
-            'listform'     => '',
-            'searchform'   => '',
-            'searchall'    => 1,
-            'searchsticky' => 0,
-        );
     }
 
     // Getting attributes.
-    $theAtts = lAtts(array(
-        'form'          => 'default',
-        'limit'         => 10,
-        'sort'          => '',
-        'keywords'      => '',
-        'time'          => null,
-        'status'        => STATUS_LIVE,
-        'allowoverride' => !$iscustom,
-        'frontpage'     => !$iscustom,
-        'match'         => 'Category1,Category2',
-        'offset'        => 0,
-        'pageby'        => '',
-        'pgonly'        => 0,
-        'wraptag'       => '',
-        'break'         => '',
-        'breakby'       => '',
-        'breakclass'    => '',
-        'label'         => '',
-        'labeltag'      => '',
-        'class'         => '',
-    ) + $customlAtts + $extralAtts, $atts);
-
-    // For the txp:article tag, some attributes are taken from globals;
-    // override them, then stash all filter attributes.
-    if (!$iscustom) {
-        $theAtts['category'] = ($c) ? $c : '';
-        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
-        $theAtts['author'] = (!empty($author) ? $author : '');
-        $theAtts['month'] = (!empty($month) ? $month : '');
-        $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
-        $theAtts['excerpted'] = 0;
-        $theAtts['exclude'] = 0;
-        $theAtts['expired'] = get_pref('publish_expired_articles');
-
-        filterAtts($theAtts);
-    }
-
+    $theAtts = filterAtts($atts, $iscustom);
     extract($theAtts);
-
-    // If a listform is specified, $thing is for doArticle() - hence ignore here.
-    if (!empty($listform)) {
-        $thing = '';
-    }
-
-    $pageby = (empty($pageby) ? $limit : $pageby);
-
-    // Treat sticky articles differently wrt search filtering, etc.
-    $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
-    $issticky = ($status == STATUS_STICKY);
+    $issticky = $theAtts['status'] == STATUS_STICKY;
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
@@ -861,98 +801,11 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     }
 
-    // Building query parts.
-    if ($exclude && $exclude !== true) {
-        $exclude = array_map('strtolower', do_list_unique($exclude));
-        $excluded = array_filter($exclude, 'is_numeric');
-    } else {
-        $exclude or $exclude = array();
-        $excluded = array();
-    }
-
-    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
-    $match = do_list_unique($match);
-    $category !== true or $category = category(array());
-    $category  = join("','", doSlash(do_list_unique($category)));
-    $categories = array();
-
-    if (in_array('Category1', $match)) {
-        $categories[] = "Category1 IN ('$category')";
-    }
-
-    if (in_array('Category2', $match)) {
-        $categories[] = "Category2 IN ('$category')";
-    }
-
-    $not = $exclude === true || in_array('category', $exclude) ? '!' : '';
-    $categories = join(" OR ", $categories);
-    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
-    $not = $exclude === true || in_array('section', $exclude) ? 'NOT' : '';
-    $section !== true or $section = section(array());
-    $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
-    $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
-    $not = $exclude === true || in_array('author', $exclude) ? 'NOT' : '';
-    $author !== true or $author = author(array('escape' => false, 'title' => false));
-    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
-    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
-        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
-
-    $timeq = '';
-
-    if ($time === null || $month || !$expired || $expired == '1') {
-        $timeq .= buildTimeSql($month, $time === null ? 'past' : $time);
-    }
-
-    if ($expired && $expired != '1') {
-        $timeq .= buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
-    } elseif (!$expired) {
-        $timeq .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
-    }
-
-    $custom = '';
-
-    if ($customFields) {
-        foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField];
-            }
-        }
-
-        if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs, $exclude);
-        }
-    }
-
-    // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = keywords(array());
-
-    if ($keywords) {
-        $keyparts = array();
-        $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
-        $keys = doSlash(do_list_unique($keywords));
-
-        foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
-        }
-
-        !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
-    }
-
-    if ($q && $searchsticky) {
-        $statusq = " AND Status IN (".implode(',', array_keys(status_group('published', false))).")";
-    } elseif ($id) {
-        $statusq = " AND Status IN (".implode(',', array_keys(status_group('published', false))).")";
-    } else {
-        $statusq = " AND Status = ".intval($status);
-    }
-
-    $where = "1 = 1".$statusq.$timeq.
-        $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
+    $where = $theAtts['*'].$search;
+    $pageby = (empty($pageby) ? $limit : $pageby);
 
     // Do not paginate if we are on a custom list.
-    if (!$iscustom and !$issticky) {
+    if (!$iscustom && !$issticky) {
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
@@ -986,10 +839,10 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($ids) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(id, ".join(',', $ids)."), ".doSlash($sort);
+    if (!empty($id) && empty($atts['sort'])) {
+        $safe_sort = "FIELD(ID, ".$id."), ".$sort;
     } else {
-        $safe_sort = doSlash($sort);
+        $safe_sort = $sort;
     }
 
     $rs = safe_rows_start(
@@ -997,6 +850,11 @@ function doArticles($atts, $iscustom, $thing = null)
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
+
+    // If a listform is specified, $thing is for doArticle() - hence ignore here.
+    if (!empty($listform)) {
+        $thing = '';
+    }
 
     // Get the form name.
     if ($q && !$issticky) {
@@ -1046,66 +904,40 @@ function doArticles($atts, $iscustom, $thing = null)
 function doArticle($atts, $thing = null)
 {
     global $pretext, $thisarticle;
-    extract($pretext);
 
-    extract(gpsa(array(
-        'parentid',
-        'preview',
-    )));
+    $oldAtts = filterAtts();
+    $atts = filterAtts($atts);
+    extract($atts);
 
-    $theAtts = lAtts(array(
-        'allowoverride' => '1',
-        'form'          => 'default',
-        'status'        => STATUS_LIVE,
-        'pgonly'        => 0,
-    ), $atts, 0);
-    extract($theAtts);
-
-    // Save *all* atts to get hold of the current article filter criteria.
-    filterAtts($atts);
-
-    // No output required.
+    // No output required, only setting atts.
     if ($pgonly) {
         return '';
     }
 
-    // If a form is specified, $thing is for doArticles() - hence ignore
-    // $thing here.
-    if (!empty($atts['form'])) {
-        $thing = '';
-    }
-
-    if ($status) {
-        $status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
-    }
-
-    if (empty($thisarticle) or $thisarticle['thisid'] != $id) {
-        $id = assert_int($id);
+    if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
+        $id = assert_int($pretext['id']);
         $thisarticle = null;
-
-        $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".implode(',', array_keys(status_group('published', false))).")");
+        $where = $atts['*'];
 
         $rs = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = $id $q_status LIMIT 1"
+            "ID = $id AND $where LIMIT 1"
         );
 
         if ($rs) {
-            extract($rs);
             populateArticleData($rs);
         }
     }
 
-    if (!empty($thisarticle) && ($thisarticle['status'] == $status || gps('txpreview'))) {
+    if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
-        $thisarticle['is_first'] = 1;
-        $thisarticle['is_last'] = 1;
+        $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
-            $article = ($thing) ? parse($thing) : parse_form($form);
+            $article = $form ? parse_form($form) : parse($thing);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
@@ -1116,6 +948,9 @@ function doArticle($atts, $thing = null)
 
         return $article;
     } else {
+        // Restore atts to the previous article filter criteria.
+        filterAtts($oldAtts ? $oldAtts : false);
+
         return parse($thing, false);
     }
 }

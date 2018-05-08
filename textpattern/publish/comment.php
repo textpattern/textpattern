@@ -214,7 +214,7 @@ function saveComment()
     $isdup = safe_row(
         "message, name",
         'txp_discuss',
-        "name = '".doSlash($name)."' AND message = '".doSlash($message2db)."' AND ip = '".doSlash($ip)."'"
+        "name = '".doSlash($name)."' AND message = '".doSlash($message2db)."'"
     );
 
     checkCommentRequired($comment);
@@ -235,7 +235,6 @@ function saveComment()
                  name     = '".doSlash($name)."',
                  email    = '".doSlash($email)."',
                  web      = '".doSlash($web)."',
-                 ip       = '".doSlash($ip)."',
                  message  = '".doSlash($message2db)."',
                  visible  = ".intval($visible).",
                  posted   = NOW()"

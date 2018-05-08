@@ -84,18 +84,18 @@
     <group id="article" title="Write panel">
         <item id="article_image" title="Article image"><![CDATA[
 <h2>Article image</h2>
-<p>If you would like to associate a single image with this article, place one of the following here:</p>
+<p>To associate a single image with this article, place one of the following here:</p>
 <ol>
-    <li>a Textpattern image ID</li>
+    <li>a Textpattern image ID (e.g. <code>12</code>)</li>
     <li>a relative URL to the image (e.g. <code>/images/my_pic.jpg</code>)</li>
-    <li>a fully-qualified URL (e.g. <code>http://example.com/path/to/images/my_pic.jpg</code>)</li>
+    <li>a fully-qualified URL (e.g. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>The image can be displayed by placing a <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to your chosen image.</p>
+<p>The image can be displayed by placing a <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to the chosen image.</p>
         ]]></item>
         <item id="body" title="Body"><![CDATA[
 <h2>Body</h2>
 <p>The main content of an article is contained within the article body.</p>
-<p>When composing or preparing articles for publication in Textpattern, you can switch between three views of the article: plain text, HTML markup (the code with which a web browser renders the article), and a rendered preview.</p>
+<p>When composing or preparing articles for publication in Textpattern, an author can switch between three views of the article: plain text, HTML markup (the code with which a web browser renders the article), and a rendered preview.</p>
         ]]></item>
         <item id="description" title="Description"><![CDATA[
 <h2>Description</h2>
@@ -125,7 +125,7 @@
         ]]></item>
         <item id="override_form" title="Override form"><![CDATA[
 <h2>Override form</h2>
-<p>If you wish for an article to use a form different from that assigned by default - for example if you want to show only an article excerpt with <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> where you normally show the entire article with <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
+<p>An article can optionally use a form different from that assigned by default - for example to show an article excerpt with <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> instead of the article body with <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
         ]]></item>
         <item id="publish_date"><![CDATA[
 <h2>Publish date</h2>
@@ -135,7 +135,7 @@
     <li>Year / Month / Day</li>
     <li>Hour (24-hour format) : Minute : Second</li>
 </ul>
-<p>An item with a timestamp greater than the current time (i.e. in the future) will not appear on the front end and the RSS/Atom feeds until that time arrives.</p>
+<p>An item with a timestamp greater than the current time (i.e. in the future) will not appear on the front side and the RSS/Atom feeds until that time arrives.</p>
         ]]></item>
         <item id="status" title="Status"><![CDATA[
 <h2>Status</h2>
@@ -161,8 +161,8 @@
         ]]></item>
         <item id="url_title" title="URL-only title"><![CDATA[
 <h2>URL-only title</h2>
-<p>If you would like to have a specific title attached to the permalink URL for your article, enter it here. If it is left blank, the URL title will be automatically generated from the article title.</p>
-<p>This is particularly useful if the title of your article uses non-ASCII characters.</p>
+<p>To use a specific title in to the permalink URL for an article, enter it here. If it is left blank, the URL title will be automatically generated from the article title.</p>
+<p>This is particularly useful if the title of the article uses non-ASCII characters.</p>
         ]]></item>
     </group>
 
@@ -186,17 +186,17 @@
 <p>The category description is limited to a maximum of 255 characters. Note that some search engines place character limits on the length of a page’s <code>meta description</code> for practicality of display in search engine results pages (SERPs) and this may be less than the 255 character limit in Textpattern.</p>
         ]]></item>
         <item id="file_category" title="Files"><![CDATA[
-<h2>Categories: Files</h2>
-<p>File categories are optional, and are useful if you want to group certain uploaded files together.</p>
+<h2>Files</h2>
+<p>File categories are optional, and useful for grouping selected uploaded files together.</p>
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
-<h2>Categories: Images</h2>
-<p>Image categories are useful both for internal organisation, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
+<h2>Images</h2>
+<p>Image categories are optional, and useful both for internal organization and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
 <h2>Links</h2>
-<p>Link categories are optional, and are useful if you want to display different groupings of links, e.g. ‘Friends’, ‘Romans’, ‘Countrymen’.</p>
-<p>Selective link lists such as these are output with the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> like so:</p>
+<p>Link categories are optional, and are useful for displaying different groupings of links, e.g. ‘Friends’, ‘Romans’, ‘Countrymen’.</p>
+<p>Selective link lists such as these are output with the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> like so:</p>
 <pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
         ]]></item>
     </group>
@@ -204,81 +204,97 @@
     <group id="diag" title="Diagnostics panel">
         <item id="clean_url_data_failed" title="Clean URL data failed"><![CDATA[
 <h2>Clean URL data failed</h2>
-<p>It appears that either your site URLs (<code>http://example.com/section/article</code>) are currently not working or your server does not support the test procedure to determine if clean URLs work or not; if clean URLs on your site work, you can safely ignore this message.</p>
+<p>It appears that either the site URLs (e.g. <code>https://example.com/section/article</code>) are currently not working or the web server does not support the test procedure to determine if clean URLs work or not; if clean URLs on the site work as expected, this message can be safely ignored.</p>
 <p>If clean URLs are <em>not</em> working it may mean either:</p>
 <ul>
-    <li>your ‘Site URL’ setting is incorrect, or the page at that address is not managed by this copy of Textpattern.</li>
-    <li>your server requires some changes to <code>.htaccess</code> in order to make clean URLs work.</li>
-    <li>your server doesn’t support clean URLs at all.</li>
+    <li>the ‘Site URL’ setting is incorrect, or the page at that address is not managed by this instance of Textpattern</li>
+    <li>the server requires some changes to <code>.htaccess</code> or similar server directive in order to make clean URLs work</li>
+    <li>the server doesn’t support clean URLs at all</li>
 </ul>
-<p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved you will have to use messy URLs on your site instead (<code>http://example.com?s=section&amp;id=4</code>). Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
+<p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved messy URLs (e.g. <code>https://example.com?s=section&amp;id=4</code>) should be used. Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
 <p>Note that using a plugin to put a site in ‘maintenance mode’ may trigger this warning.</p>
         ]]></item>
         <item id="clean_url_test_failed" title="Clean URL test failed"><![CDATA[
 <h2>Clean URL test failed</h2>
-<p>It appears that either your site URLs (<code>http://example.com/section/article</code>) are currently not working or your server does not support the test procedure to determine if clean URLs work or not; if clean URLs on your site work, you can safely ignore this message.</p>
-<p>If clean URLs are not working it may mean either:</p>
+<p>It appears that either the site URLs (e.g. <code>https://example.com/section/article</code>) are currently not working or the web server does not support the test procedure to determine if clean URLs work or not; if clean URLs on the site work as expected, this message can be safely ignored.</p>
+<p>If clean URLs are <em>not</em> working it may mean either:</p>
 <ul>
-    <li>your ‘Site URL’ setting is incorrect, or the page at that address is not managed by this copy of Textpattern</li>
-    <li>your server requires some changes to <code>.htaccess</code> in order to make clean URLs work</li>
-    <li>your server doesn’t support clean URLs at all</li>
+    <li>the ‘Site URL’ setting is incorrect, or the page at that address is not managed by this instance of Textpattern</li>
+    <li>the server requires some changes to <code>.htaccess</code> or similar server directive in order to make clean URLs work</li>
+    <li>the server doesn’t support clean URLs at all</li>
 </ul>
-<p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved you will have to use messy URLs on your site instead (<code>http://example.com?s=section&amp;id=4</code>). Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
+<p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved messy URLs (e.g. <code>https://example.com?s=section&amp;id=4</code>) should be used. Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
         ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
-<p>Hide private information for extra security. Recommended for if you want to copy and paste diagnostic information into a publicly viewable document, where exposing server details can potentially pose a security risk.</p>
+<p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpatern support forum, this reduces a security risk by omitting sensitive server information.</p>
         ]]></item>
         <item id="dev_version_live" title="Development code on a live server"><![CDATA[
 <h2>Development code on a live server</h2>
-<p>You are running in-development files on a live production site which is not recommended. If you know this already and are happy to do so, you may ignore this warning.</p>
+<p>In-development versions of Textpattern are not recommended for use on production sites. This warning can be safely ignored if the risks are understood and acceptable.</p>
         ]]></item>
         <item id="dir_not_writable" title="Directory is not writable"><![CDATA[
 <h2>Directory is not writable</h2>
-<p>To use the file and image upload capabilities, these directories have to be writable by PHP. Usually this means you have to change permissions so the web server user has write access to the directory. This can be done with your FTP client, or alternatively on the command line by issuing a <code>chmod 755 /path/to/dir</code> command.</p>
+<p>To use the file and image upload capabilities, these directories must be writable by PHP via the web server user. This can be done with an (S)FTP client, or alternatively on the command line by issuing a <code>chmod 755 /path/to/dir</code> command.</p>
         ]]></item>
         <item id="dns_lookup_fails" title="DNS fails"><![CDATA[
-<h2>DNS fails</h2>
-<p>It appears the URL you specified as the address of your site is unreachable.</p>
+<h2>DNS lookup failed</h2>
+<p>It appears the URL specified as the address of the site is unreachable.</p>
         ]]></item>
         <item id="file_uploads_disabled" title="File uploads are disabled"><![CDATA[
 <h2>File uploads are disabled</h2>
-<p>Your current server configuration shows that file uploads are disabled so you will not be able to upload using Textpattern’s ‘Files’ and/or ‘Images’ panel. Please check and alter the <code>file_uploads</code> setting in <code>php.ini</code> (or ask your host to alter it).</p>
+<p>The current server configuration indicates that file uploads are disabled. Please check and alter the <code>file_uploads</code> setting in <code>php.ini</code> or consult the site host for assistance.</p>
         ]]></item>
         <item id="htaccess_missing" title=".htaccess file missing"><![CDATA[
 <h2>.htaccess file missing</h2>
-<p>You are using a permanent link mode which requires an <code>.htaccess</code> file to be placed in your site root directory. The recommended directives are:</p>
-<pre><code>&lt;IfModule mod_rewrite.c&gt;
+<p>A permanent link mode which requires an <code>.htaccess</code> file is being used, and the file cannot be found. The file is included with Textpattern and resides in the Textpattern root, alongside <code>index.php</code> and the <code>textpattern</code> directory. The recommended directives are:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
     RewriteEngine On
     #RewriteBase /relative/web/path/
+
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^(.+) - [PT,L]
+
     RewriteCond %{REQUEST_URI} !=/favicon.ico
     RewriteRule ^(.*) index.php
+
     RewriteCond %{HTTP:Authorization}  !^$
     RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
-&lt;/IfModule&gt;</code></pre>
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
         ]]></item>
         <item id="index_inaccessible" title="Site index inaccessible"><![CDATA[
 <h2>Site index inaccessible</h2>
-<p>The main <code>index.php</code> file specified as the index for your site is unreadable by the server. Please check permissions.</p>
+<p>The root <code>index.php</code> file specified as the index for the site is unreadable by the server. Please check its existence and permissions.</p>
         ]]></item>
         <item id="missing_files" title="Missing files"><![CDATA[
 <h2>Missing files</h2>
-<p>Some essential files are missing from your Textpattern installation. Ensure that all the listed files are present on your server and are in the correct locations.</p>
+<p>One or more essential files are missing from Textpattern. Ensure that all the listed files are present on the server and are in the correct locations.</p>
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite missing"><![CDATA[
 <h2>Apache mod_rewrite missing</h2>
-<p>Apache’s <code>mod_rewrite</code> module is not installed, or installed but not enabled. This is recommended for Textpattern to function correctly. Please check your <code>.htaccess</code> file is set up correctly, or contact your host for assistance.</p>
+<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site's host for assistance.</p>
         ]]></item>
         <item id="modified_files" title="Modified files"><![CDATA[
 <h2>Modified files</h2>
-<p>Files are determined to be modified if their respective checksum differs from the known-good checksum list. If any files in the Textpattern installation are different to those expected, the files will be highlighted here. This is not necessarily a problem, but may be worth checking out if you are having problems with the functionality of your site.</p>
+<p>Files are determined to be modified if their respective checksum differs from the known-good checksum list provided with Textpattern. If any files in the Textpattern installation are different to those expected, the files will be highlighted here.</p>
         ]]></item>
         <item id="mysql_table_errors" title="MySQL table errors"><![CDATA[
 <h2>MySQL table errors</h2>
-<p>Something is probably corrupt or otherwise damaged in your MySQL database. If you have access to a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, try repairing the affected table(s).</p>
+<p>There may be some corruption or damage in Textpattern's MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="no_temp_dir" title="No temporary directory defined"><![CDATA[
 <h2>No temporary directory defined</h2>
@@ -290,11 +306,11 @@
         ]]></item>
         <item id="path_to_site_inaccessible" title="Site directory unreadable"><![CDATA[
 <h2>Site directory unreadable</h2>
-<p>The directory containing the <code>index.php</code> file specified as the index for your site is unreadable by the server. Please check permissions.</p>
+<p>The directory containing the root <code>index.php</code> file specified as the index for the site is unreadable by the server. Please check permissions.</p>
         ]]></item>
         <item id="php_version_required" title="Minimum version requirements"><![CDATA[
 <h2>Minimum version requirements</h2>
-<p>Textpattern requires certain functionality present in the PHP programming language and MySQL database server. Please consult the following table to determine the minimum system requirements for the version of Textpattern you have downloaded:</p>
+<p>Textpattern requires certain functionality present in the PHP programming language and MySQL database server. Please consult the following table to determine the minimum system requirements:</p>
 <div class="txp-listtables">
     <table class="txp-list">
         <thead>
@@ -330,26 +346,26 @@
 </div>
 <p>In addition to the above system requirements, the following PHP extensions are required:</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/ref.mysql.php">MySQL <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/ref.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/ref.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>Your <code>php.ini</code> file, either global or local, should contain a <code>date.timezone</code> setting.</p>
+<p>The site's <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
         ]]></item>
         <item id="setup_still_exists" title="Setup directory still exists"><![CDATA[
 <h2>Setup directory still exists</h2>
-<p>When Textpattern has been installed, the <code>textpattern/setup</code> directory and its contents are no longer needed and should be deleted. You will continue to receive this warning until it has been removed, as this can potentially be a security concern.</p>
+<p>When Textpattern has been installed, the <code>textpattern/setup</code> directory and its contents are no longer needed, and should be deleted for security reasons.</p>
         ]]></item>
         <item id="site_url_mismatch" title="Site URL mismatch"><![CDATA[
 <h2>Site URL mismatch</h2>
-<p>The Site URL as set in the ‘Preferences’ panel does not match the actual URL you use to visit your website.</p>
-<p>If your website can be reached through multiple different URLs, or if the links on your Textpattern powered website all function correctly, you can safely ignore this warning.</p>
-<p>Otherwise, you are advised to correct the ‘Site URL’ setting in Admin Preferences. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
+<p>The Site URL as set in the ‘Preferences’ panel does not match the actual URL used to visit the site.</p>
+<p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this messaged can be safely ignored.</p>
+<p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="PHP functions […] are disabled on your server"><![CDATA[
 <h2>PHP functions […] are disabled on your server</h2>
-<p>This means your hosting company or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
-<p>Please consult the <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
+<p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
+<p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
         <item id="textpattern_version_update" title="Textpattern CMS version update"><![CDATA[
 <h2>Textpattern CMS version update</h2>
@@ -435,7 +451,7 @@
 <h2>Install Textpack</h2>
 <p>Paste additional language strings for your site into this box and select ‘Upload’ to install them.</p>
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
-<p>International authors may then translate these packs as necessary and redistribute the localised content to the community.</p>
+<p>Translators may then translate these packs as necessary and redistribute the localised content to the community.</p>
         ]]></item>
     </group>
 
@@ -472,14 +488,14 @@
 
     <group id="prefs" title="Preferences panel">
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
-<h1>Use admin-side plugins?</h1>
+<h2>Use admin-side plugins?</h2>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
-<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="http://docs.textpattern.io/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="http://docs.textpattern.io/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> site.</p>
+<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.io/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.io/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> site.</p>
         ]]></item>
         <item id="allow_article_php_scripting" title="Allow PHP in articles?"><![CDATA[
 <h2>Allow PHP in articles?</h2>
-<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
-<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
+<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="Allow form override?"><![CDATA[
 <h2>Allow form override?</h2>
@@ -488,7 +504,7 @@
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page and form templates.</p>
-<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Archive date format"><![CDATA[
 <h2>Archive date format</h2>
@@ -503,28 +519,28 @@
 <p>This setting will attach a automatically-generated version of the article title to the URL. It is either generated automatically or can be manually overridden in ‘URL-only title’ when editing an article.</p>
 <p>The setting will only have an effect when you are using clean URLs. For certain languages this may result in long and ugly URLs, in which case you probably want to set this to ‘Off’.</p>
         ]]></item>
-        <item id="auto_dst" title="Automatically adjust Daylight Saving Time setting?"><![CDATA[
-<h2>Automatically adjust Daylight Saving Time setting?</h2>
+        <item id="auto_dst" title="Automatically adjust Daylight Saving Time?"><![CDATA[
+<h2>Automatically adjust Daylight Saving Time?</h2>
 <p>This setting allows Textpattern to alter when DST (Daylight Savings Time) occurs in your locale. If this is set to ‘No’, you will be able to change the ‘DST enabled’ preference manually.</p>
         ]]></item>
         <item id="comment_means_site_updated" title="New comment means site updated?"><![CDATA[
 <h2>New comment means site updated?</h2>
 <p>The Textpattern database keeps track of when the most recent change to your site took place. When this setting is set to ‘Yes’, a new comment will also update this value. This value is used for example for <code>"Send Last-Modified header"</code> functionality.</p>
         ]]></item>
-        <item id="comment_nofollow" title="Apply rel=nofollow to comments?"><![CDATA[
-<h2>Apply rel=nofollow to comments?</h2>
+        <item id="comment_nofollow" title="Apply rel=&quot;nofollow&quot; to comments?"><![CDATA[
+<h2>Apply rel="nofollow" to comments?</h2>
 <p>If set to ‘Yes’, this will add an additional attribute to the links made in comments. It is intended to be a measure that takes away the incentive for comment spammers and was initiated by a range of search engines and software developers. You can find out more by reading <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’s announcement <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p><strong>Note:</strong> This setting does not influence the functionality of your site. It may prevent or diminish the influence of your comments when some search engines rank sites linked to from those comments.</p>
         ]]></item>
         <item id="comments_are_ol" title="Present comments as a numbered list?"><![CDATA[
 <h2>Present comments as a numbered list?</h2>
 <p>Determines whether article comments will be wrapped with the HTML <code>&lt;ol&gt;</code> tag and individual comments will be wrapped in the <code>&lt;li&gt;</code> tag (causing comments to be presented as a numbered list), or whether individual comments will be wrapped with the <code>&lt;div&gt;</code> tag instead.</p>
-<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, found in the <code>comments_display</code> form.</p>
+<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, found in the <code>comments_display</code> form.</p>
         ]]></item>
         <item id="comments_auto_append" title="Automatically append comments to articles?"><![CDATA[
 <h2>Automatically append comments to articles?</h2>
 <p>This setting determines whether comments and the comment form are automatically appended to all individual articles (by automatically including the contents of the <code>comments_display</code> form).</p>
-<p>The majority of the time, you will want this set to ‘No’, as this allows greater flexibility to the positioning of your comments in your site design. You will need to add the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> manually in any article-based templates where you want comments to appear.</p>
+<p>The majority of the time, you will want this set to ‘No’, as this allows greater flexibility to the positioning of your comments in your site design. You will need to add the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> manually in any article-based templates where you want comments to appear.</p>
 <p>If you are experiencing duplicate display of comments in an article, then chances are your templates have the <code>&lt;txp:comments /&gt;</code> tag in a template but also have ‘Automatically append comments to articles?’ set to ‘Yes’ too.</p>
         ]]></item>
         <item id="comments_dateformat" title="Comments date format"><![CDATA[
@@ -546,8 +562,8 @@
 <h2>Comments disabled after</h2>
 <p>Use this to set the amount of time after which commenting will be turned off for articles (can be set to ‘Never’ to allow indefinite time to comment).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Strip user images from comments?"><![CDATA[
-<h2>Strip user images from comments?</h2>
+        <item id="comments_disallow_images" title="Strip commenter‘s images from comments?"><![CDATA[
+<h2>Strip commenter‘s images from comments?</h2>
 <p>With this option set to ‘Yes’, any images included in comments will be stripped out.</p>
         ]]></item>
         <item id="comments_mode" title="Comments mode"><![CDATA[
@@ -566,7 +582,7 @@
         ]]></item>
         <item id="comments_require_email" title="Comments require user’s email address?"><![CDATA[
 <h2>Comments require user’s email address?</h2>
-<p>If set to ‘Yes’, people that want to comment on your article will have to enter an email address in the comment write form. They will be unable to post a comment if they do not supply an email address.</p>
+<p>If set to ‘Yes’, people that want to comment on your article will have to enter an email address in the comment input form. They will be unable to post a comment if they do not supply an email address.</p>
         ]]></item>
         <item id="comments_require_name" title="Comments require commenter’s name?"><![CDATA[
 <h2>Comments require commenter’s name?</h2>
@@ -588,6 +604,16 @@
     <li>extended block syntax (<code>bc..</code>, <code>bq..</code>, etc.)</li>
 </ul>
 <p><strong>Note:</strong> For security reasons, raw HTML is transformed into regular text.</p>
+        ]]></item>
+        <item id="custom_overview" title="Custom fields"><![CDATA[
+<h2>Custom fields</h2>
+<p>Custom fields are used to hold additional article data. You may define up to ten by giving them a name here. Each will appear as a separate field on the Write panel, to permit custom data to be associated with each article.</p>
+<p>You may name the fields in any manner you wish, but be aware of the following:</p>
+<ul>
+<li>Using spaces improves legibility on the Write panel, but the fields may then <em>not</em> be used as sorting or filtering parameters in an article_custom tag. Consider underscores instead if you wish to use this functionality.</li>
+<li>Be careful when naming fields that they do not clash with reserved field names in Textpattern. For example, do not use <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, etc as you will obtain strange results or broken sites.</li>
+<li>Data in each field is limited to 255 characters of text only.</li>
+</ul>
         ]]></item>
         <item id="dateformat" title="Date format"><![CDATA[
 <h2>Date format</h2>
@@ -617,10 +643,10 @@
         ]]></item>
         <item id="doctype" title="Doctype"><![CDATA[
 <h2>Doctype</h2>
-<p>Select which HTML doctype you wish to use (either HTML5 or XHTML). This affects comment input forms, Textile rendering of <code>&lt;abbr&gt;</code> or <code>&lt;acronym&gt;</code>, and <code>&lt;link&gt;</code> tags generated by <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>Select which HTML doctype you wish to use (either HTML5 or XHTML). This affects comment input forms, Textile rendering of <code>&lt;abbr&gt;</code> or <code>&lt;acronym&gt;</code>, and <code>&lt;link&gt;</code> tags generated by <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
-        <item id="enable_short_tags" title="Enable short tags"><![CDATA[
-<h2>Enable short tags</h2>
+        <item id="enable_short_tags" title="Enable short tag support?"><![CDATA[
+<h2>Enable short tag support?</h2>
 <p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the <code>txp:</code> may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
 <ul>
     <li><code>&lt;txp:article_id /&gt;</code> becomes <code>&lt;article::id /&gt;</code></li>
@@ -634,7 +660,7 @@
     <li>Remove the <code>txp:</code> prefix.</li>
     <li>Swap the first occurrence of the underscore for <code>::</code>.</li>
 </ol>
-<p>Note that setting this preference in no way affects the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+<p>Note that setting this preference does not affect the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
         <item id="enable_xmlrpc_server" title="Enable XML-RPC server?"><![CDATA[
 <h2>Enable XML-RPC server?</h2>
@@ -663,8 +689,8 @@
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>images</code>.</p>
         ]]></item>
-        <item id="include_email_atom" title="Include email in Atom feeds?"><![CDATA[
-<h2>Include email in Atom feeds?</h2>
+        <item id="include_email_atom" title="Include email address in Atom feeds?"><![CDATA[
+<h2>Include email address in Atom feeds?</h2>
 <p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
         ]]></item>
         <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
@@ -679,6 +705,8 @@
     <li><strong>Referrers only:</strong> Textpattern will only log visits referred from other sites</li>
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
+<p>If you enable logging of any kind, visitor IP address information will be collected if the browser provides it. Please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
+<p>It is strongly advised that you leave this setting at its default, ‘None’, unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
 <h2>Maximum URL length (in characters)</h2>
@@ -688,8 +716,8 @@
 <h2>Display admin-side inline help links?</h2>
 <p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to ‘None’.</p>
         ]]></item>
-        <item id="never_display_email" title="Hide commenter email address?"><![CDATA[
-<h2>Hide commenter email address?</h2>
+        <item id="never_display_email" title="Hide commenter‘s email address?"><![CDATA[
+<h2>Hide commenter‘s email address?</h2>
 <p>This setting controls whether the email address of a commenter should be shown publicly.</p>
 <p>It’s recommended that email addresses should not be shown, as courtesy to your users, but there may be certain situations when showing commenter email addresses is desirable.</p>
         ]]></item>
@@ -704,15 +732,15 @@
 <p>When an article is published, its URL is generated from the article title unless a specific URL is provided in in the URL-only title field.</p>
 <p>Take the following example article title: <em>Ann and Bob eat cake</em></p>
 <p>When permalink title URL pattern option is set to ‘Hyphenated (title-like-this)’, the URL for the article would be:</p>
-<pre><code>http://example.com/ann-and-bob-eat-cake</code></pre>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
 <p>When permalink title URL pattern option is set to ‘Intercapped (TitleLikeThis)’, the URL for the article would be:</p>
-<pre><code>http://example.com/AnnandBobeatcake</code></pre>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
         ]]></item>
-        <item id="permlink_mode" title="URL pattern"><![CDATA[
-<h2>URL pattern</h2>
-<p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        <item id="permlink_mode" title="Article URL pattern"><![CDATA[
+<h2>Article URL pattern</h2>
+<p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
-<pre><code>http://example.com/index.php?id=123</code></pre>
+<pre><code>https://example.com/index.php?id=123</code></pre>
 <p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
@@ -753,7 +781,7 @@
         ]]></item>
         <item id="publish_expired_articles" title="Publish expired articles?"><![CDATA[
 <h2>Publish expired articles?</h2>
-<p>When set to ‘Yes’, expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
+<p>When set to ‘Yes’, expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
 <p>When set to ‘No’, expired articles will be removed from the public site and return a "410 Gone" HTTP status instead. The default setting is ‘No’.</p>
         ]]></item>
         <item id="publisher_email" title="Send login details from this email address"><![CDATA[
@@ -766,8 +794,8 @@
 <p>This is the maximum number of current articles to be syndicated at a time, in RSS and Atom formats.</p>
 <p>A low value, such as <code>5</code> through <code>15</code> is recommended.</p>
         ]]></item>
-        <item id="send_lastmod" title="Send Last-Modified Header?"><![CDATA[
-<h2>Send Last-Modified Header?</h2>
+        <item id="send_lastmod" title="Send &quot;Last-Modified&quot; header?"><![CDATA[
+<h2>Send "Last-Modified" header?</h2>
 <p>When set, Textpattern will read a visitor’s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor’s browser to use its cached version of the page.</p>
 <p>This can reduce bandwidth consumption, page load times, and web server load.</p>
         ]]></item>
@@ -777,11 +805,11 @@
         ]]></item>
         <item id="site_slogan" title="Site slogan"><![CDATA[
 <h2>Site slogan</h2>
-<p>The <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
+<p>The <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
         ]]></item>
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>
-<p>The <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
+<p>The <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
         ]]></item>
         <item id="siteurl" title="Site URL"><![CDATA[
 <h2>Site URL</h2>
@@ -795,10 +823,10 @@
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
-<p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you’ve installed Textpattern (i.e. if your website is <code>http://example.com</code>, you might use <code>you@example.com</code>).</p>
+<p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you’ve installed Textpattern (i.e. if your website is <code>https://example.com</code>, you might use <code>you@example.com</code>).</p>
 <p>For those interested in the technical details:</p>
 <ul>
-    <li>On UNIX/Mac OS servers, the entered email address is used as the 4th parameter (prefixed with "-f") for the PHP <code>mail()</code> function</li>
+    <li>On UNIX-like/macOS servers, the entered email address is used as the 4th parameter (prefixed with "-f") for the PHP <code>mail()</code> function</li>
     <li>On Windows servers, the entered email address is used to set (or override) the <code>sendmail_from</code> php.ini setting</li>
 </ul>
 <p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you’ve entered here, which is a requirement for sending email on some web servers.</p>
@@ -810,7 +838,7 @@
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
-<h2>Syndicate article excerpt only?</h2>
+<h2>Syndicate article excerpt <strong>only?</strong></h2>
 <p>If this is set to ‘No’, feed items will contain the full article bodies.</p>
 <p>If this is set to ‘Yes’, feed items will contain the article excerpt instead of the article body where it is available.</p>
         ]]></item>
@@ -832,12 +860,8 @@
 <h2>Accept comments?</h2>
 <p>This sets whether Textpattern’s commenting functionality should be enabled or disabled.</p>
         ]]></item>
-        <item id="use_dns" title="Use DNS lookup in visitor logs?"><![CDATA[
-<h2>Use DNS lookup in visitor logs?</h2>
-<p>This setting only has an effect when ‘Logging’ is turned on. Using DNS will, where possible, translate IP addresses in your logs to hostnames. In some instances this might slow down your site, in which case you might want to set this to ‘No’.</p>
-        ]]></item>
-        <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs?"><![CDATA[
-<h2>Use email address to construct feed IDs?</h2>
+        <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs (default is site URL)?"><![CDATA[
+<h2>Use email address to construct feed IDs (default is site URL)?</h2>
 <p>Items in an Atom feed require a unique ID.</p>
 <p>To generate IDs unique to your site, Textpattern allows you to choose between either an email address or your domain name to include in these IDs. The email address will be the first one used when creating the site. Unless you are likely to be changing your domain name in the future, it is probably safe to set this to ‘No’.</p>
         ]]></item>
@@ -860,8 +884,8 @@
 <p>For most websites, only a bare minimum of sections need be created.</p>
 <h3>A likely scenario for a website with three sections:</h3>
 <ol>
-    <li><strong>Archive:</strong> The ‘Section’ to which all articles that appear on the front page belong. Whenever a reader clicks on an article’s permanent link, it will be displayed in the page layout assigned to this ‘Section’. To go to a paged list of the most recent articles assigned to the section "Archive", the URL would be <code>http://example.com/archive/</code>.</li>
-    <li><strong>About:</strong> An ‘about this site’ page, which differs from the front page and the "Archive" section, in that it is more static, may have a different layout, and will likely contain only one article. The ‘About’ section would be reached at <code>http://example.com/about/</code>.</li>
+    <li><strong>Archive:</strong> The ‘Section’ to which all articles that appear on the front page belong. Whenever a reader clicks on an article’s permanent link, it will be displayed in the page layout assigned to this ‘Section’. To go to a paged list of the most recent articles assigned to the section "Archive", the URL would be <code>https://example.com/archive/</code>.</li>
+    <li><strong>About:</strong> An ‘about this site’ page, which differs from the front page and the "Archive" section, in that it is more static, may have a different layout, and will likely contain only one article. The ‘About’ section would be reached at <code>https://example.com/about/</code>.</li>
     <li><strong>Photos:</strong> A ‘Section’ whose differing layout (and possibly different CSS) would display photos instead of articles.</li>
 </ol>
 <p>Note that a special hidden section, named default, always exists. This default section uses the page named default and the style called default, and it constructs the front page of your site.</p>
@@ -980,10 +1004,10 @@
 <p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
 <h3>Previewing theme assets</h3>
 <p>All the while you are working on a theme, Textpattern will permit you (and only you) to preview the assets in that theme. Just visit the public website while you are still logged in to the administration area. Provided Textpattern can locate an asset with the same name as the one that is already assigned to the public Section of the site you are visiting, it will show you what your site will look like by using the working theme as a preview.</p>
-<p>This allows you to rapidly see changes to your theme's assets and continue to alter items prior to making them available to the public. At any time, switching your working theme from the administration area will allow you to preview those assets.</p>
+<p>This allows you to rapidly see changes to your theme‘s assets and continue to alter items prior to making them available to the public. At any time, switching your working theme from the administration area will allow you to preview those assets.</p>
 <p>When you are satisfied with the results, assign assets from any theme(s) to one or more Sections of your site. This will make those assets live, and visible to any site visitors.</p>
 <h3>Exporting and importing</h3>
-<p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool's <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
+<p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool‘s <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
 <p>Once there, you can package it up and distribute it. Others may unpackage themes into their own directory and use the <em>import</em> tool to bring the assets into their database. From there, they may switch to the theme and use that as their working theme, permitting preview of assets within the site and, ultimately, assignment of assets to Sections as described above.</p>
 <p>The ability to export themes also allows you to make a backup, edit asset contents on disk in your text editor and/or apply version control to them. Remember: there is <em>no link</em> between your public site and the disk-based version of your assets. In order for visitors to see the changes, you must first import alterations into your database and ensure that one or more Sections are using the assets from the theme.</p>
         ]]></item>

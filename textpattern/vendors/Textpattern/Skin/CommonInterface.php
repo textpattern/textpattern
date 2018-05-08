@@ -35,6 +35,22 @@ namespace Textpattern\Skin {
     interface CommonInterface
     {
         /**
+         * $event property getter.
+         *
+         * @return string $this->event Class related textpack string (usually the event name).
+         */
+
+        public function getEvent();
+
+        /**
+         * $mimeTypes property getter.
+         *
+         * @return $this->mimeTypes The asset related mimeTypes array.
+         */
+
+        public function getMimeTypes();
+
+        /**
          * $names property setter/sanitizer.
          *
          * @param  array  $names Multiple skin or template names to work with related methods.

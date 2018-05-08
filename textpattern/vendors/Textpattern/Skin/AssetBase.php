@@ -160,9 +160,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get essential templates infos form the $essential property value.
+         * Get essential templates infos from the $essential property value.
          *
-         * @param  string $key      $essential property key for whhich you want to get the value.
+         * @param  string $key      $essential property key for which you want to get the value.
          * @param  string $whereKey $essential property key to check against the $valueIn value.
          * @param  array  $valueIn  Values to check against the $whereKey values.
          * @return array            $essential property value if $key is null, filtered infos otherwise.
@@ -220,7 +220,7 @@ namespace Textpattern\Skin {
          * @return string static::$dir.
          */
 
-        protected static function getDir()
+        public static function getDir()
         {
             return static::$dir;
         }
@@ -300,7 +300,10 @@ namespace Textpattern\Skin {
         {
             $dirPath = self::getSubdirField() ? $this->getSubdirPath($name) : $this->getDirPath();
 
-            return $dirPath.DS.$this->getName().'.'.self::getExtension();
+            $name = $this->getName();
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+
+            return $dirPath.DS.$name.(isset(static::$mimeTypes[$extension]) ? '' : '.'.self::getExtension());
         }
 
         /**
@@ -361,7 +364,9 @@ namespace Textpattern\Skin {
 
             if ($path === null) {
                 $subdirField = $this->getSubdirField();
-                $file = $this->getName().'.'.self::getExtension();
+                $name = $this->getName();
+                $extension = pathinfo($name, PATHINFO_EXTENSION);
+                $file = $name.(isset(static::$mimeTypes[$extension]) ? '' : '.'.self::getExtension());
 
                 if ($subdirField) {
                     $path = $infos[$subdirField].DS.$file;
@@ -445,6 +450,7 @@ namespace Textpattern\Skin {
             $rows = $row = array();
             $subdirField = self::getSubdirField();
             $event = $this->getEvent();
+            $extension = self::getExtension();
 
             $parsed = $parsedFiles = $names = array();
 
@@ -454,7 +460,8 @@ namespace Textpattern\Skin {
 
                 foreach ($files as $file) {
                     $filename = $file->getFilename();
-                    $name = pathinfo($filename, PATHINFO_FILENAME);
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    $name = $ext == $extension ? pathinfo($filename, PATHINFO_FILENAME) : $filename;
 
                     if ($subdirField) {
                         $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
@@ -510,7 +517,8 @@ namespace Textpattern\Skin {
             $hasSubdir = self::getSubdirField();
 
             foreach ($this->getNames() as $name) {
-                $filenames[] = $name.'.'.$extension;
+                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                $filenames[] = $name.(isset(static::$mimeTypes[$ext]) ? '' : '.'.$extension);
             }
 
             $files = $this->getFiles($filenames, $hasSubdir ? 1 : 0);
@@ -519,11 +527,13 @@ namespace Textpattern\Skin {
                 $notRemoved = $subdirPaths = array();
 
                 foreach ($files as $file) {
-                    $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+                    $name = $file->getFilename();
+                    $ext = pathinfo($name, PATHINFO_EXTENSION);
+                    isset(static::$mimeTypes[$ext]) or $name = pathinfo($name, PATHINFO_FILENAME);
 
                     $this->setName($name);
 
-                    if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
+                    if (!$nameNotIn || !in_array($name, $nameNotIn)) {
                         unlink($file->getPathname()) or $notRemoved[] = $name;
 
                         !$hasSubdir or $subdirPaths[] = $file->getPath();
@@ -577,7 +587,8 @@ namespace Textpattern\Skin {
                     $extension = self::getExtension();
 
                     foreach ($this->getNames() as $name) {
-                        $filenames[] = $name.'.'.$extension;
+                        $ext = pathinfo($name, PATHINFO_EXTENSION);
+                        $filenames[] = $name.(isset(static::$mimeTypes[$ext]) ? '' : '.'.$extension);
                     }
 
                     $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
@@ -668,15 +679,15 @@ namespace Textpattern\Skin {
                                     $done[] = $name;
                                 }
                             }
+                        }
+                    }
 
-                            // Drops extra files…
-                            if ($sync && isset($done)) {
-                                $notUnlinked = $this->deleteExtraFiles($done);
+                    // Drops extra files…
+                    if ($sync && isset($done)) {
+                        $notUnlinked = $this->deleteExtraFiles($done);
 
-                                if ($notUnlinked) {
-                                    $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
-                                }
-                            }
+                        if ($notUnlinked) {
+                            $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
                         }
                     }
                 }
