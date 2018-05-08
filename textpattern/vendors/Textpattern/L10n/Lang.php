@@ -543,7 +543,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // will have either the 'site' owner or their own plugin name.
             // Longer term, when all plugins have caught up with the event
             // naming convention, the owner clause can be removed.
-            $where[] = "(event IN (".join(',', quote_list((array) $events)).") OR owner != '')";
+            $where[] = "(event IN (".join(',', quote_list((array) $events)).")".(version_compare(get_pref('version'), '4.6.0', '>=') ? " OR owner != '')" : ')');
         }
 
         $out = array();

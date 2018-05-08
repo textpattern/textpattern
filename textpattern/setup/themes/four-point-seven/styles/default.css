@@ -113,11 +113,16 @@ nav ol::after,
   .site-header {
     padding: 1em 0;
   }
-  .site-header h1 {
+  .site-header h2 {
     margin: 0;
   }
   .site-header h3 {
     margin: 0.5em 0 0;
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: normal;
+    line-height: 1.4;
   }
   /**
  * Additional styling for child content within site footer.
@@ -332,10 +337,10 @@ nav ol::after,
     line-height: 1.1842105;
   }
   h2 {
-    margin: 0.8em 0;
-    font-size: 1.875rem;
+    margin: 0.75em 0;
+    font-size: 2rem;
     letter-spacing: -0.25px;
-    line-height: 1.2666667;
+    line-height: 1.25;
   }
   h3 {
     margin: 1em 0;
@@ -1595,3 +1600,4 @@ nav ol::after,
     page-break-inside: avoid;
   }
 }
+

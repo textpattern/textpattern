@@ -76,7 +76,7 @@ function log_list($message = '')
     if ($sort === '') {
         $sort = get_pref('log_sort_column', 'time');
     } else {
-        if (!in_array($sort, array('ip', 'host', 'page', 'refer', 'method', 'status'))) {
+        if (!in_array($sort, array('page', 'refer', 'method', 'status'))) {
             $sort = 'time';
         }
 
@@ -95,12 +95,6 @@ function log_list($message = '')
     safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL $expire_logs_after DAY)");
 
     switch ($sort) {
-        case 'ip':
-            $sort_sql = "ip $dir";
-            break;
-        case 'host':
-            $sort_sql = "host $dir";
-            break;
         case 'page':
             $sort_sql = "page $dir";
             break;
@@ -124,13 +118,9 @@ function log_list($message = '')
     $search = new Filter(
         $event,
         array(
-            'ip' => array(
-                'column' => 'txp_log.ip',
-                'label'  => 'IP',
-            ),
-            'host' => array(
-                'column' => 'txp_log.host',
-                'label'  => gTxt('host'),
+            'time' => array(
+                'column' => 'txp_log.time',
+                'label'  => gTxt('time'),
             ),
             'page' => array(
                 'column' => 'txp_log.page',
@@ -158,12 +148,9 @@ function log_list($message = '')
 
     $total = safe_count('txp_log', "$criteria");
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading')),
-            'div',
-            array('class' => 'txp-layout-4col-alt')
-        );
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     $searchBlock =
         n.tag(
@@ -175,222 +162,160 @@ function log_list($message = '')
             )
         );
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
+    $contentBlock ='';
 
     if ($total < 1) {
-        if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo $contentBlockStart.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_refers_recorded'),
-                    array('class' => 'alert-block information')
-                );
-        }
-
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
-
-        return;
-    }
-
-    $paginator = new \Textpattern\Admin\Paginator();
-    $limit = $paginator->getLimit();
-
-    list($page, $offset, $numPages) = pager($total, $limit, $page);
-
-    echo $searchBlock.$contentBlockStart;
-
-    $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(time) AS uTime",
-        'txp_log',
-        "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-    );
-
-    if ($rs) {
-        echo n.tag_start('form', array(
-                'class'  => 'multi_edit_form',
-                'id'     => 'log_form',
-                'name'   => 'longform',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '',
-                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                ).
-                column_head(
-                    'time',
-                    'time',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
-                ).
-                column_head(
-                    'IP',
-                    'ip',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
-                ).
-                column_head(
-                    'host',
-                    'host',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
-                ).
-                column_head(
-                    'page',
-                    'page',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
-                ).
-                column_head(
-                    'referrer',
-                    'refer',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
-                ).
-                column_head(
-                    'method',
-                    'method',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
-                ).
-                column_head(
-                    'status',
-                    'status',
-                    'log',
-                    true,
-                    $switch_dir,
-                    $crit,
-                    $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
-                )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
-
-        while ($a = nextRow($rs)) {
-            extract($a, EXTR_PREFIX_ALL, 'log');
-
-            if ($log_refer) {
-                $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)), txpspecialchars($log_refer), ' target="_blank"');
-            }
-
-            if ($log_page) {
-                $log_anchor = preg_replace('/\/$/', '', $log_page);
-                $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-
-                $log_page = href(txpspecialchars($log_anchor), txpspecialchars($log_page), ' target="_blank"');
-
-                if ($log_method == 'POST') {
-                    $log_page = strong($log_page);
-                }
-            }
-
-            echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $log_id),
-                    '',
-                    'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    gTime($log_uTime),
-                    '',
-                    ' class="txp-list-col-time" scope="row"'
-                ).
-                td(
-                    href(txpspecialchars($log_ip), 'https://whois.domaintools.com/'.rawurlencode($log_ip), array(
-                        'rel'    => 'external',
-                        'target' => '_blank',
-                    )),
-                    '',
-                    'txp-list-col-ip'
-                ).
-                td(
-                    txpspecialchars($log_host),
-                    '',
-                    'txp-list-col-host'
-                ).
-                td(
-                    $log_page,
-                    '',
-                    'txp-list-col-page'
-                ).
-                td(
-                    $log_refer,
-                    '',
-                    'txp-list-col-refer'
-                ).
-                td(
-                    txpspecialchars($log_method),
-                    '',
-                    'txp-list-col-method'
-                ).
-                td(
-                    $log_status,
-                    '',
-                    'txp-list-col-status'
-                )
+        $contentBlock .=
+            graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt($criteria == 1 ? 'no_refers_recorded' : 'no_results_found'),
+                array('class' => 'alert-block information')
             );
-        }
+    } else {
+        $rs = safe_rows_start(
+            "*, UNIX_TIMESTAMP(time) AS uTime",
+            'txp_log',
+            "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
 
-        echo
-            n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            log_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-            n.tag_start('div', array(
-                'class' => 'txp-layout-cell-row txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            $paginator->render().
-            nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
+        if ($rs) {
+            $contentBlock .= n.tag_start('form', array(
+                    'class'  => 'multi_edit_form',
+                    'id'     => 'log_form',
+                    'name'   => 'longform',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
+                tr(
+                    hCell(
+                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                            '',
+                        ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    ).
+                    column_head(
+                        'time',
+                        'time',
+                        'log',
+                        true,
+                        $switch_dir,
+                        $crit,
+                        $search_method,
+                            (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
+                    ).
+                    column_head(
+                        'page',
+                        'page',
+                        'log',
+                        true,
+                        $switch_dir,
+                        $crit,
+                        $search_method,
+                            (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
+                    ).
+                    column_head(
+                        'referrer',
+                        'refer',
+                        'log',
+                        true,
+                        $switch_dir,
+                        $crit,
+                        $search_method,
+                            (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
+                    ).
+                    column_head(
+                        'method',
+                        'method',
+                        'log',
+                        true,
+                        $switch_dir,
+                        $crit,
+                        $search_method,
+                            (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
+                    ).
+                    column_head(
+                        'status',
+                        'status',
+                        'log',
+                        true,
+                        $switch_dir,
+                        $crit,
+                        $search_method,
+                            (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    )
+                ).
+                n.tag_end('thead').
+                n.tag_start('tbody');
+
+            while ($a = nextRow($rs)) {
+                extract($a, EXTR_PREFIX_ALL, 'log');
+
+                if ($log_refer) {
+                    $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)), txpspecialchars($log_refer), ' target="_blank"');
+                }
+
+                if ($log_page) {
+                    $log_anchor = preg_replace('/\/$/', '', $log_page);
+                    $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
+                    $log_page = href(txpspecialchars($log_anchor), txpspecialchars($log_page), ' target="_blank"');
+
+                    if ($log_method == 'POST') {
+                        $log_page = strong($log_page);
+                    }
+                }
+
+                $contentBlock .= tr(
+                    td(
+                        fInput('checkbox', 'selected[]', $log_id),
+                        '',
+                        'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        gTime($log_uTime),
+                        '',
+                        ' class="txp-list-col-time" scope="row"'
+                    ).
+                    td(
+                        $log_page,
+                        '',
+                        'txp-list-col-page'
+                    ).
+                    td(
+                        $log_refer,
+                        '',
+                        'txp-list-col-refer'
+                    ).
+                    td(
+                        txpspecialchars($log_method),
+                        '',
+                        'txp-list-col-method'
+                    ).
+                    td(
+                        $log_status,
+                        '',
+                        'txp-list-col-status'
+                    )
+                );
+            }
+
+            $contentBlock .=
+                n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div'). // End of .txp-listtables.
+                log_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                tInput().
+                n.tag_end('form');
+        }
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    $createBlock = '';
+    $pageBlock = $paginator->render().
+        nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_logs'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**

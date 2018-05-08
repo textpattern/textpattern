@@ -185,7 +185,7 @@ namespace Textpattern\Skin {
         /**
          * $mimeTypes property getter.
          *
-         * @return $this->skin The asset related skin object.
+         * @return $this->mimeTypes The asset related mimeTypes array.
          */
 
         public function getMimeTypes()
