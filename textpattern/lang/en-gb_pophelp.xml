@@ -860,10 +860,6 @@
 <h2>Accept comments?</h2>
 <p>This sets whether Textpattern’s commenting functionality should be enabled or disabled.</p>
         ]]></item>
-        <item id="use_dns" title="Use DNS lookup in visitor logs?"><![CDATA[
-<h2>Use DNS lookup in visitor logs?</h2>
-<p>This setting only has an effect when ‘Logging’ is turned on. Using DNS will, where possible, translate IP addresses in your logs to hostnames. In some instances this might slow down your site, in which case you might want to set this to ‘No’.</p>
-        ]]></item>
         <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs (default is site URL)?"><![CDATA[
 <h2>Use email address to construct feed IDs (default is site URL)?</h2>
 <p>Items in an Atom feed require a unique ID.</p>
