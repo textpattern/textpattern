@@ -57,11 +57,13 @@ Changes in 4.7.0 (in development)
 * Changed: Forms can recursively (up to 15 levels deep) call themselves.
 * Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
   attribute.
+* Changed: Enhanced <txp:article /> sort and status handling.
 * Changed: Enhanced <txp:article_custom /> 'exclude', 'expired', 'month' and
   'time' attributes.
 * Changed: <txp:category_list /> can output nested lists.
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: <txp:image_author /> tag accepts 'id' and 'name' attributes.
+* Changed: <txp:link_to_next/> and <txp:link_to_prev /> are more consistent.
 * Changed: Reinstate <txp:keywords> tag and add 'break', 'class' and 'wraptag'
   attributes.
 * Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
