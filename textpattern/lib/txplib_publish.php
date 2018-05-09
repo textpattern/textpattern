@@ -881,7 +881,7 @@ function filterAtts($atts = null, $iscustom = null)
         $section = ($s && $s != 'default') ? $s : '';
         $author = (!empty($author) ? $author : '');
         $month = (!empty($month) ? $month : '');
-        $expired = get_pref('publish_expired_articles');
+        $theAtts['expired'] = get_pref('publish_expired_articles');
         $theAtts['frontpage'] = ($theAtts['frontpage'] && !$section);
     }
 
