@@ -23,13 +23,6 @@
             <description></description>
         </item>
         <item>
-            <name>reciprocal-affection</name>
-            <type>article</type>
-            <parent>root</parent>
-            <title>Reciprocal affection</title>
-            <description></description>
-        </item>
-        <item>
             <name>textpattern</name>
             <type>link</type>
             <parent>root</parent>
