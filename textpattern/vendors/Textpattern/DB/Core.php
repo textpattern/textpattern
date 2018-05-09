@@ -161,29 +161,37 @@ class Core
             }
         }
 
+        // Legacy pref name, just in case.
+        $permlink_format = get_pref('permalink_title_format', null);
+
+        if ($permlink_format === null) {
+            $permlink_format = get_pref('permlink_format', null);
+        }
+
         $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($language);
 
         $path_to_public_site = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'public' : dirname(txpath);
 
         $pf = array();
-        $pf['file_base_path'] = $path_to_public_site.DS.'files';
-        $pf['path_to_site']   = $path_to_public_site;
-        $pf['tempdir']        = find_temp_dir();
-        $pf['siteurl']        = $siteurl;
-        $pf['theme_name']     = empty($theme_name) ? 'hive' : $theme_name;
-        $pf['blog_mail_uid']  = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
-        $pf['blog_uid']       = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
-        $pf['language']       = $language;
-        $pf['language_ui']    = $language;
-        $pf['locale']         = getlocale($language);
-        $pf['sitename']       = gTxt('my_site');
-        $pf['site_slogan']    = gTxt('my_slogan');
-        $pf['gmtoffset']      = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
-        $pf['permlink_mode']  = empty($permlink_mode) ? 'messy' : $permlink_mode;
-        $pf['sql_now_posted'] = $pf['sql_now_expires'] = $pf['sql_now_created'] = time();
+        $pf['file_base_path']  = $path_to_public_site.DS.'files';
+        $pf['path_to_site']    = $path_to_public_site;
+        $pf['tempdir']         = find_temp_dir();
+        $pf['siteurl']         = $siteurl;
+        $pf['theme_name']      = empty($theme_name) ? 'hive' : $theme_name;
+        $pf['blog_mail_uid']   = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
+        $pf['blog_uid']        = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
+        $pf['language']        = $language;
+        $pf['language_ui']     = $language;
+        $pf['locale']          = getlocale($language);
+        $pf['sitename']        = gTxt('my_site');
+        $pf['site_slogan']     = gTxt('my_slogan');
+        $pf['gmtoffset']       = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
+        $pf['permlink_mode']   = empty($permlink_mode) ? 'messy' : $permlink_mode;
+        $pf['permlink_format'] = $permlink_format;
+        $pf['sql_now_posted']  = $pf['sql_now_expires'] = $pf['sql_now_created'] = time();
         $pf['comments_default_invite'] = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment'
             : gTxt('setup_comment_invite');
-        $pf['default_section']= empty($pref['default_section']) ? safe_field('name', 'txp_section', "name<>'default'")
+        $pf['default_section'] = empty($pref['default_section']) ? safe_field('name', 'txp_section', "name<>'default'")
             : $pref['default_section'];
 
         foreach ($pf as $name => $val) {
@@ -204,7 +212,22 @@ class Core
     {
         global $prefs, $txp_user;
 
-        // Delete old Global/Private prefs
+        // Rename previous Global/Private prefs.
+        $renamed = @json_decode(file_get_contents($this->data_dir.DS.'renamed.prefs'), true);
+
+        if (!empty($renamed['global'])) {
+            foreach ($renamed['global'] as $oldKey => $newKey) {
+                rename_pref($newKey, $oldKey);
+            }
+        }
+
+        if (!empty($deleted['private'])) {
+            foreach ($renamed['private'] as $oldKey => $newKey) {
+                safe_update('txp_prefs', "name = '".doSlash($newKey)."'", "name='".doSlash($oldKey)."' AND user_name != ''");
+            }
+        }
+
+        // Delete old Global/Private prefs.
         $deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true);
 
         if (!empty($deleted['global'])) {
@@ -228,15 +251,17 @@ class Core
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
 
+
                     if ($def['event'] != 'custom' && $def != $row) {
                         @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
                     }
+
                     unset($prefs_check[$name]);
                 }
             }
         }
 
-        // Create missing prefs
+        // Create missing prefs.
         foreach ($prefs_check as $name => $p) {
             $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
             @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
