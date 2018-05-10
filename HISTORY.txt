@@ -1,4 +1,4 @@
-Changes in 4.7.0 (in development)
+Changes in 4.7.0-rc.1
 
 * In memory of Dean Cameron Allen, creator of Textpattern CMS.
 * Textpattern instances older than version 4.2.0 (released 17 Sep 2009) should
