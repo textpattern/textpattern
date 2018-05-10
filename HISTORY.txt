@@ -1,6 +1,8 @@
-Changes in 4.7.0 (as of beta 3)
+Changes in 4.7.0 (in development)
 
-* In memory of Dean Allen, creator of Textpattern CMS.
+* In memory of Dean Cameron Allen, creator of Textpattern CMS.
+* Textpattern instances older than version 4.2.0 (released 17 Sep 2009) should
+  upgrade to version 4.2.0 before upgrading to version 4.7.0.
 * Added: Support for website themes, markup stored within the database (accessed
   via the Themes panel) and available as flat file templates for easier version
   control, portability and installation (many many thanks, NicolasGraph).
@@ -40,6 +42,13 @@ Changes in 4.7.0 (as of beta 3)
 * Added: 'Expire now' checkbox on Write panel.
 * Added: Automatic table of contents generation for well-structured plugin help
   text.
+* Added: JSON-LD and Open Graph metadata scaffold included with default theme.
+* Removed: Involuntary Personally Identifiable Information within comments (IP
+  address) and logs (IP address/host) no longer collected - for GDPR compliance.
+* Removed: Any pre-existing IP addresses stored in comments database table are
+  deleted upon upgrade to 4.7 (and not stored in future) - for GDPR compliance.
+* Changed: Comments 'Remember me?' option is now an opt-in instead of opt-out,
+  setting stored in `localStorage` instead of as a cookie - for GDPR compliance.
 * Changed: Revised multi-site installation routine and symbolic linking (thanks,
   jools-r).
 * Changed: Most panels perform saves/searches/pagination without page
@@ -48,11 +57,13 @@ Changes in 4.7.0 (as of beta 3)
 * Changed: Forms can recursively (up to 15 levels deep) call themselves.
 * Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
   attribute.
+* Changed: Enhanced <txp:article /> sort and status handling.
 * Changed: Enhanced <txp:article_custom /> 'exclude', 'expired', 'month' and
   'time' attributes.
 * Changed: <txp:category_list /> can output nested lists.
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: <txp:image_author /> tag accepts 'id' and 'name' attributes.
+* Changed: <txp:link_to_next/> and <txp:link_to_prev /> are more consistent.
 * Changed: Reinstate <txp:keywords> tag and add 'break', 'class' and 'wraptag'
   attributes.
 * Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use

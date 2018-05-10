@@ -39,8 +39,6 @@ safe_alter('txp_prefs', "MODIFY html  VARCHAR(255) NOT NULL DEFAULT 'text_input'
 // 2) Remove basic/advanced distinction.
 safe_update('txp_prefs', "type = '".PREF_CORE."'", "type = '".PREF_PLUGIN."' AND event IN ($core_ev)");
 
-safe_update('txp_prefs', "name = 'permlink_format', html = 'permlink_format'", "name = 'permalink_title_format'");
-
 // Support for l10n string owners.
 $cols = getThings("DESCRIBE `".PFX."txp_lang`");
 

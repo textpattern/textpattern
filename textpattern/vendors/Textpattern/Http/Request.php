@@ -107,6 +107,14 @@ class Request
     protected $request;
 
     /**
+     * Resolved hostnames.
+     *
+     * @var array
+     */
+
+    protected $hostNames = array();
+
+    /**
      * Constructor.
      *
      * <code>
@@ -366,8 +374,7 @@ class Request
     /**
      * Gets client hostname.
      *
-     * This method resolves client's hostname. It uses Textpattern's visitor
-     * logs as a cache layer.
+     * This method resolves client's hostname.
      *
      * <code>
      * echo Txp::get('\Textpattern\Http\Request')->getRemoteHostname();
@@ -380,16 +387,16 @@ class Request
     {
         $ip = $this->getIp();
 
-        if (($host = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
-            return $host;
+        if (isset($this->hostNames[$ip])) {
+            return $this->hostNames[$ip];
         }
 
         if ($host = @gethostbyaddr($ip)) {
             if ($host !== $ip && @gethostbyname($host) !== $ip) {
-                return $ip;
+                $host = $ip;
             }
 
-            return $host;
+            return $this->hostNames[$ip] = $host;
         }
 
         return false;

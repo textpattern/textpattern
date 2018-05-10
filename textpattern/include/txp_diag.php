@@ -579,6 +579,8 @@ function doDiagnostics()
 
         gTxt('diag_permlink_mode').cs.$permlink_mode.n,
 
+        gTxt('diag_production_status').cs.$production_status.n,
+
         (ini_get('open_basedir')) ? 'open_basedir'.cs.ini_get('open_basedir').n : '',
 
         (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir'.cs.ini_get('upload_tmp_dir').n : '',

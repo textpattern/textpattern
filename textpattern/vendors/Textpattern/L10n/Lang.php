@@ -247,10 +247,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if ($force & TEXTPATTERN_LANG_INSTALLED || !$this->dbLangs) {
             // Need a value here for the language itself, not for each one of the rows.
+            $ownClause = ($this->hasOwnerSupport() ? "owner = ''" : "1")." GROUP BY lang ORDER BY lastmod DESC";
             $this->dbLangs = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
-                "owner = '' GROUP BY lang ORDER BY lastmod DESC"
+                $ownClause
             );
         }
 
@@ -543,7 +544,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // will have either the 'site' owner or their own plugin name.
             // Longer term, when all plugins have caught up with the event
             // naming convention, the owner clause can be removed.
-            $where[] = "(event IN (".join(',', quote_list((array) $events)).") OR owner != '')";
+            $where[] = "(event IN (".join(',', quote_list((array) $events)).")".($this->hasOwnerSupport() ? " OR owner != '')" : ')');
         }
 
         $out = array();
@@ -668,5 +669,18 @@ class Lang implements \Textpattern\Container\ReusableInterface
         reset($vals);
 
         return selectInput($name, $vals, $val, false, true, $name);
+    }
+
+    /**
+     * Determine if the class supports the 'owner' column or not.
+     *
+     * Only of use during upgrades from older versions to guard against errors.
+     *
+     * @return boolean
+     */
+
+    protected function hasOwnerSupport()
+    {
+        return (bool) version_compare(get_pref('version'), '4.6.0', '>=');
     }
 }

@@ -3,23 +3,21 @@
 
 <head>
     <meta charset="utf-8">
-    <title>
-        <txp:page_title />
-    </title>
-    <meta name="generator" content="Textpattern CMS">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
-    <meta name="robots" content="noindex, follow">
+    <title><txp:page_title /></title>
 
     <!-- Google font API -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i&amp;subset=latin-ext">
 
     <!-- CSS -->
     <txp:css format="link" media="" />
-    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
+    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:page_url type="theme_path" />/styles/default.css"> -->
+
+    <meta name="generator" content="Textpattern CMS">
+    <meta name="robots" content="noindex, follow">
 </head>
 
 <body class="popup-page">
-
     <div class="wrapper">
         <div class="container">
 
@@ -28,6 +26,5 @@
 
         </div> <!-- /.container -->
     </div> <!-- /.wrapper -->
-
 </body>
 </html>
