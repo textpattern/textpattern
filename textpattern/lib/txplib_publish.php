@@ -801,7 +801,7 @@ function chopUrl($req)
  * attributes for next/prev tags.
  *
  * @param   array $atts
- * @param   bool $issticky
+ * @param   bool $iscustom
  * @return  array/string
  * @since   4.5.0
  * @package TagParser
@@ -877,12 +877,14 @@ function filterAtts($atts = null, $iscustom = null)
     extract($pretext);
 
     if (!$iscustom) {
-        $category = ($c) ? $c : '';
-        $section = ($s && $s != 'default') ? $s : '';
-        $author = (!empty($author) ? $author : '');
-        $month = (!empty($month) ? $month : '');
-        $expired = get_pref('publish_expired_articles');
-        $theAtts['frontpage'] = ($theAtts['frontpage'] && !$section);
+        $theAtts['category'] = ($c) ? $c : '';
+        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
+        $theAtts['author'] = (!empty($author) ? $author : '');
+        $theAtts['month'] = (!empty($month) ? $month : '');
+        $theAtts['expired'] = get_pref('publish_expired_articles');
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
+    } else {
+        $q = '';
     }
 
     extract($theAtts);
@@ -918,17 +920,23 @@ function filterAtts($atts = null, $iscustom = null)
         $categories[] = "Category2 IN ('$category')";
     }
 
-    $not = $issticky && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
+    $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
     $categories = join(" OR ", $categories);
     $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
 
     // Section
-    $not = $issticky && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
+    // searchall=0 can be used to show search results for the current
+    // section only.
+    if ($q && $searchall && !$issticky) {
+        $section = '';
+    }
+
+    $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />');
-    $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
-    $not = $issticky && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
+    $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
     $author !== true or $author = parse('<txp:author escape="" title="" />');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
@@ -942,7 +950,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
+        $not = $iscustom && ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {

@@ -702,7 +702,7 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  * @package System
  */
 
-define('REQUIRED_PHP_VERSION', '5.3.3');
+define('REQUIRED_PHP_VERSION', '5.4.0');
 
 /**
  * File integrity status good.
