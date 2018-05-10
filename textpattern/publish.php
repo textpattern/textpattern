@@ -784,12 +784,6 @@ function doArticles($atts, $iscustom, $thing = null)
         $cols = join(" OR ", $cols);
         $search = " AND ($cols) $s_filter";
 
-        // searchall=0 can be used to show search results for the current
-        // section only.
-        if ($searchall) {
-            $section = '';
-        }
-
         if (!$sort) {
             $sort = "score DESC";
         }

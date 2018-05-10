@@ -403,9 +403,7 @@ function list_list($message = '', $post = '')
                         ), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        eLink('article', 'edit', 'ID', $ID, $ID)
-                            .sp.span('&#124;', array('role' => 'separator')).sp
-                            .href(gTxt('copy'), "index.php?event=article&copy=1&ID=$ID"),
+                        eLink('article', 'edit', 'ID', $ID, $ID),
                         '',
                         array(
                             'class' => '',
