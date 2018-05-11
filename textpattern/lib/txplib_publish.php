@@ -179,75 +179,8 @@ function article_column_map()
 
 function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
 {
-    global $prefs;
     static $cache = array();
-
-    $key = md5($threshold.$s.$type.join(n, $atts));
-
-    if (isset($cache[$key])) {
-        return $cache[$key];
-    }
-
-    $atts += array(
-        'expired' => true,
-        'sortdir' => 'desc',
-    );
-
-    $id = $time = $keywords = $customColumns = $customTables = '';
-
-    extract($atts);
-    $expired = ($expired && ($prefs['publish_expired_articles']));
-    $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
-    $customFields = getCustomFields();
-    $thisid = isset($thisid) ? intval($thisid) : 0;
-
-    // Building query parts; lifted from publish.php.
-    $id = (!$id) ? '' : " AND ID IN (".join(',', array_map('intval', do_list($id))).")";
-    switch ($time) {
-        case 'any':
-            $time = "";
-            break;
-        case 'future':
-            $time = " AND Posted > ".now('posted');
-            break;
-        default:
-            $time = " AND Posted <= ".now('posted');
-    }
-
-    if (!$expired) {
-        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
-    }
-
-    if ($customFields) {
-        foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField];
-            }
-        }
-
-        $customFieldData = getCustomFields('article', null, null);
-
-        if (!empty($customPairs)) {
-            $customData = buildCustomSql($customFieldData, $customPairs);
-            $customTables = $customData ? $customData['tables'] : false;
-            $customColumns = $customData ? $customData['columns'] : false;
-        }
-    }
-
-    if ($keywords) {
-        $keys = doSlash(do_list($keywords));
-
-        foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
-        }
-
-        $keywords = " AND (".join(" OR ", $keyparts).")";
-    }
-
-    $sortdir = strtolower($sortdir);
-
-    // Invert $type for ascending sortdir.
-    $types = array(
+    static $types = array(
         '>' => array(
             'desc' => '>',
             'asc'  => '<',
@@ -258,6 +191,17 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         ),
     );
 
+    $key = md5($threshold.$s.$type.join(n, $atts));
+
+    if (isset($cache[$key])) {
+        return $cache[$key];
+    }
+
+    $thisid = isset($atts['thisid']) ? intval($atts['thisid']) : 0;
+    $sortdir = isset($atts['sortdir']) ? strtolower($atts['sortdir']) : 'asc';
+    $sortby = isset($atts['sortby']) ? $atts['sortby'] : 'Posted';
+
+    // Invert $type for ascending sortdir.
     $type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
 
     // Escape threshold and treat it as a string unless explicitly told otherwise.
@@ -265,22 +209,21 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $threshold = "'".doSlash($threshold)."'";
     }
 
-    $safe_name = safe_pfx('textpattern');
+    $where = isset($atts['?']) ? $atts['?'] : '1';
+    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
+    $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
+
     $q = array(
-        "SELECT *, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns." FROM $safe_name $customTables
+        "SELECT $columns FROM $tables
             WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
-        ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
-        $id,
-        $time,
-        $keywords,
-        "AND Status = $status",
+        "AND $where",
         "ORDER BY $sortby",
-        ($type == '<') ? "DESC" : "ASC",
+        ($type == '<') ? 'DESC' : 'ASC',
         ', ID '.($type == '<' ? 'DESC' : 'ASC'),
         "LIMIT 1",
     );
 
-    $cache[$key] = getRow(join(n.' ', $q));
+    $cache[$key] = getRow(join(' ', $q));
 
     return (is_array($cache[$key])) ? $cache[$key] : false;
 }
@@ -296,16 +239,18 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
 function getNextPrev($id = 0, $threshold = null, $s = '')
 {
-    $threshold_type = 'raw';
+    $threshold_type = 'cooked';
+    $atts = filterAtts() or $atts = filterAtts(array());
 
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts() + array(
+        $atts += array(
             'sortby'  => 'Posted',
             'sortdir' => 'DESC',
             'thisid'  => $id,
         );
+        $threshold_type = 'raw';
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -315,45 +260,50 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         }
 
         $s = $thisarticle['section'];
-        $atts = filterAtts() + array(
+        $atts += array(
             'thisid' => $thisarticle['thisid'],
             'sort'   => 'Posted DESC',
         );
-        $m = preg_split('/\s+/', $atts['sort']);
+        $atts['sort'] = trim($atts['sort']);
 
-        // If in doubt, fall back to chronologically descending order.
-        if (empty($m[0])            // No explicit sort attribute
-            || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
-            || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
-        ) {
-            $atts['sortby'] = "Posted";
-            $atts['sortdir'] = "DESC";
+        if (empty($atts['sort'])) {
+            $atts['sortby'] = !empty($atts['id']) ? "FIELD(ID, ".$atts['id'].")" : 'Posted';
+            $atts['sortdir'] = !empty($atts['id']) ? 'ASC' : 'DESC';
+        } elseif (preg_match('/^([$\w\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)(?i)(\s+asc|\s+desc)?$/u', $atts['sort'], $m)) {
+            // The clause's first verb is a MySQL column identifier.
+            $atts['sortby'] = trim($m[1], ' `');
+            $atts['sortdir'] = (isset($m[2]) ? trim($m[2]) : 'ASC');
+        } elseif (preg_match('/^((?>[^(),]|(\((?:[^()]|(?2))*\)))+)(\basc|\bdesc)?$/Ui', $atts['sort'], $m)) {
+            // More complex unique clause.
+            $atts['sortby'] = trim($m[1]);
+            $atts['sortdir'] = (isset($m[3]) ? $m[3] : 'ASC');
         } else {
-            // Sort is like 'foo asc'.
-            $atts['sortby'] = $m[0];
-            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? "DESC" : "ASC");
+            $atts['sortby'] = 'Posted';
+            $atts['sortdir'] = 'DESC';
         }
 
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
                 $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['posted']).")";
-                $threshold_type = 'cooked';
                 break;
             case 'Expires':
                 $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['expires']).")";
-                $threshold_type = 'cooked';
                 break;
             case 'LastMod':
                 $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['modified']).")";
-                $threshold_type = 'cooked';
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
+                $threshold_type = 'raw';
                 $acm = array_flip(article_column_map());
-                $key = $acm[$atts['sortby']];
-                $threshold = $thisarticle[$key];
-                break;
+
+                if (isset($acm[$atts['sortby']])) {
+                    $key = $acm[$atts['sortby']];
+                    $threshold = $thisarticle[$key];
+                } else {
+                    $threshold = safe_field($atts['sortby'], 'textpattern', 'ID='.$atts['thisid']);
+                }
         }
     }
 
@@ -562,7 +512,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $pretext, $production_status, $txp_current_tag, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $max_pass, $globals;
+    static $registry = null, $maxpass, $globals;
 
     if (empty($tag)) {
         return;
@@ -577,7 +527,7 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($registry === null) {
-        $max_pass = get_pref('secondpass', 1);
+        $maxpass = get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
@@ -612,16 +562,16 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
-            trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
+            trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_NOTICE);
             $out = $registry->register($tag)->process($tag, $split, $thing);
         } else {
-            trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+            trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
             $out = '';
         }
     }
 
     if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
-        $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
+        $out = $pretext['secondpass'] < $maxpass ? $txp_current_tag : '';
     } else {
         if ($thing === null && !empty($txp_atts['not'])) {
             $out = $out ? '' : '1';
@@ -854,37 +804,221 @@ function chopUrl($req)
  * attributes for next/prev tags.
  *
  * @param   array $atts
- * @return  array
+ * @param   bool $iscustom
+ * @return  array/string
  * @since   4.5.0
  * @package TagParser
  */
 
-function filterAtts($atts = null)
+function filterAtts($atts = null, $iscustom = null)
 {
-    global $prefs, $trace;
+    global $pretext, $trace;
     static $out = array();
 
-    if (is_array($atts)) {
-        if (empty($out)) {
-            $out = lAtts(array(
-                'sort'     => 'Posted desc',
-                'keywords' => '',
-                'expired'  => $prefs['publish_expired_articles'],
-                'id'       => '',
-                'time'     => 'past',
-            ), $atts, 0);
-            $trace->log('[filterAtts accepted]');
-        } else {
-            // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
-            $trace->log('[filterAtts ignored]');
+    if ($atts === false) {
+        return $out = array();
+    } elseif (!is_array($atts)) {
+        // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
+        $trace->log('[filterAtts ignored]');
+
+        return $out;
+    } elseif (isset($atts['?'])) {
+        return $out = $atts;
+    }
+
+    $customFields = getCustomFields();
+    $customlAtts = array_null(array_flip($customFields));
+
+    $extralAtts = array(
+        'form'          => 'default',
+        'allowoverride' => !$iscustom,
+        'limit'         => 10,
+        'offset'        => 0,
+        'pageby'        => '',
+        'pgonly'        => 0,
+        'wraptag'       => '',
+        'break'         => '',
+        'breakby'       => '',
+        'breakclass'    => '',
+        'label'         => '',
+        'labeltag'      => '',
+        'class'         => '',
+    );
+
+    if ($iscustom) {
+        $extralAtts += array(
+            'category'  => '',
+            'section'   => '',
+            'author'    => '',
+            'month'     => '',
+            'expired'   => get_pref('publish_expired_articles'),
+        );
+    } else {
+        $extralAtts += array(
+            'listform'     => '',
+            'searchform'   => '',
+            'searchall'    => 1,
+            'searchsticky' => 0,
+        );
+    }
+
+    // Getting attributes.
+    $theAtts = lAtts(array(
+        'sort'          => '',
+        'keywords'      => '',
+        'time'          => null,
+        'status'        => STATUS_LIVE,
+        'frontpage'     => !$iscustom,
+        'match'         => 'Category1,Category2',
+        'id'            => '',
+        'exclude'       => '',
+        'excerpted'     => ''
+    ) + $extralAtts + $customlAtts, $atts);
+
+    // For the txp:article tag, some attributes are taken from globals;
+    // override them, then stash all filter attributes.
+    extract($pretext);
+
+    if (!$iscustom) {
+        $theAtts['category'] = ($c) ? $c : '';
+        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
+        $theAtts['author'] = (!empty($author) ? $author : '');
+        $theAtts['month'] = (!empty($month) ? $month : '');
+        $theAtts['expired'] = get_pref('publish_expired_articles');
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
+    } else {
+        $q = '';
+    }
+
+    extract($theAtts);
+
+    if ($exclude && $exclude !== true) {
+        $exclude = array_map('strtolower', do_list_unique($exclude));
+        $excluded = array_filter($exclude, 'is_numeric');
+    } else {
+        $exclude or $exclude = array();
+        $excluded = array();
+    }
+
+    // Treat sticky articles differently wrt search filtering, etc.
+    $issticky = in_array(strtolower($status), array('sticky', STATUS_STICKY));
+
+    if ($status === true) {
+        $status = array(STATUS_LIVE, STATUS_STICKY);
+    } else {
+        $status = array($issticky ? STATUS_STICKY : STATUS_LIVE);
+    }
+
+    // Categories
+    $match = do_list_unique($match);
+    $category !== true or $category = parse('<txp:category />');
+    $category  = join("','", doSlash(do_list_unique($category)));
+    $categories = array();
+
+    if (in_array('Category1', $match)) {
+        $categories[] = "Category1 IN ('$category')";
+    }
+
+    if (in_array('Category2', $match)) {
+        $categories[] = "Category2 IN ('$category')";
+    }
+
+    $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
+    $categories = join(" OR ", $categories);
+    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
+
+    // Section
+    // searchall=0 can be used to show search results for the current
+    // section only.
+    if ($q && $searchall && !$issticky) {
+        $section = '';
+    }
+
+    $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
+    $section !== true or $section = parse('<txp:section />');
+    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
+
+    // Author
+    $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
+    $author !== true or $author = parse('<txp:author escape="" title="" />');
+    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
+
+    // ID
+    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
+
+    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
+    $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
+
+    if ($time === null || $month || !$expired || $expired == '1') {
+        $not = $iscustom && ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
+        $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
+        $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
+    } else {
+        $timeq = '';
+    }
+
+    if ($expired && $expired != '1') {
+        $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
+    } elseif (!$expired) {
+        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
+    }
+
+    if ($q && $searchsticky || $id) {
+        $statusq = " AND Status >= ".STATUS_LIVE;
+    } else {
+        $statusq = " AND Status IN (".implode(',', $status).")";
+    }
+
+    $custom = $customColumns = $customTables = '';
+
+    if ($customFields) {
+        foreach ($customFields as $cField) {
+            if (isset($atts[$cField])) {
+                $customPairs[$cField] = $atts[$cField] === true ? parse('<txp:custom_field name="'.$cField.'" escape="" />') : $atts[$cField];
+            }
+        }
+
+        // Fetch all custom field data, not just name=>values.
+        $customFieldData = getCustomFields('article', null, null);
+
+        if (!empty($customPairs)) {
+            $customData = buildCustomSql($customFieldData, $customPairs, $exclude);
+            $customTables = $customData ? $customData['tables'] : false;
+            $customColumns = $customData ? $customData['columns'] : false;
         }
     }
 
-    if (empty($out)) {
-        $trace->log('[filterAtts not set]');
+    // Allow keywords for no-custom articles. That tagging mode, you know.
+    $keywords !== true or $keywords = parse('<txp:keywords />');
+
+    if ($keywords) {
+        $keyparts = array();
+        $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
+        $keys = doSlash(do_list_unique($keywords));
+
+        foreach ($keys as $key) {
+            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
+        }
+
+        !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
     }
 
-    return $out;
+    $theAtts['status'] = implode(',', $status);
+    $theAtts['id'] = implode(',', $ids);
+    $theAtts['sort'] = sanitizeForSort($sort);
+    $theAtts['?'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
+    $theAtts['*'] = '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns;
+    $theAtts['#'] = trim(safe_pfx('textpattern').' '.$customTables);
+
+    if (!$iscustom) {
+        $out = array_diff_key($theAtts, $extralAtts);
+        $trace->log('[filterAtts accepted]');
+    }
+
+    return $theAtts;
 }
 
 /**

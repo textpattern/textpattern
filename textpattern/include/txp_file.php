@@ -1258,10 +1258,12 @@ function file_set_perm($file)
  * @param  string       $label_id    HTML id attribute for the filename input element
  * @param  string       $class       HTML class attribute for the form element
  * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
+ * @param  array        $extra       array('postinput' => $categories ...)
+ * @param  string|array $accept      Comma separated list of allowed file types, or empty to omit
  * @return string HTML
  */
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null, $accept = '')
 {
     global $file_max_upload_size;
 
@@ -1271,7 +1273,7 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $cl
 
     $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
-    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val, $extra);
+    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val, $extra, $accept);
 }
 
 // -------------------------------------------------------------

@@ -31,8 +31,8 @@ before you continue.
 
 The current production release is version 4.6.2. It can be downloaded from the
 Textpattern website as a
-[.zip](https://textpattern.com/latest.zip) or
-[.tar.gz](https://textpattern.com/latest.tar.gz) archive.
+[.zip](https://textpattern.com/file_download/75/textpattern-4.6.2.zip) or
+[.tar.gz](https://textpattern.com/file_download/74/textpattern-4.6.2.tar.gz) archive.
 
 ### Development version
 

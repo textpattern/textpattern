@@ -2289,6 +2289,20 @@ function sanitizeForPage($text)
 }
 
 /**
+ * Sanitises a string for use in a ORDER BY clause.
+ *
+ * @param   string $text The string
+ * @return  string
+ * @package Filter
+ * @access  private
+ */
+
+function sanitizeForSort($text)
+{
+    return trim(strtr($text, array('#' => ' ', '--' => ' ')));
+}
+
+/**
  * Transliterates a string to ASCII.
  *
  * Used to generate RFC 3986 compliant and pretty ASCII-only URLs.
@@ -5176,25 +5190,25 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 function buildTimeSql($month, $time, $field = 'Posted')
 {
     $safe_field = '`'.doSlash($field).'`';
-    $timeq = '';
+    $timeq = '1';
 
     if ($month === 'past' || $month === 'any' || $month === 'future') {
         if ($month === 'past') {
-            $timeq = " AND $safe_field <= ".now($field);
+            $timeq = "$safe_field <= ".now($field);
         } elseif ($month === 'future') {
-            $timeq = " AND $safe_field > ".now($field);
+            $timeq = "$safe_field > ".now($field);
         }
     } elseif ($time === 'past' || $time === 'any' || $time === 'future') {
         if ($time === 'past') {
-            $timeq = " AND $safe_field <= ".now($field);
+            $timeq = "$safe_field <= ".now($field);
         } elseif ($time === 'future') {
-            $timeq = " AND $safe_field > ".now($field);
+            $timeq = "$safe_field > ".now($field);
         }
 
         $timeq .= ($month ? " AND $safe_field LIKE '".doSlash($month)."%'" : '');
     } elseif (strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
-        $timeq = " AND $safe_field LIKE '".doSlash(strftime($time, $start))."%'";
+        $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
         $start = $month ? strtotime($month) : false;
 
@@ -5206,9 +5220,9 @@ function buildTimeSql($month, $time, $field = 'Posted')
         }
 
         if ($time === 'since') {
-            $timeq = " AND $safe_field > $from";
+            $timeq = "$safe_field > $from";
         } elseif ($time === 'until') {
-            $timeq = " AND $safe_field <= $from";
+            $timeq = "$safe_field <= $from";
         } else {
             $stop = strtotime($time, $start) or $stop = time();
 
@@ -5216,7 +5230,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
                 list($start, $stop) = array($stop, $start);
             }
 
-            $timeq = " AND ".($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+            $timeq = ($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
         }
     }
 

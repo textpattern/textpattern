@@ -300,13 +300,6 @@
         "html": "pref_text",
         "position": "200"
     },
-    "use_dns": {
-        "val": "0",
-        "type": "0",
-        "event": "publish",
-        "html": "yesnoradio",
-        "position": "220"
-    },
     "enable_short_tags": {
         "val": "1",
         "type": "0",

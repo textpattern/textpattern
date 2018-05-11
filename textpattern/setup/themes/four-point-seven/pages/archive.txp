@@ -3,34 +3,72 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>
-        <txp:page_title />
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+    <title><txp:page_title /></title>
 
     <!-- Google font API -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i&amp;subset=latin-ext">
 
     <!-- CSS -->
     <txp:css format="link" media="" />
-    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
-
-    <!-- specify meta description if available -->
-    <txp:meta_description />
-    <!-- specify meta keywords if available -->
-    <txp:meta_keywords separator="," />
+    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:page_url type="theme_path" />/styles/default.css"> -->
 
     <meta name="generator" content="Textpattern CMS">
 
-    <!-- specify canonical and author -->
-    <txp:if_individual_article>
-        <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
-        <link rel="canonical" href="<txp:permlink />">
-        <txp:meta_author title="1" />
-    <txp:else />
+    <txp:if_author>
         <meta name="robots" content="noindex, follow">
-        <link rel="canonical" href="<txp:section url="1" />">
-    </txp:if_individual_article>
+    <txp:else />
+        <txp:meta_description />
+        <txp:if_article_list>
+            <txp:article pgonly="1" limit="10" />
+            <txp:variable name="page" value='<txp:page_url type="pg" />' />
+            <txp:if_variable name="page" value="1">
+                <meta name="robots" content="index, follow">
+                <link rel="canonical" href="<txp:section url="1" />">
+                <script type="application/ld+json">
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "Blog",
+                        "headline": "<txp:section title="1" escape="json" />",
+                        <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
+                        "url": "<txp:section url="1" />"
+                    }
+                </script>
+            <txp:else />
+                <meta name="robots" content="noindex, follow">
+            </txp:if_variable>
+        <txp:else />
+            <txp:meta_keywords separator="," />
+            <txp:meta_author title="1" />
+            <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
+            <link rel="canonical" href="<txp:permlink />">
+            <meta property="og:site_name" content="<txp:site_name />">
+            <meta property="og:type" content="article">
+            <meta property="og:title" content="<txp:title />">
+            <txp:if_description><meta property="og:description" content="<txp:meta_description format="" />"></txp:if_description>
+            <meta property="og:url" content="<txp:permlink />">
+            <txp:if_article_image>
+                <txp:images limit="1">
+                    <meta property="og:image" content="<txp:image_url />">
+                    <meta property="og:image:width" content="<txp:image_info type="w" />">
+                    <meta property="og:image:height" content="<txp:image_info type="h" />">
+                    <meta property="og:image:alt" content="<txp:image_info type="alt" />">
+                </txp:images>
+            </txp:if_article_image>
+            <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Blog",
+                    "blogPost": [{
+                        "@type": "BlogPosting",
+                        "headline": "<txp:title escape="json" />",
+                        <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
+                        "url": "<txp:permlink />"
+                    }]
+                }
+            </script>
+        </txp:if_article_list>
+    </txp:if_author>
 
     <!-- content feeds -->
     <txp:feed_link flavor="atom" format="link" label="Atom" />
@@ -43,33 +81,7 @@
     <body class="<txp:section />-page" itemscope itemtype="https://schema.org/WebPage">
 </txp:if_article_list>
 
-    <!-- header -->
-    <header class="site-header">
-        <h1>
-            <txp:link_to_home>
-                <txp:site_name />
-            </txp:link_to_home>
-        </h1>
-        <h3>
-            <txp:site_slogan />
-        </h3>
-    </header>
-
-    <!-- navigation -->
-    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
-        <div>
-            <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
-                <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
-                    <a itemprop="url" href="<txp:section url="1" />">
-                        <txp:section title="1" />
-                    </a>
-                </li>
-            </txp:section_list>
-
-            <!-- links by default to form: 'search_input.txp' unless you specify a different form -->
-            <txp:search_input />
-        </div>
-    </nav>
+    <txp:output_form form="body_header" />
 
     <div class="wrapper">
         <div class="container">
@@ -79,10 +91,8 @@
 
                 <txp:if_article_list>
 
-                    <h1 itemprop="name">
-                        <txp:section title="1" />
-                    </h1>
-                    <txp:article class="article-list" form="article_listing" limit="5" wraptag="ul" />
+                    <h1 itemprop="name"><txp:section title="1" /></h1>
+                    <txp:article class="article-list" form="article_listing" limit="10" wraptag="ul" />
                     <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
 
                     <!-- add pagination links to foot of article listings if there are more articles available -->
@@ -105,7 +115,6 @@
                         <txp:link_to_prev>
                             <txp:text item="prev" />
                         </txp:link_to_prev>
-
                         <txp:link_to_next>
                             <txp:text item="next" />
                         </txp:link_to_next>
@@ -115,37 +124,12 @@
 
             </main>
 
-            <!-- Complementary content -->
-            <aside class="complementary-content">
-
-                <!-- feed links, default flavor is RSS, so we don't need to specify a flavor on the first feed_link -->
-                <p>
-                    <txp:feed_link class="feed-rss" label="RSS" />
-                    /
-                    <txp:feed_link class="feed-atom" flavor="atom" label="Atom" />
-                </p>
-
-                <!-- if links exist, renders a links list -->
-                <txp:evaluate test="linklist">
-                    <section>
-                        <h4>
-                            <txp:text item="links" />
-                        </h4>
-
-                        <!-- links by default to form: 'plainlinks.txp' unless you specify a different form -->
-                        <txp:linklist wraptag="ul" break="li" />
-                    </section>
-                </txp:evaluate>
-
-            </aside>
+            <txp:output_form form="body_aside" />
 
         </div> <!-- /.container -->
     </div> <!-- /.wrapper -->
 
-    <!-- footer -->
-    <footer class="site-footer">
-        <p><small><txp:text item="published_with" /> <a rel="external" href="https://textpattern.com/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a></small></p>
-    </footer>
+    <txp:output_form form="body_footer" />
 
 </body>
 </html>
