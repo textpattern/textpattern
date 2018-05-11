@@ -125,6 +125,7 @@ Changes in 4.7.0-rc.1
   syntax.
 * Developer: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
   authors please use ahu in place of hu.'textpattern'.
+* Fixed: SQL injection in 'qty' attribute (thanks Manuel Garcia Cardenas).
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
   diagnostics information, login URL in user-invite email, login cookie
   accessible to public and admin URLs (thanks, jools-r).
