@@ -128,6 +128,7 @@ Changes in 4.7.0-rc.1
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
   diagnostics information, login URL in user-invite email, login cookie
   accessible to public and admin URLs (thanks, jools-r).
+* Fixed: SQL injection in 'qty' attribute (thanks Manuel Garcia Cárdenas).
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
