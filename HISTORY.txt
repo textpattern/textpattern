@@ -1,6 +1,7 @@
 Changes in 4.7.0-rc.1
 
 * In memory of Dean Cameron Allen, creator of Textpattern CMS.
+* Changed: Minimum system requirements increased to PHP 5.4.0.
 * Textpattern instances older than version 4.2.0 (released 17 Sep 2009) should
   upgrade to version 4.2.0 before upgrading to version 4.7.0.
 * Added: Support for website themes, markup stored within the database (accessed
