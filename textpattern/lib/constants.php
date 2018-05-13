@@ -71,32 +71,6 @@ define('VISIBLE', 1);
 
 define('RELOAD', -99);
 
-if (!defined('RPC_SERVER')) {
-    /**
-     * RPC server location.
-     *
-     * This constant can be overridden from the config.php.
-     *
-     * @example
-     * define('RPC_SERVER', 'http://rpc.example.com');
-     */
-
-    define('RPC_SERVER', 'http://rpc.textpattern.com');
-}
-
-if (!defined('HELP_URL')) {
-    /**
-     * The location where help documentation is fetched.
-     *
-     * This constant can be overridden from the config.php.
-     *
-     * @example
-     * define('HELP_URL', 'http://rpc.example.com/help/');
-     */
-
-    define('HELP_URL', 'http://rpc.textpattern.com/help/');
-}
-
 /**
  * Do not format text.
  *
