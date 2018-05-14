@@ -259,7 +259,7 @@ function log_list($message = '')
                 if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-                    $log_page = href(txpspecialchars($log_anchor), txpspecialchars($log_page), ' target="_blank"');
+                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu,'/').txpspecialchars($log_page), ' target="_blank"');
 
                     if ($log_method == 'POST') {
                         $log_page = strong($log_page);
