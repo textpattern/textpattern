@@ -71,6 +71,19 @@ define('VISIBLE', 1);
 
 define('RELOAD', -99);
 
+if (!defined('HELP_URL')) {		
+    /**		
+     * The location where help documentation is fetched.		
+     *		
+     * This constant can be overridden from the config.php.		
+     *		
+     * @example		
+     * define('HELP_URL', 'http://rpc.example.com/help/');		
+     */		
+		
+    define('HELP_URL', 'http://rpc.textpattern.com/help/');		
+}
+
 /**
  * Do not format text.
  *
