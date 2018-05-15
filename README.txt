@@ -67,6 +67,11 @@ system. Textpattern is free and open source.
 
 == Upgrading ==
 
+* Read the release notes in HISTORY.txt, both for the version you are upgrading
+  to and any prior versions you are skipping. Ensure you understand any changes
+  and enhancements that may affect your Textpattern site functionality. If in
+  doubt, refer to the resources in the Getting Started section above before you
+  undertake the upgrade process.
 * NOTE: Versions prior to 4.2.0 should be upgraded to 4.2.0 before subsequent
   version upgrades. Upgrades from versions prior to 4.2.0 will present warnings
   and/or errors upon the first login to the admin-side. These may include:
