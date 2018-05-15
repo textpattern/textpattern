@@ -705,7 +705,7 @@
     <li><strong>Referrers only:</strong> Textpattern will only log visits referred from other sites</li>
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
-<p>If you enable logging of any kind, visitor IP address information will be collected if the browser provides it. Please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
+<p>From Textpattern 4.7.0, no visitor IP address information will be collected or stored by Textpattern. If you collect or store IP addresses outside of Textpatten, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
 <p>It is strongly advised that you leave this setting at its default, ‘None’, unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
@@ -833,8 +833,7 @@
         ]]></item>
         <item id="spam_blacklists" title="Spam blocklists (comma-separated)"><![CDATA[
 <h2>Spam blocklists (comma-separated)</h2>
-<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected.</p>
-<p>Additionally, checks on approved comments will take place when an article is viewed on the front-side. If you encounter slowness when displaying articles with comments, consider disabling spam blocklists by removing the blocklist address(es).</p>
+<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
