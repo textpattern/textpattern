@@ -41,6 +41,9 @@ GitHub](https://github.com/textpattern/textpattern). Note that development
 versions are works-in-progress and not recommended for use on live production
 servers.
 
+System requirements for the development version are subject to change and may
+differ from the production release [system requirements](https://textpattern.com/about/119/system-requirements).
+
 ## Install Textpattern
 
 Please see
