@@ -1,4 +1,4 @@
-Textpattern CMS 4.7.0-beta.3
+Textpattern CMS 4.7.0
 
 Released under the GNU General Public License.
 See textpattern/lib/LICENSE.txt for terms and conditions.
@@ -13,7 +13,7 @@ See textpattern/lib/LICENSE-BSD-3.txt for terms and conditions.
 == About ==
 
 Textpattern CMS is a flexible, elegant and easy-to-use content management
-system. Textpattern is both free and open source.
+system. Textpattern is free and open source.
 
 
 == Getting Started ==
@@ -34,9 +34,9 @@ system. Textpattern is both free and open source.
   subdirectory). The top-level index.php file should reside in this directory,
   as should the /textpattern/, /rpc/ and /themes directories.
 * Ensure the top-level .htaccess file is transferred to your site. The file is
-  hidden by default on some operating systems, including OS X/macOS. Most FTP
-  clients and IDEs have an option to show these hidden files. Otherwise, you can
-  temporarily show hidden files in OS X/macOS by using the Terminal.app - follow
+  hidden by default on some operating systems, including macOS. Most FTP clients
+  and IDEs have an option to show these hidden files. Otherwise, you can
+  temporarily show hidden files in macOS by using the Terminal.app - follow
   these instructions:
     https://textpattern.com/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
@@ -60,14 +60,18 @@ system. Textpattern is both free and open source.
 == IMPORTANT ==
 
 * Check back regularly at https://textpattern.com/ to see if an update is
-  available. Updates are as painless as possible, often fixing important bugs
-  and/or security-related issues as well as offering additional features and
-  functionality. Your Admin -> Diagnostics panel will also display a message
-  if a new version is available.
+  available. Updates are as painless as possible, often extending functionality,
+  fixing bugs and/or security-related issues. Your Admin -> Diagnostics panel
+  will also display a message if a new version is available.
 
 
 == Upgrading ==
 
+* Read the release notes in HISTORY.txt, both for the version you are upgrading
+  to and any prior versions you are skipping. Ensure you understand any changes
+  and enhancements that may affect your Textpattern site functionality. If in
+  doubt, refer to the resources in the Getting Started section above before you
+  undertake the upgrade process.
 * NOTE: Versions prior to 4.2.0 should be upgraded to 4.2.0 before subsequent
   version upgrades. Upgrades from versions prior to 4.2.0 will present warnings
   and/or errors upon the first login to the admin-side. These may include:
@@ -98,8 +102,8 @@ system. Textpattern is both free and open source.
 * It is recommended that the browser cache is cleared to ensure the newer files
   are used in preference to the older files.
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
-  automatically. Check the diagnostics (Admin -> Diagnostics) to confirm the
-  correct Textpattern version number is displayed and whether there are any
+  automatically. Check the site diagnostics (Admin -> Diagnostics) to confirm
+  the correct Textpattern version number is displayed and whether there are any
   errors.
 * Verify all preference settings (Admin -> Preferences).
 
