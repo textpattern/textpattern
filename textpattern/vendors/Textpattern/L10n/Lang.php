@@ -284,22 +284,25 @@ class Lang implements \Textpattern\Container\ReusableInterface
             if (!empty($this->files)) {
                 foreach ($this->files as $file) {
                     $meta = $this->fetchMeta($file);
-                    $name = $meta['filename'];
 
-                    if (array_key_exists($name, $currently_lang)) {
-                        $currently_lang[$name]['name'] = $meta['name'];
-                        $currently_lang[$name]['direction'] = $meta['direction'];
-                        $currently_lang[$name]['file_lastmod'] = $meta['time'];
-                    } elseif (array_key_exists($name, $installed_lang)) {
-                        $installed_lang[$name]['name'] = $meta['name'];
-                        $installed_lang[$name]['direction'] = $meta['direction'];
-                        $installed_lang[$name]['file_lastmod'] = $meta['time'];
+                    if ($meta) {
+                        $name = $meta['filename'];
+
+                        if (array_key_exists($name, $currently_lang)) {
+                            $currently_lang[$name]['name'] = $meta['name'];
+                            $currently_lang[$name]['direction'] = $meta['direction'];
+                            $currently_lang[$name]['file_lastmod'] = $meta['time'];
+                        } elseif (array_key_exists($name, $installed_lang)) {
+                            $installed_lang[$name]['name'] = $meta['name'];
+                            $installed_lang[$name]['direction'] = $meta['direction'];
+                            $installed_lang[$name]['file_lastmod'] = $meta['time'];
+                        }
+
+                        $available_lang[$name]['file_lastmod'] = $meta['time'];
+                        $available_lang[$name]['name'] = $meta['name'];
+                        $available_lang[$name]['direction'] = $meta['direction'];
+                        $available_lang[$name]['type'] = 'available';
                     }
-
-                    $available_lang[$name]['file_lastmod'] = $meta['time'];
-                    $available_lang[$name]['name'] = $meta['name'];
-                    $available_lang[$name]['direction'] = $meta['direction'];
-                    $available_lang[$name]['type'] = 'available';
                 }
             }
 
