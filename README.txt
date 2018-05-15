@@ -13,7 +13,7 @@ See textpattern/lib/LICENSE-BSD-3.txt for terms and conditions.
 == About ==
 
 Textpattern CMS is a flexible, elegant and easy-to-use content management
-system. Textpattern is both free and open source.
+system. Textpattern is free and open source.
 
 
 == Getting Started ==
