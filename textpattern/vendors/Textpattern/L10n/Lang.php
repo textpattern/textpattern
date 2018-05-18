@@ -441,7 +441,6 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $installed_langs = $this->installed();
-        $now = getThing('SELECT NOW()');
         $values = array();
 
         foreach ($allpacks as $translation) {
@@ -451,7 +450,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                 continue;
             }
 
-            $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$now')";
+            $values[] = "('$name', '$lang', '$data', '$event', '$owner', NOW())";
         }
 
         $value = implode(',', $values);
@@ -478,15 +477,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $result = false;
 
         if ($langpack) {
-            $now = getThing('SELECT NOW()');
             $values = array();
 
             foreach ($langpack as $key => $translation) {
                 extract(doSlash($translation));
 
                 $owner = empty($owner) ? doSlash($owner_ref) : $owner;
-                $lastmod = empty($lastmod) ? $now : $lastmod;
-                $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$lastmod')";
+                $lastmod = empty($lastmod) ? 'NOW()' : "'$lastmod'";
+                $values[] = "('$name', '$lang', '$data', '$event', '$owner', $lastmod)";
             }
 
             if ($values) {
