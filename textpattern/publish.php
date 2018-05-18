@@ -931,7 +931,7 @@ function doArticle($atts, $thing = null)
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
-            $article = $form ? parse_form($form) : parse($thing);
+            $article = ($thing) ? parse($thing) : parse_form($form);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
