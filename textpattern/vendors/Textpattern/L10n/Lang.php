@@ -441,7 +441,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $installed_langs = $this->installed();
-        $now = doSlash(date($this->lastmodFormat));
+        $now = getThing('SELECT NOW()');
         $values = array();
 
         foreach ($allpacks as $translation) {
@@ -478,7 +478,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $result = false;
 
         if ($langpack) {
-            $now = doSlash(date($this->lastmodFormat));
+            $now = getThing('SELECT NOW()');
             $values = array();
 
             foreach ($langpack as $key => $translation) {
