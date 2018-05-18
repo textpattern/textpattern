@@ -23,7 +23,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.7.0'
+textpattern.version = '4.7.1'
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
