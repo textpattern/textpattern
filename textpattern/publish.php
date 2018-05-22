@@ -847,7 +847,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // If a listform is specified, $thing is for doArticle() - hence ignore here.
     if (!empty($listform)) {
-        $thing = '';
+        $thing = null;
     }
 
     // Get the form name.
@@ -881,7 +881,7 @@ function doArticles($atts, $iscustom, $thing = null)
             } elseif ($allowoverride && $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
             } else {
-                $articles[] = ($thing) ? parse($thing) : parse_form($fname);
+                $articles[] = $thing ? parse($thing) : parse_form($fname);
             }
 
             unset($GLOBALS['thisarticle']);
@@ -931,7 +931,7 @@ function doArticle($atts, $thing = null)
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
-            $article = ($thing) ? parse($thing) : parse_form($form);
+            $article = $thing ? parse($thing) : parse_form($form);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
