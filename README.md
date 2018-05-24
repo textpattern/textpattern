@@ -54,7 +54,7 @@ Textpattern also has social network presences on
 
 ## Development
 
-The development version is 4.8.0-dev. The development version can be
+The development version can be
 obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development
 versions are works-in-progress and not recommended for use on live production
 servers.
