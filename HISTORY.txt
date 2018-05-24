@@ -1,7 +1,7 @@
 Changes in 4.7.1
 * Maintenance release with bug fixes.
-* Fixed: <txp:article /> and <txp:article_custom /> correctly parse assigned
-  article form.
+* Fixed: <txp:article /> and <txp:article_custom /> correctly parse their
+  content.
 * Fixed: <txp:article /> with 'listform' attribute returns correct value.
 * Fixed: Corrected Textpack update timestamp where web server and database
   reside in different timezones.
