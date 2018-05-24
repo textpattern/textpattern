@@ -433,6 +433,8 @@ function preText($s, $prefs)
     // Prevent to get the id for file_downloads.
     if ($out['s'] == 'file_download') {
         if (is_numeric($out['id'])) {
+            global $thisfile;
+
             // Undo the double-encoding workaround for .gz files;
             // @see filedownloadurl().
             if (!empty($out['filename'])) {
@@ -441,6 +443,8 @@ function preText($s, $prefs)
 
             $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
             $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+
+            $thisfile = $rs ? file_download_format_info($rs) : null;
         }
 
         $is_404 = $is_404 || empty($rs);
