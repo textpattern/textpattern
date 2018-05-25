@@ -59,7 +59,7 @@
         </strong>
         <span itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
-                <txp:author link="1" this_section="1" />
+                <txp:author link this_section />
             </span>
         </span>
 
@@ -72,13 +72,13 @@
             <span itemprop="keywords">
                 <txp:if_article_category number="1">
                     <txp:if_article_category number="2">
-                        <txp:category1 title="1" link="1" />,
-                        <txp:category2 title="1" link="1" />
+                        <txp:category1 title link />,
+                        <txp:category2 title link />
                     <txp:else />
-                        <txp:category1 title="1" link="1" />
+                        <txp:category1 title link />
                     </txp:if_article_category>
                 <txp:else />
-                    <txp:category2 title="1" link="1" />
+                    <txp:category2 title link />
                 </txp:if_article_category>
             </span>
         </txp:if_article_category>

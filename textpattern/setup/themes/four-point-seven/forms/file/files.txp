@@ -4,7 +4,7 @@
     <a href="<txp:file_download_link />" itemprop="url">
         <strong itemprop="name">
             <txp:evaluate>
-                <txp:file_download_name title="1" />
+                <txp:file_download_name title />
             <txp:else />
                 <txp:file_download_name />
             </txp:evaluate>
@@ -26,7 +26,7 @@
                 <txp:text item="category" />
             </strong>
             <span itemprop="keywords">
-                <txp:file_download_category title="1" />
+                <txp:file_download_category title />
             </span>
             &#183;
         </txp:evaluate>
@@ -36,7 +36,7 @@
         </strong>
         <span itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
-                <txp:file_download_author link="1" />
+                <txp:file_download_author link />
             </span>
         </span>
         &#183;
