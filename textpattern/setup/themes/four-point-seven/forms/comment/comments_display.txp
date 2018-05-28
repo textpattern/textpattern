@@ -68,7 +68,7 @@
 
         <!-- comment invite text is taken for the article's comment invitation field on the 'write' screen -->
         <h3>
-            <txp:comments_invite showcount="0" textonly="1" showalways="1" />
+            <txp:comments_invite showcount="0" textonly showalways />
         </h3>
 
         <!-- links by default to form: 'comment_form.comment.txp' unless you specify a different form -->

@@ -14,6 +14,7 @@ Textpattern is [free and open source](#legal) software.
 * [Install Textpattern](#install-textpattern)
 * [Upgrade Textpattern](#upgrade-textpattern)
 * [Help and Support](#help-and-support)
+* [Development](#development)
 * [Contributing](#contributing)
 * [Legal](#legal)
 
@@ -27,22 +28,10 @@ before you continue.
 
 ## Download Textpattern
 
-### Production release
-
 The current production release is version 4.7.0. It can be downloaded from the
 Textpattern website as a
 [.zip](https://textpattern.com/file_download/85/textpattern-4.7.0.zip) or
 [.tar.gz](https://textpattern.com/file_download/84/textpattern-4.7.0.tar.gz) archive.
-
-### Development version
-
-The development version can be obtained from the [Textpattern repository on
-GitHub](https://github.com/textpattern/textpattern). Note that development
-versions are works-in-progress and not recommended for use on live production
-servers.
-
-System requirements for the development version are subject to change and may
-differ from the production release [system requirements](https://textpattern.com/about/119/system-requirements).
 
 ## Install Textpattern
 
@@ -62,6 +51,33 @@ The [Textpattern support forum](https://forum.textpattern.io) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
 [Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
+
+## Development
+
+The development version can be
+obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development
+versions are works-in-progress and not recommended for use on live production
+servers.
+
+### Anticipated changes to future system requirements
+
+System requirements for the development version may differ from the production
+release [system requirements](https://textpattern.com/about/119/system-requirements).
+
+As a development version approaches release, minimum and recommended system
+requirements are confirmed and the production release [system requirements](https://textpattern.com/about/119/system-requirements) will
+be updated accordingly.
+
+The following table outlines anticipated/expected system requirements for
+upcoming releases. It takes into account vendor library support, security
+considerations and other factors.
+
+|        |  Minimum<br />(v4.8.0)  | Recommended<br />(v4.8.0) |
+|--------|-------|-----|
+| PHP    | &mdash; | &mdash; |
+| MySQL  | &mdash; | &mdash; |
+| Apache | &mdash; | &mdash; |
+| Nginx  | &mdash; | &mdash; |
 
 ## Contributing
 

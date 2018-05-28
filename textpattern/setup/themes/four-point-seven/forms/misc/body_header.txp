@@ -7,10 +7,10 @@
 
 <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
     <div>
-        <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
+        <txp:section_list default_title='<txp:text item="home" />' include_default wraptag="ul" break="">
             <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
-                <a itemprop="url" href="<txp:section url="1" />">
-                    <txp:section title="1" />
+                <a itemprop="url" href="<txp:section url />">
+                    <txp:section title />
                 </a>
             </li>
         </txp:section_list>
