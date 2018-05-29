@@ -6,7 +6,7 @@ Changes in 4.7.1
 * Fixed: <txp:article /> with 'listform' attribute returns correct value.
 * Fixed: Corrected Textpack update timestamp where web server and database
   server reside in different timezones.
-* Changed: Additional code optimisation for PHP 5.4 and later.
+* Changed: Additional code optimization for PHP 5.4 and later.
 * Changed: Improved language string coverage in setup process.
 * Changed: Extend use of Textpattern 4.7.*-native tags in Four Point Seven
   theme.
