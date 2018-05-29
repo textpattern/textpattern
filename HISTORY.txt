@@ -1,4 +1,4 @@
-Changes in 4.7.1
+Changes in 4.7.1 (in progress)
 
 * Maintenance release with bug fixes.
 * Fixed: <txp:article /> and <txp:article_custom /> correctly parse their
