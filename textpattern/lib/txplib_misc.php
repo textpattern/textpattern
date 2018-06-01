@@ -3162,7 +3162,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        $txpLocale->setLocale(LC_TIME, $oldLocale);
+        $txpLocale->setLocale(LC_TIME, array($oldLocale, 'C'));
     }
 
     return $str;
