@@ -7,6 +7,7 @@ Changes in 4.7.1
 * Fixed: Textpack correctly updates timestamp where web server and database
   server reside in different timezones.
 * Fixed: Fallback to 'C' locale in some situations.
+* Fixed: Section page/style selectors are correctly populated.
 * Changed: Additional code optimization for PHP 5.4 and later.
 * Changed: Improved language string coverage in setup process.
 * Changed: Extended use of Textpattern 4.7.*-native tags in Four Point Seven
