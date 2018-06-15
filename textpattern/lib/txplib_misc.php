@@ -5605,7 +5605,7 @@ function permlinkurl($article_array)
     $section = urlencode($section);
     $url_title = urlencode($url_title);
 
-    switch ($permlink_mode) {
+    switch ($url_title === '' ? 'messy' : $permlink_mode) {
         case 'section_id_title':
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";
