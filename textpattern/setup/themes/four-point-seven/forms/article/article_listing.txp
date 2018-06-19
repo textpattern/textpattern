@@ -22,7 +22,7 @@
         <txp:text item="author" />
         <span itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
-                <txp:author link="1" this_section="1" />
+                <txp:author link this_section />
             </span>
         </span>
     </p>
