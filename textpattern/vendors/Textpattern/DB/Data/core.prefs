@@ -476,7 +476,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.0-dev",
+        "val": "4.7.1-dev",
         "type": "2",
         "event": "publish",
         "html": "text_input",
