@@ -3162,7 +3162,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        $txpLocale->setLocale(LC_TIME, $oldLocale);
+        $txpLocale->setLocale(LC_TIME, array($oldLocale, 'C'));
     }
 
     return $str;
@@ -5605,7 +5605,7 @@ function permlinkurl($article_array)
     $section = urlencode($section);
     $url_title = urlencode($url_title);
 
-    switch ($permlink_mode) {
+    switch ($url_title === '' ? 'messy' : $permlink_mode) {
         case 'section_id_title':
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";

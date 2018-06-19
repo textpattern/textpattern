@@ -433,6 +433,8 @@ function preText($s, $prefs)
     // Prevent to get the id for file_downloads.
     if ($out['s'] == 'file_download') {
         if (is_numeric($out['id'])) {
+            global $thisfile;
+
             // Undo the double-encoding workaround for .gz files;
             // @see filedownloadurl().
             if (!empty($out['filename'])) {
@@ -441,6 +443,8 @@ function preText($s, $prefs)
 
             $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
             $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+
+            $thisfile = $rs ? file_download_format_info($rs) : null;
         }
 
         $is_404 = $is_404 || empty($rs);
@@ -847,7 +851,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // If a listform is specified, $thing is for doArticle() - hence ignore here.
     if (!empty($listform)) {
-        $thing = '';
+        $thing = null;
     }
 
     // Get the form name.
@@ -881,7 +885,7 @@ function doArticles($atts, $iscustom, $thing = null)
             } elseif ($allowoverride && $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
             } else {
-                $articles[] = ($thing) ? parse($thing) : parse_form($fname);
+                $articles[] = $thing ? parse($thing) : parse_form($fname);
             }
 
             unset($GLOBALS['thisarticle']);
@@ -931,7 +935,7 @@ function doArticle($atts, $thing = null)
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
-            $article = $form ? parse_form($form) : parse($thing);
+            $article = $thing ? parse($thing) : parse_form($form);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
