@@ -25,7 +25,6 @@
             <txp:if_category>
                 <meta name="robots" content="noindex, follow">
             <txp:else />
-                <txp:article pgonly="1" limit="5" />
                 <txp:variable name="page" value='<txp:page_url type="pg" />' />
                 <txp:if_variable name="page" value="1">
                     <meta name="robots" content="index, follow">
@@ -89,7 +88,7 @@
                         <txp:else />
                             <!-- else is this an article category list? -->
                             <txp:if_category>
-                                <h1 itemprop="name"><txp:text item="category" /> <txp:category title="1" /></h1>
+                                <h1 itemprop="name"><txp:text item="category" /> <txp:category title /></h1>
                             </txp:if_category>
                         </txp:if_author>
                         <txp:article form="article_listing" limit="10" wraptag="ul" class="article-list" />

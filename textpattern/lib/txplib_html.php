@@ -1211,7 +1211,6 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
 
     $atts = array(
         'rel'    => 'help',
-        'target' => '_blank',
         'title'  => gTxt('help'),
         'role'   => 'button',
     );
@@ -1231,6 +1230,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         }
         $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
     } else {
+        $atts['target'] = '_blank';
         $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
     }
 

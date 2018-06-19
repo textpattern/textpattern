@@ -398,7 +398,7 @@ function link_edit($message = '')
             // TODO: maybe use type="url" once browsers are less strict.
             inputLabel(
                 'link_url',
-                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url', false, true),
+                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url'),
                 'url', 'link_url', array('class' => 'txp-form-field edit-link-url')
             ).
             inputLabel(

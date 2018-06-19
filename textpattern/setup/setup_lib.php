@@ -252,7 +252,8 @@ function setup_load_lang($langs)
         }
     }
 
-    Txp::get('\Textpattern\L10n\Lang')->setPack($strings);
+    Txp::get('\Textpattern\L10n\Lang')->setPack($strings)
+        ->setPack(array('help' => gTxt('setup_help')), true);
 
     return $strings;
 }
