@@ -13,6 +13,8 @@ Changes in 4.7.1
 * Changed: Extended use of Textpattern 4.7.*-native tags in Four Point Seven
   theme.
 * Added: Latest translations.
+* PrismJS 1.15.0.
+* jQuery File Upload 9.22.0.
 
 Changes in 4.7.0
 
