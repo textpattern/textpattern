@@ -22,13 +22,13 @@
   },
   "devDependencies": {
     "phplint": "~2",
-    "uglify-js": "3.3.25"
+    "uglify-js": "3.4.0"
   },
   "dependencies": {
-    "blueimp-file-upload": "9.21.0",
+    "blueimp-file-upload": "9.22.0",
     "blueimp-md5": "2.10.0",
     "jquery": "3.3.1",
-    "prismjs": "1.14.0"
+    "prismjs": "1.15.0"
   },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",

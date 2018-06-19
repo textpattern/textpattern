@@ -1,3 +1,21 @@
+Changes in 4.7.1
+
+* Maintenance release with bug fixes.
+* Fixed: <txp:article /> and <txp:article_custom /> correctly parse their
+  content.
+* Fixed: <txp:article /> with 'listform' attribute returns correct value.
+* Fixed: Textpack correctly updates timestamp where web server and database
+  server reside in different timezones.
+* Fixed: Fallback to 'C' locale in some situations.
+* Fixed: Section page/style selectors are correctly populated.
+* Changed: Additional code optimization for PHP 5.4 and later.
+* Changed: Improved language string coverage in setup process.
+* Changed: Extended use of Textpattern 4.7.*-native tags in Four Point Seven
+  theme.
+* Added: Latest translations.
+* PrismJS 1.15.0.
+* jQuery File Upload 9.22.0.
+
 Changes in 4.7.0
 
 * In memory of Dean Cameron Allen, creator of Textpattern CMS.
