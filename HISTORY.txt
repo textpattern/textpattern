@@ -12,6 +12,7 @@ Changes in 4.7.1
 * Changed: Improved language string coverage in setup process.
 * Changed: Extended use of Textpattern 4.7.*-native tags in Four Point Seven
   theme.
+* Changed: Additional database-related information included in Diagnostics.
 * Added: Latest translations.
 * PrismJS 1.15.0.
 * jQuery File Upload 9.22.0.
