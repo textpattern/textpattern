@@ -28,10 +28,10 @@ before you continue.
 
 ## Download Textpattern
 
-The current production release is version 4.7.0. It can be downloaded from the
+The current production release is version 4.7.1. It can be downloaded from the
 Textpattern website as a
-[.zip](https://textpattern.com/file_download/85/textpattern-4.7.0.zip) or
-[.tar.gz](https://textpattern.com/file_download/84/textpattern-4.7.0.tar.gz) archive.
+[.zip](https://textpattern.com/file_download/75/textpattern-4.7.1.zip) or
+[.tar.gz](https://textpattern.com/file_download/74/textpattern-4.7.1.tar.gz) archive.
 
 ## Install Textpattern
 
@@ -58,27 +58,6 @@ The development version can be
 obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development
 versions are works-in-progress and not recommended for use on live production
 servers.
-
-### Anticipated changes to future system requirements
-
-System requirements for the development version may differ from the production
-release [system requirements](https://textpattern.com/about/119/system-requirements).
-
-As a development version approaches release, minimum and recommended system
-requirements are confirmed and the production release [system requirements](https://textpattern.com/about/119/system-requirements) will
-be updated accordingly.
-
-The following table outlines anticipated / expected changes to system
-requirements for future releases. It takes into account vendor library support,
-security considerations and other factors. Note that minimum and/or recommended
-versions listed may changed during the development process.
-
-|        |  Minimum<br />(v4.8.0)  | Recommended<br />(v4.8.0) |
-|--------|-------|-----|
-| PHP    | 5.5 | 7.2 |
-| MySQL  | &mdash; | &mdash; |
-| Apache | &mdash; | &mdash; |
-| Nginx  | &mdash; | &mdash; |
 
 ## Contributing
 
