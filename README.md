@@ -68,13 +68,15 @@ As a development version approaches release, minimum and recommended system
 requirements are confirmed and the production release [system requirements](https://textpattern.com/about/119/system-requirements) will
 be updated accordingly.
 
-The following table outlines anticipated / expected changes to system
-requirements for future releases. It takes into account vendor library support,
-security considerations and other factors. Note that minimum and/or recommended
-versions listed may changed during the development process.
+The following table outlines anticipated forthcoming changes to system
+requirements for future releases. It takes into account vendor support, security
+considerations and other factors.
+
+Note that minimum and/or recommended versions listed may change multiple times
+during the development process.
 
 |        |  Minimum<br />(v4.8.0)  | Recommended<br />(v4.8.0) |
-|--------|-------|-----|
+|--------|:-------:|:-----:|
 | PHP    | 5.5 | 7.2 |
 | MySQL  | &mdash; | &mdash; |
 | Apache | &mdash; | &mdash; |
