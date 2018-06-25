@@ -28,10 +28,10 @@ before you continue.
 
 ## Download Textpattern
 
-The current production release is version 4.7.0. It can be downloaded from the
+The current production release is version 4.7.1. It can be downloaded from the
 Textpattern website as a
-[.zip](https://textpattern.com/file_download/85/textpattern-4.7.0.zip) or
-[.tar.gz](https://textpattern.com/file_download/84/textpattern-4.7.0.tar.gz) archive.
+[.zip](https://textpattern.com/file_download/86/textpattern-4.7.1.zip) or
+[.tar.gz](https://textpattern.com/file_download/87/textpattern-4.7.1.tar.gz) archive.
 
 ## Install Textpattern
 
@@ -131,7 +131,7 @@ npm run get-dependencies
 To request a specific tag or branch:
 
 ```ShellSession
-npm run get-default-theme 4.7.0
+npm run get-default-theme 4.7.1
 npm run get-classic-admin-theme 4.6.1
 npm run get-classic-admin-theme 4.6.x
 npm run get-hive-admin-theme 4.6.x
