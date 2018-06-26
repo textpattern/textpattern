@@ -132,10 +132,10 @@ To request a specific tag or branch:
 
 ```ShellSession
 npm run get-default-theme 4.7.1
-npm run get-classic-admin-theme 4.6.1
-npm run get-classic-admin-theme 4.6.x
-npm run get-hive-admin-theme 4.6.x
-npm run get-textpacks 4.6.x
+npm run get-classic-admin-theme 4.7.1
+npm run get-classic-admin-theme 4.7.x
+npm run get-hive-admin-theme 4.7.x
+npm run get-textpacks 4.7.x
 ```
 
 You can verify PHP code via a PHP linter from the CLI, like so:
