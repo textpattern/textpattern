@@ -356,9 +356,7 @@ function parse($thing, $condition = true)
         $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
-    if ($thing === null) {
-        return $condition ? '1' : '';
-    } elseif (!$short_tags) {
+    if (!$short_tags) {
         if (false === strpos($thing, '<txp:')) {
             return $condition ? $thing : ($thing ? '' : '1');
         }
