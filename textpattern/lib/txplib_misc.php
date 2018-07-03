@@ -3117,7 +3117,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     } elseif ($format == 'rfc822') {
         $format = '%a, %d %b %Y %H:%M:%S GMT';
         $gmt = true;
-        $override_locale = TEXTPATTERN_DEFAULT_LANG;
+        $override_locale = 'C';
     }
 
     if ($override_locale) {
@@ -4656,7 +4656,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
     // Disable caching when not in production
     if (get_pref('production_status') != 'live') {
         header('Cache-Control: no-cache, no-store, max-age=0');
-    } elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
+    } elseif (get_pref('send_lastmod')) {
         $unix_ts = get_lastmod($unix_ts);
 
         // Make sure lastmod isn't in the future.
@@ -5605,7 +5605,7 @@ function permlinkurl($article_array)
     $section = urlencode($section);
     $url_title = urlencode($url_title);
 
-    switch ($permlink_mode) {
+    switch ($url_title === '' ? 'messy' : $permlink_mode) {
         case 'section_id_title':
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";

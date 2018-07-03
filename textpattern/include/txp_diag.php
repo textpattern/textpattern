@@ -470,6 +470,7 @@ function doDiagnostics()
         hed(gTxt('preflight_check'), 2);
 
     $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+    $siteLang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     $langs = array_unique(array('en', $thisLang));
     $pfcStrings = array();
     $langCounter = 0;
@@ -615,6 +616,8 @@ function doDiagnostics()
 
         gTxt('diag_locale').cs.$locale.n,
 
+        gTxt('diag_languages', array('{site_lang}' => $siteLang, '{admin_lang}' => $thisLang)).n,
+
         (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
         (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.@apache_get_version().n : '',
@@ -647,7 +650,7 @@ function doDiagnostics()
 
         $out[] = n.gTxt('diag_db_charset').cs.$DB->default_charset.'/'.$DB->charset.n;
 
-        $result = safe_query("SHOW variables LIKE 'character_se%'");
+        $result = safe_query("SHOW variables WHERE Variable_name LIKE 'character_se%' OR Variable_name LIKE 'collation%'");
 
         while ($row = mysqli_fetch_row($result)) {
             $out[] = $row[0].cs.$row[1].n;
