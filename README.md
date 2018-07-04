@@ -80,7 +80,7 @@ during the development process.
 | PHP    | 5.5 | 7.2 |
 | MySQL  | &mdash; | &mdash; |
 | Apache | &mdash; | &mdash; |
-| Nginx  | &mdash; | &mdash; |
+| Nginx  | 1.10 | 1.14 |
 
 ## Contributing
 
