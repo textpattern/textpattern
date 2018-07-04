@@ -1,5 +1,6 @@
 Changes in 4.7.2
 
+* Maintenance release with bug fixes.
 * Fixed: 'problem_connecting_update_server' language string grouping corrected
   (thanks, gaekwad).
 * Changed: Extended fallback to 'C' locale in some situations.
