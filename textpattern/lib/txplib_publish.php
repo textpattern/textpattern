@@ -335,7 +335,7 @@ function lastMod()
 
 function parse($thing, $condition = true)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
+    global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $pattern, $short_tags = null;
 
     if (!empty($txp_atts['not'])) {
@@ -347,7 +347,7 @@ function parse($thing, $condition = true)
         $trace->log('['.($condition ? 'true' : 'false').']');
     }
 
-    if (!$condition) {
+    if (!$condition && empty($pretext['_txp_atts'])) {
         $txp_atts = null;
     }
 
