@@ -516,7 +516,7 @@ function step_fbCreate()
     unset($cfg['database']['client_flags']);
     unset($cfg['database']['charset']);
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
-        json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
+        json_encode($cfg, TEXTPATTERN_JSON | JSON_PRETTY_PRINT).
         "</pre>";
     if (defined('is_multisite')) {
         $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['admin_url'];
