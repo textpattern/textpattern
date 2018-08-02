@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <category>
+        <item>
+            <name>everything-is-going-to-be-alright</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Allt kommer att bli bra</title>
+            <description/>
+        </item>
+        <item>
+            <name>hope-for-the-future</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Framtidshopp</title>
+            <description/>
+        </item>
+        <item>
+            <name>meaningful-labor</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Meningsfullt arbete</title>
+            <description/>
+        </item>
+        <item>
+            <name>textpattern</name>
+            <type>link</type>
+            <parent>root</parent>
+            <title>Textpattern</title>
+            <description/>
+        </item>
+    </category>
+</resources>

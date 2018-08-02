@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<articles>
+<article>
+    <title>Tervetuloa sivustollesi</title>
+    <section>articles</section>
+    <category>hope-for-the-future</category>
+    <category>meaningful-labor</category>
+    <body format="textile"><![CDATA[
+h3. Mitä haluat tehdä seuraavaksi?
+
+* Muokata tai poistaa tämän artikkelin? Silloin "artikkelien luettelo":adminurl/index.php?event=list on aloituspaikka.
+* Vaihtaa sivuston nimen, tai vaihtaa URL-osoitteiden muodon? Sellaiset asiat riippuvat "asetuksista":adminurl/index.php?event=prefs.
+* Tutustua Textileen, meille ihmisille suunnattuun merkkaustyökaluun, joka tulee Textpatternin mukana? Sen perusteet ovat "yksinkertaisia":https://textpattern.com/textile-sandbox. Mikäli haluat oppia siitä enemmän, voit pureutua "kattavaan käsikirjaan":https://textpattern.com/textile-reference-manual myöhemmin.
+* Saada ohjeistusta ottaessasi "ensi askeleita Textpatternin kanssa":https://textpattern.com/textpattern-first-steps tekemällä yksinkertaisia tehtäviä?
+* Opiskella "Textpatternin semanttista mallia?":https://textpattern.com/textpattern-semantic-model
+* Lisätä "toisen käyttäjän":adminurl/index.php?event=admin, tai laajentaa ominaisuuksia "kolmannen osapuolen lisäosien":adminurl/index.php?event=plugin avulla, joita löysit "Textpatternin lisäosien hakemistosta?":https://textpattern.com/plugins
+* Kokeilla asioita omin päin yrityksen ja erehdyksen kautta? Silloin ole hyvä ja huomaa:
+** Kun "kirjoitat":adminurl/index.php?event=article artikkelin, määrittelet mihin sivustosi osioon se kuuluu.
+** Osiot käyttävät "sivupohjia":adminurl/index.php?event=page ja "tyylejä":adminurl/index.php?event=css kun ne näytetään maailmalle.
+** Sivupohjat käyttävät HTML(HyperText Markup Language):ää ja Textpatternin tageja (kuten tätä: @<txp:article />@) rakentaakseen "lopputuotteen".
+** Jotkut Textpatternin tageista käyttävät "lomakkeita":adminurl/index.php?event=form. Ne ovat rakennuspalikoita, jotka sisältävät tekemääsi koodia ja merkkausta, ja joita voi käyttää uudelleen ja haluamissasi yhteyksissä.
+
+"Textpatternin tagit":https://docs.textpattern.io/tags/, niiden attribuutit ja arvot selitetään, ja niistä näytetään esimerkkejä, "Textpatternin käsikirjassa":https://docs.textpattern.io/. Löydät sieltä myös arvokkaita niksejä ja ohjeita.
+
+Lisäksi ryhmä ystävällisiä, avuliaita ihmisiä on "Textpatternin tukifoorumilla":https://forum.textpattern.io/. Tule vierailulle!
+
+Toivotamme tervetulleeksi uudet kielikäännökset (ja korjaukset nykyisiin käännöksiin). Ole hyvä ja vieraile "Textpatternin käännössivulla":https://textpattern.com/languages saadaksesi lisätietoja.
+]]></body>
+    <excerpt format="textile"><![CDATA[
+Tämä on Textpatternin artikkelin johdanto. Artikkelien johdannot ovat vapaaehtoisia, mutta niillä voidaan näpsäkästi luoda yhteenveto artikkelin sisällöstä käyttämällä esimerkiksi Textpatternin sisäänrakennettua artikkelien syndikointia ja @<txp:excerpt />@ -tagia.
+]]></excerpt>
+    <comment>
+        <name>Donald Swain</name>
+        <email>donald-swain@example.com</email>
+        <web>https://docs.textpattern.io/brand/donald-swain</web>
+        <message><![CDATA[<p>Pidän kovasti sivustostasi.</p>]]></message>
+    </comment>
+</article>
+</articles>
+</resources>

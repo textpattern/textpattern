@@ -6,28 +6,28 @@
             <type>article</type>
             <parent></parent>
             <title>root</title>
-            <description></description>
+            <description/>
         </item>
         <item>
             <name>root</name>
             <type>link</type>
             <parent></parent>
             <title>root</title>
-            <description></description>
+            <description/>
         </item>
         <item>
             <name>root</name>
             <type>image</type>
             <parent></parent>
             <title>root</title>
-            <description></description>
+            <description/>
         </item>
         <item>
             <name>root</name>
             <type>file</type>
             <parent></parent>
             <title>root</title>
-            <description></description>
+            <description/>
         </item>
     </category>
 </resources>

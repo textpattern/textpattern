@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<articles>
+<article>
+    <title>Välkommen till din webbplats</title>
+    <section>articles</section>
+    <category>hope-for-the-future</category>
+    <category>meaningful-labor</category>
+    <body format="textile"><![CDATA[
+h3. Vad vill du göra härnäst?
+
+* Ändra eller ta bort den här artikeln? "artikellista":adminurl/index.php?event=list är stället att börja på.
+* Ändra webbplatsens namn eller ändra stilen på webbadresserna? It's all up to your "inställningar":adminurl/index.php?event=prefs.
+* Get yourself acquainted with Textile, the humane markup generator which comes with Textpattern? Grunderna är "enkelt":https://textpattern.com/textile-sandbox. Om du vill lära dig mer kan du fördjupa dig i den "omfattande manualen":https://textpattern.com/textile-reference-manual senare.
+* Bli guidad genom dina "Textpattern första steg":https://textpattern.com/textpattern-first-steps genom att fylla i några grundläggande uppgifter?
+* Studera "Textpattern semantisk modell?":https://textpattern.com/textpattern-semantic-model
+* Lägg till "fler användare":adminurl/index.php?event=admin, eller utöka kapaciteten med "tredjepartsplugins":adminurl/index.php?event=plugin du upptäckte i "Textpattern pluginkatalog?":https://textpattern.com/plugins
+* Eller lär dig av dina misstag? Men kom då ihåg:
+** När du "skriver":adminurl/index.php?event=article en artikel du tilldelar den till en del av din webbplats.
+** Sektioner använder en "sidmall":adminurl/index.php?event=page och en "style":adminurl/index.php?event=css som utmatningsställ.
+** Sidmallar använder HTML(HyperText Markup Language) och Textpattern-taggar (som denna: @<txp:article />@) att bygga upp markeringen.
+** Några Textpattern-taggar använder "formen":adminurl/index.php?event=form, vilka är byggstenar för återanvändbara utdrag av kod och markeringar du kan bygga och använda efter eget gottfinnande.
+
+"Textpattern taggar":https://docs.textpattern.io/tags/, deras attribut och värden förklaras och ges exempel på i "Textpattern användardokumentation":https://docs.textpattern.io/, där du också hittar värdefulla tips och handledningar.
+
+Det finns också en massa vänliga och hjälpsamma människor på "Textpattern supportforum":https://forum.textpattern.io/. Du är välkommen in!
+
+Vi välkomnar ytterligare språköversättningar (och korrigeringar till befintliga översättningar). Besök "Textpattern språköversättningar":https://textpattern.com/languages för mer information.
+]]></body>
+    <excerpt format="textile"><![CDATA[
+Detta är ett textpattern-artikelutdrag. Artikelutdrag är frivilliga, men kan användas effektivt för att sammanfatta en artikels innehåll. Till exempel med Textpatterns inbyggda artikelsyndikering. och med taggen @<txp:excerpt />@.
+]]></excerpt>
+    <comment>
+        <name>Donald Swain</name>
+        <email>donald-swain@example.com</email>
+        <web>https://docs.textpattern.io/brand/donald-swain</web>
+        <message><![CDATA[<p>Jag gillar din webbplats väldigt mycket.</p>]]></message>
+    </comment>
+</article>
+</articles>
+</resources>

@@ -5,29 +5,29 @@
             <name>everything-is-going-to-be-alright</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Everything is going to be alright</title>
-            <description></description>
+            <title>Kaikki tulee olemaan hyvin</title>
+            <description/>
         </item>
         <item>
             <name>hope-for-the-future</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Hope for the future</title>
-            <description></description>
+            <title>Toivoa tulevaan</title>
+            <description/>
         </item>
         <item>
             <name>meaningful-labor</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Meaningful labor</title>
-            <description></description>
+            <title>Merkityksellistä työtä</title>
+            <description/>
         </item>
         <item>
             <name>textpattern</name>
             <type>link</type>
             <parent>root</parent>
             <title>Textpattern</title>
-            <description></description>
+            <description/>
         </item>
     </category>
 </resources>
