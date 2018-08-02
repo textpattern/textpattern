@@ -961,7 +961,7 @@ function filterAtts($atts = null, $iscustom = null)
         $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
     }
 
-    if ($q && $searchsticky || $id) {
+    if ($q && $searchsticky || $ids) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } else {
         $statusq = " AND Status IN (".implode(',', $status).")";
