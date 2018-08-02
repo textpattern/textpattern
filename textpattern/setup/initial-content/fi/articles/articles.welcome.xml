@@ -6,8 +6,7 @@
     <section>articles</section>
     <category>hope-for-the-future</category>
     <category>meaningful-labor</category>
-    <body format="textile"><![CDATA[
-h3. Mitä haluat tehdä seuraavaksi?
+    <body format="textile"><![CDATA[h3. Mitä haluat tehdä seuraavaksi?
 
 * Muokata tai poistaa tämän artikkelin? Silloin "artikkelien luettelo":adminurl/index.php?event=list on aloituspaikka.
 * Vaihtaa sivuston nimen, tai vaihtaa URL-osoitteiden muodon? Sellaiset asiat riippuvat "asetuksista":adminurl/index.php?event=prefs.
@@ -25,11 +24,8 @@ h3. Mitä haluat tehdä seuraavaksi?
 
 Lisäksi ryhmä ystävällisiä, avuliaita ihmisiä on "Textpatternin tukifoorumilla":https://forum.textpattern.io/. Tule vierailulle!
 
-Toivotamme tervetulleeksi uudet kielikäännökset (ja korjaukset nykyisiin käännöksiin). Ole hyvä ja vieraile "Textpatternin käännössivulla":https://textpattern.com/languages saadaksesi lisätietoja.
-]]></body>
-    <excerpt format="textile"><![CDATA[
-Tämä on Textpatternin artikkelin johdanto. Artikkelien johdannot ovat vapaaehtoisia, mutta niillä voidaan näpsäkästi luoda yhteenveto artikkelin sisällöstä käyttämällä esimerkiksi Textpatternin sisäänrakennettua artikkelien syndikointia ja @<txp:excerpt />@ -tagia.
-]]></excerpt>
+Toivotamme tervetulleeksi uudet kielikäännökset (ja korjaukset nykyisiin käännöksiin). Ole hyvä ja vieraile "Textpatternin käännössivulla":https://textpattern.com/languages saadaksesi lisätietoja.]]></body>
+    <excerpt format="textile"><![CDATA[Tämä on Textpatternin artikkelin johdanto. Artikkelien johdannot ovat vapaaehtoisia, mutta niillä voidaan näpsäkästi luoda yhteenveto artikkelin sisällöstä käyttämällä esimerkiksi Textpatternin sisäänrakennettua artikkelien syndikointia ja @<txp:excerpt />@ -tagia.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>

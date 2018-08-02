@@ -6,8 +6,7 @@
     <section>articles</section>
     <category>hope-for-the-future</category>
     <category>meaningful-labor</category>
-    <body format="textile"><![CDATA[
-h3. Vad vill du göra härnäst?
+    <body format="textile"><![CDATA[h3. Vad vill du göra härnäst?
 
 * Ändra eller ta bort den här artikeln? "artikellista":adminurl/index.php?event=list är stället att börja på.
 * Ändra webbplatsens namn eller ändra stilen på webbadresserna? It's all up to your "inställningar":adminurl/index.php?event=prefs.
@@ -25,11 +24,8 @@ h3. Vad vill du göra härnäst?
 
 Det finns också en massa vänliga och hjälpsamma människor på "Textpattern supportforum":https://forum.textpattern.io/. Du är välkommen in!
 
-Vi välkomnar ytterligare språköversättningar (och korrigeringar till befintliga översättningar). Besök "Textpattern språköversättningar":https://textpattern.com/languages för mer information.
-]]></body>
-    <excerpt format="textile"><![CDATA[
-Detta är ett textpattern-artikelutdrag. Artikelutdrag är frivilliga, men kan användas effektivt för att sammanfatta en artikels innehåll. Till exempel med Textpatterns inbyggda artikelsyndikering. och med taggen @<txp:excerpt />@.
-]]></excerpt>
+Vi välkomnar ytterligare språköversättningar (och korrigeringar till befintliga översättningar). Besök "Textpattern språköversättningar":https://textpattern.com/languages för mer information.]]></body>
+    <excerpt format="textile"><![CDATA[Detta är ett textpattern-artikelutdrag. Artikelutdrag är frivilliga, men kan användas effektivt för att sammanfatta en artikels innehåll. Till exempel med Textpatterns inbyggda artikelsyndikering. och med taggen @<txp:excerpt />@.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>

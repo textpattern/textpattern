@@ -6,8 +6,7 @@
     <section>articles</section>
     <category>hope-for-the-future</category>
     <category>meaningful-labor</category>
-    <body format="textile"><![CDATA[
-h3. What do you want to do next?
+    <body format="textile"><![CDATA[h3. What do you want to do next?
 
 * Modify or delete this article? The "article list":adminurl/index.php?event=list is the place to start.
 * Change this site's name, or modify the style of the URLs? It's all up to your "preferences":adminurl/index.php?event=prefs.
@@ -25,11 +24,8 @@ h3. What do you want to do next?
 
 There's also a crowd of friendly, helpful people over at the "Textpattern support forum":https://forum.textpattern.io/. Come and pay a visit!
 
-We welcome additional language translations (and corrections to current translations). Please visit "Textpattern language translations":https://textpattern.com/languages for further details.
-]]></body>
-    <excerpt format="textile"><![CDATA[
-This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarize an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.
-]]></excerpt>
+We welcome additional language translations (and corrections to current translations). Please visit "Textpattern language translations":https://textpattern.com/languages for further details.]]></body>
+    <excerpt format="textile"><![CDATA[This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarize an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>
