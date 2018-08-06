@@ -893,7 +893,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
-        return parse($thing, false);
+        return $thing ? parse($thing, false) : '';
     }
 }
 
@@ -949,7 +949,7 @@ function doArticle($atts, $thing = null)
         // Restore atts to the previous article filter criteria.
         filterAtts($oldAtts ? $oldAtts : false);
 
-        return parse($thing, false);
+        return $thing ? parse($thing, false) : '';
     }
 }
 
