@@ -50,7 +50,7 @@ namespace Textpattern\Skin {
 
         public function getInstance()
         {
-            static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes'))));
+            static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
 
             return $this;
         }
