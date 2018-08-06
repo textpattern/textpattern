@@ -862,7 +862,7 @@ function filterAtts($atts = null, $iscustom = null)
         'sort'          => '',
         'keywords'      => '',
         'time'          => null,
-        'status'        => STATUS_LIVE,
+        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
         'id'            => '',
@@ -961,7 +961,7 @@ function filterAtts($atts = null, $iscustom = null)
         $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
     }
 
-    if ($q && $searchsticky || $id) {
+    if ($q && $searchsticky) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } else {
         $statusq = " AND Status IN (".implode(',', $status).")";
