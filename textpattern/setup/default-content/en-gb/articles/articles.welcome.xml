@@ -5,7 +5,7 @@
     <title>Welcome to your site</title>
     <section>articles</section>
     <category>hope-for-the-future</category>
-    <category>meaningful-labor</category>
+    <category>meaningful-labour</category>
     <body format="textile"><![CDATA[h3. What do you want to do next?
 
 * Modify or delete this article? The "article list":adminurl/index.php?event=list is the place to start.
