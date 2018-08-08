@@ -103,7 +103,7 @@ function css_list($current)
 
             if ((!$count-- || $extension !== $ext) && !empty($out)) {
                 $id = 'all_styles_'.($extension ? $types[$extension-1] : 'css');
-                $label = $extension ? $mimetypes[$types[$extension-1]] : 'all_stylesheets';
+                $label = $extension ? strtoupper($types[$extension-1]).' ('.$mimetypes[$types[$extension-1]].')' : 'CSS (text/css)';
                 $list .= wrapGroup($id, tag(join(n, $out), 'ul', array('class' => 'switcher-list')), $label);
                 $out = array();
             }
