@@ -16,7 +16,7 @@
 * Add one or more "additional users":adminurl/index.php?event=admin, or extend Textpattern's capabilities with "plugins":adminurl/index.php?event=plugin from the "Textpattern plugin directory?":https://textpattern.com/plugins
 * Dive in and learn by doing? Please note:
 ** When you "write an article":adminurl/index.php?event=article you assign it to a section of your site.
-** Sections use a "page template":adminurl/index.php?event=page and a "style":adminurl/index.php?event=css to define how it appears in a browser.
+** Sections use a "page template":adminurl/index.php?event=page and a "style":adminurl/index.php?event=css to define how site content appears in a browser.
 ** Page templates use HTML(HyperText Markup Language) and "Textpattern tags":https://docs.textpattern.io/tags/ (like this: @<txp:article />@) to build the output code.
 ** Some Textpattern tags use "forms":adminurl/index.php?event=form, which are building blocks for reusable code and markup.
 ** Pages, styles and forms can be packaged into "themes":adminurl/index.php?event=skin and assigned to one or more sections.
