@@ -61,17 +61,17 @@ system. Textpattern is free and open source.
 
 * Check back regularly at https://textpattern.com/ to see if an update is
   available. Updates are as painless as possible, often extending functionality,
-  fixing bugs and/or security-related issues. Your Admin -> Diagnostics panel
-  will also display a message if a new version is available.
+  fixing bugs and/or security-related issues. Textpattern's diagnostic panel
+  (Admin -> Diagnostics) will display a message if a new version is available.
 
 
 == Upgrading: preflight ==
 
 * Read the release notes in HISTORY.txt, both for the version you are upgrading
-  to and any prior versions you are skipping. Ensure you understand any changes
-  and enhancements that may affect your Textpattern site functionality. If in
-  doubt, refer to the resources in the Getting Started section above before you
-  undertake the upgrade process.
+  to and any prior versions you are skipping as these changes will apply.
+  Ensure you understand any changes and enhancements that may affect your
+  Textpattern site functionality. If in doubt, refer to the resources in the
+  Getting Started section above before you undertake the upgrade process.
 * Confirm your web server meets or exceeds the Textpattern system requirements:
     https://textpattern.com/system-requirements
 * It is recommended that the browser cache is cleared to ensure the newer files
