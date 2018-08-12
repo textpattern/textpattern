@@ -1,7 +1,7 @@
 Textpattern CMS 4.7.1
 
 Released under the GNU General Public License.
-See textpattern/LICENSE.txt for terms and conditions.
+See LICENSE.txt for terms and conditions.
 
 Includes contributions licensed under the GNU Lesser General Public License.
 See textpattern/lib/LICENSE-LESSER.txt for terms and conditions.
