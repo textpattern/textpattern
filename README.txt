@@ -87,8 +87,7 @@ system. Textpattern is free and open source.
 * NOTE: Upgrades from versions prior to 4.7.0 will present an 'Unknown section'
   message on the front side after updated files have been transferred and
   before the first admin-side log in. This is expected behaviour. The message
-  will disappear after the upgrade scripts have run automatically after the
-  first log in.
+  will disappear following the automatic upgrade after the first log in.
 * Confirm your web server meets or exceeds the Textpattern system requirements:
     https://textpattern.com/system-requirements
 * Log out of the Textpattern admin-side.
