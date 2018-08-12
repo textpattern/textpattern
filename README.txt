@@ -84,6 +84,11 @@ system. Textpattern is free and open source.
     /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
   This is expected behaviour. The messages will disappear with subsequent
   navigation in the admin-side.
+* NOTE: Upgrades from versions prior to 4.7.0 will present an 'Unknown section'
+  message on the front side after updated files have been transferred and
+  before the first admin-side log in. This is expected behaviour. The message
+  will disappear after the upgrade scripts have run automatically after the
+  first log in.
 * Confirm your web server meets or exceeds the Textpattern system requirements:
     https://textpattern.com/system-requirements
 * Log out of the Textpattern admin-side.
