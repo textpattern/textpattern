@@ -32,17 +32,17 @@ system. Textpattern is free and open source.
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
-  as should the /textpattern/, /rpc/ and /themes directories.
-* Ensure the top-level .htaccess file is transferred to your site. The file is
-  hidden by default on some operating systems, including macOS. Most FTP clients
-  and IDEs have an option to show these hidden files. Otherwise, you can
-  temporarily show hidden files in macOS by using the Terminal.app - follow
-  these instructions:
+  as should the /textpattern/, /rpc/ and /themes/ directories.
+* If you are running Textpattern on an Apache web server, ensure the top-level
+  .htaccess file is transferred to your site. The file is hidden by default on
+  some operating systems, including macOS. Most FTP clients and IDEs have an
+  option to show these hidden files. Otherwise, you can temporarily show hidden
+  files in macOS using Terminal.app - follow these instructions:
     https://textpattern.com/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
-  permissions in addition to standard SELECT, CREATE, UPDATE, ALTER, etc
-  permissions. See the system requirements for a complete list:
+  permissions in addition to pre-existing permissions. Refer to the system
+  requirements for a complete list:
     https://textpattern.com/system-requirements
 * Load /textpattern/setup/ (or /subdirectory/textpattern/setup/) in your
   browser to start the installation process and follow the directions.
@@ -61,7 +61,7 @@ system. Textpattern is free and open source.
 
 * Check back regularly at https://textpattern.com/ to see if an update is
   available. Updates are as painless as possible, often extending functionality,
-  fixing bugs and/or security-related issues. Textpattern's diagnostic panel
+  fixing bugs and/or security-related issues. Textpattern's diagnostics
   (Admin -> Diagnostics) will display a message if a new version is available.
 
 
@@ -91,7 +91,7 @@ system. Textpattern is free and open source.
 * NOTE: Upgrades from versions prior to 4.7.0 may present an 'Unknown section'
   message on the front side after updated files have been transferred and
   before the first admin-side log in. The message will disappear following the
-  first log in when the upgrade scripts are run.
+  first log in when the database upgrade scripts are run.
 
 == Upgrading ==
 
@@ -102,8 +102,8 @@ system. Textpattern is free and open source.
 * Replace the top-level index.php, css.php and .htaccess files (if Textpattern
   is running on an Apache or derivative web server), everything in the /rpc/
   directory and everything in the /textpattern/ directory (except
-  /textpattern/config.php and the /textpattern/setup directory) with the
-  corresponding files in this distribution. In addition, ensure the /themes
+  /textpattern/config.php and the /textpattern/setup/ directory) with the
+  corresponding files in this distribution. In addition, ensure the /themes/
   directory exists if it is not already there, and is writable.
   When uploading the /textpattern/ directory, ensure you preserve any custom
   files in your existing installation.
