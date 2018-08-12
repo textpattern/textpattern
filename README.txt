@@ -65,13 +65,17 @@ system. Textpattern is free and open source.
   will also display a message if a new version is available.
 
 
-== Upgrading ==
+== Upgrading: preflight ==
 
 * Read the release notes in HISTORY.txt, both for the version you are upgrading
   to and any prior versions you are skipping. Ensure you understand any changes
   and enhancements that may affect your Textpattern site functionality. If in
   doubt, refer to the resources in the Getting Started section above before you
   undertake the upgrade process.
+* Confirm your web server meets or exceeds the Textpattern system requirements:
+    https://textpattern.com/system-requirements
+* It is recommended that the browser cache is cleared to ensure the newer files
+  are used in preference to the older files.
 * NOTE: Versions prior to 4.2.0 should be upgraded to 4.2.0 before subsequent
   version upgrades. Upgrades from versions prior to 4.2.0 will present warnings
   and/or errors upon the first login to the admin-side. These may include:
@@ -84,27 +88,27 @@ system. Textpattern is free and open source.
     /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
   This is expected behaviour. The messages will disappear with subsequent
   navigation in the admin-side.
-* NOTE: Upgrades from versions prior to 4.7.0 will present an 'Unknown section'
+* NOTE: Upgrades from versions prior to 4.7.0 may present an 'Unknown section'
   message on the front side after updated files have been transferred and
-  before the first admin-side log in. This is expected behaviour. The message
-  will disappear following the automatic upgrade after the first log in.
-* Confirm your web server meets or exceeds the Textpattern system requirements:
-    https://textpattern.com/system-requirements
+  before the first admin-side log in. The message will disappear following the
+  automatic upgrade after the first log in.
+
+== Upgrading ==
+
 * Log out of the Textpattern admin-side.
 * Verify the existence of a known-good Textpattern database and file backup.
 * Ensure your MySQL database user has INDEX permissions in addition to any
   permissions previously granted.
-* Replace the top-level index.php, css.php and .htaccess files, everything in
-  the /rpc/ directory and everything in the /textpattern/ directory (except
+* Replace the top-level index.php, css.php and .htaccess files (if Textpattern
+  is running on an Apache or derivative web server), everything in the /rpc/
+  directory and everything in the /textpattern/ directory (except
   /textpattern/config.php and the /textpattern/setup directory) with the
   corresponding files in this distribution. In addition, ensure the /themes
   directory exists if it is not already there, and is writable.
-  When uploading the /textpattern/ directory, ensure you merge its contents with
-  your existing site to preserve any custom files in your existing installation.
+  When uploading the /textpattern/ directory, ensure you preserve any custom
+  files in your existing installation.
   Note: css.php and /rpc/ may not exist if the installed version of
   Textpattern is prior to 4.2.0.
-* It is recommended that the browser cache is cleared to ensure the newer files
-  are used in preference to the older files.
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
   automatically. Check the site diagnostics (Admin -> Diagnostics) to confirm
   the correct Textpattern version number is displayed and whether there are any
