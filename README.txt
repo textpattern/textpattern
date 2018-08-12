@@ -1,7 +1,7 @@
 Textpattern CMS 4.7.1
 
 Released under the GNU General Public License.
-See textpattern/lib/LICENSE.txt for terms and conditions.
+See textpattern/LICENSE.txt for terms and conditions.
 
 Includes contributions licensed under the GNU Lesser General Public License.
 See textpattern/lib/LICENSE-LESSER.txt for terms and conditions.
@@ -91,14 +91,14 @@ system. Textpattern is free and open source.
 * NOTE: Upgrades from versions prior to 4.7.0 may present an 'Unknown section'
   message on the front side after updated files have been transferred and
   before the first admin-side log in. The message will disappear following the
-  automatic upgrade after the first log in.
+  first log in when the upgrade scripts are run.
 
 == Upgrading ==
 
 * Log out of the Textpattern admin-side.
 * Verify the existence of a known-good Textpattern database and file backup.
-* Ensure your MySQL database user has INDEX permissions in addition to any
-  permissions previously granted.
+* Ensure your Textpattern database user has INDEX permissions in addition to
+  any permissions previously granted.
 * Replace the top-level index.php, css.php and .htaccess files (if Textpattern
   is running on an Apache or derivative web server), everything in the /rpc/
   directory and everything in the /textpattern/ directory (except
