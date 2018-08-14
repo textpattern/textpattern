@@ -95,7 +95,7 @@ some of the following [topic](https://help.github.com/articles/about-topics/)
 keywords to your public project repositories, so we can build a network of
 discoverable resources:
 
-* `textpattern`
+* [`textpattern`](https://github.com/topics/textpattern)
 * `textpattern-plugin`
 * `textpattern-theme`
 * `textpattern-website` (for websites built with Textpattern)
