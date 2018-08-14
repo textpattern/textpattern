@@ -1002,12 +1002,22 @@ jQuery.fn.txpAsyncForm = function (options) {
         if (typeof extra === 'undefined') extra = new Object;
 
         var $this = $(this);
+
+        // Safari workaround?
+        var $inputs = $('input[type="file"]:not([disabled])', $this);
+        $inputs.each(function(i, input) {
+            if (input.files.length > 0) return 
+            $(input).prop('disabled', true)
+        })
+
         var form =
         {
             data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
+
+        $inputs.prop('disabled', false);// Safari workaround.
 
         if (typeof extra['_txp_submit'] !== 'undefined') {
             form.button = $this.find(extra['_txp_submit']).eq(0);
