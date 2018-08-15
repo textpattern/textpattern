@@ -45,7 +45,7 @@ Please see
 [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
 for details on upgrading Textpattern.
 
-## Help and support
+## Help and Support
 
 The [Textpattern support forum](https://forum.textpattern.io) is home to
 a friendly and helpful community of Textpattern users and experts.
