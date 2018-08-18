@@ -328,6 +328,7 @@ function list_list($message = '', $post = '')
                 n.tag_end('thead');
 
             include_once txpath.'/publish/taghandlers.php';
+            $can_preview = has_privs('article.preview');
 
             $contentBlock .= n.tag_start('tbody');
 
@@ -356,7 +357,7 @@ function list_list($message = '', $post = '')
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
                 if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                    $view_url = '?txpreview='.intval($ID).'.'.time();
+                    $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
                 } else {
                     $view_url = permlinkurl($a);
                 }
@@ -433,11 +434,11 @@ function list_list($message = '', $post = '')
                     td(
                         $Category2, '', 'txp-list-col-category2 category'.$vc[2]
                     ).
-                    td(
+                    td($view_url ?
                         href($Status, $view_url, join_atts(array(
                             'target' => '_blank',
                             'title'  => gTxt('view'),
-                        ), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
+                        ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'
                     ).
                     (
                         $show_authors

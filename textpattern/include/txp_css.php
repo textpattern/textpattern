@@ -79,19 +79,37 @@ if ($event == 'css') {
 
 function css_list($current)
 {
+    $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
+    $types = array_keys($mimetypes);
+    $fields = "'".implode("','", doSlash($types))."'";
     $out = array();
+    $list = '';
+    $extension = false;
     $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
 
     $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start("name", 'txp_css', $criteria . ' ORDER BY name');
+    $rs = safe_rows_start("name,
+            (LOCATE('.', name) > 0) * FIELD(SUBSTRING_INDEX(name, '.', -1), $fields) AS ext,
+            LEFT(name, LENGTH(name) - LOCATE('.', REVERSE(name))) AS base",
+        'txp_css', $criteria . ' ORDER BY ext, base');
 
-    if ($rs) {
-        while ($a = nextRow($rs)) {
-            extract($a);
+    if ($count = numRows($rs)) {
+        while ($a = nextRow($rs) or $count >= 0) {
+            if (is_array($a)) {
+                extract($a);
+            }
+
+            if ((!$count-- || $extension !== $ext) && !empty($out)) {
+                $id = 'all_styles_'.($extension ? $types[$extension-1] : 'css');
+                $label = $extension ? strtoupper($types[$extension-1]).' ('.$mimetypes[$types[$extension-1]].')' : 'CSS (text/css)';
+                $list .= wrapGroup($id, tag(join(n, $out), 'ul', array('class' => 'switcher-list')), $label);
+                $out = array();
+            }
+
+            $extension = $ext;
             $active = ($current['name'] === $name);
-
             $edit = eLink('css', '', 'name', $name, $name);
 
             if (!array_key_exists($name, $protected)) {
@@ -101,9 +119,11 @@ function css_list($current)
             $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
-        $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list'));
-
-        return wrapGroup('all_styles', $out, 'all_stylesheets');
+        return n.tag($list, 'div', array(
+                'id'    => 'all_styles',
+                'role'  => 'region',
+            )
+        );
     }
 }
 

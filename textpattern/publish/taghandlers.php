@@ -195,6 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_trim', 'trim')
     ->registerAttr('txp_wraptag', 'wraptag, label');
 
 // -------------------------------------------------------------
@@ -3726,13 +3727,14 @@ function if_individual_article($atts, $thing = null)
 function if_article_list($atts, $thing = null)
 {
     global $is_article_list, $pretext;
+    static $defaults = array('s', 'c', 'q', 'month', 'author', 'pg');
 
     $x = ($is_article_list == true);
 
     if ($x && !empty($atts)) {
         extract(lAtts(array('type' => ''), $atts));
 
-        foreach (do_list_unique($type) as $q) {
+        foreach ($type === true ? $defaults : do_list_unique($type) as $q) {
             switch ($q) {
                 case 's':
                     $x = !empty($pretext['s']) && $pretext['s'] != 'default';
@@ -5153,7 +5155,7 @@ function txp_escape($atts, $thing = '')
                 $thing = txpspecialchars($thing);
                 break;
             case 'json':
-                $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
+                $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
                 break;
             case 'number': case 'float':
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
@@ -5222,4 +5224,15 @@ function txp_wraptag($atts, $thing = '')
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_trim($atts, $thing = '')
+{
+    extract(lAtts(array(
+        'trim'    => true,
+    ), $atts, false));
+
+    return $trim === true ? trim($thing) : trim($thing, $trim);
 }
