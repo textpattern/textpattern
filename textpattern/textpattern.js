@@ -40,19 +40,7 @@ var langdir = document.documentElement.dir,
 
 function checkCookies()
 {
-    var date = new Date();
-
-    date.setTime(date.getTime() + (60 * 1000));
-
-    document.cookie = 'testcookie=enabled; expired=' + date.toGMTString() + '; path=/';
-
-    cookieEnabled = (document.cookie.length > 2) ? true : false;
-
-    date.setTime(date.getTime() - (60 * 1000));
-
-    document.cookie = 'testcookie=; expires=' + date.toGMTString() + '; path=/';
-
-    return cookieEnabled;
+    return textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
 }
 
 /**
@@ -705,7 +693,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem('textpattern.' + textpattern._txp_uid))) || {},
+    data: (!navigator.cookieEnabled || !window.localStorage ? null : JSON.parse(window.localStorage.getItem('textpattern.' + textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -719,7 +707,7 @@ textpattern.storage =
         $.extend(true, textpattern.storage.data, data);
         textpattern.storage.clean(textpattern.storage.data);
 
-        if (window.localStorage) {
+        if (navigator.cookieEnabled && window.localStorage) {
             window.localStorage.setItem('textpattern.' + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
@@ -1980,12 +1968,6 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 
 textpattern.Route.add('login', function () {
-    // Check cookies.
-    if (!checkCookies()) {
-        cookieEnabled = false;
-        $('main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
-    }
-
     // Focus on either username or password when empty.
     $('#login_form input').filter(function(){
         return !this.value;
@@ -2363,6 +2345,13 @@ textpattern.Route.add('plugin.plugin_help', function ()
 // All panels?
 
 textpattern.Route.add('', function () {
+    // Check cookies.
+    cookieEnabled = checkCookies();
+
+    if (!cookieEnabled || textpattern.event == 'login') {
+        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), cookieEnabled ? 2 : 1])
+    }
+
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
