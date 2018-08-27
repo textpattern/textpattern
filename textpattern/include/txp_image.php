@@ -45,7 +45,7 @@ if ($event == 'image') {
 
     global $all_image_cats, $all_image_authors;
     $all_image_cats = getTree('root', 'image');
-    $all_image_authors = the_privileged('image.edit.own');
+    $all_image_authors = the_privileged('image.edit.own', true);
 
     $available_steps = array(
         'image_list'          => false,
@@ -521,7 +521,7 @@ function image_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (has_privs('image.edit') && in_array($val, $all_image_authors)) {
+            if (has_privs('image.edit') && isset($all_image_authors[$val])) {
                 $key = 'author';
             }
             break;

@@ -45,8 +45,13 @@ if ($event == 'list') {
     $statuses = status_list();
 
     $all_cats = getTree('root', 'article');
-    $all_authors = the_privileged('article.edit.own');
-    $all_sections = safe_column("name", 'txp_section', "name != 'default'");
+    $all_authors = the_privileged('article.edit.own', true);
+    $all_sections = array();
+
+    foreach (safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title") as $section) {
+        extract($section);
+        $all_sections[$name] = $title;
+    }
 
     $available_steps = array(
         'list_list'          => false,
@@ -615,7 +620,7 @@ function list_multi_edit()
         // Change author.
         case 'changeauthor':
             $value = ps('AuthorID');
-            if (has_privs('article.edit') && in_array($value, $all_authors, true)) {
+            if (has_privs('article.edit') && isset($all_authors[$value])) {
                 $field = 'AuthorID';
             }
             break;
@@ -642,7 +647,7 @@ function list_multi_edit()
         // Change section.
         case 'changesection':
             $value = ps('Section');
-            if (in_array($value, $all_sections, true)) {
+            if (isset($all_sections[$value])) {
                 $field = 'Section';
             }
             break;
