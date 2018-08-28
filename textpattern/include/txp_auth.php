@@ -291,6 +291,15 @@ function doTxpValidate()
             $txp_user = $name;
             Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
 
+            script_js(<<<EOS
+$(document).ready(function ()
+{
+    cookieEnabled = checkCookies();
+});
+EOS
+            , false);
+
+
             return '';
         } else {
             sleep(3);

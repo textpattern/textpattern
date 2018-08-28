@@ -40,7 +40,11 @@ var langdir = document.documentElement.dir,
 
 function checkCookies()
 {
-    return textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
+    cookieEnabled = textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
+
+    if (!cookieEnabled || textpattern.event == 'login') {
+        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), cookieEnabled ? 2 : 1])
+    }
 }
 
 /**
@@ -1968,6 +1972,9 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 
 textpattern.Route.add('login', function () {
+    // Check cookies.
+    cookieEnabled = checkCookies();
+
     // Focus on either username or password when empty.
     $('#login_form input').filter(function(){
         return !this.value;
@@ -2345,13 +2352,6 @@ textpattern.Route.add('plugin.plugin_help', function ()
 // All panels?
 
 textpattern.Route.add('', function () {
-    // Check cookies.
-    cookieEnabled = checkCookies();
-
-    if (!cookieEnabled || textpattern.event == 'login') {
-        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), cookieEnabled ? 2 : 1])
-    }
-
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
