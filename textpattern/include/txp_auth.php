@@ -220,11 +220,6 @@ function doTxpValidate()
         $c_userid = '';
     }
 
-    if ($logout) {
-        setcookie('txp_login', '', time() - 3600);
-        setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
-    }
-
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
@@ -237,6 +232,11 @@ function doTxpValidate()
         if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
             // Cookie is good.
             if ($logout) {
+                $txp_user = $c_userid;
+                bouncer('logout', array('logout' => true));
+                $txp_user = null;
+                setcookie('txp_login', '', time() - 3600);
+                setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
                 // Destroy nonce.
                 safe_update(
                     'txp_users',
@@ -354,6 +354,8 @@ EOS
                 $message = array(gTxt('invalid_token'), E_ERROR);
             }
         }
+    } else {
+        $message = array(gTxt('cookies_must_be_enabled'), E_WARNING);
     }
 
     $txp_user = '';

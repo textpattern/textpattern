@@ -42,8 +42,8 @@ function checkCookies()
 {
     cookieEnabled = textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
 
-    if (!cookieEnabled || textpattern.event == 'login') {
-        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), cookieEnabled ? 2 : 1])
+    if (!cookieEnabled) {
+        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1])
     }
 }
 
@@ -2542,6 +2542,8 @@ $(document).ready(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm()
     $('table.txp-list').txpColumnize()
+
+    $('.txp-logout a').attr('href', 'index.php?logout=1&_txp_token='+textpattern._txp_token)
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
