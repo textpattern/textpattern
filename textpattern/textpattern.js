@@ -40,10 +40,12 @@ var langdir = document.documentElement.dir,
 
 function checkCookies()
 {
-    cookieEnabled = textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
+    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1])
+    } else {
+        document.cookie = 'txp_test_cookie=; Max-Age=0;'
     }
 }
 
