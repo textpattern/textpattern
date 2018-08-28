@@ -55,6 +55,7 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
+            setcookie('txp_test_cookie', '1');
             doLoginForm($message);
         }
     }
@@ -220,11 +221,6 @@ function doTxpValidate()
         $c_userid = '';
     }
 
-    if ($logout) {
-        setcookie('txp_login', '', time() - 3600);
-        setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
-    }
-
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
@@ -237,6 +233,11 @@ function doTxpValidate()
         if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
             // Cookie is good.
             if ($logout) {
+                $txp_user = $c_userid;
+                bouncer('logout', array('logout' => true));
+                $txp_user = null;
+                setcookie('txp_login', '', time() - 3600);
+                setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
                 // Destroy nonce.
                 safe_update(
                     'txp_users',
@@ -290,6 +291,14 @@ function doTxpValidate()
             // Login is good, create $txp_user.
             $txp_user = $name;
             Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
+
+            script_js(<<<EOS
+$(document).ready(function ()
+{
+    cookieEnabled = checkCookies();
+});
+EOS
+            , false);
 
             return '';
         } else {

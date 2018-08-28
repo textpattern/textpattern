@@ -40,7 +40,13 @@ var langdir = document.documentElement.dir,
 
 function checkCookies()
 {
-    return textpattern.event == 'login' && navigator.cookieEnabled || document.cookie.indexOf('txp_login') >= 0;
+    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
+
+    if (!cookieEnabled) {
+        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1])
+    } else {
+        document.cookie = 'txp_test_cookie=; Max-Age=0;'
+    }
 }
 
 /**
@@ -1968,6 +1974,9 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 
 textpattern.Route.add('login', function () {
+    // Check cookies.
+    cookieEnabled = checkCookies();
+
     // Focus on either username or password when empty.
     $('#login_form input').filter(function(){
         return !this.value;
@@ -2345,13 +2354,6 @@ textpattern.Route.add('plugin.plugin_help', function ()
 // All panels?
 
 textpattern.Route.add('', function () {
-    // Check cookies.
-    cookieEnabled = checkCookies();
-
-    if (!cookieEnabled || textpattern.event == 'login') {
-        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), cookieEnabled ? 2 : 1])
-    }
-
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
@@ -2542,6 +2544,8 @@ $(document).ready(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm()
     $('table.txp-list').txpColumnize()
+
+    $('.txp-logout a').attr('href', 'index.php?logout=1&_txp_token='+textpattern._txp_token)
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
