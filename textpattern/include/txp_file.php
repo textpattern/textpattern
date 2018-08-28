@@ -52,7 +52,7 @@ if ($event == 'file') {
 
     global $all_file_cats, $all_file_authors;
     $all_file_cats = getTree('root', 'file');
-    $all_file_authors = the_privileged('file.edit.own');
+    $all_file_authors = the_privileged('file.edit.own', true);
 
     $available_steps = array(
         'file_change_pageby' => true,
@@ -568,7 +568,7 @@ function file_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (has_privs('file.edit') && in_array($val, $all_file_authors)) {
+            if (has_privs('file.edit') && isset($all_file_authors[$val])) {
                 $key = 'author';
             }
             break;

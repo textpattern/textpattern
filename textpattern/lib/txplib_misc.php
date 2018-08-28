@@ -675,15 +675,20 @@ function require_privs($res = null, $user = '')
  * @package User
  */
 
-function the_privileged($res)
+function the_privileged($res, $real = false)
 {
     global $txp_permissions;
 
+    $out = array();
+
     if (isset($txp_permissions[$res])) {
-        return safe_column("name", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY name ASC");
-    } else {
-        return array();
+        foreach (safe_rows("name, RealName", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY ".($real ? "RealName" : "name")." ASC") as $user) {
+            extract($user);
+            $out[$name] = $real ? $RealName : $name;
+        }
     }
+
+    return $out;
 }
 
 /**
