@@ -299,7 +299,6 @@ $(document).ready(function ()
 EOS
             , false);
 
-
             return '';
         } else {
             sleep(3);
@@ -354,8 +353,6 @@ EOS
                 $message = array(gTxt('invalid_token'), E_ERROR);
             }
         }
-    } else {
-        $message = array(gTxt('cookies_must_be_enabled'), E_WARNING);
     }
 
     $txp_user = '';
