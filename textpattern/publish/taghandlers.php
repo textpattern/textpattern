@@ -5138,8 +5138,8 @@ function txp_eval($atts, $thing = null)
 function txp_escape($atts, $thing = '')
 {
     global $locale;
-    static $textile = null, $format = null, $tr = array("'" => "',\"'\",'");
-    $tidy = false;
+    static $textile = null, $format = null, $strto = null,
+        $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
         return $thing;
@@ -5147,10 +5147,11 @@ function txp_escape($atts, $thing = '')
 
     extract(lAtts(array('escape' => true), $atts, false));
 
-    $escape = $escape === true ? array('html') : do_list($escape);
+    $escape = $escape === true ? array('html') : do_list(strtolower($escape));
+    $filter = $tidy = false;
 
     foreach ($escape as $attr) {
-        switch ($attr = strtolower($attr)) {
+        switch ($attr) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
@@ -5168,23 +5169,30 @@ function txp_escape($atts, $thing = '')
                 } else {
                     $thing = str_replace(',', '.', $thing);
                 }
-
                 break;
             case 'integer':
-                $thing = intval($tidy ? preg_replace('/[^\d\+\-\.]/', '', $thing) : $thing);
+                !$filter or $thing = do_list($thing);
+
+                if ($tidy) {
+                    $thing = preg_replace('/[^\d\+\-\.]/', '', $thing);
+                }
+
+                $thing = $filter ? implode(',', array_filter(array_map('intval', $thing))) : intval($thing);
                 break;
             case 'tags':
                 $thing = strip_tags($thing);
                 break;
             case 'upper': case 'lower':
-                $function = (function_exists('mb_strto'.$attr) ? 'mb_' : '').'strto'.$attr;
+                isset($strto) or $strto = function_exists('mb_strto'.$attr) ? 'mb_strto' : 'strto';
+                $function = $strto.$attr;
                 $thing = $function($thing);
                 break;
             case 'title':
                 $thing = function_exists('mb_convert_case') ? mb_convert_case($thing, MB_CASE_TITLE) : ucwords($thing);
                 break;
             case 'trim': case 'ltrim': case 'rtrim':
-                $thing = $attr($thing);
+                $filter = true;
+                $thing = is_int($thing) ? ($thing ? $thing : '') : $attr($thing);
                 break;
             case 'tidy':
                 $thing = preg_replace('/\s+/', ' ', trim($thing));
