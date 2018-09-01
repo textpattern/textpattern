@@ -16,7 +16,7 @@
 ** If you want to learn more, you can refer to an extensive "Textile manual":https://textpattern.com/textile-reference-manual.
 * Be guided through your "Textpattern first steps":https://textpattern.com/textpattern-first-steps by completing some tasks?
 * Study the "Textpattern Semantic Model":https://textpattern.com/textpattern-semantic-model?
-* Add one or more "additional users":adminurl/index.php?event=admin, or extend Textpattern's capabilities with "plugins":adminurl/index.php?event=plugin from the "Textpattern plugin directory":https://textpattern.com/plugins?
+* Add one or more additional "users":adminurl/index.php?event=admin, or extend Textpattern's capabilities with "plugins":adminurl/index.php?event=plugin from the "Textpattern plugin directory":https://textpattern.com/plugins?
 * Dive in and learn by doing? Please note:
 ** When you write an article you assign it to a "section":adminurl/index.php?event=section of your site.
 ** Sections use a "page":adminurl/index.php?event=page template and a "style":adminurl/index.php?event=css to define how site content appears in a browser.
