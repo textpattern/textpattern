@@ -374,7 +374,7 @@ function parse($thing, $condition = true)
         $level   = 0;
 
         $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
+        $t = '@^</?('.$pattern.'):(\w+)(.*)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
         $last = count($parsed);
