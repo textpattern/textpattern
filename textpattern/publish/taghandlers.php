@@ -5232,7 +5232,7 @@ function txp_wraptag($atts, $thing = '')
     if ((string)$trim !== '') {
         if ($trim === true) {
             $thing = trim($thing);
-        } elseif (strlen($trim) > 2 && preg_match('/^([^\\\w\s]).+\1[UsimuADS]*$/s', $trim)) {
+        } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsimuS]*$/As', $trim)) {
             $thing = preg_replace($trim, '', $thing);
         } else {
             $thing = trim($thing, $trim);
