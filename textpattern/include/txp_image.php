@@ -627,11 +627,7 @@ function image_edit($message = '', $id = '')
                 'image_edit',
                 upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
                 $rs)
-            : graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
-                array('class' => 'alert-block warning')
-            )
+            : ''
         );
 
         $imageBlock[] = pluggable_ui(
