@@ -619,14 +619,19 @@ function image_edit($message = '', $id = '')
         $imageBlock = array();
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
+        $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
 
-        $imageBlock[] = ($can_edit
+        $imageBlock[] = ($can_upload
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
                 upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
                 $rs)
-            : ''
+            : graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
+                array('class' => 'alert-block warning')
+            )
         );
 
         $imageBlock[] = pluggable_ui(
@@ -636,12 +641,12 @@ function image_edit($message = '', $id = '')
                 $rs
             );
 
-        $thumbBlock[] = ($can_edit
+        $thumbBlock[] = ($can_upload
             ? hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3)
             : hed(gTxt('thumbnail'), 3)
         );
 
-        $thumbBlock[] = ($can_edit
+        $thumbBlock[] = ($can_upload
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
@@ -651,7 +656,7 @@ function image_edit($message = '', $id = '')
         );
 
         $thumbBlock[] = (check_gd($ext))
-            ? ($can_edit
+            ? ($can_upload
                 ? pluggable_ui(
                     'image_ui',
                     'thumbnail_create',
@@ -684,10 +689,10 @@ function image_edit($message = '', $id = '')
             'thumbnail_image',
             '<div class="thumbnail-image">'.
             (($thumbnail)
-                ? $thumb.n.($can_edit
+                ? $thumb.n.($can_upload
                     ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
                     :'')
-                : '').
+                : gTxt('none')).
             '</div>',
             $rs
         );
