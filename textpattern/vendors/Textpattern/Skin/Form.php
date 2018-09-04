@@ -77,32 +77,32 @@ namespace Textpattern\Skin {
             array(
                 'name' => 'comments',
                 'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.io/tags/comments. -->',
+                'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.com/tags/comments. -->',
             ),
             array(
                 'name' => 'comments_display',
                 'type' => 'comment',
-                'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.io/tags/popup_comments. -->',
+                'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.com/tags/popup_comments. -->',
             ),
             array(
                 'name' => 'comment_form',
                 'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.io/tags/comments_form. -->',
+                'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.com/tags/comments_form. -->',
             ),
             array(
                 'name' => 'default',
                 'type' => 'article',
-                'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.io/tags/article. -->',
+                'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.com/tags/article. -->',
             ),
             array(
                 'name' => 'plainlinks',
                 'type' => 'link',
-                'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.io/tags/linklist. -->',
+                'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.com/tags/linklist. -->',
             ),
             array(
                 'name' => 'files',
                 'type' => 'file',
-                'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.io/tags/file_download. -->',
+                'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
             ),
         );
 

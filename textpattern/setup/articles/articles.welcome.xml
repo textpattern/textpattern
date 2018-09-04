@@ -20,11 +20,11 @@
 * Dive in and learn by doing? Please note:
 ** When you write an article you assign it to a "section":adminurl/index.php?event=section of your site.
 ** Sections use a "page":adminurl/index.php?event=page template and a "style":adminurl/index.php?event=css to define how site content appears in a browser.
-** Page templates typically use HTML(HyperText Markup Language) and "Textpattern tags":https://docs.textpattern.io/tags/ (like this: @<txp:article />@) to build the output code.
+** Page templates typically use HTML(HyperText Markup Language) and "Textpattern tags":https://docs.textpattern.com/tags/ (like this: @<txp:article />@) to build the output code.
 ** Some Textpattern tags use "forms":adminurl/index.php?event=form, reusable building blocks that provide extensive control and customization over your site construction.
 ** Pages, styles and forms can be packaged into "themes":adminurl/index.php?event=skin and assigned to one or more sections.
 
-Textpattern tags, their attributes and values are explained within the "Textpattern User Documentation":https://docs.textpattern.io/, where you will also find valuable examples, advice and tutorials.
+Textpattern tags, their attributes and values are explained within the "Textpattern User Documentation":https://docs.textpattern.com/, where you will also find valuable examples, advice and tutorials.
 
 There's also a group of friendly, helpful Textpattern users and administrators at the "Textpattern support forum":https://forum.textpattern.io/.
 
@@ -35,7 +35,7 @@ This is an example article included with Textpattern to demonstrate some of the 
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>
-        <web>https://docs.textpattern.io/brand/donald-swain</web>
+        <web>https://docs.textpattern.com/brand/donald-swain</web>
         <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
     </comment>
 </article>

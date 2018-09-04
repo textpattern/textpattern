@@ -40,7 +40,7 @@ namespace Textpattern\Skin {
         protected static $essential = array(
             array(
                 'name' => 'default',
-                'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.io/tags/css */'
+                'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
             ),
         );
 
