@@ -2241,8 +2241,8 @@ function sanitizeForUrl($text)
 
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-    // Remove all characters except letter, number, dash, space and backslash
-    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    // Remove all characters except letter, number, some emoji, dash, space and backslash
+    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\\x{1F300}-\x{1F64F}\x{1F680}-\x{1F6FF}\x{2600}-\x{27BF}]/u', '', $text);
     // Collapse spaces, minuses, (back-)slashes.
     $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
@@ -2294,7 +2294,7 @@ function sanitizeForPage($text)
 }
 
 /**
- * Sanitises a string for use in a ORDER BY clause.
+ * Sanitizes a string for use in a ORDER BY clause.
  *
  * @param   string $text The string
  * @return  string
