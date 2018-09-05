@@ -210,8 +210,6 @@ namespace Textpattern\Skin {
         protected static function setDir($name)
         {
             static::$dir = $name;
-
-            return $this;
         }
 
         /**
@@ -347,7 +345,7 @@ namespace Textpattern\Skin {
          * @return bool FALSE on error.
          */
 
-        protected static function resetEditing()
+        protected function resetEditing()
         {
             return $this->setEditing(self::getDefault());
         }
