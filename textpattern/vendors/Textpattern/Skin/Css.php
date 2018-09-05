@@ -30,44 +30,43 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    class Css extends AssetBase implements CssInterface, \Textpattern\Container\FactorableInterface
+class Css extends AssetBase implements CssInterface, \Textpattern\Container\FactorableInterface
+{
+    protected static $extension = 'css';
+    protected static $dir = 'styles';
+    protected static $fileContentsField = 'css';
+    protected static $essential = array(
+        array(
+            'name' => 'default',
+            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
+        ),
+    );
+
+    /**
+     * Constructor
+     */
+
+    public function getInstance()
     {
-        protected static $extension = 'css';
-        protected static $dir = 'styles';
-        protected static $fileContentsField = 'css';
-        protected static $essential = array(
-            array(
-                'name' => 'default',
-                'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
-            ),
-        );
+        static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
 
-        /**
-         * Constructor
-         */
+        return $this;
+    }
 
-        public function getInstance()
-        {
-            static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
+    /**
+     * {@inheritdoc}
+     */
 
-            return $this;
-        }
+    public function setInfos(
+        $name,
+        $css = null
+    ) {
+        $name = $this->setName($name)->getName();
 
-        /**
-         * {@inheritdoc}
-         */
+        $this->infos = compact('name', 'css');
 
-        public function setInfos(
-            $name,
-            $css = null
-        ) {
-            $name = $this->setName($name)->getName();
-
-            $this->infos = compact('name', 'css');
-
-            return $this;
-        }
+        return $this;
     }
 }
