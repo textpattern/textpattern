@@ -548,8 +548,8 @@ abstract class CommonBase implements CommonInterface
                 $skinName = $skin ? $skin->getName() : '';
 
                 if ($skinName) {
-                    !$where or $where.= ' AND ';
-                    $where .= " AND skin = '".doSlash($skinName)."'";
+                    !$where or $where .= ' AND ';
+                    $where .= "skin = '".doSlash($skinName)."'";
                 }
             }
 
@@ -587,8 +587,8 @@ abstract class CommonBase implements CommonInterface
                 $skinName = $skin ? $skin->getName() : '';
 
                 if ($skinName) {
-                    !$where or $where.= ' AND ';
-                    $where .= " AND skin = '".doSlash($skinName)."'";
+                    !$where or $where .= ' AND ';
+                    $where .= "skin = '".doSlash($skinName)."'";
                 }
             }
 
@@ -622,7 +622,7 @@ abstract class CommonBase implements CommonInterface
                 $skinName = $skin ? $skin->getName() : '';
 
                 if ($skinName) {
-                    !$where or $where.= ' AND ';
+                    !$where or $where .= ' AND ';
                     $where .= "skin = '".doSlash($skinName)."'";
                 }
             }
@@ -713,7 +713,7 @@ abstract class CommonBase implements CommonInterface
                 $skinName = $skin ? $skin->getName() : '';
 
                 if ($skinName) {
-                    !$where or $where.= ' AND ';
+                    !$where or $where .= ' AND ';
                     $where .= "skin = '".doSlash($skinName)."'";
                 }
             }
