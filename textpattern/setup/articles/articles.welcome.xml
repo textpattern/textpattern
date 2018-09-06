@@ -30,7 +30,7 @@ There's also a group of friendly, helpful Textpattern users and administrators a
 
 Additional language translations and corrections are welcomed. Please visit "Textpattern language translations":https://textpattern.com/languages for further details.
 
-This is an <txp:permlink id="1">example article</txp:permlink> included with Textpattern to demonstrate some of the first steps you can undertake. An "example comment":<txp:permlink id="1" />#c000001 is associated with this article. The article and comment can be safely deleted using the "articles":adminurl/index.php?event=list and "comments":adminurl/index.php?event=discuss lists.]]></body>
+This is an <txp:permlink id="1">example article</txp:permlink> included with Textpattern to demonstrate some of the first steps you can undertake. An example comment is associated with this article. The article and comment can be safely deleted using the "articles":adminurl/index.php?event=list and "comments":adminurl/index.php?event=discuss lists.]]></body>
     <excerpt format="textile"><![CDATA[This is a Textpattern article excerpt. Article excerpts are optional and can be used effectively to summarize an article's content, for example with Textpattern's built-in article syndication.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
