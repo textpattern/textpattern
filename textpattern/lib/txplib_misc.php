@@ -2240,9 +2240,9 @@ function sanitizeForUrl($text, $strip = '/[^\p{L}\p{N}\-_\s\/\\\\]/u')
         return $out;
     }
 
-    // Remove names entities and tags.
+    // Remove named entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-    // Remove all characters except letter, number, some emoji, dash, space and backslash
+    // Remove all characters except letter, number, dash, space and backslash
     $text = preg_replace($strip, '', $text);
     // Collapse spaces, minuses, (back-)slashes.
     $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');

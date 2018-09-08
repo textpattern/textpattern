@@ -586,6 +586,8 @@ function textpattern()
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
+    } else {
+        $html = trim($html);
     }
 
     // Make sure the page has an article tag if necessary.
