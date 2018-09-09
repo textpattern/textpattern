@@ -142,7 +142,7 @@ if (!$txp_is_dev) {
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
-// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.io/development/plugin-developer-prefixes)
+// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.com/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
 $files = glob(txpath.'/update/custom/post-update*.php');
 

@@ -195,8 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_trim', 'trim')
-    ->registerAttr('txp_wraptag', 'wraptag, label');
+    ->registerAttr('txp_wraptag', 'wraptag, label, trim');
 
 // -------------------------------------------------------------
 
@@ -5227,20 +5226,20 @@ function txp_wraptag($atts, $thing = '')
         'wraptag'  => '',
         'class'    => '',
         'html_id'  => '',
+        'trim'     => '',
     ), $atts, false));
+
+    if ((string)$trim !== '') {
+        if ($trim === true) {
+            $thing = trim($thing);
+        } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsimuS]*$/As', $trim)) {
+            $thing = preg_replace($trim, '', $thing);
+        } else {
+            $thing = trim($thing, $trim);
+        }
+    }
 
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
-}
-
-// -------------------------------------------------------------
-
-function txp_trim($atts, $thing = '')
-{
-    extract(lAtts(array(
-        'trim'    => true,
-    ), $atts, false));
-
-    return $trim === true ? trim($thing) : trim($thing, $trim);
 }

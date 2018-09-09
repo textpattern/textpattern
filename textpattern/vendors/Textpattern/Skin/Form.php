@@ -30,105 +30,104 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    class Form extends AssetBase implements FormInterface
+class Form extends AssetBase implements FormInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $dir = 'forms';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $subdirField = 'type';
+
+    /**
+     * The expected subdirs for this asset type.
+     *
+     * Note the order of the values is the order the blocks appear in the
+     * Presentation->Forms panel.
+     *
+     * @var array
+     */
+
+    protected static $subdirValues = array('article', 'misc', 'category', 'comment', 'file', 'link', 'section');
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $defaultSubdir = 'misc';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $fileContentsField = 'Form';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $essential = array(
+        array(
+            'name' => 'comments',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.com/tags/comments. -->',
+        ),
+        array(
+            'name' => 'comments_display',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.com/tags/popup_comments. -->',
+        ),
+        array(
+            'name' => 'comment_form',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.com/tags/comments_form. -->',
+        ),
+        array(
+            'name' => 'default',
+            'type' => 'article',
+            'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.com/tags/article. -->',
+        ),
+        array(
+            'name' => 'plainlinks',
+            'type' => 'link',
+            'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.com/tags/linklist. -->',
+        ),
+        array(
+            'name' => 'files',
+            'type' => 'file',
+            'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
+        ),
+    );
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function setInfos(
+        $name,
+        $type = null,
+        $Form = null
+    ) {
+        $name = $this->setName($name)->getName();
+
+        $this->infos = compact('name', 'type', 'Form');
+
+        return $this;
+    }
+
+    /**
+     * $defaultSubdir property getter.
+     */
+
+    public static function getTypes()
     {
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $dir = 'forms';
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $subdirField = 'type';
-
-        /**
-         * The expected subdirs for this asset type.
-         *
-         * Note the order of the values is the order the blocks appear in the
-         * Presentation->Forms panel.
-         *
-         * @var array
-         */
-
-        protected static $subdirValues = array('article', 'misc', 'category', 'comment', 'file', 'link', 'section');
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $defaultSubdir = 'misc';
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $fileContentsField = 'Form';
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $essential = array(
-            array(
-                'name' => 'comments',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.io/tags/comments. -->',
-            ),
-            array(
-                'name' => 'comments_display',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.io/tags/popup_comments. -->',
-            ),
-            array(
-                'name' => 'comment_form',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.io/tags/comments_form. -->',
-            ),
-            array(
-                'name' => 'default',
-                'type' => 'article',
-                'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.io/tags/article. -->',
-            ),
-            array(
-                'name' => 'plainlinks',
-                'type' => 'link',
-                'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.io/tags/linklist. -->',
-            ),
-            array(
-                'name' => 'files',
-                'type' => 'file',
-                'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.io/tags/file_download. -->',
-            ),
-        );
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function setInfos(
-            $name,
-            $type = null,
-            $Form = null
-        ) {
-            $name = $this->setName($name)->getName();
-
-            $this->infos = compact('name', 'type', 'Form');
-
-            return $this;
-        }
-
-        /**
-         * $defaultSubdir property getter.
-         */
-
-        public static function getTypes()
-        {
-            return static::$subdirValues;
-        }
+        return static::$subdirValues;
     }
 }
