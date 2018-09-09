@@ -596,14 +596,15 @@ function section_save()
     }
 
     // Prevent non-URL characters on section names.
-    $in['name'] = strtolower(sanitizeForUrl($in['name']));
+    $strtolower = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
+    $in['name'] = $strtolower(sanitizeForUrl($in['name']), 'UTF-8');
 
     extract($in);
 
     $in = doSlash($in);
     extract($in, EXTR_PREFIX_ALL, 'safe');
 
-    if ($name != strtolower($old_name)) {
+    if ($name != $strtolower($old_name, 'UTF-8')) {
         if (safe_field("name", 'txp_section', "name = '$safe_name'")) {
             // Invalid input. Halt all further processing (e.g. plugin event
             // handlers).

@@ -586,8 +586,6 @@ function textpattern()
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
-    } else {
-        $html = trim($html);
     }
 
     // Make sure the page has an article tag if necessary.
@@ -597,7 +595,7 @@ function textpattern()
 
     restore_error_handler();
     set_headers();
-    echo $html;
+    echo ltrim($html);
 
     callback_event('textpattern_end');
 }
@@ -637,7 +635,7 @@ function output_css($s = '', $n = '', $t = '', $e = '')
         $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
         @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
+        echo ltrim(get_pref('parse_css', false) ? parse_page(null, null, $css) : $css);
         restore_error_handler();
     }
 }
