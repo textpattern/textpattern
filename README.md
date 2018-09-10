@@ -47,7 +47,7 @@ for details on upgrading Textpattern.
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.io) is home to
+The [Textpattern support forum](https://forum.textpattern.com) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
 [Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).

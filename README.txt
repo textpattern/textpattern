@@ -22,7 +22,7 @@ system. Textpattern is free and open source.
 * In-depth documentation and a comprehensive tag index is available in the
   Textpattern user documentation at https://docs.textpattern.com
 * You can get support and information via:
-   Forum:    https://forum.textpattern.io/
+   Forum:    https://forum.textpattern.com/
    GitHub:   https://textpattern.com/github
    Google+:  https://textpattern.com/+
    Twitter:  https://textpattern.com/@textpattern
