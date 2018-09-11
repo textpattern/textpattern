@@ -85,7 +85,10 @@ class classic_theme extends \Textpattern\Admin\Theme
             }
 
             $out[] = '<li class="txp-view-site">'.
-                href(gTxt('tab_view_site'), hu, array('target' => '_blank')).
+                href(gTxt('tab_view_site'), hu, array(
+                    'rel'    => 'noopener',
+                    'target' => '_blank'
+                )).
                 '</li>';
 
             $out[] = '</ul>';
