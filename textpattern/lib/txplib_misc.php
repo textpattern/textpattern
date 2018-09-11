@@ -4314,8 +4314,6 @@ function fetch_form($name)
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
-
-            return false;
         }
 
         $forms[$name] = $form;
@@ -4349,7 +4347,7 @@ function parse_form($name)
     $name = (string) $name;
     $f = fetch_form($name);
 
-    if ($f) {
+    if ($f !== false) {
         if (!isset($stack[$name])) {
             $stack[$name] = 1;
         } elseif ($stack[$name] >= $depth) {
