@@ -359,7 +359,7 @@ function parse($thing, $condition = true)
     if (!$short_tags && false === strpos($thing, '<txp:') ||
         $short_tags && !preg_match("@<(?:{$pattern}):@", $thing))
     {
-        return $condition ? $thing : ($thing !== null ? '' : '1');
+        return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
     $hash = sha1($thing);
@@ -448,7 +448,7 @@ function parse($thing, $condition = true)
     $tag = $txp_parsed[$hash];
 
     if (empty($tag)) {
-        return $condition ? $thing : ($thing !== null ? '' : '1');
+        return $condition ? $thing : '';
     }
 
     list($first, $last) = $txp_else[$hash];
@@ -459,7 +459,7 @@ function parse($thing, $condition = true)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return ($thing ? '' : '1');
+        return '';
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
