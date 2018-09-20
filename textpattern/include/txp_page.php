@@ -260,9 +260,10 @@ function page_edit($message = '', $refresh_partials = false)
 function page_list($current)
 {
     $out = array();
-    $protected = safe_column("DISTINCT page", 'txp_section', "1 = 1") + array('error_default');
+    $safe_skin = doSlash($current['skin']);
+    $protected = safe_column("DISTINCT page", 'txp_section', "skin = '$safe_skin' OR dev_skin = '$safe_skin'") + array('error_default');
 
-    $criteria = "skin = '" . doSlash($current['skin']) . "'";
+    $criteria = "skin = '$safe_skin'";
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
     $rs = safe_rows_start("name", 'txp_page', "$criteria ORDER BY name ASC");
@@ -296,8 +297,10 @@ function page_delete()
     global $prefs;
 
     $name = ps('name');
+    $safe_name = doSlash($name);
     $skin = get_pref('skin_editing', 'default');
-    $count = safe_count('txp_section', "page = '".doSlash($name)."'");
+    $safe_skin = doSlash($skin);
+    $count = safe_count('txp_section', "page = '$safe_name' AND (skin='$safe_skin' OR dev_skin='$safe_skin')");
     $message = '';
 
     if ($name == 'error_default') {
@@ -310,7 +313,7 @@ function page_delete()
             '{count}' => $count,
         )), E_WARNING);
     } else {
-        if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+        if (safe_delete('txp_page', "name = '$safe_name' AND skin='$safe_skin'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('page_deleted', array('{list}' => $name));
             if ($name === get_pref('last_page_saved')) {

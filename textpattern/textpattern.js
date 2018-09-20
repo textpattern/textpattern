@@ -2265,11 +2265,13 @@ textpattern.Route.add('section', function ()
      * @param  string skin The theme name from which to show assets
      */
     function section_theme_show(skin) {
-        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
-        $pageSelect = $('[name=section_page]');
-        $styleSelect = $('[name=css]');
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css, #multiedit_dev_page, #multiedit_dev_css').empty();
+        $pageSelect = $('[name=section_page], #multiedit_dev_page');
+        $styleSelect = $('[name=css], #multiedit_dev_css');
 
         if (skin in skin_page) {
+            $pageSelect.append('<option></option>');
+
             $.each(skin_page[skin], function(key, item) {
                 var isSelected = (item == page_sel) ? ' selected' : '';
                 $pageSelect.append('<option'+isSelected+'>'+item+'</option>');
@@ -2277,6 +2279,8 @@ textpattern.Route.add('section', function ()
         }
 
         if (skin in skin_style) {
+            $styleSelect.append('<option></option>');
+
             $.each(skin_style[skin], function(key, item) {
                 var isSelected = (item == style_sel) ? ' selected' : '';
                 $styleSelect.append('<option'+isSelected+'>'+item+'</option>');
@@ -2284,7 +2288,7 @@ textpattern.Route.add('section', function ()
         }
     }
 
-    $('main').on('change', '#section_skin, #multiedit_skin', function() {
+    $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
         section_theme_show($(this).val());
     });
 
@@ -2294,7 +2298,10 @@ textpattern.Route.add('section', function ()
     $('main').on('change', 'select[name=edit_method]', function() {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
+        } else if ($(this).val() === 'changepagestyledev') {
+            $('#multiedit_dev_skin').change();
         }
+
     });
 });
 
