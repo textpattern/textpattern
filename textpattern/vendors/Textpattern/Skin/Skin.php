@@ -1363,7 +1363,11 @@ class Skin extends CommonBase implements SkinInterface
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
-                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))),
+                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit')))
+                        .' | '.
+                        href(gTxt('preview'),
+                            'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
+                        ),
                         '',
                         array(
                             'scope' => 'row',

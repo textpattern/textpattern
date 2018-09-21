@@ -35,6 +35,7 @@ $dbupdates = array(
     '4.5.0', '4.5.7',
     '4.6.0',
     '4.7.0',
+    '4.7.2',
 );
 
 function newest_file()

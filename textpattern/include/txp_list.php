@@ -441,6 +441,7 @@ function list_list($message = '', $post = '')
                     ).
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
+                            'rel'    => 'noopener',
                             'target' => '_blank',
                             'title'  => gTxt('view'),
                         ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'

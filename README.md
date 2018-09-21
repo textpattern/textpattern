@@ -47,7 +47,7 @@ for details on upgrading Textpattern.
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.io) is home to
+The [Textpattern support forum](https://forum.textpattern.com) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
 [Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
@@ -80,7 +80,7 @@ during the development process.
 | PHP    | 5.5 | 7.2 |
 | MySQL  | &mdash; | &mdash; |
 | Apache | &mdash; | &mdash; |
-| Nginx  | 1.10 | 1.14 |
+| Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
 
 ## Contributing
 

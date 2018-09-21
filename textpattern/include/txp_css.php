@@ -85,9 +85,10 @@ function css_list($current)
     $out = array();
     $list = '';
     $extension = false;
-    $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
+    $safe_skin = doSlash($current['skin']);
+    $protected = safe_column("DISTINCT css", 'txp_section', "skin = '$safe_skin' OR dev_skin = '$safe_skin'");
 
-    $criteria = "skin = '" . doSlash($current['skin']) . "'";
+    $criteria = "skin = '$safe_skin'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
     $rs = safe_rows_start("name,
@@ -393,14 +394,17 @@ function css_delete()
     global $prefs;
 
     $name = ps('name');
+    $safe_name = doSlash($name);
     $skin = get_pref('skin_editing', 'default');
-    $count = safe_count('txp_section', "css = '".doSlash($name)."'");
+    $safe_skin = doSlash($skin);
+
+    $count = safe_count('txp_section', "css = '$safe_name' AND (skin='$safe_skin' OR dev_skin='$safe_skin')");
     $message = '';
 
     if ($count) {
         $message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
     } else {
-        if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+        if (safe_delete('txp_css', "name = '$safe_name' AND skin='$safe_skin'")) {
             callback_event('css_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('css_deleted', array('{list}' => $name));
             if ($name === get_pref('last_css_saved')) {
@@ -409,6 +413,7 @@ function css_delete()
             }
         }
     }
+
     css_edit($message);
 }
 

@@ -527,22 +527,19 @@ function preText($s, $prefs)
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css' || get_pref('parse_css')) {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
         $userInfo = is_logged_in();
-        $skin = '';
 
-        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
-            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
-            $skin = safe_field(
-                "val",
-                "txp_prefs",
-                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        if ($rs && isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+            $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
+            $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
+            $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
+        } else {
+            $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
         }
-
-        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
-        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -586,8 +583,6 @@ function textpattern()
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
-    } else {
-        $html = trim($html);
     }
 
     // Make sure the page has an article tag if necessary.
@@ -597,7 +592,7 @@ function textpattern()
 
     restore_error_handler();
     set_headers();
-    echo $html;
+    echo ltrim($html);
 
     callback_event('textpattern_end');
 }
@@ -637,7 +632,7 @@ function output_css($s = '', $n = '', $t = '', $e = '')
         $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
         @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
+        echo ltrim(get_pref('parse_css', false) ? parse_page(null, null, $css) : $css);
         restore_error_handler();
     }
 }
