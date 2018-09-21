@@ -5049,7 +5049,7 @@ function txp_eval($atts, $thing = null)
             $_functions = array();
 
             foreach ($functions as $function) {
-                list($key, $val) = explode(':', $function, 2) + array(null, $function);
+                list($key, $val) = explode('=', $function, 2) + array(null, $function);
                 $_functions[trim($key)] = trim($val);
             }
 

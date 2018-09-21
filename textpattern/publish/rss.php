@@ -268,25 +268,26 @@ function rss()
         }
     }
 
-    header('Content-Type: application/rss+xml; charset=utf-8');
+    $out = array_merge($out, $articles);
+    $xmlns = '';
 
-    $feeds_namespaces = get_pref('feeds_namespaces');
+    $feeds_namespaces = parse_ini_string(get_pref('feeds_namespaces'));
+    is_array($feeds_namespaces) or $feeds_namespaces = array();
+    $feeds_namespaces += array(
+        'dc' => 'http://purl.org/dc/elements/1.1/',
+        'content' => 'http://purl.org/rss/1.0/modules/content/',
+        'atom' => 'http://www.w3.org/2005/Atom'
+    );
 
-    foreach (array(
-        'dc' => '"http://purl.org/dc/elements/1.1/"',
-        'content' => '"http://purl.org/rss/1.0/modules/content/"',
-        'atom' => '"http://www.w3.org/2005/Atom"'
-    ) as $ns => $url) {
-        if (strpos($feeds_namespaces, 'xmlns:'.$ns.'=') === false) {
-            $feeds_namespaces .= n.'xmlns:'.$ns.'='.$url;
-        }
+    foreach ($feeds_namespaces as $ns => $url) {
+        $xmlns .= ' xmlns:'.$ns.'="'.$url.'"';
     }
 
-    $out = array_merge($out, $articles);
+    header('Content-Type: application/rss+xml; charset=utf-8');
 
     return
         '<?xml version="1.0" encoding="UTF-8"?>'.n.
-        '<rss version="2.0" '.ltrim($feeds_namespaces).'>'.n.
+        '<rss version="2.0"'.$xmlns.'>'.n.
         tag(n.t.join(n.t, $out).n, 'channel').n.
         '</rss>';
 }
