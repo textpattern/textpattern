@@ -314,7 +314,7 @@ function css_save()
     $name = Css::sanitize(assert_string(ps('name')));
     $newname = Css::sanitize(assert_string(ps('newname')));
 
-    $skin = $instance->setName($skin)->setEditing();
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
