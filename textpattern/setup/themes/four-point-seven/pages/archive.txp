@@ -30,7 +30,7 @@
                         "@type": "Blog",
                         "headline": "<txp:section title escape="json" />",
                         <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
-                        "url": "<txp:section url />"
+                        "url": "<txp:section url escape="json" />"
                     }
                 </script>
             <txp:else />
@@ -62,7 +62,7 @@
                         "@type": "BlogPosting",
                         "headline": "<txp:title escape="json" />",
                         <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
-                        "url": "<txp:permlink />"
+                        "url": "<txp:permlink escape="json" />"
                     }]
                 }
             </script>

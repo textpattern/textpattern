@@ -35,7 +35,7 @@
                             "@type": "WebSite",
                             "headline": "<txp:site_name escape="json" />",
                             <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
-                            "url": "<txp:site_url />"
+                            "url": "<txp:site_url escape="json" />"
                         }
                     </script>
                 <txp:else />
