@@ -232,7 +232,10 @@ function css_edit($message = '', $refresh_partials = false)
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        )).(!is_writable($instance->getDirPath()) ? '' :
+           checkbox2('export', false, 0, 'export').n.
+               tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+          ), ' class="txp-save"'
     );
 
     $rs = array(
@@ -311,7 +314,7 @@ function css_save()
     $name = Css::sanitize(assert_string(ps('name')));
     $newname = Css::sanitize(assert_string(ps('newname')));
 
-    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
+    $skin = $instance->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -379,6 +382,10 @@ function css_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         callback_event('css_saved', '', 0, $name, $newname);
     }
 

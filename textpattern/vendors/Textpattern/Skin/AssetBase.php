@@ -231,7 +231,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * @return string path.
      */
 
-    protected function getDirPath()
+    public function getDirPath()
     {
         return $this->getSkin()->getSubdirPath().DS.static::getDir();
     }
