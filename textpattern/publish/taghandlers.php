@@ -340,6 +340,7 @@ function component($atts)
 
     switch ($format) {
         case 'url':
+        case 'flat':
             $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
             break;
         case 'link':
