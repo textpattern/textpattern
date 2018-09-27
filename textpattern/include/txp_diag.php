@@ -323,7 +323,7 @@ function doDiagnostics()
 
     // Anything might break if arbitrary functions are disabled.
     if (ini_get('disable_functions')) {
-        $disabled_funcs = do_array_unique(ini_get('disable_functions'));
+        $disabled_funcs = do_list_unique(ini_get('disable_functions'));
         // Commonly disabled functions that we don't need.
         $disabled_funcs = array_filter(array_diff($disabled_funcs, array(
             'imagefilltoborder',
