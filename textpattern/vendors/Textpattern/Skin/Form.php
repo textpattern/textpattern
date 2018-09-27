@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin;
 
-class Form extends AssetBase implements FormInterface
+class Form extends AssetBase implements FormInterface, \Textpattern\Container\FactorableInterface
 {
     /**
      * {@inheritdoc}
@@ -105,6 +105,24 @@ class Form extends AssetBase implements FormInterface
             'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
         ),
     );
+
+    /**
+     * Constructor
+     */
+
+    public function getInstance()
+    {
+        static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
+        static::$subdirValues = array_merge(static::$subdirValues, array_keys(static::$mimeTypes));
+        $textarray = array();
+        foreach (static::$mimeTypes as $ext => $type) {
+            $textarray[$ext] = strtoupper($ext)." ($type)";
+        }
+
+        \Txp::get('\Textpattern\L10n\Lang')->setPack($textarray, true);
+
+        return $this;
+    }
 
     /**
      * {@inheritdoc}

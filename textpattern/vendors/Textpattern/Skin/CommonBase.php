@@ -759,10 +759,8 @@ abstract class CommonBase implements CommonInterface
         $isAsset = property_exists($this, 'skin');
         $thing = $isAsset ? 'skin' : 'title';
         $things .= ', '.$thing;
-        $extensions = array_keys(static::$mimeTypes);
-        $where = $extensions ? "name NOT LIKE '%".implode("' AND name NOT LIKE '%", doSlash($extensions))."'" : '1';
 
-        $rows = $this->getRows($things, $where.' ORDER BY name');
+        $rows = $this->getRows($things, '1 ORDER BY name');
 
         $this->installed = array();
 

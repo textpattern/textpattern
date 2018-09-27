@@ -34,3 +34,18 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
             "ADD dev_{$field} VARCHAR($size) NOT NULL");
     }
 }
+
+// Mimetypes
+if (!isset( $prefs['assets_mimetypes'])) {
+    set_pref('assets_mimetypes', $prefs['assets_mimetypes'] =
+';css="text/css"
+;js="application/javascript"
+;json="application/json"
+;svg="image/svg+xml"
+;xml="application/xml"
+;txt="text/plain"
+;csv="text/csv"
+;htm="text/html"
+;html="text/html"',
+        'publish', PREF_CORE, 'longtext_input', 360, PREF_GLOBAL);
+}

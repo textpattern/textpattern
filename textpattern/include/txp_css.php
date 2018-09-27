@@ -79,53 +79,35 @@ if ($event == 'css') {
 
 function css_list($current)
 {
-    $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
-    $types = array_keys($mimetypes);
-    $fields = "'".implode("','", doSlash($types))."'";
     $out = array();
-    $list = '';
-    $extension = false;
     $safe_skin = doSlash($current['skin']);
     $protected = safe_column("DISTINCT css", 'txp_section', "skin = '$safe_skin' OR dev_skin = '$safe_skin'");
 
     $criteria = "skin = '$safe_skin'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start("name,
-            (LOCATE('.', name) > 0) * FIELD(SUBSTRING_INDEX(name, '.', -1), $fields) AS ext,
-            LEFT(name, LENGTH(name) - LOCATE('.', REVERSE(name))) AS base",
-        'txp_css', $criteria . ' ORDER BY ext, base');
+    $rs = safe_rows_start("name", 'txp_css', $criteria . ' ORDER BY name');
 
-    if ($count = numRows($rs)) {
-        while ($a = nextRow($rs) or $count >= 0) {
-            if (is_array($a)) {
-                extract($a);
-            }
+    while ($a = nextRow($rs)) {
+        extract($a);
 
-            if ((!$count-- || $extension !== $ext) && !empty($out)) {
-                $id = 'all_styles_'.($extension ? $types[$extension-1] : 'css');
-                $label = $extension ? strtoupper($types[$extension-1]).' ('.$mimetypes[$types[$extension-1]].')' : 'CSS (text/css)';
-                $list .= wrapGroup($id, tag(join(n, $out), 'ul', array('class' => 'switcher-list')), $label);
-                $out = array();
-            }
+        $active = ($current['name'] === $name);
+        $edit = eLink('css', '', 'name', $name, $name);
 
-            $extension = $ext;
-            $active = ($current['name'] === $name);
-            $edit = eLink('css', '', 'name', $name, $name);
-
-            if (!array_key_exists($name, $protected)) {
-                $edit .= dLink('css', 'css_delete', 'name', $name);
-            }
-
-            $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
+        if (!array_key_exists($name, $protected)) {
+            $edit .= dLink('css', 'css_delete', 'name', $name);
         }
 
-        return n.tag($list, 'div', array(
-                'id'    => 'all_styles',
-                'role'  => 'region',
-            )
-        );
+        $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
     }
+
+    $list = wrapGroup('all_styles_css', tag(join(n, $out), 'ul', array('class' => 'switcher-list')), gTxt('all_stylesheets'));
+
+    return n.tag($list, 'div', array(
+            'id'    => 'all_styles',
+            'role'  => 'region',
+        )
+    );
 }
 
 /**

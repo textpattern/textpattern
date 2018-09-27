@@ -29,6 +29,7 @@
 
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
+    ->register('component')
     ->register('css')
     ->register('image')
     ->register('thumbnail')
@@ -243,7 +244,6 @@ function css($atts)
         'rel'    => 'stylesheet',
         'theme'  => $pretext['skin'],
         'title'  => '',
-        'type'   => '',
     ), $atts));
 
     if (empty($name)) {
@@ -260,51 +260,120 @@ function css($atts)
         $skin_dir = urlencode(get_pref('skin_dir'));
 
         foreach(do_list_unique($name) as $n) {
-            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.Txp::get('Textpattern\Skin\Css')->getDir().'/'.urlencode($n).'.'.($type ? urlencode($type) : 'css');
+            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.Txp::get('Textpattern\Skin\Css')->getDir().'/'.urlencode($n).'.css';
         }
     } else {
-        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme).($type ? '&e='.urlencode($type) : '');
+        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
     }
 
-    if ($format === 'link') {
-        switch ($type) {
-            case '': case 'css':
-                foreach ((array)$url as $href) {
-                    $out .= tag_void('link', array(
-                        'rel'   => $rel,
-                        'type'  => $doctype != 'html5' ? 'text/css' : '',
-                        'media' => $media,
-                        'title' => $title,
-                        'href'  => $href,
-                    )).n;
-                }
-                break;
-            case 'js':
-                foreach ((array)$url as $href) {
-                    $out .= tag(null, 'script', array(
-                        'title' => $title,
-                        'type'  => $doctype != 'html5' ? 'application/javascript' : '',
-                        'src'  => $href,
-                    )).n;
-                }
-                break;
-            case 'svg':
-                foreach ((array)$url as $href) {
-                    $out .= tag_void('img', array(
-                        'title' => $title,
-                        'src'  => $href,
-                    )).n;
-                }
-                break;
-            default:
-                foreach ((array)$url as $href) {
-                    $out .= href($title ? $title : $href, $href, array(
-                        'rel'   => $rel,
-                    )).n;
-                }
+    switch ($format) {
+        case 'link':
+            foreach ((array)$url as $href) {
+                $out .= tag_void('link', array(
+                    'rel'   => $rel,
+                    'type'  => $doctype != 'html5' ? 'text/css' : '',
+                    'media' => $media,
+                    'title' => $title,
+                    'href'  => $href,
+                )).n;
+            }
+            break;
+        default:
+            $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
+            break;
+    }
+
+    return $out;
+}
+
+// -------------------------------------------------------------
+
+function component($atts)
+{
+    static $mimetypes = null, $dir = null,
+        $inherit = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+    global $doctype, $pretext;
+
+    if (!isset($mimetypes)) {
+        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+        $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
+    }
+
+    extract(lAtts(array(
+        'format' => 'url',
+        'name'   => '',
+        'query'  => '',
+        'rel'    => '',
+        'title'  => '',
+    ), $atts));
+
+    if (empty($name)) {
+        return;
+    }
+
+    list($mode, $format) = explode('.', $format.'.'.$format);
+    $theme = urlencode($pretext['skin']);
+    $out = '';
+    $qs = array();
+
+    foreach (do_list_unique($query) as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $inherit)) {
+            $qs[$q] = $pretext[$q];
+        }
+    }
+
+    if ($mode === 'flat') {
+        $url = array();
+        $skin_dir = urlencode(get_pref('skin_dir'));
+
+        foreach(do_list_unique($name) as $n) {
+            $type = pathinfo($n, PATHINFO_EXTENSION);
+            if (isset($mimetypes[$type])) {
+                $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
+            } else {
+                $url[] = hu.'component.php'.join_qs(array('n' => $n) + $qs);
+            }
         }
     } else {
-        $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
+        $url = hu.'component.php'.join_qs(array('n' => $name) + $qs);
+    }
+
+    switch ($format) {
+        case 'url':
+            $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
+            break;
+        case 'link':
+            foreach ((array)$url as $href) {
+                $out .= tag_void('link', array(
+                    'rel'   => $rel,
+                    'title' => $title,
+                    'href'  => $href,
+                )).n;
+            }
+            break;
+        case 'script':
+            foreach ((array)$url as $href) {
+                $out .= tag(null, 'script', array(
+                    'title' => $title,
+                    'type'  => $doctype != 'html5' ? 'application/javascript' : '',
+                    'src'  => $href,
+                )).n;
+            }
+            break;
+        case 'image':
+            foreach ((array)$url as $href) {
+                $out .= tag_void('img', array(
+                    'title' => $title,
+                    'src'  => $href,
+                )).n;
+            }
+            break;
+        default:
+            foreach ((array)$url as $href) {
+                $out .= href($title ? $title : $href, $href, array(
+                    'rel'   => $rel,
+                )).n;
+            }
     }
 
     return $out;
