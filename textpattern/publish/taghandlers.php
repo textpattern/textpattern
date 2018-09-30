@@ -29,7 +29,7 @@
 
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
-    ->register('component')
+//    ->register('component')
     ->register('css')
     ->register('image')
     ->register('thumbnail')
@@ -546,11 +546,17 @@ function output_form($atts, $thing = null)
     }
 
     $form = $atts['form'];
-    $to_yield = isset($atts['yield']) ? $atts['yield'] : true;
+    $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
-    if ($to_yield !== true) {
-        $to_yield = $to_yield ? array_fill_keys(do_list_unique($to_yield), null) : array();
+    if (isset($atts['format']) && empty($to_yield)) {// component
+        return component($atts + array('name' => $form));
+    }
+
+    if (!is_bool($to_yield)) {
+        $to_yield = $to_yield ?
+            array_fill_keys(do_list_unique($to_yield), null) :
+            array();
         $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
