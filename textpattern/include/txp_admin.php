@@ -582,7 +582,7 @@ function author_edit($message = '', $fullEdit = false)
         );
 
     if (!$is_edit) {
-        echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit', '', true);
+        echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit', '', false);
     } else {
         echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
     }

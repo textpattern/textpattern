@@ -506,19 +506,19 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  *
  * This form will contain a CSRF token if called on an authenticated page.
  *
- * @param  string $contents       The form contents
- * @param  string $style          Inline styles added to the form
- * @param  string $onsubmit       JavaScript run when the form is sent
- * @param  string $method         The form method, e.g. "post", "get"
- * @param  string $class          The HTML class
- * @param  string $fragment       A URL fragment added to the form target
- * @param  string $id             The HTML id
- * @param  string $role           ARIA role name
- * @param  bool   $noautocomplete If TRUE, the form is set to autocomplete="off"
+ * @param  string $contents           The form contents
+ * @param  string $style              Inline styles added to the form
+ * @param  string $onsubmit           JavaScript run when the form is sent
+ * @param  string $method             The form method, e.g. "post", "get"
+ * @param  string $class              The HTML class
+ * @param  string $fragment           A URL fragment added to the form target
+ * @param  string $id                 The HTML id
+ * @param  string $role               ARIA role name
+ * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $noautocomplete = false)
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
 {
     $action = 'index.php';
     $autocomplete = '';
@@ -531,7 +531,7 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         $action .= '#'.$fragment;
     }
 
-    if ($noautocomplete === true) {
+    if ($allow_autocomplete === false) {
         $autocomplete = 'off';
     }
 
