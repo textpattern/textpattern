@@ -213,12 +213,12 @@ function new_pass_form($message = '')
         hed(gTxt('change_password'), 2).
         inputLabel(
             'current_pass',
-            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
+            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass', false, true, '', 'current-password'),
             'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
         ).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
+            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true, '', 'new-password').
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -577,11 +577,18 @@ function author_edit($message = '', $fullEdit = false)
             'id'    => 'users_container',
         )).
         ($fullEdit
-            ?n.tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
-            :'').
-        form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit').
-            n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
+            ? n.tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
+            : ''
+        );
+
+    if (!$is_edit) {
+        echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit', '', true);
+    } else {
+        echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
+    }
+
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**

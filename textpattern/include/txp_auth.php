@@ -103,7 +103,7 @@ function doLoginForm($message)
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true, '', 'username', true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             graf(
@@ -120,7 +120,7 @@ function doLoginForm($message)
         $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
             inputLabel(
                 $label,
-                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true).
+                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true, '', 'new-password').
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -140,12 +140,12 @@ function doLoginForm($message)
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true, '', 'username', true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             inputLabel(
                 'login_password',
-                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
+                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true, '', 'current-password'),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
