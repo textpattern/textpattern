@@ -5213,7 +5213,7 @@ function txp_eval($atts, $thing = null)
 function txp_escape($atts, $thing = '')
 {
     global $locale;
-    static $textile = null, $format = null, $strto = null,
+    static $textile = null, $format = null, $strto = null, $LocaleInfo = array(),
         $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
@@ -5234,15 +5234,19 @@ function txp_escape($atts, $thing = '')
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
                 break;
             case 'number': case 'float':
+                isset($LocaleInfo[$locale]) or $LocaleInfo[$locale] = localeconv();
+                $decimal_point = $LocaleInfo[$locale]['decimal_point'];
+                $thing = str_replace($LocaleInfo[$locale]['thousands_sep'] , '', $thing);
+                $decimal_point == '.' or $thing = str_replace($decimal_point , '.', $thing);
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
 
                 if ($attr === 'number') {
-                    $format !== null
+                    isset($format)
                         or !($format = class_exists('NumberFormatter'))
                         or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
                     !$format or $thing = $format->format($thing);
-                } else {
-                    $thing = str_replace(',', '.', $thing);
+                } elseif ($decimal_point != '.') {
+                    $thing = str_replace($decimal_point, '.', $thing);
                 }
                 break;
             case 'integer':
