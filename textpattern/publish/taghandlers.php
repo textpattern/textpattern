@@ -5235,18 +5235,25 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'number': case 'float':
                 isset($LocaleInfo[$locale]) or $LocaleInfo[$locale] = localeconv();
-                $decimal_point = $LocaleInfo[$locale]['decimal_point'];
-                $thing = str_replace($LocaleInfo[$locale]['thousands_sep'] , '', $thing);
-                $decimal_point == '.' or $thing = str_replace($decimal_point , '.', $thing);
+                $dec_point = $LocaleInfo[$locale]['decimal_point'];
+                $thousands_sep = utf8_encode($LocaleInfo[$locale]['thousands_sep']);
+                !$thousands_sep or $thing = str_replace($thousands_sep , '', $thing);
+                $dec_point == '.' or $thing = str_replace($dec_point , '.', $thing);
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
 
                 if ($attr === 'number') {
                     isset($format)
                         or !($format = class_exists('NumberFormatter'))
                         or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
-                    !$format or $thing = $format->format($thing);
-                } elseif ($decimal_point != '.') {
-                    $thing = str_replace($decimal_point, '.', $thing);
+
+                    if ($format) {
+                        $thing = $format->format($thing);
+                    } else {
+                        $thing = number_format($thing, 3, $dec_point, $thousands_sep);
+                        $thing = rtrim(rtrim($thing, '0'), $dec_point);
+                    }
+                } elseif ($dec_point != '.') {
+                    $thing = str_replace($dec_point, '.', $thing);
                 }
                 break;
             case 'integer':
