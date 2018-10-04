@@ -3,6 +3,7 @@ Changes in 4.7.2
 * Maintenance release with enhancements and bug fixes.
 * Fixed: 'problem_connecting_update_server' language string grouping corrected
   (thanks, gaekwad).
+* Changed: Enhanced password manager compatibility on login and user details pages.
 * Changed: Extended fallback to 'C' locale in some situations.
 * Added: Latest translations.
 * Added: Global 'trim' attribute.
