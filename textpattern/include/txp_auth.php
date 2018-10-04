@@ -158,6 +158,11 @@ function doLoginForm($message)
             ).
             graf(
                 href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot')
+            ).
+            graf(
+                href(htmlspecialchars(get_pref('sitename')), hu, array(
+                    'title'  => gTxt('tab_view_site'),
+                )), array('class' => 'login-view-site')
             );
 
         if (gps('event')) {
