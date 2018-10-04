@@ -2149,7 +2149,7 @@ textpattern.Route.add('page, form, file, image', function () {
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
         $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data) );
-        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
 
     $('body').on('click','.pophelp', function (ev) {
@@ -2176,7 +2176,7 @@ textpattern.Route.add('', function () {
         if (item === undefined ) {
             txpAsyncLink(ev, 'pophelp');
         } else {
-            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
         }
         return false;
     });
@@ -2387,7 +2387,7 @@ textpattern.Route.add('', function () {
         textpattern.storage.update(data);
     });
 
-    hasTabs.find('a:not([data-txp-pane])').click(function() {
+    hasTabs.find('a:not([data-txp-pane], .pophelp)').click(function() {
         $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {

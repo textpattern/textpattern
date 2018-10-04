@@ -300,11 +300,11 @@ function component($atts)
     }
 
     extract(lAtts(array(
-        'format' => 'url',
-        'name'   => '',
-        'query'  => '',
-        'rel'    => '',
-        'title'  => '',
+        'format'  => 'url',
+        'name'    => '',
+        'context' => '',
+        'rel'     => '',
+        'title'   => '',
     ), $atts));
 
     if (empty($name)) {
@@ -316,7 +316,7 @@ function component($atts)
     $out = '';
     $qs = array();
 
-    foreach (do_list_unique($query) as $q) {
+    foreach (do_list_unique($context) as $q) {
         if (!empty($pretext[$q]) && in_array($q, $inherit)) {
             $qs[$q] = $pretext[$q];
         }
@@ -341,7 +341,7 @@ function component($atts)
     switch ($format) {
         case 'url':
         case 'flat':
-            $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
+            $out .= is_array($url) ? implode(',', $url) : $url;
             break;
         case 'link':
             foreach ((array)$url as $href) {

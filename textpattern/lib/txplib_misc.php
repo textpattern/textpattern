@@ -5409,8 +5409,10 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
             } else {
                 $value = txpspecialchars(join($glue, $value));
             }
-        } else {
+        } elseif ($name != 'href' && $name != 'src') {
             $value = txpspecialchars($value === true ? $name : $value);
+        } else {
+            $value = txpspecialchars(str_replace('&amp;', '&', $value));
         }
 
         if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
