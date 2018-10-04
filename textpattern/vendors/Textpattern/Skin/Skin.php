@@ -1549,9 +1549,10 @@ class Skin extends CommonBase implements SkinInterface
                 $input = text_area($field, 0, 0, $current, $event.'_'.$field);
             } elseif ($field === 'name') {
                 $input = '<input type="text" value="'.$current.'" id="'.$event.'_'.$field.'" name="'.$field.'" size="'.INPUT_REGULAR.'" maxlength="63" required />';
+            } elseif ($field === 'author_uri') {
+                $input = fInput('url', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', '', 'http(s)://');
             } else {
-                $type = ($field === 'author_uri') ? 'url' : 'text';
-                $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
+                $input = fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
             }
 
             $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field, $event.'_'.$field);
