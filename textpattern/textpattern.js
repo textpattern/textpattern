@@ -2169,11 +2169,8 @@ textpattern.Route.add('', function () {
             });
         }
 
-        var item = $(ev.target).parent().attr('data-item');
-        if (item === undefined ) {
-            item = $(ev.target).attr('data-item');
-        }
-        if (item === undefined ) {
+        var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
+        if (typeof item === 'undefined' ) {
             txpAsyncLink(ev, 'pophelp');
         } else {
             $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');

@@ -5212,8 +5212,7 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    global $locale;
-    static $textile = null, $format = null, $strto = null, $LocaleInfo = array(),
+    static $textile = null, $format = null, $strto = null, $LocaleInfo = null,
         $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
@@ -5234,9 +5233,9 @@ function txp_escape($atts, $thing = '')
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
                 break;
             case 'number': case 'float':
-                isset($LocaleInfo[$locale]) or $LocaleInfo[$locale] = localeconv();
-                $dec_point = $LocaleInfo[$locale]['decimal_point'];
-                $thousands_sep = utf8_encode($LocaleInfo[$locale]['thousands_sep']);
+                isset($LocaleInfo) or $LocaleInfo = localeconv();
+                $dec_point = $LocaleInfo['decimal_point'];
+                $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
                 !$thousands_sep or $thing = str_replace($thousands_sep , '', $thing);
                 $dec_point == '.' or $thing = str_replace($dec_point , '.', $thing);
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
@@ -5244,7 +5243,7 @@ function txp_escape($atts, $thing = '')
                 if ($attr === 'number') {
                     isset($format)
                         or !($format = class_exists('NumberFormatter'))
-                        or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+                        or $format = new NumberFormatter(LANG, NumberFormatter::DECIMAL);
 
                     if ($format) {
                         $thing = $format->format($thing);
