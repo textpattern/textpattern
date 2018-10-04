@@ -2281,7 +2281,7 @@ function comment_name_input($atts)
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
-    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
+    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name'], '', 'name');
 }
 
 // -------------------------------------------------------------
@@ -2302,7 +2302,7 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'email', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
+    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email'], '', 'email');
 }
 
 // -------------------------------------------------------------
@@ -2321,7 +2321,7 @@ function comment_web_input($atts)
         $web = $comment['web'];
     }
 
-    return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
+    return fInput($h5 ? 'url' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false, 'http(s)://', 'url');
 }
 
 // -------------------------------------------------------------
