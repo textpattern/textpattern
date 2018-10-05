@@ -5212,8 +5212,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null, $format = null, $strto = null, $LocaleInfo = null,
-        $tr = array("'" => "',\"'\",'");
+    static $textile = null, $decimal = null, $spellout = null, $strto = null,
+        $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
         return $thing;
@@ -5232,37 +5232,56 @@ function txp_escape($atts, $thing = '')
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
                 break;
-            case 'number': case 'float':
+            case 'integer':
+                !$filter or $thing = do_list($thing);
+            case 'number': case 'float': case 'spell':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
                 $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
-                !$thousands_sep or $thing = str_replace($thousands_sep , '', $thing);
-                $dec_point == '.' or $thing = str_replace($dec_point , '.', $thing);
-                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
+                !$thousands_sep or $thing = str_replace($thousands_sep, '', $thing);
+                $dec_point == '.' or $thing = str_replace($dec_point, '.', $thing);
 
-                if ($attr === 'number') {
-                    isset($format)
-                        or !($format = class_exists('NumberFormatter'))
-                        or $format = new NumberFormatter(LANG, NumberFormatter::DECIMAL);
-
-                    if ($format) {
-                        $thing = $format->format($thing);
-                    } else {
-                        $thing = number_format($thing, 3, $dec_point, $thousands_sep);
-                        $thing = rtrim(rtrim($thing, '0'), $dec_point);
-                    }
-                } elseif ($dec_point != '.') {
-                    $thing = str_replace($dec_point, '.', $thing);
-                }
-                break;
-            case 'integer':
-                !$filter or $thing = do_list($thing);
-
-                if ($tidy) {
-                    $thing = preg_replace('/[^\d\+\-\.]/', '', $thing);
+                if (is_array($thing)) {// integer mode
+                    $value = $tidy ?
+                        array_map(function ($str) {
+                            return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                        }, $thing) :
+                        $thing;
+                } else {
+                    $value = floatval($tidy ?
+                        filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) :
+                        $thing
+                    );
                 }
 
-                $thing = $filter ? implode(',', array_filter(array_map('intval', $thing))) : intval($thing);
+                switch ($attr) {
+                    case 'integer':
+                        $thing = $filter ? implode(',', array_filter(array_map('intval', $value))) : intval($value);
+                        break;
+                    case 'number':
+                        isset($decimal)
+                            or !($decimal = class_exists('NumberFormatter'))
+                            or $decimal = new NumberFormatter(LANG, NumberFormatter::DECIMAL);
+
+                        if ($decimal) {
+                            $thing = $decimal->format($value);
+                        } else {
+                            $thing = number_format($value, 3, $dec_point, $thousands_sep);
+                            $thing = rtrim(rtrim($thing, '0'), $dec_point);
+                        }
+                        break;
+                    case 'spell':
+                        isset($spellout)
+                            or !($spellout = class_exists('NumberFormatter'))
+                            or $spellout = new NumberFormatter(LANG, NumberFormatter::SPELLOUT);
+
+                        if ($spellout && ($tidy || is_numeric($thing))) {
+                            $thing = $spellout->format($value);
+                        }
+                        break;
+                    default:
+                        $thing = $dec_point != '.' ? str_replace($dec_point, '.', $value) : $value;
+                }
                 break;
             case 'tags':
                 $thing = strip_tags($thing);
