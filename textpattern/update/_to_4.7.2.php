@@ -36,16 +36,24 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
 }
 
 // Mimetypes
-if (!isset( $prefs['assets_mimetypes'])) {
+safe_update('txp_prefs', "event = 'advanced'", "name='assets_mimetypes'");
+
+if (!get_pref('assets_mimetypes', false, true)) {
     set_pref('assets_mimetypes', $prefs['assets_mimetypes'] =
 ';css="text/css"
+;htm="text/html"
+;txt="text/plain"
 ;js="application/javascript"
 ;json="application/json"
 ;svg="image/svg+xml"
-;xml="application/xml"
-;txt="text/plain"
-;csv="text/csv"
-;htm="text/html"
-;html="text/html"',
-        'publish', PREF_CORE, 'longtext_input', 360, PREF_GLOBAL);
+;xml="application/xml"',
+        'advanced', PREF_CORE, 'longtext_input', 200, PREF_GLOBAL);
+}
+
+// Custom form types
+if (!get_pref('custom_form_types', false, true)) {
+    set_pref('custom_form_types', $prefs['custom_form_types'] =
+';[custom]
+;*="Custom"',
+        'advanced', PREF_CORE, 'longtext_input', 100, PREF_GLOBAL);
 }

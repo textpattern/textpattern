@@ -648,12 +648,13 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 
 function form_partial_name($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $type = $rs['type'];
 
-    if (in_array($name, $essential_forms)) {
+    if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
         $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
     } else {
         $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
@@ -688,13 +689,22 @@ function form_partial_name($rs)
 
 function form_partial_type($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $type = $rs['type'];
     $type_widgets = '';
 
-    if (in_array($name, $essential_forms)) {
+    if ($type && !isset($form_types[$type])) {
+        $typeInput = tag_void('input', array(
+            'id'       => 'types',
+            'name'     => 'type',
+            'type'     => 'text',
+            'value'    => $type,
+            'disabled' => true
+        ));
+        $type_widgets .= hInput('type', $type);
+    } elseif (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
         $type_widgets .= hInput('type', $type);
     } else {
