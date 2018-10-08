@@ -52,7 +52,7 @@ if ($event == 'file') {
 
     global $all_file_cats, $all_file_authors;
     $all_file_cats = getTree('root', 'file');
-    $all_file_authors = the_privileged('file.edit.own');
+    $all_file_authors = the_privileged('file.edit.own', true);
 
     $available_steps = array(
         'file_change_pageby' => true,
@@ -568,7 +568,7 @@ function file_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (has_privs('file.edit') && in_array($val, $all_file_authors)) {
+            if (has_privs('file.edit') && isset($all_file_authors[$val])) {
                 $key = 'author';
             }
             break;
@@ -672,9 +672,13 @@ function file_edit($message = '', $id = '')
         $file_exists = file_exists(build_file_path($file_base_path, $filename));
         $existing_files = get_filenames();
 
-        $replace = ($file_exists)
-            ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
-            : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
+        if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
+            $replace = '';
+        } else {
+            $replace = ($file_exists)
+                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
+                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
+        }
 
         $condition = span((($file_exists)
                 ? gTxt('file_status_ok')

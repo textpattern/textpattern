@@ -675,15 +675,20 @@ function require_privs($res = null, $user = '')
  * @package User
  */
 
-function the_privileged($res)
+function the_privileged($res, $real = false)
 {
     global $txp_permissions;
 
+    $out = array();
+
     if (isset($txp_permissions[$res])) {
-        return safe_column("name", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY name ASC");
-    } else {
-        return array();
+        foreach (safe_rows("name, RealName", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY ".($real ? "RealName" : "name")." ASC") as $user) {
+            extract($user);
+            $out[$name] = $real ? $RealName : $name;
+        }
     }
+
+    return $out;
 }
 
 /**
@@ -2204,7 +2209,7 @@ function lAtts($pairs, $atts, $warn = true)
 function stripSpace($text, $force = false)
 {
     if ($force || get_pref('attach_titles_to_permalinks')) {
-        $text = trim(sanitizeForUrl($text), '-');
+        $text = trim(sanitizeForUrl($text, '/[^\p{L}\p{N}\-_\s\/\\\\\x{1F300}-\x{1F64F}\x{1F680}-\x{1F6FF}\x{2600}-\x{27BF}]/u'), '-');
 
         if (get_pref('permlink_format')) {
             return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
@@ -2221,12 +2226,13 @@ function stripSpace($text, $force = false)
  * This function just makes the string look prettier and excludes some
  * unwanted characters, but leaves UTF-8 letters and digits intact.
  *
- * @param  string $text The string
+ * @param  string $text  The string
+ * @param  string $strip The regex of the characters to strip
  * @return string
  * @package URL
  */
 
-function sanitizeForUrl($text)
+function sanitizeForUrl($text, $strip = '/[^\p{L}\p{N}\-_\s\/\\\\]/u')
 {
     $out = callback_event('sanitize_for_url', '', 0, $text);
 
@@ -2234,10 +2240,10 @@ function sanitizeForUrl($text)
         return $out;
     }
 
-    // Remove names entities and tags.
+    // Remove named entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
     // Remove all characters except letter, number, dash, space and backslash
-    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    $text = preg_replace($strip, '', $text);
     // Collapse spaces, minuses, (back-)slashes.
     $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
@@ -2289,7 +2295,7 @@ function sanitizeForPage($text)
 }
 
 /**
- * Sanitises a string for use in a ORDER BY clause.
+ * Sanitizes a string for use in a ORDER BY clause.
  *
  * @param   string $text The string
  * @return  string
@@ -4308,8 +4314,6 @@ function fetch_form($name)
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
-
-            return false;
         }
 
         $forms[$name] = $form;
@@ -4343,7 +4347,7 @@ function parse_form($name)
     $name = (string) $name;
     $f = fetch_form($name);
 
-    if ($f) {
+    if ($f !== false) {
         if (!isset($stack[$name])) {
             $stack[$name] = 1;
         } elseif ($stack[$name] >= $depth) {
@@ -5405,8 +5409,10 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
             } else {
                 $value = txpspecialchars(join($glue, $value));
             }
-        } else {
+        } elseif ($name != 'href' && $name != 'src') {
             $value = txpspecialchars($value === true ? $name : $value);
+        } else {
+            $value = txpspecialchars(str_replace('&amp;', '&', $value));
         }
 
         if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {

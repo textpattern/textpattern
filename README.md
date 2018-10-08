@@ -3,7 +3,7 @@
 [![Dependencies Status](https://david-dm.org/textpattern/textpattern/status.svg)](https://david-dm.org/textpattern/textpattern)
 [![devDependencies Status](https://david-dm.org/textpattern/textpattern/dev-status.svg)](https://david-dm.org/textpattern/textpattern?type=dev)
 
-[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
+[![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
@@ -45,9 +45,9 @@ Please see
 [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
 for details on upgrading Textpattern.
 
-## Help and support
+## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.io) is home to
+The [Textpattern support forum](https://forum.textpattern.com) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
 [Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
@@ -80,7 +80,7 @@ during the development process.
 | PHP    | 5.5 | 7.2 |
 | MySQL  | &mdash; | &mdash; |
 | Apache | &mdash; | &mdash; |
-| Nginx  | 1.10 | 1.14 |
+| Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
 
 ## Contributing
 
@@ -95,11 +95,11 @@ some of the following [topic](https://help.github.com/articles/about-topics/)
 keywords to your public project repositories, so we can build a network of
 discoverable resources:
 
-* `textpattern`
-* `textpattern-plugin`
-* `textpattern-theme`
-* `textpattern-website` (for websites built with Textpattern)
-* `textpattern-development` (for development resources)
+* [`textpattern`](https://github.com/topics/textpattern)
+* [`textpattern-plugin`](https://github.com/topics/textpattern-plugin)
+* [`textpattern-theme`](https://github.com/topics/textpattern-theme)
+* [`textpattern-website`](https://github.com/topics/textpattern-website) (for websites built with Textpattern)
+* [`textpattern-development`](https://github.com/topics/textpattern-development) (for development resources)
 
 ## Additional development tools
 

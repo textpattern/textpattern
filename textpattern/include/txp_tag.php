@@ -319,7 +319,7 @@ class BuilderTags
                 hed(gTxt('tag_'.$this->tagname), 2).
                 href(
                     gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
-                    'https://docs.textpattern.io/tags/'.$this->tagname,
+                    'https://docs.textpattern.com/tags/'.$this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
                         'rel'    => 'external',

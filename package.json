@@ -1,7 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
-  "version": "4.7.0",
+  "version": "4.7.2",
   "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "phplint": "~2",
-    "uglify-js": "3.4.6"
+    "uglify-js": "3.4.9"
   },
   "dependencies": {
     "blueimp-file-upload": "9.22.0",

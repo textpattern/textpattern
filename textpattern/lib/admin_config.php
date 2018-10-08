@@ -88,6 +88,7 @@ $txp_permissions = array(
     'prefs.feeds'                => '1,2',
     'prefs.custom'               => '1,2',
     'prefs.comments'             => '1,2',
+    'prefs.advanced_options'     => '1,2',
     'section'                    => '1,2,      6',
     'section.edit'               => '1,2,      6',
     'skin'                       => '1,2,      6',
