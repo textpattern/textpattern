@@ -527,22 +527,19 @@ function preText($s, $prefs)
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css' || get_pref('parse_css')) {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
         $userInfo = is_logged_in();
-        $skin = '';
 
-        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
-            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
-            $skin = safe_field(
-                "val",
-                "txp_prefs",
-                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        if ($rs && isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+            $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
+            $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
+            $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
+        } else {
+            $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
         }
-
-        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
-        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -595,17 +592,55 @@ function textpattern()
 
     restore_error_handler();
     set_headers();
-    echo $html;
+    echo ltrim($html);
 
     callback_event('textpattern_end');
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '', $t = '', $e = '')
+function output_component($s = '', $n = '')
 {
-    static $mimetypes = null;
+    global $pretext;
+    static $mimetypes = null, $typequery = null;
 
-    isset($mimetypes) or $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
+    if (!isset($mimetypes)) {
+        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+        $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
+    }
+
+    if (!$n || !is_scalar($n) || empty($mimetypes)) {
+        txp_die('Not Found', 404);
+    }
+
+    $t = $pretext['skin'];
+    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
+
+    $n = do_list_unique(doSlash($n));
+    $name = join("','", $n);
+    $order = count($n) > 1 ? " ORDER BY FIELD(name, '$name')" : '';
+    $mimetype = null;
+    $assets = array();
+
+    if (!empty($name)) {
+        $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order);
+
+        foreach($rs as $row) {
+            if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
+                $assets[] = $row['Form'];
+                $mimetype = $mimetypes[$row['type']];
+            }
+        }
+
+        set_error_handler('tagErrorHandler');
+        @header('Content-Type: '.$mimetype.'; charset=utf-8');
+        echo ltrim(parse_page(null, null, implode(n, $assets)));
+        restore_error_handler();
+    }
+}
+
+// -------------------------------------------------------------
+function output_css($s = '', $n = '', $t = '')
+{
     $order = '';
     $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
@@ -614,9 +649,8 @@ function output_css($s = '', $n = '', $t = '', $e = '')
             txp_die('Not Found', 404);
         }
 
-        $extension = ($e ? '.'.doSlash($e) : '');
-        $n = do_list_unique(doSlash($n));
-        $cssname = join($extension."','", $n).$extension;
+        $n = do_list_unique($n);
+        $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
@@ -631,11 +665,9 @@ function output_css($s = '', $n = '', $t = '', $e = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
-        $extension = $n && $e ? $e : 'css';
-        $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
-        @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
+        @header('Content-Type: text/css; charset=utf-8');
+        echo $css;
         restore_error_handler();
     }
 }

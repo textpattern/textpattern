@@ -300,45 +300,45 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 /**
  * Generic form input.
  *
- * @param  string $type        The input type
- * @param  string $name        The input name
- * @param  string $value       The value
- * @param  string $class       The HTML class
- * @param  string $title       The tooltip
- * @param  string $onClick     Inline JavaScript attached to the click event
- * @param  int    $size        The input size
- * @param  int    $tab         The HTML tabindex
- * @param  string $id          The HTML id
- * @param  bool   $disabled    If TRUE renders the input disabled
- * @param  bool   $required    If TRUE the field is marked as required
- * @param  string $placeholder The placeholder value displayed when the field is empty
+ * @param  string       $type         The input type
+ * @param  string       $name         The input name
+ * @param  string       $value        The value
+ * @param  string       $class        The HTML class
+ * @param  string       $title        The tooltip
+ * @param  string       $onClick      Inline JavaScript attached to the click event
+ * @param  int          $size         The input size
+ * @param  int          $tab          The HTML tabindex
+ * @param  string       $id           The HTML id
+ * @param  bool         $disabled     If TRUE renders the input disabled
+ * @param  bool         $required     If TRUE the field is marked as required
+ * @param  string       $placeholder  The placeholder value displayed when the field is empty
+ * @param  string       $autocomplete The autocomplete attribute value
+ * @param  bool         $autofocus    If TRUE the field is auto-focused
  * @return string HTML input
  * @example
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false)
 {
     $atts = join_atts(array(
-        'class'       => $class,
-        'id'          => $id,
-        'name'        => $name,
-        'type'        => $type,
-        'size'        => (int) $size,
-        'title'       => $title,
-        'onclick'     => $onClick,
-        'tabindex'    => (int) $tab,
-        'disabled'    => (bool) $disabled,
-        'required'    => (bool) $required,
-        'placeholder' => $placeholder,
+        'class'        => $class,
+        'id'           => $id,
+        'name'         => $name,
+        'type'         => $type,
+        'size'         => (int) $size,
+        'title'        => $title,
+        'onclick'      => $onClick,
+        'tabindex'     => (int) $tab,
+        'disabled'     => (bool) $disabled,
+        'required'     => (bool) $required,
+        'placeholder'  => $placeholder,
+        'autocomplete' => $autocomplete,
+        'autofocus'    => (bool) $autofocus,
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
-    }
-
-    if ($type === 'password') {
-        $atts .= join_atts(array('autocomplete' => 'off'));
     }
 
     return n.tag_void('input', $atts);
@@ -506,20 +506,22 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  *
  * This form will contain a CSRF token if called on an authenticated page.
  *
- * @param  string $contents The form contents
- * @param  string $style    Inline styles added to the form
- * @param  string $onsubmit JavaScript run when the form is sent
- * @param  string $method   The form method, e.g. "post", "get"
- * @param  string $class    The HTML class
- * @param  string $fragment A URL fragment added to the form target
- * @param  string $id       The HTML id
- * @param  string $role     ARIA role name
+ * @param  string $contents           The form contents
+ * @param  string $style              Inline styles added to the form
+ * @param  string $onsubmit           JavaScript run when the form is sent
+ * @param  string $method             The form method, e.g. "post", "get"
+ * @param  string $class              The HTML class
+ * @param  string $fragment           A URL fragment added to the form target
+ * @param  string $id                 The HTML id
+ * @param  string $role               ARIA role name
+ * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '')
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
 {
     $action = 'index.php';
+    $autocomplete = '';
 
     if ($onsubmit) {
         $onsubmit = 'return '.$onsubmit;
@@ -529,14 +531,19 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         $action .= '#'.$fragment;
     }
 
+    if ($allow_autocomplete === false) {
+        $autocomplete = 'off';
+    }
+
     return n.tag($contents.tInput().n, 'form', array(
-        'class'    => $class,
-        'id'       => $id,
-        'method'   => $method,
-        'action'   => $action,
-        'onsubmit' => $onsubmit,
-        'role'     => $role,
-        'style'    => $style,
+        'class'        => $class,
+        'id'           => $id,
+        'method'       => $method,
+        'action'       => $action,
+        'onsubmit'     => $onsubmit,
+        'role'         => $role,
+        'autocomplete' => $autocomplete,
+        'style'        => $style,
     ));
 }
 

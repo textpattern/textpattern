@@ -30,21 +30,20 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    interface CssInterface
-    {
-        /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name CSS name;
-         * @param  string $css  CSS contents;
-         * @return object $this The current class object (chainable).
-         */
+interface CssInterface
+{
+    /**
+     * $infos+$name properties setter.
+     *
+     * @param  string $name CSS name;
+     * @param  string $css  CSS contents;
+     * @return object $this The current class object (chainable).
+     */
 
-        public function setInfos(
-            $name,
-            $css = null
-        );
-    }
+    public function setInfos(
+        $name,
+        $css = null
+    );
 }

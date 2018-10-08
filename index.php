@@ -107,10 +107,13 @@ if (!empty($txpcfg['pre_publish_script'])) {
 include txpath.'/publish.php';
 
 switch (txpinterface) {
+    case 'component':
     case 'css':
-        $n = gps('n');
-        $t = gps('t');
-        output_css($s, $n, $t, gps('e'));
+        Trace::setQuiet(true);
+        $n = gps('n') or $n = $pretext['css'];
+        $t = gps('t') or $t = $pretext['skin'];
+        $output = 'output_'.txpinterface;
+        $output($s, $n, $t);
         break;
     default:
         textpattern();
@@ -120,6 +123,6 @@ switch (txpinterface) {
         }
 }
 
-if ($production_status === 'debug' && txpinterface !== 'css') {
+if ($production_status === 'debug') {
     echo $trace->result();
 }

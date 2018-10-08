@@ -85,6 +85,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             $out[] = '</nav>';
             $out[] = graf(
                 href(span(htmlspecialchars(get_pref('sitename')), array('class' => 'txp-view-site-name')), hu, array(
+                    'rel'    => 'noopener',
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));

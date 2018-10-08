@@ -35,7 +35,7 @@
                             "@type": "WebSite",
                             "headline": "<txp:site_name escape="json" />",
                             <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
-                            "url": "<txp:site_url />"
+                            "url": "<txp:site_url escape="json" />"
                         }
                     </script>
                 <txp:else />
@@ -69,10 +69,9 @@
             <!-- Main content -->
             <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
-                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.txp instead) -->
+                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_display.txp instead) -->
                 <txp:if_search>
-                    <h1 itemprop="name"><txp:text item="search_results" /></h1>
-                    <txp:output_form form="search_results" />
+                    <txp:output_form form="search_display" />
 
                 <txp:else />
                     <!-- else is this the front page? -->

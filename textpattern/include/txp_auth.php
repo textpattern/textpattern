@@ -55,6 +55,7 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
+            setcookie('txp_test_cookie', '1');
             doLoginForm($message);
         }
     }
@@ -102,7 +103,7 @@ function doLoginForm($message)
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true, '', 'username', true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             graf(
@@ -119,7 +120,7 @@ function doLoginForm($message)
         $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
             inputLabel(
                 $label,
-                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true).
+                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true, '', 'new-password').
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -139,12 +140,12 @@ function doLoginForm($message)
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true, '', 'username', true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             inputLabel(
                 'login_password',
-                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
+                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true, '', 'current-password'),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
@@ -157,6 +158,11 @@ function doLoginForm($message)
             ).
             graf(
                 href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot')
+            ).
+            graf(
+                href(htmlspecialchars(get_pref('sitename')), hu, array(
+                    'title'  => gTxt('tab_view_site'),
+                )), array('class' => 'login-view-site')
             );
 
         if (gps('event')) {
@@ -220,11 +226,6 @@ function doTxpValidate()
         $c_userid = '';
     }
 
-    if ($logout) {
-        setcookie('txp_login', '', time() - 3600);
-        setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
-    }
-
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
@@ -237,6 +238,11 @@ function doTxpValidate()
         if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
             // Cookie is good.
             if ($logout) {
+                $txp_user = $c_userid;
+                bouncer('logout', array('logout' => true));
+                $txp_user = null;
+                setcookie('txp_login', '', time() - 3600);
+                setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
                 // Destroy nonce.
                 safe_update(
                     'txp_users',
@@ -290,6 +296,14 @@ function doTxpValidate()
             // Login is good, create $txp_user.
             $txp_user = $name;
             Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
+
+            script_js(<<<EOS
+$(document).ready(function ()
+{
+    cookieEnabled = checkCookies();
+});
+EOS
+            , false);
 
             return '';
         } else {
