@@ -90,7 +90,7 @@
     <li>a relative URL to the image (e.g. <code>/images/my_pic.jpg</code>)</li>
     <li>a fully-qualified URL (e.g. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>The image can be displayed by placing a <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to the chosen image.</p>
+<p>The image can be displayed by placing a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to the chosen image.</p>
         ]]></item>
         <item id="body" title="Body"><![CDATA[
 <h2>Body</h2>
@@ -125,7 +125,7 @@
         ]]></item>
         <item id="override_form" title="Override form"><![CDATA[
 <h2>Override form</h2>
-<p>An article can optionally use a form different from that assigned by default - for example to show an article excerpt with <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> instead of the article body with <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
+<p>An article can optionally use a form different from that assigned by default - for example to show an article excerpt with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> instead of the article body with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
         ]]></item>
         <item id="publish_date"><![CDATA[
 <h2>Publish date</h2>
@@ -191,12 +191,12 @@
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
 <h2>Images</h2>
-<p>Image categories are optional, and useful both for internal organization and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
+<p>Image categories are optional, and useful both for internal organization and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
 <h2>Links</h2>
 <p>Link categories are optional, and are useful for displaying different groupings of links, e.g. ‘Friends’, ‘Romans’, ‘Countrymen’.</p>
-<p>Selective link lists such as these are output with the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> like so:</p>
+<p>Selective link lists such as these are output with the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> like so:</p>
 <pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
         ]]></item>
     </group>
@@ -286,7 +286,7 @@
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite missing"><![CDATA[
 <h2>Apache mod_rewrite missing</h2>
-<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site's host for assistance.</p>
+<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site‘s host for assistance.</p>
         ]]></item>
         <item id="modified_files" title="Modified files"><![CDATA[
 <h2>Modified files</h2>
@@ -294,7 +294,7 @@
         ]]></item>
         <item id="mysql_table_errors" title="MySQL table errors"><![CDATA[
 <h2>MySQL table errors</h2>
-<p>There may be some corruption or damage in Textpattern's MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>There may be some corruption or damage in Textpattern‘s MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="no_temp_dir" title="No temporary directory defined"><![CDATA[
 <h2>No temporary directory defined</h2>
@@ -350,7 +350,7 @@
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>The site's <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
+<p>The site‘s <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
         ]]></item>
         <item id="setup_still_exists" title="Setup directory still exists"><![CDATA[
 <h2>Setup directory still exists</h2>
@@ -365,7 +365,7 @@
         <item id="some_php_functions_disabled" title="PHP functions […] are disabled on your server"><![CDATA[
 <h2>PHP functions […] are disabled on your server</h2>
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
-<p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
+<p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
         <item id="textpattern_version_update" title="Textpattern CMS version update"><![CDATA[
 <h2>Textpattern CMS version update</h2>
@@ -490,12 +490,12 @@
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
 <h2>Use admin-side plugins?</h2>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
-<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.io/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.io/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> site.</p>
+<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a> site.</p>
         ]]></item>
         <item id="allow_article_php_scripting" title="Allow PHP in articles?"><![CDATA[
 <h2>Allow PHP in articles?</h2>
-<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.io/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
-<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
+<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="Allow form override?"><![CDATA[
 <h2>Allow form override?</h2>
@@ -504,7 +504,7 @@
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page and form templates.</p>
-<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Archive date format"><![CDATA[
 <h2>Archive date format</h2>
@@ -535,12 +535,12 @@
         <item id="comments_are_ol" title="Present comments as a numbered list?"><![CDATA[
 <h2>Present comments as a numbered list?</h2>
 <p>Determines whether article comments will be wrapped with the HTML <code>&lt;ol&gt;</code> tag and individual comments will be wrapped in the <code>&lt;li&gt;</code> tag (causing comments to be presented as a numbered list), or whether individual comments will be wrapped with the <code>&lt;div&gt;</code> tag instead.</p>
-<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, found in the <code>comments_display</code> form.</p>
+<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, found in the <code>comments_display</code> form.</p>
         ]]></item>
         <item id="comments_auto_append" title="Automatically append comments to articles?"><![CDATA[
 <h2>Automatically append comments to articles?</h2>
 <p>This setting determines whether comments and the comment form are automatically appended to all individual articles (by automatically including the contents of the <code>comments_display</code> form).</p>
-<p>The majority of the time, you will want this set to ‘No’, as this allows greater flexibility to the positioning of your comments in your site design. You will need to add the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> manually in any article-based templates where you want comments to appear.</p>
+<p>The majority of the time, you will want this set to ‘No’, as this allows greater flexibility to the positioning of your comments in your site design. You will need to add the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> manually in any article-based templates where you want comments to appear.</p>
 <p>If you are experiencing duplicate display of comments in an article, then chances are your templates have the <code>&lt;txp:comments /&gt;</code> tag in a template but also have ‘Automatically append comments to articles?’ set to ‘Yes’ too.</p>
         ]]></item>
         <item id="comments_dateformat" title="Comments date format"><![CDATA[
@@ -643,7 +643,7 @@
         ]]></item>
         <item id="doctype" title="Doctype"><![CDATA[
 <h2>Doctype</h2>
-<p>Select which HTML doctype you wish to use (either HTML5 or XHTML). This affects comment input forms, Textile rendering of <code>&lt;abbr&gt;</code> or <code>&lt;acronym&gt;</code>, and <code>&lt;link&gt;</code> tags generated by <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>Select which HTML doctype you wish to use (either HTML5 or XHTML). This affects comment input forms, Textile rendering of <code>&lt;abbr&gt;</code> or <code>&lt;acronym&gt;</code>, and <code>&lt;link&gt;</code> tags generated by <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="enable_short_tags" title="Enable short tag support?"><![CDATA[
 <h2>Enable short tag support?</h2>
@@ -658,7 +658,7 @@
 <p>If a tag contains an underscore and you enable short tags, the basic concept is:</p>
 <ol>
     <li>Remove the <code>txp:</code> prefix.</li>
-    <li>Swap the first occurrence of the underscore for <code>::</code>.</li>
+    <li>Replace the first occurrence of the underscore for <code>::</code>.</li>
 </ol>
 <p>Note that setting this preference does not affect the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
@@ -705,7 +705,7 @@
     <li><strong>Referrers only:</strong> Textpattern will only log visits referred from other sites</li>
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
-<p>From Textpattern 4.7.0, no visitor IP address information will be collected or stored by Textpattern. If you collect or store IP addresses outside of Textpatten, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
+<p>From Textpattern 4.7.0, no visitor IP address information is collected or stored by Textpattern. If you collect or store IP addresses outside of Textpattern, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
 <p>It is strongly advised that you leave this setting at its default, ‘None’, unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
@@ -738,7 +738,7 @@
         ]]></item>
         <item id="permlink_mode" title="Article URL pattern"><![CDATA[
 <h2>Article URL pattern</h2>
-<p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>https://example.com/index.php?id=123</code></pre>
 <p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
@@ -781,7 +781,7 @@
         ]]></item>
         <item id="publish_expired_articles" title="Publish expired articles?"><![CDATA[
 <h2>Publish expired articles?</h2>
-<p>When set to ‘Yes’, expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
+<p>When set to ‘Yes’, expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
 <p>When set to ‘No’, expired articles will be removed from the public site and return a "410 Gone" HTTP status instead. The default setting is ‘No’.</p>
         ]]></item>
         <item id="publisher_email" title="Send login details from this email address"><![CDATA[
@@ -805,11 +805,11 @@
         ]]></item>
         <item id="site_slogan" title="Site slogan"><![CDATA[
 <h2>Site slogan</h2>
-<p>The <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
+<p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
         ]]></item>
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>
-<p>The <a rel="external" target="_blank" href="https://docs.textpattern.io/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
+<p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
         ]]></item>
         <item id="siteurl" title="Site URL"><![CDATA[
 <h2>Site URL</h2>
@@ -990,7 +990,7 @@
 <p>This form allows you to import a theme into the Textpattern database from your themes directory.</p>
 <p>An importable theme must be composed of a readable parent folder using the theme name as the folder name, and within the folder a readable <code>manifest.json</code> file in the expected format. The theme folder should also contain pages, forms and styles into eponym subfolders.</p>
 <p>While pages and forms should use the <code>.txp</code> extension, stylesheets are expected to be <code>.css</code> files. Forms should also be grouped by type into dedicated directories. Textpattern will create any missing essential templates on import.</p>
-<p>See the <a rel="external" target="_blank" href="https://docs.textpattern.io/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information on creating, installing and using themes within Textpattern CMS.</p>
+<p>See the <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information on creating, installing and using themes within Textpattern CMS.</p>
         ]]></item>
         <item id="skin_name" title="Theme name"><![CDATA[
 <h2>Theme name</h2>

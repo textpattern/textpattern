@@ -1,74 +1,33 @@
-<txp:if_search_results>
+<li class="article" itemscope itemtype="https://schema.org/Article">
+    <h4 itemprop="headline">
+        <a href="<txp:permlink />" itemprop="url">
+            <txp:title />
+        </a>
+    </h4>
 
-    <!-- if search result count greater than 200 then display excessive results message, otherwise show search result count -->
-    <txp:if_search_results max="200">
-        <h3>
-            <txp:search_result_count />
-            <txp:text item="matching_search_request" />
-            <q><txp:search_term /></q>
-        </h3>
+    <!-- if the article has an excerpt, display that, otherwise show highlighted keywords in context of article -->
+    <txp:if_excerpt>
+        <div itemprop="description">
+            <txp:excerpt />
+        </div>
     <txp:else />
-        <h3>
-            <txp:text item="too_common_search_term" />
-            <q><txp:search_term /></q>
-        </h3>
-    </txp:if_search_results>
-
-<!-- if no search results, then display no search results message -->
-<txp:else />
-    <h3>
-        <txp:text item="no_search_matches" />
-    </h3>
-
-</txp:if_search_results>
-
-<!-- display resulting articles (10 per page; default setting) -->
-<txp:article class="article-list" wraptag="ul">
-
-    <li class="article" itemscope itemtype="https://schema.org/Article">
-        <h4 itemprop="headline">
-            <a href="<txp:permlink />" itemprop="url">
-                <txp:title />
-            </a>
-        </h4>
-
-        <!-- if the article has an excerpt, display that, otherwise show highlighted keywords in context of article -->
-        <txp:if_excerpt>
-            <div itemprop="description">
-                <txp:excerpt />
-            </div>
-        <txp:else />
-            <p>
-                <txp:search_result_excerpt />
-            </p>
-        </txp:if_excerpt>
-
-        <p class="footnote">
-            <txp:text item="posted" />
-            <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
-                <txp:posted />
-            </time>
-            <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
-            &#183;
-            <txp:text item="author" />
-            <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-                <span itemprop="name">
-                    <txp:author link this_section />
-                </span>
-            </span>
+        <p>
+            <txp:search_result_excerpt />
         </p>
-    </li>
+    </txp:if_excerpt>
 
-</txp:article>
-
-<!-- check if there are further results and provide pagination links depending on the result -->
-<txp:if_search_results min="11">
-    <txp:evaluate wraptag="p" class="paginator">
-        <txp:newer rel="prev">
-            <txp:text item="prev" />
-        </txp:newer>
-        <txp:older rel="next">
-            <txp:text item="next" />
-        </txp:older>
-    </txp:evaluate>
-</txp:if_search_results>
+    <p class="footnote">
+        <txp:text item="posted" />
+        <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
+            <txp:posted />
+        </time>
+        <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
+        &#183;
+        <txp:text item="author" />
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <txp:author link this_section />
+            </span>
+        </span>
+    </p>
+</li>

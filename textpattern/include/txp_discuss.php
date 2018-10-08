@@ -589,9 +589,15 @@ function discuss_multi_edit()
     // FIXME: this method needs some refactoring.
     $selected = ps('selected');
     $method = ps('edit_method');
-    $done = array();
+    $visStates = array(
+        'delete'      => false,
+        'spam'        => SPAM,
+        'unmoderated' => MODERATE,
+        'visible'     => VISIBLE,
+    );
+    $visState = isset($visStates[$method]) ? $visStates[$method] : null;
 
-    if ($selected && is_array($selected)) {
+    if ($selected && is_array($selected) && isset($visState)) {
         // Get all articles for which we have to update the count.
         $ids = array();
 
@@ -601,16 +607,11 @@ function discuss_multi_edit()
 
         // Remove bogus (false) entries to prevent SQL syntax errors being thrown.
         $ids = array_filter($ids);
+        $done = array();
 
         if ($ids) {
             $idList = implode(',', $ids);
-            $visStates = array(
-                'spam'        => SPAM,
-                'unmoderated' => MODERATE,
-                'visible'     => VISIBLE,
-            );
-
-            $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".$idList.")");
+            $parentids = array();
 
             $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".$idList.")");
 
@@ -625,26 +626,20 @@ function discuss_multi_edit()
                     if (safe_delete('txp_discuss', "discussid = '$id'")) {
                         $done[] = $id;
                     }
-
-                    callback_event('discuss_deleted', '', 0, $done);
-                } else {
-                    $visState = (isset($visStates[$method])) ? $visStates[$method] : null;
-
-                    if ($visState !== null && safe_update('txp_discuss',
+                } elseif (safe_update('txp_discuss',
                         "visible = ".$visState,
                         "discussid = '$id'"
-                    )) {
-                        $done[] = $id;
-                    }
+                )) {
+                    $done[] = $id;
                 }
             }
         }
 
-        $doneStr = join(', ', $done);
-
-        if ($doneStr) {
+        if ($done) {
             // Might as well clean up all comment counts while we're here.
             clean_comment_counts($parentids);
+
+            $doneStr = join(', ', $done);
 
             $messages = array(
                 'delete'      => gTxt('comments_deleted', array('{list}' => $doneStr)),
@@ -653,7 +648,11 @@ function discuss_multi_edit()
                 'visible'     => gTxt('comments_marked_visible', array('{list}' => $doneStr)),
             );
 
-            update_lastmod('discuss_updated', $done);
+            if ($method == 'delete') {
+                callback_event('discuss_deleted', '', 0, $done);
+            }
+
+            update_lastmod($method == 'delete' ? 'discuss_deleted' : 'discuss_updated', $done);
 
             return discuss_list($messages[$method]);
         }
