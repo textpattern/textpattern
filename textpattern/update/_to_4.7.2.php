@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Add dev support to Sections...
+// Add dev support to Sections.
 $cols = getThings('describe `'.PFX.'txp_section`');
 
 foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
@@ -35,7 +35,7 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
     }
 }
 
-// Mimetypes
+// Mimetypes.
 safe_update('txp_prefs', "event = 'advanced_options'", "name='assets_mimetypes'");
 safe_update('txp_prefs', "event = 'advanced_options'", "name='custom_form_types'");
 
@@ -51,7 +51,7 @@ if (!get_pref('assets_mimetypes', false, true)) {
         'advanced_options', PREF_CORE, 'longtext_input', 200, PREF_GLOBAL);
 }
 
-// Custom form types
+// Custom form types.
 if (!get_pref('custom_form_types', false, true)) {
     set_pref('custom_form_types', $prefs['custom_form_types'] =
 ';[custom]
