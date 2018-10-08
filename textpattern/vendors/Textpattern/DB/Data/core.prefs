@@ -673,15 +673,8 @@
         "position": "15",
         "private": "1"
     },
-    "assets_mimetypes": {
-        "val": ";css=\"text/css\"\n;js=\"application/javascript\"\n;json=\"application/json\"\n;svg=\"image/svg+xml\"\n;xml=\"application/xml\"\n;txt=\"text/plain\"\n;html=\"text/html\"",
-        "type": "0",
-        "event": "advanced_options",
-        "html": "longtext_input",
-        "position": "100"
-    },
     "custom_form_types": {
-        "val": ";[custom]\n;*=\"Custom\"",
+        "val": ";[js]\n;mimetype=\"application/javascript\"\n;*=\"Javascript\"",
         "type": "0",
         "event": "advanced_options",
         "html": "longtext_input",

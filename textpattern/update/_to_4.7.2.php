@@ -35,26 +35,26 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
     }
 }
 
-// Mimetypes.
-safe_update('txp_prefs', "event = 'advanced_options'", "name='assets_mimetypes'");
-safe_update('txp_prefs', "event = 'advanced_options'", "name='custom_form_types'");
-
-if (!get_pref('assets_mimetypes', false, true)) {
-    set_pref('assets_mimetypes', $prefs['assets_mimetypes'] =
-';css="text/css"
-;htm="text/html"
-;txt="text/plain"
-;js="application/javascript"
-;json="application/json"
-;svg="image/svg+xml"
-;xml="application/xml"',
-        'advanced_options', PREF_CORE, 'longtext_input', 200, PREF_GLOBAL);
-}
-
 // Custom form types.
-if (!get_pref('custom_form_types', false, true)) {
-    set_pref('custom_form_types', $prefs['custom_form_types'] =
-';[custom]
-;*="Custom"',
+if (false === ($custom_types = get_pref('custom_form_types', false, true))) {
+    set_pref('custom_form_types', 
+        ';[js]
+;mimetype="application/javascript"
+;*="Javascript"',
         'advanced_options', PREF_CORE, 'longtext_input', 100, PREF_GLOBAL);
+} else {
+    safe_update('txp_prefs', "event = 'advanced_options'", "name='custom_form_types'");
+    $custom_types = parse_ini_string($custom_types);
 }
+
+if ($mimetypes = parse_ini_string(get_pref('assets_mimetypes', '', true))) {
+    foreach ($mimetypes as $ext => $type) {
+        if (!isset($custom_types[$ext])) {
+            $prefs['custom_form_types'] .= n."[$ext]".n.'mimetype="'.$type.'"';
+        }
+    }
+
+    safe_update('txp_prefs', "val = '".doSlash($prefs['custom_form_types'])."'", "name='custom_form_types'");
+}
+
+safe_delete('txp_prefs', "name='assets_mimetypes'");

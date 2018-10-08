@@ -113,18 +113,24 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
     public function getInstance()
     {
         global $lang_ui;
-        static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
-        $textarray = array();
 
-        foreach (static::$mimeTypes as $ext => $type) {
-            $textarray[$ext] = strtoupper($ext)." ($type)";
-        }
+        $textarray = array();
 
         if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
             foreach ($custom_types as $type => $langpack) {
+                if (!empty($langpack['mimetype'])) {
+                    static::$mimeTypes[$type] = $langpack['mimetype'];
+                }
+
                 $textarray[$type] = isset($langpack[$lang_ui]) ?
                     $langpack[$lang_ui] :
-                    (isset($langpack['*']) ? $langpack['*'] : $type);
+                    (isset($langpack['*']) ?
+                        $langpack['*'] :
+                        (isset(static::$mimeTypes[$type]) ?
+                            strtoupper($type)." (".static::$mimeTypes[$type].")"
+                            : $type
+                        )
+                    );
             }
         } else {
             $custom_types = array();
