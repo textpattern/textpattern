@@ -721,9 +721,15 @@ function admin_multi_edit()
             break;
     }
 
-    if ($changed) {
-        return author_list(gTxt($msg, array('{name}' => txpspecialchars(join(', ', $changed)))));
+    if (is_array($msg)) {
+        list($msg, $err) = $msg;
+    } else {
+        $err = 0;
     }
 
-    author_list($msg);
+    if ($changed) {
+        return author_list(array(gTxt($msg, array('{name}' => txpspecialchars(join(', ', $changed)))), $err));
+    }
+
+    author_list(array(gTxt($msg), $err));
 }
