@@ -79,52 +79,35 @@ if ($event == 'css') {
 
 function css_list($current)
 {
-    $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
-    $types = array_keys($mimetypes);
-    $fields = "'".implode("','", doSlash($types))."'";
     $out = array();
-    $list = '';
-    $extension = false;
-    $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
+    $safe_skin = doSlash($current['skin']);
+    $protected = safe_column("DISTINCT css", 'txp_section', "skin = '$safe_skin' OR dev_skin = '$safe_skin'");
 
-    $criteria = "skin = '" . doSlash($current['skin']) . "'";
+    $criteria = "skin = '$safe_skin'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start("name,
-            (LOCATE('.', name) > 0) * FIELD(SUBSTRING_INDEX(name, '.', -1), $fields) AS ext,
-            LEFT(name, LENGTH(name) - LOCATE('.', REVERSE(name))) AS base",
-        'txp_css', $criteria . ' ORDER BY ext, base');
+    $rs = safe_rows_start("name", 'txp_css', $criteria . ' ORDER BY name');
 
-    if ($count = numRows($rs)) {
-        while ($a = nextRow($rs) or $count >= 0) {
-            if (is_array($a)) {
-                extract($a);
-            }
+    while ($a = nextRow($rs)) {
+        extract($a);
 
-            if ((!$count-- || $extension !== $ext) && !empty($out)) {
-                $id = 'all_styles_'.($extension ? $types[$extension-1] : 'css');
-                $label = $extension ? strtoupper($types[$extension-1]).' ('.$mimetypes[$types[$extension-1]].')' : 'CSS (text/css)';
-                $list .= wrapGroup($id, tag(join(n, $out), 'ul', array('class' => 'switcher-list')), $label);
-                $out = array();
-            }
+        $active = ($current['name'] === $name);
+        $edit = eLink('css', '', 'name', $name, $name);
 
-            $extension = $ext;
-            $active = ($current['name'] === $name);
-            $edit = eLink('css', '', 'name', $name, $name);
-
-            if (!array_key_exists($name, $protected)) {
-                $edit .= dLink('css', 'css_delete', 'name', $name);
-            }
-
-            $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
+        if (!array_key_exists($name, $protected)) {
+            $edit .= dLink('css', 'css_delete', 'name', $name);
         }
 
-        return n.tag($list, 'div', array(
-                'id'    => 'all_styles',
-                'role'  => 'region',
-            )
-        );
+        $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
     }
+
+    $list = wrapGroup('all_styles_css', tag(join(n, $out), 'ul', array('class' => 'switcher-list')), gTxt('all_stylesheets'));
+
+    return n.tag($list, 'div', array(
+            'id'    => 'all_styles',
+            'role'  => 'region',
+        )
+    );
 }
 
 /**
@@ -231,7 +214,10 @@ function css_edit($message = '', $refresh_partials = false)
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        )).(!is_writable($instance->getDirPath()) ? '' :
+           checkbox2('export', false, 0, 'export').n.
+               tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+          ), ' class="txp-save"'
     );
 
     $rs = array(
@@ -378,6 +364,10 @@ function css_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         callback_event('css_saved', '', 0, $name, $newname);
     }
 
@@ -393,14 +383,17 @@ function css_delete()
     global $prefs;
 
     $name = ps('name');
+    $safe_name = doSlash($name);
     $skin = get_pref('skin_editing', 'default');
-    $count = safe_count('txp_section', "css = '".doSlash($name)."'");
+    $safe_skin = doSlash($skin);
+
+    $count = safe_count('txp_section', "css = '$safe_name' AND (skin='$safe_skin' OR dev_skin='$safe_skin')");
     $message = '';
 
     if ($count) {
         $message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
     } else {
-        if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+        if (safe_delete('txp_css', "name = '$safe_name' AND skin='$safe_skin'")) {
             callback_event('css_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('css_deleted', array('{list}' => $name));
             if ($name === get_pref('last_css_saved')) {
@@ -409,6 +402,7 @@ function css_delete()
             }
         }
     }
+
     css_edit($message);
 }
 

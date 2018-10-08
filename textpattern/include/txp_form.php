@@ -137,7 +137,8 @@ function form_list($current)
                 if ($prev_type !== null) {
                     $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
-                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
+                    $label = isset($form_types[$prev_type]) ? $form_types[$prev_type] : $prev_type;
+                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $label, 'form_'.$prev_type);
                 }
 
                 $prev_type = $type;
@@ -354,7 +355,10 @@ function form_edit($message = '', $refresh_partials = false)
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        )).(!is_writable($instance->getDirPath()) ? '' :
+           checkbox2('export', false, 0, 'export').n.
+               tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+          ), ' class="txp-save"'
     );
 
     $listActions = graf(
@@ -444,7 +448,7 @@ function form_edit($message = '', $refresh_partials = false)
 
 function form_save()
 {
-    global $essential_forms, $form_types, $app_mode;
+    global $essential_forms, $form_types, $app_mode, $instance;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -542,6 +546,10 @@ function form_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         set_pref('last_form_saved', $newname, 'form', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         callback_event('form_saved', '', 0, $name, $newname);
     }
@@ -640,12 +648,13 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 
 function form_partial_name($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $type = $rs['type'];
 
-    if (in_array($name, $essential_forms)) {
+    if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
         $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
     } else {
         $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
@@ -680,13 +689,22 @@ function form_partial_name($rs)
 
 function form_partial_type($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $type = $rs['type'];
     $type_widgets = '';
 
-    if (in_array($name, $essential_forms)) {
+    if ($type && !isset($form_types[$type])) {
+        $typeInput = tag_void('input', array(
+            'id'       => 'types',
+            'name'     => 'type',
+            'type'     => 'text',
+            'value'    => $type,
+            'disabled' => true
+        ));
+        $type_widgets .= hInput('type', $type);
+    } elseif (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
         $type_widgets .= hInput('type', $type);
     } else {

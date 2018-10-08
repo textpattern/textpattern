@@ -50,6 +50,7 @@ if ($event == 'section') {
         'section_edit'          => false,
         'section_multi_edit'    => true,
         'section_set_default'   => true,
+        'section_set_theme'     => true,
         'section_toggle_option' => true,
     );
 
@@ -70,7 +71,7 @@ if ($event == 'section') {
 
 function sec_section_list($message = '')
 {
-    global $event;
+    global $event, $all_pages, $all_styles;
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -349,17 +350,36 @@ function sec_section_list($message = '')
                     }
                 }
 
-                $sec_page = href(txpspecialchars($sec_page), array(
+                !empty($sec_dev_skin) or $sec_dev_skin = $sec_skin;
+                !empty($sec_dev_page) or $sec_dev_page = $sec_page;
+                !empty($sec_dev_css) or $sec_dev_css = $sec_css;
+
+                $missing = isset($all_pages[$sec_dev_skin]) && !in_array($sec_dev_page, $all_pages[$sec_dev_skin]);
+                $replaced = $sec_page != $sec_dev_page || $missing;
+                $sec_page = (!$replaced ? '' : tag(href(txpspecialchars($sec_page), array(
                     'event' => 'page',
                     'name'  => $sec_page,
                     'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit')));
+                ), array('title' => gTxt('edit'))), 'del').' | ').
+                href(txpspecialchars($sec_dev_page), array(
+                    'event' => 'page',
+                    'name'  => $sec_dev_page,
+                    'skin'  => $sec_dev_skin,
+                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''));
 
-                $sec_css = href(txpspecialchars($sec_css), array(
+                $missing = isset($all_styles[$sec_dev_skin]) && !in_array($sec_dev_css, $all_styles[$sec_dev_skin]);
+                $replaced = $sec_css != $sec_dev_css || $missing;
+
+                $sec_css = (!$replaced ? '' : tag(href(txpspecialchars($sec_css), array(
                     'event' => 'css',
                     'name'  => $sec_css,
                     'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit')));
+                ), array('title' => gTxt('edit'))), 'del').' | ').
+                href(txpspecialchars($sec_dev_css), array(
+                    'event' => 'css',
+                    'name'  => $sec_dev_css,
+                    'skin'  => $sec_dev_skin,
+                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''));
 
                 $contentBlock .= tr(
                     td(
@@ -382,7 +402,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        $sec_skin, '', 'txp-list-col-skin'
+                        ($sec_skin == $sec_dev_skin ? '' : '<del>'.$sec_skin.'</del> | ').$sec_dev_skin, '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -596,14 +616,15 @@ function section_save()
     }
 
     // Prevent non-URL characters on section names.
-    $in['name'] = strtolower(sanitizeForUrl($in['name']));
+    $strtolower = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
+    $in['name'] = $strtolower(sanitizeForUrl($in['name']), 'UTF-8');
 
     extract($in);
 
     $in = doSlash($in);
     extract($in, EXTR_PREFIX_ALL, 'safe');
 
-    if ($name != strtolower($old_name)) {
+    if ($name != $strtolower($old_name, 'UTF-8')) {
         if (safe_field("name", 'txp_section', "name = '$safe_name'")) {
             // Invalid input. Halt all further processing (e.g. plugin event
             // handlers).
@@ -779,6 +800,34 @@ function section_delete()
 }
 
 /**
+ * Processes delete actions sent using the multi-edit form.
+ */
+
+function section_set_theme()
+{
+    global $all_skins;
+
+    $skin = gps('skin');
+    $message = '';
+
+    if (isset($all_skins[$skin])) {
+        safe_update(
+            'txp_section',
+            "dev_skin = '".doSlash($skin)."'",
+            '1'
+        );
+        Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
+        $message = txpspecialchars($all_skins[$skin]);
+    }
+
+    script_js(<<<EOS
+if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=section')}
+EOS
+    , false);
+    sec_section_list($message);
+}
+
+/**
  * Renders a multi-edit form widget.
  *
  * @param  int    $page          The page number
@@ -806,7 +855,7 @@ var skin_style = {$json_style};
 var page_sel = '';
 var style_sel = '';
 EOJS
-    );
+    , false);
 
     $pageSelect = inputLabel(
         'multiedit_page',
@@ -820,10 +869,39 @@ EOJS
         'css', '', array('class' => 'multi-option multi-step'), ''
     );
 
+    $devThemeSelect = inputLabel(
+        'multiedit_skin',
+        selectInput('dev_skin', $all_skins, '', false, '', 'multiedit_dev_skin'),
+        'skin', '', array('class' => 'multi-option multi-step'), ''
+    );
+
+    $devPageSelect = inputLabel(
+        'multiedit_page',
+        selectInput('dev_page', array(), '', '', '', 'multiedit_dev_page'),
+        'page', '', array('class' => 'multi-option multi-step'), ''
+    );
+
+    $devStyleSelect = inputLabel(
+        'multiedit_css',
+        selectInput('dev_css', array(), '', '', '', 'multiedit_dev_css'),
+        'css', '', array('class' => 'multi-option multi-step'), ''
+    );
+
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
             'html'  => $themeSelect . $pageSelect . $styleSelect,
+        ),
+        'changepagestyledev' => array(
+            'label' => gTxt('change_dev_page_style'),
+            'html'  => $devThemeSelect . $devPageSelect . $devStyleSelect,
+        ),
+        'switchdevlive' => array(
+            'label' => gTxt('switch_dev_live'),
+            'html'  => radioSet(array(
+                0 => gTxt('live_to_dev'),
+                1 => gTxt('dev_to_live'),
+                ), 'switch_dev_live', 0),
         ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
@@ -849,7 +927,7 @@ EOJS
 
 function section_multi_edit()
 {
-    global $txp_user;
+    global $txp_user, $all_pages, $all_styles;
 
     extract(psa(array(
         'edit_method',
@@ -873,6 +951,16 @@ function section_multi_edit()
                 'css'  => ps('css'),
             );
             break;
+        case 'changepagestyledev':
+            $nameVal = array(
+                'dev_skin' => ps('dev_skin'),
+                'dev_page' => ps('dev_page'),
+                'dev_css'  => ps('dev_css'),
+            );
+            break;
+        case 'switchdevlive':
+            $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
+            break;
         case 'changeonfrontpage':
             $nameVal['on_frontpage'] = (int) ps('on_frontpage');
             break;
@@ -884,23 +972,49 @@ function section_multi_edit()
             break;
     }
 
+    $filter = array("name IN (".join(',', quote_list($selected)).")");
+
+    if ($edit_method === 'changepagestyle') {
+        $skin = $nameVal['skin'];
+
+        if (empty($nameVal['page']) && !empty($all_pages[$skin])) {
+            $filter[] = "page IN (".join(',', quote_list($all_pages[$skin])).")";
+        }
+
+        if (empty($nameVal['css']) && !empty($all_styles[$skin])) {
+            $filter[] = "css IN (".join(',', quote_list($all_styles[$skin])).")";
+        }
+    }
+
     $sections = safe_column(
         "name",
         'txp_section',
-        "name IN (".join(',', quote_list($selected)).")"
+        implode(' AND ', $filter)
     );
 
     if ($nameVal && $sections) {
-        $in = array();
+        if ($edit_method == 'switchdevlive') {
+            $set = ($nameVal['switch_dev_live'] ? '' :
+                "skin = IF(dev_skin > '', dev_skin, skin),
+                page = IF(dev_page > '', dev_page, page),
+                css = IF(dev_css > '', dev_css, css), "
+            )."dev_skin = '', dev_page = '', dev_css = ''";
+        } else {
+            $in = array();
 
-        foreach ($nameVal as $key => $val) {
-            $in[] = "{$key} = '".doSlash($val)."'";
+            foreach ($nameVal as $key => $val) {
+                if ((string)$val > '') {
+                    $in[] = "{$key} = '".doSlash($val)."'";
+                }
+            }
+
+            $set = implode(',', $in);
         }
 
         if (
             safe_update(
                 'txp_section',
-                implode(',', $in),
+                $set,
                 "name IN (".join(',', quote_list($sections)).")"
             )
         ) {

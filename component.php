@@ -22,40 +22,12 @@
  */
 
 /**
- * Css
+ * Outputs CSS files.
  *
- * Manages stylesheets.
- *
- * @since   4.7.0
- * @package Skin
+ * @since 4.7.2
  */
 
-namespace Textpattern\Skin;
+$nolog = 1;
 
-class Css extends AssetBase implements CssInterface
-{
-    protected static $extension = 'css';
-    protected static $dir = 'styles';
-    protected static $fileContentsField = 'css';
-    protected static $essential = array(
-        array(
-            'name' => 'default',
-            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
-        ),
-    );
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function setInfos(
-        $name,
-        $css = null
-    ) {
-        $name = $this->setName($name)->getName();
-
-        $this->infos = compact('name', 'css');
-
-        return $this;
-    }
-}
+define('txpinterface', 'component');
+include 'index.php';

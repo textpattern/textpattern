@@ -40,19 +40,13 @@ var langdir = document.documentElement.dir,
 
 function checkCookies()
 {
-    var date = new Date();
+    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
-    date.setTime(date.getTime() + (60 * 1000));
-
-    document.cookie = 'testcookie=enabled; expired=' + date.toGMTString() + '; path=/';
-
-    cookieEnabled = (document.cookie.length > 2) ? true : false;
-
-    date.setTime(date.getTime() - (60 * 1000));
-
-    document.cookie = 'testcookie=; expires=' + date.toGMTString() + '; path=/';
-
-    return cookieEnabled;
+    if (!cookieEnabled) {
+        textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1])
+    } else {
+        document.cookie = 'txp_test_cookie=; Max-Age=0;'
+    }
 }
 
 /**
@@ -705,7 +699,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem('textpattern.' + textpattern._txp_uid))) || {},
+    data: (!navigator.cookieEnabled || !window.localStorage ? null : JSON.parse(window.localStorage.getItem('textpattern.' + textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -719,7 +713,7 @@ textpattern.storage =
         $.extend(true, textpattern.storage.data, data);
         textpattern.storage.clean(textpattern.storage.data);
 
-        if (window.localStorage) {
+        if (navigator.cookieEnabled && window.localStorage) {
             window.localStorage.setItem('textpattern.' + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
@@ -1981,10 +1975,7 @@ textpattern.Route.add('setup', function () {
 
 textpattern.Route.add('login', function () {
     // Check cookies.
-    if (!checkCookies()) {
-        cookieEnabled = false;
-        $('main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
-    }
+    cookieEnabled = checkCookies();
 
     // Focus on either username or password when empty.
     $('#login_form input').filter(function(){
@@ -2158,7 +2149,7 @@ textpattern.Route.add('page, form, file, image', function () {
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
         $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data) );
-        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
 
     $('body').on('click','.pophelp', function (ev) {
@@ -2178,14 +2169,11 @@ textpattern.Route.add('', function () {
             });
         }
 
-        var item = $(ev.target).parent().attr('data-item');
-        if (item === undefined ) {
-            item = $(ev.target).attr('data-item');
-        }
-        if (item === undefined ) {
+        var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
+        if (typeof item === 'undefined' ) {
             txpAsyncLink(ev, 'pophelp');
         } else {
-            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
         }
         return false;
     });
@@ -2274,11 +2262,13 @@ textpattern.Route.add('section', function ()
      * @param  string skin The theme name from which to show assets
      */
     function section_theme_show(skin) {
-        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
-        $pageSelect = $('[name=section_page]');
-        $styleSelect = $('[name=css]');
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css, #multiedit_dev_page, #multiedit_dev_css').empty();
+        $pageSelect = $('[name=section_page], #multiedit_dev_page');
+        $styleSelect = $('[name=css], #multiedit_dev_css');
 
         if (skin in skin_page) {
+            $pageSelect.append('<option></option>');
+
             $.each(skin_page[skin], function(key, item) {
                 var isSelected = (item == page_sel) ? ' selected' : '';
                 $pageSelect.append('<option'+isSelected+'>'+item+'</option>');
@@ -2286,6 +2276,8 @@ textpattern.Route.add('section', function ()
         }
 
         if (skin in skin_style) {
+            $styleSelect.append('<option></option>');
+
             $.each(skin_style[skin], function(key, item) {
                 var isSelected = (item == style_sel) ? ' selected' : '';
                 $styleSelect.append('<option'+isSelected+'>'+item+'</option>');
@@ -2293,7 +2285,7 @@ textpattern.Route.add('section', function ()
         }
     }
 
-    $('main').on('change', '#section_skin, #multiedit_skin', function() {
+    $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
         section_theme_show($(this).val());
     });
 
@@ -2303,7 +2295,10 @@ textpattern.Route.add('section', function ()
     $('main').on('change', 'select[name=edit_method]', function() {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
+        } else if ($(this).val() === 'changepagestyledev') {
+            $('#multiedit_dev_skin').change();
         }
+
     });
 });
 
@@ -2389,7 +2384,7 @@ textpattern.Route.add('', function () {
         textpattern.storage.update(data);
     });
 
-    hasTabs.find('a:not([data-txp-pane])').click(function() {
+    hasTabs.find('a:not([data-txp-pane], .pophelp)').click(function() {
         $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {
@@ -2553,6 +2548,8 @@ $(document).ready(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm()
     $('table.txp-list').txpColumnize()
+
+    $('.txp-logout a').attr('href', 'index.php?logout=1&_txp_token='+textpattern._txp_token)
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
