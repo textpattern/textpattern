@@ -20,7 +20,7 @@ system. Textpattern is free and open source.
 
 * The Textpattern FAQ is available at https://textpattern.com/faq/
 * In-depth documentation and a comprehensive tag index is available in the
-  Textpattern user documentation at https://docs.textpattern.com
+  Textpattern user documentation at https://docs.textpattern.com/
 * You can get support and information via:
    Forum:    https://forum.textpattern.com/
    GitHub:   https://textpattern.com/github
