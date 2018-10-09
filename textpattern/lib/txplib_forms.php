@@ -322,7 +322,7 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false, $ariaLabel = '')
 {
-    $atts = join_atts(array(
+    $atts = array(
         'class'        => $class,
         'id'           => $id,
         'name'         => $name,
@@ -337,7 +337,15 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'autocomplete' => $autocomplete,
         'autofocus'    => (bool) $autofocus,
         'aria-label'   => $ariaLabel,
-    ), TEXTPATTERN_STRIP_EMPTY);
+    );
+
+    if (is_array($value)) {
+        $atts = $value + $atts;
+        unset($atts['value']);
+        $value = isset($value['value']) ? $value['value'] : '';
+    }
+
+    $atts = join_atts($atts, TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
