@@ -314,12 +314,13 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
  * @param  string       $placeholder  The placeholder value displayed when the field is empty
  * @param  string       $autocomplete The autocomplete attribute value
  * @param  bool         $autofocus    If TRUE the field is auto-focused
+ * @param  string       $ariaLabel    The HTML aria-label
  * @return string HTML input
  * @example
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false)
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false, $ariaLabel = '')
 {
     $atts = join_atts(array(
         'class'        => $class,
@@ -335,6 +336,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'placeholder'  => $placeholder,
         'autocomplete' => $autocomplete,
         'autofocus'    => (bool) $autofocus,
+        'aria-label'   => $ariaLabel,
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
