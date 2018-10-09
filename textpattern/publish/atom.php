@@ -166,7 +166,15 @@ function atom()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
+        if ($atts = callback_event('feed_filter')) {
+            is_array($atts) or $atts = splat(trim($atts));
+        } else {
+            $atts = array();
+        }
+
+        $atts = filterAtts($atts, true);
+        $where = $atts['*'].' '.join(' ', $query);
+
         $rs = safe_rows_start(
             "*,
             ID AS thisid,
@@ -174,8 +182,7 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "Status = 4 AND Posted <= ".now('posted').$expired.join(' ', $query).
-            "ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY Posted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -333,12 +340,20 @@ function atom()
     }
 
     $out = array_merge($out, $articles);
+    $xmlns = '';
+
+    $feeds_namespaces = parse_ini_string(get_pref('feeds_namespaces'));
+    is_array($feeds_namespaces) or $feeds_namespaces = array();
+
+    foreach ($feeds_namespaces as $ns => $url) {
+        $xmlns .= ' xmlns:'.$ns.'="'.$url.'"';
+    }
 
     header('Content-Type: application/atom+xml; charset=utf-8');
 
     return
         '<?xml version="1.0" encoding="UTF-8"?>'.n.
-        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom">'.n.t.
+        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom"'.$xmlns.'>'.n.t.
         join(n.t, $out).n.
         '</feed>';
 }

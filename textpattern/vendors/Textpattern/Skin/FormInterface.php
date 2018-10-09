@@ -30,29 +30,28 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    interface FormInterface
-    {
-        /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name Form name;
-         * @param  string $type Form type;
-         * @param  string $Form Form contents;
-         * @return object $this The current class object (chainable).
-         */
+interface FormInterface
+{
+    /**
+     * $infos+$name properties setter.
+     *
+     * @param  string $name Form name;
+     * @param  string $type Form type;
+     * @param  string $Form Form contents;
+     * @return object $this The current class object (chainable).
+     */
 
-        public function setInfos(
-            $name,
-            $type = null,
-            $Form = null
-        );
+    public function setInfos(
+        $name,
+        $type = null,
+        $Form = null
+    );
 
-        /**
-         *  $subdirValues getter.
-         */
+    /**
+     *  $subdirValues getter.
+     */
 
-        public static function getTypes();
-    }
+    public static function getTypes();
 }

@@ -1882,7 +1882,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return $content ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts />";
 }
 
 /**

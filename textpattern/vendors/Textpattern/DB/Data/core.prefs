@@ -672,5 +672,12 @@
         "html": "defaultPublishStatus",
         "position": "15",
         "private": "1"
+    },
+    "custom_form_types": {
+        "val": ";[js]\n;mimetype=\"application/javascript\"\n;*=\"Javascript\"",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "longtext_input",
+        "position": "200"
     }
 }

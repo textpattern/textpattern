@@ -555,6 +555,8 @@ function weeks($name, $val)
         28  => '4 '.$weeks,
         35  => '5 '.$weeks,
         42  => '6 '.$weeks,
+        56  => '8 '.$weeks,
+        84  => '12 '.$weeks,
     );
 
     return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);

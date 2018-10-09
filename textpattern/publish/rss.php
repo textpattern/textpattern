@@ -114,7 +114,15 @@ function rss()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
+        if ($atts = callback_event('feed_filter')) {
+            is_array($atts) or $atts = splat(trim($atts));
+        } else {
+            $atts = array();
+        }
+
+        $atts = filterAtts($atts, true);
+        $where = $atts['*'].' '.join(' ', $query);
+
         $rs = safe_rows_start(
             "*,
             ID AS thisid,
@@ -122,8 +130,7 @@ function rss()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "Status = 4 AND Posted <= ".now('posted').$expired.join(' ', $query).
-            "ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY Posted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -144,17 +151,17 @@ function rss()
                     $count = '';
                 }
 
-                $permlink = permlinkurl($a);
-                $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
-                $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
+                $permlink = permlinkurl($thisarticle);
+                $summary = trim(parse($thisarticle['excerpt']), $permlink);
+                $content = '';
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
-                    if (!trim($summary)) {
-                        $summary = $content;
+                    if ($summary === '') {
+                        $summary = trim(parse($thisarticle['body']));
                     }
-
-                    $content = '';
+                } else {
+                    $content = trim(parse($thisarticle['body']));
                 }
 
                 $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($Title), ENT_QUOTES, 'UTF-8'))).$count;
@@ -163,15 +170,15 @@ function rss()
 
                 $item =
                     n.t.t.tag($Title, 'title').
-                    (trim($summary) ? n.t.t.tag(escape_cdata($summary), 'description') : '').
-                    (trim($content) ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
+                    ($summary !== '' ? n.t.t.tag(escape_cdata($summary), 'description') : '').
+                    ($content !== '' ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
                     n.t.t.tag($permlink, 'link').
                     n.t.t.tag(safe_strftime('rfc822', $a['posted']), 'pubDate').
                     n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
                     n.t.t.tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'guid', ' isPermaLink="false"').n.
                     $cb;
 
-                $articles[$ID] = tag($item.t, 'item');
+                $articles[$ID] = tag(replace_relative_urls($item, $permlink).t, 'item');
 
                 $dates[$ID] = $uLastMod;
             }
@@ -262,12 +269,25 @@ function rss()
     }
 
     $out = array_merge($out, $articles);
+    $xmlns = '';
+
+    $feeds_namespaces = parse_ini_string(get_pref('feeds_namespaces'));
+    is_array($feeds_namespaces) or $feeds_namespaces = array();
+    $feeds_namespaces += array(
+        'dc' => 'http://purl.org/dc/elements/1.1/',
+        'content' => 'http://purl.org/rss/1.0/modules/content/',
+        'atom' => 'http://www.w3.org/2005/Atom'
+    );
+
+    foreach ($feeds_namespaces as $ns => $url) {
+        $xmlns .= ' xmlns:'.$ns.'="'.$url.'"';
+    }
 
     header('Content-Type: application/rss+xml; charset=utf-8');
 
     return
-        '<?xml version="1.0" encoding="utf-8"?>'.n.
-        '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">'.n.
+        '<?xml version="1.0" encoding="UTF-8"?>'.n.
+        '<rss version="2.0"'.$xmlns.'>'.n.
         tag(n.t.join(n.t, $out).n, 'channel').n.
         '</rss>';
 }
