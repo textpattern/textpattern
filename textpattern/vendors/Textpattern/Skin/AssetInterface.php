@@ -30,37 +30,36 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    interface AssetInterface
-    {
-        /**
-         * $skin property setter.
-         */
+interface AssetInterface
+{
+    /**
+     * $skin property setter.
+     */
 
-        public function setSkin(Skin $skin = null);
+    public function setSkin(Skin $skin = null);
 
-        /**
-         * $essential property getter.
-         *
-         * @param string $key      $essential property array key for which you want to get values.
-         * @param string $whereKey Array key used to filter the output with $valueIn.
-         * @param array  $valueIn  Values to check against the $whereKey values to filter the output.
-         * @return array           Filtered values.
-         */
+    /**
+     * $essential property getter.
+     *
+     * @param string $key      $essential property array key for which you want to get values.
+     * @param string $whereKey Array key used to filter the output with $valueIn.
+     * @param array  $valueIn  Values to check against the $whereKey values to filter the output.
+     * @return array           Filtered values.
+     */
 
-        public static function getEssential(
-            $key = null,
-            $whereKey = null,
-            $valueIn = null
-        );
+    public static function getEssential(
+        $key = null,
+        $whereKey = null,
+        $valueIn = null
+    );
 
-        /**
-         * Build the Skin switch form.
-         *
-         * @return HTML Auto submited select list of installed skins.
-         */
+    /**
+     * Build the Skin switch form.
+     *
+     * @return HTML Auto submited select list of installed skins.
+     */
 
-        public function getSelectEdit();
-    }
+    public function getSelectEdit();
 }

@@ -43,7 +43,7 @@ if ($event == 'link') {
 
     global $all_link_cats, $all_link_authors;
     $all_link_cats = getTree('root', 'link');
-    $all_link_authors = the_privileged('link.edit.own');
+    $all_link_authors = the_privileged('link.edit.own', true);
 
     $available_steps = array(
         'link_list'          => false,
@@ -620,7 +620,7 @@ function link_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (has_privs('link.edit') && in_array($val, $all_link_authors)) {
+            if (has_privs('link.edit') && isset($all_link_authors[$val])) {
                 $key = 'author';
             }
             break;

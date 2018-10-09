@@ -45,7 +45,7 @@ if ($event == 'image') {
 
     global $all_image_cats, $all_image_authors;
     $all_image_cats = getTree('root', 'image');
-    $all_image_authors = the_privileged('image.edit.own');
+    $all_image_authors = the_privileged('image.edit.own', true);
 
     $available_steps = array(
         'image_list'          => false,
@@ -521,7 +521,7 @@ function image_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (has_privs('image.edit') && in_array($val, $all_image_authors)) {
+            if (has_privs('image.edit') && isset($all_image_authors[$val])) {
                 $key = 'author';
             }
             break;
@@ -619,8 +619,9 @@ function image_edit($message = '', $id = '')
         $imageBlock = array();
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
+        $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
 
-        $imageBlock[] = ($can_edit
+        $imageBlock[] = ($can_upload
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
@@ -636,12 +637,12 @@ function image_edit($message = '', $id = '')
                 $rs
             );
 
-        $thumbBlock[] = ($can_edit
+        $thumbBlock[] = ($can_upload
             ? hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3)
             : hed(gTxt('thumbnail'), 3)
         );
 
-        $thumbBlock[] = ($can_edit
+        $thumbBlock[] = ($can_upload
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
@@ -651,7 +652,7 @@ function image_edit($message = '', $id = '')
         );
 
         $thumbBlock[] = (check_gd($ext))
-            ? ($can_edit
+            ? ($can_upload
                 ? pluggable_ui(
                     'image_ui',
                     'thumbnail_create',
@@ -684,10 +685,10 @@ function image_edit($message = '', $id = '')
             'thumbnail_image',
             '<div class="thumbnail-image">'.
             (($thumbnail)
-                ? $thumb.n.($can_edit
+                ? $thumb.n.($can_upload
                     ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
                     :'')
-                : '').
+                : gTxt('none')).
             '</div>',
             $rs
         );

@@ -52,20 +52,22 @@ nav ol::after,
    ========================================================================== */
 @media screen {
   /* Layout
-   ========================================================================== */
+     ========================================================================== */
   /**
- * 1. Prevent adjustments of font size after orientation changes in
- *    IE on Windows Phone and in iOS.
- */
+   * 1. Prevent adjustments of font size after orientation changes in
+   *    IE on Windows Phone and in iOS.
+   */
   html {
     /* 1 */
     -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
   }
+
   /**
- * 1. Set `body` to `relative` to allow positioning of absolute elements.
- * 2. Remove default margin.
- */
+   * 1. Set `body` to `relative` to allow positioning of absolute elements.
+   * 2. Remove default margin.
+   */
   body {
     /* 1 */
     position: relative;
@@ -73,43 +75,46 @@ nav ol::after,
     margin: 0;
     background: #f7f7f7;
   }
+
   /**
- * Outer wrapper for main layouts.
- *
- * Example HTML:
- *
- * <div class="wrapper">
- *     <div class="container">
- *         Content
- *     </div>
- * </div>
- */
+   * Outer wrapper for main layouts.
+   *
+   * Example HTML:
+   *
+   * <div class="wrapper">
+   *     <div class="container">
+   *         Content
+   *     </div>
+   * </div>
+   */
   .wrapper {
     padding: 1px 0;
     border-bottom: 1px solid #cccccc;
     background: #ffffff;
   }
+
   /**
- * Wrapper for layouts, and for site header/footer.
- *
- * Example HTML:
- *
- * <div class="wrapper">
- *     <div class="container">
- *         Content
- *     </div>
- * </div>
- */
+   * Wrapper for layouts, and for site header/footer.
+   *
+   * Example HTML:
+   *
+   * <div class="wrapper">
+   *     <div class="container">
+   *         Content
+   *     </div>
+   * </div>
+   */
   .site-header,
-  .site-footer,
-  .container {
+.site-footer,
+.container {
     width: 88%;
     max-width: 54em;
     margin: 0 auto;
   }
+
   /**
- * Additional styling for child content within site header.
- */
+   * Additional styling for child content within site header.
+   */
   .site-header {
     padding: 1em 0;
   }
@@ -124,30 +129,33 @@ nav ol::after,
     font-weight: normal;
     line-height: 1.4;
   }
+
   /**
- * Additional styling for child content within site footer.
- */
+   * Additional styling for child content within site footer.
+   */
   .site-footer {
     padding: 0.5em 0;
   }
+
   /**
- * Styling for articles.
- *
- * 1. Prevent really, really long words in article from breaking layout.
- */
+   * Styling for articles.
+   *
+   * 1. Prevent really, really long words in article from breaking layout.
+   */
   .article {
     margin-bottom: 2em;
     /* 1 */
     word-wrap: break-word;
   }
+
   /**
- * Styling for complementary content.
- *
- * Initially the sidebar appears under main content, it is then repositioned
- * with media queries at 2nd breakpoint.
- *
- * 1. Prevent really, really long words in article from breaking layout.
- */
+   * Styling for complementary content.
+   *
+   * Initially the sidebar appears under main content, it is then repositioned
+   * with media queries at 2nd breakpoint.
+   *
+   * 1. Prevent really, really long words in article from breaking layout.
+   */
   .complementary-content {
     margin: 2em -6% 0;
     padding: 0 6%;
@@ -155,22 +163,23 @@ nav ol::after,
     /* 1 */
     word-wrap: break-word;
   }
+
   /* Navigation
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Style mobile first version of the navigation menu. Desktop version will
- * override some rules with extra styling at 1st breakpoint.
- *
- * Example HTML:
- *
- * <nav class="site-navigation">
- *     <ul>
- *         <li class="active"><a></li>
- *         <li><a></li>
- *         <li><a></li>
- *     </ul>
- * </nav>
- */
+   * Style mobile first version of the navigation menu. Desktop version will
+   * override some rules with extra styling at 1st breakpoint.
+   *
+   * Example HTML:
+   *
+   * <nav class="site-navigation">
+   *     <ul>
+   *         <li class="active"><a></li>
+   *         <li><a></li>
+   *         <li><a></li>
+   *     </ul>
+   * </nav>
+   */
   .site-navigation {
     background-color: #dddddd;
   }
@@ -215,14 +224,15 @@ nav ol::after,
     color: #1a1a1a;
     text-decoration: none;
   }
+
   /**
- * Search field in navigation.
- */
+   * Search field in navigation.
+   */
   .search {
     padding: 1em 6% 0.5em;
     background: #ffffff;
   }
-  .search input[type="search"] {
+  .search input[type=search] {
     width: 16em;
     height: 2.125em;
     padding-right: 0.1875em;
@@ -231,14 +241,15 @@ nav ol::after,
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg fill='%23333'%3E%3Cpath d='M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z'/%3E%3Cpath d='M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z'/%3E%3C/g%3E%3C/svg%3E") no-repeat left center;
     background-size: 2em 2em;
   }
+
   /* Links
-   ========================================================================== */
+     ========================================================================== */
   /**
- * 1. Specify link colour.
- * 2. Remove default underline style from non-hover state links.
- * 3. Interrupt the decoration line to let the shape of the text show through
- *    in supported browsers.
- */
+   * 1. Specify link colour.
+   * 2. Remove default underline style from non-hover state links.
+   * 3. Interrupt the decoration line to let the shape of the text show through
+   *    in supported browsers.
+   */
   a {
     /* 1 */
     color: #004cbf;
@@ -256,129 +267,144 @@ nav ol::after,
   a:focus {
     outline: 1px solid #0066ff;
   }
+
   /**
- * Additional styling for `h1`-`h3` heading links.
- *
- * 1. Expanded CSS level 3 `text-decoration-color` property in supported
- *    browsers, older browsers ignore this addition.
- */
+   * Additional styling for `h1`-`h3` heading links.
+   *
+   * 1. Expanded CSS level 3 `text-decoration-color` property in supported
+   *    browsers, older browsers ignore this addition.
+   */
   h1 a,
-  h2 a,
-  h3 a {
+h2 a,
+h3 a {
     color: #333333;
   }
   h1 a:hover, h1 a:active,
-  h2 a:hover,
-  h2 a:active,
-  h3 a:hover,
-  h3 a:active {
+h2 a:hover,
+h2 a:active,
+h3 a:hover,
+h3 a:active {
     color: #333333;
     /* 1 */
     -webkit-text-decoration-color: rgba(51, 51, 51, 0.5);
             text-decoration-color: rgba(51, 51, 51, 0.5);
   }
+
   /**
- * Paginator (prev/next) navigation links on articles/article lists.
- *
- * Example HTML:
- *
- * <nav class="paginator">
- *     <a rel="prev">
- *     <a rel="next">
- */
+   * Paginator (prev/next) navigation links on articles/article lists.
+   *
+   * Example HTML:
+   *
+   * <nav class="paginator">
+   *     <a rel="prev">
+   *     <a rel="next">
+   */
   .paginator {
     clear: both;
   }
-  .paginator [rel="prev"] {
+  .paginator [rel=prev] {
     float: left;
   }
-  .paginator [rel="next"] {
+  .paginator [rel=next] {
     float: right;
   }
+
   /* Typography
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Establish baseline.
- */
+   * Establish baseline.
+   */
   html {
     font-size: 16px;
     line-height: 1.5;
   }
+
   /**
- * Global font and text colour.
- */
+   * Global font and text colour.
+   */
   body {
     color: #333333;
     font-family: "PT Serif", Georgia, serif;
   }
+
   /**
- * Sans-serif font for main navigation menu.
- */
+   * Sans-serif font for main navigation menu.
+   */
   .site-navigation {
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-weight: bold;
   }
+
   /**
- * Harmonize size, style and vertical margin of headings.
- */
+   * Harmonize size, style and vertical margin of headings.
+   */
   h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
     clear: both;
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
+
   h1 {
     margin: 0.6315789em 0;
     font-size: 2.375rem;
     letter-spacing: -0.25px;
     line-height: 1.1842105;
   }
+
   h2 {
     margin: 0.75em 0;
     font-size: 2rem;
     letter-spacing: -0.25px;
     line-height: 1.25;
   }
+
   h3 {
     margin: 1em 0;
     font-size: 1.5rem;
     letter-spacing: -0.25px;
     line-height: 1.3333333;
   }
+
   h4 {
     margin: 1em 0;
     font-size: 1.25rem;
     line-height: 1.4;
   }
+
   h5 {
     margin: 1em 0;
     font-size: 1.125rem;
     line-height: 1.4444444;
   }
+
   h6 {
     margin: 1em 0;
     font-size: 1rem;
     line-height: 1.5;
   }
+
   /**
- * Add the correct font weight in Chrome, Edge, and Safari.
- */
+   * Add the correct font weight in Chrome, Edge, and Safari.
+   */
   b,
-  strong {
+strong {
     font-weight: bolder;
   }
+
   /**
- * Add vertical margin to addresses.
- */
+   * Add vertical margin to addresses.
+   */
   address {
     margin: 1em 0;
   }
+
   /**
- * Additional styling for blockquotes.
- */
+   * Additional styling for blockquotes.
+   */
   blockquote {
     margin: 0.8em 0;
     font-size: 1.25rem;
@@ -386,10 +412,11 @@ nav ol::after,
     line-height: 1.4;
     text-align: center;
   }
+
   /**
- * 1. Remove the bottom border in Chrome 57+.
- * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
- */
+   * 1. Remove the bottom border in Chrome 57+.
+   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+   */
   abbr[title] {
     /* 1 */
     border-bottom: 0;
@@ -397,23 +424,25 @@ nav ol::after,
     -webkit-text-decoration: underline dotted;
             text-decoration: underline dotted;
   }
+
   /**
- * Consistent styling for `mark` and `var` tags.
- */
+   * Consistent styling for `mark` and `var` tags.
+   */
   mark,
-  var {
+var {
     padding: 0 0.25em;
     border-radius: 0.25em;
     background: #fff9e1;
     color: #333333;
   }
+
   /**
- * Harmonize size and style of computer text.
- */
+   * Harmonize size and style of computer text.
+   */
   pre,
-  code,
-  kbd,
-  samp {
+code,
+kbd,
+samp {
     border: 1px solid #e3e3e3;
     border-radius: 0.2857143em;
     background-color: #f7f7f7;
@@ -422,18 +451,20 @@ nav ol::after,
     font-size: 0.875rem;
     line-height: 1.5;
   }
+
   code,
-  kbd,
-  samp {
+kbd,
+samp {
     padding: 1px 0.21429em;
   }
+
   /**
- * Additional stylng for preformatted text/code.
- *
- * 1. Don't wrap long words.
- * 2. Contain overflow in all browsers.
- * 3. Set tab size to 4 spaces.
- */
+   * Additional stylng for preformatted text/code.
+   *
+   * 1. Don't wrap long words.
+   * 2. Contain overflow in all browsers.
+   * 3. Set tab size to 4 spaces.
+   */
   pre {
     padding: 0.5714286em 1.1428571em;
     /* 1 */
@@ -460,46 +491,53 @@ nav ol::after,
         -ms-hyphens: none;
             hyphens: none;
   }
+
   /**
- * Prevent `sub` and `sup` elements from affecting the line height in all browsers.
- */
+   * Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+   */
   sub,
-  sup.footnote,
-  sup {
+sup.footnote,
+sup {
     position: relative;
     font-size: 0.625em;
     line-height: 0;
     vertical-align: baseline;
   }
+
   sup {
     top: -0.5em;
   }
+
   sub {
     bottom: -0.25em;
   }
+
   /**
- * Harmonize size and style of small text.
- */
+   * Harmonize size and style of small text.
+   */
   small,
-  figcaption,
-  tfoot,
-  .footnote {
+figcaption,
+tfoot,
+.footnote {
     font-size: 0.8125rem;
     line-height: 1.5;
   }
+
   figcaption,
-  tfoot,
-  .footnote {
+tfoot,
+.footnote {
     color: #585858;
   }
+
   figcaption {
     margin-top: 0.5em;
     font-style: italic;
   }
+
   /**
- * 1. Add the correct box sizing in Firefox.
- * 2. Show the overflow in Edge and IE.
- */
+   * 1. Add the correct box sizing in Firefox.
+   * 2. Show the overflow in Edge and IE.
+   */
   hr {
     height: 24px;
     margin: 1em 0;
@@ -511,157 +549,177 @@ nav ol::after,
     /* 2 */
     overflow: visible;
   }
+
   /* Support for non-latin languages (can be removed if not required)
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Bidirectional (bidi) text support.
- * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
- */
-  [dir="ltr"],
-  [dir="rtl"] {
+   * Bidirectional (bidi) text support.
+   * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
+   */
+  [dir=ltr],
+[dir=rtl] {
     unicode-bidi: -webkit-isolate;
     unicode-bidi: isolate;
   }
-  bdo[dir="ltr"],
-  bdo[dir="rtl"] {
+
+  bdo[dir=ltr],
+bdo[dir=rtl] {
     unicode-bidi: isolate-override;
   }
+
   /**
- * Preferred font for Japanese language.
- */
+   * Preferred font for Japanese language.
+   */
   :lang(ja) {
     font-family: "Hiragino Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
     font-weight: 300;
   }
+
   /**
- * Preferred font for Korean language.
- */
+   * Preferred font for Korean language.
+   */
   :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
+
   /**
- * Preferred font for simplified Chinese (PRC) language.
- */
+   * Preferred font for simplified Chinese (PRC) language.
+   */
   :lang(zh-cn) {
     font-family: "PingFang SC", SimHei, sans-serif;
   }
+
   /**
- * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
- */
+   * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
+   */
   :lang(zh-tw) {
     font-family: "PingFang TC", PMingLiU, sans-serif;
   }
+
   /**
- * Suppress `text-decoration` in some RTL languages for better legibility.
- */
-  [lang|="ar"] a:hover,
-  [lang|="fa"] a:hover,
-  [lang|="ur"] a:hover {
+   * Suppress `text-decoration` in some RTL languages for better legibility.
+   */
+  [lang|=ar] a:hover,
+[lang|=fa] a:hover,
+[lang|=ur] a:hover {
     text-decoration: none;
   }
+
   /**
- * Computer code should be LTR.
- */
-  [dir="rtl"] code {
+   * Computer code should be LTR.
+   */
+  [dir=rtl] code {
     direction: ltr;
   }
+
   /**
- * Swap image alignment right/left positions in RTL languages.
- */
-  [dir="rtl"] img.align-left {
+   * Swap image alignment right/left positions in RTL languages.
+   */
+  [dir=rtl] img.align-left {
     margin: 1em 0 1em 1em;
     float: right;
   }
-  [dir="rtl"] img.align-right {
+  [dir=rtl] img.align-right {
     margin: 1em 1em 1em 0;
     float: left;
   }
+
   /**
- * Swap table caption alignment in RTL languages.
- */
-  [dir="rtl"] caption {
+   * Swap table caption alignment in RTL languages.
+   */
+  [dir=rtl] caption {
     text-align: right;
   }
+
   /**
- * Swap table cell text alignments in RTL languages.
- */
-  [dir="rtl"] th,
-  [dir="rtl"] td {
+   * Swap table cell text alignments in RTL languages.
+   */
+  [dir=rtl] th,
+[dir=rtl] td {
     text-align: right;
   }
+
   /**
- * Swap menu/list padding positions in RTL languages.
- */
-  [dir="rtl"] menu,
-  [dir="rtl"] ol,
-  [dir="rtl"] ul {
+   * Swap menu/list padding positions in RTL languages.
+   */
+  [dir=rtl] menu,
+[dir=rtl] ol,
+[dir=rtl] ul {
     padding: 0 1.75em 0 0;
   }
-  [dir="rtl"] .site-navigation ul,
-  [dir="rtl"] .article-list {
+
+  [dir=rtl] .site-navigation ul,
+[dir=rtl] .article-list {
     padding: 0;
   }
+
   /**
- * Swap definition description margin positions in RTL languages.
- */
-  [dir="rtl"] dd {
+   * Swap definition description margin positions in RTL languages.
+   */
+  [dir=rtl] dd {
     margin: 0 1.75em 0 0;
   }
+
   /**
- * Swap checkbox/radio margin positions in RTL languages.
- */
-  [dir="rtl"] input[type="checkbox"] + label,
-  [dir="rtl"] input[type="radio"] + label {
+   * Swap checkbox/radio margin positions in RTL languages.
+   */
+  [dir=rtl] input[type=checkbox] + label,
+[dir=rtl] input[type=radio] + label {
     margin: 0 0 0 0.5em;
   }
-  [dir="rtl"] input[type="checkbox"] + label:last-of-type,
-  [dir="rtl"] input[type="radio"] + label:last-of-type {
+  [dir=rtl] input[type=checkbox] + label:last-of-type,
+[dir=rtl] input[type=radio] + label:last-of-type {
     margin: 0;
   }
+
   /**
- * Swap paginator (prev/next) navigation links on articles/article lists.
- */
-  [dir="rtl"] .paginator [rel="prev"] {
+   * Swap paginator (prev/next) navigation links on articles/article lists.
+   */
+  [dir=rtl] .paginator [rel=prev] {
     float: right;
   }
-  [dir="rtl"] .paginator [rel="next"] {
+  [dir=rtl] .paginator [rel=next] {
     float: left;
   }
+
   /**
- * Swap anchor float position on comments.
- */
-  [dir="rtl"] .comments h4 .comment-anchor {
+   * Swap anchor float position on comments.
+   */
+  [dir=rtl] .comments h4 .comment-anchor {
     float: left;
   }
+
   /* Embedded content
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Add the correct display in IE 11.
- */
+   * Add the correct display in IE 11.
+   */
   video {
     display: inline-block;
   }
+
   /**
- * Make embedded elements responsive.
- */
+   * Make embedded elements responsive.
+   */
   img,
-  video {
+video {
     max-width: 100%;
     height: auto;
   }
+
   /**
- * Images.
- *
- * 1. Remove the gap between images and the bottom of their containers.
- *
- * Image alignment (compatible with Textile markup syntax).
- *
- * Example HTML:
- *
- * <img class="align-left">
- * <img class="align-right">
- * <img class="align-center">
- */
+   * Images.
+   *
+   * 1. Remove the gap between images and the bottom of their containers.
+   *
+   * Image alignment (compatible with Textile markup syntax).
+   *
+   * Example HTML:
+   *
+   * <img class="align-left">
+   * <img class="align-right">
+   * <img class="align-center">
+   */
   img {
     /* 1 */
     vertical-align: middle;
@@ -678,100 +736,112 @@ nav ol::after,
     display: block;
     margin: 1em auto;
   }
+
   /**
- * Address margin not present in Safari.
- */
+   * Address margin not present in Safari.
+   */
   figure {
     margin: 0;
   }
+
   /* Tables
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Consistent tables.
- */
+   * Consistent tables.
+   */
   table {
     width: 100%;
     margin-bottom: 1em;
     border-collapse: collapse;
     border-spacing: 0;
   }
+
   /**
- * Styling of table captions.
- */
+   * Styling of table captions.
+   */
   caption {
     margin-bottom: 0.5em;
     font-style: italic;
     text-align: left;
   }
+
   /**
- * Make table cells align top and left by default.
- */
+   * Make table cells align top and left by default.
+   */
   th,
-  td {
+td {
     padding: 0.5em;
     border: 1px solid #d4d4d4;
     text-align: left;
     vertical-align: top;
   }
+
   /**
- * Emphasize table header.
- */
+   * Emphasize table header.
+   */
   thead tr {
     background-color: #eeeeee;
   }
   thead th,
-  thead td {
+thead td {
     border: 1px solid #cccccc;
   }
+
   /**
- * 'Zebra striping' of `tbody` rows.
- */
+   * 'Zebra striping' of `tbody` rows.
+   */
   tbody tr:nth-child(even) {
     background-color: #f7f7f7;
   }
+
   /**
- * Adjust padding of table footer due to smaller font size.
- */
+   * Adjust padding of table footer due to smaller font size.
+   */
   tfoot th,
-  tfoot td {
+tfoot td {
     padding: 0.6666667em;
   }
+
   /**
- * Multi-row span vertical cell alignments.
- */
+   * Multi-row span vertical cell alignments.
+   */
   [rowspan] {
     vertical-align: middle;
   }
+
   /* Lists
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Address paddings set differently.
- */
+   * Address paddings set differently.
+   */
   menu,
-  ol,
-  ul {
+ol,
+ul {
     padding: 0 0 0 1.75em;
   }
+
   /**
- * Remove margins from nested lists.
- */
+   * Remove margins from nested lists.
+   */
   li > ul,
-  li > ol {
+li > ol {
     margin: 0;
   }
+
   /**
- * Address margins set differently.
- */
+   * Address margins set differently.
+   */
   dd {
     margin: 0 0 0 1.75em;
   }
+
   /**
- * Additional styling for article lists.
- *
- * Example HTML:
- *
- * <ul class="article-list">
- */
+   * Additional styling for article lists.
+   *
+   * Example HTML:
+   *
+   * <ul class="article-list">
+   */
   .article-list {
     margin: 0 0 2em;
     padding: 0;
@@ -782,12 +852,13 @@ nav ol::after,
     margin-bottom: 0;
     border-bottom: 1px solid #cccccc;
   }
+
   /* Forms
-   ========================================================================== */
+     ========================================================================== */
   /**
- * 1. Address width being affected by wide descendants in Chrome, Firefox.
- * 2. Define consistent fieldset border, margin, and padding.
- */
+   * 1. Address width being affected by wide descendants in Chrome, Firefox.
+   * 2. Define consistent fieldset border, margin, and padding.
+   */
   fieldset {
     /* 1 */
     min-width: 0;
@@ -796,13 +867,14 @@ nav ol::after,
     padding: 1px 1em;
     border: 1px solid #cccccc;
   }
+
   /**
- * Normalize styling of `legend`.
- *
- * 1. Correct wrapping not present in IE 11 and Edge 12/13.
- * 2. Remove padding so people aren't caught out if they zero out fieldsets.
- * 3. Correct `color` not being inherited from fieldset in IE 11.
- */
+   * Normalize styling of `legend`.
+   *
+   * 1. Correct wrapping not present in IE 11 and Edge 12/13.
+   * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+   * 3. Correct `color` not being inherited from fieldset in IE 11.
+   */
   legend {
     /* 1 */
     display: table;
@@ -817,22 +889,24 @@ nav ol::after,
     /* 1 */
     box-sizing: border-box;
   }
+
   /**
- * Add the correct vertical alignment in Chrome, Firefox, and Opera.
- */
+   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+   */
   progress {
     vertical-align: baseline;
   }
+
   /**
- * 1. Prevent elements from spilling out of their parent.
- * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
- * 3. Correct font properties not being inherited.
- */
+   * 1. Prevent elements from spilling out of their parent.
+   * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
+   * 3. Correct font properties not being inherited.
+   */
   button,
-  input,
-  optgroup,
-  select,
-  textarea {
+input,
+optgroup,
+select,
+textarea {
     /* 1 */
     max-width: 100%;
     /* 2 */
@@ -845,43 +919,46 @@ nav ol::after,
     box-sizing: border-box;
     vertical-align: baseline;
   }
+
   /**
- * Remove the inner border and padding in Firefox.
- */
+   * Remove the inner border and padding in Firefox.
+   */
   button::-moz-focus-inner,
-  [type="button"]::-moz-focus-inner,
-  [type="reset"]::-moz-focus-inner,
-  [type="submit"]::-moz-focus-inner {
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
     padding: 0;
     border-style: none;
   }
+
   /**
- * Remove the inner padding in Chrome and Safari on macOS.
- */
-  [type="search"]::-webkit-search-decoration {
+   * Remove the inner padding in Chrome and Safari on macOS.
+   */
+  [type=search]::-webkit-search-decoration {
     -webkit-appearance: none;
   }
+
   /**
- * Styling of form input fields.
- *
- * 1. Remove browser-specific default styling.
- */
-  [type="color"],
-  [type="date"],
-  [type="datetime"],
-  [type="datetime-local"],
-  [type="email"],
-  [type="month"],
-  [type="number"],
-  [type="password"],
-  [type="search"],
-  [type="tel"],
-  [type="text"],
-  [type="time"],
-  [type="url"],
-  [type="week"],
-  select,
-  textarea {
+   * Styling of form input fields.
+   *
+   * 1. Remove browser-specific default styling.
+   */
+  [type=color],
+[type=date],
+[type=datetime],
+[type=datetime-local],
+[type=email],
+[type=month],
+[type=number],
+[type=password],
+[type=search],
+[type=tel],
+[type=text],
+[type=time],
+[type=url],
+[type=week],
+select,
+textarea {
     height: 2em;
     padding: 0.25em 0.1875em;
     border: 1px solid #cccccc;
@@ -892,110 +969,120 @@ nav ol::after,
        -moz-appearance: none;
             appearance: none;
   }
-  [type="color"]:focus,
-  [type="date"]:focus,
-  [type="datetime"]:focus,
-  [type="datetime-local"]:focus,
-  [type="email"]:focus,
-  [type="month"]:focus,
-  [type="number"]:focus,
-  [type="password"]:focus,
-  [type="search"]:focus,
-  [type="tel"]:focus,
-  [type="text"]:focus,
-  [type="time"]:focus,
-  [type="url"]:focus,
-  [type="week"]:focus,
-  select:focus,
-  textarea:focus {
+  [type=color]:focus,
+[type=date]:focus,
+[type=datetime]:focus,
+[type=datetime-local]:focus,
+[type=email]:focus,
+[type=month]:focus,
+[type=number]:focus,
+[type=password]:focus,
+[type=search]:focus,
+[type=tel]:focus,
+[type=text]:focus,
+[type=time]:focus,
+[type=url]:focus,
+[type=week]:focus,
+select:focus,
+textarea:focus {
     border-color: #0066ff;
     outline: 1px solid transparent;
   }
+
   /**
- * 1. Remove any excess padding.
- * 2. Correct margins for inline checkbox/radio labels.
- */
-  [type="checkbox"],
-  [type="radio"] {
+   * 1. Remove any excess padding.
+   * 2. Correct margins for inline checkbox/radio labels.
+   */
+  [type=checkbox],
+[type=radio] {
     /* 1 */
     padding: 0;
   }
-  [type="checkbox"] + label,
-  [type="radio"] + label {
+  [type=checkbox] + label,
+[type=radio] + label {
     /* 2 */
     margin: 0 0.5em 0 0;
   }
-  [type="checkbox"] + label:last-of-type,
-  [type="radio"] + label:last-of-type {
+  [type=checkbox] + label:last-of-type,
+[type=radio] + label:last-of-type {
     /* 2 */
     margin: 0;
   }
+
   /**
- * Correct the cursor style of increment and decrement buttons in Safari.
- */
-  [type="number"]::-webkit-inner-spin-button,
-  [type="number"]::-webkit-outer-spin-button {
+   * Correct the cursor style of increment and decrement buttons in Safari.
+   */
+  [type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
     height: auto;
   }
+
   /**
- * Use indicator icon to signify the drop-down ability of `select`.
- */
+   * Use indicator icon to signify the drop-down ability of `select`.
+   */
   select {
     padding-right: 1.5em;
     background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='5' viewBox='0 0 17 5'%3E%3Cpolygon fill='%23333' points='0,0 5,5 10,0'/%3E%3C/svg%3E") right center no-repeat;
     background-size: 1.0625em 0.3125em;
     text-transform: none;
   }
+
   /**
- * Swap `select` icon position in RTL languages.
- */
-  [dir="rtl"] select {
+   * Swap `select` icon position in RTL languages.
+   */
+  [dir=rtl] select {
     padding-right: 0.1875em;
     padding-left: 1.5em;
     background-position: 0.5em center;
   }
+
   /**
- * Remove browser-specific `select` UI in IE 11.
- */
+   * Remove browser-specific `select` UI in IE 11.
+   */
   select::-ms-expand {
     opacity: 0;
   }
+
   /**
- * Remove browser-specific `select` UI in Firefox 4+.
- */
+   * Remove browser-specific `select` UI in Firefox 4+.
+   */
   select:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 #000000;
   }
+
   /**
- * Override height and background set in a previous rule and allow auto height.
- */
+   * Override height and background set in a previous rule and allow auto height.
+   */
   select[size],
-  select[multiple] {
+select[multiple] {
     height: auto;
     padding-right: 0.5em;
     background-image: none;
   }
+
   /**
- * Override height set in rule above and restrict to one line field.
- */
+   * Override height set in rule above and restrict to one line field.
+   */
   select[size="0"],
-  select[size="1"] {
+select[size="1"] {
     height: 2em;
   }
+
   /**
- * Normalize styling of `optgroup`.
- */
+   * Normalize styling of `optgroup`.
+   */
   optgroup {
     color: #000000;
     font-style: normal;
     font-weight: bold;
   }
+
   /**
- * 1. Restrict to vertical resizing to prevent layout breakage.
- * 2. Remove default vertical scrollbar in IE 11.
- * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
- */
+   * 1. Restrict to vertical resizing to prevent layout breakage.
+   * 2. Remove default vertical scrollbar in IE 11.
+   * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+   */
   textarea {
     width: 100%;
     height: auto;
@@ -1007,16 +1094,17 @@ nav ol::after,
     /* 3 */
     vertical-align: top;
   }
+
   /**
- * Make sure disabled elements really are disabled and styled appropriately.
- *
- * 1. Override default iOS opacity setting.
- * 2. Re-set default cursor for disabled elements.
- */
+   * Make sure disabled elements really are disabled and styled appropriately.
+   *
+   * 1. Override default iOS opacity setting.
+   * 2. Re-set default cursor for disabled elements.
+   */
   [disabled],
-  [disabled] option,
-  [disabled] optgroup,
-  span.disabled {
+[disabled] option,
+[disabled] optgroup,
+span.disabled {
     border-color: #d4d4d4 !important;
     background: #eeeeee !important;
     /* 1 */
@@ -1027,24 +1115,26 @@ nav ol::after,
     /* 2 */
     cursor: default !important;
   }
+
   /**
- * Styling for form field validation.
- */
+   * Styling for form field validation.
+   */
   input:focus:invalid,
-  select:focus:invalid,
-  textarea:focus:invalid {
+select:focus:invalid,
+textarea:focus:invalid {
     border-color: #9d261d;
     box-shadow: none;
   }
+
   /**
- * Width display options for `input` fields. Height display options
- * for textareas.
- *
- * Example HTML:
- *
- * <input class="small">
- * <input class="large">
- */
+   * Width display options for `input` fields. Height display options
+   * for textareas.
+   *
+   * Example HTML:
+   *
+   * <input class="small">
+   * <input class="large">
+   */
   .small input {
     width: 25%;
     min-width: 151px;
@@ -1052,6 +1142,7 @@ nav ol::after,
   .small textarea {
     height: 5.5em;
   }
+
   .large input {
     width: 50%;
     min-width: 302px;
@@ -1059,36 +1150,39 @@ nav ol::after,
   .large textarea {
     height: 9.75em;
   }
+
   /**
- * Styling for required field indicators.
- *
- * Example HTML:
- *
- * <b class="required" title="Required">*</b>
- */
+   * Styling for required field indicators.
+   *
+   * Example HTML:
+   *
+   * <b class="required" title="Required">*</b>
+   */
   .required {
     border: 0;
     color: #9d261d;
   }
+
   /* Buttons
-   ========================================================================== */
+     ========================================================================== */
   /**
- * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
- * 2. Address `overflow` set to `hidden` in IE 11.
- */
+   * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
+   * 2. Address `overflow` set to `hidden` in IE 11.
+   */
   button {
     /* 1 */
     text-transform: none;
     /* 2 */
     overflow: visible;
   }
+
   /**
- * 1. Remove browser-specific default styling.
- */
+   * 1. Remove browser-specific default styling.
+   */
   button,
-  [type="button"],
-  [type="reset"],
-  [type="submit"] {
+[type=button],
+[type=reset],
+[type=submit] {
     background-color: #dfdfdf;
     background-image: linear-gradient(#eeeeee, #dfdfdf);
     display: inline-block;
@@ -1110,9 +1204,9 @@ nav ol::after,
     box-shadow: 0 2px 0 #acacac;
   }
   button:hover,
-  [type="button"]:hover,
-  [type="reset"]:hover,
-  [type="submit"]:hover {
+[type=button]:hover,
+[type=reset]:hover,
+[type=submit]:hover {
     background-color: #e9e9e9;
     background-image: linear-gradient(#f8f8f8, #e9e9e9);
     border-color: #bebebe;
@@ -1120,9 +1214,9 @@ nav ol::after,
     text-decoration: none;
   }
   button:active,
-  [type="button"]:active,
-  [type="reset"]:active,
-  [type="submit"]:active {
+[type=button]:active,
+[type=reset]:active,
+[type=submit]:active {
     top: 2px;
     border-color: #bebebe;
     color: #1a1a1a;
@@ -1130,30 +1224,32 @@ nav ol::after,
     box-shadow: none;
   }
   button:focus,
-  [type="button"]:focus,
-  [type="reset"]:focus,
-  [type="submit"]:focus {
+[type=button]:focus,
+[type=reset]:focus,
+[type=submit]:focus {
     border-color: #0066ff;
     outline: 1px solid transparent;
   }
+
   /**
- * Disbaled button additional styling.
- */
+   * Disbaled button additional styling.
+   */
   button[disabled],
-  [type="button"][disabled],
-  [type="reset"][disabled],
-  [type="submit"][disabled] {
+[type=button][disabled],
+[type=reset][disabled],
+[type=submit][disabled] {
     top: 2px !important;
   }
+
   /* Comments
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Styling for user comments.
- *
- * Example HTML:
- *
- * <article class="comments">
- */
+   * Styling for user comments.
+   *
+   * Example HTML:
+   *
+   * <article class="comments">
+   */
   .comments {
     margin-bottom: 1em;
     padding: 1px 1em;
@@ -1168,65 +1264,69 @@ nav ol::after,
     float: right;
     font-weight: normal;
   }
+
   /**
- * Additional styling for article author's comments.
- *
- * Example HTML:
- *
- * <article class="comments comments-author">
- */
+   * Additional styling for article author's comments.
+   *
+   * Example HTML:
+   *
+   * <article class="comments comments-author">
+   */
   .comments-author {
     background: #efefef;
   }
+
   /**
- * Styling for user comments preview.
- */
+   * Styling for user comments preview.
+   */
   #cpreview {
     margin-bottom: 2px;
     padding: 1em;
     border-radius: 0.5em;
     background-color: #fff9e1;
   }
+
   /**
- * Highlight text colour for comment errors.
- */
+   * Highlight text colour for comment errors.
+   */
   .error_message li {
     color: #9d261d;
   }
+
   /**
- * Highlighting for comment form errors.
- */
+   * Highlighting for comment form errors.
+   */
   .comments_error {
     border-color: #9d261d;
     box-shadow: 0 0 4px 2px #9d261d;
   }
+
   /* Popup comments (can be removed if you don't use popups)
-   ========================================================================== */
+     ========================================================================== */
   /**
- * Restrict maximum width of popup container.
- */
+   * Restrict maximum width of popup container.
+   */
   #popup-page .container {
     max-width: 52em;
   }
 }
-
 /* ==========================================================================
    Additional layout for screen media 576px and up
    ========================================================================== */
 @media only screen and (min-width: 38em) {
   /**
-     * Desktop version of the navigation menu. Overrides mobile first version.
-     *
-     * Example HTML:
-     *
-     * <nav class="site-navigation">
-     *     <ul>
-     *         <li class="active"><a></li>
-     *         <li><a></li>
-     *         <li><a></li>
-     *     </ul>
-     * </nav>
-     */
+   * Desktop version of the navigation menu. Overrides mobile first version.
+   *
+   * Example HTML:
+   *
+   * <nav class="site-navigation">
+   *     <ul>
+   *         <li class="active"><a></li>
+   *         <li><a></li>
+   *         <li><a></li>
+   *     </ul>
+   * </nav>
+   */
   .site-navigation {
     border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
@@ -1243,18 +1343,19 @@ nav ol::after,
     border-top: 0;
     border-left: 1px solid #cccccc;
   }
-  [dir="rtl"] .site-navigation li {
+  [dir=rtl] .site-navigation li {
     float: right;
   }
-  [dir="rtl"] .site-navigation li:first-child {
+  [dir=rtl] .site-navigation li:first-child {
     border-left: 0;
   }
-  [dir="rtl"] .site-navigation li:last-child {
+  [dir=rtl] .site-navigation li:last-child {
     border-left: 1px solid #cccccc;
   }
   .site-navigation a {
     padding: 0.5em 1em;
   }
+
   .search {
     position: absolute;
     top: 50%;
@@ -1264,117 +1365,124 @@ nav ol::after,
     background: transparent;
     z-index: 2;
   }
-  [dir="rtl"] .search {
+  [dir=rtl] .search {
     right: auto;
     left: 0;
   }
-  .search input[type="search"] {
+  .search input[type=search] {
     width: 2.125em;
     padding-right: 0;
     transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
     background-color: #eeeeee;
     cursor: pointer;
   }
-  .search input[type="search"]:hover {
+  .search input[type=search]:hover {
     background-color: #f8f8f8;
   }
-  .search input[type="search"]:focus {
+  .search input[type=search]:focus {
     width: 16em;
     padding-right: 0.1875em;
     background-color: white;
     cursor: auto;
   }
 }
-
 /* ==========================================================================
    Additional layout for screen media 864px and up
    ========================================================================== */
 @media only screen and (min-width: 46em) {
   /**
-     * Enlarge baseline text size.
-     */
+   * Enlarge baseline text size.
+   */
   html {
     font-size: 1.125rem;
   }
 }
-
 /* ==========================================================================
    Styling and layout for print media
    ========================================================================== */
 @media print {
   /**
- * Remove unnecessary global styling from printed media.
- */
+   * Remove unnecessary global styling from printed media.
+   */
   *,
-  *::before,
-  *::after {
+*::before,
+*::after {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
     box-shadow: none !important;
   }
+
   /**
- * Use a print-friendly font size.
- */
+   * Use a print-friendly font size.
+   */
   html {
     font-size: 8pt;
     line-height: 1.5;
   }
+
   /**
- * Use a print-friendly font family.
- */
+   * Use a print-friendly font family.
+   */
   body {
     margin: 0.5cm;
     padding: 2em 5em;
     font-family: "Helvetica Neue", sans-serif;
   }
+
   /**
- * Visually separate header from body.
- */
+   * Visually separate header from body.
+   */
   .site-header {
     border-bottom: 1pt solid #000000;
   }
+
   /**
- * Visually separate footer from body.
- */
+   * Visually separate footer from body.
+   */
   .site-footer {
     margin-top: 12pt;
     border-top: 1pt solid #000000;
   }
+
   /**
- * Hide unnecessary content from print.
- */
+   * Hide unnecessary content from print.
+   */
   nav,
-  audio,
-  video,
-  form,
-  #comments-form,
-  .comments h4 a:last-child,
-  .complementary-content,
-  .paginator {
+audio,
+video,
+form,
+#comments-form,
+.comments h4 a:last-child,
+.complementary-content,
+.paginator {
     display: none;
   }
+
   /**
- * Make sure links are not underlined.
- */
+   * Make sure links are not underlined.
+   */
   a {
     text-decoration: none;
   }
+
   /**
- * Show long-form for abbreviations in print.
- */
+   * Show long-form for abbreviations in print.
+   */
   abbr[title]::after {
     content: " (" attr(title) ")";
   }
+
   /**
- * Harmonize size, style and vertical margin of headings.
- */
+   * Harmonize size, style and vertical margin of headings.
+   */
   h1 {
     margin: 16pt 0;
     font-size: 32pt;
     font-weight: normal;
     line-height: 36pt;
   }
+
   h2 {
     margin: 14pt 0;
     font-size: 24pt;
@@ -1383,6 +1491,7 @@ nav ol::after,
     orphans: 2;
     widows: 2;
   }
+
   h3 {
     margin: 12pt 0;
     font-size: 18pt;
@@ -1391,6 +1500,7 @@ nav ol::after,
     orphans: 2;
     widows: 2;
   }
+
   h4 {
     margin: 11pt 0;
     font-size: 14pt;
@@ -1399,6 +1509,7 @@ nav ol::after,
     orphans: 2;
     widows: 2;
   }
+
   h5 {
     margin: 10pt 0;
     font-size: 12pt;
@@ -1407,6 +1518,7 @@ nav ol::after,
     orphans: 2;
     widows: 2;
   }
+
   h6 {
     margin: 9pt 0;
     font-size: 10pt;
@@ -1415,29 +1527,32 @@ nav ol::after,
     orphans: 2;
     widows: 2;
   }
+
   /**
- * Prevent widows (single final paragraph line on next page) and orphans (single
- * first paragraph line on previous page).
- */
+   * Prevent widows (single final paragraph line on next page) and orphans (single
+   * first paragraph line on previous page).
+   */
   p {
     orphans: 2;
     widows: 2;
   }
+
   /**
- * Harmonize size and style of small text.
- */
+   * Harmonize size and style of small text.
+   */
   footer,
-  figcaption,
-  tfoot,
-  small,
-  .footnote {
+figcaption,
+tfoot,
+small,
+.footnote {
     font-size: 6pt;
   }
+
   /**
- * Simple blockquote styling.
- *
- * 1. Avoid blockquotes breaking across multiple pages.
- */
+   * Simple blockquote styling.
+   *
+   * 1. Avoid blockquotes breaking across multiple pages.
+   */
   blockquote {
     padding: 0 0 0 8pt;
     border-left: 3pt solid #000000;
@@ -1445,16 +1560,18 @@ nav ol::after,
     /* 1 */
     page-break-inside: avoid;
   }
-  [dir="rtl"] blockquote {
+
+  [dir=rtl] blockquote {
     padding: 0 8pt 0 0;
     border-right: 3pt solid #000000;
     border-left: 0;
   }
+
   /**
- * Simple preformatted text styling.
- *
- * 1. Ensure pre blocks are wrapped when printed.
- */
+   * Simple preformatted text styling.
+   *
+   * 1. Ensure pre blocks are wrapped when printed.
+   */
   pre {
     margin-bottom: 8pt;
     padding: 8pt;
@@ -1462,29 +1579,31 @@ nav ol::after,
     /* 1 */
     white-space: pre-wrap !important;
   }
+
   /**
- * Use a print-friendly monospaced font and size.
- */
+   * Use a print-friendly monospaced font and size.
+   */
   pre,
-  code,
-  kbd,
-  samp,
-  var {
+code,
+kbd,
+samp,
+var {
     font-family: "Courier New", Courier, monospace;
   }
+
   /**
- * Images.
- *
- * 1. Avoid images breaking across multiple pages.
- *
- * Image alignment (compatible with Textile markup syntax).
- *
- * Example HTML:
- *
- * <img class="align-left">
- * <img class="align-right">
- * <img class="align-center">
- */
+   * Images.
+   *
+   * 1. Avoid images breaking across multiple pages.
+   *
+   * Image alignment (compatible with Textile markup syntax).
+   *
+   * Example HTML:
+   *
+   * <img class="align-left">
+   * <img class="align-right">
+   * <img class="align-center">
+   */
   img {
     /* 1 */
     page-break-inside: avoid;
@@ -1501,103 +1620,117 @@ nav ol::after,
     display: block;
     margin: 1em auto;
   }
+
   /**
- * Swap image alignment right/left positions in RTL languages.
- */
-  [dir="rtl"] img.align-left {
+   * Swap image alignment right/left positions in RTL languages.
+   */
+  [dir=rtl] img.align-left {
     margin: 1em 0 1em 1em;
     float: right;
   }
-  [dir="rtl"] img.align-right {
+  [dir=rtl] img.align-right {
     margin: 1em 1em 1em 0;
     float: left;
   }
+
   /**
- * Ensure margin below `figure`.
- */
+   * Ensure margin below `figure`.
+   */
   figure {
     margin-bottom: 8pt;
   }
+
   /**
- * Ensure margin above `figcaption`.
- */
+   * Ensure margin above `figcaption`.
+   */
   figcaption {
     margin-top: 4pt;
   }
+
   /**
- * Simple bullet styling for `ul` unordered lists.
- */
+   * Simple bullet styling for `ul` unordered lists.
+   */
   ul {
     padding: 0 0 8pt 1.8em;
     list-style: square;
   }
-  [dir="rtl"] ul {
+
+  [dir=rtl] ul {
     padding: 0 1.8em 8pt 0;
   }
+
   /**
- * Simple numerical styling for `ol` ordered lists.
- */
+   * Simple numerical styling for `ol` ordered lists.
+   */
   ol {
     padding: 0 0 8pt 1.8em;
     list-style: decimal;
   }
-  [dir="rtl"] ol {
+
+  [dir=rtl] ol {
     padding: 0 1.8em 8pt 0;
   }
+
   /**
- * Normalize margins on `dl` definition lists.
- */
+   * Normalize margins on `dl` definition lists.
+   */
   dl {
     padding: 0 0 8pt 1.8em;
   }
-  [dir="rtl"] dl {
+
+  [dir=rtl] dl {
     padding: 0 1.8em 8pt 0;
   }
+
   /**
- * 1. Make `table` span entire page width.
- * 2. Ensure margin below `table`.
- */
+   * 1. Make `table` span entire page width.
+   * 2. Ensure margin below `table`.
+   */
   table {
     /* 1 */
     width: 100%;
     /* 2 */
     margin-bottom: 8pt;
   }
+
   /**
- * Harmonize styling for `caption`.
- */
+   * Harmonize styling for `caption`.
+   */
   caption {
     margin-bottom: 4pt;
     font-weight: bold;
   }
+
   /**
- * Display table head across multi-page tables.
- */
+   * Display table head across multi-page tables.
+   */
   thead {
     display: table-header-group;
   }
   thead th {
     border-top: 1pt solid #000000;
   }
+
   /**
- * Avoid table rows breaking across multiple pages.
- */
+   * Avoid table rows breaking across multiple pages.
+   */
   tr {
     page-break-inside: avoid;
   }
+
   /**
- * Simple styling for table cells.
- */
+   * Simple styling for table cells.
+   */
   th,
-  td {
+td {
     padding: 4pt 8pt;
     border-bottom: 1pt solid #000000;
   }
+
   /**
- * Avoid user comments breaking across multiple pages.
- */
+   * Avoid user comments breaking across multiple pages.
+   */
   .comments {
     page-break-inside: avoid;
   }
 }
-

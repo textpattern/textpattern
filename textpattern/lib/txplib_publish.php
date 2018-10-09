@@ -359,12 +359,10 @@ function parse($thing, $condition = true)
         $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
-    if (!$short_tags) {
-        if (false === strpos($thing, '<txp:')) {
-            return $condition ? $thing : ($thing ? '' : '1');
-        }
-    } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
-        return $condition ? $thing : ($thing ? '' : '1');
+    if (!$short_tags && false === strpos($thing, '<txp:') ||
+        $short_tags && !preg_match("@<(?:{$pattern}):@", $thing))
+    {
+        return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
     $hash = sha1($thing);
@@ -377,7 +375,7 @@ function parse($thing, $condition = true)
         $level   = 0;
 
         $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
+        $t = '@^</?('.$pattern.'):(\w+)(.*)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
         $last = count($parsed);
@@ -453,7 +451,7 @@ function parse($thing, $condition = true)
     $tag = $txp_parsed[$hash];
 
     if (empty($tag)) {
-        return $condition ? $thing : ($thing ? '' : '1');
+        return $condition ? $thing : '';
     }
 
     list($first, $last) = $txp_else[$hash];
@@ -464,7 +462,7 @@ function parse($thing, $condition = true)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return ($thing ? '' : '1');
+        return '';
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
