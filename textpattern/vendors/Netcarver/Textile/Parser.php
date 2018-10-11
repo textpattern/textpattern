@@ -2808,7 +2808,9 @@ class Parser
                         $block = $o2.$content.$c2;
                     }
                 } else {
-                    $block = $this->graf($block);
+                    $block = strpos($block, ' ') === 0 ?
+                        $this->graf($block) :
+                        $this->shelve($block);
                 }
             }
 
