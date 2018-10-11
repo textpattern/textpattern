@@ -310,14 +310,12 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
  * @param  bool         $disabled     If TRUE renders the input disabled
  * @param  bool         $required     If TRUE the field is marked as required
  * @param  string       $placeholder  The placeholder value displayed when the field is empty
- * @param  string       $autocomplete The autocomplete attribute value
- * @param  bool         $autofocus    If TRUE the field is auto-focused
  * @return string HTML input
  * @example
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false)
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 {
     $atts = join_atts((is_array($name) ? $name : array('name' => $name)) + array(
         'class'        => $class,
@@ -330,8 +328,6 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'disabled'     => (bool) $disabled,
         'required'     => (bool) $required,
         'placeholder'  => $placeholder,
-        'autocomplete' => $autocomplete,
-        'autofocus'    => (bool) $autofocus,
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
