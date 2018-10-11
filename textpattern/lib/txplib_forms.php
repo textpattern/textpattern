@@ -134,13 +134,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     $out = array();
 
     $selected = false;
-    $multiple = is_array($value) ? ' multiple="multiple"' : '';
-
-    if ($multiple) {
-        $name .= '[]';
-    } else {
-        $value = (string) $value;
-    }
+    $multiple = is_array($value);
+    $multiple or $value = (string) $value;
 
     if (is_array($disabled)) {
         $disable = $disabled;
@@ -166,10 +161,13 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
     }
 
-    $atts = join_atts(array(
+    $name_m = $name.($multiple ? '[]' : '');
+    $atts = join_atts((is_array($name) ? $name : array(
+        'name' => $name_m
+    )) + array(
         'id'       => $select_id,
-        'name'     => $name,
         'disabled' => (bool) $disabled,
+        'multiple' => $multiple
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ((string) $onchange === '1') {
@@ -178,8 +176,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'.n
-        .($multiple ? hInput($name, '').n : ''); // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'.n
+        .($multiple ? hInput($name_m, '').n : ''); // TODO: use jQuery UI selectmenu?
 }
 
 /**
@@ -312,20 +310,16 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
  * @param  bool         $disabled     If TRUE renders the input disabled
  * @param  bool         $required     If TRUE the field is marked as required
  * @param  string       $placeholder  The placeholder value displayed when the field is empty
- * @param  string       $autocomplete The autocomplete attribute value
- * @param  bool         $autofocus    If TRUE the field is auto-focused
- * @param  string       $ariaLabel    The HTML aria-label
  * @return string HTML input
  * @example
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '', $autocomplete = '', $autofocus = false, $ariaLabel = '')
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 {
-    $atts = array(
+    $atts = join_atts((is_array($name) ? $name : array('name' => $name)) + array(
         'class'        => $class,
         'id'           => $id,
-        'name'         => $name,
         'type'         => $type,
         'size'         => (int) $size,
         'title'        => $title,
@@ -334,18 +328,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'disabled'     => (bool) $disabled,
         'required'     => (bool) $required,
         'placeholder'  => $placeholder,
-        'autocomplete' => $autocomplete,
-        'autofocus'    => (bool) $autofocus,
-        'aria-label'   => $ariaLabel,
-    );
-
-    if (is_array($value)) {
-        $atts = $value + $atts;
-        unset($atts['value']);
-        $value = isset($value['value']) ? $value['value'] : '';
-    }
-
-    $atts = join_atts($atts, TEXTPATTERN_STRIP_EMPTY);
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
@@ -617,14 +600,15 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         $cols = 40;
     }
 
-    return n.tag($thing, 'textarea', array(
+    $atts = (is_array($name) ? $name : array('name' => $name)) + array(
         'id'          => $id,
-        'name'        => $name,
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,
         'placeholder' => $placeholder,
-    ));
+    );
+
+    return n.tag($thing, 'textarea', $atts);
 }
 
 /**
