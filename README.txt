@@ -24,7 +24,6 @@ system. Textpattern is free and open source.
 * You can get support and information via:
    Forum:    https://forum.textpattern.com/
    GitHub:   https://textpattern.com/github
-   Google+:  https://textpattern.com/+
    Twitter:  https://textpattern.com/@textpattern
 
 

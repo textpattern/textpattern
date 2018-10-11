@@ -463,6 +463,14 @@ class Parser
     protected $blocktag_whitelist = array();
 
     /**
+     * Whitelisted tags.
+     *
+     * @var array
+     */
+
+    protected $block_whitelist = array(' ');
+
+    /**
      * Whether block tags are enabled.
      *
      * @var   bool
@@ -1573,6 +1581,7 @@ class Parser
         if ($this->isBlockTagEnabled()) {
             if ($this->isLiteModeEnabled()) {
                 $this->blocktag_whitelist = array('bq', 'p');
+                $this->block_whitelist = array(' ');
                 $text = $this->blocks($text."\n\n");
             } else {
                 $this->blocktag_whitelist = array(
@@ -1585,6 +1594,7 @@ class Parser
                     'fn'.$this->regex_snippets['digit'].'+',
                     '###',
                 );
+                $this->block_whitelist = array(' ', '\<\w[^<>]*\>');
                 $text = $this->blocks($text);
                 $text = $this->placeNoteLists($text);
             }
@@ -2736,6 +2746,7 @@ class Parser
         $regex = '/^(?P<tag>'.join('|', $this->blocktag_whitelist).')'.
             '(?P<atts>'.$this->a.$this->cls.')\.(?P<ext>\.?)(?::(?P<cite>\S+))? (?P<graf>.*)$/Ss'.
             $this->regex_snippets['mod'];
+        $whitelist = '/^(?:'.implode('|', $this->block_whitelist).')/';
 
         $textblocks = preg_split('/(\n{2,})/', $text, null, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -2780,7 +2791,7 @@ class Parser
                     $block .= $c1;
                 }
             } else {
-                if ($ext || strpos($block, ' ') !== 0) {
+                if ($ext || !preg_match($whitelist, $block)) {
                     list($o1, $o2, $content, $c2, $c1, $eat) = $this->fBlock(array(
                         0,
                         $tag,

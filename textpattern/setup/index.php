@@ -627,7 +627,7 @@ function langs()
         n.'<label for="setup_language">Please choose a language</label>'.
         n.'</div>'.
         n.'<div class="txp-form-field-value">'.
-        n.'<select id="setup_language" name="lang">';
+        n.'<select id="setup_language" name="lang" autocomplete="language">';
 
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
