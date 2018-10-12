@@ -2269,7 +2269,10 @@ function comment_name_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => ''), $atts));
 
     $namewarn = false;
     $name = pcs('name');
@@ -2281,7 +2284,12 @@ function comment_name_input($atts)
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
-    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name'], '', 'name');
+    return fInput('text',
+        array('name' => 'name',
+            'aria-label' => $aria_label,
+            'placeholder' => $placeholder
+        ),
+        $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
 }
 
 // -------------------------------------------------------------
@@ -2290,7 +2298,9 @@ function comment_email_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array('size' => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => ''), $atts));
 
     $emailwarn = false;
     $email = clean_url(pcs('email'));
@@ -2302,7 +2312,11 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email'], '', 'email');
+    return fInput($h5 ? 'email' : 'text',
+        array('name' => 'email',
+            'aria-label' => $aria_label,
+            'placeholder' => $placeholder
+        ), $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
@@ -2311,7 +2325,9 @@ function comment_web_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array('size' => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => 'http(s)://'), $atts));
 
     $web = clean_url(pcs('web'));
     $h5 = ($prefs['doctype'] == 'html5');
@@ -2321,7 +2337,11 @@ function comment_web_input($atts)
         $web = $comment['web'];
     }
 
-    return fInput($h5 ? 'url' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false, 'http(s)://', 'url');
+    return fInput($h5 ? 'url' : 'text',
+        array('name' => 'web',
+            'aria-label' => $aria_label,
+            'placeholder' => $placeholder
+        ), $web, 'comment_web_input', '', '', $size, '', 'web');
 }
 
 // -------------------------------------------------------------
@@ -2333,6 +2353,8 @@ function comment_message_input($atts)
     extract(lAtts(array(
         'rows'  => $thiscommentsform['msgrows'],
         'cols'  => $thiscommentsform['msgcols'],
+        'aria_label'  => '',
+        'placeholder' => ''
     ), $atts));
 
     $style = $thiscommentsform['msgstyle'];
@@ -2353,13 +2375,17 @@ function comment_message_input($atts)
         $commentwarn = (!trim($message));
     }
 
-    $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
-    $cols = ($cols && is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
-    $rows = ($rows && is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
-    $style = ($style ? ' style="'.$style.'"' : '');
+    $attr = join_atts(array(
+        'cols'        => intval($cols),
+        'rows'        => intval($rows),
+        'required'    => $prefs['doctype'] == 'html5',
+        'style'       => $style,
+        'aria-label'  => $aria_label,
+        'placeholder' => $placeholder
+    ));
 
     return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
-        ' id="message" name="'.$n_message.'"'.$cols.$rows.$style.$required.
+        ' id="message" name="'.$n_message.'"'.$attr.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
         callback_event('comment.form').
         $formnonce;
