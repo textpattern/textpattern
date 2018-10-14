@@ -2272,7 +2272,8 @@ function comment_name_input($atts)
     extract(lAtts(array(
         'size'        => $thiscommentsform['isize'],
         'aria_label'  => '',
-        'placeholder' => ''), $atts));
+        'placeholder' => '',
+    ), $atts));
 
     $namewarn = false;
     $name = pcs('name');
@@ -2284,12 +2285,12 @@ function comment_name_input($atts)
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
-    return fInput('text',
-        array('name' => 'name',
-            'aria-label' => $aria_label,
-            'placeholder' => $placeholder
-        ),
-        $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
+    return fInput('text', array(
+            'name'         => 'name',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'name',
+            'placeholder'  => $placeholder,
+        ), $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
 }
 
 // -------------------------------------------------------------
@@ -2298,9 +2299,11 @@ function comment_email_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize'],
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
         'aria_label'  => '',
-        'placeholder' => ''), $atts));
+        'placeholder' => '',
+    ), $atts));
 
     $emailwarn = false;
     $email = clean_url(pcs('email'));
@@ -2312,10 +2315,11 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text',
-        array('name' => 'email',
-            'aria-label' => $aria_label,
-            'placeholder' => $placeholder
+    return fInput($h5 ? 'email' : 'text', array(
+            'name'         => 'email',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'email',
+            'placeholder'  => $placeholder,
         ), $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
@@ -2325,9 +2329,11 @@ function comment_web_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize'],
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
         'aria_label'  => '',
-        'placeholder' => 'http(s)://'), $atts));
+        'placeholder' => 'http(s)://',
+    ), $atts));
 
     $web = clean_url(pcs('web'));
     $h5 = ($prefs['doctype'] == 'html5');
@@ -2337,10 +2343,11 @@ function comment_web_input($atts)
         $web = $comment['web'];
     }
 
-    return fInput($h5 ? 'url' : 'text',
-        array('name' => 'web',
-            'aria-label' => $aria_label,
-            'placeholder' => $placeholder
+    return fInput($h5 ? 'url' : 'text', array(
+            'name'         => 'web',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'url',
+            'placeholder'  => $placeholder,
         ), $web, 'comment_web_input', '', '', $size, '', 'web');
 }
 
@@ -2351,8 +2358,8 @@ function comment_message_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'rows'  => $thiscommentsform['msgrows'],
-        'cols'  => $thiscommentsform['msgcols'],
+        'rows'        => $thiscommentsform['msgrows'],
+        'cols'        => $thiscommentsform['msgcols'],
         'aria_label'  => '',
         'placeholder' => ''
     ), $atts));
@@ -2494,13 +2501,13 @@ function comments($atts, $thing = null)
     extract($prefs);
 
     extract(lAtts(array(
-        'form'       => 'comments',
-        'wraptag'    => ($comments_are_ol ? 'ol' : ''),
-        'break'      => ($comments_are_ol ? 'li' : 'div'),
-        'class'      => __FUNCTION__,
-        'limit'      => 0,
-        'offset'     => 0,
-        'sort'       => 'posted ASC',
+        'form'    => 'comments',
+        'wraptag' => ($comments_are_ol ? 'ol' : ''),
+        'break'   => ($comments_are_ol ? 'li' : 'div'),
+        'class'   => __FUNCTION__,
+        'limit'   => 0,
+        'offset'  => 0,
+        'sort'    => 'posted ASC',
     ), $atts));
 
     assert_article();
