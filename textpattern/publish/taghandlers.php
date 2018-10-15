@@ -1594,8 +1594,8 @@ function search_input($atts)
         'size'        => '15',
         'html_id'     => '',
         'label'       => gTxt('search'),
-        'aria_label'  => gTxt('search'),
-        'placeholder' => gTxt('search'),
+        'aria_label'  => '',
+        'placeholder' => '',
         'button'      => '',
         'section'     => '',
         'match'       => 'exact',
@@ -1625,18 +1625,18 @@ function search_input($atts)
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
-        return '<form method="get" action="'.hu.'"'.$id.'>'.
+        return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
             n.$out.
             n.'</form>';
     }
 
     if ($permlink_mode != 'messy') {
-        return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
+        return '<form role="search" method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
             n.$out.
             n.'</form>';
     }
 
-    return '<form method="get" action="'.hu.'"'.$id.'>'.
+    return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
         n.hInput('s', $section).
         n.$out.
         n.'</form>';
