@@ -1588,15 +1588,17 @@ function search_input($atts)
     global $q, $permlink_mode, $doctype;
 
     extract(lAtts(array(
-        'form'    => 'search_input',
-        'wraptag' => 'p',
-        'class'   => __FUNCTION__,
-        'size'    => '15',
-        'html_id' => '',
-        'label'   => gTxt('search'),
-        'button'  => '',
-        'section' => '',
-        'match'   => 'exact',
+        'form'        => 'search_input',
+        'wraptag'     => 'p',
+        'class'       => __FUNCTION__,
+        'size'        => '15',
+        'html_id'     => '',
+        'label'       => gTxt('search'),
+        'aria_label'  => gTxt('search'),
+        'placeholder' => gTxt('search'),
+        'button'      => '',
+        'section'     => '',
+        'match'       => 'exact',
     ), $atts));
 
     if ($form && !array_diff_key($atts, array('form' => true))) {
@@ -1610,7 +1612,14 @@ function search_input($atts)
     $h5 = ($doctype == 'html5');
     $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
-    $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '', false, $h5);
+    $out = fInput($h5 ? 'search' : 'text',
+        array(
+            'name'        => 'q',
+            'aria-label'  => $aria_label,
+            'placeholder' => $placeholder,
+            'required'    => $h5,
+            'size'        => $size,
+        ), $q);
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
     $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
