@@ -1594,7 +1594,7 @@ class Parser
                     'fn'.$this->regex_snippets['digit'].'+',
                     '###',
                 );
-                $this->block_whitelist = array(' ', '\<\w[^<>]*\>');
+                $this->block_whitelist = array(' ', '\<\w');
                 $text = $this->blocks($text);
                 $text = $this->placeNoteLists($text);
             }
