@@ -1583,12 +1583,15 @@ function section_list($atts, $thing = null)
 // -------------------------------------------------------------
 
 // Input form for search queries.
-function search_input($atts)
+function search_input($atts, $thing = null)
 {
     global $q, $permlink_mode, $doctype;
+    static $outside = null;
+
+    $inside = is_array($outside);
 
     extract(lAtts(array(
-        'form'        => 'search_input',
+        'form'        => null,
         'wraptag'     => 'p',
         'class'       => __FUNCTION__,
         'size'        => '15',
@@ -1599,27 +1602,45 @@ function search_input($atts)
         'button'      => '',
         'section'     => '',
         'match'       => 'exact',
-    ), $atts));
+    ), $inside ? $atts + $outside : $atts));
 
-    if ($form && !array_diff_key($atts, array('form' => true))) {
-        $rs = fetch_form($form);
+    unset($atts['form']);
 
-        if ($rs) {
-            return parse($rs);
-        }
+    if (!$inside && !isset($form) && !isset($thing) && empty($atts)) {
+        $form = 'search_input';
     }
 
-    $h5 = ($doctype == 'html5');
+    if ($form && $form = fetch_form($form)) {
+        $thing = $form;
+    }
+
+    if (isset($thing)) {
+        $oldatts = $outside;
+        $outside = $atts;
+        $out = parse($thing);
+        $outside = $oldatts;
+    } else {
+        $h5 = ($doctype == 'html5');
+        $out = fInput($h5 ? 'search' : 'text',
+            array(
+                'name'        => 'q',
+                'aria-label'  => $aria_label,
+                'placeholder' => $placeholder,
+                'required'    => $h5,
+                'size'        => $size,
+                'class'       => $wraptag || empty($atts['class']) ? false : $class
+            ), $q);
+    }
+
+    if ($form || $inside) {
+        empty($atts['wraptag']) or $out = doTag($out, $wraptag, $class);
+
+        return $out;
+    }
+
     $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
-    $out = fInput($h5 ? 'search' : 'text',
-        array(
-            'name'        => 'q',
-            'aria-label'  => $aria_label,
-            'placeholder' => $placeholder,
-            'required'    => $h5,
-            'size'        => $size,
-        ), $q);
+
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
     $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
