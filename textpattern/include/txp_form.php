@@ -350,15 +350,18 @@ function form_edit($message = '', $refresh_partials = false)
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
-        tag_void('input', array(
+        (!is_writable($instance->getDirPath()) ? '' :
+            span(
+                checkbox2('export', false, 0, 'export').
+                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ).
+        n.tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )).(!is_writable($instance->getDirPath()) ? '' :
-           checkbox2('export', false, 0, 'export').n.
-               tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
-          ), ' class="txp-save"'
+        )), ' class="txp-save"'
     );
 
     $listActions = graf(
