@@ -3,14 +3,29 @@ Changes in 4.7.2
 * Maintenance release with enhancements and bug fixes.
 * Fixed: 'problem_connecting_update_server' language string grouping corrected
   (thanks, gaekwad).
+* Fixed: Unparsed 'must_reassign_assets' and 'cannot_assign_assets_to_deletee'
+  strings
+* Fixed: A bug with <txp:related_articles /> tag.
+* Fixed: <txp:search_input /> will always respect its 'form' attribute setting,
+  if set.
+* Changed: <txp:search_input /> can be used as a container tag, and also accepts
+  'aria_label' and 'placeholder' attributes.
 * Changed: More robust search routes within default public-side theme.
 * Changed: Enhanced password manager compatibility on login and user details
   pages.
 * Changed: Extended fallback to 'C' locale in some situations.
 * Changed: Hive admin theme login panel now displays link to public site.
 * Changed: Classic admin theme login panel layout simplified.
+* Changed: Fine-grained development theme preview.
+* Changed: More customizable Atom/RSS feeds.
+* Changed: Deleting an article deletes the associated comments.
+* Changed: Some emoji are preserved in automatically generated URL titles.
+* Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: Latest translations.
 * Added: Global 'trim' attribute.
+* Added: Global 'escape="spell"' attribute value, to spell out numbers.
+* Added: Custom form (MIME)types.
+* Added: Option to export form/page/style to disk on save.
 
 Changes in 4.7.1
 
