@@ -5442,7 +5442,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 function pagelinkurl($parts, $inherit = array())
 {
     global $permlink_mode, $prefs;
-    static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+    static $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     $keys = array_merge($inherit, $parts);
 
@@ -5455,7 +5455,9 @@ function pagelinkurl($parts, $inherit = array())
     // Unset extra stuff to link to an article.
     if (!empty($keys['id'])) {
         foreach ($internals as $key) {
-            unset($keys[$key]);
+            if ($key != 'id') {
+                unset($keys[$key]);
+            }
         }
     }
 
@@ -5523,12 +5525,16 @@ function pagelinkurl($parts, $inherit = array())
 
 function permlinkurl_id($id)
 {
-    global $permlinks;
+    global $permlinks, $thisarticle;
 
     $id = (int) $id;
 
     if (isset($permlinks[$id])) {
         return $permlinks[$id];
+    }
+
+    if (isset($thisarticle['thisid']) && $thisarticle['thisid'] == $id) {
+        return permlinkurl($thisarticle);
     }
 
     $rs = safe_row(
