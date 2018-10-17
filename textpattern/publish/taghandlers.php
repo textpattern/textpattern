@@ -291,7 +291,7 @@ function css($atts)
 function component($atts)
 {
     static $mimetypes = null, $dir = null,
-        $inherit = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
     global $doctype, $pretext;
 
     if (!isset($mimetypes)) {
@@ -316,8 +316,8 @@ function component($atts)
     $out = '';
     $qs = array();
 
-    foreach (do_list_unique($context) as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $inherit)) {
+    foreach ($context === true ? $internals : do_list_unique($context) as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $internals)) {
             $qs[$q] = $pretext[$q];
         }
     }
@@ -331,11 +331,11 @@ function component($atts)
             if (isset($mimetypes[$type])) {
                 $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
             } else {
-                $url[] = hu.'component.php'.join_qs(array('n' => $n) + $qs);
+                $url[] = pagelinkurl(array('f' => $n) + $qs);
             }
         }
     } else {
-        $url = hu.'component.php'.join_qs(array('n' => $name) + $qs);
+        $url = pagelinkurl(array('f' => $name) + $qs);
     }
 
     switch ($format) {
@@ -4583,9 +4583,9 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
-    static $specials = null;
+    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
-    $specials !== null or $specials = array(
+    isset($specials) or $specials = array(
         'admin_root'  => ahu,
         'images_root' => ihu.get_pref('img_dir'),
         'themes_root' => hu.get_pref('skin_dir'),
@@ -4597,6 +4597,7 @@ function page_url($atts)
         'type'    => 'request_uri',
         'default' => '',
         'escape'  => null,
+        'context' => ''
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
@@ -4605,6 +4606,19 @@ function page_url($atts)
 
     if (isset($specials[$type])) {
         return $specials[$type];
+    }
+
+    if ($context) {
+        $keys = array();
+
+        foreach ($context === true ? $internals : do_list_unique($context) as $key) {
+            $value = isset($pretext[$key]) ? $pretext[$key] : gps($key);
+            empty($value) or $keys[$key] = $value;
+        }
+
+        isset($keys[$type]) or $keys[$type] = $default;
+
+        return pagelinkurl($keys);
     }
 
     if (isset($pretext[$type])) {

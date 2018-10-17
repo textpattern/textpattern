@@ -106,23 +106,20 @@ if (!empty($txpcfg['pre_publish_script'])) {
 
 include txpath.'/publish.php';
 
-switch (txpinterface) {
-    case 'component':
-    case 'css':
-        Trace::setQuiet(true);
-        $n = gps('n') or $n = $pretext['css'];
-        $t = gps('t') or $t = $pretext['skin'];
-        $output = 'output_'.txpinterface;
-        $output($s, $n, $t);
-        break;
-    default:
-        textpattern();
+if (txpinterface == 'css') {
+    $n = gps('n') or $n = $pretext['css'];
+    $t = gps('t') or $t = $pretext['skin'];
+    output_css($s, $n, $t);
+} elseif (!empty($f)) {
+    output_component($f);
+} else {
+    textpattern();
 
-        if ($production_status !== 'live') {
-            echo $trace->summary();
-        }
-}
+    if ($production_status !== 'live') {
+        echo $trace->summary();
+    }
 
-if ($production_status === 'debug') {
-    echo $trace->result();
+    if ($production_status === 'debug') {
+        echo $trace->result();
+    }
 }
