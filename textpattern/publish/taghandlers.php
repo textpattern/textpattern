@@ -291,7 +291,7 @@ function css($atts)
 function component($atts)
 {
     static $mimetypes = null, $dir = null,
-        $inherit = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
     global $doctype, $pretext;
 
     if (!isset($mimetypes)) {
@@ -316,8 +316,8 @@ function component($atts)
     $out = '';
     $qs = array();
 
-    foreach (do_list_unique($context) as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $inherit)) {
+    foreach ($context === true ? $internals : do_list_unique($context) as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $internals)) {
             $qs[$q] = $pretext[$q];
         }
     }
@@ -331,11 +331,11 @@ function component($atts)
             if (isset($mimetypes[$type])) {
                 $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
             } else {
-                $url[] = hu.'component.php'.join_qs(array('n' => $n) + $qs);
+                $url[] = pagelinkurl(array('f' => $n) + $qs);
             }
         }
     } else {
-        $url = hu.'component.php'.join_qs(array('n' => $name) + $qs);
+        $url = pagelinkurl(array('f' => $name) + $qs);
     }
 
     switch ($format) {
@@ -1583,51 +1583,81 @@ function section_list($atts, $thing = null)
 // -------------------------------------------------------------
 
 // Input form for search queries.
-function search_input($atts)
+function search_input($atts, $thing = null)
 {
     global $q, $permlink_mode, $doctype;
+    static $outside = null;
+
+    $inside = is_array($outside);
 
     extract(lAtts(array(
-        'form'    => 'search_input',
-        'wraptag' => 'p',
-        'class'   => __FUNCTION__,
-        'size'    => '15',
-        'html_id' => '',
-        'label'   => gTxt('search'),
-        'button'  => '',
-        'section' => '',
-        'match'   => 'exact',
-    ), $atts));
+        'form'        => null,
+        'wraptag'     => 'p',
+        'class'       => __FUNCTION__,
+        'size'        => '15',
+        'html_id'     => '',
+        'label'       => gTxt('search'),
+        'aria_label'  => '',
+        'placeholder' => '',
+        'button'      => '',
+        'section'     => '',
+        'match'       => 'exact',
+    ), $inside ? $atts + $outside : $atts));
 
-    if ($form && !array_diff_key($atts, array('form' => true))) {
-        $rs = fetch_form($form);
+    unset($atts['form']);
 
-        if ($rs) {
-            return parse($rs);
-        }
+    if (!$inside && !isset($form) && !isset($thing) && empty($atts)) {
+        $form = 'search_input';
     }
 
-    $h5 = ($doctype == 'html5');
+    if ($form && $form = fetch_form($form)) {
+        $thing = $form;
+    }
+
+    if (isset($thing)) {
+        $oldatts = $outside;
+        $outside = $atts;
+        $out = parse($thing);
+        $outside = $oldatts;
+    } else {
+        $h5 = ($doctype == 'html5');
+        $out = fInput($h5 ? 'search' : 'text',
+            array(
+                'name'        => 'q',
+                'aria-label'  => $aria_label,
+                'placeholder' => $placeholder,
+                'required'    => $h5,
+                'size'        => $size,
+                'class'       => $wraptag || empty($atts['class']) ? false : $class
+            ), $q);
+    }
+
+    if ($form || $inside) {
+        empty($atts['wraptag']) or $out = doTag($out, $wraptag, $class);
+
+        return $out;
+    }
+
     $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
-    $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '', false, $h5);
+
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
     $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
-        return '<form method="get" action="'.hu.'"'.$id.'>'.
+        return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
             n.$out.
             n.'</form>';
     }
 
     if ($permlink_mode != 'messy') {
-        return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
+        return '<form role="search" method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
             n.$out.
             n.'</form>';
     }
 
-    return '<form method="get" action="'.hu.'"'.$id.'>'.
+    return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
         n.hInput('s', $section).
         n.$out.
         n.'</form>';
@@ -2269,7 +2299,11 @@ function comment_name_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => '',
+    ), $atts));
 
     $namewarn = false;
     $name = pcs('name');
@@ -2281,7 +2315,12 @@ function comment_name_input($atts)
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
-    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name'], '', 'name');
+    return fInput('text', array(
+            'name'         => 'name',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'name',
+            'placeholder'  => $placeholder,
+        ), $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
 }
 
 // -------------------------------------------------------------
@@ -2290,7 +2329,11 @@ function comment_email_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => '',
+    ), $atts));
 
     $emailwarn = false;
     $email = clean_url(pcs('email'));
@@ -2302,7 +2345,12 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email'], '', 'email');
+    return fInput($h5 ? 'email' : 'text', array(
+            'name'         => 'email',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'email',
+            'placeholder'  => $placeholder,
+        ), $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
@@ -2311,7 +2359,11 @@ function comment_web_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size'        => $thiscommentsform['isize'],
+        'aria_label'  => '',
+        'placeholder' => 'http(s)://',
+    ), $atts));
 
     $web = clean_url(pcs('web'));
     $h5 = ($prefs['doctype'] == 'html5');
@@ -2321,7 +2373,12 @@ function comment_web_input($atts)
         $web = $comment['web'];
     }
 
-    return fInput($h5 ? 'url' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false, 'http(s)://', 'url');
+    return fInput($h5 ? 'url' : 'text', array(
+            'name'         => 'web',
+            'aria-label'   => $aria_label,
+            'autocomplete' => 'url',
+            'placeholder'  => $placeholder,
+        ), $web, 'comment_web_input', '', '', $size, '', 'web');
 }
 
 // -------------------------------------------------------------
@@ -2331,8 +2388,10 @@ function comment_message_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'rows'  => $thiscommentsform['msgrows'],
-        'cols'  => $thiscommentsform['msgcols'],
+        'rows'        => $thiscommentsform['msgrows'],
+        'cols'        => $thiscommentsform['msgcols'],
+        'aria_label'  => '',
+        'placeholder' => ''
     ), $atts));
 
     $style = $thiscommentsform['msgstyle'];
@@ -2353,13 +2412,17 @@ function comment_message_input($atts)
         $commentwarn = (!trim($message));
     }
 
-    $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
-    $cols = ($cols && is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
-    $rows = ($rows && is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
-    $style = ($style ? ' style="'.$style.'"' : '');
+    $attr = join_atts(array(
+        'cols'        => intval($cols),
+        'rows'        => intval($rows),
+        'required'    => $prefs['doctype'] == 'html5',
+        'style'       => $style,
+        'aria-label'  => $aria_label,
+        'placeholder' => $placeholder
+    ));
 
     return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
-        ' id="message" name="'.$n_message.'"'.$cols.$rows.$style.$required.
+        ' id="message" name="'.$n_message.'"'.$attr.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
         callback_event('comment.form').
         $formnonce;
@@ -2468,13 +2531,13 @@ function comments($atts, $thing = null)
     extract($prefs);
 
     extract(lAtts(array(
-        'form'       => 'comments',
-        'wraptag'    => ($comments_are_ol ? 'ol' : ''),
-        'break'      => ($comments_are_ol ? 'li' : 'div'),
-        'class'      => __FUNCTION__,
-        'limit'      => 0,
-        'offset'     => 0,
-        'sort'       => 'posted ASC',
+        'form'    => 'comments',
+        'wraptag' => ($comments_are_ol ? 'ol' : ''),
+        'break'   => ($comments_are_ol ? 'li' : 'div'),
+        'class'   => __FUNCTION__,
+        'limit'   => 0,
+        'offset'  => 0,
+        'sort'    => 'posted ASC',
     ), $atts));
 
     assert_article();
@@ -4520,9 +4583,9 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
-    static $specials = null;
+    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
-    $specials !== null or $specials = array(
+    isset($specials) or $specials = array(
         'admin_root'  => ahu,
         'images_root' => ihu.get_pref('img_dir'),
         'themes_root' => hu.get_pref('skin_dir'),
@@ -4534,6 +4597,7 @@ function page_url($atts)
         'type'    => 'request_uri',
         'default' => '',
         'escape'  => null,
+        'context' => ''
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
@@ -4542,6 +4606,19 @@ function page_url($atts)
 
     if (isset($specials[$type])) {
         return $specials[$type];
+    }
+
+    if ($context) {
+        $keys = array();
+
+        foreach ($context === true ? $internals : do_list_unique($context) as $key) {
+            $value = isset($pretext[$key]) ? $pretext[$key] : gps($key);
+            empty($value) or $keys[$key] = $value;
+        }
+
+        isset($keys[$type]) or $keys[$type] = $default;
+
+        return pagelinkurl($keys);
     }
 
     if (isset($pretext[$type])) {

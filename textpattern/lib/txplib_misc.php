@@ -5442,6 +5442,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 function pagelinkurl($parts, $inherit = array())
 {
     global $permlink_mode, $prefs;
+    static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     $keys = array_merge($inherit, $parts);
 
@@ -5451,9 +5452,11 @@ function pagelinkurl($parts, $inherit = array())
         return $url;
     }
 
-    // Can't use this to link to an article.
-    if (isset($keys['id'])) {
-        unset($keys['id']);
+    // Unset extra stuff to link to an article.
+    if (!empty($keys['id'])) {
+        foreach ($internals as $key) {
+            unset($keys[$key]);
+        }
     }
 
     if (isset($keys['s']) && $keys['s'] == 'default') {
@@ -5475,7 +5478,10 @@ function pagelinkurl($parts, $inherit = array())
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
 
-        if (!empty($keys['rss'])) {
+        if (!empty($keys['id'])) {
+            $url = permlinkurl_id($keys['id']);
+            unset($keys['id']);
+        } elseif (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
@@ -5556,10 +5562,6 @@ function permlinkurl($article_array)
     global $permlink_mode, $prefs, $permlinks, $production_status;
     static $now = null;
 
-    if (!$article_array || !is_array($article_array)) {
-        return;
-    }
-
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
         and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== false) {
@@ -5583,10 +5585,6 @@ function permlinkurl($article_array)
     }
 
     $thisid = (int) $thisid;
-
-    if (isset($permlinks[$thisid])) {
-        return $permlinks[$thisid];
-    }
 
     if (!isset($now)) {
         $now = strftime('%F %T');
