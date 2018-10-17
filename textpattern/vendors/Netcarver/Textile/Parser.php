@@ -1594,7 +1594,7 @@ class Parser
                     'fn'.$this->regex_snippets['digit'].'+',
                     '###',
                 );
-                $this->block_whitelist = array(' ', '\<\w[^<>]*\>');
+                $this->block_whitelist = array(' ', '\<\w');
                 $text = $this->blocks($text);
                 $text = $this->placeNoteLists($text);
             }
@@ -2808,7 +2808,9 @@ class Parser
                         $block = $o2.$content.$c2;
                     }
                 } else {
-                    $block = $this->graf($block);
+                    $block = strpos($block, ' ') === 0 ?
+                        $this->graf($block) :
+                        $this->shelve($block);
                 }
             }
 
