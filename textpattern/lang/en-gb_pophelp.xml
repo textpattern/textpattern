@@ -471,8 +471,8 @@
     </group>
 
     <group id="login" title="Login panel">
-        <item id="remember_login" title="Remember login"><![CDATA[
-<h2>Remember login</h2>
+        <item id="remember_login" title="Remain logged in with this browser"><![CDATA[
+<h2>Remain logged in with this browser</h2>
 <p>When checked, you will remain logged in to your Textpattern account with the current web browser, until you choose to log out. If left unchecked, you will be automatically logged out after a period of inactivity.</p>
 <p>Requires cookies to be enabled in your browser.</p>
         ]]></item>
@@ -691,7 +691,7 @@
         ]]></item>
         <item id="include_email_atom" title="Include email address in Atom feeds?"><![CDATA[
 <h2>Include email address in Atom feeds?</h2>
-<p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
+<p>This allows you to include the email address of the author (as set in their user account) of an article in the <code>author</code> part of your Atom feeds.</p>
         ]]></item>
         <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
 <h2>Daylight Saving Time enabled?</h2>
@@ -712,8 +712,8 @@
 <h2>Maximum URL length (in characters)</h2>
 <p>This prevents URLs that are longer than the specified length from functioning. It could be helpful in damage limitation and site security.</p>
         ]]></item>
-        <item id="module_pophelp" title="Display admin-side inline help links?"><![CDATA[
-<h2>Display admin-side inline help links?</h2>
+        <item id="module_pophelp" title="Display admin-side inline help links"><![CDATA[
+<h2>Display admin-side inline help links</h2>
 <p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to ‘None’.</p>
         ]]></item>
         <item id="never_display_email" title="Hide commenter‘s email address?"><![CDATA[
@@ -820,6 +820,7 @@
 <h2>Theme directory</h2>
 <p>If you’d like to customise the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
+<p>The default is <code>themes</code>.</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
