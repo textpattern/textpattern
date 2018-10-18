@@ -196,7 +196,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, label, trim');
+    ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
 
 // -------------------------------------------------------------
 
@@ -301,13 +301,13 @@ function component($atts)
 
     extract(lAtts(array(
         'format'  => 'url',
-        'name'    => '',
+        'form'    => '',
         'context' => '',
         'rel'     => '',
         'title'   => '',
-    ), $atts));
+    ), $atts, false));
 
-    if (empty($name)) {
+    if (empty($form)) {
         return;
     }
 
@@ -326,7 +326,7 @@ function component($atts)
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
-        foreach(do_list_unique($name) as $n) {
+        foreach(do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
                 $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
@@ -335,7 +335,7 @@ function component($atts)
             }
         }
     } else {
-        $url = pagelinkurl(array('f' => $name) + $qs);
+        $url = pagelinkurl(array('f' => $form) + $qs);
     }
 
     switch ($format) {
@@ -550,7 +550,7 @@ function output_form($atts, $thing = null)
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
     if (isset($atts['format']) && empty($to_yield)) {// component
-        return component($atts + array('name' => $form));
+        return component($atts + array('form' => $form));
     }
 
     if (!is_bool($to_yield)) {
@@ -5409,7 +5409,10 @@ function txp_wraptag($atts, $thing = '')
         'class'    => '',
         'html_id'  => '',
         'trim'     => '',
+        'default'  => null,
     ), $atts, false));
+
+    !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if ((string)$trim !== '') {
         if ($trim === true) {
