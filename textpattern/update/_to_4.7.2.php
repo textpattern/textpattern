@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Add dev support to Sections...
+// Add dev support to Sections.
 $cols = getThings('describe `'.PFX.'txp_section`');
 
 foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
@@ -34,3 +34,27 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
             "ADD dev_{$field} VARCHAR($size) NOT NULL");
     }
 }
+
+// Custom form types.
+if (false === ($custom_types = get_pref('custom_form_types', false, true))) {
+    set_pref('custom_form_types', 
+        ';[js]
+;mimetype="application/javascript"
+;*="Javascript"',
+        'advanced_options', PREF_CORE, 'longtext_input', 100, PREF_GLOBAL);
+} else {
+    safe_update('txp_prefs', "event = 'advanced_options'", "name='custom_form_types'");
+    $custom_types = parse_ini_string($custom_types);
+}
+
+if ($mimetypes = parse_ini_string(get_pref('assets_mimetypes', '', true))) {
+    foreach ($mimetypes as $ext => $type) {
+        if (!isset($custom_types[$ext])) {
+            $prefs['custom_form_types'] .= n."[$ext]".n.'mimetype="'.$type.'"';
+        }
+    }
+
+    safe_update('txp_prefs', "val = '".doSlash($prefs['custom_form_types'])."'", "name='custom_form_types'");
+}
+
+safe_delete('txp_prefs', "name='assets_mimetypes'");

@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin;
 
-class Form extends AssetBase implements FormInterface
+class Form extends AssetBase implements FormInterface, \Textpattern\Container\FactorableInterface
 {
     /**
      * {@inheritdoc}
@@ -105,6 +105,47 @@ class Form extends AssetBase implements FormInterface
             'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
         ),
     );
+
+    /**
+     * Constructor
+     */
+
+    public function getInstance()
+    {
+        global $lang_ui;
+
+        $textarray = array();
+
+        if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
+            foreach ($custom_types as $type => $langpack) {
+                if (!empty($langpack['mimetype'])) {
+                    static::$mimeTypes[$type] = $langpack['mimetype'];
+                }
+
+                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                    $langpack[$lang_ui] :
+                    (isset($langpack['*']) ?
+                        $langpack['*'] :
+                        (isset(static::$mimeTypes[$type]) ?
+                            strtoupper($type)." (".static::$mimeTypes[$type].")"
+                            : $type
+                        )
+                    );
+            }
+        } else {
+            $custom_types = array();
+        }
+
+        \Txp::get('\Textpattern\L10n\Lang')->setPack($textarray, true);
+
+        static::$subdirValues = array_unique(array_merge(
+            static::$subdirValues,
+            array_keys($custom_types),
+            array_keys(static::$mimeTypes)
+        ));
+
+        return $this;
+    }
 
     /**
      * {@inheritdoc}

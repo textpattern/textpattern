@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin;
 
-class Css extends AssetBase implements CssInterface, \Textpattern\Container\FactorableInterface
+class Css extends AssetBase implements CssInterface
 {
     protected static $extension = 'css';
     protected static $dir = 'styles';
@@ -43,17 +43,6 @@ class Css extends AssetBase implements CssInterface, \Textpattern\Container\Fact
             'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
         ),
     );
-
-    /**
-     * Constructor
-     */
-
-    public function getInstance()
-    {
-        static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes')))) or static::$mimeTypes = array();
-
-        return $this;
-    }
 
     /**
      * {@inheritdoc}

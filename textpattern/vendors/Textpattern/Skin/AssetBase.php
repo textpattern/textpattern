@@ -203,15 +203,11 @@ abstract class AssetBase extends CommonBase implements AssetInterface
 
     /**
      * $dir property setter.
-     *
-     * @return object $this The current class object (chainable).
      */
 
     protected static function setDir($name)
     {
         static::$dir = $name;
-
-        return $this;
     }
 
     /**
@@ -231,7 +227,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * @return string path.
      */
 
-    protected function getDirPath()
+    public function getDirPath()
     {
         return $this->getSkin()->getSubdirPath().DS.static::getDir();
     }
@@ -347,7 +343,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * @return bool FALSE on error.
      */
 
-    protected static function resetEditing()
+    protected function resetEditing()
     {
         return $this->setEditing(self::getDefault());
     }

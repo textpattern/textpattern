@@ -286,7 +286,7 @@
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite missing"><![CDATA[
 <h2>Apache mod_rewrite missing</h2>
-<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site's host for assistance.</p>
+<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site‘s host for assistance.</p>
         ]]></item>
         <item id="modified_files" title="Modified files"><![CDATA[
 <h2>Modified files</h2>
@@ -294,7 +294,7 @@
         ]]></item>
         <item id="mysql_table_errors" title="MySQL table errors"><![CDATA[
 <h2>MySQL table errors</h2>
-<p>There may be some corruption or damage in Textpattern's MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>There may be some corruption or damage in Textpattern‘s MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="no_temp_dir" title="No temporary directory defined"><![CDATA[
 <h2>No temporary directory defined</h2>
@@ -350,7 +350,7 @@
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>The site's <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
+<p>The site‘s <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
         ]]></item>
         <item id="setup_still_exists" title="Setup directory still exists"><![CDATA[
 <h2>Setup directory still exists</h2>
@@ -471,8 +471,8 @@
     </group>
 
     <group id="login" title="Login panel">
-        <item id="remember_login" title="Remember login"><![CDATA[
-<h2>Remember login</h2>
+        <item id="remember_login" title="Remain logged in with this browser"><![CDATA[
+<h2>Remain logged in with this browser</h2>
 <p>When checked, you will remain logged in to your Textpattern account with the current web browser, until you choose to log out. If left unchecked, you will be automatically logged out after a period of inactivity.</p>
 <p>Requires cookies to be enabled in your browser.</p>
         ]]></item>
@@ -490,7 +490,7 @@
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
 <h2>Use admin-side plugins?</h2>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
-<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> site.</p>
+<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a> site.</p>
         ]]></item>
         <item id="allow_article_php_scripting" title="Allow PHP in articles?"><![CDATA[
 <h2>Allow PHP in articles?</h2>
@@ -658,7 +658,7 @@
 <p>If a tag contains an underscore and you enable short tags, the basic concept is:</p>
 <ol>
     <li>Remove the <code>txp:</code> prefix.</li>
-    <li>Swap the first occurrence of the underscore for <code>::</code>.</li>
+    <li>Replace the first occurrence of the underscore for <code>::</code>.</li>
 </ol>
 <p>Note that setting this preference does not affect the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
@@ -691,7 +691,7 @@
         ]]></item>
         <item id="include_email_atom" title="Include email address in Atom feeds?"><![CDATA[
 <h2>Include email address in Atom feeds?</h2>
-<p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
+<p>This allows you to include the email address of the author (as set in their user account) of an article in the <code>author</code> part of your Atom feeds.</p>
         ]]></item>
         <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
 <h2>Daylight Saving Time enabled?</h2>
@@ -705,15 +705,15 @@
     <li><strong>Referrers only:</strong> Textpattern will only log visits referred from other sites</li>
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
-<p>From Textpattern 4.7.0, no visitor IP address information will be collected or stored by Textpattern. If you collect or store IP addresses outside of Textpatten, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
+<p>From Textpattern 4.7.0, no visitor IP address information is collected or stored by Textpattern. If you collect or store IP addresses outside of Textpattern, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
 <p>It is strongly advised that you leave this setting at its default, ‘None’, unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
 <h2>Maximum URL length (in characters)</h2>
 <p>This prevents URLs that are longer than the specified length from functioning. It could be helpful in damage limitation and site security.</p>
         ]]></item>
-        <item id="module_pophelp" title="Display admin-side inline help links?"><![CDATA[
-<h2>Display admin-side inline help links?</h2>
+        <item id="module_pophelp" title="Display admin-side inline help links"><![CDATA[
+<h2>Display admin-side inline help links</h2>
 <p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to ‘None’.</p>
         ]]></item>
         <item id="never_display_email" title="Hide commenter‘s email address?"><![CDATA[
@@ -820,6 +820,7 @@
 <h2>Theme directory</h2>
 <p>If you’d like to customise the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
+<p>The default is <code>themes</code>.</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
@@ -833,7 +834,7 @@
         ]]></item>
         <item id="spam_blacklists" title="Spam blocklists (comma-separated)"><![CDATA[
 <h2>Spam blocklists (comma-separated)</h2>
-<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p> 
+<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[

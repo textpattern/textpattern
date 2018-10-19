@@ -910,9 +910,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (message) {
         $('#messagepane').html(message)
-    } /*else {
-        $('#messagepane').empty()
-    }*/
+    }
 });
 
 /**
@@ -1690,9 +1688,17 @@ jQuery.fn.txpColumnize = function ()
             }
         }
 
-        var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
-        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' /> ' + $title + '</label></div>');
+        var disabled = $this.hasClass('asc') || $this.hasClass('desc');
+        var $li = $('<li />').addClass(disabled ? 'ui-state-disabled' : null);
+        var $box = $('<input type="checkbox" tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" />')
+            .attr('value', $id)
+            .attr('data-index', index)
+            .prop('disabled', disabled);
+
+        $li.html($('<div role="menuitem" />')
+            .append($('<label />').text($title).prepend($box)));
+
+
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
@@ -1718,9 +1724,16 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a>')
+        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span>');
 
-    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    var $li = $('<li class="txp-dropdown-toggle-all" />'),
+        $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />')
+        .attr('checked', selectAll);
+
+    $li.html($('<div role="menuitem" />')
+        .append($('<label />').html(textpattern.gTxt('toggle_all_selected')).prepend($box)));
+
+    $menu.html($li).append(items);
 
     var $container = $table.closest('.txp-layout-1col')
     var $ui = $container.find('.txp-list-options')
@@ -1856,7 +1869,7 @@ jQuery.fn.txpFileupload = function (options) {
 
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
             }
 
             if(!uploadErrors.length) {
@@ -2149,7 +2162,7 @@ textpattern.Route.add('page, form, file, image', function () {
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
         $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data) );
-        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
 
     $('body').on('click','.pophelp', function (ev) {
@@ -2169,14 +2182,11 @@ textpattern.Route.add('', function () {
             });
         }
 
-        var item = $(ev.target).parent().attr('data-item');
-        if (item === undefined ) {
-            item = $(ev.target).attr('data-item');
-        }
-        if (item === undefined ) {
+        var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
+        if (typeof item === 'undefined' ) {
             txpAsyncLink(ev, 'pophelp');
         } else {
-            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
         }
         return false;
     });
@@ -2387,7 +2397,7 @@ textpattern.Route.add('', function () {
         textpattern.storage.update(data);
     });
 
-    hasTabs.find('a:not([data-txp-pane])').click(function() {
+    hasTabs.find('a:not([data-txp-pane], .pophelp)').click(function() {
         $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {
