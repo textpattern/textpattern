@@ -1869,7 +1869,7 @@ jQuery.fn.txpFileupload = function (options) {
 
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
             }
 
             if(!uploadErrors.length) {
