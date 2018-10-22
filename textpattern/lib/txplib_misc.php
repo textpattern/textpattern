@@ -5493,6 +5493,13 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
+        } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
+            if (!empty($keys['context'])) {
+                $keys['context'] = gTxt($keys['context'].'_context');
+            }
+            $month = implode('/', explode('-', urlencode($keys['month'])));
+            $url = hu.$month.'/';
+            unset($keys['month']);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';

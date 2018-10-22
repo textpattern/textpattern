@@ -360,7 +360,15 @@ function preText($s, $prefs)
                             if (empty($u2)) {
                                 $out['s'] = $u1;
                             } else {
-                                $out['month'] = "$u1-$u2".(empty($u3) ? '' : "-$u3");
+                                if (@checkdate($u2, empty($u3) ? 1 : $u3, $u1)) {
+                                    $month = empty($u3) ?
+                                        array($u1, $u2) :
+                                        array($u1, $u2, $u3);
+                                } else {
+                                    $month = array();
+                                    $is_404 = true;
+                                }
+
                                 $title = empty($u4) ? null : $u4;
                             }
 
@@ -402,12 +410,19 @@ function preText($s, $prefs)
 
     // Validate dates
     if ($out['month']) {
-        list($y, $m, $d) = explode('-', $out['month']) + array(1, 1, 1);
+        $month = explode('-', $out['month']) +
+            (!empty($month) ? $month : array());
+        list($y, $m, $d) = $month + array(1, 1, 1);
 
         if (@!checkdate($m, $d, $y)) {
-            $out['month'] = '';
+            $out['month'] = $month = '';
             $is_404 = true;
+        } else {
+            $month = implode('-', $month);
         }
+    } elseif (isset($month)) {
+        $month = implode('-', $month);
+        !empty($title) or $out['month'] = $month;
     }
 
     // Existing category in messy or clean URL?
@@ -472,9 +487,13 @@ function preText($s, $prefs)
     } elseif ($out['context'] == 'article') {
         if (!empty($out['id']) || !empty($title)) {
             if (empty($out['s']) || $out['s'] === 'default') {
-                $rs = !empty($out['id']) ? lookupByID($out['id']) : lookupByDateTitle($out['month'], $title);
+                $rs = !empty($out['id']) ?
+                    lookupByID($out['id']) :
+                    lookupByDateTitle(isset($month) ? $month : '', $title);
             } else {
-                $rs = !empty($out['id']) ? lookupByIDSection($out['id'], $out['s']) : lookupByTitleSection($title, $out['s']);
+                $rs = !empty($out['id']) ?
+                    lookupByIDSection($out['id'], $out['s']) :
+                    lookupByTitleSection($title, $out['s']);
             }
 
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
