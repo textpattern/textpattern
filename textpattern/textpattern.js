@@ -1959,7 +1959,12 @@ jQuery.fn.txpUploadPreview = function(template) {
                 }
             }
 
-            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, status: status, title: this.name.replace(/\.[^\.]*$/, '')}))
+            preview = textpattern.mustache(template, $.extend(this, {
+                hash: hash,
+                preview: preview,
+                status: status,
+                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
+            }))
             form.append(preview)
         });
     }).change()
