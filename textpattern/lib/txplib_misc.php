@@ -5444,19 +5444,19 @@ function pagelinkurl($parts, $inherit = array())
     global $permlink_mode, $prefs;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
+    // Unset extra stuff to link to an article.
+    if (!empty($parts['id'])) {
+        foreach ($internals as $key) {
+            unset($parts[$key]);
+        }
+    }
+
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
         && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
-    }
-
-    // Unset extra stuff to link to an article.
-    if (!empty($keys['id'])) {
-        foreach ($internals as $key) {
-            unset($keys[$key]);
-        }
     }
 
     if (isset($keys['s']) && $keys['s'] == 'default') {
@@ -5497,8 +5497,7 @@ function pagelinkurl($parts, $inherit = array())
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
             }
-            $month = implode('/', explode('-', urlencode($keys['month'])));
-            $url = hu.$month.'/';
+            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
             unset($keys['month']);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
@@ -5720,9 +5719,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
 
 function in_list($val, $list, $delim = ',')
 {
-    $args = do_list($list, $delim);
-
-    return in_array((string) $val, $args, true);
+    return in_array((string) $val, do_list($list, $delim), true);
 }
 
 /**
@@ -6014,6 +6011,31 @@ function getMetaDescription($type = null)
     }
 
     return $content;
+}
+
+/**
+ * Get some URL data.
+ * @param mixed $context The data to retrieve
+ * @param array $internals Data restrictions
+ * @return array The retrieved data
+ */
+ 
+function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
+    global $pretext;
+
+    if (!is_array($context)) {
+        $context = $context === true ? $internals : do_list_unique($context);
+    }
+
+    $out = array();
+
+    foreach ($context as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? get_author_name($pretext[$q]) : $pretext[$q];
+        }
+    }
+
+    return $out;
 }
 
 /**

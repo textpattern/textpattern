@@ -410,15 +410,16 @@ function preText($s, $prefs)
 
     // Validate dates
     if ($out['month']) {
-        $month = explode('-', $out['month']) +
+        $date = empty($month) ? '' : implode('-', $month);
+        $month = explode('-', $out['month'], 3) +
             (!empty($month) ? $month : array());
         list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if (@!checkdate($m, $d, $y)) {
+        if ((strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+            $month = implode('-', $month);
+        } else {
             $out['month'] = $month = '';
             $is_404 = true;
-        } else {
-            $month = implode('-', $month);
         }
     } elseif (isset($month)) {
         $month = implode('-', $month);

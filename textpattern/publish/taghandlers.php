@@ -314,13 +314,7 @@ function component($atts)
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';
-    $qs = array();
-
-    foreach ($context === true ? $internals : do_list_unique($context) as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $internals)) {
-            $qs[$q] = $pretext[$q];
-        }
-    }
+    $qs = $context ? get_context($context, $internals) : array();
 
     if ($mode === 'flat') {
         $url = array();
@@ -1681,7 +1675,7 @@ function search_term($atts)
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = null)
 {
-    global $thisarticle;
+    global $pretext, $thisarticle;
 
     if (!in_array($target, array('next', 'prev'))) {
         return '';
@@ -1695,6 +1689,7 @@ function link_to($atts, $thing = null, $target = null)
         'form'       => '',
         'link'       => 1,
         'showalways' => 0,
+        'context'    => true
     ), $atts));
 
     if (is_array($thisarticle)) {
@@ -1703,7 +1698,13 @@ function link_to($atts, $thing = null, $target = null)
         }
 
         if ($thisarticle[$target] !== false) {
-            $url = permlinkurl($thisarticle[$target]);
+            $context = get_context($context, array('c', 'author', 'month', 'f'));
+
+            if ($context) {
+                $url = pagelinkurl(array('id' => $thisarticle[$target]['ID']), $context);
+            } else {
+                $url = permlinkurl($thisarticle[$target]);
+            }
 
             if ($form || $thing !== null) {
                 $oldarticle = $thisarticle;
@@ -1828,7 +1829,7 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $is_article_list;
+    global $thispage, $is_article_list;
 
     if (empty($thispage)) {
         return $is_article_list ? postpone_process() : '';
@@ -1847,24 +1848,9 @@ function newer($atts, $thing = null)
     $nextpg = $shift === '*' ? min(1, $pg - 1) : ($pg - (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
-
-        // Author URLs should use RealName, rather than username.
-        if (!empty($pretext['author'])) {
-            $author = get_author_name($pretext['author']);
-        } else {
-            $author = '';
-        }
-
         $url = pagelinkurl(array(
-            'month'   => @$pretext['month'],
-            'pg'      => $nextpg == 1 && !isset($shift) ? '' : $nextpg,
-            's'       => @$pretext['s'],
-            'c'       => @$pretext['c'],
-            'context' => @$pretext['context'],
-            'q'       => @$pretext['q'],
-            'm'       => @$m,
-            'author'  => $author,
-        ));
+            'pg' => $nextpg == 1 && !isset($shift) ? '' : $nextpg
+        ) + get_context());
 
         if ($thing) {
             if ($escape == 'html') {
@@ -1891,7 +1877,7 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $is_article_list;
+    global $thispage, $is_article_list;
 
     if (empty($thispage)) {
         return $is_article_list ? postpone_process() : '';
@@ -1910,24 +1896,9 @@ function older($atts, $thing = null)
     $nextpg = $shift === '*' ? max($numPages, $pg + 1) : ($pg + (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
-
-        // Author URLs should use RealName, rather than username.
-        if (!empty($pretext['author'])) {
-            $author = get_author_name($pretext['author']);
-        } else {
-            $author = '';
-        }
-
         $url = pagelinkurl(array(
-            'month'   => @$pretext['month'],
-            'pg'      => $nextpg,
-            's'       => @$pretext['s'],
-            'c'       => @$pretext['c'],
-            'context' => @$pretext['context'],
-            'q'       => @$pretext['q'],
-            'm'       => @$m,
-            'author'  => $author,
-        ));
+            'pg' => $nextpg
+        ) + get_context());
 
         if ($thing) {
             if ($escape == 'html') {
@@ -4008,20 +3979,29 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $thisarticle;
+    global $pretext, $thisarticle;
+    static $internals = array('c', 'author', 'month', 'f');
 
     extract(lAtts(array(
-        'class' => '',
-        'id'    => '',
-        'style' => '',
-        'title' => '',
+        'class'   => '',
+        'id'      => '',
+        'style'   => '',
+        'title'   => '',
+        'context' => '',
     ), $atts));
 
     if (!$id) {
         assert_article();
     }
 
-    $url = ($id) ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    $thisid = $id ? $id : $thisarticle['thisid'];
+    empty($context) or $context = get_context($context, $internals);
+
+    if ($context) {
+        $url = pagelinkurl(array('id' => $thisid), $context);
+    } else {
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    }
 
     if ($url) {
         if ($thing === null) {
