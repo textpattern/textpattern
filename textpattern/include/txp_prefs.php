@@ -157,7 +157,13 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user;
+    global $prefs, $txp_user, $txp_options;
+
+    foreach($txp_options as $pref => $pane) {
+        if (get_pref($pref)) {
+            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+        }
+    }
 
     extract($prefs);
 

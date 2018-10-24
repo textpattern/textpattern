@@ -34,10 +34,14 @@ foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
             "ADD dev_{$field} VARCHAR($size) NOT NULL");
     }
 }
+// Advanced options
+if (false === get_pref('advanced_options', false, true)) {
+    set_pref('advanced_options', 0, 'admin', PREF_CORE, 'onoffRadio', 200, PREF_GLOBAL);
+}
 
 // Custom form types.
 if (false === ($custom_types = get_pref('custom_form_types', false, true))) {
-    set_pref('custom_form_types', 
+    set_pref('custom_form_types',
         ';[js]
 ;mimetype="application/javascript"
 ;*="Javascript"',

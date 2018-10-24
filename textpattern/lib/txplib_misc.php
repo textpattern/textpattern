@@ -588,7 +588,7 @@ function load_lang_event($event, $lang = LANG)
  *
  * Will not let you override existing privs.
  *
- * @param   string $res  The resource
+ * @param   mixed  $res  The resource
  * @param   string $perm List of user-groups, e.g. '1,2,3'
  * @package User
  * @example
@@ -599,9 +599,13 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list_unique($perm));
-        $txp_permissions[$res] = $perm;
+    is_array($res) or $res = array($res, $perm);
+
+    foreach($res as $priv => $group) {
+        if (!isset($txp_permissions[$priv])) {
+            $group = join(',', do_list_unique($group));
+            $txp_permissions[$priv] = $group;
+        }
     }
 }
 
