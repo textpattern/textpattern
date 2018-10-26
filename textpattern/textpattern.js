@@ -2305,19 +2305,16 @@ textpattern.Route.add('section', function ()
 
     $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
         section_theme_show($(this).val());
-    });
-
-    // Invoke the handler now to set things on initial page load.
-    $('#section_skin').change();
-
-    $('main').on('change', 'select[name=edit_method]', function() {
+    }).on('change', 'select[name=edit_method]', function() {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
         } else if ($(this).val() === 'changepagestyledev') {
             $('#multiedit_dev_skin').change();
         }
+    })
 
-    });
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
 });
 
 // Plugin help panel.

@@ -890,17 +890,19 @@ EOJS
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => $themeSelect . $pageSelect . $styleSelect,
-        ),
-        'changepagestyledev' => array(
-            'label' => gTxt('change_dev_page_style'),
-            'html'  => $devThemeSelect . $devPageSelect . $devStyleSelect,
+            'html'  => inputLabel('dev_theme',
+                checkbox2('dev_theme', 1, 0, 'dev_theme'),
+                'dev_theme', '', array('class' => 'multi-option multi-step'), ''
+            ) . inputLabel('live_theme',
+                checkbox2('live_theme', 0, 0, 'live_theme'),
+                'live_theme', '', array('class' => 'multi-option multi-step'), ''
+            ) . $themeSelect . $pageSelect . $styleSelect
         ),
         'switchdevlive' => array(
             'label' => gTxt('switch_dev_live'),
             'html'  => radioSet(array(
-                0 => gTxt('live_to_dev'),
-                1 => gTxt('dev_to_live'),
+                0 => gTxt('dev_theme'),
+                1 => gTxt('live_theme'),
                 ), 'switch_dev_live', 0),
         ),
         'changeonfrontpage' => array(
@@ -945,18 +947,22 @@ function section_multi_edit()
             return section_delete();
             break;
         case 'changepagestyle':
-            $nameVal = array(
-                'skin' => ps('skin'),
-                'page' => ps('section_page'),
-                'css'  => ps('css'),
-            );
-            break;
-        case 'changepagestyledev':
-            $nameVal = array(
-                'dev_skin' => ps('dev_skin'),
-                'dev_page' => ps('dev_page'),
-                'dev_css'  => ps('dev_css'),
-            );
+            if (ps('live_theme')) {
+                $nameVal += array(
+                    'skin' => ps('skin'),
+                    'page' => ps('section_page'),
+                    'css'  => ps('css'),
+                );
+            }
+
+            if (ps('dev_theme')) {
+                $nameVal += array(
+                    'dev_skin' => ps('skin'),
+                    'dev_page' => ps('section_page'),
+                    'dev_css'  => ps('css'),
+                );
+            }
+
             break;
         case 'switchdevlive':
             $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
@@ -974,7 +980,7 @@ function section_multi_edit()
 
     $filter = array("name IN (".join(',', quote_list($selected)).")");
 
-    if ($edit_method === 'changepagestyle') {
+    if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
         $skin = $nameVal['skin'];
 
         if (empty($nameVal['page']) && !empty($all_pages[$skin])) {
@@ -1011,7 +1017,7 @@ function section_multi_edit()
             $set = implode(',', $in);
         }
 
-        if (
+        if ($set &&
             safe_update(
                 'txp_section',
                 $set,
