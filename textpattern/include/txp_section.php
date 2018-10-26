@@ -247,6 +247,7 @@ function sec_section_list($message = '')
         );
 
         if ($rs) {
+            $dev_set = false;
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -356,6 +357,7 @@ function sec_section_list($message = '')
 
                 $missing = isset($all_pages[$sec_dev_skin]) && !in_array($sec_dev_page, $all_pages[$sec_dev_skin]);
                 $replaced = $sec_page != $sec_dev_page || $missing;
+                $dev_set = $dev_set || $replaced;
                 $sec_page = (!$replaced ? '' : tag(href(txpspecialchars($sec_page), array(
                     'event' => 'page',
                     'name'  => $sec_page,
@@ -369,7 +371,7 @@ function sec_section_list($message = '')
 
                 $missing = isset($all_styles[$sec_dev_skin]) && !in_array($sec_dev_css, $all_styles[$sec_dev_skin]);
                 $replaced = $sec_css != $sec_dev_css || $missing;
-
+                $dev_set = $dev_set || $replaced;
                 $sec_css = (!$replaced ? '' : tag(href(txpspecialchars($sec_css), array(
                     'event' => 'css',
                     'name'  => $sec_css,
@@ -381,6 +383,8 @@ function sec_section_list($message = '')
                     'skin'  => $sec_dev_skin,
                 ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''));
 
+                $replaced = $sec_skin != $sec_dev_skin;
+                $dev_set = $dev_set || $replaced;
                 $contentBlock .= tr(
                     td(
                         fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
@@ -402,7 +406,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($sec_skin == $sec_dev_skin ? '' : '<del>'.$sec_skin.'</del> | ').$sec_dev_skin, '', 'txp-list-col-skin'
+                        ($replaced ? '<del>'.$sec_skin.'</del> | ' : '').$sec_dev_skin, '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -429,7 +433,7 @@ function sec_section_list($message = '')
             $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
-                section_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                section_multiedit_form($page, $sort, $dir, $crit, $search_method, $dev_set ? array() : array('switchdevlive')).
                 tInput().
                 n.tag_end('form');
         }
@@ -838,7 +842,7 @@ EOS
  * @return string HTML
  */
 
-function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
+function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled = array())
 {
     global $all_skins, $all_pages, $all_styles;
 
@@ -901,8 +905,8 @@ EOJS
         'switchdevlive' => array(
             'label' => gTxt('switch_dev_live'),
             'html'  => radioSet(array(
-                0 => gTxt('dev_theme'),
-                1 => gTxt('live_theme'),
+                0 => gTxt('live_to_dev'),
+                1 => gTxt('dev_to_live'),
                 ), 'switch_dev_live', 0),
         ),
         'changeonfrontpage' => array(
@@ -920,6 +924,10 @@ EOJS
         'delete' => gTxt('delete'),
     );
 
+    foreach ($disabled as $method) {
+        unset($methods[$method]);
+    }
+
     return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
@@ -929,7 +937,7 @@ EOJS
 
 function section_multi_edit()
 {
-    global $txp_user, $all_pages, $all_styles;
+    global $txp_user, $all_skins, $all_pages, $all_styles;
 
     extract(psa(array(
         'edit_method',
@@ -978,18 +986,42 @@ function section_multi_edit()
             break;
     }
 
+    $setskin = "IF(dev_skin > '', dev_skin, skin)";
+    $setpage = "IF(dev_page > '', dev_page, page)";
+    $setcss = "IF(dev_css > '', dev_css, css)";
+
     $filter = array("name IN (".join(',', quote_list($selected)).")");
 
     if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
         $skin = $nameVal['skin'];
 
-        if (empty($nameVal['page']) && !empty($all_pages[$skin])) {
-            $filter[] = "page IN (".join(',', quote_list($all_pages[$skin])).")";
+        if (empty($nameVal['page'])) {
+            $filter[] = empty($all_pages[$skin]) ?
+                '0' :
+                "page IN (".join(',', quote_list($all_pages[$skin])).")";
         }
 
-        if (empty($nameVal['css']) && !empty($all_styles[$skin])) {
-            $filter[] = "css IN (".join(',', quote_list($all_styles[$skin])).")";
+        if (empty($nameVal['css'])) {
+            $filter[] = empty($all_styles[$skin]) ?
+                '0' :
+                "css IN (".join(',', quote_list($all_styles[$skin])).")";
         }
+    } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
+        $skinset = array();
+
+        foreach ($all_skins as $skin => $title) {
+            $skinset[] = "$setskin = '".doSlash($skin)."' AND ".
+            (empty($all_pages[$skin]) ?
+                '0' :
+                "$setpage IN (".join(',', quote_list($all_pages[$skin])).")"
+            )." AND ".
+            (empty($all_styles[$skin]) ?
+                '0' :
+                "$setcss IN (".join(',', quote_list($all_styles[$skin])).")"
+            );
+        }
+
+        $filter[] = '('.implode(' OR ', $skinset).')';
     }
 
     $sections = safe_column(
@@ -1001,9 +1033,9 @@ function section_multi_edit()
     if ($nameVal && $sections) {
         if ($edit_method == 'switchdevlive') {
             $set = ($nameVal['switch_dev_live'] ? '' :
-                "skin = IF(dev_skin > '', dev_skin, skin),
-                page = IF(dev_page > '', dev_page, page),
-                css = IF(dev_css > '', dev_css, css), "
+                "skin = $setskin,
+                page = $setpage,
+                css = $setcss, "
             )."dev_skin = '', dev_page = '', dev_css = ''";
         } else {
             $in = array();
