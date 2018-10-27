@@ -991,6 +991,7 @@ function section_multi_edit()
     $setcss = "IF(dev_css > '', dev_css, css)";
 
     $filter = array("name IN (".join(',', quote_list($selected)).")");
+    $message = '';
 
     if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
         $skin = $nameVal['skin'];
@@ -1056,15 +1057,15 @@ function section_multi_edit()
                 "name IN (".join(',', quote_list($sections)).")"
             )
         ) {
-            sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));
+            $message = gTxt('section_updated', array('{name}' => join(', ', $sections)));
 
             if ($edit_method === 'changepagestyle') {
                 Txp::get('Textpattern\Skin\Skin')->setEditing(doSlash($nameVal['skin']));
             }
-
-            return;
         }
+    } else {
+        $message = array(gTxt('section_save_failed'), E_ERROR);
     }
 
-    sec_section_list();
+    sec_section_list($message);
 }

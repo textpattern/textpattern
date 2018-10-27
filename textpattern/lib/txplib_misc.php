@@ -602,7 +602,9 @@ function add_privs($res, $perm = '1')
     is_array($res) or $res = array($res, $perm);
 
     foreach($res as $priv => $group) {
-        if (!isset($txp_permissions[$priv])) {
+        if ($group === null) {
+            unset($txp_permissions[$priv]);
+        } elseif (!isset($txp_permissions[$priv])) {
             $group = join(',', do_list_unique($group));
             $txp_permissions[$priv] = $group;
         }
@@ -667,6 +669,32 @@ function require_privs($res = null, $user = '')
         echo graf(gTxt('restricted_area'), array('class' => 'restricted-area'));
         end_page();
         exit;
+    }
+}
+
+/**
+ * Adds dynamic priviledges.
+ *
+ * @param   array $pluggable The array, see global $txp_options
+ * @since   4.7.2
+ * @package User
+ */
+
+function plug_privs($pluggable = null)
+{
+    global $txp_options;
+
+    is_array($pluggable) or $pluggable = $txp_options;
+
+    foreach($pluggable as $pref => $pane) {
+        if (get_pref($pref)) {
+            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+        } else {
+            add_privs(is_array($pane) ?
+                array_fill_keys(array_keys($pane), null) :
+                array('prefs.'.$pref => null)
+            );
+        }
     }
 }
 

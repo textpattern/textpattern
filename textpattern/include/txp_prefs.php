@@ -58,6 +58,7 @@ function prefs_save()
 {
     global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user;
 
+    plug_privs();
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
     $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE ".safe_pfx('textpattern'))));
@@ -157,14 +158,9 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user, $txp_options;
+    global $prefs, $txp_user;
 
-    foreach($txp_options as $pref => $pane) {
-        if (get_pref($pref)) {
-            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
-        }
-    }
-
+    plug_privs();
     extract($prefs);
 
     pagetop(gTxt('tab_preferences'), $message);
