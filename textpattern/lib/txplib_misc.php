@@ -615,7 +615,7 @@ function add_privs($res, $perm = '1')
  * Checks if a user has privileges to the given resource.
  *
  * @param   string $res  The resource
- * @param   string $user The user. If no user name is supplied, assume the current logged in user
+ * @param   mixed  $user The user. If no user name is supplied, assume the current logged in user
  * @return  bool
  * @package User
  * @example
@@ -631,6 +631,11 @@ function has_privs($res, $user = '')
     global $txp_user, $txp_permissions;
     static $privs;
 
+    if (is_array($user)) {
+        $level = isset($user['privs']) ? $user['privs'] : null;
+        $user = isset($user['name']) ? $user['name'] : '';
+    }
+
     $user = (string) $user;
 
     if ($user === '') {
@@ -639,7 +644,9 @@ function has_privs($res, $user = '')
 
     if ($user !== '') {
         if (!isset($privs[$user])) {
-            $privs[$user] = safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
+            $privs[$user] = isset($level) ?
+                $level :
+                safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
         if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {

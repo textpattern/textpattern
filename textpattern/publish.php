@@ -551,7 +551,7 @@ function preText($s, $prefs)
 
         $userInfo = is_logged_in();
 
-        if ($rs && isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+        if ($rs && $userInfo && has_privs('skin', $userInfo)) {
             $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
             $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
             $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
