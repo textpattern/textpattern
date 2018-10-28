@@ -44,7 +44,7 @@ if (false === ($custom_types = get_pref('custom_form_types', false, true))) {
     set_pref('custom_form_types',
         ';[js]
 ;mimetype="application/javascript"
-;*="Javascript"',
+;title="Javascript"',
         'advanced_options', PREF_CORE, 'longtext_input', 100, PREF_GLOBAL);
 } else {
     safe_update('txp_prefs', "event = 'advanced_options'", "name='custom_form_types'");

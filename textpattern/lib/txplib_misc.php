@@ -2562,15 +2562,21 @@ function is_blacklisted($ip, $checks = '')
 
 function is_logged_in($user = '')
 {
+    static $users = array();
+
     $name = substr(cs('txp_login_public'), 10);
 
-    if (!strlen($name) or strlen($user) and $user !== $name) {
+    if (!strlen($name) || strlen($user) && $user !== $name) {
         return false;
     }
 
-    $rs = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    if (!isset($users[$name])) {
+        $users[$name] = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    }
 
-    if ($rs and substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
+    $rs = $users[$name];
+
+    if ($rs && substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
         unset($rs['nonce']);
 
         return $rs;
