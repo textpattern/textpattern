@@ -26,7 +26,7 @@ Changes in 4.7.2
 * Added: Global 'escape="spell"' attribute value, to spell out numbers.
 * Added: Custom form (MIME)types.
 * Added: Option to export form/page/style to disk on save.
-* jQuery File Upload 9.24.0.
+* jQuery File Upload 9.25.1.
 
 Changes in 4.7.1
 
