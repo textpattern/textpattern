@@ -30,7 +30,7 @@ Changes in 4.7.2
 * Added: 'context' and 'format' attributes to <txp:output_form /> tag.
 * Added: 'context' attribute to <txp:link_to_next />, <txp:link_to_prev />,
   <txp:page_url /> and <txp:permlink /> tags.
-* jQuery File Upload 9.24.0.
+* jQuery File Upload 9.25.1.
 
 Changes in 4.7.1
 
