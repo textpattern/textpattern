@@ -248,6 +248,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
+            $dev_preview = has_privs('skin.preview');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -356,34 +357,36 @@ function sec_section_list($message = '')
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
                 $missing = isset($all_pages[$sec_dev_skin]) && !in_array($sec_dev_page, $all_pages[$sec_dev_skin]);
-                $replaced = $sec_page != $sec_dev_page || $missing;
+                $replaced = $dev_preview && ($sec_page != $sec_dev_page || $missing);
                 $dev_set = $dev_set || $replaced;
-                $sec_page = (!$replaced ? '' : tag(href(txpspecialchars($sec_page), array(
+                $sec_page = tag(href(txpspecialchars($sec_page), array(
                     'event' => 'page',
                     'name'  => $sec_page,
                     'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), 'del').' | ').
+                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
+                !$replaced ? '' : ' | '.
                 href(txpspecialchars($sec_dev_page), array(
                     'event' => 'page',
                     'name'  => $sec_dev_page,
                     'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''));
+                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
 
                 $missing = isset($all_styles[$sec_dev_skin]) && !in_array($sec_dev_css, $all_styles[$sec_dev_skin]);
-                $replaced = $sec_css != $sec_dev_css || $missing;
+                $replaced = $dev_preview && ($sec_css != $sec_dev_css || $missing);
                 $dev_set = $dev_set || $replaced;
-                $sec_css = (!$replaced ? '' : tag(href(txpspecialchars($sec_css), array(
+                $sec_css = tag(href(txpspecialchars($sec_css), array(
                     'event' => 'css',
                     'name'  => $sec_css,
                     'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), 'del').' | ').
+                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
+                !$replaced ? '' : ' | '.
                 href(txpspecialchars($sec_dev_css), array(
                     'event' => 'css',
                     'name'  => $sec_dev_css,
                     'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''));
+                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
 
-                $replaced = $sec_skin != $sec_dev_skin;
+                $replaced = $dev_preview && ($sec_skin != $sec_dev_skin);
                 $dev_set = $dev_set || $replaced;
                 $contentBlock .= tr(
                     td(
@@ -406,7 +409,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? '<del>'.$sec_skin.'</del> | ' : '').$sec_dev_skin, '', 'txp-list-col-skin'
+                        tag($sec_skin, $replaced ? 'del' : '').
+                        ($replaced ? ' | '.$sec_dev_skin : ''), '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -430,10 +434,12 @@ function sec_section_list($message = '')
                 );
             }
 
+            $disabled = $dev_set ? array() : array('switchdevlive');
+
             $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
-                section_multiedit_form($page, $sort, $dir, $crit, $search_method, $dev_set ? array() : array('switchdevlive')).
+                section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled).
                 tInput().
                 n.tag_end('form');
         }
@@ -894,12 +900,15 @@ EOJS
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => inputLabel('dev_theme',
-                checkbox2('dev_theme', 1, 0, 'dev_theme'),
-                'dev_theme', '', array('class' => 'multi-option multi-step'), ''
-            ) . inputLabel('live_theme',
-                checkbox2('live_theme', 0, 0, 'live_theme'),
-                'live_theme', '', array('class' => 'multi-option multi-step'), ''
+            'html'  => (in_array('switchdevlive', $disabled) ?
+                hInput('live_theme', 1) :
+                inputLabel('dev_theme',
+                    checkbox2('dev_theme', 1, 0, 'dev_theme'),
+                    'dev_theme', '', array('class' => 'multi-option multi-step'), ''
+                ) . inputLabel('live_theme',
+                    checkbox2('live_theme', 0, 0, 'live_theme'),
+                    'live_theme', '', array('class' => 'multi-option multi-step'), ''
+                )
             ) . $themeSelect . $pageSelect . $styleSelect
         ),
         'switchdevlive' => array(

@@ -90,6 +90,14 @@
         "html": "module_pophelp",
         "position": "170"
     },
+    "switch_dev_live": {
+        "val": "1",
+        "type": "0",
+        "event": "admin",
+        "html": "onoffRadio",
+        "position": "180",
+        "private": "1"
+    },
     "advanced_options": {
         "val": "0",
         "type": "0",

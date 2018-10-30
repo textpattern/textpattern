@@ -56,8 +56,14 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
+// Get logged user.
+if (txpinterface !== 'css') {
+    $userInfo = is_logged_in();
+}
+
 // Get all prefs as an array.
-$prefs = get_prefs();
+$prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
+plug_privs();
 
 // Add prefs to globals.
 extract($prefs);
@@ -551,7 +557,7 @@ function preText($s, $prefs)
 
         $userInfo = is_logged_in();
 
-        if ($rs && $userInfo && has_privs('skin', $userInfo)) {
+        if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
             $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
             $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
             $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];

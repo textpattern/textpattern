@@ -4768,7 +4768,9 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
+    $user = implode(',', (array) quote_list($user));
+
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name IN (".$user.") ORDER BY FIELD(user_name, ".$user.")");
 
     if ($r) {
         while ($a = nextRow($r)) {

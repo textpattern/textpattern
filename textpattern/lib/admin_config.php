@@ -127,5 +127,8 @@ $txp_options = array(
     'advanced_options' => '1,2',
     'use_comments' => array(
         'prefs.comments' => '1,2'
+    ),
+    'switch_dev_live' => array(
+        'skin.preview' => '1,2,      6'
     )
 );
