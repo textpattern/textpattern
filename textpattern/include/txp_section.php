@@ -900,7 +900,7 @@ EOJS
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (in_array('switchdevlive', $disabled) ?
+            'html'  => (!has_privs('skin.preview') ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
