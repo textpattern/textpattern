@@ -688,6 +688,13 @@
         "position": "15",
         "private": "1"
     },
+    "txp_evaluate_functions": {
+        "val": "",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "text_input",
+        "position": "100"
+    },
     "custom_form_types": {
         "val": ";[js]\n;mimetype=\"application/javascript\"\n;title=\"JavaScript\"",
         "type": "0",
