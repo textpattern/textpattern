@@ -5198,12 +5198,12 @@ function txp_eval($atts, $thing = null)
         }
 
         if ($functions) {
-            $query = preg_replace_callback('/\b('.$functions.')\s*\(/',
+            $query = preg_replace_callback('/\b('.$functions.')\s*\((.*)\)/U',
                 function ($match) {
                     global $prefs;
                     $function = empty($prefs['_txp_evaluate_functions'][$match[1]]) ? $match[1] : $prefs['_txp_evaluate_functions'][$match[1]];
 
-                    return "php:function('$function',";
+                    return "php:function('$function'".(trim($match[2]) === '' ? '' : ','.$match[2]).')';
                 },
                 $query
             );
@@ -5269,8 +5269,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null, $decimal = null, $spellout = null, $strto = null,
-        $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
+    static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
+        $strto = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
         return $thing;
@@ -5291,7 +5291,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'integer':
                 !$filter or $thing = do_list($thing);
-            case 'number': case 'float': case 'spell':
+            case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
                 $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
@@ -5334,6 +5334,15 @@ function txp_escape($atts, $thing = '')
 
                         if ($spellout && ($tidy || is_numeric($thing))) {
                             $thing = $spellout->format($value);
+                        }
+                        break;
+                    case 'ordinal':
+                        isset($ordinal)
+                            or !($ordinal = class_exists('NumberFormatter'))
+                            or $ordinal = new NumberFormatter(LANG, NumberFormatter::ORDINAL);
+
+                        if ($ordinal && ($tidy || is_numeric($thing))) {
+                            $thing = $ordinal->format($value);
                         }
                         break;
                     default:
