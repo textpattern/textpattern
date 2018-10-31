@@ -599,7 +599,7 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    is_array($res) or $res = array($res, $perm);
+    is_array($res) or $res = array($res => $perm);
 
     foreach($res as $priv => $group) {
         if ($group === null) {
