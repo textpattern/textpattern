@@ -689,7 +689,7 @@
         "private": "1"
     },
     "custom_form_types": {
-        "val": ";[js]\n;mimetype=\"application/javascript\"\n;title=\"Javascript\"",
+        "val": ";[js]\n;mimetype=\"application/javascript\"\n;title=\"JavaScript\"",
         "type": "0",
         "event": "advanced_options",
         "html": "longtext_input",

@@ -6066,7 +6066,7 @@ function getMetaDescription($type = null)
  * @param array $internals Data restrictions
  * @return array The retrieved data
  */
- 
+
 function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
     global $pretext;
 
@@ -7065,6 +7065,6 @@ function real_max_upload_size($user_max, $php = true)
         }
     }
 
-    // 2^53 - 1 is max safe Javascript integer, let 8192Tb
+    // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }
