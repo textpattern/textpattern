@@ -90,11 +90,11 @@
         "html": "module_pophelp",
         "position": "170"
     },
-    "switch_dev_live": {
+    "enable_dev_preview": {
         "val": "1",
         "type": "0",
         "event": "admin",
-        "html": "onoffRadio",
+        "html": "yesnoradio",
         "position": "180",
         "private": "1"
     },
@@ -102,7 +102,7 @@
         "val": "0",
         "type": "0",
         "event": "admin",
-        "html": "onoffRadio",
+        "html": "onoffradio",
         "position": "200"
     },
     "comments_on_default": {
