@@ -5228,7 +5228,8 @@ function txp_eval($atts, $thing = null)
 
         if (strpos($query, '<+>') !== false) {
             if (!$test) {
-                $query = str_replace('<+>', parse($thing), $query);
+                $quoted = txp_escape(array('escape' => 'quote'), parse($thing));
+                $query = str_replace('<+>', $quoted, $query);
                 $staged = false;
             } else {
                 $staged = true;
@@ -5253,50 +5254,44 @@ function txp_eval($atts, $thing = null)
 
     $hash = sha1($thing);
 
-    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
-        if ($staged) {
-            $query = str_replace('<+>', $thing, $query);
-            $thing = $xpath->evaluate($query);
+    if (!empty($txp_parsed[$hash]) && !empty($txp_else[$hash])) {
+        $test = trim($test);
+        $isempty = !empty($test);
+        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+        $tag = $txp_parsed[$hash];
+        $nr = $txp_else[$hash][0] - 2;
+        $out = array($tag[0]);
+
+        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+            $txp_tag = $tag[$n];
+
+            if ($test && !in_array($txp_tag[1], $test)) {
+                $out[] = $txp_tag;
+                $tags[] = $n;
+            } else {
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $out[] = $nextag;
+                $isempty &= trim($nextag) === '';
+            }
+
+            $out[] = $tag[++$n];
         }
 
-        return $thing instanceof DOMNodeList ? $thing->length : $thing;
-    }
-
-    $test = trim($test);
-    $isempty = !empty($test);
-    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-    $tag = $txp_parsed[$hash];
-    $nr = $txp_else[$hash][0] - 2;
-    $out = array($tag[0]);
-
-    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-        $txp_tag = $tag[$n];
-
-        if ($test && !in_array($txp_tag[1], $test)) {
-            $out[] = $txp_tag;
-            $tags[] = $n;
-        } else {
-            $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-            $out[] = $nextag;
-            $isempty &= trim($nextag) === '';
+        if ($isempty) {
+            return parse($thing, false);
         }
 
-        $out[] = $tag[++$n];
-    }
+        foreach ($tags as $n) {
+            $txp_tag = $out[$n];
+            $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+        }
 
-    if ($isempty) {
-        return parse($thing, false);
+        $thing = implode('', $out);
     }
-
-    foreach ($tags as $n) {
-        $txp_tag = $out[$n];
-        $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-    }
-
-    $thing = implode('', $out);
 
     if ($staged) {
-        $query = str_replace('<+>', $thing, $query);
+        $quoted = txp_escape(array('escape' => 'quote'), $thing);
+        $query = str_replace('<+>', $quoted, $query);
         $thing = $xpath->evaluate($query);
     }
 
