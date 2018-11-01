@@ -496,7 +496,7 @@
 <h2>Advanced options</h2>
 <p>Show the advanced preferences group, where additional settings can be configured such as:</p>
 <ul>
-    <li>PHP functions enabled in txp:evaluate.</li>
+    <li>PHP functions enabled in <code>txp:evaluate</code>.</li>
     <li>Custom form template types.</li>
 </ul>
         ]]></item>
@@ -874,7 +874,9 @@
         ]]></item>
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
 <h2>PHP functions enabled in txp:evaluate</h2>
-<p>TO DO.</p>
+<p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified in this list can be utilized in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;<code> tag:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> should return a scalar value (<strong>not</strong> an array/object).</p>
         ]]></item>
         <item id="use_comments" title="Accept comments?"><![CDATA[
 <h2>Accept comments?</h2>
