@@ -5104,12 +5104,14 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($atts['value']) || isset($thing) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) ? '' : null;
 
     extract(lAtts(array(
-        'escape' => $set,
-        'name'   => '',
-        'value'  => $thing ? parse($thing) : $thing,
+        'escape'    => $set,
+        'name'      => '',
+        'value'     => null,
+        'add'       => null,
+        'separator' => null
     ), $atts));
 
     if (empty($name)) {
@@ -5121,6 +5123,19 @@ function variable($atts, $thing = null)
             $trace->log("[<txp:variable>: Unknown variable '$name']");
         }
     } else {
+        isset($value) or $value = isset($thing) ?
+            parse($thing) :
+            (isset($variable[$name]) ? $variable[$name] : null);
+        $add = trim($add);
+
+        if (!empty($add)) {
+            if (!isset($separator) && is_numeric($add) && is_numeric($value)) {
+                $value += $add;
+            } else {
+                $value .= ($value ? $separator : '').$add;
+            }
+        }
+
         $variable[$name] = $escape
             ? txp_escape(array('escape' => $escape), $value)
             : $value;
@@ -5166,6 +5181,8 @@ function txp_eval($atts, $thing = null)
     global $prefs, $txp_parsed, $txp_else, $txp_tag;
     static $xpath = null, $functions = null;
 
+    $staged = null;
+
     extract(lAtts(array(
         'query' => null,
         'test'  => !isset($atts['query']),
@@ -5209,7 +5226,16 @@ function txp_eval($atts, $thing = null)
             );
         }
 
-        $x = $xpath->evaluate($query);
+        if (strpos($query, '<+>') !== false) {
+            if (!$test) {
+                $query = str_replace('<+>', parse($thing), $query);
+                $staged = false;
+            } else {
+                $staged = true;
+            }
+        }
+
+        $x = $staged ? true : $xpath->evaluate($query);
 
         if ($x instanceof DOMNodeList) {
             $x = $x->length;
@@ -5219,7 +5245,7 @@ function txp_eval($atts, $thing = null)
         return '';
     }
 
-    if (!isset($thing)) {
+    if (!isset($thing) || $x && $staged === false) {
         return $x;
     } elseif (empty($x)) {
         return parse($thing, false);
@@ -5228,7 +5254,12 @@ function txp_eval($atts, $thing = null)
     $hash = sha1($thing);
 
     if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
-        return $thing;
+        if ($staged) {
+            $query = str_replace('<+>', $thing, $query);
+            $thing = $xpath->evaluate($query);
+        }
+
+        return $thing instanceof DOMNodeList ? $thing->length : $thing;
     }
 
     $test = trim($test);
@@ -5262,7 +5293,14 @@ function txp_eval($atts, $thing = null)
         $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
     }
 
-    return implode('', $out);
+    $thing = implode('', $out);
+
+    if ($staged) {
+        $query = str_replace('<+>', $thing, $query);
+        $thing = $xpath->evaluate($query);
+    }
+
+    return $thing instanceof DOMNodeList ? $thing->length : $thing;
 }
 
 // -------------------------------------------------------------
