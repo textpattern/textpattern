@@ -496,6 +496,7 @@
 <h2>Advanced options</h2>
 <p>Show the advanced preferences group, where additional settings can be configured such as:</p>
 <ul>
+    <li>PHP functions enabled in txp:evaluate.</li>
     <li>Custom form template types.</li>
 </ul>
         ]]></item>
@@ -870,6 +871,10 @@
 <h2>Prevent widowed words in article titles?</h2>
 <p>‘Widowed word’ refers to the final word of a sentence shown on a new line when the sentence is too long to fit on one line. In printed works, widowed words are considered sloppy typography and should be avoided. Setting this preference to ‘Yes’ will ensure that long article titles lines never have only the last word on a new line. Instead, the two last words will appear on a new line.</p>
 <p><strong>Note:</strong> This setting can prove problematic in responsive pages at smaller page widths, because the non-breaking space character between the last two words may cause titles to overspill their parent container. In that case, set this preference to ‘No’.</p>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
+<h2>PHP functions enabled in txp:evaluate</h2>
+<p>TO DO.</p>
         ]]></item>
         <item id="use_comments" title="Accept comments?"><![CDATA[
 <h2>Accept comments?</h2>
