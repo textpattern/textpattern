@@ -998,7 +998,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         // Safari workaround?
         var $inputs = $('input[type="file"]:not([disabled])', $this);
         $inputs.each(function(i, input) {
-            if (input.files.length > 0) return 
+            if (input.files.length > 0) return
             $(input).prop('disabled', true)
         })
 
@@ -1724,7 +1724,7 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span>');
+        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
 
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />')
