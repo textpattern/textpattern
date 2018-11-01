@@ -18,10 +18,12 @@ Changes in 4.7.2
 * Changed: Hive admin theme login panel now displays link to public site.
 * Changed: Classic admin theme login panel layout simplified.
 * Changed: Fine-grained development theme preview.
-* Changed: More customizable Atom/RSS feeds.
+* Changed: More customizable Atom/RSS feeds via 'atom_head', 'rss_head' and
+  'feed_filter' callbacks.
 * Changed: Deleting an article deletes the associated comments.
 * Changed: Some emoji are preserved in automatically generated URL titles.
 * Changed: Text blocks starting with a tag are not textiled.
+* Changed: File data is available on 'file_download' callback.
 * Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: Latest translations.
 * Added: Global 'trim' and 'default' attributes.
@@ -31,6 +33,8 @@ Changes in 4.7.2
 * Added: 'context' and 'format' attributes to <txp:output_form /> tag.
 * Added: 'context' attribute to <txp:link_to_next />, <txp:link_to_prev />,
   <txp:page_url /> and <txp:permlink /> tags.
+* Added: 'add' and 'separator' attributes to <txp:variable /> tag.
+* Added: Custom functions can be registered for use in <txp:evaluate /> tag.
 * jQuery File Upload 9.25.1.
 
 Changes in 4.7.1
