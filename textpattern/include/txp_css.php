@@ -214,8 +214,8 @@ function css_edit($message = '', $refresh_partials = false)
                 checkbox2('export', false, 0, 'export').
                 n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
-        ).
-        n.tag_void('input', array(
+        ).n.
+        tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
             'method' => 'post',
