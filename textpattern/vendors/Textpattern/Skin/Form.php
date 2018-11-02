@@ -124,8 +124,8 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
 
                 $textarray[$type] = isset($langpack[$lang_ui]) ?
                     $langpack[$lang_ui] :
-                    (isset($langpack['*']) ?
-                        $langpack['*'] :
+                    (isset($langpack['title']) ?
+                        $langpack['title'] :
                         (isset(static::$mimeTypes[$type]) ?
                             strtoupper($type)." (".static::$mimeTypes[$type].")"
                             : $type
