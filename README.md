@@ -30,8 +30,8 @@ before you continue.
 
 The current production release is version 4.7.1. It can be downloaded from the
 Textpattern website as a
-[.zip](https://textpattern.com/file_download/86/textpattern-4.7.1.zip) or
-[.tar.gz](https://textpattern.com/file_download/87/textpattern-4.7.1.tar.gz) archive.
+[.zip](https://textpattern.com/File+download/87/textpattern-4.7.1.zip) or
+[.tar.gz](https://textpattern.com/File+download/86/textpattern-4.7.1.tar.gz) archive.
 
 ## Install Textpattern
 
