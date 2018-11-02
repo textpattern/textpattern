@@ -910,9 +910,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (message) {
         $('#messagepane').html(message)
-    } /*else {
-        $('#messagepane').empty()
-    }*/
+    }
 });
 
 /**
@@ -1000,7 +998,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         // Safari workaround?
         var $inputs = $('input[type="file"]:not([disabled])', $this);
         $inputs.each(function(i, input) {
-            if (input.files.length > 0) return 
+            if (input.files.length > 0) return
             $(input).prop('disabled', true)
         })
 
@@ -1690,9 +1688,17 @@ jQuery.fn.txpColumnize = function ()
             }
         }
 
-        var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
-        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' /> ' + $title + '</label></div>');
+        var disabled = $this.hasClass('asc') || $this.hasClass('desc');
+        var $li = $('<li />').addClass(disabled ? 'ui-state-disabled' : null);
+        var $box = $('<input type="checkbox" tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" />')
+            .attr('value', $id)
+            .attr('data-index', index)
+            .prop('disabled', disabled);
+
+        $li.html($('<div role="menuitem" />')
+            .append($('<label />').text($title).prepend($box)));
+
+
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
@@ -1718,9 +1724,16 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a>')
+        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
 
-    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    var $li = $('<li class="txp-dropdown-toggle-all" />'),
+        $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />')
+        .attr('checked', selectAll);
+
+    $li.html($('<div role="menuitem" />')
+        .append($('<label />').html(textpattern.gTxt('toggle_all_selected')).prepend($box)));
+
+    $menu.html($li).append(items);
 
     var $container = $table.closest('.txp-layout-1col')
     var $ui = $container.find('.txp-list-options')
@@ -1856,7 +1869,7 @@ jQuery.fn.txpFileupload = function (options) {
 
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
             }
 
             if(!uploadErrors.length) {
@@ -1946,7 +1959,12 @@ jQuery.fn.txpUploadPreview = function(template) {
                 }
             }
 
-            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, status: status, title: this.name.replace(/\.[^\.]*$/, '')}))
+            preview = textpattern.mustache(template, $.extend(this, {
+                hash: hash,
+                preview: preview,
+                status: status,
+                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
+            }))
             form.append(preview)
         });
     }).change()
@@ -2321,19 +2339,16 @@ textpattern.Route.add('section', function ()
 
     $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
         section_theme_show($(this).val());
-    });
-
-    // Invoke the handler now to set things on initial page load.
-    $('#section_skin').change();
-
-    $('main').on('change', 'select[name=edit_method]', function() {
+    }).on('change', 'select[name=edit_method]', function() {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
         } else if ($(this).val() === 'changepagestyledev') {
             $('#multiedit_dev_skin').change();
         }
+    })
 
-    });
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
 });
 
 // Plugin help panel.

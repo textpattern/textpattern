@@ -56,8 +56,14 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
+// Get logged user.
+if (txpinterface !== 'css') {
+    $userInfo = is_logged_in();
+}
+
 // Get all prefs as an array.
-$prefs = get_prefs();
+$prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
+plug_privs();
 
 // Add prefs to globals.
 extract($prefs);
@@ -360,7 +366,15 @@ function preText($s, $prefs)
                             if (empty($u2)) {
                                 $out['s'] = $u1;
                             } else {
-                                $out['month'] = "$u1-$u2".(empty($u3) ? '' : "-$u3");
+                                if (@checkdate($u2, empty($u3) ? 1 : $u3, $u1)) {
+                                    $month = empty($u3) ?
+                                        array($u1, $u2) :
+                                        array($u1, $u2, $u3);
+                                } else {
+                                    $month = array();
+                                    $is_404 = true;
+                                }
+
                                 $title = empty($u4) ? null : $u4;
                             }
 
@@ -402,12 +416,20 @@ function preText($s, $prefs)
 
     // Validate dates
     if ($out['month']) {
-        list($y, $m, $d) = explode('-', $out['month']) + array(1, 1, 1);
+        $date = empty($month) ? '' : implode('-', $month);
+        $month = explode('-', $out['month'], 3) +
+            (!empty($month) ? $month : array());
+        list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if (@!checkdate($m, $d, $y)) {
-            $out['month'] = '';
+        if ((strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+            $month = implode('-', $month);
+        } else {
+            $out['month'] = $month = '';
             $is_404 = true;
         }
+    } elseif (isset($month)) {
+        $month = implode('-', $month);
+        !empty($title) or $out['month'] = $month;
     }
 
     // Existing category in messy or clean URL?
@@ -472,9 +494,13 @@ function preText($s, $prefs)
     } elseif ($out['context'] == 'article') {
         if (!empty($out['id']) || !empty($title)) {
             if (empty($out['s']) || $out['s'] === 'default') {
-                $rs = !empty($out['id']) ? lookupByID($out['id']) : lookupByDateTitle($out['month'], $title);
+                $rs = !empty($out['id']) ?
+                    lookupByID($out['id']) :
+                    lookupByDateTitle(isset($month) ? $month : '', $title);
             } else {
-                $rs = !empty($out['id']) ? lookupByIDSection($out['id'], $out['s']) : lookupByTitleSection($title, $out['s']);
+                $rs = !empty($out['id']) ?
+                    lookupByIDSection($out['id'], $out['s']) :
+                    lookupByTitleSection($title, $out['s']);
             }
 
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
@@ -531,7 +557,7 @@ function preText($s, $prefs)
 
         $userInfo = is_logged_in();
 
-        if ($rs && isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+        if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
             $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
             $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
             $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
