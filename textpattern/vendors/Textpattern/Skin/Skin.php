@@ -1303,6 +1303,7 @@ class Skin extends CommonBase implements SkinInterface
         $rs = $this->getTableData($criteria, $sortSQL, $offset, $limit);
 
         if ($rs) {
+            $dev_preview = has_privs('skin.preview');
             $out = n.tag_start('form', array(
                         'class'  => 'multi_edit_form',
                         'id'     => $event.'_form',
@@ -1364,10 +1365,10 @@ class Skin extends CommonBase implements SkinInterface
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
                         href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit')))
-                        .' | '.
+                        .(!$dev_preview ? '' : ' | '.
                         href(gTxt('preview'),
                             'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
-                        ),
+                        )),
                         '',
                         array(
                             'scope' => 'row',

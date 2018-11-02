@@ -314,13 +314,7 @@ function component($atts)
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';
-    $qs = array();
-
-    foreach ($context === true ? $internals : do_list_unique($context) as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $internals)) {
-            $qs[$q] = $pretext[$q];
-        }
-    }
+    $qs = $context ? get_context($context, $internals) : array();
 
     if ($mode === 'flat') {
         $url = array();
@@ -1331,7 +1325,7 @@ function category_list($atts, $thing = null)
         'parent'       => '',
         'section'      => '',
         'children'     => 1,
-        'sort'         => '',
+        'sort'         => 'name ASC',
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -1681,7 +1675,7 @@ function search_term($atts)
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = null)
 {
-    global $thisarticle;
+    global $pretext, $thisarticle;
 
     if (!in_array($target, array('next', 'prev'))) {
         return '';
@@ -1695,6 +1689,7 @@ function link_to($atts, $thing = null, $target = null)
         'form'       => '',
         'link'       => 1,
         'showalways' => 0,
+        'context'    => true
     ), $atts));
 
     if (is_array($thisarticle)) {
@@ -1703,7 +1698,13 @@ function link_to($atts, $thing = null, $target = null)
         }
 
         if ($thisarticle[$target] !== false) {
-            $url = permlinkurl($thisarticle[$target]);
+            $context = get_context($context, array('c', 'author', 'month', 'f'));
+
+            if ($context) {
+                $url = pagelinkurl(array('id' => $thisarticle[$target]['ID']), $context);
+            } else {
+                $url = permlinkurl($thisarticle[$target]);
+            }
 
             if ($form || $thing !== null) {
                 $oldarticle = $thisarticle;
@@ -1828,7 +1829,7 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $is_article_list;
+    global $thispage, $is_article_list;
 
     if (empty($thispage)) {
         return $is_article_list ? postpone_process() : '';
@@ -1847,24 +1848,9 @@ function newer($atts, $thing = null)
     $nextpg = $shift === '*' ? min(1, $pg - 1) : ($pg - (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
-
-        // Author URLs should use RealName, rather than username.
-        if (!empty($pretext['author'])) {
-            $author = get_author_name($pretext['author']);
-        } else {
-            $author = '';
-        }
-
         $url = pagelinkurl(array(
-            'month'   => @$pretext['month'],
-            'pg'      => $nextpg == 1 && !isset($shift) ? '' : $nextpg,
-            's'       => @$pretext['s'],
-            'c'       => @$pretext['c'],
-            'context' => @$pretext['context'],
-            'q'       => @$pretext['q'],
-            'm'       => @$m,
-            'author'  => $author,
-        ));
+            'pg' => $nextpg == 1 && !isset($shift) ? '' : $nextpg
+        ) + get_context());
 
         if ($thing) {
             if ($escape == 'html') {
@@ -1891,7 +1877,7 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $is_article_list;
+    global $thispage, $is_article_list;
 
     if (empty($thispage)) {
         return $is_article_list ? postpone_process() : '';
@@ -1910,24 +1896,9 @@ function older($atts, $thing = null)
     $nextpg = $shift === '*' ? max($numPages, $pg + 1) : ($pg + (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
-
-        // Author URLs should use RealName, rather than username.
-        if (!empty($pretext['author'])) {
-            $author = get_author_name($pretext['author']);
-        } else {
-            $author = '';
-        }
-
         $url = pagelinkurl(array(
-            'month'   => @$pretext['month'],
-            'pg'      => $nextpg,
-            's'       => @$pretext['s'],
-            'c'       => @$pretext['c'],
-            'context' => @$pretext['context'],
-            'q'       => @$pretext['q'],
-            'm'       => @$m,
-            'author'  => $author,
-        ));
+            'pg' => $nextpg
+        ) + get_context());
 
         if ($thing) {
             if ($escape == 'html') {
@@ -4008,20 +3979,29 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $thisarticle;
+    global $pretext, $thisarticle;
+    static $internals = array('c', 'author', 'month', 'f');
 
     extract(lAtts(array(
-        'class' => '',
-        'id'    => '',
-        'style' => '',
-        'title' => '',
+        'class'   => '',
+        'id'      => '',
+        'style'   => '',
+        'title'   => '',
+        'context' => '',
     ), $atts));
 
     if (!$id) {
         assert_article();
     }
 
-    $url = ($id) ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    $thisid = $id ? $id : $thisarticle['thisid'];
+    empty($context) or $context = get_context($context, $internals);
+
+    if ($context) {
+        $url = pagelinkurl(array('id' => $thisid), $context);
+    } else {
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    }
 
     if ($url) {
         if ($thing === null) {
@@ -5124,12 +5104,14 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($atts['value']) || isset($thing) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) ? '' : null;
 
     extract(lAtts(array(
-        'escape' => $set,
-        'name'   => '',
-        'value'  => $thing ? parse($thing) : $thing,
+        'escape'    => $set,
+        'name'      => '',
+        'value'     => null,
+        'add'       => null,
+        'separator' => null
     ), $atts));
 
     if (empty($name)) {
@@ -5141,6 +5123,19 @@ function variable($atts, $thing = null)
             $trace->log("[<txp:variable>: Unknown variable '$name']");
         }
     } else {
+        isset($value) or $value = isset($thing) ?
+            parse($thing) :
+            (isset($variable[$name]) ? $variable[$name] : null);
+        $add = trim($add);
+
+        if (!empty($add)) {
+            if (!isset($separator) && is_numeric($add) && is_numeric($value)) {
+                $value += $add;
+            } else {
+                $value .= ($value ? $separator : '').$add;
+            }
+        }
+
         $variable[$name] = $escape
             ? txp_escape(array('escape' => $escape), $value)
             : $value;
@@ -5186,6 +5181,8 @@ function txp_eval($atts, $thing = null)
     global $prefs, $txp_parsed, $txp_else, $txp_tag;
     static $xpath = null, $functions = null;
 
+    $staged = null;
+
     extract(lAtts(array(
         'query' => null,
         'test'  => !isset($atts['query']),
@@ -5218,18 +5215,28 @@ function txp_eval($atts, $thing = null)
         }
 
         if ($functions) {
-            $query = preg_replace_callback('/\b('.$functions.')\s*\(/',
+            $query = preg_replace_callback('/\b('.$functions.')\s*\(\s*(\)?)/',
                 function ($match) {
                     global $prefs;
                     $function = empty($prefs['_txp_evaluate_functions'][$match[1]]) ? $match[1] : $prefs['_txp_evaluate_functions'][$match[1]];
 
-                    return "php:function('$function',";
+                    return "php:function('$function'".($match[2] ? ')' : ',');
                 },
                 $query
             );
         }
 
-        $x = $xpath->evaluate($query);
+        if (strpos($query, '<+>') !== false) {
+            if (!$test) {
+                $quoted = txp_escape(array('escape' => 'quote'), parse($thing));
+                $query = str_replace('<+>', $quoted, $query);
+                $staged = false;
+            } else {
+                $staged = true;
+            }
+        }
+
+        $x = $staged ? true : $xpath->evaluate($query);
 
         if ($x instanceof DOMNodeList) {
             $x = $x->length;
@@ -5239,7 +5246,7 @@ function txp_eval($atts, $thing = null)
         return '';
     }
 
-    if (!isset($thing)) {
+    if (!isset($thing) || $x && $staged === false) {
         return $x;
     } elseif (empty($x)) {
         return parse($thing, false);
@@ -5247,50 +5254,56 @@ function txp_eval($atts, $thing = null)
 
     $hash = sha1($thing);
 
-    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
-        return $thing;
-    }
+    if (!empty($txp_parsed[$hash]) && !empty($txp_else[$hash])) {
+        $test = trim($test);
+        $isempty = !empty($test);
+        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+        $tag = $txp_parsed[$hash];
+        $nr = $txp_else[$hash][0] - 2;
+        $out = array($tag[0]);
 
-    $test = trim($test);
-    $isempty = !empty($test);
-    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-    $tag = $txp_parsed[$hash];
-    $nr = $txp_else[$hash][0] - 2;
-    $out = array($tag[0]);
+        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+            $txp_tag = $tag[$n];
 
-    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-        $txp_tag = $tag[$n];
+            if ($test && !in_array($txp_tag[1], $test)) {
+                $out[] = $txp_tag;
+                $tags[] = $n;
+            } else {
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $out[] = $nextag;
+                $isempty &= trim($nextag) === '';
+            }
 
-        if ($test && !in_array($txp_tag[1], $test)) {
-            $out[] = $txp_tag;
-            $tags[] = $n;
-        } else {
-            $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-            $out[] = $nextag;
-            $isempty &= trim($nextag) === '';
+            $out[] = $tag[++$n];
         }
 
-        $out[] = $tag[++$n];
+        if ($isempty) {
+            return parse($thing, false);
+        }
+
+        foreach ($tags as $n) {
+            $txp_tag = $out[$n];
+            $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+        }
+
+        $thing = implode('', $out);
     }
 
-    if ($isempty) {
-        return parse($thing, false);
+    if ($staged) {
+        $quoted = txp_escape(array('escape' => 'quote'), $thing);
+        $query = str_replace('<+>', $quoted, $query);
+        $thing = $xpath->evaluate($query);
     }
 
-    foreach ($tags as $n) {
-        $txp_tag = $out[$n];
-        $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-    }
-
-    return implode('', $out);
+    return $thing instanceof DOMNodeList ? $thing->length : $thing;
 }
 
 // -------------------------------------------------------------
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null, $decimal = null, $spellout = null, $strto = null,
-        $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
+    static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
+        $strto = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
         return $thing;
@@ -5311,7 +5324,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'integer':
                 !$filter or $thing = do_list($thing);
-            case 'number': case 'float': case 'spell':
+            case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
                 $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
@@ -5354,6 +5367,15 @@ function txp_escape($atts, $thing = '')
 
                         if ($spellout && ($tidy || is_numeric($thing))) {
                             $thing = $spellout->format($value);
+                        }
+                        break;
+                    case 'ordinal':
+                        isset($ordinal)
+                            or !($ordinal = class_exists('NumberFormatter'))
+                            or $ordinal = new NumberFormatter(LANG, NumberFormatter::ORDINAL);
+
+                        if ($ordinal && ($tidy || is_numeric($thing))) {
+                            $thing = $ordinal->format($value);
                         }
                         break;
                     default:

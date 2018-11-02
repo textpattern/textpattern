@@ -174,6 +174,12 @@ function page_edit($message = '', $refresh_partials = false)
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
+        (!is_writable($instance->getDirPath()) ? '' :
+            span(
+                checkbox2('export', false, 0, 'export').
+                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ).n.
         tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
@@ -428,6 +434,10 @@ function page_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         callback_event('page_saved', '', 0, $name, $newname);
     }
 

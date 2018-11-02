@@ -998,7 +998,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         // Safari workaround?
         var $inputs = $('input[type="file"]:not([disabled])', $this);
         $inputs.each(function(i, input) {
-            if (input.files.length > 0) return 
+            if (input.files.length > 0) return
             $(input).prop('disabled', true)
         })
 
@@ -1724,7 +1724,7 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span>');
+        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
 
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />')
@@ -1959,7 +1959,12 @@ jQuery.fn.txpUploadPreview = function(template) {
                 }
             }
 
-            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, status: status, title: this.name.replace(/\.[^\.]*$/, '')}))
+            preview = textpattern.mustache(template, $.extend(this, {
+                hash: hash,
+                preview: preview,
+                status: status,
+                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
+            }))
             form.append(preview)
         });
     }).change()
@@ -2300,19 +2305,16 @@ textpattern.Route.add('section', function ()
 
     $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
         section_theme_show($(this).val());
-    });
-
-    // Invoke the handler now to set things on initial page load.
-    $('#section_skin').change();
-
-    $('main').on('change', 'select[name=edit_method]', function() {
+    }).on('change', 'select[name=edit_method]', function() {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
         } else if ($(this).val() === 'changepagestyledev') {
             $('#multiedit_dev_skin').change();
         }
+    })
 
-    });
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
 });
 
 // Plugin help panel.

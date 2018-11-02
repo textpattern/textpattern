@@ -185,6 +185,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     // Add private preferences.
     $prefs = array_merge(get_prefs($txp_user), $prefs);
+    plug_privs();
     extract($prefs);
 
     $dbversion = $version;

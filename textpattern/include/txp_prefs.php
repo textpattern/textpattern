@@ -140,6 +140,7 @@ function prefs_save()
 
     update_lastmod('preferences_saved');
     $prefs = get_prefs();
+    plug_privs();
 
     prefs_list(gTxt('preferences_saved'));
 }
