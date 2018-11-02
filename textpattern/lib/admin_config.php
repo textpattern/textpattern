@@ -87,8 +87,8 @@ $txp_permissions = array(
     'prefs.publish'              => '1,2',
     'prefs.feeds'                => '1,2',
     'prefs.custom'               => '1,2',
-    'prefs.comments'             => '1,2',
-    'prefs.advanced_options'     => '1,2',
+//    'prefs.comments'             => '1,2',
+//    'prefs.advanced_options'     => '1,2',
     'section'                    => '1,2,      6',
     'section.edit'               => '1,2,      6',
     'skin'                       => '1,2,      6',
@@ -115,4 +115,20 @@ $txp_groups = array(
     5 => 'freelancer',
     6 => 'designer',
     0 => 'privs_none',
+);
+
+/**
+ * List of pluggable options.
+ *
+ * @global array $txp_options
+ */
+
+$txp_options = array(
+    'advanced_options' => '1,2',
+    'use_comments' => array(
+        'prefs.comments' => '1,2'
+    ),
+    'enable_dev_preview' => array(
+        'skin.preview' => '1,2,      6'
+    )
 );
