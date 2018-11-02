@@ -96,6 +96,8 @@ class classic_theme extends \Textpattern\Admin\Theme
 
     function footer()
     {
+        global $txp_user;
+
         $out[] = href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com', array(
                 'class'  => 'mothership',
                 'rel'    => 'external',

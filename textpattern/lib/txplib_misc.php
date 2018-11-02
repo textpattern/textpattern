@@ -588,7 +588,7 @@ function load_lang_event($event, $lang = LANG)
  *
  * Will not let you override existing privs.
  *
- * @param   string $res  The resource
+ * @param   mixed  $res  The resource
  * @param   string $perm List of user-groups, e.g. '1,2,3'
  * @package User
  * @example
@@ -599,9 +599,15 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list_unique($perm));
-        $txp_permissions[$res] = $perm;
+    is_array($res) or $res = array($res => $perm);
+
+    foreach($res as $priv => $group) {
+        if ($group === null) {
+            unset($txp_permissions[$priv]);
+        } elseif (!isset($txp_permissions[$priv])) {
+            $group = join(',', do_list_unique($group));
+            $txp_permissions[$priv] = $group;
+        }
     }
 }
 
@@ -609,7 +615,7 @@ function add_privs($res, $perm = '1')
  * Checks if a user has privileges to the given resource.
  *
  * @param   string $res  The resource
- * @param   string $user The user. If no user name is supplied, assume the current logged in user
+ * @param   mixed  $user The user. If no user name is supplied, assume the current logged in user
  * @return  bool
  * @package User
  * @example
@@ -625,6 +631,11 @@ function has_privs($res, $user = '')
     global $txp_user, $txp_permissions;
     static $privs;
 
+    if (is_array($user)) {
+        $level = isset($user['privs']) ? $user['privs'] : null;
+        $user = isset($user['name']) ? $user['name'] : '';
+    }
+
     $user = (string) $user;
 
     if ($user === '') {
@@ -633,7 +644,9 @@ function has_privs($res, $user = '')
 
     if ($user !== '') {
         if (!isset($privs[$user])) {
-            $privs[$user] = safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
+            $privs[$user] = isset($level) ?
+                $level :
+                safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
         if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
@@ -663,6 +676,32 @@ function require_privs($res = null, $user = '')
         echo graf(gTxt('restricted_area'), array('class' => 'restricted-area'));
         end_page();
         exit;
+    }
+}
+
+/**
+ * Adds dynamic priviledges.
+ *
+ * @param   array $pluggable The array, see global $txp_options
+ * @since   4.7.2
+ * @package User
+ */
+
+function plug_privs($pluggable = null)
+{
+    global $txp_options;
+
+    is_array($pluggable) or $pluggable = $txp_options;
+
+    foreach($pluggable as $pref => $pane) {
+        if (get_pref($pref)) {
+            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+        } else {
+            add_privs(is_array($pane) ?
+                array_fill_keys(array_keys($pane), null) :
+                array('prefs.'.$pref => null)
+            );
+        }
     }
 }
 
@@ -2523,15 +2562,21 @@ function is_blacklisted($ip, $checks = '')
 
 function is_logged_in($user = '')
 {
+    static $users = array();
+
     $name = substr(cs('txp_login_public'), 10);
 
-    if (!strlen($name) or strlen($user) and $user !== $name) {
+    if (!strlen($name) || strlen($user) && $user !== $name) {
         return false;
     }
 
-    $rs = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    if (!isset($users[$name])) {
+        $users[$name] = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    }
 
-    if ($rs and substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
+    $rs = $users[$name];
+
+    if ($rs && substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
         unset($rs['nonce']);
 
         return $rs;
@@ -4723,7 +4768,9 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
+    $user = implode(',', (array) quote_list($user));
+
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name IN (".$user.") ORDER BY FIELD(user_name, ".$user.")");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -5444,19 +5491,19 @@ function pagelinkurl($parts, $inherit = array())
     global $permlink_mode, $prefs;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
+    // Unset extra stuff to link to an article.
+    if (!empty($parts['id'])) {
+        foreach ($internals as $key) {
+            unset($parts[$key]);
+        }
+    }
+
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
         && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
-    }
-
-    // Unset extra stuff to link to an article.
-    if (!empty($keys['id'])) {
-        foreach ($internals as $key) {
-            unset($keys[$key]);
-        }
     }
 
     if (isset($keys['s']) && $keys['s'] == 'default') {
@@ -5493,6 +5540,12 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
+        } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
+            if (!empty($keys['context'])) {
+                $keys['context'] = gTxt($keys['context'].'_context');
+            }
+            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            unset($keys['month']);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
@@ -5523,12 +5576,16 @@ function pagelinkurl($parts, $inherit = array())
 
 function permlinkurl_id($id)
 {
-    global $permlinks;
+    global $permlinks, $thisarticle;
 
     $id = (int) $id;
 
     if (isset($permlinks[$id])) {
         return $permlinks[$id];
+    }
+
+    if (isset($thisarticle['thisid']) && $thisarticle['thisid'] == $id) {
+        return permlinkurl($thisarticle);
     }
 
     $rs = safe_row(
@@ -5709,9 +5766,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
 
 function in_list($val, $list, $delim = ',')
 {
-    $args = do_list($list, $delim);
-
-    return in_array((string) $val, $args, true);
+    return in_array((string) $val, do_list($list, $delim), true);
 }
 
 /**
@@ -6003,6 +6058,31 @@ function getMetaDescription($type = null)
     }
 
     return $content;
+}
+
+/**
+ * Get some URL data.
+ * @param mixed $context The data to retrieve
+ * @param array $internals Data restrictions
+ * @return array The retrieved data
+ */
+
+function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
+    global $pretext;
+
+    if (!is_array($context)) {
+        $context = $context === true ? $internals : do_list_unique($context);
+    }
+
+    $out = array();
+
+    foreach ($context as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? get_author_name($pretext[$q]) : $pretext[$q];
+        }
+    }
+
+    return $out;
 }
 
 /**
@@ -6985,6 +7065,6 @@ function real_max_upload_size($user_max, $php = true)
         }
     }
 
-    // 2^53 - 1 is max safe Javascript integer, let 8192Tb
+    // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }
