@@ -35,7 +35,7 @@ Changes in 4.7.2
   <txp:page_url /> and <txp:permlink /> tags.
 * Added: 'add' and 'separator' attributes to <txp:variable /> tag.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
-* jQuery File Upload 9.25.1.
+* jQuery File Upload 9.26.0.
 
 Changes in 4.7.1
 
