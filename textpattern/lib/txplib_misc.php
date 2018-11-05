@@ -2950,15 +2950,9 @@ function get_form_types()
     static $types = null;
 
     if ($types === null) {
-        $types = array(
-            'article'  => gTxt('article'),
-            'misc'     => gTxt('misc'),
-            'comment'  => gTxt('comment'),
-            'category' => gTxt('category'),
-            'file'     => gTxt('file'),
-            'link'     => gTxt('link'),
-            'section'  => gTxt('section'),
-        );
+        foreach (Txp::get('Textpattern\Skin\Form')->getTypes() as $type) {
+            $types[$type] = gTxt($type);
+        }
 
         callback_event_ref('form.types', 'types', 0, $types);
     }
