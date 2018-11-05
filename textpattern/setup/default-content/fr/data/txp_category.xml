@@ -2,24 +2,24 @@
 <resources>
     <category>
         <item>
-            <name>everything-is-going-to-be-alright</name>
+            <name>tout-ira-bien</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Kaikki tulee olemaan hyvin</title>
+            <title>Tout ira bien</title>
             <description/>
         </item>
         <item>
-            <name>hope-for-the-future</name>
+            <name>espoir-pour-le-futur</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Toivoa tulevaan</title>
+            <title>Espoir pour le futur</title>
             <description/>
         </item>
         <item>
-            <name>meaningful-labor</name>
+            <name>travail-significatif</name>
             <type>article</type>
             <parent>root</parent>
-            <title>Merkityksellistä työtä</title>
+            <title>Travail significatif</title>
             <description/>
         </item>
         <item>

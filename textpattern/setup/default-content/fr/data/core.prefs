@@ -7,14 +7,14 @@
     "position": "0"
   },
   "custom_1_set": {
-    "val": "custom1",
+    "val": "personnalisé1",
     "type": "0",
     "event": "custom",
     "html": "custom_set",
     "position": "1"
   },
   "custom_2_set": {
-    "val": "custom2",
+    "val": "personnalisé2",
     "type": "0",
     "event": "custom",
     "html": "custom_set",

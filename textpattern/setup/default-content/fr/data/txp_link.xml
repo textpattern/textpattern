@@ -5,7 +5,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>https://textpattern.com/</url>
-            <linkname>Textpatternin sivusto</linkname>
+            <linkname>Site officiel de Textpattern</linkname>
             <linksort>10</linksort>
             <description/>
             <author/>
@@ -14,7 +14,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>https://docs.textpattern.io/</url>
-            <linkname>Textpatternin käyttöohjeet</linkname>
+            <linkname>Documentation utilisateur de Textpattern</linkname>
             <linksort>20</linksort>
             <description/>
             <author/>
@@ -23,7 +23,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>https://textpattern.com/github</url>
-            <linkname>Textpattern GitHubissa</linkname>
+            <linkname>Textpattern sur GitHub</linkname>
             <linksort>30</linksort>
             <description/>
             <author/>
@@ -32,7 +32,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>https://textpattern.com/@textpattern</url>
-            <linkname>Textpattern Twitterissä</linkname>
+            <linkname>Textpattern sur Twitter</linkname>
             <linksort>40</linksort>
             <description/>
             <author/>
