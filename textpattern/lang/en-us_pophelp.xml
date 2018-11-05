@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<help lang="en-GB">
+<help lang="en-US">
     <group id="admin" title="Users panel">
         <item id="about_privileges" title="About roles"><![CDATA[
 <h2>About roles</h2>
@@ -107,8 +107,8 @@
 <h2>Excerpt</h2>
 <p>Article excerpts are optional. Excerpts could be used as a short summary of the article that is displayed as part of a table of contents, used in place of the full article body in the site’s RSS/Atom feeds, or a number of other uses.</p>
         ]]></item>
-        <item id="expire_date" title="Expire date"><![CDATA[
-<h2>Expire date</h2>
+        <item id="expire_date" title="Expiration date"><![CDATA[
+<h2>Expiration date</h2>
 <p>The time an article is labelled as expired. The time is optional and can be set to an arbitrary time in the past or future.</p>
 <p>The boxes correspond to the following information:</p>
 <ul>
@@ -169,7 +169,7 @@
     <group id="category" title="Categories panel">
         <item id="article_category" title="Articles"><![CDATA[
 <h2>Articles</h2>
-<p>Unlike sections, which define the navigational structure of a site, article categories allow organisation of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
+<p>Unlike sections, which define the navigational structure of a site, article categories allow organization of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
 <p>For example, likely article categories on a site about food might be:</p>
 <ul>
     <li>raw ingredients</li>
@@ -451,7 +451,7 @@
 <h2>Install Textpack</h2>
 <p>Paste additional language strings for your site into this box and select ‘Upload’ to install them.</p>
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
-<p>Translators may then translate these packs as necessary and redistribute the localised content to the community.</p>
+<p>Translators may then translate these packs as necessary and redistribute the localized content to the community.</p>
         ]]></item>
     </group>
 
@@ -701,7 +701,7 @@
         ]]></item>
         <item id="img_dir" title="Image directory"><![CDATA[
 <h2>Image directory</h2>
-<p>If you’d like to customise the name of your images directory, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>If you’d like to customize the name of your images directory, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>images</code>.</p>
         ]]></item>
@@ -755,7 +755,7 @@
         <item id="permlink_mode" title="Article URL pattern"><![CDATA[
 <h2>Article URL pattern</h2>
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
-<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
+<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>https://example.com/index.php?id=123</code></pre>
 <p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
@@ -834,7 +834,7 @@
         ]]></item>
         <item id="skin_dir" title="Theme directory"><![CDATA[
 <h2>Theme directory</h2>
-<p>If you’d like to customise the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>If you’d like to customize the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>themes</code>.</p>
         ]]></item>
@@ -854,7 +854,7 @@
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
-<h2>Syndicate article excerpt <strong>only?</strong></h2>
+<h2>Syndicate article excerpt <strong>only</strong>?</h2>
 <p>If this is set to ‘No’, feed items will contain the full article bodies.</p>
 <p>If this is set to ‘Yes’, feed items will contain the article excerpt instead of the article body where it is available.</p>
         ]]></item>
@@ -874,7 +874,7 @@
         ]]></item>
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
 <h2>PHP functions enabled in txp:evaluate</h2>
-<p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified within this list can be utilised in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;</code> tag:</p>
+<p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified within this list can be utilized in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;</code> tag:</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
 <p><code>function</code> should return a scalar value (<strong>not</strong> an array/object).</p>
         ]]></item>
