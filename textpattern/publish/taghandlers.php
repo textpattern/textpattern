@@ -5199,8 +5199,11 @@ function txp_eval($atts, $thing = null)
             $_functions = array();
 
             foreach ($functions as $function) {
-                list($key, $val) = explode('=', $function, 2) + array(null, $function);
-                $_functions[trim($key)] = trim($val);
+                list($key, $val) = do_list($function, '=') + array(null, $function);
+
+                if (function_exists($val)) {
+                    $_functions[$key] = $val;
+                }
             }
 
             if ($_functions) {
