@@ -2862,6 +2862,147 @@ function event_category_popup($name, $cat = '', $id = '', $atts = array())
 }
 
 /**
+ * Creates a form template.
+ *
+ * On a successful run, will trigger a 'form.create > done' callback event.
+ *
+ * @param   string $name The name
+ * @param   string $type The type
+ * @param   string $Form The template
+ * @return  bool FALSE on error
+ * @since   4.6.0
+ * @package Template
+ */
+
+function create_form($name, $type, $Form)
+{
+    $types = get_form_types();
+
+    if (form_exists($name) || !is_valid_form($name) || !in_array($type, array_keys($types))) {
+        return false;
+    }
+
+    if (
+        safe_insert(
+            'txp_form',
+            "name = '".doSlash($name)."',
+            type = '".doSlash($type)."',
+            Form = '".doSlash($Form)."'"
+        ) === false
+    ) {
+        return false;
+    }
+
+    callback_event('form.create', 'done', 0, compact('name', 'type', 'Form'));
+
+    return true;
+}
+
+/**
+ * Checks if a form template exists.
+ *
+ * @param   string $name The form
+ * @return  bool TRUE if the form exists
+ * @since   4.6.0
+ * @package Template
+ */
+
+function form_exists($name)
+{
+    return (bool) safe_row("name", 'txp_form', "name = '".doSlash($name)."'");
+}
+
+/**
+ * Validates a string as a form template name.
+ *
+ * @param   string $name The form name
+ * @return  bool TRUE if the string validates
+ * @since   4.6.0
+ * @package Template
+ */
+
+function is_valid_form($name)
+{
+    if (function_exists('mb_strlen')) {
+        $length = mb_strlen($name, '8bit');
+    } else {
+        $length = strlen($name);
+    }
+
+    return $name && !preg_match('/^\s|[<>&"\']|\s$/u', $name) && $length <= 64;
+}
+
+/**
+ * Gets a list of form types.
+ *
+ * The list form types can be extended with a 'form.types > types'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$types'. The third parameter contains a reference to an
+ * array of 'type => label' pairs.
+ *
+ * @return  array An array of form types
+ * @since   4.6.0
+ * @package Template
+ */
+
+function get_form_types()
+{
+    static $types = null;
+
+    if ($types === null) {
+        $types = array(
+            'article'  => gTxt('article'),
+            'misc'     => gTxt('misc'),
+            'comment'  => gTxt('comment'),
+            'category' => gTxt('category'),
+            'file'     => gTxt('file'),
+            'link'     => gTxt('link'),
+            'section'  => gTxt('section'),
+        );
+
+        callback_event_ref('form.types', 'types', 0, $types);
+    }
+
+    return $types;
+}
+
+/**
+ * Gets a list of essential form templates.
+ *
+ * These forms can not be deleted or renamed. The array keys hold
+ * the form names, the array values their group.
+ *
+ * The list forms can be extended with a 'form.essential > forms'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$essential'. The third parameter contains a reference to an
+ * array of forms.
+ *
+ * @return  array An array of form names
+ * @since   4.6.0
+ * @package Template
+ */
+
+function get_essential_forms()
+{
+    static $essential = null;
+
+    if ($essential === null) {
+        $essential = array(
+            'comments'         => 'comment',
+            'comments_display' => 'comment',
+            'comment_form'     => 'comment',
+            'default'          => 'article',
+            'plainlinks'       => 'link',
+            'files'            => 'file',
+        );
+
+        callback_event_ref('form.essential', 'forms', 0, $essential);
+    }
+
+    return $essential;
+}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
