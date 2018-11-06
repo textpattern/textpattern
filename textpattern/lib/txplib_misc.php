@@ -2665,7 +2665,7 @@ function splat($text)
     if ($production_status !== 'live') {
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
             $trace->stop('[/attribute]');
 
             if (isset($global_atts[$sha][$p])) {
@@ -2674,7 +2674,7 @@ function splat($text)
         }
     } else {
         foreach ($parse[$sha] as $p) {
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
 
             if (isset($global_atts[$sha][$p])) {
                 $txp_atts[$p] = $atts[$p];

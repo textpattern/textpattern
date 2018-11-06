@@ -333,12 +333,12 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true)
+function parse($thing, $condition = true, $not = true)
 {
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $pattern, $short_tags = null;
 
-    if (!empty($txp_atts['not'])) {
+    if ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
