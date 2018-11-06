@@ -150,7 +150,7 @@
 <p>Un <strong>brouillon</strong> d’article est considéré comme un travail en cours et n’est pas visible à l’extérieur de la zone d’administration de Textpattern (c'est-à-dire non visible sur le site public de Textpattern et non syndiqué dans les flux).</p>
 <p>Un article <strong>masqué</strong> n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
 <p>Un article <strong>à valider</strong> est considéré comme prêt pour la publication et en attente d’approbation mais il n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
-<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c'est-à-dire visible sur le site public de Textpattern, syndiqué dans les fluxs si la préférence le permet). Si un article est publié et dispose d’une date d’expiration, le statut demeure à «publié» après que cette date soit atteinte tandis que l’article apparaît sur le site public de Textpattern si l’option «Publier les articles qui ont expiré ?» le permet.
+<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c'est-à-dire visible sur le site public de Textpattern, syndiqué dans les flux si la préférence le permet). Si un article est publié et dispose d’une date d’expiration, le statut demeure à «publié» après que cette date soit atteinte tandis que l’article apparaît sur le site public de Textpattern si l’option «Publier les articles qui ont expiré ?» le permet.
 </p>
 <p>Un article <strong>persistant</strong> est semblable à un article <strong>publié</strong> dans la mesure où il peut être visible hors de l’espace d’administration de Textpattern mais n’apparaîtra <strong>pas</strong> dans la liste des articles tant que les balises respectives <code>articles</code> ou <code>article_custom</code> n'incluent un attribut <code>status</code> avec pour valeur <code>sticky</code>.</p>
         ]]></item>
@@ -539,12 +539,18 @@
 <p>Si réglé sur «Oui», ajoutera un attribut supplémentaire aux liens présents dans les commentaires. Il s’agit d’une mesure pour dissuader les spammeurs de commentaire et a été initiée par de nombreux moteurs de recherches et des développeurs de logiciels. Vous pourrez en savoir plus en lisant cette <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">annonce de Google<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
 <p><strong>Remarque :</strong> ce paramètre n’affecte pas les fonctionnalités de votre site. Cela peut empêcher ou diminuer l’influence de vos commentaires lors de l’indexation des sites qui y sont mentionnés par certains moteurs de recherches.</p>
         ]]></item>
-        <item id="comments_are_ol" title="Afficher les commentaires dans une liste ordonnée ?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[
-<h2>Invite à commenter par défaut</h2>
-<p>Si vous permettez aux visiteurs de commenter, c’est le texte d’invitation affiché par défaut. Par exemple :</p>
+        <item id="comments_are_ol" title="Afficher les commentaires dans une liste ordonnée ?"><![CDATA[<h2>Afficher les commentaires dans une liste ordonnée ?</h2>
+<p>Détermine si les commentaires d’articles seront contenus dans la balise HTML <code>&lt;ol&gt;</code> et les commentaires individuels dans une balise <code>&lt;li&gt;</code> (ce qui affiche les commentaires dans une liste ordonnée), ou si les commentaires individuels seront plutôt contenus dans une balise <code>&lt;div&gt;</code>.</p>
+<p>Qu'importe ce choix, vous pourrez toujours choisir de changer les balises utilisées en modifiant la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> présent dans le module <code>comments_display</code>.</p>]]></item>
+        <item id="comments_auto_append" title="Ajout automatique des commentaires après un article ?"><![CDATA[<h2>Ajout automatique des commentaires après un article ?</h2>
+<p>Ce paramètre détermine si les commentaires et le formulaire associé doivent suivre tous les articles individuels (par ajout automatique du contenu du module <code>comments_display</code>).</p>
+<p>La plupart du temps, vous choisirez de régler la valeur sur «Non» afin d’obtenir plus de flexibilité avec le positionnement de vos commentaires dans l’apparence de votre site. Vous devrez ajouter la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> manuellement dans chaque modèle d’articles à l’endroit désiré.</p>
+<p>Si vous constatez un double affichage des commentaires dans un article, il est probable que la balise <code>&lt;txp:comments /&gt;</code> soit présente dans votre modèle et que le paramètre «Ajout automatique des commentaires après un article ?» soit réglé sur «Oui» également.</p>]]></item>
+        <item id="comments_dateformat" title="Format de la date des commentaires"><![CDATA[<h2>Format de la date des commentaires</h2>
+<p>Contrôle la présentation de la date des commentaires sur votre site public.</p>]]></item>
+        <item id="comments_default_invite" title="Phrase – par défaut – d’invitation à poster"><![CDATA[
+<h2>Phrase – par défaut – d’invitation à poster</h2>
+<p>Si vous autorisez vos visiteurs à commenter, c’est le texte d’invitation affiché par défaut. Par exemple :</p>
 <ul>
    <li>Commentaires</li>
    <li>Ajoutez votre commentaire</li>
@@ -635,18 +641,44 @@
 <p>Sélectionnez le doctype HTML que vous souhaitez utiliser (HTML5 ou XHTML). Cela affecte les champs de saisies des commentaires, le rendu de Textile pour <code>&lt;abbr&gt;</code> ou <code>&lt;acronym&gt;</code> et les balises <code>&lt;link&gt;</code> générées par <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
         <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Activer le support des balises réduites ?"><![CDATA[<h2>Activer le support des balises réduites ?</h2>
+<p>Les balises spécifiques de Textpattern sont de la forme <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Il est toutefois possible d’en réduire la saisie par l’emploi d’une notation courte où les préfixes <code>txp:</code> peuvent être omis en respectant une convention très simple. Voici des exemples pour démontrer le concept :</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> devient : <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> devient : <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> devient : <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> devient : <code>&lt;smd::if /&gt;</code></li> 
+    <li><code>&lt;txp:smd_if&gt;...<15>...&lt;/txp:smd_if&gt;</code> devient : <code>&lt;smd::if&gt;...&lt;smd::else /&gt;...&lt;/smd::if&gt;</code>(notez que le préfixe du plugin peut être utilisé pour la balise <code>else</code>).</li>
+</ul>
+<p>Si une balise contient un trait souligné (underscore) et que vous adoptez les balises réduites, le concept devient alors :</p>
+<ol>
+    <li>Supprimez le préfixe <code>txp:</code></li>
+    <li>Remplacez la première occurrence de l’underscore par <code>::</code></li>
+</ol>
+<p>Remarque : l’adoption de cette préférence n’affecte pas l’usage des codes réduits <code>&lt;txp:output_form /&gt;</code> pour restituer le contenu d’un module. Vous pouvez continuez à utiliser <code>&lt;txp::shortcode /&gt;</code> ce qui sera interprété <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>]]></item>
+        <item id="enable_xmlrpc_server" title="Activer le serveur XML-RPC ?"><![CDATA[<h2>Activer le serveur XML-RPC ?</h2>
+<p>Si vous souhaitez utiliser <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> afin de contrôler Textpattern par un processus distant (ex. via une application de bureau ou mobile), vous devez activer le serveur XML-RPC en réglant ce paramètre sur «Oui».</p>]]></item>
+        <item id="expire_logs_after" title="Le journal d’activités (log) expire après ?"><![CDATA[<h2>Le journal d’activités (log) expire après ?</h2>
+<p>Lorsque la journalisation des visites de Textpattern est activée, vous pouvez choisir le délai (en jours) de conservation des traces des accès. Le chiffre «7» signifie que les logs seront disponibles pendant une semaine.</p>
+<p><strong>Remarque :</strong> les logs sont réduits lorsque vous consultez la page «Activité». Sinon, leur taille continuera de croître.</p>]]></item>
+        <item id="file_base_path" title="Chemin du répertoire des fichiers téléversés"><![CDATA[<h2>Chemin du répertoire des fichiers téléversés</h2>
+<p>Renseigne le <strong>chemin absolu</strong> au répertoire de conservation des fichiers téléversés. PHP réclame un accès en écriture à ce dossier.</p>]]></item>
+        <item id="file_max_upload_size" title="Taille maximale d’un fichier envoyé sur le serveur (octets)"><![CDATA[<h2>Taille maximale d’un fichier téléversé (en octets)</h2>
+<p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s'y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>  ]]></item>
+        <item id="gmtoffset" title="Fuseau horaire"><![CDATA[<h2>Fuseau horaire</h2>
+<p>Afin dafficher les dates selon votre situation géographique, veuillez sélectionner votre fuseau horaire.</p>]]></item>
+        <item id="img_dir" title="Répertoire des images"><![CDATA[<h2>Répertoire des images</h2>
+<p>Si vous souhaitez personnaliser le répertoire des images, vous pouvez le faire ici. Vous devrez d’abord créer ce dossier à la racine de l’installation de Textpattern ; vous devrez également vous assurer que ce dossier est accessible en écriture.</p>
+<p>Ce chemin est toujours un <strong>chemin relatif</strong> (au répertoire racine de votre installation de Textpattern) </p>
+<p>Par défaut c’est : <code>images</code>.</p>]]></item>
+        <item id="include_email_atom" title="Inclure l’adresse e-mail dans les flux Atom ?"><![CDATA[<h2>Inclure l’adresse e-mail dans les flux Atom ?</h2>
+<p>Permet d’inclure l’adresse e-mail de l’auteur (selon celle renseignée avec le compte utilisateur) d’un article dans la partie <code>author</code> des flux de syndication Atom.</p>]]></item>
+        <item id="is_dst" title="Mises à jour des heures d’été utilisées ?"><![CDATA[<h2>Mises à jour des heures d’été utilisées ?</h2>
+<p>Si l’heure d’été est effectivement activée pour votre fuseau horaire DST (Daylight Saving Time).</p>]]></item>
+        <item id="logging" title="Enregistrements dans le journal d’activités"><![CDATA[]]></item>
+        <item id="max_url_len" title="Longueur maximale d’une URL (en caractères)"><![CDATA[<h2>Longueur maximale d’une URL (en caractères)</h2>
+<p>Permet de prévenir le fonctionnement des URL plus longues que la valeur spécifiée. Utile pour réduire les dommages et accroître la sécurité du site.</p>]]></item>
+        <item id="module_pophelp" title="Afficher dans l’administration les liens de l’aide en ligne"><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
