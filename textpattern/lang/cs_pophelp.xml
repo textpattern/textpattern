@@ -115,7 +115,7 @@
 <p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>        ]]></item>
         <item id="override_form" title="Přebít formu"><![CDATA[
 <h2>Přebít formu</h2>
-<p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>        ]]></item>
+<p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>        ]]></item>
         <item id="publish_date"><![CDATA[
 <h2>Datum vydání</h2>
 <p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti. </p>
@@ -177,7 +177,7 @@
         <item id="link_category" title="Odkazy"><![CDATA[
 <h2>Odkazy</h2>
 <p>Volitelná možnost. Kategorie odkazů jsou užitečné pro členění odkazů do skupin, např. „Přátelé”, „Římané”, „Krajané”, atd.</p>
-<p>Vybraný seznam odkazů lze zobrazit pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře odkaz v novém okně)</span></a> např. takto:</p>
+<p>Vybraný seznam odkazů lze zobrazit pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře odkaz v novém okně)</span></a> např. takto:</p>
 <code>&lt;txp:linklist category="pratele" /&gt;</code>        ]]></item>
     </group>
 
