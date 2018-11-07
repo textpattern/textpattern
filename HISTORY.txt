@@ -179,10 +179,10 @@ Changes in 4.7.0
 * Changed: Pagination and search added to Plugins panel.
 * Changed: Plugin preview page syntax highlighting and layout improvements.
   Also show Textpack string additions preview (if applicable).
-* Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when viewing
-  a new, unsaved Page/Form/Style (thanks, adi).
-* Changed: Categories can no longer reassign the parent of a child element to its
-  children. Avoids infinite tree loops.
+* Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when
+  viewing a new, unsaved Page/Form/Style (thanks, adi).
+* Changed: Categories can no longer reassign the parent of a child element to
+  its children. Avoids infinite tree loops.
 * Changed: Article preview includes debug info.
 * Changed: 'wraptag' attribute can prepend/append content using special '<+>'
   syntax.
@@ -439,7 +439,8 @@ Changes in 4.5.0
 * Minimum system requirement: PHP 5.2.
 * Modern default site theme (responsive, HTML5, CSS3).
 * Choice of HTML5 or XHTML document type as a preference.
-* Textile 2.4.1. See full changelog at https://textpattern.com/textile-changelog.
+* Textile 2.4.1. See full changelog at
+  https://textpattern.com/textile-changelog.
 * User interface realignment and clean-up.
 * Additional admin theme (Hive).
 * Beautified setup process.
@@ -691,8 +692,8 @@ Changes in 4.0.7
 * Parser: full nesting support, allowing unlimited nesting of identical tags.
 * Parser: attribute values are parsed when enclosed in single quotes.
 * Parser: unquoted attribute values are deprecated and will result in warnings
-  when site status is not set to 'live'. Fix your templates and use double quotes
-  to delimit attribute values.
+  when site status is not set to 'live'. Fix your templates and use double
+  quotes to delimit attribute values.
 * Feature: Expiry time for articles, accompanied by related tags.
 * Speed: various components of the parsing process have been optimized, which
   compensates the impact of increased parser complexity, resulting in slightly
