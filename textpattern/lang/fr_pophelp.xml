@@ -675,20 +675,75 @@
 <p>Permet d’inclure l’adresse e-mail de l’auteur (selon celle renseignée avec le compte utilisateur) d’un article dans la partie <code>author</code> des flux de syndication Atom.</p>]]></item>
         <item id="is_dst" title="Mises à jour des heures d’été utilisées ?"><![CDATA[<h2>Mises à jour des heures d’été utilisées ?</h2>
 <p>Si l’heure d’été est effectivement activée pour votre fuseau horaire DST (Daylight Saving Time).</p>]]></item>
-        <item id="logging" title="Enregistrements dans le journal d’activités"><![CDATA[]]></item>
+        <item id="logging" title="Enregistrements dans le journal d’activités"><![CDATA[<h2>Enregistrements dans le journal d’activités</h2>
+<p>Vous pouvez choisir le niveau de détail sur les visites des Internautes obtenues par Textpattern</p>
+<ul>
+   <li><strong>Tous :</strong> Textpattern dénombrera toutes les pages vues sur votre site</li>
+   <li><strong>Référents seuls :</strong> Textpattern dénombrera uniquement les visiteurs en provenance d’autres sites</li>
+   <li><strong>Aucun :</strong> Textpattern n’enregistrera aucune activité pour toutes pages vues</li>
+</ul>
+<p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>  
+<p>Il est vivement recommandé de laisser ce paramètre sur sa valeur par défaut, à savoir «Aucun», à moins que les besoins de ces informations ne soient absolument nécessaires et, en outre, d’informer explicitement de l’usage que vous comptez en faire.</p>]]></item>
         <item id="max_url_len" title="Longueur maximale d’une URL (en caractères)"><![CDATA[<h2>Longueur maximale d’une URL (en caractères)</h2>
 <p>Permet de prévenir le fonctionnement des URL plus longues que la valeur spécifiée. Utile pour réduire les dommages et accroître la sécurité du site.</p>]]></item>
-        <item id="module_pophelp" title="Afficher dans l’administration les liens de l’aide en ligne"><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title="Afficher dans l’administration les liens de l’aide en ligne"><![CDATA[<h2>Afficher dans l’administration les liens de l’aide en ligne</h2>
+<p>Si vous préférez cacher les liens de l’aide en ligne (les fenêtre modales d’aide) dans l’interface d’administration de Textpattern, choisissez «Aucun».</p>]]></item>
+        <item id="never_display_email" title="Toujours masquer les adresses e-mail des commentaires ?"><![CDATA[<h2>Toujours masquer les adresses e-mail des commentaires ?</h2>
+<p>Ce paramètre contrôle l’affichage publique des adresses e-mail des commentateurs.</p>
+<p>Il est vivement recommandé que ces adresses e-mail ne soient pas affichées publiquement, eu égard à vos visiteurs, mais certaines situations peuvent, cependant, l’exiger.</p>]]></item>
+        <item id="override_emailcharset" title="Transformer les e-mails en Latin 1 (ISO-8859-1) ?"><![CDATA[<h2>Transformer les e-mails en Latin 1 (ISO-8859-1) ?</h2>
+<p>Textpattern utilise l’encodage UTF-8  par défaut dans la mesure du possible, y compris pour les e-mails sortants. Toutefois, certains anciens clients de messagerie électronique (y compris certaines versions de Microsoft Outlook) ne dispose pas d’un bon support UTF-8. Si vous obtenez des caractères inintelligibles dans vos messages, ce paramètre permettra d’utiliser l’encodage ISO-8859-1.</p>
+<p><strong>Remarque :</strong> si vous utilisez une langue dont les caractères ne peuvent être représentés en ISO-8859-1, ce paramètre ne vous aidera malheureusement pas. Vous devrez faire usage d’un client de messagerie compatible UTF-8.</p>]]></item>
+        <item id="permlink_format" title="Permaliens : forme des titres d’URL"><![CDATA[<h2>Permaliens : forme des titres d’URL</h2>
+<p>Détermine la méthode à employer pour la construction et l’association des URL des articles lorsque la forme brute n’est pas en usage.</p>
+<p>Quand un article est publié, son URL est générée à partir de son titre à moins qu’une URL personnalisée ne soit changée dans le champ «Texte de l’URL».</p>
+<p>Par exemple, avec ce titre d’article : <em>Anne et Jean mangent un gâteau</em></p>
+<p>Lorsque l’option de choix d’URL est sélectionné à «Avec traits d’union (titre-comme-cela)», l’URL pour cet article sera alors :</p>
+<pre><code>https://example.com/anne-et-jean-mangent-un-gateau</code></pre>
+<p>Si la même option est sélectionnée à «Casse de chameau (TitreCommeCela)», l’URL pour cet article deviendra alors :</p>
+<pre><code>https://example.com/AnneetJeanmangentungateau</code></pre>]]></item>
+        <item id="permlink_mode" title="Format des URL"><![CDATA[<h2>Format des URL</h2>
+<p>Détermine la méthode avec laquelle les articles individuels sont liés par des URL avec les balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>brute (?=paramètres) est le plus compatible il fonction sans pratiquement aucune configuration particulière mais est pénalisant en terme de lisibilité et d’optimisation à destination des moteurs de recherches (SEO). Avec ce mode, les URL de vos articles ressembleront à :</p>
+<pre><code></code></pre>
+<p>Tous les autres modes requièrent les capacités de réécriture d’URL par le serveur (c-à-d <code>mod_rewrite</code> d’Apache ou les directives de réécriture NGINX dans le bloc <code>server</code>). Si votre serveur ne supporte pas la réécriture des URL, veuillez contacter votre hébergeur pour faire usage du mode brute (?=paramètres) expliqué ci-avant.</p>]]></item>
+        <item id="plugin_cache_dir" title="Chemin du répertoire de cache des plugins"><![CDATA[<h2>Chemin du répertoire de cache des plugins</h2>
+<p>Ce paramètre s’adresse principalement aux développeurs de plugins. Lorsque renseigné, le code source d’un plugin (non encore compilé) placé dans ce dossier sera chargé automatiquement par Textpattern et permet d’en éditer facilement le code et contrôler son fonctionnement sans devoir installer/activer le plugin. <strong>Attention</strong> toutefois avec cette méthode : un plugin défaillant (qui échoue dans sa compilation) brisera l’exécution de Textpattern !</p>
+<p>Il est recommandé de charger les plugins selon la procédure standard depuis la page «Installer un plugin» sur un site en production plutôt que d’utiliser ce répertoire de cache.</p>
+<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p> ]]></item>
+        <item id="production_status" title="Statut de production"><![CDATA[<h2>Statut de production</h2>
+<p>Un site Textpattern fonctionne dans l’un de ces trois modes :</p>
+<ol>
+   <li>En débogage</li>
+   <li>En test</li>
+   <li>En exploitation</li>
+</ol>
+<h3>Mode de débogage</h3>
+<p>Toutes les erreurs PHP signalées sur votre site seront visibles en rapport avec les messages d’erreur du code saisi et des plugins défaillants. En complément, les informations suivantes seront affichées dans le code source de la page HTML :</p>
+<ul>
+   <li>le délai de génération de la page par le serveur (Runtime)</li>
+   <li>le nombre de requêtes MySQL exécutées</li>
+   <li>la consommation approximative de la mémoire</li>
+   <li>toutes les balises Textpattern associées à la génération de la page (connu également sous la désignation de «tag trace»)</li>
+</ul>
+<h3>Le mode de test</h3>
+<p>Toutes les erreurs PHP signalées sur votre site seront visibles en rapport avec les messages d’erreur du code saisi et des plugins défaillants. En complément, les informations suivantes seront affichées dans le code source de la page HTML :</p>
+<ul>
+   <li>le délai de génération de la page par le serveur (Runtime)</li>
+   <li>le nombre de requêtes MySQL exécutées</li>
+   <li>la consommation approximative de la mémoire</li>
+</ul>
+<h3>Le mode de production</h3>
+<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p> ]]></item>
+        <item id="public_theme_name" title="Thème du site public"><![CDATA[<h2>Thème du site public</h2>
+<p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu'une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>]]></item>
+        <item id="publish_expired_articles" title="Publier les articles qui ont expiré ?"><![CDATA[<h2>Publier les articles qui ont expiré ?<0>
+<p>Si renseigné sur «Oui», les articles expirés continueront à s’afficher sur le site public après leur date d’expiration. Vous pouvez utiliser la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien dans une nouvelle fenêtre)</span></a> pour afficher un contenu alternatif ou une structure de substitution aux articles expirés.</p>
+<p>Si renseigné sur «Non», les articles expirés seront supprimés du site public et toute tentative d’y accéder renverra un statut HTTP «401 Gone» à la place. Le paramètre par défaut est «Non».</p>]]></item>
+        <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[<h2>Envoi des informations de connexion à cette adresse e-mail</h2>
+<p>Renseigne une adresse e-mail utilisée pour origine d’expéditeur «De :» dans les messages d’envoi des informations de connexion aux nouveaux utilisateurs du site.</p>
+<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p> ]]></item>
+        <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
         <item id="site_slogan" title=""><![CDATA[]]></item>

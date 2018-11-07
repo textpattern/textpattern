@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="cs">
-    <group id="admin" title="Panel uživatele">
+    <group id="admin" title="Panel Uživatelé">
         <item id="about_privileges" title="Uživatelské role"><![CDATA[
 <h2>Uživatelské role</h2>
 <h3>Vydavatel</h3>
@@ -97,26 +97,102 @@
 <p>Popis článku je volitelná součást, která může pomoci prohledávačům webových stránek lépe rozpoznávat a třídit obsah.</p>
 <p>Popis článku je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>
 <p> Všimněte si, že popis článku se liší od anotace článku, ačkoli mohou mít podobný, nebo stejný obsah. Popis článku je primárně určen pro použití vyhledávačům a robotům, zatímco anotace článku slouží čtenářům jako stručné shrnutí obsahu článku. </p>        ]]></item>
-        <item id="excerpt" title=""><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title=""><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
-        <item id="publish_date"><![CDATA[]]></item>
-        <item id="status" title=""><![CDATA[]]></item>
-        <item id="title" title=""><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="excerpt" title="Anotace"><![CDATA[
+<h2>Anotace</h2>
+<p>Anotace článku není povinná. Zpravidla jde o krátké shrnutí obsahu článku, které se zobrazuje v seznamu článků, či obsahu serveru, nebo se používá namísto celého těla článku v pramenech RSS a Atom, apod.</p>        ]]></item>
+        <item id="expire_date" title="Datum expirace"><![CDATA[
+<h2>Datum expirace</h2>
+<p>Datum, kdy článku vyprší platnost. Čas je volitelný a lze nastavit na libovolnou dobu v minulosti nebo budoucnosti.</p>
+<p>Políčka jsou určené pro následující informace:</p>
+<ul>
+    <li>Rok / Měsíc / Den</li>
+    <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
+</ul>
+<p>Je-li povolena možnost vydat expirované články, článek zůstává viditelný. V případě, že je možnost zobrazování prošlých článků zakázána, uvidí návštěvníci stránky namísto obsahu článku výpis Chyba HTTP 410.</p>        ]]></item>
+        <item id="keywords" title="Klíčová slova"><![CDATA[
+<h2>Psaní: Klíčová slova</h2>
+<p>Klíčová slova jsou užitečná pro určení vztahů mezi články, jiných než jen podle příslušnosti k téže kategorii.</p>
+<p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>        ]]></item>
+        <item id="override_form" title="Přebít formu"><![CDATA[
+<h2>Přebít formu</h2>
+<p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>        ]]></item>
+        <item id="publish_date"><![CDATA[
+<h2>Datum vydání</h2>
+<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti. </p>
+<p>Políčka jsou určená pro následující informace:</p>
+<ul>
+    <li>Rok / Měsíc / Den</li>
+    <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
+</ul>
+<p>Článek s datem vydání pozdějším, než je současný okamžik (tedy v budoucnosti), nebude na úvodní straně ani v pramenech RSS/Atom zobrazen až do zadaného okamžiku. </p>        ]]></item>
+        <item id="status" title="Stav"><![CDATA[
+<h2>Stav článku</h2>
+<p>Určuje viditelnost článku.</p>
+<p>Stav článku může být:</p>
+<ul>
+    <li>Návrh</li>
+    <li>Skrytý</li>
+    <li>Čekající</li>
+    <li>Vydáno</li>
+    <li>Trvalý</li>
+</ul>
+<p><strong>Návrh</strong> je považován za koncept a není viditelný mimo administrační část Textpatternu (ani v kanálech RSS pro syndikaci webu).</p>
+<p><strong>Skrytý</strong> článek není viditelný mimo administrační část Textpatternu.</p>
+<p><strong>Čekající</strong> je považován za připravený k publikování a čeká na schválení, není viditelný mimo administrační část Textpatternu.</p>
+<p><strong>Vydáno</strong> - článek je publikován a je viditelný na veřejně dostupné stránce. Je-li článek aktivní a má datum vypršení platnosti, stav <em>vydáno</em> zůstane zachován i po tomto datu, ale mimo administrační oblast bude viditelný, pouze když je v Nastavení povoleno <em>vydat expirované články</em>.</p>
+<p><strong>Trvalý</strong> - článek je podobně jako při stavu <em>Vydáno</em> viditelný i mimo administrační část, ale bude ve výpisu článků zobrazen pouze pokud tag  <code>article</code> nebo <code>article_custom</code> v šabloně stránky obsahuje atribut <code>trvalý</code>.</p>        ]]></item>
+        <item id="title" title="Název"><![CDATA[
+<h2>Název článku</h2>
+<p>Stručný, vystižný název pro tento článek.</p>
+<p>Délka názvu článku je omezena na maximálně 255 znaků.</p>        ]]></item>
+        <item id="url_title" title="Název do odkazů"><![CDATA[
+<h2>Název do URL odkazu</h2>
+<p>Chceš-li do trvalého odkazu na článek vložit vlastní název, zadej jej zde. (Používej malá písmena bez diakritiky, slova odděluj pomlčkami, nebo podtržítky.) Necháš-li pole prázné, název do odkazu bude automaticky odvozen z názvu článku.</p>
+<p>Je to obzvláště užitečné, pokud název článku používá znaky jiné než ASCII.</p>        ]]></item>
     </group>
 
-    <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
-        <item id="category_description" title=""><![CDATA[]]></item>
-        <item id="file_category" title=""><![CDATA[]]></item>
-        <item id="image_category" title=""><![CDATA[]]></item>
-        <item id="link_category" title=""><![CDATA[]]></item>
+    <group id="category" title="Panel Kategorie">
+        <item id="article_category" title="Články"><![CDATA[
+<h2>Články</h2>
+<p>Na rozdíl od rubrik, které určují navigační strukturu serveru, slouží kategorie spíše k roztřídění článků podle tématu. Jsou-li články zařazeny do kategorí, lze procházet seznamy článků v jednotlivých kategoriích.</p>
+<p>Příklady kategorií na stránkách o jídle:</p>
+<ul>
+	<li>suroviny</li>
+	<li>nákupy</li>
+	<li>recepty</li>
+	<li>servírování</li>
+	<li>restaurace</li>
+	<li>šéfkuchaři</li>
+</ul>        ]]></item>
+        <item id="category_description" title="Popis"><![CDATA[
+<h2>Popis</h2>
+<p>Popis kategorie je volitelná část, která může pomoci vyhledávačům a robotům lépe určit a uspořádat obsah.</p>
+<p>Popis je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>        ]]></item>
+        <item id="file_category" title="Soubory"><![CDATA[
+<h2>Soubory</h2>
+<p>Kategorie souborů jsou volitelná část a umožňují snažší správu a seskupování nahraných souborů.</p>        ]]></item>
+        <item id="image_category" title="Obrázky"><![CDATA[
+<h2>Obrázky</h2>
+<p>Kategorie obrázků jsou užitečné jak pro vnitřní organizaci, tak pro definování skupin obrázků, které lze zobrazit pomocí tagu<br><a rel="external" target="_blank" title="otevře se externí odkaz v novém okně" href="https://docs.textpattern.com/tags/image"><code>&lt; txp:image /&gt;</code><span class ="ui-icon ui-icon-extlink"></span></a> v šabloně (formě) článku.</p>        ]]></item>
+        <item id="link_category" title="Odkazy"><![CDATA[
+<h2>Odkazy</h2>
+<p>Volitelná možnost. Kategorie odkazů jsou užitečné pro členění odkazů do skupin, např. „Přátelé”, „Římané”, „Krajané”, atd.</p>
+<p>Vybraný seznam odkazů lze zobrazit pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře odkaz v novém okně)</span></a> např. takto:</p>
+<code>&lt;txp:linklist category="pratele" /&gt;</code>        ]]></item>
     </group>
 
-    <group id="diag" title="">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+    <group id="diag" title="Diagnostika">
+        <item id="clean_url_data_failed" title="Test hezkých URL selhal"><![CDATA[
+<h2>Test hezkých URL adres selhal</h2>
+<p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
+<p>Pokud čisté URL <em>nefungují</em>, může to být způsobeno:</p>
+<ul>
+    <li>nastavení ‘webová adresa’ není správné</li>
+    <li>server pro zprovoznění hezkých URL adres vyžaduje nějaké změny v souboru <code>.htaccess</code>.</li>
+    <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
+</ul>
+<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
+<p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>        ]]></item>
         <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
         <item id="diag_clear_private" title=""><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
