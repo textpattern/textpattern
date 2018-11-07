@@ -23,7 +23,7 @@ Changes in 4.7.2
   'feed_filter' callbacks.
 * Changed: Deleting an article deletes the associated comments.
 * Changed: Some emoji are preserved in automatically generated URL titles.
-* Changed: Text blocks starting with a tag are not textiled.
+* Changed: Text blocks starting with a Textpattern tag are not Textile'd.
 * Changed: File data is available on 'file_download' callback.
 * Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: Latest translations.
