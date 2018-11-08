@@ -193,22 +193,126 @@
 </ul>
 <p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
 <p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>        ]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[
+<h2>Test hezkých URL adres selhal</h2>
+<p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
+<p>Pokud čisté URL <em>nefungují</em>, může to být způsobeno:</p>
+<ul>
+    <li>nastavení ‘webová adresa’ není správné</li>
+    <li>server pro zprovoznění hezkých URL adres vyžaduje nějaké změny v souboru <code>.htaccess</code>.</li>
+    <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
+</ul>
+<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>        ]]></item>
+        <item id="diag_clear_private" title="Skrýt soukromé informace"><![CDATA[
+<h2>Skrýt soukromé informace</h2>
+<p>Pokud mají být diagnostické informace sdíleny ve veřejně viditelném formátu, například ve fóru podpory Textpattern, vynecháním citlivých informací o serveru se snižuje bezpečnostní riziko.</p>        ]]></item>
+        <item id="dev_version_live" title="Vývojová verze na živém serveru"><![CDATA[
+<h2>Vývojová verze na živém serveru</h2>
+<p>Provozuješ vývojovou verzi Textpattern, což se na živém webu nedoporučuje. Pokud je to záměrně, můžeš toto varování ignorovat.</p>        ]]></item>
+        <item id="dir_not_writable" title="Do adresáře nelze zapisovat"><![CDATA[
+<h2>Do adresáře nelze zapisovat</h2>
+<p>Chceš-li používat funkce nahrávání souborů a obrázků, musí být odpovídající adresáře zapisovatelné pro PHP. Pravděpodobně bude nutné změnit oprávnění. To lze provést pomocí FTP klienta, nebo alternativně v příkazovém řádku příkazem <code>chmod 755 /cesta/do/adresare</code> command.</p>        ]]></item>
+        <item id="dns_lookup_fails" title="DNS selhalo"><![CDATA[
+<h2>DNS selhalo</h2>
+<p>Zdá se, že URL zadaná jako adresa tvých stránek není na webu dostupná.</p>        ]]></item>
+        <item id="file_uploads_disabled" title="Nahrávání souborů je zakázáno"><![CDATA[
+<h2>Nahrávání souborů je zakázáno</h2>
+<p>Aktuální konfigurace serveru nahrávání souborů zakázuje, takže není možné nahrávat pomocí Textpatternu soubory ani obrázky. Zkontroluj a změň nastavení <code>file_uploads</code> v souboru <code>php.ini</code> (nebo o změnu požádej poskytovatele hostingových služeb).</p>        ]]></item>
+        <item id="htaccess_missing" title="Soubor.htaccess neexistuje"><![CDATA[
+<h2>Soubor .htaccess neexistuje</h2>
+<p>Používáš <em>permanent link mode</em>, který vyžaduje soubor <code>.htaccess</code> umístěný do kořenového adresáře webu vedle souboru <code>index.php</code> a složky <code>textpattern</code>. Doporučené směrnice jsou:</p
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>        ]]></item>
+        <item id="index_inaccessible" title="Soubor index.php je nedostupný"><![CDATA[
+<h2>Soubor index.php je nedostupný</h2>
+<p>Hlavní soubor <code>index.php</code>, určený pro tento web jako základní, je pro server nečitelný. Zkontroluj, zda existuje a jeho oprávnění.</p>        ]]></item>
+        <item id="missing_files" title="Chybějící soubory"><![CDATA[
+<h2>Chybějící soubory</h2>
+<p>Některé základní soubory v instalaci Textpatternu chybí. Ujisti se, že všechny uvedené soubory jsou na serveru k dispozici a jsou ve správném umístění.</p>        ]]></item>
+        <item id="mod_rewrite_missing" title="Modul mod_rewrite pro Apache není nainstalován"><![CDATA[
+<h2>Modul mod_rewrite pro Apache není nainstalován.</h2>
+<p>Modul Apache <code>mod_rewrite</code> není nainstalován, nebo není povolen. Pro správné fungování systému Textpattern je doporučený. Zkontroluj, zda je modul nainstalován a povolen, nebo se obrať o pomoc na svého poskytovatele hostingových služeb.</p>        ]]></item>
+        <item id="modified_files" title="Změněné soubory"><![CDATA[
+<h2>Změněné soubory</h2>
+<p>Soubory jsou označeny jako změněné, pokud se jejich příslušný kontrolní součet liší od kontrolního soupisu v systému Textpattern. Pokud se nějaké soubory v instalaci Textpatternu liší od očekávaných, jsou zde zvýrazněny.</p>        ]]></item>
+        <item id="mysql_table_errors" title="Chyby v tabulce MySQL"><![CDATA[
+<h2>Chyby v tabulce MySQL</h2>
+<p>Něco je pravděpodobně poškozeno v tabulkách databáze MySQL. Pokus se příslušné tabulky opravit pomocí nástroje pro přístup k databázím, jako je <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, nebo <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></p>        ]]></item>
+        <item id="no_temp_dir" title="Adresář dočasných souborů není určen"><![CDATA[
+<h2>Adresář dočasných souborů není určen</h2>
+<p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>        ]]></item>
         <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Nelze číst z kořenového adresáře"><![CDATA[
+<h2>Nelze číst z kořenového adresáře</h2>
+<p>Nelze číst z adresáře obsahujícího soubor <code>index.php</code>. Zkontroluj oprávnění.</p>        ]]></item>
+        <item id="php_version_required" title="Minimální systémové požadavky"><![CDATA[
+<h2>Minimální systémové požadavky</h2>
+<p>Textpattern vyžaduje funkce obsažené v programovacím jazyce PHP a MySQL. prohlédni si následující tabulku k určení minimálních systémových požadavků:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">verze Textpattern</th>
+                <th scope="col">Minimální verze PHP</th>
+                <th scope="col">Minimální verze MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Kromě výše uvedených požadavků na systém jsou požadovány následující rozšíření PHP:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+</ul>
+<p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>        ]]></item>
         <item id="setup_still_exists" title=""><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>

@@ -743,42 +743,118 @@
         <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[<h2>Envoi des informations de connexion à cette adresse e-mail</h2>
 <p>Renseigne une adresse e-mail utilisée pour origine d’expéditeur «De :» dans les messages d’envoi des informations de connexion aux nouveaux utilisateurs du site.</p>
 <p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p> ]]></item>
-        <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="title_no_widow" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[<h2>Combien d’articles par flux XML (RSS/Atom) ?</h2>
+<p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
+<p>Une valeur faible, comme <code>5</code> plutôt que <code>15</code>, est préférable.</p>]]></item>
+        <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[<h2>Envoyer l’entête de dernière modification ?</h2>
+<p>Si renseigné, Textpattern comparera l’entête HTTP <code>If-Modified-Since</code> des visiteurs (si elle existe) avec la dernière modification intervenue sur le site. Si rien n’a changé depuis la dernière visite de l’Internaute (ex. si l’horodatage transmis par le navigateur est identique à celui de la dernière mise à jour du site), alors une entête sera envoyée pour que le navigateur du visiteur affiche la version de la page mise dans son cache.</p>
+<p>Permet de réduire la consommation de la bande passante, le délai de chargement des pages, et la charge du serveur.</p>  ]]></item>
+        <item id="show_comment_count_in_feed" title="Afficher le nombre de commentaires dans les flux XML ?"><![CDATA[<h2>Afficher le nombre de commentaires dans les flux XML ?</h2>
+<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p> ]]></item>
+        <item id="site_slogan" title="Slogan du site"><![CDATA[<h2>Slogan du site</h2>
+<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site</a>(ouvre le lien externe dans une nouvelle fenêtre)</span></2> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>]]></item>
+        <item id="sitename" title="Nom du site"><![CDATA[<h2>Nom du site</h2>
+<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom ou titre général de votre site</a>(ouvre le lien externe dans une nouvelle fenêtre)</span></2>. Apparaîtra dans la barre de titres des navigateurs ou dans les lecteurs de flux de syndications et partout ailleurs sur votre site, à discrétion.</p>]]></item>
+        <item id="siteurl" title="URL du site"><![CDATA[<h2>URL du site</h2>
+<p>C’est l’adresse de votre site Textpattern, par exemple : <code>www.example.com</code>.</p>
+<p><strong>Remarque :</strong> Aucun préfixe <code>http://</code>, <code>https://</code> ni de barres obliques n’est requis.</p>]]></item>
+        <item id="skin_dir" title="Répertoire du thème"><![CDATA[<h2>Répertoire du thème</h2>
+<p>Si vous souhaitez personnaliser le choix de votre répertoire de thèmes où les fichiers plats (Flat Files) du modèle public seront conservés. Vous devrez, d’abord, créer ce dossier à la racine de votre installation de Textpattern et lui accorder les droits d’accès en écriture.</p>
+<p>Ce chemin est toujours <strong>un chemin relatif</strong>(au répertoire racine de votre installation de Textpattern).</p>
+<p>Par défaut c’est <code>themes</code>.</p>]]></item>
+        <item id="smtp_from" title="Adresse d’envoi SMTP"><![CDATA[<h2>Adresse d’envoi SMTP</h2>
+<p>Cette préférence devrait rester vide à moins que vous rencontriez des problèmes avec les envois de e-mails depuis Textpattern (si aucun e-mail n’est transmis). Si ce problème devait survenir, vous pourrez, alors, renseigner une adresse e-mail valide ici bien qu’il serait préférable qu’elle ait le même nom de domaine que celui où vous avez installé Textpattern (ex. si l’adresse de votre site est <code>https://example.com</code>, vous devriez utiliser <code>you@example.com</code>).</p>
+<p>Pour les détails techniques :</p>
+<ul>
+    <li>Sur serveurs UNIX-like/MacOS, l’adresse e-mail renseignée est utilisée comme 4ème paramètre (préfixé par "-f") pour la fonction PHP <code>mail()</code></li>
+    <li>Sur serveur Windows, l’adresse e-mail renseignée est utilisée pour définir (ou remplacer) le paramètre <code>sendmail_from</code> du fichier php.ini</li>
+</ul>
+<p>Cela garanti que l’enveloppe SMTP de l’adresse d’expédition (qui n’est par nécessairement la même que celle de l’entête "From:" visible dans les messages) est configurée avec l’adresse renseignée ici, ce qui est requis pour l’envoi de e-mail sur certains serveurs.</p>]]></item>
+        <item id="spam_blacklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[<h2>Listes noires anti-spam (séparées par une virgule)</h2>
+<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">liste noire <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
+<p>Vous pouvez renseigner une liste de noms de domaine, séparés par une virgule. Veuillez prendre note que ces listes relèvent de votre responsabilité et correspondent, effectivement, à vos besoins.</p>]]></item>
+        <item id="syndicate_body_or_excerpt" title="Le résumé plutôt que l’article complet dans les flux XML ?"><![CDATA[<h2>Le résumé <strong>plutôt</strong> que l’article complet dans les flux XML ?</h2>
+<p>Si renseigné sur «Non», les flux contiendront les corps des articles complets.</p>
+<p>Si renseigné sur «Oui», les flux contiendront les résumés à la place des corps d’articles chaque fois que possible.</p>]]></item>
+        <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[<h2>Chemin du répertoire temporaire</h2>
+<p>Renseignez un <strong>chemin absolu</strong> pour le répertoire temporaire (parfois dénommé tmp ou temp). PHP réclame de disposer de droits d’écriture sur ce dossier. Il sera utilisé pour les fichiers temporaires, par exemple les téléversements de toutes sortes (plugins, fichiers ou images).</p>
+<p><strong>Remarque :</strong> ne renseigner pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p> ]]></item>
+        <item id="theme_name" title="Thème de l’administration"><![CDATA[<h2>Thème de l’administration</h2>
+<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p> ]]></item>
+        <item id="title_no_widow" title="Éviter un mot veuf (seul) dans les titres d’articles ?"><![CDATA[<h2>Éviter un mot veuf (seul) dans les titres d’articles ?</h2>
+<p>Les mots veufs (ou orphelins) correspondent au dernier mot d’une phrase placé sur une nouvelle ligne lorsque la phrase est trop longue pour se contenir sur une même ligne. En typographie, ces mots veufs sont considérés comme inélégants et doivent être évités. Renseigner cette préférence sur «Oui» vous assurera que les longs titres d’articles ne comporteront pas de mots seuls en début de nouvelle ligne.</p>
+<p><strong>Remarque :</strong> ce paramètre peut provoquer des problèmes dans les pages dites «Responsives» dans les petits écrans en raison de l’ajout d’un espace insécable entre les deux derniers mots et pouvant déborder de leur élément parent. Dans ce cas, choisissez pour réglage «Non».</p>  ]]></item>
+        <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[<h2>Functions PHP associées à txp:evaluate</h2>
+<p>Renseignez une liste de <code>function</code> séparées par une virgule ou des <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments renseignés dans cette liste peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> doit retourner une valeur scalaire (<strong>pas</strong> un array/object).</p>]]></item>
+        <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[<h2>Accepter les commentaires ?</h2>
+<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p> ]]></item>
+        <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?<0>adresse e-mail 
+<p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
+<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p> ]]></item>
+        <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[<h2>Utiliser les plugins ?</h2>
+<p>Permet de désactiver totalement le support des plugins dans Textpattern. Utile pour le débogage d’erreurs sur votre site et pour identifier le dysfonctionnement, éventuel, d’un plugin.</p>]]></item>
+        <item id="use_textile" title="Utiliser Textile?"><![CDATA[<h2>Utiliser Textile ?</h2>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention d’écriture pour convertir, très simplement, du texte en HTML. Quand activé, Textile intercepte le corps des articles et retourne un document structuré en HTML.</p>
+<p>Textile offre également un puissant mais panel de commandes avec lequel formater du texte, définir sa structure tels que des listes, des niveaux de titre ou des citations ainsi que des liens et des images.</p>
+<p>Le paramètre choisi ici devient celui par défaut pour la structure HTML des résumés et du corps des articles depuis la page «Rédiger». Vous pourrez, toutefois, basculer du formatage Textile à la conversion des retours de ligne en paragraphes HTML ou ne rien convertir du tout.</p>]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    <group id="section" title="Nom de la section">
+        <item id="section_category" title="Introduction"><![CDATA[<p>Il est légitime d’appréhender, par analogie, les sections dans Textpattern comme les sections d’un journal ; chacune appartenant à la même publication, mais pouvant relever de différentes mises en page, ou différentes thématiques d’articles, et ainsi de suite.</p>
+<p>Pour la plupart des sites web, il suffit de créer un nombre minimum de sections (pages).</p>
+<h3>Considérons ce scénario pour un site avec trois sections :</h3>
+<ol>
+    <li><strong>Archives :</strong> la section à laquelle tous les articles figurant sur la page d’accueil dépendent. Lorsqu’un lecteur clique sur le lien permanent d’un article, celui-ci s’affiche dans la mise en page attribuée à cette section. Pour accéder à la liste paginée des articles les plus récents affectés à cette section «Archive», l'URL serait de la forme <code>https://example.com/archive/</code>.</li>
+    <li><strong>À propos :</strong> une page nommée «À propos de ce site» qui différerait de la page d’accueil et celle des archives en ce sens qu’elle serait beaucoup plus statique, pourrait avoir une présentation différente et ne contenir qu’un seul article. Cette page «À propos» serait accessible sur <code>https://example.com/a-propos/</code>.</li>
+    <li><strong>Photos :</strong> une section avec une présentation différente (et sans doute d’autres styles CSS) pouvant présenter des images plutôt que des articles.</li>
+</ol>
+<p>Remarquez qu’une section cachée spéciale, nommée «default», sera toujours présente. Cette section par défaut utilise le gabarit et les styles CSS nommés également «default» et bâtissent la page d’accueil principale de votre site.</p>  ]]></item>
+        <item id="section_default" title="Section de publication par défaut"><![CDATA[<h2>Section de publication par défaut</h2>
+<p>Cette option détermine la section sélectionnée par défaut dans la liste de choix lors de la création d’un nouvel article depuis la page «Rédiger».</p>
+<p>Si la plupart de vos articles dépendent d’une section particulière, choisissez-la dans la liste ici. Les modifications seront immédiatement actives.</p>
+<p>Vous pourrez, cependant, continuer d’affecter toute autre section, individuellement et par article, depuis la liste de choix dans «Affectation et affichage de l’article» de la page «Rédiger».</p>      ]]></item>
+        <item id="section_description" title="Description"><![CDATA[<h2>Description</h2>
+<p>La description attachée à la section est optionnelle et peut améliorer les moteurs de recherches et leur robots d’indexation à identifier et restituer les contenus textuels.</p>
+<p>Cette description est limitée à 255 caractères maximum. Sachez que certains moteurs de recherches définissent une limite maximale différente pour des raisons de présentation depuis leurs résultats (SERP) et cette limite peut être inférieure à la limite propre à Textpattern.</p>]]></item>
+        <item id="section_on_frontpage" title="En page d’accueil ?"><![CDATA[<h2>En page d’accueil ?</h2>
+<p>Les articles de certaines sections, comme celles ressemblant davantage à des pages statiques,  peuvent n’avoir aucune légitimité à s’afficher dans la succession d’articles récents de la page d’accueil.</p>
+<p>Réglez ce paramètre sur «Non» afin d’empêcher les articles associés à cette section d’apparaître sur la page d’accueil de votre site.</p>]]></item>
+        <item id="section_searchable" title="Ajouter aux recherches ?"><![CDATA[<h2>Ajouter aux recherches ?</h2>
+<p>Permet d’associer les articles appartenant à cette section de figurer dans les résultats de recherches sur votre site.</p>]]></item>
+        <item id="section_syndicate" title="Syndiquer (flux XML) ?"><![CDATA[<h2>Syndiquer (flux XML) ?</h2>
+<p>Permet d’inclure ou non les articles de cette section dans les flux de syndication RSS et Atom du site</p>]]></item>
+        <item id="section_uses_css" title="Utilise le style"><![CDATA[<h2>Utilise le style</h2>
+<p>Si vous souhaitez substituer les styles CSS par défaut d’une section, faîtes-le ici.</p>
+<p>Ne concerne que les feuilles de style disponibles depuis la page «Styles» de Textpattern. Si vous hébergez vos CSS en dehors du stockage dans la base de donnée de Textpattern sous la forme de fichiers (ce qui est vivement recommandé), cette option n’aura alors aucun effet.</p>]]></item>
+        <item id="section_uses_page" title="Utilise le gabarit"><![CDATA[<h2>Utilise le gabarit</h2>
+<p>Dans Textpattern, les sections (pages) sont associées aux modèles de page (gabarits). C’est plutôt super, vraiment !</p>]]></item>
+        <item id="section_uses_skin" title="Utilise le thème"><![CDATA[<h2>Utilise le thème</h2>
+<p>Si vous souhaitez changer de thème pour une section particulière, cela est possible en le sélectionnant, ici, parmi l’un des thèmes installés et disponibles.</p>]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+    <group id="setup" title="Installation">
+        <item id="setup_user_login" title="Nom d’utilisateur"><![CDATA[<h2>Identifiant d’utilisateur</h2>
+<p>L’identifiant de connexion du compte l’administrateur utilisé pour administrer le site.</p>
+<p>Bien qu’il n’y ait aucune restriction dans le choix de cet identifiant, il est préférable d’éviter les séquences de caractères complexes ainsi que les mots prédictibles (ex. <code>admin</code>, <code>administrator</code>, <2>administrateur</2>, etc.)</p>]]></item>
+        <item id="setup_user_pass" title="Mot de passe"><![CDATA[<h2>Mot de passe</h2>
+<p>Parce que ce compte dispose des plus hauts niveaux d’accès dans Textpattern, veuillez choisir un mot de passe particulièrement complexe voire, idéalement, une phrase secrète.</p>
+<h3>Conseils</h3>
+<ul>
+   <li>Utilisez une combinaison de caractères majuscules et minuscules</li>
+   <li>Utilisez aussi des nombres</li>
+   <li>Ainsi que des symboles</li>
+   <li>Le tout comprenant, au moins, huit caractères</li>
+   <li><strong>Proscrivez</strong> toutes les informations personnelles (dates, noms, endroits, membres de la famille, animaux de compagnie, etc.)</li>
+   <li><strong>Évitez</strong> d’utiliser des mots du dictionnaire uniques ou répétés, quels que soient leur orthographe, leur langue ou leur casse (majuscules ou minuscules).</li>
+</ul>]]></item>
+        <item id="table_prefix" title="Préfixe des tables"><![CDATA[<h2>Préfixe des tables</h2>
+<p>Vous n’aurez à renseigner un préfixe de tables uniquement si vous réalisez de multiples installations de Textpattern dans une seule et même base de donnée. Chaque installation de Textpattern nécessitera alors un préfixe unique.</p>
+<ul>
+   <li><strong>Le premier caractère :</strong> doit être compris parmi les lettres a-z, A-Z ou un trait souligné (underscore)</li>
+   <li>les caractères suivants :</strong> peuvent être compris parmi les lettres a-z, A-Z ou un trait souligné (underscore)</li>
+</ul>]]></item>
     </group>
 
     <group id="skin" title="">
