@@ -956,7 +956,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($expired && $expired != '1') {
         $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
     } elseif (!$expired) {
-        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
+        $timeq .= ' AND (Expires IS NULL OR '.now('expires').' <= Expires)';
     }
 
     if ($q && $searchsticky) {

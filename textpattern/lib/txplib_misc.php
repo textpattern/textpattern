@@ -5210,7 +5210,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
         $start = $month ? strtotime($month) : time() or $start = time();
         $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
-        $start = $month ? strtotime($month) : false;
+        $start = $month ? safe_strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);
@@ -5230,7 +5230,10 @@ function buildTimeSql($month, $time, $field = 'Posted')
                 list($start, $stop) = array($stop, $start);
             }
 
-            $timeq = ($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+            $timeq = ($start == $stop ?
+                "$safe_field = FROM_UNIXTIME($start)" :
+                "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)"
+            );
         }
     }
 
