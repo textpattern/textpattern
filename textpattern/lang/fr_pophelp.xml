@@ -849,7 +849,7 @@
    <li>Ainsi que des symboles</li>
    <li>Le tout comprenant, au moins, huit caractères</li>
    <li><strong>Proscrivez</strong> toutes les informations personnelles (dates, noms, endroits, membres de la famille, animaux de compagnie, etc.)</li>
-   <li><strong>Évitez</strong> d’utiliser des mots du dictionnaire uniques ou répétés, quels que soient leur orthographe, leur langue ou leur casse (majuscules ou minuscules).</li>
+   <li><strong>Évitez</strong> d’utiliser des mots du dictionnaire uniques ou répétés, quelle que soit leur orthographe, leur langue ou leur casse (majuscules ou minuscules).</li>
 </ul>]]></item>
         <item id="table_prefix" title="Préfixe des tables"><![CDATA[<h2>Préfixe des tables</h2>
 <p>Vous n’aurez à renseigner un préfixe de tables uniquement si vous réalisez de multiples installations de Textpattern dans une seule et même base de donnée. Chaque installation de Textpattern nécessitera alors un préfixe unique.</p>
