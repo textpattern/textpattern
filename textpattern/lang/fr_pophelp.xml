@@ -189,7 +189,7 @@
 <h2>Fichiers</h2>
 <p>Les catégories de fichiers sont optionnelles mais utiles pour regrouper certains fichiers ensembles.</p>
         ]]></item>
-        <item id="image_category" title=""><![CDATA[
+        <item id="image_category" title="Images"><![CDATA[
 <h2>Images</h2>
 <p>Les catégories d’images sont optionnelles mais utiles à la fois pour l’organisation interne mais aussi pour pouvoir les afficher à l’aide des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> et <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
@@ -355,7 +355,7 @@
 <h2>Le répertoire d’installation existe toujours</h2>
 <p>Après l’installation de Textpattern, le répertoire <code>textpattern/setup</code>, ainsi que son contenu, n’est plus nécessaire et doit être supprimé pour des raisons de sécurité.</p>
         ]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[
+        <item id="site_url_mismatch" title="URL du site incohérente"><![CDATA[
 <h2>URL du site incohérente</h2>
 <p>L’URL du site renseignée dans les Préférences ne correspond pas à l’URL courante utilisée pour l’accès au site.</p>
 <p>Si le site peut être consulté par diverses URL différentes, et sil se comporte comme prévu, vous pouvez ignorer ce message.</p>
@@ -606,7 +606,8 @@
 </ul>
 <p><strong>Remarque :</strong> pour des raisons de sécurité, le HTML brut est transformé en texte ordinaire.</p>
         ]]></item>
-        <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[<h2>Modèles types de modules personnalisés</h2>
+<p>A compléter. Types MINE à compléter</p>]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
 <p>Les champs personnalisés sont utilisés pour conserver des données supplémentaires avec l’article. Vous pouvez en définir jusqu'à dix en leur attribuant un nom ici.
@@ -640,7 +641,8 @@
 <h2>Doctype</h2>
 <p>Sélectionnez le doctype HTML que vous souhaitez utiliser (HTML5 ou XHTML). Cela affecte les champs de saisies des commentaires, le rendu de Textile pour <code>&lt;abbr&gt;</code> ou <code>&lt;acronym&gt;</code> et les balises <code>&lt;link&gt;</code> générées par <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Activer l’aperçu du thème en mode développement ?"><![CDATA[<h2>Activer l’aperçu du thème en mode développement ?</h2>
+<p>A compléter.</p>]]></item>
         <item id="enable_short_tags" title="Activer le support des balises réduites ?"><![CDATA[<h2>Activer le support des balises réduites ?</h2>
 <p>Les balises spécifiques de Textpattern sont de la forme <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Il est toutefois possible d’en réduire la saisie par l’emploi d’une notation courte où les préfixes <code>txp:</code> peuvent être omis en respectant une convention très simple. Voici des exemples pour démontrer le concept :</p>
 <ul>
@@ -778,7 +780,7 @@
 <p>Si renseigné sur «Oui», les flux contiendront les résumés à la place des corps d’articles chaque fois que possible.</p>]]></item>
         <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[<h2>Chemin du répertoire temporaire</h2>
 <p>Renseignez un <strong>chemin absolu</strong> pour le répertoire temporaire (parfois dénommé tmp ou temp). PHP réclame de disposer de droits d’écriture sur ce dossier. Il sera utilisé pour les fichiers temporaires, par exemple les téléversements de toutes sortes (plugins, fichiers ou images).</p>
-<p><strong>Remarque :</strong> ne renseigner pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p> ]]></item>
+<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p> ]]></item>
         <item id="theme_name" title="Thème de l’administration"><![CDATA[<h2>Thème de l’administration</h2>
 <p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p> ]]></item>
         <item id="title_no_widow" title="Éviter un mot veuf (seul) dans les titres d’articles ?"><![CDATA[<h2>Éviter un mot veuf (seul) dans les titres d’articles ?</h2>
@@ -857,18 +859,45 @@
 </ul>]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+    <group id="skin" title="Thèmes">
+        <item id="skin_author" title="Auteur du thème"><![CDATA[<h2>Auteur•e du thème</h2>
+<p>Les auteur•e•s de ce thème (optionnel).</p>]]></item>
+        <item id="skin_author_uri" title="Site web du thème"><![CDATA[<h2>Site web du thème</h2>
+<p>L’URL correspondante où se situent les informations et/ou les dernières versions pour ce thème (optionnel).</p>]]></item>
+        <item id="skin_delete_entirely" title="Supprimer également les modèles du thème sur le serveur"><![CDATA[<h2>Supprimer également les modèles du thème sur le serveur</h2>
+<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s'y trouvent.</p> ]]></item>
+        <item id="skin_delete_from_database" title="Supprimer de la base de données les modèles inutilisés à l’importation"><![CDATA[<h2>Supprimer de la base de données les modèles inutilisés à l’importation</h2>
+<p>Si coché, chaque modèle du(es) thème(s) sélectionné(s) n’ayant aucun fichier correspondant sur le disque sera définitivement supprimé de la base de données. Le résultat, après exécution de l’action, fera correspondre, tant que faire se peut,  la base de données avec ce qui est présent sur le disque.</p> 
+<p>Remarque : si vous avez supprimé des fichiers d’un modèle que Textpattern requière, des versions vides de ces fichiers seront créés automatiquement (incluant un commentaire informatif circonstancié) dans la base de données.</p>]]></item>
+        <item id="skin_delete_from_disk" title="Supprimer les modèles inutilisés sur le serveur à l’exportation"><![CDATA[<h2>Supprimer les modèles inutilisés sur le serveur à l’exportation</h2>
+<p>Si coché, chaque fichier du modèle du(es) thème(s) sélectionné(s) n’ayant pas d’élément correspondant dans la base de données sera définitivement supprimé du thème sur le disque. Le résultat, après exécution l’action, fera correspondre, exactement, le système de fichiers avec ce qui est présent dans la base de données.</p>]]></item>
+        <item id="skin_description" title="Descriptif du thème"><![CDATA[<h2>Description du thème</h2>
+<p>Un bref résumé concernant le design/la mise en forme peut être complété (optionnel).</p>
+<p>La description du thème est limitée à 255 caractères au maximum.</p>]]></item>
+        <item id="skin_import" title="Importer le thème"><![CDATA[<h2>Importer le thème</h2>
+<p>Ce formulaire permet l’importation d’un thème dans la base de données depuis le répertoire des thèmes.</p>
+<p>Un thème importable doit être composé d’un dossier parent accessible en lecture utilisant le nom du thème pour nom de dossier interne, ainsi qu’un fichier <code>manifest.json</code> dans le format requis et accessible en lecture. Le dossier du thème doit également contenir les pages, modules et les styles correspondants dans leur dossier éponymes.</p>
+<p>Alors que les gabarits et les modules doivent comporter une extension <code>.txp</code>, les feuilles de styles seront des fichiers <code>.css</code>. Les modules devront être groupés par type dans leur dossiers correspondants. Textpattern créera tout les modèles essentiels manquants lors de l’importation.</p>
+<p>Voir la documentation <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations lors de la création, l’installation et l’utilisation des thèmes avec Textpattern CMS.</p> ]]></item>
+        <item id="skin_name" title="Nom du thème"><![CDATA[<h2>Nom du thème</h2>
+<p>Le nom du thème est utilisé pour nom du dossier du thème et pour d’autres raisons techniques (requis).</p>
+<p>Le nom ne doit pas contenir de caractères spéciaux ni d’espaces.</p>]]></item>
+        <item id="skin_overview" title="Introduction aux Thèmes"><![CDATA[<h2>Introduction aux thèmes</h2>
+<p>Un Thème Textpattern est une collection de Gabarits, de Modules et de Styles. Les thèmes vous permettent de séparer, logiquement, vos ressources du site dans des groupes pour une meilleure identification ou pour le partage avec d’autres utilisateurs en tant que distributions. L’acte de créer ou d’importer un Thème, ainsi que toutes les ressources qu’il contient, n’a <em>aucun</em> impact sur votre site existant. Vous êtes laissé libre d’éditer ou de modifier n’importe quelle ressource qui n’est pas associée avec une Section de votre site, sans craindre d’affecter votre site lui-même.</p>
+<p>Pour éditer une ressource de Thème, consultez les Gabarits, les Modules ou les Styles de votre interface d’administration et sélectionnez le thème, dans la liste de choix, sur lequel vous souhaitez travailler. Le thème sur lequel vous travaillez sera mémorisé d'une page d’administration à une autre, vous permettant de basculer d’une page à l’autre rapidement et facilement. Ce sera reconnu comme étant votre <em>Thème de travail</em>.</p>
+<h3>Aperçu d’une ressource de thème</h3>
+<p>Tant que vous travaillez sur un thème, Textpattern vous permettra (et seulement vous) d’afficher l’aperçu du thème sur le site public. Pourvu que vous soyez identifié par la page de connexion à Textpattern. Textpattern peut localiser un élément portant le même nom que celui déjà attribué à la section publique du site que vous visitez. Il vous montrera à quoi ressemble votre site en utilisant le thème de travail comme aperçu.</p>
+<p>Cela vous permet de voir rapidement les modifications apportées aux ressources de votre thème et de continuer à modifier les éléments avant de les rendre accessibles au public. À tout moment, le fait de changer de thème de travail à partir de la zone d'administration vous permettra de prévisualiser ces ressources. </p>
+<p>Lorsque vous êtes satisfait des résultats, affectez les ressources de n’importe quel thème à une ou plusieurs sections de votre site. site. Cela rendra ces éléments actifs et visibles par tous les visiteurs du site. </p>
+<h3>Exportation et importation</h3>
+<p>Les thèmes peuvent être partagés avec la communauté. Sélectionnez un ou plusieurs thèmes via les cases à cocher et utilisez l’option <em>Exporter</em> de la liste de choix multiples pour exporter les ressources du thème sur le disque. Chaque thème est situé dans son propre sous-répertoire, sous le répertoire défini dans vos préférences <em>Répertoire des thèmes</em> (dossier par défaut : <code>themes </code>).</p>
+<p>Une fois effectué, vous pouvez empaqueter le thème et le distribuer. Les utilisateurs pourront décompacter le thème dans leur propre répertoire et choisir l’option <em>importer</em> pour l’importer le rendre actif dans leur base de données. Dès lors, ils pourront basculer sur le thème et l'utiliser comme thème de travail pour permettre la prévisualisation des ressources du site et, en définitive, l'affectation des ressources aux sections, comme décrit ci-dessus.</p>
+<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n'y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d'abord importer les modifications dans votre base de données et vous assurer qu'une ou plusieurs sections utilisent les ressources du thème.</p> ]]></item>
+        <item id="skin_title" title="Titre du thème"><![CDATA[<h2>Titre du thème</h2>
+<p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l'interface d’administration de Textpattern (requis).</p>
+<p>Le titre peut comporter des caractères spéciaux ainsi que des espaces.</p>]]></item>
+        <item id="skin_version" title="Version du thème"><![CDATA[<h2>Version du thème</h2>
+<p>Le numéro de version pour la version de ce thème installé (optionnel).</p>< ]]></item>
     </group>
 </help>
 </resources>
