@@ -5322,6 +5322,9 @@ function txp_escape($atts, $thing = '')
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
+            case 'url':
+                $thing = urlencode($thing);
+                break;
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
                 break;
