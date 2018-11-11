@@ -4343,9 +4343,7 @@ function php($atts = null, $thing = null)
 
     $error = null;
 
-    if (!empty($pretext['secondpass'])) {
-        $error = 'php_code_disabled_page';
-    } elseif (empty($is_article_body)) {
+    if (empty($is_article_body)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
@@ -4614,18 +4612,24 @@ function page_url($atts)
 
 // -------------------------------------------------------------
 
-function if_different($atts, $thing)
+function if_different($atts, $thing = null)
 {
-    static $last;
+    static $last, $test;
 
     $key = md5($thing);
-    $out = parse($thing, 1);
+    $out = isset($atts['test']) ? $atts['test'] : parse($thing);
 
-    if (empty($last[$key]) || $out != $last[$key]) {
+    if (isset($atts['test'])) {
+        if (!isset($test[$key]) || $out != $test[$key]) {
+            $test[$key] = $out;
+
+            return isset($thing) ? $last[$key] = parse($thing) : $out;
+        }
+    } elseif (!isset($last[$key]) || $out != $last[$key]) {
         return $last[$key] = $out;
-    } else {
-        return parse($thing, 0);
     }
+
+    return parse($thing, 0);
 }
 
 // -------------------------------------------------------------
@@ -5079,7 +5083,9 @@ function hide($atts = array(), $thing = null)
     if (!$process) {
         return $pretext['secondpass'] < get_pref('secondpass', 1) ? postpone_process() : $thing;
     } elseif (is_numeric($process)) {
-        return $process > $pretext['secondpass'] + 1 ? postpone_process($process) : parse($thing);
+        return abs($process) > $pretext['secondpass'] + 1 ?
+            postpone_process($process) :
+            ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
     } elseif ($process) {
         parse($thing);
     }
@@ -5110,6 +5116,7 @@ function variable($atts, $thing = null)
         'escape'    => $set,
         'name'      => '',
         'value'     => null,
+        'output'    => null,
         'add'       => null,
         'separator' => null
     ), $atts));
@@ -5141,7 +5148,7 @@ function variable($atts, $thing = null)
             : $value;
     }
 
-    return '';
+    return $output ? $variable[$name] : '';
 }
 
 // -------------------------------------------------------------
@@ -5305,8 +5312,9 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
+    global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
-        $strto = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
+        $mb = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
     if (empty($atts['escape'])) {
         return $thing;
@@ -5316,6 +5324,8 @@ function txp_escape($atts, $thing = '')
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
     $filter = $tidy = false;
+
+    isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
     foreach ($escape as $attr) {
         switch ($attr) {
@@ -5392,12 +5402,12 @@ function txp_escape($atts, $thing = '')
                 $thing = strip_tags($thing);
                 break;
             case 'upper': case 'lower':
-                isset($strto) or $strto = function_exists('mb_strto'.$attr) ? 'mb_strto' : 'strto';
-                $function = $strto.$attr;
+                $function = ($mb && mb_detect_encoding($thing) != 'ASCII' ? 'mb_strto' : 'strto').$attr;
                 $thing = $function($thing);
                 break;
             case 'title':
-                $thing = function_exists('mb_convert_case') ? mb_convert_case($thing, MB_CASE_TITLE) : ucwords($thing);
+                $thing = $mb && mb_detect_encoding($thing) != 'ASCII' ?
+                    mb_convert_case($thing, MB_CASE_TITLE) : ucwords($thing);
                 break;
             case 'trim': case 'ltrim': case 'rtrim':
                 $filter = true;

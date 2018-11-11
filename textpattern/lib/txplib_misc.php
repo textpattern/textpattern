@@ -4463,7 +4463,7 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $prefs, $pretext, $trace;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
@@ -4471,6 +4471,10 @@ function parse_page($name, $theme, $page = '')
 
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
+            if ($pretext['secondpass']) {
+                $prefs['allow_page_php_scripting'] = false;
+            }
+
             $page = parse($page);
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
