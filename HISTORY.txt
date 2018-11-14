@@ -14,6 +14,7 @@ Changes in 4.7.2
 * Changed: <txp:search_input /> can be used as a container tag, and also accepts
   'aria_label' and 'placeholder' attributes.
 * Changed: More robust search routes within default public-side theme.
+* Changed: Improved upgrade route where MySQL NO_ZERO_DATE is set.
 * Changed: Enhanced password manager compatibility on login and user details
   pages.
 * Changed: Extended fallback to 'C' locale in some situations.
