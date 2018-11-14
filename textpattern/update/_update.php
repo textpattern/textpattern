@@ -84,6 +84,15 @@ if (!isset($updates[$thisversion])) {
 }
 
 try {
+    // Disable no zero dates mode
+    if (version_compare($dbversion, '4.6', '<') && $sql_mode = getThing('SELECT @@SESSION.sql_mode')) {
+        $tmp_mode = implode(',', array_diff(
+            do_list_unique($sql_mode),
+            array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE')
+        ));
+        safe_query("SET SESSION sql_mode = '".doSlash($tmp_mode)."'");
+    }
+
     foreach ($updates as $dbupdate => $update) {
         if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $thisversion, '<=')) {
             if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
@@ -99,6 +108,11 @@ try {
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
     safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+
+    // Restore sql_mode
+    if (!empty($sql_mode)) {
+        safe_query("SET SESSION sql_mode = '".doSlash($sql_mode)."'");
+    }
 } catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
     // Error message already communicated via updateErrorHandler
