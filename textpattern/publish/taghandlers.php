@@ -4614,22 +4614,31 @@ function page_url($atts)
 
 function if_different($atts, $thing = null)
 {
-    static $last, $test;
+    static $last, $tested;
+
+    extract(lAtts(array(
+        'test'    => null,
+        'not'     => ''
+    ), $atts));
 
     $key = md5($thing);
-    $out = isset($atts['test']) ? $atts['test'] : parse($thing);
+    $out = isset($test) ? $test : parse($thing);
 
-    if (isset($atts['test'])) {
-        if (!isset($test[$key]) || $out != $test[$key]) {
-            $test[$key] = $out;
-
-            return isset($thing) ? $last[$key] = parse($thing) : $out;
+    if (isset($test)) {
+        if ($different = !isset($tested[$key]) || $out != $tested[$key]) {
+            $tested[$key] = $out;
         }
-    } elseif (!isset($last[$key]) || $out != $last[$key]) {
-        return $last[$key] = $out;
+    } else {
+        if ($different = !isset($last[$key]) || $out != $last[$key]) {
+            $last[$key] = $out;
+        }
     }
 
-    return parse($thing, 0);
+    $condition = $not ? !$different : $different;
+
+    return isset($test) ?
+        parse($thing, $condition) :
+        ($condition ? $out : parse($thing, false));
 }
 
 // -------------------------------------------------------------
@@ -5116,36 +5125,55 @@ function variable($atts, $thing = null)
         'escape'    => $set,
         'name'      => '',
         'value'     => null,
-        'output'    => null,
         'add'       => null,
-        'separator' => null
+        'reset'     => null,
+        'separator' => null,
+        'output'    => null
     ), $atts));
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
     } elseif ($set === null) {
-        if (isset($variable[$name])) {
+        if (isset($reset)) {
+            $out = isset($variable[$name]) ? $variable[$name] : '';
+            $variable[$name] = $reset === true ? null : $reset;
+
+            return $out;
+        } elseif (isset($variable[$name])) {
             return $variable[$name];
         } else {
             $trace->log("[<txp:variable>: Unknown variable '$name']");
         }
     } else {
-        isset($value) or $value = isset($thing) ?
-            parse($thing) :
-            (isset($variable[$name]) ? $variable[$name] : null);
-        $add = trim($add);
+        if ($add === true) {
+            $var = isset($variable[$name]) ? $variable[$name] : null;
+            empty($thing) or $thing = parse($thing);
+
+            switch ($value) {
+                case null:
+                    $add = isset($thing) ? $thing : 1;
+                    break;
+                default:
+                    $add = $value === true ? $var : $value;
+                    !isset($thing) or $var = $thing;
+            }
+        } else {
+            $var = isset($value) ? $value : (isset($thing) ?
+                parse($thing) :
+                (isset($variable[$name]) ? $variable[$name] : $reset));
+        }
 
         if (!empty($add)) {
-            if (!isset($separator) && is_numeric($add) && is_numeric($value)) {
-                $value += $add;
+            if (!isset($separator) && is_numeric($add) && is_numeric($var)) {
+                $var += $add;
             } else {
-                $value .= ($value ? $separator : '').$add;
+                $var .= ($var ? $separator : '').$add;
             }
         }
 
         $variable[$name] = $escape
-            ? txp_escape(array('escape' => $escape), $value)
-            : $value;
+            ? txp_escape(array('escape' => $escape), $var)
+            : $var;
     }
 
     return $output ? $variable[$name] : '';

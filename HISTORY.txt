@@ -27,6 +27,7 @@ Changes in 4.7.2
 * Changed: Some emoji are preserved in automatically generated URL titles.
 * Changed: Text blocks starting with a Textpattern tag are not Textile'd.
 * Changed: File data is available on 'file_download' callback.
+* Changed: Article lists can be split by 'breakby' form value.
 * Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: Latest translations.
 * Added: French pophelp translation. Massive thanks to Lowel for all their work.
@@ -37,8 +38,10 @@ Changes in 4.7.2
 * Added: 'context' and 'format' attributes to <txp:output_form /> tag.
 * Added: 'context' attribute to <txp:link_to_next />, <txp:link_to_prev />,
   <txp:page_url /> and <txp:permlink /> tags.
-* Added: 'add', 'separator' and 'output' attributes to <txp:variable /> tag.
+* Added: 'add', 'reset', 'separator' and 'output' attributes to <txp:variable />
+* tag.
 * Added: 'test' attribute to <txp:if_different /> tag.
+* Added: 'breakform' attribute to <txp:article(_custom) /> tag.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
 * jQuery File Upload 9.28.0.
 

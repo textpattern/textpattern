@@ -833,6 +833,7 @@ function filterAtts($atts = null, $iscustom = null)
         'break'         => '',
         'breakby'       => '',
         'breakclass'    => '',
+        'breakform'     => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
