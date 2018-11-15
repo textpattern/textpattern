@@ -750,7 +750,7 @@ function doDiagnostics()
 
 function checkUpdates()
 {
-    $response = @json_decode(file_get_contents('https://textpattern.io/version.json'), true);
+    $response = @json_decode(file_get_contents('https://textpattern.com/version.json'), true);
     $release = @$response['textpattern-version']['release'];
     $prerelease = @$response['textpattern-version']['prerelease'];
     $version = get_pref('version');

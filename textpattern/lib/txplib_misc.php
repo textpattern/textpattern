@@ -2665,7 +2665,7 @@ function splat($text)
     if ($production_status !== 'live') {
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
             $trace->stop('[/attribute]');
 
             if (isset($global_atts[$sha][$p])) {
@@ -2674,7 +2674,7 @@ function splat($text)
         }
     } else {
         foreach ($parse[$sha] as $p) {
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
 
             if (isset($global_atts[$sha][$p])) {
                 $txp_atts[$p] = $atts[$p];
@@ -2950,15 +2950,9 @@ function get_form_types()
     static $types = null;
 
     if ($types === null) {
-        $types = array(
-            'article'  => gTxt('article'),
-            'misc'     => gTxt('misc'),
-            'comment'  => gTxt('comment'),
-            'category' => gTxt('category'),
-            'file'     => gTxt('file'),
-            'link'     => gTxt('link'),
-            'section'  => gTxt('section'),
-        );
+        foreach (Txp::get('Textpattern\Skin\Form')->getTypes() as $type) {
+            $types[$type] = gTxt($type);
+        }
 
         callback_event_ref('form.types', 'types', 0, $types);
     }
@@ -4410,7 +4404,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f);
+        $out = parse($f, true, false);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
@@ -4469,7 +4463,7 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $prefs, $pretext, $trace;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
@@ -4477,6 +4471,10 @@ function parse_page($name, $theme, $page = '')
 
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
+            if ($pretext['secondpass']) {
+                $prefs['allow_page_php_scripting'] = false;
+            }
+
             $page = parse($page);
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
@@ -5216,7 +5214,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
         $start = $month ? strtotime($month) : time() or $start = time();
         $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
-        $start = $month ? strtotime($month) : false;
+        $start = $month ? safe_strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);
@@ -5236,7 +5234,10 @@ function buildTimeSql($month, $time, $field = 'Posted')
                 list($start, $stop) = array($stop, $start);
             }
 
-            $timeq = ($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+            $timeq = ($start == $stop ?
+                "$safe_field = FROM_UNIXTIME($start)" :
+                "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)"
+            );
         }
     }
 

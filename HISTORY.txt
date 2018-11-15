@@ -4,14 +4,17 @@ Changes in 4.7.2
 * Fixed: 'problem_connecting_update_server' language string grouping corrected
   (thanks, gaekwad).
 * Fixed: Unparsed 'must_reassign_assets' and 'cannot_assign_assets_to_deletee'
-  strings
+  strings.
 * Fixed: A bug with <txp:related_articles /> tag.
 * Fixed: <txp:search_input /> will always respect its 'form' attribute setting,
   if set.
 * Fixed: A bug with <txp:link_to_[next|prev] /> tags in 'month' URL mode.
+* Fixed: A bug with the global 'not' attribute.
+* Fixed: Multibyte characters are properly obfuscated by <txp:email />.
 * Changed: <txp:search_input /> can be used as a container tag, and also accepts
   'aria_label' and 'placeholder' attributes.
 * Changed: More robust search routes within default public-side theme.
+* Changed: Improved upgrade route where MySQL NO_ZERO_DATE is set.
 * Changed: Enhanced password manager compatibility on login and user details
   pages.
 * Changed: Extended fallback to 'C' locale in some situations.
@@ -22,20 +25,25 @@ Changes in 4.7.2
   'feed_filter' callbacks.
 * Changed: Deleting an article deletes the associated comments.
 * Changed: Some emoji are preserved in automatically generated URL titles.
-* Changed: Text blocks starting with a tag are not textiled.
+* Changed: Text blocks starting with a Textpattern tag are not Textile'd.
 * Changed: File data is available on 'file_download' callback.
+* Changed: Article lists can be split by 'breakby' form value.
 * Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: Latest translations.
+* Added: French pophelp translation. Massive thanks to Lowel for all their work.
 * Added: Global 'trim' and 'default' attributes.
-* Added: Global 'escape="spell"' attribute value, to spell out numbers.
+* Added: Global 'escape="ordinal|spell|url"' attribute values.
 * Added: Custom form (MIME)types, served as "flat" files if needed.
 * Added: Option to export form/page/style to disk on save.
 * Added: 'context' and 'format' attributes to <txp:output_form /> tag.
 * Added: 'context' attribute to <txp:link_to_next />, <txp:link_to_prev />,
   <txp:page_url /> and <txp:permlink /> tags.
-* Added: 'add' and 'separator' attributes to <txp:variable /> tag.
+* Added: 'add', 'reset', 'separator' and 'output' attributes to <txp:variable />
+* tag.
+* Added: 'test' attribute to <txp:if_different /> tag.
+* Added: 'breakform' attribute to <txp:article(_custom) /> tag.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
-* jQuery File Upload 9.26.0.
+* jQuery File Upload 9.28.0.
 
 Changes in 4.7.1
 
@@ -178,10 +186,10 @@ Changes in 4.7.0
 * Changed: Pagination and search added to Plugins panel.
 * Changed: Plugin preview page syntax highlighting and layout improvements.
   Also show Textpack string additions preview (if applicable).
-* Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when viewing
-  a new, unsaved Page/Form/Style (thanks, adi).
-* Changed: Categories can no longer reassign the parent of a child element to its
-  children. Avoids infinite tree loops.
+* Changed: Removed 'Create ...' links from Pages/Forms/Styles panels when
+  viewing a new, unsaved Page/Form/Style (thanks, adi).
+* Changed: Categories can no longer reassign the parent of a child element to
+  its children. Avoids infinite tree loops.
 * Changed: Article preview includes debug info.
 * Changed: 'wraptag' attribute can prepend/append content using special '<+>'
   syntax.
@@ -438,7 +446,8 @@ Changes in 4.5.0
 * Minimum system requirement: PHP 5.2.
 * Modern default site theme (responsive, HTML5, CSS3).
 * Choice of HTML5 or XHTML document type as a preference.
-* Textile 2.4.1. See full changelog at https://textpattern.com/textile-changelog.
+* Textile 2.4.1. See full changelog at
+  https://textpattern.com/textile-changelog.
 * User interface realignment and clean-up.
 * Additional admin theme (Hive).
 * Beautified setup process.
@@ -690,8 +699,8 @@ Changes in 4.0.7
 * Parser: full nesting support, allowing unlimited nesting of identical tags.
 * Parser: attribute values are parsed when enclosed in single quotes.
 * Parser: unquoted attribute values are deprecated and will result in warnings
-  when site status is not set to 'live'. Fix your templates and use double quotes
-  to delimit attribute values.
+  when site status is not set to 'live'. Fix your templates and use double
+  quotes to delimit attribute values.
 * Feature: Expiry time for articles, accompanied by related tags.
 * Speed: various components of the parsing process have been optimized, which
   compensates the impact of increased parser complexity, resulting in slightly
