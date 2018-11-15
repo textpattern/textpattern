@@ -40,7 +40,7 @@ Changes in 4.7.2
 * Added: 'add', 'separator' and 'output' attributes to <txp:variable /> tag.
 * Added: 'test' attribute to <txp:if_different /> tag.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
-* jQuery File Upload 9.26.0.
+* jQuery File Upload 9.28.0.
 
 Changes in 4.7.1
 
