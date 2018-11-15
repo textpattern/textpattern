@@ -336,12 +336,12 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true)
+function parse($thing, $condition = true, $not = true)
 {
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $pattern, $short_tags = null;
 
-    if (!empty($txp_atts['not'])) {
+    if ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
@@ -836,6 +836,7 @@ function filterAtts($atts = null, $iscustom = null)
         'break'         => '',
         'breakby'       => '',
         'breakclass'    => '',
+        'breakform'     => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
@@ -959,7 +960,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($expired && $expired != '1') {
         $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
     } elseif (!$expired) {
-        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
+        $timeq .= ' AND (Expires IS NULL OR '.now('expires').' <= Expires)';
     }
 
     if ($q && $searchsticky) {
