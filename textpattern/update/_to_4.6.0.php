@@ -25,15 +25,6 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Disable no zero dates mode
-if ($sql_mode = getThing('SELECT @@SESSION.sql_mode')) {
-    $tmp_mode = implode(',', array_diff(
-        do_list_unique($sql_mode),
-        array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE')
-    ));
-    safe_query("SET SESSION sql_mode = '".doSlash($tmp_mode)."'");
-}
-
 safe_alter('textpattern', "MODIFY textile_body    VARCHAR(32) NOT NULL DEFAULT '1'");
 safe_alter('textpattern', "MODIFY textile_excerpt VARCHAR(32) NOT NULL DEFAULT '1'");
 safe_update('txp_prefs', "name = 'pane_article_textfilter_help_visible'", "name = 'pane_article_textile_help_visible'");
@@ -257,9 +248,4 @@ $availableThemes = \Textpattern\Admin\Theme::names();
 
 if (!in_array(get_pref('theme_name'), $availableThemes)) {
     set_pref('theme_name', 'hive');
-}
-
-// Restore sql_mode
-if (!empty($sql_mode)) {
-    safe_query("SET SESSION sql_mode = '".doSlash($sql_mode)."'");
 }
