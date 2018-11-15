@@ -227,7 +227,7 @@
         ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
-<p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpatern support forum, this reduces a security risk by omitting sensitive server information.</p>
+<p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpattern support forum, this reduces a security risk by omitting sensitive server information.</p>
         ]]></item>
         <item id="dev_version_live" title="Development code on a live server"><![CDATA[
 <h2>Development code on a live server</h2>

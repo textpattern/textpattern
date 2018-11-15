@@ -2665,7 +2665,7 @@ function splat($text)
     if ($production_status !== 'live') {
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
             $trace->stop('[/attribute]');
 
             if (isset($global_atts[$sha][$p])) {
@@ -2674,7 +2674,7 @@ function splat($text)
         }
     } else {
         foreach ($parse[$sha] as $p) {
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
 
             if (isset($global_atts[$sha][$p])) {
                 $txp_atts[$p] = $atts[$p];
@@ -2859,6 +2859,141 @@ function event_category_popup($name, $cat = '', $id = '', $atts = array())
     }
 
     return false;
+}
+
+/**
+ * Creates a form template.
+ *
+ * On a successful run, will trigger a 'form.create > done' callback event.
+ *
+ * @param   string $name The name
+ * @param   string $type The type
+ * @param   string $Form The template
+ * @return  bool FALSE on error
+ * @since   4.6.0
+ * @package Template
+ */
+
+function create_form($name, $type, $Form)
+{
+    $types = get_form_types();
+
+    if (form_exists($name) || !is_valid_form($name) || !in_array($type, array_keys($types))) {
+        return false;
+    }
+
+    if (
+        safe_insert(
+            'txp_form',
+            "name = '".doSlash($name)."',
+            type = '".doSlash($type)."',
+            Form = '".doSlash($Form)."'"
+        ) === false
+    ) {
+        return false;
+    }
+
+    callback_event('form.create', 'done', 0, compact('name', 'type', 'Form'));
+
+    return true;
+}
+
+/**
+ * Checks if a form template exists.
+ *
+ * @param   string $name The form
+ * @return  bool TRUE if the form exists
+ * @since   4.6.0
+ * @package Template
+ */
+
+function form_exists($name)
+{
+    return (bool) safe_row("name", 'txp_form', "name = '".doSlash($name)."'");
+}
+
+/**
+ * Validates a string as a form template name.
+ *
+ * @param   string $name The form name
+ * @return  bool TRUE if the string validates
+ * @since   4.6.0
+ * @package Template
+ */
+
+function is_valid_form($name)
+{
+    if (function_exists('mb_strlen')) {
+        $length = mb_strlen($name, '8bit');
+    } else {
+        $length = strlen($name);
+    }
+
+    return $name && !preg_match('/^\s|[<>&"\']|\s$/u', $name) && $length <= 64;
+}
+
+/**
+ * Gets a list of form types.
+ *
+ * The list form types can be extended with a 'form.types > types'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$types'. The third parameter contains a reference to an
+ * array of 'type => label' pairs.
+ *
+ * @return  array An array of form types
+ * @since   4.6.0
+ * @package Template
+ */
+
+function get_form_types()
+{
+    static $types = null;
+
+    if ($types === null) {
+        foreach (Txp::get('Textpattern\Skin\Form')->getTypes() as $type) {
+            $types[$type] = gTxt($type);
+        }
+
+        callback_event_ref('form.types', 'types', 0, $types);
+    }
+
+    return $types;
+}
+
+/**
+ * Gets a list of essential form templates.
+ *
+ * These forms can not be deleted or renamed. The array keys hold
+ * the form names, the array values their group.
+ *
+ * The list forms can be extended with a 'form.essential > forms'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$essential'. The third parameter contains a reference to an
+ * array of forms.
+ *
+ * @return  array An array of form names
+ * @since   4.6.0
+ * @package Template
+ */
+
+function get_essential_forms()
+{
+    static $essential = null;
+
+    if ($essential === null) {
+        $essential = array(
+            'comments'         => 'comment',
+            'comments_display' => 'comment',
+            'comment_form'     => 'comment',
+            'default'          => 'article',
+            'plainlinks'       => 'link',
+            'files'            => 'file',
+        );
+
+        callback_event_ref('form.essential', 'forms', 0, $essential);
+    }
+
+    return $essential;
 }
 
 /**
@@ -4269,7 +4404,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f);
+        $out = parse($f, true, false);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
@@ -4328,7 +4463,7 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $prefs, $pretext, $trace;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
@@ -4336,6 +4471,10 @@ function parse_page($name, $theme, $page = '')
 
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
+            if ($pretext['secondpass']) {
+                $prefs['allow_page_php_scripting'] = false;
+            }
+
             $page = parse($page);
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
@@ -5075,7 +5214,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
         $start = $month ? strtotime($month) : time() or $start = time();
         $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
-        $start = $month ? strtotime($month) : false;
+        $start = $month ? safe_strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);
@@ -5095,7 +5234,10 @@ function buildTimeSql($month, $time, $field = 'Posted')
                 list($start, $stop) = array($stop, $start);
             }
 
-            $timeq = ($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+            $timeq = ($start == $stop ?
+                "$safe_field = FROM_UNIXTIME($start)" :
+                "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)"
+            );
         }
     }
 
