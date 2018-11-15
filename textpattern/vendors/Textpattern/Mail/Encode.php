@@ -129,9 +129,17 @@ class Encode
     public function entityObfuscateAddress($address)
     {
         $ent = array();
+        $mb = extension_loaded('mbstring');
+        $length = $mb ? mb_strlen($address, 'UTF-8') : strlen($address);
 
-        for ($i = 0; $i < strlen($address); $i++) {
-            $ent[] = "&#".ord(substr($address, $i, 1)).";";
+        if ($mb) {
+            for ($i = 0; $i < $length; $i++) {
+                $ent[] = "&#".mb_ord(mb_substr($address, $i, 1, 'UTF-8'), 'UTF-8').";";
+            }
+        } else {
+            for ($i = 0; $i < $length; $i++) {
+                $ent[] = "&#".ord(substr($address, $i, 1)).";";
+            }
         }
 
         return join('', $ent);

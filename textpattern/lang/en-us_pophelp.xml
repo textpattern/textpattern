@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<help lang="en">
+<help lang="en-US">
     <group id="admin" title="Users panel">
         <item id="about_privileges" title="About roles"><![CDATA[
 <h2>About roles</h2>
@@ -107,8 +107,8 @@
 <h2>Excerpt</h2>
 <p>Article excerpts are optional. Excerpts could be used as a short summary of the article that is displayed as part of a table of contents, used in place of the full article body in the site’s RSS/Atom feeds, or a number of other uses.</p>
         ]]></item>
-        <item id="expire_date" title="Expire date"><![CDATA[
-<h2>Expire date</h2>
+        <item id="expire_date" title="Expiration date"><![CDATA[
+<h2>Expiration date</h2>
 <p>The time an article is labelled as expired. The time is optional and can be set to an arbitrary time in the past or future.</p>
 <p>The boxes correspond to the following information:</p>
 <ul>
