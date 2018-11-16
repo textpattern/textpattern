@@ -931,7 +931,9 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = '';
-        $groupby = $breakby && !is_numeric(strtr($breakby, ' ,', '00'));
+        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
+            false :
+            (strpos($breakby, '<') !== false ? 1 : 2);
 
         while ($count++ <= $last) {
             global $thisarticle;
@@ -941,7 +943,11 @@ function doArticles($atts, $iscustom, $thing = null)
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
 
-                $newbreak = $groupby ? parse_form($breakby) : $count;
+                $newbreak = !$groupby ? $count :
+                    ($groupby === 1 ?
+                        parse($breakby, true, false) :
+                        parse_form($breakby)
+                    );
             } else {
                 $newbreak = null;
             }
