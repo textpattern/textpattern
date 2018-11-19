@@ -421,7 +421,7 @@ function preText($s, $prefs)
             (!empty($month) ? $month : array());
         list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if ((strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
             $month = implode('-', $month);
         } else {
             $out['month'] = $month = '';
