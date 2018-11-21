@@ -4469,17 +4469,18 @@ function parse_page($name, $theme, $page = '')
         $page = fetch_page($name, $theme);
     }
 
-    if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
-            if ($pretext['secondpass']) {
-                $prefs['allow_page_php_scripting'] = false;
-            }
+    $php_allowed = $prefs['allow_page_php_scripting'];
 
+    if ($page !== false) {
+        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
             $page = parse($page);
+            $prefs['allow_page_php_scripting'] = false;
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
         }
     }
+
+    $prefs['allow_page_php_scripting'] = $php_allowed;
 
     return $page;
 }

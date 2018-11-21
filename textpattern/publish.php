@@ -68,6 +68,10 @@ plug_privs();
 // Add prefs to globals.
 extract($prefs);
 
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
+}
+
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -933,7 +937,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $chunk = '';
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
-            (strpos($breakby, '<') !== false ? 1 : 2);
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
 
         while ($count++ <= $last) {
             global $thisarticle;
