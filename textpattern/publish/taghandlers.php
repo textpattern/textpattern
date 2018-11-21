@@ -5482,7 +5482,7 @@ function txp_escape($atts, $thing = '')
                     $textile = Txp::get('\Textpattern\Textile\Parser');
                 }
 
-                $thing = $textile->textileThis($tidy ? ' '.$thing : $thing);
+                $thing = $textile->parse($tidy ? ' '.$thing : $thing);
                 !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':

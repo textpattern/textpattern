@@ -4610,9 +4610,9 @@ function clean_comment_counts($parentids)
 
 function markup_comment($msg)
 {
-    $textile = new \Textpattern\Textile\Parser();
+    $textile = new \Textpattern\Textile\RestrictedParser();
 
-    return $textile->textileRestricted($msg);
+    return $textile->parse($msg);
 }
 
 /**
