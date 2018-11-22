@@ -1139,7 +1139,7 @@ class Parser
 
         $this->patterns = array(
             'block' => '/^(?:'.$block.')$/i',
-            'contained' => '/^<\/?(?P<open>[^\s>]+)(?:\s|\/?>).*>$/smi',
+            'contained' => '/^<\/?(?P<open>[^\s>]+)(?:\s.*|\/?>.*|)>$/smi',
             'divider' => '/^(?:<\/?('.$divider.')(?:\s[^>]*?|\/?)>(?:<\/\1\s*?>)?)+$/smi',
             'phrasing' => '/^(?:'.$phrasing.')$/i',
             'raw' => '/^(?:'.$raw.')$/i',
