@@ -333,12 +333,12 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true)
+function parse($thing, $condition = true, $not = true)
 {
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
-    static $pattern, $short_tags = null;
+    static $short_tags = null;
 
-    if (!empty($txp_atts['not'])) {
+    if ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
@@ -353,11 +353,10 @@ function parse($thing, $condition = true)
 
     if (!isset($short_tags)) {
         $short_tags = get_pref('enable_short_tags', false);
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
     if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match("@<(?:{$pattern}):@", $thing))
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing))
     {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
@@ -371,8 +370,8 @@ function parse($thing, $condition = true)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*)/?\>$@s';
+        $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
         $last = count($parsed);
@@ -833,6 +832,7 @@ function filterAtts($atts = null, $iscustom = null)
         'break'         => '',
         'breakby'       => '',
         'breakclass'    => '',
+        'breakform'     => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
@@ -956,7 +956,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($expired && $expired != '1') {
         $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
     } elseif (!$expired) {
-        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
+        $timeq .= ' AND (Expires IS NULL OR '.now('expires').' <= Expires)';
     }
 
     if ($q && $searchsticky) {

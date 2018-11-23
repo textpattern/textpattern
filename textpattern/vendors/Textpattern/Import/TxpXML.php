@@ -158,7 +158,7 @@ class TxpXML
             $article['Body'] = @trim($this->replaceUrls($a->body));
             $format = $a->body->attributes()->format;
             if ($format == 'textile') {
-                $article['Body_html']       = $textile->textileThis($article['Body']);
+                $article['Body_html']       = $textile->parse($article['Body']);
                 $article['textile_body']    = 1;
             } else {
                 $article['Body_html']       = $article['Body'];
@@ -168,7 +168,7 @@ class TxpXML
             $article['Excerpt'] = @trim($this->replaceUrls($a->excerpt));
             $format = $a->excerpt->attributes()->format;
             if ($format == 'textile') {
-                $article['Excerpt_html']    = $textile->textileThis($article['Excerpt']);
+                $article['Excerpt_html']    = $textile->parse($article['Excerpt']);
                 $article['textile_excerpt'] = 1;
             } else {
                 $article['Excerpt_html']    = $article['Excerpt'];

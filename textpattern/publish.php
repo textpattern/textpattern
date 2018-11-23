@@ -68,6 +68,10 @@ plug_privs();
 // Add prefs to globals.
 extract($prefs);
 
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
+}
+
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -421,7 +425,7 @@ function preText($s, $prefs)
             (!empty($month) ? $month : array());
         list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if ((strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
             $month = implode('-', $month);
         } else {
             $out['month'] = $month = '';
@@ -795,6 +799,16 @@ function doArticles($atts, $iscustom, $thing = null)
     global $pretext, $thispage;
     extract($pretext);
 
+    // Article form preview.
+    if (txpinterface === 'admin' && ps('Form')) {
+        doAuth();
+
+        if (!has_privs('form')) {
+            txp_status_header('401 Unauthorized');
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+        }
+    }
+
     if ($iscustom) {
         // Custom articles must not render search results.
         $q = '';
@@ -920,31 +934,59 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($rs && $last = numRows($rs)) {
         $count = 0;
         $articles = array();
+        $chunk = '';
+        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
+            false :
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
 
-        while ($a = nextRow($rs)) {
-            ++$count;
-            populateArticleData($a);
+        while ($count++ <= $last) {
             global $thisarticle;
-            $thisarticle['is_first'] = ($count == 1);
-            $thisarticle['is_last'] = ($count == $last);
 
-            // Article form preview.
-            if (txpinterface === 'admin' && ps('Form')) {
-                doAuth();
+            if ($a = nextRow($rs)) {
+                populateArticleData($a);
+                $thisarticle['is_first'] = ($count == 1);
+                $thisarticle['is_last'] = ($count == $last);
 
-                if (!has_privs('form')) {
-                    txp_status_header('401 Unauthorized');
-                    exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-                }
-
-                $articles[] = parse(gps('Form'));
-            } elseif ($allowoverride && $a['override_form']) {
-                $articles[] = parse_form($a['override_form']);
+                $newbreak = !$groupby ? $count :
+                    ($groupby === 1 ?
+                        parse($breakby, true, false) :
+                        parse_form($breakby)
+                    );
             } else {
-                $articles[] = $thing ? parse($thing) : parse_form($fname);
+                $newbreak = null;
             }
 
+            if (isset($oldbreak) && $newbreak !== $oldbreak) {
+                if ($breakform) {
+                    $tmparticle = $thisarticle;
+                    $thisarticle = $oldarticle;
+                    $newform = parse_form($breakform);
+                    $chunk = str_replace('<+>', $chunk, $newform);
+                    $thisarticle = $tmparticle;
+                }
+
+                $articles[] = $chunk;
+                $chunk = '';
+            }
+
+            if ($count <= $last) {
+                // Article form preview.
+                if (txpinterface === 'admin' && ps('Form')) {
+                    $chunk .= parse(gps('Form'));
+                } elseif ($allowoverride && $a['override_form']) {
+                    $chunk .= parse_form($a['override_form']);
+                } else {
+                    $chunk .= $thing ? parse($thing) : parse_form($fname);
+                }
+            }
+
+            $oldarticle = $thisarticle;
+            $oldbreak = $newbreak;
             unset($GLOBALS['thisarticle']);
+        }
+
+        if ($groupby) {
+            $breakby = '';
         }
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));

@@ -17,10 +17,10 @@
  *
  * Additions and fixes Copyright (c) 2006    Alex Shiels       https://twitter.com/tellyworth
  * Additions and fixes Copyright (c) 2010    Stef Dawson       http://stefdawson.com/
- * Additions and fixes Copyright (c) 2010-16 Netcarver         https://github.com/netcarver
+ * Additions and fixes Copyright (c) 2010-17 Netcarver         https://github.com/netcarver
  * Additions and fixes Copyright (c) 2011    Jeff Soo          http://ipsedixit.net/
  * Additions and fixes Copyright (c) 2012    Robert Wetzlmayr  http://wetzlmayr.com/
- * Additions and fixes Copyright (c) 2012-14 Jukka Svahn       http://rahforum.biz/
+ * Additions and fixes Copyright (c) 2012-18 Jukka Svahn       http://rahforum.biz/
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -350,7 +350,7 @@ class Parser
      * @var string
      */
 
-    protected $ver = '3.6.0';
+    protected $ver = '3.7.0-dev';
 
     /**
      * Regular expression snippets.
@@ -463,12 +463,160 @@ class Parser
     protected $blocktag_whitelist = array();
 
     /**
-     * Whitelisted tags.
+     * Whether raw blocks are enabled.
      *
-     * @var array
+     * @var   bool
+     * @since 3.7.0
      */
 
-    protected $block_whitelist = array(' ');
+    protected $rawBlocksEnabled = false;
+
+    /**
+     * An array of patterns used for matching raw blocks.
+     *
+     * @var   array
+     * @since 3.7.0
+     */
+
+    protected $rawContent = array(
+        'code',
+        'notextile',
+        'pre',
+    );
+
+    /**
+     * An array of patterns used for matching phrasing tags.
+     *
+     * Phrasing tags, unline others, are wrapped in a paragraph even if they
+     * already wrap the block.
+     *
+     * @var   array
+     * @since 3.7.0
+     */
+
+    protected $phrasingContent = array(
+        'a',
+        'abbr',
+        'acronym',
+        'area',
+        'audio',
+        'b',
+        'bdo',
+        'br',
+        'button',
+        'canvas',
+        'cite',
+        'code',
+        'command',
+        'data',
+        'datalist',
+        'del',
+        'dfn',
+        'em',
+        'embed',
+        'i',
+        'iframe',
+        'img',
+        'input',
+        'ins',
+        'kbd',
+        'keygen',
+        'label',
+        'link',
+        'map',
+        'mark',
+        'math',
+        'meta',
+        'meter',
+        'noscript',
+        'object',
+        'output',
+        'progress',
+        'q',
+        'ruby',
+        'samp',
+        'script',
+        'select',
+        'small',
+        'span',
+        'strong',
+        'sub',
+        'sup',
+        'svg',
+        'textarea',
+        'time',
+        'var',
+        'video',
+        'wbr',
+    );
+
+    /**
+     * An array of patterns used to match divider tags.
+     *
+     * Blocks containing only self-closing divider tags are not wrapped in
+     * paragraph tags.
+     *
+     * @var   array
+     * @since 3.7.0
+     */
+
+    protected $dividerContent = array(
+        'br',
+        'hr',
+        'img',
+    );
+
+    /**
+     * An array of patterns used to match unwrappable block tags.
+     *
+     * Blocks containing any of these unwrappable tags will not be wrapped in
+     * paragraphs.
+     *
+     * @var   array
+     * @since 3.7.0
+     */
+
+    protected $blockContent = array(
+        'address',
+        'article',
+        'aside',
+        'blockquote',
+        'details',
+        'div',
+        'dl',
+        'fieldset',
+        'figure',
+        'footer',
+        'form',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'header',
+        'hgroup',
+        'main',
+        'menu',
+        'nav',
+        'ol',
+        'p',
+        'pre',
+        's',
+        'section',
+        'table',
+        'template',
+        'ul',
+    );
+
+    /**
+     * An array of built patterns.
+     *
+     * @var   array
+     * @since 3.7.0
+     */
+
+    protected $patterns = array();
 
     /**
      * Whether block tags are enabled.
@@ -664,9 +812,30 @@ class Parser
      * Relative image path.
      *
      * @var string
+     * @deprecated in 3.7.0
+     * @see Parser::$relImagePrefix
+     * @see Parser::$relLinkPrefix
      */
 
-    protected $relativeImagePrefix = '';
+    protected $relativeImagePrefix;
+
+    /**
+     * Relative link prefix.
+     *
+     * @var   string
+     * @since 3.7.0
+     */
+
+    protected $relLinkPrefix = '';
+
+    /**
+     * Prefix applied to relative images.
+     *
+     * @var   string
+     * @since 3.7.0
+     */
+
+    protected $relImagePrefix = '';
 
     /**
      * Maximum nesting level for inline elements.
@@ -962,6 +1131,21 @@ class Parser
                 'char'  => '\S',
             );
         }
+
+        $block = implode('|', $this->blockContent);
+        $divider = implode('|', $this->dividerContent);
+        $phrasing = implode('|', $this->phrasingContent);
+        $raw = implode('|', $this->rawContent);
+
+        $this->patterns = array(
+            'block' => '/^(?:'.$block.')$/i',
+            'contained' => '/^<\/?(?P<open>[^\s>]+)(?:\s.*|\/?>.*|)>$/smi',
+            'divider' => '/^(?:<\/?('.$divider.')(?:\s[^>]*?|\/?)>(?:<\/\1\s*?>)?)+$/smi',
+            'phrasing' => '/^(?:'.$phrasing.')$/i',
+            'raw' => '/^(?:'.$raw.')$/i',
+            'wrapped' => '/^<\/?(?P<open>[^\s>]+)[^>]*?>.*<\/\1>$/smi',
+            'unwrappable' => '/<\/?(?:'.$block.')(?:\s[^>]*?|\/?)>/smi',
+        );
 
         $this->urlch = '['.$this->regex_snippets['wrd'].'"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
         $this->quote_starts = implode('|', array_map('preg_quote', array_keys($this->quotes)));
@@ -1286,6 +1470,55 @@ class Parser
     }
 
     /**
+     * Enables and disables raw blocks.
+     *
+     * When raw blocks are enabled, any paragraph blocks wrapped in a tag
+     * not matching Parser::$blockContent or Parser::$phrasingContent will not
+     * be parsed, and instead is left as is.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * echo $parser
+     *     ->setRawBlocks(true)
+     *     ->parse('<div>A *raw* block.</div>');
+     *
+     * The above generates:
+     *
+     * bc. <div>A *raw* block.</div>
+     *
+     * @param  bool $enabled TRUE to enable, FALSE to disable
+     * @return Parser
+     * @since  3.7.0
+     * @see    Parser::isRawBlocksEnabled()
+     * @see    Parser::isRawBlock()
+     * @api
+     */
+
+    public function setRawBlocks($enabled)
+    {
+        $this->rawBlocksEnabled = (bool) $enabled;
+        return $this;
+    }
+
+    /**
+     * Whether raw blocks are enabled.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * if ($parser->isRawBlocksEnabled() === true) {
+     *     echo 'Raw blocks are enabled';
+     * }
+     *
+     * @return bool TRUE if enabled, FALSE otherwise
+     * @since  3.7.0
+     * @see    Parser::setRawBlocks()
+     * @api
+     */
+
+    public function isRawBlocksEnabled()
+    {
+        return (bool) $this->rawBlocksEnabled;
+    }
+
+    /**
      * Enables and disables block-level tags and formatting features.
      *
      * When disabled, block-level tags aren't rendered. This allows PHP-Textile to
@@ -1299,7 +1532,7 @@ class Parser
      *
      * The above generates:
      *
-     * bc. h1. Hello *strong* world!
+     * bc. h1. Hello <strong>strong</strong> world!
      *
      * @param  bool   $enabled TRUE to enable, FALSE to disable
      * @return Parser
@@ -1408,7 +1641,7 @@ class Parser
      * array containing the full symbol table.
      *
      * bc. $parser = new \Netcarver\Textile\Parser();
-     * print_r($parser-getSymbol);
+     * print_r($parser->getSymbol());
      *
      * The above outputs all available symbol definitions.
      *
@@ -1433,23 +1666,112 @@ class Parser
     }
 
     /**
-     * Sets base image directory path.
+     * Sets base relative image prefix.
      *
-     * This is used when Textile is supplied with a relative image path.
-     * Allows client systems to have PHP-Textile convert relative image paths to
-     * absolute or prefixed paths. This method is used to set that base path,
-     * usually a absolute HTTP address pointing to a directory.
+     * The given string is used to prefix relative image paths, usually an
+     * absolute HTTP address pointing a the site's image, or upload, directory.
+     * PHP-Textile to convert relative paths to absolute, or prefixed paths.
      *
      * bc. $parser = new \Netcarver\Textile\Parser();
-     * $parser->setRelativeImagePrefix('http://static.example.com/');
+     * $parser->setImagePrefix('https://static.example.com/images/');
+     *
+     * @param  string $prefix The prefix
+     * @return Parser
+     * @since  3.7.0
+     * @see    Parser::getImagePrefix()
+     * @api
+     */
+
+    public function setImagePrefix($prefix)
+    {
+        $this->relImagePrefix = (string) $prefix;
+        return $this;
+    }
+
+    /**
+     * Gets base relative image prefix.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * echo $parser->getImagePrefix();
+     *
+     * @return string The prefix
+     * @since  3.7.0
+     * @see    Parser::setImagePrefix()
+     * @api
+     */
+
+    public function getImagePrefix()
+    {
+        return (string) $this->relImagePrefix;
+    }
+
+    /**
+     * Sets base relative link prefix.
+     *
+     * The given string is used to prefix relative link paths. This allows
+     * PHP-Textile convert relative paths to absolute, or prefixed, links.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * $parser->setLinkPrefix('https://example.com/');
+     *
+     * @param  string $prefix The prefix
+     * @return Parser
+     * @since  3.7.0
+     * @see    Parser::getLinkPrefix()
+     * @api
+     */
+
+    public function setLinkPrefix($prefix)
+    {
+        $this->relLinkPrefix = (string) $prefix;
+        return $this;
+    }
+
+    /**
+     * Gets base relative link prefix.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * echo $parser->getLinkPrefix();
+     *
+     * @return string The prefix
+     * @since  3.7.0
+     * @see    Parser::setLinkPrefix()
+     * @api
+     */
+
+    public function getLinkPrefix()
+    {
+        return (string) $this->relLinkPrefix;
+    }
+
+    /**
+     * Sets base relative image and link directory path.
+     *
+     * This is used when Textile is supplied with a relative image or link path.
+     * Allows client systems to have PHP-Textile convert relative paths to
+     * absolute or prefixed paths. This method is used to set that base path,
+     * usually an absolute HTTP address pointing to a directory. Note that
+     * despite its name it applies to both links and images.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * $parser->setRelativeImagePrefix('https://example.com/');
      *
      * @param  string $prefix  The string to prefix all relative image paths with
      * @return Parser
+     * @deprecated in 3.7.0
+     * @see Parser::setImagePrefix
+     * @see Parser::setLinkPrefix
      * @api
      */
 
     public function setRelativeImagePrefix($prefix = '')
     {
+        trigger_error(
+            'Parser::setRelativeImagePrefix() is deprecated.'.
+            'Use Parser::setImagePrefix() and Parser::setLinkPrefix() instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->relativeImagePrefix = $prefix;
         return $this;
     }
@@ -1581,7 +1903,6 @@ class Parser
         if ($this->isBlockTagEnabled()) {
             if ($this->isLiteModeEnabled()) {
                 $this->blocktag_whitelist = array('bq', 'p');
-                $this->block_whitelist = array(' ');
                 $text = $this->blocks($text."\n\n");
             } else {
                 $this->blocktag_whitelist = array(
@@ -1594,7 +1915,6 @@ class Parser
                     'fn'.$this->regex_snippets['digit'].'+',
                     '###',
                 );
-                $this->block_whitelist = array(' ', '\<\w');
                 $text = $this->blocks($text);
                 $text = $this->placeNoteLists($text);
             }
@@ -1653,12 +1973,17 @@ class Parser
     {
         if ($encode) {
             trigger_error(
-                'Use of the $encode argument is discouraged. Use Parser::textileEncode() instead.',
+                '$encode argument is deprecated. Use Parser::textileEncode() instead.',
                 E_USER_DEPRECATED
             );
 
             return $this->textileEncode($text);
         }
+
+        trigger_error(
+            'Parser::textileThis() is deprecated. Use Parser::parse() instead.',
+            E_USER_DEPRECATED
+        );
 
         return $this
             ->setRestricted(false)
@@ -1694,6 +2019,10 @@ class Parser
      * @param  bool   $noimage Allow images
      * @param  string $rel     Relationship attribute applied to generated links
      * @return string Parsed input
+     * @see    Parser::setRestricted()
+     * @see    Parser::setLite()
+     * @see    Parser::setImages()
+     * @see    Parser::setLinkRelationShip()
      * @see    Parser::parse()
      * @deprecated in 3.6.0
      * @api
@@ -1701,6 +2030,11 @@ class Parser
 
     public function textileRestricted($text, $lite = true, $noimage = true, $rel = 'nofollow')
     {
+        trigger_error(
+            'Parser::textileRestricted() is deprecated. Use Parser::parse() with Parser::setRestricted() instead.',
+            E_USER_DEPRECATED
+        );
+
         return $this
             ->setRestricted(true)
             ->setLite($lite)
@@ -2076,8 +2410,10 @@ class Parser
         if (preg_match("/\[([^]]+)\]/U", $matched, $lng)) {
             // Consume entire lang block -- valid or invalid.
             $matched = str_replace($lng[0], '', $matched);
-            if (preg_match("/\[([a-zA-Z]{2}(?:[\-\_][a-zA-Z]{2})?)\]/U", $lng[0], $lng)) {
-                $lang = $lng[1];
+            if ($element === 'code' && preg_match("/\[([a-zA-Z0-9_-]+)\]/U", $lng[0], $lng1)) {
+                $lang = $lng1[1];
+            } elseif (preg_match("/\[([a-zA-Z]{2}(?:[\-\_][a-zA-Z]{2})?)\]/U", $lng[0], $lng2)) {
+                $lang = $lng2[1];
             }
         }
 
@@ -2174,7 +2510,7 @@ class Parser
             $o['span'] = $this->cleanAttribs($span);
         }
 
-        if ($style) {
+        if (!empty($style)) {
             $so = '';
             $tmps = array();
 
@@ -2196,8 +2532,7 @@ class Parser
                 }
             }
 
-            $styleOut = trim(str_replace(array("\n", ';;'), array('', ';'), $so));
-            $o['style'] = $styleOut;
+            $o['style'] = trim(str_replace(array("\n", ';;'), array('', ';'), $so));
         }
 
         if ($width) {
@@ -2209,21 +2544,31 @@ class Parser
     }
 
     /**
-     * Checks whether the text is not enclosed by a block tag.
+     * Checks whether the text block should be wrapped in a paragraph.
      *
      * @param  string $text The input string
-     * @return bool   TRUE if the text is not enclosed
+     * @return bool   TRUE if the text can be wrapped, FALSE otherwise
      */
 
     protected function hasRawText($text)
     {
-        $r = preg_replace(
-            '@<(p|hr|br|img|blockquote|div|form|table|ul|ol|dl|pre|h[1-6])[^>]*?'.chr(62).'.*</\1[^>]*?>@si',
-            '',
-            trim($text)
-        );
-        $r = trim(preg_replace('@<(br|hr|img)[^>]*?/?>@i', '', trim($r)));
-        return '' != $r;
+        if (preg_match($this->patterns['unwrappable'], $text)) {
+            return false;
+        }
+
+        if (preg_match($this->patterns['divider'], $text)) {
+            return false;
+        }
+
+        if (preg_match($this->patterns['wrapped'], $text, $m)) {
+            if (preg_match($this->patterns['phrasing'], $m['open'])) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -2536,15 +2881,20 @@ class Parser
 
     protected function fTextileList($m)
     {
-        $text = preg_split('/\n(?=[*#;:])/m', $m[0]);
+        $text = $m[0];
+        $lines = preg_split('/\n(?=[*#;:])/m', $m[0]);
         $pt = '';
-        $out = array();
 
-        foreach ($text as $nr => $line) {
-            $nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
+        foreach ($lines as $nr => $line) {
+            $nextline = isset($lines[$nr+1]) ? $lines[$nr+1] : false;
 
             if (preg_match("/^(?P<tl>[#*;:]+)(?P<st>_|\d+)?(?P<atts>$this->cls)[ .](?P<content>.*)$/s", $line, $m)) {
                 $tl = $m['tl'];
+
+                if ($nr === 0 && strlen($tl) > 1) {
+                    return $text;
+                }
+
                 $st = $m['st'];
                 $atts = $m['atts'];
                 $content = trim($m['content']);
@@ -2746,7 +3096,6 @@ class Parser
         $regex = '/^(?P<tag>'.join('|', $this->blocktag_whitelist).')'.
             '(?P<atts>'.$this->a.$this->cls.')\.(?P<ext>\.?)(?::(?P<cite>\S+))? (?P<graf>.*)$/Ss'.
             $this->regex_snippets['mod'];
-        $whitelist = '/^(?:'.implode('|', $this->block_whitelist).')/';
 
         $textblocks = preg_split('/(\n{2,})/', $text, null, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -2791,7 +3140,10 @@ class Parser
                     $block .= $c1;
                 }
             } else {
-                if ($ext || !preg_match($whitelist, $block)) {
+                $rawBlock = preg_match($this->patterns['divider'], $block) ||
+                    ($this->isRawBlocksEnabled() && $this->isRawBlock($block));
+
+                if ($ext || (strpos($block, ' ') !== 0 && !$rawBlock)) {
                     list($o1, $o2, $content, $c2, $c1, $eat) = $this->fBlock(array(
                         0,
                         $tag,
@@ -2807,10 +3159,12 @@ class Parser
                     } else {
                         $block = $o2.$content.$c2;
                     }
+                } elseif ($rawBlock && $this->isRestrictedModeEnabled()) {
+                    $block = $this->shelve($this->rEncodeHTML($block));
+                } elseif ($rawBlock) {
+                    $block = $this->shelve($block);
                 } else {
-                    $block = strpos($block, ' ') === 0 ?
-                        $this->graf($block) :
-                        $this->shelve($block);
+                    $block = $this->graf($block);
                 }
             }
 
@@ -2828,7 +3182,6 @@ class Parser
             } else {
                 $whitespace = '';
             }
-
         }
 
         if ($ext) {
@@ -2915,7 +3268,14 @@ class Parser
             $c2 = "</p>";
             $c1 = "\n</blockquote>";
         } elseif ($tag == 'bc') {
-            $o1 = "<pre$atts><code>";
+            $attrib_array = $this->parseAttribsToArray($att, 'code');
+            $code_class   = '';
+            if (isset($attrib_array['lang'])) {
+                $code_class = ' class="'.$attrib_array['lang'].'"';
+                unset($attrib_array['lang']);
+                $atts = $this->formatAttributeString($attrib_array);
+            }
+            $o1 = "<pre$atts><code$code_class>";
             $c1 = "</code></pre>";
             $content = $this->shelve($this->rEncodeHTML($content));
         } elseif ($tag == 'notextile') {
@@ -2940,6 +3300,37 @@ class Parser
         $content = (!$eat) ? $this->graf($content) : '';
 
         return array($o1, $o2, $content, $c2, $c1, $eat);
+    }
+
+    /**
+     * Whether the block is a raw document node.
+     *
+     * Raw blocks will be shelved and left as is.
+     *
+     * @param  string $text Block to check
+     * @return bool   TRUE if the block is raw, FALSE otherwise
+     * @since  3.7.0
+     */
+
+    protected function isRawBlock($text)
+    {
+        if (preg_match($this->patterns['contained'], $text, $m)) {
+            if (preg_match($this->patterns['raw'], $m['open'])) {
+                return true;
+            }
+
+            if (preg_match($this->patterns['phrasing'], $m['open'])) {
+                return false;
+            }
+
+            if (preg_match($this->patterns['block'], $m['open'])) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -3896,18 +4287,18 @@ class Parser
         return $pre . $out . $pop . $tight;
     }
 
-     /**
-      * Finds URI aliases within the given input.
-      *
-      * This method finds URI aliases in the Textile input. Links are stored
-      * in an internal cache, so that they can be referenced from any link
-      * in the document.
-      *
-      * This operation happens before the actual link parsing takes place.
-      *
-      * @param  string $text Textile input
-      * @return string The Textile document with any URI aliases removed
-      */
+    /**
+     * Finds URI aliases within the given input.
+     *
+     * This method finds URI aliases in the Textile input. Links are stored
+     * in an internal cache, so that they can be referenced from any link
+     * in the document.
+     *
+     * This operation happens before the actual link parsing takes place.
+     *
+     * @param  string $text Textile input
+     * @return string The Textile document with any URI aliases removed
+     */
 
     protected function getRefs($text)
     {
@@ -3948,19 +4339,24 @@ class Parser
      * Stores away a URL fragments that have been parsed
      * and requires no more processing.
      *
-     * @param  string $text The URL
+     * @param  string $text  The URL
+     * @param  string $type  The type
      * @return string The fragment's unique reference ID
      * @see    Parser::retrieveURLs()
      */
 
-    protected function shelveURL($text)
+    protected function shelveURL($text, $type = null)
     {
         if ('' === $text) {
             return '';
         }
 
+        if ($type === null) {
+            $type = 'url';
+        }
+
         $this->refCache[$this->refIndex] = $text;
-        return $this->uid.($this->refIndex++).':url';
+        return $this->uid.($this->refIndex++).':'.$type;
     }
 
     /**
@@ -3976,7 +4372,11 @@ class Parser
 
     protected function retrieveURLs($text)
     {
-        return preg_replace_callback('/'.$this->uid.'(?P<token>[0-9]+):url/', array($this, 'retrieveURL'), $text);
+        return preg_replace_callback(
+            '/'.$this->uid.'(?P<token>[0-9]+):(?P<type>url|image)/',
+            array($this, 'retrieveURL'),
+            $text
+        );
     }
 
     /**
@@ -3993,11 +4393,12 @@ class Parser
         }
 
         $url = $this->refCache[$m['token']];
+
         if (isset($this->urlrefs[$url])) {
             $url = $this->urlrefs[$url];
         }
 
-        return $this->rEncodeHTML($this->relURL($url));
+        return $this->rEncodeHTML($this->relURL($url, $m['type']));
     }
 
     /**
@@ -4037,13 +4438,23 @@ class Parser
      * or the URL starts with one of $this->url_schemes. Otherwise
      * the URL is prefixed.
      *
-     * @param  string $url The URL
+     * @param  string $url  The URL
+     * @param  string $type The type
      * @return string Absolute URL
      */
 
-    protected function relURL($url)
+    protected function relURL($url, $type = null)
     {
-        if ($this->relativeImagePrefix) {
+        if ($this->relativeImagePrefix !== null) {
+            // Use legacy fallback if set. Deprecated in 3.7.0.
+            $prefix = $this->relativeImagePrefix;
+        } elseif ($type === null || $type === 'image') {
+            $prefix = $this->relImagePrefix;
+        } else {
+            $prefix = $this->relLinkPrefix;
+        }
+
+        if ($prefix) {
             if (strpos($url, '/') === 0 || strpos($url, './') === 0 || strpos($url, '../') === 0) {
                 return $url;
             }
@@ -4054,7 +4465,7 @@ class Parser
                 }
             }
 
-            return $this->relativeImagePrefix.$url;
+            return $prefix.$url;
         }
 
         return $url;
@@ -4120,21 +4531,24 @@ class Parser
     }
 
     /**
-     * Checks the given path to see if it lies within, or below, the document root
+     * Checks that the given path is under the document root.
      *
      * @param  string Path to check
-     * @return bool True if path is within the image document root
+     * @return bool   TRUE if path is within the image document root
      * @see    Parser::images()
+     * @since  3.6.0
      */
 
     protected function isInDocumentRootDirectory($path)
     {
         $realpath = realpath($path);
+
         if ($realpath) {
-            $root     = str_replace('\\', '/', $this->getDocumentRootDirectory());
+            $root = str_replace('\\', '/', $this->getDocumentRootDirectory());
             $realpath = str_replace('\\', '/', $realpath);
             return (0 === strpos($realpath, $root));
         }
+
         return false;
     }
 
@@ -4185,15 +4599,15 @@ class Parser
         $img = $this->newTag('img', $this->parseAttribsToArray($atts, '', 1, $extras))
             ->align($align)
             ->alt($title, true)
-            ->src($this->shelveURL($url), true)
+            ->src($this->shelveURL($url, 'image'), true)
             ->title($title);
 
         if (!$this->dimensionless_images && $this->isRelUrl($url)) {
             $location = $this->getDocumentRootDirectory().ltrim($url, '\\/');
-            $real_location = realpath($location);
-            if ($real_location) {
-                $location_ok = $this->isInDocumentRootDirectory($real_location);
-                if ($location_ok && $size = getimagesize($real_location)) {
+            $location_ok = $this->isInDocumentRootDirectory($location);
+            if ($location_ok) {
+                $real_location = realpath($location);
+                if ($size = getimagesize($real_location)) {
                     $img->height($size[1])->width($size[0]);
                 }
             }
@@ -4351,8 +4765,8 @@ class Parser
 
     protected function noTextile($text)
     {
-         $text = $this->doSpecial($text, '<notextile>', '</notextile>', 'fTextile');
-         return $this->doSpecial($text, '==', '==', 'fTextile');
+        $text = $this->doSpecial($text, '<notextile>', '</notextile>', 'fTextile');
+        return $this->doSpecial($text, '==', '==', 'fTextile');
     }
 
     /**
@@ -4483,7 +4897,6 @@ class Parser
         $text = preg_replace('/"\z/', "\" ", $text);
         $text = preg_split("@(<[\w/!?].*>)@Us".$this->regex_snippets['mod'], $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         $i = 0;
-        $glyph_out = array();
 
         foreach ($text as $line) {
             // Text tag text tag text ...

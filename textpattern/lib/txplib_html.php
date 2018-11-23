@@ -1781,7 +1781,7 @@ function asyncHref($item, $parms, $atts = '')
 function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('breakby', 'breakclass');
+    static $import = array('breakby', 'breakclass', 'wrapform');
 
     if (!$list) {
         return '';
@@ -1841,6 +1841,10 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $content = join($break, $list);
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
+    }
+
+    if (!empty($wrapform)) {
+        $content = str_replace('<+>', $content, parse_form($wrapform));
     }
 
     if (empty($wraptag)) {

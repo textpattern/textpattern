@@ -48,6 +48,7 @@ class Textile extends Base implements TextfilterInterface
     {
         parent::__construct(USE_TEXTILE, gTxt('use_textile'));
         $this->textile = new \Textpattern\Textile\Parser();
+        $this->textileRestricted = new \Textpattern\Textile\RestrictedParser();
         $this->version = $this->textile->getVersion();
     }
 
@@ -63,21 +64,17 @@ class Textile extends Base implements TextfilterInterface
         parent::filter($thing, $options);
 
         if (($this->options['restricted'])) {
-            return $this->textile->textileRestricted(
-                $thing,
-                $this->options['lite'],
-                $this->options['noimage'],
-                $this->options['rel']
-            );
+            return $this->textileRestricted
+                ->setLite($this->options['lite'])
+                ->setImages(!$this->options['noimage'])
+                ->setLinkRelationShip($this->options['rel'])
+                ->parse($thing);
         } else {
-            return $this->textile->textileThis(
-                $thing,
-                $this->options['lite'],
-                '',
-                $this->options['noimage'],
-                '',
-                $this->options['rel']
-            );
+            return $this->textile
+                ->setLite($this->options['lite'])
+                ->setImages(!$this->options['noimage'])
+                ->setLinkRelationShip($this->options['rel'])
+                ->parse($thing);
         }
     }
 
