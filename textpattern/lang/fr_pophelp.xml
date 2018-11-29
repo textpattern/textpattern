@@ -81,8 +81,8 @@
     </group>
 
     <group id="article" title="Page «Rédiger»">
-        <item id="article_image" title="Image d’un article"><![CDATA[
-<h2>Image d’un article</h2>
+        <item id="article_image" title="Image de l’article"><![CDATA[
+<h2>Image de l’article</h2>
 <p>Pour associer une image unique à cet article, veuillez appliquer l’une de ces possibilités :</p>
 <ol>
 <li>l’identifiant unique <code>ID</code> d’une image (ex. <code>12</code>)</li>
