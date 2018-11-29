@@ -1344,7 +1344,7 @@ function messenger($thing, $thething = '', $action = '')
 function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
 {
     $html = $methods = array();
-    $methods[''] = gTxt('with_selected_option');
+    $methods[''] = gTxt('with_selected_option', array('{count}' => '0'));
 
     if ($event === null) {
         global $event;
