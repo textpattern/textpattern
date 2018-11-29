@@ -42,9 +42,9 @@ nav ul::after,
 nav ol::after,
 .container::after,
 .paginator::after {
+  content: "";
   display: table;
   clear: both;
-  content: "";
 }
 
 /* ==========================================================================
@@ -461,16 +461,16 @@ samp {
   /**
    * Additional stylng for preformatted text/code.
    *
-   * 1. Don't wrap long words.
-   * 2. Contain overflow in all browsers.
+   * 1. Contain overflow in all browsers.
+   * 2. Don't wrap long words.
    * 3. Set tab size to 4 spaces.
    */
   pre {
     padding: 0.5714286em 1.1428571em;
     /* 1 */
-    word-wrap: normal;
-    /* 2 */
     overflow-x: auto;
+    /* 2 */
+    word-wrap: normal;
     /* 3 */
     -moz-tab-size: 4;
       -o-tab-size: 4;
@@ -482,10 +482,10 @@ samp {
     background-color: transparent;
     font-size: 1em;
     text-align: left;
+    word-wrap: normal;
+    word-break: normal;
     white-space: pre;
     word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
     direction: ltr;
     -webkit-hyphens: none;
         -ms-hyphens: none;
@@ -493,7 +493,8 @@ samp {
   }
 
   /**
-   * Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+   * Prevent `sub` and `sup` elements from affecting the line height in all
+   * browsers.
    */
   sub,
 sup.footnote,
@@ -539,15 +540,15 @@ tfoot,
    * 2. Show the overflow in Edge and IE.
    */
   hr {
+    /* 1 */
+    box-sizing: content-box;
     height: 24px;
     margin: 1em 0;
+    /* 2 */
+    overflow: visible;
     border: 0;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24'%3E%3Cpath fill='%23333' d='M0,0c1.742,13.61,54.74,20.912,119.995,15.279C184.922,9.679,238.594,13.024,240,24c-1.744-13.613-54.742-20.913-120.005-15.284C55.078,14.32,1.405,10.973,0,0z'/%3E%3C/svg%3E") 50% 50% no-repeat;
     background-size: 240px 24px;
-    /* 1 */
-    box-sizing: content-box;
-    /* 2 */
-    overflow: visible;
   }
 
   /* Support for non-latin languages (can be removed if not required)
@@ -752,8 +753,8 @@ video {
   table {
     width: 100%;
     margin-bottom: 1em;
-    border-collapse: collapse;
     border-spacing: 0;
+    border-collapse: collapse;
   }
 
   /**
@@ -879,6 +880,8 @@ li > ol {
     /* 1 */
     display: table;
     /* 1 */
+    box-sizing: border-box;
+    /* 1 */
     max-width: 100%;
     /* 2 */
     padding: 0;
@@ -886,8 +889,6 @@ li > ol {
     color: inherit;
     /* 1 */
     white-space: normal;
-    /* 1 */
-    box-sizing: border-box;
   }
 
   /**
@@ -907,6 +908,7 @@ input,
 optgroup,
 select,
 textarea {
+    box-sizing: border-box;
     /* 1 */
     max-width: 100%;
     /* 2 */
@@ -916,7 +918,6 @@ textarea {
     /* 3 */
     font-size: 1rem;
     line-height: 1.375;
-    box-sizing: border-box;
     vertical-align: baseline;
   }
 
@@ -1068,20 +1069,20 @@ select[size="1"] {
   }
 
   /**
-   * 1. Restrict to vertical resizing to prevent layout breakage.
-   * 2. Remove default vertical scrollbar in IE 11.
-   * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+   * 1. Remove default vertical scrollbar in IE 11.
+   * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+   * 3. Restrict to vertical resizing to prevent layout breakage.
    */
   textarea {
     width: 100%;
     height: auto;
     min-height: 3em;
     /* 1 */
-    resize: vertical;
-    /* 2 */
     overflow: auto;
-    /* 3 */
+    /* 2 */
     vertical-align: top;
+    /* 3 */
+    resize: vertical;
   }
 
   /**
@@ -1095,12 +1096,12 @@ select[size="1"] {
 [disabled] optgroup,
 span.disabled {
     border-color: #d4d4d4 !important;
-    background: #eeeeee !important;
     /* 1 */
     opacity: 1;
+    background: #eeeeee !important;
+    box-shadow: none !important;
     color: #aaaaaa !important;
     text-shadow: none !important;
-    box-shadow: none !important;
     /* 2 */
     cursor: default !important;
   }
@@ -1155,14 +1156,14 @@ textarea:focus:invalid {
   /* Buttons
      ========================================================================== */
   /**
-   * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
-   * 2. Address `overflow` set to `hidden` in IE 11.
+   * 1. Address `overflow` set to `hidden` in IE 11.
+   * 2. Correct `button` style inheritance in Firefox, IE 11, and Opera.
    */
   button {
     /* 1 */
-    text-transform: none;
-    /* 2 */
     overflow: visible;
+    /* 2 */
+    text-transform: none;
   }
 
   /**
@@ -1184,6 +1185,7 @@ textarea:focus:invalid {
     border: 1px solid #dfdfdf;
     border-radius: 1em;
     background-clip: padding-box;
+    box-shadow: 0 2px 0 #acacac;
     color: #333333;
     font-weight: normal;
     text-align: center;
@@ -1191,7 +1193,6 @@ textarea:focus:invalid {
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-    box-shadow: 0 2px 0 #acacac;
     /* 2 */
     cursor: pointer;
   }
@@ -1211,9 +1212,9 @@ textarea:focus:invalid {
 [type=submit]:active {
     top: 2px;
     border-color: #bebebe;
+    box-shadow: none;
     color: #1a1a1a;
     text-decoration: none;
-    box-shadow: none;
   }
   button:focus,
 [type=button]:focus,
@@ -1361,12 +1362,12 @@ textarea:focus:invalid {
 
   .search {
     position: absolute;
+    z-index: 2;
     top: 50%;
     right: 0;
     margin-top: -1.0625em;
     padding: 0;
     background: transparent;
-    z-index: 2;
   }
   [dir=rtl] .search {
     right: auto;
@@ -1411,9 +1412,9 @@ textarea:focus:invalid {
 *::before,
 *::after {
     background: transparent !important;
+    box-shadow: none !important;
     color: #000000 !important;
     text-shadow: none !important;
-    box-shadow: none !important;
   }
 
   /**
@@ -1431,6 +1432,13 @@ textarea:focus:invalid {
     margin: 0.5cm;
     padding: 2em 5em;
     font-family: "Helvetica Neue", sans-serif;
+  }
+
+  /**
+   * Make sure links are not underlined.
+   */
+  a {
+    text-decoration: none;
   }
 
   /**
@@ -1460,13 +1468,6 @@ form,
 .complementary-content,
 .paginator {
     display: none;
-  }
-
-  /**
-   * Make sure links are not underlined.
-   */
-  a {
-    text-decoration: none;
   }
 
   /**
@@ -1705,16 +1706,6 @@ var {
   }
 
   /**
-   * Display table head across multi-page tables.
-   */
-  thead {
-    display: table-header-group;
-  }
-  thead th {
-    border-top: 1pt solid #000000;
-  }
-
-  /**
    * Avoid table rows breaking across multiple pages.
    */
   tr {
@@ -1728,6 +1719,16 @@ var {
 td {
     padding: 4pt 8pt;
     border-bottom: 1pt solid #000000;
+  }
+
+  /**
+   * Display table head across multi-page tables.
+   */
+  thead {
+    display: table-header-group;
+  }
+  thead th {
+    border-top: 1pt solid #000000;
   }
 
   /**

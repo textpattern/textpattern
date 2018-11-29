@@ -140,7 +140,7 @@ class HelpAdmin
 
             if ($format == 'textile') {
                 $textile = new \Netcarver\Textile\Parser();
-                $out = $textile->textileThis($pophelp).n;
+                $out = $textile->parse($pophelp).n;
             } else {
                 $out = $pophelp.n;
             }

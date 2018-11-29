@@ -63,8 +63,8 @@ class Plugin
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                 // Default: help is in Textile format.
-                $textile = new \Textpattern\Textile\Parser();
-                $help = $textile->textileRestricted($help_raw, 0, 0);
+                $textile = new \Textpattern\Textile\RestrictedParser();
+                $help = $textile->setLite(false)->setImages(true)->parse($help_raw);
             }
 
             $fields = "

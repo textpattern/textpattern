@@ -302,6 +302,10 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 if (typeof(e.originalEvent) != 'undefined') {
                     form.selectAll.prop('checked', box.prop('checked') && boxes.filter(':checked').length === boxes.length).change();
                 }
+
+                form.editMethod.find('[value=""]').gTxt('with_selected_option', {
+                    '{count}': boxes.filter(':checked').length
+                });
             });
 
             return lib;
