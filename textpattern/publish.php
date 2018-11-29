@@ -68,6 +68,10 @@ plug_privs();
 // Add prefs to globals.
 extract($prefs);
 
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
+}
+
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -421,7 +425,7 @@ function preText($s, $prefs)
             (!empty($month) ? $month : array());
         list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if ((strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
             $month = implode('-', $month);
         } else {
             $out['month'] = $month = '';
@@ -931,7 +935,9 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = '';
-        $groupby = $breakby && !is_numeric(strtr($breakby, ' ,', '00'));
+        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
+            false :
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
 
         while ($count++ <= $last) {
             global $thisarticle;
@@ -941,7 +947,11 @@ function doArticles($atts, $iscustom, $thing = null)
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
 
-                $newbreak = $groupby ? parse_form($breakby) : $count;
+                $newbreak = !$groupby ? $count :
+                    ($groupby === 1 ?
+                        parse($breakby, true, false) :
+                        parse_form($breakby)
+                    );
             } else {
                 $newbreak = null;
             }

@@ -194,7 +194,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process, breakby, breakclass')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
 
@@ -2914,13 +2914,29 @@ function if_logged_in($atts, $thing = null)
 function body()
 {
     global $thisarticle, $is_article_body;
+    static $stack = array(), $depth = null;
+    isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
     assert_article();
+    $id = $thisarticle['thisid'];
+
+    if (!isset($stack[$id])) {
+        $stack[$id] = 1;
+    } elseif ($stack[$id] >= $depth) {
+        trigger_error(gTxt('form_circular_reference', array(
+            '{name}' => '<txp:body id="'.$id.'"/>'
+        )));
+
+        return '';
+    } else {
+        $stack[$id]++;
+    }
 
     $was_article_body = $is_article_body;
     $is_article_body = 1;
     $out = parse($thisarticle['body']);
     $is_article_body = $was_article_body;
+    $stack[$id]--;
 
     return $out;
 }
@@ -2952,13 +2968,29 @@ function title($atts)
 function excerpt()
 {
     global $thisarticle, $is_article_body;
+    static $stack = array(), $depth = null;
+    isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
     assert_article();
+    $id = $thisarticle['thisid'];
+
+    if (!isset($stack[$id])) {
+        $stack[$id] = 1;
+    } elseif ($stack[$id] >= $depth) {
+        trigger_error(gTxt('form_circular_reference', array(
+            '{name}' => '<txp:excerpt id="'.$id.'"/>'
+        )));
+
+        return '';
+    } else {
+        $stack[$id]++;
+    }
 
     $was_article_body = $is_article_body;
     $is_article_body = 1;
     $out = parse($thisarticle['excerpt']);
     $is_article_body = $was_article_body;
+    $stack[$id]--;
 
     return $out;
 }
@@ -5450,7 +5482,7 @@ function txp_escape($atts, $thing = '')
                     $textile = Txp::get('\Textpattern\Textile\Parser');
                 }
 
-                $thing = $textile->textileThis($tidy ? ' '.$thing : $thing);
+                $thing = $textile->parse($tidy ? ' '.$thing : $thing);
                 !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':
