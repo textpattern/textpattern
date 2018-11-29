@@ -339,7 +339,7 @@ function lastMod()
 function parse($thing, $condition = true, $not = true)
 {
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
-    static $pattern, $short_tags = null;
+    static $short_tags = null;
 
     if ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
@@ -356,11 +356,10 @@ function parse($thing, $condition = true, $not = true)
 
     if (!isset($short_tags)) {
         $short_tags = get_pref('enable_short_tags', false);
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
     if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match("@<(?:{$pattern}):@", $thing))
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing))
     {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
@@ -374,8 +373,8 @@ function parse($thing, $condition = true, $not = true)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*)/?\>$@s';
+        $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
         $last = count($parsed);
