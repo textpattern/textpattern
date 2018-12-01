@@ -96,6 +96,7 @@ function pagetop($pagetitle = '', $message = '')
         'select',
         'toggle_all_selected',
         'upload_err_form_size',
+        'with_selected_option',
     ));
 
     $lang_direction = gTxt('lang_dir');
