@@ -659,7 +659,8 @@
         ]]></item>
         <item id="enable_dev_preview" title="Enable development theme preview?"><![CDATA[
 <h2>Enable development theme preview?</h2>
-<p>TO DO.</p>
+<p>Users with sufficient privileges (by default, those with Publisher and Designer roles) can safely develop and preview a new theme while all other users will still see the old theme (until the new one is deployed).</p>
+<p>However, privileged users who do not wish to participate in themes development can disable the development theme preview. They will then be served the current ‘public’ theme, like standard site visitors.</p>
         ]]></item>
         <item id="enable_short_tags" title="Enable short tag support?"><![CDATA[
 <h2>Enable short tag support?</h2>
