@@ -81,7 +81,7 @@ abstract class CommonBase implements CommonInterface
     /**
      * Asset mimetypes.
      *
-     * @var array Associative array of 'extension' => 'mimetype'
+     * @var array Associative array of 'extension' => 'mediatype'
      */
 
     protected static $mimeTypes = array();
