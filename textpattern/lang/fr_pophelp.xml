@@ -606,8 +606,7 @@
 </ul>
 <p><strong>Remarque :</strong> pour des raisons de sécurité, le HTML brut est transformé en texte ordinaire.</p>
         ]]></item>
-        <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[<h2>Modèles types de modules personnalisés</h2>
-<p>A compléter. Types MINE à compléter</p>]]></item>
+        <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
 <p>Les champs personnalisés sont utilisés pour conserver des données supplémentaires avec l’article. Vous pouvez en définir jusqu'à dix en leur attribuant un nom ici.
@@ -642,7 +641,8 @@
 <p>Sélectionnez le doctype HTML que vous souhaitez utiliser (HTML5 ou XHTML). Cela affecte les champs de saisies des commentaires, le rendu de Textile pour <code>&lt;abbr&gt;</code> ou <code>&lt;acronym&gt;</code> et les balises <code>&lt;link&gt;</code> générées par <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
         <item id="enable_dev_preview" title="Activer l’aperçu du thème en mode développement ?"><![CDATA[<h2>Activer l’aperçu du thème en mode développement ?</h2>
-<p>A compléter.</p>]]></item>
+<p>Les utilisateurs disposant de privilèges suffisants (par défaut, ceux affectés des rôles d’Administrat•eur•rice ou de Designer) peuvent développer et visualiser, en toute discrétion, un nouveau thème tandis que les autres utilisateurs continueront à voir l’ancien (jusqu’à ce que le nouveau soit déployé).</p>
+<p>Toutefois, les utilisateurs habilités ne souhaitant pas participer à l’élaboration de nouveaux thèmes peuvent désactiver l’aperçu du thème en mode de développement. Le thème public courant leurs sera alors servi tout comme pour les visiteurs du site.</p>]]></item>
         <item id="enable_short_tags" title="Activer le support des balises réduites ?"><![CDATA[<h2>Activer le support des balises réduites ?</h2>
 <p>Les balises spécifiques de Textpattern sont de la forme <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Il est toutefois possible d’en réduire la saisie par l’emploi d’une notation courte où les préfixes <code>txp:</code> peuvent être omis en respectant une convention très simple. Voici des exemples pour démontrer le concept :</p>
 <ul>
