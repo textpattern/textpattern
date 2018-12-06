@@ -137,29 +137,25 @@ class HelpAdmin
         }
 
         $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
+        $pophelp = $x ? trim($x[0]) : false;
 
-        if (!$x && !empty(self::$fallback_xml)) {
+        if (!$pophelp && !empty(self::$fallback_xml)) {
             $xml = self::$fallback_xml;
             $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
+            $pophelp = $x ? trim($x[0]) : false;
         }
 
         $title = '';
 
-        if ($x) {
-            $pophelp = trim($x[0]);
+        if ($pophelp) {
+            $title = txpspecialchars($x[0]->attributes()->title);
+            $format = $x[0]->attributes()->format;
 
-            if ($pophelp) {
-                $title = txpspecialchars($x[0]->attributes()->title);
-                $format = $x[0]->attributes()->format;
-
-                if ($format == 'textile') {
-                    $textile = new \Netcarver\Textile\Parser();
-                    $out = $textile->parse($pophelp).n;
-                } else {
-                    $out = $pophelp.n;
-                }
+            if ($format == 'textile') {
+                $textile = new \Netcarver\Textile\Parser();
+                $out = $textile->parse($pophelp).n;
             } else {
-                $out = gTxt('pophelp_missing', array('{item}' => $item));
+                $out = $pophelp.n;
             }
         } else {
             $out = gTxt('pophelp_missing', array('{item}' => $item));
