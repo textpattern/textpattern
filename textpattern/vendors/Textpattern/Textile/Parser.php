@@ -51,37 +51,11 @@ class Parser extends \Netcarver\Textile\Parser
         }
 
         parent::__construct($doctype);
-
-        $txpattern = get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?';
-        $this->rawContent = array_merge($this->rawContent, array("(?:$txpattern):\w+"));
-        $this->patterns['raw'] = '/^(?:'.implode('|', $this->rawContent).')$/i';
-
         $this->setImagePrefix(ihu)->setLinkPrefix(hu)->setRawBlocks(true);
         $this->setSymbol('quote_single_open', gTxt('txt_quote_single_open'));
         $this->setSymbol('quote_single_close', gTxt('txt_quote_single_close'));
         $this->setSymbol('quote_double_open', gTxt('txt_quote_double_open'));
         $this->setSymbol('quote_double_close', gTxt('txt_quote_double_close'));
-    }
-
-    /**
-     * Whether the block is a raw document node.
-     *
-     * Raw blocks will be shelved and left as is.
-     *
-     * @param  string $text Block to check
-     * @return bool   TRUE if the block is raw, FALSE otherwise
-     * @since  3.7.0
-     */
-
-    protected function isRawBlock($text)
-    {
-        if (preg_match($this->patterns['contained'], $text, $m)) {
-            if (preg_match($this->patterns['raw'], $m['open'])) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
