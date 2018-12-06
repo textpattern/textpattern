@@ -118,8 +118,8 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
 
         if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
             foreach ($custom_types as $type => $langpack) {
-                if (!empty($langpack['mimetype'])) {
-                    static::$mimeTypes[$type] = $langpack['mimetype'];
+                if (!empty($langpack['mediatype'])) {
+                    static::$mimeTypes[$type] = $langpack['mediatype'];
                 }
 
                 $textarray[$type] = isset($langpack[$lang_ui]) ?
