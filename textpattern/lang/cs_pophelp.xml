@@ -188,7 +188,7 @@
 </ul>
 <p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
 <p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>        ]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[
+        <item id="clean_url_test_failed" title="Test hezkých URL adres selhal"><![CDATA[
 <h2>Test hezkých URL adres selhal</h2>
 <p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
 <p>Pokud čisté URL <em>nefungují</em>, může to být způsobeno:</p>
@@ -261,7 +261,10 @@
         <item id="no_temp_dir" title="Adresář dočasných souborů není určen"><![CDATA[
 <h2>Adresář dočasných souborů není určen</h2>
 <p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>        ]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Adresář rubriky již existuje"><![CDATA[
+<h2>Adresář rubriky již existuje</h2>
+<p>Soubory adresářů existujících rubrik budou v konfliktu se schématem v <code>.htaccess</code>. Pokud jsou hlášené soubory zástupci, odstraňte je.</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title="Nelze číst z kořenového adresáře"><![CDATA[
 <h2>Nelze číst z kořenového adresáře</h2>
 <p>Nelze číst z adresáře obsahujícího soubor <code>index.php</code>. Zkontroluj oprávnění.</p>        ]]></item>
@@ -565,9 +568,10 @@ např.: #@language cs-cz</p>
         <item id="doctype" title="Doctype"><![CDATA[
 <h2>Doctype</h2>
 <p>Nastav, jaký HTML doctype chceš používat (HTML5 nebo XHTML). Nastavení má vliv na vstupní formulář komentářů a Textile vykreslování prvků<code>&lt;abbr&gt;</code> nebo <code>&lt;acronym&gt;</code>, a <code>&lt;link&gt;</code> generovaných stylem <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>        ]]></item>
-        <item id="enable_dev_preview" title="Umožnit náhled vývojové verze tématu?"><![CDATA[
-<h2>Umožnit náhled vývojové verze tématu?</h2>
-<p>Zvolit z možností.</p>        ]]></item>
+        <item id="enable_dev_preview" title="Umožnit náhled vývojové verze skinu?"><![CDATA[
+<h2>Umožnit náhled vývojové verze skinu?</h2>
+<p>Uživatelé s dostatečnými oprávněními (ve výchozím nastavení s rolí vydavatele a návrháře) mohou bezpečně vyvíjet a zobrazovat náhled nového skinu, zatímco všem ostatním uživatelům bude i nadále zobrazován starý (až do nasazení nového).</p>
+<p>Nicméně ti privilegovaní uživatelé, kteří se nechtějí na vývoji podílet, si mohou náhled vývojové verze zakázat a budou používat současný veřejný vzhled jako standardní návštěvníci stránek.</p>        ]]></item>
         <item id="enable_short_tags" title="Povolit zkrácený zápis tagů?"><![CDATA[
 <h2>Povolit zkrácený zápis tagů</h2>
 <p>Textpattern tagy mají formu <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Povolením zkrácené notace je možné kód zredukovat vynecháním zápisu <code>txp:</code> podle následujících jednoduchých pokynů. Zde je několik příkladů na ukázku tohoto konceptu:</p>
