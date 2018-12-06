@@ -40,6 +40,7 @@ class HelpAdmin
 
     private static $textile;
     protected static $pophelp_xml;
+    protected static $fallback_xml;
 
     /**
      * Constructor.
@@ -61,7 +62,9 @@ class HelpAdmin
 
 
     /**
-     * Load pophelp.xml
+     * Load given pophelp.xml file
+     *
+     * Also load fallback file if it's not the same language.
      *
      * @param string    $lang
      */
@@ -69,6 +72,13 @@ class HelpAdmin
     private static function pophelp_load($lang)
     {
         $file = txpath."/lang/{$lang}_pophelp.xml";
+        $fallback_file = txpath."/lang/".TEXTPATTERN_DEFAULT_LANG."_pophelp.xml";
+
+        if (file_exists($fallback_file) && $fallback_file !== $file) {
+            if (empty(self::$fallback_xml)) {
+                self::$fallback_xml = simplexml_load_file($fallback_file, "SimpleXMLElement", LIBXML_NOCDATA);
+            }
+        }
 
         if (!file_exists($file)) {
             return false;
@@ -121,20 +131,24 @@ class HelpAdmin
 
         if (!$xml = self::pophelp_load($lang_ui)) {
             $lang_ui = TEXTPATTERN_DEFAULT_LANG;
-            $xml = self::pophelp_load($lang_ui);
+
+            if (!empty(self::$fallback_xml)) {
+                $xml = self::$fallback_xml;
+            }
         }
 
         $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
+        $pophelp = $x ? trim($x[0]) : false;
 
-        if (!$x && $lang_ui != TEXTPATTERN_DEFAULT_LANG) {
-            $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
+        if (!$pophelp && !empty(self::$fallback_xml)) {
+            $xml = self::$fallback_xml;
             $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
+            $pophelp = $x ? trim($x[0]) : false;
         }
 
         $title = '';
 
-        if ($x) {
-            $pophelp = trim($x[0]);
+        if ($pophelp) {
             $title = txpspecialchars($x[0]->attributes()->title);
             $format = $x[0]->attributes()->format;
 
