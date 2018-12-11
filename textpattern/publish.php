@@ -195,7 +195,7 @@ $textarray = array();
 
 // i18n.
 if (txpinterface !== 'css') {
-    load_lang(LANG);
+    $textarray = load_lang(LANG);
 }
 
 // Tidy up the site.
