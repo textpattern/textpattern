@@ -31,7 +31,10 @@ $cols = getThings('describe `'.PFX.'txp_section`');
 foreach (array('skin' => 63, 'page' => 255, 'css' => 255) as $field => $size) {
     if (!in_array('dev_'.$field, $cols)) {
         safe_alter('txp_section',
-            "ADD dev_{$field} VARCHAR($size) NOT NULL");
+            "ADD dev_{$field} VARCHAR($size) NOT NULL DEFAULT ''");
+    } else {
+        safe_alter('txp_section',
+            "ALTER dev_{$field} SET DEFAULT ''");
     }
 }
 // Advanced options

@@ -5393,7 +5393,7 @@ function txp_escape($atts, $thing = '')
                 $thing = txpspecialchars($thing);
                 break;
             case 'url':
-                $thing = urlencode($thing);
+                $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
