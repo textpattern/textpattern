@@ -27,8 +27,8 @@ Changes in 4.7.2
 * Changed: More customizable Atom/RSS feeds via 'atom_head', 'rss_head' and
   'feed_filter' callbacks.
 * Changed: Deleting an article deletes the associated comments.
-* Changed: Some emoji are preserved in automatically generated URL titles.
-* Changed: Text blocks starting with a Textpattern tag are not Textile'd.
+* Changed: Some emoji are preserved in automatically-generated URL titles.
+* Changed: Article text blocks starting with a Textpattern tag are not Textile'd.
 * Changed: File data is available on 'file_download' callback.
 * Changed: Article lists can be split by 'breakby' form value.
 * Changed: Expanded Schema.org media items within default theme.
