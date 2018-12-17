@@ -77,7 +77,7 @@ during the development process.
 
 |        |  Minimum<br />(v4.8.0)  | Recommended<br />(v4.8.0) |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | 7.2 |
+| PHP    | 5.5 | actively supported (7.2 or 7.3) |
 | MySQL  | &mdash; | &mdash; |
 | Apache | &mdash; | &mdash; |
 | Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
