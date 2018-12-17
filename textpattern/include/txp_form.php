@@ -304,7 +304,7 @@ function form_edit($message = '', $refresh_partials = false)
         'skin',
     ))));
 
-    $name = Form::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $type = assert_string(gps('type'));
     $newname = Form::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
@@ -461,7 +461,8 @@ function form_save()
         'skin',
     )))));
 
-    $name = Form::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Form::sanitize($passedName);
     $newname = Form::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -470,7 +471,7 @@ function form_save()
     $message = '';
 
     if (in_array($name, $essential_forms)) {
-        $newname = $name;
+        $newname = $passedName = $name;
         $type = safe_field('type', 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
         $_POST['newname'] = $newname;
     }
@@ -485,6 +486,7 @@ function form_save()
         } else {
             if ($copy && $name === $newname) {
                 $newname .= '_copy';
+                $passedName = $name;
                 $_POST['newname'] = $newname;
             }
 
@@ -514,6 +516,11 @@ function form_save()
 
                             $message = gTxt('form_created', array('{list}' => $newname));
 
+                            // If form name has been auto-sanitized, throw a warning.
+                            if ($passedName !== $name) {
+                                $message = array($message, E_WARNING);
+                            }
+
                             callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
@@ -530,11 +537,16 @@ function form_save()
                         type = '$type',
                         skin = '$safe_skin',
                         name = '".doSlash($newname)."'",
-                        "name = '".doSlash($name)."' AND skin = '$safe_skin'"
+                        "name = '".doSlash($passedName)."' AND skin = '$safe_skin'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
 
                         $message = gTxt('form_updated', array('{list}' => $newname));
+
+                        // If form name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
 
                         callback_event('form_updated', '', 0, $name, $newname);
                     } else {
