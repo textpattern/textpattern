@@ -109,7 +109,7 @@ function page_edit($message = '', $refresh_partials = false)
         // Name value.
         'name_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#new_page,input[name=name]',
+            'selector' => '#new_page,#main_content input[name=name]',
             'cb'       => 'page_partial_name_value',
         ),
         // Textarea.
@@ -521,7 +521,7 @@ function page_partial_name($rs)
 
     $titleblock = inputLabel(
         'new_page',
-        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        fInput('text', array('name' => 'newname', 'pattern' => '[^<>&"\'*]+'), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
         array('class' => 'txp-form-field name')
