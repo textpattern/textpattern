@@ -1,10 +1,10 @@
 Changes in 4.7.2
 
 * Maintenance release with enhancements and bug fixes.
+* Fixed: A bug with <txp:link_to_[next|prev] /> tags in 'month' URL mode.
 * Fixed: A bug with <txp:related_articles /> tag.
 * Fixed: <txp:search_input /> will always respect its 'form' attribute setting,
   if set.
-* Fixed: A bug with <txp:link_to_[next|prev] /> tags in 'month' URL mode.
 * Fixed: A bug with the global 'not' attribute.
 * Fixed: Multibyte characters are correctly obfuscated by <txp:email />.
 * Fixed: Salutation text within emails not displaying correctly.
@@ -32,8 +32,7 @@ Changes in 4.7.2
   Textile'd.
 * Changed: File data is available on 'file_download' callback.
 * Changed: Article lists can be split by 'breakby' form value.
-* Changed: Expanded Schema.org media items within default theme.
-* Added: 'aria_label' and 'placeholder' attributes on comment input fields.
+* Changed: Expanded Schema.org media items within default public-side theme.
 * Added: Latest translations.
 * Added: Czech inline help translation. Many thanks to Miloš Berka for all
   their work.
@@ -42,8 +41,7 @@ Changes in 4.7.2
 * Added: Global 'trim' and 'default' attributes.
 * Added: Global 'wrapform' attribute.
 * Added: Global 'escape="ordinal|spell|url"' attribute values.
-* Added: Custom form media (MIME) types, served as 'flat' files if needed.
-* Added: Option to export form/page/style to disk on save.
+* Added: 'aria_label' and 'placeholder' attributes on comment input fields.
 * Added: 'breakform' attribute to <txp:article(_custom) /> tag.
 * Added: 'test' attribute to <txp:if_different /> tag.
 * Added: 'context' attribute to <txp:link_to_next />, <txp:link_to_prev />,
@@ -51,6 +49,8 @@ Changes in 4.7.2
 * Added: 'context' and 'format' attributes to <txp:output_form /> tag.
 * Added: 'add', 'reset', 'separator' and 'output' attributes to <txp:variable />
   tag.
+* Added: Custom form media (MIME) types, served as 'flat' files if needed.
+* Added: Option to export form/page/style to disk on save.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
 * Textile 3.7. See https://github.com/textile/php-textile/releases/tag/v3.7.0
   for full list of changes in this release (thanks, gocom).
