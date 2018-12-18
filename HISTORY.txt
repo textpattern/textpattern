@@ -26,6 +26,8 @@ Changes in 4.7.2
 * Changed: More customizable Atom/RSS feeds via 'atom_head', 'rss_head' and
   'feed_filter' callbacks.
 * Changed: Deleting an article deletes any associated comments.
+* Changed: Forms, Pages and Styles accept pre-4.7 names for editing, but
+  must be sanitized prior to saving.
 * Changed: Some emoji are preserved in automatically-generated article URL
   titles.
 * Changed: Article text blocks starting with a Textpattern tag are not
