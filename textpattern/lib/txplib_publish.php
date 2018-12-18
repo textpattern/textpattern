@@ -826,7 +826,7 @@ function filterAtts($atts = null, $iscustom = null)
         'allowoverride' => !$iscustom,
         'limit'         => 10,
         'offset'        => 0,
-        'pageby'        => '',
+        'pageby'        => null,
         'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
