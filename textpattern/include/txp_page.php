@@ -129,7 +129,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("page", 'txp_section', "name = 'default'");
 
-    $name = Page::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $newname = Page::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
@@ -363,7 +363,8 @@ function page_save()
         'skin',
     )))));
 
-    $name = Page::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Page::sanitize($passedName);
     $newname = Page::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -377,11 +378,12 @@ function page_save()
     } else {
         if ($copy && ($name === $newname)) {
             $newname .= '_copy';
+            $passedName = $name;
             $_POST['newname'] = $newname;
         }
 
         $safe_skin = doSlash($skin);
-        $safe_name = doSlash($name);
+        $safe_name = doSlash($passedName);
         $safe_newname = doSlash($newname);
 
         $exists = safe_field('name', 'txp_page', "name = '$safe_newname' AND skin = '$safe_skin'");
@@ -403,6 +405,11 @@ function page_save()
 
                         $message = gTxt('page_created', array('{list}' => $newname));
 
+                        // If page name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
+
                         callback_event($copy ? 'page_duplicated' : 'page_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -421,6 +428,11 @@ function page_save()
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
 
                     $message = gTxt('page_updated', array('{list}' => $newname));
+
+                    // If page name has been auto-sanitized, throw a warning.
+                    if ($passedName !== $name) {
+                        $message = array($message, E_WARNING);
+                    }
 
                     callback_event('page_updated', '', 0, $name, $newname);
                 } else {
