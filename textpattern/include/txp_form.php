@@ -658,9 +658,9 @@ function form_partial_name($rs)
     $type = $rs['type'];
 
     if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
-        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => '[^<>&"\'*]+'), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
     } else {
-        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => '[^<>&"\'*]+'), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
     }
 
     $name_widgets = inputLabel(
