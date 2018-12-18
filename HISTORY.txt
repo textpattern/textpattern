@@ -27,8 +27,8 @@ Changes in 4.7.2
 * Changed: More customizable Atom/RSS feeds via 'atom_head', 'rss_head' and
   'feed_filter' callbacks.
 * Changed: Deleting an article deletes the associated comments.
-* Changed: Some emoji are preserved in automatically generated URL titles.
-* Changed: Text blocks starting with a Textpattern tag are not Textile'd.
+* Changed: Some emoji are preserved in automatically-generated URL titles.
+* Changed: Article text blocks starting with a Textpattern tag are not Textile'd.
 * Changed: File data is available on 'file_download' callback.
 * Changed: Article lists can be split by 'breakby' form value.
 * Changed: Expanded Schema.org media items within default theme.
@@ -51,7 +51,8 @@ Changes in 4.7.2
 * Added: 'breakform' attribute to <txp:article(_custom) /> tag.
 * Added: Global 'wrapform' attribute.
 * Added: Custom functions can be registered for use in <txp:evaluate /> tag.
-* Textile 3.7.
+* Textile 3.7. See https://github.com/textile/php-textile/releases/tag/v3.7.0
+  for full list of changes in this release (thanks, gocom).
 * jQuery File Upload 9.28.0.
 
 Changes in 4.7.1

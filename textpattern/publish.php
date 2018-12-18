@@ -195,7 +195,7 @@ $textarray = array();
 
 // i18n.
 if (txpinterface !== 'css') {
-    load_lang(LANG);
+    $textarray = load_lang(LANG);
 }
 
 // Tidy up the site.
@@ -857,12 +857,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
         $cols = join(" OR ", $cols);
         $search = " AND ($cols) $s_filter";
+        $fname = ($searchform ? $searchform : 'search_results');
 
         if (!$sort) {
             $sort = "score DESC";
         }
     } else {
         $score = $search = '';
+        $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
             $sort = "Posted DESC";
@@ -870,17 +872,22 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['*'].$search;
-    $pageby = (empty($pageby) ? $limit : $pageby);
+    $pg or $pg = 1;
+    $pgby = intval(empty($pageby) || $pageby === true ? $limit : $pageby);
+
+    if ($offset === true || !$iscustom && !$issticky) {
+        $offset = $offset === true ? 0 : intval($offset);
+        $pgoffset = ($pg - 1) * $pgby + $offset;
+    } else {
+        $pgoffset = $offset = intval($offset);
+    }
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
-        $pg = (!$pg) ? 1 : $pg;
-        $pgoffset = $offset + (($pg - 1) * $pageby);
-
-        if (empty($thispage)) {
+        if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
             $grand_total = safe_count('textpattern', $where);
             $total = $grand_total - $offset;
-            $numPages = ceil($total / $pageby);
+            $numPages = $pgby ? ceil($total / $pgby) : 1;
 
             // Send paging info to txp:newer and txp:older.
             $thispage = array(
@@ -897,13 +904,9 @@ function doArticles($atts, $iscustom, $thing = null)
         if ($pgonly) {
             return;
         }
-    } else {
-        if ($pgonly) {
-            $total = safe_count('textpattern', $where) - $offset;
-            return ceil($total / $pageby);
-        }
-
-        $pgoffset = $offset;
+    } elseif ($pgonly) {
+        $total = safe_count('textpattern', $where) - $offset;
+        return $pgby ? ceil($total / $pgby) : $total;
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
@@ -919,19 +922,12 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
-    // If a listform is specified, $thing is for doArticle() - hence ignore here.
-    if (!empty($listform)) {
-        $thing = null;
-    }
-
-    // Get the form name.
-    if ($q && !$issticky) {
-        $fname = ($searchform ? $searchform : 'search_results');
-    } else {
-        $fname = (!empty($listform) ? $listform : $form);
-    }
-
     if ($rs && $last = numRows($rs)) {
+        // If a listform is specified, $thing is for doArticle() - hence ignore here.
+        if (!empty($listform)) {
+            $thing = null;
+        }
+
         $count = 0;
         $articles = array();
         $chunk = '';
