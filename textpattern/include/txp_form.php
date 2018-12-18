@@ -668,11 +668,12 @@ function form_partial_name($rs)
     $name = $rs['name'];
     $skin = $rs['skin'];
     $type = $rs['type'];
+    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => '[^<>&"\'*]+'), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
     } else {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => '[^<>&"\'*]+'), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
     }
 
     $name_widgets = inputLabel(
