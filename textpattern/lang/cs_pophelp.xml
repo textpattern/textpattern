@@ -313,7 +313,7 @@
 <p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>        ]]></item>
         <item id="setup_still_exists" title="Složka setup stále existuje"><![CDATA[
 <h2>Složka setup stále existuje</h2>
-<p>Po nainstalování systému Textpattern již není složka <code>textpattern/setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>        ]]></item>
+<p>Po nainstalování systému Textpattern již není složka <code>setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>        ]]></item>
         <item id="site_url_mismatch" title="Chybná webová adresa (doména)"><![CDATA[
 <h2>Chybná webová adresa (doména)</h2>
 <p>Adresa URL webu uvedená v Nastavení/Server neodpovídá skutečné adrese URL, kterou používáš pro prohlížení svých webových stránek.</p>
@@ -529,10 +529,7 @@ např.: #@language cs-cz</p>
     <li>rozšířená syntaxe blokových prvků (bc.., bq.., atd.)</li>
 </ul>
 <p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>        ]]></item>
-        <item id="custom_form_types" title="Vlastní typy šablon forem"><![CDATA[
-<h2>Vlastní typy šablon forem</h2>
-<p>TO DO. MIME typy TO DO.</p>
-        ]]></item>
+        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[]]></item>
         <item id="custom_overview" title="Vlastní pole"><![CDATA[
 <h2>Vlastní pole</h2>
 <p>Vlastní pole se používají k uložení doplňkových dat článků.<br>Můžeš definovat až deset vlastních polí. Každé se objeví jako samostatné pole na panelu Psaní.</p>
