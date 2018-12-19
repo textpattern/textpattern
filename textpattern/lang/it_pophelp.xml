@@ -367,7 +367,17 @@
 <p>L’host del sito o l’amministratore del server ha disattivato una o più funzioni PHP, alcune delle quali possono influenzare il funzionamento di Textpattern.</p>
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[
+<h2>Aggiornamento versione Textpattern CMS</h2>
+<p>È disponibile una nuova versione di Textpattern CMS. Per usufruire delle ultime features e sicurezza, si raccomanda l’upgrade.</p>
+<p>Notare che anche se ci sforziamo per rendere l’esperienza di upgrade più semplice e indolore possibile:</p>
+<ul>
+    <li>Se solo l’ultima cifra differisce dalla vostra attuale versione, l’aggiornamento sarà verosimilmente retro-compatibile con plugin e temi.</li>
+    <li>Se le ultime due cifre differiscono dalla vostra attuale versione, l’aggiornamento potrebbe richiedere di aggiornare alcuni plugin e/o temi, sebbene continuerà a funzionare comunque, seppure in capacità limitata.</li>
+    <li>Se la prima cifra è differente dalla vostra attuale versione, l’aggiornamento verosimilmente richiederà di aggiornare anche gran parte di plugin e temi. Se fate molto affidamento su un particolare plugin o caratteristica del tema, controllate con l’autore o coi membri della comunità prima di cominciare l’upgrade.</li>
+</ul>
+<p>Se il messaggio dice “There is a problem trying to connect to the RPC server” vuol dire che una nuova versione non potrà essere controllata in quel momento, o che il server è momentaneamente fuori servizio. Gli aggiornamenti sono controllati ogni 24 ore per cui è probabile che alla prossima vostra visita al pannello Diagnostica, andrà tutto bene.</p>
+        ]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
