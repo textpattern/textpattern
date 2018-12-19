@@ -210,7 +210,7 @@
     <li>Il server richiede alcune modifiche a <code>. htaccess</code> o simile direttiva server, al fine di rendere funzionanti gli URL puliti</li>
     <li>Il server non supporta affatto gli URL puliti</li>
 </ul>
-<p>Il test URL puliti tenta di recuperare una pagina dall’indirizzo web specificato nella preferenza ‘URL del sito’ al fine di verificare che tutti i parametri URL puliti stiano lavorando correttamente. Se tale URL è un sito diverso, o è stato sostituito con una pagina statica o simili, il test avrà esito negativo. Fino a quando il problema non viene risolto, possono essere utilizzati URL sporchi (ad esempio <code>https://example.com?s=section&amp;id = 4</code>). Assicurarsi che lo ’Schema Permanent link’ nelle preferenze di Amministrazione venga impostato di conseguenza.</p>
+<p>Il test URL puliti tenta di recuperare una pagina dall’indirizzo web specificato nella preferenza ‘URL del sito’ al fine di verificare che tutti i parametri URL puliti stiano lavorando correttamente. Se tale URL è un sito diverso, o è stato sostituito con una pagina statica o simili, il test avrà esito negativo. Fino a quando il problema non viene risolto, possono essere utilizzati URL sporchi (ad esempio <code>https://example.com?s=section&amp;id=4</code>). Assicurarsi che lo ‘Schema Permanent link’ nelle preferenze di Amministrazione venga impostato di conseguenza.</p>
 <p>Nota che utilizzando un plugin per mettere un sito in ‘modalità di manutenzione’ può innescare questo avviso.</p>
         ]]></item>
         <item id="clean_url_test_failed" title="Verifica degli URL puliti fallita"><![CDATA[
@@ -298,7 +298,7 @@
         ]]></item>
         <item id="no_temp_dir" title="Non è stata definita nessuna cartella temp"><![CDATA[
 <h2>Nessuna directory temporanea definita</h2>
-<p>Anche se Textpattern verrà eseguito senza una directory temporanea, alcune funzionalità potrebbero non funzionare come previsto se questa preferenza non è impostata. Si prega di visitare le preferenze amministrazione e impostare il percorso della directory temporanea.</p>
+<p>Anche se Textpattern verrà eseguito senza una directory temporanea, alcune funzionalità potrebbero non funzionare come previsto se questa preferenza non è impostata. Si prega di visitare le preferenze di amministrazione e impostare il percorso della directory temporanea.</p>
         ]]></item>
         <item id="old_placeholder_exists" title="Cartella Sezione esiste"><![CDATA[
 <h2>Cartella sezione esiste</h2>
@@ -315,7 +315,7 @@
     <table class="txp-list">
         <thead>
             <tr>
-                <th scope="col">Textpattern version</th>
+                <th scope="col">Versione di Textpattern</th>
                 <th scope="col">Minimum PHP version</th>
                 <th scope="col">Minimum MySQL version</th>
             </tr>
@@ -350,7 +350,7 @@
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>The site‘s <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
+<p>Il file <code>php.ini</code> del sito, sia globale che locale, deve contenere una impostazione <code>date.timezone</code>.</p>
         ]]></item>
         <item id="setup_still_exists" title="Directory di setup esiste ancora"><![CDATA[
 <h2>Directory di setup esiste ancora</h2>
@@ -378,7 +378,7 @@
 </ul>
 <p>Se il messaggio dice “There is a problem trying to connect to the RPC server” vuol dire che una nuova versione non potrà essere controllata in quel momento, o che il server è momentaneamente fuori servizio. Gli aggiornamenti sono controllati ogni 24 ore per cui è probabile che alla prossima vostra visita al pannello Diagnostica, andrà tutto bene.</p>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
