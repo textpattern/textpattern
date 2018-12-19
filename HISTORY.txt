@@ -40,6 +40,7 @@ Changes in 4.7.2
   their work.
 * Added: French inline help translation. Many thanks to Lowel for all their
   work.
+* Added: Partial Italian inline help translation. Thanks Giampiero Mellea.
 * Added: Global 'trim' and 'default' attributes.
 * Added: Global 'wrapform' attribute.
 * Added: Global 'escape="ordinal|spell|url"' attribute values.
