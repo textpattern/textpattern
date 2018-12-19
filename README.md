@@ -83,9 +83,9 @@ during the development process.
 
 |        |  Minimum<br />(Textpattern v4.8.0)  | Recommended<br />(Textpattern v4.8.0) |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | [actively supported](http://php.net/supported-versions.php)<br />(7.2 or 7.3) |
-| MySQL  | &mdash; | [actively supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
-| Apache | &mdash; | 2.3 or 2.4 |
+| PHP    | 5.5 | [vendor supported](http://php.net/supported-versions.php)<br />(7.2 or 7.3) |
+| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
+| Apache | &mdash; | vendor supported<br />(2.3 or 2.4) |
 | Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
 
 ## Contributing
