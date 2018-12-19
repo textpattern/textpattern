@@ -313,7 +313,7 @@
 <p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>        ]]></item>
         <item id="setup_still_exists" title="Složka setup stále existuje"><![CDATA[
 <h2>Složka setup stále existuje</h2>
-<p>Po nainstalování systému Textpattern již není složka <code>textpattern/setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>        ]]></item>
+<p>Po nainstalování systému Textpattern již není složka <code>setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>        ]]></item>
         <item id="site_url_mismatch" title="Chybná webová adresa (doména)"><![CDATA[
 <h2>Chybná webová adresa (doména)</h2>
 <p>Adresa URL webu uvedená v Nastavení/Server neodpovídá skutečné adrese URL, kterou používáš pro prohlížení svých webových stránek.</p>
@@ -493,7 +493,7 @@ např.: #@language cs-cz</p>
 <p>Pro každý článek lze tuto výzvu změnit při psaní a úpravách článku.</p>        ]]></item>
         <item id="comments_disabled_after" title="Kdy vyprší lhůta pro vkládání komentářů"><![CDATA[
 <h2>Kdy vyprší lhůta pro vkládání komentářů</h2>
-<p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba 'Nikdy', která umožní komentovat stále).</p>        ]]></item>
+<p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba ’Nikdy’, která umožní komentovat stále).</p>        ]]></item>
         <item id="comments_disallow_images" title="Zakázat vkládání obrázků do komentářů?"><![CDATA[
 <h2>Zakázat vkládání obrázků do komentářů?</h2>
 <p>Nastavením ‘Ano’ budou jakékoliv obrázky vložené do komentářů odstraněny.</p        ]]></item>
@@ -529,10 +529,7 @@ např.: #@language cs-cz</p>
     <li>rozšířená syntaxe blokových prvků (bc.., bq.., atd.)</li>
 </ul>
 <p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>        ]]></item>
-        <item id="custom_form_types" title="Vlastní typy šablon forem"><![CDATA[
-<h2>Vlastní typy šablon forem</h2>
-<p>TO DO. MIME typy TO DO.</p>
-        ]]></item>
+        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[]]></item>
         <item id="custom_overview" title="Vlastní pole"><![CDATA[
 <h2>Vlastní pole</h2>
 <p>Vlastní pole se používají k uložení doplňkových dat článků.<br>Můžeš definovat až deset vlastních polí. Každé se objeví jako samostatné pole na panelu Psaní.</p>
@@ -734,7 +731,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
         <item id="spam_blacklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
 <h2>Černé listiny spamu (odděluj čárkou)</h2>
 <p>Po přijetí nového komentáře se Textpattern spojí se zde uvedenými poskytovateli <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">černých listin (spam blocklists)<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a ověří adresu IP autora komentáře. Pokud tuto adresu na některém ze seznamů najde, odmítne komentář přijmout, protože na tuto adresy byly v minulosti zaznamenány stížnosti kvůli spamu.</p>
-<p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p> 
+<p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p>
 <p>Můžeš zde zadat seznam domén oddělených čárkami. Vhodné listiny lze najít např. na <a rel="external" target="_blank" href="https://www.dmoz.org/Computers/Internet/E-mail/Spam/Blacklisting/Lists/">dmoz <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>nicméně nezapomeň, že je na tobě, abys sis tyto poskytovatele prověřil dříve, než je začneš používat na svých stránkách.</p>        ]]></item>
         <item id="syndicate_body_or_excerpt" title="Do pramenů použít pouze anotaci?"><![CDATA[
 <h2>Do pramenů použít<strong> pouze</strong> anotaci?</h2>
