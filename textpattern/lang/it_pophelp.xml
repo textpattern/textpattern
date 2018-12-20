@@ -346,9 +346,9 @@
 </div>
 <p>In aggiunta ai suddetti requisiti di sistema, sono richieste le seguenti estensioni PHP:</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
 </ul>
 <p>Il file <code>php.ini</code> del sito, sia globale che locale, deve contenere una impostazione <code>date.timezone</code>.</p>
         ]]></item>
@@ -378,51 +378,138 @@
 </ul>
 <p>Se il messaggio dice “There is a problem trying to connect to the RPC server” vuol dire che una nuova versione non potrà essere controllata in quel momento, o che il server è momentaneamente fuori servizio. Gli aggiornamenti sono controllati ogni 24 ore per cui è probabile che alla prossima vostra visita al pannello Diagnostica, andrà tutto bene.</p>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[
+<h2>I percorsi delle directory Temporanea e di Cache dei plugin non devono essere uguali</h2>
+<p>I plugin devono avere la propria directory e non condividere la directory Temporanea. Ciò è un potenziale rischio di sicurezza e potrebbe influire negativamente sul tuo sito se la directory temporanea viene svuotata. Assicurarsi che il percorso della directory temporanea sia diverso dal percorso della cache plugin.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[
+<h2>Nella tua installazione di PHP non è presente la funzione mail()</h2>
+<p>La funzione <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> di PHP è disabilitata. Di conseguenza, Textpattern non può inviare messaggi di posta elettronica e alcune funzionalità non saranno disponibili. Ad esempio, non verranno inviate notifiche email per nuovi commenti e nuovi utenti non riceveranno un’email di benvenuto. Gli utenti, tuttavia, possono ancora essere aggiunti.</p>
+        ]]></item>
     </group>
 
-    <group id="file" title="">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title=""><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
+    <group id="file" title="Pannello file">
+        <item id="file_reassign" title="Riassegna file"><![CDATA[
+<h2>Riassegna file</h2>
+<p>Quando si carica un file al posto di uno che è etichettato ‘Mancante’, il file che hai scelto è caricato sul server e linkato alle informazioni file originali nel database. Ciò significa che il nome file del file originale rimarrà, così come tutte le altre informazioni associate, come ad esempio i download totali e la categoria. Tuttavia, la dimensione del file sarà aggiornata per riflettere il nuovo file.</p>
+        ]]></item>
+        <item id="file_replace" title="Sostituisci file"><![CDATA[
+<h2>Sostituisci file</h2>
+<p>Caricando qui un file, si andrà a sostituire il contenuto del file esistente sul server ma si manterrà il nome file come era prima. Il conteggio dei download e altre informazioni associate al file rimarranno inalterati.</p>
+        ]]></item>
+        <item id="upload" title="Carica file"><![CDATA[
+<h2>Carica file</h2>
+<p>Utilizza questo modulo per caricare file o immagini sul tuo server.</p>
+<p>Utilizza il codice Textile per il rendering della grafica all’interno di articoli, il codice Textpattern per inserire gli elementi grafici sui tuoi template di pagina, o codice HTML per inserire la grafica altrove.</p>
+        ]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+    <group id="form" title="Pannello moduli">
+        <item id="forms_overview" title="Introduzione ai moduli"><![CDATA[
+<h2>Introduzione ai moduli (form)</h2>
+<p>in Textpattern, un modulo (detto form) è un piccolo insieme di testo, codice HTML e tag Textpattern che può essere riutilizzato per visualizzare contenuto.</p>
+<p>Ecco un modulo di esempio che potrebbe essere denominato <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Potresti usarlo per visualizzare una lista HTML non ordinata di articoli correlati:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Dato che il compito di questo modulo è di creare un elenco di titoli, potrebbe essere applicabile all’interno di altri tag, per mostrare, ad esempio, 20 articoli dalla sezione corrente:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Puoi anche scegliere di impiegare un modulo per mostrare contenuti che si ripetono uguali, come l’intestazione e i piè di pagina nei tuoi template di pagina. Questo significa che il contenuto esiste solo in un unico posto e se decidi di modificarlo, ti è sufficiente farlo una volta. Visualizzare contenuto da un modulo è solitamente ottenuto con:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Un modulo può essere grande fino a 64 KB. Un esempio per un piè di pagina potrebbero includere intestazioni, paragrafi, link, tag condizionali e riferimenti ad altri moduli come ad esempio <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title=""><![CDATA[]]></item>
-        <item id="replace_image_form" title=""><![CDATA[]]></item>
-        <item id="upload_image" title=""><![CDATA[]]></item>
-        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
+    <group id="image" title="Pannello immagini">
+        <item id="create_thumbnail" title="Crea miniatura"><![CDATA[
+<h2>Crea miniatura</h2>
+<p>Ti permette di (ri)creare una miniatura di specifiche dimensioni dall’immagine full-size.</p>
+<p>La miniatura verrà scalata per adattarsi alle dimensioni che hai scelto, a meno che tu non abbia spuntato il check-box ‘Crop’. In tal caso, la miniatura verrà creata dal centro dell’immagine senza alcun ridimensionamento.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Sostituisci immagine"><![CDATA[
+<h2>Sostituisci immagine</h2>
+<p>Un immagine caricata qui sostituirà semplicemente quella esistente associata con questo record nel database.</p>
+        ]]></item>
+        <item id="upload_image" title="Carica immagine"><![CDATA[
+<h2>Carica immagine</h2>
+<p>Carica una o più immagini sul tuo server.</p>
+<p>Al momento del caricamento alla cartella <code>images</code>, il nome file dell’immagine originale sarà conservato solo internamente nel database di Textpattern; il file immagine verrà rinominato in un numero progressivo + estensione file.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Carica miniatura"><![CDATA[
+<h2>Carica miniatura</h2>
+<p>Alle immagini full size possono essere assegnate le proprie miniature. Queste sono utili per il collegamento alle corrispondenti immagini full size e alla loro indicizzazione.</p>
+<p>Il riferimento alla miniatura è esattamente lo stesso riferimento all’immagine full size, con la lettera <code>t</code> aggiunta al nome del file. Ad esempio, come riferimento a una miniatura associata a un’immagine full size conservata in <code>/images/12.jpg</code> si utilizzerebbe <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+    <group id="lang" title="Pannello lingue">
+        <item id="get_textpack" title="Installa Textpack"><![CDATA[
+<h2>Installa Textpack</h2>
+<p>Incolla ulteriori stringhe di lingua tradotte per il sito in questo box e seleziona ‘Carica’ per installarle.</p>
+<p>Le stringhe si presentano spesso sotto forma di Textpack scaricabile, distribuito con un plugin per permettere che le stringhe di lingua del plugin stesso vengano usate, tradotte, all’interno di Textpattern.</p>
+<p>I traduttori sono invitati a tradurre opportunamente questi pacchetti e ridistribuire alla community il contenuto localizzato.</p>
+        ]]></item>
     </group>
 
-    <group id="link" title="">
-        <item id="link_description" title=""><![CDATA[]]></item>
-        <item id="link_sort" title=""><![CDATA[]]></item>
-        <item id="link_url" title=""><![CDATA[]]></item>
+    <group id="link" title="Pannello link">
+        <item id="link_description" title="Descrizione"><![CDATA[
+<h2>Descrizione</h2>
+<p>Le descrizioni per I link sono facoltative, ma utili per aggiungere una didascalia al link, per creare attributi <code>title=""</code> (tooltip) per i link, o semplicemente per tua documentazione interna.</p>
+        ]]></item>
+        <item id="link_sort" title="Chiave di ordinamento"><![CDATA[
+<h2>Chiave di ordinamento</h2>
+<p>Utile per ordinare elenchi di link in base al linguaggio naturale, p.es. in base al cognome di una persona piuttosto che al nome, o in frasi che cominciano con un articolo determinativo o indeterminativo.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>L’indirizzo del link. Se il link punta ad un altro sito, allora deve essere preceduto da <code>http://</code> o <code>https://</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="login" title="">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+    <group id="login" title="Pannello login">
+        <item id="remember_login" title="Rimani connesso con questo browser"><![CDATA[
+<h2>Rimani connesso con questo browser</h2>
+<p>Se spuntato, rimarrai connesso al tuo account Textpattern con l’attuale browser web, finché non decidi di chiudere la sessione. Se lasciato vuoto, sarai automaticamente disconnesso dopo un periodo di inattività.</p>
+<p>Richiede l’abilitazione dei cookie nel browser.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
+    <group id="plugin" title="Pannello plug-in">
+        <item id="install_plugin" title="Installa plug-in"><![CDATA[
+<h2>Installa plug-in</h2>
+<p>Incolla qui il contenuto del file di testo del plugin, poi usa ‘Carica’ per iniziare l’installazione. Qualsiasi plug-in già caricato con lo stesso nome o uno che hai precedentemente installato sarà sovrascritto dalla nuova versione caricata.</p>
+<p>Il testo del plug-in che incolli qui <strong>non</strong> è in codice PHP ma testo codificato su Base64, di solito preceduto da un header contenente informazioni sul plug-in (come il nome del plugin, versione e descrizione, nome autore, etc).</p>
+        ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+    <group id="prefs" title="Pannello preferenze">
+        <item id="admin_side_plugins" title="Usare plugin lato-amministrazione?"><![CDATA[
+<h2>Usare plugin lato-amministrazione?</h2>
+<p>I plug-in lato-amministrazione possono cambiare il funzionamento dell’interfaccia di amministrazione. Potrebbero agire su azioni già esistenti, come modificare o pubblicare articoli, o potrebbero aggiungere nuovi pannelli per funzionalità supplementari/estese.</p>
+<p>Per saperne di più sui plugin lato-amministrazione, vedi la pagina (in inglese) <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plug-in di tutti i tipi sono elencati nel sito <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opzioni avanzate"><![CDATA[
+<h2>Opzioni avanzate</h2>
+<p>Mostra il gruppo di preferenze avanzate, dove è possibile configurare ulteriori impostazioni  come:</p>
+<ul>
+    <li>Funzioni PHP abilitate in <code>txp:evaluate</code>.</li>
+    <li>Tipi di template di moduli personalizzati.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Accetta codice PHP negli articoli?"><![CDATA[
+<h2>Accetta codice PHP negli articoli?</h2>
+<p>Se attivata, questa impostazione consente l’uso di codice PHP all’interno di articoli. L’autore deve avere privilegi sufficienti per farlo (per default, solo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Editori’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Redattori capo’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> possono farlo).</p>
+<p>Il codice PHP deve avere tag PHP di apertura e chiusura omessi, e deve anche essere racchiuso tra <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php">tag <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Consenti la sostituzione di moduli?"><![CDATA[
+<h2>Consenti la sostituzione di moduli?</h2>
+<p>Questa impostazione consente gli autori di articoli di forzare il modulo da usare nel rendering dell’articolo. Se attivata, un campo a tendina ’Sostituisci il modulo’ sarà disponibile sotto ‘Assegna l’articolo’, quando si edita un articolo.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Accetta codice PHP nelle pagine?"><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
         <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
