@@ -134,7 +134,7 @@
 <li>Année / Mois / Jour</li>
 <li>Heures (format 24 heures) : Minutes : Secondes</li>
 </ul>
-<p>Un élément affecté d’un horodatage plus grand que l’instant présent (ex dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n'arrive.</p>
+<p>Un élément affecté d’un horodatage plus grand que l’instant présent (ex dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
         ]]></item>
         <item id="status" title="Statut"><![CDATA[
 <h2>Statut</h2>
@@ -147,12 +147,12 @@
     <li>Publié</li>
     <li>Persistant</li>
 </ul>
-<p>Un <strong>brouillon</strong> d’article est considéré comme un travail en cours et n’est pas visible à l’extérieur de la zone d’administration de Textpattern (c'est-à-dire non visible sur le site public de Textpattern et non syndiqué dans les flux).</p>
+<p>Un <strong>brouillon</strong> d’article est considéré comme un travail en cours et n’est pas visible à l’extérieur de la zone d’administration de Textpattern (c’est-à-dire non visible sur le site public de Textpattern et non syndiqué dans les flux).</p>
 <p>Un article <strong>masqué</strong> n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
 <p>Un article <strong>à valider</strong> est considéré comme prêt pour la publication et en attente d’approbation mais il n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
-<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c'est-à-dire visible sur le site public de Textpattern, syndiqué dans les flux si la préférence le permet). Si un article est publié et dispose d’une date d’expiration, le statut demeure à «publié» après que cette date soit atteinte tandis que l’article apparaît sur le site public de Textpattern si l’option «Publier les articles qui ont expiré ?» le permet.
+<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c’est-à-dire visible sur le site public de Textpattern, syndiqué dans les flux si la préférence le permet). Si un article est publié et dispose d’une date d’expiration, le statut demeure à «publié» après que cette date soit atteinte tandis que l’article apparaît sur le site public de Textpattern si l’option «Publier les articles qui ont expiré ?» le permet.
 </p>
-<p>Un article <strong>persistant</strong> est semblable à un article <strong>publié</strong> dans la mesure où il peut être visible hors de l’espace d’administration de Textpattern mais n’apparaîtra <strong>pas</strong> dans la liste des articles tant que les balises respectives <code>articles</code> ou <code>article_custom</code> n'incluent un attribut <code>status</code> avec pour valeur <code>sticky</code>.</p>
+<p>Un article <strong>persistant</strong> est semblable à un article <strong>publié</strong> dans la mesure où il peut être visible hors de l’espace d’administration de Textpattern mais n’apparaîtra <strong>pas</strong> dans la liste des articles tant que les balises respectives <code>articles</code> ou <code>article_custom</code> n’incluent un attribut <code>status</code> avec pour valeur <code>sticky</code>.</p>
         ]]></item>
         <item id="title" title="Titre"><![CDATA[
 <h2>Titre</h2>
@@ -373,7 +373,7 @@
 <ul>
    <li>Si seul le dernier chiffre diffère de votre version actuelle, la mise à niveau sera probablement compatible avec les versions antérieures des plugins et des thèmes.</li>
    <li>Si les deux derniers chiffres diffèrent de votre version actuelle, la mise à niveau peut nécessiter la mise à jour de certains plugins et/ou thèmes, bien que, probablement, tout devrait continuer de fonctionner même avec des capacités limitées.</li>
-   <li>Si c’est le premier chiffre qui diffère de votre version actuelle, la mise à niveau nécessitera probablement la mise à jour des plugins et des thèmes. Si vous comptez beaucoup sur un plugin ou un thème en particulier, veuillez vous renseigner auprès de l'auteur ou des membres de la communauté avant de commencer la mise à niveau.</li>
+   <li>Si c’est le premier chiffre qui diffère de votre version actuelle, la mise à niveau nécessitera probablement la mise à jour des plugins et des thèmes. Si vous comptez beaucoup sur un plugin ou un thème en particulier, veuillez vous renseigner auprès de l’auteur ou des membres de la communauté avant de commencer la mise à niveau.</li>
 </ul>
 <p>Si un message affiche «Échec de connexion avec le serveur RPC» cela signifie que, dans l’immédiat, la recherche de nouvelle version ne peut être effectuée ou que le serveur est inactif. Les disponibilités de mise à jour sont vérifiées toutes les 24 heures. Il est donc probable que tout ira bien lors de votre prochaine visite de la page «Diagnostics».</p>
         ]]></item>
@@ -430,7 +430,7 @@
 <p>La vignette sera retaillée pour s’adapter aux dimensions souhaitées, à moins de cliquer sur la case à cocher «Retailler». Dans ce cas, la vignette sera créée à partir du centre de l’image sans aucune déformation.</p>
         ]]></item>
         <item id="replace_image_form" title="Remplacer l’image"><![CDATA[
-<h2>Remplacer l'image</h2>
+<h2>Remplacer l’image</h2>
 <p>Toute image téléversée ici remplacera celle existante associée à sa référence dans la base de données.</p>
         ]]></item>
         <item id="upload_image" title="Envoyer une image"><![CDATA[
@@ -472,7 +472,7 @@
     <group id="login" title="Connexion">
         <item id="remember_login" title="Se souvenir de moi"><![CDATA[
 <h2>Restez connecté•e avec ce navigateur</h2>
-<p>Si coché, vous resterez connecté•e à votre compte Textpattern depuis votre navigateur courant, jusqu'à ce que vous choisissiez de fermer votre session. Si laissé vide, vous serez automatiquement déconnecté•e après une période d’inactivité.</p>
+<p>Si coché, vous resterez connecté•e à votre compte Textpattern depuis votre navigateur courant, jusqu’à ce que vous choisissiez de fermer votre session. Si laissé vide, vous serez automatiquement déconnecté•e après une période d’inactivité.</p>
 <p>Nécessite l’acceptation des cookies par votre navigateur.</p>
         ]]></item>
     </group>
@@ -511,7 +511,7 @@
         <item id="allow_page_php_scripting" title="Autoriser l’usage de PHP dans les gabarits ?"><![CDATA[
 <h2>Autoriser l’usage de PHP dans les gabarits ?</h2>
 <p>Si activé, ce paramètre permet l’ajout de code PHP dans les gabarits de pages et les modules.</p>
-<p>Le code PHP ne doit pas inclure les balises d'ouverture et de fermeture propres à PHP, mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>Le code PHP ne doit pas inclure les balises d’ouverture et de fermeture propres à PHP, mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Format de la date des archives"><![CDATA[
 <h2>Format de la date des archives</h2>
@@ -541,7 +541,7 @@
         ]]></item>
         <item id="comments_are_ol" title="Afficher les commentaires dans une liste ordonnée ?"><![CDATA[<h2>Afficher les commentaires dans une liste ordonnée ?</h2>
 <p>Détermine si les commentaires d’articles seront contenus dans la balise HTML <code>&lt;ol&gt;</code> et les commentaires individuels dans une balise <code>&lt;li&gt;</code> (ce qui affiche les commentaires dans une liste ordonnée), ou si les commentaires individuels seront plutôt contenus dans une balise <code>&lt;div&gt;</code>.</p>
-<p>Qu'importe ce choix, vous pourrez toujours choisir de changer les balises utilisées en modifiant la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> présent dans le module <code>comments_display</code>.</p>]]></item>
+<p>Qu’importe ce choix, vous pourrez toujours choisir de changer les balises utilisées en modifiant la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> présent dans le module <code>comments_display</code>.</p>]]></item>
         <item id="comments_auto_append" title="Ajout automatique des commentaires après un article ?"><![CDATA[<h2>Ajout automatique des commentaires après un article ?</h2>
 <p>Ce paramètre détermine si les commentaires et le formulaire associé doivent suivre tous les articles individuels (par ajout automatique du contenu du module <code>comments_display</code>).</p>
 <p>La plupart du temps, vous choisirez de régler la valeur sur «Non» afin d’obtenir plus de flexibilité avec le positionnement de vos commentaires dans l’apparence de votre site. Vous devrez ajouter la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> manuellement dans chaque modèle d’articles à l’endroit désiré.</p>
@@ -609,7 +609,7 @@
         <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[<h2>Modèles types de modules personnalisés</h2>
 <p>En complément des types de modules standards (article, fichier, divers etc.), les Administrat•eur•rice•s peuvent définir leurs types personnalisés. L’objectif des modèles de modules personnalisés est double : faciliter la classification des modules  et permettre la définition personnalisée des ressources.</p>
 <p>Le format du paramètre des préférences est <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>, et dont chaque élément correspond à un type de modèle de module</p>
-<p>Pour déclarer un type de module personnalisé (ex. <code>js</code>) ce type (chacun sur une ligne distincte) devra être associé à un élément <code>[js]</code>. Un titre d'intitulé par défaut peut être déclaré à l’aide du détail <code>title="Javascript"</code> de l’élément de liste correspondant. Si nécessaire, le support des traductions des intitulés est possible également (ex. <code>ru="Скрипт"</code>).</p>
+<p>Pour déclarer un type de module personnalisé (ex. <code>js</code>) ce type (chacun sur une ligne distincte) devra être associé à un élément <code>[js]</code>. Un titre d’intitulé par défaut peut être déclaré à l’aide du détail <code>title="Javascript"</code> de l’élément de liste correspondant. Si nécessaire, le support des traductions des intitulés est possible également (ex. <code>ru="Скрипт"</code>).</p>
 <p>De plus, un modèle de module <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type</span>(ouvre le lien externe dans une nouvelle fenêtre)</3></a> (auparavant connu sous la désignation «MINE Type») peut être spécifié, par exemple : <code>minetype="application/javascript"</code>. Cela transforme les modèles de modules de ce type en ressources personnalisées qui peuvent être servies dans le paramètre du type de média plutôt que dans celui de la base de données ou du serveur (fichiers «Flat» indépendants) grâce à la balise <code>&lt;txp:output_form /&gt;</code>. Par exemple, un modèle de module nommé <code>example.js</code> du type <code>[js]</code> et de type de média <code>minetype="application/javascript"</code> pourra être inclus à l’aide d’une balise HTML <code>&lt;script&gt;</code> dans votre code comme ci-après :</p>
 <pre><code>&lt;script&gt;
     <9>
@@ -623,7 +623,7 @@
 Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel <code>myscript</code> (sans <code>.js</code>) – afin de le rendre accessible via son URL.</p>]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
-<p>Les champs personnalisés sont utilisés pour conserver des données supplémentaires avec l’article. Vous pouvez en définir jusqu'à dix en leur attribuant un nom ici.
+<p>Les champs personnalisés sont utilisés pour conserver des données supplémentaires avec l’article. Vous pouvez en définir jusqu’à dix en leur attribuant un nom ici.
         ]]></item>
         <item id="dateformat" title="Format de la date"><![CDATA[
 <h2>Format de la date</h2>
@@ -645,10 +645,10 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
     <li>Publié</li>
     <li>Persistant</li>
 </ul>
-<p>Un <strong>brouillon</strong> d’article est considéré comme un travail en cours et n’est pas visible à l’extérieur de la zone d’administration de Textpattern (c'est-à-dire non visible sur le site public de Textpattern et non syndiqué dans les flux).</p>
+<p>Un <strong>brouillon</strong> d’article est considéré comme un travail en cours et n’est pas visible à l’extérieur de la zone d’administration de Textpattern (c’est-à-dire non visible sur le site public de Textpattern et non syndiqué dans les flux).</p>
 <p>Un article <strong>masqué</strong> n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
 <p>Un article <strong>à valider</strong> est considéré comme prêt pour la publication et en attente d’approbation mais il n’est pas visible à l’extérieur de la zone d’administration de Textpattern.</p>
-<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c'est-à-dire visible sur le site public de Textpattern, syndiqué dans les flux si la préférence le permet).
+<p>Un article <strong>publié</strong> est généralement visible à l’extérieur de l’espace d’administration de Textpattern (c’est-à-dire visible sur le site public de Textpattern, syndiqué dans les flux si la préférence le permet).
         ]]></item>
         <item id="doctype" title="Doctype"><![CDATA[
 <h2>Doctype</h2>
@@ -663,7 +663,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
     <li><code>&lt;txp:article_id /&gt;</code> devient : <code>&lt;article::id /&gt;</code></li>
     <li><code>&lt;txp:recent_articles/&gt;</code> devient : <code>&lt;recent::articles /&gt;</code></li>
     <li><code>&lt;txp:file_download_list /&gt;</code> devient : <code>&lt;file::download_list /&gt;</code></li>
-    <li><code>&lt;txp:smd_if /&gt;</code> devient : <code>&lt;smd::if /&gt;</code></li> 
+    <li><code>&lt;txp:smd_if /&gt;</code> devient : <code>&lt;smd::if /&gt;</code></li>
     <li><code>&lt;txp:smd_if&gt;...<15>...&lt;/txp:smd_if&gt;</code> devient : <code>&lt;smd::if&gt;...&lt;smd::else /&gt;...&lt;/smd::if&gt;</code>(notez que le préfixe du plugin peut être utilisé pour la balise <code>else</code>).</li>
 </ul>
 <p>Si une balise contient un trait souligné (underscore) et que vous adoptez les balises réduites, le concept devient alors :</p>
@@ -680,7 +680,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="file_base_path" title="Chemin du répertoire des fichiers téléversés"><![CDATA[<h2>Chemin du répertoire des fichiers téléversés</h2>
 <p>Renseigne le <strong>chemin absolu</strong> au répertoire de conservation des fichiers téléversés. PHP réclame un accès en écriture à ce dossier.</p>]]></item>
         <item id="file_max_upload_size" title="Taille maximale d’un fichier envoyé sur le serveur (octets)"><![CDATA[<h2>Taille maximale d’un fichier téléversé (en octets)</h2>
-<p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s'y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>  ]]></item>
+<p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s’y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>  ]]></item>
         <item id="gmtoffset" title="Fuseau horaire"><![CDATA[<h2>Fuseau horaire</h2>
 <p>Afin dafficher les dates selon votre situation géographique, veuillez sélectionner votre fuseau horaire.</p>]]></item>
         <item id="img_dir" title="Répertoire des images"><![CDATA[<h2>Répertoire des images</h2>
@@ -698,7 +698,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
    <li><strong>Référents seuls :</strong> Textpattern dénombrera uniquement les visiteurs en provenance d’autres sites</li>
    <li><strong>Aucun :</strong> Textpattern n’enregistrera aucune activité pour toutes pages vues</li>
 </ul>
-<p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>  
+<p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>
 <p>Il est vivement recommandé de laisser ce paramètre sur sa valeur par défaut, à savoir «Aucun», à moins que les besoins de ces informations ne soient absolument nécessaires et, en outre, d’informer explicitement de l’usage que vous comptez en faire.</p>]]></item>
         <item id="max_url_len" title="Longueur maximale d’une URL (en caractères)"><![CDATA[<h2>Longueur maximale d’une URL (en caractères)</h2>
 <p>Permet de prévenir le fonctionnement des URL plus longues que la valeur spécifiée. Utile pour réduire les dommages et accroître la sécurité du site.</p>]]></item>
@@ -752,7 +752,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <h3>Le mode de production</h3>
 <p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p> ]]></item>
         <item id="public_theme_name" title="Thème du site public"><![CDATA[<h2>Thème du site public</h2>
-<p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu'une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>]]></item>
+<p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu’une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>]]></item>
         <item id="publish_expired_articles" title="Publier les articles qui ont expiré ?"><![CDATA[<h2>Publier les articles qui ont expiré ?<0>
 <p>Si renseigné sur «Oui», les articles expirés continueront à s’afficher sur le site public après leur date d’expiration. Vous pouvez utiliser la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien dans une nouvelle fenêtre)</span></a> pour afficher un contenu alternatif ou une structure de substitution aux articles expirés.</p>
 <p>Si renseigné sur «Non», les articles expirés seront supprimés du site public et toute tentative d’y accéder renverra un statut HTTP «401 Gone» à la place. Le paramètre par défaut est «Non».</p>]]></item>
@@ -806,7 +806,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p><code>function</code> doit retourner une valeur scalaire (<strong>pas</strong> un array/object).</p>]]></item>
         <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[<h2>Accepter les commentaires ?</h2>
 <p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p> ]]></item>
-        <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?<0>adresse e-mail 
+        <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?<0>adresse e-mail
 <p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
 <p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p> ]]></item>
         <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[<h2>Utiliser les plugins ?</h2>
@@ -822,7 +822,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Pour la plupart des sites web, il suffit de créer un nombre minimum de sections (pages).</p>
 <h3>Considérons ce scénario pour un site avec trois sections :</h3>
 <ol>
-    <li><strong>Archives :</strong> la section à laquelle tous les articles figurant sur la page d’accueil dépendent. Lorsqu’un lecteur clique sur le lien permanent d’un article, celui-ci s’affiche dans la mise en page attribuée à cette section. Pour accéder à la liste paginée des articles les plus récents affectés à cette section «Archive», l'URL serait de la forme <code>https://example.com/archive/</code>.</li>
+    <li><strong>Archives :</strong> la section à laquelle tous les articles figurant sur la page d’accueil dépendent. Lorsqu’un lecteur clique sur le lien permanent d’un article, celui-ci s’affiche dans la mise en page attribuée à cette section. Pour accéder à la liste paginée des articles les plus récents affectés à cette section «Archive», l’URL serait de la forme <code>https://example.com/archive/</code>.</li>
     <li><strong>À propos :</strong> une page nommée «À propos de ce site» qui différerait de la page d’accueil et celle des archives en ce sens qu’elle serait beaucoup plus statique, pourrait avoir une présentation différente et ne contenir qu’un seul article. Cette page «À propos» serait accessible sur <code>https://example.com/a-propos/</code>.</li>
     <li><strong>Photos :</strong> une section avec une présentation différente (et sans doute d’autres styles CSS) pouvant présenter des images plutôt que des articles.</li>
 </ol>
@@ -879,9 +879,9 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="skin_author_uri" title="Site web du thème"><![CDATA[<h2>Site web du thème</h2>
 <p>L’URL correspondante où se situent les informations et/ou les dernières versions pour ce thème (optionnel).</p>]]></item>
         <item id="skin_delete_entirely" title="Supprimer également les modèles du thème sur le serveur"><![CDATA[<h2>Supprimer également les modèles du thème sur le serveur</h2>
-<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s'y trouvent.</p> ]]></item>
+<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s’y trouvent.</p> ]]></item>
         <item id="skin_delete_from_database" title="Supprimer de la base de données les modèles inutilisés à l’importation"><![CDATA[<h2>Supprimer de la base de données les modèles inutilisés à l’importation</h2>
-<p>Si coché, chaque modèle du(es) thème(s) sélectionné(s) n’ayant aucun fichier correspondant sur le disque sera définitivement supprimé de la base de données. Le résultat, après exécution de l’action, fera correspondre, tant que faire se peut,  la base de données avec ce qui est présent sur le disque.</p> 
+<p>Si coché, chaque modèle du(es) thème(s) sélectionné(s) n’ayant aucun fichier correspondant sur le disque sera définitivement supprimé de la base de données. Le résultat, après exécution de l’action, fera correspondre, tant que faire se peut,  la base de données avec ce qui est présent sur le disque.</p>
 <p>Remarque : si vous avez supprimé des fichiers d’un modèle que Textpattern requière, des versions vides de ces fichiers seront créés automatiquement (incluant un commentaire informatif circonstancié) dans la base de données.</p>]]></item>
         <item id="skin_delete_from_disk" title="Supprimer les modèles inutilisés sur le serveur à l’exportation"><![CDATA[<h2>Supprimer les modèles inutilisés sur le serveur à l’exportation</h2>
 <p>Si coché, chaque fichier du modèle du(es) thème(s) sélectionné(s) n’ayant pas d’élément correspondant dans la base de données sera définitivement supprimé du thème sur le disque. Le résultat, après exécution l’action, fera correspondre, exactement, le système de fichiers avec ce qui est présent dans la base de données.</p>]]></item>
@@ -898,17 +898,17 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Le nom ne doit pas contenir de caractères spéciaux ni d’espaces.</p>]]></item>
         <item id="skin_overview" title="Introduction aux Thèmes"><![CDATA[<h2>Introduction aux thèmes</h2>
 <p>Un Thème Textpattern est une collection de Gabarits, de Modules et de Styles. Les thèmes vous permettent de séparer, logiquement, vos ressources du site dans des groupes pour une meilleure identification ou pour le partage avec d’autres utilisateurs en tant que distributions. L’acte de créer ou d’importer un Thème, ainsi que toutes les ressources qu’il contient, n’a <em>aucun</em> impact sur votre site existant. Vous êtes laissé libre d’éditer ou de modifier n’importe quelle ressource qui n’est pas associée avec une Section de votre site, sans craindre d’affecter votre site lui-même.</p>
-<p>Pour éditer une ressource de Thème, consultez les Gabarits, les Modules ou les Styles de votre interface d’administration et sélectionnez le thème, dans la liste de choix, sur lequel vous souhaitez travailler. Le thème sur lequel vous travaillez sera mémorisé d'une page d’administration à une autre, vous permettant de basculer d’une page à l’autre rapidement et facilement. Ce sera reconnu comme étant votre <em>Thème de travail</em>.</p>
+<p>Pour éditer une ressource de Thème, consultez les Gabarits, les Modules ou les Styles de votre interface d’administration et sélectionnez le thème, dans la liste de choix, sur lequel vous souhaitez travailler. Le thème sur lequel vous travaillez sera mémorisé d’une page d’administration à une autre, vous permettant de basculer d’une page à l’autre rapidement et facilement. Ce sera reconnu comme étant votre <em>Thème de travail</em>.</p>
 <h3>Aperçu d’une ressource de thème</h3>
 <p>Tant que vous travaillez sur un thème, Textpattern vous permettra (et seulement vous) d’afficher l’aperçu du thème sur le site public. Pourvu que vous soyez identifié par la page de connexion à Textpattern. Textpattern peut localiser un élément portant le même nom que celui déjà attribué à la section publique du site que vous visitez. Il vous montrera à quoi ressemble votre site en utilisant le thème de travail comme aperçu.</p>
-<p>Cela vous permet de voir rapidement les modifications apportées aux ressources de votre thème et de continuer à modifier les éléments avant de les rendre accessibles au public. À tout moment, le fait de changer de thème de travail à partir de la zone d'administration vous permettra de prévisualiser ces ressources. </p>
+<p>Cela vous permet de voir rapidement les modifications apportées aux ressources de votre thème et de continuer à modifier les éléments avant de les rendre accessibles au public. À tout moment, le fait de changer de thème de travail à partir de la zone d’administration vous permettra de prévisualiser ces ressources. </p>
 <p>Lorsque vous êtes satisfait des résultats, affectez les ressources de n’importe quel thème à une ou plusieurs sections de votre site. site. Cela rendra ces éléments actifs et visibles par tous les visiteurs du site. </p>
 <h3>Exportation et importation</h3>
 <p>Les thèmes peuvent être partagés avec la communauté. Sélectionnez un ou plusieurs thèmes via les cases à cocher et utilisez l’option <em>Exporter</em> de la liste de choix multiples pour exporter les ressources du thème sur le disque. Chaque thème est situé dans son propre sous-répertoire, sous le répertoire défini dans vos préférences <em>Répertoire des thèmes</em> (dossier par défaut : <code>themes </code>).</p>
-<p>Une fois effectué, vous pouvez empaqueter le thème et le distribuer. Les utilisateurs pourront décompacter le thème dans leur propre répertoire et choisir l’option <em>importer</em> pour l’importer le rendre actif dans leur base de données. Dès lors, ils pourront basculer sur le thème et l'utiliser comme thème de travail pour permettre la prévisualisation des ressources du site et, en définitive, l'affectation des ressources aux sections, comme décrit ci-dessus.</p>
-<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n'y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d'abord importer les modifications dans votre base de données et vous assurer qu'une ou plusieurs sections utilisent les ressources du thème.</p> ]]></item>
+<p>Une fois effectué, vous pouvez empaqueter le thème et le distribuer. Les utilisateurs pourront décompacter le thème dans leur propre répertoire et choisir l’option <em>importer</em> pour l’importer le rendre actif dans leur base de données. Dès lors, ils pourront basculer sur le thème et l’utiliser comme thème de travail pour permettre la prévisualisation des ressources du site et, en définitive, l’affectation des ressources aux sections, comme décrit ci-dessus.</p>
+<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n’y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d’abord importer les modifications dans votre base de données et vous assurer qu’une ou plusieurs sections utilisent les ressources du thème.</p> ]]></item>
         <item id="skin_title" title="Titre du thème"><![CDATA[<h2>Titre du thème</h2>
-<p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l'interface d’administration de Textpattern (requis).</p>
+<p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
 <p>Le titre peut comporter des caractères spéciaux ainsi que des espaces.</p>]]></item>
         <item id="skin_version" title="Version du thème"><![CDATA[<h2>Version du thème</h2>
 <p>Le numéro de version pour la version de ce thème installé (optionnel).</p>< ]]></item>
