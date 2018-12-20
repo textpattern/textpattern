@@ -346,9 +346,9 @@
 </div>
 <p>In aggiunta ai suddetti requisiti di sistema, sono richieste le seguenti estensioni PHP:</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a></li>
 </ul>
 <p>Il file <code>php.ini</code> del sito, sia globale che locale, deve contenere una impostazione <code>date.timezone</code>.</p>
         ]]></item>
@@ -460,24 +460,56 @@
 <h2>Descrizione</h2>
 <p>Le descrizioni per I link sono facoltative, ma utili per aggiungere una didascalia al link, per creare attributi <code>title=""</code> (tooltip) per i link, o semplicemente per tua documentazione interna.</p>
         ]]></item>
-        <item id="link_sort" title="Chiave di ordinamento"><![CDATA[]]></item>
-        <item id="link_url" title=""><![CDATA[]]></item>
+        <item id="link_sort" title="Chiave di ordinamento"><![CDATA[
+<h2>Chiave di ordinamento</h2>
+<p>Utile per ordinare elenchi di link in base al linguaggio naturale, p.es. in base al cognome di una persona piuttosto che al nome, o in frasi che cominciano con un articolo determinativo o indeterminativo.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>L’indirizzo del link. Se il link punta ad un altro sito, allora deve essere preceduto da <code>http://</code> o <code>https://</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="login" title="">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+    <group id="login" title="Pannello login">
+        <item id="remember_login" title="Rimani connesso con questo browser"><![CDATA[
+<h2>Rimani connesso con questo browser</h2>
+<p>Se spuntato, rimarrai connesso al tuo account Textpattern con l’attuale browser web, finché non decidi di chiudere la sessione. Se lasciato vuoto, sarai automaticamente disconnesso dopo un periodo di inattività.</p>
+<p>Richiede l’abilitazione dei cookie nel browser.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
+    <group id="plugin" title="Pannello plug-in">
+        <item id="install_plugin" title="Installa plug-in"><![CDATA[
+<h2>Installa plug-in</h2>
+<p>Incolla qui il contenuto del file di testo del plugin, poi usa ‘Carica’ per iniziare l’installazione. Qualsiasi plug-in già caricato con lo stesso nome o uno che hai precedentemente installato sarà sovrascritto dalla nuova versione caricata.</p>
+<p>Il testo del plug-in che incolli qui <strong>non</strong> è in codice PHP ma testo codificato su Base64, di solito preceduto da un header contenente informazioni sul plug-in (come il nome del plugin, versione e descrizione, nome autore, etc).</p>
+        ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+    <group id="prefs" title="Pannello preferenze">
+        <item id="admin_side_plugins" title="Usare plugin lato-amministrazione?"><![CDATA[
+<h2>Usare plugin lato-amministrazione?</h2>
+<p>I plug-in lato-amministrazione possono cambiare il funzionamento dell’interfaccia di amministrazione. Potrebbero agire su azioni già esistenti, come modificare o pubblicare articoli, o potrebbero aggiungere nuovi pannelli per funzionalità supplementari/estese.</p>
+<p>Per saperne di più sui plugin lato-amministrazione, vedi la pagina (in inglese) <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plug-in di tutti i tipi sono elencati nel sito <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opzioni avanzate"><![CDATA[
+<h2>Opzioni avanzate</h2>
+<p>Mostra il gruppo di preferenze avanzate, dove è possibile configurare ulteriori impostazioni  come:</p>
+<ul>
+    <li>Funzioni PHP abilitate in <code>txp:evaluate</code>.</li>
+    <li>Tipi di template di moduli personalizzati.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Accetta codice PHP negli articoli?"><![CDATA[
+<h2>Accetta codice PHP negli articoli?</h2>
+<p>Se attivata, questa impostazione consente l’uso di codice PHP all’interno di articoli. L’autore deve avere privilegi sufficienti per farlo (per default, solo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Editori’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Redattori capo’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> possono farlo).</p>
+<p>Il codice PHP deve avere tag PHP di apertura e chiusura omessi, e deve anche essere racchiuso tra <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php">tag <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Consenti la sostituzione di moduli?"><![CDATA[
+<h2>Consenti la sostituzione di moduli?</h2>
+<p>Questa impostazione consente gli autori di articoli di forzare il modulo da usare nel rendering dell’articolo. Se attivata, un campo a tendina ’Sostituisci il modulo’ sarà disponibile sotto ‘Assegna l’articolo’, quando si edita un articolo.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Accetta codice PHP nelle pagine?"><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
         <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
