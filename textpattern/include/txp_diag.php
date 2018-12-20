@@ -433,6 +433,10 @@ function doDiagnostics()
             $gd_support[] = 'PNG';
         }
 
+        if ($gd_info['WebP Support']) {
+            $gd_support[] = 'WebP';
+        }
+        
         if ($gd_support) {
             $gd_support = implode(', ', $gd_support);
         } else {
