@@ -164,7 +164,7 @@ function doLoginForm($message)
                     array(
                         'name'         => 'p_password',
                         'autocomplete' => 'current-password',
-                    ), '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
+                    ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'login_password', false, true),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
