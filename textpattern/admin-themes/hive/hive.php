@@ -29,7 +29,7 @@ class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">';
+        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
