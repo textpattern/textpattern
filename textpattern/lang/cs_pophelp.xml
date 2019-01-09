@@ -331,8 +331,7 @@
     <li>Jestliže se pouze poslední číslice nové verze liší od tvojí současné verze, je pravděpodobné, že bude zpětně kompatibilní s pluginy a tématy.</li>
     <li>V případě, že se liší poslední dvě číslice od tvojí současné verze, upgrade může vyžadovat aktualizace některých pluginů, nebo témat, i když vše bude pravděpodobně nadále v omezené míře fungovat.</li>
     <li>Pokud je odlišná první číslice nové verze od tvojí současné verze, upgrade bude pravděpodobně vyžadovat aktualizace většiny pluginů a témat. Pokud je funkce webu závislá na konkrétním pluginu nebo tématu, obrať se před zahájením upgradu na autora či komunitu.</li>
-</ul>
-<p>Pokud se zobrazí zpráva “Vyskytl se problém při pokusu připojit se k serveru RPC”, znamená to, že nemohla být ověřena existence nové verze, nebo že server může být mimo provoz. Aktualizace jsou kontrolovány každých 24 hodin, takže je pravděpodobné, že při příští návštěvě panelu Diagnostika bude všechno v pořádku.</p>        ]]></item>
+</ul>        ]]></item>
         <item id="tmp_plugin_paths_match" title="Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné"><![CDATA[
 <h2>Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné</h2>
 <p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Je to potenciální bezpečnostní riziko, které může tvé stránky nepříznivě ovlivnit. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>        ]]></item>
