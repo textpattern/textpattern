@@ -1,6 +1,6 @@
 <li class="article" itemscope itemtype="https://schema.org/Article">
     <h4 itemprop="headline">
-        <a href="<txp:permlink />" itemprop="url">
+        <a href="<txp:permlink />" itemprop="url mainEntityOfPage" title="<txp:text item="read_more" />">
             <txp:title />
         </a>
     </h4>

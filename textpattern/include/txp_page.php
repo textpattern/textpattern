@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -109,7 +109,7 @@ function page_edit($message = '', $refresh_partials = false)
         // Name value.
         'name_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#new_page,input[name=name]',
+            'selector' => '#new_page,#main_content input[name=name]',
             'cb'       => 'page_partial_name_value',
         ),
         // Textarea.
@@ -129,7 +129,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("page", 'txp_section', "name = 'default'");
 
-    $name = Page::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $newname = Page::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
@@ -363,7 +363,8 @@ function page_save()
         'skin',
     )))));
 
-    $name = Page::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Page::sanitize($passedName);
     $newname = Page::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -377,11 +378,12 @@ function page_save()
     } else {
         if ($copy && ($name === $newname)) {
             $newname .= '_copy';
+            $passedName = $name;
             $_POST['newname'] = $newname;
         }
 
         $safe_skin = doSlash($skin);
-        $safe_name = doSlash($name);
+        $safe_name = doSlash($passedName);
         $safe_newname = doSlash($newname);
 
         $exists = safe_field('name', 'txp_page', "name = '$safe_newname' AND skin = '$safe_skin'");
@@ -403,6 +405,11 @@ function page_save()
 
                         $message = gTxt('page_created', array('{list}' => $newname));
 
+                        // If page name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
+
                         callback_event($copy ? 'page_duplicated' : 'page_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -421,6 +428,11 @@ function page_save()
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
 
                     $message = gTxt('page_updated', array('{list}' => $newname));
+
+                    // If page name has been auto-sanitized, throw a warning.
+                    if ($passedName !== $name) {
+                        $message = array($message, E_WARNING);
+                    }
 
                     callback_event('page_updated', '', 0, $name, $newname);
                 } else {
@@ -518,10 +530,11 @@ function page_partial_name($rs)
 {
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     $titleblock = inputLabel(
         'new_page',
-        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
         array('class' => 'txp-form-field name')

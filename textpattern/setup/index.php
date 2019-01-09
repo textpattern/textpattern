@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -79,9 +79,12 @@ if (count($txpdir) > 3) {
 $prefs = array();
 $prefs['module_pophelp'] = 1;
 $step = ps('step');
-$rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
-$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), DS);
 
+// Be kind to Windows: replace directory separator with '/' since
+// PHP returns $_SERVER variables in that form.
+$pattern = "#^(.*?)(".str_replace(DS, '/', $txpdir).")?/setup.*$#i";
+$rel_siteurl = preg_replace($pattern, '$1', $_SERVER['PHP_SELF']);
+$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), DS);
 
 if (empty($_SESSION['cfg'])) {
     $cfg = @json_decode(file_get_contents(dirname(__FILE__).DS.'.default.json'), true);

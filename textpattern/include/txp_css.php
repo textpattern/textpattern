@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -146,7 +146,7 @@ function css_edit($message = '', $refresh_partials = false)
         // Name value.
         'name_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#new_style,input[name=name]',
+            'selector' => '#new_style,#main_content input[name=name]',
             'cb'       => 'css_partial_name_value',
         ),
         // Textarea.
@@ -166,7 +166,7 @@ function css_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
-    $name = Css::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $newname = Css::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
@@ -296,7 +296,8 @@ function css_save()
         'skin',
     )))));
 
-    $name = Css::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Css::sanitize($passedName);
     $newname = Css::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -310,11 +311,12 @@ function css_save()
     } else {
         if ($copy && ($name === $newname)) {
             $newname .= '_copy';
+            $passedName = $name;
             $_POST['newname'] = $newname;
         }
 
         $safe_skin = doSlash($skin);
-        $safe_name = doSlash($name);
+        $safe_name = doSlash($passedName);
         $safe_newname = doSlash($newname);
 
         $exists = safe_field('name', 'txp_css', "name = '$safe_newname' AND skin = '$safe_skin'");
@@ -336,6 +338,11 @@ function css_save()
 
                         $message = gTxt('css_created', array('{list}' => $newname));
 
+                        // If css name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
+
                         callback_event($copy ? 'css_duplicated' : 'css_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('css_save_failed'), E_ERROR);
@@ -354,6 +361,11 @@ function css_save()
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));
 
                     $message = gTxt('css_updated', array('{list}' => $newname));
+
+                    // If css name has been auto-sanitized, throw a warning.
+                    if ($passedName !== $name) {
+                        $message = array($message, E_WARNING);
+                    }
 
                     callback_event('css_updated', '', 0, $name, $newname);
                 } else {
@@ -436,10 +448,11 @@ function css_partial_name($rs)
 {
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     $titleblock = inputLabel(
         'new_style',
-        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
+        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
         'css_name',
         array('', 'instructions_style_name'),
         array('class' => 'txp-form-field name')

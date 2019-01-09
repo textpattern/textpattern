@@ -4,7 +4,7 @@
     <txp:if_individual_article>
         <h1 itemprop="headline"><txp:title /></h1>
     <txp:else />
-        <h1 itemprop="headline"><a href="<txp:permlink />" itemprop="url"><txp:title /></a>
+        <h1 itemprop="headline"><a href="<txp:permlink />" itemprop="url" title="<txp:text item="read_more" />"><txp:title /></a>
         </h1>
     </txp:if_individual_article>
 

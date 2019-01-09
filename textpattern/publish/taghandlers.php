@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -749,22 +749,22 @@ function linklist($atts, $thing = null)
 
     // Set up paging if required.
     if ($limit && $pageby) {
-        $grand_total = safe_count('txp_link', $where);
-        $total = $grand_total - $offset;
-        $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
         $pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'link';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
-
         if (empty($thispage)) {
+            $grand_total = safe_count('txp_link', $where);
+            $total = $grand_total - $offset;
+            $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+
+            // Send paging info to txp:newer and txp:older.
+            $pageout['pg']          = $pg;
+            $pageout['numPages']    = $numPages;
+            $pageout['s']           = $s;
+            $pageout['c']           = $c;
+            $pageout['context']     = 'link';
+            $pageout['grand_total'] = $grand_total;
+            $pageout['total']       = $total;
             $thispage = $pageout;
         }
     } else {
@@ -3611,22 +3611,22 @@ function images($atts, $thing = null)
 
     // Set up paging if required.
     if ($limit && $pageby) {
-        $grand_total = safe_count('txp_image', $where);
-        $total = $grand_total - $offset;
-        $numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
         $pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'image';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
-
         if (empty($thispage)) {
+            $grand_total = safe_count('txp_image', $where);
+            $total = $grand_total - $offset;
+            $numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
+
+            // Send paging info to txp:newer and txp:older.
+            $pageout['pg']          = $pg;
+            $pageout['numPages']    = $numPages;
+            $pageout['s']           = $s;
+            $pageout['c']           = $c;
+            $pageout['context']     = 'image';
+            $pageout['grand_total'] = $grand_total;
+            $pageout['total']       = $total;
             $thispage = $pageout;
         }
     } else {
@@ -4806,22 +4806,22 @@ function file_download_list($atts, $thing = null)
 
     // Set up paging if required.
     if ($limit && $pageby) {
-        $grand_total = safe_count('txp_file', $where);
-        $total = $grand_total - $offset;
-        $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
         $pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'file';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
-
         if (empty($thispage)) {
+            $grand_total = safe_count('txp_file', $where);
+            $total = $grand_total - $offset;
+            $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+
+            // Send paging info to txp:newer and txp:older.
+            $pageout['pg']          = $pg;
+            $pageout['numPages']    = $numPages;
+            $pageout['s']           = $s;
+            $pageout['c']           = $c;
+            $pageout['context']     = 'file';
+            $pageout['grand_total'] = $grand_total;
+            $pageout['total']       = $total;
             $thispage = $pageout;
         }
     } else {
@@ -5393,7 +5393,7 @@ function txp_escape($atts, $thing = '')
                 $thing = txpspecialchars($thing);
                 break;
             case 'url':
-                $thing = urlencode($thing);
+                $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);

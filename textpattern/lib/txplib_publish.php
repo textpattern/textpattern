@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -829,7 +829,7 @@ function filterAtts($atts = null, $iscustom = null)
         'allowoverride' => !$iscustom,
         'limit'         => 10,
         'offset'        => 0,
-        'pageby'        => '',
+        'pageby'        => null,
         'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',

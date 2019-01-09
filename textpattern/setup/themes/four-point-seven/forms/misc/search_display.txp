@@ -29,12 +29,14 @@
 
 <!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">
-    <txp:evaluate wraptag="p" class="paginator">
-        <txp:newer rel="prev">
-            <txp:text item="prev" />
-        </txp:newer>
-        <txp:older rel="next">
-            <txp:text item="next" />
-        </txp:older>
-    </txp:evaluate>
+    <nav class="paginator" aria-label="<txp:text item="page_nav" />">
+        <txp:evaluate>
+            <txp:newer rel="prev">
+                <txp:text item="prev" />
+            </txp:newer>
+            <txp:older rel="next">
+                <txp:text item="next" />
+            </txp:older>
+        </txp:evaluate>
+    </nav>
 </txp:if_search_results>

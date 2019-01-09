@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -63,7 +63,7 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.7.2';
+$thisversion = '4.8.0-dev';
 // $txp_using_svn deprecated in 4.7.0.
 $txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
