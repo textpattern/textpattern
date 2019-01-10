@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -433,6 +433,10 @@ function doDiagnostics()
             $gd_support[] = 'PNG';
         }
 
+        if ($gd_info['WebP Support']) {
+            $gd_support[] = 'WebP';
+        }
+        
         if ($gd_support) {
             $gd_support = implode(', ', $gd_support);
         } else {

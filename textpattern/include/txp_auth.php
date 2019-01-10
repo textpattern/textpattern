@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -164,7 +164,7 @@ function doLoginForm($message)
                     array(
                         'name'         => 'p_password',
                         'autocomplete' => 'current-password',
-                    ), '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
+                    ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'login_password', false, true),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
