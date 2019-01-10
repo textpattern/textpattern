@@ -376,7 +376,6 @@
     <li>Se le ultime due cifre differiscono dalla vostra attuale versione, l’aggiornamento potrebbe richiedere di aggiornare alcuni plugin e/o temi, sebbene continuerà a funzionare comunque, seppure in capacità limitata.</li>
     <li>Se la prima cifra è differente dalla vostra attuale versione, l’aggiornamento verosimilmente richiederà di aggiornare anche gran parte di plugin e temi. Se fate molto affidamento su un particolare plugin o caratteristica del tema, controllate con l’autore o coi membri della comunità prima di cominciare l’upgrade.</li>
 </ul>
-<p>Se il messaggio dice “There is a problem trying to connect to the RPC server” vuol dire che una nuova versione non potrà essere controllata in quel momento, o che il server è momentaneamente fuori servizio. Gli aggiornamenti sono controllati ogni 24 ore per cui è probabile che alla prossima vostra visita al pannello Diagnostica, andrà tutto bene.</p>
         ]]></item>
         <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[
 <h2>I percorsi delle directory Temporanea e di Cache dei plugin non devono essere uguali</h2>
@@ -509,26 +508,109 @@
 <h2>Consenti la sostituzione di moduli?</h2>
 <p>Questa impostazione consente gli autori di articoli di forzare il modulo da usare nel rendering dell’articolo. Se attivata, un campo a tendina ’Sostituisci il modulo’ sarà disponibile sotto ‘Assegna l’articolo’, quando si edita un articolo.</p>
         ]]></item>
-        <item id="allow_page_php_scripting" title="Accetta codice PHP nelle pagine?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Accetta codice PHP nelle pagine?"><![CDATA[
+<h2>Accetta codice PHP nelle pagine?</h2>
+<p>Se attivata, questa impostazione consente l’uso di codice PHP all’interno di template di pagine e template di moduli.</p>
+<p>Il codice PHP non deve avere I tag di apertura e chiusura propri di PHP, ma deve essere incapsulato dentro tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Formato data archivio"><![CDATA[
+<h2>Formato data archivio</h2>
+<p>Definisce l’aspetto delle date per gli articoli nelle sezioni del sito.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Articoli con sommario?"><![CDATA[
+<h2>Articoli con sommario?</h2>
+<p>Scegliendo ‘No’ il campo sommario non sarà mostrato all’autore nella pagina di modifica articolo.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Attacco i titoli ai permalink?"><![CDATA[
+<h2>Attacco i titoli ai permalink?</h2>
+<p>Questa impostazione attaccherà una versione generata automaticamente del titolo articolo all’URL. Esso è generato in automatico ma può essere sovrascritto manualmente nel ‘titolo URL’ quando si modifica un articolo.</p>
+<p>L’impostazione ha effetto solo quando si usano URL puliti. Per certe lingue questo può dar luogo a URL lunghi e brutti, nel qual caso probabilmente è preferibile impostare il parametro a ‘No’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Aggiorna automaticamente l’ora legale/solare?"><![CDATA[
+<h2>Aggiorna automaticamente l’ora legale/solare?</h2>
+<p>Questa impostazione permette a Textpattern di adattarsi automaticamente quando il DST (Daylight Savings Time - Ora legale) si produce nel tuo paese. Se impostato a ‘No’, potrai cambiare a mano la preferenza ‘abilito ora legale’.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Nuovi commenti equivalgono a sito aggiornato?"><![CDATA[
+<h2>Nuovi commenti equivalgono a sito aggiornato?</h2>
+<p>Il database Textpattern tiene traccia di quando ha avuto luogo la più recente variazione nel sito. Se impostato a ‘Sì’, anche un nuovo commento aggiornerà questo valore. Questo valore è usato per esempio per la funzionalità <code>Invio l’intestazione Last-Modified</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Applico rel=&quot;nofollow&quot; nei commenti?"><![CDATA[
+<h2>Applico rel="nofollow" nei commenti?</h2>
+<p>Se impostato a ‘Sì’, aggiunge un ulteriore attributo ai link presenti nei commenti. È inteso come misura per disincentivare gli spammer dei commenti ed è stato iniziato da numerosi motori di ricerca e sviluppatori software. Per approfondire leggi <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">l’annuncio di Google <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
+<p><strong>Nota:</strong> L’impostazione non influenza la funzionalità del sito. Può prevenire o diminuire l’influenza dei tuoi commenti quando alcuni motori di ricerca classificano siti verso cui linkano quei commenti.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Presentare i commenti come elenco numerato?"><![CDATA[
+<h2>Presentare commenti come un elenco numerato?</h2>
+<p>Determina se i commenti agli articoli saranno contenuti in un tag HTML <code>&lt;ol&gt;</code> e i singoli commenti in un tag <code>&lt;li&gt;</code> (il che farà sì che i commenti siano presentati come un elenco numerato), oppure se i singoli commenti siano invece contenuti in un tag <code>&lt;div&gt;</code>.</p>
+<p>Qualunque sia la scelta, sarà sempre possibile modificare i tag utilizzati modificando il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>, presente nel modulo <code>comments_display</code>.</p>        ]]></item>
+        <item id="comments_auto_append" title="Aggiungere automaticamente i commenti agli articoli?"><![CDATA[
+<h2>Aggiungere automaticamente i commenti agli articoli?</h2>
+<p>questa impostazione determina se i commenti e il modulo commenti vengono automaticamente aggiunti a tutti i singoli articoli (includendo automaticamente il contenuto del modulo <code>comments_display</code>).</p>
+<p>Il più delle volte, è preferibile impostare a ‘No’, per avere una maggiore flessibilità nel posizionamento dei commenti nel design del sito. Sarà necessario aggiungere il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> manualmente in ogni template basato su articoli nel quale vuoi che appaiano commenti.</p>
+<p>Nel caso di visualizzazioni doppie dei commenti in un articolo, è probabile che il tag <code>&lt;txp:comments /&gt;</code> sia presente nel vostro template, ma che contemporaneamente il parametro ‘Aggiungere automaticamente commenti agli articoli?’ sia impostato su ‘Sì’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Formato data commenti"><![CDATA[
+<h2>Formato data commenti</h2>
+<p>Come le date dei commenti appariranno ai visitatori del sito.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Invito predefinito a commentare"><![CDATA[
+<h2>Invito predefinito a commentare</h2>
+<p>Se ai visitatori si consente di commentare sul sito, questo è il testo di invito predefinito. Ad esempio:</p>
+<ul>
+    <li>Commenti</li>
+    <li>Aggiungi un commento</li>
+    <li>Feedback</li>
+    <li>Annota</li>
+</ul>
+<p>Si noti che il testo di invito può sempre essere cambiato, individualmente, per articolo.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Commenti disabilitati dopo"><![CDATA[
+<h2>Commenti disabilitati dopo</h2>
+<p>Consente di definire la quantità di tempo trascorsa la quale viene disattivata la possibilità di commentare (può essere impostato su ‘Mai’ per consentire di commentare a tempo indeterminato).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Rimuovere immagini utente dai commenti?"><![CDATA[
+<h2>Rimuovere immagini utente dai commenti?</h2>
+<p>Con questa opzione impostata su ‘Sì’, qualsiasi immagine inclusa nei commenti verrà rimossa.</p>
+        ]]></item>
+        <item id="comments_mode" title="Modalità commenti"><![CDATA[
+<h2>Modalità commenti</h2>
+<p>Se è selezionato ‘nopopup’ (modo consigliato) la finestra corrente verrà aggiornata mostrando solo l’articolo corrente, con sotto i commenti.</p>
+<p>Se è selezionato ‘popup’, si apre una nuova finestra del browser allorché si clicca sul link commenti (invocando così il modulo <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Vuoi moderare i commenti?"><![CDATA[
+<h2>Vuoi moderare i commenti?</h2>
+<p>Impostato su ‘Sì’, la visibilità di ogni nuovo commento sarà disattivata fino a quando lo stesso non sia stato esaminato. È necessario l’intervento manuale del moderatore per rendere il commento visibile (un messaggio sarà inviato all’autore dell’articolo avvisandolo della presenza di un nuovo commento).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Commenti abilitati di default?"><![CDATA[
+<h2>Commenti abilitati di default?</h2>
+<p>Se impostato su ‘Sì’, i commenti saranno attivati automaticamente per ogni articolo pubblicato. Se impostato su ‘No’, è necessario abilitare i commenti sul pannello articolo ‘Scrivi’ ogni volta che si desidera accettare commenti.</p>
+<p>Nota: l’autorizzazione a commentare può essere attivata o disattivata in qualsiasi momento, per ciascun articolo.</p>
+        ]]></item>
+        <item id="comments_require_email" title="I commenti richiedono l’indirizzo e-mail dell’utente?"><![CDATA[
+<h2>I commenti richiedono l’indirizzo email dell’utente?</h2>
+<p>Se impostato su ‘Sì’, i visitatori che vogliono lasciare un commento sull’articolo devono inserire un indirizzo e-mail nel modulo di commento. Non potranno postare il commento senza fornire un indirizzo e-mail.</p>
+        ]]></item>
+        <item id="comments_require_name" title="I commenti richiedono il nome del commentatore?"><![CDATA[
+<h2>I commenti richiedono il nome del commentatore?</h2>
+<p>Se impostato su ‘Sì’, i visitatori che vogliono commentare il vostro articolo dovranno immettere un nome nel modulo di commento. Non potranno postare il commento senza fornire un nome.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Invio per e-mail i commenti all’autore?"><![CDATA[
+<h2>Invio per e-mail i commenti all’autore?</h2>
+<p>Se impostato su ‘Sì’, ogni volta che viene ricevuto un nuovo commento su un articolo, una copia sarà inviata via e-mail all’autore dell’articolo.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Consentire più markup Textile nei commenti?"><![CDATA[
+<h2>Consentire più markup Textile nei commenti?</h2>
+<p>Se impostato su ‘Sì’, i commenti possono contenere elementi <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> che altrimenti verrebbero trattati come testo normale, ad esempio:</p>
+<ul>
+    <li>titoli</li>
+    <li>elenchi ordinati e non ordinati</li>
+    <li>note a piè pagina</li>
+    <li>tabelle</li>
+    <li>codice</li>
+    <li>sintassi di blocco esteso (<code>bc...</code>, <code>bq..</code>, ecc.)</li>
+</ul>
+<p><strong>Nota:</strong> per sicurezza, l’HTML grezzo viene trasformato in testo normale.</p>
+        ]]></item>
         <item id="custom_form_types" title=""><![CDATA[]]></item>
         <item id="custom_overview" title=""><![CDATA[]]></item>
         <item id="dateformat" title=""><![CDATA[]]></item>
