@@ -375,7 +375,6 @@
    <li>Si les deux derniers chiffres diffèrent de votre version actuelle, la mise à niveau peut nécessiter la mise à jour de certains plugins et/ou thèmes, bien que, probablement, tout devrait continuer de fonctionner même avec des capacités limitées.</li>
    <li>Si c’est le premier chiffre qui diffère de votre version actuelle, la mise à niveau nécessitera probablement la mise à jour des plugins et des thèmes. Si vous comptez beaucoup sur un plugin ou un thème en particulier, veuillez vous renseigner auprès de l’auteur ou des membres de la communauté avant de commencer la mise à niveau.</li>
 </ul>
-<p>Si un message affiche «Échec de connexion avec le serveur RPC» cela signifie que, dans l’immédiat, la recherche de nouvelle version ne peut être effectuée ou que le serveur est inactif. Les disponibilités de mise à jour sont vérifiées toutes les 24 heures. Il est donc probable que tout ira bien lors de votre prochaine visite de la page «Diagnostics».</p>
         ]]></item>
         <item id="tmp_plugin_paths_match" title="Le répertoire temporaire et le répertoire de cache des plugins doivent être différents"><![CDATA[
 <h2>Le répertoire temporaire et le répertoire de cache des plugins doivent être différents</h2>
