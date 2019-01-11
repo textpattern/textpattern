@@ -1584,8 +1584,7 @@ jQuery.fn.txpMenu = function(button) {
     });
 
     !button || button.on('click', function (e) {
-        menu.toggle().position(
-        {
+        menu.toggle().position({
             my: dir+' top',
             at: dir+' bottom',
             of: this
@@ -1670,8 +1669,10 @@ function txp_search()
  */
 
 var uniqueID = (function() {
-   var id = 0;
-   return function() { return id++; };
+    var id = 0;
+    return function() {
+        return id++;
+    };
 })(); // Invoke the outer function after defining it.
 
 jQuery.fn.txpColumnize = function ()
@@ -1733,8 +1734,7 @@ jQuery.fn.txpColumnize = function ()
         $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
 
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
-        $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />')
-        .attr('checked', selectAll);
+        $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />').attr('checked', selectAll);
 
     $li.html($('<div role="menuitem" />')
         .append($('<label />').html(textpattern.gTxt('toggle_all_selected')).prepend($box)));
@@ -1857,7 +1857,7 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this;
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        maxChunkSize = Math.min(parseFloat(textpattern.prefs.max_upload_size || 1000000), Number.MAX_SAFE_INTEGER);
+        maxChunkSize = Math.min(parseFloat(textpattern.prefs.max_upload_size || 1000000), Number.MAX_SAFE_INTEGER),
         maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER);
 
     form.fileupload($.extend({
@@ -1882,10 +1882,10 @@ jQuery.fn.txpFileupload = function (options) {
                 data.submit();
                 form.uploadCount++;
             }
-        },/*
-        done: function (e, data) {
-            console.log(data)
-        },*/
+        },
+        /* done: function (e, data) {
+            console.log(data);
+        }, */
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data);
         },
@@ -1912,26 +1912,24 @@ jQuery.fn.txpFileupload = function (options) {
 
         // Reduce maxChunkSize by extra data size (?)
         var res = typeof data.formData.entries !== 'undefined'
-        ? Array.from(data.formData.entries(), function(prop) {
-            return prop[1].name.length + prop[1].value.length;
-        }).reduce(function(a, b) {return a + b + 2;}, 0)
-        : 256;
+            ? Array.from(data.formData.entries(), function(prop) {
+                return prop[1].name.length + prop[1].value.length;
+            }).reduce(function(a, b) {return a + b + 2;}, 0)
+            : 256;
 
         form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255));
     });
-/*
-    fileInput.on('change', function(e) {
-        var singleFileUploads = false
+    /* fileInput.on('change', function(e) {
+        var singleFileUploads = false;
 
         $(this.files).each(function () {
             if (this.size > maxChunkSize) {
-                singleFileUploads = true
+                singleFileUploads = true;
             }
-        })
+        });
 
-        form.fileupload('option', 'singleFileUploads', singleFileUploads)
-    })
-*/
+        form.fileupload('option', 'singleFileUploads', singleFileUploads);
+    }) */
     return this;
 };
 
@@ -1955,13 +1953,13 @@ jQuery.fn.txpUploadPreview = function(template) {
 
             if (createObjectURL) {
                 switch (mime[0]) {
-                    case 'image':
-                          preview = '<img src="' + createObjectURL(this) + '" />';
-                        break;
-                    case 'audio':
-//                    case 'video':
-                          preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />';
-                        break;
+                case 'image':
+                    preview = '<img src="' + createObjectURL(this) + '" />';
+                    break;
+                // TODO case 'video':?
+                case 'audio':
+                    preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />';
+                    break;
                 }
             }
 
@@ -2002,7 +2000,7 @@ textpattern.Route.add('login', function () {
     cookieEnabled = checkCookies();
 
     // Focus on either username or password when empty.
-    $('#login_form input').filter(function(){
+    $('#login_form input').filter(function() {
         return !this.value;
     }).first().focus();
 
@@ -2168,7 +2166,7 @@ textpattern.Route.add('page, form, file, image', function () {
     });
 });
 
-// popHelp.
+// Pophelp.
 
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
@@ -2217,7 +2215,7 @@ textpattern.Route.add('form', function () {
     });
 });
 
-// Admin panel.
+// Users panel.
 
 textpattern.Route.add('admin', function () {
     textpattern.passwordMask();
@@ -2231,7 +2229,7 @@ textpattern.Route.add('plugin', function () {
     });
 });
 
-// Diag panel.
+// Diagnostics panel.
 
 textpattern.Route.add('diag', function () {
     $('#diag_clear_private').change(function () {
@@ -2463,9 +2461,10 @@ $(document).ready(function () {
 
     // Enable spellcheck for all elements mentioned in textpattern.prefs.do_spellcheck.
     $(textpattern.prefs.do_spellcheck).each(function(i, c) {
-    if ('spellcheck' in c) {
-        $(c).prop('spellcheck', true);
-    }});
+        if ('spellcheck' in c) {
+            $(c).prop('spellcheck', true);
+        }
+    });
 
     // Attach toggle behaviours.
     $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
