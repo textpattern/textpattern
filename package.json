@@ -1,7 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
-  "version": "4.7.3",
+  "version": "4.8.0-dev",
   "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
@@ -48,7 +48,10 @@
       "no-undef": 0,
       "no-unused-vars": 0,
       "no-useless-escape": 0,
-      "quotes": [2, "single"]
+      "quotes": [
+        2,
+        "single"
+      ]
     }
   },
   "scripts": {
