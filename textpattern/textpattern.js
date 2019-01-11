@@ -19,6 +19,8 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 /**
  * Collection of client-side tools.
  */
@@ -882,7 +884,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         },
         handle = function(html) {
             if (html) {
-                $html = $(html);
+                var $html = $(html);
                 $.each(list.split(','), function(index, value) {
                     $(value).each(function() {
                         var id = this.id;
