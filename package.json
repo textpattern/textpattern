@@ -33,6 +33,7 @@
     "prismjs": "1.15.0"
   },
   "eslintConfig": {
+    "extends": "eslint:recommended",
     "parserOptions": {
       "ecmaVersion": 5,
       "ecmaFeatures": {
@@ -40,9 +41,14 @@
       }
     },
     "rules": {
-      "indent": ["error", 4],
-      "semi": ["error", "always"],
-      "quotes": ["error", "single"]
+      "no-cond-assign": 0,
+      "no-console": 0,
+      "no-extra-boolean-cast": 1,
+      "no-redeclare": 1,
+      "no-undef": 0,
+      "no-unused-vars": 0,
+      "no-useless-escape": 0,
+      "quotes": [2, "single"]
     }
   },
   "scripts": {
