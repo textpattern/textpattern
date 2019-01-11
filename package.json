@@ -21,6 +21,7 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
+    "eslint": "^5.12.0",
     "phplint": "~2",
     "uglify-js": "3.4.9"
   },
@@ -32,6 +33,7 @@
     "prismjs": "1.15.0"
   },
   "scripts": {
+    "eslint": "./node_modules/.bin/eslint textpattern/textpattern.js",
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:blueimp-file-upload": "uglifyjs -c -m -o textpattern/vendors/blueimp/fileupload/jquery.fileupload.js node_modules/blueimp-file-upload/js/jquery.fileupload.js node_modules/blueimp-md5/js/md5.js",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
