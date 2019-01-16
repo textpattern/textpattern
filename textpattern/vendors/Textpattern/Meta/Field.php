@@ -294,8 +294,8 @@ class Field
     */
         $constraints = array();
 
-        $created = (empty($created)) ? $sqlnow : $created;
-        $expires = (empty($expires)) ? "NULL" : "'".$expires."'";
+        $created = (empty($created) || $created === '0000-00-00 00:00:00') ? $sqlnow : $created;
+        $expires = (empty($expires) || $expires === '0000-00-00 00:00:00') ? "NULL" : "'".$expires."'";
         $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['text_input'];
 
         $has_textfilter = ($textfilter !== '' && $data_type['textfilter']);
@@ -387,7 +387,7 @@ class Field
                     // Write default value.
                     // TODO: value_id.
                     safe_delete($table_name, "meta_id='$id' AND content_id='-1' AND value_id='0'");
-                    $defaultClause = $default === '' ? '' : ", value" . ($has_textfilter ? '_raw' : '') . "='$default'";
+                    $defaultClause = ($default === '' || $default === '0000-00-00 00:00:00') ? '' : ", value" . ($has_textfilter ? '_raw' : '') . "='$default'";
                     safe_insert($table_name, "meta_id='$id', content_id='-1', value_id='0'".$defaultClause);
 
                     // Iterate over newly inserted rows and run them through the textfilter if desired.
