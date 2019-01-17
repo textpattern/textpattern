@@ -1,7 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
-  "version": "4.7.3",
+  "version": "4.8.0-dev",
   "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
@@ -21,6 +21,7 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
+    "eslint": "~5",
     "phplint": "~2",
     "uglify-js": "3.4.9"
   },
@@ -31,7 +32,30 @@
     "jquery-ui-dist": "1.12.1",
     "prismjs": "1.15.0"
   },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 5,
+      "ecmaFeatures": {
+        "impliedStrict": true
+      }
+    },
+    "rules": {
+      "no-cond-assign": 0,
+      "no-console": 0,
+      "no-extra-boolean-cast": 1,
+      "no-redeclare": 1,
+      "no-undef": 0,
+      "no-unused-vars": 0,
+      "no-useless-escape": 0,
+      "quotes": [
+        2,
+        "single"
+      ]
+    }
+  },
   "scripts": {
+    "eslint": "./node_modules/.bin/eslint textpattern/textpattern.js; exit 0",
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:blueimp-file-upload": "uglifyjs -c -m -o textpattern/vendors/blueimp/fileupload/jquery.fileupload.js node_modules/blueimp-file-upload/js/jquery.fileupload.js node_modules/blueimp-md5/js/md5.js",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
