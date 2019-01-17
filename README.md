@@ -150,6 +150,12 @@ You can verify PHP code via a PHP linter from the CLI, like so:
 npm run phplint
 ```
 
+You can verify JavaScript code via a JavaScript linter from the CLI, like so:
+
+```ShellSession
+npm run eslint
+```
+
 Release tools:
 
 Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
