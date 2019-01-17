@@ -257,7 +257,7 @@ nav ol::after,
     text-decoration: none;
     /* 3 */
     -webkit-text-decoration-skip: ink;
-            text-decoration-skip: ink;
+            text-decoration-skip-ink: auto;
   }
   a:hover, a:active {
     outline: 0;
@@ -276,15 +276,24 @@ nav ol::after,
    */
   h1 a,
 h2 a,
-h3 a {
-    color: #333333;
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+    color: #000000;
   }
   h1 a:hover, h1 a:active,
 h2 a:hover,
 h2 a:active,
 h3 a:hover,
-h3 a:active {
-    color: #333333;
+h3 a:active,
+h4 a:hover,
+h4 a:active,
+h5 a:hover,
+h5 a:active,
+h6 a:hover,
+h6 a:active {
+    color: #000000;
     /* 1 */
     -webkit-text-decoration-color: rgba(51, 51, 51, 0.5);
             text-decoration-color: rgba(51, 51, 51, 0.5);
@@ -345,6 +354,7 @@ h4,
 h5,
 h6 {
     clear: both;
+    color: #000000;
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
 
@@ -830,6 +840,13 @@ li > ol {
   }
 
   /**
+   * CSS Lists and Counters Module Level 3 list marker styling.
+   */
+  li::marker {
+    color: color-text-heading;
+  }
+
+  /**
    * Address margins set differently.
    */
   dd {
@@ -896,6 +913,14 @@ li > ol {
    */
   progress {
     vertical-align: baseline;
+  }
+
+  /**
+   * Show the overflow in Edge.
+   */
+  button,
+input {
+    overflow: visible;
   }
 
   /**
@@ -1139,6 +1164,36 @@ textarea:focus:invalid {
   }
   .large textarea {
     height: 9.75em;
+  }
+
+  /**
+   * Normalize form placeholder style across browsers.
+   *
+   * 1. Fix placeholder font properties inheritance.
+   */
+  ::-webkit-input-placeholder {
+    opacity: 1;
+    color: #999999;
+    /* 1 */
+    font: inherit;
+  }
+  :-ms-input-placeholder {
+    opacity: 1;
+    color: #999999;
+    /* 1 */
+    font: inherit;
+  }
+  ::-ms-input-placeholder {
+    opacity: 1;
+    color: #999999;
+    /* 1 */
+    font: inherit;
+  }
+  ::placeholder {
+    opacity: 1;
+    color: #999999;
+    /* 1 */
+    font: inherit;
   }
 
   /**
