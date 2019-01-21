@@ -494,7 +494,7 @@ function safe_insert($table, $set, $debug = false)
  * Inserts a new row, or updates an existing if a matching row is found.
  *
  * @param  string       $table The table
- * @param  string       $set   The set clause
+ * @param  string|array $set   The set clause
  * @param  string|array $where The where clause
  * @param  bool         $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
@@ -509,20 +509,19 @@ function safe_upsert($table, $set, $where, $debug = false)
 {
     global $DB;
 
-    if (is_array($set)) {
-        $set = join_qs(quote_list($set), ',');
-    }
-
+    $setparams = is_array($set) ? join_qs(quote_list($set), null) : array($set);
     $whereset = is_array($where) ? join_qs(quote_list($where), null) : array($where);
     $where = implode(' AND ', $whereset);
 
     // FIXME: lock the table so this is atomic?
-    $r = safe_update($table, $set, $where, $debug);
+    $r = safe_update($table, implode(', ', $setparams), $where, $debug);
 
     if ($r && (mysqli_affected_rows($DB->link) || safe_count($table, $where, $debug))) {
         return $r;
     } else {
-        return safe_insert($table, join(', ', array(implode(', ', $whereset), $set)), $debug);
+        $whereset = array_merge($whereset, $setparams);
+
+        return safe_insert($table, implode(', ', $whereset), $debug);
     }
 }
 
