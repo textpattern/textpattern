@@ -526,53 +526,6 @@ function safe_upsert($table, $set, $where, $debug = false)
 }
 
 /**
- * Inserts a new row, or updates an existing if a matching row is found using arrays.
- *
- * Handles duplicate keys by ensuring that 'set' override the 'where' keys.
- * 
- * @param  string $table The table
- * @param  array  $set   Tuples representing the items to set
- * @param  array  $where Tuples representing the where clause
- * @param  bool   $debug Dump query
- * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
- */
-
-function safe_updin($table, $set, $where, $debug = false)
-{
-    global $DB;
-
-    $andWhere = '';
-    $setItems = array();
-    $whereItems = array();
-
-    foreach ($set as $col => $val) {
-        $setItems[] = $col . "='$val'";
-    }
-
-    foreach ($where as $col => $val) {
-        $whereItems[] = $col . "='$val'";
-    }
-
-    $andWhere = implode(' AND ', $whereItems);
-
-    // FIXME: lock the table so this is atomic?
-    $r = safe_update($table, implode(', ', $setItems), $andWhere, $debug);
-
-    if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $andWhere, $debug))) {
-        return $r;
-    } else {
-        $ins = array_merge($where, $set);
-        $insItems = array();
-
-        foreach ($ins as $col => $val) {
-            $insItems[] = $col . "='$val'";
-        }
-
-        return safe_insert($table, implode(', ', $insItems), $debug);
-    }
-}
-
-/**
  * Changes the structure of a table.
  *
  * @param  string $table The table

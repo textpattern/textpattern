@@ -280,6 +280,7 @@ class Field
         $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
         $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
         $this->set($data);
+        // @todo Possibly validate this.
         $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
 
         extract(doSlash($data));
@@ -448,7 +449,7 @@ class Field
 
                     // Add option labels to Textpack.
                     foreach ($optLabelList as $key => $val) {
-                        $done = safe_updin(
+                        $done = safe_upsert(
                             'txp_lang',
                             array(
                                 'name'  => $key,
@@ -457,7 +458,7 @@ class Field
                             ),
                             array(
                                 'name'  => $key,
-                                'event' => $content_type,
+                                'event' => 'common',
                                 'lang'  => $thisLang,
                             )
                         );
@@ -466,7 +467,7 @@ class Field
                     // Add label to Textpack, renaming existing entry if $name_orig differs from $name.
                     $orig_label_name = $this->getLabelReference($name_orig);
                     $new_label_name = $this->getLabelReference($name);
-                    $done = safe_updin(
+                    $done = safe_upsert(
                         'txp_lang',
                         array(
                             'name'  => $new_label_name,
@@ -475,7 +476,7 @@ class Field
                         ),
                         array(
                             'name'  => $orig_label_name,
-                            'event' => $content_type,
+                            'event' => 'common',
                             'lang'  => $thisLang,
                         )
                     );
@@ -483,7 +484,7 @@ class Field
                     // Add help to Textpack, renaming existing entry if $name_orig differs from $name.
                     $orig_help_name = $this->getHelpReference($name_orig);
                     $new_help_name = $this->getHelpReference($name);
-                    $done = safe_updin(
+                    $done = safe_upsert(
                         'txp_lang',
                         array(
                             'name'  => $new_help_name,
@@ -492,7 +493,7 @@ class Field
                         ),
                         array(
                             'name'  => $orig_help_name,
-                            'event' => $content_type,
+                            'event' => 'common',
                             'lang'  => $thisLang,
                         )
                     );
