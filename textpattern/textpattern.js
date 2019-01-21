@@ -2389,6 +2389,7 @@ textpattern.Route.add('', function () {
     var tabs = hasTabs.find('.switcher-list li');
     var $switchers = tabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
+    var selectedTab = 1;
 
     if (textpattern.event === 'plugin') {
         var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
