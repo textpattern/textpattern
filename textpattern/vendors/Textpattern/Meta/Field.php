@@ -776,7 +776,7 @@ class Field
             if (isset($row[$fieldCol])) {
                 $thisContent[] = $row[$fieldCol];
             } else {
-                $thisContent[] = $row;
+                $thisContent[] = is_array($row) ? $row[$fieldCol] : $row;
             }
         }
 

@@ -203,7 +203,7 @@ class FieldSet implements \IteratorAggregate, \Textpattern\Container\ReusableInt
 
                 foreach ($raw as $rawVal) {
                     if ($filter === null) {
-                        $cfq[$cf_type][$id][] = "value = '" . doSlash($rawVal) . "'";
+                        $cfq[$cf_type][$id][] = "value = " . ($rawVal === '' ? 'NULL' : "'" . doSlash($rawVal) . "'");
                     } else {
                         $cooked = \Txp::get('Textpattern\Textfilter\Registry')->filter(
                             $filter,
