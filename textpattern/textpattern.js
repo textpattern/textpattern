@@ -2320,8 +2320,8 @@ textpattern.Route.add('section', function ()
      */
     function section_theme_show(skin) {
         $('#section_page, #section_css, #multiedit_page, #multiedit_css, #multiedit_dev_page, #multiedit_dev_css').empty();
-        $pageSelect = $('[name=section_page], #multiedit_dev_page');
-        $styleSelect = $('[name=css], #multiedit_dev_css');
+        var $pageSelect = $('[name=section_page], #multiedit_dev_page');
+        var $styleSelect = $('[name=css], #multiedit_dev_css');
 
         if (skin in skin_page) {
             $pageSelect.append('<option></option>');
