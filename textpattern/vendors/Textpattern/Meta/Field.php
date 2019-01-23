@@ -849,6 +849,7 @@ class Field
                 break;
             case 'date':
             case 'time':
+            case 'number':
                 $widget = fInput($type, $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
                 break;
             case 'dateTime':
