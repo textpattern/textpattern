@@ -89,6 +89,13 @@ class Field
     protected $helpPfx = 'txphlp_';
 
     /**
+     * Crude namespacing for inline help / txp_lang strings to void collisions.
+     *
+     * @var string
+     */
+    protected $inlineHelpPfx = 'instructions_';
+
+    /**
      * Crude namespacing for option / txp_lang strings to void collisions.
      *
      * @var string
@@ -285,8 +292,9 @@ class Field
 
         extract(doSlash($data));
 
-        $help = doSlash(ps('help'));
-
+        // doSlash() done later.
+        $help = ps('help');
+        $inlineHelp = ps('inline_help');
     /*
         TODO: constraints for data_type, etc
         $constraints = array(
@@ -484,6 +492,8 @@ class Field
                     // Add help to Textpack, renaming existing entry if $name_orig differs from $name.
                     $orig_help_name = $this->getHelpReference($name_orig);
                     $new_help_name = $this->getHelpReference($name);
+                    $orig_inline_help_name = $this->getHelpReference($name_orig, 'inline');
+                    $new_inline_help_name = $this->getHelpReference($name, 'inline');
                     $done = safe_upsert(
                         'txp_lang',
                         array(
@@ -493,6 +503,20 @@ class Field
                         ),
                         array(
                             'name'  => $orig_help_name,
+                            'event' => 'common',
+                            'lang'  => $thisLang,
+                        )
+                    );
+
+                    $done = safe_upsert(
+                        'txp_lang',
+                        array(
+                            'name'  => $new_inline_help_name,
+                            'data'  => $inlineHelp,
+                            'owner' => 'custom_field',
+                        ),
+                        array(
+                            'name'  => $orig_inline_help_name,
                             'event' => 'common',
                             'lang'  => $thisLang,
                         )
@@ -659,11 +683,13 @@ class Field
 
     /**
      * Fetch the help prefix value.
+     *
+     * @param  string $type Flavour of pophelp to build (pophelp or inline)
      */
 
-    public function getHelpPrefix()
+    public function getHelpPrefix($type = 'pophelp')
     {
-        return $this->helpPfx;
+        return ($type === 'pophelp') ? $this->helpPfx : $this->inlineHelpPfx;
     }
 
     /**
@@ -693,12 +719,13 @@ class Field
      * Fetch a help reference from the given name.
      * 
      * @param  string $name Key name upon which to base the help ref. Assumes doSlash() done
+     * @param  string $type Flavour of pophelp to build (pophelp or inline)
      * @return string       Help reference (txp_lang named key)
      */
 
-    public function getHelpReference($name)
+    public function getHelpReference($name, $type = 'pophelp')
     {
-        return $this->getHelpPrefix()
+        return $this->getHelpPrefix($type)
             . doSlash($this->sanitizeName($this->get('content_type')))
             . '_' . $this->sanitizeName($name);
     }
@@ -768,6 +795,7 @@ class Field
         $fieldCol = $this->getValueField();
         $labelRef = $this->getLabelReference($label);
         $help = $this->getHelpReference($label);
+        $inlineHelp = $this->getHelpReference($label, 'inline');
         $type = $this->get('render');
         $options = array();
         $thisContent = array();
@@ -831,7 +859,6 @@ class Field
                 break;
         }
 
-        // @Todo: Use inputLabel().
-        return graf('<label for="'.$id.'">'.gTxt($labelRef).'</label>'.br.$widget);
+        return inputLabel($id, $widget, $labelRef, array($help, $inlineHelp));
     }
 }

@@ -381,6 +381,7 @@ function meta_edit($message = '')
         if ($data_type['textfilter']) {
             $textfilter_types[] = $key;
         }
+
         if ($data_type['options']) {
             $option_types[] = $key;
         }
@@ -390,6 +391,7 @@ function meta_edit($message = '')
     $default = ''; 
     $label_ref = '';
     $help_ref = '';
+    $inline_help_ref = '';
     $options = array();
 
     $rs = array();
@@ -410,9 +412,10 @@ function meta_edit($message = '')
 
             $label_ref = $cf->getLabelReference($name);
             $help_ref = $cf->getHelpReference($name);
-            $has_textfilter = ($textfilter !== null && $data_types[$render]['textfilter'] !== '');
-            $table_name = 'txp_meta_value_' . $data_type;
-            $ts = safe_strtotime($created);
+            $inline_help_ref = $cf->getHelpReference($name, 'inline');
+            $has_textfilter = ($textfilter !== null && isset($data_types[$render]) && $data_types[$render]['textfilter'] !== '');
+            $table_name = 'txp_meta_value_' . txpspecialchars($data_type);
+            $ts = safe_strtotime((string)$created);
 
             $default = $cf->get('default');
             $options = $cf->get('options');
@@ -433,6 +436,7 @@ function meta_edit($message = '')
     if (has_privs('meta')) {
         $caption = gTxt(($is_edit) ? 'edit_meta' : 'create_meta');
         $helpTxt = (gTxt($help_ref) === $help_ref) ? '' : gTxt($help_ref);
+        $inlineHelpTxt = (gTxt($inline_help_ref) === $inline_help_ref) ? '' : gTxt($inline_help_ref);
 
         echo script_js(<<<EOJS
 var textfilter_map = ['{$textfilter_map}'];
@@ -448,7 +452,7 @@ EOJS
             ).
             inputLabel(
                 'name',
-                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'),
+                fInput('text', 'name', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'name'),
                 'name', '', array('class' => 'txp-form-field edit-meta-name')
             ).
             inputLabel(
@@ -463,12 +467,12 @@ EOJS
             ).
             inputLabel(
                 'default',
-                fInput('text', 'default', $default, '', '', '', INPUT_REGULAR, '', 'default'),
+                fInput('text', 'default', txpspecialchars($default), '', '', '', INPUT_REGULAR, '', 'default'),
                 'default', '', array('class' => 'txp-form-field edit-meta-default')
             ).
             inputLabel(
                 'family',
-                fInput('text', 'family', $family, '', '', '', INPUT_REGULAR, '', 'family'),
+                fInput('text', 'family', txpspecialchars($family), '', '', '', INPUT_REGULAR, '', 'family'),
                 'family', '', array('class' => 'txp-form-field edit-meta-family')
             ).
             inputLabel(
@@ -478,17 +482,17 @@ EOJS
             ).
             inputLabel(
                 'ordinal',
-                fInput('text', 'ordinal', $ordinal, '', '', '', INPUT_REGULAR, '', 'ordinal'),
+                fInput('text', 'ordinal', txpspecialchars($ordinal), '', '', '', INPUT_REGULAR, '', 'ordinal'),
                 'ordinal', '', array('class' => 'txp-form-field edit-meta-ordinal')
             ).
             inputLabel(
                 'created',
-                fInput('text', 'created', $created, '', '', '', INPUT_REGULAR, '', 'created'),
+                fInput('text', 'created', txpspecialchars($created), '', '', '', INPUT_REGULAR, '', 'created'),
                 'created', '', array('class' => 'txp-form-field edit-meta-created')
             ).
             inputLabel(
                 'expires',
-                fInput('text', 'expires', $expires, '', '', '', INPUT_REGULAR, '', 'expires'),
+                fInput('text', 'expires', txpspecialchars($expires), '', '', '', INPUT_REGULAR, '', 'expires'),
                 'expires', '', array('class' => 'txp-form-field edit-meta-expires')
             ).
             inputLabel(
@@ -500,6 +504,11 @@ EOJS
                 'help',
                 text_area('help', 0, 0, $helpTxt, 'help'),
                 'help', '', array('class' => 'txp-form-field edit-meta-help')
+            ).
+            inputLabel(
+                'inline_help',
+                text_area('inline_help', 0, 0, $inlineHelpTxt, 'inline_help'),
+                'inline_help', '', array('class' => 'txp-form-field edit-meta-inline-help')
             ).
             pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
             graf(
@@ -641,6 +650,7 @@ function meta_multi_edit()
                     }
                 }
             }
+
             if ($changed) {
                 callback_event('meta_deleted', '', 0, $changed);
             }
