@@ -212,6 +212,22 @@ $s = (empty($s)) ? '' : $s;
 
 $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
+
+if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== 'file_download') {
+    doArticle(array(), null, false);
+
+    if (!empty($thisarticle)) {
+        $pretext['id_keywords'] = $thisarticle['keywords'];
+        $pretext['id_author']   = $thisarticle['authorid'];
+
+        $uExpires = $thisarticle['expires'];
+
+        if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
+            $pretext['status'] = '410';
+        }
+    }
+}
+
 callback_event('pretext_end');
 extract($pretext);
 $pretext += array('secondpass' => 0, '_txp_atts' => false);
@@ -531,26 +547,6 @@ function preText($s, $prefs)
 
     if (empty($id)) {
         $is_article_list = true;
-    }
-
-    if (!$is_404 && $id && $out['s'] !== 'file_download') {
-        $a = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-            'textpattern',
-            "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
-        );
-
-        if ($a) {
-            $out['id_keywords'] = $a['Keywords'];
-            $out['id_author']   = $a['AuthorID'];
-            populateArticleData($a);
-
-            $uExpires = $a['uExpires'];
-
-            if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
-                $out['status'] = '410';
-            }
-        }
     }
 
     // By this point we should know the section, so grab its page and CSS.
@@ -993,7 +989,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
 // -------------------------------------------------------------
 
-function doArticle($atts, $thing = null)
+function doArticle($atts, $thing = null, $parse = true)
 {
     global $pretext, $thisarticle;
 
@@ -1010,19 +1006,17 @@ function doArticle($atts, $thing = null)
         $id = assert_int($pretext['id']);
         $thisarticle = null;
         $where = $atts['?'];
+        $tables = $atts['#'];
+        $columns = $atts['*'];
 
-        $rs = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-            'textpattern',
-            "ID = $id AND $where LIMIT 1"
-        );
+        $rs = startRows("SELECT $columns FROM $tables WHERE ID = $id AND $where LIMIT 1");
 
-        if ($rs) {
-            populateArticleData($rs);
+        if ($rs && $a = nextRow($rs)) {
+            populateArticleData($a);
         }
     }
 
-    if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
+    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
@@ -1043,7 +1037,7 @@ function doArticle($atts, $thing = null)
         // Restore atts to the previous article filter criteria.
         filterAtts($oldAtts ? $oldAtts : false);
 
-        return $thing ? parse($thing, false) : '';
+        return $parse && $thing ? parse($thing, false) : '';
     }
 }
 

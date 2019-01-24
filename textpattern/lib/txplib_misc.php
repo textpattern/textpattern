@@ -5198,9 +5198,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
     }
 
     if ($pairs) {
-        $pairs = doSlash($pairs);
-
-        foreach ($pairs as $k => $v) {
+        foreach (doSlash($pairs) as $k => $v) {
             if (isset($custom['by_type'])) {
                 $no = array_search($k, $custom['by_id']);
 
@@ -5209,15 +5207,15 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                     $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
                     $columns[] = "$tableAlias.value AS $k";
-                    $query = " AND ($tableAlias.meta_id = '".$no."' AND
-                        $tableAlias.value".$not." LIKE '$v')";
+                    $query = " AND ($tableAlias.meta_id = '".$no."'".(!isset($pairs[$k]) ? '' : " AND
+                        $tableAlias.value".$not." LIKE '$v'").')';
                     $tables[] = ' JOIN '.$tableName.' AS '.$tableAlias.' ON ('.$tableAlias.'.content_id = '.$contentTypeMap[$custom['by_content'][$no]]['column'].$query.')';
                 }
             }
         }
     }
 
-    if (!empty($query)) {
+    if (!empty($columns)) {
        $ret['columns'] = ', '. join(', ', $columns).' ';
        $ret['tables'] = join(' ', $tables);
 

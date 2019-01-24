@@ -138,7 +138,7 @@ function article_column_map()
 
     if ($custom) {
         foreach ($custom as $i => $name) {
-            $custom_map[$name] = 'custom_'.$i;
+            $custom_map[$name] = $name;//'custom_'.$i;
         }
     }
 
@@ -876,8 +876,8 @@ function filterAtts($atts = null, $iscustom = null)
     extract($pretext);
 
     if (!$iscustom) {
-        $theAtts['category'] = ($c) ? $c : '';
-        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
+        $theAtts['category'] = !empty($c) ? $c : '';
+        $theAtts['section'] = (!empty($s) && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
         $theAtts['expired'] = get_pref('publish_expired_articles');
@@ -974,17 +974,16 @@ function filterAtts($atts = null, $iscustom = null)
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
                 $customPairs[$cField] = $atts[$cField] === true ? parse('<txp:custom_field name="'.$cField.'" escape="" />') : $atts[$cField];
+            } else {
+                $customPairs[$cField] = null;
             }
         }
 
         // Fetch all custom field data, not just name=>values.
         $customFieldData = getCustomFields('article', null, null);
-
-        if (!empty($customPairs)) {
-            $customData = buildCustomSql($customFieldData, $customPairs, $exclude);
-            $customTables = $customData ? $customData['tables'] : false;
-            $customColumns = $customData ? $customData['columns'] : false;
-        }
+        $customData = buildCustomSql($customFieldData, $customPairs, $exclude);
+        $customTables = $customData ? $customData['tables'] : false;
+        $customColumns = $customData ? $customData['columns'] : false;
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
