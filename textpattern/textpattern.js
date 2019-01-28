@@ -2287,8 +2287,8 @@ textpattern.Route.add('section', function ()
      */
     function section_theme_show(skin) {
         $('#section_page, #section_css, #multiedit_page, #multiedit_css, #multiedit_dev_page, #multiedit_dev_css').empty();
-        $pageSelect = $('[name=section_page], #multiedit_dev_page');
-        $styleSelect = $('[name=css], #multiedit_dev_css');
+        var $pageSelect = $('[name=section_page], #multiedit_dev_page');
+        var $styleSelect = $('[name=css], #multiedit_dev_css');
 
         if (skin in skin_page) {
             $pageSelect.append('<option></option>');
@@ -2389,6 +2389,7 @@ textpattern.Route.add('', function () {
     var tabs = hasTabs.find('.switcher-list li');
     var $switchers = tabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
+    var selectedTab = 1;
 
     if (textpattern.event === 'plugin') {
         var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
