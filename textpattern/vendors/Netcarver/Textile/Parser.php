@@ -9,7 +9,7 @@
 /*
  * Textile - A Humane Web Text Generator
  *
- * Copyright (c) 2003-2004, Dean Allen <dean@textism.com>
+ * Copyright (c) 2003-2004, Dean Allen
  * All rights reserved.
  *
  * Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring
@@ -20,7 +20,7 @@
  * Additions and fixes Copyright (c) 2010-17 Netcarver         https://github.com/netcarver
  * Additions and fixes Copyright (c) 2011    Jeff Soo          http://ipsedixit.net/
  * Additions and fixes Copyright (c) 2012    Robert Wetzlmayr  http://wetzlmayr.com/
- * Additions and fixes Copyright (c) 2012-18 Jukka Svahn       http://rahforum.biz/
+ * Additions and fixes Copyright (c) 2012-19 Jukka Svahn       http://rahforum.biz/
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -65,8 +65,8 @@ Block modifier syntax:
     Example: bq. Block quotation... -> <blockquote>Block quotation...</blockquote>
 
     Blockquote with citation: bq.:http://citation.url
-    Example: bq.:http://textism.com/ Text...
-    ->    <blockquote cite="http://textism.com">Text...</blockquote>
+    Example: bq.:http://example.com/ Text...
+    ->    <blockquote cite="http://example.com">Text...</blockquote>
 
     Footnote: fn(1-100).
     Example: fn1. Footnote... -> <p id="fn1">Footnote...</p>
@@ -371,7 +371,7 @@ class Parser
      * @var string
      */
 
-    protected $ver = '3.7.0';
+    protected $ver = '3.7.1';
 
     /**
      * Regular expression snippets.
@@ -3230,7 +3230,7 @@ class Parser
     protected function blocks($text)
     {
         $regex = '/^(?P<tag>'.join('|', $this->blocktag_whitelist).')'.
-            '(?P<atts>'.$this->a.$this->cls.')\.(?P<ext>\.?)(?::(?P<cite>\S+))? (?P<graf>.*)$/Ss'.
+            '(?P<atts>'.$this->a.$this->cls.$this->a.')\.(?P<ext>\.?)(?::(?P<cite>\S+))? (?P<graf>.*)$/Ss'.
             $this->regex_snippets['mod'];
 
         $textblocks = preg_split('/(\n{2,})/', $text, null, PREG_SPLIT_DELIM_CAPTURE);
@@ -4591,7 +4591,9 @@ class Parser
         }
 
         if ($prefix) {
-            if (strpos($url, '/') === 0 || strpos($url, './') === 0 || strpos($url, '../') === 0) {
+            if (strpos($url, '/') === 0 || strpos($url, './') === 0 || strpos($url, '../') === 0 ||
+                strpos($url, '#') === 0
+            ) {
                 return $url;
             }
 
