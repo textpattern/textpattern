@@ -557,7 +557,8 @@ function preText($s, $prefs)
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $ss = doSlash($s);
+        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name IN ('$ss', 'default') ORDER BY FIELD(name, '$ss', 'default') LIMIT 1");
 
         $userInfo = is_logged_in();
 
