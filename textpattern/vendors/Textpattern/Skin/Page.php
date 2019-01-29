@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,36 +30,35 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    class Page extends AssetBase implements PageInterface
-    {
-        protected static $dir = 'pages';
-        protected static $fileContentsField = 'user_html';
-        protected static $essential = array(
-            array(
-                'name'      => 'default',
-                'user_html' => '<!-- Contents of the default (home) page template goes here. -->',
-            ),
-            array(
-                'name'      => 'error_default',
-                'user_html' => '<!-- Contents of the standard error page template goes here. -->',
-            ),
-        );
+class Page extends AssetBase implements PageInterface
+{
+    protected static $dir = 'pages';
+    protected static $fileContentsField = 'user_html';
+    protected static $essential = array(
+        array(
+            'name'      => 'default',
+            'user_html' => '<!-- Contents of the default (home) page template goes here. -->',
+        ),
+        array(
+            'name'      => 'error_default',
+            'user_html' => '<!-- Contents of the standard error page template goes here. -->',
+        ),
+    );
 
-        /**
-         * {@inheritdoc}
-         */
+    /**
+     * {@inheritdoc}
+     */
 
-        public function setInfos(
-            $name,
-            $user_html = null
-        ) {
-            $name = $this->setName($name)->getName();
+    public function setInfos(
+        $name,
+        $user_html = null
+    ) {
+        $name = $this->setName($name)->getName();
 
-            $this->infos = compact('name', 'user_html');
+        $this->infos = compact('name', 'user_html');
 
-            return $this;
-        }
+        return $this;
     }
 }

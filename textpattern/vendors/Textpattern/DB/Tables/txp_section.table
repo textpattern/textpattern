@@ -7,6 +7,9 @@ in_rss       INT          NOT NULL DEFAULT '1',
 on_frontpage INT          NOT NULL DEFAULT '1',
 searchable   INT          NOT NULL DEFAULT '1',
 title        VARCHAR(255) NOT NULL DEFAULT '',
+dev_skin     VARCHAR(63)  NOT NULL DEFAULT '',
+dev_page     VARCHAR(255) NOT NULL DEFAULT '',
+dev_css      VARCHAR(255) NOT NULL DEFAULT '',
 
 INDEX page_skin (page(50), skin(63)),
 INDEX css_skin (css(50), skin(63))

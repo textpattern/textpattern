@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,13 +28,13 @@ if (!defined('TXP_UPDATE')) {
 global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode, $event;
 
 $dbupdates = array(
-    '1.0.0',
-    '4.0.2', '4.0.3', '4.0.4', '4.0.5', '4.0.6', '4.0.7', '4.0.8',
+    '4.0.3', '4.0.4', '4.0.5', '4.0.6', '4.0.7', '4.0.8',
     '4.2.0',
     '4.3.0',
     '4.5.0', '4.5.7',
     '4.6.0',
     '4.7.0',
+    '4.7.2',
 );
 
 function newest_file()
@@ -59,9 +59,7 @@ if (($dbversion == '') ||
     $dbversion = '0.9.9';
 }
 
-$dbversion_target = $thisversion;
-
-if ($dbversion == $dbversion_target ||
+if ($dbversion == $thisversion ||
     ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
 }
@@ -81,18 +79,27 @@ set_error_handler("updateErrorHandler");
 
 $updates = array_fill_keys($dbupdates, true);
 
-if (!isset($updates[$dbversion_target])) {
-    $updates[$dbversion_target] = false;
+if (!isset($updates[$thisversion])) {
+    $updates[$thisversion] = false;
 }
 
 try {
+    // Disable no zero dates mode
+    if (version_compare($dbversion, '4.6', '<') && $sql_mode = getThing('SELECT @@SESSION.sql_mode')) {
+        $tmp_mode = implode(',', array_diff(
+            do_list_unique($sql_mode),
+            array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE')
+        ));
+        safe_query("SET SESSION sql_mode = '".doSlash($tmp_mode)."'");
+    }
+
     foreach ($updates as $dbupdate => $update) {
-        if (version_compare($dbversion, $dbupdate, '<')) {
+        if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $thisversion, '<=')) {
             if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
 
-            if (!($txp_is_dev && $dbversion_target == $dbupdate)) {
+            if (!($txp_is_dev && $thisversion == $dbupdate)) {
                 $dbversion = $dbupdate;
             }
         }
@@ -101,6 +108,11 @@ try {
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
     safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+
+    // Restore sql_mode
+    if (!empty($sql_mode)) {
+        safe_query("SET SESSION sql_mode = '".doSlash($sql_mode)."'");
+    }
 } catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
     // Error message already communicated via updateErrorHandler
@@ -142,7 +154,7 @@ if (!$txp_is_dev) {
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
-// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.io/development/plugin-developer-prefixes)
+// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.com/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
 $files = glob(txpath.'/update/custom/post-update*.php');
 

@@ -17,5 +17,7 @@
         "prefs_id",
         "skin_base_path"
     ],
-    "private": []
+    "private": [
+        "switch_dev_live"
+    ]
 }

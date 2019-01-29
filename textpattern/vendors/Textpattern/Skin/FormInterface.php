@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,29 +30,28 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    interface FormInterface
-    {
-        /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name Form name;
-         * @param  string $type Form type;
-         * @param  string $Form Form contents;
-         * @return object $this The current class object (chainable).
-         */
+interface FormInterface
+{
+    /**
+     * $infos+$name properties setter.
+     *
+     * @param  string $name Form name;
+     * @param  string $type Form type;
+     * @param  string $Form Form contents;
+     * @return object $this The current class object (chainable).
+     */
 
-        public function setInfos(
-            $name,
-            $type = null,
-            $Form = null
-        );
+    public function setInfos(
+        $name,
+        $type = null,
+        $Form = null
+    );
 
-        /**
-         *  $subdirValues getter.
-         */
+    /**
+     *  $subdirValues getter.
+     */
 
-        public static function getTypes();
-    }
+    public static function getTypes();
 }

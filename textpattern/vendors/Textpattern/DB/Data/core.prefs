@@ -90,6 +90,21 @@
         "html": "module_pophelp",
         "position": "170"
     },
+    "enable_dev_preview": {
+        "val": "1",
+        "type": "0",
+        "event": "admin",
+        "html": "yesnoradio",
+        "position": "180",
+        "private": "1"
+    },
+    "advanced_options": {
+        "val": "0",
+        "type": "0",
+        "event": "admin",
+        "html": "onoffradio",
+        "position": "200"
+    },
     "comments_on_default": {
         "val": "0",
         "type": "0",
@@ -546,7 +561,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.7.1",
+        "val": "4.7.2",
         "type": "2",
         "event": "publish",
         "html": "text_input",
@@ -672,5 +687,19 @@
         "html": "defaultPublishStatus",
         "position": "15",
         "private": "1"
+    },
+    "txp_evaluate_functions": {
+        "val": "",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "text_input",
+        "position": "100"
+    },
+    "custom_form_types": {
+        "val": ";[js]\n;mediatype=\"application/javascript\"\n;title=\"JavaScript\"",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "longtext_input",
+        "position": "200"
     }
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><txp:page_title /></title>
 
     <!-- Google font API -->
@@ -35,7 +35,7 @@
                             "@type": "WebSite",
                             "headline": "<txp:site_name escape="json" />",
                             <txp:if_description>"description": "<txp:meta_description format="" escape="json" />",</txp:if_description>
-                            "url": "<txp:site_url />"
+                            "url": "<txp:site_url escape="json" />"
                         }
                     </script>
                 <txp:else />
@@ -69,10 +69,9 @@
             <!-- Main content -->
             <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
-                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.txp instead) -->
+                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_display.txp instead) -->
                 <txp:if_search>
-                    <h1 itemprop="name"><txp:text item="search_results" /></h1>
-                    <txp:output_form form="search_results" />
+                    <txp:output_form form="search_display" />
 
                 <txp:else />
                     <!-- else is this the front page? -->
@@ -95,13 +94,15 @@
                     </txp:if_variable>
 
                     <!-- add pagination links to foot of front page/author listings/category listings if there are more articles available -->
-                    <txp:evaluate wraptag="p" class="paginator">
-                        <txp:newer rel="prev">
-                            <txp:text item="newer" />
-                        </txp:newer>
-                        <txp:older rel="next">
-                            <txp:text item="older" />
-                        </txp:older>
+                    <txp:evaluate test="newer,older">
+                        <nav class="paginator" aria-label="<txp:text item="page_nav" />">
+                            <txp:newer rel="prev">
+                                <txp:text item="newer" />
+                            </txp:newer>
+                            <txp:older rel="next">
+                                <txp:text item="older" />
+                            </txp:older>
+                        </nav>
                     </txp:evaluate>
                 </txp:if_search>
 

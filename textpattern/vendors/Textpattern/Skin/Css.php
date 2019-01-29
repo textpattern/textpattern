@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,44 +30,32 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    class Css extends AssetBase implements CssInterface, \Textpattern\Container\FactorableInterface
-    {
-        protected static $extension = 'css';
-        protected static $dir = 'styles';
-        protected static $fileContentsField = 'css';
-        protected static $essential = array(
-            array(
-                'name' => 'default',
-                'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.io/tags/css */'
-            ),
-        );
+class Css extends AssetBase implements CssInterface
+{
+    protected static $extension = 'css';
+    protected static $dir = 'styles';
+    protected static $fileContentsField = 'css';
+    protected static $essential = array(
+        array(
+            'name' => 'default',
+            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
+        ),
+    );
 
-        /**
-         * Constructor
-         */
+    /**
+     * {@inheritdoc}
+     */
 
-        public function getInstance()
-        {
-            static::$mimeTypes = parse_ini_string(implode(n, do_list_unique(get_pref('assets_mimetypes'))));
+    public function setInfos(
+        $name,
+        $css = null
+    ) {
+        $name = $this->setName($name)->getName();
 
-            return $this;
-        }
+        $this->infos = compact('name', 'css');
 
-        /**
-         * {@inheritdoc}
-         */
-
-        public function setInfos(
-            $name,
-            $css = null
-        ) {
-            $name = $this->setName($name)->getName();
-
-            $this->infos = compact('name', 'css');
-
-            return $this;
-        }
+        return $this;
     }
 }

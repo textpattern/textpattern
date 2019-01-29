@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1668,6 +1668,7 @@ function article_partial_article_view($rs)
     return n.href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('view'), $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
+        'rel'    => 'noopener',
         'target' => '_blank',
     ));
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -29,7 +29,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">';
+        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
@@ -85,6 +85,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             $out[] = '</nav>';
             $out[] = graf(
                 href(span(htmlspecialchars(get_pref('sitename')), array('class' => 'txp-view-site-name')), hu, array(
+                    'rel'    => 'noopener',
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));

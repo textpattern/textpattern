@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -319,7 +319,7 @@ class BuilderTags
                 hed(gTxt('tag_'.$this->tagname), 2).
                 href(
                     gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
-                    'https://docs.textpattern.io/tags/'.$this->tagname,
+                    'https://docs.textpattern.com/tags/'.$this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
                         'rel'    => 'external',
@@ -1976,7 +1976,7 @@ class BuilderTags
             $urlinfo = parse_url(hu);
             $url = ($permlink_mode === 'messy')
                 ? $urlinfo['path'].'index.php?s=file_download'.($type === 'textile' ? '&' : a).'id='.$id
-                : $urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
+                : $urlinfo['path'].'file_download'.'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
             switch ($type) {
                 case 'textile':

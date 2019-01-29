@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -109,7 +109,7 @@ function page_edit($message = '', $refresh_partials = false)
         // Name value.
         'name_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#new_page,input[name=name]',
+            'selector' => '#new_page,#main_content input[name=name]',
             'cb'       => 'page_partial_name_value',
         ),
         // Textarea.
@@ -129,7 +129,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("page", 'txp_section', "name = 'default'");
 
-    $name = Page::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $newname = Page::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
@@ -174,6 +174,12 @@ function page_edit($message = '', $refresh_partials = false)
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
+        (!is_writable($instance->getDirPath()) ? '' :
+            span(
+                checkbox2('export', false, 0, 'export').
+                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ).n.
         tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
@@ -260,9 +266,10 @@ function page_edit($message = '', $refresh_partials = false)
 function page_list($current)
 {
     $out = array();
-    $protected = safe_column("DISTINCT page", 'txp_section', "1 = 1") + array('error_default');
+    $safe_skin = doSlash($current['skin']);
+    $protected = safe_column("DISTINCT page", 'txp_section', "skin = '$safe_skin' OR dev_skin = '$safe_skin'") + array('error_default');
 
-    $criteria = "skin = '" . doSlash($current['skin']) . "'";
+    $criteria = "skin = '$safe_skin'";
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
     $rs = safe_rows_start("name", 'txp_page', "$criteria ORDER BY name ASC");
@@ -296,8 +303,10 @@ function page_delete()
     global $prefs;
 
     $name = ps('name');
+    $safe_name = doSlash($name);
     $skin = get_pref('skin_editing', 'default');
-    $count = safe_count('txp_section', "page = '".doSlash($name)."'");
+    $safe_skin = doSlash($skin);
+    $count = safe_count('txp_section', "page = '$safe_name' AND (skin='$safe_skin' OR dev_skin='$safe_skin')");
     $message = '';
 
     if ($name == 'error_default') {
@@ -310,7 +319,7 @@ function page_delete()
             '{count}' => $count,
         )), E_WARNING);
     } else {
-        if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+        if (safe_delete('txp_page', "name = '$safe_name' AND skin='$safe_skin'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('page_deleted', array('{list}' => $name));
             if ($name === get_pref('last_page_saved')) {
@@ -354,7 +363,8 @@ function page_save()
         'skin',
     )))));
 
-    $name = Page::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Page::sanitize($passedName);
     $newname = Page::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -368,11 +378,12 @@ function page_save()
     } else {
         if ($copy && ($name === $newname)) {
             $newname .= '_copy';
+            $passedName = $name;
             $_POST['newname'] = $newname;
         }
 
         $safe_skin = doSlash($skin);
-        $safe_name = doSlash($name);
+        $safe_name = doSlash($passedName);
         $safe_newname = doSlash($newname);
 
         $exists = safe_field('name', 'txp_page', "name = '$safe_newname' AND skin = '$safe_skin'");
@@ -394,6 +405,11 @@ function page_save()
 
                         $message = gTxt('page_created', array('{list}' => $newname));
 
+                        // If page name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
+
                         callback_event($copy ? 'page_duplicated' : 'page_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -413,6 +429,11 @@ function page_save()
 
                     $message = gTxt('page_updated', array('{list}' => $newname));
 
+                    // If page name has been auto-sanitized, throw a warning.
+                    if ($passedName !== $name) {
+                        $message = array($message, E_WARNING);
+                    }
+
                     callback_event('page_updated', '', 0, $name, $newname);
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -425,6 +446,10 @@ function page_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         callback_event('page_saved', '', 0, $name, $newname);
     }
 
@@ -505,10 +530,11 @@ function page_partial_name($rs)
 {
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     $titleblock = inputLabel(
         'new_page',
-        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
         array('class' => 'txp-form-field name')

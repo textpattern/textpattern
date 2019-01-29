@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -323,9 +323,9 @@ function doDiagnostics()
 
     // Anything might break if arbitrary functions are disabled.
     if (ini_get('disable_functions')) {
-        $disabled_funcs = array_map('trim', explode(',', ini_get('disable_functions')));
+        $disabled_funcs = do_list_unique(ini_get('disable_functions'));
         // Commonly disabled functions that we don't need.
-        $disabled_funcs = array_diff($disabled_funcs, array(
+        $disabled_funcs = array_filter(array_diff($disabled_funcs, array(
             'imagefilltoborder',
             'escapeshellarg',
             'escapeshellcmd',
@@ -341,7 +341,7 @@ function doDiagnostics()
             'popen',
             'dl',
             'chown',
-        ));
+        )), function($func) {return strpos($func, 'pcntl_') !== 0;});
 
         if ($disabled_funcs) {
             $fail['w'][] = array('some_php_functions_disabled', 'some_php_functions_disabled', array('{list}' => implode(', ', array_filter($disabled_funcs))));
@@ -433,6 +433,10 @@ function doDiagnostics()
             $gd_support[] = 'PNG';
         }
 
+        if ($gd_info['WebP Support']) {
+            $gd_support[] = 'WebP';
+        }
+        
         if ($gd_support) {
             $gd_support = implode(', ', $gd_support);
         } else {
@@ -750,7 +754,7 @@ function doDiagnostics()
 
 function checkUpdates()
 {
-    $response = @json_decode(file_get_contents('https://textpattern.io/version.json'), true);
+    $response = @json_decode(file_get_contents('https://textpattern.com/version.json'), true);
     $release = @$response['textpattern-version']['release'];
     $prerelease = @$response['textpattern-version']['prerelease'];
     $version = get_pref('version');

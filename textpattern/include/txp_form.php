@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -137,7 +137,8 @@ function form_list($current)
                 if ($prev_type !== null) {
                     $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
-                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
+                    $label = isset($form_types[$prev_type]) ? $form_types[$prev_type] : $prev_type;
+                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $label, 'form_'.$prev_type);
                 }
 
                 $prev_type = $type;
@@ -303,7 +304,7 @@ function form_edit($message = '', $refresh_partials = false)
         'skin',
     ))));
 
-    $name = Form::sanitize(assert_string(gps('name')));
+    $name = assert_string(gps('name'));
     $type = assert_string(gps('type'));
     $newname = Form::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
@@ -349,7 +350,13 @@ function form_edit($message = '', $refresh_partials = false)
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
-        tag_void('input', array(
+        (!is_writable($instance->getDirPath()) ? '' :
+            span(
+                checkbox2('export', false, 0, 'export').
+                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ).
+        n.tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
             'method' => 'post',
@@ -444,7 +451,7 @@ function form_edit($message = '', $refresh_partials = false)
 
 function form_save()
 {
-    global $essential_forms, $form_types, $app_mode;
+    global $essential_forms, $form_types, $app_mode, $instance;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -454,7 +461,8 @@ function form_save()
         'skin',
     )))));
 
-    $name = Form::sanitize(assert_string(ps('name')));
+    $passedName = assert_string(ps('name'));
+    $name = Form::sanitize($passedName);
     $newname = Form::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -463,7 +471,7 @@ function form_save()
     $message = '';
 
     if (in_array($name, $essential_forms)) {
-        $newname = $name;
+        $newname = $passedName = $name;
         $type = safe_field('type', 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
         $_POST['newname'] = $newname;
     }
@@ -478,6 +486,7 @@ function form_save()
         } else {
             if ($copy && $name === $newname) {
                 $newname .= '_copy';
+                $passedName = $name;
                 $_POST['newname'] = $newname;
             }
 
@@ -507,6 +516,11 @@ function form_save()
 
                             $message = gTxt('form_created', array('{list}' => $newname));
 
+                            // If form name has been auto-sanitized, throw a warning.
+                            if ($passedName !== $name) {
+                                $message = array($message, E_WARNING);
+                            }
+
                             callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
@@ -523,11 +537,16 @@ function form_save()
                         type = '$type',
                         skin = '$safe_skin',
                         name = '".doSlash($newname)."'",
-                        "name = '".doSlash($name)."' AND skin = '$safe_skin'"
+                        "name = '".doSlash($passedName)."' AND skin = '$safe_skin'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
 
                         $message = gTxt('form_updated', array('{list}' => $newname));
+
+                        // If form name has been auto-sanitized, throw a warning.
+                        if ($passedName !== $name) {
+                            $message = array($message, E_WARNING);
+                        }
 
                         callback_event('form_updated', '', 0, $name, $newname);
                     } else {
@@ -542,6 +561,10 @@ function form_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        if (gps('export')) {
+            $instance->setNames(array($newname))->export()->getMessage();
+        }
+
         set_pref('last_form_saved', $newname, 'form', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         callback_event('form_saved', '', 0, $name, $newname);
     }
@@ -640,15 +663,17 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 
 function form_partial_name($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $skin = $rs['skin'];
+    $type = $rs['type'];
+    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
-    if (in_array($name, $essential_forms)) {
-        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+    if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
     } else {
-        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
     }
 
     $name_widgets = inputLabel(
@@ -680,13 +705,22 @@ function form_partial_name($rs)
 
 function form_partial_type($rs)
 {
-    global $essential_forms;
+    global $essential_forms, $form_types;
 
     $name = $rs['name'];
     $type = $rs['type'];
     $type_widgets = '';
 
-    if (in_array($name, $essential_forms)) {
+    if ($type && !isset($form_types[$type])) {
+        $typeInput = tag_void('input', array(
+            'id'       => 'types',
+            'name'     => 'type',
+            'type'     => 'text',
+            'value'    => $type,
+            'disabled' => true
+        ));
+        $type_widgets .= hInput('type', $type);
+    } elseif (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
         $type_widgets .= hInput('type', $type);
     } else {

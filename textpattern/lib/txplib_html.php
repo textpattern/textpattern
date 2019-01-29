@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1344,7 +1344,7 @@ function messenger($thing, $thething = '', $action = '')
 function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
 {
     $html = $methods = array();
-    $methods[''] = gTxt('with_selected_option');
+    $methods[''] = gTxt('with_selected_option', array('{count}' => '0'));
 
     if ($event === null) {
         global $event;
@@ -1781,7 +1781,7 @@ function asyncHref($item, $parms, $atts = '')
 function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('breakby', 'breakclass');
+    static $import = array('breakby', 'breakclass', 'wrapform');
 
     if (!$list) {
         return '';
@@ -1843,6 +1843,10 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
 
+    if (!empty($wrapform)) {
+        $content = str_replace('<+>', $content, parse_form($wrapform));
+    }
+
     if (empty($wraptag)) {
         return $content;
     } else {
@@ -1882,7 +1886,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return $content ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts />";
 }
 
 /**

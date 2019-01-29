@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -103,7 +103,7 @@ $txpcfg['client_flags'] = 0;
 
 /*
  * Optional, advanced: http address of the site serving images.
- * see https://forum.textpattern.io/viewtopic.php?id=34493
+ * see https://forum.textpattern.com/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');

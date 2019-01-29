@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,21 +30,20 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    interface PageInterface
-    {
-        /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name      Page name;
-         * @param  string $user_html Page contents;
-         * @return object $this      The current class object (chainable).
-         */
+interface PageInterface
+{
+    /**
+     * $infos+$name properties setter.
+     *
+     * @param  string $name      Page name;
+     * @param  string $user_html Page contents;
+     * @return object $this      The current class object (chainable).
+     */
 
-        public function setInfos(
-            $name,
-            $user_html = null
-        );
-    }
+    public function setInfos(
+        $name,
+        $user_html = null
+    );
 }

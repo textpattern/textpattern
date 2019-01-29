@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -51,7 +51,7 @@ class Parser extends \Netcarver\Textile\Parser
         }
 
         parent::__construct($doctype);
-        $this->setRelativeImagePrefix(hu);
+        $this->setImagePrefix(ihu)->setLinkPrefix(hu)->setRawBlocks(true);
         $this->setSymbol('quote_single_open', gTxt('txt_quote_single_open'));
         $this->setSymbol('quote_single_close', gTxt('txt_quote_single_close'));
         $this->setSymbol('quote_double_open', gTxt('txt_quote_double_open'));

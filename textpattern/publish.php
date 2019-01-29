@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -56,11 +56,21 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
+// Get logged user.
+if (txpinterface !== 'css') {
+    $userInfo = is_logged_in();
+}
+
 // Get all prefs as an array.
-$prefs = get_prefs();
+$prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
+plug_privs();
 
 // Add prefs to globals.
 extract($prefs);
+
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
+}
 
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_yield = $yield = array();
@@ -185,7 +195,7 @@ $textarray = array();
 
 // i18n.
 if (txpinterface !== 'css') {
-    load_lang(LANG);
+    $textarray = load_lang(LANG);
 }
 
 // Tidy up the site.
@@ -257,7 +267,7 @@ function preText($s, $prefs)
     callback_event('pretext');
 
     // Set messy variables.
-    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
     if (gps('rss')) {
         $out['feed'] = 'rss';
@@ -360,7 +370,15 @@ function preText($s, $prefs)
                             if (empty($u2)) {
                                 $out['s'] = $u1;
                             } else {
-                                $out['month'] = "$u1-$u2".(empty($u3) ? '' : "-$u3");
+                                if (@checkdate($u2, empty($u3) ? 1 : $u3, $u1)) {
+                                    $month = empty($u3) ?
+                                        array($u1, $u2) :
+                                        array($u1, $u2, $u3);
+                                } else {
+                                    $month = array();
+                                    $is_404 = true;
+                                }
+
                                 $title = empty($u4) ? null : $u4;
                             }
 
@@ -402,12 +420,20 @@ function preText($s, $prefs)
 
     // Validate dates
     if ($out['month']) {
-        list($y, $m, $d) = explode('-', $out['month']) + array(1, 1, 1);
+        $date = empty($month) ? '' : implode('-', $month);
+        $month = explode('-', $out['month'], 3) +
+            (!empty($month) ? $month : array());
+        list($y, $m, $d) = $month + array(1, 1, 1);
 
-        if (@!checkdate($m, $d, $y)) {
-            $out['month'] = '';
+        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+            $month = implode('-', $month);
+        } else {
+            $out['month'] = $month = '';
             $is_404 = true;
         }
+    } elseif (isset($month)) {
+        $month = implode('-', $month);
+        !empty($title) or $out['month'] = $month;
     }
 
     // Existing category in messy or clean URL?
@@ -472,9 +498,13 @@ function preText($s, $prefs)
     } elseif ($out['context'] == 'article') {
         if (!empty($out['id']) || !empty($title)) {
             if (empty($out['s']) || $out['s'] === 'default') {
-                $rs = !empty($out['id']) ? lookupByID($out['id']) : lookupByDateTitle($out['month'], $title);
+                $rs = !empty($out['id']) ?
+                    lookupByID($out['id']) :
+                    lookupByDateTitle(isset($month) ? $month : '', $title);
             } else {
-                $rs = !empty($out['id']) ? lookupByIDSection($out['id'], $out['s']) : lookupByTitleSection($title, $out['s']);
+                $rs = !empty($out['id']) ?
+                    lookupByIDSection($out['id'], $out['s']) :
+                    lookupByTitleSection($title, $out['s']);
             }
 
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
@@ -525,24 +555,21 @@ function preText($s, $prefs)
 
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
-    if (txpinterface != 'css' || get_pref('parse_css')) {
+    if (txpinterface != 'css') {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
         $userInfo = is_logged_in();
-        $skin = '';
 
-        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
-            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
-            $skin = safe_field(
-                "val",
-                "txp_prefs",
-                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
+            $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
+            $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
+            $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
+        } else {
+            $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
         }
-
-        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
-        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -595,17 +622,53 @@ function textpattern()
 
     restore_error_handler();
     set_headers();
-    echo $html;
+    echo ltrim($html);
 
     callback_event('textpattern_end');
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '', $t = '', $e = '')
+function output_component($n = '')
 {
-    static $mimetypes = null;
+    global $pretext;
+    static $mimetypes = null, $typequery = null;
 
-    isset($mimetypes) or $mimetypes = Txp::get('Textpattern\Skin\Css')->getMimeTypes();
+    if (!isset($mimetypes)) {
+        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+        $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
+    }
+
+    if (!$n || !is_scalar($n) || empty($mimetypes)) {
+        return;
+    }
+
+    $t = $pretext['skin'];
+    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
+
+    $n = do_list_unique(doSlash($n));
+    $name = join("','", $n);
+    $order = count($n) > 1 ? " ORDER BY FIELD(name, '$name')" : '';
+    $mimetype = null;
+    $assets = array();
+
+    if (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+        foreach($rs as $row) {
+            if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
+                $assets[] = $row['Form'];
+                $mimetype = $mimetypes[$row['type']];
+            }
+        }
+
+        set_error_handler('tagErrorHandler');
+        @header('Content-Type: '.$mimetype.'; charset=utf-8');
+        echo ltrim(parse_page(null, null, implode(n, $assets)));
+        restore_error_handler();
+    }
+}
+
+// -------------------------------------------------------------
+function output_css($s = '', $n = '', $t = '')
+{
     $order = '';
     $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
@@ -614,9 +677,8 @@ function output_css($s = '', $n = '', $t = '', $e = '')
             txp_die('Not Found', 404);
         }
 
-        $extension = ($e ? '.'.doSlash($e) : '');
-        $n = do_list_unique(doSlash($n));
-        $cssname = join($extension."','", $n).$extension;
+        $n = do_list_unique($n);
+        $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
@@ -631,11 +693,9 @@ function output_css($s = '', $n = '', $t = '', $e = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
-        $extension = $n && $e ? $e : 'css';
-        $mimetype = isset($mimetypes[$extension]) ? $mimetypes[$extension] : 'text/css';
         set_error_handler('tagErrorHandler');
-        @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
+        @header('Content-Type: text/css; charset=utf-8');
+        echo $css;
         restore_error_handler();
     }
 }
@@ -739,6 +799,16 @@ function doArticles($atts, $iscustom, $thing = null)
     global $pretext, $thispage;
     extract($pretext);
 
+    // Article form preview.
+    if (txpinterface === 'admin' && ps('Form')) {
+        doAuth();
+
+        if (!has_privs('form')) {
+            txp_status_header('401 Unauthorized');
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+        }
+    }
+
     if ($iscustom) {
         // Custom articles must not render search results.
         $q = '';
@@ -787,12 +857,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
         $cols = join(" OR ", $cols);
         $search = " AND ($cols) $s_filter";
+        $fname = ($searchform ? $searchform : 'search_results');
 
         if (!$sort) {
             $sort = "score DESC";
         }
     } else {
         $score = $search = '';
+        $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
             $sort = "Posted DESC";
@@ -800,17 +872,22 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['*'].$search;
-    $pageby = (empty($pageby) ? $limit : $pageby);
+    $pg or $pg = 1;
+    $pgby = intval(empty($pageby) || $pageby === true ? $limit : $pageby);
+
+    if ($offset === true || !$iscustom && !$issticky) {
+        $offset = $offset === true ? 0 : intval($offset);
+        $pgoffset = ($pg - 1) * $pgby + $offset;
+    } else {
+        $pgoffset = $offset = intval($offset);
+    }
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
-        $pg = (!$pg) ? 1 : $pg;
-        $pgoffset = $offset + (($pg - 1) * $pageby);
-
-        if (empty($thispage)) {
+        if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
             $grand_total = safe_count('textpattern', $where);
             $total = $grand_total - $offset;
-            $numPages = ceil($total / $pageby);
+            $numPages = $pgby ? ceil($total / $pgby) : 1;
 
             // Send paging info to txp:newer and txp:older.
             $thispage = array(
@@ -827,13 +904,9 @@ function doArticles($atts, $iscustom, $thing = null)
         if ($pgonly) {
             return;
         }
-    } else {
-        if ($pgonly) {
-            $total = safe_count('textpattern', $where) - $offset;
-            return ceil($total / $pageby);
-        }
-
-        $pgoffset = $offset;
+    } elseif ($pgonly) {
+        $total = safe_count('textpattern', $where) - $offset;
+        return $pgby ? ceil($total / $pgby) : $total;
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
@@ -849,51 +922,72 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
-    // If a listform is specified, $thing is for doArticle() - hence ignore here.
-    if (!empty($listform)) {
-        $thing = null;
-    }
-
-    // Get the form name.
-    if ($q && !$issticky) {
-        $fname = ($searchform ? $searchform : 'search_results');
-    } else {
-        $fname = (!empty($listform) ? $listform : $form);
-    }
-
     if ($rs && $last = numRows($rs)) {
+        // If a listform is specified, $thing is for doArticle() - hence ignore here.
+        if (!empty($listform)) {
+            $thing = null;
+        }
+
         $count = 0;
         $articles = array();
+        $chunk = '';
+        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
+            false :
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
 
-        while ($a = nextRow($rs)) {
-            ++$count;
-            populateArticleData($a);
+        while ($count++ <= $last) {
             global $thisarticle;
-            $thisarticle['is_first'] = ($count == 1);
-            $thisarticle['is_last'] = ($count == $last);
 
-            // Article form preview.
-            if (txpinterface === 'admin' && ps('Form')) {
-                doAuth();
+            if ($a = nextRow($rs)) {
+                populateArticleData($a);
+                $thisarticle['is_first'] = ($count == 1);
+                $thisarticle['is_last'] = ($count == $last);
 
-                if (!has_privs('form')) {
-                    txp_status_header('401 Unauthorized');
-                    exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-                }
-
-                $articles[] = parse(gps('Form'));
-            } elseif ($allowoverride && $a['override_form']) {
-                $articles[] = parse_form($a['override_form']);
+                $newbreak = !$groupby ? $count :
+                    ($groupby === 1 ?
+                        parse($breakby, true, false) :
+                        parse_form($breakby)
+                    );
             } else {
-                $articles[] = $thing ? parse($thing) : parse_form($fname);
+                $newbreak = null;
             }
 
+            if (isset($oldbreak) && $newbreak !== $oldbreak) {
+                if ($breakform) {
+                    $tmparticle = $thisarticle;
+                    $thisarticle = $oldarticle;
+                    $newform = parse_form($breakform);
+                    $chunk = str_replace('<+>', $chunk, $newform);
+                    $thisarticle = $tmparticle;
+                }
+
+                $articles[] = $chunk;
+                $chunk = '';
+            }
+
+            if ($count <= $last) {
+                // Article form preview.
+                if (txpinterface === 'admin' && ps('Form')) {
+                    $chunk .= parse(gps('Form'));
+                } elseif ($allowoverride && $a['override_form']) {
+                    $chunk .= parse_form($a['override_form']);
+                } else {
+                    $chunk .= $thing ? parse($thing) : parse_form($fname);
+                }
+            }
+
+            $oldarticle = $thisarticle;
+            $oldbreak = $newbreak;
             unset($GLOBALS['thisarticle']);
+        }
+
+        if ($groupby) {
+            $breakby = '';
         }
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
-        return parse($thing, false);
+        return $thing ? parse($thing, false) : '';
     }
 }
 
@@ -949,7 +1043,7 @@ function doArticle($atts, $thing = null)
         // Restore atts to the previous article filter criteria.
         filterAtts($oldAtts ? $oldAtts : false);
 
-        return parse($thing, false);
+        return $thing ? parse($thing, false) : '';
     }
 }
 

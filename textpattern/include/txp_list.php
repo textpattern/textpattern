@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -45,8 +45,13 @@ if ($event == 'list') {
     $statuses = status_list();
 
     $all_cats = getTree('root', 'article');
-    $all_authors = the_privileged('article.edit.own');
-    $all_sections = safe_column("name", 'txp_section', "name != 'default'");
+    $all_authors = the_privileged('article.edit.own', true);
+    $all_sections = array();
+
+    foreach (safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title") as $section) {
+        extract($section);
+        $all_sections[$name] = $title;
+    }
 
     $available_steps = array(
         'list_list'          => false,
@@ -328,6 +333,7 @@ function list_list($message = '', $post = '')
                 n.tag_end('thead');
 
             include_once txpath.'/publish/taghandlers.php';
+            $can_preview = has_privs('article.preview');
 
             $contentBlock .= n.tag_start('tbody');
 
@@ -356,7 +362,7 @@ function list_list($message = '', $post = '')
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
                 if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                    $view_url = '?txpreview='.intval($ID).'.'.time();
+                    $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
                 } else {
                     $view_url = permlinkurl($a);
                 }
@@ -433,11 +439,12 @@ function list_list($message = '', $post = '')
                     td(
                         $Category2, '', 'txp-list-col-category2 category'.$vc[2]
                     ).
-                    td(
+                    td($view_url ?
                         href($Status, $view_url, join_atts(array(
+                            'rel'    => 'noopener',
                             'target' => '_blank',
                             'title'  => gTxt('view'),
-                        ), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
+                        ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'
                     ).
                     (
                         $show_authors
@@ -599,9 +606,9 @@ function list_multi_edit()
             }
 
             if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
-                safe_update('txp_discuss', "visible = ".MODERATE, "parentid IN (".join(',', $selected).")");
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
+                safe_delete('txp_discuss', "parentid IN (".join(',', $selected).")");
                 update_lastmod('articles_deleted', $selected);
                 now('posted', true);
                 now('expires', true);
@@ -614,7 +621,7 @@ function list_multi_edit()
         // Change author.
         case 'changeauthor':
             $value = ps('AuthorID');
-            if (has_privs('article.edit') && in_array($value, $all_authors, true)) {
+            if (has_privs('article.edit') && isset($all_authors[$value])) {
                 $field = 'AuthorID';
             }
             break;
@@ -641,7 +648,7 @@ function list_multi_edit()
         // Change section.
         case 'changesection':
             $value = ps('Section');
-            if (in_array($value, $all_sections, true)) {
+            if (isset($all_sections[$value])) {
                 $field = 'Section';
             }
             break;

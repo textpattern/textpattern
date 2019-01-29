@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -588,7 +588,7 @@ function load_lang_event($event, $lang = LANG)
  *
  * Will not let you override existing privs.
  *
- * @param   string $res  The resource
+ * @param   mixed  $res  The resource
  * @param   string $perm List of user-groups, e.g. '1,2,3'
  * @package User
  * @example
@@ -599,9 +599,15 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list_unique($perm));
-        $txp_permissions[$res] = $perm;
+    is_array($res) or $res = array($res => $perm);
+
+    foreach($res as $priv => $group) {
+        if ($group === null) {
+            unset($txp_permissions[$priv]);
+        } elseif (!isset($txp_permissions[$priv])) {
+            $group = join(',', do_list_unique($group));
+            $txp_permissions[$priv] = $group;
+        }
     }
 }
 
@@ -609,7 +615,7 @@ function add_privs($res, $perm = '1')
  * Checks if a user has privileges to the given resource.
  *
  * @param   string $res  The resource
- * @param   string $user The user. If no user name is supplied, assume the current logged in user
+ * @param   mixed  $user The user. If no user name is supplied, assume the current logged in user
  * @return  bool
  * @package User
  * @example
@@ -625,6 +631,11 @@ function has_privs($res, $user = '')
     global $txp_user, $txp_permissions;
     static $privs;
 
+    if (is_array($user)) {
+        $level = isset($user['privs']) ? $user['privs'] : null;
+        $user = isset($user['name']) ? $user['name'] : '';
+    }
+
     $user = (string) $user;
 
     if ($user === '') {
@@ -633,7 +644,9 @@ function has_privs($res, $user = '')
 
     if ($user !== '') {
         if (!isset($privs[$user])) {
-            $privs[$user] = safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
+            $privs[$user] = isset($level) ?
+                $level :
+                safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
         if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
@@ -667,6 +680,32 @@ function require_privs($res = null, $user = '')
 }
 
 /**
+ * Adds dynamic priviledges.
+ *
+ * @param   array $pluggable The array, see global $txp_options
+ * @since   4.7.2
+ * @package User
+ */
+
+function plug_privs($pluggable = null)
+{
+    global $txp_options;
+
+    is_array($pluggable) or $pluggable = $txp_options;
+
+    foreach($pluggable as $pref => $pane) {
+        if (get_pref($pref)) {
+            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+        } else {
+            add_privs(is_array($pane) ?
+                array_fill_keys(array_keys($pane), null) :
+                array('prefs.'.$pref => null)
+            );
+        }
+    }
+}
+
+/**
  * Gets a list of users having access to a resource.
  *
  * @param   string $res The resource, e.g. 'article.edit.published'
@@ -675,15 +714,20 @@ function require_privs($res = null, $user = '')
  * @package User
  */
 
-function the_privileged($res)
+function the_privileged($res, $real = false)
 {
     global $txp_permissions;
 
+    $out = array();
+
     if (isset($txp_permissions[$res])) {
-        return safe_column("name", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY name ASC");
-    } else {
-        return array();
+        foreach (safe_rows("name, RealName", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY ".($real ? "RealName" : "name")." ASC") as $user) {
+            extract($user);
+            $out[$name] = $real ? $RealName : $name;
+        }
     }
+
+    return $out;
 }
 
 /**
@@ -2204,7 +2248,7 @@ function lAtts($pairs, $atts, $warn = true)
 function stripSpace($text, $force = false)
 {
     if ($force || get_pref('attach_titles_to_permalinks')) {
-        $text = trim(sanitizeForUrl($text), '-');
+        $text = trim(sanitizeForUrl($text, '/[^\p{L}\p{N}\-_\s\/\\\\\x{1F300}-\x{1F64F}\x{1F680}-\x{1F6FF}\x{2600}-\x{27BF}]/u'), '-');
 
         if (get_pref('permlink_format')) {
             return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
@@ -2221,12 +2265,13 @@ function stripSpace($text, $force = false)
  * This function just makes the string look prettier and excludes some
  * unwanted characters, but leaves UTF-8 letters and digits intact.
  *
- * @param  string $text The string
+ * @param  string $text  The string
+ * @param  string $strip The regex of the characters to strip
  * @return string
  * @package URL
  */
 
-function sanitizeForUrl($text)
+function sanitizeForUrl($text, $strip = '/[^\p{L}\p{N}\-_\s\/\\\\]/u')
 {
     $out = callback_event('sanitize_for_url', '', 0, $text);
 
@@ -2234,10 +2279,10 @@ function sanitizeForUrl($text)
         return $out;
     }
 
-    // Remove names entities and tags.
+    // Remove named entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
     // Remove all characters except letter, number, dash, space and backslash
-    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    $text = preg_replace($strip, '', $text);
     // Collapse spaces, minuses, (back-)slashes.
     $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
@@ -2289,7 +2334,7 @@ function sanitizeForPage($text)
 }
 
 /**
- * Sanitises a string for use in a ORDER BY clause.
+ * Sanitizes a string for use in a ORDER BY clause.
  *
  * @param   string $text The string
  * @return  string
@@ -2517,15 +2562,21 @@ function is_blacklisted($ip, $checks = '')
 
 function is_logged_in($user = '')
 {
+    static $users = array();
+
     $name = substr(cs('txp_login_public'), 10);
 
-    if (!strlen($name) or strlen($user) and $user !== $name) {
+    if (!strlen($name) || strlen($user) && $user !== $name) {
         return false;
     }
 
-    $rs = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    if (!isset($users[$name])) {
+        $users[$name] = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
+    }
 
-    if ($rs and substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
+    $rs = $users[$name];
+
+    if ($rs && substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
         unset($rs['nonce']);
 
         return $rs;
@@ -2614,7 +2665,7 @@ function splat($text)
     if ($production_status !== 'live') {
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
             $trace->stop('[/attribute]');
 
             if (isset($global_atts[$sha][$p])) {
@@ -2623,7 +2674,7 @@ function splat($text)
         }
     } else {
         foreach ($parse[$sha] as $p) {
-            $atts[$p] = parse($atts[$p]);
+            $atts[$p] = parse($atts[$p], true, false);
 
             if (isset($global_atts[$sha][$p])) {
                 $txp_atts[$p] = $atts[$p];
@@ -2899,15 +2950,9 @@ function get_form_types()
     static $types = null;
 
     if ($types === null) {
-        $types = array(
-            'article'  => gTxt('article'),
-            'misc'     => gTxt('misc'),
-            'comment'  => gTxt('comment'),
-            'category' => gTxt('category'),
-            'file'     => gTxt('file'),
-            'link'     => gTxt('link'),
-            'section'  => gTxt('section'),
-        );
+        foreach (Txp::get('Textpattern\Skin\Form')->getTypes() as $type) {
+            $types[$type] = gTxt($type);
+        }
 
         callback_event_ref('form.types', 'types', 0, $types);
     }
@@ -4308,8 +4353,6 @@ function fetch_form($name)
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
-
-            return false;
         }
 
         $forms[$name] = $form;
@@ -4343,7 +4386,7 @@ function parse_form($name)
     $name = (string) $name;
     $f = fetch_form($name);
 
-    if ($f) {
+    if ($f !== false) {
         if (!isset($stack[$name])) {
             $stack[$name] = 1;
         } elseif ($stack[$name] >= $depth) {
@@ -4361,7 +4404,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f);
+        $out = parse($f, true, false);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
@@ -4420,19 +4463,24 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $prefs, $pretext, $trace;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
     }
 
+    $php_allowed = $prefs['allow_page_php_scripting'];
+
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
+        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
             $page = parse($page);
+            $prefs['allow_page_php_scripting'] = false;
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
         }
     }
+
+    $prefs['allow_page_php_scripting'] = $php_allowed;
 
     return $page;
 }
@@ -4563,9 +4611,9 @@ function clean_comment_counts($parentids)
 
 function markup_comment($msg)
 {
-    $textile = new \Textpattern\Textile\Parser();
+    $textile = new \Textpattern\Textile\RestrictedParser();
 
-    return $textile->textileRestricted($msg);
+    return $textile->parse($msg);
 }
 
 /**
@@ -4719,7 +4767,9 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
+    $user = implode(',', (array) quote_list($user));
+
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name IN (".$user.") ORDER BY FIELD(user_name, ".$user.")");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -5165,7 +5215,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
         $start = $month ? strtotime($month) : time() or $start = time();
         $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
-        $start = $month ? strtotime($month) : false;
+        $start = $month ? safe_strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);
@@ -5185,7 +5235,10 @@ function buildTimeSql($month, $time, $field = 'Posted')
                 list($start, $stop) = array($stop, $start);
             }
 
-            $timeq = ($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+            $timeq = ($start == $stop ?
+                "$safe_field = FROM_UNIXTIME($start)" :
+                "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)"
+            );
         }
     }
 
@@ -5405,8 +5458,10 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
             } else {
                 $value = txpspecialchars(join($glue, $value));
             }
-        } else {
+        } elseif ($name != 'href' && $name != 'src') {
             $value = txpspecialchars($value === true ? $name : $value);
+        } else {
+            $value = txpspecialchars(str_replace('&amp;', '&', $value));
         }
 
         if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
@@ -5436,6 +5491,14 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 function pagelinkurl($parts, $inherit = array())
 {
     global $permlink_mode, $prefs;
+    static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+
+    // Unset extra stuff to link to an article.
+    if (!empty($parts['id'])) {
+        foreach ($internals as $key) {
+            unset($parts[$key]);
+        }
+    }
 
     $keys = array_merge($inherit, $parts);
 
@@ -5443,11 +5506,6 @@ function pagelinkurl($parts, $inherit = array())
         && is_callable($prefs['custom_url_func'])
         && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
-    }
-
-    // Can't use this to link to an article.
-    if (isset($keys['id'])) {
-        unset($keys['id']);
     }
 
     if (isset($keys['s']) && $keys['s'] == 'default') {
@@ -5469,7 +5527,10 @@ function pagelinkurl($parts, $inherit = array())
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
 
-        if (!empty($keys['rss'])) {
+        if (!empty($keys['id'])) {
+            $url = permlinkurl_id($keys['id']);
+            unset($keys['id']);
+        } elseif (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
@@ -5481,6 +5542,12 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
+        } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
+            if (!empty($keys['context'])) {
+                $keys['context'] = gTxt($keys['context'].'_context');
+            }
+            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            unset($keys['month']);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
@@ -5511,12 +5578,16 @@ function pagelinkurl($parts, $inherit = array())
 
 function permlinkurl_id($id)
 {
-    global $permlinks;
+    global $permlinks, $thisarticle;
 
     $id = (int) $id;
 
     if (isset($permlinks[$id])) {
         return $permlinks[$id];
+    }
+
+    if (isset($thisarticle['thisid']) && $thisarticle['thisid'] == $id) {
+        return permlinkurl($thisarticle);
     }
 
     $rs = safe_row(
@@ -5550,10 +5621,6 @@ function permlinkurl($article_array)
     global $permlink_mode, $prefs, $permlinks, $production_status;
     static $now = null;
 
-    if (!$article_array || !is_array($article_array)) {
-        return;
-    }
-
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
         and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== false) {
@@ -5577,10 +5644,6 @@ function permlinkurl($article_array)
     }
 
     $thisid = (int) $thisid;
-
-    if (isset($permlinks[$thisid])) {
-        return $permlinks[$thisid];
-    }
 
     if (!isset($now)) {
         $now = strftime('%F %T');
@@ -5705,9 +5768,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
 
 function in_list($val, $list, $delim = ',')
 {
-    $args = do_list($list, $delim);
-
-    return in_array((string) $val, $args, true);
+    return in_array((string) $val, do_list($list, $delim), true);
 }
 
 /**
@@ -5999,6 +6060,31 @@ function getMetaDescription($type = null)
     }
 
     return $content;
+}
+
+/**
+ * Get some URL data.
+ * @param mixed $context The data to retrieve
+ * @param array $internals Data restrictions
+ * @return array The retrieved data
+ */
+
+function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
+    global $pretext;
+
+    if (!is_array($context)) {
+        $context = $context === true ? $internals : do_list_unique($context);
+    }
+
+    $out = array();
+
+    foreach ($context as $q) {
+        if (!empty($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? get_author_name($pretext[$q]) : $pretext[$q];
+        }
+    }
+
+    return $out;
 }
 
 /**
@@ -6981,6 +7067,6 @@ function real_max_upload_size($user_max, $php = true)
         }
     }
 
-    // 2^53 - 1 is max safe Javascript integer, let 8192Tb
+    // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }

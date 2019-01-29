@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -484,8 +484,8 @@ function plugin_verify()
         $textpack = '';
 
         if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
-            $textile = new \Textpattern\Textile\Parser();
-            $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
+            $textile = new \Textpattern\Textile\RestrictedParser();
+            $help_source = $textile->setLite(false)->setImages(true)->parse($plugin['help_raw']);
         } else {
             $help_source = $plugin['help'] ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
         }

@@ -1,0 +1,42 @@
+<h1 itemprop="name"><txp:text item="search_results" /></h1>
+
+<txp:if_search_results>
+
+    <!-- if search result count greater than 200 then display excessive results message, otherwise show search result count -->
+    <txp:if_search_results max="200">
+        <h3>
+            <txp:search_result_count />
+            <txp:text item="matching_search_request" />
+            <q><txp:search_term /></q>
+        </h3>
+    <txp:else />
+        <h3>
+            <txp:text item="too_common_search_term" />
+            <q><txp:search_term /></q>
+        </h3>
+    </txp:if_search_results>
+
+<!-- if no search results, then display no search results message -->
+<txp:else />
+    <h3>
+        <txp:text item="no_search_matches" />
+    </h3>
+
+</txp:if_search_results>
+
+<!-- display resulting articles (10 per page; default setting) -->
+<txp:article class="article-list" wraptag="ul" />
+
+<!-- check if there are further results and provide pagination links depending on the result -->
+<txp:if_search_results min="11">
+    <nav class="paginator" aria-label="<txp:text item="page_nav" />">
+        <txp:evaluate>
+            <txp:newer rel="prev">
+                <txp:text item="prev" />
+            </txp:newer>
+            <txp:older rel="next">
+                <txp:text item="next" />
+            </txp:older>
+        </txp:evaluate>
+    </nav>
+</txp:if_search_results>

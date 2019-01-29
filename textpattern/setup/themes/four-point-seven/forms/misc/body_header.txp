@@ -5,7 +5,7 @@
     </txp:evaluate>
 </header>
 
-<nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
+<nav class="site-navigation" aria-label="<txp:text item="site_nav" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
     <div>
         <txp:section_list default_title='<txp:text item="home" />' include_default wraptag="ul" break="">
             <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>

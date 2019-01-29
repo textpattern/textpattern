@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -919,8 +919,4 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
  * @since   4.7.0
  */
 
-if (defined('JSON_UNESCAPED_UNICODE')) {
-    define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-} else {
-    define('TEXTPATTERN_JSON', 0);
-}
+define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -333,12 +333,12 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true)
+function parse($thing, $condition = true, $not = true)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
-    static $pattern, $short_tags = null;
+    global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
+    static $short_tags = null;
 
-    if (!empty($txp_atts['not'])) {
+    if ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
@@ -347,21 +347,18 @@ function parse($thing, $condition = true)
         $trace->log('['.($condition ? 'true' : 'false').']');
     }
 
-    if (!$condition) {
+    if (!$condition && empty($pretext['_txp_atts'])) {
         $txp_atts = null;
     }
 
     if (!isset($short_tags)) {
         $short_tags = get_pref('enable_short_tags', false);
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
-    if (!$short_tags) {
-        if (false === strpos($thing, '<txp:')) {
-            return $condition ? $thing : ($thing ? '' : '1');
-        }
-    } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
-        return $condition ? $thing : ($thing ? '' : '1');
+    if (!$short_tags && false === strpos($thing, '<txp:') ||
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing))
+    {
+        return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
     $hash = sha1($thing);
@@ -373,8 +370,8 @@ function parse($thing, $condition = true)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
+        $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
         $last = count($parsed);
@@ -450,7 +447,7 @@ function parse($thing, $condition = true)
     $tag = $txp_parsed[$hash];
 
     if (empty($tag)) {
-        return $condition ? $thing : ($thing ? '' : '1');
+        return $condition ? $thing : '';
     }
 
     list($first, $last) = $txp_else[$hash];
@@ -461,7 +458,7 @@ function parse($thing, $condition = true)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return ($thing ? '' : '1');
+        return '';
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
@@ -829,12 +826,13 @@ function filterAtts($atts = null, $iscustom = null)
         'allowoverride' => !$iscustom,
         'limit'         => 10,
         'offset'        => 0,
-        'pageby'        => '',
+        'pageby'        => null,
         'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
         'breakby'       => '',
         'breakclass'    => '',
+        'breakform'     => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
@@ -862,7 +860,7 @@ function filterAtts($atts = null, $iscustom = null)
         'sort'          => '',
         'keywords'      => '',
         'time'          => null,
-        'status'        => STATUS_LIVE,
+        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
         'id'            => '',
@@ -958,10 +956,10 @@ function filterAtts($atts = null, $iscustom = null)
     if ($expired && $expired != '1') {
         $timeq .= ' AND '.buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
     } elseif (!$expired) {
-        $timeq .= ' AND ('.now('expires').' <= Expires OR Expires IS NULL)';
+        $timeq .= ' AND (Expires IS NULL OR '.now('expires').' <= Expires)';
     }
 
-    if ($q && $searchsticky || $id) {
+    if ($q && $searchsticky) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } else {
         $statusq = " AND Status IN (".implode(',', $status).")";

@@ -1,7 +1,7 @@
 <div itemscope itemtype="https://schema.org/DataDownload">
 
     <!-- ...if exists, use the file title, otherwise use file name -->
-    <a href="<txp:file_download_link />" itemprop="url">
+    <a href="<txp:file_download_link />" itemprop="url contentUrl">
         <strong itemprop="name">
             <txp:evaluate>
                 <txp:file_download_name title />

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -140,6 +140,7 @@ function prefs_save()
 
     update_lastmod('preferences_saved');
     $prefs = get_prefs();
+    plug_privs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -555,6 +556,8 @@ function weeks($name, $val)
         28  => '4 '.$weeks,
         35  => '5 '.$weeks,
         42  => '6 '.$weeks,
+        56  => '8 '.$weeks,
+        84  => '12 '.$weeks,
     );
 
     return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);

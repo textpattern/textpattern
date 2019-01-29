@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -898,7 +898,7 @@ class TXP_Wrapper
         }
 
         if ($incoming['textile_body'] == USE_TEXTILE) {
-            $incoming['Title'] = $textile->textileThis($incoming['Title'], '', 1);
+            $incoming['Title'] = $textile->textileEncode($incoming['Title']);
         }
 
         $incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
@@ -928,7 +928,7 @@ class TXP_Wrapper
                 $html = nl2br(trim($field));
                 break;
             case USE_TEXTILE:
-                $html = $textile->textileThis($field);
+                $html = $textile->parse($field);
                 break;
         }
 

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -134,13 +134,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     $out = array();
 
     $selected = false;
-    $multiple = is_array($value) ? ' multiple="multiple"' : '';
-
-    if ($multiple) {
-        $name .= '[]';
-    } else {
-        $value = (string) $value;
-    }
+    $multiple = is_array($value);
+    $multiple or $value = (string) $value;
 
     if (is_array($disabled)) {
         $disable = $disabled;
@@ -166,10 +161,13 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
     }
 
-    $atts = join_atts(array(
+    $name_m = $name.($multiple ? '[]' : '');
+    $atts = join_atts((is_array($name) ? $name : array(
+        'name' => $name_m
+    )) + array(
         'id'       => $select_id,
-        'name'     => $name,
         'disabled' => (bool) $disabled,
+        'multiple' => $multiple
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ((string) $onchange === '1') {
@@ -178,8 +176,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'.n
-        .($multiple ? hInput($name, '').n : ''); // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'.n
+        .($multiple ? hInput($name_m, '').n : ''); // TODO: use jQuery UI selectmenu?
 }
 
 /**
@@ -300,18 +298,18 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 /**
  * Generic form input.
  *
- * @param  string $type        The input type
- * @param  string $name        The input name
- * @param  string $value       The value
- * @param  string $class       The HTML class
- * @param  string $title       The tooltip
- * @param  string $onClick     Inline JavaScript attached to the click event
- * @param  int    $size        The input size
- * @param  int    $tab         The HTML tabindex
- * @param  string $id          The HTML id
- * @param  bool   $disabled    If TRUE renders the input disabled
- * @param  bool   $required    If TRUE the field is marked as required
- * @param  string $placeholder The placeholder value displayed when the field is empty
+ * @param  string       $type         The input type
+ * @param  string       $name         The input name
+ * @param  string       $value        The value
+ * @param  string       $class        The HTML class
+ * @param  string       $title        The tooltip
+ * @param  string       $onClick      Inline JavaScript attached to the click event
+ * @param  int          $size         The input size
+ * @param  int          $tab          The HTML tabindex
+ * @param  string       $id           The HTML id
+ * @param  bool         $disabled     If TRUE renders the input disabled
+ * @param  bool         $required     If TRUE the field is marked as required
+ * @param  string       $placeholder  The placeholder value displayed when the field is empty
  * @return string HTML input
  * @example
  * echo fInput('text', 'myInput', 'My example value');
@@ -319,26 +317,21 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 {
-    $atts = join_atts(array(
-        'class'       => $class,
-        'id'          => $id,
-        'name'        => $name,
-        'type'        => $type,
-        'size'        => (int) $size,
-        'title'       => $title,
-        'onclick'     => $onClick,
-        'tabindex'    => (int) $tab,
-        'disabled'    => (bool) $disabled,
-        'required'    => (bool) $required,
-        'placeholder' => $placeholder,
+    $atts = join_atts((is_array($name) ? $name : array('name' => $name)) + array(
+        'class'        => $class,
+        'id'           => $id,
+        'type'         => $type,
+        'size'         => (int) $size,
+        'title'        => $title,
+        'onclick'      => $onClick,
+        'tabindex'     => (int) $tab,
+        'disabled'     => (bool) $disabled,
+        'required'     => (bool) $required,
+        'placeholder'  => $placeholder,
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
-    }
-
-    if ($type === 'password') {
-        $atts .= join_atts(array('autocomplete' => 'off'));
     }
 
     return n.tag_void('input', $atts);
@@ -506,20 +499,22 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  *
  * This form will contain a CSRF token if called on an authenticated page.
  *
- * @param  string $contents The form contents
- * @param  string $style    Inline styles added to the form
- * @param  string $onsubmit JavaScript run when the form is sent
- * @param  string $method   The form method, e.g. "post", "get"
- * @param  string $class    The HTML class
- * @param  string $fragment A URL fragment added to the form target
- * @param  string $id       The HTML id
- * @param  string $role     ARIA role name
+ * @param  string $contents           The form contents
+ * @param  string $style              Inline styles added to the form
+ * @param  string $onsubmit           JavaScript run when the form is sent
+ * @param  string $method             The form method, e.g. "post", "get"
+ * @param  string $class              The HTML class
+ * @param  string $fragment           A URL fragment added to the form target
+ * @param  string $id                 The HTML id
+ * @param  string $role               ARIA role name
+ * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '')
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
 {
     $action = 'index.php';
+    $autocomplete = '';
 
     if ($onsubmit) {
         $onsubmit = 'return '.$onsubmit;
@@ -529,14 +524,19 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         $action .= '#'.$fragment;
     }
 
+    if ($allow_autocomplete === false) {
+        $autocomplete = 'off';
+    }
+
     return n.tag($contents.tInput().n, 'form', array(
-        'class'    => $class,
-        'id'       => $id,
-        'method'   => $method,
-        'action'   => $action,
-        'onsubmit' => $onsubmit,
-        'role'     => $role,
-        'style'    => $style,
+        'class'        => $class,
+        'id'           => $id,
+        'method'       => $method,
+        'action'       => $action,
+        'onsubmit'     => $onsubmit,
+        'role'         => $role,
+        'autocomplete' => $autocomplete,
+        'style'        => $style,
     ));
 }
 
@@ -600,14 +600,15 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         $cols = 40;
     }
 
-    return n.tag($thing, 'textarea', array(
+    $atts = (is_array($name) ? $name : array('name' => $name)) + array(
         'id'          => $id,
-        'name'        => $name,
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,
         'placeholder' => $placeholder,
-    ));
+    );
+
+    return n.tag($thing, 'textarea', $atts);
 }
 
 /**

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -57,6 +57,7 @@ class Locale
         'en-gb' => array('en_GB.UTF-8', 'en_GB.ISO_8859-1', 'English_UK.1252', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'C'),
         'en-us' => array('en_US.UTF-8', 'en_US.ISO_8859-1', 'English_USA.1252', 'en_US', 'english-us', 'eng', 'en', 'english'),
         'es'    => array('es_ES.UTF-8', 'es_ES.ISO_8859-1', 'Spanish_Spain.1252', 'es_ES', 'esp', 'spanish'),
+        'es-ve' => array('es_VE.UTF-8', 'es_VE.ISO_8859-1', 'Spanish_Venezuela.1252', 'es_VE', 'esv', 'spanish-venezuela'),
         'et'    => array('et_EE.UTF-8', 'et_EE.ISO_8859-1', 'et_EE.ISO_8859-15', 'Estonian_Estonia.1257', 'et_EE', 'et', 'est', 'estonian'),
         'fa'    => array('fa_IR.UTF-8', 'Farsi_Iran.1256', 'fa_IR', 'fa', 'persian', 'per', 'fas', 'farsi'),
         'fi'    => array('fi_FI.UTF-8', 'fi_FI.ISO_8859-1', 'fi_FI.ISO-8859-15', 'fi_FI.ISO_8859-16', 'Finnish_Finland.1252', 'fi_FI', 'fin', 'fi', 'finnish'),

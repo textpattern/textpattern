@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -638,18 +638,16 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
-     * Generate a &lt;select&gt; element of languages.
+     * Generate an array of languages and their localised names.
      *
-     * @param  string $name  The HTML name and ID to assign to the select control
-     * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
      * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
      *                       TEXTPATTERN_LANG_ACTIVE: the active language
      *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
      *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
-     * @return string HTML
+     * @return array
      */
 
-    public function languageSelect($name, $val, $flags = null)
+    public function languageList($flags = null)
     {
         if ($flags === null) {
             $flags = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED;
@@ -668,6 +666,25 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         ksort($vals);
         reset($vals);
+
+        return $vals;
+    }
+
+    /**
+     * Generate a &lt;select&gt; element of languages.
+     *
+     * @param  string $name  The HTML name and ID to assign to the select control
+     * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
+     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     *                       TEXTPATTERN_LANG_ACTIVE: the active language
+     *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
+     *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
+     * @return string HTML
+     */
+
+    public function languageSelect($name, $val, $flags = null)
+    {
+        $vals = $this->languageList($flags);
 
         return selectInput($name, $vals, $val, false, true, $name);
     }

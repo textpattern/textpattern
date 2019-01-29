@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -106,20 +106,20 @@ if (!empty($txpcfg['pre_publish_script'])) {
 
 include txpath.'/publish.php';
 
-switch (txpinterface) {
-    case 'css':
-        $n = gps('n');
-        $t = gps('t');
-        output_css($s, $n, $t, gps('e'));
-        break;
-    default:
-        textpattern();
+if (txpinterface == 'css') {
+    $n = gps('n') or $n = $pretext['css'];
+    $t = gps('t') or $t = $pretext['skin'];
+    output_css($s, $n, $t);
+} elseif (!empty($f)) {
+    output_component($f);
+} else {
+    textpattern();
 
-        if ($production_status !== 'live') {
-            echo $trace->summary();
-        }
-}
+    if ($production_status !== 'live') {
+        echo $trace->summary();
+    }
 
-if ($production_status === 'debug' && txpinterface !== 'css') {
-    echo $trace->result();
+    if ($production_status === 'debug') {
+        echo $trace->result();
+    }
 }

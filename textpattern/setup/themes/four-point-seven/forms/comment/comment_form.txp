@@ -33,10 +33,6 @@
     <txp:comment_web_input size="32" />
 </p>
 
-<p>
-    <txp:comment_remember />
-</p>
-
 <p class="small">
     <label for="message">
         <txp:text item="comment_message" />

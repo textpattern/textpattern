@@ -3,7 +3,7 @@
 [![Dependencies Status](https://david-dm.org/textpattern/textpattern/status.svg)](https://david-dm.org/textpattern/textpattern)
 [![devDependencies Status](https://david-dm.org/textpattern/textpattern/dev-status.svg)](https://david-dm.org/textpattern/textpattern?type=dev)
 
-[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
+[![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
@@ -28,10 +28,16 @@ before you continue.
 
 ## Download Textpattern
 
-The current production release is version 4.7.1. It can be downloaded from the
-Textpattern website as a
-[.zip](https://textpattern.com/file_download/86/textpattern-4.7.1.zip) or
-[.tar.gz](https://textpattern.com/file_download/87/textpattern-4.7.1.tar.gz) archive.
+The current production release is version 4.7.2. It can be downloaded from the
+Textpattern website or GitHub in .zip and .tar.gz varieties.
+
+If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
+
+|        |  textpattern.com  | GitHub |
+|--------|:-------:|:-----:|
+| .zip   | [Download](https://textpattern.com/file_download/89/textpattern-4.7.2.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.7.2/textpattern-4.7.2.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/88/textpattern-4.7.2.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.7.2/textpattern-4.7.2.tar.gz) |
+
 
 ## Install Textpattern
 
@@ -45,12 +51,12 @@ Please see
 [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
 for details on upgrading Textpattern.
 
-## Help and support
+## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.io) is home to
+The [Textpattern support forum](https://forum.textpattern.com) is home to
 a friendly and helpful community of Textpattern users and experts.
-Textpattern also has social network presences on
-[Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
+Textpattern also has a social network presence on
+[Twitter](https://textpattern.com/@textpattern).
 
 ## Development
 
@@ -75,12 +81,12 @@ considerations and other factors.
 Note that minimum and/or recommended versions listed may change multiple times
 during the development process.
 
-|        |  Minimum<br />(v4.8.0)  | Recommended<br />(v4.8.0) |
+|        |  Minimum<br />(Textpattern v4.8.0)  | Recommended<br />(Textpattern v4.8.0) |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | 7.2 |
-| MySQL  | &mdash; | &mdash; |
-| Apache | &mdash; | &mdash; |
-| Nginx  | 1.10 | 1.14 |
+| PHP    | 5.5 | [vendor supported](http://php.net/supported-versions.php)<br />(7.2 or 7.3) |
+| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
+| Apache | &mdash; | vendor supported<br />(2.3 or 2.4) |
+| Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
 
 ## Contributing
 
@@ -95,11 +101,11 @@ some of the following [topic](https://help.github.com/articles/about-topics/)
 keywords to your public project repositories, so we can build a network of
 discoverable resources:
 
-* `textpattern`
-* `textpattern-plugin`
-* `textpattern-theme`
-* `textpattern-website` (for websites built with Textpattern)
-* `textpattern-development` (for development resources)
+* [`textpattern`](https://github.com/topics/textpattern)
+* [`textpattern-plugin`](https://github.com/topics/textpattern-plugin)
+* [`textpattern-theme`](https://github.com/topics/textpattern-theme)
+* [`textpattern-website`](https://github.com/topics/textpattern-website) (for websites built with Textpattern)
+* [`textpattern-development`](https://github.com/topics/textpattern-development) (for development resources)
 
 ## Additional development tools
 
@@ -131,8 +137,8 @@ npm run get-dependencies
 To request a specific tag or branch:
 
 ```ShellSession
-npm run get-default-theme 4.7.1
-npm run get-classic-admin-theme 4.7.1
+npm run get-default-theme 4.7.2
+npm run get-classic-admin-theme 4.7.2
 npm run get-classic-admin-theme 4.7.x
 npm run get-hive-admin-theme 4.7.x
 npm run get-textpacks 4.7.x
@@ -142,6 +148,12 @@ You can verify PHP code via a PHP linter from the CLI, like so:
 
 ```ShellSession
 npm run phplint
+```
+
+You can verify JavaScript code via a JavaScript linter from the CLI, like so:
+
+```ShellSession
+npm run eslint
 ```
 
 Release tools:

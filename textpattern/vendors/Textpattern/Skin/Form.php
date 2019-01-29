@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,105 +30,145 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin;
 
-    class Form extends AssetBase implements FormInterface
+class Form extends AssetBase implements FormInterface, \Textpattern\Container\FactorableInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $dir = 'forms';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $subdirField = 'type';
+
+    /**
+     * The expected subdirs for this asset type.
+     *
+     * Note the order of the values is the order the blocks appear in the
+     * Presentation->Forms panel.
+     *
+     * @var array
+     */
+
+    protected static $subdirValues = array('article', 'misc', 'category', 'comment', 'file', 'link', 'section');
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $defaultSubdir = 'misc';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $fileContentsField = 'Form';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    protected static $essential = array(
+        array(
+            'name' => 'comments',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.com/tags/comments. -->',
+        ),
+        array(
+            'name' => 'comments_display',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.com/tags/popup_comments. -->',
+        ),
+        array(
+            'name' => 'comment_form',
+            'type' => 'comment',
+            'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.com/tags/comments_form. -->',
+        ),
+        array(
+            'name' => 'default',
+            'type' => 'article',
+            'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.com/tags/article. -->',
+        ),
+        array(
+            'name' => 'plainlinks',
+            'type' => 'link',
+            'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.com/tags/linklist. -->',
+        ),
+        array(
+            'name' => 'files',
+            'type' => 'file',
+            'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
+        ),
+    );
+
+    /**
+     * Constructor
+     */
+
+    public function getInstance()
     {
-        /**
-         * {@inheritdoc}
-         */
+        global $lang_ui;
 
-        protected static $dir = 'forms';
+        $textarray = array();
 
-        /**
-         * {@inheritdoc}
-         */
+        if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
+            foreach ($custom_types as $type => $langpack) {
+                if (!empty($langpack['mediatype'])) {
+                    static::$mimeTypes[$type] = $langpack['mediatype'];
+                }
 
-        protected static $subdirField = 'type';
-
-        /**
-         * The expected subdirs for this asset type.
-         *
-         * Note the order of the values is the order the blocks appear in the
-         * Presentation->Forms panel.
-         *
-         * @var array
-         */
-
-        protected static $subdirValues = array('article', 'misc', 'category', 'comment', 'file', 'link', 'section');
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $defaultSubdir = 'misc';
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $fileContentsField = 'Form';
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected static $essential = array(
-            array(
-                'name' => 'comments',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.io/tags/comments. -->',
-            ),
-            array(
-                'name' => 'comments_display',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.io/tags/popup_comments. -->',
-            ),
-            array(
-                'name' => 'comment_form',
-                'type' => 'comment',
-                'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.io/tags/comments_form. -->',
-            ),
-            array(
-                'name' => 'default',
-                'type' => 'article',
-                'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.io/tags/article. -->',
-            ),
-            array(
-                'name' => 'plainlinks',
-                'type' => 'link',
-                'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.io/tags/linklist. -->',
-            ),
-            array(
-                'name' => 'files',
-                'type' => 'file',
-                'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.io/tags/file_download. -->',
-            ),
-        );
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function setInfos(
-            $name,
-            $type = null,
-            $Form = null
-        ) {
-            $name = $this->setName($name)->getName();
-
-            $this->infos = compact('name', 'type', 'Form');
-
-            return $this;
+                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                    $langpack[$lang_ui] :
+                    (isset($langpack['title']) ?
+                        $langpack['title'] :
+                        (isset(static::$mimeTypes[$type]) ?
+                            strtoupper($type)." (".static::$mimeTypes[$type].")"
+                            : $type
+                        )
+                    );
+            }
+        } else {
+            $custom_types = array();
         }
 
-        /**
-         * $defaultSubdir property getter.
-         */
+        \Txp::get('\Textpattern\L10n\Lang')->setPack($textarray, true);
 
-        public static function getTypes()
-        {
-            return static::$subdirValues;
-        }
+        static::$subdirValues = array_unique(array_merge(
+            static::$subdirValues,
+            array_keys($custom_types),
+            array_keys(static::$mimeTypes)
+        ));
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function setInfos(
+        $name,
+        $type = null,
+        $Form = null
+    ) {
+        $name = $this->setName($name)->getName();
+
+        $this->infos = compact('name', 'type', 'Form');
+
+        return $this;
+    }
+
+    /**
+     * $defaultSubdir property getter.
+     */
+
+    public static function getTypes()
+    {
+        return static::$subdirValues;
     }
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -96,6 +96,7 @@ function pagetop($pagetitle = '', $message = '')
         'select',
         'toggle_all_selected',
         'upload_err_form_size',
+        'with_selected_option',
     ));
 
     $lang_direction = gTxt('lang_dir');
