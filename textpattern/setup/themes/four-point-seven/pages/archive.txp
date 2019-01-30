@@ -120,10 +120,10 @@
                         </txp:evaluate>
 
                     <txp:else />
-                        <txp:article />
+                        <txp:article status />
 
                         <!-- add pagination links to foot of article if there are more articles available -->
-                        <txp:evaluate test="prev,next">
+                        <txp:evaluate test="link_to_prev,link_to_next">
                             <nav class="paginator" aria-label="<txp:text item="page_nav" />">
                                 <txp:link_to_prev>
                                     <txp:text item="prev" />
