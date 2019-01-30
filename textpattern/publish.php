@@ -214,7 +214,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 
 if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== 'file_download') {
-    doArticle(array(), null, false);
+    doArticle(array('expired' => 1, 'status' => true, 'time' => 'any'), null, false);
 
     if (!empty($thisarticle)) {
         $pretext['id_keywords'] = $thisarticle['keywords'];
@@ -553,7 +553,8 @@ function preText($s, $prefs)
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $ss = doSlash($s);
+        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name IN ('$ss', 'default') ORDER BY FIELD(name, '$ss', 'default') LIMIT 1");
 
         $userInfo = is_logged_in();
 
@@ -915,7 +916,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = $sort;
     }
 
-    $rs = startRows("SELECT $columns$score FROM $tables WHERE $where GROUP BY textpattern.ID ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    $rs = startRows("SELECT $columns$score FROM $tables WHERE $where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
     if ($rs && $last = numRows($rs)) {
@@ -994,7 +995,7 @@ function doArticle($atts, $thing = null, $parse = true)
     global $pretext, $thisarticle;
 
     $oldAtts = filterAtts();
-    $atts = filterAtts($atts);
+    $atts = filterAtts($atts, !$parse);
     extract($atts);
 
     // No output required, only setting atts.
@@ -1013,15 +1014,13 @@ function doArticle($atts, $thing = null, $parse = true)
 
         if ($rs && $a = nextRow($rs)) {
             populateArticleData($a);
+            $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
         }
     }
 
     if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
-        extract($thisarticle);
-        $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
-
-        if ($allowoverride && $override_form) {
-            $article = parse_form($override_form);
+        if ($allowoverride && !empty($thisarticle['override_form'])) {
+            $article = parse_form($thisarticle['override_form']);
         } else {
             $article = $thing ? parse($thing) : parse_form($form);
         }
