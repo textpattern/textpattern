@@ -996,10 +996,9 @@ function doArticle($atts, $thing = null, $parse = true)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts, !$parse);
-    extract($atts);
 
     // No output required, only setting atts.
-    if ($pgonly) {
+    if ($atts['pgonly']) {
         return '';
     }
 
@@ -1010,7 +1009,7 @@ function doArticle($atts, $thing = null, $parse = true)
         $tables = $atts['#'];
         $columns = $atts['*'];
 
-        $rs = startRows("SELECT $columns FROM $tables WHERE ID = $id AND $where LIMIT 1");
+        $rs = startRows("SELECT $columns FROM $tables WHERE textpattern.ID = $id AND $where LIMIT 1");
 
         if ($rs && $a = nextRow($rs)) {
             populateArticleData($a);
@@ -1018,11 +1017,11 @@ function doArticle($atts, $thing = null, $parse = true)
         }
     }
 
-    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
-        if ($allowoverride && !empty($thisarticle['override_form'])) {
+    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
+        if ($atts['allowoverride'] && !empty($thisarticle['override_form'])) {
             $article = parse_form($thisarticle['override_form']);
         } else {
-            $article = $thing ? parse($thing) : parse_form($form);
+            $article = $thing ? parse($thing) : parse_form($atts['form']);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
