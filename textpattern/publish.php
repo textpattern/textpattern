@@ -916,7 +916,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = $sort;
     }
 
-    $rs = startRows("SELECT $columns$score FROM $tables WHERE $where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    $rs = startRows("SELECT $columns$score FROM $tables WHERE $where GROUP BY textpattern.ID ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
     if ($rs && $last = numRows($rs)) {
@@ -1009,7 +1009,7 @@ function doArticle($atts, $thing = null, $parse = true)
         $tables = $atts['#'];
         $columns = $atts['*'];
 
-        $rs = startRows("SELECT $columns FROM $tables WHERE textpattern.ID = $id AND $where LIMIT 1");
+        $rs = startRows("SELECT $columns FROM $tables WHERE textpattern.ID = $id AND $where GROUP BY textpattern.ID");
 
         if ($rs && $a = nextRow($rs)) {
             populateArticleData($a);
