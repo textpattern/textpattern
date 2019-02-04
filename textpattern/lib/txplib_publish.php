@@ -1005,7 +1005,7 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['id'] = implode(',', $ids);
     $theAtts['sort'] = sanitizeForSort($sort);
     $theAtts['?'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
-    $theAtts['*'] = '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns;
+    $theAtts['*'] = 'textpattern.*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns;
     $theAtts['#'] = trim(safe_pfx('textpattern').' '.$customTables);
 
     if (!$iscustom) {

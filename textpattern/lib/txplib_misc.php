@@ -5207,8 +5207,8 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                     $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
                     $columns[] = "GROUP_CONCAT($tableAlias.value) AS $k";
-                    $query = " AND ($tableAlias.meta_id = '".$no."'".(!isset($pairs[$k]) ? '' : " AND
-                        $tableAlias.value".$not." LIKE '$v'").')';
+                    $query = " AND $tableAlias.meta_id = '".$no."'".(!isset($pairs[$k]) ? '' : " AND
+                        $tableAlias.value".$not." LIKE '$v'");
                     $tables[] = ' LEFT JOIN '.$tableName.' AS '.$tableAlias.' ON ('.$tableAlias.'.content_id = '.$contentTypeMap[$custom['by_content'][$no]]['column'].$query.')';
                 }
             }
