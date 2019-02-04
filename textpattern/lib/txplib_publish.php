@@ -968,7 +968,7 @@ function filterAtts($atts = null, $iscustom = null)
         $statusq = " AND Status IN (".implode(',', $status).")";
     }
 
-    $custom = $customColumns = $customTables = '';
+    $customColumns = $customTables = '';
 
     if ($customFields) {
         foreach ($customFields as $cField) {
@@ -982,7 +982,7 @@ function filterAtts($atts = null, $iscustom = null)
         // Fetch all custom field data, not just name=>values.
         $customFieldData = getCustomFields('article', null, null);
         $customData = buildCustomSql($customFieldData, $customPairs, $exclude);
-        $customTables = $customData ? $customData['tables'] : false;
+        $customWhere = $customData ? $customData['where'] : false;
         $customColumns = $customData ? $customData['columns'] : false;
     }
 
@@ -1001,12 +1001,13 @@ function filterAtts($atts = null, $iscustom = null)
         !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
     }
 
+    $custom = $customWhere ? ' HAVING '.$customWhere : '';
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
     $theAtts['sort'] = sanitizeForSort($sort);
     $theAtts['?'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
-    $theAtts['*'] = 'textpattern.*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns;
-    $theAtts['#'] = trim(safe_pfx('textpattern').' '.$customTables);
+    $theAtts['*'] = '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns;
+    $theAtts['#'] = trim(safe_pfx('textpattern'));
 
     if (!$iscustom) {
         $out = array_diff_key($theAtts, $extralAtts);

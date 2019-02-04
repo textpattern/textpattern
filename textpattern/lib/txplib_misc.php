@@ -5197,20 +5197,27 @@ function buildCustomSql($custom, $pairs, $exclude = array())
         $contentTypeMap = \Txp::get('\Textpattern\Meta\ContentType')->get();
     }
 
+    $columns = $where = array();
+
     if ($pairs) {
         foreach (doSlash($pairs) as $k => $v) {
             if (isset($custom['by_type'])) {
                 $no = array_search($k, $custom['by_id']);
 
                 if ($no !== false) {
-                    $tableAlias = 't_'.$k;
+                    $unique = !in_array($custom['by_callback'][$no], array('checkboxSet'));
                     $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                     $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
-                    $columns[] = "GROUP_CONCAT($tableAlias.value) AS $k";
-                    $left = isset($pairs[$k]) ? '' : ' LEFT';
-                    $query = " AND $tableAlias.meta_id = '".$no."'".($left ? '' : " AND
-                        $tableAlias.value".$not." LIKE '$v'");
-                    $tables[] = $left.' JOIN '.$tableName.' AS '.$tableAlias.' ON ('.$tableAlias.'.content_id = '.$contentTypeMap[$custom['by_content'][$no]]['column'].$query.')';
+
+                    if ($unique) {
+                        $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
+                    } else {
+                        $columns[] = "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID GROUP BY content_id) AS $k";
+                    }
+
+                    if (isset($pairs[$k])) {
+                        $where[] = $k.$not." LIKE '$v'";
+                    }
                 }
             }
         }
@@ -5218,7 +5225,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
     if (!empty($columns)) {
        $ret['columns'] = ', '. join(', ', $columns).' ';
-       $ret['tables'] = join(' ', $tables);
+       $ret['where'] = join(' AND ', $where);
 
        return $ret;
     }
