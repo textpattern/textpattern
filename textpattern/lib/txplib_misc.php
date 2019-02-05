@@ -5209,15 +5209,16 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                     $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
 
-                    if ($unique) {
-                        $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
+                    if (isset($pairs[$k])) {
+                        $where[] = $unique ? $k.$not." LIKE '$v'" : "$k IS NOT NULL";
+                        $filter = ' AND value'.$not." LIKE '$v'";
                     } else {
-                        $columns[] = "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID GROUP BY content_id) AS $k";
+                        $filter = '';
                     }
 
-                    if (isset($pairs[$k])) {
-                        $where[] = $k.$not." LIKE '$v'";
-                    }
+                    $columns[] = $unique ?
+                        "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k" :
+                        "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
                 }
             }
         }

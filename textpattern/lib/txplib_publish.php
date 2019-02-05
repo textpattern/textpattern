@@ -968,7 +968,7 @@ function filterAtts($atts = null, $iscustom = null)
         $statusq = " AND Status IN (".implode(',', $status).")";
     }
 
-    $customColumns = $customTables = '';
+    $customColumns = $customWhere = '';
 
     if ($customFields) {
         foreach ($customFields as $cField) {
