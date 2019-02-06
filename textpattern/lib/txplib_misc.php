@@ -5191,35 +5191,26 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
 function buildCustomSql($custom, $pairs, $exclude = array())
 {
-    static $contentTypeMap = null;
-
-    if ($contentTypeMap === null) {
-        $contentTypeMap = \Txp::get('\Textpattern\Meta\ContentType')->get();
-    }
-
     $columns = $where = array();
 
-    if ($pairs) {
+    if ($pairs && isset($custom['by_name'])) {
         foreach (doSlash($pairs) as $k => $v) {
             if (isset($custom['by_name'][$k])) {
                 $no = $custom['by_name'][$k];
+                $unique = !in_array($custom['by_callback'][$no], array('checkboxSet'));
+                $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
+                $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
 
-                if ($no !== false) {
-                    $unique = !in_array($custom['by_callback'][$no], array('checkboxSet'));
-                    $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
-                    $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
-
-                    if (isset($pairs[$k])) {
-                        $where[] = $unique ? $k.$not." LIKE '$v'" : "$k IS NOT NULL";
-                        $filter = ' AND value'.$not." LIKE '$v'";
-                    } else {
-                        $filter = '';
-                    }
-
-                    $columns[] = $unique ?
-                        "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k" :
-                        "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
+                if (isset($pairs[$k])) {
+                    $where[] = $unique ? $k.$not." LIKE '$v'" : "$k IS NOT NULL";
+                    $filter = ' AND value'.$not." LIKE '$v'";
+                } else {
+                    $filter = '';
                 }
+
+                $columns[] = $unique ?
+                    "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k" :
+                    "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
             }
         }
     }
