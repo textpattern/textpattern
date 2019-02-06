@@ -4428,6 +4428,11 @@ function txp_header($atts)
 function custom_field($atts)
 {
     global $is_article_body, $thisarticle;
+    static $customFields = null;
+
+    if ($customFields === null) {
+        $customFields = getCustomFields('article', null, 'name');
+    }
 
     assert_article();
 
@@ -4439,13 +4444,13 @@ function custom_field($atts)
 
     $name = strtolower($name);
 
-    if (!isset($thisarticle[$name])) {
+    if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
         return '';
     }
 
-    if ($thisarticle[$name] !== '') {
+    if (isset($thisarticle[$name]) && $thisarticle[$name] !== '') {
         $out = $thisarticle[$name];
     } else {
         $out = $default;
@@ -4464,6 +4469,11 @@ function custom_field($atts)
 function if_custom_field($atts, $thing = null)
 {
     global $thisarticle;
+    static $customFields = null;
+
+    if ($customFields === null) {
+        $customFields = getCustomFields('article', null, 'name');
+    }
 
     assert_article();
 
@@ -4476,13 +4486,15 @@ function if_custom_field($atts, $thing = null)
 
     $name = strtolower($name);
 
-    if (!isset($thisarticle[$name])) {
+    if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
         return '';
     }
 
-    if ($value !== null) {
+    if (!isset($thisarticle[$name])) {
+        $cond = false;
+    } elseif ($value !== null) {
         switch ($match) {
             case '':
             case 'exact':

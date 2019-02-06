@@ -5201,8 +5201,8 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
     if ($pairs) {
         foreach (doSlash($pairs) as $k => $v) {
-            if (isset($custom['by_type'])) {
-                $no = array_search($k, $custom['by_id']);
+            if (isset($custom['by_name'][$k])) {
+                $no = $custom['by_name'][$k];
 
                 if ($no !== false) {
                     $unique = !in_array($custom['by_callback'][$no], array('checkboxSet'));
