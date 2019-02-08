@@ -72,7 +72,7 @@ ob_start(null, 2048);
 if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
     header('HTTP/1.1 503 Service Unavailable');
-    exit('config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.');
+    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.</p>');
 } else {
     ob_end_clean();
 }
