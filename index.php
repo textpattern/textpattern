@@ -94,7 +94,7 @@ $trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {
     txp_status_header('503 Service Unavailable');
-    exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
+    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>.</p>');
 }
 
 // Custom caches, etc?

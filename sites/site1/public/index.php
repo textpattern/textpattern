@@ -33,7 +33,7 @@ if (!isset($txpcfg['table_prefix'])) {
     $config_missing_setup_url = $this_protocol.$admin_subdomain.'.'.substr($this_domain, strpos($this_domain, '.') + 1).'/setup/';
 
     header("HTTP/1.0 503 Service Unavailable");
-    exit('config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain)');
+    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain).</p>');
 }
 
 if (!defined('txpath')) {
