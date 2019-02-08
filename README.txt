@@ -1,4 +1,4 @@
-Textpattern CMS 4.7.2
+Textpattern CMS 4.7.3
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
