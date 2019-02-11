@@ -567,7 +567,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // Switch to 'text' view upon page load and after article post.
     $view = gps('view', 'text');
 
-    if ($view == 'text'
+    if (($view == 'text' || gps('save'))
         && !empty($ID)
         && !$concurrent) {
         // It's an existing article - off we go to the database.
@@ -595,7 +595,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // Assume they came from post.
         $store_out = array('ID' => $ID) + gpsa($vars);
 
-        if ($concurrent || gps('save')) {
+        if ($concurrent) {
             $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
