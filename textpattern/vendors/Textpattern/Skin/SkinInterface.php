@@ -37,8 +37,9 @@ interface SkinInterface
     /**
      * $dirPath property setter.
      *
-     * @param  string $path          Custom skin directory path.
-     *                               Builds the path from the 'path_to_site' + 'skin_dir' if null.
+     * @param  string $path Custom skin directory path.
+     *                      Builds the path from the 'path_to_site' + 'skin_dir'
+     *                      if null.
      * @return string $this->dirPath
      */
 
@@ -47,9 +48,9 @@ interface SkinInterface
     /**
      * $assets property setter.
      *
-     * @param array   $pages  Page names to work with;
-     * @param array   $forms  Form names to work with;
-     * @param array   $styles CSS names to work with.
+     * @param  array $pages  Page names to work with;
+     * @param  array $forms  Form names to work with;
+     * @param  array $styles CSS names to work with.
      * @return object $this   The current class object (chainable).
      */
 
@@ -79,7 +80,7 @@ interface SkinInterface
     /**
      * Get a $dir property value related subdirectory path.
      *
-     * @param string  $name Directory(/skin) name (default: $this->getName()).
+     * @param  string $name Directory(/skin) name (default: $this->getName()).
      * @return string       The Path
      */
 
@@ -98,8 +99,8 @@ interface SkinInterface
     /**
      * $uploaded property getter.
      *
-     * @param  bool  $expanded Set it to false to get a simple associative
-     *                         array of skin names and their titles.
+     * @param  bool $expanded Set it to false to get a simple associative
+     *                        array of skin names and their titles.
      * @return array
      */
 

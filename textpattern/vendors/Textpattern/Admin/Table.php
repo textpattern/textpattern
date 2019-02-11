@@ -43,7 +43,7 @@ class Table
     /**
      * Constructor.
      *
-     * @param string $evt    Textpattern event (panel)
+     * @param string $evt Textpattern event (panel)
      */
 
     public function __construct($evt = null)
@@ -60,7 +60,7 @@ class Table
     /**
      * Renders a widget to display lists.
      *
-     * @param  array    $data Current search/pagination settings
+     * @param  array $data Current search/pagination settings
      * @return string      HTML
      */
 
