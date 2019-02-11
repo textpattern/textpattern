@@ -48,8 +48,8 @@ class Plugin
      * the following callback is raised upon installation:
      *   plugin_lifecycle.{plugin_name} > installed
      *
-     * @param  string $plugin Plugin_base64
-     * @param  int    $status Plugin status
+     * @param string $plugin Plugin_base64
+     * @param int    $status Plugin status
      *
      * @return string|array
      */
@@ -172,7 +172,7 @@ class Plugin
      *   plugin_lifecycle.{plugin_name} > disabled
      *   plugin_lifecycle.{plugin_name} > deleted
      *
-     * @param  string $name Plugin name
+     * @param string $name Plugin name
      */
 
     public function delete($name)
@@ -199,8 +199,8 @@ class Plugin
      *   plugin_lifecycle.{plugin_name} > disabled
      *   plugin_lifecycle.{plugin_name} > enabled
      *
-     * @param  string $name      Plugin name
-     * @param  int    $setStatus Plugin status. Toggle status, if null
+     * @param string $name      Plugin name
+     * @param int    $setStatus Plugin status. Toggle status, if null
      */
 
     public function changeStatus($name, $setStatus = null)
@@ -234,8 +234,8 @@ class Plugin
      *
      * Plugins with a lower nunber are loaded first.
      *
-     * @param  string $name  Plugin name
-     * @param  int    $order Plugin load priority
+     * @param string $name  Plugin name
+     * @param int    $order Plugin load priority
      */
 
     public function changeOrder($name, $order)
@@ -250,8 +250,8 @@ class Plugin
      * The process may be intercepted (for example, to fetch data from the
      * filesystem) via the "txp.plugin > textpack.fetch" callback.
      *
-     * @param  string  $name   Plugin name
-     * @param  boolean $reset  Delete old strings
+     * @param string  $name  Plugin name
+     * @param boolean $reset Delete old strings
      */
 
     public function installTextpack($name, $reset = false)

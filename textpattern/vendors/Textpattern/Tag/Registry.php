@@ -164,7 +164,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
     /**
      * Lists registered tags.
      *
-     * @param  bool $is_attr  tag or attr?
+     * @param  bool $is_attr tag or attr?
      * @return array
      */
 
