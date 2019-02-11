@@ -91,7 +91,6 @@ class TxpXML
      *
      * Allowed a mix of different data types in one xml file.
      * Import articles after the creation of all categories and sections.
-     *
      */
 
     public function importXml($data, $importAllow = '')
@@ -128,7 +127,6 @@ class TxpXML
 
     /**
      * importXmlArticles
-     *
      */
 
     private function importXmlArticles($xml)
@@ -203,7 +201,6 @@ class TxpXML
     /**
      * replaceUrls
      * Used in importXmlArticles()
-     *
      */
 
     private function replaceUrls($txt)
@@ -221,7 +218,6 @@ class TxpXML
 
     /**
      * Make sql set string from array
-     *
      */
 
     public function makeSqlSet($array)

@@ -49,7 +49,7 @@ namespace Textpattern\Iterator {
          * Constructor
          *
          * @param object RecDirIterator $iterator Instance of RecDirIterator.
-         * @param mixed  $filter                  Array of filenames or regEx as a string.
+         * @param mixed                 $filter   Array of filenames or regEx as a string.
          */
 
         public function __construct(RecDirIterator $iterator, $filter)
@@ -98,7 +98,7 @@ namespace Textpattern\Iterator {
         /**
          * $filter property setter
          *
-         * @param  mixed  $filter Array of filenames or regEx as a string.
+         * @param  mixed $filter Array of filenames or regEx as a string.
          * @return object $this.
          */
 
