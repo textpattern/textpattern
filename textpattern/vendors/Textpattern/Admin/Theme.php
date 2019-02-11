@@ -183,7 +183,7 @@ abstract class Theme
     /**
      * Get a list of all theme names.
      *
-     * @param  int $format
+     * @param int $format
      *   0 - names
      *   1 - name => title              Used for selectInput
      *   2 - name => manifest(array)    Now not used, reserved
@@ -251,10 +251,10 @@ abstract class Theme
      * Sets Textpatterns menu structure, message contents and other application
      * states.
      *
-     * @param  string $area Currently active top level menu
-     * @param  string $event Currently active second level menu
-     * @param  bool $is_popup Just a popup window for tag builder et cetera
-     * @param  array $message The contents of the notification message pane
+     * @param  string $area     Currently active top level menu
+     * @param  string $event    Currently active second level menu
+     * @param  bool   $is_popup Just a popup window for tag builder et cetera
+     * @param  array  $message  The contents of the notification message pane
      * @return \Textpattern\Admin\Theme This theme object
      */
 
@@ -340,7 +340,6 @@ abstract class Theme
 
     /**
      * HTML &lt;head&gt; custom section.
-     *
      */
 
     public function html_head_custom()
@@ -404,9 +403,9 @@ abstract class Theme
     /**
      * Output notification message for synchronous HTML views.
      *
-     * @param  array $thing Message text and status flag
-     * @param  bool $modal If TRUE, immediate user interaction suggested
-     * @return string HTML
+     * @param   array $thing Message text and status flag
+     * @param   bool  $modal If TRUE, immediate user interaction suggested
+     * @return  string HTML
      * @example
      * global $theme;
      * echo $theme->announce(array('my_message', E_ERROR));
@@ -420,10 +419,10 @@ abstract class Theme
     /**
      * Output notification message for asynchronous JavaScript views.
      *
-     * @param  array $thing Message text and status flag
-     * @param  bool $modal If TRUE, immediate user interaction suggested
-     * @return string JavaScript
-     * @since 4.5.0
+     * @param   array $thing Message text and status flag
+     * @param   bool  $modal If TRUE, immediate user interaction suggested
+     * @return  string JavaScript
+     * @since   4.5.0
      * @example
      * global $theme;
      * echo script_js(
@@ -438,7 +437,6 @@ abstract class Theme
 
     /**
      * Output notification message for synchronous HTML and asynchronous JavaScript views.
-     *
      */
 
     private function _announce($thing, $async, $modal)
