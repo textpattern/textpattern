@@ -67,7 +67,6 @@ $vars = array(
     'LastModID',
     'sLastMod',
     'override_form',
-    'from_view',
     'year',
     'month',
     'day',
@@ -554,11 +553,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
     );
 
-    extract(gpsa(array(
-        'view',
-        'from_view',
-    )));
-
     if ($step !== 'create') {
         $step = "edit";
     }
@@ -571,14 +565,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     // Switch to 'text' view upon page load and after article post.
-    if (!$view) {
-        $view = 'text';
-    }
+    $view = gps('view', 'text');
 
     if ($view == 'text'
         && !empty($ID)
-        && $from_view != 'preview'
-        && $from_view != 'html'
         && !$concurrent) {
         // It's an existing article - off we go to the database.
         $ID = assert_int($ID);
@@ -603,28 +593,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     } else {
         // Assume they came from post.
-        if ($from_view == 'preview' or $from_view == 'html') {
-            $store_out = array();
-            $store = json_decode(base64_decode(ps('store')), true);
+        $store_out = array('ID' => $ID) + gpsa($vars);
 
-            foreach ($vars as $var) {
-                if (isset($store[$var])) {
-                    $store_out[$var] = $store[$var];
-                }
-            }
-        } else {
-            $store_out = array('ID' => $ID) + gpsa($vars);
+        if ($concurrent || gps('save')) {
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+        }
 
-            if ($concurrent) {
-                $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
-            }
-
-            if (!has_privs('article.set_markup') && !empty($ID)) {
-                $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
-                if (!empty($oldArticle)) {
-                    $store_out['textile_body'] = $oldArticle['textile_body'];
-                    $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
-                }
+        if (!has_privs('article.set_markup') && !empty($ID)) {
+            $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
+            if (!empty($oldArticle)) {
+                $store_out['textile_body'] = $oldArticle['textile_body'];
+                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
         }
 
@@ -668,7 +647,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    if ($ID && isset($sPosted)) {
+    if ($ID && !empty($sPosted)) {
         // Previous record?
         $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
@@ -745,9 +724,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         )).
         n.'<div class="txp-layout">';
 
-    if (!empty($store_out)) {
-        echo hInput('store', base64_encode(json_encode($store_out, TEXTPATTERN_JSON)));
-    }
 
     echo hInput('ID', $ID).
         eInput('article').
@@ -766,31 +742,29 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
-    // Title input.
     if ($view == 'preview') {
-        echo n.'<div class="preview">'.
+        echo n.'<div class="mode preview" id="pane-preview">'.
             graf(gTxt('title'), array('class' => 'alert-block information')).
             hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'html') {
-        echo n.'<div class="html">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'text') {
-        echo n.'<div class="text">'.$partials['title']['html'];
-    }
-
-    // Author.
-    if ($view == "text") {
-        echo $partials['author']['html'];
-    }
-
-    // Body.
-    if ($view == 'preview') {
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
                 $Body_html.
                 '</div>';
-    } elseif ($view == 'html') {
+        if ($articles_use_excerpts) {
+            echo n.'<div class="excerpt">'.
+                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+                $Excerpt_html.
+                '</div>';
+        }
+        echo n.'</div>';
+    } else {
+        echo n.'<div class="mode preview" id="pane-preview" style="display:none"></div>';
+    }
+
+    if ($view == 'html') {
+        echo n.'<div class="mode html" id="pane-html">'.
+            graf(gTxt('title'), array('class' => 'alert-block information')).
+            hed(txpspecialchars($Title), 1, ' class="title"');
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
             n.tag(
                 tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
@@ -799,18 +773,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 )),
                 'pre', array('class' => 'body')
             );
-    } else {
-        echo $partials['body']['html'];
-    }
-
-    // Excerpt.
-    if ($articles_use_excerpts) {
-        if ($view == 'preview') {
-            echo n.'<div class="excerpt">'.
-                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                $Excerpt_html.
-                '</div>';
-        } elseif ($view == 'html') {
+        if ($articles_use_excerpts) {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
                 n.tag(
                     tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
@@ -819,13 +782,19 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     )),
                     'pre', array('class' => 'excerpt')
                 );
-        } else {
-            echo $partials['excerpt']['html'];
         }
+        echo n.'</div>';
+    } else {
+        echo n.'<div class="mode html" id="pane-html" style="display:none"></div>';
     }
 
-    echo hInput('from_view', $view),
-        n.'</div>';
+    echo n.'<div class="mode text" id="pane-text">'.$partials['title']['html'];
+    echo $partials['author']['html'];
+    echo $partials['body']['html'];
+    if ($articles_use_excerpts) {
+        echo $partials['excerpt']['html'];
+    }
+    echo n.'</div>';
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.

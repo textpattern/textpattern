@@ -1012,7 +1012,7 @@ jQuery.fn.txpAsyncForm = function (options) {
 
         var form =
         {
-            data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
+            data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
@@ -1557,7 +1557,7 @@ $(document).keydown(function (e) {
 
     if (key === 27) {
         $('.close').parent().toggle();
-    } else if (key === 19 || ((e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
+    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
     {
         var obj = $('input.publish');
 
@@ -2041,6 +2041,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
+        $('#tab-text a').click();
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
@@ -2049,8 +2050,19 @@ textpattern.Route.add('article', function () {
         '[data-view-mode]',
         function (e) {
             e.preventDefault();
-            $('input[name="view"]').val($(this).data('view-mode'));
-            document.article_form.submit();
+            let $this = $(this);
+            let $view = $this.data('view-mode');
+            $('#pane-'+$view).show().siblings('.mode').hide();
+            $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+            $('input[name="view"]').val($view);
+
+            if ($view != 'text') {
+                textpattern.Relay.callback('updateList', {
+                    data: form.serializeArray(),
+                    list: '#pane-'+$view,
+                    callback: function (e) {Prism.highlightAllUnder(document.getElementById('pane-'+$view));}
+                });
+            }
         }
     );
 
