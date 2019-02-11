@@ -56,7 +56,7 @@ class Tools
     /**
      * Removes files and directories.
      *
-     * @param  string $root The parent directory
+     * @param  string $root  The parent directory
      * @param  array  $files Files to remove
      * @return bool   The result
      */

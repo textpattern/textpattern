@@ -45,7 +45,6 @@ class Core
 
     /**
      * Constructor.
-     *
      */
 
     public function __construct()
@@ -57,7 +56,7 @@ class Core
     /**
      * getStructure
      *
-     * @param  table name or empty
+     * @param table name or empty
      */
 
     public function getStructure($table='')
@@ -75,7 +74,6 @@ class Core
 
     /**
      * Create All Tables
-     *
      */
 
     public function createAllTables()
@@ -88,7 +86,7 @@ class Core
     /**
      * Create Table
      *
-     * @param  table name
+     * @param table name
      */
 
     public function createTable($table)
@@ -100,7 +98,6 @@ class Core
 
     /**
      * Initial mandatory data
-     *
      */
 
     public function initData()
@@ -114,7 +111,6 @@ class Core
 
     /**
      * Create core prefs
-     *
      */
 
     public function initPrefs()
@@ -205,7 +201,6 @@ class Core
 
     /**
      * Checks prefs integrity and AutoCreate missing prefs.
-     *
      */
 
     public function checkPrefsIntegrity()

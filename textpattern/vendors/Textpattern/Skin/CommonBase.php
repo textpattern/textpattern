@@ -38,7 +38,7 @@ abstract class CommonBase implements CommonInterface
      * Class related textpack string (usually the event name).
      *
      * @var string 'skin', 'page', 'form', 'css', etc.
-     * @see        getEvent().
+     * @see getEvent().
      */
 
     protected $event;
@@ -47,7 +47,7 @@ abstract class CommonBase implements CommonInterface
      * Skin/templates directory/files name(s) pattern.
      *
      * @var string Regex without delimiters.
-     * @see        getNamePattern().
+     * @see getNamePattern().
      */
 
     protected static $namePattern = '[a-zA-Z0-9_\-\.]{0,63}';
@@ -56,7 +56,7 @@ abstract class CommonBase implements CommonInterface
      * Installed.
      *
      * @var array Associative array of skin names and their titles.
-     * @see       setUploaded(), getUploaded().
+     * @see setUploaded(), getUploaded().
      */
 
     protected $installed;
@@ -65,7 +65,7 @@ abstract class CommonBase implements CommonInterface
      * Class related skin/template names to work with.
      *
      * @var array Names.
-     * @see       setNames(), getNames().
+     * @see setNames(), getNames().
      */
 
     protected $names;
@@ -90,7 +90,7 @@ abstract class CommonBase implements CommonInterface
      * Skin/template name to work with.
      *
      * @var string Name.
-     * @see        setName(), getName().
+     * @see setName(), getName().
      */
 
     protected $name;
@@ -99,7 +99,7 @@ abstract class CommonBase implements CommonInterface
      * Skin/template related infos.
      *
      * @var array Associative array of class related table main fields and their values.
-     * @see       setInfos(), getInfos().
+     * @see setInfos(), getInfos().
      */
 
     protected $infos;
@@ -108,7 +108,7 @@ abstract class CommonBase implements CommonInterface
      * Skin/template name used as the base for update or duplication.
      *
      * @var string Name.
-     * @see        setBase(), getBase().
+     * @see setBase(), getBase().
      */
 
     protected $base;
@@ -118,7 +118,7 @@ abstract class CommonBase implements CommonInterface
      *
      * @var array Associative array of 'success', 'warning' and 'error'
      *            textpack related items and their related '{list}' parameters.
-     * @see       mergeResult(), getResults(), getMessage().
+     * @see mergeResult(), getResults(), getMessage().
      */
 
     protected $results = array(
@@ -224,7 +224,7 @@ abstract class CommonBase implements CommonInterface
     /**
      * $names property setter/sanitizer.
      *
-     * @param  array  $names Multiple skin or template names to work with related methods.
+     * @param  array $names Multiple skin or template names to work with related methods.
      * @return object $this  The current class object (chainable).
      */
 
@@ -259,8 +259,9 @@ abstract class CommonBase implements CommonInterface
     /**
      * $name property setter.
      *
-     * @param  array  $name Single skin or template name to work with related methods.
-     *                      Takes the '_last_saved' or '_editing' related preference value if null.
+     * @param  array $name Single skin or template name to work with related methods.
+     *                     Takes the '_last_saved' or '_editing' related preference
+     *                     value if null.
      * @return object $this The current class object (chainable).
      */
 
@@ -285,8 +286,8 @@ abstract class CommonBase implements CommonInterface
     /**
      * $infos property getter/parser.
      *
-     * @param  bool  $safe Whether to get the property value
-     *                     as a safe SET query clause.
+     * @param  bool $safe Whether to get the property value
+     *                    as a safe SET query clause.
      * @return mixed       The $infos property value or the related SET clause.
      */
 
@@ -311,12 +312,12 @@ abstract class CommonBase implements CommonInterface
      * @param object $this The current object (chainable).
      */
 
-     public function setBase($name)
-     {
-         $this->base = static::sanitize($name);
+    public function setBase($name)
+    {
+        $this->base = static::sanitize($name);
 
-         return $this;
-     }
+        return $this;
+    }
 
     /**
      * $base property getter.
@@ -481,8 +482,8 @@ abstract class CommonBase implements CommonInterface
     /**
      * Get files from the $dir property value related directory.
      *
-     * @param  array  $names    Optional filenames to filter the result.
-     * @param  int    $maxDepth Optional RecursiveIteratorIterator related property value (default = -1 infinite).
+     * @param  array $names    Optional filenames to filter the result.
+     * @param  int   $maxDepth Optional RecursiveIteratorIterator related property value (default = -1 infinite).
      * @return object           Collection of file objects.
      */
 
