@@ -58,7 +58,7 @@ class Files
     /**
      * Transforms a multiple $_FILES entry into int-indexed array.
      *
-     * @param  array $file        The file
+     * @param  array $file The file
      * @return array of files
      */
 
@@ -88,7 +88,7 @@ class Files
     /**
      * Treats chunked file uploads.
      *
-     * @param  array $file        The file
+     * @param  array $file The file
      * @return bool
      */
 
