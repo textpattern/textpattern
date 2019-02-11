@@ -38,7 +38,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * The directory in the themes folder in which assets of a particular type can be found.
      *
      * @var string Directory name.
-     * @see        setDir(), getDir().
+     * @see setDir(), getDir().
      */
 
     protected static $dir;
@@ -47,7 +47,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * Asset related default subdirectory to store exported files.
      *
      * @var string Asset subdirectory name.
-     * @see        getDefaultSubdir().
+     * @see getDefaultSubdir().
      */
 
     protected static $defaultSubdir;
@@ -56,7 +56,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * Asset related table field used as subdirectories.
      *
      * @var string
-     * @see        getSubdirField().
+     * @see getSubdirField().
      */
 
     protected static $subdirField;
@@ -65,7 +65,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * Asset related table field(s) used as asset file contents.
      *
      * @var string Field name (could accept an array in the future for JSON contents)
-     * @see        getFileContentsField().
+     * @see getFileContentsField().
      */
 
     protected static $fileContentsField;
@@ -78,7 +78,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      *
      * @var array Associative array of the following fields and their value:
      *            'name', ($subdirField, ) $fileContentsField.
-     * @see       getEssential().
+     * @see getEssential().
      */
 
     protected static $essential = array();
@@ -87,7 +87,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * Parent skin object.
      *
      * @var object skin
-     * @see        __construct().
+     * @see __construct().
      */
 
     protected $skin;

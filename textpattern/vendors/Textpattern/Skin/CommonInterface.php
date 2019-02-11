@@ -53,7 +53,7 @@ interface CommonInterface
     /**
      * $names property setter/sanitizer.
      *
-     * @param  array  $names Multiple skin or template names to work with related methods.
+     * @param  array $names Multiple skin or template names to work with related methods.
      * @return object $this  The current object (chainable).
      */
 
@@ -62,8 +62,9 @@ interface CommonInterface
     /**
      * $name property setter.
      *
-     * @param  array  $name Single skin or template name to work with related methods.
-     *                      Takes the '_last_saved' or '_editing' related preference value if null.
+     * @param  array $name Single skin or template name to work with related methods.
+     *                     Takes the '_last_saved' or '_editing' related preference
+     *                     value if null.
      * @return object $this The current object (chainable).
      */
 
@@ -108,8 +109,8 @@ interface CommonInterface
      * or multiple templates from the $names (+ $skin) property value(s).
      * Merges results in the related property.
      *
-     * @param  bool   $sync     Whether to removes extra skin template rows or not;
-     * @param  bool   $override Whether to insert or update the skins.
+     * @param  bool $sync     Whether to removes extra skin template rows or not;
+     * @param  bool $override Whether to insert or update the skins.
      * @return object $this     The current object (chainable).
      */
 
@@ -120,7 +121,7 @@ interface CommonInterface
      * or multiple templates from the $names (+ $skin) property value(s).
      * Merges results in the related property.
      *
-     * @param  bool   $sync Whether to removes extra skin template files or not;
+     * @param  bool $sync Whether to removes extra skin template files or not;
      * @return object $this The current object (chainable).
      */
 

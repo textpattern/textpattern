@@ -98,7 +98,7 @@ class Paginator
     /**
      * Renders a widget to select various amounts to page lists by.
      *
-     * @param  int    $val Current pagination setting
+     * @param  int $val Current pagination setting
      * @return string      HTML
      */
 
