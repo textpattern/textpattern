@@ -313,6 +313,7 @@ class Field
 
         callback_event_ref('meta_ui', 'validate_save', 0, $this->definition, $constraints);
         $validator = new \Textpattern\Validator\Validator($constraints);
+        $ordinal = empty($ordinal) ? 1 : $ordinal;
 
         if ($name === '') {
             $name = $labelStr;
@@ -855,11 +856,10 @@ class Field
                 break;
             case 'date':
             case 'time':
-            case 'number':
-                $widget = fInput($type, $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
-                break;
             case 'dateTime':
-                $widget = fInput('datetime', $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
+            case 'number':
+            case 'range':
+                $widget = fInput(strtolower($type), $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
                 break;
             default:
                 $widget = callback_event('meta_ui', 'render', 0, compact($num, $id, $name, $type, $labelRef, $options, $help, $thisContent));
