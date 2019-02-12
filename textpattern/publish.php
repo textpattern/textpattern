@@ -843,6 +843,7 @@ function doArticles($atts, $iscustom, $thing = null)
         } else {
             $colJoin = ($m === 'any') ? "OR" : "AND";
             $search_terms = explode(' ', $search_terms);
+
             for ($i = 0; $i < count($cols); $i++) {
                 $like = array();
                 foreach ($search_terms as $search_term) {

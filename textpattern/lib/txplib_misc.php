@@ -5197,7 +5197,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
     if ($delimited === null) {
         $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
 
-        foreach ($datatypeMap as $k => $def) {
+        foreach ($dataTypeMap as $k => $def) {
             if ($def['delimited']) {
                 $delimited[] = $k;
             }
@@ -5225,7 +5225,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
                 } else {
                     $dlm = $custom['by_delimiter'][$no];
-                    $columns[] = "(SELECT GROUP_CONCAT(value, '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
+                    $columns[] = "(SELECT GROUP_CONCAT(value SEPARATOR '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
                 }
             }
         }

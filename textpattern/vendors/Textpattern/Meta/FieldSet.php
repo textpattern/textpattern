@@ -71,6 +71,7 @@ class FieldSet implements \IteratorAggregate, \Textpattern\Container\ReusableInt
                 render,
                 family,
                 textfilter,
+                delimiter,
                 ordinal,
                 created,
                 modified,
