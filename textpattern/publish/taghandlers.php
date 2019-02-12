@@ -290,22 +290,23 @@ function css($atts)
 
 function component($atts)
 {
-    static $mimetypes = null, $dir = null,
-        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
     global $doctype, $pretext;
+    static $mimetypes = null, $dir = null,
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
+        $defaults = array(
+        'format'  => 'url',
+        'form'    => '',
+        'context' => '',
+        'rel'     => '',
+        'title'   => '',
+    );
 
     if (!isset($mimetypes)) {
         $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
         $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
     }
 
-    extract(lAtts(array(
-        'format'  => 'url',
-        'form'    => '',
-        'context' => '',
-        'rel'     => '',
-        'title'   => '',
-    ), $atts, false));
+    extract(lAtts($defaults, $atts, false));
 
     if (empty($form)) {
         return;
@@ -314,7 +315,7 @@ function component($atts)
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';
-    $qs = $context ? get_context($context, $internals) : array();
+    $qs = ($context ? get_context($context, $internals) : array()) + array_diff_key($atts, $defaults);
 
     if ($mode === 'flat') {
         $url = array();
