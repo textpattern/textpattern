@@ -4648,7 +4648,6 @@ function page_url($atts)
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
-        ($escape === null || in_list('html', strtolower($escape))) or $out = txpspecialchars($out);
     }
 
     return $escape === null ? txpspecialchars($out) : $out;
@@ -5406,6 +5405,9 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
+                break;
+            case 'js':
+                $thing = escape_js($thing);
                 break;
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);
