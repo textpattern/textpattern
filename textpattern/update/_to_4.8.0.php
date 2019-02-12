@@ -32,7 +32,7 @@ safe_create(
     `name` varchar(63) NULL DEFAULT NULL,
     `content_type` varchar(31) NULL DEFAULT NULL,
     `data_type` varchar(31) NULL DEFAULT '',
-    `render` varchar(255) NULL DEFAULT 'text_input',
+    `render` varchar(255) NULL DEFAULT 'textInput',
     `family` varchar(255) NULL DEFAULT NULL,
     `textfilter` tinyint(4) NULL DEFAULT NULL,
     `delimiter` varchar(31) NULL DEFAULT NULL,
@@ -44,12 +44,13 @@ safe_create(
     UNIQUE KEY `name_content` (`name`,`content_type`)"
 );
 
-// Allow multi-select options to be defined.
+// Allow multi-select options and constraints to be defined.
 safe_create(
     "txp_meta_options",
     "`meta_id` int(12) NULL DEFAULT NULL,
-    `value` varchar(192) NULL DEFAULT NULL,
-    `ordinal` smallint(5) NULL DEFAULT 0,
+    `type`  varchar(31) NULL DEFAULT 'option',
+    `name`  varchar(192) NULL DEFAULT NULL,
+    `ordinal` int(11) NULL DEFAULT 0,
     KEY `meta_id` (`meta_id`,`value`)"
 );
 

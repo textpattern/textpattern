@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2018 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -258,14 +258,14 @@ class Field
 
             if ($hasOptions) {
                 $this->options = safe_rows(
-                    'value',
+                    'name',
                     'txp_meta_options',
-                    "meta_id='" . $this->definition['id'] . "' ORDER BY ordinal"
+                    "meta_id='" . $this->definition['id'] . "' AND type='option' ORDER BY ordinal"
                 );
 
                 // Find the labels and add them to the structure.
                 foreach ($this->options as $idx => $row) {
-                    $this->options[$idx]['label'] = gTxt($this->getOptionReference($row['value']));
+                    $this->options[$idx]['label'] = gTxt($this->getOptionReference($row['name']));
                 }
             }
         }
@@ -451,7 +451,7 @@ class Field
 
                         $nv[0] = $data_type['type'] === 'varchar' ? strtolower(sanitizeForUrl($nv[0])) : $idx;
 
-                        $insertList[] = "('$id', '$nv[0]', '$idx')";
+                        $insertList[] = "('$id', 'option', '$nv[0]', '$idx')";
                         $optLabelList[$this->getOptionReference($nv[0])] = $nv[1];
                     }
 
@@ -815,7 +815,7 @@ class Field
         }
 
         if (isset($this->dataType['options']) && $this->dataType['options'] === true) {
-            $options = safe_rows('value', 'txp_meta_options', "meta_id='" . $num . "' ORDER BY ordinal");
+            $options = safe_rows('name', 'txp_meta_options', "meta_id='" . $num . "' AND type='option' ORDER BY ordinal");
         }
 
         switch ($type) {
@@ -832,7 +832,7 @@ class Field
                 $vals = array();
 
                 foreach ($options as $idx => $opt) {
-                    $vals[$opt['value']] = gTxt($this->getOptionReference($opt['value']));
+                    $vals[$opt['name']] = gTxt($this->getOptionReference($opt['name']));
                 }
 
                 $widget = radioSet($vals, $name, implode('', $thisContent), 0, $id);
@@ -845,7 +845,7 @@ class Field
 
                 foreach ($options as $idx => $opt) {
                     $box_id = $name . '-' . $idx;
-                    $out[] = tag(checkbox($name, $opt['value'], (in_array($opt['value'], $thisContent)), '', $box_id, true) . '<label for="' . $box_id . '">' . gTxt($this->getOptionReference($opt['value'])) . '</label>', 'li');
+                    $out[] = tag(checkbox($name, $opt['name'], (in_array($opt['name'], $thisContent)), '', $box_id, true) . '<label for="' . $box_id . '">' . gTxt($this->getOptionReference($opt['name'])) . '</label>', 'li');
                 }
 
                 $widget = tag(implode($out, n), 'ul');

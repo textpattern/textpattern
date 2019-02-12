@@ -433,7 +433,7 @@ function meta_edit($message = '')
     $optionList = array();
 
     foreach ($options as $opt) {
-        $optionList[] = $opt['value'] . ' => ' . gTxt($opt['label']);
+        $optionList[] = $opt['name'] . ' => ' . gTxt($opt['label']);
     }
 
     $textfilter_map = implode("','", $textfilter_types);
