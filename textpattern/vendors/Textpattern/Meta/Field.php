@@ -136,6 +136,7 @@ class Field
             'render',
             'family',
             'textfilter',
+            'delimiter',
             'ordinal',
             'created',
             'modified',
@@ -308,6 +309,7 @@ class Field
         $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['text_input'];
 
         $has_textfilter = ($textfilter !== '' && $data_type['textfilter']);
+        $has_delimiter = ($delimiter !== '' && $data_type['delimited']);
 
         callback_event_ref('meta_ui', 'validate_save', 0, $this->definition, $constraints);
         $validator = new \Textpattern\Validator\Validator($constraints);
@@ -321,9 +323,10 @@ class Field
         if ($validator->validate()) {
             try {
                 safe_query('START TRANSACTION');
-            
+
                 $table_name = $table_prefix . $data_type['type'];
                 $txf = ($has_textfilter ? "$textfilter" : "NULL");
+                $dlm = ($has_delimiter ? "'$delimiter'" : "NULL");
 
                 if ($id) {
                     $ok = safe_update('txp_meta',
@@ -333,6 +336,7 @@ class Field
                         render       = '$render',
                         family       = '$family',
                         textfilter   = $txf,
+                        delimiter    = $dlm,
                         ordinal      = '$ordinal',
                         created      = '$created',
                         modified     = '$sqlnow',
@@ -347,6 +351,7 @@ class Field
                         render       = '$render',
                         family       = '$family',
                         textfilter   = $txf,
+                        delimiter    = $dlm,
                         ordinal      = '$ordinal',
                         created      = '$created',
                         modified     = '$sqlnow',
@@ -537,6 +542,7 @@ class Field
                         'default',
                         'family',
                         'textfilter',
+                        'delimiter',
                         'ordinal',
                         'created',
                         'modified',
@@ -575,7 +581,7 @@ class Field
 
     public function store()
     {
-        
+
     }
 
     /**
@@ -703,7 +709,7 @@ class Field
 
     /**
      * Fetch a label reference from the given name.
-     * 
+     *
      * @param  string $name Key name upon which to base the label ref. Assumes doSlash() done
      * @return string       Label reference (txp_lang named key)
      */
@@ -717,7 +723,7 @@ class Field
 
     /**
      * Fetch a help reference from the given name.
-     * 
+     *
      * @param  string $name Key name upon which to base the help ref. Assumes doSlash() done
      * @param  string $type Flavour of pophelp to build (pophelp or inline)
      * @return string       Help reference (txp_lang named key)
@@ -732,7 +738,7 @@ class Field
 
     /**
      * Fetch an option reference from the given name.
-     * 
+     *
      * @param  string $name Key name upon which to base the option ref. Assumes doSlash() done
      * @return string       Option reference (txp_lang named key)
      */
@@ -746,7 +752,7 @@ class Field
 
     /**
      * Dumb down the name for URL and string reference purposes.
-     * 
+     *
      * @param  string $name Key name upon which to operate
      * @return string
      */
@@ -772,7 +778,7 @@ class Field
      *
      * The rendered widget can be customised via the 'meta_ui > render'
      * callback event.
-     * 
+     *
      * @param  int          $num     Custom field number
      * @param  string       $type    Data type key
      * @param  string|array $content Content | array of selected content options
@@ -813,7 +819,7 @@ class Field
         }
 
         switch ($type) {
-            case 'text_input':
+            case 'textInput':
                 $widget = fInput('text', $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
                 break;
             case 'yesNoRadio':
@@ -844,7 +850,7 @@ class Field
 
                 $widget = tag(implode($out, n), 'ul');
                 break;
-            case 'text_area':
+            case 'textArea':
                 $widget = text_area($name, 0, 0, implode('', $thisContent), $id);
                 break;
             case 'date':

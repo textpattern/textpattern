@@ -5164,6 +5164,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
             $out[$when]['by_callback'][$thisId] = $def->get('render');
             $out[$when]['by_family'][$thisId] = $def->get('family');
             $out[$when]['by_textfilter'][$thisId] = $def->get('textfilter');
+            $out[$when]['by_delimiter'][$thisId] = $def->get('delimiter');
             $out[$when]['by_ordinal'][$thisId] = $def->get('ordinal');
             $out[$when]['by_created'][$thisId] = $def->get('created');
             $out[$when]['by_modified'][$thisId] = $def->get('modified');
@@ -5191,13 +5192,25 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
 function buildCustomSql($custom, $pairs, $exclude = array())
 {
+    static $delimited = null;
+
+    if ($delimited === null) {
+        $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
+
+        foreach ($datatypeMap as $k => $def) {
+            if ($def['delimited']) {
+                $delimited[] = $k;
+            }
+        }
+    }
+
     $columns = $where = array();
 
     if ($pairs && isset($custom['by_name'])) {
         foreach (doSlash($pairs) as $k => $v) {
             if (isset($custom['by_name'][$k])) {
                 $no = $custom['by_name'][$k];
-                $unique = !in_array($custom['by_callback'][$no], array('checkboxSet'));
+                $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                 $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
 
@@ -5208,9 +5221,12 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     $filter = '';
                 }
 
-                $columns[] = $unique ?
-                    "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k" :
-                    "(SELECT GROUP_CONCAT(value) FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
+                if ($unique) {
+                    $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
+                } else {
+                    $dlm = $custom['by_delimiter'][$no];
+                    $columns[] = "(SELECT GROUP_CONCAT(value, '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
+                }
             }
         }
     }

@@ -35,6 +35,7 @@ safe_create(
     `render` varchar(255) NULL DEFAULT 'text_input',
     `family` varchar(255) NULL DEFAULT NULL,
     `textfilter` tinyint(4) NULL DEFAULT NULL,
+    `delimiter` varchar(31) NULL DEFAULT NULL,
     `ordinal` smallint(5) unsigned NULL DEFAULT NULL,
     `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `modified` timestamp NULL DEFAULT NULL,

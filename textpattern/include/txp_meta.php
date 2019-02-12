@@ -46,6 +46,7 @@ if ($event == 'meta') {
         'default',
         'family',
         'textfilter',
+        'delimiter',
         'ordinal',
         'created',
         'modified',
@@ -376,6 +377,7 @@ function meta_edit($message = '')
 
     $textfilter_types = array();
     $option_types = array();
+    $delimited_types = array();
 
     foreach ($data_types as $key => $data_type) {
         if ($data_type['textfilter']) {
@@ -385,10 +387,14 @@ function meta_edit($message = '')
         if ($data_type['options']) {
             $option_types[] = $key;
         }
+
+        if ($data_type['delimited']) {
+            $delimited_types[] = $key;
+        }
     }
 
     $is_edit = ($id && $step == 'meta_edit');
-    $default = ''; 
+    $default = '';
     $label_ref = '';
     $help_ref = '';
     $inline_help_ref = '';
@@ -431,6 +437,7 @@ function meta_edit($message = '')
     }
 
     $textfilter_map = implode("','", $textfilter_types);
+    $delimiter_map = implode("','", $delimited_types);
     $option_map = implode("','", $option_types);
 
     if (has_privs('meta')) {
@@ -440,6 +447,7 @@ function meta_edit($message = '')
 
         echo script_js(<<<EOJS
 var textfilter_map = ['{$textfilter_map}'];
+var delimiter_map = ['{$delimiter_map}'];
 var option_map = ['{$option_map}'];
 EOJS
         );
@@ -479,6 +487,11 @@ EOJS
                 'textfilter',
                 pref_text('textfilter', $textfilter, 'textfilter'),
                 'textfilter', '', array('class' => 'txp-form-field edit-meta-textfilter')
+            ).
+            inputLabel(
+                'delimiter',
+                fInput('text', 'delimiter', txpspecialchars($delimiter), '', '', '', INPUT_SMALL, '', 'delimiter'),
+                'delimiter', '', array('class' => 'txp-form-field edit-meta-delimiter')
             ).
             inputLabel(
                 'ordinal',

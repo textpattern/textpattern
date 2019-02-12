@@ -26,7 +26,7 @@
  *
  * Each entry is a set of properties that define the way
  * the data type is represented in Textpattern.
- * 
+ *
  * @since   4.8.0
  * @package CustomField
  */
@@ -43,6 +43,7 @@ class DataType implements \IteratorAggregate
      *  size       : (int) database field size (width). null = system defined
      *  textfilter : (bool) whether the field can accept Textfiltered content
      *  options    : (bool) whether the field is made of a set of options (e.g. select list)
+     *  delimited  : (bool) whether the field content requires a delimiter between stored values
      *
      * @var array
      * @todo Could (should?) be an array of DataType objects.
@@ -53,66 +54,77 @@ class DataType implements \IteratorAggregate
             'size'       => 2,
             'textfilter' => false,
             'options'    => false,
+            'delimited'  => false,
         ),
         'onOffRadio' => array(
             'type'       => 'tinyint',
             'size'       => 2,
             'textfilter' => false,
             'options'    => false,
+            'delimited'  => false,
         ),
         'radioSet' => array(
             'type'       => 'tinyint',
             'size'       => 2,
             'textfilter' => false,
             'options'    => true,
+            'delimited'  => false,
         ),
         'checkbox' => array(
             'type'       => 'tinyint',
             'size'       => 2,
             'textfilter' => false,
             'options'    => false,
+            'delimited'  => false,
         ),
         'checkboxSet' => array(
             'type'       => 'varchar',
             'size'       => 255,
             'textfilter' => false,
             'options'    => true,
+            'delimited'  => true,
         ),
         'number' => array(
             'type'       => 'int',
             'size'       => 12,
             'textfilter' => false,
             'options'    => false,
+            'delimited'  => false,
         ),
-        'text_input' => array(
+        'textInput' => array(
             'type'       => 'varchar',
             'size'       => 255,
             'textfilter' => true,
             'options'    => false,
+            'delimited'  => false,
         ),
-        'text_area' => array(
+        'textArea' => array(
             'type'       => 'text',
             'size'       => null,
             'textfilter' => true,
             'options'    => false,
+            'delimited'  => false,
         ),
         'selectInput' => array(
             'type'       => 'varchar',
             'size'       => 255,
             'textfilter' => true,
             'options'    => true,
+            'delimited'  => false,
         ),
-        'multi-select' => array(
+        'multiSelect' => array(
             'type'       => 'varchar',
             'size'       => 255,
             'textfilter' => true,
             'options'    => true,
+            'delimited'  => true,
         ),
         'dateTime' => array(
             'type'       => 'datetime',
             'size'       => null,
             'textfilter' => false,
             'options'    => false,
+            'delimited'  => false,
         ),
     );
 

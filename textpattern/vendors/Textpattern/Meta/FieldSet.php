@@ -23,7 +23,7 @@
 
 /**
  * A collection of custom fields.
- * 
+ *
  * Whereas a field's name can be reused between content types, each field
  * has a custom_N id, which is unique across ALL types.
  *

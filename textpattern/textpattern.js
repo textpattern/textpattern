@@ -2265,6 +2265,12 @@ textpattern.Route.add('meta', function ()
         } else {
             $('.edit-meta-options').hide();
         }
+
+        if ($.inArray(meVal, delimiter_map) > -1) {
+            $('.edit-meta-delimiter').show();
+        } else {
+            $('.edit-meta-delimiter').hide();
+        }
     }).change();
 
     $('#labelStr').change(function (e)
