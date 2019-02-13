@@ -352,7 +352,7 @@ function form_edit($message = '', $refresh_partials = false)
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
             span(
-                checkbox2('export', false, 0, 'export').
+                checkbox2('export', gps('export'), 0, 'export').
                 n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
         ).
