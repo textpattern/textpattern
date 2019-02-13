@@ -1553,7 +1553,7 @@ $(document).keydown(function (e) {
 
     if (key === 27) {
         $('.close').parent().toggle();
-    } else if (key === 19 || ((e.metaKey || e.ctrlKey) && !(e.altKey) && String.fromCharCode(key).toLowerCase() === 's'))
+    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
     {
         var obj = $('input.publish');
 
