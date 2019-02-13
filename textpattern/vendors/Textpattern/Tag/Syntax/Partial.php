@@ -56,7 +56,9 @@ class Partial
         }
 
         if (!isset($inner)) {
-            $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
+            $inner = isset($default) ?
+                ($default === true ? gps($name) : $default) :
+                ($thing ? parse($thing) : $thing);
         }
 
         return $inner;
