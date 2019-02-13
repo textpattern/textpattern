@@ -1,6 +1,7 @@
 meta_id INT(12)      NULL DEFAULT NULL,
 type    VARCHAR(31)  NULL DEFAULT 'option',
 name    VARCHAR(192) NULL DEFAULT NULL,
+value   VARCHAR(192) NULL DEFAULT NULL,
 ordinal INT(11)      NULL DEFAULT 0,
 
 KEY meta_id (meta_id,value)
