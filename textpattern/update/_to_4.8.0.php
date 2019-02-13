@@ -51,7 +51,7 @@ safe_create(
     `type`  varchar(31) NULL DEFAULT 'option',
     `name`  varchar(192) NULL DEFAULT NULL,
     `ordinal` int(11) NULL DEFAULT 0,
-    KEY `meta_id` (`meta_id`,`value`)"
+    KEY `meta_id` (`meta_id`,`name`)"
 );
 
 // Only varchar fields are catered for on update, since they were
