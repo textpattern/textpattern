@@ -1232,7 +1232,7 @@ jQuery.fn.txpDialog = function (options) {
             }
         }],
         width: 440
-    }, options);
+    }, options, $(this).data());
 
     this.dialog(options);
 
@@ -1564,7 +1564,7 @@ $(document).keydown(function (e) {
         if (obj.length)
         {
             e.preventDefault();
-            obj.eq(0).click();
+            obj.eq(0).closest('form').submit();
         }
     }
 });
@@ -2037,9 +2037,9 @@ textpattern.Route.add('article', function () {
                 submitButton.val(textpattern.gTxt('publish'));
             }
         }
-    });
-
-    $('#article_form').on('click', '.txp-clone', function (e) {
+    }).on('submit.txpAsyncForm', function (e) {
+        $('#view_modes li.active [data-view-mode]').click();
+    }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
         $('#tab-text a').click();
         form.trigger('submit', {data: {copy:1, publish:1}});
@@ -2052,7 +2052,7 @@ textpattern.Route.add('article', function () {
             e.preventDefault();
             let $this = $(this);
             let $view = $this.data('view-mode');
-            let $pane = $('#txp-preview-container');
+            let $pane = $('#pane-view').closest('.txp-dialog');
             $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
             $('input[name="view"]').val($view);
 
@@ -2063,19 +2063,10 @@ textpattern.Route.add('article', function () {
                     callback: function (e) {
                         var pane = document.getElementById('pane-view');
                         Prism.highlightAllUnder(pane);
-
-                        if ($pane.dialog('instance')) {
-                            $pane.dialog('open');
-                        } else {
-                            $pane.dialog({
-                                close: function( event, ui ) {
-                                    $('#tab-text [data-view-mode]').click();
-                                }
-                            });
-                        }
+                        $pane.dialog('option', 'title', $this.text()).dialog('open');
                     }
                 });
-            } else if ($pane.dialog('instance')) {
+            } else {
                 $pane.dialog('close');
             }
         }
@@ -2210,7 +2201,7 @@ textpattern.Route.add('', function () {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                dialogClass: 'txp-dialog-container',
+                classes: {'ui-dialog': 'txp-dialog-container'},
                 autoOpen: false,
                 width: 440,
                 title: textpattern.gTxt('help'),

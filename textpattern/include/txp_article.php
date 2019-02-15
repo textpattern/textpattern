@@ -750,7 +750,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
     echo n.'</div>';
 
-    echo n.'<div id="txp-preview-container" style="display:none">';
+    echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
     echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
 
     if ($view == 'preview') {
