@@ -742,9 +742,19 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
+    echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
+    echo $partials['author']['html'];
+    echo $partials['body']['html'];
+    if ($articles_use_excerpts) {
+        echo $partials['excerpt']['html'];
+    }
+    echo n.'</div>';
+
+    echo n.'<div id="txp-preview-container" style="display:none">';
+    echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
+
     if ($view == 'preview') {
-        echo n.'<div class="mode preview" id="pane-preview">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
+        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
             hed(txpspecialchars($Title), 1, ' class="title"');
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
@@ -757,13 +767,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 '</div>';
         }
         echo n.'</div>';
-    } else {
-        echo n.'<div class="mode preview" id="pane-preview" style="display:none"></div>';
-    }
-
-    if ($view == 'html') {
-        echo n.'<div class="mode html" id="pane-html">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
+    } elseif ($view == 'html') {
+        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
             hed(txpspecialchars($Title), 1, ' class="title"');
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
             n.tag(
@@ -784,17 +789,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 );
         }
         echo n.'</div>';
-    } else {
-        echo n.'<div class="mode html" id="pane-html" style="display:none"></div>';
     }
 
-    echo n.'<div class="mode text" id="pane-text">'.$partials['title']['html'];
-    echo $partials['author']['html'];
-    echo $partials['body']['html'];
-    if ($articles_use_excerpts) {
-        echo $partials['excerpt']['html'];
-    }
-    echo n.'</div>';
+    echo '</div>';
+    echo '</div>';
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -1918,7 +1916,7 @@ function article_partial_comments($rs)
 
         if (!empty($ID) && $comments_disabled_after) {
             $lifespan = $comments_disabled_after * 86400;
-            $time_since = time() - $sPosted;
+            $time_since = time() - intval($sPosted);
 
             if ($time_since > $lifespan) {
                 $comments_expired = true;

@@ -2052,16 +2052,31 @@ textpattern.Route.add('article', function () {
             e.preventDefault();
             let $this = $(this);
             let $view = $this.data('view-mode');
-            $('#pane-'+$view).show().siblings('.mode').hide();
+            let $pane = $('#txp-preview-container');
             $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
             $('input[name="view"]').val($view);
 
             if ($view != 'text') {
                 textpattern.Relay.callback('updateList', {
                     data: form.serializeArray(),
-                    list: '#pane-'+$view,
-                    callback: function (e) {Prism.highlightAllUnder(document.getElementById('pane-'+$view));}
+                    list: '#pane-view',
+                    callback: function (e) {
+                        var pane = document.getElementById('pane-view');
+                        Prism.highlightAllUnder(pane);
+
+                        if ($pane.dialog('instance')) {
+                            $pane.dialog('open');
+                        } else {
+                            $pane.dialog({
+                                close: function( event, ui ) {
+                                    $('#tab-text [data-view-mode]').click();
+                                }
+                            });
+                        }
+                    }
                 });
+            } else if ($pane.dialog('instance')) {
+                $pane.dialog('close');
             }
         }
     );
