@@ -2038,21 +2038,27 @@ textpattern.Route.add('article', function () {
             }
         }
     }).on('submit.txpAsyncForm', function (e) {
-        $('#view_modes li.active [data-view-mode]').click();
+        if ($pane.dialog('isOpen')) {
+            $('#view_modes li.active [data-view-mode]').click();
+        }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        $('#tab-text a').click();
+        $pane.trigger('dialogclose');
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
     // Switch to Text/HTML/Preview mode.
+    var $pane = $('#pane-view').closest('.txp-dialog');
+    $pane.on( 'dialogclose', function( event, ui ) {
+        $('#tab-text [data-view-mode]').click();
+    } );
+
     $(document).on('click',
         '[data-view-mode]',
         function (e) {
             e.preventDefault();
             let $this = $(this);
             let $view = $this.data('view-mode');
-            let $pane = $('#pane-view').closest('.txp-dialog');
             $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
             $('input[name="view"]').val($view);
 
@@ -2062,8 +2068,8 @@ textpattern.Route.add('article', function () {
                     list: '#pane-view',
                     callback: function (e) {
                         var pane = document.getElementById('pane-view');
-                        Prism.highlightAllUnder(pane);
                         $pane.dialog('option', 'title', $this.text()).dialog('open');
+                        Prism.highlightAllUnder(pane);
                     }
                 });
             } else {
