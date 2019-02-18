@@ -544,14 +544,16 @@ function output_form($atts, $thing = null)
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
-    if (isset($atts['format']) && empty($to_yield)) {// component
-        return component($atts + array('form' => $form));
+    if (!empty($to_yield)) {
+        $to_yield = $to_yield === true ? $atts : array_fill_keys(do_list_unique($to_yield), null);
+        empty($txp_atts) or $txp_atts = array_diff_key($txp_atts, $to_yield);
     }
 
-    if (!is_bool($to_yield)) {
-        $to_yield = $to_yield ?
-            array_fill_keys(do_list_unique($to_yield), null) :
-            array();
+    if (isset($atts['format'])) {// component
+        empty($txp_atts) or $atts = array_diff_key($atts, $txp_atts);
+
+        return component($atts + array('form' => $form));
+    } elseif (is_array($to_yield)) {
         $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
