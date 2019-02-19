@@ -877,11 +877,6 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Admin-side theme</h2>
 <p>The default admin-side theme that will be used when anybody logs into Textpattern. A number of pre-installed admin themes are included with Textpattern, and you can also add custom theme packages to the <code>textpattern/admin-themes</code> directory to make them available for use.</p>
         ]]></item>
-        <item id="title_no_widow" title="Prevent widowed words in article titles?"><![CDATA[
-<h2>Prevent widowed words in article titles?</h2>
-<p>‘Widowed word’ refers to the final word of a sentence shown on a new line when the sentence is too long to fit on one line. In printed works, widowed words are considered sloppy typography and should be avoided. Setting this preference to ‘Yes’ will ensure that long article titles lines never have only the last word on a new line. Instead, the two last words will appear on a new line.</p>
-<p><strong>Note:</strong> This setting can prove problematic in responsive pages at smaller page widths, because the non-breaking space character between the last two words may cause titles to overspill their parent container. In that case, set this preference to ‘No’.</p>
-        ]]></item>
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
 <h2>PHP functions enabled in txp:evaluate</h2>
 <p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified within this list can be utilised in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;</code> tag:</p>
