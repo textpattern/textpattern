@@ -15,7 +15,8 @@
         "lastmod_keepalive",
         "show_article_category_count",
         "prefs_id",
-        "skin_base_path"
+        "skin_base_path",
+        "title_no_widow"
     ],
     "private": [
         "switch_dev_live"

@@ -259,13 +259,6 @@
         "html": "yesnoradio",
         "position": "100"
     },
-    "title_no_widow": {
-        "val": "0",
-        "type": "0",
-        "event": "publish",
-        "html": "yesnoradio",
-        "position": "20"
-    },
     "articles_use_excerpts": {
         "val": "1",
         "type": "0",

@@ -878,11 +878,6 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <h2>Tema lato amministrazione</h2>
 <p>il tema lato admin di default che verrà utilizzato quando qualcuno accede a Textpattern. Una scelta di temi admin preinstallati è inclusa con Textpattern, ed è inoltre possibile aggiungere pacchetti di temi personalizzati nella directory <code>textpattern/admin-themes</code> per renderli disponibili all’uso.</p>
         ]]></item>
-        <item id="title_no_widow" title="Evitare parole ‘vedove’ nei titoli degli articoli?"><![CDATA[
-<h2>Evitare parole ‘vedove’ nei titoli degli articoli?</h2>
-<p>Per ‘parola vedova’ si intende l’ultima parola di una frase mostrata in una nuova riga quando la frase è troppo lunga per rientrare in un’unica riga. In tipografia, le parole vedove sono considerate ineleganti e da evitare. Impostare questa preferenza su ‘Sì’ vi garantirà che lunghi titoli d’articolo non avranno mai l’ultima parola tutta sola su una nuova riga, dove invece appariranno le due ultime parole.</p>
-<p><strong>Nota:</strong> questa impostazione può rivelarsi problematica in pagine dette "Responsive" con più piccole larghezze di pagina, perché l’inserimento di un carattere ‘spazio unificatore’ tra le ultime due parole può causare titoli che debordano dall’elemento parente. In questo caso, impostare questa preferenza a ‘No’.</p>
-        ]]></item>
         <item id="txp_evaluate_functions" title="Funzioni PHP abilitate in txp:evaluate"><![CDATA[
 <h2>Funzioni PHP abilitate in txp:evaluate</h2>
 <p>Si tratta di un elenco delimitato da virgole di elementi <code>function</code> o <code>alias=function</code>, ad esempio <code>md5</code>, <code>replace=str_replace</code>. Gli elementi specificati in questo elenco possono essere utilizzati nell’attributo <code>query</code> del tag <code>&lt;txp:evaluate /&gt;</code>:</p>
