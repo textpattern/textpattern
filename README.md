@@ -81,7 +81,9 @@ considerations and other factors.
 Note that minimum and/or recommended versions listed may change multiple times
 during the development process.
 
-|        |  Minimum<br />(Textpattern in-development)  | Recommended<br />(Textpattern in-development) |
+#### Textpattern in-development version
+
+|        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
 | PHP    | 5.5 | [vendor supported](http://php.net/supported-versions.php)<br />(7.2 or 7.3) |
 | MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
