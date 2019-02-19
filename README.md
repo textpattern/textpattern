@@ -81,7 +81,7 @@ considerations and other factors.
 Note that minimum and/or recommended versions listed may change multiple times
 during the development process.
 
-#### Textpattern in-development version
+#### Textpattern development version
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
