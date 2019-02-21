@@ -5790,7 +5790,7 @@ function filedownloadurl($id, $filename = '')
         }
     }
 
-    return hu.urlencode(txpinterface == 'public' ? gTxt('file_download') : 'file_download').'/'.intval($id).$filename;
+    return hu.'file_download/'.intval($id).$filename;
 }
 
 /**
