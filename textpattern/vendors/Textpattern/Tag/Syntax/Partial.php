@@ -57,7 +57,7 @@ class Partial
 
         if (!isset($inner)) {
             $inner = isset($default) ?
-                ($default === true ? gps($name) : $default) :
+                ($default === true ? page_url(array('type' => $name)) : $default) :
                 ($thing ? parse($thing) : $thing);
         }
 
