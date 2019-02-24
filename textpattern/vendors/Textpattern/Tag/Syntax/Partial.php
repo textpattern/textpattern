@@ -41,7 +41,7 @@ class Partial
 
     public static function renderYield($atts, $thing = null)
     {
-        global $yield, $txp_yield;
+        global $yield, $txp_yield, $txp_atts;
 
         extract(lAtts(array(
             'name'    => '',
@@ -56,8 +56,9 @@ class Partial
         }
 
         if (!isset($inner)) {
+            $escape = isset($txp_atts['escape']) ? $txp_atts['escape'] : null;
             $inner = isset($default) ?
-                ($default === true ? page_url(array('type' => $name)) : $default) :
+                ($default === true ? page_url(array('type' => $name, 'escape' => $escape)) : $default) :
                 ($thing ? parse($thing) : $thing);
         }
 
