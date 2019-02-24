@@ -635,7 +635,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="default_publish_status" title="Statut de publication par défaut"><![CDATA[
 <h2>Statuts de publication par défaut</h2>
 <p>Définit l’état de visibilité pour la publication d’un article dans Textpattern.</p>
-<p>Notez que ce paramètre des préférences naffectera pas le statut des articles créés ou édités sur ceux existants.</p>
+<p>Notez que ce paramètre des préférences n’affectera pas le statut des articles déjà créés ou édités.</p>
 <p>Les statuts de publication correspondent à la liste suivante :</p>
 <ul>
     <li>Brouillon</li>
@@ -670,7 +670,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
     <li>Supprimez le préfixe <code>txp:</code></li>
     <li>Remplacez la première occurrence de l’underscore par <code>::</code></li>
 </ol>
-<p>Remarque : l’adoption de cette préférence n’affecte pas l’usage des codes réduits <code>&lt;txp:output_form /&gt;</code> pour restituer le contenu d’un module. Vous pouvez continuez à utiliser <code>&lt;txp::shortcode /&gt;</code> ce qui sera interprété <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>]]></item>
+<p>Remarque : l’adoption de cette préférence n’affecte pas l’usage des codes réduits <code>&lt;txp:output_form /&gt;</code> pour restituer le contenu d’un module. Vous pouvez continuer à utiliser <code>&lt;txp::shortcode /&gt;</code> ce qui sera interprété <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>]]></item>
         <item id="enable_xmlrpc_server" title="Activer le serveur XML-RPC ?"><![CDATA[<h2>Activer le serveur XML-RPC ?</h2>
 <p>Si vous souhaitez utiliser <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> afin de contrôler Textpattern par un processus distant (ex. via une application de bureau ou mobile), vous devez activer le serveur XML-RPC en réglant ce paramètre sur «Oui».</p>]]></item>
         <item id="expire_logs_after" title="Le journal d’activités (log) expire après ?"><![CDATA[<h2>Le journal d’activités (log) expire après ?</h2>
@@ -752,7 +752,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p> ]]></item>
         <item id="public_theme_name" title="Thème du site public"><![CDATA[<h2>Thème du site public</h2>
 <p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu’une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>]]></item>
-        <item id="publish_expired_articles" title="Publier les articles qui ont expiré ?"><![CDATA[<h2>Publier les articles qui ont expiré ?<0>
+        <item id="publish_expired_articles" title="Publier les articles qui ont expiré ?"><![CDATA[<h2>Publier les articles qui ont expiré ?</h2>
 <p>Si renseigné sur «Oui», les articles expirés continueront à s’afficher sur le site public après leur date d’expiration. Vous pouvez utiliser la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien dans une nouvelle fenêtre)</span></a> pour afficher un contenu alternatif ou une structure de substitution aux articles expirés.</p>
 <p>Si renseigné sur «Non», les articles expirés seront supprimés du site public et toute tentative d’y accéder renverra un statut HTTP «401 Gone» à la place. Le paramètre par défaut est «Non».</p>]]></item>
         <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[<h2>Envoi des informations de connexion à cette adresse e-mail</h2>
@@ -907,7 +907,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
 <p>Le titre peut comporter des caractères spéciaux ainsi que des espaces.</p>]]></item>
         <item id="skin_version" title="Version du thème"><![CDATA[<h2>Version du thème</h2>
-<p>Le numéro de version pour la version de ce thème installé (optionnel).</p>< ]]></item>
+<p>Le numéro de version pour la version de ce thème installé (optionnel).</p>]]></item>
     </group>
 </help>
 </resources>
