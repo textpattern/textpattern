@@ -1082,7 +1082,7 @@ function recent_articles($atts)
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
     ), $atts);
 
     $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
@@ -1177,7 +1177,7 @@ function related_articles($atts, $thing = null)
         'limit'    => 10,
         'offset'   => 0,
         'match'    => 'Category1,Category2',
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
@@ -2954,7 +2954,7 @@ function title($atts)
 
     extract(lAtts(array(
         'escape'   => null,
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
     ), $atts));
 
     $t = $escape === null ? escape_title($thisarticle['title']) : $thisarticle['title'];
