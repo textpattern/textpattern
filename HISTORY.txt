@@ -1,8 +1,15 @@
+Changes in TBC 4.8.0/5.0.0 (upcoming)
+
+* Removed: Obsolete 'no widowed words' preference setting. If this feature is
+  needed it can be implemented directly with <txp:title /> tag.
+
 Changes in 4.7.3 (upcoming)
 
 * Fixed: 'Export to disk' checkbox state inconsistencies for new assets.
 * Fixed: Logout issue in Classic admin theme.
-* Changed: Permit falling back on pophelp in 'lang' database table
+* Fixed: a bug when PHP 'mbstring' extension is disabled.
+* Changed: Permit falling back on pophelp in 'lang' database table.
+* Added: <txp:yield /> values are available in external forms too.
 * Added: Latest translations.
 * Added: Complete Italian inline help translation. Many thanks to Giampiero
   Mellea for all their work.
