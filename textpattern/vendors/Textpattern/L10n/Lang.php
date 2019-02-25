@@ -595,6 +595,20 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Determine if a string key exists in the current pack
+     *
+     * @param  string  $var The string name to check
+     * @return boolean
+     */
+
+    public function hasString($var)
+    {
+        $v = strtolower($var);
+
+        return isset($this->strings[$v]);
+    }
+
+    /**
      * Return a localisation string.
      *
      * @param   string $var    String name
