@@ -6,6 +6,7 @@ Changes in 4.7.3
 * Fixed: Prevent Alt+S from triggering save (thanks, o10154016).
 * Fixed: Language .ini files trump old .txt files.
 * Changed: Permit falling back on pophelp in 'lang' database table.
+* Changed: 'Show password' on Users panel displays both passwords.
 * Added: <txp:yield /> values are available in external forms too.
 * Added: Indicator for WebP support in Diagnostics panel.
 * Added: Latest translations.
