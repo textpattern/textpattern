@@ -689,7 +689,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string $name  The HTML name and ID to assign to the select control
      * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
-     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     * @param  int    $flags Logical OR list of flags indicating the type of list to return:
      *                       TEXTPATTERN_LANG_ACTIVE: the active language
      *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
      *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system

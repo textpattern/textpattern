@@ -232,7 +232,7 @@ class Plugin
     /**
      * Change plugin load priority.
      *
-     * Plugins with a lower nunber are loaded first.
+     * Plugins with a lower number are loaded first.
      *
      * @param  string $name  Plugin name
      * @param  int    $order Plugin load priority
@@ -299,8 +299,8 @@ class Plugin
                 $done = array();
 
                 // Manual merge since array_merge/array_merge_recursive don't work as expected
-                // on these muti-dimensional structures.
-                // There must be a more efficent way to do this...
+                // on these multi-dimensional structures.
+                // There must be a more efficient way to do this...
                 foreach ($allpacks[$fallback] as $idx => $packEntry) {
                     if (isset($allpacks[$lang][$idx]['name']) && $allpacks[$lang][$idx]['name'] === $packEntry['name']) {
                         // Great! keys in the same order.

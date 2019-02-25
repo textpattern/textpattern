@@ -1803,7 +1803,7 @@ function txp_expand_collapse_all(ev)
 }
 
 /**
- * Restore sub-panel twistys to their as-stored state.
+ * Restore sub-panel twisties to their as-stored state.
  *
  * @return {[type]} [description]
  */

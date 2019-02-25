@@ -58,7 +58,7 @@ interface AssetInterface
     /**
      * Build the Skin switch form.
      *
-     * @return HTML Auto submited select list of installed skins.
+     * @return HTML Auto submitted select list of installed skins.
      */
 
     public function getSelectEdit();
