@@ -194,7 +194,7 @@ class TXP_Wrapper
      * @param  int    $offset The offset
      * @param  int    $limit  The limit
      * @param  bool   $slash  If TRUE, escapes $where and $what
-     * @return array|bool Array of artilces, or FALSE on failure
+     * @return array|bool Array of articles, or FALSE on failure
      */
 
     public function getArticleList($what = '*', $where = '1', $offset = 0, $limit = 10, $slash = true)
@@ -232,7 +232,7 @@ class TXP_Wrapper
      * Retrieves an article matching the given criteria.
      *
      * This method forms an SQL query from the given arguments and returns an
-     * article as an assocative array.
+     * article as an associative array.
      *
      * This method requires authentication and at least 'article.edit.own'
      * privileges. If the user doesn't have 'article.edit' privileges,
@@ -378,7 +378,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a list of sections as an assocative array.
+     * Gets a list of sections as an associative array.
      *
      * This method requires authentication and 'article' privileges.
      *
@@ -404,7 +404,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a section as an assocative array.
+     * Gets a section as an associative array.
      *
      * This method requires authentication and 'article' privileges.
      *
@@ -430,7 +430,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a list of categories as an assocative array.
+     * Gets a list of categories as an associative array.
      *
      * This method requires authentication and 'article' privileges.
      *
@@ -456,7 +456,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a category as an assocative array.
+     * Gets a category as an associative array.
      *
      * This method requires authentication and 'article' privileges.
      *
@@ -482,7 +482,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a category as an assocative array by ID.
+     * Gets a category as an associative array by ID.
      *
      * This method is an alternative to TXP_wrapper::getCategory().
      *
@@ -504,7 +504,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Gets a category as an assocative array by title.
+     * Gets a category as an associative array by title.
      *
      * This method is an alternative to TXP_wrapper::getCategory().
      *
@@ -861,7 +861,7 @@ class TXP_Wrapper
         }
 
         foreach ($this->vars as $def_key) {
-            // Add those ones inexistent in the incoming array.
+            // Add those ones nonexistent in the incoming array.
             if (!array_key_exists($def_key, $out)) {
                 $out[$def_key] = '';
             }

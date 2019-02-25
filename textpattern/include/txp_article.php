@@ -392,7 +392,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
         'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
          'cb' => $callback_function,
-         'html' => $return_value_of_callback_function (need not be intialised here)
+         'html' => $return_value_of_callback_function (need not be initialised here)
     )
     */
     $partials = array(
