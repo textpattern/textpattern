@@ -7,7 +7,7 @@ Changes in 4.7.3 (upcoming)
 
 * Fixed: 'Export to disk' checkbox state inconsistencies for new assets.
 * Fixed: Logout issue in Classic admin theme.
-* Fixed: a bug when PHP 'mbstring' extension is disabled.
+* Fixed: A bug when PHP 'mbstring' extension is disabled.
 * Changed: Permit falling back on pophelp in 'lang' database table.
 * Added: <txp:yield /> values are available in external forms too.
 * Added: Latest translations.
