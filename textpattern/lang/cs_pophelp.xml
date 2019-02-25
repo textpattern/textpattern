@@ -743,10 +743,6 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
         <item id="theme_name" title="Volba vzhledu administrace"><![CDATA[
 <h2>Volba vzhledu administrace</h2>
 <p>Tady zvol téma vzhledu administračního prostředí, které bude použito při každém přihlášení do systému Textpattern. Textpattern je dodáván s několika předinstalovanými motivy administrace. Také můžeš přidat vlastní balíček s tématem vzhledu do adresáře <code>textpattern/admin-themes</code>, poté ho objevíš tady jako jednu z voleb.</p>        ]]></item>
-        <item id="title_no_widow" title="Zabránit sirotkům v názvech článků?"><![CDATA[
-<h2>Zabránit sirotkům v názvech článků?</h2>
-<p>Termín ‘sirotek’ se týká jednoho slova na konci názvu článku, které je vypsáno na novém řádku, je-li je nadpis článku příliš dlouhý a nevejde se na jeden řádek. V tištěných materiálech jsou sirotci považováni za nedbalost v typografii a je třeba se jim vyhýbat. Nastavení ‘Ano’ zajistí, že poslední slova dlouhých nadpisů článků nebudou nikdy na samostatném řádku. Namísto toho se zobrazí na samostatném řádku dvě poslední slova.</p>
-<p><strong>Pozn.:</strong> Toto nastavení se může ukázat jako problematické na stránkách s responzivním designem při menších šířkách, protože nerozbitná mezera mezi posledními dvěma slovy může způsobit, že nadpis přeteče svůj nadřazený kontejner. V takovém případě nastav tuto volbu ‘Ne’.</p>        ]]></item>
         <item id="txp_evaluate_functions" title="Funkce PHP povolené v txp:evaluate"><![CDATA[
 <h2>Funkce PHP povolené v txp:evaluate</h2>
 <p>Jedná se o seznam položek (oddělených čárkami)<code>funtion</code> nebo <code>alias=function</code>, např. <code>md5</code>, <code>replace=str_replace</code>. Položky uvedené v tomto seznamu lze použít pro atribut <code>query</code> v tagu <code>&lt;txp:evaluate /&gt;</code>:</p>
