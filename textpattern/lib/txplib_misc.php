@@ -680,7 +680,7 @@ function require_privs($res = null, $user = '')
 }
 
 /**
- * Adds dynamic priviledges.
+ * Adds dynamic privileges.
  *
  * @param   array $pluggable The array, see global $txp_options
  * @since   4.7.2
@@ -1885,7 +1885,7 @@ function load_plugins($type = false)
 }
 
 /**
- * Attachs a handler to a callback event.
+ * Attaches a handler to a callback event.
  *
  * @param   callback $func  The callback function
  * @param   string   $event The callback event
@@ -4913,7 +4913,7 @@ function remove_pref($name = null, $event = null, $user_name = null)
  *
  * Searches for matching preference strings based on the given arguments.
  *
- * The $user_name argument can be used to limit the search to a specifc user,
+ * The $user_name argument can be used to limit the search to a specific user,
  * or to global and private strings. If NULL, matches are searched from both
  * private and global strings.
  *
@@ -5158,8 +5158,8 @@ function getCustomFields()
  * Build a query qualifier to filter non-matching custom fields from the
  * result set.
  *
- * @param   array $custom An array of 'custom_field_name' => field_number tupels
- * @param   array $pairs  Filter criteria: An array of 'name' => value tupels
+ * @param   array $custom An array of 'custom_field_name' => field_number tuples
+ * @param   array $pairs  Filter criteria: An array of 'name' => value tuples
  * @return  bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
@@ -6320,7 +6320,7 @@ function pager($total, $limit, $page)
  * Word-wrap a string using a zero width space.
  *
  * @param  string $text  The input string
- * @param  int    $width Target line lenght
+ * @param  int    $width Target line length
  * @param  string $break Is not used
  * @return string
  */
@@ -6366,7 +6366,7 @@ function strip_prefix($str, $pfx)
 /**
  * Sends an XML envelope.
  *
- * Wraps an array of name => value tupels into an XML envelope, supports one
+ * Wraps an array of name => value tuples into an XML envelope, supports one
  * level of nested arrays at most.
  *
  * @param   array $response
@@ -7085,7 +7085,7 @@ function get_files_content($dir, $ext)
 
 /**
  * Get Theme prefs
- * Now Textpatern does not support themes. If the setup folder is deleted, it will return an empty array.
+ * Now Textpattern does not support themes. If the setup folder is deleted, it will return an empty array.
  */
 
 function get_prefs_theme()
