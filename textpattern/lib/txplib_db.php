@@ -933,7 +933,7 @@ function safe_row($things, $table, $where, $debug = false)
  * @param  string $table  The table
  * @param  string $where  The where clause
  * @param  bool   $debug  Dump query
- * @return array  Returns an empty array if no mathes are found
+ * @return array  Returns an empty array if no matches are found
  * @see    safe_row()
  * @see    safe_rows_start()
  * @uses   getRows()
@@ -964,7 +964,7 @@ function safe_rows($things, $table, $where, $debug = false)
  * @param  string        $table  The table
  * @param  string        $where  The where clause
  * @param  bool          $debug  Dump query
- * @return resource|bool A result resouce or FALSE on error
+ * @return resource|bool A result resource or FALSE on error
  * @see    nextRow()
  * @see    numRows()
  * @example
@@ -1121,7 +1121,7 @@ function getRows($query, $debug = false)
 /**
  * Executes an SQL statement and returns results.
  *
- * This function is indentical to safe_query() apart from the missing
+ * This function is identical to safe_query() apart from the missing
  * $unbuf argument.
  *
  * @param  string $query The SQL statement to execute

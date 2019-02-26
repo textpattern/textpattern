@@ -644,7 +644,7 @@ function wrapGroup($id, $content, $label, $class = '', $help = '')
  * @param  string $align HTML align attribute
  * @param  string $class HTML class attribute
  * @param  int    $p     HTML cellpadding attribute
- * @param  int    $w     HTML width atttribute
+ * @param  int    $w     HTML width attribute
  * @return string HTML
  * @example
  * startTable().
@@ -1150,7 +1150,7 @@ function small($item, $atts = '')
  * Renders a table data row from an array of content => width pairs.
  *
  * @param  array        $array Array of content => width pairs
- * @param  string|array $atts  Table row atrributes
+ * @param  string|array $atts  Table row attributes
  * @return string A HTML table row
  */
 
@@ -1186,7 +1186,7 @@ function assHead()
 }
 
 /**
- * Renders the ubiquitious popup help button.
+ * Renders the ubiquitous popup help button.
  *
  * The rendered link can be customised via a 'admin_help > {$help_var}'
  * pluggable UI callback event.
@@ -1270,7 +1270,7 @@ function fieldHelp($help_var)
 }
 
 /**
- * Renders the ubiquitious popup help button with a little less visual noise.
+ * Renders the ubiquitous popup help button with a little less visual noise.
  *
  * The rendered link can be customised via a 'admin_help > {$help_var}'
  * pluggable UI callback event.

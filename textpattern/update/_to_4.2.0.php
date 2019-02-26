@@ -55,7 +55,7 @@ safe_alter('txp_plugin', "MODIFY code_restore MEDIUMTEXT NOT NULL");
 
 safe_alter('txp_prefs', "MODIFY val TEXT NOT NULL");
 
-// Add author column to files and links, boldy assuming that the publisher in
+// Add author column to files and links, boldly assuming that the publisher in
 // charge of updating this site is the author of any existing content items.
 foreach (array('txp_file', 'txp_link') as $table) {
     $cols = getThings("DESCRIBE `".PFX.$table."`");
