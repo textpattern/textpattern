@@ -43,9 +43,9 @@ interface AssetInterface
     /**
      * $essential property getter.
      *
-     * @param string $key      $essential property array key for which you want to get values.
-     * @param string $whereKey Array key used to filter the output with $valueIn.
-     * @param array  $valueIn  Values to check against the $whereKey values to filter the output.
+     * @param  string $key      $essential property array key for which you want to get values.
+     * @param  string $whereKey Array key used to filter the output with $valueIn.
+     * @param  array  $valueIn  Values to check against the $whereKey values to filter the output.
      * @return array           Filtered values.
      */
 
@@ -58,7 +58,7 @@ interface AssetInterface
     /**
      * Build the Skin switch form.
      *
-     * @return HTML Auto submited select list of installed skins.
+     * @return HTML Auto submitted select list of installed skins.
      */
 
     public function getSelectEdit();

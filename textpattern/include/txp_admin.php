@@ -217,7 +217,7 @@ function new_pass_form($message = '')
                 array(
                     'name'         => 'current_pass',
                     'autocomplete' => 'current-password',
-                ), '', '', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
+                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
             'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
         ).
         inputLabel(

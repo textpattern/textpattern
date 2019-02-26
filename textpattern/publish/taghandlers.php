@@ -290,22 +290,23 @@ function css($atts)
 
 function component($atts)
 {
-    static $mimetypes = null, $dir = null,
-        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
     global $doctype, $pretext;
+    static $mimetypes = null, $dir = null,
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
+        $defaults = array(
+        'format'  => 'url',
+        'form'    => '',
+        'context' => '',
+        'rel'     => '',
+        'title'   => '',
+    );
 
     if (!isset($mimetypes)) {
         $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
         $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
     }
 
-    extract(lAtts(array(
-        'format'  => 'url',
-        'form'    => '',
-        'context' => '',
-        'rel'     => '',
-        'title'   => '',
-    ), $atts, false));
+    extract(lAtts($defaults, $atts, false));
 
     if (empty($form)) {
         return;
@@ -314,7 +315,7 @@ function component($atts)
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';
-    $qs = $context ? get_context($context, $internals) : array();
+    $qs = ($context ? get_context($context, $internals) : array()) + array_diff_key($atts, $defaults);
 
     if ($mode === 'flat') {
         $url = array();
@@ -543,14 +544,16 @@ function output_form($atts, $thing = null)
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
-    if (isset($atts['format']) && empty($to_yield)) {// component
-        return component($atts + array('form' => $form));
+    if (!empty($to_yield)) {
+        $to_yield = $to_yield === true ? $atts : array_fill_keys(do_list_unique($to_yield), null);
+        empty($txp_atts) or $txp_atts = array_diff_key($txp_atts, $to_yield);
     }
 
-    if (!is_bool($to_yield)) {
-        $to_yield = $to_yield ?
-            array_fill_keys(do_list_unique($to_yield), null) :
-            array();
+    if (isset($atts['format'])) {// component
+        empty($txp_atts) or $atts = array_diff_key($atts, $txp_atts);
+
+        return component($atts + array('form' => $form));
+    } elseif (is_array($to_yield)) {
         $atts = lAtts($to_yield, $atts) or $atts = array();
     }
 
@@ -1079,7 +1082,7 @@ function recent_articles($atts)
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
     ), $atts);
 
     $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
@@ -1174,7 +1177,7 @@ function related_articles($atts, $thing = null)
         'limit'    => 10,
         'offset'   => 0,
         'match'    => 'Category1,Category2',
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
@@ -2951,7 +2954,7 @@ function title($atts)
 
     extract(lAtts(array(
         'escape'   => null,
-        'no_widow' => @$prefs['title_no_widow'],
+        'no_widow' => '',
     ), $atts));
 
     $t = $escape === null ? escape_title($thisarticle['title']) : $thisarticle['title'];
@@ -4636,7 +4639,6 @@ function page_url($atts)
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
-        ($escape === null || in_list('html', strtolower($escape))) or $out = txpspecialchars($out);
     }
 
     return $escape === null ? txpspecialchars($out) : $out;
@@ -5394,6 +5396,9 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
+                break;
+            case 'js':
+                $thing = escape_js($thing);
                 break;
             case 'json':
                 $thing = substr(json_encode($thing, JSON_UNESCAPED_UNICODE), 1, -1);

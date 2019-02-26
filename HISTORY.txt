@@ -1,8 +1,24 @@
-Changes in 4.7.3 (upcoming)
+Changes in TBC 4.8.0/5.0.0 (upcoming)
 
+* Removed: Obsolete 'no widowed words' preference setting. If this feature is
+  needed it can be implemented directly with <txp:title /> tag.
+
+Changes in 4.7.3
+
+* Maintenance release with enhancements and bug fixes.
+* Fixed: 'Export to disk' checkbox state inconsistencies for new assets.
+* Fixed: Logout issue in Classic admin theme.
+* Fixed: A bug when PHP 'mbstring' extension is disabled.
+* Fixed: Prevent Alt+S from triggering save (thanks, o10154016).
+* Fixed: Language .ini files trump old .txt files.
+* Changed: Permit falling back on pophelp in 'lang' database table.
+* Changed: 'Show password' on Users panel displays both passwords.
+* Added: <txp:yield /> values are available in external forms too.
+* Added: Indicator for WebP support in Diagnostics panel.
 * Added: Latest translations.
 * Added: Complete Italian inline help translation. Many thanks to Giampiero
   Mellea for all their work.
+* Developer: Introduce L10n/Lang->languageList() to get language tuples.
 * Textile 3.7.1. See https://github.com/textile/php-textile/releases/tag/v3.7.1
   for full list of changes in this release (thanks, gocom).
 
@@ -115,7 +131,7 @@ Changes in 4.7.0
   output.
 * Added: <txp:if_logged_in /> tag.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
-  centralise and verify/delete preferences on upgrade. Table structure and
+  centralize and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
 * Added: Per-user admin panel language preference (decoupled from site language
   preference).
@@ -239,7 +255,7 @@ Changes in 4.6.2
 * Maintenance release with bug fixes.
 * Fixed: More complete SQL trace on non-row-based queries.
 * Fixed: Update process for filesystem-only releases.
-* Fixed: Normalise link text in some tag builder tags (thanks, makss).
+* Fixed: Normalize link text in some tag builder tags (thanks, makss).
 * Fixed: Incorrect focus ring styling.
 * Fixed: Define Trace in RPC (thanks, Retrax/makss).
 * Added: Better cross-browser support for input type=color
@@ -444,7 +460,7 @@ Changes in 4.5.2
   different time zones.
 * Avoid "undefined variable" error while bulk-editing form types.
 * Developer: Use actual callback instead of hard-coded function to render
-  'View'link.  Pass reference to partials meta data into partial callbacks as
+  'View' link. Pass reference to partials meta data into partial callbacks as
   $rs['partials_meta'].
 * Developer: Escape '<script>' tags in script_js(). Use jQuery in dom_attach().
 
@@ -870,7 +886,7 @@ Changes in 4.0.5
 * Distribute jQuery 1.1.2 as a default JavaScript library.
 * Keep image properties on replacement.
 * Add 'delete thumbnail' function.
-* Support back end branding: customisable logo and colour bar.
+* Support back end branding: customizable logo and colour bar.
 * Table sort indicators.
 * Textile improvements.
 * Fix non-utf8 mails (iso 8859-1).
@@ -886,7 +902,7 @@ Changes in 4.0.5
   4.0.4).
 * Fix 'active class' in section_list, category_list.
 * Better cooperation with some proxies (and other HTTP/1.0 clients).
-* Smarter comment submit button emphasises preview step.
+* Smarter comment submit button emphasizes preview step.
 * Optionally hide spam comments in back end list.
 * Truncate longish article category titles in the write screen.
 * Handle thumbnailing of larger images.
@@ -900,7 +916,7 @@ Changes in 4.0.5
   part.
 * Many, many minor improvements.
 
-Changes in 4.0.4:
+Changes in 4.0.4
 
 * RSS 2.0 support.
 * RSS and Atom feed fixes and improvements.
@@ -957,7 +973,7 @@ Changes in 4.0.4:
   (mary).
 * Many minor bugfixes.
 
-Changes in 4.0.3:
+Changes in 4.0.3
 
 * fixed 2 potential security holes(detected in internal code review). Updade is
   recommended.
@@ -993,7 +1009,7 @@ Changes in 4.0.3:
 * Add extra info to the tag trace (SQL queries, conditional tag results, page
   template and form names).
 
-Changes in 4.0.2:
+Changes in 4.0.2
 
 * Fix a bug in 404 handling on some fastcgi servers.
 * Fix a bug that prevented file_download_list from working properly.
@@ -1022,7 +1038,7 @@ Changes in 4.0.2:
 * Improved comment input form HTML markup.
 * Improved txp:section and txp:category tags.
 * New tags: txp:if_different, txp:if_first_article, txp:if_last_article.
-* Localise the XML feed link title.
+* Localize the XML feed link title.
 * Better encoding of article titles.
 * Fix rare problems caused by magic_quotes_runtime.
 * Improved file upload forms.
@@ -1068,7 +1084,7 @@ Changes in 4.0.2:
 * Textile: stop footnote links from clashing in article lists.
 * Added fi_FI locale support.
 
-Changes in 4.0.1:
+Changes in 4.0.1
 
 * Fixed some serious security issues. Updates are strongly recommended.
 * Fixed textile problems (missing block-elements in some cases; notextile;

@@ -48,8 +48,8 @@ class Plugin
      * the following callback is raised upon installation:
      *   plugin_lifecycle.{plugin_name} > installed
      *
-     * @param  string $plugin Plugin_base64
-     * @param  int    $status Plugin status
+     * @param string $plugin Plugin_base64
+     * @param int    $status Plugin status
      *
      * @return string|array
      */
@@ -172,7 +172,7 @@ class Plugin
      *   plugin_lifecycle.{plugin_name} > disabled
      *   plugin_lifecycle.{plugin_name} > deleted
      *
-     * @param  string $name Plugin name
+     * @param string $name Plugin name
      */
 
     public function delete($name)
@@ -199,8 +199,8 @@ class Plugin
      *   plugin_lifecycle.{plugin_name} > disabled
      *   plugin_lifecycle.{plugin_name} > enabled
      *
-     * @param  string $name      Plugin name
-     * @param  int    $setStatus Plugin status. Toggle status, if null
+     * @param string $name      Plugin name
+     * @param int    $setStatus Plugin status. Toggle status, if null
      */
 
     public function changeStatus($name, $setStatus = null)
@@ -232,10 +232,10 @@ class Plugin
     /**
      * Change plugin load priority.
      *
-     * Plugins with a lower nunber are loaded first.
+     * Plugins with a lower number are loaded first.
      *
-     * @param  string $name  Plugin name
-     * @param  int    $order Plugin load priority
+     * @param string $name  Plugin name
+     * @param int    $order Plugin load priority
      */
 
     public function changeOrder($name, $order)
@@ -250,8 +250,8 @@ class Plugin
      * The process may be intercepted (for example, to fetch data from the
      * filesystem) via the "txp.plugin > textpack.fetch" callback.
      *
-     * @param  string  $name   Plugin name
-     * @param  boolean $reset  Delete old strings
+     * @param string  $name  Plugin name
+     * @param boolean $reset Delete old strings
      */
 
     public function installTextpack($name, $reset = false)
@@ -299,8 +299,8 @@ class Plugin
                 $done = array();
 
                 // Manual merge since array_merge/array_merge_recursive don't work as expected
-                // on these muti-dimensional structures.
-                // There must be a more efficent way to do this...
+                // on these multi-dimensional structures.
+                // There must be a more efficient way to do this...
                 foreach ($allpacks[$fallback] as $idx => $packEntry) {
                     if (isset($allpacks[$lang][$idx]['name']) && $allpacks[$lang][$idx]['name'] === $packEntry['name']) {
                         // Great! keys in the same order.

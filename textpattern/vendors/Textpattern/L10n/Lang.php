@@ -131,11 +131,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Return all language files in the lang directory.
      *
-     * @param array $extensions Language files extensions
+     * @param  array $extensions Language files extensions
      * @return array Available language filenames
      */
 
-    public function files($extensions = array('txt', 'textpack', 'ini'))
+    public function files($extensions = array('ini', 'textpack', 'txt'))
     {
         if (!is_dir($this->langDirectory) || !is_readable($this->langDirectory)) {
             trigger_error('Lang directory is not accessible: '.$this->langDirectory, E_USER_WARNING);
@@ -233,8 +233,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * Depending on the flags, the returned array can contain active,
      * installed or available language metadata.
      *
-     * @param  int   $flags Determine which type of information to return
-     * @param  int   $force Force update the given information, even if it's already populated
+     * @param  int $flags Determine which type of information to return
+     * @param  int $force Force update the given information, even if it's already populated
      * @return array
      */
 
@@ -285,7 +285,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                 foreach ($this->files as $file) {
                     $meta = $this->fetchMeta($file);
 
-                    if ($meta) {
+                    if ($meta && !isset($available_lang[$meta['filename']])) {
                         $name = $meta['filename'];
 
                         if (array_key_exists($name, $currently_lang)) {
@@ -393,7 +393,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Install a language pack from a file.
      *
-     * @param  string $lang_code The lang identifier to load
+     * @param string $lang_code The lang identifier to load
      */
 
     public function installFile($lang_code)
@@ -467,8 +467,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Insert or update a language pack.
      *
-     * @param  array  $langpack  The language pack to store
-     * @param  string $langpack  The owner to use if not in the pack
+     * @param  array  $langpack The language pack to store
+     * @param  string $langpack The owner to use if not in the pack
      * @return result set
      */
 
@@ -512,9 +512,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
      *
-     * @param   string       $lang_code The language code
-     * @param   array|string $events    A list of loaded events to extract
-     * @return  array
+     * @param  string       $lang_code The language code
+     * @param  array|string $events    A list of loaded events to extract
+     * @return array
      */
 
     public function extract($lang_code, $events = null)
@@ -569,10 +569,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
      *
-     * @param   string       $lang_code The language code
-     * @param   array|string $events    A list of loaded events to load
-     * @see  extract()
-     * @return  array
+     * @param  string       $lang_code The language code
+     * @param  array|string $events    A list of loaded events to load
+     * @see    extract()
+     * @return array
      */
 
     public function load($lang_code, $events = null)
@@ -592,6 +592,20 @@ class Lang implements \Textpattern\Container\ReusableInterface
     public function getStrings()
     {
         return $this->strings;
+    }
+
+    /**
+     * Determine if a string key exists in the current pack
+     *
+     * @param  string  $var The string name to check
+     * @return boolean
+     */
+
+    public function hasString($var)
+    {
+        $v = strtolower($var);
+
+        return isset($this->strings[$v]);
     }
 
     /**
@@ -640,10 +654,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Generate an array of languages and their localised names.
      *
-     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
-     *                       TEXTPATTERN_LANG_ACTIVE: the active language
-     *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
-     *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
+     * @param  int $flags Logical OR list of flags indiacting the type of list to return:
+     *                    TEXTPATTERN_LANG_ACTIVE: the active language
+     *                    TEXTPATTERN_LANG_INSTALLED: all installed languages
+     *                    TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
      * @return array
      */
 
@@ -675,7 +689,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string $name  The HTML name and ID to assign to the select control
      * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
-     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     * @param  int    $flags Logical OR list of flags indicating the type of list to return:
      *                       TEXTPATTERN_LANG_ACTIVE: the active language
      *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
      *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system

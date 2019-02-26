@@ -90,7 +90,7 @@ function page_edit($message = '', $refresh_partials = false)
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
         'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
          'cb' => $callback_function,
-         'html' => $return_value_of_callback_function (need not be intialised here)
+         'html' => $return_value_of_callback_function (need not be initialised here)
     )
     */
     $partials = array(
@@ -176,8 +176,8 @@ function page_edit($message = '', $refresh_partials = false)
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
             span(
-                checkbox2('export', false, 0, 'export').
-                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+                checkbox2('export', gps('export'), 0, 'export').
+                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
         ).n.
         tag_void('input', array(
@@ -229,7 +229,7 @@ function page_edit($message = '', $refresh_partials = false)
         )
     );
 
-    // Pages code columm.
+    // Pages code column.
     echo n.tag(
         form(
             $actions.

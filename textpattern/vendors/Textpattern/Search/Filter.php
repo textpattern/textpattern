@@ -87,10 +87,10 @@ class Filter
     /**
      * General constructor for searches.
      *
-     * @param string    $event      The admin-side event to which this search relates
-     * @param string    $methods    Available search methods
-     * @param string    $crit       Criteria to be used in filter. If omitted, uses GET/POST value
-     * @param string[]  $method     Search method(s) to filter by. If omitted, uses GET/POST value or last-used method
+     * @param string   $event   The admin-side event to which this search relates
+     * @param string   $methods Available search methods
+     * @param string   $crit    Criteria to be used in filter. If omitted, uses GET/POST value
+     * @param string[] $method  Search method(s) to filter by. If omitted, uses GET/POST value or last-used method
      */
 
     public function __construct($event, $methods, $crit = null, $method = null)
@@ -226,7 +226,8 @@ class Filter
             'placeholder'    => '',
             'label_all'      => 'toggle_all_selected',
             'class'          => '',
-        ), (array) $options));
+            ), (array) $options
+        ));
 
         $selected = ($selected) ? $selected : $default_method;
         $submit_as = (in_array($submit_as, array('get', 'post')) ? $submit_as : 'get');
@@ -246,10 +247,13 @@ class Filter
         foreach ($methods as $key => $value) {
             $name = ($key === 'all') ? 'select_all' : 'search_method[]';
             $method_list[] = tag(
-                n.tag(n.tag(
-                    checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).' '.$value
-                    , 'label').n,
-                    'div').n,
+                n.tag(
+                    n.tag(
+                        checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).' '.$value,
+                        'label'
+                    ).n,
+                    'div'
+                ).n,
                 'li', $key === 'all' ? ' class="txp-dropdown-toggle-all"' : ''
             );
         }
@@ -273,8 +277,7 @@ class Filter
             eInput($event).
             sInput($step).
             $buttons.
-            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', '', 'search'
-            ).
+            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', '', 'search').
             script_js("textpattern.Route.add('{$event}', txp_search);", false);
     }
 
@@ -298,7 +301,7 @@ class Filter
     /**
      * Search method(s) to filter by. If omitted, uses GET/POST value or last-used method.
      *
-     * @param string[]|string   $method  The method key(s) as either an array of strings or a comma-separated list.
+     * @param string[]|string $method The method key(s) as either an array of strings or a comma-separated list.
      */
     public function setSearchMethod($method = null)
     {
@@ -315,7 +318,7 @@ class Filter
     /**
      * Load default search method from a private preference.
      *
-     * @return  string[]    The default search method key(s).
+     * @return string[]    The default search method key(s).
      */
     public function loadDefaultSearchMethod()
     {

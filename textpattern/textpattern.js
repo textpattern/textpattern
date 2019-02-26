@@ -1557,7 +1557,7 @@ $(document).keydown(function (e) {
 
     if (key === 27) {
         $('.close').parent().toggle();
-    } else if (key === 19 || ((e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
+    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
     {
         var obj = $('input.publish');
 
@@ -1807,7 +1807,7 @@ function txp_expand_collapse_all(ev)
 }
 
 /**
- * Restore sub-panel twistys to their as-stored state.
+ * Restore sub-panel twisties to their as-stored state.
  *
  * @return {[type]} [description]
  */

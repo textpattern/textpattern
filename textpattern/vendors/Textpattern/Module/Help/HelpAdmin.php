@@ -43,7 +43,6 @@ class HelpAdmin
 
     /**
      * Constructor.
-     *
      */
 
     public static function init()
@@ -65,7 +64,7 @@ class HelpAdmin
      *
      * Also load fallback file if it's not the same language.
      *
-     * @param string    $lang
+     * @param string $lang
      */
 
     private static function pophelp_load($lang)
@@ -93,7 +92,7 @@ class HelpAdmin
     /**
      * Get pophelp group keys
      *
-     * @param string    $group
+     * @param string $group
      */
 
     public static function pophelp_keys($group)
@@ -158,7 +157,14 @@ class HelpAdmin
                 $out = $pophelp.n;
             }
         } else {
-            $out = gTxt('pophelp_missing', array('{item}' => $item));
+            // Check if the pophelp item is installed in the DB as a regular string.
+            $exists = \Txp::get('\Textpattern\L10n\Lang')->hasString($item);
+
+            if ($exists) {
+                $out = gTxt($item);
+            } else {
+                $out = gTxt('pophelp_missing', array('{item}' => $item));
+            }
         }
 
         $out = tag($out, 'div', array(
@@ -176,7 +182,6 @@ class HelpAdmin
 
     /**
      * Stub, waiting Txp 4.8
-     *
      */
 
     public static function dashboard()

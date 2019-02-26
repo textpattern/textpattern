@@ -12,6 +12,13 @@ main {
 }
 
 /**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  vertical-align: baseline;
+}
+
+/**
  * Add the correct display in all browsers.
  */
 summary {
@@ -123,7 +130,7 @@ nav ol::after,
   }
   .site-header h3 {
     margin: 0.5em 0 0;
-    font-family: "PT Serif", Georgia, serif;
+    font-family: "PT Serif", Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
     font-size: 1.25rem;
     font-style: italic;
     font-weight: normal;
@@ -333,7 +340,7 @@ h6 a:active {
    */
   body {
     color: #333333;
-    font-family: "PT Serif", Georgia, serif;
+    font-family: "PT Serif", Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
 
   /**
@@ -656,7 +663,7 @@ bdo[dir=rtl] {
   [dir=rtl] menu,
 [dir=rtl] ol,
 [dir=rtl] ul {
-    padding: 0 1.75em 0 0;
+    padding: 0 2em 0 0;
   }
 
   [dir=rtl] .site-navigation ul,
@@ -668,7 +675,7 @@ bdo[dir=rtl] {
    * Swap definition description margin positions in RTL languages.
    */
   [dir=rtl] dd {
-    margin: 0 1.75em 0 0;
+    margin: 0 2em 0 0;
   }
 
   /**
@@ -749,10 +756,10 @@ video {
   }
 
   /**
-   * Address margin not present in Safari.
+   * Consistent margins on `figure`.
    */
   figure {
-    margin: 0;
+    margin: 1em 0;
   }
 
   /* Tables
@@ -828,7 +835,7 @@ tfoot td {
   menu,
 ol,
 ul {
-    padding: 0 0 0 1.75em;
+    padding: 0 0 0 2em;
   }
 
   /**
@@ -850,7 +857,7 @@ li > ol {
    * Address margins set differently.
    */
   dd {
-    margin: 0 0 0 1.75em;
+    margin: 0 0 0 2em;
   }
 
   /**
@@ -909,13 +916,6 @@ li > ol {
   }
 
   /**
-   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
-   */
-  progress {
-    vertical-align: baseline;
-  }
-
-  /**
    * Show the overflow in Edge.
    */
   button,
@@ -944,13 +944,6 @@ textarea {
     font-size: 1rem;
     line-height: 1.375;
     vertical-align: baseline;
-  }
-
-  /**
-   * Remove the inner padding in Chrome and Safari on macOS.
-   */
-  [type=search]::-webkit-search-decoration {
-    -webkit-appearance: none;
   }
 
   /**
@@ -1030,6 +1023,14 @@ textarea:focus {
   [type=number]::-webkit-inner-spin-button,
 [type=number]::-webkit-outer-spin-button {
     height: auto;
+  }
+
+  /**
+   * Remove the inner padding in Chrome and Safari on macOS.
+   */
+  [type=search]::-webkit-search-decoration {
+    /* autoprefixer: off */
+    appearance: none;
   }
 
   /**
@@ -1132,16 +1133,6 @@ span.disabled {
   }
 
   /**
-   * Styling for form field validation.
-   */
-  input:focus:invalid,
-select:focus:invalid,
-textarea:focus:invalid {
-    border-color: #9d261d;
-    box-shadow: none;
-  }
-
-  /**
    * Width display options for `input` fields. Height display options
    * for textareas.
    *
@@ -1164,6 +1155,26 @@ textarea:focus:invalid {
   }
   .large textarea {
     height: 9.75em;
+  }
+
+  /**
+   * Styling for form field validation.
+   */
+  input:focus:invalid,
+select:focus:invalid,
+textarea:focus:invalid {
+    border-color: #9d261d;
+    box-shadow: none;
+  }
+
+  /**
+   * Styling for Firefox-specfic form field validation.
+   */
+  input:-moz-ui-invalid,
+select:-moz-ui-invalid,
+textarea:-moz-ui-invalid {
+    border-color: #9d261d;
+    box-shadow: none;
   }
 
   /**
@@ -1212,13 +1223,24 @@ textarea:focus:invalid {
      ========================================================================== */
   /**
    * 1. Address `overflow` set to `hidden` in IE 11.
-   * 2. Correct `button` style inheritance in Firefox, IE 11, and Opera.
+   * 2. Remove the inheritance of text transform in Edge, Firefox, and IE 11.
    */
   button {
     /* 1 */
     overflow: visible;
     /* 2 */
     text-transform: none;
+  }
+
+  /**
+   * Remove the inner border and padding in Firefox.
+   */
+  button::-moz-focus-inner,
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
   }
 
   /**
@@ -1289,17 +1311,6 @@ textarea:focus:invalid {
     top: 2px !important;
   }
 
-  /**
-   * Remove the inner border and padding in Firefox.
-   */
-  button::-moz-focus-inner,
-[type=button]::-moz-focus-inner,
-[type=reset]::-moz-focus-inner,
-[type=submit]::-moz-focus-inner {
-    padding: 0;
-    border-style: none;
-  }
-
   /* Comments
      ========================================================================== */
   /**
@@ -1357,7 +1368,6 @@ textarea:focus:invalid {
    */
   .comments_error {
     border-color: #9d261d;
-    box-shadow: 0 0 4px 2px #9d261d;
   }
 
   /* Popup comments (can be removed if you don't use popups)
