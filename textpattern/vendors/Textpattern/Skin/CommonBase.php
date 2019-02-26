@@ -400,7 +400,7 @@ abstract class CommonBase implements CommonInterface
     /**
      * $results property getter.
      *
-     * @param  array $status Array of results related status ('success', 'warning', 'error') to filter the outpout.
+     * @param  array $status Array of results related status ('success', 'warning', 'error') to filter the output.
      * @return array         Associative array of status textpack related items
      *                       and their related '{list}' parameters.
      */
@@ -820,7 +820,7 @@ abstract class CommonBase implements CommonInterface
     }
 
     /**
-     * Wether a directory is empty or not.
+     * Whether a directory is empty or not.
      *
      * @param  string $path The directory path
      * @return mixed        NULL if the directory is not readable (or does not exist),

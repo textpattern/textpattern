@@ -127,7 +127,7 @@ function css_edit($message = '', $refresh_partials = false)
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
         'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
          'cb' => $callback_function,
-         'html' => $return_value_of_callback_function (need not be intialised here)
+         'html' => $return_value_of_callback_function (need not be initialised here)
     )
     */
     $partials = array(
@@ -212,7 +212,7 @@ function css_edit($message = '', $refresh_partials = false)
         (!is_writable($instance->getDirPath()) ? '' :
             span(
                 checkbox2('export', gps('export'), 0, 'export').
-                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
         ).n.
         tag_void('input', array(
@@ -264,7 +264,7 @@ function css_edit($message = '', $refresh_partials = false)
         )
     );
 
-    // Styles code columm.
+    // Styles code column.
     echo n.tag(
         form(
             $actions.
