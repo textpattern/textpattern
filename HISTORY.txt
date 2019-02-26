@@ -5,6 +5,7 @@ Changes in TBC 4.8.0/5.0.0 (upcoming)
 
 Changes in 4.7.3
 
+* Maintenance release with enhancements and bug fixes.
 * Fixed: 'Export to disk' checkbox state inconsistencies for new assets.
 * Fixed: Logout issue in Classic admin theme.
 * Fixed: A bug when PHP 'mbstring' extension is disabled.
