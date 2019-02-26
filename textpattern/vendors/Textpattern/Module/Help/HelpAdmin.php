@@ -158,7 +158,14 @@ class HelpAdmin
                 $out = $pophelp.n;
             }
         } else {
-            $out = gTxt('pophelp_missing', array('{item}' => $item));
+            // Check if the pophelp item is installed in the DB as a regular string.
+            $exists = \Txp::get('\Textpattern\L10n\Lang')->hasString($item);
+
+            if ($exists) {
+                $out = gTxt($item);
+            } else {
+                $out = gTxt('pophelp_missing', array('{item}' => $item));
+            }
         }
 
         $out = tag($out, 'div', array(

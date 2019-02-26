@@ -248,7 +248,7 @@ abstract class Theme
     }
 
     /**
-     * Sets Textpatterns menu structure, message contents and other application
+     * Sets Textpattern's menu structure, message contents and other application
      * states.
      *
      * @param  string $area     Currently active top level menu

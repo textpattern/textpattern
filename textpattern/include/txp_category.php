@@ -284,7 +284,7 @@ function cat_category_multiedit()
     $things = ps('selected');
 
     if (is_array($things) and $things and in_array($type, array('article', 'image', 'link', 'file'))) {
-        // Fetch selected ites and remove bogus (false) entries to prevent SQL syntax errors.
+        // Fetch selected items and remove bogus (false) entries to prevent SQL syntax errors.
         $things = array_map('assert_int', $things);
         $things = array_filter($things);
 
@@ -316,7 +316,7 @@ function cat_category_multiedit()
                             safe_update('txp_'.$type, "category = ''", "category IN ('$affected')");
                         }
 
-                        // Promote subcatagories of deleted catagories to root.
+                        // Promote subcategories of deleted categories to root.
                         safe_update('txp_category', "parent = 'root'", "parent IN ('$affected')");
                     }
 

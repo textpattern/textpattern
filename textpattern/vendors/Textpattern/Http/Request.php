@@ -143,7 +143,7 @@ class Request
      * to the 'Accept' header for XHR requests.
      *
      * Supplied format of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf',
-     * 'atom' or 'rss' is autocompleted and matched againsts multiple valid MIMEs.
+     * 'atom' or 'rss' is autocompleted and matched against multiple valid MIMEs.
      *
      * Both of the following will return MIME for JSON if 'json' format is
      * supported:
@@ -199,7 +199,7 @@ class Request
      * </code>
      *
      * The above will return 'fi-FI' as long as the Accept-Language header
-     * contains an indentifier that matches Finnish, such as 'fi-fi', 'fi-Fi'
+     * contains an identifier that matches Finnish, such as 'fi-fi', 'fi-Fi'
      * or 'fi'.
      *
      * @param  string|array $languages Languages to check
