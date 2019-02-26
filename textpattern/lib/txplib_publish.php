@@ -67,7 +67,7 @@ function filterFrontPage()
  * Keeps all article tag-related values in one place, in order to do easy
  * bugfixing and ease the addition of new article tags.
  *
- * @param array $rs An article as an assocative array
+ * @param array $rs An article as an associative array
  * @example
  * if ($rs = safe_rows_start("*,
  *     UNIX_TIMESTAMP(Posted) AS uPosted,
@@ -108,7 +108,7 @@ function populateArticleData($rs)
  * Convenience for those who prefer doing conversion in application end instead
  * of in the SQL statement.
  *
- * @param array $rs An article as an assocative array
+ * @param array $rs An article as an associative array
  * @example
  * article_format_info(
  *     safe_row('*', 'textpattern', 'Status = 4 LIMIT 1')

@@ -645,7 +645,7 @@ function type_options($array)
 }
 
 /**
- * Generates a list of radio buttons wrapped in a unordered list.
+ * Generates a list of radio buttons wrapped in an unordered list.
  *
  * @param  string       $name        The field
  * @param  array        $values      The values as an array array( $value => $label )

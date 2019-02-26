@@ -135,7 +135,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array Available language filenames
      */
 
-    public function files($extensions = array('txt', 'textpack', 'ini'))
+    public function files($extensions = array('ini', 'textpack', 'txt'))
     {
         if (!is_dir($this->langDirectory) || !is_readable($this->langDirectory)) {
             trigger_error('Lang directory is not accessible: '.$this->langDirectory, E_USER_WARNING);
@@ -285,7 +285,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                 foreach ($this->files as $file) {
                     $meta = $this->fetchMeta($file);
 
-                    if ($meta) {
+                    if ($meta && !isset($available_lang[$meta['filename']])) {
                         $name = $meta['filename'];
 
                         if (array_key_exists($name, $currently_lang)) {
@@ -689,7 +689,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string $name  The HTML name and ID to assign to the select control
      * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
-     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     * @param  int    $flags Logical OR list of flags indicating the type of list to return:
      *                       TEXTPATTERN_LANG_ACTIVE: the active language
      *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
      *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system

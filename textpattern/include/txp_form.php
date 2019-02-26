@@ -124,7 +124,7 @@ function form_list($current)
     if ($rs) {
         $prev_type = null;
 
-        // Add a hidden field, in case only one skin is in use and mult-edit is the
+        // Add a hidden field, in case only one skin is in use and multi-edit is the
         // first action performed. This way, the value is propagated and saved, even
         // if the skin select list is not rendered or a Form is not saved first.
         $out[] = hInput('skin', $current['skin']);
@@ -255,7 +255,7 @@ function form_edit($message = '', $refresh_partials = false)
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
         'selector' => $DOM_selector or array($selector, $fragment, $script) of $DOM_selectors,
          'cb' => $callback_function,
-         'html' => $return_value_of_callback_function (need not be intialised here)
+         'html' => $return_value_of_callback_function (need not be initialised here)
     )
     */
     $partials = array(
@@ -353,7 +353,7 @@ function form_edit($message = '', $refresh_partials = false)
         (!is_writable($instance->getDirPath()) ? '' :
             span(
                 checkbox2('export', gps('export'), 0, 'export').
-                n.tag(gtxt('export_to_disk'), 'label', array('for' => 'export'))
+                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
         ).
         n.tag_void('input', array(
@@ -417,7 +417,7 @@ function form_edit($message = '', $refresh_partials = false)
         )
     );
 
-    // Forms code columm.
+    // Forms code column.
     echo n.tag(
         form(
             $actions.
