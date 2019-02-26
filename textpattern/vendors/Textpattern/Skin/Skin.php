@@ -1452,7 +1452,7 @@ class Skin extends CommonBase implements SkinInterface
     protected function getMultiEditCheckbox($label)
     {
         return checkbox2('sync', get_pref($label, true), 0, 'sync')
-               .n.tag(gtxt($label), 'label', array('for' => 'sync'))
+               .n.tag(gTxt($label), 'label', array('for' => 'sync'))
                .popHelp($label);
     }
 
