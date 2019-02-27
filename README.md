@@ -18,6 +18,8 @@ Textpattern is [free and open source](#legal) software.
 * [Contributing](#contributing)
 * [Legal](#legal)
 
+![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/index-device-screens@2x.png)
+
 ## System requirements
 
 Textpattern is installed to a web server with PHP and MySQL.
