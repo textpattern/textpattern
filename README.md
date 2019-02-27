@@ -5,9 +5,7 @@
 
 [![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
-**A flexible, elegant and easy-to-use content management system.**
-
-Textpattern is [free and open source](#legal) software.
+**A flexible, elegant and easy-to-use content management system.** Textpattern is [free and open source](#legal) software.
 
 * [System requirements](#system-requirements)
 * [Download Textpattern](#download-textpattern)
