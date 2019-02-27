@@ -18,7 +18,7 @@ Textpattern is [free and open source](#legal) software.
 * [Contributing](#contributing)
 * [Legal](#legal)
 
-![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/index-device-screens@2x.png)
+![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/index-device-screens@2x.jpg)
 
 ## System requirements
 
