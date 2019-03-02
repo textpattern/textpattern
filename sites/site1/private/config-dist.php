@@ -106,7 +106,7 @@ $txpcfg['client_flags'] = 0;
  * see https://forum.textpattern.com/viewtopic.php?id=34493
  */
 
-// define('ihu', 'http://static.example.com/');
+// define('ihu', 'https://static.example.com/');
 
 /*
  * Optional, advanced: custom CSS rules for admin-side themes.
