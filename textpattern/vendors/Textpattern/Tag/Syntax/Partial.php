@@ -45,7 +45,7 @@ class Partial
 
         extract(lAtts(array(
             'name'    => '',
-            'default' => null,
+            'default' => '',
         ), $atts));
 
         if ($name === '') {
