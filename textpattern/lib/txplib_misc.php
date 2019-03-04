@@ -5725,7 +5725,7 @@ function filedownloadurl($id, $filename = '')
         $filename = '/'.urlencode($filename);
 
         // FIXME: work around yet another mod_deflate problem (double compression)
-        // http://blogs.msdn.com/wndp/archive/2006/08/21/Content-Encoding-not-equal-Content-Type.aspx
+        // https://blogs.msdn.microsoft.com/wndp/2006/08/21/content-encoding-content-type/
         if (preg_match('/gz$/i', $filename)) {
             $filename .= a;
         }
