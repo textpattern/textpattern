@@ -2,7 +2,7 @@
   "name": "textpattern",
   "title": "Textpattern CMS",
   "version": "4.8.0-dev",
-  "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
+  "description": "A flexible, elegant, fast and easy-to-use content management system written in PHP.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
   "keywords": [

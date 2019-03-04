@@ -172,7 +172,7 @@ echo $theme->html_head_custom();
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
         n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
-        n.'<div id="messagepane">'.$theme->announce($message).'</div>';
+        n.'<div class="messagepane" id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }
 
