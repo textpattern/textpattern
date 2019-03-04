@@ -598,7 +598,7 @@ function setClassRemember(className, force)
  * @param  {object} fn     Success handler
  * @param  {string} format Response data format, defaults to 'xml'
  * @return {object} this
- * @see    http://api.jquery.com/jQuery.post/
+ * @see    https://api.jquery.com/jQuery.post/
  */
 
 function sendAsyncEvent(data, fn, format)
