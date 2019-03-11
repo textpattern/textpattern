@@ -449,9 +449,10 @@ function preText($s, $prefs)
         $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
 
         if ($name) {
+            $out['realname'] = $out['author'];
             $out['author'] = $name;
         } else {
-            $out['author'] = '';
+            $out['author'] = $out['realname'] = '';
             $is_404 = true;
         }
     }

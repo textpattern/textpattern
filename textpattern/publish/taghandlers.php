@@ -4626,7 +4626,9 @@ function page_url($atts)
         $keys = array();
 
         foreach ($context === true ? $internals : do_list_unique($context) as $key) {
-            $value = isset($pretext[$key]) ? $pretext[$key] : gps($key);
+            $value = isset($pretext[$key]) ?
+                ($key === 'author' ? ($pretext['realname']) : $pretext[$key])
+                : gps($key);
             empty($value) or $keys[$key] = $value;
         }
 
