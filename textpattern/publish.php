@@ -471,6 +471,8 @@ function preText($s, $prefs)
             $out['author'] = $out['realname'] = '';
             $is_404 = true;
         }
+    } else {
+        $out['realname'] = '';
     }
 
     // Prevent to get the id for file_downloads.
