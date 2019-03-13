@@ -421,6 +421,9 @@ function link_edit($message = '')
             eInput('link').
             sInput('link_save').
             hInput('id', $id).
+            hInput('sort', gps('sort')).
+            hInput('dir', gps('dir')).
+            hInput('page', gps('page')).
             hInput('search_method', gps('search_method')).
             hInput('crit', gps('crit')),
         '', '', 'post', 'txp-edit', '', 'link_details');
