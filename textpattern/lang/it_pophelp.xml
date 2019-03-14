@@ -544,7 +544,8 @@
         <item id="comments_are_ol" title="Presentare i commenti come elenco numerato?"><![CDATA[
 <h2>Presentare commenti come un elenco numerato?</h2>
 <p>Determina se i commenti agli articoli saranno contenuti in un tag HTML <code>&lt;ol&gt;</code> e i singoli commenti in un tag <code>&lt;li&gt;</code> (il che farà sì che i commenti siano presentati come un elenco numerato), oppure se i singoli commenti siano invece contenuti in un tag <code>&lt;div&gt;</code>.</p>
-<p>Qualunque sia la scelta, sarà sempre possibile modificare i tag utilizzati modificando il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>, presente nel modulo <code>comments_display</code>.</p>        ]]></item>
+<p>Qualunque sia la scelta, sarà sempre possibile modificare i tag utilizzati modificando il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>, presente nel modulo <code>comments_display</code>.</p>
+        ]]></item>
         <item id="comments_auto_append" title="Aggiungere automaticamente i commenti agli articoli?"><![CDATA[
 <h2>Aggiungere automaticamente i commenti agli articoli?</h2>
 <p>questa impostazione determina se i commenti e il modulo commenti vengono automaticamente aggiunti a tutti i singoli articoli (includendo automaticamente il contenuto del modulo <code>comments_display</code>).</p>
