@@ -1995,11 +1995,7 @@ textpattern.Route.add('setup', function () {
     $('#setup_public_theme').prop('required',true);
 
     if ($('textarea[name=config]').length) {
-        var btn = $('<a />', {class: 'txp-button', text: textpattern.gTxt('download')});
-        $('input[type=submit]').before(btn);
-        btn.after(" ");
-
-        btn.on('click', function (e) {
+        $('.config-download').on('click', function (e) {
             var text = $('textarea[name=config]').val();
             var text = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
             var el = e.currentTarget;
