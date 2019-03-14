@@ -286,7 +286,18 @@ function plugin_list($message = '')
             }
 
             $manage_items = ($manage) ? join($manage) : '-';
-            $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
+            $edit_url = array(
+                'event'         => 'plugin',
+                'step'          => 'plugin_edit',
+                'name'          => $name,
+                'sort'          => $sort,
+                'dir'           => $dir,
+                'page'          => $page,
+                'search_method' => $search_method,
+                'crit'          => $crit,
+                '_txp_token'    => form_token(),
+            );
+
             $statusLink = status_link($status, $name, yes_no($status));
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
@@ -297,7 +308,7 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $edit_url, '', ' class="txp-list-col-name" scope="row"'
+                    href(txpspecialchars($name), $edit_url), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
                     href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
@@ -428,6 +439,12 @@ function plugin_edit_form($name = '')
             ).
             eInput('plugin').
             sInput('plugin_save').
+            hInput('name', $name).
+            hInput('sort', gps('sort')).
+            hInput('dir', gps('dir')).
+            hInput('page', gps('page')).
+            hInput('search_method', gps('search_method')).
+            hInput('crit', gps('crit')).
             hInput('name', $name), '', '', 'post', 'edit-plugin-code', '', 'plugin_details');
 }
 
