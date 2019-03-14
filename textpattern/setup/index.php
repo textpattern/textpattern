@@ -153,7 +153,6 @@ exit("</main>\n</body>\n</html>");
 /**
  * Return the top of page furniture.
  *
- * @param  string $step Name of the current Textpattern step of the setup wizard
  * @return HTML
  */
 
@@ -573,6 +572,7 @@ function setup_config_contents()
             strong(gTxt('before_you_proceed')).' '.
             gTxt('create_config', array('{configpath}' => $config_path.DS))
         ).
+        graf('<a class="txp-button config-download">'.gTxt('download').'</a>').
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             setup_makeConfig($cfg, true).
         n.'</textarea>'.
