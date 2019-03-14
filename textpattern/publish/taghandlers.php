@@ -1075,6 +1075,7 @@ function recent_articles($atts)
         'break'    => 'br',
         'category' => '',
         'class'    => __FUNCTION__,
+        'form'     => '',
         'label'    => gTxt('recent_articles'),
         'labeltag' => '',
         'limit'    => 10,
@@ -1085,7 +1086,7 @@ function recent_articles($atts)
         'no_widow' => '',
     ), $atts);
 
-    $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    $thing = $form ? null : '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     unset($atts['no_widow']);
 
     return article_custom($atts, $thing);
@@ -1328,7 +1329,7 @@ function category_list($atts, $thing = null)
         'parent'       => '',
         'section'      => '',
         'children'     => 1,
-        'sort'         => 'name ASC',
+        'sort'         => empty($atts['categories']) ? 'name ASC' : '',
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -3871,7 +3872,7 @@ function if_individual_article($atts, $thing = null)
 function if_article_list($atts, $thing = null)
 {
     global $is_article_list, $pretext;
-    static $defaults = array('s', 'c', 'q', 'month', 'author', 'pg');
+    static $defaults = array('s', 'c', 'q', 'month', 'author');
 
     $x = ($is_article_list == true);
 
@@ -4596,7 +4597,7 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
-    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f');
 
     isset($specials) or $specials = array(
         'admin_root'  => ahu,
@@ -4625,7 +4626,9 @@ function page_url($atts)
         $keys = array();
 
         foreach ($context === true ? $internals : do_list_unique($context) as $key) {
-            $value = isset($pretext[$key]) ? $pretext[$key] : gps($key);
+            $value = isset($pretext[$key]) ?
+                ($key === 'author' ? ($pretext['realname']) : $pretext[$key])
+                : gps($key);
             empty($value) or $keys[$key] = $value;
         }
 

@@ -16,7 +16,7 @@
 * [Contributing](#contributing)
 * [Legal](#legal)
 
-![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/index-device-screens@2x.jpg)
+![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/readme-device-screens.jpg)
 
 ## System requirements
 
@@ -183,4 +183,4 @@ Includes contributions licensed under the New BSD License. See
 [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/dev/textpattern/lib/LICENSE-BSD-3.txt)
 for terms and conditions.
 
-![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/index-blog-header@2x.png)
+![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.jpg)
