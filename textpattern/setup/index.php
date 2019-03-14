@@ -153,7 +153,6 @@ exit("</main>\n</body>\n</html>");
 /**
  * Return the top of page furniture.
  *
- * @param  string $step Name of the current Textpattern step of the setup wizard
  * @return HTML
  */
 
@@ -163,7 +162,7 @@ function preamble()
 
     $out = array();
     $bodyclass = ($step == '') ? ' welcome' : '';
-    gTxtScript(array('help'));
+    gTxtScript(array('help', 'download'));
 
     if (isset($cfg['site']['language_code']) && !isset($_SESSION['direction'])) {
         $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($cfg['site']['language_code']);
