@@ -1995,7 +1995,7 @@ textpattern.Route.add('setup', function () {
     $('#setup_public_theme').prop('required',true);
 
     if ($('textarea[name=config]').length) {
-        $('.config-download').on('click', function (e) {
+        $('.txp-config-download').on('click', function (e) {
             var text = $('textarea[name=config]').val();
             var text = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
             var el = e.currentTarget;
