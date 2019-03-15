@@ -1060,14 +1060,6 @@ textarea:focus {
   }
 
   /**
-   * Remove browser-specific `select` UI in Firefox 4+.
-   */
-  select:-moz-focusring {
-    color: transparent;
-    text-shadow: 0 0 0 #000000;
-  }
-
-  /**
    * Override height and background set in a previous rule and allow auto height.
    */
   select[size],
