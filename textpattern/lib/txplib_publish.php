@@ -325,6 +325,100 @@ function lastMod()
 }
 
 /**
+ * Parse a string and store the result.
+ *
+ * @param   string      $thing     The raw string
+ * @param   null|string $hash      The string SHA1 hash
+ * @package TagParser
+ */
+
+function txp_tokenize($thing, $hash = null) {
+    global $txp_parsed, $txp_else;
+    static $short_tags = null;
+
+    isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
+    isset($hash) or $hash = sha1($thing);
+    $tag     = array();
+    $outside = array();
+    $else    = array(-1);
+    $count   = array(-1);
+    $level   = 0;
+
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
+
+    $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $last = count($parsed);
+    $inside  = array($parsed[0]);
+    $tags    = array($inside);
+
+    for ($i = 1; $i < $last || $level > 0; $i++) {
+        $chunk = $i < $last ? $parsed[$i] : '</txp:'.$tag[$level-1][2].'>';
+        preg_match($t, $chunk, $tag[$level]);
+        $count[$level] += 2;
+
+        if ($tag[$level][2] === 'else') {
+            $else[$level] = $count[$level];
+        } elseif ($tag[$level][1] === 'txp:') {
+            // Handle <txp::shortcode />.
+            $tag[$level][3] .= ' form="'.$tag[$level][2].'"';
+            $tag[$level][2] = 'output_form';
+        } elseif ($short_tags && $tag[$level][1] !== 'txp') {
+            // Handle <short::tags />.
+            $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+        }
+
+        if ($chunk[strlen($chunk) - 2] === '/') {
+            // Self closed tag.
+            if ($chunk[1] === '/') {
+                trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
+            }
+
+            $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
+            $inside[$level] .= $chunk;
+        } elseif ($chunk[1] !== '/') {
+            // Opening tag.
+            $inside[$level] .= $chunk;
+            $level++;
+            $outside[$level] = $chunk;
+            $inside[$level] = '';
+            $else[$level] = $count[$level] = -1;
+            $tags[$level] = array();
+        } else {
+            // Closing tag.
+            if ($level < 1) {
+                trigger_error(gTxt('missing_open_tag', array('{chunk}' => $chunk)), E_USER_WARNING);
+                $tags[$level][] = array($chunk, null, '', null, null);
+                $inside[$level] .= $chunk;
+            } else {
+                if ($i >= $last) {
+                    trigger_error(gTxt('missing_close_tag', array('{chunk}' => $outside[$level])), E_USER_WARNING);
+                } elseif ($tag[$level-1][2] != $tag[$level][2]) {
+                    trigger_error(gTxt('mismatch_open_close_tag', array(
+                        '{from}' => $outside[$level],
+                        '{to}'   => $chunk,
+                    )), E_USER_WARNING);
+                }
+
+                $sha = sha1($inside[$level]);
+                $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
+                $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
+                $level--;
+                $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], $chunk);
+                $inside[$level] .= $inside[$level+1].$chunk;
+            }
+        }
+
+        $chunk = ++$i < $last ? $parsed[$i] : '';
+        $tags[$level][] = $chunk;
+        $inside[$level] .= $chunk;
+    }
+
+    $txp_parsed[$hash] = $tags[0];
+    $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+}
+
+/**
  * Parse a string and replace any Textpattern tags with their actual value.
  *
  * @param   string    $thing     The raw string
@@ -338,10 +432,14 @@ function parse($thing, $condition = true, $not = true)
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $short_tags = null;
 
-    if ($not && !empty($txp_atts['not'])) {
+    if (!empty($txp_atts['evaluate'])) {
+        $condition = true;
+    } elseif ($not && !empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
+
+    $txp_tag = !empty($condition);
 
     if ($production_status === 'debug') {
         $trace->log('['.($condition ? 'true' : 'false').']');
@@ -364,84 +462,7 @@ function parse($thing, $condition = true, $not = true)
     $hash = sha1($thing);
 
     if (!isset($txp_parsed[$hash])) {
-        $tag     = array();
-        $outside = array();
-        $else    = array(-1);
-        $count   = array(-1);
-        $level   = 0;
-
-        $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
-
-        $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-        $last = count($parsed);
-        $inside  = array($parsed[0]);
-        $tags    = array($inside);
-
-        for ($i = 1; $i < $last || $level > 0; $i++) {
-            $chunk = $i < $last ? $parsed[$i] : '</txp:'.$tag[$level-1][2].'>';
-            preg_match($t, $chunk, $tag[$level]);
-            $count[$level] += 2;
-
-            if ($tag[$level][2] === 'else') {
-                $else[$level] = $count[$level];
-            } elseif ($tag[$level][1] === 'txp:') {
-                // Handle <txp::shortcode />.
-                $tag[$level][3] .= ' form="'.$tag[$level][2].'"';
-                $tag[$level][2] = 'output_form';
-            } elseif ($short_tags && $tag[$level][1] !== 'txp') {
-                // Handle <short::tags />.
-                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
-            }
-
-            if ($chunk[strlen($chunk) - 2] === '/') {
-                // Self closed tag.
-                if ($chunk[1] === '/') {
-                    trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
-                }
-
-                $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
-                $inside[$level] .= $chunk;
-            } elseif ($chunk[1] !== '/') {
-                // Opening tag.
-                $inside[$level] .= $chunk;
-                $level++;
-                $outside[$level] = $chunk;
-                $inside[$level] = '';
-                $else[$level] = $count[$level] = -1;
-                $tags[$level] = array();
-            } else {
-                // Closing tag.
-                if ($level < 1) {
-                    trigger_error(gTxt('missing_open_tag', array('{chunk}' => $chunk)), E_USER_WARNING);
-                    $tags[$level][] = array($chunk, null, '', null, null);
-                    $inside[$level] .= $chunk;
-                } else {
-                    if ($i >= $last) {
-                        trigger_error(gTxt('missing_close_tag', array('{chunk}' => $outside[$level])), E_USER_WARNING);
-                    } elseif ($tag[$level-1][2] != $tag[$level][2]) {
-                        trigger_error(gTxt('mismatch_open_close_tag', array(
-                            '{from}' => $outside[$level],
-                            '{to}'   => $chunk,
-                        )), E_USER_WARNING);
-                    }
-
-                    $sha = sha1($inside[$level]);
-                    $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
-                    $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
-                    $level--;
-                    $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], $chunk);
-                    $inside[$level] .= $inside[$level+1].$chunk;
-                }
-            }
-
-            $chunk = ++$i < $last ? $parsed[$i] : '';
-            $tags[$level][] = $chunk;
-            $inside[$level] .= $chunk;
-        }
-
-        $txp_parsed[$hash] = $tags[0];
-        $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+        txp_tokenize($thing, $hash);
     }
 
     $tag = $txp_parsed[$hash];
@@ -452,21 +473,58 @@ function parse($thing, $condition = true, $not = true)
 
     list($first, $last) = $txp_else[$hash];
 
-    if ($condition) {
-        $last = $first - 2;
-        $first   = 1;
-    } elseif ($first <= $last) {
-        $first  += 2;
-    } else {
-        return '';
+    if (!empty($txp_atts['evaluate'])) {
+        $test = trim($txp_atts['evaluate']);
+        $isempty = !empty($test);
+        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+        $nr = $first - 2;
+        $out = array($tag[0]);
+
+        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+            $txp_tag = $tag[$n];
+
+            if ($test && !in_array($txp_tag[1], $test)) {
+                $out[] = null;
+                $tags[] = $n;
+            } else {
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $out[] = $nextag;
+                $isempty &= trim($nextag) === '';
+            }
+
+            $out[] = $tag[++$n];
+        }
+
+        if ($isempty == empty($txp_atts['not'])) {
+            unset($out);
+            $condition = false;
+        } else {
+            foreach ($tags as $n) {
+                $txp_tag = $tag[$n];
+                $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+            }
+
+            $out = implode('', $out);
+        }
     }
 
-    for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-        $txp_tag = $tag[$first];
-        $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
+    if (!isset($out)) {
+        if ($condition) {
+            $last = $first - 2;
+            $first   = 1;
+        } elseif ($first <= $last) {
+            $first  += 2;
+        } else {
+            return '';
+        }
+
+        for ($out = $tag[$first - 1]; $first <= $last; $first++) {
+            $txp_tag = $tag[$first];
+            $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
+        }
     }
 
-    $txp_tag = null;
+    $txp_tag = !empty($condition);
 
     return $out;
 }
@@ -569,7 +627,7 @@ function processTags($tag, $atts = '', $thing = null)
             $out = $out ? '' : '1';
         }
 
-        unset($txp_atts['txp-process'], $txp_atts['not']);
+        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
 
         if ($txp_atts) {
             $pretext['_txp_atts'] = true;

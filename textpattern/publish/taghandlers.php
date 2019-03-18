@@ -194,7 +194,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
 
@@ -5250,9 +5250,10 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $prefs, $txp_parsed, $txp_else, $txp_tag;
+    global $prefs, $txp_parsed, $txp_else, $txp_tag, $txp_atts;
     static $xpath = null, $functions = null;
 
+    unset($txp_atts['evaluate']);
     $staged = null;
 
     extract(lAtts(array(
@@ -5327,47 +5328,18 @@ function txp_eval($atts, $thing = null)
         return parse($thing, false);
     }
 
-    $hash = sha1($thing);
+    $txp_atts['evaluate'] = $test;
+    $thing = parse($thing);
+    unset($txp_atts['evaluate']);
 
-    if (!empty($txp_parsed[$hash]) && !empty($txp_else[$hash])) {
-        $test = trim($test);
-        $isempty = !empty($test);
-        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-        $tag = $txp_parsed[$hash];
-        $nr = $txp_else[$hash][0] - 2;
-        $out = array($tag[0]);
-
-        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-            $txp_tag = $tag[$n];
-
-            if ($test && !in_array($txp_tag[1], $test)) {
-                $out[] = $txp_tag;
-                $tags[] = $n;
-            } else {
-                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $out[] = $nextag;
-                $isempty &= trim($nextag) === '';
-            }
-
-            $out[] = $tag[++$n];
+    if($txp_tag) {
+        if ($staged) {
+            $quoted = txp_escape(array('escape' => 'quote'), $thing);
+            $query = str_replace('<+>', $quoted, $query);
+            $thing = $xpath->evaluate($query);
         }
-
-        if ($isempty) {
-            return parse($thing, false);
-        }
-
-        foreach ($tags as $n) {
-            $txp_tag = $out[$n];
-            $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-        }
-
-        $thing = implode('', $out);
-    }
-
-    if ($staged) {
-        $quoted = txp_escape(array('escape' => 'quote'), $thing);
-        $query = str_replace('<+>', $quoted, $query);
-        $thing = $xpath->evaluate($query);
+    } else {
+        $txp_atts = null;
     }
 
     return $thing instanceof DOMNodeList ? $thing->length : $thing;
