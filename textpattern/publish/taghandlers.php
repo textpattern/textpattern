@@ -379,36 +379,69 @@ function component($atts)
 
 function image($atts)
 {
+    return thumbnail(array('thumbnail' => isset($atts['thumbnail']) ? $atts['thumbnail'] : false) + $atts);
+}
+
+// -------------------------------------------------------------
+
+function thumbnail($atts)
+{
     extract(lAtts(array(
-        'class'   => '',
-        'escape'  => true,
-        'html_id' => '',
-        'id'      => '',
-        'name'    => '',
-        'width'   => '',
-        'height'  => '',
-        'style'   => '',
-        'wraptag' => '',
+        'escape'    => true,
+        'title'     => '',
+        'class'     => '',
+        'html_id'   => '',
+        'height'    => '',
+        'id'        => '',
+        'link'      => 0,
+        'link_rel'  => '',
+        'name'      => '',
+        'poplink'   => 0, // Deprecated, 4.7
+        'style'     => '',
+        'wraptag'   => '',
+        'width'     => '',
+        'thumbnail' => null,
     ), $atts));
 
+    if (isset($atts['poplink'])) {
+        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
+    }
+
     if ($imageData = imageFetchInfo($id, $name)) {
+        $thumb_ = $thumbnail || !isset($thumbnail) ? 'thumb_' : '';
+
+        if ($thumb_ && empty($imageData['thumbnail'])) {
+            $thumb_ = '';
+
+            if (!isset($thumbnail)) {
+                return;
+            }
+        }
+
         extract($imageData);
 
         if ($escape) {
-            $escape = compact('escape');
-            $alt = txp_escape($escape, $alt);
-            $caption = txp_escape($escape, $caption);
+            $alt = txp_escape(array('escape' => $escape), $alt);
         }
 
-        if ($width == '' && $w) {
-            $width = $w;
+        if ($title === true) {
+            $title = $caption;
         }
 
-        if ($height == '' && $h) {
-            $height = $h;
+        if ($width == '' && ($thumb_ && $thumb_w || !$thumb_ && $w)) {
+            $width = ${$thumb_.'w'};
         }
 
-        $out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"';
+        if ($height == '' && ($thumb_ && $thumb_h || !$thumb_ && $h)) {
+            $height = ${$thumb_.'h'};
+        }
+
+        $out = '<img src="'.imagesrcurl($id, $ext, !empty($thumb_)).
+            '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"';
+
+        if ($title) {
+            $out .= ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"';
+        }
 
         if ($html_id && !$wraptag) {
             $out .= ' id="'.txpspecialchars($html_id).'"';
@@ -432,99 +465,25 @@ function image($atts)
 
         $out .= ' />';
 
+        if ($link && $thumb_) {
+            $attribs = '';
+
+            if (!empty($link_rel)) {
+                $attribs .= " rel='".txpspecialchars($link_rel)."'";
+            }
+
+            $out = href($out, imagesrcurl($id, $ext), $attribs);
+        } elseif ($poplink) {
+            $out = '<a href="'.imagesrcurl($id, $ext).'"'.
+                ' onclick="window.open(this.href, \'popupwindow\', '.
+                '\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
+        }
+
         if ($wraptag) {
             return doTag($out, $wraptag, $class, '', $html_id);
         }
 
         return $out;
-    }
-}
-
-// -------------------------------------------------------------
-
-function thumbnail($atts)
-{
-    extract(lAtts(array(
-        'class'    => '',
-        'escape'   => true,
-        'html_id'  => '',
-        'height'   => '',
-        'id'       => '',
-        'link'     => 0,
-        'link_rel' => '',
-        'name'     => '',
-        'poplink'  => 0, // Deprecated, 4.7
-        'style'    => '',
-        'wraptag'  => '',
-        'width'    => '',
-    ), $atts));
-
-    if (isset($atts['poplink'])) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
-    }
-
-    if ($imageData = imageFetchInfo($id, $name)) {
-        extract($imageData);
-
-        if ($thumbnail) {
-            if ($escape) {
-                $escape = compact('escape');
-                $alt = txp_escape($escape, $alt);
-                $caption = txp_escape($escape, $caption);
-            }
-
-            if ($width == '' && $thumb_w) {
-                $width = $thumb_w;
-            }
-
-            if ($height == '' && $thumb_h) {
-                $height = $thumb_h;
-            }
-
-            $out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"';
-
-            if ($html_id && !$wraptag) {
-                $out .= ' id="'.txpspecialchars($html_id).'"';
-            }
-
-            if ($class && !$wraptag) {
-                $out .= ' class="'.txpspecialchars($class).'"';
-            }
-
-            if ($style) {
-                $out .= ' style="'.txpspecialchars($style).'"';
-            }
-
-            if ($width) {
-                $out .= ' width="'.(int) $width.'"';
-            }
-
-            if ($height) {
-                $out .= ' height="'.(int) $height.'"';
-            }
-
-            $out .= ' />';
-
-            if ($link) {
-                $attribs = '';
-
-                if (!empty($link_rel)) {
-                    $attribs .= " rel='".txpspecialchars($link_rel)."'";
-                }
-
-                $out = href($out, imagesrcurl($id, $ext), $attribs);
-            } elseif ($poplink) {
-                $out = '<a href="'.imagesrcurl($id, $ext).'"'.
-                    ' onclick="window.open(this.href, \'popupwindow\', '.
-                    '\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
-            }
-
-            if ($wraptag) {
-                return doTag($out, $wraptag, $class, '', $html_id);
-            }
-
-            return $out;
-        }
     }
 }
 
@@ -1337,7 +1296,14 @@ function category_list($atts, $thing = null)
         'offset'       => '',
     ), $atts));
 
-    $categories = $categories === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($categories);
+    $categories = $categories === true ?
+        array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) :
+        do_list_unique($categories);
+
+    if (isset($atts['categories']) && empty($categories)) {
+        return '';
+    }
+
     $roots = ($parent === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($parent)) or $roots = $categories or $roots = array('root');
     $level++;
     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
@@ -3252,8 +3218,9 @@ function article_image($atts)
     assert_article();
 
     extract(lAtts(array(
-        'class'     => '',
         'escape'    => true,
+        'title'     => '',
+        'class'     => '',
         'html_id'   => '',
         'style'     => '',
         'width'     => '',
@@ -3271,54 +3238,37 @@ function article_image($atts)
     if (intval($image)) {
         $rs = safe_row("*", 'txp_image', "id = ".intval($image));
 
-        if ($rs) {
-            $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
-            $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
-
-            if ($thumbnail) {
-                if ($rs['thumbnail']) {
-                    extract($rs);
-
-                    if ($escape) {
-                        $escape = compact('escape');
-                        $alt = txp_escape($escape, $alt);
-                        $caption = txp_escape($escape, $caption);
-                    }
-
-                    $out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
-                        (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-                        (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                        ($style ? ' style="'.txpspecialchars($style).'"' : '').
-                        ($width ? ' width="'.(int) $width.'"' : '').
-                        ($height ? ' height="'.(int) $height.'"' : '').
-                        ' />';
-                } else {
-                    return '';
-                }
-            } else {
-                extract($rs);
-
-                if ($escape) {
-                    $escape = compact('escape');
-                    $alt = txp_escape($escape, $alt);
-                    $caption = txp_escape($escape, $caption);
-                }
-
-                $out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
-                    (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-                    (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                    ($style ? ' style="'.txpspecialchars($style).'"' : '').
-                    ($width ? ' width="'.(int) $width.'"' : '').
-                    ($height ? ' height="'.(int) $height.'"' : '').
-                    ' />';
-            }
-        } else {
+        if (empty($rs)) {
             trigger_error(gTxt('unknown_image'));
 
             return '';
         }
+
+        if ($thumbnail && empty($rs['thumbnail'])) {
+            return '';
+        }
+
+        $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
+        $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
+
+        extract($rs);
+
+        if ($title === true) {
+            $title = $caption;
+        }
+
+        $out = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
+            '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
+            ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '').
+            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+            ($style ? ' style="'.txpspecialchars($style).'"' : '').
+            ($width ? ' width="'.(int) $width.'"' : '').
+            ($height ? ' height="'.(int) $height.'"' : '').
+            ' />';
     } else {
         $out = '<img src="'.txpspecialchars($image).'" alt=""'.
+            ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '').
             (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
             (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
             ($style ? ' style="'.txpspecialchars($style).'"' : '').
