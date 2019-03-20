@@ -492,6 +492,7 @@ function preText($s, $prefs)
         global $nolog;
 
         $nolog = true;
+        header('Cache-Control: no-cache, no-store, max-age=0');
         $rs = safe_row("ID AS id, Section AS s", 'textpattern', "ID = ".intval(gps('txpreview'))." LIMIT 1");
 
         if ($rs) {
