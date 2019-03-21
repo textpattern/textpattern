@@ -38,17 +38,17 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>';
 
         // Medium Editor
-        $out[] = '<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">';
         $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/medium-editor.min.css">';
         $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/themes/default.css">';
         $out[] = '<script src="vendors/Medium/Editor/js/medium-editor.min.js"></script>';
+/*      // Options
         $out[] = script_js('textpattern.medium = {
             toolbar: {
                 buttons: ["bold", "italic", "underline", "image", "anchor", "h2", "h3", "quote"]
             },
-            buttonLabels: "fontawesome"
+            buttonLabels: false
         };');
-
+*/
         return join(n, $out);
     }
 
