@@ -25,6 +25,8 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
+new \Textpattern\Textfilter\Medium();
+
 class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
@@ -33,7 +35,19 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>'.n;
+        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>';
+
+        // Medium Editor
+        $out[] = '<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">';
+        $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/medium-editor.min.css">';
+        $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/themes/default.css">';
+        $out[] = '<script src="vendors/Medium/Editor/js/medium-editor.min.js"></script>';
+        $out[] = script_js('textpattern.medium = {
+            toolbar: {
+                buttons: ["bold", "italic", "underline", "image", "anchor", "h2", "h3", "quote"]
+            },
+            buttonLabels: "fontawesome"
+        };');
 
         return join(n, $out);
     }

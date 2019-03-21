@@ -2074,7 +2074,7 @@ textpattern.Route.add('article', function () {
         var thisHelp = me.data('help');
         var renderHelp = (typeof thisHelp === 'undefined') ? '' : thisHelp;
 
-        wrapper.find('.textfilter-value').val(me.data('id'));
+        wrapper.find('.textfilter-value').val(me.data('id')).trigger('change');
         wrapper.find('.textfilter-help').html(renderHelp);
     });
 
