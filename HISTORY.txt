@@ -658,8 +658,7 @@ Changes in 4.3.0
 Changes in 4.2.0
 
 * Feature: Extendable admin-side themes. 'Classic' and 'Remora' theme contained
-  in the core package, user-contributed themes available from
-  http://textgarden.org/layouts/?c=txp-admin.
+  in the core package.
 * Feature: Capability for multi-site file system layouts (thanks: Sam Weiss).
 * Feature: Role-based permission checks for images, links and files.
 * Feature: Save various pane toggle states.
