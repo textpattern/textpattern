@@ -294,7 +294,7 @@ Changes in 4.6.0
 * Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
-* Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7
+* Requires PHP 5.3.3 or newer. Compatible with PHP 7.0 and MySQL 5.7
   (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and
   <txp:if_yield>.
@@ -492,7 +492,7 @@ Changes in 4.5.0
 * Beautified setup process.
 * Write, Plugin and Section panels save some changes without page refreshes
   (Ajax).
-* WordPress import tool imports image media attachemnts as article images, can
+* WordPress import tool imports image media attachments as article images, can
   use 'utf8' or 'latin1' source databases.
 * New advanced preference "Login info email address" allows to define a 'From:'
   address from which  a new user's login info is sent.
@@ -577,12 +577,12 @@ Changes in 4.4.1
 
 Changes in 4.4.0
 
-* Security: Fix several vulnerabilites. Updates are *absolutely* recommended for
-  sites running any older version. Thanks, Neal Poole.
+* Security: Fix several vulnerabilities. Updates are *absolutely* recommended
+  for sites running any older version. Thanks, Neal Poole.
 * Passwords are case-sensitive.
 * Hotlink protection for files: Downloads from a web-accessible '/files'
   directory are inhibited. The '/file_download/$id/example.foo' route is the
-  only valid way to access downloadable files. Requires an Apache webserver and
+  only valid way to access downloadable files. Requires an Apache web server and
   usage of the sample .htaccess file.
 * Empty <txp:variable></txp:variable> container sets a variable's value to "".
 * WordPress import tool fixed for WP 3.x.
@@ -804,7 +804,7 @@ Changes in 4.0.7
 * Developer: pagelinkurl() calls a custom URL handler if present. NB: The custom
   URL handlers function signature is modified, as an additional flag discerns
   pagelinks from permlinks.
-* Developer: $prefs['searchable_article_fields'] may contain an arrray of column
+* Developer: $prefs['searchable_article_fields'] may contain an array of column
   names defining the fulltext-indexed set. A corresponding MySQL fulltext index
   must be established previously.
 * jQuery 1.2.6.
@@ -879,7 +879,7 @@ Changes in 4.0.5
 
 * Fixed security issue on public-side (XSS) (thanks zarathu).
 * Fixed path disclosure issue (thanks zarathu).
-* Search for posted and last modifed dates in article list.
+* Search for posted and last modified dates in article list.
 * New tag: <txp:hide /> as a container for comments and other internal content.
 * Changed tags: <txp:comments />, <txp:category_list />, <txp:section_list />
   and <txp:image_index /> support 'sort' attribute.
@@ -898,7 +898,7 @@ Changes in 4.0.5
 * Fix comment spam blacklist false positives (see FAQ for 4.0.4).
 * Fix file_download-tag from showing the same URL for different downloads (see
   FAQ for 4.0.4).
-* Fix disappearing comment preferences in certain ciscumstances (see FAQ for
+* Fix disappearing comment preferences in certain circumstances (see FAQ for
   4.0.4).
 * Fix 'active class' in section_list, category_list.
 * Better cooperation with some proxies (and other HTTP/1.0 clients).
@@ -922,15 +922,15 @@ Changes in 4.0.4
 * RSS and Atom feed fixes and improvements.
 * Many improvements to admin interface XHTML markup and CSS.
 * Many subtle improvements to the admin UI.
-* Add automatical detection of and working with SSL.
+* Add automatic detection of and working with SSL.
 * add nowidow-attribute to article tags.
-* Adapt navigation-elemts to the user's permissions.
+* Adapt navigation-elements to the user's permissions.
 * Lots of Textile improvements.
 * Fixed sending Last-Modified header.
 * Better indexing for faster article list queries.
 * Update to tag builders.
 * Show (source of) plugin-help before installation.
-* Improvements in translations (and translateables) (thanks Skubidu and others).
+* Improvements in translations (and translatables) (thanks Skubidu and others).
 * New translations: Indonesian, Hebrew, Hungarian, Romanian.
 * Improved handling of comma-separated values in tag attributes.
 * article, article_custom tags: new 'sort' attribute.
@@ -975,7 +975,7 @@ Changes in 4.0.4
 
 Changes in 4.0.3
 
-* fixed 2 potential security holes(detected in internal code review). Updade is
+* Fixed 2 potential security holes(detected in internal code review). Update is
   recommended.
 * Textile i18n improvements.
 * Add a bulk Ban function for comments.
@@ -984,7 +984,7 @@ Changes in 4.0.3
 * Fix double translated linebreaks in comments.
 * Fix nofollow in comments.
 * Fix preview without textile in certain edge cases.
-* Seperate hidden comments into unmoderated and spam.
+* Separate hidden comments into unmoderated and spam.
 * Add bulk changing of comment status (visible, moderated, spam).
 * Better error-handling in comments-form when critical fields are missing.
 * New tag: <txp:comments_error /> (and conditional <txp:if_comments_error>).
@@ -1001,7 +1001,7 @@ Changes in 4.0.3
 * Add comment edit link to notification emails.
 * Make comment-time format customizable in tag (mary).
 * Add offset-attribute to file_download_list (mary).
-* Make older, newer and link_to_home work more consistantly with other nav-tags
+* Make older, newer and link_to_home work more consistently with other nav-tags
   (mary).
 * Fix mailto: links.
 * Fix tag trace output for enclosing tags.
