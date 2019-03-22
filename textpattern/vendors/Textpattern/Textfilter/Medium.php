@@ -47,6 +47,10 @@ class Medium extends Base implements TextfilterInterface
             self::$init = true;
 
             script_js('textpattern.Route.add("article", function() {
+                if (typeof MediumEditor === "undefined") {
+                    return;
+                }
+
                 var mediumEditors = [];
 
                 $(".txp-textarea-options").each(function(i) {
