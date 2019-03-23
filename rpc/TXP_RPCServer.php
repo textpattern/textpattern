@@ -5,7 +5,7 @@
  * https://textpattern.com/
  *
  * XML-RPC Server for Textpattern 4.0.x
- * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
+ * https://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
  * Copyright (C) 2019 The Textpattern Development Team
  * Author: Pedro Palazón
