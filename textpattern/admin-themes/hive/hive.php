@@ -26,6 +26,7 @@ if (!defined('txpinterface')) {
 }
 
 new \Textpattern\Textfilter\Medium();
+new \Textpattern\Textfilter\ProseMirror();
 
 class hive_theme extends \Textpattern\Admin\Theme
 {
@@ -41,7 +42,8 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/medium-editor.min.css">';
         $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/themes/default.css">';
         $out[] = '<script src="vendors/Medium/Editor/js/medium-editor.min.js"></script>';
-/*      // Options
+/*
+        // Options
         $out[] = script_js('textpattern.medium = {
             toolbar: {
                 buttons: ["bold", "italic", "underline", "image", "anchor", "h2", "h3", "quote"]
@@ -49,6 +51,11 @@ class hive_theme extends \Textpattern\Admin\Theme
             buttonLabels: false
         };');
 */
+
+        // ProseMirror
+        $out[] = '<link rel="stylesheet" href="vendors/ProseMirror/css/editor.css">';
+        $out[] = '<script src="vendors/ProseMirror/js/prosemirror.js"></script>';
+
         return join(n, $out);
     }
 

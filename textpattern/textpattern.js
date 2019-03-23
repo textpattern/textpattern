@@ -1429,6 +1429,21 @@ textpattern.encodeHTML = function (string) {
 };
 
 /**
+ * Decodes a string as HTML.
+ *
+ * @param  {string} string The string
+ * @return {string} Encoded string
+ * @since  4.8.0
+ */
+
+textpattern.decodeHTML = function (string) {
+    let div = document.createElement('template');
+    div.innerHTML = string.trim();
+  
+    return div.content; 
+}
+
+/**
  * Translates given substrings.
  *
  * @param  {string} string        The mustached string

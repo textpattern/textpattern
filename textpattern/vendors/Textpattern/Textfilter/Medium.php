@@ -32,7 +32,7 @@ namespace Textpattern\Textfilter;
 
 class Medium extends Base implements TextfilterInterface
 {
-    private static $init = null;
+    private static $init = null, $id = 4;
 
     /**
      * Constructor.
@@ -40,7 +40,7 @@ class Medium extends Base implements TextfilterInterface
 
     public function __construct()
     {
-        parent::__construct(4, gTxt('Medium Editor'));
+        parent::__construct(self::$id, gTxt('MediumEditor'));
         $this->options = array();
 
         if (!isset(self::$init)) {
@@ -51,13 +51,15 @@ class Medium extends Base implements TextfilterInterface
                     return;
                 }
 
-                var mediumEditors = [];
-
                 $(".txp-textarea-options").each(function(i) {
-                    mediumEditors[i] = new MediumEditor($(this).closest(".txp-form-field-textarea").find("textarea"), textpattern.medium);
+                    var container = $(this).closest(".txp-form-field-textarea");
+                    var mEditor = new MediumEditor(container.find("textarea"), textpattern.medium);
                     $(this).find("input.textfilter-value").change(function() {
-                        if ($(this).val() == 4) mediumEditors[i].setup();
-                        else mediumEditors[i].destroy();
+                        if ($(this).val() == "'.self::$id.'") {
+                            mEditor.setup();
+                            container.find(".medium-editor-element").show();
+                        }
+                        else mEditor.destroy();
                     }).change();
                 });
             });', false);
