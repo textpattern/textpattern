@@ -58,7 +58,7 @@ function require(name) {
 
 const {EditorState} = require("prosemirror-state")
 const {EditorView} = require("prosemirror-view")
-const {Schema, DOMParser} = require("prosemirror-model")
+const {Schema, DOMParser, DOMSerializer} = require("prosemirror-model")
 const {schema} = require("prosemirror-schema-basic")
 const {addListNodes} = require("prosemirror-schema-list")
 const {exampleSetup} = require("prosemirror-example-setup")
@@ -97,13 +97,14 @@ textpattern.Route.add("article", function() {
               dispatchTransaction(tr) {
                 const { state } = this.state.applyTransaction(tr)
                 const area = document.getElementById(id)
-                const editor = document.getElementById("prosemirror-editor-"+id).querySelector(".ProseMirror")
+                const div = $("<div />")
 
                 this.updateState(state)
         
                 // Update textarea only if content has changed
                 if (tr.docChanged) {
-                  area.value = editor.innerHTML//defaultMarkdownSerializer.serialize(tr.doc)
+                  //area.value = defaultMarkdownSerializer.serialize(tr.doc)
+                  $(area).text(div.html(DOMSerializer.fromSchema(mySchema).serializeFragment(state.doc.content)).html());
                 }
               }
             })
