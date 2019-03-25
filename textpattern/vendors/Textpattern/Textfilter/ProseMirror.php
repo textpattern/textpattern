@@ -32,7 +32,7 @@ namespace Textpattern\Textfilter;
 
 class ProseMirror extends Base implements TextfilterInterface
 {
-    private static $init = null, $id = 5;
+    private static $init = null, $id = 'pmeditor';
 
     /**
      * Constructor.
@@ -60,6 +60,7 @@ const {EditorState} = require("prosemirror-state")
 const {EditorView} = require("prosemirror-view")
 const {Schema, DOMParser, DOMSerializer} = require("prosemirror-model")
 const {schema} = require("prosemirror-schema-basic")
+//const {schema, defaultMarkdownParser, defaultMarkdownSerializer} = require("prosemirror-markdown")
 const {addListNodes} = require("prosemirror-schema-list")
 const {exampleSetup} = require("prosemirror-example-setup")
 
@@ -81,15 +82,15 @@ textpattern.Route.add("article", function() {
     let textarea = $(this).closest(".txp-form-field-textarea").find("textarea").first(), id = textarea.attr("id")
 
     $(this).find("input.textfilter-value").change(function() {
-        if ($(this).val() == 5) {
-          if (typeof ProseMirrorEditors[i] === "undefined") {
-            textarea.after($("<div />").attr("id", "prosemirror-editor-"+id).css({"width":"100%", "min-height":"10rem", "border":"1px solid #ccc", "display":"none"}))
-          }
+        if ($(this).val() == 'pmeditor') {
+            if (typeof ProseMirrorEditors[i] === "undefined") {
+                textarea.after($("<div />").attr("id", "prosemirror-editor-"+id).css({"width":"100%", "min-height":"10rem", "border":"1px solid #ccc", "display":"none"}))
+            }
 
-          textarea.hide()
-          $("#prosemirror-editor-"+id).show()
+            textarea.hide()
+            $("#prosemirror-editor-"+id).show()
 
-          ProseMirrorEditors[i] = new EditorView(document.getElementById("prosemirror-editor-"+id), {
+            ProseMirrorEditors[i] = new EditorView(document.getElementById("prosemirror-editor-"+id), {
               state: EditorState.create({
                 doc: DOMParser.fromSchema(mySchema).parse(textpattern.decodeHTML(document.getElementById(id).value)),
                 plugins: exampleSetup({schema: mySchema})

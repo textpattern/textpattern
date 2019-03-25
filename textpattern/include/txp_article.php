@@ -1692,23 +1692,24 @@ function article_partial_body($rs)
         // Markup help.
         $help = '';
         $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
-        $selected = $textfilter_opts[$rs['textile_body']];
+        isset($textfilter_opts[$rs['textile_body']]) or $rs['textile_body'] = LEAVE_TEXT_UNTOUCHED;
 
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
             $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
             $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
+            $selected = (string)$filter_key === (string)$rs['textile_body'];
 
             $html_markup[] = tag(
                 $filter_name, 'option', array(
                     'data-id'   => $filter_key,
                     'data-help' => $renderHelp,
-                    'selected'  => ($filter_key == $rs['textile_body']),
+                    'selected'  => $selected,
                 )
             );
 
-            if ($filter_key == $rs['textile_body']) {
+            if ($selected) {
                 $help = $renderHelp;
             }
         }
@@ -1759,23 +1760,24 @@ function article_partial_excerpt($rs)
         // Markup help.
         $help = '';
         $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
-        $selected = $textfilter_opts[$rs['textile_excerpt']];
+        isset($textfilter_opts[$rs['textile_excerpt']]) or $rs['textile_excerpt'] = LEAVE_TEXT_UNTOUCHED;
 
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
             $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
             $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
+            $selected = (string)$filter_key === (string)$rs['textile_excerpt'];
 
             $html_markup[] = tag(
                 $filter_name, 'option', array(
                     'data-id'   => $filter_key,
                     'data-help' => $renderHelp,
-                    'selected'  => ($filter_key == $rs['textile_excerpt']),
+                    'selected'  => $selected,
                 )
             );
 
-            if ($filter_key == $rs['textile_excerpt']) {
+            if ($selected) {
                 $help = $renderHelp;
             }
         }
