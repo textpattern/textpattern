@@ -79,33 +79,32 @@ textpattern.Route.add("article", function() {
   var ProseMirrorEditors = [];
 
   $(".txp-textarea-options").each(function(i) {
-    let textarea = $(this).closest(".txp-form-field-textarea").find("textarea").first(), id = textarea.attr("id")
+    const textarea = $(this).closest(".txp-form-field-textarea").find("textarea").first(),
+        id = textarea.attr("id"),
+        div = $("<div />"),
+        editor = $("<div />").css({"width":"100%", "min-height":"10rem", "border":"1px solid #ccc", "display":"none"})
+
+        textarea.after(editor)
 
     $(this).find("input.textfilter-value").change(function() {
         if ($(this).val() == 'pmeditor') {
-            if (typeof ProseMirrorEditors[i] === "undefined") {
-                textarea.after($("<div />").attr("id", "prosemirror-editor-"+id).css({"width":"100%", "min-height":"10rem", "border":"1px solid #ccc", "display":"none"}))
-            }
-
             textarea.hide()
-            $("#prosemirror-editor-"+id).show()
+            editor.show()
 
-            ProseMirrorEditors[i] = new EditorView(document.getElementById("prosemirror-editor-"+id), {
+            ProseMirrorEditors[i] = new EditorView(editor.toArray()[0], {
               state: EditorState.create({
                 doc: DOMParser.fromSchema(mySchema).parse(textpattern.decodeHTML(document.getElementById(id).value)),
                 plugins: exampleSetup({schema: mySchema})
               }),
               dispatchTransaction(tr) {
                 const { state } = this.state.applyTransaction(tr)
-                const area = document.getElementById(id)
-                const div = $("<div />")
 
                 this.updateState(state)
         
                 // Update textarea only if content has changed
                 if (tr.docChanged) {
-                  //area.value = defaultMarkdownSerializer.serialize(tr.doc)
-                  $(area).text(div.html(DOMSerializer.fromSchema(mySchema).serializeFragment(state.doc.content)).html());
+                  //textarea.value = defaultMarkdownSerializer.serialize(tr.doc)
+                  textarea.val(div.html(DOMSerializer.fromSchema(mySchema).serializeFragment(state.doc)).html());
                 }
               }
             })
@@ -115,10 +114,9 @@ textpattern.Route.add("article", function() {
             ProseMirrorEditors[i].destroy()
           }
 
-          $("#prosemirror-editor-"+id).hide()
+          editor.hide()
           if ($(this).val() < 4) {textarea.show()}
         }
-
     }).change()
   })
 })
