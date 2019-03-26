@@ -23,14 +23,14 @@
   "devDependencies": {
     "eslint": "~5",
     "phplint": "~2",
-    "uglify-js": "3.4.9"
+    "uglify-js": "3.5.1"
   },
   "dependencies": {
     "blueimp-file-upload": "9.28.0",
     "blueimp-md5": "2.10.0",
     "jquery": "3.3.1",
     "jquery-ui-dist": "1.12.1",
-    "prismjs": "1.15.0"
+    "prismjs": "1.16.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
