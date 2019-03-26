@@ -949,6 +949,8 @@ textpattern.Route =
                 'fn'  : fn
             });
         });
+
+        return this;
     },
 
     /**
@@ -960,20 +962,26 @@ textpattern.Route =
      */
 
     init: function (options) {
+        var custom = !!options;
         var options = $.extend({
             'event': textpattern.event,
             'step' : textpattern.step
         }, options);
 
-        $.each(textpattern.Route.attached, function (index, data) {
-            if (data.page === '' || data.page === options.event || data.page === '.' + options.step || data.page === options.event + '.' + options.step) {
+        textpattern.Route.attached = textpattern.Route.attached.filter(function (elt) {return !!elt});
+        textpattern.Route.attached.forEach(function (data, index) {
+            if (!custom && data.page === '' || data.page === options.event || data.page === '.' + options.step || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event': options.event,
                     'step' : options.step,
                     'route': data.page
                 });
+
+                delete(textpattern.Route.attached[index]);
             }
         });
+
+        return this;
     }
 };
 
@@ -2096,6 +2104,11 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
+
+textpattern.Route.add('article.init', function () {
+    $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange')
+})
+
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return;
 
@@ -2601,6 +2614,8 @@ $(document).ready(function () {
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
+    // Trigger post init events.
+    textpattern.Route.init({'step':'init'});
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');

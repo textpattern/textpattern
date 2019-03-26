@@ -25,9 +25,6 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-new \Textpattern\Textfilter\Medium();
-new \Textpattern\Textfilter\ProseMirror();
-
 class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
@@ -37,24 +34,6 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>';
-
-        // Medium Editor
-        $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/medium-editor.min.css">';
-        $out[] = '<link rel="stylesheet" href="vendors/Medium/Editor/css/themes/default.css">';
-        $out[] = '<script src="vendors/Medium/Editor/js/medium-editor.min.js"></script>';
-/*
-        // Options
-        $out[] = script_js('textpattern.medium = {
-            toolbar: {
-                buttons: ["bold", "italic", "underline", "image", "anchor", "h2", "h3", "quote"]
-            },
-            buttonLabels: false
-        };');
-*/
-
-        // ProseMirror
-        $out[] = '<link rel="stylesheet" href="vendors/ProseMirror/css/editor.css">';
-        $out[] = '<script src="vendors/ProseMirror/js/prosemirror.js"></script>';
 
         return join(n, $out);
     }

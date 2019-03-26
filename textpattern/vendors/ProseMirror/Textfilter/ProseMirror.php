@@ -28,11 +28,11 @@
  * @package Textfilter
  */
 
-namespace Textpattern\Textfilter;
+namespace ProseMirror\Textfilter;
 
-class ProseMirror extends Base implements TextfilterInterface
+class ProseMirror extends \Textpattern\Textfilter\Base implements \Textpattern\Textfilter\TextfilterInterface
 {
-    private static $init = null, $id = 'pmeditor';
+    private static $init = null, $id = 'prosemirror';
 
     /**
      * Constructor.
@@ -46,6 +46,12 @@ class ProseMirror extends Base implements TextfilterInterface
         if (!isset(self::$init)) {
             self::$init = true;
 
+            register_callback(function() {
+                echo n.'<link rel="stylesheet" href="vendors/ProseMirror/css/editor.css">'.
+                script_js("vendors/ProseMirror/js/prosemirror.js", TEXTPATTERN_SCRIPT_URL, array("article")).n;
+            }, 'admin_side', 'head_end');
+
+            $id = self::$id;
             $js = <<<EOS
 // Kludge to make requiring prosemirror core libraries possible. The
 // PM global is defined by http://prosemirror.net/examples/prosemirror.js,
@@ -56,44 +62,43 @@ function require(name) {
     return mod
 }
 
-const {EditorState} = require("prosemirror-state")
-const {EditorView} = require("prosemirror-view")
-const {Schema, DOMParser, DOMSerializer} = require("prosemirror-model")
-const {schema} = require("prosemirror-schema-basic")
-//const {schema, defaultMarkdownParser, defaultMarkdownSerializer} = require("prosemirror-markdown")
-const {addListNodes} = require("prosemirror-schema-list")
-const {exampleSetup} = require("prosemirror-example-setup")
-
-// Mix the nodes from prosemirror-schema-list into the basic schema to
-// create a schema with list support.
-const mySchema = new Schema({
-    nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
-    marks: schema.spec.marks
-})
-            
 textpattern.Route.add("article", function() {
   if (typeof PM === "undefined") {
     return;
   }
 
+  const {EditorState} = require("prosemirror-state")
+  const {EditorView} = require("prosemirror-view")
+  const {Schema, DOMParser, DOMSerializer} = require("prosemirror-model")
+  const {schema} = require("prosemirror-schema-basic")
+  //const {schema, defaultMarkdownParser, defaultMarkdownSerializer} = require("prosemirror-markdown")
+  const {addListNodes} = require("prosemirror-schema-list")
+  const {exampleSetup} = require("prosemirror-example-setup")
+
+  // Mix the nodes from prosemirror-schema-list into the basic schema to
+  // create a schema with list support.
+  const mySchema = new Schema({
+      nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
+      marks: schema.spec.marks
+  })
+
   var ProseMirrorEditors = [];
 
   $(".txp-textarea-options").each(function(i) {
     const textarea = $(this).closest(".txp-form-field-textarea").find("textarea").first(),
-        id = textarea.attr("id"),
-        div = $("<div />"),
+        buffer = $("<div />"),
         editor = $("<div />").css({"width":"100%", "min-height":"10rem", "border":"1px solid #ccc", "display":"none"})
 
-        textarea.after(editor)
+    textarea.after(editor)
 
     $(this).find("input.textfilter-value").change(function() {
-        if ($(this).val() == 'pmeditor') {
+        if ($(this).val() == "$id") {
             textarea.hide()
             editor.show()
 
-            ProseMirrorEditors[i] = new EditorView(editor.toArray()[0], {
+            ProseMirrorEditors[i] = new EditorView(editor[0], {
               state: EditorState.create({
-                doc: DOMParser.fromSchema(mySchema).parse(textpattern.decodeHTML(document.getElementById(id).value)),
+                doc: DOMParser.fromSchema(mySchema).parse(textpattern.decodeHTML(textarea[0].value)),
                 plugins: exampleSetup({schema: mySchema})
               }),
               dispatchTransaction(tr) {
@@ -104,7 +109,7 @@ textpattern.Route.add("article", function() {
                 // Update textarea only if content has changed
                 if (tr.docChanged) {
                   //textarea.value = defaultMarkdownSerializer.serialize(tr.doc)
-                  textarea.val(div.html(DOMSerializer.fromSchema(mySchema).serializeFragment(state.doc)).html());
+                  textarea.val(buffer.html(DOMSerializer.fromSchema(mySchema).serializeFragment(state.doc)).html());
                 }
               }
             })
@@ -117,7 +122,7 @@ textpattern.Route.add("article", function() {
           editor.hide()
           if ($(this).val() < 4) {textarea.show()}
         }
-    }).change()
+    })
   })
 })
 EOS;
