@@ -84,8 +84,8 @@ error_reporting(E_ALL | E_STRICT);
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 $trace->start('[PHP includes]');
-include txpath.'/lib/txplib_misc.php';
 include_once txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -117,6 +117,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         updateSitePath(dirname(dirname(__FILE__)));
     }
 
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
     define("LANG", $language);
     define('txp_version', $thisversion);
 
