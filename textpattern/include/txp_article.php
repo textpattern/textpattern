@@ -67,7 +67,6 @@ $vars = array(
     'LastModID',
     'sLastMod',
     'override_form',
-    'from_view',
     'year',
     'month',
     'day',
@@ -83,12 +82,6 @@ $vars = array(
     'exp_second',
     'sExpires',
 );
-
-$cfs = getCustomFields();
-
-foreach ($cfs as $i => $cf_name) {
-    $vars[] = "custom_$i";
-}
 
 $statuses = status_list();
 
@@ -145,11 +138,12 @@ function article_post()
 
 function article_save()
 {
-    global $txp_user, $vars, $prefs;
+    global $txp_user, $vars, $prefs, $txpnow;
 
     extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
+    $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
     $is_clone = ps('copy');
 
     if ($is_clone) {
@@ -213,8 +207,8 @@ function article_save()
 
     // Set and validate article timestamp.
     if ($publish_now || $reset_time) {
-        $whenposted = "NOW()";
-        $when_ts = time();
+        $whenposted = "'".$sqlnow."'";
+        $when_ts = $txpnow;
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
             $ts = false;
@@ -223,13 +217,13 @@ function article_save()
         }
 
         if ($ts === false || $ts < 0) {
-            $when = $when_ts = $oldArticle['sPosted'];
+            $when_ts = $oldArticle['sPosted'];
             $msg = array(gTxt('invalid_postdate'), E_ERROR);
         } else {
-            $when = $when_ts = $ts - tz_offset($ts);
+            $when_ts = $ts - tz_offset($ts);
         }
 
-        $whenposted = "FROM_UNIXTIME($when)";
+        $whenposted = "FROM_UNIXTIME($when_ts)";
     }
 
     // Set and validate expiry timestamp.
@@ -294,17 +288,13 @@ function article_save()
     $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
     $user = doSlash($txp_user);
 
-    $cfq = array();
-    $cfs = getCustomFields();
+    $mfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
+        ->filterCollectionAt('article', $when_ts);
 
-    foreach ($cfs as $i => $cf_name) {
-        $custom_x = "custom_{$i}";
-        $cfq[] = "custom_$i = '".$$custom_x."'";
-    }
-
-    $cfq = join(', ', $cfq);
-
+    // ToDo: Run CFs through validator.
+    // ToDo: Transaction
     $rs = compact($vars);
+
     if (article_validate($rs, $msg)) {
         $set =
            "Title           = '$Title',
@@ -316,9 +306,9 @@ function article_save()
             description     = '$description',
             Image           = '$Image',
             Status          = '$Status',
+            LastMod         = '".$sqlnow."',
             Posted          =  $whenposted,
             Expires         =  $whenexpires,
-            LastMod         =  NOW(),
             LastModID       = '$user',
             Section         = '$Section',
             Category1       = '$Category1',
@@ -329,15 +319,18 @@ function article_save()
             override_form   = '$override_form',
             url_title       = '$url_title',
             AnnotateInvite  = '$AnnotateInvite'"
-            .(($cfs) ? ', '.$cfq : '')
             .(!empty($ID) ? '' :
             ", AuthorID        = '$user',
-            uid            = '".md5(uniqid(rand(), true))."',
+            uid             = '".md5(uniqid(rand(), true))."',
             feed_time       = NOW()");
 
         if ($ID && safe_update('textpattern', $set, "ID = $ID")
             || !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
         ) {
+            // @Todo: Return code.
+            // @Todo: Rollback if fail.
+            $mfs->store($_POST, 'article', $rs['ID']);
+
             if ($is_clone) {
                 $url_title = stripSpace($Title_plain.' ('.$rs['ID'].')', 1);
                 safe_update(
@@ -377,12 +370,12 @@ function article_save()
  *
  * @param string|array $message          The activity message
  * @param bool         $concurrent       Treat as a concurrent save
- * @param bool         $refresh_partials Whether refresh partial contents
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $step, $view;
+    global $vars, $txp_user, $prefs, $step, $view, $txpnow;
 
     extract($prefs);
 
@@ -560,28 +553,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
     );
 
-    // Add partials for custom fields (and their values which is redundant by
-    // design, for plugins).
-    global $cfs;
-
-    foreach ($cfs as $k => $v) {
-        $partials["custom_field_{$k}"] = array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => "p.custom-field.custom-{$k}",
-            'cb'       => 'article_partial_custom_field',
-        );
-        $partials["custom_{$k}"] = array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => "#custom-{$k}",
-            'cb'       => 'article_partial_value',
-        );
-    }
-
-    extract(gpsa(array(
-        'view',
-        'from_view',
-    )));
-
     if ($step !== 'create') {
         $step = "edit";
     }
@@ -594,14 +565,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     // Switch to 'text' view upon page load and after article post.
-    if (!$view) {
-        $view = 'text';
-    }
+    $view = gps('view', 'text');
 
-    if ($view == 'text'
+    if (($view == 'text' || gps('save'))
         && !empty($ID)
-        && $from_view != 'preview'
-        && $from_view != 'html'
         && !$concurrent) {
         // It's an existing article - off we go to the database.
         $ID = assert_int($ID);
@@ -626,28 +593,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     } else {
         // Assume they came from post.
-        if ($from_view == 'preview' or $from_view == 'html') {
-            $store_out = array();
-            $store = json_decode(base64_decode(ps('store')), true);
+        $store_out = array('ID' => $ID) + gpsa($vars);
 
-            foreach ($vars as $var) {
-                if (isset($store[$var])) {
-                    $store_out[$var] = $store[$var];
-                }
-            }
-        } else {
-            $store_out = array('ID' => $ID) + gpsa($vars);
+        if ($concurrent) {
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+        }
 
-            if ($concurrent) {
-                $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
-            }
-
-            if (!has_privs('article.set_markup') && !empty($ID)) {
-                $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
-                if (!empty($oldArticle)) {
-                    $store_out['textile_body'] = $oldArticle['textile_body'];
-                    $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
-                }
+        if (!has_privs('article.set_markup') && !empty($ID)) {
+            $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
+            if (!empty($oldArticle)) {
+                $store_out['textile_body'] = $oldArticle['textile_body'];
+                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
         }
 
@@ -691,7 +647,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    if ($ID && isset($sPosted)) {
+    if ($ID && !empty($sPosted)) {
         // Previous record?
         $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
@@ -699,6 +655,21 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $rs['next_id'] = checkIfNeighbour('next', $sPosted, $ID);
     } else {
         $rs['prev_id'] = $rs['next_id'] = 0;
+    }
+
+    $when = ($sPosted) ? $sPosted : $txpnow;
+
+    // Add partials for custom fields (and their values which is redundant by design, for plugins).
+    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
+        ->filterCollectionAt('article', $when);
+
+    foreach ($cfs as $i => $cf_info) {
+        $vars[] = "custom_$i";
+        $partials["custom_field_{$i}"] = array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => "p.custom-field.custom-{$i}",
+            'cb'       => 'article_partial_custom_field'
+        );
     }
 
     // Let plugins chime in on partials meta data.
@@ -753,9 +724,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         )).
         n.'<div class="txp-layout">';
 
-    if (!empty($store_out)) {
-        echo hInput('store', base64_encode(json_encode($store_out, TEXTPATTERN_JSON)));
-    }
 
     echo hInput('ID', $ID).
         eInput('article').
@@ -774,31 +742,36 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
-    // Title input.
-    if ($view == 'preview') {
-        echo n.'<div class="preview">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'html') {
-        echo n.'<div class="html">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'text') {
-        echo n.'<div class="text">'.$partials['title']['html'];
+    echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
+    echo $partials['author']['html'];
+    echo $partials['body']['html'];
+    if ($articles_use_excerpts) {
+        echo $partials['excerpt']['html'];
     }
+    echo n.'</div>';
 
-    // Author.
-    if ($view == "text") {
-        echo $partials['author']['html'];
-    }
+    echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
+    echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
 
-    // Body.
     if ($view == 'preview') {
+        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
+            hed(txpspecialchars($Title), 1, ' class="title"');
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
-                $Body_html.
+                implode('', txp_tokenize($Body_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
+        if ($articles_use_excerpts) {
+            echo n.'<div class="excerpt">'.
+                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+                $Excerpt_html.
+                '</div>';
+        }
+        echo n.'</div>';
     } elseif ($view == 'html') {
+        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
+            hed(txpspecialchars($Title), 1, ' class="title"');
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
             n.tag(
                 tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
@@ -816,7 +789,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         if ($view == 'preview') {
             echo n.'<div class="excerpt">'.
                 graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                $Excerpt_html.
+                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
         } elseif ($view == 'html') {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
@@ -827,13 +802,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     )),
                     'pre', array('class' => 'excerpt')
                 );
-        } else {
-            echo $partials['excerpt']['html'];
         }
+        echo n.'</div>';
     }
 
-    echo hInput('from_view', $view),
-        n.'</div>';
+    echo '</div>';
+    echo '</div>';
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -1049,26 +1023,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo //tInput().
         n.'</div>'. // End of .txp-layout.
         n.'</form>';
-}
-
-/**
- * Renders a custom field.
- *
- * @param  int    $num     The custom field number
- * @param  string $field   The label
- * @param  string $content The field contents
- * @return string HTML form field
- */
-
-function custField($num, $field, $content)
-{
-    return inputLabel(
-        'custom-'.$num,
-        fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num),
-        $field,
-        array('', 'instructions_custom_'.$num),
-        array('class' => 'txp-form-field custom-field custom-'.$num)
-    );
 }
 
 /**
@@ -1431,14 +1385,26 @@ function article_partial_actions($rs)
 
 function article_partial_custom_field($rs, $key)
 {
-    global $prefs;
-    extract($prefs);
+    global $txpnow;
+
+    $out = '';
 
     preg_match('/custom_field_([0-9]+)/', $key, $m);
-    $custom_x_set = "custom_{$m[1]}_set";
-    $custom_x = "custom_{$m[1]}";
 
-    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set, $rs[$custom_x]) : '');
+    if (!empty($m[1])) {
+        $num = $m[1];
+        $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
+            ->filterCollectionAt('article', ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
+        $cf = $cfs->getItem($num);
+
+        if ($cf) {
+            $ref = ($rs['ID']) ? $rs['ID'] : null;
+            $cf->loadContent($ref, true);
+            $out = $cf->render();
+        }
+    }
+
+    return $out;
 }
 
 /**
@@ -1582,8 +1548,11 @@ function article_partial_image($rs)
 
 function article_partial_custom_fields($rs)
 {
-    global $cfs;
+    global $txpnow;
+
     $cf = '';
+    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
+        ->filterCollectionAt('article', ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
 
     foreach ($cfs as $k => $v) {
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
@@ -1964,7 +1933,7 @@ function article_partial_comments($rs)
 
         if (!empty($ID) && $comments_disabled_after) {
             $lifespan = $comments_disabled_after * 86400;
-            $time_since = time() - $sPosted;
+            $time_since = time() - intval($sPosted);
 
             if ($time_since > $lifespan) {
                 $comments_expired = true;
