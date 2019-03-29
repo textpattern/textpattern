@@ -758,7 +758,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             hed(txpspecialchars($Title), 1, ' class="title"');
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
-                $Body_html.
+                implode('', txp_tokenize($Body_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
         if ($articles_use_excerpts) {
             echo n.'<div class="excerpt">'.
@@ -778,7 +780,20 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 )),
                 'pre', array('class' => 'body')
             );
-        if ($articles_use_excerpts) {
+    } else {
+        echo $partials['body']['html'];
+    }
+
+    // Excerpt.
+    if ($articles_use_excerpts) {
+        if ($view == 'preview') {
+            echo n.'<div class="excerpt">'.
+                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+                '</div>';
+        } elseif ($view == 'html') {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
                 n.tag(
                     tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
