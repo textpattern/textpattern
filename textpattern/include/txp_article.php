@@ -796,7 +796,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     if ($view == 'preview') {
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
-                $Body_html.
+                implode('', txp_tokenize($Body_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
     } elseif ($view == 'html') {
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
@@ -816,7 +818,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         if ($view == 'preview') {
             echo n.'<div class="excerpt">'.
                 graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                $Excerpt_html.
+                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
         } elseif ($view == 'html') {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).

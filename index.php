@@ -88,8 +88,8 @@ if (!isset($txpcfg['table_prefix'])) {
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 $trace->start('[PHP includes, stage 1]');
-include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+include txpath.'/lib/constants.php';
 $trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {

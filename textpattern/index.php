@@ -84,8 +84,8 @@ error_reporting(E_ALL | E_STRICT);
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 $trace->start('[PHP includes]');
-include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+include_once txpath.'/lib/constants.php';
 
 include txpath.'/vendors/Textpattern/Loader.php';
 

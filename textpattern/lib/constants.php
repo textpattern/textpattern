@@ -920,3 +920,11 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
  */
 
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+/**
+ * Define the parser namespace pattern
+ *
+ * @since   4.7.0
+ */
+
+define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');

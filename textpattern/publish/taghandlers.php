@@ -4266,16 +4266,22 @@ function if_last_category($atts, $thing = null)
 
 function if_section($atts, $thing = null)
 {
-    global $s;
+    global $s, $thissection;
 
-    extract(lAtts(array('name' => false), $atts));
+    extract(lAtts(array('name' => false, 'section' => false), $atts));
 
-    $section = ($s == 'default' ? '' : $s);
+    switch ($section) {
+        case true: $section = isset($thissection) ? $thissection : $s; break;
+        case false: $section = $s; break;
+    }
+
+    $section !== 'default' or $section = '';
+    $name === false or $name = do_list($name);
 
     if ($section) {
-        $x = $name === false || in_list($section, $name);
+        $x = $name === false || in_array($section, $name);
     } else {
-        $x = $name !== false && (in_list('', $name) || in_list('default', $name));
+        $x = $name !== false && (in_array('', $name) || in_array('default', $name));
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
