@@ -762,6 +762,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     return '<span class="disabled">'.txpspecialchars($tag).'</span>';
                 })).
                 '</div>';
+
         if ($articles_use_excerpts) {
             echo n.'<div class="excerpt">'.
                 graf(gTxt('excerpt'), array('class' => 'alert-block information')).
@@ -780,20 +781,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 )),
                 'pre', array('class' => 'body')
             );
-    } else {
-        echo $partials['body']['html'];
-    }
 
-    // Excerpt.
-    if ($articles_use_excerpts) {
-        if ($view == 'preview') {
-            echo n.'<div class="excerpt">'.
-                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-        } elseif ($view == 'html') {
+        if ($articles_use_excerpts) {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
                 n.tag(
                     tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
@@ -803,7 +792,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'pre', array('class' => 'excerpt')
                 );
         }
-        echo n.'</div>';
+    } else {
+        echo $partials['body']['html'];
     }
 
     echo '</div>';
