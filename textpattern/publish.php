@@ -177,6 +177,10 @@ if (!defined('LANG')) {
     define('LANG', $language);
 }
 
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
+}
+
 if (!empty($locale)) {
     setlocale(LC_ALL, $locale);
 }
