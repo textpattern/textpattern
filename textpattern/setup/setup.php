@@ -59,8 +59,8 @@ error_reporting(E_ALL | E_STRICT);
 
 include_once txpath.'/lib/class.trace.php';
 $trace = new Trace();
-include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
+include_once txpath.'/lib/constants.php';
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
 $loader = new \Textpattern\Loader(txpath.'/vendors');
