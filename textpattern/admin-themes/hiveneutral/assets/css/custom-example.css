@@ -38,6 +38,15 @@
 } */
 
 
+/**
+ * Remove lightbulb (light/dark mode toggle).
+ */
+
+/* .txp-lightbulb {
+    display: none !important;
+} */
+
+
 
 /* Content -> Write panel
    ========================================================================== */
