@@ -117,6 +117,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         updateSitePath(dirname(dirname(__FILE__)));
     }
 
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
     define("LANG", $language);
     define('txp_version', $thisversion);
 
