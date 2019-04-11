@@ -61,8 +61,12 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
     public function __construct()
     {
         if ($filters = get_pref('admin_textfilter_classes')) {
-            foreach (do_list($filters) as $filter) {
-                new $filter;
+            foreach (do_list_unique($filters) as $filter) {
+                $filter[0] == '\\' or $filter = __NAMESPACE__.'\\'.$filter;
+
+                if (class_exists($filter)) {
+                    new $filter;
+                }
             }
         } else {
             new Plain();

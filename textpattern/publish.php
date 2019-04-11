@@ -68,10 +68,6 @@ plug_privs();
 // Add prefs to globals.
 extract($prefs);
 
-if (!defined('TXP_PATTERN')) {
-    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
-}
-
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -179,6 +175,10 @@ if (!defined('LANG')) {
      */
 
     define('LANG', $language);
+}
+
+if (!defined('TXP_PATTERN')) {
+    define('TXP_PATTERN', get_pref('enable_short_tags', false) ? 'txp|[a-z]+:' : 'txp:?');
 }
 
 if (!empty($locale)) {
@@ -492,6 +492,7 @@ function preText($s, $prefs)
         global $nolog;
 
         $nolog = true;
+        header('Cache-Control: no-cache, no-store, max-age=0');
         $rs = safe_row("ID AS id, Section AS s", 'textpattern', "ID = ".intval(gps('txpreview'))." LIMIT 1");
 
         if ($rs) {

@@ -32,7 +32,7 @@
  * properly. See RPC Server implementation to view an example of the required
  * files and predefined variables.
  *
- * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
+ * @link      https://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
  * @author    Pedro Palazón
  * @copyright 2005-2008 The Textpattern Development Team
  */

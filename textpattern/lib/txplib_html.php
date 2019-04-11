@@ -1594,8 +1594,8 @@ function script_js($js, $flags = '', $route = array())
     static $store = '';
     global $event, $step;
 
-    $targetEvent = empty($route[0]) ? null : (array)$route[0];
-    $targetStep = empty($route[1]) ? null : (array)$route[1];
+    $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
+    $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
 
     if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
         if (is_int($flags)) {
