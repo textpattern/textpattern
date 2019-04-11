@@ -1,6 +1,6 @@
 Changes in TBC 4.8.0/5.0.0 (upcoming)
 
-* Added: config file generated during setup can be downloaded.
+* Added: Configuration file generated during setup can be downloaded.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * PrismJS 1.16.0.
