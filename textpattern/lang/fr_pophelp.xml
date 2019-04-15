@@ -769,7 +769,8 @@
 <h2>Chemin du répertoire de cache des plugins</h2>
 <p>Ce paramètre s’adresse principalement aux développeurs de plugins. Lorsque renseigné, le code source d’un plugin (non encore compilé) placé dans ce dossier sera chargé automatiquement par Textpattern et permet d’en éditer facilement le code et contrôler son fonctionnement sans devoir installer/activer le plugin. <strong>Attention</strong> toutefois avec cette méthode : un plugin défaillant (qui échoue dans sa compilation) brisera l’exécution de Textpattern !</p>
 <p>Il est recommandé de charger les plugins selon la procédure standard depuis la page «Installer un plugin» sur un site en production plutôt que d’utiliser ce répertoire de cache.</p>
-<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p> ]]></item>
+<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p>
+        ]]></item>
         <item id="production_status" title="Statut de production"><![CDATA[
 <h2>Statut de production</h2>
 <p>Un site Textpattern fonctionne dans l’un de ces trois modes :</p>
@@ -794,7 +795,8 @@
    <li>la consommation approximative de la mémoire</li>
 </ul>
 <h3>Le mode de production</h3>
-<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p> ]]></item>
+<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p>
+        ]]></item>
         <item id="public_theme_name" title="Thème du site public"><![CDATA[
 <h2>Thème du site public</h2>
 <p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu’une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>
@@ -807,7 +809,8 @@
         <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[
 <h2>Envoi des informations de connexion à cette adresse e-mail</h2>
 <p>Renseigne une adresse e-mail utilisée pour origine d’expéditeur «De :» dans les messages d’envoi des informations de connexion aux nouveaux utilisateurs du site.</p>
-<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p> ]]></item>
+<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p>
+        ]]></item>
         <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[
 <h2>Combien d’articles par flux XML (RSS/Atom) ?</h2>
 <p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
@@ -819,7 +822,8 @@
 <p>Permet de réduire la consommation de la bande passante, le délai de chargement des pages, et la charge du serveur.</p>  ]]></item>
         <item id="show_comment_count_in_feed" title="Afficher le nombre de commentaires dans les flux XML ?"><![CDATA[
 <h2>Afficher le nombre de commentaires dans les flux XML ?</h2>
-<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p> ]]></item>
+<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p>
+        ]]></item>
         <item id="site_slogan" title="Slogan du site"><![CDATA[
 <h2>Slogan du site</h2>
 <p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>
@@ -862,10 +866,12 @@
         <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[
 <h2>Chemin du répertoire temporaire</h2>
 <p>Renseignez un <strong>chemin absolu</strong> pour le répertoire temporaire (parfois dénommé tmp ou temp). PHP réclame de disposer de droits d’écriture sur ce dossier. Il sera utilisé pour les fichiers temporaires, par exemple les téléversements de toutes sortes (plugins, fichiers ou images).</p>
-<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p> ]]></item>
+<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p>
+        ]]></item>
         <item id="theme_name" title="Thème de l’administration"><![CDATA[
 <h2>Thème de l’administration</h2>
-<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p> ]]></item>
+<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
+        ]]></item>
         <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
 <h2>Functions PHP associées à txp:evaluate</h2>
 <p>Renseignez une liste de <code>function</code> séparées par une virgule ou des <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments renseignés dans cette liste peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
@@ -874,11 +880,13 @@
         ]]></item>
         <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[
 <h2>Accepter les commentaires ?</h2>
-<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p> ]]></item>
+<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p>
+        ]]></item>
         <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[
 <h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?</h2>
 <p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
-<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p> ]]></item>
+<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p>
+        ]]></item>
         <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[
 <h2>Utiliser les plugins ?</h2>
 <p>Permet de désactiver totalement le support des plugins dans Textpattern. Utile pour le débogage d’erreurs sur votre site et pour identifier le dysfonctionnement, éventuel, d’un plugin.</p>
@@ -981,7 +989,8 @@
         ]]></item>
         <item id="skin_delete_entirely" title="Supprimer également les modèles du thème sur le serveur"><![CDATA[
 <h2>Supprimer également les modèles du thème sur le serveur</h2>
-<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s’y trouvent.</p> ]]></item>
+<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s’y trouvent.</p>
+        ]]></item>
         <item id="skin_delete_from_database" title="Supprimer de la base de données les modèles inutilisés à l’importation"><![CDATA[
 <h2>Supprimer de la base de données les modèles inutilisés à l’importation</h2>
 <p>Si coché, chaque modèle du(es) thème(s) sélectionné(s) n’ayant aucun fichier correspondant sur le disque sera définitivement supprimé de la base de données. Le résultat, après exécution de l’action, fera correspondre, tant que faire se peut,  la base de données avec ce qui est présent sur le disque.</p>
@@ -1001,7 +1010,8 @@
 <p>Ce formulaire permet l’importation d’un thème dans la base de données depuis le répertoire des thèmes.</p>
 <p>Un thème importable doit être composé d’un dossier parent accessible en lecture utilisant le nom du thème pour nom de dossier interne, ainsi qu’un fichier <code>manifest.json</code> dans le format requis et accessible en lecture. Le dossier du thème doit également contenir les pages, modules et les styles correspondants dans leur dossier éponymes.</p>
 <p>Alors que les gabarits et les modules doivent comporter une extension <code>.txp</code>, les feuilles de styles seront des fichiers <code>.css</code>. Les modules devront être groupés par type dans leur dossiers correspondants. Textpattern créera tout les modèles essentiels manquants lors de l’importation.</p>
-<p>Voir la documentation <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations lors de la création, l’installation et l’utilisation des thèmes avec Textpattern CMS.</p> ]]></item>
+<p>Voir la documentation <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations lors de la création, l’installation et l’utilisation des thèmes avec Textpattern CMS.</p>
+        ]]></item>
         <item id="skin_name" title="Nom du thème"><![CDATA[
 <h2>Nom du thème</h2>
 <p>Le nom du thème est utilisé pour nom du dossier du thème et pour d’autres raisons techniques (requis).</p>
@@ -1018,7 +1028,8 @@
 <h3>Exportation et importation</h3>
 <p>Les thèmes peuvent être partagés avec la communauté. Sélectionnez un ou plusieurs thèmes via les cases à cocher et utilisez l’option <em>Exporter</em> de la liste de choix multiples pour exporter les ressources du thème sur le disque. Chaque thème est situé dans son propre sous-répertoire, sous le répertoire défini dans vos préférences <em>Répertoire des thèmes</em> (dossier par défaut : <code>themes </code>).</p>
 <p>Une fois effectué, vous pouvez empaqueter le thème et le distribuer. Les utilisateurs pourront décompacter le thème dans leur propre répertoire et choisir l’option <em>importer</em> pour l’importer le rendre actif dans leur base de données. Dès lors, ils pourront basculer sur le thème et l’utiliser comme thème de travail pour permettre la prévisualisation des ressources du site et, en définitive, l’affectation des ressources aux sections, comme décrit ci-dessus.</p>
-<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n’y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d’abord importer les modifications dans votre base de données et vous assurer qu’une ou plusieurs sections utilisent les ressources du thème.</p> ]]></item>
+<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n’y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d’abord importer les modifications dans votre base de données et vous assurer qu’une ou plusieurs sections utilisent les ressources du thème.</p>
+        ]]></item>
         <item id="skin_title" title="Titre du thème"><![CDATA[
 <h2>Titre du thème</h2>
 <p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
