@@ -269,6 +269,10 @@ function preText($s, $prefs)
     // Set messy variables.
     $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
+    $out['skin'] = '';
+    $out['page'] = '';
+    $out['css'] = '';
+
     if (gps('rss')) {
         $out['feed'] = 'rss';
     }
