@@ -22,7 +22,7 @@
 
 Textpattern is installed to a web server with PHP and MySQL.
 
-Ensure the server meets or exceeds the [system requirements](https://textpattern.com/about/119/system-requirements) before you continue.
+Ensure the server meets or exceeds the [system requirements](https://textpattern.com/system-requirements) before you continue.
 
 ## Download Textpattern
 
@@ -54,9 +54,9 @@ The development version can be obtained from the [Textpattern repository on GitH
 
 ### Anticipated changes to future system requirements
 
-System requirements for the development version may differ from the production release [system requirements](https://textpattern.com/about/119/system-requirements).
+System requirements for the development version may differ from the production release [system requirements](https://textpattern.com/system-requirements).
 
-As a development version approaches release, minimum and recommended system requirements are confirmed and the production release [system requirements](https://textpattern.com/about/119/system-requirements) is updated accordingly.
+As a development version approaches release, minimum and recommended system requirements are confirmed and the production release [system requirements](https://textpattern.com/system-requirements) is updated accordingly.
 
 The following table outlines anticipated forthcoming changes to system requirements for future releases. It takes into account vendor support, security considerations, overall performance and other factors.
 
