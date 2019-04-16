@@ -197,6 +197,7 @@ eod;
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     </head>
     <body class="setup{$bodyclass}" id="page-setup">
+    <script src="../admin-themes/hive/assets/js/darkmode.js"></script>
     <main class="txp-body">
 eod;
 

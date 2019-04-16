@@ -89,7 +89,7 @@
 <li>une URL relative de l’image (ex. <code>/images/my-pic.jpg</code>)</li>
 <li>une URL complète (ex. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>L’image pourra être affichée en ajoutant une <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><4>&lt;txp:article_image /&gt;</4> balise <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> dans un module d’articles. Ce qui génèrera une balise HTML <code>&lt;img&gt;</code> valide pour l’image choisie.</p>
+<p>L’image pourra être affichée en ajoutant une <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> balise <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> dans un module d’articles. Ce qui génèrera une balise HTML <code>&lt;img&gt;</code> valide pour l’image choisie.</p>
         ]]></item>
         <item id="body" title="Corps de texte"><![CDATA[
 <h2>Corps d’article</h2>
@@ -418,7 +418,7 @@
 <pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
 <p>Vous avez tout intérêt d’utiliser des modules pour afficher du contenu récurrent dans vos gabarits de pages comme, par exemple, un «header» ou un «footer». Cela signifie que les contenus se trouvent à un seul endroit et ce qui facilite grandement les corrections répercutées partout où ils apparaissent. Afficher le contenu d’un module est habituellement effectué avec :</p>
 <pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
-<p>Un module peut atteindre une taille de 64 Kb. Un exemple pour un «footer» pourrait inclure des titres, des paragraphes, des liens, des balises conditionnelles et des références à d’autres modules tel que <code>ordinary_list</code>.</p>
+<p>Un module peut atteindre une taille de 64 Kb. Un exemple pour un «footer» pourrait inclure des titres, des paragraphes, des liens, des balises conditionnelles et des références à d’autres modules tel que <code>ordinary_list</code>. Par ailleurs, la création de types de modèles de modules personnalisés nécessite d’activer la «Configuration avancée» depuis les préférences d’administration (une option masquée par défaut)</p>
         ]]></item>
     </group>
 
@@ -535,18 +535,18 @@
         ]]></item>
         <item id="comment_nofollow" title="Attribut rel=&quot;nofollow&quot; pour les liens des commentaires ?"><![CDATA[
 <h2>Ajouter rel="nofollow" aux commentaires ?</h2>
-<p>Si réglé sur «Oui», ajoutera un attribut supplémentaire aux liens présents dans les commentaires. Il s’agit d’une mesure pour dissuader les spammeurs de commentaire et a été initiée par de nombreux moteurs de recherches et des développeurs de logiciels. Vous pourrez en savoir plus en lisant cette <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">annonce de Google<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>Si réglé sur «Oui», ajoutera un attribut supplémentaire aux liens présents dans les commentaires. Il s’agit d’une mesure pour dissuader les spammeurs de commentaire et a été initiée par de nombreux moteurs de recherches et des développeurs de logiciels. Vous pourrez en savoir plus en lisant cette <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">annonce de Google <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
 <p><strong>Remarque :</strong> ce paramètre n’affecte pas les fonctionnalités de votre site. Cela peut empêcher ou diminuer l’influence de vos commentaires lors de l’indexation des sites qui y sont mentionnés par certains moteurs de recherches.</p>
         ]]></item>
         <item id="comments_are_ol" title="Afficher les commentaires dans une liste ordonnée ?"><![CDATA[
 <h2>Afficher les commentaires dans une liste ordonnée ?</h2>
 <p>Détermine si les commentaires d’articles seront contenus dans la balise HTML <code>&lt;ol&gt;</code> et les commentaires individuels dans une balise <code>&lt;li&gt;</code> (ce qui affiche les commentaires dans une liste ordonnée), ou si les commentaires individuels seront plutôt contenus dans une balise <code>&lt;div&gt;</code>.</p>
-<p>Qu’importe ce choix, vous pourrez toujours choisir de changer les balises utilisées en modifiant la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> présent dans le module <code>comments_display</code>.</p>
+<p>Qu’importe ce choix, vous pourrez toujours choisir de changer les balises utilisées en modifiant la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> présent dans le module <code>comments_display</code>.</p>
         ]]></item>
         <item id="comments_auto_append" title="Ajout automatique des commentaires après un article ?"><![CDATA[
 <h2>Ajout automatique des commentaires après un article ?</h2>
 <p>Ce paramètre détermine si les commentaires et le formulaire associé doivent suivre tous les articles individuels (par ajout automatique du contenu du module <code>comments_display</code>).</p>
-<p>La plupart du temps, vous choisirez de régler la valeur sur «Non» afin d’obtenir plus de flexibilité avec le positionnement de vos commentaires dans l’apparence de votre site. Vous devrez ajouter la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> manuellement dans chaque modèle d’articles à l’endroit désiré.</p>
+<p>La plupart du temps, vous choisirez de régler la valeur sur «Non» afin d’obtenir plus de flexibilité avec le positionnement de vos commentaires dans l’apparence de votre site. Vous devrez ajouter la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> manuellement dans chaque modèle d’articles à l’endroit désiré.</p>
 <p>Si vous constatez un double affichage des commentaires dans un article, il est probable que la balise <code>&lt;txp:comments /&gt;</code> soit présente dans votre modèle et que le paramètre «Ajout automatique des commentaires après un article ?» soit réglé sur «Oui» également.</p>
         ]]></item>
         <item id="comments_dateformat" title="Format de la date des commentaires"><![CDATA[
@@ -600,7 +600,7 @@
         ]]></item>
         <item id="comments_use_fat_textile" title="Permettre plus de balises Textile ?"><![CDATA[
 <h2>Permettre plus de balisage Textile dans les commentaires ?</h2>
-<p>Si réglé sur «Oui», les commentaires pourront contenir des éléments <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> qui, autrement, seraient considérés comme du texte brut, tel que :</p>
+<p>Si réglé sur «Oui», les commentaires pourront contenir des éléments <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> qui, autrement, seraient considérés comme du texte brut, tel que :</p>
 <ul>
     <li>les titres (h1)</li>
     <li>les listes ordonnées et non ordonnées</li>
@@ -611,22 +611,24 @@
 </ul>
 <p><strong>Remarque :</strong> pour des raisons de sécurité, le HTML brut est transformé en texte ordinaire.</p>
         ]]></item>
-        <item id="custom_form_types" title="Modèles types de modules personnalisés"><![CDATA[
-<h2>Modèles types de modules personnalisés</h2>
-<p>En complément des types de modules standards (article, fichier, divers etc.), les Administrat•eur•rice•s peuvent définir leurs types personnalisés. L’objectif des modèles de modules personnalisés est double : faciliter la classification des modules  et permettre la définition personnalisée des ressources.</p>
-<p>Le format du paramètre des préférences est <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>, et dont chaque élément correspond à un type de modèle de module</p>
-<p>Pour déclarer un type de module personnalisé (ex. <code>js</code>) ce type (chacun sur une ligne distincte) devra être associé à un élément <code>[js]</code>. Un titre d’intitulé par défaut peut être déclaré à l’aide du détail <code>title="Javascript"</code> de l’élément de liste correspondant. Si nécessaire, le support des traductions des intitulés est possible également (ex. <code>ru="Скрипт"</code>).</p>
-<p>De plus, un modèle de module <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type</span>(ouvre le lien externe dans une nouvelle fenêtre)</3></a> (auparavant connu sous la désignation «MINE Type») peut être spécifié, par exemple : <code>minetype="application/javascript"</code>. Cela transforme les modèles de modules de ce type en ressources personnalisées qui peuvent être servies dans le paramètre du type de média plutôt que dans celui de la base de données ou du serveur (fichiers «Flat» indépendants) grâce à la balise <code>&lt;txp:output_form /&gt;</code>. Par exemple, un modèle de module nommé <code>example.js</code> du type <code>[js]</code> et de type de média <code>minetype="application/javascript"</code> pourra être inclus à l’aide d’une balise HTML <code>&lt;script&gt;</code> dans votre code comme ci-après :</p>
-<pre><code>&lt;script&gt;
-    <9>
-&lt;/script&gt;</code></pre>
+        <item id="custom_form_types" title="Types de modèles de modules personnalisés"><![CDATA[
+<h2>Types de modèles de modules personnalisés</h2>
+<p>En complément des types de modules standards (article, fichier, divers etc.), les Administrat•eur•rice•s peuvent définir leurs types personnalisés. L’objectif des modèles de modules personnalisés est double : faciliter la classification des modules et permettre la définition personnalisée des ressources.</p>
+<p>Le paramètre de ces préférences est au format <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>, et chaque élément correspond à un type de modèle de module</p>
+<p>Pour déclarer un type de module personnalisé (ex. <code>js</code>), veuillez tout d’abord à activer la «Configuration avancée» depuis les préférences d’administration (désactivée par défaut). Depuis cette nouvelle option, renseignez ce type (chaque nouveau sur une ligne distincte) qui devra être associé à un élément <code>[js]</code>. Un titre d’intitulé par défaut peut être déclaré à l’aide de la ligne <code>title="Javascript"</code> de l’élément de liste correspondant. Si nécessaire, le support des traductions des intitulés est possible également (ex. <code>ru="Скрипт"</code>).</p>
+<p>De plus, un modèle de module <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> (auparavant connu sous la désignation «MINE Type») peut être spécifié, par exemple : <code>minetype="application/javascript"</code>. Cela transforme les modèles de modules de ce type en ressources personnalisées qui seront servies dans le paramètre du type de média plutôt que dans celui de la base de données ou du serveur (fichiers «Flat» indépendants) grâce à la balise <code>&lt;txp:output_form /&gt;</code>. Par exemple, un modèle de module nommé <code>example.js</code> du type <code>[js]</code> et de type de média <code>minetype="application/javascript"</code> pourra être inclus dans votre code comme ci-après :</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Ce qui génèrera le balisage <code>&lt;script&gt;</code> HTML suivant:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
 <p>Seuls les modèles de modules d’une même extension correspondant à leur type (ex. <code>myscript.js</code>) peuvent être servis comme fichiers indépendants («Flat files»). Dans ce cas, ils ne seront pas interceptés par Textpattern et seront tous accessibles via leur URL.</p>
-<p>Si un modèle de module nécessite d’être interprété (s’il contient des balisages Textpattern), vous devrez les servir depuis la base de données comme suit :</p>
+<p>Si un modèle de module nécessite d’être interprété (s’il contient des balisages Textpattern), vous devrez les servir depuis la base de données comme suit :</p>
 <pre><code>&lt;script&gt;
     &lt;txp:txp:output_form form="myscript.js"
     format="script" /&gt;
 &lt;/script&gt;</code></pre>
-Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel <code>myscript</code> (sans <code>.js</code>) – afin de le rendre accessible via son URL.</p>
+<p>Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel de <code>myscript</code> (sans <code>.js</code>) afin de le rendre inaccessible via une URL standard – et en l’incluant comme suit :</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
         ]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
@@ -674,7 +676,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
     <li><code>&lt;txp:recent_articles/&gt;</code> devient : <code>&lt;recent::articles /&gt;</code></li>
     <li><code>&lt;txp:file_download_list /&gt;</code> devient : <code>&lt;file::download_list /&gt;</code></li>
     <li><code>&lt;txp:smd_if /&gt;</code> devient : <code>&lt;smd::if /&gt;</code></li>
-    <li><code>&lt;txp:smd_if&gt;...<15>...&lt;/txp:smd_if&gt;</code> devient : <code>&lt;smd::if&gt;...&lt;smd::else /&gt;...&lt;/smd::if&gt;</code>(notez que le préfixe du plugin peut être utilisé pour la balise <code>else</code>).</li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> devient : <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (notez que le préfixe du plugin peut être utilisé pour la balise <code>else</code>).</li>
 </ul>
 <p>Si une balise contient un trait souligné (underscore) et que vous adoptez les balises réduites, le concept devient alors :</p>
 <ol>
@@ -707,7 +709,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <h2>Répertoire des images</h2>
 <p>Si vous souhaitez personnaliser le répertoire des images, vous pouvez le faire ici. Vous devrez d’abord créer ce dossier à la racine de l’installation de Textpattern ; vous devrez également vous assurer que ce dossier est accessible en écriture.</p>
 <p>Ce chemin est toujours un <strong>chemin relatif</strong> (au répertoire racine de votre installation de Textpattern) </p>
-<p>Par défaut c’est : <code>images</code>.</p>
+<p>Par défaut c’est : <code>images</code>.</p>
         ]]></item>
         <item id="include_email_atom" title="Inclure l’adresse e-mail dans les flux Atom ?"><![CDATA[
 <h2>Inclure l’adresse e-mail dans les flux Atom ?</h2>
@@ -725,7 +727,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
    <li><strong>Référents seuls :</strong> Textpattern dénombrera uniquement les visiteurs en provenance d’autres sites</li>
    <li><strong>Aucun :</strong> Textpattern n’enregistrera aucune activité pour toutes pages vues</li>
 </ul>
-<p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>
+<p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>
 <p>Il est vivement recommandé de laisser ce paramètre sur sa valeur par défaut, à savoir «Aucun», à moins que les besoins de ces informations ne soient absolument nécessaires et, en outre, d’informer explicitement de l’usage que vous comptez en faire.</p>
         ]]></item>
         <item id="max_url_len" title="Longueur maximale d’une URL (en caractères)"><![CDATA[
@@ -758,7 +760,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         ]]></item>
         <item id="permlink_mode" title="Format des URL"><![CDATA[
 <h2>Format des URL</h2>
-<p>Détermine la méthode avec laquelle les articles individuels sont liés par des URL avec les balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>Détermine la méthode avec laquelle les articles individuels sont liés par des URL avec les balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
 <p>brute (?=paramètres) est le plus compatible il fonction sans pratiquement aucune configuration particulière mais est pénalisant en terme de lisibilité et d’optimisation à destination des moteurs de recherches (SEO). Avec ce mode, les URL de vos articles ressembleront à :</p>
 <pre><code></code></pre>
 <p>Tous les autres modes requièrent les capacités de réécriture d’URL par le serveur (c-à-d <code>mod_rewrite</code> d’Apache ou les directives de réécriture NGINX dans le bloc <code>server</code>). Si votre serveur ne supporte pas la réécriture des URL, veuillez contacter votre hébergeur pour faire usage du mode brute (?=paramètres) expliqué ci-avant.</p>
@@ -767,7 +769,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <h2>Chemin du répertoire de cache des plugins</h2>
 <p>Ce paramètre s’adresse principalement aux développeurs de plugins. Lorsque renseigné, le code source d’un plugin (non encore compilé) placé dans ce dossier sera chargé automatiquement par Textpattern et permet d’en éditer facilement le code et contrôler son fonctionnement sans devoir installer/activer le plugin. <strong>Attention</strong> toutefois avec cette méthode : un plugin défaillant (qui échoue dans sa compilation) brisera l’exécution de Textpattern !</p>
 <p>Il est recommandé de charger les plugins selon la procédure standard depuis la page «Installer un plugin» sur un site en production plutôt que d’utiliser ce répertoire de cache.</p>
-<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p> ]]></item>
+<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p>
+        ]]></item>
         <item id="production_status" title="Statut de production"><![CDATA[
 <h2>Statut de production</h2>
 <p>Un site Textpattern fonctionne dans l’un de ces trois modes :</p>
@@ -792,7 +795,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
    <li>la consommation approximative de la mémoire</li>
 </ul>
 <h3>Le mode de production</h3>
-<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p> ]]></item>
+<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p>
+        ]]></item>
         <item id="public_theme_name" title="Thème du site public"><![CDATA[
 <h2>Thème du site public</h2>
 <p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu’une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>
@@ -805,7 +809,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[
 <h2>Envoi des informations de connexion à cette adresse e-mail</h2>
 <p>Renseigne une adresse e-mail utilisée pour origine d’expéditeur «De :» dans les messages d’envoi des informations de connexion aux nouveaux utilisateurs du site.</p>
-<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p> ]]></item>
+<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p>
+        ]]></item>
         <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[
 <h2>Combien d’articles par flux XML (RSS/Atom) ?</h2>
 <p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
@@ -817,14 +822,15 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Permet de réduire la consommation de la bande passante, le délai de chargement des pages, et la charge du serveur.</p>  ]]></item>
         <item id="show_comment_count_in_feed" title="Afficher le nombre de commentaires dans les flux XML ?"><![CDATA[
 <h2>Afficher le nombre de commentaires dans les flux XML ?</h2>
-<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p> ]]></item>
+<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p>
+        ]]></item>
         <item id="site_slogan" title="Slogan du site"><![CDATA[
 <h2>Slogan du site</h2>
-<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site</a>(ouvre le lien externe dans une nouvelle fenêtre)</span></2> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>
+<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>
         ]]></item>
         <item id="sitename" title="Nom du site"><![CDATA[
 <h2>Nom du site</h2>
-<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom ou titre général de votre site</a>(ouvre le lien externe dans une nouvelle fenêtre)</span></2>. Apparaîtra dans la barre de titres des navigateurs ou dans les lecteurs de flux de syndications et partout ailleurs sur votre site, à discrétion.</p>
+<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom ou titre général de votre site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>. Apparaîtra dans la barre de titres des navigateurs ou dans les lecteurs de flux de syndications et partout ailleurs sur votre site, à discrétion.</p>
         ]]></item>
         <item id="siteurl" title="URL du site"><![CDATA[
 <h2>URL du site</h2>
@@ -860,10 +866,12 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[
 <h2>Chemin du répertoire temporaire</h2>
 <p>Renseignez un <strong>chemin absolu</strong> pour le répertoire temporaire (parfois dénommé tmp ou temp). PHP réclame de disposer de droits d’écriture sur ce dossier. Il sera utilisé pour les fichiers temporaires, par exemple les téléversements de toutes sortes (plugins, fichiers ou images).</p>
-<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p> ]]></item>
+<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p>
+        ]]></item>
         <item id="theme_name" title="Thème de l’administration"><![CDATA[
 <h2>Thème de l’administration</h2>
-<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p> ]]></item>
+<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
+        ]]></item>
         <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
 <h2>Functions PHP associées à txp:evaluate</h2>
 <p>Renseignez une liste de <code>function</code> séparées par une virgule ou des <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments renseignés dans cette liste peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
@@ -872,18 +880,20 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         ]]></item>
         <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[
 <h2>Accepter les commentaires ?</h2>
-<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p> ]]></item>
+<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p>
+        ]]></item>
         <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[
-<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?<0>adresse e-mail
+<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?</h2>
 <p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
-<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p> ]]></item>
+<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p>
+        ]]></item>
         <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[
 <h2>Utiliser les plugins ?</h2>
 <p>Permet de désactiver totalement le support des plugins dans Textpattern. Utile pour le débogage d’erreurs sur votre site et pour identifier le dysfonctionnement, éventuel, d’un plugin.</p>
         ]]></item>
         <item id="use_textile" title="Utiliser Textile?"><![CDATA[
 <h2>Utiliser Textile ?</h2>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention d’écriture pour convertir, très simplement, du texte en HTML. Quand activé, Textile intercepte le corps des articles et retourne un document structuré en HTML.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention d’écriture pour convertir, très simplement, du texte en HTML. Quand activé, Textile intercepte le corps des articles et retourne un document structuré en HTML.</p>
 <p>Textile offre également un puissant mais panel de commandes avec lequel formater du texte, définir sa structure tels que des listes, des niveaux de titre ou des citations ainsi que des liens et des images.</p>
 <p>Le paramètre choisi ici devient celui par défaut pour la structure HTML des résumés et du corps des articles depuis la page «Rédiger». Vous pourrez, toutefois, basculer du formatage Textile à la conversion des retours de ligne en paragraphes HTML ou ne rien convertir du tout.</p>
         ]]></item>
@@ -891,6 +901,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 
     <group id="section" title="Nom de la section">
         <item id="section_category" title="Introduction"><![CDATA[
+<h2>Introduction</h2>
 <p>Il est légitime d’appréhender, par analogie, les sections dans Textpattern comme les sections d’un journal ; chacune appartenant à la même publication, mais pouvant relever de différentes mises en page, ou différentes thématiques d’articles, et ainsi de suite.</p>
 <p>Pour la plupart des sites web, il suffit de créer un nombre minimum de sections (pages).</p>
 <h3>Considérons ce scénario pour un site avec trois sections :</h3>
@@ -942,7 +953,7 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         <item id="setup_user_login" title="Nom d’utilisateur"><![CDATA[
 <h2>Identifiant d’utilisateur</h2>
 <p>L’identifiant de connexion du compte l’administrateur utilisé pour administrer le site.</p>
-<p>Bien qu’il n’y ait aucune restriction dans le choix de cet identifiant, il est préférable d’éviter les séquences de caractères complexes ainsi que les mots prédictibles (ex. <code>admin</code>, <code>administrator</code>, <2>administrateur</2>, etc.)</p>
+<p>Bien qu’il n’y ait aucune restriction dans le choix de cet identifiant, il est préférable d’éviter les séquences de caractères complexes ainsi que les mots prédictibles (ex. <code>admin</code>, <code>administrator</code>, <code>administrateur</code>, etc.)</p>
         ]]></item>
         <item id="setup_user_pass" title="Mot de passe"><![CDATA[
 <h2>Mot de passe</h2>
@@ -978,7 +989,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
         ]]></item>
         <item id="skin_delete_entirely" title="Supprimer également les modèles du thème sur le serveur"><![CDATA[
 <h2>Supprimer également les modèles du thème sur le serveur</h2>
-<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s’y trouvent.</p> ]]></item>
+<p>Si coché, tous les fichiers du modèle correspondants au(x) thème(s) sélectionné(s) seront définitivement supprimés du disque. Toutefois, les répertoires relatifs aux thèmes ainsi que leurs sous-répertoires ne seront pas détruits si des fichiers (javascript, images, etc.) s’y trouvent.</p>
+        ]]></item>
         <item id="skin_delete_from_database" title="Supprimer de la base de données les modèles inutilisés à l’importation"><![CDATA[
 <h2>Supprimer de la base de données les modèles inutilisés à l’importation</h2>
 <p>Si coché, chaque modèle du(es) thème(s) sélectionné(s) n’ayant aucun fichier correspondant sur le disque sera définitivement supprimé de la base de données. Le résultat, après exécution de l’action, fera correspondre, tant que faire se peut,  la base de données avec ce qui est présent sur le disque.</p>
@@ -998,7 +1010,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <p>Ce formulaire permet l’importation d’un thème dans la base de données depuis le répertoire des thèmes.</p>
 <p>Un thème importable doit être composé d’un dossier parent accessible en lecture utilisant le nom du thème pour nom de dossier interne, ainsi qu’un fichier <code>manifest.json</code> dans le format requis et accessible en lecture. Le dossier du thème doit également contenir les pages, modules et les styles correspondants dans leur dossier éponymes.</p>
 <p>Alors que les gabarits et les modules doivent comporter une extension <code>.txp</code>, les feuilles de styles seront des fichiers <code>.css</code>. Les modules devront être groupés par type dans leur dossiers correspondants. Textpattern créera tout les modèles essentiels manquants lors de l’importation.</p>
-<p>Voir la documentation <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations lors de la création, l’installation et l’utilisation des thèmes avec Textpattern CMS.</p> ]]></item>
+<p>Voir la documentation <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations lors de la création, l’installation et l’utilisation des thèmes avec Textpattern CMS.</p>
+        ]]></item>
         <item id="skin_name" title="Nom du thème"><![CDATA[
 <h2>Nom du thème</h2>
 <p>Le nom du thème est utilisé pour nom du dossier du thème et pour d’autres raisons techniques (requis).</p>
@@ -1015,7 +1028,8 @@ Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simpl
 <h3>Exportation et importation</h3>
 <p>Les thèmes peuvent être partagés avec la communauté. Sélectionnez un ou plusieurs thèmes via les cases à cocher et utilisez l’option <em>Exporter</em> de la liste de choix multiples pour exporter les ressources du thème sur le disque. Chaque thème est situé dans son propre sous-répertoire, sous le répertoire défini dans vos préférences <em>Répertoire des thèmes</em> (dossier par défaut : <code>themes </code>).</p>
 <p>Une fois effectué, vous pouvez empaqueter le thème et le distribuer. Les utilisateurs pourront décompacter le thème dans leur propre répertoire et choisir l’option <em>importer</em> pour l’importer le rendre actif dans leur base de données. Dès lors, ils pourront basculer sur le thème et l’utiliser comme thème de travail pour permettre la prévisualisation des ressources du site et, en définitive, l’affectation des ressources aux sections, comme décrit ci-dessus.</p>
-<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n’y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d’abord importer les modifications dans votre base de données et vous assurer qu’une ou plusieurs sections utilisent les ressources du thème.</p> ]]></item>
+<p>La possibilité d’exporter des thèmes vous permet de faire une sauvegarde, de modifier le contenu des ressources sur le disque dans votre éditeur de texte et/ou de leur appliquer un contrôle de version. Rappelez-vous : il n’y a <em>pas de lien</em> entre votre site public et la version sur disque de vos ressources sur le disque. Pour que les visiteurs voient les modifications, vous devrez d’abord importer les modifications dans votre base de données et vous assurer qu’une ou plusieurs sections utilisent les ressources du thème.</p>
+        ]]></item>
         <item id="skin_title" title="Titre du thème"><![CDATA[
 <h2>Titre du thème</h2>
 <p>Une titre de description pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
