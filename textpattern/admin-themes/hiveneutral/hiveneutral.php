@@ -87,14 +87,16 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             $out[] = '</nav>';
             $out[] = graf(
                 href(span(htmlspecialchars(get_pref('sitename')), array('class' => 'txp-view-site-name')), hu, array(
-                    'rel'    => 'noopener',
-                    'target' => '_blank',
-                    'title'  => gTxt('tab_view_site'),
+                    'rel'        => 'noopener',
+                    'target'     => '_blank',
+                    'title'      => gTxt('tab_view_site'),
+                    'aria-label' => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));
             $out[] = graf(
                 href(span(gTxt('lightswitch'), array('class' => 'ui-icon ui-icon-lightbulb')), '#', array(
-                    'id'     => 'lightswitch',
-                    'title'  => gTxt('lightswitch'),
+                    'id'         => 'lightswitch',
+                    'title'      => gTxt('lightswitch'),
+                    'aria-label' => gTxt('lightswitch'),
                 )), array('class' => 'txp-lightswitch'));
             $out[] = graf(
                 href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
