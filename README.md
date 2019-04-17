@@ -22,14 +22,11 @@
 
 Textpattern is installed to a web server with PHP and MySQL.
 
-Ensure the server meets or exceeds the
-[system requirements](https://textpattern.com/about/119/system-requirements)
-before you continue.
+Ensure the server meets or exceeds the [system requirements](https://textpattern.com/system-requirements) before you continue.
 
 ## Download Textpattern
 
-The current production release is version 4.7.3. It can be downloaded from the
-Textpattern website or GitHub in .zip and .tar.gz varieties.
+The current production release is version 4.7.3. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
 
@@ -41,67 +38,46 @@ If you want to use the multi-site functionality in Textpattern, get the .tar.gz 
 
 ## Install Textpattern
 
-Please see
-[README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
-for details on installing Textpattern.
+Please see [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt) for details on installing Textpattern.
 
 ## Upgrade Textpattern
 
-Please see
-[README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
-for details on upgrading Textpattern.
+Please see [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt) for details on upgrading Textpattern.
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.com) is home to
-a friendly and helpful community of Textpattern users and experts.
-Textpattern also has a social network presence on
-[Twitter](https://textpattern.com/@textpattern).
+The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Twitter](https://textpattern.com/@textpattern).
 
 ## Development
 
-The development version can be
-obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development
-versions are works-in-progress and not recommended for use on live production
-servers.
+The development version can be obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development versions are works-in-progress and not recommended for use on live production servers.
 
 ### Anticipated changes to future system requirements
 
-System requirements for the development version may differ from the production
-release [system requirements](https://textpattern.com/about/119/system-requirements).
+System requirements for the development version may differ from the production release [system requirements](https://textpattern.com/system-requirements).
 
-As a development version approaches release, minimum and recommended system
-requirements are confirmed and the production release [system requirements](https://textpattern.com/about/119/system-requirements) will
-be updated accordingly.
+As a development version approaches release, minimum and recommended system requirements are confirmed and the production release [system requirements](https://textpattern.com/system-requirements) is updated accordingly.
 
-The following table outlines anticipated forthcoming changes to system
-requirements for future releases. It takes into account vendor support, security
-considerations and other factors.
+The following table outlines anticipated forthcoming changes to system requirements for future releases. It takes into account vendor support, security considerations, overall performance and other factors.
 
-Note that minimum and/or recommended versions listed may change multiple times
-during the development process.
+Note that minimum and/or recommended versions listed may change multiple times during the development process.
 
 #### Textpattern development version
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | [vendor supported](http://php.net/supported-versions.php)<br />(7.2 or 7.3) |
+| PHP    | 5.5 | [vendor supported](https://php.net/supported-versions.php)<br />(7.2 or 7.3) |
 | MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | 1.10 | mainline (1.15) or stable (1.14) |
 
 ## Contributing
 
-Want to help out with the development of Textpattern CMS? Please refer to the
-[Contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md)
-for full details.
+Do you want to help with the development of Textpattern CMS? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
 
 ## GitHub topic tags
 
-If you use GitHub for Textpattern-related development please consider adding
-some of the following [topic](https://help.github.com/articles/about-topics/)
-keywords to your public project repositories, so we can build a network of
-discoverable resources:
+If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can build a network of discoverable resources:
 
 * [`textpattern`](https://github.com/topics/textpattern)
 * [`textpattern-plugin`](https://github.com/topics/textpattern-plugin)
@@ -111,13 +87,9 @@ discoverable resources:
 
 ## Additional development tools
 
-Various components used within Textpattern CMS (such as the bundled themes and
-language translations) are maintained in standalone repositories. We have a
-simple development toolset built on [Node.js](https://nodejs.org/) to pull the
-distribution files of those repositories into the core as required.
+Various components used within Textpattern CMS (such as the bundled themes and language translations) are maintained in standalone repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
 
-You can install Node.js using the [installer](https://nodejs.org/en/download/)
-or [package manager](https://nodejs.org/en/download/package-manager/).
+You can install Node.js using the [installer](https://nodejs.org/en/download/) or [package manager](https://nodejs.org/en/download/package-manager/).
 
 Install required dev tools:
 
@@ -171,16 +143,10 @@ npm run txp-gitdist 1.2.3 ../my-dest-dir
 
 ## Legal
 
-Released under the GNU General Public License. See
-[LICENSE.txt](https://github.com/textpattern/textpattern/blob/master/LICENSE.txt)
-for terms and conditions.
+Released under the GNU General Public License. See [LICENSE.txt](https://github.com/textpattern/textpattern/blob/master/LICENSE.txt) for terms and conditions.
 
-Includes contributions licensed under the GNU Lesser General Public License. See
-[LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/dev/textpattern/lib/LICENSE-LESSER.txt)
-for terms and conditions.
+Includes contributions licensed under the GNU Lesser General Public License. See [LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-LESSER.txt) for terms and conditions.
 
-Includes contributions licensed under the New BSD License. See
-[LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/dev/textpattern/lib/LICENSE-BSD-3.txt)
-for terms and conditions.
+Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
 ![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.jpg)

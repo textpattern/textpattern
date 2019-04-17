@@ -1,10 +1,17 @@
-Changes in TBC 4.8.0/5.0.0 (upcoming)
+Changes in TBC (upcoming)
 
+* Fixed: index.php correctly included in css.php.
+* Fixed: 3 undefined routing-related indexes.
+* Fixed: txpreview is not cached.
+* Changed: Author's real name is used in <txp:page_url>.
+* Added: Dark Mode support in Hive admin theme.
 * Added: Configuration file generated during setup can be downloaded.
+* Added: Latest translations.
+* Added: 'title' attribute to image tags.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
-* PrismJS 1.16.0.
 * jQuery 3.4.0.
+* PrismJS 1.16.0.
 
 Changes in 4.7.3
 
