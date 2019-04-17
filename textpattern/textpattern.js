@@ -1441,7 +1441,7 @@ textpattern.encodeHTML = function (string) {
  *
  * @param  {string} string The string
  * @return {string} Encoded string
- * @since  4.8.0
+ * @since  4.7.4
  */
 
 textpattern.decodeHTML = function (string) {
