@@ -87,7 +87,7 @@ If you use GitHub for Textpattern-related development please consider adding som
 
 ## Additional development tools
 
-Various components used within Textpattern CMS (such as the bundled themes and language translations) are maintained in standalone repositories. Texpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
+Various components used within Textpattern CMS (such as the bundled themes and language translations) are maintained in standalone repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
 
 You can install Node.js using the [installer](https://nodejs.org/en/download/) or [package manager](https://nodejs.org/en/download/package-manager/).
 
@@ -145,8 +145,8 @@ npm run txp-gitdist 1.2.3 ../my-dest-dir
 
 Released under the GNU General Public License. See [LICENSE.txt](https://github.com/textpattern/textpattern/blob/master/LICENSE.txt) for terms and conditions.
 
-Includes contributions licensed under the GNU Lesser General Public License. See [LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/dev/textpattern/lib/LICENSE-LESSER.txt) for terms and conditions.
+Includes contributions licensed under the GNU Lesser General Public License. See [LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-LESSER.txt) for terms and conditions.
 
-Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/dev/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
+Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
 ![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.jpg)
