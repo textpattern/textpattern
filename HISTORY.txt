@@ -10,8 +10,9 @@ Changes in TBC (upcoming)
 * Added: 'title' attribute to image tags.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
-* jQuery 3.4.0.
+* jQuery 3.4.1.
 * PrismJS 1.16.0.
+* jQuery File Upload 9.30.0.
 
 Changes in 4.7.3
 
