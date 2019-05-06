@@ -24,4 +24,15 @@
     AddType image/svg+xml  svg svgz
     AddEncoding gzip       svgz
 </IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options nosniff
+    Header always set Referrer-Policy strict-origin-when-cross-origin
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+    Header always set Feature-Policy "camera 'none'; geolocation 'none'; microphone 'none'; payment 'none'"
+    Header always set Content-Security-Policy "default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'" 
+ </IfModule>  
+  
 # END Textpattern
