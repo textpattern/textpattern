@@ -1438,7 +1438,15 @@ function load_plugin($name, $force = false)
         }
 
         $txp_current_plugin = $rs['name'];
-        eval($rs['code']);
+        $dir = sanitizeForFile($txp_current_plugin);
+        $filename = txpath."/plugins/$dir/$dir.php";
+
+        if (is_file($filename) ||
+            \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $rs['code'])
+        ) {
+            include_once($filename);
+        }
+
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1856,7 +1864,7 @@ function load_plugins($type = false)
     $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
     $where = "status = 1 AND type IN (".($type ? $admin : "0,1,5").")";
 
-    $rs = safe_rows("name, code, version", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
+    $rs = safe_rows("name, version", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
 
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
@@ -1867,7 +1875,16 @@ function load_plugins($type = false)
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
-                $eval_ok = eval($a['code']);
+
+                $dir = sanitizeForFile($a['name']);
+                $filename = txpath."/plugins/$dir/$dir.php";
+        
+                if (!is_file($filename)) {
+                    $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
+                    \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
+                }
+
+                $eval_ok = is_file($filename) ? include_once($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
