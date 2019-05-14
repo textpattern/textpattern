@@ -237,6 +237,10 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         exit;
     }
 
+    if ($lang_ui != $language) {
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, $lang_ui);
+    }
+
     // Register modules
     register_callback('\Textpattern\Module\Help\HelpAdmin::init', 'help');
 

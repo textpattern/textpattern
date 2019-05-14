@@ -1081,7 +1081,6 @@ select[size="1"] {
    * Normalize styling of `optgroup`.
    */
   optgroup {
-    color: #000000;
     font-style: normal;
     font-weight: bold;
   }
