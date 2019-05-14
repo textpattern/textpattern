@@ -103,6 +103,7 @@ class Plugin
 
             if ($rs and $code) {
                 $this->installTextpack($name, true);
+                $this->updateFile($name, $code);
 
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -188,6 +189,7 @@ class Plugin
 
             safe_delete('txp_plugin', "name = '".doSlash($name)."'");
             safe_delete('txp_lang', "owner = '".doSlash($name)."'");
+            $this->updateFile($name, null);
         }
     }
 
@@ -353,6 +355,28 @@ class Plugin
                 $this->installTextpack($name);
             }
         }
+    }
+
+    /**
+     * Create/update/delete plugin file.
+     * 
+     * @param  string $name The plugin
+     * @param  string $code The code
+     */
+
+    public function updateFile($name, $code = null)
+    {
+        $filename = sanitizeForFile($name);
+
+        if (!isset($code)) {
+            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.'/plugins', $filename);
+        }
+
+        if(!is_dir($dir = txpath."/plugins/$filename")) {
+            mkdir($dir);
+        }
+
+        return file_put_contents("$dir/$filename.php", '<?php'.n.$code.n.'?>', LOCK_EX);
     }
 
     /**
