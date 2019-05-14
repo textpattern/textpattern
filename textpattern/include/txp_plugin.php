@@ -458,10 +458,10 @@ function plugin_edit_form($name = '')
 
 function plugin_save()
 {
-    extract(doSlash(array_map('assert_string', gpsa(array('name', 'code')))));
+    extract(array_map('assert_string', gpsa(array('name', 'code'))));
 
-    safe_update('txp_plugin', "code = '$code'", "name = '$name'");
-
+    safe_update('txp_plugin', "code = '".doSlash($code)."'", "name = '".doSlash($name)."'");
+    Txp::get('\Textpattern\Plugin\Plugin')->updateFile($name, $code);
     $message = gTxt('plugin_saved', array('{name}' => $name));
 
     plugin_list($message);

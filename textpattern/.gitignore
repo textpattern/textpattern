@@ -4,6 +4,7 @@
 !/admin-themes/hiveneutral/
 /config.php
 /plugin-cache
+/plugins/*
 /setup/.default.json
 /tmp/*
 /tmp/!.gitignore
