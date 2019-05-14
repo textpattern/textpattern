@@ -694,12 +694,5 @@
         "event": "advanced_options",
         "html": "longtext_input",
         "position": "200"
-    },
-    "admin_textfilter_classes": {
-        "val": "",
-        "type": "0",
-        "event": "advanced_options",
-        "html": "longtext_input",
-        "position": "300"
     }
 }

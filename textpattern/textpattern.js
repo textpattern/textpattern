@@ -1447,8 +1447,8 @@ textpattern.encodeHTML = function (string) {
 textpattern.decodeHTML = function (string) {
     let div = document.createElement('template');
     div.innerHTML = string.trim();
-  
-    return div.content; 
+
+    return div.content;
 }
 
 /**
