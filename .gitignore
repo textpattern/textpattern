@@ -13,8 +13,6 @@ Thumbs.db
 /composer.lock
 /images/*
 /images/!.gitignore
-/files/*
-/files/!.htaccess
 /themes/*
 /themes/!.htaccess
 *~
