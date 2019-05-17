@@ -27,3 +27,7 @@
 </IfModule>
 
 # END Textpattern
+
+# For further configuration snippets that can help your Apache-compatible server
+# improve the web site's performance and security, we recommended:
+# https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess
