@@ -1,12 +1,13 @@
 # BEGIN Textpattern
-#DirectoryIndex index.php index.html
 
-#Options +FollowSymLinks
-#Options -Indexes
-#ErrorDocument 403 default
+#DirectoryIndex index.php index.html
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Enable the `FollowSymLinks` option below if it isn't already.
+    # Options +FollowSymlinks
+
     #RewriteBase /relative/web/path/
 
     RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -24,4 +25,5 @@
     AddType image/svg+xml  svg svgz
     AddEncoding gzip       svgz
 </IfModule>
+
 # END Textpattern
