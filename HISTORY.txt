@@ -4,8 +4,8 @@ Changes in TBC (upcoming)
 * Fixed: 3 undefined routing-related indexes.
 * Fixed: Article preview (txpreview) is not cached.
 * Changed: Author's real name is used in <txp:page_url>.
-* Changed: Refined scope of root .htaccess and restrict directory listing in
-  /files/ .htaccess.
+* Changed: Refined scope of root .htaccess, and restricted directory listing
+  in /files/ and /textpattern/ with their respective .htaccess.
 * Added: Dark Mode support in Hive admin theme.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
