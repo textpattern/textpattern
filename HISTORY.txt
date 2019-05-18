@@ -2,7 +2,7 @@ Changes in TBC (upcoming)
 
 * Fixed: index.php correctly included in css.php.
 * Fixed: 3 undefined routing-related indexes.
-* Fixed: txpreview is not cached.
+* Fixed: Article preview (txpreview) is not cached.
 * Changed: Author's real name is used in <txp:page_url>.
 * Changed: Refined scope of root .htaccess and restrict directory listing in
   /files/ .htaccess.
