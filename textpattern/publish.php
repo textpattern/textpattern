@@ -366,24 +366,29 @@ function preText($s, $prefs)
                     switch ($permlink_mode) {
                         case 'section_id_title':
                             $out['s'] = $u1;
-                            $out['id'] = (!empty($u2)) ? $u2 : '';
+
+                            if (is_numeric($u2)) {
+                                $out['id'] = $u2;
+                            } else {
+                                $title = empty($u2) ? null : $u2;
+                            }
 
                             break;
 
                         case 'year_month_day_title':
-                            if (empty($u2)) {
-                                $out['s'] = $u1;
-                            } else {
-                                if (@checkdate($u2, empty($u3) ? 1 : $u3, $u1)) {
-                                    $month = empty($u3) ?
-                                        array($u1, $u2) :
-                                        array($u1, $u2, $u3);
-                                } else {
-                                    $month = array();
-                                    $is_404 = true;
-                                }
-
+                            if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
                                 $title = empty($u4) ? null : $u4;
+                                $month = array($u1);
+
+                                if (!empty($u2)) {
+                                    $month[] = ltrim($u2);
+                                    empty($u3) or $month[] = ltrim($u3);
+                                }
+                            } elseif (empty($u3)) {
+                                $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
+                            } else {
+                                $is_404 = true;
                             }
 
                             break;
@@ -410,6 +415,7 @@ function preText($s, $prefs)
                             } else {
                                 // We don't want to miss the /section/ pages.
                                 $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
                             }
 
                             break;
