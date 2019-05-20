@@ -186,6 +186,53 @@ class Plugin
     }
 
     /**
+     * Update a plugin from file.
+     *
+     * @param  string  $name      Plugin name
+     * @param  boolean $normalize Check/normalize some fields
+     * @return array
+     */
+
+    public function read($name, $normalize = true)
+    {
+        $name = sanitizeForFile($name);
+        $dir = txpath.DS.'plugins'.DS.$name;
+
+        if (!is_dir($dir)) {
+            return false;
+        }
+
+        $plugin = array('name' => $name);
+
+        if (@$info = file_get_contents($dir.'/manifest.json')) {
+            $plugin += json_decode($info, true);
+        }
+
+        if (@$code = file_get_contents($dir.'/'.$name.'.php')) {
+            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
+            $plugin['code'] = $code;
+        }
+
+        if (@$textpack = file_get_contents($dir.'/textpack.txp')) {
+            $plugin['textpack'] = $textpack;
+        }
+
+        if (@$help = file_get_contents($dir.'/help.html')) {
+            $plugin['help'] = $help;
+        } elseif (@$help = file_get_contents($dir.'/help.textile')) {
+            $plugin['help_raw'] = $help;
+        }
+
+        if ($normalize) {
+            $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
+            $plugin['order'] = empty($plugin['order']) ? 5 : min(max(intval($plugin['order']), 1), 9);
+            $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
+        }
+
+        return $plugin;
+    }
+
+    /**
      * Delete plugin from the database.
      *
      * If the plugin has been programmed to respond to lifecycle events,

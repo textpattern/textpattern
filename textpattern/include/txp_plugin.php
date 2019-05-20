@@ -582,7 +582,7 @@ function plugin_upload()
     if($_FILES["theplugin"]["name"]) {
         $filename = $_FILES["theplugin"]["name"];
         $source = $_FILES["theplugin"]["tmp_name"];
-        $target_path = txpath.DS.'plugins'.DS.$filename;
+        $target_path = rtrim(get_pref('temp_dir', txpath.DS.'plugins'), DS).DS.$filename;
 
         if(move_uploaded_file($source, $target_path)) {
             $name = pathinfo($target_path, PATHINFO_FILENAME);
@@ -598,29 +598,9 @@ function plugin_upload()
                     }
                 }
 
-                $dir = txpath.DS.'plugins'.DS.$name;
-                $zip->extractTo(empty($makedir) ? txpath.DS.'plugins' : $dir);
+                $zip->extractTo(txpath.DS.'plugins'.(empty($makedir) ? '' : DS.$name));
                 $zip->close();
-                $plugin['name'] = $name;
-
-                if (@$info = file_get_contents($dir.'/manifest.json')) {
-                    $plugin += json_decode($info, true);
-                }
-
-                if (@$code = file_get_contents($dir.'/'.$name.'.php')) {
-                    $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
-                    $plugin['code'] = $code;
-                }
-
-                if (@$textpack = file_get_contents($dir.'/textpack.txp')) {
-                    $plugin['textpack'] = $textpack;
-                }
-
-                if (@$help = file_get_contents($dir.'/help.html')) {
-                    $plugin['help'] = $help;
-                } elseif (@$help = file_get_contents($dir.'/help.textile')) {
-                    $plugin['help_raw'] = $help;
-                }
+                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
             }
 
             unlink($target_path);
@@ -714,6 +694,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => $orders,
         ),
         'delete'       => gTxt('delete'),
+        'update'       => gTxt('update_from_disk'),
     );
 
     return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);
@@ -748,6 +729,11 @@ function plugin_multi_edit()
         case 'changeorder':
             foreach ($selected as $name) {
                 $plugin->changeOrder($name, ps('order'));
+            }
+            break;
+        case 'update':
+            foreach ($selected as $name) {
+                $plugin->install($plugin->read($name));
             }
             break;
     }
