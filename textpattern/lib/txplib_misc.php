@@ -3186,14 +3186,11 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     if ($override_locale) {
         $oldLocale = $txpLocale->getLocale(LC_TIME);
-
-        try {
+        
+        if ($oldLocale != $override_locale) {
             $txpLocale->setLocale(LC_TIME, $override_locale);
-        } catch (\Exception $e) {
-            // Revert to original locale on error and signal that the
-            // later revert isn't necessary
-            $txpLocale->setLocale(LC_TIME, $oldLocale);
-            $oldLocale = false;
+        } else {
+            $oldLocale = null;
         }
     }
 
@@ -3225,8 +3222,8 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     // Revert to the old locale.
-    if ($override_locale && $oldLocale) {
-        $txpLocale->setLocale(LC_TIME, array($oldLocale, 'C'));
+    if ($oldLocale) {
+        $txpLocale->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -6127,10 +6124,7 @@ function getlocale($lang)
 {
     global $locale;
 
-    try {
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
-    } catch (Exception $e) {
-    }
+    Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
 
     return Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
 }
