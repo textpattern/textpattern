@@ -193,6 +193,10 @@ class Locale
             }
         }
 
+        if (@setlocale($category, null)) {
+            return $this;
+        }
+
         throw new \Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
     }
 
