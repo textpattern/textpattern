@@ -4579,15 +4579,7 @@ function page_url($atts)
     }
 
     if ($context) {
-        $keys = array();
-
-        foreach ($context === true ? $internals : do_list_unique($context) as $key) {
-            $value = isset($pretext[$key]) ?
-                ($key === 'author' ? ($pretext['realname']) : $pretext[$key])
-                : gps($key);
-            empty($value) or $keys[$key] = $value;
-        }
-
+        $keys = get_context($context, $internals);
         isset($keys[$type]) or $keys[$type] = $default;
 
         return pagelinkurl($keys);

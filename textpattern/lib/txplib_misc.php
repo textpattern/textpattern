@@ -1376,7 +1376,7 @@ function load_plugin($name, $force = false)
 {
     global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
-    if (is_array($plugins) and in_array($name, $plugins)) {
+    if (is_array($plugins) && in_array($name, $plugins)) {
         return true;
     }
 
@@ -1426,31 +1426,31 @@ function load_plugin($name, $force = false)
         }
     }
 
-    $rs = safe_row("name, code, version", 'txp_plugin', ($force ? '' : "status = 1 AND ")."name = '".doSlash($name)."'");
+    $version = safe_field("version", 'txp_plugin', ($force ? '' : "status = 1 AND ")."name = '".doSlash($name)."'");
 
-    if ($rs) {
-        $plugins[] = $rs['name'];
-        $plugins_ver[$rs['name']] = $rs['version'];
+    if ($version !== false) {
+        $plugins[] = $name;
+        $plugins_ver[$name] = $version;
         set_error_handler("pluginErrorHandler");
 
         if (isset($txp_current_plugin)) {
             $txp_parent_plugin = $txp_current_plugin;
         }
 
-        $txp_current_plugin = $rs['name'];
-        $dir = sanitizeForFile($txp_current_plugin);
-        $filename = txpath."/plugins/$dir/$dir.php";
+        $txp_current_plugin = $name;
+        $dir = sanitizeForFile($name);
+        $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
 
-        if (is_file($filename) ||
-            \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $rs['code'])
-        ) {
-            include_once($filename);
+        if (!is_file($filename)) {
+            $code = safe_field("code", 'txp_plugin', "name = '".doSlash($name)."'");
+            \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
+        $ok = @include_once($filename);
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
-        return true;
+        return $ok;
     }
 
     return false;
@@ -1876,8 +1876,8 @@ function load_plugins($type = false)
                 $GLOBALS['txp_current_plugin'] = $a['name'];
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
 
-                $dir = sanitizeForFile($a['name']);
-                $filename = txpath."/plugins/$dir/$dir.php";
+                $dir = $a['name'];
+                $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
         
                 if (!is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
@@ -1885,6 +1885,8 @@ function load_plugins($type = false)
                 }
 
                 $eval_ok = is_file($filename) ? include_once($filename) : false;
+
+//                $eval_ok = eval($a['code']);
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -3184,14 +3186,11 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     if ($override_locale) {
         $oldLocale = $txpLocale->getLocale(LC_TIME);
-
-        try {
+        
+        if ($oldLocale != $override_locale) {
             $txpLocale->setLocale(LC_TIME, $override_locale);
-        } catch (\Exception $e) {
-            // Revert to original locale on error and signal that the
-            // later revert isn't necessary
-            $txpLocale->setLocale(LC_TIME, $oldLocale);
-            $oldLocale = false;
+        } else {
+            $oldLocale = null;
         }
     }
 
@@ -3223,8 +3222,8 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     // Revert to the old locale.
-    if ($override_locale && $oldLocale) {
-        $txpLocale->setLocale(LC_TIME, array($oldLocale, 'C'));
+    if (isset($oldLocale)) {
+        $txpLocale->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -6125,10 +6124,7 @@ function getlocale($lang)
 {
     global $locale;
 
-    try {
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
-    } catch (Exception $e) {
-    }
+    Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
 
     return Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
 }
@@ -6206,7 +6202,9 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
 
     foreach ($context as $q) {
         if (!empty($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? get_author_name($pretext[$q]) : $pretext[$q];
+            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
+        } elseif (!isset($pretext[$q]) && $value = gps($q)) {
+            $out[$q] = $value;
         }
     }
 
