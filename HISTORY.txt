@@ -14,7 +14,7 @@ Changes in TBC (upcoming)
   needed it can be implemented directly with <txp:title /> tag.
 * jQuery 3.4.1.
 * PrismJS 1.16.0.
-* jQuery File Upload 9.30.0.
+* jQuery File Upload 9.31.0.
 
 Changes in 4.7.3
 
