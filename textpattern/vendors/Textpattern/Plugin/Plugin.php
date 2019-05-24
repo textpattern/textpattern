@@ -186,7 +186,7 @@ class Plugin
     }
 
     /**
-     * Update a plugin from file.
+     * Read a plugin from file.
      *
      * @param  string  $name      Plugin name
      * @param  boolean $normalize Check/normalize some fields

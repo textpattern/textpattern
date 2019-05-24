@@ -211,7 +211,7 @@ class Locale
 
     public function getLocale($category = LC_ALL)
     {
-        return @setlocale($category, '0');
+        return @setlocale($category, 0);
     }
 
     /**
@@ -252,7 +252,7 @@ class Locale
      * platform. These formats include IETF language tag, POSIX locale name and
      * language name in English.
      *
-     * All these will return 'en-GB':
+     * All these will return 'en-gb':
      *
      * <code>
      * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('en_GB.UTF-8');
@@ -279,7 +279,7 @@ class Locale
         }
 
         if (strpos($locale, '.')) {
-            return join('.', array_slice(explode('.', $locale), 0, 1));
+            return strtok($locale, '.');
         }
 
         return false;
