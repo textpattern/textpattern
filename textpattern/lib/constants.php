@@ -920,3 +920,43 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
  */
 
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+/**
+ * A tab character.
+ *
+ * @var string
+ */
+
+define("t", "\t");
+
+/**
+ * A line feed.
+ *
+ * @var string
+ */
+
+define("n", "\n");
+
+/**
+ * A self-closing HTML line-break tag.
+ *
+ * @var string
+ */
+
+define("br", "<br />");
+
+/**
+ * A non-breaking space as a HTML entity.
+ *
+ * @var string
+ */
+
+define("sp", "&#160;");
+
+/**
+ * An ampersand as a HTML entity.
+ *
+ * @var string
+ */
+
+define("a", "&#38;");

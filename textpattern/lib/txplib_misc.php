@@ -312,10 +312,16 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
+    global $event;
     static $txpLang = null;
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
+        $strings = $txpLang->getStrings();
+
+        if (!isset($strings)) {
+            load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+        }
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -502,9 +508,10 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    global $production_status, $event;
+    global $production_status, $event, $textarray;
 
-    $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+    isset($textarray) or $textarray = array();
+    $textarray = array_merge($textarray, Txp::get('\Textpattern\L10n\Lang')->load($lang, $events));
 
     if (($production_status !== 'live' || $event === 'diag')
         && @$debug = parse_ini_file(txpath.DS.'mode.ini')
@@ -1830,9 +1837,10 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
  * @param bool $type If TRUE loads admin-side plugins, otherwise public
  */
 
-function load_plugins($type = false)
+function load_plugins($type = false, $pre = null)
 {
     global $prefs, $plugins, $plugins_ver, $app_mode, $trace;
+    static $rs = null;
 
     if (!is_array($plugins)) {
         $plugins = array();
@@ -1861,16 +1869,20 @@ function load_plugins($type = false)
         }
     }
 
-    $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
-    $where = "status = 1 AND type IN (".($type ? $admin : "0,1,5").")";
+    if (!isset($rs)) {
+        $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
+        $where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')'.
+            ($plugins ? ' AND name NOT IN ('.join(',', quote_list($plugins)).')' : '');
 
-    $rs = safe_rows("name, version", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
+        $rs = safe_rows("name, version, load_order", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
+    }
 
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
+        $pre = intval($pre);
 
         foreach ($rs as $a) {
-            if (!in_array($a['name'], $plugins)) {
+            if (!isset($plugins_ver[$a['name']]) && (!$pre || $a['load_order'] < $pre)) {
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
@@ -1884,9 +1896,7 @@ function load_plugins($type = false)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = is_file($filename) ? include_once($filename) : false;
-
-//                $eval_ok = eval($a['code']);
+                $eval_ok = @include($filename);
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -5969,7 +5979,7 @@ function doQuote($val)
  * @return  mixed
  * @package DB
  * @example
- * if ($r = safe_row('name', 'myTable', 'type in(' . quote_list(array('value1', 'value2')) . ')')
+ * if ($r = safe_row('name', 'myTable', 'type in(' . join(',', quote_list(array('value1', 'value2'))) . ')')
  * {
  *     echo "Found '{$r['name']}'.";
  * }
