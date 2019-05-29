@@ -327,27 +327,7 @@ function preText($s, $prefs)
     if (gps('atom')) {
         $out['feed'] = 'atom';
     }
-/*
-    // Some useful vars for taghandlers, plugins.
-    $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
-    $out['qs'] = serverSet('QUERY_STRING');
 
-    // IIS fix.
-    if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
-        $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
-    }
-
-    // Another IIS fix.
-    if (!$out['request_uri'] and serverSet('argv')) {
-        $argv = serverSet('argv');
-        $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
-    }
-
-    // Define the usable url, minus any subdirectories.
-    // This is pretty ugly, if anyone wants to have a go at it.
-    $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
-    $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
-*/
     $req = reqUrl($out);
     $is_404 = ($out['status'] == '404');
     $title = null;
