@@ -201,15 +201,17 @@ if ($use_plugins) {
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
-$req = reqUrl();
-
-// Send 304 Not Modified if appropriate.
-if ($req['u1'] != 'rss' && $req['u1'] != 'atom') {
-    handle_lastmod();
-}
 
 isset($pretext) or $pretext = array();
 callback_event('pretext');
+
+// Send 304 Not Modified if appropriate.
+$req = preText($s, null);
+
+if (empty($req['feed'])) {
+    handle_lastmod();
+}
+
 $pretext = array_merge($pretext, preText($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
@@ -275,11 +277,14 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function reqUrl(&$in = null)
+function preText($s, $prefs)
 {
-    static $url = null, $out = array();
+    static $url = null, $out = null;
 
-    if (!isset($url)) {
+    if (!isset($out)) {
+        // Set messy variables.
+        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
@@ -301,40 +306,30 @@ function reqUrl(&$in = null)
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
         $url = chopUrl($req);
+
+        if ($url['u1'] == 'rss' || gps('rss')) {
+            $out['feed'] = 'rss';
+        } elseif ($url['u1'] == 'atom' || gps('atom')) {
+            $out['feed'] = 'atom';
+        }
     }
 
-    !isset($in) or $in = array_merge($in, $out);
-    return $url;
-}
+    if (!isset($prefs)) {
+        return $out;
+    }
 
-// -------------------------------------------------------------
-
-function preText($s, $prefs)
-{
     extract($prefs);
-
-    // Set messy variables.
-    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
     $out['skin'] = '';
     $out['page'] = '';
     $out['css'] = '';
 
-    if (gps('rss')) {
-        $out['feed'] = 'rss';
-    }
-
-    if (gps('atom')) {
-        $out['feed'] = 'atom';
-    }
-
-    $req = reqUrl($out);
     $is_404 = ($out['status'] == '404');
     $title = null;
 
     // If messy vars exist, bypass URL parsing.
     if (!$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
-        extract($req);
+        extract($url);
 
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
