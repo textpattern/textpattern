@@ -6,6 +6,8 @@ Changes in TBC (upcoming)
 * Changed: Author's real name is used in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
+* Changed: Non-searchable sections are omitted from <txp:section_list> output
+  when 'exclude' attribute is used.
 * Added: Dark Mode support in Hive admin theme.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
