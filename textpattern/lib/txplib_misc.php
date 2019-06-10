@@ -5308,8 +5308,16 @@ function buildCustomSql($custom, $pairs, $exclude = array())
             $no = array_search($k, $custom);
 
             if ($no !== false) {
-                $not = ($exclude === true || in_array($k, $exclude)) ? ' not' : '';
-                $out[] = "and custom_".$no.$not." like '$v'";
+                $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
+                list($from, $to) = explode('%%', $v) + array(null, null);
+
+                if (!isset($to)) {
+                    $out[] = "AND $not custom_".$no." LIKE '$v'";
+                } elseif ($from !== '') {
+                    $out[] = $to === '' ? "AND $not custom_".$no.">='$from'" :  "AND $not custom_".$no." BETWEEN '$from' and '$to'";
+                } elseif ($to !== '') {
+                    $out[] = "AND $not custom_".$no."<='$to'";
+                }
             }
         }
     }
