@@ -6,12 +6,16 @@ Changes in TBC (upcoming)
 * Changed: Author's real name is used in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
+* Changed: Non-searchable sections can be omitted from <txp:section_list>
+  output with valueless 'exclude' attribute.
 * Added: Dark Mode support in Hive admin theme.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
 * Added: 'title' attribute to image tags.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
+* Textile 3.7.2. See https://github.com/textile/php-textile/releases/tag/v3.7.2
+  for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.16.0.
 * jQuery File Upload 9.31.0.

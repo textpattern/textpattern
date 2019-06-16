@@ -517,7 +517,7 @@ samp {
 sup.footnote,
 sup {
     position: relative;
-    font-size: 0.625em;
+    font-size: 0.75em;
     line-height: 0;
     vertical-align: baseline;
   }

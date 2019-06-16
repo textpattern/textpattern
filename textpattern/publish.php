@@ -43,13 +43,10 @@ $loader->register();
 
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/admin_config.php';
 
-include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
-include_once txpath.'/publish/comment.php';
+
 $trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
@@ -193,31 +190,54 @@ $txp_user = null;
 // Will remove in future.
 $textarray = array();
 
-// i18n.
-if (txpinterface !== 'css') {
-    $textarray = load_lang(LANG);
-}
-
 // Tidy up the site.
 janitor();
 
-// Here come the plugins.
+// Here come the early plugins.
 if ($use_plugins) {
-    load_plugins();
+    load_plugins(false, 3);
 }
 
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
 
-$pretext = !isset($pretext) ? array() : $pretext;
-$pretext = array_merge($pretext, pretext($s, $prefs));
+isset($pretext) or $pretext = array();
+callback_event('pretext');
+
+// Send 304 Not Modified if appropriate.
+$req = preText($s, null);
+
+if (empty($req['feed'])) {
+    handle_lastmod();
+}
+
+$pretext = array_merge($pretext, preText($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
 $pretext += array('secondpass' => 0, '_txp_atts' => false);
 
+$trace->start('[PHP includes, stage 3]');
+
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
+include_once txpath.'/publish/comment.php';
+include_once txpath.'/publish/taghandlers.php';
+
+$trace->stop();
+
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
+
+// i18n.
+/*if (txpinterface !== 'css') {
+    load_lang(LANG);
+}*/
+
+// Here come the regular plugins.
+if ($use_plugins) {
+    load_plugins();
+}
 
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
@@ -247,13 +267,10 @@ if (gps('parentid')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download' && !empty($filename)) {
-    output_file_download($filename);
+if (@$s == 'file_download') {
+    empty($filename) or output_file_download($filename);
     exit(0);
 }
-
-// Send 304 Not Modified if appropriate.
-handle_lastmod();
 
 // Log the page view.
 log_hit($status);
@@ -262,56 +279,62 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
+    static $url = null, $out = null;
+
+    if (!isset($out)) {
+        // Set messy variables.
+        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+
+        // Some useful vars for taghandlers, plugins.
+        $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
+        $out['qs'] = serverSet('QUERY_STRING');
+
+        // IIS fix.
+        if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
+            $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
+        }
+
+        // Another IIS fix.
+        if (!$out['request_uri'] and serverSet('argv')) {
+            $argv = serverSet('argv');
+            $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
+        }
+
+        // Define the usable url, minus any subdirectories.
+        // This is pretty ugly, if anyone wants to have a go at it.
+        $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
+        $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
+
+        $url = chopUrl($req);
+
+        if ($url['u1'] == 'rss' || gps('rss')) {
+            $out['feed'] = 'rss';
+        } elseif ($url['u1'] == 'atom' || gps('atom')) {
+            $out['feed'] = 'atom';
+        }
+    }
+
+    if (!isset($prefs)) {
+        return $out;
+    }
+
     extract($prefs);
-
-    callback_event('pretext');
-
-    // Set messy variables.
-    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
 
     $out['skin'] = '';
     $out['page'] = '';
     $out['css'] = '';
 
-    if (gps('rss')) {
-        $out['feed'] = 'rss';
-    }
-
-    if (gps('atom')) {
-        $out['feed'] = 'atom';
-    }
-
-    // Some useful vars for taghandlers, plugins.
-    $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
-    $out['qs'] = serverSet('QUERY_STRING');
-
-    // IIS fix.
-    if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
-        $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
-    }
-
-    // Another IIS fix.
-    if (!$out['request_uri'] and serverSet('argv')) {
-        $argv = serverSet('argv');
-        $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
-    }
-
-    // Define the usable url, minus any subdirectories.
-    // This is pretty ugly, if anyone wants to have a go at it.
-    $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
-    $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
-
     $is_404 = ($out['status'] == '404');
     $title = null;
 
     // If messy vars exist, bypass URL parsing.
-    if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') && ! (txpinterface == 'admin')) {
+    if (!$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
+        extract($url);
+
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
             exit(show_clean_test($out));
         }
-
-        extract(chopUrl($req));
 
         // First we sniff out some of the preset URL schemes.
         if (strlen($u1)) {
@@ -718,7 +741,12 @@ function output_css($s = '', $n = '', $t = '')
 // -------------------------------------------------------------
 function output_file_download($filename)
 {
-    global $file_error, $file_base_path, $pretext;
+global $file_error, $file_base_path, $pretext;
+
+    set_headers(array(
+        'last-modified' => false,
+        'etag' => false
+    ), true);
 
     callback_event('file_download');
 

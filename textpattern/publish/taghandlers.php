@@ -1470,7 +1470,9 @@ function section_list($atts, $thing = null)
             $sql_sort = "FIELD(name, $sections)";
         }
     } else {
-        if ($exclude) {
+        if ($exclude === true) {
+            $sql[] = "searchable";
+        } elseif ($exclude) {
             $exclude = join(',', quote_list(do_list_unique($exclude)));
             $sql[] = "name NOT IN ($exclude)";
         }
