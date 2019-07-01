@@ -2777,11 +2777,11 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     global $txp_user;
 
     $smtp_from = get_pref('smtp_from'); 
-	$site_name = get_pref('sitename');
+    $site_name = get_pref('sitename');
     
-    if($smtpFrom) {
+    if(smtp_from) {
 	$sender = array ("RealName" => $site_name,
-						"email" => $smtpFrom);
+			"email" => smtp_from);
     }
     else {
         // Send the email as the currently logged in user.
