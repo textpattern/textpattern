@@ -2779,9 +2779,9 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     $smtp_from = get_pref('smtp_from'); 
     $site_name = get_pref('sitename');
     
-    if(smtp_from) {
+    if($smtp_from) {
 	$sender = array ("RealName" => $site_name,
-			"email" => smtp_from);
+			"email" => $smtp_from);
     }
     else {
         // Send the email as the currently logged in user.
