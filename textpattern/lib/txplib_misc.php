@@ -5309,7 +5309,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
             if ($no !== false) {
                 $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
-                list($from, $to) = explode('%%', $v) + array(null, null);
+                list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
                 if (!isset($to)) {
                     $out[] = "AND $not custom_".$no." LIKE '$v'";
