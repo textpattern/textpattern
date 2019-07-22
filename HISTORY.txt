@@ -17,8 +17,8 @@ Changes in TBC (upcoming)
 * Textile 3.7.2. See https://github.com/textile/php-textile/releases/tag/v3.7.2
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
-* PrismJS 1.16.0.
-* jQuery File Upload 9.31.0.
+* PrismJS 1.17.1.
+* jQuery File Upload 10.0.0.
 
 Changes in 4.7.3
 
