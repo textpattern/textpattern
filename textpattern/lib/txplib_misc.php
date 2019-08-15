@@ -1071,8 +1071,7 @@ function link_format_info($link)
 /**
  * Gets a HTTP GET or POST parameter.
  *
- * Internally handles and normalises MAGIC_QUOTES_GPC,
- * strips CRLF from GET parameters and removes NULL bytes.
+ * Internally strips CRLF from GET parameters and removes NULL bytes.
  *
  * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
@@ -1087,19 +1086,10 @@ function link_format_info($link)
 function gps($thing, $default = '')
 {
     if (isset($_GET[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_GET[$thing]);
-        } else {
-            $out = $_GET[$thing];
-        }
-
+        $out = $_GET[$thing];
         $out = doArray($out, 'deCRLF');
     } elseif (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_POST[$thing]);
-        } else {
-            $out = $_POST[$thing];
-        }
+        $out = $_POST[$thing];
     } else {
         $out = $default;
     }
@@ -1141,8 +1131,7 @@ function gpsa($array)
 /**
  * Gets a HTTP POST parameter.
  *
- * Internally handles and normalises MAGIC_QUOTES_GPC,
- * and removes NULL bytes.
+ * Internally removes NULL bytes.
  *
  * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
@@ -1157,12 +1146,9 @@ function gpsa($array)
 function ps($thing)
 {
     $out = '';
+
     if (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_POST[$thing]);
-        } else {
-            $out = $_POST[$thing];
-        }
+        $out = $_POST[$thing];
     }
 
     $out = doArray($out, 'deNull');
@@ -1221,11 +1207,7 @@ function psas($array)
 function stripPost()
 {
     if (isset($_POST)) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_POST);
-        } else {
-            return $_POST;
-        }
+        return $_POST;
     }
 
     return '';
@@ -1291,17 +1273,9 @@ function remote_addr()
 function pcs($thing)
 {
     if (isset($_COOKIE["txp_".$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_COOKIE["txp_".$thing]);
-        } else {
-            return $_COOKIE["txp_".$thing];
-        }
+        return $_COOKIE["txp_".$thing];
     } elseif (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_POST[$thing]);
-        } else {
-            return $_POST[$thing];
-        }
+        return $_POST[$thing];
     }
 
     return '';
@@ -1309,8 +1283,6 @@ function pcs($thing)
 
 /**
  * Gets a HTTP cookie.
- *
- * Internally normalises MAGIC_QUOTES_GPC.
  *
  * @param   string $thing The cookie
  * @return  string The cookie or an empty string
@@ -1325,11 +1297,7 @@ function pcs($thing)
 function cs($thing)
 {
     if (isset($_COOKIE[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_COOKIE[$thing]);
-        } else {
-            return $_COOKIE[$thing];
-        }
+        return $_COOKIE[$thing];
     }
 
     return '';
