@@ -14,7 +14,7 @@ Changes in TBC (upcoming)
 * Added: 'title' attribute to image tags.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
-* Removed: PHP magic quotes references, for better PHP 7.4 compatibility.
+* Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
 * Textile 3.7.2. See https://github.com/textile/php-textile/releases/tag/v3.7.2
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
