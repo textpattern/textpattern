@@ -251,6 +251,7 @@ function css($atts)
     }
 
     $out = '';
+    $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format.'.'.$format);
 
     if (has_handler('css.url')) {
@@ -312,6 +313,7 @@ function component($atts)
         return;
     }
 
+    $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';

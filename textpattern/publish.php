@@ -195,27 +195,22 @@ janitor();
 
 // Here come the early plugins.
 if ($use_plugins) {
-    load_plugins(false, 3);
+    load_plugins(false, 5);
 }
 
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
 
-isset($pretext) or $pretext = array();
+isset($pretext) or $pretext = preText($s, null);
+$pretext += array('secondpass' => 0, '_txp_atts' => false);
 callback_event('pretext');
 
 // Send 304 Not Modified if appropriate.
-$req = preText($s, null);
 
-if (empty($req['feed'])) {
+if (empty($pretext['feed']) && $pretext['status'] == '200') {
     handle_lastmod();
 }
-
-$pretext = array_merge($pretext, preText($s, $prefs));
-callback_event('pretext_end');
-extract($pretext);
-$pretext += array('secondpass' => 0, '_txp_atts' => false);
 
 $trace->start('[PHP includes, stage 3]');
 
@@ -226,6 +221,15 @@ include_once txpath.'/publish/taghandlers.php';
 
 $trace->stop();
 
+// Here come the regular plugins.
+if ($use_plugins) {
+    load_plugins();
+}
+
+$pretext = array_merge($pretext, preText($s, $prefs));
+callback_event('pretext_end');
+extract($pretext);
+
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
@@ -233,11 +237,6 @@ set_error_level($production_status);
 /*if (txpinterface !== 'css') {
     load_lang(LANG);
 }*/
-
-// Here come the regular plugins.
-if ($use_plugins) {
-    load_plugins();
-}
 
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
@@ -314,15 +313,15 @@ function preText($s, $prefs)
         }
     }
 
+    $out['skin'] = '';
+    $out['page'] = '';
+    $out['css'] = '';
+
     if (!isset($prefs)) {
         return $out;
     }
 
     extract($prefs);
-
-    $out['skin'] = '';
-    $out['page'] = '';
-    $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
     $title = null;
