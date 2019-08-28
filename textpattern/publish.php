@@ -206,11 +206,7 @@ $s = (empty($s)) ? '' : $s;
 
 isset($pretext) or $pretext = preText($s, null);
 $pretext += array('secondpass' => 0, '_txp_atts' => false);
-
-if (has_handler('pretext')) {
-    $pretext += safe_row("skin, page, css", "txp_section", "name='default'");
-    callback_event('pretext');
-}
+callback_event('pretext');
 
 // Send 304 Not Modified if appropriate.
 
@@ -317,11 +313,12 @@ function preText($s, $prefs)
         }
     }
 
+    $out['skin'] = $out['page'] = $out['css'] = '';
+
     if (!isset($prefs)) {
         return $out;
     }
 
-    $out['skin'] = $out['page'] = $out['css'] = '';
     extract($prefs);
 
     $is_404 = ($out['status'] == '404');

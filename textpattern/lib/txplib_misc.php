@@ -4534,7 +4534,15 @@ function parse_form($name)
 
 function fetch_page($name, $theme)
 {
-    global $trace;
+    global $pretext, $trace;
+
+    if (empty($theme)) {
+        if (empty($pretext['skin'])) {
+            $pretext = safe_row("skin, page, css", "txp_section", "name='default'") + $pretext;
+        }
+
+        $theme = $pretext['skin'];
+    }
 
     if (has_handler('page.fetch')) {
         $page = callback_event('page.fetch', '', false, compact('name', 'theme'));
@@ -5438,19 +5446,10 @@ function txp_die($msg, $status = '503', $url = '')
     }
 
     $out = false;
+    $skin = empty($pretext['skin']) ? null : $pretext['skin'];
 
     if ($connected && @txpinterface == 'public') {
-        if ($pretext['skin']) {
-            $skin = $pretext['skin'];
-        } else {
-            $skin = safe_field('skin', 'txp_section', "name = 'default'");
-        }
-
-        $out = safe_field(
-            'user_html',
-            'txp_page',
-            "name IN('error_{$code}', 'error_default') AND skin='".doSlash($skin)."' ORDER BY name LIMIT 1"
-        );
+        $out = fetch_page("error_{$code}", $skin) or $out = fetch_page('error_default', $skin);
     }
 
     if ($out === false) {
