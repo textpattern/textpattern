@@ -44,6 +44,8 @@ $loader->register();
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/admin_config.php';
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
 
 include_once txpath.'/publish/log.php';
 
@@ -214,8 +216,6 @@ if (empty($pretext['feed']) && $pretext['status'] == '200') {
 
 $trace->start('[PHP includes, stage 3]');
 
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/publish/comment.php';
 include_once txpath.'/publish/taghandlers.php';
 
