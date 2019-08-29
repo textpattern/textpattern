@@ -964,7 +964,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     }
 
     $message = gTxt('image_uploaded', array('{name}' => $name));
-    update_lastmod('image_uploaded', compact('id', 'name', 'ext', 'w', 'h', 'alt', 'caption', 'category', 'txpuser'));
+    update_lastmod('image_uploaded', compact('id', 'name', 'ext', 'w', 'h', 'alt', 'caption', 'category', 'txp_user'));
 
     // call post-upload plugins with new image's $id
     callback_event('image_uploaded', $event, false, $id);
