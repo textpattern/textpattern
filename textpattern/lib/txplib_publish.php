@@ -483,9 +483,6 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($registry === null) {
-        include_once txpath.'/publish/comment.php';
-        include_once txpath.'/publish/taghandlers.php';
-
         $maxpass = get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
