@@ -212,7 +212,7 @@ function page_title($atts)
 
     if ($parent_id) {
         $out = gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id")).$appending;
-    } elseif ($thisarticle['title']) {
+    } elseif (isset($thisarticle['title'])) {
         $out = escape_title($thisarticle['title']).$appending;
     } elseif ($q) {
         $out = gTxt('search_results').' '.gTxt('txt_quote_double_open').txpspecialchars($q).gTxt('txt_quote_double_close').$pageStr.$appending;

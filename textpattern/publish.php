@@ -44,8 +44,6 @@ $loader->register();
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/admin_config.php';
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
 
 include_once txpath.'/publish/log.php';
 
@@ -207,11 +205,6 @@ $s = (empty($s)) ? '' : $s;
 isset($pretext) or $pretext = preText($s, null);
 $pretext += array('secondpass' => 0, '_txp_atts' => false);
 
-if (has_handler('pretext')) {
-    $pretext += safe_row("skin, page, css", "txp_section", "name='default'");
-    callback_event('pretext');
-}
-
 // Send 304 Not Modified if appropriate.
 
 if (empty($pretext['feed'])) {
@@ -220,6 +213,8 @@ if (empty($pretext['feed'])) {
 
 $trace->start('[PHP includes, stage 3]');
 
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/publish/comment.php';
 include_once txpath.'/publish/taghandlers.php';
 
@@ -230,6 +225,7 @@ if ($use_plugins) {
     load_plugins();
 }
 
+callback_event('pretext');
 $pretext = array_merge($pretext, preText($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
@@ -317,11 +313,12 @@ function preText($s, $prefs)
         }
     }
 
+    $out['skin'] = $out['page'] = $out['css'] = '';
+
     if (!isset($prefs)) {
         return $out;
     }
 
-    $out['skin'] = $out['page'] = $out['css'] = '';
     extract($prefs);
 
     $is_404 = ($out['status'] == '404');
