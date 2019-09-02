@@ -15,7 +15,7 @@ Changes in TBC (upcoming)
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
-* Textile 3.7.2. See https://github.com/textile/php-textile/releases/tag/v3.7.2
+* Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.17.1.
