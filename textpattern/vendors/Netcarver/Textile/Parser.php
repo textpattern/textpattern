@@ -371,7 +371,7 @@ class Parser
      * @var string
      */
 
-    protected $ver = '3.7.2';
+    protected $ver = '3.7.3';
 
     /**
      * Regular expression snippets.
@@ -1926,7 +1926,7 @@ class Parser
      *
      * bc. <h1>Hello World!</h1>
      *
-     * Additinally the parser can be run in safe, restricted mode using the
+     * Additionally the parser can be run in safe, restricted mode using the
      * Parser::setRestricted() method.
      *
      * bc. $parser = new \Netcarver\Textile\Parser();
@@ -2384,10 +2384,10 @@ class Parser
             $this->patterns = array(
                 'block' => '/^(?:'.$block.')$/i',
                 'contained' => '/^<\/?(?P<open>[^\s<>\/]+)(?:\s.*|\/?>.*|)>$/si',
-                'divider' => '/^(?:<\/?('.$divider.')(?:\s[^<>]*?|\/?)>(?:<\/\1\s*?>)?)+$/smi',
+                'divider' => '/^(?:<\/?('.$divider.')(?:\s[^<>]*?|\/?)>(?:<\/\1\s*?>)?)+$/si',
                 'phrasing' => '/^(?:'.$phrasing.')$/i',
                 'wrapped' => '/^<\/?(?P<open>[^\s<>\/]+)[^<>]*?>(?:.*<\/\1\s*?>)?$/si',
-                'unwrappable' => '/<\/?(?:'.$block.')(?:\s[^<>]*?|\/?)>/smi',
+                'unwrappable' => '/<\/?(?:'.$block.')(?:\s[^<>]*?|\/?)>/si',
             );
         }
 
@@ -2511,8 +2511,6 @@ class Parser
         $span = '';
         $width = '';
         $id = '';
-        $atts = '';
-        $align = '';
         $matched = $in;
 
         if ($element == 'td') {
@@ -3019,6 +3017,7 @@ class Parser
         $prev = false;
         $out = array();
         $lists = array();
+        $litem = '';
 
         if ($lines === false) {
             return '';
@@ -3103,6 +3102,8 @@ class Parser
                 }
             } elseif ($showitem) {
                 $line = "$tabs\t<$litem$atts>$content";
+            } else {
+                $line = '';
             }
 
             if ((!$next || $next['level'] <= $m['level']) && $showitem) {
@@ -3274,7 +3275,6 @@ class Parser
                 $tag = 'p';
                 $atts = '';
                 $cite = '';
-                $graf = '';
                 $eat = false;
             }
 
@@ -3810,7 +3810,6 @@ class Parser
             if ($this->notes) {
                 foreach ($this->notes as $seq => $info) {
                     $links = $this->makeBackrefLink($info, $m['links'], $m['startchar']);
-                    $atts = '';
 
                     if (!empty($info['def'])) {
                         $out[] = "\t".'<li'.$info['def']['atts'].'>'.$links.
@@ -3854,8 +3853,6 @@ class Parser
 
     protected function makeBackrefLink($info, $g_links, $i)
     {
-        $id = '';
-
         $backlink_type = !empty($info['def']) && $info['def']['link'] ? $info['def']['link'] : $g_links;
         $allow_inc = (false === strpos($this->syms, $i));
 
@@ -4281,7 +4278,6 @@ class Parser
         $m = array();
 
         $pop = $tight = '';
-        $url_chars = array();
         $counts = array(
             '[' => null,
             ']' => substr_count($url, ']'), # We need to know how many closing square brackets we have
@@ -4317,7 +4313,6 @@ class Parser
         // Does this need to be mb_ enabled? We are only searching for text in the ASCII charset anyway
         // Create an array of (possibly) multi-byte characters.
         // This is going to allow us to pop off any non-matched or nonsense chars from the url
-        $len = strlen($url);
         $url_chars = str_split($url);
 
         // Now we have the array of all the multi-byte chars in the url we will parse the
@@ -4676,14 +4671,14 @@ class Parser
             '/
             (?:[[{])?                       # pre
             \!                              # opening !
-            (?P<align>\<|\=|\>|&lt;|&gt;)?  # optional alignment              $algn
-            (?P<atts>'.$this->cls.')        # optional style,class atts       $atts
+            (?P<align>\<|\=|\>|&lt;|&gt;)?  # optional alignment
+            (?P<atts>'.$this->cls.')        # optional attributes
             (?:\.\s)?                       # optional dot-space
-            (?P<url>[^\s(!]+)               # presume this is the src         $url
+            (?P<url>[^\s(!]+)               # presume this is the src
             \s?                             # optional space
-            (?:\((?P<title>[^\)]+)\))?      # optional title                  $title
+            (?:\((?P<title>[^\)]+)\))?      # optional title
             \!                              # closing
-            (?::(?P<href>\S+)(?<![\]).,]))? # optional href sans final punct. $href
+            (?::(?P<href>\S+)(?<![\]).,]))? # optional href sans final punct
             (?:[\]}]|(?=[.,\s)|]|$))        # lookahead: space,.)| or end of string ("|" needed if image in table cell)
             /x'.$this->regex_snippets['mod'],
             array($this, "fImage"),

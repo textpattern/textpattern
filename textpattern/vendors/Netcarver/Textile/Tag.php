@@ -52,7 +52,7 @@ namespace Netcarver\Textile;
  *
  * @method Tag alt(string $text)
  * @method Tag align(string $alignment)
- * @method Tag href(string $url, bool $allowEmpty)
+ * @method Tag href(string $url, bool $allowEmpty = false)
  * @method Tag rel(string $relationship)
  * @method Tag title(string $title)
  * @internal
