@@ -5897,7 +5897,26 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
-    return array_map('trim', explode($delim, $list));
+    if (is_array($delim)) {
+        list($delim, $range) = $delim + array(null, null);
+    }
+
+    $list = explode($delim, $list);
+
+    if (isset($range)) {
+        $out = array();
+
+        foreach($list as $item) {
+            if (strpos($item, $range) === false) {
+                $out[] = trim($item);
+            } else {
+                list($start, $end) = explode($range, $item, 2);
+                $out = array_merge($out, range(trim($start), trim($end)));
+            }
+        }
+    }
+
+    return isset($out) ? $out : array_map('trim', $list);
 }
 
 /**
@@ -5917,7 +5936,7 @@ function do_list($list, $delim = ',')
 
 function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
 {
-    $out = array_unique(array_map('trim', explode($delim, $list)));
+    $out = array_unique(do_list($list, $delim));
 
     if ($flags & TEXTPATTERN_STRIP_EMPTY) {
         $out = array_filter($out);

@@ -660,7 +660,7 @@ function linklist($atts, $thing = null)
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
     }
 
     if ($author) {
@@ -3482,7 +3482,7 @@ function images($atts, $thing = null)
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
     }
 
     if ($author) {
@@ -4706,7 +4706,7 @@ function file_download_list($atts, $thing = null)
         $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
-    $ids = array_map('intval', do_list_unique($id));
+    $ids = array_map('intval', do_list_unique($id, array(',', '-')));
 
     if ($id) {
         $where[] = "id IN ('".join("','", $ids)."')";
