@@ -3482,7 +3482,8 @@ function images($atts, $thing = null)
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
+        $id = join(',', array_map('intval', do_list_unique($id, array(',', '-'))));
+        $where[] = "id IN ($id)";
     }
 
     if ($author) {
@@ -3511,23 +3512,14 @@ function images($atts, $thing = null)
                 case 'article':
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
-                        $items = do_list_unique($thisarticle['article_image']);
-                        foreach ($items as &$item) {
-                            if (is_numeric($item)) {
-                                $item = intval($item);
-                            } else {
-                                return article_image(compact('class', 'html_id', 'wraptag'));
-                            }
+                        if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
+                            return article_image(compact('class', 'html_id', 'wraptag'));
                         }
-                        $items = join(",", $items);
+
+                        $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
 
                         // Note: This clause will squash duplicate ids.
-                        $where[] = "id IN ($items)";
-
-                        // Order of ids in article image field overrides default 'sort' attribute.
-                        if (empty($atts['sort'])) {
-                            $safe_sort = "FIELD(id, $items)";
-                        }
+                        $where[] = "id IN ($id)";
                     }
                     break;
                 case 'category':
@@ -3551,8 +3543,8 @@ function images($atts, $thing = null)
     }
 
     // Order of ids in 'id' attribute overrides default 'sort' attribute.
-    if (empty($atts['sort']) && $id !== '') {
-        $safe_sort = "FIELD(id, ".join(',', doSlash(do_list_unique($id))).")";
+    if (empty($atts['sort']) && $id) {
+        $safe_sort = "FIELD(id, $id)";
     }
 
     // If nothing matches, output nothing.
