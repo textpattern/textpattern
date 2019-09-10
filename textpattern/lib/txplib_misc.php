@@ -5323,13 +5323,27 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                 $no = $custom['by_name'][$k];
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
-                $not = ($exclude === true || in_array($k, $exclude)) ? ' NOT' : '';
+                $filter = '';
 
                 if (isset($pairs[$k])) {
+                    $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
+/*
                     $where[] = $unique ? $k.$not." LIKE '$v'" : "$k IS NOT NULL";
                     $filter = ' AND value'.$not." LIKE '$v'";
-                } else {
-                    $filter = '';
+*/
+                    // TBC
+                    list($from, $to) = explode('%%', $v, 2) + array(null, null);
+
+                    if (!isset($to)) {
+                        $where[] = $unique ? "$not $k LIKE '$v'" : "$k IS NOT NULL";
+                        $filter = "AND $not value LIKE '$v'";
+                    } elseif ($from !== '') {
+                        $where[] = $unique ? ($to === '' ? "$not $k>='$from'" :  "$not $k BETWEEN '$from' and '$to'") : "$k IS NOT NULL";
+                        $filter = $to === '' ? "AND $not value>='$from'" :  "AND $not value BETWEEN '$from' and '$to'";
+                    } elseif ($to !== '') {
+                        $where[] = $unique ? "$not $k<='$to'" : "$k IS NOT NULL";
+                        $filter = "AND $not value<='$to'";
+                    }
                 }
 
                 if ($unique) {
