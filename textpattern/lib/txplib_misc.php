@@ -312,10 +312,16 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
+    global $event;
     static $txpLang = null;
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
+        $strings = $txpLang->getStrings();
+
+        if (!isset($strings)) {
+            load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+        }
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -502,9 +508,10 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    global $production_status, $event;
+    global $production_status, $event, $textarray;
 
-    $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+    isset($textarray) or $textarray = array();
+    $textarray = array_merge($textarray, Txp::get('\Textpattern\L10n\Lang')->load($lang, $events));
 
     if (($production_status !== 'live' || $event === 'diag')
         && @$debug = parse_ini_file(txpath.DS.'mode.ini')
@@ -1064,8 +1071,7 @@ function link_format_info($link)
 /**
  * Gets a HTTP GET or POST parameter.
  *
- * Internally handles and normalises MAGIC_QUOTES_GPC,
- * strips CRLF from GET parameters and removes NULL bytes.
+ * Internally strips CRLF from GET parameters and removes NULL bytes.
  *
  * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
@@ -1080,19 +1086,10 @@ function link_format_info($link)
 function gps($thing, $default = '')
 {
     if (isset($_GET[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_GET[$thing]);
-        } else {
-            $out = $_GET[$thing];
-        }
-
+        $out = $_GET[$thing];
         $out = doArray($out, 'deCRLF');
     } elseif (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_POST[$thing]);
-        } else {
-            $out = $_POST[$thing];
-        }
+        $out = $_POST[$thing];
     } else {
         $out = $default;
     }
@@ -1134,8 +1131,7 @@ function gpsa($array)
 /**
  * Gets a HTTP POST parameter.
  *
- * Internally handles and normalises MAGIC_QUOTES_GPC,
- * and removes NULL bytes.
+ * Internally removes NULL bytes.
  *
  * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
@@ -1150,12 +1146,9 @@ function gpsa($array)
 function ps($thing)
 {
     $out = '';
+
     if (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            $out = doStrip($_POST[$thing]);
-        } else {
-            $out = $_POST[$thing];
-        }
+        $out = $_POST[$thing];
     }
 
     $out = doArray($out, 'deNull');
@@ -1214,11 +1207,7 @@ function psas($array)
 function stripPost()
 {
     if (isset($_POST)) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_POST);
-        } else {
-            return $_POST;
-        }
+        return $_POST;
     }
 
     return '';
@@ -1284,17 +1273,9 @@ function remote_addr()
 function pcs($thing)
 {
     if (isset($_COOKIE["txp_".$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_COOKIE["txp_".$thing]);
-        } else {
-            return $_COOKIE["txp_".$thing];
-        }
+        return $_COOKIE["txp_".$thing];
     } elseif (isset($_POST[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_POST[$thing]);
-        } else {
-            return $_POST[$thing];
-        }
+        return $_POST[$thing];
     }
 
     return '';
@@ -1302,8 +1283,6 @@ function pcs($thing)
 
 /**
  * Gets a HTTP cookie.
- *
- * Internally normalises MAGIC_QUOTES_GPC.
  *
  * @param   string $thing The cookie
  * @return  string The cookie or an empty string
@@ -1318,11 +1297,7 @@ function pcs($thing)
 function cs($thing)
 {
     if (isset($_COOKIE[$thing])) {
-        if (MAGIC_QUOTES_GPC) {
-            return doStrip($_COOKIE[$thing]);
-        } else {
-            return $_COOKIE[$thing];
-        }
+        return $_COOKIE[$thing];
     }
 
     return '';
@@ -1376,7 +1351,7 @@ function load_plugin($name, $force = false)
 {
     global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
-    if (is_array($plugins) and in_array($name, $plugins)) {
+    if (is_array($plugins) && in_array($name, $plugins)) {
         return true;
     }
 
@@ -1426,31 +1401,31 @@ function load_plugin($name, $force = false)
         }
     }
 
-    $rs = safe_row("name, code, version", 'txp_plugin', ($force ? '' : "status = 1 AND ")."name = '".doSlash($name)."'");
+    $version = safe_field("version", 'txp_plugin', ($force ? '' : "status = 1 AND ")."name = '".doSlash($name)."'");
 
-    if ($rs) {
-        $plugins[] = $rs['name'];
-        $plugins_ver[$rs['name']] = $rs['version'];
+    if ($version !== false) {
+        $plugins[] = $name;
+        $plugins_ver[$name] = $version;
         set_error_handler("pluginErrorHandler");
 
         if (isset($txp_current_plugin)) {
             $txp_parent_plugin = $txp_current_plugin;
         }
 
-        $txp_current_plugin = $rs['name'];
-        $dir = sanitizeForFile($txp_current_plugin);
-        $filename = txpath."/plugins/$dir/$dir.php";
+        $txp_current_plugin = $name;
+        $dir = sanitizeForFile($name);
+        $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
 
-        if (is_file($filename) ||
-            \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $rs['code'])
-        ) {
-            include_once($filename);
+        if (!is_file($filename)) {
+            $code = safe_field("code", 'txp_plugin', "name = '".doSlash($name)."'");
+            \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
+        $ok = @include_once($filename);
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
-        return true;
+        return $ok;
     }
 
     return false;
@@ -1830,9 +1805,10 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
  * @param bool $type If TRUE loads admin-side plugins, otherwise public
  */
 
-function load_plugins($type = false)
+function load_plugins($type = false, $pre = null)
 {
     global $prefs, $plugins, $plugins_ver, $app_mode, $trace;
+    static $rs = null;
 
     if (!is_array($plugins)) {
         $plugins = array();
@@ -1861,30 +1837,34 @@ function load_plugins($type = false)
         }
     }
 
-    $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
-    $where = "status = 1 AND type IN (".($type ? $admin : "0,1,5").")";
+    if (!isset($rs)) {
+        $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
+        $where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')'.
+            ($plugins ? ' AND name NOT IN ('.join(',', quote_list($plugins)).')' : '');
 
-    $rs = safe_rows("name, version", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
+        $rs = safe_rows("name, version, load_order", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
+    }
 
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
+        $pre = intval($pre);
 
         foreach ($rs as $a) {
-            if (!in_array($a['name'], $plugins)) {
+            if (!isset($plugins_ver[$a['name']]) && (!$pre || $a['load_order'] < $pre)) {
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
 
-                $dir = sanitizeForFile($a['name']);
-                $filename = txpath."/plugins/$dir/$dir.php";
-        
+                $dir = $a['name'];
+                $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
+
                 if (!is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = is_file($filename) ? include_once($filename) : false;
+                $eval_ok = @include($filename);
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -3185,13 +3165,10 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     if ($override_locale) {
         $oldLocale = $txpLocale->getLocale(LC_TIME);
 
-        try {
+        if ($oldLocale != $override_locale) {
             $txpLocale->setLocale(LC_TIME, $override_locale);
-        } catch (\Exception $e) {
-            // Revert to original locale on error and signal that the
-            // later revert isn't necessary
-            $txpLocale->setLocale(LC_TIME, $oldLocale);
-            $oldLocale = false;
+        } else {
+            $oldLocale = null;
         }
     }
 
@@ -3223,8 +3200,8 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     // Revert to the old locale.
-    if ($override_locale && $oldLocale) {
-        $txpLocale->setLocale(LC_TIME, array($oldLocale, 'C'));
+    if (isset($oldLocale)) {
+        $txpLocale->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -4557,7 +4534,15 @@ function parse_form($name)
 
 function fetch_page($name, $theme)
 {
-    global $trace;
+    global $pretext, $trace;
+
+    if (empty($theme)) {
+        if (empty($pretext['skin'])) {
+            $pretext = safe_row("skin, page, css", "txp_section", "name='default'") + $pretext;
+        }
+
+        $theme = $pretext['skin'];
+    }
 
     if (has_handler('page.fetch')) {
         $page = callback_event('page.fetch', '', false, compact('name', 'theme'));
@@ -5512,19 +5497,10 @@ function txp_die($msg, $status = '503', $url = '')
     }
 
     $out = false;
+    $skin = empty($pretext['skin']) ? null : $pretext['skin'];
 
     if ($connected && @txpinterface == 'public') {
-        if ($pretext['skin']) {
-            $skin = $pretext['skin'];
-        } else {
-            $skin = safe_field('skin', 'txp_section', "name = 'default'");
-        }
-
-        $out = safe_field(
-            'user_html',
-            'txp_page',
-            "name IN('error_{$code}', 'error_default') AND skin='".doSlash($skin)."' ORDER BY name LIMIT 1"
-        );
+        $out = fetch_page("error_{$code}", $skin) or $out = fetch_page('error_default', $skin);
     }
 
     if ($out === false) {
@@ -5972,7 +5948,26 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
-    return array_map('trim', explode($delim, $list));
+    if (is_array($delim)) {
+        list($delim, $range) = $delim + array(null, null);
+    }
+
+    $list = explode($delim, $list);
+
+    if (isset($range)) {
+        $out = array();
+
+        foreach($list as $item) {
+            if (strpos($item, $range) === false) {
+                $out[] = trim($item);
+            } else {
+                list($start, $end) = explode($range, $item, 2);
+                $out = array_merge($out, range(trim($start), trim($end)));
+            }
+        }
+    }
+
+    return isset($out) ? $out : array_map('trim', $list);
 }
 
 /**
@@ -5992,7 +5987,7 @@ function do_list($list, $delim = ',')
 
 function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
 {
-    $out = array_unique(array_map('trim', explode($delim, $list)));
+    $out = array_unique(do_list($list, $delim));
 
     if ($flags & TEXTPATTERN_STRIP_EMPTY) {
         $out = array_filter($out);
@@ -6029,7 +6024,7 @@ function doQuote($val)
  * @return  mixed
  * @package DB
  * @example
- * if ($r = safe_row('name', 'myTable', 'type in(' . quote_list(array('value1', 'value2')) . ')')
+ * if ($r = safe_row('name', 'myTable', 'type in(' . join(',', quote_list(array('value1', 'value2'))) . ')')
  * {
  *     echo "Found '{$r['name']}'.";
  * }
@@ -6184,10 +6179,7 @@ function getlocale($lang)
 {
     global $locale;
 
-    try {
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
-    } catch (Exception $e) {
-    }
+    Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
 
     return Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
 }
@@ -6265,7 +6257,9 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
 
     foreach ($context as $q) {
         if (!empty($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? get_author_name($pretext[$q]) : $pretext[$q];
+            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
+        } elseif (!isset($pretext[$q]) && $value = gps($q)) {
+            $out[$q] = $value;
         }
     }
 

@@ -2646,6 +2646,7 @@ $(document).ready(function () {
         if ($(this).hasClass('pophelp')) return;
         e.preventDefault();
         textpattern.Relay.callback('updateList', {url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()});
+        scroll(0, 0);
     }).on('click', '.txp-list thead th a', function(e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {list: '#txp-list-container', url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()});

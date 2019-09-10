@@ -905,7 +905,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // ID
     $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
     $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
         .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 

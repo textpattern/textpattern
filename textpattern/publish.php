@@ -43,13 +43,10 @@ $loader->register();
 
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/admin_config.php';
 
-include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
-include_once txpath.'/publish/comment.php';
+
 $trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
@@ -193,25 +190,43 @@ $txp_user = null;
 // Will remove in future.
 $textarray = array();
 
-// i18n.
-if (txpinterface !== 'css') {
-    $textarray = load_lang(LANG);
-}
-
 // Tidy up the site.
 janitor();
 
-// Here come the plugins.
+// Here come the early plugins.
 if ($use_plugins) {
-    load_plugins();
+    load_plugins(false, 5);
 }
 
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
 
-$pretext = !isset($pretext) ? array() : $pretext;
-$pretext = array_merge($pretext, pretext($s, $prefs));
+isset($pretext) or $pretext = preText($s, null);
+$pretext += array('secondpass' => 0, '_txp_atts' => false);
+
+// Send 304 Not Modified if appropriate.
+
+if (empty($pretext['feed'])) {
+    handle_lastmod();
+}
+
+$trace->start('[PHP includes, stage 3]');
+
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
+include_once txpath.'/publish/comment.php';
+include_once txpath.'/publish/taghandlers.php';
+
+$trace->stop();
+
+// Here come the regular plugins.
+if ($use_plugins) {
+    load_plugins();
+}
+
+callback_event('pretext');
+$pretext = array_merge($pretext, preText($s, $prefs));
 
 if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== 'file_download') {
     doArticle(array('expired' => 1, 'status' => true, 'time' => 'any'), null, false);
@@ -230,10 +245,14 @@ if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== '
 
 callback_event('pretext_end');
 extract($pretext);
-$pretext += array('secondpass' => 0, '_txp_atts' => false);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
+
+// i18n.
+/*if (txpinterface !== 'css') {
+    load_lang(LANG);
+}*/
 
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
@@ -263,13 +282,10 @@ if (gps('parentid')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download' && !empty($filename)) {
-    output_file_download($filename);
+if (@$s == 'file_download') {
+    empty($filename) or output_file_download($filename);
     exit(0);
 }
-
-// Send 304 Not Modified if appropriate.
-handle_lastmod();
 
 // Log the page view.
 log_hit($status);
@@ -278,56 +294,60 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
+    static $url = null, $out = null;
+
+    if (!isset($out)) {
+        // Set messy variables.
+        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+
+        // Some useful vars for taghandlers, plugins.
+        $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
+        $out['qs'] = serverSet('QUERY_STRING');
+
+        // IIS fix.
+        if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
+            $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
+        }
+
+        // Another IIS fix.
+        if (!$out['request_uri'] and serverSet('argv')) {
+            $argv = serverSet('argv');
+            $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
+        }
+
+        // Define the usable url, minus any subdirectories.
+        // This is pretty ugly, if anyone wants to have a go at it.
+        $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
+        $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
+
+        $url = chopUrl($req);
+
+        if ($url['u1'] == 'rss' || gps('rss')) {
+            $out['feed'] = 'rss';
+        } elseif ($url['u1'] == 'atom' || gps('atom')) {
+            $out['feed'] = 'atom';
+        }
+    }
+
+    $out['skin'] = $out['page'] = $out['css'] = '';
+
+    if (!isset($prefs)) {
+        return $out;
+    }
+
     extract($prefs);
-
-    callback_event('pretext');
-
-    // Set messy variables.
-    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
-
-    $out['skin'] = '';
-    $out['page'] = '';
-    $out['css'] = '';
-
-    if (gps('rss')) {
-        $out['feed'] = 'rss';
-    }
-
-    if (gps('atom')) {
-        $out['feed'] = 'atom';
-    }
-
-    // Some useful vars for taghandlers, plugins.
-    $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
-    $out['qs'] = serverSet('QUERY_STRING');
-
-    // IIS fix.
-    if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
-        $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
-    }
-
-    // Another IIS fix.
-    if (!$out['request_uri'] and serverSet('argv')) {
-        $argv = serverSet('argv');
-        $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
-    }
-
-    // Define the usable url, minus any subdirectories.
-    // This is pretty ugly, if anyone wants to have a go at it.
-    $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
-    $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
     $is_404 = ($out['status'] == '404');
     $title = null;
 
     // If messy vars exist, bypass URL parsing.
-    if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') && ! (txpinterface == 'admin')) {
+    if (!$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
+        extract($url);
+
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
             exit(show_clean_test($out));
         }
-
-        extract(chopUrl($req));
 
         // First we sniff out some of the preset URL schemes.
         if (strlen($u1)) {
@@ -382,24 +402,29 @@ function preText($s, $prefs)
                     switch ($permlink_mode) {
                         case 'section_id_title':
                             $out['s'] = $u1;
-                            $out['id'] = (!empty($u2)) ? $u2 : '';
+
+                            if (is_numeric($u2)) {
+                                $out['id'] = $u2;
+                            } else {
+                                $title = empty($u2) ? null : $u2;
+                            }
 
                             break;
 
                         case 'year_month_day_title':
-                            if (empty($u2)) {
-                                $out['s'] = $u1;
-                            } else {
-                                if (@checkdate($u2, empty($u3) ? 1 : $u3, $u1)) {
-                                    $month = empty($u3) ?
-                                        array($u1, $u2) :
-                                        array($u1, $u2, $u3);
-                                } else {
-                                    $month = array();
-                                    $is_404 = true;
-                                }
-
+                            if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
                                 $title = empty($u4) ? null : $u4;
+                                $month = array($u1);
+
+                                if (!empty($u2)) {
+                                    $month[] = ltrim($u2);
+                                    empty($u3) or $month[] = ltrim($u3);
+                                }
+                            } elseif (empty($u3)) {
+                                $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
+                            } else {
+                                $is_404 = true;
                             }
 
                             break;
@@ -426,6 +451,7 @@ function preText($s, $prefs)
                             } else {
                                 // We don't want to miss the /section/ pages.
                                 $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
                             }
 
                             break;
@@ -708,7 +734,12 @@ function output_css($s = '', $n = '', $t = '')
 // -------------------------------------------------------------
 function output_file_download($filename)
 {
-    global $file_error, $file_base_path, $pretext;
+global $file_error, $file_base_path, $pretext;
+
+    set_headers(array(
+        'last-modified' => false,
+        'etag' => false
+    ), true);
 
     callback_event('file_download');
 

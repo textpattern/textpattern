@@ -196,9 +196,8 @@
         <item id="link_category" title="Liens"><![CDATA[
 <h2>Liens</h2>
 <p>Les catégories de liens sont optionnelles mais utiles pour afficher différents groupes de liens, c-à-d : «Amis», «Romains», «Compatriotes».</p>
-<p>Les listes sélectives de liens sont celles qui affichent à l’aide des balises  <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> comme ceci : </p>
-<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
-        ]]></item>
+<p>Les listes sélectives de liens s’obtiennent à l’aide de la balise  <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> comme ceci : </p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>]]></item>
     </group>
 
     <group id="diag" title="Diagnostics">
@@ -872,30 +871,28 @@
 <h2>Thème de l’administration</h2>
 <p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
         ]]></item>
-        <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
+        <item id="txp_evaluate_functions" title="Éviter un mot veuf (seul) dans les titres d’articles ?"><![CDATA[<h2>Éviter un mot veuf (seul) dans les titres d’articles ?</h2>
+<p>Les mots veufs (ou orphelins) correspondent au dernier mot d’une phrase placé sur une nouvelle ligne lorsque la phrase est trop longue pour se contenir sur une même ligne. En typographie, ces mots veufs sont considérés comme inélégants et doivent être évités. Renseigner cette préférence sur «Oui» vous assurera que les longs titres d’articles ne comporteront pas de mots seuls en début de nouvelle ligne.</p>
+<p><strong>Remarque :</strong> ce paramètre peut provoquer des problèmes dans les pages dites «Responsives» dans les petits écrans en raison de l’ajout d’un espace insécable entre les deux derniers mots et pouvant déborder de leur élément parent. Dans ce cas, choisissez pour réglage «Non».</p>
+        ]]></item>
+        <item id="use_comments" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
 <h2>Functions PHP associées à txp:evaluate</h2>
 <p>Renseignez une liste de <code>function</code> séparées par une virgule ou des <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments renseignés dans cette liste peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
 <p><code>function</code> doit retourner une valeur scalaire (<strong>pas</strong> un array/object).</p>
         ]]></item>
-        <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[
+        <item id="use_mail_on_feeds_id" title="Accepter les commentaires ?"><![CDATA[
 <h2>Accepter les commentaires ?</h2>
 <p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[
+        <item id="use_plugins" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[
 <h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?</h2>
 <p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
 <p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p>
         ]]></item>
-        <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[
+        <item id="use_textile" title="Utiliser les plugins ?"><![CDATA[
 <h2>Utiliser les plugins ?</h2>
 <p>Permet de désactiver totalement le support des plugins dans Textpattern. Utile pour le débogage d’erreurs sur votre site et pour identifier le dysfonctionnement, éventuel, d’un plugin.</p>
-        ]]></item>
-        <item id="use_textile" title="Utiliser Textile?"><![CDATA[
-<h2>Utiliser Textile ?</h2>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention d’écriture pour convertir, très simplement, du texte en HTML. Quand activé, Textile intercepte le corps des articles et retourne un document structuré en HTML.</p>
-<p>Textile offre également un puissant mais panel de commandes avec lequel formater du texte, définir sa structure tels que des listes, des niveaux de titre ou des citations ainsi que des liens et des images.</p>
-<p>Le paramètre choisi ici devient celui par défaut pour la structure HTML des résumés et du corps des articles depuis la page «Rédiger». Vous pourrez, toutefois, basculer du formatage Textile à la conversion des retours de ligne en paragraphes HTML ou ne rien convertir du tout.</p>
         ]]></item>
     </group>
 

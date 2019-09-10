@@ -201,10 +201,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    // Reload string pack using per-user language.
-    $lang_ui = (empty($language_ui)) ? $language : $language_ui;
-    load_lang($lang_ui, $event);
-
     /**
      * @ignore
      */
@@ -226,6 +222,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     // Article or form preview.
     if (isset($_GET['txpreview'])) {
+        load_lang(LANG, array('public'));
         include txpath.'/publish.php';
         textpattern();
         echo $trace->summary();
@@ -236,6 +233,10 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
         exit;
     }
+
+    // Reload string pack using per-user language.
+    $lang_ui = (empty($language_ui)) ? $language : $language_ui;
+    load_lang($lang_ui, $event);
 
     if ($lang_ui != $language) {
         Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, $lang_ui);
