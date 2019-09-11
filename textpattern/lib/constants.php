@@ -127,6 +127,15 @@ define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
 
 define('DS', defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : (IS_WIN ? '\\' : '/'));
 
+/**
+ * Magic quotes GPC, TRUE if on.
+ *
+ * @package Network
+ * @deprecated in 4.8.0
+ */
+
+define('MAGIC_QUOTES_GPC', false);
+
 if (!defined('REGEXP_UTF8')) {
     /**
      * TRUE if the system supports UTF-8 regex patterns.
