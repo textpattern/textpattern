@@ -193,7 +193,9 @@ class Locale
             }
         }
 
-        throw new \Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
+        @setlocale($category, null);
+
+        return $this;
     }
 
     /**
@@ -209,7 +211,7 @@ class Locale
 
     public function getLocale($category = LC_ALL)
     {
-        return @setlocale($category, '0');
+        return @setlocale($category, 0);
     }
 
     /**
@@ -224,7 +226,7 @@ class Locale
      * echo Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale('en-GB');
      * </code>
      *
-     * Returns the current locale name if the system doesn't have anything
+     * Returns the default locale name if the system doesn't have anything
      * more appropriate.
      *
      * @param  string $language The language
@@ -236,13 +238,8 @@ class Locale
         $locale = false;
 
         if ($original = $this->getLocale(LC_TIME)) {
-            $locale = $original;
-
-            try {
-                $locale = $this->setLocale(LC_TIME, $language)->getLocale(LC_TIME);
-                $this->setLocale(LC_TIME, $original);
-            } catch (\Exception $e) {
-            }
+            $locale = $this->setLocale(LC_TIME, $language)->getLocale(LC_TIME);
+            $this->setLocale(LC_TIME, $original);
         }
 
         return $locale;
@@ -255,7 +252,7 @@ class Locale
      * platform. These formats include IETF language tag, POSIX locale name and
      * language name in English.
      *
-     * All these will return 'en-GB':
+     * All these will return 'en-gb':
      *
      * <code>
      * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('en_GB.UTF-8');
@@ -282,7 +279,7 @@ class Locale
         }
 
         if (strpos($locale, '.')) {
-            return join('.', array_slice(explode('.', $locale), 0, 1));
+            return strtok($locale, '.');
         }
 
         return false;

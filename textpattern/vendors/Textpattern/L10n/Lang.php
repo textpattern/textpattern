@@ -78,7 +78,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @var array
      */
 
-    protected $strings = array();
+    protected $strings = null;
 
     /**
      * Date format to use for the lastmod column.
@@ -340,7 +340,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     public function setPack(array $strings, $merge = false)
     {
         if ((bool)$merge) {
-            $this->strings = array_merge($this->strings, (array)$strings);
+            $this->strings = is_array($this->strings) ? array_merge($this->strings, (array)$strings) : (array)$strings;
         } else {
             $this->strings = (array)$strings;
         }
@@ -622,22 +622,16 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         global $textarray; // deprecated since 4.7
 
-        if (!is_array($atts)) {
-            $atts = array();
-        }
-
-        if ($escape == 'html') {
-            foreach ($atts as $key => $value) {
-                $atts[$key] = txpspecialchars($value);
-            }
-        }
-
         $v = strtolower($var);
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];
         } else {
             $out = isset($textarray[$v]) ? $textarray[$v] : '';
+        }
+
+        if ($atts && $escape == 'html') {
+            $atts = array_map('txpspecialchars', $atts);
         }
 
         if ($out !== '') {

@@ -28,46 +28,6 @@
  */
 
 /**
- * A tab character.
- *
- * @var string
- */
-
-define("t", "\t");
-
-/**
- * A line feed.
- *
- * @var string
- */
-
-define("n", "\n");
-
-/**
- * A self-closing HTML line-break tag.
- *
- * @var string
- */
-
-define("br", "<br />");
-
-/**
- * A non-breaking space as a HTML entity.
- *
- * @var string
- */
-
-define("sp", "&#160;");
-
-/**
- * An ampersand as a HTML entity.
- *
- * @var string
- */
-
-define("a", "&#38;");
-
-/**
  * Renders the admin-side footer.
  *
  * The footer's default markup is provided by a theme. It can be further
