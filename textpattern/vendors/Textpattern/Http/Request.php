@@ -55,14 +55,6 @@ class Request
     protected $headers;
 
     /**
-     * Magic quotes GCP.
-     *
-     * @var bool
-     */
-
-    protected $magicQuotesGpc = false;
-
-    /**
      * Stores referer.
      *
      * @var string
@@ -131,8 +123,6 @@ class Request
         } else {
             $this->request = $request;
         }
-
-        $this->magicQuotesGpc = $this->request->getMagicQuotesGpc();
     }
 
     /**
@@ -618,10 +608,6 @@ class Request
     public function getCookie($name)
     {
         if (isset($_COOKIE[$name])) {
-            if ($this->magicQuotesGpc) {
-                return doStrip($_COOKIE[$name]);
-            }
-
             return $_COOKIE[$name];
         }
 
@@ -678,11 +664,6 @@ class Request
     {
         if (isset($_GET[$name])) {
             $out = $_GET[$name];
-
-            if ($this->magicQuotesGpc) {
-                $out = doStrip($out);
-            }
-
             $out = doArray($out, 'deCRLF');
 
             return doArray($out, 'deNull');
@@ -704,10 +685,6 @@ class Request
 
         if (isset($_POST[$name])) {
             $out = $_POST[$name];
-
-            if ($this->magicQuotesGpc) {
-                $out = doStrip($out);
-            }
         }
 
         return doArray($out, 'deNull');
