@@ -42,13 +42,14 @@ if ($event == 'plugin') {
         'plugin_list'       => false,
         'plugin_install'    => true,
         'plugin_save'       => true,
+        'plugin_upload'     => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
         'plugin_change_pageby' => true,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
+    if ($step && bouncer($step, $available_steps) && is_callable($step)) {
         $step();
     } else {
         plugin_list();
@@ -575,6 +576,46 @@ function plugin_install()
 }
 
 /**
+ * Uploads a plugin.
+ */
+
+function plugin_upload()
+{
+    $plugin = array();
+
+    if($_FILES["theplugin"]["name"]) {
+        $filename = $_FILES["theplugin"]["name"];
+        $source = $_FILES["theplugin"]["tmp_name"];
+        $target_path = rtrim(get_pref('temp_dir', txpath.DS.'plugins'), DS).DS.$filename;
+
+        if(move_uploaded_file($source, $target_path)) {
+            $name = pathinfo($target_path, PATHINFO_FILENAME);
+            $zip = new ZipArchive();
+            $x = $zip->open($target_path);
+
+            if ($x === true) {
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    if (strpos($zip->getNameIndex($i), $name.'/') !== 0) {
+                        $makedir = true;
+
+                        break;
+                    }
+                }
+
+                $zip->extractTo(txpath.DS.'plugins'.(empty($makedir) ? '' : DS.$name));
+                $zip->close();
+                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+            }
+
+            unlink($target_path);
+        }
+    }
+
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin);
+    plugin_list($message);
+}
+
+/**
  * Renders a plugin installation form.
  *
  * @return string HTML
@@ -584,7 +625,25 @@ function plugin_install()
 
 function plugin_form()
 {
-    return form(
+    return (class_exists('ZipArchive') ? tag(
+            tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
+            tag_void('input', array(
+                'type'   => "file",
+                'name'   => "theplugin",
+                'id'     => "plugin-upload",
+                'accept' => "application/x-zip-compressed, application/zip"
+            )).
+            fInput('submit', 'install_new', gTxt('upload')).
+            eInput('plugin').
+            sInput('plugin_upload').
+            tInput().n, 'form', array(
+            'class'        => 'plugin-data',
+            'id'           => 'plugin_upload_form',
+            'method'       => 'post',
+            'action'       => 'index.php',
+            'enctype'      => 'multipart/form-data'
+        )).br : '').
+        form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
@@ -639,6 +698,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => $orders,
         ),
         'delete'       => gTxt('delete'),
+        'update'       => gTxt('update_from_disk'),
     );
 
     return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);
@@ -673,6 +733,11 @@ function plugin_multi_edit()
         case 'changeorder':
             foreach ($selected as $name) {
                 $plugin->changeOrder($name, ps('order'));
+            }
+            break;
+        case 'update':
+            foreach ($selected as $name) {
+                $plugin->install($plugin->read($name));
             }
             break;
     }

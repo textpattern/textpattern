@@ -241,12 +241,13 @@ function save_language()
     $langName = fetchLangName($language);
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
+        $candidates = array_unique(array($language, $txpLocale->getLocaleLanguage($language)));
         $locale = $txpLocale->getLanguageLocale($language);
         $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
+        $new_language = $txpLocale->getLocaleLanguage($new_locale);
         set_pref('locale', $new_locale);
 
-        if ($new_locale == $locale) {
+        if ($new_locale == $locale || $new_language == $language) {
             $msg = gTxt('preferences_saved');
         } else {
             $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);

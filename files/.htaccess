@@ -4,6 +4,6 @@
     Options -Indexes
 </IfModule>
 
-# Inhibit direct file downloads.
+# Inhibit direct file downloads (display 403 Forbidden error) if desired.
 
-RewriteRule .*\.txp$ - [R=403,L]
+# RedirectMatch 403 .*

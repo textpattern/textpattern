@@ -587,7 +587,7 @@
 <p>If this is set to ‘Yes’, comments will be automatically enabled for every article published. If set to ‘No’, you must enable comments on the article ‘Write’ panel each time you want to accept comments.</p>
 <p>Note that allowing comments can be turned on or off at any time, on a per-article basis.</p>
         ]]></item>
-        <item id="comments_require_email" title="Comments require user’s email address?"><![CDATA[
+        <item id="comments_require_email" title="Comments require commenter’s email address?"><![CDATA[
 <h2>Comments require user’s email address?</h2>
 <p>If set to ‘Yes’, people that want to comment on your article will have to enter an email address in the comment input form. They will be unable to post a comment if they do not supply an email address.</p>
         ]]></item>

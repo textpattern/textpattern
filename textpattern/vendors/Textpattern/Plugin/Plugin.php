@@ -32,6 +32,16 @@ namespace Textpattern\Plugin;
 
 class Plugin
 {
+    private static $metaData = array(
+        'type'          => 0,
+        'author'        => '',
+        'author_uri'    => '',
+        'version'       => '1',
+        'description'   => '',
+        'order'         => 5,
+        'flags'         => 0
+    );
+
     /**
      * Constructor.
      */
@@ -56,10 +66,21 @@ class Plugin
 
     public function install($plugin, $status = null)
     {
-        if ($plugin = $this->extract($plugin)) {
-            extract($plugin);
+        if ($encoded = !is_array($plugin)) {
+            $plugin = $this->extract($plugin);
+        }
 
+        if (!empty($plugin['name'])) {
+            extract($plugin + self::$metaData + array(
+                'help'          => '',
+                'code'          => '',
+                'textpack'      => '',
+                'data'          => ''
+            ));
+
+            $name = sanitizeForFile($name);
             $exists = fetch('name', 'txp_plugin', 'name', $name);
+            isset($md5) or $md5 = md5($code);
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                 // Default: help is in Textile format.
@@ -77,13 +98,13 @@ class Plugin
                     code         = '".doSlash($code)."',
                     code_restore = '".doSlash($code)."',
                     code_md5     = '".doSlash($md5)."',
-                    textpack     = '".@doSlash($textpack)."',
-                    data         = '".@doSlash($data)."',
+                    textpack     = '".doSlash($textpack)."',
+                    data         = '".doSlash($data)."',
                     flags        = $flags
             ";
 
             if ($exists) {
-                if ($status !== null) {
+                if (isset($status)) {
                     $fields .= ", status = ".(empty($status) ? 0 : 1);
                 }
                 $rs = safe_update(
@@ -101,9 +122,9 @@ class Plugin
                 );
             }
 
-            if ($rs and $code) {
+            if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
-                $this->updateFile($name, $code);
+                $encoded and $this->updateFile($name, $plugin);
 
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -119,7 +140,6 @@ class Plugin
                 $message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
             }
         }
-
 
         if (empty($message)) {
             $message = array(gTxt('bad_plugin_code'), E_ERROR);
@@ -154,6 +174,53 @@ class Plugin
 
         if (empty($plugin['name'])) {
             return false;
+        }
+
+        if ($normalize) {
+            $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
+            $plugin['order'] = empty($plugin['order']) ? 5 : min(max(intval($plugin['order']), 1), 9);
+            $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
+        }
+
+        return $plugin;
+    }
+
+    /**
+     * Read a plugin from file.
+     *
+     * @param  string  $name      Plugin name
+     * @param  boolean $normalize Check/normalize some fields
+     * @return array
+     */
+
+    public function read($name, $normalize = true)
+    {
+        $name = sanitizeForFile($name);
+        $dir = txpath.DS.'plugins'.DS.$name;
+
+        if (!is_dir($dir)) {
+            return false;
+        }
+
+        $plugin = array('name' => $name);
+
+        if (@$info = file_get_contents($dir.'/manifest.json')) {
+            $plugin += json_decode($info, true);
+        }
+
+        if (@$code = file_get_contents($dir.'/'.$name.'.php')) {
+            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
+            $plugin['code'] = $code;
+        }
+
+        if (@$textpack = file_get_contents($dir.'/textpack.txp')) {
+            $plugin['textpack'] = $textpack;
+        }
+
+        if (@$help = file_get_contents($dir.'/help.html')) {
+            $plugin['help'] = $help;
+        } elseif (@$help = file_get_contents($dir.'/help.textile')) {
+            $plugin['help_raw'] = $help;
         }
 
         if ($normalize) {
@@ -369,14 +436,30 @@ class Plugin
         $filename = sanitizeForFile($name);
 
         if (!isset($code)) {
-            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.'/plugins', $filename);
+            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'plugins', $filename);
         }
 
-        if(!is_dir($dir = txpath."/plugins/$filename")) {
+        if(!is_dir($dir = txpath.DS.'plugins'.DS.$filename)) {
             mkdir($dir);
         }
 
-        return file_put_contents("$dir/$filename.php", '<?php'.n.$code.n.'?>', LOCK_EX);
+        if (is_array($code)) {
+            if ($manifest = array_intersect_key($code, self::$metaData)) {
+                file_put_contents($dir.DS.'manifest.json', json_encode($manifest), LOCK_EX);
+            }
+
+            if (isset($code['help'])) {
+                file_put_contents($dir.DS.'help.html', $code['help'], LOCK_EX);
+            }
+
+            if (isset($code['textpack'])) {
+                file_put_contents($dir.DS.'textpack.txp', $code['textpack'], LOCK_EX);
+            }
+
+            $code = isset($code['code']) ? $code['code'] : '';
+        }
+
+        return file_put_contents($dir.DS.$filename.'.php', '<?php'.n.$code, LOCK_EX);
     }
 
     /**
