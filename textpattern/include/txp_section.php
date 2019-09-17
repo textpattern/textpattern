@@ -654,6 +654,8 @@ function section_save()
     $ok = false;
 
     if ($name == 'default') {
+        $on_frontpage = $in_rss = $searchable = 0;
+
         $ok = safe_update('txp_section', "skin = '$safe_skin', page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
     } elseif ($name) {
         extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
@@ -690,7 +692,7 @@ function section_save()
     }
 
     if ($ok) {
-        update_lastmod('section_saved', compact('name', 'title', 'page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable'));
+        update_lastmod('section_saved', compact('name', 'title', 'section_page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable'));
         Txp::get('Textpattern\Skin\Skin')->setEditing($safe_skin);
     }
 

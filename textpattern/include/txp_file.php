@@ -886,7 +886,7 @@ function file_create()
 
     if ($ids) {
         now('created', true);
-        update_lastmod('file_created', compact('ids', 'filenames', 'title', 'category', 'description'));
+        update_lastmod('file_created', compact('ids', 'filename', 'title', 'category', 'description'));
     }
 
     $response = '';
