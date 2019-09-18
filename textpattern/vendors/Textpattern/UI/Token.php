@@ -22,30 +22,22 @@
  */
 
 /**
- * An &lt;input type="radio" /&gt; tag set with yes/no options.
+ * A hidden &lt;input /&gt; tag containing a CSRF token.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class YesNoRadioSet extends RadioSet implements \Textpattern\Widget\WidgetCollectionInterface
+class Token extends Input implements UIInterface
 {
     /**
-     * Construct a yes/no pair of radio widgets.
-     *
-     * @param string $name    The RadioSet key (HTML name attribute)
-     * @param string $default The key from the $options array to set as selected
+     * Construct a single hidden token input field.
      */
 
-    public function __construct($name, $default = null)
+    public function __construct()
     {
-        $options = array(
-            gTxt('no'),
-            gTxt('yes'),
-        );
-
-        parent::__construct($name, $options, $default);
+        parent::__construct('_txp_token', 'hidden', form_token());
     }
 }

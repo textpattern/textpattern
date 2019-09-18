@@ -22,30 +22,43 @@
  */
 
 /**
- * An &lt;input type="radio" /&gt; tag set with on/off options.
+ * UI interface.
+ *
+ * An interface for creating UI components such as input fields,
+ * checkboxes, and controls.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class OnOffRadioSet extends RadioSet implements \Textpattern\Widget\WidgetCollectionInterface
+interface UIInterface
 {
     /**
-     * Construct an on/off pair of radio widgets.
+     * Sets the tag to use.
      *
-     * @param string $name    The RadioSet key (HTML name attribute)
-     * @param string $default The key from the $options array to set as selected
+     * @param  string $tag Tag name
+     * @return this
      */
 
-    public function __construct($name, $default = null)
-    {
-        $options = array(
-            gTxt('off'),
-            gTxt('on'),
-        );
+    public function setTag($tag);
 
-        parent::__construct($name, $options, $default);
-    }
+    /**
+     * Sets the given attributes.
+     *
+     * @param  array $atts Name-value attributes
+     * @return this
+     */
+
+    public function setAtts($atts, $props = array());
+
+    /**
+     * Render the complete component.
+     *
+     * @param  array $option To affect the flavour of tag returned
+     * @return string
+     */
+
+    public function render($option = null);
 }

@@ -22,15 +22,15 @@
  */
 
 /**
- * Base widget - a tag.
+ * Base HTML component - a tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Tag implements \Textpattern\Widget\WidgetInterface
+class Tag implements UIInterface
 {
     /**
      * Global control over tag output.
@@ -59,7 +59,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     /**
      * The tag's attributes as an Attribute object.
      *
-     * @var \Textpattern\Widget\Attribute
+     * @var \Textpattern\UI\Attribute
      */
 
     protected $atts = null;
@@ -99,7 +99,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
         }
 
         $this->setTag($tag);
-        $this->atts = new \Textpattern\Widget\Attribute();
+        $this->atts = new \Textpattern\UI\Attribute();
     }
 
     /**

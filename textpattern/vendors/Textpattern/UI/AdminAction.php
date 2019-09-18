@@ -27,15 +27,15 @@
  * Replaces eInput(), sInput(), tInput().
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class AdminAction extends InputSet implements \Textpattern\Widget\WidgetCollectionInterface
+class AdminAction extends InputSet implements UICollectionInterface
 {
     /**
-     * Construct event/step/token widgets.
+     * Construct event/step/token elements.
      *
      * @param string      $event      The Textpattern event (panel)
      * @param string|true $stepOrCsrf The Textpattern step (action), or true if only event + token are required
@@ -54,8 +54,8 @@ class AdminAction extends InputSet implements \Textpattern\Widget\WidgetCollecti
         parent::__construct($nameVals, 'hidden');
 
         if ($csrf) {
-            $token = new \Textpattern\Widget\Token();
-            $this->addWidget($token, 'token');
+            $token = new \Textpattern\UI\Token();
+            $this->add($token, 'token');
         }
     }
 }

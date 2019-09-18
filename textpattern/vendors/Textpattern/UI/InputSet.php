@@ -25,15 +25,15 @@
  * An &lt;input /&gt; tag set.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class InputSet extends TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
+class InputSet extends TagCollection implements UICollectionInterface
 {
     /**
-     * Construct a set of text input widgets from an array.
+     * Construct a set of text input fields from an array.
      *
      * Primarily of use for creating a series of hidden inputs.
      *
@@ -53,13 +53,13 @@ class InputSet extends TagCollection implements \Textpattern\Widget\WidgetCollec
                 $value = implode($join, $value);
             }
 
-            $input = new \Textpattern\Widget\Input((string)$key, (string)$type, (string)$value);
+            $input = new \Textpattern\UI\Input((string)$key, (string)$type, (string)$value);
 
             // Retrieve and set the id. Although it's possible to just use $name
             // directly due to the key's simplicity, if the Input implementation of
             // the key changes in the Input class, this is safer.
             $id = $input->getKey();
-            $this->addWidget($input, $id);
+            $this->add($input, $id);
         }
     }
 }

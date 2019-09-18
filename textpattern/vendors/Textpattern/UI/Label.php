@@ -25,15 +25,15 @@
  * A single &lt;label /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Label extends Tag implements \Textpattern\Widget\WidgetInterface
+class Label extends Tag implements UIInterface
 {
     /**
-     * Construct a single label widget.
+     * Construct a single label field.
      *
      * @param string $value The Label text
      * @param string $name  The name of the input control for which the radio is a Label

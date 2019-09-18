@@ -26,12 +26,12 @@
  *
  * @see  pre-order binary tree (category) algorithms
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class SelectTree extends Select implements \Textpattern\Widget\WidgetInterface
+class SelectTree extends Select implements UIInterface
 {
     /**
      * Minimum length of the truncate flag.
@@ -58,7 +58,7 @@ class SelectTree extends Select implements \Textpattern\Widget\WidgetInterface
     );
 
     /**
-     * Construct a tree select widget with a bunch of options.
+     * Construct a tree select input with a bunch of options.
      *
      * @param string       $name    The Select key (HTML name attribute)
      * @param array        $options Record set with this structure:
@@ -133,7 +133,7 @@ class SelectTree extends Select implements \Textpattern\Widget\WidgetInterface
                 $label = preg_replace('/^(.{0,'.($maxlen).'}).*$/su', '$1', $label);
             }
 
-            $option = new \Textpattern\Widget\Option(
+            $option = new \Textpattern\UI\Option(
                 txpspecialchars($value),
                 $sep.txpspecialchars($label).$suffix,
                 $checked

@@ -27,12 +27,12 @@
  * Only used for creating select list components.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
+class OptGroup extends Tag implements UICollectionInterface
 {
     /**
      * The key (id) used in the tag.
@@ -51,10 +51,10 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
     protected $options = null;
 
     /**
-     * Construct a single optgroup widget.
+     * Construct a single optgroup element.
      *
-     * @param string                            $label   The optgroup label
-     * @param \Textpattern\Widget\TagCollection $options The options to add to the group
+     * @param string                        $label   The optgroup label
+     * @param \Textpattern\UI\TagCollection $options The options to add to the group
      */
 
     public function __construct($label, $options = null)
@@ -64,10 +64,10 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
         parent::__construct('optgroup');
         $this->setAtt('label', $this->key);
 
-        if ($options instanceof \Textpattern\Widget\TagCollection) {
+        if ($options instanceof \Textpattern\UI\TagCollection) {
             $this->options = $options;
         } else {
-            $this->options = new \Textpattern\Widget\TagCollection();
+            $this->options = new \Textpattern\UI\TagCollection();
         }
     }
 
@@ -83,7 +83,7 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
 
     public function addOption($value, $label, $checked = false)
     {
-        $option = new \Textpattern\Widget\Option(
+        $option = new \Textpattern\UI\Option(
             txpspecialchars($value),
             txpspecialchars($label),
             $checked
@@ -91,50 +91,50 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
 
         $option->setAtt('dir', 'auto');
 
-        $this->options->addWidget($option, $value);
+        $this->options->add($option, $value);
 
         return $this;
     }
 
     /**
-     * Add a widget to the collection. Chainable.
+     * Add an item to the collection. Chainable.
      *
-     * @param  object $widget The widget
-     * @param  string $key    Optional reference to the object in the collection
+     * @param  object $item The interface component
+     * @param  string $key  Optional reference to the object in the collection
      * @return this
      */
 
-    public function addWidget($widget, $key = null)
+    public function add($item, $key = null)
     {
-        $this->options->addWidget($widget, $key);
+        $this->options->add($item, $key);
 
         return $this;
     }
 
     /**
-     * Remove a widget from the collection. Chainable.
+     * Remove an element from the collection. Chainable.
      *
      * @param  string $key The reference to the object in the collection
      * @return this
      */
 
-    public function removeWidget($key)
+    public function remove($key)
     {
-        $this->options->removeWidget($key);
+        $this->options->remove($key);
 
         return $this;
     }
 
     /**
-     * Fetch a widget from the collection.
+     * Fetch an element from the collection.
      *
      * @param  string $key The reference to the object in the collection
      * @return object
      */
 
-    public function getWidget($key)
+    public function get($key)
     {
-        return $this->options->getWidget($key);
+        return $this->options->get($key);
     }
 
     /**

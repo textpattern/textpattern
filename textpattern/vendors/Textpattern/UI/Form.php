@@ -25,12 +25,12 @@
  * A &lt;form /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Form extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
+class Form extends Tag implements UICollectionInterface
 {
     /**
      * The key (id) used in the tag.
@@ -49,13 +49,13 @@ class Form extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
     protected $tags = null;
 
     /**
-     * Construct a single form container widget.
+     * Construct a single form container tag.
      *
      * @param string $method Which mechanism to submit the data - post or get
-     * @param mixed  $widget The widget or widget collection to add as content
+     * @param mixed  $item   The UI element or collection to add as content
      */
 
-    public function __construct($method = 'post', $widget = null)
+    public function __construct($method = 'post', $item = null)
     {
         parent::__construct('form');
 
@@ -66,60 +66,60 @@ class Form extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
 
         $this->setAction('index.php');
 
-        $this->tags = new \Textpattern\Widget\TagCollection();
+        $this->tags = new \Textpattern\UI\TagCollection();
 
-        if ($widget !== null) {
-            $this->addWidget($widget);
+        if ($item !== null) {
+            $this->add($item);
         }
     }
 
     /**
-     * Add one or more widgets to the form. Chainable.
+     * Add one or more elements to the form. Chainable.
      *
-     * @param mixed   $widget The pre-built widget or collection of widgets
-     * @param boolean $label  The optional unique key to associate with the tag
+     * @param mixed   $item The pre-built UI element or collection
+     * @param boolean $key  The optional unique key to associate with the tag
      */
 
-    public function addWidget($widget, $key = null)
+    public function add($item, $key = null)
     {
-        if ($widget instanceof \Textpattern\Widget\TagCollection) {
-            foreach ($widget as $key => $item) {
-                $this->tags->addWidget($item, $key);
+        if ($item instanceof \Textpattern\UI\TagCollection) {
+            foreach ($item as $key => $element) {
+                $this->tags->add($element, $key);
             }
 
-            // Original object is not needed any nore as it's been merged in this object.
-            $widget = null;
+            // Original object is not needed any more as it's been merged in this object.
+            $item = null;
         } else {
-            $this->tags->addWidget($widget, $key);
+            $this->tags->add($item, $key);
         }
 
         return $this;
     }
 
     /**
-     * Remove a widget from the form. Chainable.
+     * Remove an element from the form. Chainable.
      *
      * @param  string $key The reference to the object in the collection
      * @return this
      */
 
-    public function removeWidget($key)
+    public function remove($key)
     {
-        $this->tags->removeWidget($key);
+        $this->tags->remove($key);
 
         return $this;
     }
 
     /**
-     * Fetch a widget from the form.
+     * Fetch an element from the form.
      *
      * @param  string $key The reference to the object in the collection
      * @return object
      */
 
-    public function getWidget($key)
+    public function get($key)
     {
-        $this->tags->getWidget($key);
+        $this->tags->get($key);
     }
 
     /**
@@ -168,7 +168,7 @@ class Form extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
     }
 
     /**
-     * Add the widgets as content and draw them.
+     * Add the elements as content and draw them.
      *
      * @param  string $flavour To affect the flavour of tag returned - complete, self-closing, open, close, content
      * @return string HTML

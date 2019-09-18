@@ -22,45 +22,45 @@
  */
 
 /**
- * Widget Collection interface.
+ * UI Collection interface.
  *
- * An interface for grouping a set of user interface Widgets.
+ * An interface for grouping a set of user interface components.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-interface WidgetCollectionInterface
+interface UICollectionInterface
 {
     /**
-     * Add a widget to the collection. Chainable.
+     * Add a component to the collection. Chainable.
      *
-     * @param  object $widget The widget
-     * @param  string $key    Optional reference to the object in the collection
+     * @param  object $item The UI component to add
+     * @param  string $key  Optional reference to the object in the collection
      * @return this
      */
 
-    public function addWidget($widget, $key = null);
+    public function add($item, $key = null);
 
     /**
-     * Remove a widget from the collection. Chainable.
+     * Remove a component from the collection by its key. Chainable.
      *
      * @param  string $key The reference to the object in the collection
      * @return this
      */
 
-    public function removeWidget($key);
+    public function remove($key);
 
     /**
-     * Fetch a widget from the collection.
+     * Fetch a component from the collection by its key.
      *
      * @param  string $key The reference to the object in the collection
      * @return object
      */
 
-    public function getWidget($key);
+    public function get($key);
 
     /**
      * Render the content as a bunch of XML elements.

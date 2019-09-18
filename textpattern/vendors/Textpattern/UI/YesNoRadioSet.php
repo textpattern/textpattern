@@ -22,36 +22,30 @@
  */
 
 /**
- * An &lt;input type="radio" /&gt; tag set.
+ * An &lt;input type="radio" /&gt; tag set with yes/no options.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class RadioSet extends TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
+class YesNoRadioSet extends RadioSet implements UICollectionInterface
 {
     /**
-     * Construct a set of radio widgets.
+     * Construct a yes/no pair of radio buttons.
      *
      * @param string $name    The RadioSet key (HTML name attribute)
-     * @param array  $options Key => Label pairs
      * @param string $default The key from the $options array to set as selected
      */
 
-    public function __construct($name, $options, $default = null)
+    public function __construct($name, $default = null)
     {
-        foreach ((array) $options as $key => $label) {
-            $key = (string)$key;
-            $checked = ($key === (string)$default);
+        $options = array(
+            gTxt('no'),
+            gTxt('yes'),
+        );
 
-            $radio = new \Textpattern\Widget\Radio($name, $key, $checked);
-            $id = $radio->getKey();
-            $label = new \Textpattern\Widget\Label($label, $id);
-
-            $this->addWidget($radio, 'radio-'.$id);
-            $this->addWidget($label, 'label-'.$id);
-        }
+        parent::__construct($name, $options, $default);
     }
 }

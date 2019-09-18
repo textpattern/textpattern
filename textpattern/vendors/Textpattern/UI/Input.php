@@ -22,15 +22,15 @@
  */
 
 /**
- * A &lt;textarea /&gt; tag.
+ * An &lt;input /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Textarea extends Tag implements \Textpattern\Widget\WidgetInterface
+class Input extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -41,19 +41,30 @@ class Textarea extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $key = null;
 
     /**
-     * Construct a single textarea widget.
+     * Construct a single text input field.
      *
-     * @param string $name    The textarea key (HTML name attribute)
-     * @param string $content The default content to assign
+     * @param string $name  The text input key (HTML name attribute)
+     * @param string $type  The HTML type attribute
+     * @param string $value The default value to assign
      */
 
-    public function __construct($name, $content = '')
+    public function __construct($name, $type = null, $value = null)
     {
+        if ($type === null) {
+            $type = 'text';
+        }
+
         $this->key = $name;
 
-        parent::__construct('textarea');
-        $this->setAtt('name', $this->key);
-        $this->setContent(txpspecialchars($content));
+        parent::__construct('input');
+        $this->setAtts(array(
+                'name' => $this->key,
+                'type' => $type,
+            ));
+
+        if ($value !== null) {
+            $this->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+        }
     }
 
     /**

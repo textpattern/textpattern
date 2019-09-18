@@ -22,15 +22,15 @@
  */
 
 /**
- * A single &lt;input type="radio" /&gt; tag.
+ * A &lt;textarea /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
+class Textarea extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -41,35 +41,23 @@ class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $key = null;
 
     /**
-     * Construct a single radio widget.
+     * Construct a single textarea field.
      *
-     * @param string $name    The Radio key (HTML name attribute)
-     * @param string $value   The Radio value
-     * @param bool   $checked Whether the button is selected
+     * @param string $name    The textarea key (HTML name attribute)
+     * @param string $content The default content to assign
      */
 
-    public function __construct($name, $value = null, $checked = true)
+    public function __construct($name, $content = '')
     {
-        parent::__construct('input');
-        $type = $class = 'radio';
-        $this->key = ($value !== null) ? $name.'-'.$value : $name;
+        $this->key = $name;
 
-        if ((bool)$checked === true) {
-            $this->setBool('checked');
-            $class .= ' active';
-        }
-
-        $this->setAtts(array(
-                'class' => $class,
-                'id'    => $this->key,
-                'name'  => $name,
-                'type'  => $type,
-            ))
-            ->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+        parent::__construct('textarea');
+        $this->setAtt('name', $this->key);
+        $this->setContent(txpspecialchars($content));
     }
 
     /**
-     * Fetch the key (id) in use by this radio button.
+     * Fetch the key (id) in use by this text input.
      *
      * @return string
      */

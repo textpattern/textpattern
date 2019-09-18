@@ -25,10 +25,10 @@
  * One or more tag attributes.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
 class Attribute
 {

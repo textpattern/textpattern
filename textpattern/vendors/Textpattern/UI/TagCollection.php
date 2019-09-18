@@ -22,18 +22,18 @@
  */
 
 /**
- * A collection of widgets.
+ * A collection of HTML tags.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCollectionInterface
+class TagCollection implements \IteratorAggregate, UICollectionInterface
 {
     /**
-     * The object store for each widget.
+     * The object store for each field.
      *
      * @var array
      */
@@ -52,40 +52,40 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
      * General constructor for the collection.
      */
 
-    public function __construct($widget = null, $key = null)
+    public function __construct($item = null, $key = null)
     {
-        if (!empty($widget)) {
-            $this->addWidget($widget, $key);
+        if (!empty($item)) {
+            $this->add($item, $key);
         }
     }
 
     /**
-     * Add a widget to the collection. Chainable.
+     * Add a tag to the collection. Chainable.
      *
-     * @param  object $widget The widget
-     * @param  string $key    Optional reference to the object in the collection
+     * @param  object $tag The tag
+     * @param  string $key Optional reference to the object in the collection
      * @return this
      */
 
-    public function addWidget($widget, $key = null)
+    public function add($tag, $key = null)
     {
         if ($key === null) {
-            $this->items[] = $widget;
+            $this->items[] = $tag;
         } else {
-            $this->items[$key] = $widget;
+            $this->items[$key] = $tag;
         }
 
         return $this;
     }
 
     /**
-     * Remove a widget from the collection. Chainable.
+     * Remove a tag from the collection. Chainable.
      *
      * @param  string $key The reference to the object in the collection
      * @return this
      */
 
-    public function removeWidget($key)
+    public function remove($key)
     {
         if ($this->keyExists($key)) {
             unset($this->items[$key]);
@@ -95,13 +95,13 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
     }
 
     /**
-     * Fetch a widget from the collection.
+     * Fetch/find a tag from the collection.
      *
      * @param  string $key The reference to the object in the collection
      * @return object
      */
 
-    public function getWidget($key)
+    public function get($key)
     {
         if ($this->keyExists($key)) {
             return $this->items[$key];
@@ -180,8 +180,8 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
 
         $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : '';
 
-        foreach ($this->items as $widget) {
-            $out[] = $widget->render();
+        foreach ($this->items as $item) {
+            $out[] = $item->render();
         }
 
         return join(n, $out).$break;

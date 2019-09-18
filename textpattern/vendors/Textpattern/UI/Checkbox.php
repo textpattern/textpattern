@@ -22,15 +22,15 @@
  */
 
 /**
- * An &lt;input /&gt; tag.
+ * A single &lt;input type="checkbox" /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Input extends Tag implements \Textpattern\Widget\WidgetInterface
+class Checkbox extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -41,34 +41,35 @@ class Input extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $key = null;
 
     /**
-     * Construct a single text input widget.
+     * Construct a single checkbox button.
      *
-     * @param string $name  The text input key (HTML name attribute)
-     * @param string $type  The HTML type attribute
-     * @param string $value The default value to assign
+     * @param string $name    The Checkbox key (HTML name attribute)
+     * @param string $value   The Checkbox value
+     * @param bool   $checked Whether the checkbox is selected
      */
 
-    public function __construct($name, $type = null, $value = null)
+    public function __construct($name, $value = null, $checked = true)
     {
-        if ($type === null) {
-            $type = 'text';
-        }
-
-        $this->key = $name;
-
         parent::__construct('input');
-        $this->setAtts(array(
-                'name' => $this->key,
-                'type' => $type,
-            ));
+        $type = $class = 'checkbox';
+        $this->key = ($value !== null) ? $name.'-'.$value : $name;
 
-        if ($value !== null) {
-            $this->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+        if ((bool)$checked === true) {
+            $this->setBool('checked');
+            $class .= ' active';
         }
+
+        $this->setAtts(array(
+                'class' => $class,
+                'id'    => $this->key,
+                'name'  => $name,
+                'type'  => $type,
+            ))
+            ->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
     }
 
     /**
-     * Fetch the key (id) in use by this text input.
+     * Fetch the key (id) in use by this radio button.
      *
      * @return string
      */

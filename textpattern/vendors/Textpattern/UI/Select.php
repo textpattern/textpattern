@@ -25,12 +25,12 @@
  * A &lt;select /&gt; list tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Select extends Tag implements \Textpattern\Widget\WidgetInterface
+class Select extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -67,7 +67,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $currentGroup = null;
 
     /**
-     * Construct a select widget with a bunch of options.
+     * Construct a select input with a bunch of options.
      *
      * @param string       $name    The Select key (HTML name attribute)
      * @param array        $options Key => Label pairs
@@ -109,7 +109,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
 
     public function addOption($value, $label, $checked = false, $group = null)
     {
-        $option = new \Textpattern\Widget\Option(
+        $option = new \Textpattern\UI\Option(
             txpspecialchars($value),
             txpspecialchars($label),
             $checked
@@ -126,7 +126,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
                 $this->addOptGroup($group);
             }
 
-            $this->optGroups[$group]->addWidget($option, $value);
+            $this->optGroups[$group]->add($option, $value);
         } else {
             $this->options[$value] = $option;
         }
@@ -142,7 +142,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
 
     public function addOptGroup($label)
     {
-        $optGroup = new \Textpattern\Widget\OptGroup(
+        $optGroup = new \Textpattern\UI\OptGroup(
             txpspecialchars($label)
         );
 
@@ -160,7 +160,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
 
     public function blankFirst()
     {
-        $emptyOption = new \Textpattern\Widget\Option('', '&#160;');
+        $emptyOption = new \Textpattern\UI\Option('', '&#160;');
         array_unshift($this->options, $emptyOption);
 
         return $this;

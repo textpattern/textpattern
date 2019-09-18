@@ -22,15 +22,15 @@
  */
 
 /**
- * A single &lt;input type="checkbox" /&gt; tag.
+ * A single &lt;input type="radio" /&gt; tag.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Checkbox extends Tag implements \Textpattern\Widget\WidgetInterface
+class Radio extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -41,17 +41,17 @@ class Checkbox extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $key = null;
 
     /**
-     * Construct a single checkbox widget.
+     * Construct a single radio button.
      *
-     * @param string $name    The Checkbox key (HTML name attribute)
-     * @param string $value   The Checkbox value
-     * @param bool   $checked Whether the checkbox is selected
+     * @param string $name    The Radio key (HTML name attribute)
+     * @param string $value   The Radio value
+     * @param bool   $checked Whether the button is selected
      */
 
     public function __construct($name, $value = null, $checked = true)
     {
         parent::__construct('input');
-        $type = $class = 'checkbox';
+        $type = $class = 'radio';
         $this->key = ($value !== null) ? $name.'-'.$value : $name;
 
         if ((bool)$checked === true) {

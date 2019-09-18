@@ -22,43 +22,36 @@
  */
 
 /**
- * An &lt;input type="checkbox" /&gt; tag set.
+ * An &lt;input type="radio" /&gt; tag set.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class CheckboxSet extends TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
+class RadioSet extends TagCollection implements UICollectionInterface
 {
     /**
-     * Construct a set of checkbox widgets.
+     * Construct a set of radio buttons.
      *
-     * @param string       $name    The CheckboxSet key (HTML name attribute)
-     * @param array        $options Key => Label pairs
-     * @param array|string $default The key(s) from the $options array to select by default
+     * @param string $name    The RadioSet key (HTML name attribute)
+     * @param array  $options Key => Label pairs
+     * @param string $default The key from the $options array to set as selected
      */
 
     public function __construct($name, $options, $default = null)
     {
-        if ($default === null) {
-            $default = array();
-        } elseif (!is_array($default)) {
-            $default = do_list($default);
-        }
-
         foreach ((array) $options as $key => $label) {
             $key = (string)$key;
-            $checked = (in_array($key, $default));
+            $checked = ($key === (string)$default);
 
-            $box = new \Textpattern\Widget\Checkbox($name, $key, $checked);
-            $box->setMultiple('name');
-            $id = $box->getKey();
-            $label = new \Textpattern\Widget\Label($label, $id);
+            $radio = new \Textpattern\UI\Radio($name, $key, $checked);
+            $id = $radio->getKey();
+            $label = new \Textpattern\UI\Label($label, $id);
 
-            $this->addWidget($box, 'checkbox-'.$id);
-            $this->addWidget($label, 'label-'.$id);
+            $this->add($radio, 'radio-'.$id);
+            $this->add($label, 'label-'.$id);
         }
     }
 }

@@ -27,12 +27,12 @@
  * Only used for creating select list components.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Option extends Tag implements \Textpattern\Widget\WidgetInterface
+class Option extends Tag implements UIInterface
 {
     /**
      * The key (id) used in the tag.
@@ -43,7 +43,7 @@ class Option extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $key = null;
 
     /**
-     * Construct a single option widget.
+     * Construct a single option element.
      *
      * @param string  $value   The option key (HTML value attribute)
      * @param string  $label   The label

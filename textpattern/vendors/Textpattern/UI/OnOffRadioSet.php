@@ -22,22 +22,30 @@
  */
 
 /**
- * A hidden &lt;input /&gt; tag containing a CSRF token.
+ * An &lt;input type="radio" /&gt; tag set with on/off options.
  *
  * @since   4.8.0
- * @package Widget
+ * @package UI
  */
 
-namespace Textpattern\Widget;
+namespace Textpattern\UI;
 
-class Token extends Input implements \Textpattern\Widget\WidgetInterface
+class OnOffRadioSet extends RadioSet implements UICollectionInterface
 {
     /**
-     * Construct a single hidden token input widget.
+     * Construct an on/off pair of radio buttons.
+     *
+     * @param string $name    The RadioSet key (HTML name attribute)
+     * @param string $default The key from the $options array to set as selected
      */
 
-    public function __construct()
+    public function __construct($name, $default = null)
     {
-        parent::__construct('_txp_token', 'hidden', form_token());
+        $options = array(
+            gTxt('off'),
+            gTxt('on'),
+        );
+
+        parent::__construct($name, $options, $default);
     }
 }
