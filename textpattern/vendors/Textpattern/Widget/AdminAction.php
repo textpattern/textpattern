@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -26,17 +26,17 @@
  *
  * Replaces eInput(), sInput(), tInput().
  *
- * @since   4.7.0
+ * @since   4.8.0
  * @package Widget
  */
 
 namespace Textpattern\Widget;
 
-class AdminAction extends TextboxSet implements \Textpattern\Widget\WidgetCollectionInterface
+class AdminAction extends InputSet implements \Textpattern\Widget\WidgetCollectionInterface
 {
     /**
      * Construct event/step/token widgets.
-     * 
+     *
      * @param string      $event      The Textpattern event (panel)
      * @param string|true $stepOrCsrf The Textpattern step (action), or true if only event + token are required
      * @param boolean     $csrf       Whether to render a token

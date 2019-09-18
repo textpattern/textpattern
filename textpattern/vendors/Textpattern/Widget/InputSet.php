@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,13 +24,13 @@
 /**
  * An &lt;input /&gt; tag set.
  *
- * @since   4.7.0
+ * @since   4.8.0
  * @package Widget
  */
 
 namespace Textpattern\Widget;
 
-class TextboxSet extends TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
+class InputSet extends TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
 {
     /**
      * Construct a set of text input widgets from an array.
@@ -53,11 +53,11 @@ class TextboxSet extends TagCollection implements \Textpattern\Widget\WidgetColl
                 $value = implode($join, $value);
             }
 
-            $input = new \Textpattern\Widget\Textbox((string)$key, (string)$type, (string)$value);
+            $input = new \Textpattern\Widget\Input((string)$key, (string)$type, (string)$value);
 
             // Retrieve and set the id. Although it's possible to just use $name
-            // directly due to the key's simplicity, if the Textbox implementation of
-            // the key changes in the Textbox class, this is safer.
+            // directly due to the key's simplicity, if the Input implementation of
+            // the key changes in the Input class, this is safer.
             $id = $input->getKey();
             $this->addWidget($input, $id);
         }

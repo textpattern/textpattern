@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@
  * A &lt;select /&gt; list tag built from a tree-based record set.
  *
  * @see  pre-order binary tree (category) algorithms
- * @since   4.7.0
+ * @since   4.8.0
  * @package Widget
  */
 
@@ -41,7 +41,7 @@ class SelectTree extends Select implements \Textpattern\Widget\WidgetInterface
 
     /**
      * Tag properties that control the output.
-     * 
+     *
      * separator: Separator character(s) to indicate the option's depth.
      * label_max: Maximum number of characters in label before truncation.
      * more:      Characters to append to the label to indicate truncation.

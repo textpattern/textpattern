@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,7 +24,7 @@
 /**
  * An &lt;input type="radio" /&gt; tag set with on/off options.
  *
- * @since   4.7.0
+ * @since   4.8.0
  * @package Widget
  */
 
