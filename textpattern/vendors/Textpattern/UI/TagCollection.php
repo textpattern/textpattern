@@ -120,6 +120,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
     /**
      * Fetch the number of items in the collection.
      */
+
     public function length()
     {
         return count($this->items);
@@ -130,6 +131,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
      *
      * @param  string $key The reference to the object in the collection
      */
+
     public function keyExists($key)
     {
         return array_key_exists($key, $this->items);
@@ -192,6 +194,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
      *
      * @return string HTML
      */
+
     public function __toString()
     {
         return $this->render();

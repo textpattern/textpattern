@@ -265,6 +265,24 @@ class Tag implements UIInterface
     }
 
     /**
+     * Retrieve a local tag property.
+     *
+     * @param string      $key     The name of the property to fetch
+     * @param string|null $default The default value of the property if not defined
+     */
+
+    public function getProperty($key, $default = null)
+    {
+        $out = $default;
+
+        if (isset($this->properties[$key])) {
+            $out = $this->properties[$key];
+        }
+
+        return $out;
+    }
+
+    /**
      * Set the break string to use after the tag has been output. Chainable.
      *
      * @param string $break The break tag to use
@@ -352,6 +370,7 @@ class Tag implements UIInterface
      *
      * @return string HTML
      */
+
     public function __toString()
     {
         return $this->render();

@@ -41,6 +41,7 @@ class AdminAction extends InputSet implements UICollectionInterface
      * @param string|true $stepOrCsrf The Textpattern step (action), or true if only event + token are required
      * @param boolean     $csrf       Whether to render a token
      */
+
     public function __construct($event, $stepOrCsrf = null, $csrf = false)
     {
         $nameVals['event'] = $event;

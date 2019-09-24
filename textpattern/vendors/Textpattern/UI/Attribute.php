@@ -248,6 +248,7 @@ class Attribute
      *
      * @return string HTML
      */
+
     public function __toString()
     {
         return $this->render();

@@ -37,7 +37,7 @@ class OptGroup extends Tag implements UICollectionInterface
     /**
      * The key (id) used in the tag.
      *
-     * @var null
+     * @var string
      */
 
     protected $key = null;

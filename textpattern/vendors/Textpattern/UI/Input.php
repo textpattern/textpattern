@@ -35,7 +35,7 @@ class Input extends Tag implements UIInterface
     /**
      * The key (id) used in the tag.
      *
-     * @var null
+     * @var string
      */
 
     protected $key = null;

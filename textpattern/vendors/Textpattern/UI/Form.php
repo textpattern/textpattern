@@ -35,7 +35,7 @@ class Form extends Tag implements UICollectionInterface
     /**
      * The key (id) used in the tag.
      *
-     * @var null
+     * @var string
      */
 
     protected $key = null;
@@ -134,6 +134,7 @@ class Form extends Tag implements UICollectionInterface
     /**
      * Fetch the number of items in the form.
      */
+
     public function length()
     {
         return $this->tags->length();
@@ -144,6 +145,7 @@ class Form extends Tag implements UICollectionInterface
      *
      * @param  string $key The reference to the object in the collection
      */
+
     public function keyExists($key)
     {
         return $this->tags->keyExists($key);
