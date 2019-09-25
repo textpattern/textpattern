@@ -301,7 +301,7 @@ class Disclosure extends Tag implements UICollectionInterface
             ->render();
 
         $block = new \Textpattern\UI\Tag('div');
-        $block->setContent($out)
+        $block->setContent(n.$out.n)
             ->setAtts($display_state)
             ->render();
 
