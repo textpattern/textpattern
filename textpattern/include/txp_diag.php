@@ -210,11 +210,13 @@ function doDiagnostics()
         }
 
         if (!empty($lastCheck['msg'])) {
-            $fail['i'][] = array('textpattern_version_update', $lastCheck['msg']);
+            $txpver = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
+            $fail['i'][] = array('textpattern_version_update', $lastCheck['msg'], $txpver);
         }
 
         if (!empty($lastCheck['msg2'])) {
-            $fail['i'][] = array('textpattern_version_update_beta', $lastCheck['msg2']);
+            $txpver = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
+            $fail['i'][] = array('textpattern_version_update_beta', $lastCheck['msg2'], $txpver);
         }
     }
 
@@ -436,7 +438,7 @@ function doDiagnostics()
         if ($gd_info['WebP Support']) {
             $gd_support[] = 'WebP';
         }
-        
+
         if ($gd_support) {
             $gd_support = implode(', ', $gd_support);
         } else {
@@ -649,7 +651,11 @@ function doDiagnostics()
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
         if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
-            $out[] = n.gTxt('diag_last_update_check').cs.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
+            $relmain = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
+            $relbeta = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
+            $msgmain = empty($lastCheck['msg']) ? '' : strip_tags(gTxt($lastCheck['msg'], $relmain));
+            $msgbeta = empty($lastCheck['msg2']) ? '' : strip_tags(gTxt($lastCheck['msg2'], $relbeta));
+            $out[] = n.gTxt('diag_last_update_check').cs.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.$msgmain.' '.$msgbeta.n;
         }
 
         $out[] = n.gTxt('diag_db_charset').cs.$DB->default_charset.'/'.$DB->charset.n;
@@ -760,22 +766,28 @@ function checkUpdates()
     $version = get_pref('version');
 
     $lastCheck = array(
-        'when'  => time(),
-        'msg'   => '',
-        'msg2'  => '',
+        'when'    => time(),
+        'msg'     => '',
+        'msg2'    => '',
+        'msgval'  => '',
+        'msgval2' => '',
     );
 
     if (!empty($release)) {
         if (version_compare($version, $release) < 0) {
-            $lastCheck['msg'] = gTxt('textpattern_update_available', array('{version}' => $release));
+            $lastCheck['msg'] = 'textpattern_update_available';
+            $lastCheck['msgval'] = array('{version}' => $release);
         }
 
         if (version_compare($version, $prerelease) < 0) {
-            $lastCheck['msg2'] = gTxt('textpattern_update_available_beta', array('{version}' => $prerelease));
+            $lastCheck['msg2'] = 'textpattern_update_available_beta';
+            $lastCheck['msgval2'] = array('{version}' => $prerelease);
         }
     } else {
-        $lastCheck['msg'] = gTxt('problem_connecting_update_server');
+        $lastCheck['msg'] = 'problem_connecting_update_server';
+        $lastCheck['msgval'] = array();
     }
+
     set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
 
     return $lastCheck;
