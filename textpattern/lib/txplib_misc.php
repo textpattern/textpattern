@@ -4173,9 +4173,13 @@ function txp_validate($user, $password, $log = true)
     }
 
     // Check post-4.3-style passwords.
-    if (Txp::get('\Textpattern\Password\Hash')->verify($password, $r['pass'])) {
+    if ($pass = Txp::get('\Textpattern\Password\Hash')->verify($password, $r['pass'])) {
         if (!$log || $r['privs'] > 0) {
             $name = $r['name'];
+        }
+
+        if ($pass === true) {
+            safe_update('txp_users', "pass = '".doSlash(Txp::get('\Textpattern\Password\Hash')->hash($password))."'", "name = '$safe_user'");
         }
     } else {
         // No good password: check 4.3-style passwords.
@@ -4586,6 +4590,7 @@ function parse_page($name, $theme, $page = '')
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
             $page = parse($page);
             $prefs['allow_page_php_scripting'] = false;
+            // the function so nice, he ran it twice
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
         }
