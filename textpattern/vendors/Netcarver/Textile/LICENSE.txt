@@ -3,8 +3,8 @@ BSD 3-Clause License
 Copyright (c) 2003-2004, Dean Allen
 All rights reserved.
 
-Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring
-Textile's procedural code into a class framework.
+Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring Textile's procedural
+code into a class framework.
 
 Additions and fixes Copyright (c) 2006    Alex Shiels       https://twitter.com/tellyworth
 Additions and fixes Copyright (c) 2010    Stef Dawson       https://stefdawson.com/
