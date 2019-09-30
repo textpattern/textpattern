@@ -1368,6 +1368,9 @@ class Skin extends CommonBase implements SkinInterface
                         .(!$dev_preview ? '' : ' | '.
                         href(gTxt('preview'),
                             'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
+                        ).' | '.
+                        href(gTxt('view'),
+                            'index.php?event=section&step=section_use_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
                         )),
                         '',
                         array(
