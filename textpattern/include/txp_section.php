@@ -51,6 +51,7 @@ if ($event == 'section') {
         'section_multi_edit'    => true,
         'section_set_default'   => true,
         'section_set_theme'     => true,
+        'section_use_theme'     => true,
         'section_toggle_option' => true,
     );
 
@@ -817,12 +818,12 @@ function section_delete()
 }
 
 /**
- * Processes delete actions sent using the multi-edit form.
+ * Processes theme preview actions.
  */
 
-function section_set_theme()
+function section_set_theme($type = 'dev_skin')
 {
-    global $all_skins;
+    global $all_skins, $all_pages, $all_styles;
 
     $skin = gps('skin');
     $message = '';
@@ -830,11 +831,14 @@ function section_set_theme()
     if (isset($all_skins[$skin])) {
         safe_update(
             'txp_section',
-            "dev_skin = '".doSlash($skin)."'",
-            '1'
+            "$type = '".doSlash($skin)."'",
+            $type == 'dev_skin' ? '1' : 'page IN ('.join(',', quote_list($all_pages[$skin])).') AND css IN ('.join(',', quote_list($all_styles[$skin])).')'
         );
-        Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
-        $message = txpspecialchars($all_skins[$skin]);
+        $message = gTxt($type == 'dev_skin' ? 'dev_theme' : 'live_theme').': '.txpspecialchars($all_skins[$skin]);
+
+        if ($type == 'dev_skin') {
+            Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
+        }
     }
 
     script_js(<<<EOS
@@ -842,6 +846,15 @@ if (typeof window.history.replaceState == 'function') {history.replaceState({}, 
 EOS
     , false);
     sec_section_list($message);
+}
+
+/**
+ * Processes theme view actions.
+ */
+
+function section_use_theme()
+{
+    section_set_theme('skin');
 }
 
 /**

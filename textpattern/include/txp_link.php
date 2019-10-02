@@ -508,9 +508,11 @@ function link_save()
         }
 
         if ($ok) {
-            // update lastmod due to link feeds
-            update_lastmod('link_saved', compact('id', 'linkname', 'linksort', 'url', 'category', 'description'));
             $message = gTxt(($id ? 'link_updated' : 'link_created'), array('{name}' => doStrip($linkname)));
+
+            // Update lastmod due to link feeds.
+            $id = empty($id) ? $ok : $id;
+            update_lastmod('link_saved', compact('id', 'linkname', 'linksort', 'url', 'category', 'description'));
         } else {
             $message = array(gTxt('link_save_failed'), E_ERROR);
         }
