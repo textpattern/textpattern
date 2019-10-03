@@ -69,34 +69,32 @@ class Random extends \Textpattern\Password\Generator
     public function generate($length)
     {
         $bytes = (int)ceil($length / 2);
+        $random = null;
 
-        if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
-
-            if ($random && strlen($random) === $bytes) {
-                return substr(bin2hex($random), 0, $length);
-            }
+        if (function_exists('random_bytes') && version_compare(PHP_VERSION, '7.0') >= 0) {
+            $random = random_bytes($bytes);
         }
 
-        if (IS_WIN === false && file_exists('/dev/urandom') && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
+        if (!$random && function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        }
+
+        if (!$random && IS_WIN === false && file_exists('/dev/urandom') && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
             if (function_exists('stream_set_read_buffer')) {
                 stream_set_read_buffer($fp, 0);
             }
 
             $random = fread($fp, $bytes);
             fclose($fp);
-
-            if ($random && strlen($random) === $bytes) {
-                return substr(bin2hex($random), 0, $length);
-            }
         }
 
-        if (IS_WIN === false && function_exists('openssl_random_pseudo_bytes') && version_compare(PHP_VERSION, '5.3.4') >= 0) {
+        if (!$random && IS_WIN === false && function_exists('openssl_random_pseudo_bytes') && version_compare(PHP_VERSION, '5.3.4') >= 0) {
             $random = openssl_random_pseudo_bytes($bytes, $strong);
+            $strong === true or $random = null;
+        }
 
-            if ($random && $strong === true && strlen($random) === $bytes) {
-                return substr(bin2hex($random), 0, $length);
-            }
+        if ($random && strlen($random) === $bytes) {
+            return substr(bin2hex($random), 0, $length);
         }
 
         return parent::generate($length);

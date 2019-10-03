@@ -55,7 +55,7 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
 
     public function verify($password, $hash)
     {
-        return $this->phpass->CheckPassword($password, $hash);
+        return password_verify($password, $hash) ? 1 : $this->phpass->CheckPassword($password, $hash);
     }
 
     /**
@@ -64,6 +64,6 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
 
     public function hash($password)
     {
-        return $this->phpass->HashPassword($password);
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 }
