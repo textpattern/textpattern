@@ -1367,10 +1367,9 @@ class Skin extends CommonBase implements SkinInterface
                         href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit')))
                         .(!$dev_preview ? '' : ' | '.
                         href(gTxt('preview'),
-                            'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token(),
-                            array('data-verify' => gTxt('are_you_sure'))
+                            'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
                         ).' | '.
-                        href(gTxt('view'),
+                        href(gTxt('active'),
                             'index.php?event=section&step=section_use_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token(),
                             array('data-verify' => gTxt('are_you_sure'))
                         )),
