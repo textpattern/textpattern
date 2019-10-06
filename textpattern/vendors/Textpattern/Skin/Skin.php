@@ -1359,7 +1359,6 @@ class Skin extends CommonBase implements SkinInterface
                 );
 
                 $tdAuthor = txpspecialchars($skin_author);
-
                 empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri);
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
@@ -1368,6 +1367,13 @@ class Skin extends CommonBase implements SkinInterface
                         .(!$dev_preview ? '' : ' | '.
                         href(gTxt('preview'),
                             'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
+                        ).' | '.
+                        href(gTxt('active'),
+                            'index.php?event=section&step=section_use_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token(),
+                            array(
+                                'data-verify' => gTxt('are_you_sure'),
+                                'class' => ${$event.'_section_count'} > 0 ? 'success' : false
+                            )
                         )),
                         '',
                         array(

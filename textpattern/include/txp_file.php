@@ -790,7 +790,7 @@ function file_edit($message = '', $id = '')
                 ).
                 eInput('file').
                 sInput('file_save').
-                hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')),
+                hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
             '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
             n.tag_end('div');
     }
