@@ -14,6 +14,7 @@
 * [Help and Support](#help-and-support)
 * [Development](#development)
 * [Contributing](#contributing)
+* [Thank you](#thank-you)
 * [Legal](#legal)
 
 ![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/readme-device-screens.jpg)
@@ -140,6 +141,9 @@ npm run txp-index
 npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
+## Thank You
+
+We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern) and [BrowserStack](https://www.browserstack.com) for their kind considerations in supporting Textpattern CMS by way of web hosting infrastructure (DigitalOcean) and cross browser testing platform (BrowserStack). Thank you!
 
 ## Legal
 
