@@ -4183,12 +4183,10 @@ function txp_validate($user, $password, $log = true)
         }
     } else {
         // No good password: check 4.3-style passwords.
-        $passwords = array();
-        $passwords[] = "PASSWORD(LOWER('".doSlash($password)."'))";
-        $passwords[] = "PASSWORD('".doSlash($password)."')";
+        $pass = '*'.sha1(sha1($password, true));
 
         $name = safe_field("name", 'txp_users',
-            "name = '$safe_user' AND (pass = ".join(" OR pass = ", $passwords).") AND privs > 0");
+            "name = '$safe_user' AND privs > 0 AND (pass = UPPER('$pass') OR pass = LOWER('$pass'))");
 
         // Old password is good: migrate password to phpass.
         if ($name !== false) {
