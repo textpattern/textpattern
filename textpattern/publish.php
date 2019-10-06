@@ -220,6 +220,11 @@ include_once txpath.'/publish/taghandlers.php';
 
 $trace->stop();
 
+// i18n.
+/*if (txpinterface !== 'css') {
+    load_lang(LANG);
+}*/
+
 // Here come the regular plugins.
 if ($use_plugins) {
     load_plugins();
@@ -248,11 +253,6 @@ extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
-
-// i18n.
-/*if (txpinterface !== 'css') {
-    load_lang(LANG);
-}*/
 
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
