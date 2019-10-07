@@ -666,7 +666,7 @@ function plugin_form($existing_files = array())
             selectInput('filename', $existing_files, null, false, '', 'file-existing').
             fInput('submit', '', gTxt('import')),
         '', '', 'post', 'assign-existing-form', '', 'assign_file') : '').
-        form(
+        br.form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
