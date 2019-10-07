@@ -798,7 +798,7 @@ function image_insert()
         return;
     }
 
-    global $app_mode;
+    global $app_mode, $event;
     $messages = $ids = array();
     $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
@@ -818,6 +818,9 @@ function image_insert()
         }
     }
 
+    // call post-upload plugins with new images $ids
+    empty($ids) or callback_event('images_uploaded', $event, false, $ids);
+
     if ($app_mode == 'async') {
         $response = !empty($ids) ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
@@ -830,7 +833,6 @@ function image_insert()
         // Bail out.
         return;
     }
-
 
     if (is_array($img_result)) {
         list($message, $id) = $img_result;

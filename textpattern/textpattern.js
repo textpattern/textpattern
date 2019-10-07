@@ -1904,8 +1904,8 @@ jQuery.fn.txpFileupload = function (options) {
             }
 
             if(!uploadErrors.length) {
-                data.submit();
                 form.uploadCount++;
+                data.submit();
             }
         },
         /* done: function (e, data) {
@@ -1932,7 +1932,7 @@ jQuery.fn.txpFileupload = function (options) {
             textpattern.Console.announce('uploadEnd');
         }
     }).bind('fileuploadsubmit', function (e, data) {
-        data.formData = $.merge([], options.formData);
+        data.formData = $.merge([{"name" : "fileInputOrder", "value" : form.uploadCount}], options.formData);
         $.merge(data.formData, form.serializeArray());
 
         // Reduce maxChunkSize by extra data size (?)
