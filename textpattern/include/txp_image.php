@@ -818,9 +818,6 @@ function image_insert()
         }
     }
 
-    // call post-upload plugins with new images $ids
-    empty($ids) or callback_event('images_uploaded', $event, false, $ids);
-
     if ($app_mode == 'async') {
         $response = !empty($ids) ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
