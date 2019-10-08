@@ -1894,23 +1894,11 @@ jQuery.fn.txpFileupload = function (options) {
         formData: null,
         fileInput: null,
         dropZone: null,
-        replaceFileInput: false,
+        replaceFileInput: false,/*
         add: function (e, data) {
-            var file = data.files[0], uploadErrors = [];
-
-            if(file['size'] && file['size'] > maxFileSize) {
-                uploadErrors.push('Filesize is too big');
-                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
-            }
-
-            if(!uploadErrors.length) {
-                form.uploadCount++;
-                data.submit();
-            }
-        },
-        /* done: function (e, data) {
-            console.log(data);
-        }, */
+            form.uploadCount++;
+            data.submit();
+        },*/
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data);
         },
@@ -1923,16 +1911,30 @@ jQuery.fn.txpFileupload = function (options) {
     }, options)).off('submit').submit(function (e) {
         e.preventDefault();
         form.uploadCount = 0;
-        form.fileupload('add', {
-            files: fileInput.prop('files')
-        });
-        fileInput.val('');
+        var files = [];
 
-        if (!form.uploadCount) {
+        for (let file of fileInput.prop('files')) {
+            if (file.size <= maxFileSize) {
+                form.uploadCount++;
+                file["order"] = form.uploadCount;
+                files.push(file);
+            } else {
+                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
+            }
+        };
+
+        if (!files.length) {
             textpattern.Console.announce('uploadEnd');
+        } else {
+            form.fileupload('add', {
+                files: files
+            });
         }
+        fileInput.val('');
     }).bind('fileuploadsubmit', function (e, data) {
-        data.formData = $.merge([{"name" : "fileInputOrder", "value" : form.uploadCount}], options.formData);
+        data.formData = $.merge([{
+            "name" : "fileInputOrder", "value" : data.files[0].order+"/"+form.uploadCount
+        }], options.formData);
         $.merge(data.formData, form.serializeArray());
 
         // Reduce maxChunkSize by extra data size (?)
@@ -1942,9 +1944,11 @@ jQuery.fn.txpFileupload = function (options) {
             }).reduce(function(a, b) {return a + b + 2;}, 0)
             : 256;
 
-        form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255));
+        var chunkSize = form.fileupload('option', 'maxChunkSize');
+        form.fileupload('option', 'maxChunkSize', Math.min(maxChunkSize - 8*(res + 255), chunkSize));
     });
-    /* fileInput.on('change', function(e) {
+/*
+    fileInput.on('change', function(e) {
         var singleFileUploads = false;
 
         $(this.files).each(function () {
@@ -1954,7 +1958,7 @@ jQuery.fn.txpFileupload = function (options) {
         });
 
         form.fileupload('option', 'singleFileUploads', singleFileUploads);
-    }) */
+    })*/
     return this;
 };
 
