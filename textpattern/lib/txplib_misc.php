@@ -3377,28 +3377,32 @@ function get_uploaded_file($f, $dest = '')
  *
  * Used for importing existing files on the server to Textpattern's files panel.
  *
+ * @param   string $path    The directory to scan
+ * @param   int    $options glob() options
  * @return  array An array of file paths
  * @package File
  */
 
-function get_filenames()
+function get_filenames($path = null, $options = GLOB_NOSORT)
 {
     global $file_base_path;
 
     $files = array();
+    $file_path = isset($path) ? $path : $file_base_path;
+    $is_file = empty($options & GLOB_ONLYDIR) ? 'is_file' : 'is_dir';
 
-    if (!is_dir($file_base_path) || !is_readable($file_base_path)) {
+    if (!is_dir($file_path) || !is_readable($file_path)) {
         return array();
     }
 
     $cwd = getcwd();
 
-    if (chdir($file_base_path)) {
-        $directory = glob('*', GLOB_NOSORT);
+    if (chdir($file_path)) {
+        $directory = glob('*', $options);
 
         if ($directory) {
             foreach ($directory as $filename) {
-                if (is_file($filename) && is_readable($filename)) {
+                if ($is_file($filename) && is_readable($filename)) {
                     $files[$filename] = $filename;
                 }
             }
@@ -3411,8 +3415,8 @@ function get_filenames()
         }
     }
 
-    if (!$files) {
-        return array();
+    if (!$files || isset($path)) {
+        return $files;
     }
 
     $rs = safe_rows_start("filename", 'txp_file', "1 = 1");

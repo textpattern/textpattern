@@ -923,15 +923,17 @@ function file_insert()
         $newname = sanitizeForFile($name);
         $newpath = build_file_path($file_base_path, $newname);
 
-        if (!$size || $file_max_upload_size < $size) {
-            $messages[] = array(gTxt('file_upload_failed')." $newname - ".upload_get_errormsg($chunked && !$size ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE), E_ERROR);
+        if ($error || !$size && $chunked) {
+            $messages[] = array(gTxt('file_upload_failed', array('{list}' => $newname))." - ".upload_get_errormsg($error ? $error : UPLOAD_ERR_PARTIAL), E_ERROR);
+        } elseif ($file_max_upload_size < $size) {
+            $messages[] = array(gTxt('file_upload_failed', array('{list}' => $newname))." - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE), E_ERROR);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $hash = isset($titles[$i]) ? $i : md5($name);
             $title = isset($titles[$hash]) ? $titles[$hash] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
-                $messages[] = array(gTxt('file_upload_failed').' (db_add)', E_ERROR);
+                $messages[] = array(gTxt('file_upload_failed', array('{list}' => $newname)).' (db_add)', E_ERROR);
             } else {
                 $id = assert_int($id);
 
