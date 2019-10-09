@@ -174,7 +174,7 @@ class Core
         $pf['tempdir']         = find_temp_dir();
         $pf['siteurl']         = $siteurl;
         $pf['theme_name']      = empty($theme_name) ? 'hive' : $theme_name;
-        $pf['blog_mail_uid']   = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
+        $pf['blog_mail_uid']   = empty($_SESSION['email']) ? md5(rand()).'blog@example.com' : $_SESSION['email'];
         $pf['blog_uid']        = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
         $pf['language']        = $language;
         $pf['language_ui']     = $language;
