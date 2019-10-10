@@ -4580,25 +4580,20 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $prefs, $pretext, $trace;
+    global $pretext, $trace;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
     }
 
-    $php_allowed = $prefs['allow_page_php_scripting'];
-
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
             $page = parse($page);
-            $prefs['allow_page_php_scripting'] = false;
             // the function so nice, he ran it twice
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
         }
     }
-
-    $prefs['allow_page_php_scripting'] = $php_allowed;
 
     return $page;
 }

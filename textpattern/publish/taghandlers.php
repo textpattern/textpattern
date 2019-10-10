@@ -29,7 +29,6 @@
 
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
-//    ->register('component')
     ->register('css')
     ->register('image')
     ->register('thumbnail')
@@ -2882,23 +2881,29 @@ function if_logged_in($atts, $thing = null)
 
     return isset($thing) ? parse($thing, $x) : $x;
 }
-
 // -------------------------------------------------------------
 
-function body()
-{
+function txp_sandbox($atts = array(), $thing = null, $parse = true) {
+    static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body;
-    static $stack = array(), $depth = null;
+
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
-    assert_article();
-    $id = $thisarticle['thisid'];
+    extract($atts + array('field' => ''));
+    unset($atts['field']);
+
+    if (empty($id)) {
+        assert_article();
+        $id = $thisarticle['thisid'];
+    } elseif (!isset($articles[$id])) {
+        return;
+    }
 
     if (!isset($stack[$id])) {
         $stack[$id] = 1;
     } elseif ($stack[$id] >= $depth) {
         trigger_error(gTxt('form_circular_reference', array(
-            '{name}' => '<txp:body id="'.$id.'"/>'
+            '{name}' => '<txp:article id="'.$id.'"/>'
         )));
 
         return '';
@@ -2906,13 +2911,47 @@ function body()
         $stack[$id]++;
     }
 
-    $was_article_body = $is_article_body;
-    $is_article_body = 1;
-    $out = parse($thisarticle['body']);
-    $is_article_body = $was_article_body;
+    if ($parse) {
+        $oldarticle = $thisarticle;
+        isset($articles[$id]) and $thisarticle = $articles[$id];
+        $was_article_body = $is_article_body;
+        !$field or $is_article_body = 1;
+
+        $thing = parse(isset($thing) ? $thing : $thisarticle[$field]);
+
+        $is_article_body = $was_article_body;
+        $thisarticle = $oldarticle;
+    }
+
     $stack[$id]--;
 
-    return $out;
+    if (!preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+        return $thing;
+    }
+
+    if (!isset($uniqid)) {
+        $uniqid = strtr(uniqid('sandbox_', true), '.', '_');
+        Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
+    }
+    
+    if ($field) {
+        $tag = $field;
+        unset($atts['id']);
+    } else {
+        $tag = $uniqid;
+        $atts['id'] = $id;
+    }
+
+    isset($articles[$id]) or $articles[$id] = $thisarticle;
+
+    return "<txp:$tag".($atts ? join_atts($atts) : '').">{$thing}</txp:$tag>";
+}
+
+// -------------------------------------------------------------
+
+function body($atts = array(), $thing = null)
+{
+    return txp_sandbox(array('field' => 'body'), $thing);
 }
 
 // -------------------------------------------------------------
@@ -2939,34 +2978,9 @@ function title($atts)
 
 // -------------------------------------------------------------
 
-function excerpt()
+function excerpt($atts = array(), $thing = null)
 {
-    global $thisarticle, $is_article_body;
-    static $stack = array(), $depth = null;
-    isset($depth) or $depth = get_pref('form_circular_depth', 15);
-
-    assert_article();
-    $id = $thisarticle['thisid'];
-
-    if (!isset($stack[$id])) {
-        $stack[$id] = 1;
-    } elseif ($stack[$id] >= $depth) {
-        trigger_error(gTxt('form_circular_reference', array(
-            '{name}' => '<txp:excerpt id="'.$id.'"/>'
-        )));
-
-        return '';
-    } else {
-        $stack[$id]++;
-    }
-
-    $was_article_body = $is_article_body;
-    $is_article_body = 1;
-    $out = parse($thisarticle['excerpt']);
-    $is_article_body = $was_article_body;
-    $stack[$id]--;
-
-    return $out;
+    return txp_sandbox(array('field' => 'excerpt'), $thing);
 }
 
 // -------------------------------------------------------------
@@ -4383,7 +4397,7 @@ function txp_header($atts)
 
 function custom_field($atts)
 {
-    global $is_article_body, $thisarticle;
+    global $thisarticle;
 
     assert_article();
 
@@ -4407,12 +4421,7 @@ function custom_field($atts)
         $out = $default;
     }
 
-    $was_article_body = $is_article_body;
-    $is_article_body = 1;
-    $out = ($escape === null ? txpspecialchars($out) : parse($out));
-    $is_article_body = $was_article_body;
-
-    return $out;
+    return txp_sandbox(array('field' => 'custom_field', 'name' => $name), $out);
 }
 
 // -------------------------------------------------------------
