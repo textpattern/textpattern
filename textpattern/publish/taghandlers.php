@@ -4395,7 +4395,7 @@ function txp_header($atts)
 
 // -------------------------------------------------------------
 
-function custom_field($atts)
+function custom_field($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4415,13 +4415,13 @@ function custom_field($atts)
         return '';
     }
 
-    if ($thisarticle[$name] !== '') {
-        $out = $thisarticle[$name];
-    } else {
-        $out = $default;
+    if (!isset($thing)) {
+        $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
     }
 
-    return txp_sandbox(array('field' => 'custom_field', 'name' => $name), $out);
+    $thing = ($escape === null ? txpspecialchars($thing) : parse($thing));
+
+    return txp_sandbox(array('field' => 'custom_field') + $atts, $thing, false);
 }
 
 // -------------------------------------------------------------
