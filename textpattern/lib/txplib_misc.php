@@ -1091,7 +1091,7 @@ function gps($thing, $default = '')
     } elseif (isset($_POST[$thing])) {
         $out = $_POST[$thing];
     } else {
-        $out = $default;
+        return $default;
     }
 
     $out = doArray($out, 'deNull');

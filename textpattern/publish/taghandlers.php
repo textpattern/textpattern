@@ -5203,7 +5203,7 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $prefs, $txp_parsed, $txp_else, $txp_tag, $txp_atts;
+    global $prefs, $txp_tag, $txp_atts;
     static $xpath = null, $functions = null;
 
     unset($txp_atts['evaluate']);
