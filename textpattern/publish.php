@@ -1005,11 +1005,11 @@ function doArticles($atts, $iscustom, $thing = null)
             if ($count <= $last) {
                 // Article form preview.
                 if (txpinterface === 'admin' && ps('Form')) {
-                    $chunk .= parse(gps('Form'));
+                    $chunk .= txp_sandbox(array(), ps('Form'));
                 } elseif ($allowoverride && $a['override_form']) {
-                    $chunk .= parse_form($a['override_form']);
+                    $chunk .= txp_sandbox(array(), parse_form($a['override_form']), false);
                 } else {
-                    $chunk .= $thing ? parse($thing) : parse_form($fname);
+                    $chunk .= $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
                 }
             }
 

@@ -1914,12 +1914,12 @@ jQuery.fn.txpFileupload = function (options) {
         var files = [];
 
         for (let file of fileInput.prop('files')) {
-            if (file.size <= maxFileSize) {
+            if (file.size > maxFileSize) {
+                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
+            } else {
                 form.uploadCount++;
                 file["order"] = form.uploadCount;
                 files.push(file);
-            } else {
-                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
             }
         };
 
