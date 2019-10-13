@@ -14,6 +14,7 @@
 * [Help and Support](#help-and-support)
 * [Development](#development)
 * [Contributing](#contributing)
+* [Thank you](#thank-you)
 * [Legal](#legal)
 
 ![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/readme-device-screens.jpg)
@@ -67,7 +68,7 @@ Note that minimum and/or recommended versions listed may change multiple times d
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
 | PHP    | 5.5 | [vendor supported](https://php.net/supported-versions.php)<br />(7.2 or 7.3) |
-| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.7 or 8.0) |
+| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | 1.10 | mainline (1.17) or stable (1.16) |
 
@@ -140,6 +141,9 @@ npm run txp-index
 npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
+## Thank You
+
+We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern) and [BrowserStack](https://www.browserstack.com) for their kind considerations in supporting Textpattern CMS by way of web hosting infrastructure (DigitalOcean) and cross browser testing platform (BrowserStack). Thank you!
 
 ## Legal
 

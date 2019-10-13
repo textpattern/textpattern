@@ -220,6 +220,11 @@ include_once txpath.'/publish/taghandlers.php';
 
 $trace->stop();
 
+// i18n.
+/*if (txpinterface !== 'css') {
+    load_lang(LANG);
+}*/
+
 // Here come the regular plugins.
 if ($use_plugins) {
     load_plugins();
@@ -232,11 +237,6 @@ extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
-
-// i18n.
-/*if (txpinterface !== 'css') {
-    load_lang(LANG);
-}*/
 
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
@@ -1008,11 +1008,11 @@ function doArticles($atts, $iscustom, $thing = null)
             if ($count <= $last) {
                 // Article form preview.
                 if (txpinterface === 'admin' && ps('Form')) {
-                    $chunk .= parse(gps('Form'));
+                    $chunk .= txp_sandbox(array(), ps('Form'));
                 } elseif ($allowoverride && $a['override_form']) {
-                    $chunk .= parse_form($a['override_form']);
+                    $chunk .= txp_sandbox(array(), parse_form($a['override_form']), false);
                 } else {
-                    $chunk .= $thing ? parse($thing) : parse_form($fname);
+                    $chunk .= $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
                 }
             }
 

@@ -1,4 +1,4 @@
-Textpattern CMS 4.8.0
+Textpattern CMS 4.8.0-dev
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
@@ -31,12 +31,13 @@ system. Textpattern is free and open source.
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
-  as should the /textpattern/, /rpc/ and /themes/ directories.
+  as should the /textpattern/, /files/, /images/, /rpc/ and /themes/
+  directories.
 * If you are running Textpattern on an Apache web server, ensure the top-level
   .htaccess file is transferred to your site. The file is hidden by default on
-  some operating systems, including macOS. Most FTP clients and IDEs have an
-  option to show these hidden files. Otherwise, you can temporarily show hidden
-  files in macOS using Terminal.app - follow these instructions:
+  some operating systems, including macOS. FTP clients and IDEs typically have
+  an option to show these hidden files. Otherwise, you can temporarily show
+  hidden files in macOS using Terminal.app - follow these instructions:
     https://textpattern.com/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
@@ -119,7 +120,7 @@ system. Textpattern is free and open source.
 
 * There are additional resources for the default front-side theme, such as
   Sass preprocessor files, available at:
-    https://github.com/textpattern/textpattern-default-theme/tree/master/
+    https://github.com/textpattern/textpattern-default-theme/
 
 
 == Contributing ==

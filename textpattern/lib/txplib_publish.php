@@ -768,7 +768,7 @@ function chopUrl($req)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $pretext, $trace;
+    global $pretext, $trace, $thisarticle;
     static $out = array();
 
     if ($atts === false) {
@@ -902,7 +902,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // ID
     $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
     $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
         .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
@@ -933,8 +933,16 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($customFields) {
         foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField] === true ? parse('<txp:custom_field name="'.$cField.'" escape="" />') : $atts[$cField];
+            if (isset($atts[$cField])) switch ($atts[$cField]) {
+                case true:
+                    if (!empty($thisarticle)) {
+                        $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
+                    } elseif (($val = gps($cField, false)) !== false) {
+                        $customPairs[$cField] = $val;
+                    }
+                    break;
+                default:
+                    $customPairs[$cField] = $atts[$cField];
             }
         }
 
