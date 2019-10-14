@@ -278,7 +278,7 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
-    static $url = null, $out = null;
+    static $url = array(), $out = null;
 
     if (!isset($out)) {
         // Set messy variables.
@@ -382,6 +382,8 @@ function preText($s, $prefs)
                     break;
 
                 default:
+                    for ($n = 0; isset(${'u'.($n+1)}); $n++);
+                    $un = ${'u'.$n};
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
                         case 'section_id_title':
@@ -391,6 +393,16 @@ function preText($s, $prefs)
                                 $out['id'] = $u2;
                             } else {
                                 $title = empty($u2) ? null : $u2;
+                            }
+
+                            break;
+
+                        case 'section_category_title':
+                            $out['s'] = $u1;
+                            $title = empty($un) ? null : $un;
+
+                            if (!isset($title) && $n > 2) {
+                                $out['c'] = ${'u'.($n-1)};
                             }
 
                             break;

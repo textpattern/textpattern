@@ -1303,6 +1303,44 @@ function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
 }
 
 /**
+ * Gets a target/path/up/to/root array.
+ *
+ * This function is used by categories.
+ *
+ * @param  string $target The target
+ * @param  string $type   The category type
+ * @param  string $tbl    The table
+ * @param  string $root   The root (excluded)
+ * @return array
+ */
+
+function getRootPath($target, $type = 'article', $tbl = 'txp_category', $root = 'root')
+{
+    static $cache = array(
+        'article' => array(),
+        'file'    => array(),
+        'image'   => array(),
+        'link'    => array()
+    );
+    $out = array();
+
+    if (!isset($cache[$type])) {
+        return $out;
+    } elseif (empty($cache[$type])) {
+        foreach(safe_rows('id, name, parent, title, description', $tbl, "type = '".doSlash($type)."'") as $row) {
+            $cache[$type][$row['name']] = $row;
+        }
+    }
+
+    while ($target !== $root && isset($cache[$type][$target])) {
+        $out[] = $cache[$type][$target];
+        $target = $cache[$type][$target]['parent'];
+    }
+
+    return $out;
+}
+
+/**
  * Gets a tree path up to a target.
  *
  * This function is used by categories.

@@ -5654,6 +5654,11 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
+            if (!empty($keys['c']) && $permlink_mode == 'section_category_title') {
+                $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
+                $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
+                unset($keys['c']);
+            }
         } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
@@ -5665,6 +5670,7 @@ function pagelinkurl($parts, $inherit = array())
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c'])) {
+            $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
             unset($keys['c'], $keys['context']);
@@ -5703,7 +5709,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
     );
@@ -5745,6 +5751,8 @@ function permlinkurl($article_array)
         'title'     => null,
         'url_title' => null,
         'section'   => null,
+        'category1' => null,
+        'category2' => null,
         'posted'    => null,
         'uposted'   => null,
         'expires'   => null,
@@ -5802,8 +5810,32 @@ function permlinkurl($article_array)
         case 'section_title':
             $out = hu."$section/$url_title";
             break;
+        case 'section_category_title':
+            $out = hu.$section.'/';
+            if (empty($category1)) {
+                if (!empty($category2)) {
+                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
+                }
+            } elseif (empty($category2)) {
+                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
+            } else {
+                $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
+                if (in_array($category2, $c1_path)) {
+                    $out .= implode('/', $c1_path).'/';
+                } else {
+                    $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
+                    if (in_array($category1, $c2_path)) {
+                        $out .= implode('/', $c2_path).'/';
+                    } else {
+                        $c0_path = array_intersect($c1_path, $c2_path);
+                        $out .= implode('/', $c0_path).'/'."$category1+$category2/";
+                    }
+                }
+            }
+            $out .= $url_title;
+            break;
         case 'title_only':
-            $out = hu."$url_title";
+            $out = hu.$url_title;
             break;
         case 'messy':
             $out = hu."index.php?id=$thisid";

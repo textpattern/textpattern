@@ -1072,8 +1072,8 @@ function recent_comments($atts, $thing = null)
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
     $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires IS NULL) ";
 
-    $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
-            t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
+    $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time, t.ID AS thisid,
+            UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.Category1, t.Category2 t.url_title
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
         WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
         ORDER BY ".sanitizeForSort($sort)."
@@ -4026,7 +4026,6 @@ function lang()
 function breadcrumb($atts, $thing = null)
 {
     global $c, $s, $sitename, $thiscategory, $context;
-    static $cache = array();
 
     extract(lAtts(array(
         'type'      => $context,
@@ -4053,12 +4052,13 @@ function breadcrumb($atts, $thing = null)
     $content = array();
     $label = txpspecialchars($label);
     $type = $type === true ? $context : validContext($type);
+    $section != 'default' or $section = '';
 
     if ($linked && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
     }
 
-    if (!empty($section) && $section != 'default') {
+    if (!empty($section)) {
         $section_title = ($title) ? fetch_section_title($section) : $section;
         $section_title_html = escape_title($section_title);
         $content[] = ($linked)
@@ -4068,12 +4068,8 @@ function breadcrumb($atts, $thing = null)
 
     if (!$category) {
         $catpath = array();
-    } elseif (isset($cache[$type.$category])) {
-        $catpath = $cache[$type.$category];
     } else {
-        $catpath = getTreePath($category, $type);
-        array_shift($catpath);
-        $cache[$type.$category] = $catpath;
+        $catpath = array_reverse(getRootPath($category, $type));
     }
 
     if ($limit || $offset) {
@@ -4089,6 +4085,7 @@ function breadcrumb($atts, $thing = null)
             ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array(
                 'c'       => $thiscategory['name'],
                 'context' => $type,
+                's'       => $section
             )).'"')
             : $category_title_html;
     }
@@ -4151,7 +4148,6 @@ function if_search_results($atts, $thing = null)
 function if_category($atts, $thing = null)
 {
     global $c, $context, $thiscategory;
-    static $cache = array();
 
     extract(lAtts(array(
         'category' => false,
@@ -4180,15 +4176,7 @@ function if_category($atts, $thing = null)
     }
 
     if ($x && $parent && $category) {
-        if (!isset($cache[$theType.$category])) {
-            $names = array();
-            foreach (getTreePath($category, $theType) as $i => $cat) {
-                $i and $names[] = $cat['name'];
-            }
-            $cache[$theType.$category] = array_reverse($names);
-        }
-
-        $path = $cache[$theType.$category];
+        $path = array_column(getRootPath($category, $theType), 'name');
 
         if (!$parentname) {
             $name = $parent;
@@ -4281,7 +4269,7 @@ function if_section($atts, $thing = null)
     extract(lAtts(array('name' => false, 'section' => false), $atts));
 
     switch ($section) {
-        case true: $section = isset($thissection) ? $thissection : $s; break;
+        case true: $section = isset($thissection) ? $thissection['name'] : $s; break;
         case false: $section = $s; break;
     }
 
