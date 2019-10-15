@@ -1247,54 +1247,69 @@ function getCount($table, $where, $debug = false)
  *
  * This function is used by categories.
  *
- * @param  string $root  The root
+ * @param  string $root  The roots
  * @param  string $type  The type
  * @param  string $where The where clause
  * @param  string $tbl   The table
  * @return array
  */
 
-function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
+function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_category', $depth = true)
 {
-    $root = doSlash($root);
-    $type = doSlash($type);
+    if (is_array($root)) {
+        $names = true;
+    } else {
+        $root = do_list_unique($root);
+    }
 
-    $rs = safe_row(
-        "lft AS l, rgt AS r",
-        $tbl,
-        "name = '$root' AND type = '$type'"
-    );
-
-    if (!$rs) {
+    if (empty($root)) {
         return array();
     }
 
-    extract($rs);
+    $type = doSlash($type);
+    $out = $border = array();
 
-    $out = array();
+    $rows = safe_rows(
+        "lft AS l, rgt AS r",
+        $tbl,
+        "name IN ('".implode("','", doSlash($root))."') AND type = '$type'"
+    );
+
+    foreach ($rows as $rs) {
+        extract($rs);
+        $border[] = $depth ? "lft BETWEEN $l AND $r" : "lft=$l AND rgt=$r";
+    }
+
+    $border = implode(' OR ', $border);
     $right = array();
 
-    $rs = safe_rows_start(
-        "id, name, lft, rgt, parent, title",
+    $rs = $border ? safe_rows_start(
+        isset($names) ? "id, name, lft, rgt" : "id, name, lft, rgt, parent, title",
         $tbl,
-        "lft BETWEEN $l AND $r AND type = '$type' AND name != 'root' AND $where ORDER BY lft ASC"
-    );
+        "($border) AND type = '$type' AND name != 'root' AND $where ORDER BY lft ASC"
+    ) : null;
 
     while ($rs and $row = nextRow($rs)) {
         extract($row);
 
-        while (count($right) > 0 && $right[count($right) - 1] < $rgt) {
+        while (($level = count($right)) > 0 && $right[count($right) - 1] < $rgt) {
             array_pop($right);
         }
 
-        $out[] = array(
-            'id'       => $id,
-            'name'     => $name,
-            'title'    => $title,
-            'level'    => count($right),
-            'children' => ($rgt - $lft - 1) / 2,
-            'parent'   => $parent,
-        );
+        if ($depth === true || $level <= $depth) {
+            if (isset($names)) {
+                $out[$id] = $name;
+            } else {
+                $out[] = array(
+                    'id'       => $id,
+                    'name'     => $name,
+                    'title'    => $title,
+                    'level'    => $level,
+                    'children' => ($rgt - $lft - 1) / 2,
+                    'parent'   => $parent,
+                );
+            }
+        }
 
         $right[] = $rgt;
     }

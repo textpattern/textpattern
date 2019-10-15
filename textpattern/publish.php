@@ -480,9 +480,13 @@ function preText($s, $prefs)
 
     // Existing category in messy or clean URL?
     if (!empty($out['c'])) {
-        if (!ckCat($out['context'], $out['c'])) {
+        global $thiscategory;
+        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
             $is_404 = true;
             $out['c'] = '';
+            $thiscategory = null;
+        } else {
+            $thiscategory += array('is_first' => true, 'is_last' => true);
         }
     }
 
@@ -557,7 +561,8 @@ function preText($s, $prefs)
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
         } elseif (!empty($out['s']) && $out['s'] !== 'default') {
-            $out['s'] = (ckEx('section', $out['s'])) ? $out['s'] : '';
+            global $thissection;
+            $out['s'] = ($thissection = ckEx('section', array('name' => $out['s'], 'title' => null, 'description' => null))) ? $out['s'] : '';
             $is_404 = $is_404 || empty($out['s']);
         }
     }

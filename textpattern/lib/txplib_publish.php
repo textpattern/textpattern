@@ -596,7 +596,17 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
-    return safe_field("name", 'txp_'.$table, "name = '".doSlash($val)."' LIMIT 1", $debug);
+    if (is_array($val)) {
+        $fields = implode(',', array_keys($val));
+        $where = join_qs(quote_list(array_filter($val)), ' AND ');
+
+        return safe_row($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+    } else {
+        $fields = 'name';
+        $where = "name = '".doSlash($val)."'";
+
+        return safe_field($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+    }
 }
 
 /**
@@ -605,19 +615,19 @@ function ckEx($table, $val, $debug = false)
  * @param   string $type  The category type, either 'article', 'file', 'link', 'image'
  * @param   string $val   The category name to look for
  * @param   bool   $debug Dump the query
- * @return  bool|string The category's name, or FALSE when it doesn't exist
+ * @return  bool|array The category's data, or FALSE when it doesn't exist
  * @package Filter
  * @see     ckEx()
  * @example
  * if ($r = ckCat('article', 'development'))
  * {
- *     echo "Category '{$r}' exists.";
+ *     echo "Category {$r['name']} exists.";
  * }
  */
 
 function ckCat($type, $val, $debug = false)
 {
-    return safe_field("name", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
+    return safe_row("name, title, description, type", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
 }
 
 /**
@@ -800,6 +810,7 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
+        'depth'         => 0,
     );
 
     if ($iscustom) {
@@ -868,21 +879,27 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = do_list_unique($match);
+    $depth === true or $depth = intval($depth);
     $category !== true or $category = parse('<txp:category />');
-    $category  = join("','", doSlash(do_list_unique($category)));
+    $category  = do_list_unique($category);
     $categories = array();
 
-    if (in_array('Category1', $match)) {
-        $categories[] = "Category1 IN ('$category')";
-    }
+    if ($category = getTree($category, 'article', '1', 'txp_category', $depth)) {
+        $category  = join("','", doSlash($category));
 
-    if (in_array('Category2', $match)) {
-        $categories[] = "Category2 IN ('$category')";
+        if (in_array('Category1', $match)) {
+            $categories[] = "Category1 IN ('$category')";
+        }
+
+        if (in_array('Category2', $match)) {
+            $categories[] = "Category2 IN ('$category')";
+        }
+
+        $categories = join(" OR ", $categories);
     }
 
     $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
-    $categories = join(" OR ", $categories);
-    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
+    $category  = !$categories  ? '' : " AND $not($categories)";
 
     // Section
     // searchall=0 can be used to show search results for the current
