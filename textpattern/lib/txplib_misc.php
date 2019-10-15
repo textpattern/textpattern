@@ -5654,8 +5654,10 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-            if (!empty($keys['c']) && $permlink_mode == 'section_category_title') {
-                $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
+            if (!empty($keys['c']) && ($permlink_mode == 'section_category_title' || $permlink_mode == 'breadcrumb_title')) {
+                $catpath = $permlink_mode == 'breadcrumb_title' ?
+                    array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
+                    array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
             }
@@ -5811,23 +5813,25 @@ function permlinkurl($article_array)
             $out = hu."$section/$url_title";
             break;
         case 'section_category_title':
+        case 'breadcrumb_title':
+            $breadcrumb = ($permlink_mode == 'breadcrumb_title');
             $out = hu.$section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
-                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
+                    $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category2), 'name'))) : $category2).'/';
                 }
             } elseif (empty($category2)) {
-                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
+                $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category1), 'name'))) : $category1).'/';
             } else {
-                $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
-                if (in_array($category2, $c1_path)) {
-                    $out .= implode('/', $c1_path).'/';
+                $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
+                if (in_array($category1, $c2_path)) {
+                    $out .= ($breadcrumb ? implode('/', $c2_path) : "$category1/$category2").'/';
                 } else {
-                    $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
-                    if (in_array($category1, $c2_path)) {
-                        $out .= implode('/', $c2_path).'/';
+                    $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
+                    if (in_array($category2, $c1_path)) {
+                        $out .= ($breadcrumb ? implode('/', $c1_path) : "$category2/$category1").'/';
                     } else {
-                        $c0_path = array_intersect($c1_path, $c2_path);
+                        $c0_path = $breadcrumb ? array_intersect($c1_path, $c2_path) : null;
                         $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
                     }
                 }

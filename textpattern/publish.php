@@ -398,6 +398,7 @@ function preText($s, $prefs)
                             break;
 
                         case 'section_category_title':
+                        case 'breadcrumb_title':
                             $out['s'] = $u1;
                             $title = empty($un) ? null : $un;
 
