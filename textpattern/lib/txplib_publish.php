@@ -810,7 +810,6 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-        'depth'         => 0,
     );
 
     if ($iscustom) {
@@ -838,6 +837,7 @@ function filterAtts($atts = null, $iscustom = null)
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
+        'depth'         => 0,
         'id'            => '',
         'exclude'       => '',
         'excerpted'     => ''
@@ -879,7 +879,6 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = do_list_unique($match);
-    $depth === true or $depth = intval($depth);
     $category !== true or $category = parse('<txp:category />');
     $category  = do_list_unique($category);
     $categories = array();

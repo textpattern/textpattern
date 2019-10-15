@@ -478,18 +478,6 @@ function preText($s, $prefs)
         !empty($title) or $out['month'] = $month;
     }
 
-    // Existing category in messy or clean URL?
-    if (!empty($out['c'])) {
-        global $thiscategory;
-        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
-            $is_404 = true;
-            $out['c'] = '';
-            $thiscategory = null;
-        } else {
-            $thiscategory += array('is_first' => true, 'is_last' => true);
-        }
-    }
-
     // Resolve AuthorID from Authorname.
     if ($out['author']) {
         $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
@@ -564,6 +552,19 @@ function preText($s, $prefs)
             global $thissection;
             $out['s'] = ($thissection = ckEx('section', array('name' => $out['s'], 'title' => null, 'description' => null))) ? $out['s'] : '';
             $is_404 = $is_404 || empty($out['s']);
+        }
+    }
+
+    // Existing category in messy or clean URL?
+    if (!empty($out['c'])) {
+        global $thiscategory;
+
+        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
+            $is_404 = true;
+            $out['c'] = '';
+            $thiscategory = null;
+        } else {
+            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
         }
     }
 

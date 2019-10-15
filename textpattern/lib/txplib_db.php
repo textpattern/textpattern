@@ -1267,6 +1267,7 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
     }
 
     $type = doSlash($type);
+    $depth === true or $depth = intval($depth);
     $out = $border = array();
 
     $rows = safe_rows(
