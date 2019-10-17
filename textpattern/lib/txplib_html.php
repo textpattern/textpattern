@@ -1783,6 +1783,8 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
         if ($break == 'br' || $break == 'hr') {
             $break = "<$break $breakatts/>".n;
+        } elseif (!isset($txp_atts['trim']) || $txp_atts['trim'] === true) {
+            $list = array_map('trim', $list);
         }
 
         $content = join($break, $list);
