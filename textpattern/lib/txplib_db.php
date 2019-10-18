@@ -1267,7 +1267,7 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
     }
 
     $type = doSlash($type);
-    $depth === true or $depth = intval($depth);
+    $depth === true or list($min, $max) = array_map('intval', array_slice(explode(',', '0,'.$depth, 3), -2, 2));
     $out = $border = array();
 
     $rows = safe_rows(
@@ -1297,7 +1297,7 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
             array_pop($right);
         }
 
-        if ($depth === true || $level <= $depth) {
+        if ($depth === true || $level >= $min && $level <= $max) {
             if (isset($names)) {
                 $out[$id] = $name;
             } else {

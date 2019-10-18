@@ -2616,8 +2616,7 @@ function splat($text)
     $sha = sha1($text);
 
     if (!isset($stack[$sha])) {
-        $stack[$sha] = array();
-        $parse[$sha] = array();
+        $stack[$sha] = $parse[$sha] = array();
 
         if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
@@ -2663,19 +2662,13 @@ function splat($text)
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
             $atts[$p] = parse($atts[$p], true, false);
+            isset($txp_atts[$p]) and $txp_atts[$p] = $atts[$p];
             $trace->stop('[/attribute]');
-
-            if (isset($global_atts[$sha][$p])) {
-                $txp_atts[$p] = $atts[$p];
-            }
         }
     } else {
         foreach ($parse[$sha] as $p) {
             $atts[$p] = parse($atts[$p], true, false);
-
-            if (isset($global_atts[$sha][$p])) {
-                $txp_atts[$p] = $atts[$p];
-            }
+            isset($txp_atts[$p]) and $txp_atts[$p] = $atts[$p];
         }
     }
 
@@ -5280,27 +5273,30 @@ function getCustomFields()
 function buildCustomSql($custom, $pairs, $exclude = array())
 {
     if ($pairs) {
-        $pairs = doSlash($pairs);
-
         foreach ($pairs as $k => $v) {
             $no = array_search($k, $custom);
 
             if ($no !== false) {
                 $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
-                list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
-                if (!isset($to)) {
-                    $out[] = "AND $not custom_".$no." LIKE '$v'";
-                } elseif ($from !== '') {
-                    $out[] = $to === '' ? "AND $not custom_".$no.">='$from'" :  "AND $not custom_".$no." BETWEEN '$from' and '$to'";
-                } elseif ($to !== '') {
-                    $out[] = "AND $not custom_".$no."<='$to'";
+                if ($v === true) {
+                    $out[] = "$not custom_{$no}";
+                } else {
+                    list($from, $to) = explode('%%', doSlash($v), 2) + array(null, null);
+
+                    if (!isset($to)) {
+                        $out[] = "$not custom_{$no} LIKE '$from'";
+                    } elseif ($from !== '') {
+                        $out[] = $to === '' ? "$not custom_{$no} >= '$from'" :  "$not custom_{$no} BETWEEN '$from' AND '$to'";
+                    } elseif ($to !== '') {
+                        $out[] = "$not custom_{$no} <= '$to'";
+                    }
                 }
             }
         }
     }
 
-    return !empty($out) ? ' '.join(' ', $out).' ' : false;
+    return !empty($out) ? ' AND '.join(' AND ', $out).' ' : false;
 }
 
 /**
