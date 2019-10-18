@@ -436,26 +436,6 @@ function parse($thing, $condition = true, $not = true)
 }
 
 /**
- * Guesstimate whether a given function name may be a valid tag handler.
- *
- * @param   string $tag function name
- * @return  bool FALSE if the function name is not a valid tag handler
- * @package TagParser
- */
-
-function maybe_tag($tag)
-{
-    static $tags = null;
-
-    if ($tags === null) {
-        $tags = get_defined_functions();
-        $tags = array_flip($tags['user']);
-    }
-
-    return isset($tags[$tag]);
-}
-
-/**
  * Parse a tag for attributes and hand over to the tag handler function.
  *
  * @param  string      $tag   The tag name
@@ -517,13 +497,8 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($out === false) {
-        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
-            trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_NOTICE);
-            $out = $registry->register($tag)->process($tag, $split, $thing);
-        } else {
-            trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
-            $out = '';
-        }
+        trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
+        $out = '';
     }
 
     if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
@@ -949,16 +924,16 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($customFields) {
         foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) switch ($atts[$cField]) {
-                case true:
+            if (isset($atts[$cField])) {
+                if ($atts[$cField] === true) {
                     if (!empty($thisarticle)) {
                         $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
                     } elseif (($val = gps($cField, false)) !== false) {
                         $customPairs[$cField] = $val;
                     }
-                    break;
-                default:
+                } else {
                     $customPairs[$cField] = $atts[$cField];
+                }
             }
         }
 
