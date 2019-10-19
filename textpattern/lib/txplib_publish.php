@@ -925,14 +925,12 @@ function filterAtts($atts = null, $iscustom = null)
     if ($customFields) {
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
-                if ($atts[$cField] === true) {
-                    if (!empty($thisarticle)) {
-                        $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
-                    } elseif (($val = gps($cField, false)) !== false) {
-                        $customPairs[$cField] = $val;
-                    }
-                } else {
-                    $customPairs[$cField] = $atts[$cField];
+                $customPairs[$cField] = $atts[$cField];
+            } elseif (in_array($cField, $match)) {
+                if (!empty($thisarticle)) {
+                    $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
+                } elseif (($val = gps($cField, false)) !== false) {
+                    $customPairs[$cField] = $val;
                 }
             }
         }
