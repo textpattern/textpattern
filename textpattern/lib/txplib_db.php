@@ -1266,8 +1266,11 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
         return array();
     }
 
+    if ($depth && $depth !== true) {
+        $levels = array_map('intval', do_list($depth, array(',', '-')));
+    }
+
     $type = doSlash($type);
-    $depth === true or list($min, $max) = array_map('intval', array_slice(explode(',', '0,'.$depth, 3), -2, 2));
     $out = $border = array();
 
     $rows = safe_rows(
@@ -1297,7 +1300,7 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
             array_pop($right);
         }
 
-        if ($depth === true || $level >= $min && $level <= $max) {
+        if (!isset($levels) || in_array($level, $levels)) {
             if (isset($names)) {
                 $out[$id] = $name;
             } else {
