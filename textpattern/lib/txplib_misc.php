@@ -5273,23 +5273,32 @@ function getCustomFields()
 function buildCustomSql($custom, $pairs, $exclude = array())
 {
     if ($pairs) {
-        foreach ($pairs as $k => $v) {
+        foreach ($pairs as $k => $val) {
             $no = array_search($k, $custom);
 
             if ($no !== false) {
-                $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
+                $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT ' : '';
 
-                if ($v === true) {
-                    $out[] = "$not custom_{$no}";
+                if ($val === true) {
+                    $out[] = "{$not}custom_{$no}";
                 } else {
-                    list($from, $to) = explode('%%', doSlash($v), 2) + array(null, null);
+                    $val = doSlash($val);
+                    $parts = array();
 
-                    if (!isset($to)) {
-                        $out[] = "$not custom_{$no} LIKE '$from'";
-                    } elseif ($from !== '') {
-                        $out[] = $to === '' ? "$not custom_{$no} >= '$from'" :  "$not custom_{$no} BETWEEN '$from' AND '$to'";
-                    } elseif ($to !== '') {
-                        $out[] = "$not custom_{$no} <= '$to'";
+                    foreach ((array)$val as $v) {
+                        list($from, $to) = explode('%%', $v, 2) + array(null, null);
+
+                        if (!isset($to)) {
+                            $parts[] = "{$not}custom_{$no} LIKE '$from'";
+                        } elseif ($from !== '') {
+                            $parts[] = $to === '' ? "{$not}custom_{$no} >= '$from'" :  "{$not}custom_{$no} BETWEEN '$from' AND '$to'";
+                        } elseif ($to !== '') {
+                            $parts[] = "{$not}custom_{$no} <= '$to'";
+                        }
+                    }
+
+                    if ($parts) {
+                        $out[] = '('.join(' OR ', $parts).')';
                     }
                 }
             }
