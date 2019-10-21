@@ -183,6 +183,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_custom')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
+    ->register('txp_item', 'item')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_email_input')
@@ -1800,98 +1801,91 @@ function link_to_home($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function newer($atts, $thing = null)
+function txp_pager($atts, $thing = null, $newer = true)
 {
-    global $thispage, $is_article_list;
+    global $thispage, $is_article_list, $txp_item;
+    static $shown = array();
 
-    if (empty($thispage)) {
+    if (empty($thispage) || empty($thispage['numPages'])) {
         return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
+        'link'       => true,
         'escape'     => 'html',
         'rel'        => '',
         'shift'      => null,
+        'break'      => '',
     ), $atts));
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
-    $nextpg = $shift === '*' ? min(1, $pg - 1) : ($pg - (isset($shift) ? intval($shift) : 1));
+    $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
+    $context = get_context();
+    $out = array();
 
-    if ($nextpg > 0 && $nextpg <= $numPages) {
-        $url = pagelinkurl(array(
-            'pg' => $nextpg == 1 && !isset($shift) ? '' : $nextpg
-        ) + get_context());
-
-        if ($thing) {
-            if ($escape == 'html') {
-                $title = escape_title($title);
-            } elseif ($escape) {
-                $title = txp_escape(array('escape' => $escape), $title);
-            }
-
-            return href(
-                parse($thing),
-                $url,
-                (empty($title) ? '' : ' title="'.$title.'"').
-                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
-            );
+    if (!isset($shift)){
+        $pages = array(1);
+    } elseif ($shift === true) {
+        $pages = array(-1);
+    } else {
+        $pages = array_map('intval', do_list($shift));
+    }
+    
+    foreach ($pages as $page) {
+        if ($newer) {
+            $nextpg = (int)$page < 0 ? min(-$page, $pg - 1) : $pg - $page;
+        } else {
+            $nextpg = (int)$page < 0 ? max($numPages + $page, $pg) + 1 : $pg + $page;
         }
 
-        return $url;
+        if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $numPages) && ($showalways || empty($shown[$nextpg]))) {
+            $txp_item['page'] = $nextpg;
+            $shown[$nextpg] = true;
+            $url = pagelinkurl(array(
+                'pg' => $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? '' : $nextpg
+            ) + $context);
+
+            if (isset($thing)) {
+                if ($escape == 'html') {
+                    $title = escape_title($title);
+                } elseif ($escape) {
+                    $title = txp_escape(array('escape' => $escape), $title);
+                }
+
+                $url = $link ? href(
+                    parse($thing),
+                    $url,
+                    (empty($title) ? '' : ' title="'.$title.'"').
+                    (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
+                ) : parse($thing);
+            }
+        } else {
+            $url = $showalways ? parse($thing) : '';
+        }
+
+        empty($url) or $out[] = $url;
     }
 
-    return ($showalways) ? parse($thing) : '';
+    $txp_item['page'] = $oldpage;
+
+    return doWrap($out, '', $break);
+}
+
+// -------------------------------------------------------------
+
+function newer($atts, $thing = null)
+{
+    return txp_pager($atts, $thing);
 }
 
 // -------------------------------------------------------------
 
 function older($atts, $thing = null)
 {
-    global $thispage, $is_article_list;
-
-    if (empty($thispage)) {
-        return $is_article_list ? postpone_process() : '';
-    }
-
-    extract(lAtts(array(
-        'showalways' => 0,
-        'title'      => '',
-        'escape'     => 'html',
-        'rel'        => '',
-        'shift'      => null,
-    ), $atts));
-
-    $numPages = $thispage['numPages'];
-    $pg = $thispage['pg'];
-    $nextpg = $shift === '*' ? max($numPages, $pg + 1) : ($pg + (isset($shift) ? intval($shift) : 1));
-
-    if ($nextpg > 0 && $nextpg <= $numPages) {
-        $url = pagelinkurl(array(
-            'pg' => $nextpg
-        ) + get_context());
-
-        if ($thing) {
-            if ($escape == 'html') {
-                $title = escape_title($title);
-            } elseif ($escape) {
-                $title = txp_escape(array('escape' => $escape), $title);
-            }
-
-            return href(
-                parse($thing),
-                $url,
-                (empty($title) ? '' : ' title="'.$title.'"').
-                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
-            );
-        }
-
-        return $url;
-    }
-
-    return ($showalways) ? parse($thing) : '';
+    return txp_pager($atts, $thing, false);
 }
 
 // -------------------------------------------------------------
@@ -5446,4 +5440,17 @@ function txp_wraptag($atts, $thing = '')
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_item($atts)
+{
+    global $txp_item;
+
+    extract(lAtts(array(
+        'name' => 'item'
+    ), $atts));
+
+    return isset($txp_item[$name]) ? $txp_item[$name] : null;
 }

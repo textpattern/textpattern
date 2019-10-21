@@ -66,7 +66,7 @@ plug_privs();
 extract($prefs);
 
 $txp_current_tag = '';
-$txp_parsed = $txp_else = $txp_yield = $yield = array();
+$txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
 $txp_atts = null;
 
 // Check the size of the URL request.
@@ -855,7 +855,7 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thispage;
+    global $pretext, $thispage, $txp_item;
     extract($pretext);
 
     // Article form preview.
@@ -990,6 +990,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = '';
+        $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
+        unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
             (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
@@ -1011,7 +1013,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 $newbreak = null;
             }
 
-            if (isset($oldbreak) && $newbreak !== $oldbreak) {
+            if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
                 if ($breakform) {
                     $tmparticle = $thisarticle;
                     $thisarticle = $oldarticle;
@@ -1036,13 +1038,15 @@ function doArticles($atts, $iscustom, $thing = null)
             }
 
             $oldarticle = $thisarticle;
-            $oldbreak = $newbreak;
+            $txp_item['breakby'] = $newbreak;
             unset($GLOBALS['thisarticle']);
         }
 
         if ($groupby) {
             $breakby = '';
         }
+
+        $txp_item['breakby'] = $oldbreak;
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
