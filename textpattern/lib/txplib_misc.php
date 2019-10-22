@@ -5344,13 +5344,14 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                                 $filter[] = "$not value<='$to'";
                             }
                         }
-                        $filter = $filter ? 'AND ('.join(' OR ', $filter).')' : '';
 
                         if ($parts) {
                             $where[] = '('.join(' OR ', $parts).')';
                         }
                     }
                 }
+
+                $filter = $filter ? 'AND ('.join(' OR ', $filter).')' : '';
 
                 if ($unique) {
                     $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
