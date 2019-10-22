@@ -2616,8 +2616,7 @@ function splat($text)
     $sha = sha1($text);
 
     if (!isset($stack[$sha])) {
-        $stack[$sha] = array();
-        $parse[$sha] = array();
+        $stack[$sha] = $parse[$sha] = array();
 
         if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
@@ -2663,19 +2662,13 @@ function splat($text)
         foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$p."']");
             $atts[$p] = parse($atts[$p], true, false);
+            isset($txp_atts[$p]) and $txp_atts[$p] = $atts[$p];
             $trace->stop('[/attribute]');
-
-            if (isset($global_atts[$sha][$p])) {
-                $txp_atts[$p] = $atts[$p];
-            }
         }
     } else {
         foreach ($parse[$sha] as $p) {
             $atts[$p] = parse($atts[$p], true, false);
-
-            if (isset($global_atts[$sha][$p])) {
-                $txp_atts[$p] = $atts[$p];
-            }
+            isset($txp_atts[$p]) and $txp_atts[$p] = $atts[$p];
         }
     }
 
@@ -5320,31 +5313,42 @@ function buildCustomSql($custom, $pairs, $exclude = array())
     $columns = $where = array();
 
     if ($pairs && isset($custom['by_name'])) {
-        foreach (doSlash($pairs) as $k => $v) {
+        foreach ($pairs as $k => $val) {
             if (isset($custom['by_name'][$k])) {
                 $no = $custom['by_name'][$k];
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
-                $filter = '';
+                $filter = array();
 
                 if (isset($pairs[$k])) {
                     $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT' : '';
-/*
-                    $where[] = $unique ? $k.$not." LIKE '$v'" : "$k IS NOT NULL";
-                    $filter = ' AND value'.$not." LIKE '$v'";
-*/
                     // TBC
-                    list($from, $to) = explode('%%', $v, 2) + array(null, null);
+                    if ($val === true) {
+                        $where[] = $unique ? "$not $k" : "$k IS NOT NULL";
+                        $filter[] = "$not value";
+                    } else {
+                        $val = doSlash($val);
+                        $parts = array();
 
-                    if (!isset($to)) {
-                        $where[] = $unique ? "$not $k LIKE '$v'" : "$k IS NOT NULL";
-                        $filter = "AND $not value LIKE '$v'";
-                    } elseif ($from !== '') {
-                        $where[] = $unique ? ($to === '' ? "$not $k>='$from'" :  "$not $k BETWEEN '$from' and '$to'") : "$k IS NOT NULL";
-                        $filter = $to === '' ? "AND $not value>='$from'" :  "AND $not value BETWEEN '$from' and '$to'";
-                    } elseif ($to !== '') {
-                        $where[] = $unique ? "$not $k<='$to'" : "$k IS NOT NULL";
-                        $filter = "AND $not value<='$to'";
+                        foreach ((array)$val as $v) {
+                            list($from, $to) = explode('%%', $v, 2) + array(null, null);
+
+                            if (!isset($to)) {
+                                $parts[] = $unique ? "$not $k LIKE '$v'" : "$k IS NOT NULL";
+                                $filter[] = "$not value LIKE '$v'";
+                            } elseif ($from !== '') {
+                                $parts[] = $unique ? ($to === '' ? "$not $k>='$from'" :  "$not $k BETWEEN '$from' and '$to'") : "$k IS NOT NULL";
+                                $filter[] = $to === '' ? "$not value>='$from'" :  "$not value BETWEEN '$from' and '$to'";
+                            } elseif ($to !== '') {
+                                $parts[] = $unique ? "$not $k<='$to'" : "$k IS NOT NULL";
+                                $filter[] = "$not value<='$to'";
+                            }
+                        }
+                        $filter = $filter ? 'AND ('.join(' OR ', $filter).')' : '';
+
+                        if ($parts) {
+                            $where[] = '('.join(' OR ', $parts).')';
+                        }
                     }
                 }
 
@@ -5719,6 +5723,13 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
+            if (!empty($keys['c']) && ($permlink_mode == 'section_category_title' || $permlink_mode == 'breadcrumb_title')) {
+                $catpath = $permlink_mode == 'breadcrumb_title' ?
+                    array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
+                    array($keys['c']);
+                $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
+                unset($keys['c']);
+            }
         } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
@@ -5730,6 +5741,7 @@ function pagelinkurl($parts, $inherit = array())
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c'])) {
+            $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
             unset($keys['c'], $keys['context']);
@@ -5768,7 +5780,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
     );
@@ -5810,6 +5822,8 @@ function permlinkurl($article_array)
         'title'     => null,
         'url_title' => null,
         'section'   => null,
+        'category1' => null,
+        'category2' => null,
         'posted'    => null,
         'uposted'   => null,
         'expires'   => null,
@@ -5867,8 +5881,34 @@ function permlinkurl($article_array)
         case 'section_title':
             $out = hu."$section/$url_title";
             break;
+        case 'section_category_title':
+        case 'breadcrumb_title':
+            $breadcrumb = ($permlink_mode == 'breadcrumb_title');
+            $out = hu.$section.'/';
+            if (empty($category1)) {
+                if (!empty($category2)) {
+                    $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category2), 'name'))) : $category2).'/';
+                }
+            } elseif (empty($category2)) {
+                $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category1), 'name'))) : $category1).'/';
+            } else {
+                $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
+                if (in_array($category1, $c2_path)) {
+                    $out .= ($breadcrumb ? implode('/', $c2_path) : "$category1/$category2").'/';
+                } else {
+                    $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
+                    if (in_array($category2, $c1_path)) {
+                        $out .= ($breadcrumb ? implode('/', $c1_path) : "$category2/$category1").'/';
+                    } else {
+                        $c0_path = $breadcrumb ? array_intersect($c1_path, $c2_path) : null;
+                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
+                    }
+                }
+            }
+            $out .= $url_title;
+            break;
         case 'title_only':
-            $out = hu."$url_title";
+            $out = hu.$url_title;
             break;
         case 'messy':
             $out = hu."index.php?id=$thisid";

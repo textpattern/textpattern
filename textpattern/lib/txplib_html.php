@@ -1779,6 +1779,10 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         empty($newlist) or $list = array_map('implode', $newlist);
     }
 
+    if (isset($txp_atts['trim']) && $txp_atts['trim'] === true) {
+        $list = array_map('trim', $list);
+    }
+
     // Non-enclosing breaks.
     if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
         if ($break == 'br' || $break == 'hr') {

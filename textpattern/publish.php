@@ -66,7 +66,7 @@ plug_privs();
 extract($prefs);
 
 $txp_current_tag = '';
-$txp_parsed = $txp_else = $txp_yield = $yield = array();
+$txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
 $txp_atts = null;
 
 // Check the size of the URL request.
@@ -294,7 +294,7 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
-    static $url = null, $out = null;
+    static $url = array(), $out = null;
 
     if (!isset($out)) {
         // Set messy variables.
@@ -398,6 +398,8 @@ function preText($s, $prefs)
                     break;
 
                 default:
+                    for ($n = 0; isset(${'u'.($n+1)}); $n++);
+                    $un = ${'u'.$n};
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
                         case 'section_id_title':
@@ -407,6 +409,17 @@ function preText($s, $prefs)
                                 $out['id'] = $u2;
                             } else {
                                 $title = empty($u2) ? null : $u2;
+                            }
+
+                            break;
+
+                        case 'section_category_title':
+                        case 'breadcrumb_title':
+                            $out['s'] = $u1;
+                            $title = empty($un) ? null : $un;
+
+                            if (!isset($title) && $n > 2) {
+                                $out['c'] = ${'u'.($n-1)};
                             }
 
                             break;
@@ -482,14 +495,6 @@ function preText($s, $prefs)
         !empty($title) or $out['month'] = $month;
     }
 
-    // Existing category in messy or clean URL?
-    if (!empty($out['c'])) {
-        if (!ckCat($out['context'], $out['c'])) {
-            $is_404 = true;
-            $out['c'] = '';
-        }
-    }
-
     // Resolve AuthorID from Authorname.
     if ($out['author']) {
         $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
@@ -561,8 +566,22 @@ function preText($s, $prefs)
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
         } elseif (!empty($out['s']) && $out['s'] !== 'default') {
-            $out['s'] = (ckEx('section', $out['s'])) ? $out['s'] : '';
+            global $thissection;
+            $out['s'] = ($thissection = ckEx('section', array('name' => $out['s'], 'title' => null, 'description' => null))) ? $out['s'] : '';
             $is_404 = $is_404 || empty($out['s']);
+        }
+    }
+
+    // Existing category in messy or clean URL?
+    if (!empty($out['c'])) {
+        global $thiscategory;
+
+        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
+            $is_404 = true;
+            $out['c'] = '';
+            $thiscategory = null;
+        } else {
+            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
         }
     }
 
@@ -832,7 +851,7 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thispage;
+    global $pretext, $thispage, $txp_item;
     extract($pretext);
 
     // Article form preview.
@@ -968,6 +987,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = '';
+        $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
+        unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
             (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
@@ -989,7 +1010,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 $newbreak = null;
             }
 
-            if (isset($oldbreak) && $newbreak !== $oldbreak) {
+            if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
                 if ($breakform) {
                     $tmparticle = $thisarticle;
                     $thisarticle = $oldarticle;
@@ -1014,13 +1035,15 @@ function doArticles($atts, $iscustom, $thing = null)
             }
 
             $oldarticle = $thisarticle;
-            $oldbreak = $newbreak;
+            $txp_item['breakby'] = $newbreak;
             unset($GLOBALS['thisarticle']);
         }
 
         if ($groupby) {
             $breakby = '';
         }
+
+        $txp_item['breakby'] = $oldbreak;
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
