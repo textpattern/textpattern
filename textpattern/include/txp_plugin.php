@@ -43,6 +43,7 @@ if ($event == 'plugin') {
         'plugin_install'    => true,
         'plugin_save'       => true,
         'plugin_upload'     => true,
+        'plugin_load'       => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
@@ -162,8 +163,8 @@ function plugin_list($message = '')
             )
         );
 
-    $createBlock = tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
     $contentBlock = '';
+    $existing_files = get_filenames(txpath.DS.'plugins'.DS, GLOB_ONLYDIR) or $existing_files = array();
 
     $paginator = new \Textpattern\Admin\Paginator($event, 'plugin');
     $limit = $paginator->getLimit();
@@ -335,7 +336,7 @@ function plugin_list($message = '')
                 $status ? ' class="active"' : ''
             );
 
-            unset($name);
+            unset($existing_files[$name], $name);
         }
 
         $contentBlock .=
@@ -347,8 +348,10 @@ function plugin_list($message = '')
             n.tag_end('form');
     }
 
+    $createBlock = tag(plugin_form($existing_files), 'div', array('class' => 'txp-control-panel'));
+
     $pageBlock = $paginator->render().
-    nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+        nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table();
     echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_plugins'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
@@ -616,14 +619,31 @@ function plugin_upload()
 }
 
 /**
+ * Uploads a plugin.
+ */
+
+function plugin_load()
+{
+    $plugin = array();
+
+    if($filename = gps('filename')) {
+        $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
+    }
+
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin);
+    plugin_list($message);
+}
+
+/**
  * Renders a plugin installation form.
  *
+ * @param  array  $existing_files
  * @return string HTML
  * @access private
  * @see    form()
  */
 
-function plugin_form()
+function plugin_form($existing_files = array())
 {
     return (class_exists('ZipArchive') ? tag(
             tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
@@ -642,8 +662,15 @@ function plugin_form()
             'method'       => 'post',
             'action'       => 'index.php',
             'enctype'      => 'multipart/form-data'
-        )).br : '').
-        form(
+        )) : '').
+        ($existing_files ? form(
+            eInput('plugin').
+            sInput('plugin_load').
+            tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
+            selectInput('filename', $existing_files, null, false, '', 'file-existing').
+            fInput('submit', '', gTxt('import')),
+        '', '', 'post', 'assign-existing-form', '', 'assign_file') : '').
+        br.form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
@@ -697,8 +724,12 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'label' => gTxt('changeorder'),
             'html'  => $orders,
         ),
-        'delete'       => gTxt('delete'),
         'update'       => gTxt('update_from_disk'),
+        'delete'       => array(
+            'label' => gTxt('delete'),
+            'html' => checkbox2('sync', gps('sync'), 0, 'sync').n.
+                tag(gTxt('remove'), 'label', array('for' => 'sync'))
+        )
     );
 
     return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);
