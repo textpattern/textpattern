@@ -293,6 +293,8 @@ function discuss_list($message = '')
                 textpattern.Section AS section,
                 textpattern.url_title,
                 textpattern.Title AS title,
+                textpattern.Category1 AS category1,
+                textpattern.Category2 AS category2,
                 textpattern.Status,
                 UNIX_TIMESTAMP(textpattern.Posted) AS posted
             FROM ".safe_pfx_j('txp_discuss')."

@@ -256,7 +256,7 @@ class Plugin
 
             safe_delete('txp_plugin', "name = '".doSlash($name)."'");
             safe_delete('txp_lang', "owner = '".doSlash($name)."'");
-            $this->updateFile($name, null);
+            gps('sync') and $this->updateFile($name, null);
         }
     }
 
