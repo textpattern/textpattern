@@ -436,26 +436,6 @@ function parse($thing, $condition = true, $not = true)
 }
 
 /**
- * Guesstimate whether a given function name may be a valid tag handler.
- *
- * @param   string $tag function name
- * @return  bool FALSE if the function name is not a valid tag handler
- * @package TagParser
- */
-
-function maybe_tag($tag)
-{
-    static $tags = null;
-
-    if ($tags === null) {
-        $tags = get_defined_functions();
-        $tags = array_flip($tags['user']);
-    }
-
-    return isset($tags[$tag]);
-}
-
-/**
  * Parse a tag for attributes and hand over to the tag handler function.
  *
  * @param  string      $tag   The tag name
@@ -517,13 +497,8 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($out === false) {
-        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
-            trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_NOTICE);
-            $out = $registry->register($tag)->process($tag, $split, $thing);
-        } else {
-            trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
-            $out = '';
-        }
+        trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
+        $out = '';
     }
 
     if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
@@ -596,7 +571,17 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
-    return safe_field("name", 'txp_'.$table, "name = '".doSlash($val)."' LIMIT 1", $debug);
+    if (is_array($val)) {
+        $fields = implode(',', array_keys($val));
+        $where = join_qs(quote_list(array_filter($val)), ' AND ');
+
+        return safe_row($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+    } else {
+        $fields = 'name';
+        $where = "name = '".doSlash($val)."'";
+
+        return safe_field($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+    }
 }
 
 /**
@@ -605,19 +590,19 @@ function ckEx($table, $val, $debug = false)
  * @param   string $type  The category type, either 'article', 'file', 'link', 'image'
  * @param   string $val   The category name to look for
  * @param   bool   $debug Dump the query
- * @return  bool|string The category's name, or FALSE when it doesn't exist
+ * @return  bool|array The category's data, or FALSE when it doesn't exist
  * @package Filter
  * @see     ckEx()
  * @example
  * if ($r = ckCat('article', 'development'))
  * {
- *     echo "Category '{$r}' exists.";
+ *     echo "Category {$r['name']} exists.";
  * }
  */
 
 function ckCat($type, $val, $debug = false)
 {
-    return safe_field("name", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
+    return safe_row("name, title, description, type", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
 }
 
 /**
@@ -768,7 +753,7 @@ function chopUrl($req)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $pretext, $trace;
+    global $pretext, $trace, $thisarticle;
     static $out = array();
 
     if ($atts === false) {
@@ -827,6 +812,7 @@ function filterAtts($atts = null, $iscustom = null)
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
+        'depth'         => 0,
         'id'            => '',
         'exclude'       => '',
         'excerpted'     => ''
@@ -869,20 +855,25 @@ function filterAtts($atts = null, $iscustom = null)
     // Categories
     $match = do_list_unique($match);
     $category !== true or $category = parse('<txp:category />');
-    $category  = join("','", doSlash(do_list_unique($category)));
+    $category  = do_list_unique($category);
     $categories = array();
 
-    if (in_array('Category1', $match)) {
-        $categories[] = "Category1 IN ('$category')";
-    }
+    if ($category = getTree($category, 'article', '1', 'txp_category', $depth)) {
+        $category  = join("','", doSlash($category));
 
-    if (in_array('Category2', $match)) {
-        $categories[] = "Category2 IN ('$category')";
+        if (in_array('Category1', $match)) {
+            $categories[] = "Category1 IN ('$category')";
+        }
+
+        if (in_array('Category2', $match)) {
+            $categories[] = "Category2 IN ('$category')";
+        }
+
+        $categories = join(" OR ", $categories);
     }
 
     $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
-    $categories = join(" OR ", $categories);
-    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
+    $category  = !$categories  ? '' : " AND $not($categories)";
 
     // Section
     // searchall=0 can be used to show search results for the current
@@ -934,7 +925,13 @@ function filterAtts($atts = null, $iscustom = null)
     if ($customFields) {
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField] === true ? parse('<txp:custom_field name="'.$cField.'" escape="" />') : $atts[$cField];
+                $customPairs[$cField] = $atts[$cField];
+            } elseif (in_array($cField, $match)) {
+                if (!empty($thisarticle)) {
+                    $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
+                } elseif (($val = gps($cField, false)) !== false) {
+                    $customPairs[$cField] = $val;
+                }
             }
         }
 

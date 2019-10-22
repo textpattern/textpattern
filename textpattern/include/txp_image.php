@@ -798,7 +798,7 @@ function image_insert()
         return;
     }
 
-    global $app_mode;
+    global $app_mode, $event;
     $messages = $ids = array();
     $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
@@ -830,7 +830,6 @@ function image_insert()
         // Bail out.
         return;
     }
-
 
     if (is_array($img_result)) {
         list($message, $id) = $img_result;
