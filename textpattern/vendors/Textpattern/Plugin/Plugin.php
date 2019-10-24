@@ -124,7 +124,10 @@ class Plugin
 
             if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
-                $encoded and $this->updateFile($name, $plugin);
+
+                if ($encoded) {
+                    $this->updateFile($name, $plugin);
+                }
 
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -406,6 +409,9 @@ class Plugin
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
+
+            $plugLang = new \Textpattern\L10n\Lang(txpath.DS.'plugins'.DS.$name.DS.'lang'.DS);
+            $plugLang->installFile($lang, $name);
         }
     }
 
