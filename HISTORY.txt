@@ -8,6 +8,7 @@ Changes in TBC (upcoming)
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
+* Added: <txp:item /> tag.
 * Added: Dark Mode support in Hive admin theme.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
