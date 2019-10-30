@@ -26,13 +26,6 @@
  *
  * Replaces wrapGroup() and wrapRegion().
  *
- * @example <section class="txp-details" id="regionname1_group" aria-labelledby="regionname1_group-label">
- *   <h3 class="txp-summary expanded" id="regionname1_group-label"><a href="#name-of-details" role="button" aria-controls="name-of-details" aria-pressed="true">Heading (lever)</a></h3>
- *   <div class="toggle" id="name-of-details" role="group" aria-expanded="true">
- *       ...content...
- *   </div>
- * </section>
- *
  * @since   4.8.0
  * @package UI
  */

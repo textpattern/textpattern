@@ -164,6 +164,22 @@ class Tag implements UIInterface
     }
 
     /**
+     * Retrieve the given attribute or assign default if not set.
+     *
+     * @param  string $key     Attribute key
+     * @param  string $default Attribute default value if unset
+     * @param  array  $props Name-value attribute options
+     * @return this
+     */
+
+    public function getAtt($key, $default = null)
+    {
+        $val = $this->atts->getValue($key);
+
+        return ($val === null) ? $default : $val;
+    }
+
+    /**
      * Set the given attributes. Chainable.
      *
      * @param  string|array $keys One or more keys to set as boolean attributes
