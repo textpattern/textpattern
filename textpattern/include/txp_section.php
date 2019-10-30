@@ -137,6 +137,10 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.css',
                 'label'  => gTxt('css'),
             ),
+            'description' => array(
+                'column' => 'txp_section.description',
+                'label'  => gTxt('description'),
+            ),
             'permlink_mode' => array(
                 'column' => 'txp_section.permlink_mode',
                 'label'  => gTxt('permlink_mode'),
@@ -227,7 +231,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
-            $dev_preview = has_privs('skin.preview');
+            $dev_preview = has_privs('skin.edit');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -887,7 +891,7 @@ EOJS
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (!has_privs('skin.preview') ?
+            'html'  => (!has_privs('skin.edit') ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
