@@ -571,16 +571,18 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
+    $table === 'textpattern' or $table = 'txp_'.$table;
+
     if (is_array($val)) {
         $fields = implode(',', array_keys($val));
         $where = join_qs(quote_list(array_filter($val)), ' AND ');
 
-        return safe_row($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+        return safe_row($fields, $table, $where." LIMIT 1", $debug);
     } else {
         $fields = 'name';
         $where = "name = '".doSlash($val)."'";
 
-        return safe_field($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+        return safe_field($fields, $table, $where." LIMIT 1", $debug);
     }
 }
 
