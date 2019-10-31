@@ -1791,8 +1791,13 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $list = array_map('trim', $list);
     }
 
+    if (strpos($break, '<+>') !== false) {
+        $content = array_reduce($list, function($carry, $item) use ($break) {
+            return $carry.str_replace('<+>', $item, $break);
+        });
+    }
     // Non-enclosing breaks.
-    if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
+    elseif ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
         if ($break == 'br' || $break == 'hr') {
             $break = "<$break $breakatts/>".n;
         }
