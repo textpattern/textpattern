@@ -45,10 +45,10 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
         // Add API Methods as callbacks.
         if ($enable_xmlrpc_server) {
-            // Blogger API [http://www.blogger.com/developers/api/] - add as
+            // Blogger API [https://developers.google.com/blogger/docs/2.0/reference] - add as
             // server capability.
             $this->capabilities['bloggerAPI'] = array(
-                'specUrl'     => 'http://www.blogger.com/developers/api/',
+                'specUrl'     => 'https://developers.google.com/blogger/docs/2.0/reference',
                 'specVersion' => 2,
             );
             $this->addCallback(
