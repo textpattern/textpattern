@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2019 The Textpattern Development Team
  *
@@ -21,18 +21,14 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * This file is not a CODE, it makes no sense and won't run or validate
- * Its AST serves PhpStorm IDE as DATA source to make advanced type inference decisions.
- *
- * @see https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata
- */
+if (!defined('TXP_UPDATE')) {
+    exit("Nothing here. You can't access this file directly.");
+}
 
-namespace PHPSTORM_META {
+// ... and Sections...
+$cols = getThings('describe `'.PFX.'txp_section`');
 
-    $STATIC_METHOD_TYPES = array(
-        \Textpattern\Container\FactoryInterface::get('') => array(
-            "" == "@" // Substitutes @ with arg value
-        )
-    );
+if (!in_array('permlink_mode', $cols)) {
+    safe_alter('txp_section',
+        "ADD permlink_mode VARCHAR(63) NOT NULL AFTER css");
 }
