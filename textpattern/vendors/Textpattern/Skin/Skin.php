@@ -1303,7 +1303,7 @@ class Skin extends CommonBase implements SkinInterface
         $rs = $this->getTableData($criteria, $sortSQL, $offset, $limit);
 
         if ($rs) {
-            $dev_preview = has_privs('skin.preview');
+            $dev_preview = has_privs('skin.edit');
             $out = n.tag_start('form', array(
                         'class'  => 'multi_edit_form',
                         'id'     => $event.'_form',
