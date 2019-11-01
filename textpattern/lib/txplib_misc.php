@@ -5611,7 +5611,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 
 function pagelinkurl($parts, $inherit = array())
 {
-    global $permlink_mode, $prefs;
+    global $permlink_mode, $prefs, $txp_sections;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     // Unset extra stuff to link to an article.
@@ -5629,8 +5629,16 @@ function pagelinkurl($parts, $inherit = array())
         return $url;
     }
 
-    if (isset($keys['s']) && $keys['s'] == 'default') {
-        unset($keys['s']);
+    if (isset($keys['s'])) {
+        $url_mode = isset($txp_sections[$keys['s']]) ? $txp_sections[$keys['s']]['permlink_mode'] : $permlink_mode;
+
+        if ($keys['s'] == 'default') {
+            unset($keys['s']);
+        }
+    }
+
+    if(empty($url_mode)) {
+        $url_mode = $permlink_mode;
     }
 
     // 'article' context is implicit, no need to add it to the page URL.
@@ -5638,7 +5646,7 @@ function pagelinkurl($parts, $inherit = array())
         unset($keys['context']);
     }
 
-    if ($permlink_mode == 'messy') {
+    if ($url_mode == 'messy') {
         if (!empty($keys['context'])) {
             $keys['context'] = gTxt($keys['context'].'_context');
         }
@@ -5663,14 +5671,14 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-            if (!empty($keys['c']) && ($permlink_mode == 'section_category_title' || $permlink_mode == 'breadcrumb_title')) {
-                $catpath = $permlink_mode == 'breadcrumb_title' ?
+            if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
+                $catpath = $url_mode == 'breadcrumb_title' ?
                     array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
             }
-        } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
+        } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
             }

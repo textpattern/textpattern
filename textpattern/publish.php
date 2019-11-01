@@ -400,7 +400,7 @@ function preText($s, $prefs)
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if (strpos($out['req'], permlinkurl($thisarticle, '/')) === 0 ) {
+                            if (permlinkurl($thisarticle, '/') === $u0) {
                                 $permlink_guess = $permlink_modes[$a['Section']];
 
                                 break;
@@ -414,6 +414,8 @@ function preText($s, $prefs)
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
                         }
+                    } elseif (isset($permlink_modes[$u1])) {
+                        $permlink_guess = $permlink_modes[$u1];
                     }
 
                     // Then see if the prefs-defined permlink scheme is usable.
@@ -464,16 +466,6 @@ function preText($s, $prefs)
 
                             break;
 
-                        case 'title_only':
-                            if (isset($u2)) {
-                                $out['s'] = $u1;
-                                $title = empty($u2) ? null : $u2;
-                            } else {
-                                $title = $u1;
-                            }
-
-                            break;
-
                         case 'id_title':
                             if (is_numeric($u1)) {
                                 $out['id'] = $u1;
@@ -484,6 +476,14 @@ function preText($s, $prefs)
                             }
 
                             break;
+
+                        default:
+                            if (isset($u2)) {
+                                $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
+                            } else {
+                                $title = $u1;
+                            }
                     }
             }
         } else {

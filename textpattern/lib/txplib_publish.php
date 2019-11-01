@@ -730,12 +730,13 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function chopUrl($req)
 {
-    $req = strtolower(strtok($req, '?'));
-    $req = preg_replace('/index\.php$/', '', $req);
-    $r = array_map('urldecode', explode('/', $req));
+    $req = strtok($req, '?');
+    $req = preg_replace('/index\.php$/i', '', $req);
+    $r = array_map('urldecode', explode('/', strtolower($req)));
     $n = max(4, count($r));
+    $o = array('u0' => $req);
 
-    for ($i = 0; $i < $n; $i++) {
+    for ($i = 1; $i < $n; $i++) {
         $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
     }
 
