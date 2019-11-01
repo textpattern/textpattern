@@ -10,9 +10,10 @@ Changes in TBC (upcoming)
   output with valueless 'exclude' attribute.
 * Added: <txp:item /> tag.
 * Added: Dark Mode support in Hive admin theme.
-* Added: Configuration file generated during setup can be downloaded.
 * Added: 'breadcrumb/title' article link format.
+* Added: Per-section article link format override.
 * Added: 'title' attribute to image tags.
+* Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
 * Removed: Obsolete 'no widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
