@@ -96,7 +96,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function __construct($langDirectory = null)
     {
-        if ($langDirectory === null) {
+        if ($langDirectory === null || !is_dir($langDirectory)) {
             $langDirectory = txpath.DS.'lang'.DS;
         }
 
