@@ -414,9 +414,12 @@ class Plugin
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
+            $langDir = txpath.DS.'plugins'.DS.$name.DS.'lang'.DS;
 
-            $plugLang = new \Textpattern\L10n\Lang(txpath.DS.'plugins'.DS.$name.DS.'lang'.DS);
-            $plugLang->installFile($lang, $name);
+            if (is_dir($langDir) && is_readable($langDir)) {
+                $plugLang = new \Textpattern\L10n\Lang($langDir);
+                $plugLang->installFile($lang, $name);
+            }
         }
     }
 
