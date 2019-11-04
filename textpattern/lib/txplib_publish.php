@@ -37,6 +37,7 @@
 function filterFrontPage()
 {
     static $filterFrontPage;
+    global $txp_sections;
 
     if (isset($filterFrontPage)) {
         return $filterFrontPage;
@@ -44,16 +45,10 @@ function filterFrontPage()
 
     $filterFrontPage = false;
 
-    $rs = safe_column("name", 'txp_section', "on_frontpage != '1'");
+    $rs = array_filter(array_column($txp_sections, 'on_frontpage', 'name'));
 
     if ($rs) {
-        $filters = array();
-
-        foreach ($rs as $name) {
-            $filters[] = " and Section != '".doSlash($name)."'";
-        }
-
-        $filterFrontPage = join('', $filters);
+        $filterFrontPage = " AND Section IN(".join(',', quote_list(array_keys($rs))).")";
     }
 
     return $filterFrontPage;

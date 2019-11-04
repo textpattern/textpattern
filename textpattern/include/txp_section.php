@@ -84,10 +84,10 @@ function sec_section_list($message = '')
         'search_method',
     )));
 
-    $columns = array('name', 'title', 'skin', 'page', 'css', 'permlink_mode', 'in_rss', 'on_frontpage', 'searchable', 'article_count');
+    $columns = array('name', 'title', 'skin', 'page', 'css', 'permlink_mode', 'on_frontpage', 'in_rss', 'searchable', 'article_count');
     $columns = array_merge(
         array_combine($columns, $columns),
-        array('in_rss' => 'syndicate', 'on_frontpage' => 'on_front_page', 'searchable' => 'include_in_search', 'article_count' => 'articles')
+        array('on_frontpage' => 'on_front_page', 'in_rss' => 'syndicate', 'searchable' => 'include_in_search', 'article_count' => 'articles')
     );
 
     if ($sort === '') {
