@@ -202,7 +202,7 @@ function doDiagnostics()
     $isUpdate = defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
-        // Check for Textpattern updates, at most once every 24 hours.
+        // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
         if ($now > (@(int)$lastCheck['when'] + (60 * 60))) {
