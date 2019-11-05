@@ -205,7 +205,7 @@ function doDiagnostics()
         // Check for Textpattern updates, at most once every 24 hours.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
+        if ($now > (@(int)$lastCheck['when'] + (60 * 60))) {
             $lastCheck = checkUpdates();
         }
 
