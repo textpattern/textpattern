@@ -79,7 +79,7 @@ define("r_relself", ' rel="self"');
 
 function atom()
 {
-    global $prefs;
+    global $prefs, $txp_sections;
     set_error_handler('feedErrorHandler');
     ob_clean();
     extract($prefs);
@@ -154,17 +154,13 @@ function atom()
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
 
-        $frs = safe_column("name", 'txp_section', "in_rss != '1'");
-        $query = array();
+        $query = array($sfilter, $cfilter);
 
-        if ($frs) {
-            foreach ($frs as $f) {
-                $query[] = "AND Section != '".doSlash($f)."'";
-            }
+        $rs = array_filter(array_column($txp_sections, 'in_rss', 'name'));
+
+        if ($rs) {
+            $query[] = 'AND Section IN('.join(',', quote_list(array_keys($rs))).')';
         }
-
-        $query[] = $sfilter;
-        $query[] = $cfilter;
 
         if ($atts = callback_event('feed_filter')) {
             is_array($atts) or $atts = splat(trim($atts));
