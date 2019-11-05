@@ -37,6 +37,7 @@
 function filterFrontPage()
 {
     static $filterFrontPage;
+    global $txp_sections;
 
     if (isset($filterFrontPage)) {
         return $filterFrontPage;
@@ -44,16 +45,10 @@ function filterFrontPage()
 
     $filterFrontPage = false;
 
-    $rs = safe_column("name", 'txp_section', "on_frontpage != '1'");
+    $rs = array_filter(array_column($txp_sections, 'on_frontpage', 'name'));
 
     if ($rs) {
-        $filters = array();
-
-        foreach ($rs as $name) {
-            $filters[] = " and Section != '".doSlash($name)."'";
-        }
-
-        $filterFrontPage = join('', $filters);
+        $filterFrontPage = " AND Section IN(".join(',', quote_list(array_keys($rs))).")";
     }
 
     return $filterFrontPage;
@@ -730,12 +725,13 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function chopUrl($req)
 {
-    $req = strtolower(strtok($req, '?'));
-    $req = preg_replace('/index\.php$/', '', $req);
-    $r = array_map('urldecode', explode('/', $req));
+    $req = strtok($req, '?');
+    $req = preg_replace('/index\.php$/i', '', $req);
+    $r = array_map('urldecode', explode('/', strtolower($req)));
     $n = max(4, count($r));
+    $o = array('u0' => $req);
 
-    for ($i = 0; $i < $n; $i++) {
+    for ($i = 1; $i < $n; $i++) {
         $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
     }
 
