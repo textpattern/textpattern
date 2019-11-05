@@ -1858,7 +1858,7 @@ function load_plugins($type = false, $pre = null)
 
                 $dir = $a['name'];
                 $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
-        
+
                 if (!is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
@@ -3157,7 +3157,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     if ($override_locale) {
         $oldLocale = $txpLocale->getLocale(LC_TIME);
-        
+
         if ($oldLocale != $override_locale) {
             $txpLocale->setLocale(LC_TIME, $override_locale);
         } else {
@@ -6612,7 +6612,7 @@ function send_xml_response($response = array())
 
             foreach ($value as $e => $v) {
                 // Character escaping in values;
-                // @see http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping.
+                // @see https://www.w3.org/TR/REC-xml/#sec-references.
                 $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_QUOTES, 'UTF-8'));
                 $out[] = t.t."<$e value='$v' />".n;
             }
