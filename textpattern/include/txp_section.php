@@ -359,7 +359,7 @@ function sec_section_list($message = '')
                         ).
                         span(
                             sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
+                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
                         ), '', array(
                             'class' => 'txp-list-col-name',

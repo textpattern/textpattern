@@ -5609,7 +5609,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
  * @package URL
  */
 
-function pagelinkurl($parts, $inherit = array())
+function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
     global $permlink_mode, $prefs, $txp_sections;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
@@ -5621,7 +5621,7 @@ function pagelinkurl($parts, $inherit = array())
         }
     }
 
-    $keys = array_merge($inherit, $parts);
+    $keys = $inherit ? array_merge($inherit, $parts) : $parts;
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
@@ -5630,7 +5630,9 @@ function pagelinkurl($parts, $inherit = array())
     }
 
     if (isset($keys['s'])) {
-        $url_mode = isset($txp_sections[$keys['s']]) ? $txp_sections[$keys['s']]['permlink_mode'] : $permlink_mode;
+        if (!isset($url_mode) && isset($txp_sections[$keys['s']])) {
+            $url_mode = $txp_sections[$keys['s']]['permlink_mode'];
+        }
 
         if ($keys['s'] == 'default') {
             unset($keys['s']);
