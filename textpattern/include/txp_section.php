@@ -510,7 +510,7 @@ function section_edit()
         ).inputLabel(
             'permlink_mode',
             permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
-            '', 'section_permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
+            '', 'permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
         ).script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
