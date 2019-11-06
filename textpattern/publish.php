@@ -825,7 +825,6 @@ global $file_error, $file_base_path, $pretext;
             set_headers(array(
                 'content-type' => 'application/octet-stream',
                 'content-disposition' => 'attachment; filename="'.$filename.'"',
-                'content-description' => 'File Download',
                 'content-length' => $filesize,
                 // Fix for IE6 PDF bug on servers configured to send cache headers.
                 'cache-control' => 'private'
