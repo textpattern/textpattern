@@ -4790,10 +4790,12 @@ function set_headers($headers = array('content-type' => 'text/html; charset=utf-
     }
 
     foreach ((array)$headers as $name => $header) {
-        if ($header) {
-            header($name.':'.$header);
+        if ($name === 1) {
+            txp_status_header($header);
+        } elseif ($header) {
+            header($name ? $name.':'.$header : $header);
         } else {
-            header_remove($name);
+            header_remove($name ? $name : null);
         }
     }
 }
@@ -5432,9 +5434,10 @@ function txp_die($msg, $status = '503', $url = '')
         '404' => 'Not Found',
         '410' => 'Gone',
         '414' => 'Request-URI Too Long',
+        '451' => 'Unavailable For Legal Reasons',
         '500' => 'Internal Server Error',
         '501' => 'Not Implemented',
-        '503' => 'Service Unavailable',
+        '503' => 'Service Unavailable'
     );
 
     if ($status) {

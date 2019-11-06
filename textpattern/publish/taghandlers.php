@@ -4370,9 +4370,7 @@ function txp_header($atts)
         'value'   => 'text/html; charset=utf-8',
     ), $atts));
 
-    if ($name) {
-        set_headers(array(strtolower($name) => $value), !empty($replace));
-    }
+    set_headers(array(strtolower($name) => $value), !empty($replace));
 }
 
 // -------------------------------------------------------------
