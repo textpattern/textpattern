@@ -1028,7 +1028,7 @@ function password_protect($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function recent_articles($atts)
+function recent_articles($atts, $thing = null)
 {
     global $prefs;
 
@@ -1047,7 +1047,10 @@ function recent_articles($atts)
         'no_widow' => '',
     ), $atts);
 
-    $thing = $form ? null : '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    if(!isset($thing) && !$atts['form']) {
+        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    }
+
     unset($atts['no_widow']);
 
     return article_custom($atts, $thing);
