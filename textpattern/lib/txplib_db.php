@@ -840,21 +840,29 @@ function safe_field($thing, $table, $where, $debug = false)
  * @return array
  */
 
-function safe_column($thing, $table, $where, $debug = false)
+function safe_column($thing, $table, $where = '1', $debug = false)
 {
+    if (is_array($thing)) {
+        list($index, $thing) = $thing + array(null, '*');
+    }
+
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
 
     if ($rs) {
-        foreach ($rs as $a) {
-            $v = array_shift($a);
-            $out[$v] = $v;
+        if (isset($index)) {
+            $out = isset($rs[0][$index]) ? array_column($rs, null, $index) : false;
+        } elseif (isset($rs[0][$thing])) {
+            $out = array_column($rs, $thing, $thing);
+        } else {
+            foreach ($rs as $a) {
+                $v = array_shift($a);
+                $out[$v] = $v;
+            }
         }
-
-        return $out;
     }
 
-    return array();
+    return empty($out) ? array() : $out;
 }
 
 /**

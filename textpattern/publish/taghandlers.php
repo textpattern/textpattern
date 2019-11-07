@@ -59,15 +59,15 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('section_list')
     ->register('search_input')
     ->register('search_term')
-    ->register('link_to_next')
-    ->register('link_to_prev')
+    ->register('link_to', 'link_to_next')
+    ->register('link_to', 'link_to_prev', 'prev')
     ->register('next_title')
     ->register('prev_title')
     ->register('site_name')
     ->register('site_slogan')
     ->register('link_to_home')
-    ->register('newer')
-    ->register('older')
+    ->register('txp_pager', 'newer')
+    ->register('txp_pager', 'older', false)
     ->register('text')
     ->register('article_id')
     ->register('article_url_title')
@@ -101,8 +101,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('body')
     ->register('title')
     ->register('excerpt')
-    ->register('category1')
-    ->register('category2')
+    ->register('article_category', 'category1')
+    ->register('article_category', 'category2', 2)
     ->register('category')
     ->register('section')
     ->register('keywords')
@@ -165,8 +165,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('file_download')
     ->register('file_download_link')
     ->register('file_download_size')
-    ->register('file_download_created')
-    ->register('file_download_modified')
+    ->register('file_download_time', 'file_download_created')
+    ->register('file_download_time', 'file_download_modified', 'modified')
     ->register('file_download_id')
     ->register('file_download_name')
     ->register('file_download_category')
@@ -1028,7 +1028,7 @@ function password_protect($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function recent_articles($atts)
+function recent_articles($atts, $thing = null)
 {
     global $prefs;
 
@@ -1047,7 +1047,10 @@ function recent_articles($atts)
         'no_widow' => '',
     ), $atts);
 
-    $thing = $form ? null : '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    if(!isset($thing) && !$atts['form']) {
+        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    }
+
     unset($atts['no_widow']);
 
     return article_custom($atts, $thing);
@@ -1647,7 +1650,7 @@ function search_term($atts)
 // -------------------------------------------------------------
 
 // Link to next/prev article, if it exists.
-function link_to($atts, $thing = null, $target = null)
+function link_to($atts, $thing = null, $target = 'next')
 {
     global $pretext, $thisarticle;
 
@@ -1701,22 +1704,6 @@ function link_to($atts, $thing = null, $target = null)
     }
 
     return ($showalways) ? parse($thing) : '';
-}
-
-// -------------------------------------------------------------
-
-// Link to next article, if it exists.
-function link_to_next($atts, $thing = null)
-{
-    return link_to($atts, $thing, 'next');
-}
-
-// -------------------------------------------------------------
-
-// Link to previous article, if it exists.
-function link_to_prev($atts, $thing = null)
-{
-    return link_to($atts, $thing, 'prev');
 }
 
 // -------------------------------------------------------------
@@ -1872,20 +1859,6 @@ function txp_pager($atts, $thing = null, $newer = true)
     $txp_item['page'] = $oldpage;
 
     return doWrap($out, '', $break);
-}
-
-// -------------------------------------------------------------
-
-function newer($atts, $thing = null)
-{
-    return txp_pager($atts, $thing);
-}
-
-// -------------------------------------------------------------
-
-function older($atts, $thing = null)
-{
-    return txp_pager($atts, $thing, false);
 }
 
 // -------------------------------------------------------------
@@ -2979,28 +2952,14 @@ function excerpt($atts = array(), $thing = null)
 
 // -------------------------------------------------------------
 
-function category1($atts, $thing = null)
-{
-    return article_category(array('number' => 1) + $atts, $thing);
-}
-
-// -------------------------------------------------------------
-
-function category2($atts, $thing = null)
-{
-    return article_category(array('number' => 2) + $atts, $thing);
-}
-
-// -------------------------------------------------------------
-
-function article_category($atts, $thing = null)
+function article_category($atts, $thing = null, $number = 1)
 {
     global $thisarticle, $s, $permlink_mode;
 
     assert_article();
 
     extract(lAtts(array(
-        'number'       => 1,
+        'number'       => $number,
         'class'        => '',
         'link'         => 0,
         'title'        => 0,
@@ -4365,14 +4324,12 @@ function txp_header($atts)
     }
 
     extract(lAtts(array(
-        'name'    => 'Content-Type',
+        'name'    => true,
         'replace' => true,
-        'value'   => 'text/html; charset=utf-8',
+        'value'   => '200 OK',
     ), $atts));
 
-    if ($name) {
-        set_headers(array(strtolower($name) => $value), !empty($replace));
-    }
+    set_headers(array($name => $value), !empty($replace));
 }
 
 // -------------------------------------------------------------
@@ -4923,7 +4880,7 @@ function file_download_size($atts)
 
 // -------------------------------------------------------------
 
-function file_download_created($atts)
+function file_download_time($atts, $thing = null, $time = 'created')
 {
     global $thisfile;
 
@@ -4931,27 +4888,9 @@ function file_download_created($atts)
 
     extract(lAtts(array('format' => ''), $atts));
 
-    if ($thisfile['created']) {
+    if (!empty($thisfile[$time])) {
         return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile['created'],
-            'format' => $format,
-        ));
-    }
-}
-
-// -------------------------------------------------------------
-
-function file_download_modified($atts)
-{
-    global $thisfile;
-
-    assert_file();
-
-    extract(lAtts(array('format' => ''), $atts));
-
-    if ($thisfile['modified']) {
-        return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile['modified'],
+            'ftime'  => $thisfile[$time],
             'format' => $format,
         ));
     }

@@ -4630,7 +4630,7 @@ function fetch_category_title($name, $type = 'article')
 function fetch_section_title($name)
 {
     static $sectitles = array();
-    global $thissection;
+    global $thissection, $txp_sections;
 
     // Try cache.
     if (isset($sectitles[$name])) {
@@ -4646,6 +4646,8 @@ function fetch_section_title($name)
 
     if ($name == 'default' or empty($name)) {
         return '';
+    } elseif (isset($txp_sections[$name])) {
+        return $txp_sections[$name]['title'];
     }
 
     $f = safe_field("title", 'txp_section', "name = '".doSlash($name)."'");
@@ -4771,27 +4773,39 @@ function get_lastmod($unix_ts = null)
 /**
  * Sets headers.
  *
- * @param   array $headers    'lower-case-name' => 'value'
+ * @param   array $headers    'name' => 'value'
  * @param   bool  $rewrite    If TRUE, rewrites existing headers
  */
 
-function set_headers($headers = array('content-type' => 'text/html; charset=utf-8'), $rewrite = false)
+function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-8'), $rewrite = false)
 {
     if (headers_sent()) {
         return;
     }
 
-    if (!$rewrite) {
-        foreach (headers_list() as $header) {
-            unset($headers[strtolower(trim(strtok($header, ':')))]);
+    if (!$rewrite && $headers_list = headers_list()) {
+        $headers_low = array();
+
+        foreach (array_keys($headers) as $name) {
+            $headres_low[strtolower($name)] = $name;
+        }
+
+        foreach ($headers_list as $header) {
+            $name = strtolower(trim(strtok($header, ':')));
+
+            if (isset($headers_low[$name])) {
+                unset($headers[$headers_low[$name]]);
+            }
         }
     }
 
     foreach ((array)$headers as $name => $header) {
-        if ($header) {
-            header($name.':'.$header);
+        if ($name === 1) {
+            txp_status_header($header);
+        } elseif ($header) {
+            header($name ? $name.':'.$header : $header);
         } else {
-            header_remove($name);
+            header_remove($name ? $name : null);
         }
     }
 }
@@ -4907,6 +4921,8 @@ function get_prefs($user = '')
 
 function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 {
+    global $prefs;
+    $prefs[$name] = $val;
     $user_name = null;
 
     if ($is_private == PREF_PRIVATE) {
@@ -5493,9 +5509,10 @@ function txp_die($msg, $status = '503', $url = '')
         '404' => 'Not Found',
         '410' => 'Gone',
         '414' => 'Request-URI Too Long',
+        '451' => 'Unavailable For Legal Reasons',
         '500' => 'Internal Server Error',
         '501' => 'Not Implemented',
-        '503' => 'Service Unavailable',
+        '503' => 'Service Unavailable'
     );
 
     if ($status) {
@@ -5670,9 +5687,9 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
  * @package URL
  */
 
-function pagelinkurl($parts, $inherit = array())
+function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
-    global $permlink_mode, $prefs;
+    global $permlink_mode, $prefs, $txp_sections;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     // Unset extra stuff to link to an article.
@@ -5682,7 +5699,7 @@ function pagelinkurl($parts, $inherit = array())
         }
     }
 
-    $keys = array_merge($inherit, $parts);
+    $keys = $inherit ? array_merge($inherit, $parts) : $parts;
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
@@ -5690,8 +5707,18 @@ function pagelinkurl($parts, $inherit = array())
         return $url;
     }
 
-    if (isset($keys['s']) && $keys['s'] == 'default') {
-        unset($keys['s']);
+    if (isset($keys['s'])) {
+        if (!isset($url_mode) && isset($txp_sections[$keys['s']])) {
+            $url_mode = $txp_sections[$keys['s']]['permlink_mode'];
+        }
+
+        if ($keys['s'] == 'default') {
+            unset($keys['s']);
+        }
+    }
+
+    if(empty($url_mode)) {
+        $url_mode = $permlink_mode;
     }
 
     // 'article' context is implicit, no need to add it to the page URL.
@@ -5699,7 +5726,7 @@ function pagelinkurl($parts, $inherit = array())
         unset($keys['context']);
     }
 
-    if ($permlink_mode == 'messy') {
+    if ($url_mode == 'messy') {
         if (!empty($keys['context'])) {
             $keys['context'] = gTxt($keys['context'].'_context');
         }
@@ -5724,14 +5751,14 @@ function pagelinkurl($parts, $inherit = array())
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-            if (!empty($keys['c']) && ($permlink_mode == 'section_category_title' || $permlink_mode == 'breadcrumb_title')) {
-                $catpath = $permlink_mode == 'breadcrumb_title' ?
+            if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
+                $catpath = $url_mode == 'breadcrumb_title' ?
                     array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
             }
-        } elseif (!empty($keys['month']) && $permlink_mode == 'year_month_day_title') {
+        } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
             }
@@ -5806,9 +5833,9 @@ function permlinkurl_id($id)
  * ));
  */
 
-function permlinkurl($article_array)
+function permlinkurl($article_array, $hu = hu)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status;
+    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
     static $now = null;
 
     if (isset($prefs['custom_url_func'])
@@ -5853,39 +5880,45 @@ function permlinkurl($article_array)
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
-    if (empty($url_title)) {
-        $url_title = stripSpace($title);
+    if (!empty($section) && isset($txp_sections[$section])) {
+        $url_mode = empty($txp_sections[$section]['permlink_mode']) ? $permlink_mode : $txp_sections[$section]['permlink_mode'];
+    } else {
+        $url_mode = $permlink_mode;
+    }
+
+    if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title'))) {
+        $url_mode = 'messy';
     }
 
     $section = urlencode($section);
     $url_title = urlencode($url_title);
 
-    switch ($url_title === '' ? 'messy' : $permlink_mode) {
+    switch ($url_mode) {
         case 'section_id_title':
-            if ($prefs['attach_titles_to_permalinks']) {
-                $out = hu."$section/$thisid/$url_title";
+            if ($url_title && $prefs['attach_titles_to_permalinks']) {
+                $out = "$section/$thisid/$url_title";
             } else {
-                $out = hu."$section/$thisid";
+                $out = "$section/$thisid";
             }
             break;
         case 'year_month_day_title':
             list($y, $m, $d) = explode("-", date("Y-m-d", isset($uposted) ? $uposted : $posted));
-            $out =  hu."$y/$m/$d/$url_title";
+            $out =  "$y/$m/$d/$url_title";
             break;
         case 'id_title':
-            if ($prefs['attach_titles_to_permalinks']) {
-                $out = hu."$thisid/$url_title";
+            if ($url_title && $prefs['attach_titles_to_permalinks']) {
+                $out = "$thisid/$url_title";
             } else {
-                $out = hu."$thisid";
+                $out = "$thisid";
             }
             break;
         case 'section_title':
-            $out = hu."$section/$url_title";
+            $out = "$section/$url_title";
             break;
         case 'section_category_title':
         case 'breadcrumb_title':
-            $breadcrumb = ($permlink_mode == 'breadcrumb_title');
-            $out = hu.$section.'/';
+            $breadcrumb = ($url_mode == 'breadcrumb_title');
+            $out = $section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
                     $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category2), 'name'))) : $category2).'/';
@@ -5909,14 +5942,38 @@ function permlinkurl($article_array)
             $out .= $url_title;
             break;
         case 'title_only':
-            $out = hu.$url_title;
+            $out = $url_title;
             break;
         case 'messy':
-            $out = hu."index.php?id=$thisid";
+            $out = "index.php?id=$thisid";
             break;
     }
 
-    return $permlinks[$thisid] = $out;
+    return $permlinks[$thisid] = $hu.$out;
+}
+
+/**
+ * Renders a HTML &lt;select&gt; list of supported permanent link URL formats.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlinkmodes($name, $val, $blank = false)
+{
+    $vals = array(
+        'messy'                     => gTxt('messy'),
+        'id_title'                  => gTxt('id_title'),
+        'section_id_title'          => gTxt('section_id_title'),
+        'section_category_title'    => gTxt('section_category_title'),
+        'year_month_day_title'      => gTxt('year_month_day_title'),
+        'breadcrumb_title'          => gTxt('breadcrumb_title'),
+        'section_title'             => gTxt('section_title'),
+        'title_only'                => gTxt('title_only')
+    );
+
+    return selectInput($name, $vals, $val, $blank, '', $name);
 }
 
 /**
@@ -6635,7 +6692,7 @@ function send_xml_response($response = array())
 
             foreach ($value as $e => $v) {
                 // Character escaping in values;
-                // @see http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping.
+                // @see https://www.w3.org/TR/REC-xml/#sec-references.
                 $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_QUOTES, 'UTF-8'));
                 $out[] = t.t."<$e value='$v' />".n;
             }

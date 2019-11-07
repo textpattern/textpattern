@@ -65,6 +65,7 @@ plug_privs();
 // Add prefs to globals.
 extract($prefs);
 
+$txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -225,6 +226,8 @@ $trace->stop();
     load_lang(LANG);
 }*/
 
+$txp_sections = safe_column(array('name'), 'txp_section');
+
 // Here come the regular plugins.
 if ($use_plugins) {
     load_plugins();
@@ -294,6 +297,7 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
+    global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
     if (!isset($out)) {
@@ -400,8 +404,38 @@ function preText($s, $prefs)
                 default:
                     for ($n = 0; isset(${'u'.($n+1)}); $n++);
                     $un = ${'u'.$n};
+                    $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
+
+                    if (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
+                        $safe_un = doSlash($un);
+
+                        $guessarticles = safe_rows('*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
+                            'textpattern', "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
+                        );
+
+                        foreach ($guessarticles as $a) {
+                            populateArticleData($a);
+
+                            if (permlinkurl($thisarticle, '/') === $u0) {
+                                $permlink_guess = $permlink_modes[$a['Section']];
+
+                                break;
+                            }
+                        }
+
+                        if (!isset($permlink_guess)) {
+                            unset($thisarticle);
+                            $is_404 = true;
+                        } else {
+                            $out['id'] = $thisarticle['thisid'];
+                            $out['s'] = $thisarticle['section'];
+                        }
+                    } elseif (isset($permlink_modes[$u1])) {
+                        $permlink_guess = $permlink_modes[$u1];
+                    }
+
                     // Then see if the prefs-defined permlink scheme is usable.
-                    switch ($permlink_mode) {
+                    switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
                         case 'section_id_title':
                             $out['s'] = $u1;
 
@@ -448,16 +482,6 @@ function preText($s, $prefs)
 
                             break;
 
-                        case 'title_only':
-                            if (isset($u2)) {
-                                $out['s'] = $u1;
-                                $title = trim($u2) === '' ? null : $u2;
-                            } else {
-                                $title = $u1;
-                            }
-
-                            break;
-
                         case 'id_title':
                             if (is_numeric($u1)) {
                                 $out['id'] = $u1;
@@ -468,6 +492,14 @@ function preText($s, $prefs)
                             }
 
                             break;
+
+                        default:
+                            if (isset($u2)) {
+                                $out['s'] = $u1;
+                                $title = empty($u2) ? null : $u2;
+                            } else {
+                                $title = $u1;
+                            }
                     }
             }
         } else {
@@ -551,7 +583,7 @@ function preText($s, $prefs)
             $out = array_merge($out, $rs);
         }
     } elseif ($out['context'] == 'article') {
-        if (!empty($out['id']) || !empty($title)) {
+        if (!$is_404 && empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
             if (empty($out['s']) || $out['s'] === 'default') {
                 $rs = !empty($out['id']) ?
                     lookupByID($out['id']) :
@@ -565,9 +597,17 @@ function preText($s, $prefs)
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
-        } elseif (!empty($out['s']) && $out['s'] !== 'default') {
+        }
+
+        if (!empty($out['s']) && $out['s'] !== 'default') {
             global $thissection;
-            $out['s'] = ($thissection = ckEx('section', array('name' => $out['s'], 'title' => null, 'description' => null))) ? $out['s'] : '';
+
+            if (isset($txp_sections[$out['s']])) {
+                $thissection = array_intersect_key($txp_sections[$out['s']], array('name' => $out['s'], 'title' => null, 'description' => null));
+            } else {
+                $out['s'] = '';
+            }
+
             $is_404 = $is_404 || empty($out['s']);
         }
     }
@@ -605,10 +645,8 @@ function preText($s, $prefs)
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $ss = doSlash($s);
-        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name IN ('$ss', 'default') ORDER BY FIELD(name, '$ss', 'default') LIMIT 1");
-
+        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
+        $rs = array_intersect_key($txp_sections[$s], array_fill_keys(array('skin', 'page', 'css', 'dev_skin', 'dev_page', 'dev_css'), null));
         $userInfo = is_logged_in();
 
         if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
@@ -775,7 +813,6 @@ global $file_error, $file_base_path, $pretext;
             set_headers(array(
                 'content-type' => 'application/octet-stream',
                 'content-disposition' => 'attachment; filename="'.$filename.'"',
-                'content-description' => 'File Download',
                 'content-length' => $filesize,
                 // Fix for IE6 PDF bug on servers configured to send cache headers.
                 'cache-control' => 'private'

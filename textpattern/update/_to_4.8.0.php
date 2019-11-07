@@ -25,6 +25,13 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+// ... Sections permlink_mode...
+$cols = getThings('describe `'.PFX.'txp_section`');
+
+if (!in_array('permlink_mode', $cols)) {
+    safe_alter('txp_section', "ADD permlink_mode VARCHAR(63) NOT NULL AFTER css");
+}
+
 // Here come unlimited custom fields a.k.a. the Textpattern Meta Store.
 safe_create(
     "txp_meta",

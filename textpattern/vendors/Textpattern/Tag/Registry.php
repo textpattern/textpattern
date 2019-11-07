@@ -39,6 +39,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      */
 
     private $tags = array();
+    private $params = array();
     private $atts = array();
 
     /**
@@ -63,6 +64,11 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
             if ($tag) {
                 $this->tags[$tag] = $callback;
+                $params = array_slice(func_get_args(), 2);
+
+                if (!empty($params)) {
+                    $this->params[$tag] = $params;
+                }
             }
         }
 
@@ -113,7 +119,11 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+            //TODO: switch to args unpacking for php 5.6+
+            return isset($this->params[$tag]) ?
+//                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
+                (string) call_user_func_array($this->tags[$tag], array_merge(array((array)$atts, $thing), $this->params[$tag])) :
+                (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
         } else {
             return false;
         }

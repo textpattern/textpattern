@@ -144,6 +144,11 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $disable = array();
     }
 
+    if (is_array($blank_first)) {
+        $array = $blank_first + $array;
+        $blank_first = false;
+    }
+
     foreach ($array as $avalue => $alabel) {
         if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
             $sel = ' selected="selected"';
