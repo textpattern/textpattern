@@ -590,12 +590,13 @@ function plugin_upload()
         if(move_uploaded_file($source, $target_path)) {
             extract(pathinfo($target_path));
 
-            if (strtolower($extension) === 'php' && $pack = file_get_contents($target_path)) {
+            if (strtolower($extension) === 'php') {
                 $write = true;
-                $plugin['code'] = preg_replace('/^.*\#\s*\-{3,}\s*BEGIN PLUGIN CODE\s*\-{3,}(.*)\#\s*\-{3,}\s*END PLUGIN CODE\s*\-{3,}.*$/sm', '$1', $pack);
-                $plugin['help_raw'] = preg_replace('/^.*\# \-{3} BEGIN PLUGIN HELP \-{3}(.*)\# \-{3} END PLUGIN HELP \-{3}.*$/sm', '$1', $pack);
+                $pack = file_get_contents($target_path);
+                list($code, $pack) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, 'CODE');
+                list($help_raw, $pack) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, 'HELP');
+                $plugin += compact('code', 'help_raw');
 
-                $pack = str_replace($plugin['code'], '', $pack);
                 file_put_contents($target_path, $pack);
                 include $target_path;
             } else {
