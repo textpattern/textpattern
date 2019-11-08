@@ -64,7 +64,7 @@ class Plugin
      * @return string|array
      */
 
-    public function install($plugin, $status = null)
+    public function install($plugin, $status = null, $write = true)
     {
         if ($encoded = !is_array($plugin)) {
             $plugin = $this->extract($plugin);
@@ -125,7 +125,7 @@ class Plugin
             if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
 
-                if ($encoded) {
+                if ($write) {
                     $this->updateFile($name, $plugin);
                 }
 

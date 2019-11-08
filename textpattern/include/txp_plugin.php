@@ -588,29 +588,40 @@ function plugin_upload()
         $target_path = rtrim(get_pref('temp_dir', txpath.DS.'plugins'), DS).DS.$filename;
 
         if(move_uploaded_file($source, $target_path)) {
-            $name = pathinfo($target_path, PATHINFO_FILENAME);
-            $zip = new ZipArchive();
-            $x = $zip->open($target_path);
+            extract(pathinfo($target_path));
 
-            if ($x === true) {
-                for ($i = 0; $i < $zip->numFiles; $i++) {
-                    if (strpos($zip->getNameIndex($i), $name.'/') !== 0) {
-                        $makedir = true;
+            if (strtolower($extension) === 'php' && $pack = file_get_contents($target_path)) {
+                $write = true;
+                $plugin['code'] = preg_replace('/^.*\#\s*\-{3,}\s*BEGIN PLUGIN CODE\s*\-{3,}(.*)\#\s*\-{3,}\s*END PLUGIN CODE\s*\-{3,}.*$/sm', '$1', $pack);
+                $plugin['help_raw'] = preg_replace('/^.*\# \-{3} BEGIN PLUGIN HELP \-{3}(.*)\# \-{3} END PLUGIN HELP \-{3}.*$/sm', '$1', $pack);
 
-                        break;
+                $pack = str_replace($plugin['code'], '', $pack);
+                file_put_contents($target_path, $pack);
+                include $target_path;
+            } else {
+                $zip = new ZipArchive();
+                $x = $zip->open($target_path);
+
+                if ($x === true) {
+                    for ($i = 0; $i < $zip->numFiles; $i++) {
+                        if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
+                            $makedir = true;
+
+                            break;
+                        }
                     }
-                }
 
-                $zip->extractTo(txpath.DS.'plugins'.(empty($makedir) ? '' : DS.$name));
-                $zip->close();
-                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+                    $zip->extractTo(txpath.DS.'plugins'.(empty($makedir) ? '' : DS.$filename));
+                    $zip->close();
+                    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
+                }
             }
 
             unlink($target_path);
         }
     }
 
-    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin);
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin, null, !empty($write));
     plugin_list($message);
 }
 
@@ -647,7 +658,7 @@ function plugin_form($existing_files = array())
                 'type'   => "file",
                 'name'   => "theplugin",
                 'id'     => "plugin-upload",
-                'accept' => "application/x-zip-compressed, application/zip"
+                'accept' => "application/x-zip-compressed, application/zip, .php"
             )).
             fInput('submit', 'install_new', gTxt('upload')).
             eInput('plugin').
