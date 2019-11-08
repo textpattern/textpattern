@@ -3448,7 +3448,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         $headers_low = array();
 
         foreach (array_keys($headers) as $name) {
-            $headres_low[strtolower($name)] = $name;
+            $headers_low[strtolower($name)] = $name;
         }
 
         foreach ($headers_list as $header) {
