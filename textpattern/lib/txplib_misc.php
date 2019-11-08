@@ -427,6 +427,24 @@ function load_lang($lang, $events = null)
 }
 
 /**
+ * Gets a list of user groups.
+ *
+ * @return  array
+ * @package User
+ * @example
+ * print_r(
+ *     get_groups()
+ * );
+ */
+
+function get_groups()
+{
+    global $txp_groups;
+
+    return doArray($txp_groups, 'gTxt');
+}
+
+/**
  * Checks if a user has privileges to the given resource.
  *
  * @param   string $res  The resource
@@ -3448,7 +3466,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         $headers_low = array();
 
         foreach (array_keys($headers) as $name) {
-            $headres_low[strtolower($name)] = $name;
+            $headers_low[strtolower($name)] = $name;
         }
 
         foreach ($headers_list as $header) {
