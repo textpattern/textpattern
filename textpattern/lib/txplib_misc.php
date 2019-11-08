@@ -427,6 +427,24 @@ function load_lang($lang, $events = null)
 }
 
 /**
+ * Gets a list of user groups.
+ *
+ * @return  array
+ * @package User
+ * @example
+ * print_r(
+ *     get_groups()
+ * );
+ */
+
+function get_groups()
+{
+    global $txp_groups;
+
+    return doArray($txp_groups, 'gTxt');
+}
+
+/**
  * Checks if a user has privileges to the given resource.
  *
  * @param   string $res  The resource

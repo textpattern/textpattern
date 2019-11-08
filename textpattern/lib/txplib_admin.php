@@ -1168,24 +1168,6 @@ function assign_user_assets($owner, $new_owner)
 }
 
 /**
- * Gets a list of user groups.
- *
- * @return  array
- * @package User
- * @example
- * print_r(
- *     get_groups()
- * );
- */
-
-function get_groups()
-{
-    global $txp_groups;
-
-    return doArray($txp_groups, 'gTxt');
-}
-
-/**
  * Validates a string as a username.
  *
  * @param   string $name The username
