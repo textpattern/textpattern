@@ -59,24 +59,24 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('section_list')
     ->register('search_input')
     ->register('search_term')
-    ->register('link_to_next')
-    ->register('link_to_prev')
+    ->register('link_to', 'link_to_next')
+    ->register('link_to', 'link_to_prev', 'prev')
     ->register('next_title')
     ->register('prev_title')
     ->register('site_name')
     ->register('site_slogan')
     ->register('link_to_home')
-    ->register('newer')
-    ->register('older')
+    ->register('txp_pager', 'newer')
+    ->register('txp_pager', 'older', false)
     ->register('text')
     ->register('article_id')
     ->register('article_url_title')
     ->register('if_article_id')
     ->register('posted')
-    ->register('expires')
+    ->register('posted', 'modified', 'modified')
+    ->register('posted', 'expires', 'expires')
     ->register('if_expires')
     ->register('if_expired')
-    ->register('modified')
     ->register('comments_count')
     ->register('comments_invite')
     ->register('comments_form')
@@ -101,8 +101,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('body')
     ->register('title')
     ->register('excerpt')
-    ->register('category1')
-    ->register('category2')
+    ->register('article_category', 'category1')
+    ->register('article_category', array('category2', array('number' => 2)))
     ->register('category')
     ->register('section')
     ->register('keywords')
@@ -165,8 +165,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('file_download')
     ->register('file_download_link')
     ->register('file_download_size')
-    ->register('file_download_created')
-    ->register('file_download_modified')
+    ->register('file_download_time', 'file_download_created')
+    ->register('file_download_time', 'file_download_modified', 'modified')
     ->register('file_download_id')
     ->register('file_download_name')
     ->register('file_download_category')
@@ -183,10 +183,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_custom')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
+    ->register('txp_item', 'item')
     ->register('comments_help')
     ->register('comment_name_input')
-    ->register('comment_email_input')
-    ->register('comment_web_input')
+    ->register('comment_name_input', 'comment_email_input', 'email', 'clean_url')
+    ->register('comment_name_input', array('comment_web_input', array('placeholder' => 'http(s)://')), 'web', 'clean_url')
+//    ->register('comment_web_input')
     ->register('comment_message_input')
     ->register('comment_remember')
     ->register('comment_preview')
@@ -1027,7 +1029,7 @@ function password_protect($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function recent_articles($atts)
+function recent_articles($atts, $thing = null)
 {
     global $prefs;
 
@@ -1046,7 +1048,10 @@ function recent_articles($atts)
         'no_widow' => '',
     ), $atts);
 
-    $thing = $form ? null : '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    if(!isset($thing) && !$atts['form']) {
+        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    }
+
     unset($atts['no_widow']);
 
     return article_custom($atts, $thing);
@@ -1646,7 +1651,7 @@ function search_term($atts)
 // -------------------------------------------------------------
 
 // Link to next/prev article, if it exists.
-function link_to($atts, $thing = null, $target = null)
+function link_to($atts, $thing = null, $target = 'next')
 {
     global $pretext, $thisarticle;
 
@@ -1700,22 +1705,6 @@ function link_to($atts, $thing = null, $target = null)
     }
 
     return ($showalways) ? parse($thing) : '';
-}
-
-// -------------------------------------------------------------
-
-// Link to next article, if it exists.
-function link_to_next($atts, $thing = null)
-{
-    return link_to($atts, $thing, 'next');
-}
-
-// -------------------------------------------------------------
-
-// Link to previous article, if it exists.
-function link_to_prev($atts, $thing = null)
-{
-    return link_to($atts, $thing, 'prev');
 }
 
 // -------------------------------------------------------------
@@ -1800,98 +1789,77 @@ function link_to_home($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function newer($atts, $thing = null)
+function txp_pager($atts, $thing = null, $newer = true)
 {
-    global $thispage, $is_article_list;
+    global $thispage, $is_article_list, $txp_item;
+    static $shown = array();
 
-    if (empty($thispage)) {
+    if (empty($thispage) || empty($thispage['numPages'])) {
         return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
+        'link'       => true,
         'escape'     => 'html',
         'rel'        => '',
         'shift'      => null,
+        'break'      => '',
     ), $atts));
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
-    $nextpg = $shift === '*' ? min(1, $pg - 1) : ($pg - (isset($shift) ? intval($shift) : 1));
+    $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
+    $context = get_context();
+    $out = array();
 
-    if ($nextpg > 0 && $nextpg <= $numPages) {
-        $url = pagelinkurl(array(
-            'pg' => $nextpg == 1 && !isset($shift) ? '' : $nextpg
-        ) + get_context());
-
-        if ($thing) {
-            if ($escape == 'html') {
-                $title = escape_title($title);
-            } elseif ($escape) {
-                $title = txp_escape(array('escape' => $escape), $title);
-            }
-
-            return href(
-                parse($thing),
-                $url,
-                (empty($title) ? '' : ' title="'.$title.'"').
-                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
-            );
+    if (!isset($shift)){
+        $pages = array(1);
+    } elseif ($shift === true) {
+        $pages = array(-1);
+    } else {
+        $pages = array_map('intval', do_list($shift));
+    }
+    
+    foreach ($pages as $page) {
+        if ($newer) {
+            $nextpg = (int)$page < 0 ? min(-$page, $pg - 1) : $pg - $page;
+        } else {
+            $nextpg = (int)$page < 0 ? max($numPages + $page, $pg) + 1 : $pg + $page;
         }
 
-        return $url;
-    }
+        if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $numPages) && ($showalways || empty($shown[$nextpg]))) {
+            $txp_item['page'] = $nextpg;
+            $shown[$nextpg] = true;
+            $url = pagelinkurl(array(
+                'pg' => $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? '' : $nextpg
+            ) + $context);
 
-    return ($showalways) ? parse($thing) : '';
-}
+            if (isset($thing)) {
+                if ($escape == 'html') {
+                    $title = escape_title($title);
+                } elseif ($escape) {
+                    $title = txp_escape(array('escape' => $escape), $title);
+                }
 
-// -------------------------------------------------------------
-
-function older($atts, $thing = null)
-{
-    global $thispage, $is_article_list;
-
-    if (empty($thispage)) {
-        return $is_article_list ? postpone_process() : '';
-    }
-
-    extract(lAtts(array(
-        'showalways' => 0,
-        'title'      => '',
-        'escape'     => 'html',
-        'rel'        => '',
-        'shift'      => null,
-    ), $atts));
-
-    $numPages = $thispage['numPages'];
-    $pg = $thispage['pg'];
-    $nextpg = $shift === '*' ? max($numPages, $pg + 1) : ($pg + (isset($shift) ? intval($shift) : 1));
-
-    if ($nextpg > 0 && $nextpg <= $numPages) {
-        $url = pagelinkurl(array(
-            'pg' => $nextpg
-        ) + get_context());
-
-        if ($thing) {
-            if ($escape == 'html') {
-                $title = escape_title($title);
-            } elseif ($escape) {
-                $title = txp_escape(array('escape' => $escape), $title);
+                $url = $link ? href(
+                    parse($thing),
+                    $url,
+                    (empty($title) ? '' : ' title="'.$title.'"').
+                    (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
+                ) : parse($thing);
             }
-
-            return href(
-                parse($thing),
-                $url,
-                (empty($title) ? '' : ' title="'.$title.'"').
-                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
-            );
+        } else {
+            $url = $showalways ? parse($thing) : '';
         }
 
-        return $url;
+        empty($url) or $out[] = $url;
     }
 
-    return ($showalways) ? parse($thing) : '';
+    $txp_item['page'] = $oldpage;
+
+    return doWrap($out, '', $break);
 }
 
 // -------------------------------------------------------------
@@ -1959,67 +1927,13 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts)
+function posted($atts, $thing = null, $time = 'posted')
 {
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
 
     assert_article();
 
-    extract(lAtts(array(
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
-    ), $atts));
-
-    if ($format) {
-        $out = safe_strftime($format, $thisarticle['posted'], $gmt, $lang);
-    } else {
-        if ($id || $c || $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle['posted'], $gmt, $lang);
-        } else {
-            $out = safe_strftime($dateformat, $thisarticle['posted'], $gmt, $lang);
-        }
-    }
-
-    return $out;
-}
-
-// -------------------------------------------------------------
-
-function modified($atts)
-{
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
-    ), $atts));
-
-    if ($format) {
-        $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
-    } else {
-        if ($id || $c || $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
-        } else {
-            $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
-        }
-    }
-
-    return $out;
-}
-
-// -------------------------------------------------------------
-
-function expires($atts)
-{
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-
-    assert_article();
-
-    if ($thisarticle['expires'] == 0) {
+    if (empty($thisarticle[$time])) {
         return '';
     }
 
@@ -2030,12 +1944,12 @@ function expires($atts)
     ), $atts));
 
     if ($format) {
-        $out = safe_strftime($format, $thisarticle['expires'], $gmt, $lang);
+        $out = safe_strftime($format, $thisarticle[$time], $gmt, $lang);
     } else {
         if ($id || $c || $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle['expires'], $gmt, $lang);
+            $out = safe_strftime($archive_dateformat, $thisarticle[$time], $gmt, $lang);
         } else {
-            $out = safe_strftime($dateformat, $thisarticle['expires'], $gmt, $lang);
+            $out = safe_strftime($dateformat, $thisarticle[$time], $gmt, $lang);
         }
     }
 
@@ -2239,7 +2153,7 @@ function comments_form($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function comment_name_input($atts)
+function comment_name_input($atts, $thing = null, $field = 'name', $clean = false)
 {
     global $prefs, $thiscommentsform;
 
@@ -2249,80 +2163,24 @@ function comment_name_input($atts)
         'placeholder' => '',
     ), $atts));
 
-    $namewarn = false;
-    $name = pcs('name');
+    $warn = false;
+    $val = is_callable($clean) ? $clean(pcs($field)) : pcs($field);
     $h5 = ($prefs['doctype'] == 'html5');
+    $required = get_pref('comments_require_'.$field);
 
     if (ps('preview')) {
         $comment = getComment();
-        $name = $comment['name'];
-        $namewarn = ($prefs['comments_require_name'] && !$name);
+        $val = $comment[$field];
+        $warn = $required && !$val;
     }
 
     return fInput('text', array(
-            'name'         => 'name',
+            'name'         => $field,
             'aria-label'   => $aria_label,
-            'autocomplete' => 'name',
+            'autocomplete' => $field == 'web' ? 'url' : $field,
             'placeholder'  => $placeholder,
-        ), $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
-}
-
-// -------------------------------------------------------------
-
-function comment_email_input($atts)
-{
-    global $prefs, $thiscommentsform;
-
-    extract(lAtts(array(
-        'size'        => $thiscommentsform['isize'],
-        'aria_label'  => '',
-        'placeholder' => '',
-    ), $atts));
-
-    $emailwarn = false;
-    $email = clean_url(pcs('email'));
-    $h5 = ($prefs['doctype'] == 'html5');
-
-    if (ps('preview')) {
-        $comment = getComment();
-        $email = $comment['email'];
-        $emailwarn = ($prefs['comments_require_email'] && !$email);
-    }
-
-    return fInput($h5 ? 'email' : 'text', array(
-            'name'         => 'email',
-            'aria-label'   => $aria_label,
-            'autocomplete' => 'email',
-            'placeholder'  => $placeholder,
-        ), $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
-}
-
-// -------------------------------------------------------------
-
-function comment_web_input($atts)
-{
-    global $prefs, $thiscommentsform;
-
-    extract(lAtts(array(
-        'size'        => $thiscommentsform['isize'],
-        'aria_label'  => '',
-        'placeholder' => 'http(s)://',
-    ), $atts));
-
-    $web = clean_url(pcs('web'));
-    $h5 = ($prefs['doctype'] == 'html5');
-
-    if (ps('preview')) {
-        $comment = getComment();
-        $web = $comment['web'];
-    }
-
-    return fInput($h5 ? 'url' : 'text', array(
-            'name'         => 'web',
-            'aria-label'   => $aria_label,
-            'autocomplete' => 'url',
-            'placeholder'  => $placeholder,
-        ), $web, 'comment_web_input', '', '', $size, '', 'web');
+            'required'     => $h5 && $required
+        ), $val, 'comment_'.$field.'_input'.($warn ? ' comments_error' : ''), '', '', $size, '', $field);
 }
 
 // -------------------------------------------------------------
@@ -2981,20 +2839,6 @@ function title($atts)
 function excerpt($atts = array(), $thing = null)
 {
     return txp_sandbox(array('field' => 'excerpt'), $thing);
-}
-
-// -------------------------------------------------------------
-
-function category1($atts, $thing = null)
-{
-    return article_category(array('number' => 1) + $atts, $thing);
-}
-
-// -------------------------------------------------------------
-
-function category2($atts, $thing = null)
-{
-    return article_category(array('number' => 2) + $atts, $thing);
 }
 
 // -------------------------------------------------------------
@@ -4371,14 +4215,12 @@ function txp_header($atts)
     }
 
     extract(lAtts(array(
-        'name'    => 'Content-Type',
+        'name'    => true,
         'replace' => true,
-        'value'   => 'text/html; charset=utf-8',
+        'value'   => '200 OK',
     ), $atts));
 
-    if ($name) {
-        set_headers(array(strtolower($name) => $value), !empty($replace));
-    }
+    set_headers(array($name => $value), !empty($replace));
 }
 
 // -------------------------------------------------------------
@@ -4917,7 +4759,7 @@ function file_download_size($atts)
 
 // -------------------------------------------------------------
 
-function file_download_created($atts)
+function file_download_time($atts, $thing = null, $time = 'created')
 {
     global $thisfile;
 
@@ -4925,27 +4767,9 @@ function file_download_created($atts)
 
     extract(lAtts(array('format' => ''), $atts));
 
-    if ($thisfile['created']) {
+    if (!empty($thisfile[$time])) {
         return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile['created'],
-            'format' => $format,
-        ));
-    }
-}
-
-// -------------------------------------------------------------
-
-function file_download_modified($atts)
-{
-    global $thisfile;
-
-    assert_file();
-
-    extract(lAtts(array('format' => ''), $atts));
-
-    if ($thisfile['modified']) {
-        return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile['modified'],
+            'ftime'  => $thisfile[$time],
             'format' => $format,
         ));
     }
@@ -5446,4 +5270,17 @@ function txp_wraptag($atts, $thing = '')
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_item($atts)
+{
+    global $txp_item;
+
+    extract(lAtts(array(
+        'name' => 'item'
+    ), $atts));
+
+    return isset($txp_item[$name]) ? $txp_item[$name] : null;
 }

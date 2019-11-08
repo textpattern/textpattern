@@ -40,6 +40,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     private $tags = array();
     private $atts = array();
+    private $params = array();
+    private $attr = array();
 
     /**
      * Registers a tag.
@@ -61,8 +63,21 @@ class Registry implements \Textpattern\Container\ReusableInterface
                 $tag = $callback;
             }
 
+            if (is_array($tag)) {
+                list($tag, $atts) = $tag + array(null, null);
+            }
+
             if ($tag) {
                 $this->tags[$tag] = $callback;
+                $params = array_slice(func_get_args(), 2);
+
+                if (!empty($params)) {
+                    $this->params[$tag] = $params;
+                }
+
+                if (isset($atts)) {
+                    $this->atts[$tag] = (array)$atts;
+                }
             }
         }
 
@@ -86,14 +101,14 @@ class Registry implements \Textpattern\Container\ReusableInterface
         // is_callable only checks syntax here to avoid autoloading
         if (is_bool($callback)) {
             foreach (do_list_unique($tag) as $tag) {
-                $this->atts[$tag] = $callback;
+                $this->attr[$tag] = $callback;
             }
         } elseif ($callback && is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
-                $this->atts[$callback] = $callback;
+                $this->attr[$callback] = $callback;
             } else {
                 foreach (do_list_unique($tag) as $tag) {
-                    $this->atts[$tag] = $callback;
+                    $this->attr[$tag] = $callback;
                 }
             }
         }
@@ -113,7 +128,17 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+            $atts = (array)$atts;
+
+            if (isset($this->atts[$tag])) {
+                $atts += $this->atts[$tag];
+            }
+
+            //TODO: switch to args unpacking for php 5.6+
+            return isset($this->params[$tag]) ?
+//                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
+                (string) call_user_func_array($this->tags[$tag], array_merge(array($atts, $thing), $this->params[$tag])) :
+                (string) call_user_func($this->tags[$tag], $atts, $thing);
         } else {
             return false;
         }
@@ -131,7 +156,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function processAttr($tag, $atts = null, $thing = null)
     {
         if ($this->isRegisteredAttr($tag)) {
-            return (string) call_user_func($this->atts[$tag], $atts, $thing);
+            return (string) call_user_func($this->attr[$tag], $atts, $thing);
         } else {
             return false;
         }
@@ -158,7 +183,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegisteredAttr($tag)
     {
-        return isset($this->atts[$tag]) && is_callable($this->atts[$tag]);
+        return isset($this->attr[$tag]) && is_callable($this->attr[$tag]);
     }
 
     /**
@@ -170,6 +195,6 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function getRegistered($is_attr = false)
     {
-        return $is_attr ? $this->atts : $this->tags;
+        return $is_attr ? $this->attr : $this->tags;
     }
 }

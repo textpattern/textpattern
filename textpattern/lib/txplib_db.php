@@ -841,21 +841,29 @@ function safe_field($thing, $table, $where, $debug = false)
  * @return array
  */
 
-function safe_column($thing, $table, $where, $debug = false)
+function safe_column($thing, $table, $where = '1', $debug = false)
 {
+    if (is_array($thing)) {
+        list($index, $thing) = $thing + array(null, '*');
+    }
+
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
 
     if ($rs) {
-        foreach ($rs as $a) {
-            $v = array_shift($a);
-            $out[$v] = $v;
+        if (isset($index)) {
+            $out = isset($rs[0][$index]) ? array_column($rs, null, $index) : false;
+        } elseif (isset($rs[0][$thing])) {
+            $out = array_column($rs, $thing, $thing);
+        } else {
+            foreach ($rs as $a) {
+                $v = array_shift($a);
+                $out[$v] = $v;
+            }
         }
-
-        return $out;
     }
 
-    return array();
+    return empty($out) ? array() : $out;
 }
 
 /**
@@ -1266,8 +1274,11 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
         return array();
     }
 
+    if ($depth && $depth !== true) {
+        $levels = array_map('intval', do_list($depth, array(',', '-')));
+    }
+
     $type = doSlash($type);
-    $depth === true or list($min, $max) = array_map('intval', array_slice(explode(',', '0,'.$depth, 3), -2, 2));
     $out = $border = array();
 
     $rows = safe_rows(
@@ -1297,7 +1308,7 @@ function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_categor
             array_pop($right);
         }
 
-        if ($depth === true || $level >= $min && $level <= $max) {
+        if (!isset($levels) || in_array($level, $levels)) {
             if (isset($names)) {
                 $out[$id] = $name;
             } else {

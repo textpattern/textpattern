@@ -124,7 +124,10 @@ class Plugin
 
             if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
-                $encoded and $this->updateFile($name, $plugin);
+
+                if ($encoded) {
+                    $this->updateFile($name, $plugin);
+                }
 
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -202,24 +205,29 @@ class Plugin
             return false;
         }
 
+        $dir .= DS;
         $plugin = array('name' => $name);
 
-        if (@$info = file_get_contents($dir.'/manifest.json')) {
+        if (@$info = file_get_contents($dir.'manifest.json')) {
             $plugin += json_decode($info, true);
         }
 
-        if (@$code = file_get_contents($dir.'/'.$name.'.php')) {
+        if (@$code = file_get_contents($dir.$name.'.php')) {
             $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
             $plugin['code'] = $code;
         }
 
-        if (@$textpack = file_get_contents($dir.'/textpack.txp')) {
+        if (@$textpack = file_get_contents($dir.'textpack.txp')) {
             $plugin['textpack'] = $textpack;
         }
 
-        if (@$help = file_get_contents($dir.'/help.html')) {
+        if (@$data = file_get_contents($dir.'data.txp')) {
+            $plugin['data'] = $data;
+        }
+
+        if (@$help = file_get_contents($dir.'help.html')) {
             $plugin['help'] = $help;
-        } elseif (@$help = file_get_contents($dir.'/help.textile')) {
+        } elseif (@$help = file_get_contents($dir.'help.textile')) {
             $plugin['help_raw'] = $help;
         }
 
@@ -406,6 +414,12 @@ class Plugin
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
+            $langDir = txpath.DS.'plugins'.DS.$name.DS.'lang'.DS;
+
+            if (is_dir($langDir) && is_readable($langDir)) {
+                $plugLang = new \Textpattern\L10n\Lang($langDir);
+                $plugLang->installFile($lang, $name);
+            }
         }
     }
 
@@ -439,7 +453,7 @@ class Plugin
             return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'plugins', $filename);
         }
 
-        if(!is_dir($dir = txpath.DS.'plugins'.DS.$filename)) {
+        if (!is_dir($dir = txpath.DS.'plugins'.DS.$filename)) {
             mkdir($dir);
         }
 
@@ -454,6 +468,10 @@ class Plugin
 
             if (isset($code['textpack'])) {
                 file_put_contents($dir.DS.'textpack.txp', $code['textpack'], LOCK_EX);
+            }
+
+            if (isset($code['data'])) {
+                file_put_contents($dir.DS.'data.txp', $code['data'], LOCK_EX);
             }
 
             $code = isset($code['code']) ? $code['code'] : '';

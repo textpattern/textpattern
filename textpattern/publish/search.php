@@ -43,14 +43,13 @@
 
 function filterSearch()
 {
-    $rs = safe_column("name", 'txp_section', "searchable != '1'");
-    if ($rs) {
-        foreach ($rs as $name) {
-            $filters[] = "AND Section != '".doSlash($name)."'";
-        }
+    static $filterSearch = null;
+    global $txp_sections;
 
-        return join(' ', $filters);
+    if (!isset($filterSearch)) {
+        $rs = array_filter(array_column($txp_sections, 'searchable', 'name'));
+        $filterSearch = $rs ? 'AND Section IN('.join(',', quote_list(array_keys($rs))).')' : false;
     }
 
-    return false;
+    return $filterSearch;
 }

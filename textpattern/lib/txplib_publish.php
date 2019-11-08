@@ -37,6 +37,7 @@
 function filterFrontPage()
 {
     static $filterFrontPage;
+    global $txp_sections;
 
     if (isset($filterFrontPage)) {
         return $filterFrontPage;
@@ -44,16 +45,10 @@ function filterFrontPage()
 
     $filterFrontPage = false;
 
-    $rs = safe_column("name", 'txp_section', "on_frontpage != '1'");
+    $rs = array_filter(array_column($txp_sections, 'on_frontpage', 'name'));
 
     if ($rs) {
-        $filters = array();
-
-        foreach ($rs as $name) {
-            $filters[] = " and Section != '".doSlash($name)."'";
-        }
-
-        $filterFrontPage = join('', $filters);
+        $filterFrontPage = " AND Section IN(".join(',', quote_list(array_keys($rs))).")";
     }
 
     return $filterFrontPage;
@@ -571,16 +566,18 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
+    $table === 'textpattern' or $table = 'txp_'.$table;
+
     if (is_array($val)) {
         $fields = implode(',', array_keys($val));
         $where = join_qs(quote_list(array_filter($val)), ' AND ');
 
-        return safe_row($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+        return safe_row($fields, $table, $where." LIMIT 1", $debug);
     } else {
         $fields = 'name';
         $where = "name = '".doSlash($val)."'";
 
-        return safe_field($fields, 'txp_'.$table, $where." LIMIT 1", $debug);
+        return safe_field($fields, $table, $where." LIMIT 1", $debug);
     }
 }
 
@@ -728,12 +725,13 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function chopUrl($req)
 {
-    $req = strtolower(strtok($req, '?'));
-    $req = preg_replace('/index\.php$/', '', $req);
-    $r = array_map('urldecode', explode('/', $req));
+    $req = strtok($req, '?');
+    $req = preg_replace('/index\.php$/i', '', $req);
+    $r = array_map('urldecode', explode('/', strtolower($req)));
     $n = max(4, count($r));
+    $o = array('u0' => $req);
 
-    for ($i = 0; $i < $n; $i++) {
+    for ($i = 1; $i < $n; $i++) {
         $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
     }
 
