@@ -86,6 +86,7 @@ $trace = new Trace();
 $trace->start('[PHP includes]');
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+include txpath.'/lib/txplib_admin.php';
 
 include txpath.'/vendors/Textpattern/Loader.php';
 

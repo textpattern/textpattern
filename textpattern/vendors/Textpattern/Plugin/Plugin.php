@@ -64,7 +64,7 @@ class Plugin
      * @return string|array
      */
 
-    public function install($plugin, $status = null)
+    public function install($plugin, $status = null, $write = true)
     {
         if ($encoded = !is_array($plugin)) {
             $plugin = $this->extract($plugin);
@@ -125,7 +125,7 @@ class Plugin
             if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
 
-                if ($encoded) {
+                if ($write) {
                     $this->updateFile($name, $plugin);
                 }
 
@@ -186,6 +186,28 @@ class Plugin
         }
 
         return $plugin;
+    }
+
+    /**
+     * Extract a section from plugin template.
+     *
+     * @param  string $pack    Plugin template
+     * @param  string $section Section
+     * @return array
+     */
+
+    public function extractSection($pack, $section = 'CODE') {
+        $code = '';
+        $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$section.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$section.'\s*\-{3,}\s*$/Ums', $pack, null, PREG_SPLIT_DELIM_CAPTURE);
+
+        foreach ($pack as $i => $chunk) {
+            if ($i % 2) {
+                $code .= $chunk;
+                $pack[$i] = '';
+            }
+        }
+
+        return array($code, implode('', $pack));
     }
 
     /**
