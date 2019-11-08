@@ -971,12 +971,12 @@ function email($atts, $thing = null)
 
         // Obfuscate link text?
         if (is_valid_email($linktext)) {
-            $linktext = eE($linktext);
+            $linktext = Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($linktext);
         }
 
         return href(
             $linktext,
-            eE('mailto:'.$email),
+            Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress('mailto:'.$email),
             ($title ? ' title="'.txpspecialchars($title).'"' : '')
         );
     }
@@ -2465,8 +2465,10 @@ function comment_id()
 function comment_name($atts)
 {
     global $thiscomment, $prefs;
+    static $encoder = null;
 
     assert_comment();
+    isset($encoder) or $encoder = Txp::get('\Textpattern\Mail\Encode');
 
     extract($prefs);
     extract($thiscomment);
@@ -2484,7 +2486,7 @@ function comment_name($atts)
         }
 
         if ($email && !$never_display_email) {
-            return href($name, eE('mailto:'.$email), $nofollow);
+            return href($name, $encoder->entityObfuscateAddress('mailto:'.$email), $nofollow);
         }
     }
 

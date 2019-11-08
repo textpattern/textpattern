@@ -1956,3 +1956,18 @@ function assert_system_requirements()
         txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '.REQUIRED_PHP_VERSION.' or better.');
     }
 }
+
+/**
+ * Get Theme prefs
+ * Now Textpattern does not support themes. If the setup folder is deleted, it will return an empty array.
+ */
+
+function get_prefs_theme()
+{
+    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    if (empty($out)) {
+        return array();
+    }
+
+    return $out;
+}
