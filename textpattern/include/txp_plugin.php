@@ -593,8 +593,7 @@ function plugin_upload()
             if (strtolower($extension) === 'php') {
                 $write = true;
                 $pack = file_get_contents($target_path);
-                list($code, $pack) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, 'CODE');
-                list($help_raw, $pack) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, 'HELP');
+                list($pack, $code, $help_raw) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, array('CODE', 'HELP'));
                 $plugin += compact('code', 'help_raw');
 
                 file_put_contents($target_path, $pack);
