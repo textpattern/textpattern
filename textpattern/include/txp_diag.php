@@ -63,7 +63,23 @@ if ($event == 'diag') {
     require_privs('diag');
 
     $step = ($step) ? $step : gps('step');
-    doDiagnostics();
+
+    $available_steps = array(
+        'low'     => true,
+        'high'    => true,
+        'phpinfo' => true,
+    );
+
+    if ($step && bouncer($step, $available_steps)) {
+        if ($step === 'phpinfo') {
+            phpinfo();
+            exit;
+        } else {
+            doDiagnostics();
+        }
+    } else {
+        doDiagnostics();
+    }
 }
 
 /**
@@ -550,7 +566,14 @@ function doDiagnostics()
                 '',
                 array('class' => 'txp-form-field diagnostic-details-level'),
                 ''
-            ).
+            ).href('php_diagnostics', array(
+                'event'      => 'diag',
+                'step'       => 'phpinfo',
+                '_txp_token' => form_token(),
+            ), array(
+                'class'  => 'txp-button',
+                'target' => '_blank',
+            )).
             inputLabel(
                 'diag_clear_private',
                 checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
