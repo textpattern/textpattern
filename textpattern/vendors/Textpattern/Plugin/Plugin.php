@@ -495,6 +495,10 @@ class Plugin
                 file_put_contents($dir.DS.'help.html', $code['help'], LOCK_EX);
             }
 
+            if (isset($code['help_raw'])) {
+                file_put_contents($dir.DS.'help.textile', $code['help_raw'], LOCK_EX);
+            }
+
             if (isset($code['textpack'])) {
                 file_put_contents($dir.DS.'textpack.txp', $code['textpack'], LOCK_EX);
             }
