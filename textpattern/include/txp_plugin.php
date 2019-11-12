@@ -592,12 +592,7 @@ function plugin_upload()
 
             if (strtolower($extension) === 'php') {
                 $write = true;
-                $pack = file_get_contents($target_path);
-                list($pack, $code, $help_raw) = Txp::get('\Textpattern\Plugin\Plugin')->extractSection($pack, array('CODE', 'HELP'));
-                $plugin += compact('code', 'help_raw');
-
-                file_put_contents($target_path, $pack);
-                include $target_path;
+                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read(array($filename, $target_path));
             } elseif (class_exists('ZipArchive')) {
                 $zip = new ZipArchive();
                 $x = $zip->open($target_path);
