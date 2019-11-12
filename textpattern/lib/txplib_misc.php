@@ -1475,7 +1475,8 @@ function callback_event($event, $step = '', $pre = 0)
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
                 if ($production_status !== 'live') {
-                    $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                    $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString()."'".
+                        (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
                 $return_value = call_user_func_array($c['function'], array(
@@ -1503,7 +1504,7 @@ function callback_event($event, $step = '', $pre = 0)
                     $trace->stop();
                 }
             } elseif ($production_status === 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
+                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
             }
         }
     }
@@ -1549,32 +1550,12 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
                 // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
                 $return_value[] = $c['function']($event, $step, $data, $options);
             } elseif ($production_status == 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
+                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
             }
         }
     }
 
     return $return_value;
-}
-
-/**
- * Converts a callable to a string presentation.
- *
- * <code>
- * echo callback_tostring(array('class', 'method'));
- * </code>
- *
- * @param      callback $callback The callback
- * @return     string The $callback as a human-readable string
- * @since      4.5.0
- * @package    Callback
- * @deprecated in 4.6.0
- * @see        \Textpattern\Type\Callable::toString()
- */
-
-function callback_tostring($callback)
-{
-    return Txp::get('\Textpattern\Type\TypeCallable', $callback)->toString();
 }
 
 /**
@@ -1624,7 +1605,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
     foreach ((array) $plugin_callback as $c) {
         if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre) {
             if ($as_string) {
-                $out[] = callback_tostring($c['function']);
+                $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString();
             } else {
                 $out[] = $c['function'];
             }
