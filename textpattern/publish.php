@@ -389,8 +389,13 @@ function preText($s, $prefs)
                     for ($n = 0; isset(${'u'.($n+1)}); $n++);
                     $un = ${'u'.$n};
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
+                    $custom_modes = array_filter($permlink_modes, function($v) use ($permlink_mode) {
+                        return $v && $v !== $permlink_mode;
+                    });
 
-                    if (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
+                    if (empty($custom_modes)) {
+                        $permlink_guess = $permlink_mode;
+                    } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
                         $safe_un = doSlash($un);
 
                         $guessarticles = safe_rows('*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
