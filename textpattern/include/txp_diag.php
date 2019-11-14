@@ -559,6 +559,13 @@ function doDiagnostics()
     $out = array(
         form(
             eInput('diag').
+            href('php_diagnostics', array(
+                'event'      => 'diag',
+                'step'       => 'phpinfo',
+                '_txp_token' => form_token(),
+            ), array(
+                'target' => '_blank',
+            )).
             inputLabel(
                 'diag_detail_level',
                 selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
@@ -566,14 +573,7 @@ function doDiagnostics()
                 '',
                 array('class' => 'txp-form-field diagnostic-details-level'),
                 ''
-            ).href('php_diagnostics', array(
-                'event'      => 'diag',
-                'step'       => 'phpinfo',
-                '_txp_token' => form_token(),
-            ), array(
-                'class'  => 'txp-button',
-                'target' => '_blank',
-            )).
+            ).
             inputLabel(
                 'diag_clear_private',
                 checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
