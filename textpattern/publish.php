@@ -414,81 +414,86 @@ function preText($s, $prefs)
 
                         if (!isset($permlink_guess)) {
                             unset($thisarticle);
-                            $is_404 = true;
                         } else {
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
+                            $title = $thisarticle['url_title'];
+                            $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
                         }
-                    } elseif (isset($permlink_modes[$u1])) {
+                    }
+
+                    if (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
                         $permlink_guess = $permlink_modes[$u1];
                     }
 
-                    // Then see if the prefs-defined permlink scheme is usable.
-                    switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
-                        case 'section_id_title':
-                            $out['s'] = $u1;
+                    if (empty($out['id'])) {
+                        // Then see if the prefs-defined permlink scheme is usable.
+                        switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
+                            case 'section_id_title':
+                                $out['s'] = $u1;
 
-                            if (is_numeric($u2)) {
-                                $out['id'] = $u2;
-                            } else {
-                                $title = empty($u2) ? null : $u2;
-                            }
-
-                            break;
-
-                        case 'section_category_title':
-                        case 'breadcrumb_title':
-                            $out['s'] = $u1;
-                            $title = empty($un) ? null : $un;
-
-                            if (!isset($title) && $n > 2) {
-                                $out['c'] = ${'u'.($n-1)};
-                            }
-
-                            break;
-
-                        case 'year_month_day_title':
-                            if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
-                                $title = empty($u4) ? null : $u4;
-                                $month = array($u1);
-
-                                if (!empty($u2)) {
-                                    $month[] = ltrim($u2);
-                                    empty($u3) or $month[] = ltrim($u3);
+                                if (is_numeric($u2)) {
+                                    $out['id'] = $u2;
+                                } else {
+                                    $title = empty($u2) ? null : $u2;
                                 }
-                            } elseif (empty($u3)) {
+
+                                break;
+
+                            case 'section_category_title':
+                            case 'breadcrumb_title':
+                                $out['s'] = $u1;
+                                $title = empty($un) ? null : $un;
+
+                                if (!isset($title) && $n > 2) {
+                                    $out['c'] = ${'u'.($n-1)};
+                                }
+
+                                break;
+
+                            case 'year_month_day_title':
+                                if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
+                                    $title = empty($u4) ? null : $u4;
+                                    $month = array($u1);
+
+                                    if (!empty($u2)) {
+                                        $month[] = ltrim($u2);
+                                        empty($u3) or $month[] = ltrim($u3);
+                                    }
+                                } elseif (empty($u3)) {
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                } else {
+                                    $is_404 = true;
+                                }
+
+                                break;
+
+                            case 'section_title':
                                 $out['s'] = $u1;
                                 $title = empty($u2) ? null : $u2;
-                            } else {
-                                $is_404 = true;
-                            }
 
-                            break;
+                                break;
 
-                        case 'section_title':
-                            $out['s'] = $u1;
-                            $title = empty($u2) ? null : $u2;
+                            case 'id_title':
+                                if (is_numeric($u1)) {
+                                    $out['id'] = $u1;
+                                } else {
+                                    // We don't want to miss the /section/ pages.
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                }
 
-                            break;
+                                break;
 
-                        case 'id_title':
-                            if (is_numeric($u1)) {
-                                $out['id'] = $u1;
-                            } else {
-                                // We don't want to miss the /section/ pages.
-                                $out['s'] = $u1;
-                                $title = empty($u2) ? null : $u2;
-                            }
-
-                            break;
-
-                        default:
-                            if (isset($u2)) {
-                                $out['s'] = $u1;
-                                $title = empty($u2) ? null : $u2;
-                            } else {
-                                $title = $u1;
-                            }
+                            default:
+                                if (isset($u2)) {
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                } else {
+                                    $title = $u1;
+                                }
+                        }
                     }
             }
         } else {
@@ -501,11 +506,9 @@ function preText($s, $prefs)
     // Validate dates
     if ($out['month']) {
         $date = empty($month) ? '' : implode('-', $month);
-        $month = explode('-', $out['month'], 3) +
-            (!empty($month) ? $month : array());
-        list($y, $m, $d) = $month + array(1, 1, 1);
+        $month = explode('-', $out['month'], 3) + (!empty($month) ? $month : array());
 
-        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+        if (!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) {
             $month = implode('-', $month);
         } else {
             $out['month'] = $month = '';
