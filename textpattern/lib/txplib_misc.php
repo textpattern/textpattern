@@ -459,7 +459,7 @@ function get_groups()
  * }
  */
 
-function has_privs($res, $user = '')
+function has_privs($res = null, $user = '')
 {
     global $txp_user, $txp_permissions;
     static $privs;
@@ -482,7 +482,9 @@ function has_privs($res, $user = '')
                 safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
-        if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
+        if (!isset($res)) {
+            return $privs[$user];
+        } elseif (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
             return in_list($privs[$user], $txp_permissions[$res]);
         }
     }
@@ -532,13 +534,17 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    is_array($res) or $res = array($res => $perm);
+    if (is_array($res)) {
+        unset($res[0]);
+    } else {
+        $res = array($res => $perm);
+    }
 
     foreach($res as $priv => $group) {
         if ($group === null) {
             unset($txp_permissions[$priv]);
         } elseif (!isset($txp_permissions[$priv])) {
-            $group = join(',', do_list_unique($group));
+            $group = $group === true ? has_privs() : join(',', do_list_unique($group));
             $txp_permissions[$priv] = $group;
         }
     }
