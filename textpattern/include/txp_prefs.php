@@ -174,11 +174,13 @@ function prefs_list($message = '')
     $level = has_privs();
 
     $sql = array();
+
     foreach($txp_options as $pref => $option) {
-        if (is_array($option) && isset($option[0])) {
-            $sql[] = "(name != '".doSlash($pref)."' OR $level IN(".$option[0]."))";
+        if (is_array($option) && isset($option[0]) && !in_list($level, $option[0])) {
+            $sql[] = "name != '".doSlash($pref)."'";
         }
     }
+
     $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''

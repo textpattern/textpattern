@@ -504,16 +504,26 @@ function plug_privs($pluggable = null)
 {
     global $txp_options;
 
-    is_array($pluggable) or $pluggable = $txp_options;
+    isset($pluggable) or $pluggable = $txp_options;
+    $level = has_privs();
 
-    foreach($pluggable as $pref => $pane) {
-        if (get_pref($pref)) {
-            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+    foreach((array)$pluggable as $pref => $pane) {    
+        if (is_array($pane)) {
+            if (isset($pane[0])) {
+                if (!in_list($level, $pane[0])) {
+                    return;
+                }
+    
+                unset($pane[0]);
+            }
         } else {
-            add_privs(is_array($pane) ?
-                array_fill_keys(array_keys($pane), null) :
-                array('prefs.'.$pref => null)
-            );
+            $pane = array('prefs.'.$pref => $pane);
+        }
+
+        if (get_pref($pref)) {
+            add_privs($pane);
+        } else {
+            add_privs(array_fill_keys(array_keys($pane), null));
         }
     }
 }
@@ -534,17 +544,17 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    if (is_array($res)) {
-        unset($res[0]);
-    } else {
+    if (!is_array($res)) {
         $res = array($res => $perm);
     }
 
     foreach($res as $priv => $group) {
         if ($group === null) {
             unset($txp_permissions[$priv]);
-        } elseif (!isset($txp_permissions[$priv])) {
-            $group = $group === true ? has_privs() : join(',', do_list_unique($group));
+        } else {
+            $group = ($group === true ? has_privs() : $group).
+                (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
+            $group = join(',', do_list_unique($group));
             $txp_permissions[$priv] = $group;
         }
     }
