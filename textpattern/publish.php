@@ -60,7 +60,7 @@ if (txpinterface !== 'css') {
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs();
+plug_privs(null, $userInfo['privs']);
 
 // Add prefs to globals.
 extract($prefs);

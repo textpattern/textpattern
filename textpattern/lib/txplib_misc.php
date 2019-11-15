@@ -500,12 +500,12 @@ function has_privs($res = null, $user = '')
  * @package User
  */
 
-function plug_privs($pluggable = null)
+function plug_privs($pluggable = null, $level = null)
 {
     global $txp_options;
 
     isset($pluggable) or $pluggable = $txp_options;
-    $level = has_privs();
+    isset($level) or $level = has_privs();
 
     foreach((array)$pluggable as $pref => $pane) {    
         if (is_array($pane)) {
@@ -519,6 +519,12 @@ function plug_privs($pluggable = null)
         } else {
             $pane = array('prefs.'.$pref => $pane);
         }
+
+        array_walk($pane, function(&$item) use ($level) {
+            if ($item === true) {
+                $item = $level;
+            }
+        });
 
         if (get_pref($pref)) {
             add_privs($pane);
@@ -552,8 +558,7 @@ function add_privs($res, $perm = '1')
         if ($group === null) {
             unset($txp_permissions[$priv]);
         } else {
-            $group = ($group === true ? has_privs() : $group).
-                (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
+            $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
             $txp_permissions[$priv] = $group;
         }
