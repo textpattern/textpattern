@@ -459,7 +459,7 @@ function get_groups()
  * }
  */
 
-function has_privs($res, $user = '')
+function has_privs($res = null, $user = '')
 {
     global $txp_user, $txp_permissions;
     static $privs;
@@ -482,7 +482,9 @@ function has_privs($res, $user = '')
                 safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
-        if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
+        if (!isset($res)) {
+            return $privs[$user];
+        } elseif (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
             return in_list($privs[$user], $txp_permissions[$res]);
         }
     }
@@ -498,20 +500,36 @@ function has_privs($res, $user = '')
  * @package User
  */
 
-function plug_privs($pluggable = null)
+function plug_privs($pluggable = null, $user = null)
 {
     global $txp_options;
 
-    is_array($pluggable) or $pluggable = $txp_options;
+    isset($pluggable) or $pluggable = $txp_options;
+    $level = isset($user['privs']) ? $user['privs'] : has_privs();
 
-    foreach($pluggable as $pref => $pane) {
-        if (get_pref($pref)) {
-            add_privs(is_array($pane) ? $pane : array('prefs.'.$pref => $pane));
+    foreach((array)$pluggable as $pref => $pane) {    
+        if (is_array($pane)) {
+            if (isset($pane[0])) {
+                if (!in_list($level, $pane[0])) {
+                    return;
+                }
+    
+                unset($pane[0]);
+            }
         } else {
-            add_privs(is_array($pane) ?
-                array_fill_keys(array_keys($pane), null) :
-                array('prefs.'.$pref => null)
-            );
+            $pane = array('prefs.'.$pref => $pane);
+        }
+
+        array_walk($pane, function(&$item) use ($level) {
+            if ($item === true) {
+                $item = $level;
+            }
+        });
+
+        if (get_pref($pref)) {
+            add_privs($pane);
+        } else {
+            add_privs(array_fill_keys(array_keys($pane), null));
         }
     }
 }
@@ -532,12 +550,15 @@ function add_privs($res, $perm = '1')
 {
     global $txp_permissions;
 
-    is_array($res) or $res = array($res => $perm);
+    if (!is_array($res)) {
+        $res = array($res => $perm);
+    }
 
     foreach($res as $priv => $group) {
         if ($group === null) {
             unset($txp_permissions[$priv]);
-        } elseif (!isset($txp_permissions[$priv])) {
+        } else {
+            $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
             $txp_permissions[$priv] = $group;
         }
@@ -1475,7 +1496,8 @@ function callback_event($event, $step = '', $pre = 0)
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
                 if ($production_status !== 'live') {
-                    $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                    $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString()."'".
+                        (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
                 $return_value = call_user_func_array($c['function'], array(
@@ -1503,7 +1525,7 @@ function callback_event($event, $step = '', $pre = 0)
                     $trace->stop();
                 }
             } elseif ($production_status === 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
+                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
             }
         }
     }
@@ -1549,32 +1571,12 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
                 // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
                 $return_value[] = $c['function']($event, $step, $data, $options);
             } elseif ($production_status == 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
+                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
             }
         }
     }
 
     return $return_value;
-}
-
-/**
- * Converts a callable to a string presentation.
- *
- * <code>
- * echo callback_tostring(array('class', 'method'));
- * </code>
- *
- * @param      callback $callback The callback
- * @return     string The $callback as a human-readable string
- * @since      4.5.0
- * @package    Callback
- * @deprecated in 4.6.0
- * @see        \Textpattern\Type\Callable::toString()
- */
-
-function callback_tostring($callback)
-{
-    return Txp::get('\Textpattern\Type\TypeCallable', $callback)->toString();
 }
 
 /**
@@ -1624,7 +1626,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
     foreach ((array) $plugin_callback as $c) {
         if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre) {
             if ($as_string) {
-                $out[] = callback_tostring($c['function']);
+                $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString();
             } else {
                 $out[] = $c['function'];
             }
