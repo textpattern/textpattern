@@ -210,19 +210,24 @@ if (empty($pretext['feed'])) {
     handle_lastmod();
 }
 
-$trace->start('[PHP includes, stage 3]');
+if (txpinterface !== 'css') {
+    $trace->start('[PHP includes, stage 3]');
 
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/publish/comment.php';
-include_once txpath.'/publish/taghandlers.php';
+    include_once txpath.'/lib/txplib_html.php';
+    include_once txpath.'/lib/txplib_forms.php';
+    include_once txpath.'/publish/comment.php';
+    include_once txpath.'/publish/taghandlers.php';
 
-$trace->stop();
-
+    $trace->stop();
 // i18n.
-/*if (txpinterface !== 'css') {
-    load_lang(LANG);
-}*/
+//    load_lang(LANG);
+} else {
+    $n = gps('n');
+    $t = gps('t');
+    output_css($pretext['s'], $n, $t);
+
+    exit;
+}
 
 $txp_sections = safe_column(array('name'), 'txp_section');
 
@@ -776,28 +781,24 @@ function output_component($n = '')
 function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
-    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
     if ($n) {
-        if (!is_scalar($n)) {
-            txp_die('Not Found', 404);
+        if (!is_array($n)) {
+            $n = do_list_unique($n);
         }
 
-        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
         }
-    } elseif ($s) {
-        if (!is_scalar($s)) {
-            txp_die('Not Found', 404);
-        }
-
-        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
+    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='".doSlash($s)."'")) {
+        $cssname = $res['css'];
+        $t or $t = $res['skin'];
     }
 
     if (!empty($cssname)) {
+        $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
         @header('Content-Type: text/css; charset=utf-8');
