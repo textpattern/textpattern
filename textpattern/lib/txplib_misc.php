@@ -500,12 +500,12 @@ function has_privs($res = null, $user = '')
  * @package User
  */
 
-function plug_privs($pluggable = null, $level = null)
+function plug_privs($pluggable = null, $user = null)
 {
     global $txp_options;
 
     isset($pluggable) or $pluggable = $txp_options;
-    isset($level) or $level = has_privs();
+    $level = isset($user['privs']) ? $user['privs'] : has_privs();
 
     foreach((array)$pluggable as $pref => $pane) {    
         if (is_array($pane)) {
