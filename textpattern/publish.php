@@ -54,13 +54,11 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 // Get logged user.
-if (txpinterface !== 'css') {
-    $userInfo = is_logged_in();
-}
+$userInfo = txpinterface === 'css' ? null : is_logged_in();
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs(null, $userInfo['privs']);
+plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);
