@@ -396,7 +396,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @param string $lang_code The lang identifier to load
      */
 
-    public function installFile($lang_code)
+    public function installFile($lang_code, $owner = '')
     {
         $langpack = $this->getPack($lang_code);
 
@@ -411,7 +411,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack = array_merge($fallpack, $langpack);
         }
 
-        return ($this->upsertPack($langpack) === false) ? false : true;
+        return ($this->upsertPack($langpack, $owner) === false) ? false : true;
     }
 
     /**

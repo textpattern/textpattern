@@ -493,31 +493,6 @@ function logging($name, $val)
 }
 
 /**
- * Renders a HTML &lt;select&gt; list of supported permanent link URL formats.
- *
- * @param  string $name HTML name and id of the list
- * @param  string $val  Initial (or current) selected item
- * @return string HTML
- */
-
-function permlinkmodes($name, $val)
-{
-    $vals = array(
-        'messy'                     => gTxt('messy'),
-        'id_title'                  => gTxt('id_title'),
-        'section_id_title'          => gTxt('section_id_title'),
-        'section_category_title'    => gTxt('section_category_title'),
-        'year_month_day_title'      => gTxt('year_month_day_title'),
-        'breadcrumb_title'          => gTxt('breadcrumb_title'),
-        'section_title'             => gTxt('section_title'),
-        'title_only'                => gTxt('title_only'),
-        //'category_subcategory' => gTxt('category_subcategory'),
-    );
-
-    return selectInput($name, $vals, $val, '', '', $name);
-}
-
-/**
  * Renders a HTML choice of comment popup modes.
  *
  * @param  string $name HTML name and id of the widget
