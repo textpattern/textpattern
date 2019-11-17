@@ -1730,6 +1730,10 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     global $txp_atts;
     static $import = array('breakby', 'breakclass', 'wrapform');
 
+    $list = is_array($list) ? array_filter($list, function($v) {
+        return $v !== false;
+    }) : null;
+
     if (!$list) {
         return '';
     }
