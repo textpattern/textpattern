@@ -158,7 +158,7 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user;
+    global $prefs, $txp_user, $txp_options;
 
     extract($prefs);
 
@@ -171,8 +171,16 @@ function prefs_list($message = '')
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
+    $level = has_privs();
 
     $sql = array();
+
+    foreach($txp_options as $pref => $option) {
+        if (is_array($option) && isset($option[0]) && !in_list($level, $option[0])) {
+            $sql[] = "name != '".doSlash($pref)."'";
+        }
+    }
+
     $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''

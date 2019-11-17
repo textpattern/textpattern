@@ -35,6 +35,7 @@ $dbupdates = array(
     '4.6.0',
     '4.7.0',
     '4.7.2',
+    '4.8.0-dev',
 );
 
 function newest_file()
@@ -71,8 +72,8 @@ assert_system_requirements();
 
 // Wipe out the last update check setting so the next visit to Diagnostics
 // forces an update check, which resets the message. Without this, people who
-// upgrade in future may still see a "new version available" message for some
-// time after upgrading.
+// upgrade in future may still see a "new version available" message for a
+// short time after upgrading.
 safe_delete('txp_prefs', "name = 'last_update_check'");
 
 set_error_handler("updateErrorHandler");
