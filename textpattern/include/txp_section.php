@@ -310,45 +310,33 @@ function sec_section_list($message = '')
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
-                $missing = isset($all_pages[$sec_dev_skin]) && !in_array($sec_dev_page, $all_pages[$sec_dev_skin]);
-                $replaced = $dev_preview && ($sec_page != $sec_dev_page || $missing);
-                $dev_set = $dev_set || $replaced;
-                $sec_page = tag(href(txpspecialchars($sec_page), array(
-                    'event' => 'page',
-                    'name'  => $sec_page,
-                    'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
-                !$replaced ? '' : ' | '.
-                href(txpspecialchars($sec_dev_page), array(
-                    'event' => 'page',
-                    'name'  => $sec_dev_page,
-                    'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
+                foreach (array('page', 'css') as $item) {
+                    $all_items = $item === 'page' ? $all_pages : $all_styles;
+                    $sec_item = ${"sec_$item"};
+                    $sec_dev_item = ${"sec_dev_$item"};
 
-                $missing = isset($all_styles[$sec_dev_skin]) && !in_array($sec_dev_css, $all_styles[$sec_dev_skin]);
-                $replaced = $dev_preview && ($sec_css != $sec_dev_css || $missing);
-                $dev_set = $dev_set || $replaced;
+                    $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
+                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
+                    $dev_set = $dev_set || $replaced;
 
-                if (empty($sec_permlink_mode)) {
-                    $sec_permlink_mode = '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>';
-                } else {
-                    $sec_permlink_mode = gTxt($sec_permlink_mode);
+                    ${"sec_$item"} = href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
+                        array(
+                            'event' => $item,
+                            'name'  => $sec_item,
+                            'skin'  => $sec_skin,
+                        ), array('title' => gTxt('edit'))).
+                    (!$replaced ? '' : ' | '.
+                        href(txpspecialchars($sec_dev_item), array(
+                            'event' => $item,
+                            'name'  => $sec_dev_item,
+                            'skin'  => $sec_dev_skin,
+                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''))
+                    );
                 }
 
-                $sec_css = tag(href(txpspecialchars($sec_css), array(
-                    'event' => 'css',
-                    'name'  => $sec_css,
-                    'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
-                !$replaced ? '' : ' | '.
-                href(txpspecialchars($sec_dev_css), array(
-                    'event' => 'css',
-                    'name'  => $sec_dev_css,
-                    'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
-
-                $replaced = $dev_preview && ($sec_skin != $sec_dev_skin);
+                $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
                 $dev_set = $dev_set || $replaced;
+
                 $contentBlock .= tr(
                     td(
                         fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
@@ -359,7 +347,7 @@ function sec_section_list($message = '')
                         ).
                         span(
                             sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
+                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
                         ), '', array(
                             'class' => 'txp-list-col-name',
@@ -370,7 +358,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? 'del' : '').
+                        tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)).
                         ($replaced ? ' | '.$sec_dev_skin : ''), '', 'txp-list-col-skin'
                     ).
                     td(
@@ -380,7 +368,7 @@ function sec_section_list($message = '')
                         $sec_css, '', 'txp-list-col-style'
                     ).
                     td(
-                        $sec_permlink_mode, '', 'txp-list-col-permlink_mode'
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
                     ).
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
@@ -522,7 +510,7 @@ function section_edit()
         ).inputLabel(
             'permlink_mode',
             permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
-            '', 'section_permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
+            '', 'permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
         ).script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};

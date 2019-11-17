@@ -64,7 +64,7 @@ class Plugin
      * @return string|array
      */
 
-    public function install($plugin, $status = null)
+    public function install($plugin, $status = null, $write = true)
     {
         if ($encoded = !is_array($plugin)) {
             $plugin = $this->extract($plugin);
@@ -125,7 +125,7 @@ class Plugin
             if ($rs && ($code || !$encoded)) {
                 $this->installTextpack($name, true);
 
-                if ($encoded) {
+                if ($write) {
                     $this->updateFile($name, $plugin);
                 }
 
@@ -189,47 +189,98 @@ class Plugin
     }
 
     /**
+     * Extract a section from plugin template.
+     *
+     * @param  string       $pack    Plugin template
+     * @param  array|string $section Section
+     * @return array
+     */
+
+    public function extractSection($pack, $section = 'CODE') {
+        $result = array(false);
+
+        foreach ((array)$section as $s) {
+            $code = '';
+            $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$s.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$s.'\s*\-{3,}\s*$/Ums', $pack, null, PREG_SPLIT_DELIM_CAPTURE);
+
+            foreach ($pack as $i => $chunk) {
+                if ($i % 2) {
+                    $code .= $chunk;
+                    $pack[$i] = '';
+                }
+            }
+
+            $result[] = $code;
+            $pack = implode('', $pack);
+        }
+
+        return array($pack) + $result;
+    }
+
+    /**
      * Read a plugin from file.
      *
-     * @param  string  $name      Plugin name
-     * @param  boolean $normalize Check/normalize some fields
+     * @param  string|array $name|$path Plugin name
+     * @param  boolean      $normalize  Check/normalize some fields
      * @return array
      */
 
     public function read($name, $normalize = true)
     {
-        $name = sanitizeForFile($name);
-        $dir = txpath.DS.'plugins'.DS.$name;
+        global $txp_user;
 
-        if (!is_dir($dir)) {
-            return false;
+        if (is_array($name)) {
+            list($name, $target_path) = $name + array(null, null);
+
+            if (!(@$pack = file_get_contents($target_path))) {
+                return false;
+            }
+
+            list($pack, $code, $help_raw) = $this->extractSection($pack, array('CODE', 'HELP'));
+            $plugin = array_filter(compact('code', 'help_raw'));
+
+            if (!empty($code)) {
+                file_put_contents($target_path, $pack);
+                include $target_path;
+            }
+        } else {
+            $name = sanitizeForFile($name);
+            $dir = txpath.DS.'plugins'.DS.$name;
+
+            if (!is_dir($dir)) {
+                return false;
+            }
+
+            $dir .= DS;
+            $target_path = $dir.$name.'.php';
         }
 
-        $dir .= DS;
-        $plugin = array('name' => $name);
-
-        if (@$info = file_get_contents($dir.'manifest.json')) {
-            $plugin += json_decode($info, true);
-        }
-
-        if (@$code = file_get_contents($dir.$name.'.php')) {
+        if (empty($plugin['code']) && @$code = file_get_contents($target_path)) {
             $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
             $plugin['code'] = $code;
         }
 
-        if (@$textpack = file_get_contents($dir.'textpack.txp')) {
-            $plugin['textpack'] = $textpack;
+        if (!empty($dir)) {
+            if (@$info = file_get_contents($dir.'manifest.json')) {
+                $plugin += json_decode($info, true);
+            }
+
+            if (@$textpack = file_get_contents($dir.'textpack.txp')) {
+                $plugin['textpack'] = $textpack;
+            }
+
+            if (@$data = file_get_contents($dir.'data.txp')) {
+                $plugin['data'] = $data;
+            }
+
+            if (@$help = file_get_contents($dir.'help.html')) {
+                $plugin['help'] = $help;
+            } elseif (@$help = file_get_contents($dir.'help.textile')) {
+                $plugin['help_raw'] = $help;
+            }
         }
 
-        if (@$data = file_get_contents($dir.'data.txp')) {
-            $plugin['data'] = $data;
-        }
-
-        if (@$help = file_get_contents($dir.'help.html')) {
-            $plugin['help'] = $help;
-        } elseif (@$help = file_get_contents($dir.'help.textile')) {
-            $plugin['help_raw'] = $help;
-        }
+        $plugin += array('name' => $name, 'author' => get_author_name($txp_user));
 
         if ($normalize) {
             $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
@@ -462,16 +513,16 @@ class Plugin
                 file_put_contents($dir.DS.'manifest.json', json_encode($manifest), LOCK_EX);
             }
 
-            if (isset($code['help'])) {
-                file_put_contents($dir.DS.'help.html', $code['help'], LOCK_EX);
-            }
-
-            if (isset($code['textpack'])) {
-                file_put_contents($dir.DS.'textpack.txp', $code['textpack'], LOCK_EX);
-            }
-
-            if (isset($code['data'])) {
-                file_put_contents($dir.DS.'data.txp', $code['data'], LOCK_EX);
+            foreach (array(
+                'help' => 'help.html',
+                'help_raw' => 'help.textile',
+                'textpack' => 'textpack.txp',
+                'data' => 'data.txp'
+                ) as $key => $file
+            ) {
+                if (isset($code[$key])) {
+                    file_put_contents($dir.DS.$file, $code[$key], LOCK_EX);
+                }
             }
 
             $code = isset($code['code']) ? $code['code'] : '';
