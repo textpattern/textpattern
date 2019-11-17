@@ -158,7 +158,7 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user;
+    global $prefs, $txp_user, $txp_options;
 
     extract($prefs);
 
@@ -171,8 +171,16 @@ function prefs_list($message = '')
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
+    $level = has_privs();
 
     $sql = array();
+
+    foreach($txp_options as $pref => $option) {
+        if (is_array($option) && isset($option[0]) && !in_list($level, $option[0])) {
+            $sql[] = "name != '".doSlash($pref)."'";
+        }
+    }
+
     $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
@@ -487,31 +495,6 @@ function logging($name, $val)
         'all'   => gTxt('all_hits'),
         'refer' => gTxt('referrers_only'),
         'none'  => gTxt('none'),
-    );
-
-    return selectInput($name, $vals, $val, '', '', $name);
-}
-
-/**
- * Renders a HTML &lt;select&gt; list of supported permanent link URL formats.
- *
- * @param  string $name HTML name and id of the list
- * @param  string $val  Initial (or current) selected item
- * @return string HTML
- */
-
-function permlinkmodes($name, $val)
-{
-    $vals = array(
-        'messy'                     => gTxt('messy'),
-        'id_title'                  => gTxt('id_title'),
-        'section_id_title'          => gTxt('section_id_title'),
-        'section_category_title'    => gTxt('section_category_title'),
-        'year_month_day_title'      => gTxt('year_month_day_title'),
-        'breadcrumb_title'          => gTxt('breadcrumb_title'),
-        'section_title'             => gTxt('section_title'),
-        'title_only'                => gTxt('title_only'),
-        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);

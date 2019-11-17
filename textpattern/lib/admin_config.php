@@ -129,6 +129,7 @@ $txp_options = array(
         'prefs.comments' => '1,2'
     ),
     'enable_dev_preview' => array(
-        'skin.preview' => '1,2,      6'
+        0 => '1,2,      6',
+        'skin.preview' => true
     )
 );

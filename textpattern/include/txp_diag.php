@@ -63,7 +63,23 @@ if ($event == 'diag') {
     require_privs('diag');
 
     $step = ($step) ? $step : gps('step');
-    doDiagnostics();
+
+    $available_steps = array(
+        'low'     => true,
+        'high'    => true,
+        'phpinfo' => true,
+    );
+
+    if ($step && bouncer($step, $available_steps)) {
+        if ($step === 'phpinfo') {
+            phpinfo();
+            exit;
+        } else {
+            doDiagnostics();
+        }
+    } else {
+        doDiagnostics();
+    }
 }
 
 /**
@@ -202,10 +218,10 @@ function doDiagnostics()
     $isUpdate = defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
-        // Check for Textpattern updates, at most once every 24 hours.
+        // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
+        if ($now > (@(int)$lastCheck['when'] + (60 * 60))) {
             $lastCheck = checkUpdates();
         }
 
@@ -543,6 +559,13 @@ function doDiagnostics()
     $out = array(
         form(
             eInput('diag').
+            href('php_diagnostics', array(
+                'event'      => 'diag',
+                'step'       => 'phpinfo',
+                '_txp_token' => form_token(),
+            ), array(
+                'target' => '_blank',
+            )).
             inputLabel(
                 'diag_detail_level',
                 selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),

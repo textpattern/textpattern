@@ -84,10 +84,16 @@ function sec_section_list($message = '')
         'search_method',
     )));
 
+    $columns = array('name', 'title', 'skin', 'page', 'css', 'permlink_mode', 'on_frontpage', 'in_rss', 'searchable', 'article_count');
+    $columns = array_merge(
+        array_combine($columns, $columns),
+        array('on_frontpage' => 'on_front_page', 'in_rss' => 'syndicate', 'searchable' => 'include_in_search', 'article_count' => 'articles')
+    );
+
     if ($sort === '') {
         $sort = get_pref('section_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('title', 'skin', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
+        if (!isset($columns[$sort])) {
             $sort = 'name';
         }
 
@@ -101,34 +107,10 @@ function sec_section_list($message = '')
         set_pref('section_sort_dir', $dir, 'section', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    switch ($sort) {
-        case 'title':
-            $sort_sql = "title $dir";
-            break;
-        case 'skin':
-            $sort_sql = 'skin '.$dir;
-            break;
-        case 'page':
-            $sort_sql = "page $dir";
-            break;
-        case 'css':
-            $sort_sql = "css $dir";
-            break;
-        case 'in_rss':
-            $sort_sql = "in_rss $dir";
-            break;
-        case 'on_frontpage':
-            $sort_sql = "on_frontpage $dir";
-            break;
-        case 'searchable':
-            $sort_sql = "searchable $dir";
-            break;
-        case 'article_count':
-            $sort_sql = "article_count $dir";
-            break;
-        default:
-            $sort_sql = "name $dir";
-            break;
+    if (isset($columns[$sort])) {
+        $sort_sql = "$sort $dir";
+    } else {
+        $sort_sql = "name $dir";
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
@@ -151,10 +133,6 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.page',
                 'label'  => gTxt('page'),
             ),
-            'description' => array(
-                'column' => 'txp_section.description',
-                'label'  => gTxt('description'),
-            ),
             'css' => array(
                 'column' => 'txp_section.css',
                 'label'  => gTxt('css'),
@@ -162,6 +140,10 @@ function sec_section_list($message = '')
             'description' => array(
                 'column' => 'txp_section.description',
                 'label'  => gTxt('description'),
+            ),
+            'permlink_mode' => array(
+                'column' => 'txp_section.permlink_mode',
+                'label'  => gTxt('permlink_mode'),
             ),
             'on_frontpage' => array(
                 'column' => 'txp_section.on_frontpage',
@@ -249,7 +231,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
-            $dev_preview = has_privs('skin.preview');
+            $dev_preview = has_privs('skin.edit');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -259,49 +241,20 @@ function sec_section_list($message = '')
                 )).
                 n.tag_start('div', array('class' => 'txp-listtables')).
                 n.tag_start('table', array('class' => 'txp-list')).
-                n.tag_start('thead').
-                tr(
-                    hCell(
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                            '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                    ).
-                    column_head(
-                        'name', 'name', 'section', true, $switch_dir, $crit, $search_method,
-                            (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
-                    ).
-                    column_head(
-                        'title', 'title', 'section', true, $switch_dir, $crit, $search_method,
-                            (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
-                    ).
-                    column_head(
-                        'skin', 'skin', 'section', true, $switch_dir, $crit, $search_method,
-                            (('skin' == $sort) ? "$dir " : '').'txp-list-col-skin'
-                    ).
-                    column_head(
-                        'page', 'page', 'section', true, $switch_dir, $crit, $search_method,
-                            (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
-                    ).
-                    column_head(
-                        'css', 'css', 'section', true, $switch_dir, $crit, $search_method,
-                            (('css' == $sort) ? "$dir " : '').'txp-list-col-style'
-                    ).
-                    column_head(
-                        'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method,
-                            (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage'
-                    ).
-                    column_head(
-                        'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method,
-                            (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate'
-                    ).
-                    column_head(
-                        'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method,
-                            (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable'
-                    ).
-                    column_head(
-                        'articles', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
-                            (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count'
-                    )
-                ).
+                n.tag_start('thead');
+                $thead = hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                );
+
+                foreach ($columns as $column => $label) {
+                    $thead .= column_head(
+                        $label, $column, 'section', true, $switch_dir, $crit, $search_method,
+                            (($column == $sort) ? "$dir " : '').'txp-list-col-'.$column
+                    );
+                }
+
+                $contentBlock .= tr($thead).
                 n.tag_end('thead').
                 n.tag_start('tbody');
 
@@ -357,38 +310,33 @@ function sec_section_list($message = '')
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
-                $missing = isset($all_pages[$sec_dev_skin]) && !in_array($sec_dev_page, $all_pages[$sec_dev_skin]);
-                $replaced = $dev_preview && ($sec_page != $sec_dev_page || $missing);
-                $dev_set = $dev_set || $replaced;
-                $sec_page = tag(href(txpspecialchars($sec_page), array(
-                    'event' => 'page',
-                    'name'  => $sec_page,
-                    'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
-                !$replaced ? '' : ' | '.
-                href(txpspecialchars($sec_dev_page), array(
-                    'event' => 'page',
-                    'name'  => $sec_dev_page,
-                    'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
+                foreach (array('page', 'css') as $item) {
+                    $all_items = $item === 'page' ? $all_pages : $all_styles;
+                    $sec_item = ${"sec_$item"};
+                    $sec_dev_item = ${"sec_dev_$item"};
 
-                $missing = isset($all_styles[$sec_dev_skin]) && !in_array($sec_dev_css, $all_styles[$sec_dev_skin]);
-                $replaced = $dev_preview && ($sec_css != $sec_dev_css || $missing);
-                $dev_set = $dev_set || $replaced;
-                $sec_css = tag(href(txpspecialchars($sec_css), array(
-                    'event' => 'css',
-                    'name'  => $sec_css,
-                    'skin'  => $sec_skin,
-                ), array('title' => gTxt('edit'))), $replaced ? 'del' : '').(
-                !$replaced ? '' : ' | '.
-                href(txpspecialchars($sec_dev_css), array(
-                    'event' => 'css',
-                    'name'  => $sec_dev_css,
-                    'skin'  => $sec_dev_skin,
-                ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')));
+                    $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
+                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
+                    $dev_set = $dev_set || $replaced;
 
-                $replaced = $dev_preview && ($sec_skin != $sec_dev_skin);
+                    ${"sec_$item"} = href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
+                        array(
+                            'event' => $item,
+                            'name'  => $sec_item,
+                            'skin'  => $sec_skin,
+                        ), array('title' => gTxt('edit'))).
+                    (!$replaced ? '' : ' | '.
+                        href(txpspecialchars($sec_dev_item), array(
+                            'event' => $item,
+                            'name'  => $sec_dev_item,
+                            'skin'  => $sec_dev_skin,
+                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''))
+                    );
+                }
+
+                $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
                 $dev_set = $dev_set || $replaced;
+
                 $contentBlock .= tr(
                     td(
                         fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
@@ -399,7 +347,7 @@ function sec_section_list($message = '')
                         ).
                         span(
                             sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
+                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
                         ), '', array(
                             'class' => 'txp-list-col-name',
@@ -410,7 +358,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? 'del' : '').
+                        tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)).
                         ($replaced ? ' | '.$sec_dev_skin : ''), '', 'txp-list-col-skin'
                     ).
                     td(
@@ -420,10 +368,13 @@ function sec_section_list($message = '')
                         $sec_css, '', 'txp-list-col-style'
                     ).
                     td(
-                        $sec_on_frontpage, '', 'txp-list-col-frontpage'
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
                     ).
                     td(
-                        $sec_in_rss, '', 'txp-list-col-syndicate'
+                        $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
+                    ).
+                    td(
+                        $sec_in_rss, '', 'txp-list-col-in_rss'
                     ).
                     td(
                         $sec_searchable, '', 'txp-list-col-searchable'
@@ -556,6 +507,10 @@ function section_edit()
             'uses_style',
             'section_uses_css',
             array('class' => 'txp-form-field edit-section-uses-css')
+        ).inputLabel(
+            'permlink_mode',
+            permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
+            '', 'permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
         ).script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
@@ -620,6 +575,7 @@ function section_save()
         'old_name',
         'section_page',
         'css',
+        'permlink_mode',
     )));
 
     if (empty($in['title'])) {
@@ -658,6 +614,7 @@ function section_save()
         $on_frontpage = $in_rss = $searchable = 0;
 
         $ok = safe_update('txp_section', "skin = '$safe_skin', page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
+        set_pref('permlink_mode', $permlink_mode);
     } elseif ($name) {
         extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
@@ -669,6 +626,7 @@ function section_save()
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
+                permlink_mode  = '$safe_permlink_mode',
                 on_frontpage = '$on_frontpage',
                 in_rss       = '$in_rss',
                 searchable   = '$searchable'
@@ -686,6 +644,7 @@ function section_save()
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
+                permlink_mode  = '$safe_permlink_mode',
                 on_frontpage = '$on_frontpage',
                 in_rss       = '$in_rss',
                 searchable   = '$searchable'");
@@ -693,7 +652,7 @@ function section_save()
     }
 
     if ($ok) {
-        update_lastmod('section_saved', compact('name', 'title', 'section_page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable'));
+        update_lastmod('section_saved', compact('name', 'title', 'section_page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable', 'permlink_mode'));
         Txp::get('Textpattern\Skin\Skin')->setEditing($safe_skin);
     }
 
@@ -920,7 +879,7 @@ EOJS
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (!has_privs('skin.preview') ?
+            'html'  => (!has_privs('skin.edit') ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
@@ -937,6 +896,10 @@ EOJS
                 0 => gTxt('live_to_dev'),
                 1 => gTxt('dev_to_live'),
                 ), 'switch_dev_live', 0),
+        ),
+        'permlinkmode' => array(
+            'label' => gTxt('permlink_mode'),
+            'html'  => permlinkmodes('permlink_mode', '', array('' => gTxt('default'))),
         ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
@@ -1004,6 +967,9 @@ function section_multi_edit()
         case 'switchdevlive':
             $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
             break;
+        case 'permlinkmode':
+            $nameVal['permlink_mode'] = (string) ps('permlink_mode');
+            break;
         case 'changeonfrontpage':
             $nameVal['on_frontpage'] = (int) ps('on_frontpage');
             break;
@@ -1067,6 +1033,12 @@ function section_multi_edit()
                 page = $setpage,
                 css = $setcss, "
             )."dev_skin = '', dev_page = '', dev_css = ''";
+        } elseif ($edit_method == 'permlinkmode') {
+            $set = "permlink_mode = IF(name='default', '', '".doSlash($nameVal['permlink_mode'])."')";
+
+            if ($nameVal['permlink_mode'] && in_array('default', $sections)) {
+                set_pref('permlink_mode', $nameVal['permlink_mode']);
+            }
         } else {
             $in = array();
 

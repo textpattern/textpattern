@@ -54,17 +54,16 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 // Get logged user.
-if (txpinterface !== 'css') {
-    $userInfo = is_logged_in();
-}
+$userInfo = txpinterface === 'css' ? null : is_logged_in();
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs();
+plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);
 
+$txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
 $txp_atts = null;
@@ -211,19 +210,26 @@ if (empty($pretext['feed'])) {
     handle_lastmod();
 }
 
-$trace->start('[PHP includes, stage 3]');
+if (txpinterface !== 'css') {
+    $trace->start('[PHP includes, stage 3]');
 
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/publish/comment.php';
-include_once txpath.'/publish/taghandlers.php';
+    include_once txpath.'/lib/txplib_html.php';
+    include_once txpath.'/lib/txplib_forms.php';
+    include_once txpath.'/publish/comment.php';
+    include_once txpath.'/publish/taghandlers.php';
 
-$trace->stop();
-
+    $trace->stop();
 // i18n.
-/*if (txpinterface !== 'css') {
-    load_lang(LANG);
-}*/
+//    load_lang(LANG);
+} else {
+    $n = gps('n');
+    $t = gps('t');
+    output_css($pretext['s'], $n, $t);
+
+    exit;
+}
+
+$txp_sections = safe_column(array('name'), 'txp_section');
 
 // Here come the regular plugins.
 if ($use_plugins) {
@@ -278,6 +284,7 @@ log_hit($status);
 
 function preText($s, $prefs)
 {
+    global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
     if (!isset($out)) {
@@ -384,74 +391,112 @@ function preText($s, $prefs)
                 default:
                     for ($n = 0; isset(${'u'.($n+1)}); $n++);
                     $un = ${'u'.$n};
-                    // Then see if the prefs-defined permlink scheme is usable.
-                    switch ($permlink_mode) {
-                        case 'section_id_title':
-                            $out['s'] = $u1;
+                    $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
+                    $custom_modes = array_filter($permlink_modes, function($v) use ($permlink_mode) {
+                        return $v && $v !== $permlink_mode;
+                    });
 
-                            if (is_numeric($u2)) {
-                                $out['id'] = $u2;
-                            } else {
-                                $title = empty($u2) ? null : $u2;
+                    if (empty($custom_modes)) {
+                        $permlink_guess = $permlink_mode;
+                    } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
+                        $safe_un = doSlash($un);
+
+                        $guessarticles = safe_rows('*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
+                            'textpattern', "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
+                        );
+
+                        foreach ($guessarticles as $a) {
+                            populateArticleData($a);
+
+                            if (permlinkurl($thisarticle, '/') === $u0) {
+                                $permlink_guess = $permlink_modes[$a['Section']];
+
+                                break;
                             }
+                        }
 
-                            break;
+                        if (!isset($permlink_guess)) {
+                            unset($thisarticle);
+                        } else {
+                            $out['id'] = $thisarticle['thisid'];
+                            $out['s'] = $thisarticle['section'];
+                            $title = $thisarticle['url_title'];
+                            $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
+                        }
+                    }
 
-                        case 'section_category_title':
-                        case 'breadcrumb_title':
-                            $out['s'] = $u1;
-                            $title = empty($un) ? null : $un;
+                    if (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
+                        $permlink_guess = $permlink_modes[$u1];
+                    }
 
-                            if (!isset($title) && $n > 2) {
-                                $out['c'] = ${'u'.($n-1)};
-                            }
+                    if (empty($out['id'])) {
+                        // Then see if the prefs-defined permlink scheme is usable.
+                        switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
+                            case 'section_id_title':
+                                $out['s'] = $u1;
 
-                            break;
-
-                        case 'year_month_day_title':
-                            if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
-                                $title = empty($u4) ? null : $u4;
-                                $month = array($u1);
-
-                                if (!empty($u2)) {
-                                    $month[] = ltrim($u2);
-                                    empty($u3) or $month[] = ltrim($u3);
+                                if (is_numeric($u2)) {
+                                    $out['id'] = $u2;
+                                } else {
+                                    $title = empty($u2) ? null : $u2;
                                 }
-                            } elseif (empty($u3)) {
+
+                                break;
+
+                            case 'section_category_title':
+                            case 'breadcrumb_title':
+                                $out['s'] = $u1;
+                                $title = empty($un) ? null : $un;
+
+                                if (!isset($title) && $n > 2) {
+                                    $out['c'] = ${'u'.($n-1)};
+                                }
+
+                                break;
+
+                            case 'year_month_day_title':
+                                if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
+                                    $title = empty($u4) ? null : $u4;
+                                    $month = array($u1);
+
+                                    if (!empty($u2)) {
+                                        $month[] = ltrim($u2);
+                                        empty($u3) or $month[] = ltrim($u3);
+                                    }
+                                } elseif (empty($u3)) {
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                } else {
+                                    $is_404 = true;
+                                }
+
+                                break;
+
+                            case 'section_title':
                                 $out['s'] = $u1;
                                 $title = empty($u2) ? null : $u2;
-                            } else {
-                                $is_404 = true;
-                            }
 
-                            break;
+                                break;
 
-                        case 'section_title':
-                            $out['s'] = $u1;
-                            $title = empty($u2) ? null : $u2;
+                            case 'id_title':
+                                if (is_numeric($u1)) {
+                                    $out['id'] = $u1;
+                                } else {
+                                    // We don't want to miss the /section/ pages.
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                }
 
-                            break;
+                                break;
 
-                        case 'title_only':
-                            if (isset($u2)) {
-                                $out['s'] = $u1;
-                                $title = trim($u2) === '' ? null : $u2;
-                            } else {
-                                $title = $u1;
-                            }
-
-                            break;
-
-                        case 'id_title':
-                            if (is_numeric($u1)) {
-                                $out['id'] = $u1;
-                            } else {
-                                // We don't want to miss the /section/ pages.
-                                $out['s'] = $u1;
-                                $title = empty($u2) ? null : $u2;
-                            }
-
-                            break;
+                            default:
+                                if (isset($u2)) {
+                                    $out['s'] = $u1;
+                                    $title = empty($u2) ? null : $u2;
+                                } else {
+                                    $title = $u1;
+                                }
+                        }
                     }
             }
         } else {
@@ -464,11 +509,9 @@ function preText($s, $prefs)
     // Validate dates
     if ($out['month']) {
         $date = empty($month) ? '' : implode('-', $month);
-        $month = explode('-', $out['month'], 3) +
-            (!empty($month) ? $month : array());
-        list($y, $m, $d) = $month + array(1, 1, 1);
+        $month = explode('-', $out['month'], 3) + (!empty($month) ? $month : array());
 
-        if ((!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) && @checkdate($m, $d, $y)) {
+        if (!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) {
             $month = implode('-', $month);
         } else {
             $out['month'] = $month = '';
@@ -535,7 +578,7 @@ function preText($s, $prefs)
             $out = array_merge($out, $rs);
         }
     } elseif ($out['context'] == 'article') {
-        if (!empty($out['id']) || !empty($title)) {
+        if (!$is_404 && empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
             if (empty($out['s']) || $out['s'] === 'default') {
                 $rs = !empty($out['id']) ?
                     lookupByID($out['id']) :
@@ -549,9 +592,17 @@ function preText($s, $prefs)
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
-        } elseif (!empty($out['s']) && $out['s'] !== 'default') {
+        }
+
+        if (!empty($out['s']) && $out['s'] !== 'default') {
             global $thissection;
-            $out['s'] = ($thissection = ckEx('section', array('name' => $out['s'], 'title' => null, 'description' => null))) ? $out['s'] : '';
+
+            if (isset($txp_sections[$out['s']])) {
+                $thissection = array_intersect_key($txp_sections[$out['s']], array('name' => $out['s'], 'title' => null, 'description' => null));
+            } else {
+                $out['s'] = '';
+            }
+
             $is_404 = $is_404 || empty($out['s']);
         }
     }
@@ -587,32 +638,38 @@ function preText($s, $prefs)
     }
 
     if (!$is_404 && $id && $out['s'] !== 'file_download') {
-        $a = safe_row(
+        if (empty($thisarticle)) {
+            $a = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".implode(',', array_keys(status_group('published', false))).")")
-        );
+            "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".implode(',', array_keys(status_group('published', false))).")")
+            );
 
-        if ($a) {
-            $out['id_keywords'] = $a['Keywords'];
-            $out['id_author']   = $a['AuthorID'];
-            populateArticleData($a);
+            if ($a) {
+                populateArticleData($a);
+            }
+        } elseif (!gps('txpreview') && !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
+            unset($thisarticle);
+        }
 
-            $uExpires = $a['uExpires'];
+        if (!empty($thisarticle)) {
+            $uExpires = $thisarticle['expires'];
+            $out['id_keywords'] = $thisarticle['keywords'];
+            $out['id_author']   = $thisarticle['authorid'];
 
             if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $out['status'] = '410';
             }
+        } else {
+            $is_404 = true;
         }
     }
 
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
-        $ss = doSlash($s);
-        $rs = safe_row("skin, page, css, dev_skin, dev_page, dev_css", "txp_section", "name IN ('$ss', 'default') ORDER BY FIELD(name, '$ss', 'default') LIMIT 1");
-
+        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
+        $rs = array_intersect_key($txp_sections[$s], array_fill_keys(array('skin', 'page', 'css', 'dev_skin', 'dev_page', 'dev_css'), null));
         $userInfo = is_logged_in();
 
         if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
@@ -724,28 +781,24 @@ function output_component($n = '')
 function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
-    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
     if ($n) {
-        if (!is_scalar($n)) {
-            txp_die('Not Found', 404);
+        if (!is_array($n)) {
+            $n = do_list_unique($n);
         }
 
-        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
         }
-    } elseif ($s) {
-        if (!is_scalar($s)) {
-            txp_die('Not Found', 404);
-        }
-
-        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
+    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='".doSlash($s)."'")) {
+        $cssname = $res['css'];
+        $t or $t = $res['skin'];
     }
 
     if (!empty($cssname)) {
+        $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
         @header('Content-Type: text/css; charset=utf-8');
@@ -779,7 +832,6 @@ global $file_error, $file_base_path, $pretext;
             set_headers(array(
                 'content-type' => 'application/octet-stream',
                 'content-disposition' => 'attachment; filename="'.$filename.'"',
-                'content-description' => 'File Download',
                 'content-length' => $filesize,
                 // Fix for IE6 PDF bug on servers configured to send cache headers.
                 'cache-control' => 'private'
