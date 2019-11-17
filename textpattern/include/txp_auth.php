@@ -334,8 +334,6 @@ EOS
         // Reset request.
         sleep(3);
 
-        include_once txpath.'/lib/txplib_admin.php';
-
         $message = ($p_userid) ? send_reset_confirmation_request($p_userid) : '';
     } elseif ($p_alter || $p_set) {
         // Password change/set confirmation.
