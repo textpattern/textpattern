@@ -4923,7 +4923,7 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? '' : null;
 
     extract(lAtts(array(
         'escape'    => $set,
@@ -4935,52 +4935,56 @@ function variable($atts, $thing = null)
         'output'    => null
     ), $atts));
 
+    $var = isset($variable[$name]) ? $variable[$name] : null;
+
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null) {
-        if (isset($reset)) {
-            $out = isset($variable[$name]) ? $variable[$name] : '';
-            $variable[$name] = $reset === true ? null : $reset;
-
-            return $out;
-        } elseif (isset($variable[$name])) {
-            return $variable[$name];
-        } else {
-            $trace->log("[<txp:variable>: Unknown variable '$name']");
-        }
+    } elseif ($set === null && !isset($var)) {
+        $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
-            $var = isset($variable[$name]) ? $variable[$name] : null;
             empty($thing) or $thing = parse($thing);
 
-            switch ($value) {
-                case null:
-                    $add = isset($thing) ? $thing : 1;
-                    break;
-                default:
-                    $add = $value === true ? $var : $value;
-                    !isset($thing) or $var = $thing;
+            if (!isset($value)) {
+                $add = isset($thing) ? $thing : 1;
+            } elseif ($value === true) {
+                $add = $var;
+                !isset($thing) or $var = $thing;
+            } else {
+                $add = isset($thing) ? $thing : $var;
+                $var = $value;
             }
+        } elseif ($value === true) {
+            isset($var) or $var = (isset($thing) ? parse($thing) : null);
         } else {
-            $var = isset($value) ? $value : (isset($thing) ?
-                parse($thing) :
-                (isset($variable[$name]) ? $variable[$name] : $reset));
+            $var = isset($value) ?
+                $value :
+                (isset($thing) ? parse($thing) : $var);
         }
 
-        if (!empty($add)) {
-            if (!isset($separator) && is_numeric($add) && is_numeric($var)) {
+        if (isset($add)) {
+            if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
                 $var += $add;
             } else {
                 $var .= ($var ? $separator : '').$add;
             }
         }
-
-        $variable[$name] = $escape
-            ? txp_escape(array('escape' => $escape), $var)
-            : $var;
     }
 
-    return !$output ? '' : ((int)$output ? $variable[$name] : txp_escape(array('escape' => $output), $variable[$name]));
+    if ($set !== null) {
+        $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
+
+        if (isset($reset)) {
+            $variable[$name] = $reset === true ? null : $reset;
+            isset($output) or $output = 1;
+        } else {
+            $variable[$name] = $var;
+        }
+    } else {
+        isset($output) or $output = 1;
+    }
+
+    return !$output ? '' : ((int)$output ? $var : txp_escape(array('escape' => $output), $var));
 }
 
 // -------------------------------------------------------------
