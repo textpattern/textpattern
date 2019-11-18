@@ -4980,7 +4980,7 @@ function variable($atts, $thing = null)
             : $var;
     }
 
-    return $output ? $variable[$name] : '';
+    return !$output ? '' : ((int)$output ? $variable[$name] : txp_escape(array('escape' => $output), $variable[$name]));
 }
 
 // -------------------------------------------------------------
