@@ -3465,7 +3465,9 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         return;
     }
 
-    if (!$rewrite && $headers_list = headers_list()) {
+    $rewrite = (int)$rewrite;
+
+    if ($rewrite <= 0 && $headers_list = headers_list()) {
         $headers_low = array();
 
         foreach (array_keys($headers) as $name) {
@@ -3473,10 +3475,15 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         }
 
         foreach ($headers_list as $header) {
-            $name = strtolower(trim(strtok($header, ':')));
+            list($name, $value) = explode(':', strtolower($header), 2) + array(null, null);
+            $name = trim($name);
 
             if (isset($headers_low[$name])) {
-                unset($headers[$headers_low[$name]]);
+                if (!$rewrite) {
+                    unset($headers[$headers_low[$name]]);
+                } else {
+                    $headers[$headers_low[$name]] = implode(',', do_list_unique($value.','.$headers[$headers_low[$name]]));
+                }
             }
         }
     }

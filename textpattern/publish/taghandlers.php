@@ -4227,7 +4227,7 @@ function txp_header($atts)
         'value'   => '200 OK',
     ), $atts));
 
-    set_headers(array($name => $value), !empty($replace));
+    set_headers(array($name => $value), $replace);
 }
 
 // -------------------------------------------------------------
