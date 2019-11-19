@@ -175,7 +175,7 @@ function prefs_list($message = '')
 
     $sql = array();
 
-    foreach($txp_options as $pref => $option) {
+    foreach ($txp_options as $pref => $option) {
         if (is_array($option) && isset($option[0]) && !in_list($level, $option[0])) {
             $sql[] = "name != '".doSlash($pref)."'";
         }
@@ -230,9 +230,9 @@ function prefs_list($message = '')
                     );
 
                     $groupOut[] = n.tag(href(
-                            gTxt($last_event),
-                            '#prefs_group_'.$last_event,
-                            array(
+                        gTxt($last_event),
+                        '#prefs_group_'.$last_event,
+                        array(
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                             )),
@@ -300,9 +300,9 @@ function prefs_list($message = '')
         );
 
         $groupOut[] = n.tag(href(
-                gTxt($last_event),
-                '#prefs_group_'.$last_event,
-                array(
+            gTxt($last_event),
+            '#prefs_group_'.$last_event,
+            array(
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                 )),
@@ -734,8 +734,8 @@ function themename($name, $val)
     $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
-    return pluggable_ui('prefs_ui', 'theme_name',
-        selectInput($name, $vals, $val, '', '', $name));
+    return pluggable_ui('prefs_ui', 'theme_name', selectInput($name, $vals, $val, '', '', $name)
+    );
 }
 
 /**

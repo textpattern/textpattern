@@ -582,12 +582,12 @@ function plugin_upload()
 {
     $plugin = array();
 
-    if($_FILES["theplugin"]["name"]) {
+    if ($_FILES["theplugin"]["name"]) {
         $filename = $_FILES["theplugin"]["name"];
         $source = $_FILES["theplugin"]["tmp_name"];
         $target_path = rtrim(get_pref('temp_dir', txpath.DS.'plugins'), DS).DS.$filename;
 
-        if(move_uploaded_file($source, $target_path)) {
+        if (move_uploaded_file($source, $target_path)) {
             extract(pathinfo($target_path));
 
             if (strtolower($extension) === 'php') {
@@ -628,7 +628,7 @@ function plugin_load()
 {
     $plugin = array();
 
-    if($filename = gps('filename')) {
+    if ($filename = gps('filename')) {
         $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
     }
 
@@ -648,36 +648,39 @@ function plugin_load()
 function plugin_form($existing_files = array())
 {
     return tag(
-            tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
-            tag_void('input', array(
-                'type'   => "file",
-                'name'   => "theplugin",
-                'id'     => "plugin-upload",
-                'accept' => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php"
-            )).
-            fInput('submit', 'install_new', gTxt('upload')).
-            eInput('plugin').
-            sInput('plugin_upload').
-            tInput().n, 'form', array(
+        tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
+        tag_void('input', array(
+            'type'   => "file",
+            'name'   => "theplugin",
+            'id'     => "plugin-upload",
+            'accept' => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php"
+        )).
+        fInput('submit', 'install_new', gTxt('upload')).
+        eInput('plugin').
+        sInput('plugin_upload').
+        tInput().n, 'form', array(
             'class'        => 'plugin-data',
             'id'           => 'plugin_upload_form',
             'method'       => 'post',
             'action'       => 'index.php',
             'enctype'      => 'multipart/form-data'
-        )).
-        ($existing_files ? form(
-            eInput('plugin').
-            sInput('plugin_load').
-            tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
-            selectInput('filename', $existing_files, null, false, '', 'file-existing').
-            fInput('submit', '', gTxt('import')),
-        '', '', 'post', 'assign-existing-form', '', 'assign_file') : '').
-        br.form(
+        )
+    ).
+    ($existing_files ? form(
+        eInput('plugin').
+        sInput('plugin_load').
+        tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
+        selectInput('filename', $existing_files, null, false, '', 'file-existing').
+        fInput('submit', '', gTxt('import')),
+        '', '', 'post', 'assign-existing-form', '', 'assign_file'
+    ) : '').
+    br.form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
-        sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
+    );
 }
 
 /**

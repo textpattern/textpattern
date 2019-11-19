@@ -355,8 +355,7 @@ function parse($thing, $condition = true, $not = true)
     }
 
     if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing))
-    {
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
@@ -462,10 +461,10 @@ function processTags($tag, $atts = '', $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
-             function ($v) {
-                 return !is_bool($v);
-             }
-         );
+            function ($v) {
+                return !is_bool($v);
+            }
+        );
     }
 
     $old_atts = $txp_atts;

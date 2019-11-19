@@ -406,14 +406,16 @@ function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit
         span(
             $label,
             array('class' => 'ui-icon '.$theClass)
-        ), array(
+        ),
+        array(
             'event'         => $event,
             'step'          => $step,
             'page'          => (int) $page,
             'dir'           => $dir,
             'crit'          => $crit,
             'search_method' => $search_method,
-        ), array(
+        ),
+        array(
             'rel'        => $type,
             'title'      => $label,
             'aria-label' => $label,
@@ -1340,7 +1342,8 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
         ($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
         join('', $html).
         fInput('submit', '', gTxt('go')),
-        'div', array('class' => 'multi-edit')
+        'div',
+        array('class' => 'multi-edit')
     );
 }
 
@@ -1436,7 +1439,8 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 'class' => 'txp-upload-progress',
                 'style' =>  'display:none',
             )),
-            'form', array(
+            'form',
+            array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
@@ -1730,7 +1734,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     global $txp_atts;
     static $import = array('breakby', 'breakclass', 'wrapform');
 
-    $list = is_array($list) ? array_filter($list, function($v) {
+    $list = is_array($list) ? array_filter($list, function ($v) {
         return $v !== false;
     }) : null;
 
@@ -1771,6 +1775,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                     $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
                     break;
                 }
+                // no break
             default:
                 $newlist = array();
 
@@ -1788,7 +1793,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     }
 
     if (strpos($break, '<+>') !== false) {
-        $content = array_reduce($list, function($carry, $item) use ($break) {
+        $content = array_reduce($list, function ($carry, $item) use ($break) {
             return $carry.str_replace('<+>', $item, $break);
         });
     }

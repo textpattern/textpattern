@@ -232,10 +232,10 @@ function image_list($message = '')
 
     if ($total < 1) {
         $contentBlock .= graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt($criteria != 1 ? 'no_results_found' : 'no_images_recorded'),
-                    array('class' => 'alert-block information')
-                );
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt($criteria != 1 ? 'no_results_found' : 'no_images_recorded'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $rs = safe_query(
             "SELECT

@@ -192,7 +192,7 @@ function log_list($message = '')
                 tr(
                     hCell(
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                            '',
+                        '',
                         ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                     ).
                     column_head(
@@ -203,7 +203,7 @@ function log_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                            (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
+                        (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
                     ).
                     column_head(
                         'page',
@@ -213,7 +213,7 @@ function log_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                            (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
+                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                     ).
                     column_head(
                         'referrer',
@@ -223,7 +223,7 @@ function log_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                            (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
+                        (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
                     ).
                     column_head(
                         'method',
@@ -233,7 +233,7 @@ function log_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                            (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
+                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
                     ).
                     column_head(
                         'status',
@@ -243,7 +243,7 @@ function log_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                            (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                     )
                 ).
                 n.tag_end('thead').
@@ -259,7 +259,7 @@ function log_list($message = '')
                 if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu,'/').txpspecialchars($log_page), ' rel="external" target="_blank"');
+                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), ' rel="external" target="_blank"');
 
                     if ($log_method == 'POST') {
                         $log_page = strong($log_page);

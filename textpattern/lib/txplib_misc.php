@@ -507,20 +507,20 @@ function plug_privs($pluggable = null, $user = null)
     isset($pluggable) or $pluggable = $txp_options;
     $level = isset($user['privs']) ? $user['privs'] : has_privs();
 
-    foreach((array)$pluggable as $pref => $pane) {    
+    foreach ((array)$pluggable as $pref => $pane) {
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
                     return;
                 }
-    
+
                 unset($pane[0]);
             }
         } else {
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function(&$item) use ($level) {
+        array_walk($pane, function (&$item) use ($level) {
             if ($item === true) {
                 $item = $level;
             }
@@ -554,7 +554,7 @@ function add_privs($res, $perm = '1')
         $res = array($res => $perm);
     }
 
-    foreach($res as $priv => $group) {
+    foreach ($res as $priv => $group) {
         if ($group === null) {
             unset($txp_permissions[$priv]);
         } else {
@@ -2935,7 +2935,8 @@ function has_single_author($table, $col = 'author')
  * @package TagParser
  */
 
-function txp_tokenize($thing, $hash = null, $transform = null) {
+function txp_tokenize($thing, $hash = null, $transform = null)
+{
     global $txp_parsed, $txp_else;
     static $short_tags = null;
 
@@ -4333,7 +4334,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         }
     }
 
-    if(empty($url_mode)) {
+    if (empty($url_mode)) {
         $url_mode = $permlink_mode;
     }
 
@@ -4663,7 +4664,7 @@ function do_list($list, $delim = ',')
     if (isset($range)) {
         $out = array();
 
-        foreach($list as $item) {
+        foreach ($list as $item) {
             if (strpos($item, $range) === false) {
                 $out[] = trim($item);
             } else {
@@ -4952,7 +4953,8 @@ function getMetaDescription($type = null)
  * @return array The retrieved data
  */
 
-function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
+function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
+{
     global $pretext;
 
     if (!is_array($context)) {
@@ -5515,8 +5517,10 @@ function real_max_upload_size($user_max, $php = true)
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $val *= 1024;
+                // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }

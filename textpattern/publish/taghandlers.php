@@ -260,7 +260,7 @@ function css($atts)
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
-        foreach(do_list_unique($name) as $n) {
+        foreach (do_list_unique($name) as $n) {
             $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.Txp::get('Textpattern\Skin\Css')->getDir().'/'.urlencode($n).'.css';
         }
     } else {
@@ -323,7 +323,7 @@ function component($atts)
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
-        foreach(do_list_unique($form) as $n) {
+        foreach (do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
                 $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
@@ -1047,7 +1047,7 @@ function recent_articles($atts, $thing = null)
         'no_widow' => '',
     ), $atts);
 
-    if(!isset($thing) && !$atts['form']) {
+    if (!isset($thing) && !$atts['form']) {
         $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     }
 
@@ -1592,7 +1592,8 @@ function search_input($atts, $thing = null)
         $outside = $oldatts;
     } else {
         $h5 = ($doctype == 'html5');
-        $out = fInput($h5 ? 'search' : 'text',
+        $out = fInput(
+            $h5 ? 'search' : 'text',
             array(
                 'name'        => 'q',
                 'aria-label'  => $aria_label,
@@ -1600,7 +1601,9 @@ function search_input($atts, $thing = null)
                 'required'    => $h5,
                 'size'        => $size,
                 'class'       => $wraptag || empty($atts['class']) ? false : $class
-            ), $q);
+            ),
+            $q
+        );
     }
 
     if ($form || $inside) {
@@ -1813,14 +1816,14 @@ function txp_pager($atts, $thing = null, $newer = true)
     $context = get_context();
     $out = array();
 
-    if (!isset($shift)){
+    if (!isset($shift)) {
         $pages = array(1);
     } elseif ($shift === true) {
         $pages = array(-1);
     } else {
         $pages = array_map('intval', do_list($shift));
     }
-    
+
     foreach ($pages as $page) {
         if ($newer) {
             $nextpg = (int)$page < 0 ? min(-$page, $pg - 1) : $pg - $page;
@@ -2742,7 +2745,8 @@ function if_logged_in($atts, $thing = null)
 }
 // -------------------------------------------------------------
 
-function txp_sandbox($atts = array(), $thing = null, $parse = true) {
+function txp_sandbox($atts = array(), $thing = null, $parse = true)
+{
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body;
 
@@ -2792,7 +2796,7 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true) {
         $uniqid = strtr(uniqid('sandbox_', true), '.', '_');
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
-    
+
     if ($field) {
         $tag = $field;
         unset($atts['id']);
@@ -3693,7 +3697,9 @@ function if_article_list($atts, $thing = null)
                     $x = !empty($pretext[$q]) || !isset($pretext[$q]) && gps($q);
             }
 
-            if ($x) break;
+            if ($x) {
+                break;
+            }
         }
     }
 
@@ -5102,7 +5108,7 @@ function txp_eval($atts, $thing = null)
     $thing = parse($thing);
     unset($txp_atts['evaluate']);
 
-    if($txp_tag) {
+    if ($txp_tag) {
         if ($staged) {
             $quoted = txp_escape(array('escape' => 'quote'), $thing);
             $query = str_replace('<+>', $quoted, $query);
@@ -5150,6 +5156,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'integer':
                 !$filter or $thing = do_list($thing);
+                // no break
             case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
