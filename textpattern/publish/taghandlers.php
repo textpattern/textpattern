@@ -183,7 +183,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_custom')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
-    ->register('txp_item', 'item')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_name_input', 'comment_email_input', 'email', 'clean_url')
@@ -5276,17 +5275,4 @@ function txp_wraptag($atts, $thing = '')
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
-}
-
-// -------------------------------------------------------------
-
-function txp_item($atts)
-{
-    global $txp_item;
-
-    extract(lAtts(array(
-        'name' => 'item'
-    ), $atts));
-
-    return isset($txp_item[$name]) ? $txp_item[$name] : null;
 }
