@@ -4222,12 +4222,12 @@ function txp_header($atts)
     }
 
     extract(lAtts(array(
-        'name'    => true,
-        'replace' => true,
-        'value'   => '200 OK',
+        'name'    => 1,
+        'replace' => 1,
+        'value'   => isset($atts['name']) ? true : '200 OK',
     ), $atts));
 
-    set_headers(array($name => $value), $replace);
+    return set_headers(array($name => $value), $replace);
 }
 
 // -------------------------------------------------------------

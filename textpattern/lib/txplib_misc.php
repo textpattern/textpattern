@@ -3466,37 +3466,43 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
     }
 
     $rewrite = (int)$rewrite;
+    $headers_list = headers_list();
+    $headers_low = array();
+    $out = array();
 
-    if ($rewrite <= 0 && $headers_list = headers_list()) {
-        $headers_low = array();
+    foreach (array_keys($headers) as $name) {
+        $headers_low[strtolower($name)] = $name;
+    }
 
-        foreach (array_keys($headers) as $name) {
-            $headers_low[strtolower($name)] = $name;
-        }
+    foreach ($headers_list as $header) {
+        list($name, $value) = explode(':', $header, 2) + array(null, null);
+        $name = strtolower(trim($name));
 
-        foreach ($headers_list as $header) {
-            list($name, $value) = explode(':', strtolower($header), 2) + array(null, null);
-            $name = trim($name);
-
-            if (isset($headers_low[$name])) {
-                if (!$rewrite) {
-                    unset($headers[$headers_low[$name]]);
-                } else {
-                    $headers[$headers_low[$name]] = implode(',', do_list_unique($value.','.$headers[$headers_low[$name]]));
-                }
+        if (isset($headers_low[$name]) && (string)$headers[$headers_low[$name]] !== '') {
+            if ($headers[$headers_low[$name]] === true) {
+                $out[] = trim($value);
+            } elseif ($rewrite == 1) {
+                header($headers_low[$name].': '.$headers[$headers_low[$name]]);
+            } elseif ($rewrite) {
+                header($headers_low[$name].': '.implode(', ', do_list_unique($value.','.$headers[$headers_low[$name]])));
             }
+
+            unset($headers[$headers_low[$name]]);
         }
     }
 
-    foreach ((array)$headers as $name => $header) {
-        if ($name === 1) {
+    // Leftovers
+    foreach ($headers as $name => $header) {
+        if ((string)$header === '') {
+            header_remove($name && $name !== 1 ? $name : null);
+        } elseif ($name === 1) {
             txp_status_header($header);
-        } elseif ($header) {
-            header($name ? $name.':'.$header : $header);
         } else {
-            header_remove($name ? $name : null);
+            header($name ? $name.': '.$header : $header);
         }
     }
+
+    return $out ? implode(n, $out) : null;
 }
 
 /**
