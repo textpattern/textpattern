@@ -3466,43 +3466,37 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
     }
 
     $rewrite = (int)$rewrite;
-    $headers_list = headers_list();
-    $headers_low = array();
-    $out = array();
+    $out = $headers_low = array();
 
-    foreach (array_keys($headers) as $name) {
-        $headers_low[strtolower($name)] = $name;
-    }
-
-    foreach ($headers_list as $header) {
-        list($name, $value) = explode(':', $header, 2) + array(null, null);
-        $name = strtolower(trim($name));
-
-        if (isset($headers_low[$name]) && (string)$headers[$headers_low[$name]] !== '') {
-            if ($headers[$headers_low[$name]] === true) {
-                $out[] = trim($value);
-            } elseif ($rewrite == 1) {
-                header($headers_low[$name].': '.$headers[$headers_low[$name]]);
-            } elseif ($rewrite) {
-                header($headers_low[$name].': '.implode(', ', do_list_unique($value.','.$headers[$headers_low[$name]])));
-            }
-
-            unset($headers[$headers_low[$name]]);
+    if (($rewrite != 1 || in_array(true, $headers, true)) && $headers_list = headers_list()) {
+        foreach ($headers_list as $header) {
+            list($name, $value) = explode(':', $header, 2) + array(null, null);
+            $headers_low[strtolower(trim($name))] = $value;
         }
     }
 
-    // Leftovers
     foreach ($headers as $name => $header) {
+        $name_low = strtolower(trim($name));
+
         if ((string)$header === '') {
-            header_remove($name && $name !== 1 ? $name : null);
-        } elseif ($name === 1) {
+            !$rewrite or header_remove($name && $name != 1 ? $name : null);
+        } elseif ($header === true) {
+            if ($name == 1) {
+                $out = array_merge($out, $headers_low);
+            } elseif (isset($headers_low[$name_low])) {
+                $out[$name_low] = $headers_low[$name_low];
+            }
+        } elseif ($name == 1) {
             txp_status_header($header);
-        } else {
+        } elseif ($rewrite == 1 || !isset($headers_low[$name_low])) {
+            header($name ? $name.': '.$header : $header);
+        } elseif ($rewrite) {
+            $header = implode(', ', do_list_unique($headers_low[$name_low].','.$header));
             header($name ? $name.': '.$header : $header);
         }
     }
 
-    return $out ? implode(n, $out) : null;
+    return $out ? $out : null;
 }
 
 /**

@@ -4225,9 +4225,12 @@ function txp_header($atts)
         'name'    => 1,
         'replace' => 1,
         'value'   => isset($atts['name']) ? true : '200 OK',
+        'break'   => ''
     ), $atts));
 
-    return set_headers(array($name => $value), $replace);
+    $out = set_headers(array($name => $value), $replace);
+
+    return $out ? doWrap($out, null, $break) : null;
 }
 
 // -------------------------------------------------------------
