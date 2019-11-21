@@ -4669,14 +4669,15 @@ function do_list($list, $delim = ',')
     $list = explode($delim, $list);
 
     if (isset($range)) {
+        $pattern = '/^\s*(\w|[-+]]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]]?\d+)\s*$/';
         $out = array();
 
         foreach ($list as $item) {
-            if (strpos($item, $range) === false) {
+            if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
-                list($start, $end) = explode($range, $item, 2);
-                $out = array_merge($out, range(trim($start), trim($end)));
+                list($m, $start, $end) = $match;
+                $out = array_merge($out, range($start, $end));
             }
         }
     }
