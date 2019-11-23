@@ -269,10 +269,10 @@ function discuss_list($message = '')
 
     if ($total < 1) {
         $contentBlock .= graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt($criteria == 1 ? 'no_comments_recorded' : 'no_results_found'),
-                    array('class' => 'alert-block information')
-                );
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt($criteria == 1 ? 'no_comments_recorded' : 'no_results_found'),
+            array('class' => 'alert-block information')
+        );
     } else {
         if (!cs('toggle_show_spam')) {
             $total = $count[MODERATE] + $count[VISIBLE];

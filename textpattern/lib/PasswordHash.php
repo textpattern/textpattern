@@ -214,7 +214,7 @@ class PasswordHash {
     {
         $hash = $this->crypt_private($password, $stored_hash);
         if ($hash[0] === '*')
-            @$hash = crypt($password, $stored_hash);
+            $hash = crypt($password, $stored_hash);
 
         # This is not constant-time.  In order to keep the code simple,
         # for timing safety we currently rely on the salts being

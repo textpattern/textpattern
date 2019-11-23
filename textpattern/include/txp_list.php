@@ -247,10 +247,10 @@ function list_list($message = '', $post = '')
 
     if ($total < 1) {
         $contentBlock .= graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt($criteria != 1 ? 'no_results_found' : 'no_articles_recorded'),
-                array('class' => 'alert-block information')
-            );
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt($criteria != 1 ? 'no_results_found' : 'no_articles_recorded'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
