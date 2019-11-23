@@ -507,20 +507,20 @@ function plug_privs($pluggable = null, $user = null)
     isset($pluggable) or $pluggable = $txp_options;
     $level = isset($user['privs']) ? $user['privs'] : has_privs();
 
-    foreach((array)$pluggable as $pref => $pane) {    
+    foreach ((array)$pluggable as $pref => $pane) {
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
                     return;
                 }
-    
+
                 unset($pane[0]);
             }
         } else {
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function(&$item) use ($level) {
+        array_walk($pane, function (&$item) use ($level) {
             if ($item === true) {
                 $item = $level;
             }
@@ -554,7 +554,7 @@ function add_privs($res, $perm = '1')
         $res = array($res => $perm);
     }
 
-    foreach($res as $priv => $group) {
+    foreach ($res as $priv => $group) {
         if ($group === null) {
             unset($txp_permissions[$priv]);
         } else {
@@ -2935,7 +2935,8 @@ function has_single_author($table, $col = 'author')
  * @package TagParser
  */
 
-function txp_tokenize($thing, $hash = null, $transform = null) {
+function txp_tokenize($thing, $hash = null, $transform = null)
+{
     global $txp_parsed, $txp_else;
     static $short_tags = null;
 
@@ -3444,7 +3445,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if ($max_article = safe_field("UNIX_TIMESTAMP(Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field("UNIX_TIMESTAMP(Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -3464,31 +3465,38 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         return;
     }
 
-    if (!$rewrite && $headers_list = headers_list()) {
-        $headers_low = array();
+    $rewrite = (int)$rewrite;
+    $out = $headers_low = array();
 
-        foreach (array_keys($headers) as $name) {
-            $headers_low[strtolower($name)] = $name;
-        }
-
+    if (($rewrite != 1 || in_array(true, $headers, true)) && $headers_list = headers_list()) {
         foreach ($headers_list as $header) {
-            $name = strtolower(trim(strtok($header, ':')));
+            list($name, $value) = explode(':', $header, 2) + array(null, null);
+            $headers_low[strtolower(trim($name))] = $value;
+        }
+    }
 
-            if (isset($headers_low[$name])) {
-                unset($headers[$headers_low[$name]]);
+    foreach ($headers as $name => $header) {
+        $name_low = strtolower(trim($name));
+
+        if ((string)$header === '') {
+            !$rewrite or header_remove($name && $name != 1 ? $name : null);
+        } elseif ($header === true) {
+            if ($name == 1) {
+                $out = array_merge($out, $headers_low);
+            } elseif (isset($headers_low[$name_low])) {
+                $out[$name_low] = $headers_low[$name_low];
             }
+        } elseif ($name == 1) {
+            txp_status_header($header);
+        } elseif ($rewrite == 1 || !isset($headers_low[$name_low])) {
+            header($name ? $name.': '.$header : $header);
+        } elseif ($rewrite) {
+            $header = implode(', ', do_list_unique($headers_low[$name_low].','.$header));
+            header($name ? $name.': '.$header : $header);
         }
     }
 
-    foreach ((array)$headers as $name => $header) {
-        if ($name === 1) {
-            txp_status_header($header);
-        } elseif ($header) {
-            header($name ? $name.':'.$header : $header);
-        } else {
-            header_remove($name ? $name : null);
-        }
-    }
+    return $out ? $out : null;
 }
 
 /**
@@ -4333,7 +4341,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         }
     }
 
-    if(empty($url_mode)) {
+    if (empty($url_mode)) {
         $url_mode = $permlink_mode;
     }
 
@@ -4661,14 +4669,15 @@ function do_list($list, $delim = ',')
     $list = explode($delim, $list);
 
     if (isset($range)) {
+        $pattern = '/^\s*(\w|[-+]]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]]?\d+)\s*$/';
         $out = array();
 
-        foreach($list as $item) {
-            if (strpos($item, $range) === false) {
+        foreach ($list as $item) {
+            if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
-                list($start, $end) = explode($range, $item, 2);
-                $out = array_merge($out, range(trim($start), trim($end)));
+                list($m, $start, $end) = $match;
+                $out = array_merge($out, range($start, $end));
             }
         }
     }
@@ -4952,7 +4961,8 @@ function getMetaDescription($type = null)
  * @return array The retrieved data
  */
 
-function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f')) {
+function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
+{
     global $pretext;
 
     if (!is_array($context)) {
@@ -5515,8 +5525,10 @@ function real_max_upload_size($user_max, $php = true)
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $val *= 1024;
+                // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }

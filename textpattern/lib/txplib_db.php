@@ -1354,7 +1354,7 @@ function getRootPath($target, $type = 'article', $tbl = 'txp_category', $root = 
     if (!isset($cache[$type])) {
         return $out;
     } elseif (empty($cache[$type])) {
-        foreach(safe_rows('id, name, parent, title, description', $tbl, "type = '".doSlash($type)."'") as $row) {
+        foreach (safe_rows('id, name, parent, title, description', $tbl, "type = '".doSlash($type)."'") as $row) {
             $cache[$type][$row['name']] = $row;
         }
     }

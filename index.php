@@ -106,11 +106,7 @@ if (!empty($txpcfg['pre_publish_script'])) {
 
 include txpath.'/publish.php';
 
-if (txpinterface == 'css') {
-    $n = gps('n') or $n = $pretext['css'];
-    $t = gps('t') or $t = $pretext['skin'];
-    output_css($s, $n, $t);
-} elseif (!empty($f)) {
+if (!empty($f)) {
     output_component($f);
 } else {
     textpattern();
