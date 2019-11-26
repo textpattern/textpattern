@@ -354,8 +354,8 @@ function css_save()
                 }
             } else {
                 if (safe_update('txp_css',
-                        "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
-                        "name = '$safe_name' AND skin = '$safe_skin'")) {
+                    "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
+                    "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name'");
                     set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));

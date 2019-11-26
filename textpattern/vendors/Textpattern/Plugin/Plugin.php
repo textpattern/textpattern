@@ -196,7 +196,8 @@ class Plugin
      * @return array
      */
 
-    public function extractSection($pack, $section = 'CODE') {
+    public function extractSection($pack, $section = 'CODE')
+    {
         $result = array(false);
 
         foreach ((array)$section as $s) {
@@ -491,7 +492,7 @@ class Plugin
 
     /**
      * Create/update/delete plugin file.
-     * 
+     *
      * @param  string $name The plugin
      * @param  string $code The code
      */
