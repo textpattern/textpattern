@@ -269,18 +269,18 @@ class Skin extends CommonBase implements SkinInterface
      * @param array Section names.
      */
 
-     protected function getSections($skin = null)
-     {
-         $skin !== null or $skin = $this->getName();
+    protected function getSections($skin = null)
+    {
+        $skin !== null or $skin = $this->getName();
 
-         return array_values(
+        return array_values(
              safe_column(
                  'name',
                  'txp_section',
                  $this->getEvent()." ='".doSlash($skin)."'"
              )
          );
-     }
+    }
 
     /**
      * Update the txp_section table.
@@ -1429,7 +1429,6 @@ class Skin extends CommonBase implements SkinInterface
                    .n.self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
                    .tInput()
                    .n.tag_end('form');
-
         }
     }
 
@@ -1555,11 +1554,13 @@ class Skin extends CommonBase implements SkinInterface
             if ($field === 'description') {
                 $input = text_area($field, 0, 0, $current, $event.'_'.$field);
             } elseif ($field === 'name') {
-                $input = fInput('text',
+                $input = fInput(
+                    'text',
                     array(
                         'name'      => $field,
                         'maxlength' => '63',
-                    ), $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', true);
+                    ), $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', true
+                );
             } elseif ($field === 'author_uri') {
                 $input = fInput('url', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', '', 'http(s)://');
             } else {
