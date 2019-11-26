@@ -1917,20 +1917,20 @@ function article_partial_section($rs)
 function article_partial_categories($rs)
 {
     $out = inputLabel(
-            'category-1',
-            category_popup('Category1', $rs['Category1'], 'category-1').
-            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-            'category1',
-            array('', 'instructions_category1'),
-            array('class' => 'txp-form-field category category-1')
-        ).
-        inputLabel(
-            'category-2',
-            category_popup('Category2', $rs['Category2'], 'category-2'),
-            'category2',
-            array('', 'instructions_category2'),
-            array('class' => 'txp-form-field category category-2')
-        );
+        'category-1',
+        category_popup('Category1', $rs['Category1'], 'category-1').
+        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+        'category1',
+        array('', 'instructions_category1'),
+        array('class' => 'txp-form-field category category-1')
+    ).
+    inputLabel(
+        'category-2',
+        category_popup('Category2', $rs['Category2'], 'category-2'),
+        'category2',
+        array('', 'instructions_category2'),
+        array('class' => 'txp-form-field category category-2')
+    );
 
     return pluggable_ui('article_ui', 'categories', $out, $rs);
 }

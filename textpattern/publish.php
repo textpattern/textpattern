@@ -392,7 +392,7 @@ function preText($s, $prefs)
                     for ($n = 0; isset(${'u'.($n+1)}); $n++);
                     $un = ${'u'.$n};
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
-                    $custom_modes = array_filter($permlink_modes, function($v) use ($permlink_mode) {
+                    $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
                     });
 
@@ -401,8 +401,10 @@ function preText($s, $prefs)
                     } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
                         $safe_un = doSlash($un);
 
-                        $guessarticles = safe_rows('*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
-                            'textpattern', "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
+                        $guessarticles = safe_rows(
+                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
+                            'textpattern',
+                            "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
                         );
 
                         foreach ($guessarticles as $a) {
@@ -640,9 +642,9 @@ function preText($s, $prefs)
     if (!$is_404 && $id && $out['s'] !== 'file_download') {
         if (empty($thisarticle)) {
             $a = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-            'textpattern',
-            "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
+                "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+                'textpattern',
+                "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
             );
 
             if ($a) {
@@ -763,7 +765,7 @@ function output_component($n = '')
     $assets = array();
 
     if (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
-        foreach($rs as $row) {
+        foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
                 $mimetype = $mimetypes[$row['type']];
@@ -810,7 +812,7 @@ function output_css($s = '', $n = '', $t = '')
 // -------------------------------------------------------------
 function output_file_download($filename)
 {
-global $file_error, $file_base_path, $pretext;
+    global $file_error, $file_base_path, $pretext;
 
     set_headers(array(
         'last-modified' => false,

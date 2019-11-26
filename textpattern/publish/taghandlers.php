@@ -183,7 +183,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_custom')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
-    ->register('txp_item', 'item')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_name_input', 'comment_email_input', 'email', 'clean_url')
@@ -261,7 +260,7 @@ function css($atts)
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
-        foreach(do_list_unique($name) as $n) {
+        foreach (do_list_unique($name) as $n) {
             $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.Txp::get('Textpattern\Skin\Css')->getDir().'/'.urlencode($n).'.css';
         }
     } else {
@@ -324,7 +323,7 @@ function component($atts)
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
-        foreach(do_list_unique($form) as $n) {
+        foreach (do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
                 $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
@@ -1048,7 +1047,7 @@ function recent_articles($atts, $thing = null)
         'no_widow' => '',
     ), $atts);
 
-    if(!isset($thing) && !$atts['form']) {
+    if (!isset($thing) && !$atts['form']) {
         $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     }
 
@@ -1593,7 +1592,8 @@ function search_input($atts, $thing = null)
         $outside = $oldatts;
     } else {
         $h5 = ($doctype == 'html5');
-        $out = fInput($h5 ? 'search' : 'text',
+        $out = fInput(
+            $h5 ? 'search' : 'text',
             array(
                 'name'        => 'q',
                 'aria-label'  => $aria_label,
@@ -1601,7 +1601,9 @@ function search_input($atts, $thing = null)
                 'required'    => $h5,
                 'size'        => $size,
                 'class'       => $wraptag || empty($atts['class']) ? false : $class
-            ), $q);
+            ),
+            $q
+        );
     }
 
     if ($form || $inside) {
@@ -1814,14 +1816,14 @@ function txp_pager($atts, $thing = null, $newer = true)
     $context = get_context();
     $out = array();
 
-    if (!isset($shift)){
+    if (!isset($shift)) {
         $pages = array(1);
     } elseif ($shift === true) {
         $pages = array(-1);
     } else {
         $pages = array_map('intval', do_list($shift));
     }
-    
+
     foreach ($pages as $page) {
         if ($newer) {
             $nextpg = (int)$page < 0 ? min(-$page, $pg - 1) : $pg - $page;
@@ -2743,7 +2745,8 @@ function if_logged_in($atts, $thing = null)
 }
 // -------------------------------------------------------------
 
-function txp_sandbox($atts = array(), $thing = null, $parse = true) {
+function txp_sandbox($atts = array(), $thing = null, $parse = true)
+{
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body;
 
@@ -2793,7 +2796,7 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true) {
         $uniqid = strtr(uniqid('sandbox_', true), '.', '_');
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
-    
+
     if ($field) {
         $tag = $field;
         unset($atts['id']);
@@ -3694,7 +3697,9 @@ function if_article_list($atts, $thing = null)
                     $x = !empty($pretext[$q]) || !isset($pretext[$q]) && gps($q);
             }
 
-            if ($x) break;
+            if ($x) {
+                break;
+            }
         }
     }
 
@@ -4217,12 +4222,15 @@ function txp_header($atts)
     }
 
     extract(lAtts(array(
-        'name'    => true,
-        'replace' => true,
-        'value'   => '200 OK',
+        'name'    => 1,
+        'replace' => 1,
+        'value'   => isset($atts['name']) ? true : '200 OK',
+        'break'   => ''
     ), $atts));
 
-    set_headers(array($name => $value), !empty($replace));
+    $out = set_headers(array($name => $value), $replace);
+
+    return $out ? doWrap($out, null, $break) : null;
 }
 
 // -------------------------------------------------------------
@@ -4923,7 +4931,7 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? '' : null;
 
     extract(lAtts(array(
         'escape'    => $set,
@@ -4935,52 +4943,56 @@ function variable($atts, $thing = null)
         'output'    => null
     ), $atts));
 
+    $var = isset($variable[$name]) ? $variable[$name] : null;
+
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null) {
-        if (isset($reset)) {
-            $out = isset($variable[$name]) ? $variable[$name] : '';
-            $variable[$name] = $reset === true ? null : $reset;
-
-            return $out;
-        } elseif (isset($variable[$name])) {
-            return $variable[$name];
-        } else {
-            $trace->log("[<txp:variable>: Unknown variable '$name']");
-        }
+    } elseif ($set === null && !isset($var)) {
+        $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
-            $var = isset($variable[$name]) ? $variable[$name] : null;
             empty($thing) or $thing = parse($thing);
 
-            switch ($value) {
-                case null:
-                    $add = isset($thing) ? $thing : 1;
-                    break;
-                default:
-                    $add = $value === true ? $var : $value;
-                    !isset($thing) or $var = $thing;
+            if (!isset($value)) {
+                $add = isset($thing) ? $thing : 1;
+            } elseif ($value === true) {
+                $add = $var;
+                !isset($thing) or $var = $thing;
+            } else {
+                $add = isset($thing) ? $thing : $var;
+                $var = $value;
             }
+        } elseif ($value === true) {
+            isset($var) or $var = (isset($thing) ? parse($thing) : null);
         } else {
-            $var = isset($value) ? $value : (isset($thing) ?
-                parse($thing) :
-                (isset($variable[$name]) ? $variable[$name] : $reset));
+            $var = isset($value) ?
+                $value :
+                (isset($thing) ? parse($thing) : $var);
         }
 
-        if (!empty($add)) {
-            if (!isset($separator) && is_numeric($add) && is_numeric($var)) {
+        if (isset($add)) {
+            if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
                 $var += $add;
             } else {
                 $var .= ($var ? $separator : '').$add;
             }
         }
-
-        $variable[$name] = $escape
-            ? txp_escape(array('escape' => $escape), $var)
-            : $var;
     }
 
-    return $output ? $variable[$name] : '';
+    if ($set !== null) {
+        $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
+
+        if (isset($reset)) {
+            $variable[$name] = $reset === true ? null : $reset;
+            isset($output) or $output = 1;
+        } else {
+            $variable[$name] = $var;
+        }
+    } else {
+        isset($output) or $output = 1;
+    }
+
+    return !$output ? '' : ((int)$output ? $var : txp_escape(array('escape' => $output), $var));
 }
 
 // -------------------------------------------------------------
@@ -5099,7 +5111,7 @@ function txp_eval($atts, $thing = null)
     $thing = parse($thing);
     unset($txp_atts['evaluate']);
 
-    if($txp_tag) {
+    if ($txp_tag) {
         if ($staged) {
             $quoted = txp_escape(array('escape' => 'quote'), $thing);
             $query = str_replace('<+>', $quoted, $query);
@@ -5147,6 +5159,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'integer':
                 !$filter or $thing = do_list($thing);
+                // no break
             case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
@@ -5272,17 +5285,4 @@ function txp_wraptag($atts, $thing = '')
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
-}
-
-// -------------------------------------------------------------
-
-function txp_item($atts)
-{
-    global $txp_item;
-
-    extract(lAtts(array(
-        'name' => 'item'
-    ), $atts));
-
-    return isset($txp_item[$name]) ? $txp_item[$name] : null;
 }
