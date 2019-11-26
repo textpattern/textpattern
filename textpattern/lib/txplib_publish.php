@@ -355,8 +355,7 @@ function parse($thing, $condition = true, $not = true)
     }
 
     if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing))
-    {
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
@@ -397,8 +396,8 @@ function parse($thing, $condition = true, $not = true)
         }
 
         if ($isempty == empty($txp_atts['not'])) {
-            unset($out);
-            $condition = false;
+            $out = false;
+            $condition = $txp_tag = false;
         } else {
             foreach ($tags as $n) {
                 $txp_tag = $tag[$n];
@@ -409,14 +408,14 @@ function parse($thing, $condition = true, $not = true)
         }
     }
 
-    if (!isset($out)) {
+    if (!isset($out) || $out === false) {
         if ($condition) {
             $last = $first - 2;
             $first   = 1;
         } elseif ($first <= $last) {
             $first  += 2;
         } else {
-            return '';
+            return isset($out) ? false : '';
         }
 
         for ($out = $tag[$first - 1]; $first <= $last; $first++) {
@@ -462,10 +461,10 @@ function processTags($tag, $atts = '', $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
-             function ($v) {
-                 return !is_bool($v);
-             }
-         );
+            function ($v) {
+                return !is_bool($v);
+            }
+        );
     }
 
     $old_atts = $txp_atts;
@@ -492,7 +491,7 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($out === false) {
-        trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
+        trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_WARNING);
         $out = '';
     }
 
@@ -856,7 +855,7 @@ function filterAtts($atts = null, $iscustom = null)
     $category  = do_list_unique($category);
     $categories = array();
 
-    if ($category = getTree($category, 'article', '1', 'txp_category', $depth)) {
+    if ($category && (!$depth || $category = getTree($category, 'article', '1', 'txp_category', $depth))) {
         $category  = join("','", doSlash($category));
 
         if (in_array('Category1', $match)) {
@@ -866,11 +865,10 @@ function filterAtts($atts = null, $iscustom = null)
         if (in_array('Category2', $match)) {
             $categories[] = "Category2 IN ('$category')";
         }
-
-        $categories = join(" OR ", $categories);
     }
 
     $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
+    $categories = join(" OR ", $categories);
     $category  = !$categories  ? '' : " AND $not($categories)";
 
     // Section
