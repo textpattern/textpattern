@@ -1681,6 +1681,14 @@ function lAtts($pairs, $atts, $warn = true)
         }
     }
 
+    if (isset($txp_atts['yield'])) {
+        unset($pairs['yield']);
+
+        foreach (do_list_unique($txp_atts['yield']) as $name) {
+            $pairs[$name] = parse('<txp:yield name="'.txpspecialchars($name).'" />');
+        }
+    }
+
     return $pairs ? $pairs : false;
 }
 
