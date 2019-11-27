@@ -1660,6 +1660,18 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
+    if (isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+        unset($atts['yield']);
+
+        foreach (do_list_unique($txp_atts['yield']) as $name) {
+            $value = parse('<txp:yield name="'.txpspecialchars($name).'" />', true, false);
+
+            if((string)$value !== '') {
+                $atts[$name] = $value;
+            }
+        }
+    }
+
     if (empty($pretext['_txp_atts'])) {
         foreach ($atts as $name => $value) {
             if (array_key_exists($name, $pairs)) {
@@ -1678,14 +1690,6 @@ function lAtts($pairs, $atts, $warn = true)
                 $pairs[$name] = $value;
                 unset($txp_atts[$name]);
             }
-        }
-    }
-
-    if (isset($txp_atts['yield'])) {
-        unset($pairs['yield']);
-
-        foreach (do_list_unique($txp_atts['yield']) as $name) {
-            $pairs[$name] = parse('<txp:yield name="'.txpspecialchars($name).'" />');
         }
     }
 
