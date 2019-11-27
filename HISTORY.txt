@@ -1,5 +1,6 @@
 Changes in TBC (upcoming)
 
+* Changed: Minimum system requirements increased to PHP 5.5.
 * Fixed: index.php correctly included in css.php.
 * Fixed: 3 undefined routing-related indexes.
 * Fixed: Article preview (txpreview) is not cached.
@@ -8,6 +9,7 @@ Changes in TBC (upcoming)
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
+* Added: support for PHP 7.4.
 * Added: <txp:item /> tag.
 * Added: Dark Mode support in Hive admin theme.
 * Added: 'breadcrumb/title' article link format.
