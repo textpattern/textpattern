@@ -16,7 +16,7 @@ Changes in 4.8.0 (upcoming)
 * Added: Per-section article link format override.
 * Added: 'title' attribute to image tags.
 * Added: Configuration file generated during setup can be downloaded.
-* Added: Latest translations.
+* Added: Latest translations. Thanks to all CrowdIn translators for their work.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Developer: plugins can be uploaded with .php and .zip extensions.
