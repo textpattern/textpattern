@@ -559,7 +559,7 @@ function doDiagnostics()
     $out = array(
         form(
             eInput('diag').
-            href('php_diagnostics', array(
+            href(gTxt('php_diagnostics'), array(
                 'event'      => 'diag',
                 'step'       => 'phpinfo',
                 '_txp_token' => form_token(),
