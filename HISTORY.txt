@@ -1,5 +1,6 @@
-Changes in TBC (upcoming)
+Changes in 4.8.0 (upcoming)
 
+* Changed: Minimum system requirements increased to PHP 5.4.0.
 * Fixed: index.php correctly included in css.php.
 * Fixed: 3 undefined routing-related indexes.
 * Fixed: Article preview (txpreview) is not cached.
