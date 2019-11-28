@@ -1,5 +1,6 @@
-Changes in TBC (upcoming)
+Changes in 4.8.0 (upcoming)
 
+* Changed: Minimum system requirements increased to PHP 5.5.0.
 * Fixed: index.php correctly included in css.php.
 * Fixed: 3 undefined routing-related indexes.
 * Fixed: Article preview (txpreview) is not cached.
@@ -8,6 +9,7 @@ Changes in TBC (upcoming)
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
+* Added: support for PHP 7.4.
 * Added: <txp:item /> tag.
 * Added: Dark Mode support in Hive admin theme.
 * Added: 'breadcrumb/title' article link format.
@@ -24,7 +26,7 @@ Changes in TBC (upcoming)
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.17.1.
-* jQuery File Upload 10.3.0.
+* jQuery File Upload 10.4.0.
 
 Changes in 4.7.3
 

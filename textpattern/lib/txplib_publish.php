@@ -502,7 +502,7 @@ function processTags($tag, $atts = '', $thing = null)
             $out = $out ? '' : '1';
         }
 
-        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
+        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate'], $txp_atts['yield']);
 
         if ($txp_atts) {
             $pretext['_txp_atts'] = true;
