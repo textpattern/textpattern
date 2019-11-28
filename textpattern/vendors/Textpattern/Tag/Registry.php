@@ -197,4 +197,16 @@ class Registry implements \Textpattern\Container\ReusableInterface
     {
         return $is_attr ? $this->attr : $this->tags;
     }
+
+    /**
+     * Tags getter.
+     *
+     * @param  string $tag
+     * @return callable
+     */
+
+    public function getTag($tag)
+    {
+        return $this->isRegistered($tag) ? $this->tags[$tag] : false;
+    }
 }
