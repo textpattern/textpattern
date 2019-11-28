@@ -22,6 +22,7 @@ Changes in 4.8.0 (upcoming)
 * Developer: plugins can be uploaded with .php and .zip extensions.
 * Developer: some txplib_misc.php functions moved to txplib_admin.php.
 * Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
+* Developer: PHP safe_mode support removed.
 * Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
