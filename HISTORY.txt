@@ -17,7 +17,7 @@ Changes in 4.8.0 (upcoming)
 * Added: 'title' attribute to image tags.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations.
-* Removed: Obsolete 'no widowed words' preference setting. If this feature is
+* Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Developer: plugins can be uploaded with .php and .zip extensions.
 * Developer: some txplib_misc.php functions moved to txplib_admin.php.
