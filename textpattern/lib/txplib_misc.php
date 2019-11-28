@@ -1653,11 +1653,24 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 function lAtts($pairs, $atts, $warn = true)
 {
     global $pretext, $production_status, $txp_atts;
-    static $globals = null, $global_atts;
+    static $globals = null, $global_atts, $partial;
 
     if ($globals === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
         $globals = array_filter($global_atts);
+        $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
+    }
+
+    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield']) && $partial) {
+        unset($atts['yield']);
+
+        foreach (do_list_unique($txp_atts['yield']) as $name) {
+            $value = call_user_func($partial, array('name' => $name));
+
+            if(isset($value)) {
+                $atts[$name] = $value;
+            }
+        }
     }
 
     if (empty($pretext['_txp_atts'])) {
