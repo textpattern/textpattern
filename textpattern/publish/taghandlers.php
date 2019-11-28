@@ -194,7 +194,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate, yield')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
 
@@ -3893,26 +3893,19 @@ function breadcrumb($atts, $thing = null)
         'linkclass' => '',
     ), $atts));
 
-    // For BC, get rid of in crockery.
-    if ($link == 'n') {
-        $linked = false;
-    } else {
-        $linked = $link;
-    }
-
     $content = array();
     $label = txpspecialchars($label);
     $type = $type === true ? $context : validContext($type);
     $section != 'default' or $section = '';
 
-    if ($linked && $label) {
+    if ($link && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
     }
 
     if (!empty($section)) {
         $section_title = ($title) ? fetch_section_title($section) : $section;
         $section_title_html = escape_title($section_title);
-        $content[] = ($linked)
+        $content[] = ($link)
             ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s' => $s)).'"'))
             : $section_title_html;
     }
@@ -3932,7 +3925,7 @@ function breadcrumb($atts, $thing = null)
 
     foreach ($catpath as $thiscategory) {
         $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
-        $content[] = ($linked)
+        $content[] = ($link)
             ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array(
                 'c'       => $thiscategory['name'],
                 'context' => $type,
