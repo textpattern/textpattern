@@ -1461,6 +1461,15 @@ textarea:-moz-ui-invalid {
   }
 }
 /* ==========================================================================
+   Additional accessibility for screen media
+   ========================================================================== */
+@media screen and (prefers-reduced-motion: reduce), (update: slow) {
+  .search input[type=search] {
+    -webkit-transition-duration: 0;
+            transition-duration: 0;
+  }
+}
+/* ==========================================================================
    Styling and layout for print media
    ========================================================================== */
 @media print {

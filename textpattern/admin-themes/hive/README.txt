@@ -13,10 +13,15 @@ supporting files as long as licences are respected (see below).
 # Select 'Hive' from the 'Admin-side theme' dropdown list. Save the preferences.
 
 
-== Optional custom files for advanced users ==
+== Optional customizations for advanced users ==
 
-We provide an optional user-defined custom CSS and JavaScript file for
-customization of the admin-side theme. By default, these are located at:
+You can disable auto-expanding text areas (autosize.js) by adding the following
+line into Textpattern 'config.php' file (before the closing '?>' line):
+
+    define('no_autosize', true);
+
+We also provide an optional user-defined custom CSS and JavaScript file for
+further customization of the admin-side theme. By default, these are located at:
 
     assets -> css -> custom.css
     assets -> js -> custom.js
