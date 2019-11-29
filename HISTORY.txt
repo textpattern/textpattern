@@ -11,16 +11,16 @@ Changes in 4.8.0 (upcoming)
 * Changed: Consistent Edit step search behaviour on Plugins and Links panels.
 * Changed: Tag parser tweaks for secondpass handler.
 * Changed: Plugins cached and loaded from disk to avoid eval().
-* Changed: Custom fields support from/to date filtering.
+* Changed: Custom fields support from/to filtering.
 * Changed: Evaluate removes empty items from lists.
 * Changed: Scroll to top on list panels during navigation.
 * Changed: Random generator supports random_bytes and doesn't throw errors.
-* Changed: Improve performance of feed handling with sections.
+* Changed: Improved performance of syndication feed handling for sections.
 * Changed: Check for updates throttle reduced to 1hr from 24hrs.
 * Added: Global public theme switcher.
 * Added: Dedicated live/dev theme switching.
 * Added: Support for PHP 7.4.
-* Added: <txp:item /> tag.
+* Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
@@ -56,6 +56,7 @@ Changes in 4.8.0 (upcoming)
 * Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
 * Developer: PHP safe_mode support removed.
 * Developer: Merge headers on demand.
+* Developer: Tags can be registered with custom attributes/parameters.
 * Performance optimizations via cacheing and preloading frequent content.
 * Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
   for full list of changes in this release (thanks, gocom).
