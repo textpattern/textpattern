@@ -4923,7 +4923,7 @@ function getlocale($lang)
 
 function getMetaDescription($type = null)
 {
-    global $thisarticle, $thiscategory, $thissection, $c, $s, $context;
+    global $thisarticle, $thiscategory, $thissection, $c, $s, $context, $txp_sections;
 
     $content = '';
 
@@ -4937,7 +4937,7 @@ function getMetaDescription($type = null)
         } elseif ($c) {
             $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '".doSlash($context)."'");
         } elseif ($s) {
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($s)."'");
+            $content = isset($txp_sections[$s]) ? $txp_sections[$s]['description'] : '';
         }
     } else {
         if (strpos($type, 'category') === 0) {
@@ -4957,7 +4957,7 @@ function getMetaDescription($type = null)
             }
         } elseif ($type === 'section') {
             $theSection = ($thissection) ? $thissection['name'] : $s;
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($theSection)."'");
+            $content = isset($txp_sections[$theSection]) ? $txp_sections[$theSection]['description'] : '';
         } elseif ($type === 'article') {
             assert_article();
             $content = ($thisarticle? $thisarticle['description'] : '');
