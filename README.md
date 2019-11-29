@@ -67,7 +67,7 @@ Note that minimum and/or recommended versions listed may change multiple times d
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | [vendor supported](https://php.net/supported-versions.php)<br />(7.2 or 7.3) |
+| PHP    | 5.5 | [vendor supported](https://php.net/supported-versions.php)<br />(7.2, 7.3 or 7.4) |
 | MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | 1.10 | mainline (1.17) or stable (1.16) |

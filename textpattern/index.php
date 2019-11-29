@@ -229,6 +229,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         exit;
     }
 
+    $txp_sections = safe_column(array('name'), 'txp_section');
+
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;
     load_lang($lang_ui, $event);

@@ -39,6 +39,7 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
      */
 
     private $phpass;
+    private $native;
 
     /**
      * Constructor.
@@ -47,6 +48,7 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
     public function __construct()
     {
         $this->phpass = new \PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+        $this->native = function_exists('password_hash');
     }
 
     /**
@@ -55,7 +57,7 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
 
     public function verify($password, $hash)
     {
-        return password_verify($password, $hash) ? 1 : $this->phpass->CheckPassword($password, $hash);
+        return $this->native && password_verify($password, $hash) ? 1 : $this->phpass->CheckPassword($password, $hash);
     }
 
     /**
@@ -64,6 +66,6 @@ class PasswordHash implements \Textpattern\Password\AdapterInterface
 
     public function hash($password)
     {
-        return password_hash($password, PASSWORD_DEFAULT);
+        return $this->native ? password_hash($password, PASSWORD_DEFAULT) : $this->phpass->HashPassword($password);
     }
 }
