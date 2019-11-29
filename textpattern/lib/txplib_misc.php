@@ -5556,3 +5556,9 @@ function real_max_upload_size($user_max, $php = true)
     // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }
+
+/*** Polyfills ***/
+
+if (!function_exists('array_column')) {
+    include txpath.'/lib/array_column.php';
+}
