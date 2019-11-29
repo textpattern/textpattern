@@ -649,7 +649,7 @@ function plugin_form($existing_files = array())
 {
     return tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
-        tag_void('input', array(
+        n.tag_void('input', array(
             'type'   => "file",
             'name'   => "theplugin",
             'id'     => "plugin-upload",
@@ -659,7 +659,7 @@ function plugin_form($existing_files = array())
         eInput('plugin').
         sInput('plugin_upload').
         tInput().n, 'form', array(
-            'class'        => 'plugin-data',
+            'class'        => 'plugin-file',
             'id'           => 'plugin_upload_form',
             'method'       => 'post',
             'action'       => 'index.php',
@@ -676,7 +676,7 @@ function plugin_form($existing_files = array())
     ) : '').
     br.form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-        '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
+        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'

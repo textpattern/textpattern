@@ -1041,7 +1041,7 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
 
     $files = array();
     $file_path = isset($path) ? $path : $file_base_path;
-    $is_file = empty($options & GLOB_ONLYDIR) ? 'is_file' : 'is_dir';
+    $is_file = ($options & GLOB_ONLYDIR) ? 'is_dir' : 'is_file';
 
     if (!is_dir($file_path) || !is_readable($file_path)) {
         return array();
