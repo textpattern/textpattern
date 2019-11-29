@@ -35,6 +35,10 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script defer src="'.$this->url.'assets/js/main.js"></script>'.n;
 
+        if (!defined('no_autosize')) {
+            $out[] = '<script defer src="'.$this->url.'assets/js/autosize.js"></script>'.n;
+        }
+
         return join(n, $out);
     }
 
