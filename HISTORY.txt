@@ -36,6 +36,8 @@ Changes in 4.8.0 (upcoming)
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Latest translations. Thanks to all CrowdIn translators for their work.
+* Added: Option to disable auto-expanding text areas in Hive admin themes via
+  config.php file. See Hive theme's README.txt file for instructions.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Removed: Some deprecated functions from long ago.
@@ -50,6 +52,8 @@ Changes in 4.8.0 (upcoming)
 * Fixed: Undefined variable warnings thrown via compact().
 * Fixed: Password handling when using MySQL 8+.
 * Fixed: nbsp on French opening quote broke Textile in some cases.
+* Accessibility: Honour 'prefers-reduced-motion' in official themes.
+* Accessibility: Target WCAG 2.0 AAA contrast levels in official themes.
 * Developer: Plugins can be uploaded with .php and .zip extensions.
 * Developer: Upload order and file totals sent when batch uploading files.
 * Developer: Some txplib_misc.php functions moved to txplib_admin.php.
