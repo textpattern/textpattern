@@ -15,7 +15,7 @@ Changes in 4.8.0 (upcoming)
 * Changed: Evaluate removes empty items from lists.
 * Changed: Scroll to top on list panels during navigation.
 * Changed: Random generator supports random_bytes and doesn't throw errors.
-* Changed: Improve performance of feed handling with sections.
+* Changed: Improved performance of syndication feed handling for sections.
 * Changed: Check for updates throttle reduced to 1hr from 24hrs.
 * Added: Global public theme switcher.
 * Added: Dedicated live/dev theme switching.
