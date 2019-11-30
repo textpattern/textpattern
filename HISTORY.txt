@@ -57,8 +57,8 @@ Changes in 4.8.0 (upcoming)
 * Developer: Plugins can be uploaded with .php and .zip extensions.
 * Developer: Upload order and file totals sent when batch uploading files.
 * Developer: Some txplib_misc.php functions moved to txplib_admin.php.
-* Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
-* Developer: PHP safe_mode support removed.
+* Developer: PHP magic_quotes_gpc, magic_quotes_runtime, safe_mode and
+  register_globals support removed.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
 * Performance optimizations via cacheing and preloading frequent content.
