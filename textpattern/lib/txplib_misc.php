@@ -1658,10 +1658,10 @@ function lAtts($pairs, $atts, $warn = true)
     if ($globals === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
         $globals = array_filter($global_atts);
-        $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
     }
 
-    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield']) && $partial) {
+    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+        isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
         unset($atts['yield']);
 
         foreach (do_list_unique($txp_atts['yield']) as $name) {
