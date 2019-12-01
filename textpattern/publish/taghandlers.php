@@ -2104,7 +2104,7 @@ function comments_form($atts, $thing = null)
     extract($thisarticle);
 
     $out = '';
-    $ip = serverset('REMOTE_ADDR');
+    $ip = serverSet('REMOTE_ADDR');
     $blacklisted = is_blacklisted($ip);
 
     if (!checkCommentsAllowed($thisid)) {

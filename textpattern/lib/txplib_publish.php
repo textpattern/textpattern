@@ -528,24 +528,6 @@ function processTags($tag, $atts = '', $thing = null)
 }
 
 /**
- * Protection from those who'd bomb the site by GET.
- *
- * Origin of the infamous 'Nice try' message and an even more useful '503'
- * HTTP status.
- */
-
-function bombShelter()
-{
-    global $prefs;
-    $in = serverset('REQUEST_URI');
-
-    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
-        txp_status_header('503 Service Unavailable');
-        exit('Nice try.');
-    }
-}
-
-/**
  * Checks a named item's existence in a database table.
  *
  * The given database table is prefixed with 'txp_'. As such this function can
@@ -712,29 +694,6 @@ function lookupByID($id, $debug = false)
 function lookupByDateTitle($when, $title, $debug = false)
 {
     return safe_row("ID, Section", 'textpattern', "posted LIKE '".doSlash($when)."%' AND url_title LIKE '".doSlash($title)."' AND Status >= 4 LIMIT 1");
-}
-
-/**
- * Chops a request string into URL-decoded path parts.
- *
- * @param   string $req Request string
- * @return  array
- * @package URL
- */
-
-function chopUrl($req)
-{
-    $req = strtok($req, '?');
-    $req = preg_replace('/index\.php$/i', '', $req);
-    $r = array_map('urldecode', explode('/', strtolower($req)));
-    $n = max(4, count($r));
-    $o = array('u0' => $req);
-
-    for ($i = 1; $i < $n; $i++) {
-        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
-    }
-
-    return $o;
 }
 
 /**
