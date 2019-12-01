@@ -1077,7 +1077,7 @@ function recent_comments($atts, $thing = null)
     $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires IS NULL) ";
 
     $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time, t.ID AS thisid,
-            UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.Category1, t.Category2 t.url_title
+            UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.Category1, t.Category2, t.url_title
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
         WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
         ORDER BY ".sanitizeForSort($sort)."
