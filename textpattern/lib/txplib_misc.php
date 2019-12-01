@@ -5396,6 +5396,24 @@ function janitor()
 }
 
 /**
+ * Protection from those who'd bomb the site by GET.
+ *
+ * Origin of the infamous 'Nice try' message and an even more useful '503'
+ * HTTP status.
+ */
+
+function bombShelter()
+{
+    global $prefs;
+    $in = serverSet('REQUEST_URI');
+
+    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+        txp_status_header('503 Service Unavailable');
+        exit('Nice try.');
+    }
+}
+
+/**
  * Test whether the client accepts a certain response format.
  *
  * Discards formats with a quality factor below 0.1

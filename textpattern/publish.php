@@ -41,10 +41,8 @@ $loader->register();
 $loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
-include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/admin_config.php';
-
 include_once txpath.'/publish/log.php';
 
 $trace->stop();
@@ -54,7 +52,10 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 // Get logged user.
-$userInfo = txpinterface === 'css' ? null : is_logged_in();
+$userInfo = is_logged_in();
+
+// Initialise the current user.
+$txp_user = empty($userInfo) ? null : $userInfo['name'];
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
@@ -63,13 +64,13 @@ plug_privs(null, $userInfo);
 // Add prefs to globals.
 extract($prefs);
 
+// Check the size of the URL request.
+bombShelter();
+
 $txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
 $txp_atts = null;
-
-// Check the size of the URL request.
-bombShelter();
 
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
@@ -181,16 +182,10 @@ if (!empty($locale)) {
     setlocale(LC_ALL, $locale);
 }
 
-// Initialise the current user.
-$txp_user = null;
-
 // For backwards-compatibility (sort of) with plugins that expect the
 // $textarray global to be present.
 // Will remove in future.
 $textarray = array();
-
-// Tidy up the site.
-janitor();
 
 // Here come the early plugins.
 if ($use_plugins) {
@@ -213,23 +208,26 @@ if (empty($pretext['feed'])) {
 if (txpinterface !== 'css') {
     $trace->start('[PHP includes, stage 3]');
 
+    include_once txpath.'/lib/txplib_publish.php';
     include_once txpath.'/lib/txplib_html.php';
     include_once txpath.'/lib/txplib_forms.php';
     include_once txpath.'/publish/comment.php';
     include_once txpath.'/publish/taghandlers.php';
 
     $trace->stop();
-// i18n.
-//    load_lang(LANG);
 } else {
-    $n = gps('n');
-    $t = gps('t');
-    output_css($pretext['s'], $n, $t);
+    output_css($pretext['s'], gps('n'), gps('t'));
 
     exit;
 }
 
 $txp_sections = safe_column(array('name'), 'txp_section');
+
+// i18n.
+//    load_lang(LANG);
+
+// Tidy up the site.
+janitor();
 
 // Here come the regular plugins.
 if ($use_plugins) {
@@ -782,7 +780,6 @@ function output_component($n = '')
 // -------------------------------------------------------------
 function output_css($s = '', $n = '', $t = '')
 {
-    global $txp_sections;
     $order = '';
 
     if ($n) {
@@ -795,9 +792,9 @@ function output_css($s = '', $n = '', $t = '')
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
         }
-    } elseif (isset($txp_sections[$s])) {
-        $cssname = $txp_sections[$s]['css'];
-        $t or $t = $txp_sections[$s]['skin'];
+    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='".doSlash($s)."'")) {
+        $cssname = $res['css'];
+        $t or $t = $res['skin'];
     }
 
     if (!empty($cssname)) {
@@ -1220,4 +1217,27 @@ function validContext($context)
     }
 
     return isset($valid[$context]) ? $valid[$context] : 'article';
+}
+
+/**
+ * Chops a request string into URL-decoded path parts.
+ *
+ * @param   string $req Request string
+ * @return  array
+ * @package URL
+ */
+
+function chopUrl($req)
+{
+    $req = strtok($req, '?');
+    $req = preg_replace('/index\.php$/i', '', $req);
+    $r = array_map('urldecode', explode('/', strtolower($req)));
+    $n = max(4, count($r));
+    $o = array('u0' => $req);
+
+    for ($i = 1; $i < $n; $i++) {
+        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
+    }
+
+    return $o;
 }
