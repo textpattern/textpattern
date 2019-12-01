@@ -1,30 +1,72 @@
-Changes in TBC (upcoming)
+Changes in 4.8.0 (upcoming)
 
-* Fixed: index.php correctly included in css.php.
-* Fixed: 3 undefined routing-related indexes.
-* Fixed: Article preview (txpreview) is not cached.
+* Changed: Minimum system requirements increased to PHP 5.5.0.
+* Changed: Plugin tags MUST be registered or they will not work.
+* Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
 * Changed: Author's real name is used in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
-* Added: <txp:item /> tag.
+* Changed: Consistent Edit step search behaviour on Plugins and Links panels.
+* Changed: Tag parser tweaks for secondpass handler.
+* Changed: Plugins cached and loaded from disk to avoid eval().
+* Changed: Custom fields support from/to filtering.
+* Changed: Evaluate removes empty items from lists.
+* Changed: Scroll to top on list panels during navigation.
+* Changed: Random generator supports random_bytes and doesn't throw errors.
+* Changed: Improved performance of syndication feed handling for sections.
+* Changed: Check for updates throttle reduced to 1hr from 24hrs.
+* Added: Global public theme switcher.
+* Added: Dedicated live/dev theme switching.
+* Added: Support for PHP 7.4.
+* Added: 'item' attribute to <txp:yield /> tag.
+* Added: 'title' attribute to image tags.
+* Added: Support for id ranges in some tags and admin fields.
+* Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
+* Added: Support for native PHP password hashing.
 * Added: Dark Mode support in Hive admin theme.
 * Added: 'breadcrumb/title' article link format.
+* Added: 'section/category/title' article link format.
+* Added: Category searching to a specified depth.
 * Added: Per-section article link format override.
-* Added: 'title' attribute to image tags.
+* Added: Custom field URL filters via valueless attributes.
+* Added: Global 'evaluate' and 'yield' attributes.
+* Added: Ability to trim lists when using valueless 'trim' attribute.
+* Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
-* Added: Latest translations.
-* Removed: Obsolete 'no widowed words' preference setting. If this feature is
+* Added: Latest translations. Thanks to all CrowdIn translators for their work.
+* Added: Option to disable auto-expanding text areas in Hive admin themes via
+  config.php file. See Hive theme's README.txt file for instructions.
+* Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
-* Developer: plugins can be uploaded with .php and .zip extensions.
-* Developer: some txplib_misc.php functions moved to txplib_admin.php.
-* Developer: PHP magic_quotes_gpc and magic_quotes_runtime support removed.
+* Removed: Some deprecated functions from long ago.
+* Fixed: index.php correctly included in css.php.
+* Fixed: 3 undefined routing-related indexes.
+* Fixed: Article preview (txpreview) is not cached.
+* Fixed: <txp:category_list> 'sort' attribute respects 'categories'
+  attribute instead of requiring sort="" override.
+* Fixed: <txp:recent_articles> only uses default link without form/container.
+* Fixed: Use locale on admin side.
+* Fixed: Localization of pre-flight diagnostic upgrade messages.
+* Fixed: Undefined variable warnings thrown via compact().
+* Fixed: Password handling when using MySQL 8+.
+* Fixed: nbsp on French opening quote broke Textile in some cases.
+* Accessibility: Honour 'prefers-reduced-motion' in official themes.
+* Accessibility: Target WCAG 2.0 AAA contrast levels in official themes.
+* Developer: Plugins can be uploaded with .php and .zip extensions.
+* Developer: Upload order and file totals sent when batch uploading files.
+* Developer: Some txplib_misc.php functions moved to txplib_admin.php.
+* Developer: PHP magic_quotes_gpc, magic_quotes_runtime, safe_mode and
+  register_globals support removed.
+* Developer: Merge headers on demand.
+* Developer: Tags can be registered with custom attributes/parameters.
+* Performance optimizations via cacheing and preloading frequent content.
 * Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.17.1.
-* jQuery File Upload 10.3.0.
+* jQuery File Upload 10.4.0.
 
 Changes in 4.7.3
 

@@ -31,44 +31,6 @@ error_reporting(E_ALL & ~E_NOTICE);
 // TODO: if display_errors is set to 0... who will ever see errors? See https://github.com/textpattern/textpattern/issues/1012
 ini_set("display_errors", "0");
 
-if (@ini_get('register_globals')) {
-    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-        die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
-    }
-
-    // Collect and unset all registered variables from globals.
-    $_txpg = array_merge(
-        isset($_SESSION) ? (array) $_SESSION : array(),
-        (array) $_ENV,
-        (array) $_GET,
-        (array) $_POST,
-        (array) $_COOKIE,
-        (array) $_FILES,
-        (array) $_SERVER
-    );
-
-    // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
-    // unset to avoid notices further down, we must remove any potential
-    // identically-named global from the list of global names here.
-    unset($_txpg['_txpfoo']);
-
-    foreach ($_txpg as $_txpfoo => $value) {
-        if (!in_array($_txpfoo, array(
-            'GLOBALS',
-            '_SERVER',
-            '_GET',
-            '_POST',
-            '_FILES',
-            '_COOKIE',
-            '_SESSION',
-            '_REQUEST',
-            '_ENV',
-        ))) {
-            unset($GLOBALS[$_txpfoo], $$_txpfoo);
-        }
-    }
-}
-
 define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface', 'xmlrpc');
 

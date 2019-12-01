@@ -1653,11 +1653,24 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 function lAtts($pairs, $atts, $warn = true)
 {
     global $pretext, $production_status, $txp_atts;
-    static $globals = null, $global_atts;
+    static $globals = null, $global_atts, $partial;
 
     if ($globals === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
         $globals = array_filter($global_atts);
+    }
+
+    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+        isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
+        unset($atts['yield']);
+
+        foreach (do_list_unique($txp_atts['yield']) as $name) {
+            $value = call_user_func($partial, array('name' => $name));
+
+            if(isset($value)) {
+                $atts[$name] = $value;
+            }
+        }
     }
 
     if (empty($pretext['_txp_atts'])) {
@@ -4910,7 +4923,7 @@ function getlocale($lang)
 
 function getMetaDescription($type = null)
 {
-    global $thisarticle, $thiscategory, $thissection, $c, $s, $context;
+    global $thisarticle, $thiscategory, $thissection, $c, $s, $context, $txp_sections;
 
     $content = '';
 
@@ -4924,7 +4937,7 @@ function getMetaDescription($type = null)
         } elseif ($c) {
             $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '".doSlash($context)."'");
         } elseif ($s) {
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($s)."'");
+            $content = isset($txp_sections[$s]) ? $txp_sections[$s]['description'] : '';
         }
     } else {
         if (strpos($type, 'category') === 0) {
@@ -4944,7 +4957,7 @@ function getMetaDescription($type = null)
             }
         } elseif ($type === 'section') {
             $theSection = ($thissection) ? $thissection['name'] : $s;
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($theSection)."'");
+            $content = isset($txp_sections[$theSection]) ? $txp_sections[$theSection]['description'] : '';
         } elseif ($type === 'article') {
             assert_article();
             $content = ($thisarticle? $thisarticle['description'] : '');
@@ -5542,4 +5555,10 @@ function real_max_upload_size($user_max, $php = true)
 
     // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
+}
+
+/*** Polyfills ***/
+
+if (!function_exists('array_column')) {
+    include txpath.'/lib/array_column.php';
 }

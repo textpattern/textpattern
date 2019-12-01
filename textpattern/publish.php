@@ -782,6 +782,7 @@ function output_component($n = '')
 // -------------------------------------------------------------
 function output_css($s = '', $n = '', $t = '')
 {
+    global $txp_sections;
     $order = '';
 
     if ($n) {
@@ -794,9 +795,9 @@ function output_css($s = '', $n = '', $t = '')
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
         }
-    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='".doSlash($s)."'")) {
-        $cssname = $res['css'];
-        $t or $t = $res['skin'];
+    } elseif (isset($txp_sections[$s])) {
+        $cssname = $txp_sections[$s]['css'];
+        $t or $t = $txp_sections[$s]['skin'];
     }
 
     if (!empty($cssname)) {

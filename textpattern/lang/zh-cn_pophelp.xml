@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="zh-CN">
+    <group id="admin" title="用户面板">
+        <item id="about_privileges" title="关于角色"><![CDATA[
+<h2>关于角色</h2>
+<h3>出版商</h3>
+<ul>
+    <li>可管理文章、评论和链接</li>
+    <li>如果管理端设置 ‘允许在文章中嵌入PHP？’ 为 ‘是’，那么就可以在文章中使用PHP</li>
+    <li>可管理图像和文件</li>
+    <li>可管理版块和分类</li>
+    <li>可管理页面、模块和样式</li>
+    <li>可浏览诊断信息</li>
+    <li>可管理站点配置信息</li>
+    <li>可管理用户</li>
+    <li>可管理访问记录</li>
+    <li>可管理插件</li>
+    <li>可导入数据</li>
+</ul>
+<h3>管理编辑人员</h3>
+<ul>
+    <li>可管理文章、评论和链接</li>
+    <li>如果管理端设置 ‘允许在文章中嵌入PHP？’ 为 ‘是’，那么就可以在文章中使用PHP</li>
+    <li>可管理图像和文件</li>
+    <li>可管理版块和分类</li>
+    <li>可管理页面、模块和样式</li>
+    <li>可浏览诊断信息</li>
+    <li>可管理站点配置信息</li>
+    <li>可管理用户</li>
+    <li>可管理访问记录</li>
+    <li>可管理插件</li>
+    <li>可导入数据</li>
+</ul>
+<h3>副本编辑人员</h3>
+<ul>
+    <li>可管理文章，但会受到一定限制：
+        <ul>
+            <li>不能删除别人的文章</li>
+        </ul>
+    </li>
+    <li>可管理评论和链接</li>
+    <li>可管理图像和文件</li>
+    <li>可管理分类</li>
+    <li>可管理页面和模块</li>
+    <li>可浏览用户</li>
+    <li>可管理访问记录</li>
+</ul>
+<h3>撰稿人</h3>
+<ul>
+    <li>可管理自己的文章，浏览别人的文章</li>
+    <li>可管理图像和文件</li>
+</ul>
+<h3>自由撰稿人</h3>
+<ul>
+    <li>可管理自己的文章，但会受到一定限制：
+        <ul>
+            <li>只能修改未发表文章</li>
+            <li>文章状态<em>仅可为</em> 草稿，隐藏或者待审核</li>
+        </ul>
+    </li>
+    <li>可浏览别人的文章</li>
+</ul>
+<h3>设计师</h3>
+<ul>
+    <li>可管理自己的文章，但会受到一定限制：
+        <ul>
+            <li>只能修改未发表文章</li>
+            <li>文章状态<em>仅可为</em> 草稿，隐藏或者待审核</li>
+        </ul>
+    </li>
+    <li>可浏览别人的文章</li>
+    <li>可管理图像</li>
+    <li>可管理板块</li>
+    <li>可管理页面、模块和样式</li>
+</ul>        ]]></item>
+        <item id="create_author" title="添加作者"><![CDATA[
+<h2>添加作者</h2>
+<p>邮寄密码、欢迎信息和登录说明给新作者。</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="写作面板">
+        <item id="article_image" title="文章附图"><![CDATA[
+<h2>文章附图</h2>
+<p>文章用到的图像可能是：</p>
+<ol>
+    <li>一个 Textpattern 图像 ID (e.g. <code>12</code>)</li>
+    <li>一个图像的相对 URL 路径 (例如 <code>/images/my_pic.jpg</code>)</li>
+    <li>一个完整 URL 路径 (例如 <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>插入诸如 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> 到一个文章的组件。该组件将输出完整的 HTML <code>&lt;img&gt;</code> 标签关闭图像。</p>
+        ]]></item>
+        <item id="body" title="内容"><![CDATA[
+<h2>内容</h2>
+<p>文章的主要内容。</p>
+<p>在 Textpattern 里编辑文章发布之前，作者都可以自由切换于三种形式之间：纯文本、HTML标记（带有超文本标签的文章）和渲染后的预览形式。</p>
+        ]]></item>
+        <item id="description" title="描述"><![CDATA[
+<h2>描述</h2>
+<p>此可选的文章描述组件能够帮助搜索引擎和网站爬虫更好地识别和排序内容。</p>
+<p>文章描述最多不能超过255个字符。注意，为了便于在搜索引擎结果页面（SERPs）中显示，某些搜索引擎在页面的<code>元描述</code>的长度上设置了字符限制，该字符限制可能小于Textpattern中的255个字符。</p>
+<p>注意，文章描述与文章摘录不同，尽管它们可以有相似的内容。文章描述应主要用于搜索引擎和爬虫，而文章摘录更适合放在供人类阅读的地方。</p>        ]]></item>
+        <item id="excerpt" title="摘录"><![CDATA[
+<h2>摘录</h2>
+<p>文章摘录可选。摘录主要用来展示文章的内容，可以使用目录来显示的文章梗概，可用于站点的RSS/Atom源或者其他用途。</p>
+        ]]></item>
+        <item id="expire_date" title="过期日期"><![CDATA[
+<h2>过期日期</h2>
+<p>标示文章过期时间。该项可选，时间设置可以是未来，也可以是过去。</p>
+<p>空白处的信息为：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>时 (24小时格式) : 分 : 秒</li>
+</ul>
+<p>当时间到了，或者设置了过去的时间，那么文章就过期了。</p>
+<p>如果设置了可以显示过期文章，则文章过期后仍然可以显示；如果设置了不能显示过期文章，那么当访问该文章时，页面会显示 HTTP 410 错误。</p>
+        ]]></item>
+        <item id="keywords" title="关键词"><![CDATA[
+<h2>关键词</h2>
+<p>关键词提供除了分类以外还需要提供的重要信息。</p>
+<p>关键词多于一个时用逗号（英文里的逗号）分开。</p>
+        ]]></item>
+        <item id="override_form" title="覆盖默认文章模块"><![CDATA[
+<h2>覆盖默认文章模块</h2>
+<p>文章可以使用不同于默认模块的模块——例如使用摘录显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 替换默认的内容显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> - 可以在这里设置。</p>
+        ]]></item>
+        <item id="publish_date"><![CDATA[
+<h2>发布日期</h2>
+<p>发布文章、上传文件或者修改文章的时间。时间可以设置为文章发布的实际时间，或者未来、或者过去的任何时间都可以。</p>
+<p>空白处的信息为：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>时 (24小时格式) : 分 : 秒</li>
+</ul>
+<p>当发布时间大于当前时间（例如未来的时间）时，该项目不会显示在 RSS/Atom 中，直到该时间到达时才会显示。</p>
+        ]]></item>
+        <item id="status" title="状态"><![CDATA[
+<h2>状态</h2>
+<p>设置文章发布状态。</p>
+<p>发布状态可设置：</p>
+<ul>
+    <li>草稿</li>
+    <li>隐藏</li>
+    <li>待审</li>
+    <li>公开</li>
+    <li>置顶</li>
+</ul>
+<p><strong>草稿</strong>文章是指仍处于编辑状态中的文章，该状态文章仅能在管理端可见（不能在用户区和RSS中使用）。</p>
+<p><strong>隐藏</strong>文章仅能在管理端可见。</p>
+<p><strong>待审</strong>文章是指准备发布，等待审核的文章，该状态文章仅能在管理端可见。</p>
+<p><strong>公开</strong>文章不仅仅管理端可见，所有人都能看到（用户可见，Rss等也会采集相关信息）。如果一篇文章已经公开，但是有有效期，那么有效期到了之后，也只有管理端能看到了。</p>
+<p><strong>置顶</strong>文章类似于<strong>公开</strong>文章，谁都可以看到。设置文章为置顶状态或者相关的<code>article_custom</code>标签属性值为<code>置顶</code>后，文章才会出现在文章列表中。</p>
+        ]]></item>
+        <item id="title" title="标题"><![CDATA[
+<h2>标题</h2>
+<p>添加一个文章的标题</p>
+<p>文章标题限于255个字符（128个汉字）。</p>
+        ]]></item>
+        <item id="url_title" title="URL标题"><![CDATA[
+<h2>URL标题</h2>
+<p>给文章设定一个可用于URL的特殊有意义的标题。如果留空，URL标题会自动生成 。</p>
+<p>如果文章标题使用了非ASCII码字符，该标题会显得很有用。</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="分类面板">
+        <item id="article_category" title="文章"><![CDATA[
+<h2>文章分类</h2>
+<p>不同于版块定义网站的整体框架，文章分类是从内容主题角度来组织文章。浏览时一旦选定特定分类，相关内容的文章就会全部列出。</p>
+<p>例如，一个关于食物的网站文章可能会分为：</p>
+<ul>
+    <li>食材</li>
+    <li>采购</li>
+    <li>菜谱</li>
+    <li>成品</li>
+    <li>餐馆</li>
+    <li>厨师</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="分类描述"><![CDATA[
+<h2>分类描述</h2>
+<p>分类描述为选填项，主要用来辅助搜索引擎和站点索引程序更好的识别和排序内容。</p>
+<p>分类描述不能超过255个字符（128个汉字）。注意有些搜索引擎由于该项目内容来源于网页的 <code>meta description</code> 标签可能少于 Textpattern 的255个字符。</p>
+        ]]></item>
+        <item id="file_category" title="文件"><![CDATA[
+<h2>文件</h2>
+<p>文件分类为选填项，该功能有助于将上传的文件合并管理。</p>
+        ]]></item>
+        <item id="image_category" title="图像"><![CDATA[
+<h2>图像</h2>
+<p>图像分类为选填项，对于内部组织以及定义图像集合可以使用<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt; <4> <4> </code>><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 和<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code><7 </code><7><7>>在新窗口中打开外部链接></span>>标签</a>
+        ]]></item>
+        <item id="link_category" title="链接"><![CDATA[
+<h2>链接</h2>
+<p>链接分类为选填项，可用于展示不同组别的链接，例如：朋友们，罗马人，乡亲们</p>
+<p>选择链接输出使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口打开链接)</span></a> 例如：</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="诊断面板">
+        <item id="clean_url_data_failed" title="简洁 URL 测试失败。"><![CDATA[
+<h2>简洁 URL 测试失败</h2>
+<p>不知道是不是因为服务器不支持，反正网站的简洁 URL (诸如 <code>https://example.com/section/article</code>) 看起来没有工作哦。如果网站的简洁 URL 已经正常了，那就可能我出错了，忽略这条信息吧。</p>
+<p>如果简洁 URL <em>没有</em> 正常工作，那么将意味着：</p>
+<ul>
+    <li>‘网站 URL’ 设置错误，或者 Textpattern 程序无法正常管理</li>
+    <li>服务器需要修改 <code>.htaccess</code> 文件或者类似的指令来使简洁 URL 工作</li>
+    <li>服务器根本不支持简洁 URLs</li>
+</ul>
+<p>简洁 URL 测试就是通过从服务器上用设定的简洁 URL 地址来获取一个页面来测试该功能是否正常。如果 URL 指向一个其他的服务器，或者使用一个静态页面，则测试就会失败。问题解决前或使用复杂 URLs (诸如： <code>https://example.com?s=section&amp;id=4</code>) 。测试前请确保管理端的 ‘永久链接模式’ 设置正确。</p>
+<p>注意：使用插件将站点置于 ‘持久模式’ 也可能触发这个警告。</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="简洁 URL 测试失败"><![CDATA[
+<h2>简洁网址测试失败</h2>
+<p>似乎站点的网址（例如：<code>https://example.com/section/article</code>）当前不起作用，或者网站服务器不支持测试简洁网址是否有效；如果简洁网址能够正常工作，可以安全地忽略此信息。</p>
+<p>如果简洁网址<em>未</em>起作用，可能有以下原因：</p>
+<ul>
+   <li>“网站网址”设置不正确，或者此Textpattern实例未管理该地址处的页面</li>
+   <li>服务器需要对<code>.htaccess</code>或类似的服务器指令进行一些更改，以使简洁网址能够正常工作</li>
+   <li>服务器根本不支持简洁网址</li>
+</ul>
+<p>简洁网址测试尝试从“站点网址”首选项中指定的网址获取页面，以检查所有简洁网址参数是否正常工作。如果该网址是另一个站点，或者已被静态页面或类似页面替换，则测试将失败。除非问题得到解决，应使用凌乱网址（例如：<code>https://example.com?s=section&amp;id=4</code>）。确保管理首选项中的“永久链接模式”已进行相应设置。</p>        ]]></item>
+        <item id="diag_clear_private" title="隐藏隐私信息"><![CDATA[
+<h2>隐藏私人信息</h2>
+<p>隐藏私人信息以提高安全性。如果要以公开可见的格式（例如Textpattern支持论坛）共享诊断信息，这将通过省略敏感的服务器信息来降低安全风险。</p>]]></item>
+        <item id="dev_version_live" title="在一个开放服务器上写开发代码"><![CDATA[
+<h2>在线服务器开发代码</h2>
+<p>不建议将Textpattern开发中版本用于在线的站点。如果能够理解风险并且可以接受，则可以安全地忽略此警告。</p>
+        ]]></item>
+        <item id="dir_not_writable" title="目录禁止写入"><![CDATA[
+<h2>目录不可写</h2>
+<p>要使用文件和图片上传功能，这些目录必须可由PHP通过Web服务器用户写入。这可以通过（S）FTP客户端来设置，也可以在命令行上通过发出<code>chmod 755 /path/to/dir</code>命令来设置。</p>        ]]></item>
+        <item id="dns_lookup_fails" title="DNS 测试失败"><![CDATA[
+<h2>DNS查找失败</h2>
+<p>看起来指定为该网站地址的URL无法访问。</p>        ]]></item>
+        <item id="file_uploads_disabled" title="文件上传功能已禁用"><![CDATA[
+<h2>文件上传功能已禁用</h2>
+<p>当前服务器的配置显示，文件上传功能已禁用。请检查和更改<code>php.ini</code>中的<code>file_uploads</code> 设置或咨询网站主机服务商以获得帮助。</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess 文件遗失"><![CDATA[
+<h2>.htaccess文件缺失</h2>
+<p>永久链接模式，需要使用<code>.htaccess</code> 文件，现无法找到该文件。该文件被包含在Textpattern 中，并且与<code>index.php</code>和<code>textpattern</code>目录一起位于Textpattern的根目录中。推荐的指令是：</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+     RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="网站 index 禁止访问"><![CDATA[
+<h2>站点索引不可访问</h2>
+<p>被指定为网站索引文件的根<code>index.php</code> 文件无法被服务器读取。请检查其是否存在及其权限。</p>
+        ]]></item>
+        <item id="missing_files" title="文件遗失"><![CDATA[
+<h2>缺少文件</h2>
+<p>Textpattern缺少一个或多个必需的文件。确保列出的所有文件都存在于服务器上，并且在正确的位置。</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache 服务器 mod_rewrite 模块遗失"><![CDATA[
+<h2>Apache服务器mod_rewrite模块丢失</h2>
+<p>Apache服务器的<code>mod_rewrite</code>模块未安装或被禁用。此模块是Textpattern 正常工作需要的。确保其存在并处于激活状态，或联系网站主机服务商寻求帮助。</p>
+        ]]></item>
+        <item id="modified_files" title="文件被修改"><![CDATA[
+<h2>修改过的文件</h2>
+<p>如果文件的校验和与Textpattern提供的已知良好校验和列表不同则确定该文件已被修改。如果Textpattern安装中的任何文件与预期的不同，这些文件将在此处突出显示。</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL 数据库表错误"><![CDATA[
+<h2>MySQL 数据表错误</h2>
+<p>Textpattern的MySQL 数据库中可能有一些损坏。尝试使用 MySQL 访问工具修复受影响的数据表，例如<a rel="external" target="_blank" href="https://www.adminer.org"> Adminer <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>或<a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>。</p>
+        ]]></item>
+        <item id="no_temp_dir" title="未指定临时文件夹"><![CDATA[
+<h2>未指定临时文件夹</h2>
+<p>尽管Textpattern 可以在没有临时文件夹的情况下运行，但如果没有设置此预设，某些功能可能无法正常工作。请访问管理预设并设置“临时文件夹”。</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="部分目录不存在"><![CDATA[
+<h2>区段目录存在</h2>
+<p>现有区段目录文件将与 <code>.htaccess</code> 方案冲突。如果报告的文件属于预留文件，请将它们删除。</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="站点目录不可读"><![CDATA[
+<h2>站点目录不可读</h2>
+<p>服务器无法读取包含指定为站点索引的根<code>index.php</code>文件的目录。请检查权限。</p>
+        ]]></item>
+        <item id="php_version_required" title="最低版本需求"><![CDATA[
+<h2>最低版本要求</h2>
+<p>Textpattern 需要 PHP 编程语言和 MySQL 数据库服务器中提供的某些功能。请查阅以下表格以确定最低系统要求：</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col"> Textpattern版本</th>
+                <th scope="col">最低PHP版本</th>
+                <th scope="col">最低MySQL版本</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>除上述系统要求外，还需要以下PHP扩展：</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+</ul>
+<p>网站的<code>php.ini</code> 文件，无论是全局还是局部的，都需要包含 <code>date.timezone</code> 设置。</p>
+        ]]></item>
+        <item id="setup_still_exists" title="安装目录仍然存在"><![CDATA[
+<h2>安装目录仍然存在</h2>
+<p>安装Textpattern后，不再需要<code> textpattern/setup </code>目录及其内容，出于安全考虑应将其删除。</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="站点 URL 不匹配"><![CDATA[
+<h2>站点URL不匹配</h2>
+<p>在“偏好设置”面板中设置的网站URL与用于访问该网站的实际URL不匹配。</p>
+<p>如果可以通过多个不同的URL访问该站点，并且该站点的行为符合预期，则可以安全地忽略此消息。</p>
+<p>否则，请根据需要检查并修改“管理偏好设置”中的“站点URL”设置。“诊断”面板上的启用前警告消息中显示了对正确的站点URL的有根据的猜测。</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP 函数 […] 在您的服务器上被禁用"><![CDATA[
+<h2>PHP 函数 […] 在您的服务器上被禁用。</h2>
+<p>网站主机或服务器管理员已禁用一个或多个PHP 功能，其中有些可能影响到Textpattern的运行。</p>
+<p>请参阅<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions"> Textpattern用户文档<span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>以获取更多信息。</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern CMS 版本更新"><![CDATA[
+<h2>Textpattern CMS 版本更新</h2>
+<p>Textpattern CMS 有较新的版本可用。为了获得最新的功能和安全性，建议您升级。</p>
+<p>请注意，尽管我们努力使升级体验尽可能无缝和轻松：</p>
+<ul>
+    <li>如果新版只有最后一位数字与您当前的版本不同，则升级可能与插件和主题兼容。</li>
+    <li>如果新版的最后两位数字与您当前的版本不同，升级可能需要更新某些插件和/或主题，尽管它可能仍会继续在有限的能力内工作。</li>
+    <li>如果新版的第一位数字与您当前的版本不同，升级可能需要更新大多数插件和主题。如果您严重依赖特定的插件或主题功能，请在升级之前与作者或社区成员联系。</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="临时文件和插件缓存目录路径不应匹配"><![CDATA[
+<h2>临时文件和插件缓存目录路径不应匹配</h2>
+<p>插件应该有自己的目录，不应该共享临时目录。这有潜在的安全风险，如果刷新了临时目录，则可能会对您的站点产生不利影响。请确保临时目录路径与插件缓存路径不同。</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="您的PHP安装缺失mail() 函数"><![CDATA[
+<h2>您的 PHP 安装缺少mail() 函数</h2>
+<p>PHP 的<a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a> 函数不可用。因此，Textpattern 无法发送电子邮件，某些功能将不可用。 例如，新评论的电子邮件通知将不能发送，新用户将不会收到欢迎邮件。但仍然可以添加用户。</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="文件面板">
+        <item id="file_reassign" title="重新分配文件"><![CDATA[
+<h2>重新分配文件</h2>
+<p>当您上传一个文件取代标注为“缺失”的文件，您选择的文件上传到服务器后将链接到数据库中的原始文件信息。这意味着原始文件的文件名及所有其他相关信息，例如下载计数和类别将保持不变。 但文件大小将被更新以反映新文件。</p>
+        ]]></item>
+        <item id="file_replace" title="替换文件"><![CDATA[
+<h2>替换文件</h2>
+<p>在这里上传的文件将替换服务器上现有文件的内容，但将保持文件名称与以前相同。下载计数及与该文件相关的其他信息不受影响。</p>
+        ]]></item>
+        <item id="upload" title="上传文件"><![CDATA[
+<h2>上传文件</h2>
+<p>使用此表单将文件或图像上传到您的服务器。</p>
+<p>使用Textile代码在文章中呈现图形，使用Textpattern代码在页面模板上放置图形，或者使用HTML代码在其他地方放置图形。</p>        ]]></item>
+    </group>
+
+    <group id="form" title="表单面板">
+        <item id="forms_overview" title="表单简介"><![CDATA[
+<h2>表单简介</h2>
+<p>在Textpattern中，表单是一小段或一小块文本、HTML和Textpattern标记，可以重复使用它们来显示内容。</p>
+<p>这是一个示例表单，可以命名为<code>ordinary_list</code>：</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>您可以使用它来显示相关文章的HTML无序列表：</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>由于此表单的作用是输出标题列表，因此它可能适用于其他标签，例如显示当前章节中的20篇文章：</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>您还可以选择采用表单来显示重复的内容，例如页面模板中的页眉和页脚。这意味着内容仅存在于一个地方，并且如果您决定对其进行更改，则只需要改一次。显示表单中的内容通常可以通过以下方式完成：</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>表单的最大大小为64KB。页脚的示例可能包括标题、段落、链接、条件标签以及对其他表单的引用，例如<code>ordinary_list</code>。</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="图像面板">
+        <item id="create_thumbnail" title="建立缩略图"><![CDATA[
+<h2>创建缩略图</h2>
+<p>允许您根据全尺寸图像（重新）创建一幅指定尺寸的缩略图。</p>
+<p>缩略图将被缩放以适应您选择的尺寸，除非您选择“裁剪”复选框。 “裁剪”将从图像中心生成缩略图，而无任何缩放。</p>
+        ]]></item>
+        <item id="replace_image_form" title="替换图像"><![CDATA[
+<h2>替换图像</h2>
+<p>上传到这里的图像将直接替换数据库中与此条目相关的现有图像。</p>
+        ]]></item>
+        <item id="upload_image" title="上传图像"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="上传缩略图"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="语言面板">
+        <item id="get_textpack" title="安装 Textpack"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="链接面板">
+        <item id="link_description" title="描述"><![CDATA[]]></item>
+        <item id="link_sort" title="排序值"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="登录面板">
+        <item id="remember_login" title="在此浏览器中保持登录状态"><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title="安装插件"><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="advanced_options" title="'高级选项"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="文章中允许使用PHP？"><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="页面中允许使用PHP？"><![CDATA[]]></item>
+        <item id="archive_dateformat" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title="日期格式"><![CDATA[]]></item>
+        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title="默认发布状态"><![CDATA[]]></item>
+        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="启用开发主题预览？"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="启用短标签支持?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="启用 XML-RPC 服务器？"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="保留访问记录天数"><![CDATA[]]></item>
+        <item id="file_base_path" title="文件目录路径"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="最大上传文件大小（字节）"><![CDATA[]]></item>
+        <item id="gmtoffset" title="时区"><![CDATA[]]></item>
+        <item id="img_dir" title="图片目录"><![CDATA[]]></item>
+        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[]]></item>
+        <item id="is_dst" title="启用夏令时？"><![CDATA[]]></item>
+        <item id="logging" title="日志"><![CDATA[]]></item>
+        <item id="max_url_len" title="最大 URL 长度 (字符)"><![CDATA[]]></item>
+        <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[]]></item>
+        <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码 (默认为 UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title="永久链接标题 URL 模式"><![CDATA[]]></item>
+        <item id="permlink_mode" title="文章的 URL 模式"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="插件缓存目录路径"><![CDATA[]]></item>
+        <item id="production_status" title="网站状态"><![CDATA[]]></item>
+        <item id="public_theme_name" title="前端主题"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="发布过期的文章？"><![CDATA[]]></item>
+        <item id="publisher_email" title="发送此电子邮件地址的登录详情"><![CDATA[]]></item>
+        <item id="rss_how_many" title="订阅中的文章数目"><![CDATA[]]></item>
+        <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="在订阅中显示评论计数？"><![CDATA[]]></item>
+        <item id="site_slogan" title="网站标语"><![CDATA[]]></item>
+        <item id="sitename" title="网站名称"><![CDATA[]]></item>
+        <item id="siteurl" title="网站 URL"><![CDATA[]]></item>
+        <item id="skin_dir" title="主题目录"><![CDATA[]]></item>
+        <item id="smtp_from" title="SMTP 发送地址"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="垃圾信息黑名单（半角逗号分隔）"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="仅同步文章摘要？"><![CDATA[]]></item>
+        <item id="tempdir" title="临时目录路径"><![CDATA[]]></item>
+        <item id="theme_name" title="管理端主题"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="在 txp 中启用 PHP 函数：evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="接受评论？"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="使用电子邮件地址构建 feed ID （默认为网站 URL）？"><![CDATA[]]></item>
+        <item id="use_plugins" title="使用插件？"><![CDATA[]]></item>
+        <item id="use_textile" title="使用 Textile?"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="章节面板">
+        <item id="section_category" title="简介"><![CDATA[]]></item>
+        <item id="section_default" title="默认发布部分"><![CDATA[]]></item>
+        <item id="section_description" title="描述"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="在首页显示章节文章"><![CDATA[]]></item>
+        <item id="section_searchable" title="在站点搜索中包含此章节？"><![CDATA[]]></item>
+        <item id="section_syndicate" title="在本节中同步文章？"><![CDATA[]]></item>
+        <item id="section_uses_css" title="使用样式"><![CDATA[]]></item>
+        <item id="section_uses_page" title="使用页面"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="使用主题"><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title="用户登录"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="用户密码"><![CDATA[]]></item>
+        <item id="table_prefix" title="表前缀"><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="主题面板">
+        <item id="skin_author" title="主题作者"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="主题网站"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="导入时从磁盘中删除未使用的模板"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="导出时从磁盘中删除未使用的模板"><![CDATA[]]></item>
+        <item id="skin_description" title="主题描述"><![CDATA[]]></item>
+        <item id="skin_import" title="导入主题"><![CDATA[]]></item>
+        <item id="skin_name" title="主题名称"><![CDATA[]]></item>
+        <item id="skin_overview" title="主题介绍"><![CDATA[]]></item>
+        <item id="skin_title" title="主题标题"><![CDATA[]]></item>
+        <item id="skin_version" title="主题版本"><![CDATA[]]></item>
+    </group>
+</help>
+</resources>

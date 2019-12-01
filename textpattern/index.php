@@ -21,42 +21,6 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (@ini_get('register_globals')) {
-    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-        die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
-    }
-
-    // Collect and unset all registered variables from globals.
-    $_txpg = array_merge(
-        isset($_SESSION) ? (array) $_SESSION : array(),
-        (array) $_ENV,
-        (array) $_GET,
-        (array) $_POST,
-        (array) $_COOKIE,
-        (array) $_FILES,
-        (array) $_SERVER
-    );
-
-    // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
-    // down, we must remove any potentially identical-named global from the list of global names here.
-    unset($_txpg['_txpfoo']);
-    foreach ($_txpg as $_txpfoo => $value) {
-        if (!in_array($_txpfoo, array(
-            'GLOBALS',
-            '_SERVER',
-            '_GET',
-            '_POST',
-            '_FILES',
-            '_COOKIE',
-            '_SESSION',
-            '_REQUEST',
-            '_ENV',
-        ))) {
-            unset($GLOBALS[$_txpfoo], $$_txpfoo);
-        }
-    }
-}
-
 if (!defined('txpath')) {
     define("txpath", dirname(__FILE__));
 }
@@ -228,6 +192,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
         exit;
     }
+
+    $txp_sections = safe_column(array('name'), 'txp_section');
 
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;
