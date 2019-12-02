@@ -205,23 +205,23 @@ if (empty($pretext['feed'])) {
     handle_lastmod();
 }
 
-if (txpinterface !== 'css') {
-    $trace->start('[PHP includes, stage 3]');
-
-    include_once txpath.'/lib/txplib_publish.php';
-    include_once txpath.'/lib/txplib_html.php';
-    include_once txpath.'/lib/txplib_forms.php';
-    include_once txpath.'/publish/comment.php';
-    include_once txpath.'/publish/taghandlers.php';
-
-    $trace->stop();
-} else {
+if (txpinterface === 'css') {
     output_css($pretext['s'], gps('n'), gps('t'));
 
     exit;
 }
 
 $txp_sections = safe_column(array('name'), 'txp_section');
+
+$trace->start('[PHP includes, stage 3]');
+
+include_once txpath.'/lib/txplib_publish.php';
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
+include_once txpath.'/publish/comment.php';
+include_once txpath.'/publish/taghandlers.php';
+
+$trace->stop();
 
 // i18n.
 //    load_lang(LANG);
