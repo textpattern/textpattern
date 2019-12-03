@@ -334,9 +334,9 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'required'     => (bool) $required,
         'placeholder'  => $placeholder,
     );
-    
+
     if ($atts['required'] && !isset($atts['placeholder'])
-        && in_array($atts['type'], array('password', 'search', 'tel', 'text', 'url'))
+        && in_array($atts['type'], array('email', 'password', 'search', 'tel', 'text', 'url'))
     ) {
         $atts['placeholder'] = gTxt('required');
     }
