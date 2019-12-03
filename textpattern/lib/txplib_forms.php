@@ -575,11 +575,12 @@ function fetch_editable($name, $event, $identifier, $id)
  * @param  string $id          The HTML id
  * @param  int    $rows        Rows
  * @param  int    $cols        Columns
+ * @param  bool   $required    If TRUE the field is marked as required
  * @param  string $placeholder The placeholder value displayed when the field is empty
  * @return string HTML
  */
 
-function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = '')
+function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $required = false, $placeholder = '')
 {
     $style = '';
 
@@ -610,6 +611,7 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,
+        'required'    => (bool) $required,
         'placeholder' => $placeholder,
     );
 
