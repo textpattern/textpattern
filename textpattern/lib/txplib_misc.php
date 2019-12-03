@@ -1658,10 +1658,10 @@ function lAtts($pairs, $atts, $warn = true)
     if ($globals === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
         $globals = array_filter($global_atts);
-        $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
     }
 
-    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield']) && $partial) {
+    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+        isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
         unset($atts['yield']);
 
         foreach (do_list_unique($txp_atts['yield']) as $name) {
@@ -4923,7 +4923,7 @@ function getlocale($lang)
 
 function getMetaDescription($type = null)
 {
-    global $thisarticle, $thiscategory, $thissection, $c, $s, $context;
+    global $thisarticle, $thiscategory, $thissection, $c, $s, $context, $txp_sections;
 
     $content = '';
 
@@ -4937,7 +4937,7 @@ function getMetaDescription($type = null)
         } elseif ($c) {
             $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '".doSlash($context)."'");
         } elseif ($s) {
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($s)."'");
+            $content = isset($txp_sections[$s]) ? $txp_sections[$s]['description'] : '';
         }
     } else {
         if (strpos($type, 'category') === 0) {
@@ -4957,7 +4957,7 @@ function getMetaDescription($type = null)
             }
         } elseif ($type === 'section') {
             $theSection = ($thissection) ? $thissection['name'] : $s;
-            $content = safe_field("description", 'txp_section', "name = '".doSlash($theSection)."'");
+            $content = isset($txp_sections[$theSection]) ? $txp_sections[$theSection]['description'] : '';
         } elseif ($type === 'article') {
             assert_article();
             $content = ($thisarticle? $thisarticle['description'] : '');
@@ -5392,6 +5392,24 @@ function janitor()
             $prefs['is_dst'] = $is_dst;
             set_pref('is_dst', $is_dst, 'publish', PREF_HIDDEN);
         }
+    }
+}
+
+/**
+ * Protection from those who'd bomb the site by GET.
+ *
+ * Origin of the infamous 'Nice try' message and an even more useful '503'
+ * HTTP status.
+ */
+
+function bombShelter()
+{
+    global $prefs;
+    $in = serverSet('REQUEST_URI');
+
+    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+        txp_status_header('503 Service Unavailable');
+        exit('Nice try.');
     }
 }
 

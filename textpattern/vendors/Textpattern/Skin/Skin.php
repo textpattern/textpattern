@@ -1368,7 +1368,7 @@ class Skin extends CommonBase implements SkinInterface
                         href(gTxt('preview'),
                             'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
                         ).' | '.
-                        href(gTxt('active'),
+                        href(gTxt(${$event.'_section_count'} > 0 ? 'active' : 'activate'),
                             'index.php?event=section&step=section_use_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token(),
                             array(
                                 'data-verify' => gTxt('are_you_sure'),

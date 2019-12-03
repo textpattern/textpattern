@@ -674,9 +674,9 @@ function plugin_form($existing_files = array())
         fInput('submit', '', gTxt('import')),
         '', '', 'post', 'assign-existing-form', '', 'assign_file'
     ) : '').
-    br.form(
+    form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
+        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
