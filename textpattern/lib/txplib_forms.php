@@ -623,8 +623,8 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         'placeholder' => $placeholder,
     );
 
-    if ($atts['required'] && !isset($atts['placeholder'])) {
-        $atts['placeholder'] = gTxt('required');
+    if (!isset($atts['placeholder'])) {
+        $atts['placeholder'] = $atts['required'] ? gTxt('required') : false;
     }
 
     return n.tag($thing, 'textarea', $atts);
