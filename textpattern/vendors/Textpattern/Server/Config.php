@@ -37,25 +37,6 @@ namespace Textpattern\Server;
 class Config
 {
     /**
-     * Register globals status.
-     *
-     * @var bool
-     */
-
-    private $registerGlobals = false;
-
-    /**
-     * Constructor.
-     */
-
-    public function __construct()
-    {
-        if (version_compare(PHP_VERSION, '5.4.0') < 0) {
-            $this->registerGlobals = @ini_get('register_globals');
-        }
-    }
-
-    /**
      * Gets a server configuration variable.
      *
      * @param  string $name The variable
@@ -69,16 +50,5 @@ class Config
         }
 
         return false;
-    }
-
-    /**
-     * Gets register globals status.
-     *
-     * @return bool
-     */
-
-    public function getRegisterGlobals()
-    {
-        return (bool)$this->registerGlobals;
     }
 }

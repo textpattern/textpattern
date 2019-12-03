@@ -449,7 +449,7 @@ function section_edit()
         );
 
         if ($rs) {
-            $rs['name'] = $rs['title'] = $rs['description'] = '';
+            $rs['name'] = $rs['title'] = $rs['description'] = $rs['permlink_mode'] = '';
         }
     }
 
@@ -620,16 +620,16 @@ function section_save()
 
         if ($safe_old_name) {
             $ok = safe_update('txp_section', "
-                name         = '$safe_name',
-                title        = '$safe_title',
-                skin         = '$safe_skin',
-                page         = '$safe_section_page',
-                css          = '$safe_css',
-                description  = '$safe_description',
+                name           = '$safe_name',
+                title          = '$safe_title',
+                skin           = '$safe_skin',
+                page           = '$safe_section_page',
+                css            = '$safe_css',
+                description    = '$safe_description',
                 permlink_mode  = '$safe_permlink_mode',
-                on_frontpage = '$on_frontpage',
-                in_rss       = '$in_rss',
-                searchable   = '$searchable'
+                on_frontpage   = '$on_frontpage',
+                in_rss         = '$in_rss',
+                searchable     = '$searchable'
                 ", "name = '$safe_old_name'");
 
             // Manually maintain referential integrity.

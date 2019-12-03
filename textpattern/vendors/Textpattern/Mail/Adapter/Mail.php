@@ -106,7 +106,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         if (filter_var(get_pref('smtp_from'), FILTER_VALIDATE_EMAIL)) {
             if (IS_WIN) {
                 ini_set('sendmail_from', get_pref('smtp_from'));
-            } elseif (!ini_get('safe_mode')) {
+            } else {
                 $this->smtpFrom = get_pref('smtp_from');
             }
         }
