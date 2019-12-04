@@ -677,7 +677,7 @@ function plugin_form($existing_files = array())
         tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
         selectInput('filename', $existing_files, null, false, '', 'file-existing').
         fInput('submit', '', gTxt('import')),
-        '', '', 'post', 'assign-existing-form', '', 'assign_file'
+        '', '', 'post', 'assign-existing-form txp-async-update', '', 'assign_file'
     ) : '').
     form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
