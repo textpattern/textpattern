@@ -166,6 +166,10 @@ function plugin_list($message = '')
     $contentBlock = '';
     $existing_files = get_filenames(txpath.DS.'plugins'.DS, GLOB_ONLYDIR) or $existing_files = array();
 
+    foreach(safe_column_num('name', 'txp_plugin', 1) as $name) {
+        unset($existing_files[$name]);
+    }
+
     $paginator = new \Textpattern\Admin\Paginator($event, 'plugin');
     $limit = $paginator->getLimit();
 
@@ -336,7 +340,7 @@ function plugin_list($message = '')
                 $status ? ' class="active"' : ''
             );
 
-            unset($existing_files[$name], $name);
+            unset($name);
         }
 
         $contentBlock .=
