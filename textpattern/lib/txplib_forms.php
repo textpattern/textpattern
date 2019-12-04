@@ -320,9 +320,9 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = null)
 {
-    $atts = join_atts((is_array($name) ? $name : array('name' => $name)) + array(
+    $atts = (is_array($name) ? $name : array('name' => $name)) + array(
         'class'        => $class,
         'id'           => $id,
         'type'         => $type,
@@ -333,7 +333,15 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'disabled'     => (bool) $disabled,
         'required'     => (bool) $required,
         'placeholder'  => $placeholder,
-    ), TEXTPATTERN_STRIP_EMPTY);
+    );
+
+    if ($atts['required'] && !isset($atts['placeholder'])
+        && in_array($atts['type'], array('email', 'password', 'search', 'tel', 'text', 'url'))
+    ) {
+        $atts['placeholder'] = gTxt('required');
+    }
+
+    $atts = join_atts($atts, TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
@@ -576,10 +584,11 @@ function fetch_editable($name, $event, $identifier, $id)
  * @param  int    $rows        Rows
  * @param  int    $cols        Columns
  * @param  string $placeholder The placeholder value displayed when the field is empty
+ * @param  bool   $required    If TRUE the field is marked as required
  * @return string HTML
  */
 
-function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = '')
+function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = null, $required = false)
 {
     $style = '';
 
@@ -610,8 +619,13 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,
+        'required'    => (bool) $required,
         'placeholder' => $placeholder,
     );
+
+    if (!isset($atts['placeholder'])) {
+        $atts['placeholder'] = $atts['required'] ? gTxt('required') : false;
+    }
 
     return n.tag($thing, 'textarea', $atts);
 }
