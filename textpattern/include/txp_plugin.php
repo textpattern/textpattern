@@ -650,10 +650,11 @@ function plugin_form($existing_files = array())
     return tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
-            'type'   => "file",
-            'name'   => "theplugin",
-            'id'     => "plugin-upload",
-            'accept' => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php"
+            'type'     => 'file',
+            'name'     => 'theplugin',
+            'id'       => 'plugin-upload',
+            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php",
+            'required' => 'required',
         )).
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
