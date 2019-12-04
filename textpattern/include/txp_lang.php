@@ -212,7 +212,7 @@ function list_languages($message = '')
                 n.tag(
                     form(
                         '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
-                        n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
+                        n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
                         fInput('submit', 'install_new', gTxt('upload')).
                         eInput('lang').
                         sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
