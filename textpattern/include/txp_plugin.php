@@ -166,6 +166,10 @@ function plugin_list($message = '')
     $contentBlock = '';
     $existing_files = get_filenames(txpath.DS.'plugins'.DS, GLOB_ONLYDIR) or $existing_files = array();
 
+    foreach(safe_column_num('name', 'txp_plugin', 1) as $name) {
+        unset($existing_files[$name]);
+    }
+
     $paginator = new \Textpattern\Admin\Paginator($event, 'plugin');
     $limit = $paginator->getLimit();
 
@@ -336,7 +340,7 @@ function plugin_list($message = '')
                 $status ? ' class="active"' : ''
             );
 
-            unset($existing_files[$name], $name);
+            unset($name);
         }
 
         $contentBlock .=
@@ -650,10 +654,11 @@ function plugin_form($existing_files = array())
     return tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
-            'type'   => "file",
-            'name'   => "theplugin",
-            'id'     => "plugin-upload",
-            'accept' => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php"
+            'type'     => 'file',
+            'name'     => 'theplugin',
+            'id'       => 'plugin-upload',
+            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php",
+            'required' => 'required',
         )).
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
@@ -672,11 +677,11 @@ function plugin_form($existing_files = array())
         tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
         selectInput('filename', $existing_files, null, false, '', 'file-existing').
         fInput('submit', '', gTxt('import')),
-        '', '', 'post', 'assign-existing-form', '', 'assign_file'
+        '', '', 'post', 'assign-existing-form txp-async-update', '', 'assign_file'
     ) : '').
     form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
+        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
