@@ -1418,6 +1418,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 n.tag_void('input', array(
                     'name'     => $name,
                     'type'     => 'file',
+                    'required' => true,
                     'id'       => $label_id,
                     'multiple' => $multiple,
                     'accept'   => $accept,
