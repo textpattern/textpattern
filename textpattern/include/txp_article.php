@@ -805,8 +805,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'pre', array('class' => 'excerpt')
                 );
         }
-    } else {
-        echo $partials['body']['html'];
     }
 
     echo '</div>';

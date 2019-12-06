@@ -2101,12 +2101,13 @@ textpattern.Route.add('article', function () {
 
             if ($view != 'text') {
                 textpattern.Relay.callback('updateList', {
+                    url: 'index.php #pane-view',
                     data: form.serializeArray(),
                     list: '#pane-view',
                     callback: function (e) {
-                        var pane = document.getElementById('pane-view');
+                        var pane = $pane.find('#pane-view.html');
                         $pane.dialog('option', 'title', $this.text()).dialog('open');
-                        Prism.highlightAllUnder(pane);
+                        pane.length == 0 || Prism.highlightAllUnder(pane[0]);
                     }
                 });
             } else {
