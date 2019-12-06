@@ -755,13 +755,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
-    echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
-    echo $partials['author']['html'];
-    echo $partials['body']['html'];
-    if ($articles_use_excerpts) {
-        echo $partials['excerpt']['html'];
+    if ($view == 'text') {
+        echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
+        echo $partials['author']['html'];
+        echo $partials['body']['html'];
+        if ($articles_use_excerpts) {
+            echo $partials['excerpt']['html'];
+        }
+        echo n.'</div>';
     }
-    echo n.'</div>';
 
     echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
     echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
