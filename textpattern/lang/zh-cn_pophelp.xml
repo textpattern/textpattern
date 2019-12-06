@@ -426,7 +426,10 @@
 <h2>替换图像</h2>
 <p>上传到这里的图像将直接替换数据库中与此条目相关的现有图像。</p>
         ]]></item>
-        <item id="upload_image" title="上传图像"><![CDATA[]]></item>
+        <item id="upload_image" title="上传图像"><![CDATA[
+<h2>上传图像</h2>
+<p>将一个或多个图像上传到您的服务器。</p>
+<p>上传到<code>images</code>目录后，原始图像的文件名将仅在内部保存在Textpattern的数据库中；图像文件本身将重命名为序号+文件扩展名。</p>        ]]></item>
         <item id="upload_thumbnail" title="上传缩略图"><![CDATA[]]></item>
     </group>
 
