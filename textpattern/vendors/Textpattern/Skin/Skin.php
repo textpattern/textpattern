@@ -1212,10 +1212,10 @@ class Skin extends CommonBase implements SkinInterface
                     ))
                     .tag(gTxt('import_from_disk'), 'label', array('for' => $event.'_import'))
                     .popHelp($event.'_import')
-                    .selectInput('skins', $new, '', true, false, 'skins')
+                    .selectInput('skins', $new, '', false, false, 'skins')
                     .eInput($this->getEvent())
                     .sInput('import')
-                    .fInput('submit', '', gTxt('upload'))
+                    .fInput('submit', '', gTxt('import'))
                     .n
                     .tag_end('form');
             }
