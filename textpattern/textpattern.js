@@ -2085,15 +2085,26 @@ textpattern.Route.add('article', function () {
     });
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog');
-    $pane.on( 'dialogclose', function( event, ui ) {
+    var $pane = $('#pane-view').closest('.txp-dialog'), $view = 'text';
+    $pane.on( 'dialogopen', function( event, ui ) {
+        $('#live-preview').trigger('change');
+    }).on( 'dialogclose', function( event, ui ) {
+        $('#body, #excerpt, #title').off('input', txp_article_preview);
         $('#tab-text [data-view-mode]').click();
-    } );
+    });
 
-    textpattern.Relay.register('previewArticle',
+    $('#live-preview').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#body, #excerpt, #title').on('input', txp_article_preview);
+        } else {
+            $('#body, #excerpt, #title').off('input', txp_article_preview);
+        }
+    })
+
+    textpattern.Relay.register('article.preview',
         function (e, obj) {
             let $this = $(obj);
-            let $view = $this.data('view-mode');
+            $view = $this.data('view-mode');
             $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
             $('input[name="view"]').val($view);
 
@@ -2114,17 +2125,15 @@ textpattern.Route.add('article', function () {
 
     $(document).on('click', '[data-view-mode]', function(e) {
         e.preventDefault();
-        textpattern.Relay.callback('previewArticle', this);
+        textpattern.Relay.callback('article.preview', this);
     }).on('updateList', '#pane-view.html', function() {
         Prism.highlightAllUnder(this);
     });
-/*
-    $('#body').on('input', function() {
-        var $view = $('input[name="view"]').val();
-        if ($view != 'text')
-            textpattern.Relay.callback('previewArticle', $('[data-view-mode="'+$view+'"]'), 1000);
-    })
-*/
+
+    function txp_article_preview() {
+        textpattern.Relay.callback('article.preview', $('[data-view-mode="'+$view+'"]'), 1000);
+    }
+
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
 
