@@ -2090,11 +2090,9 @@ textpattern.Route.add('article', function () {
         $('#tab-text [data-view-mode]').click();
     } );
 
-    $(document).on('click',
-        '[data-view-mode]',
-        function (e) {
-            e.preventDefault();
-            let $this = $(this);
+    textpattern.Relay.register('previewArticle',
+        function (e, obj) {
+            let $this = $(obj);
             let $view = $this.data('view-mode');
             $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
             $('input[name="view"]').val($view);
@@ -2105,9 +2103,7 @@ textpattern.Route.add('article', function () {
                     data: form.serializeArray(),
                     list: '#pane-view',
                     callback: function (e) {
-                        var pane = $pane.find('#pane-view.html');
                         $pane.dialog('option', 'title', $this.text()).dialog('open');
-                        pane.length == 0 || Prism.highlightAllUnder(pane[0]);
                     }
                 });
             } else {
@@ -2116,6 +2112,19 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    $(document).on('click', '[data-view-mode]', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('previewArticle', this);
+    }).on('updateList', '#pane-view.html', function() {
+        Prism.highlightAllUnder(this);
+    });
+/*
+    $('#body').on('input', function() {
+        var $view = $('input[name="view"]').val();
+        if ($view != 'text')
+            textpattern.Relay.callback('previewArticle', $('[data-view-mode="'+$view+'"]'), 1000);
+    })
+*/
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
 
