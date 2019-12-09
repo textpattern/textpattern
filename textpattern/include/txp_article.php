@@ -767,7 +767,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
     echo n.checkbox2('', false, 0, 'live-preview').
-        tag(gTxt('live_preview'), 'label', array('for' => 'live-preview'));
+        n.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview'));
     echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
 
     if ($view == 'preview') {
