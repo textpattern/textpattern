@@ -2109,9 +2109,11 @@ textpattern.Route.add('article', function () {
             $('input[name="view"]').val($view);
 
             if ($view != 'text') {
+                var data = form.serializeArray();
+                data.push({name: 'app_mode', value: 'async'});
                 textpattern.Relay.callback('updateList', {
                     url: 'index.php #pane-view',
-                    data: form.serializeArray(),
+                    data: data,
                     list: '#pane-view',
                     callback: function (e) {
                         $pane.dialog('option', 'title', $this.text()).dialog('open');
