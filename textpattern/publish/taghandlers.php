@@ -2160,6 +2160,7 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
+        'class'       => '',
         'size'        => $thiscommentsform['isize'],
         'aria_label'  => '',
         'placeholder' => '',
@@ -2169,6 +2170,10 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
     $val = is_callable($clean) ? $clean(pcs($field)) : pcs($field);
     $h5 = ($prefs['doctype'] == 'html5');
     $required = get_pref('comments_require_'.$field);
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     if (ps('preview')) {
         $comment = getComment();
@@ -2182,7 +2187,7 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
             'autocomplete' => $field == 'web' ? 'url' : $field,
             'placeholder'  => $placeholder,
             'required'     => $h5 && $required
-        ), $val, 'comment_'.$field.'_input'.($warn ? ' comments_error' : ''), '', '', $size, '', $field);
+        ), $val, 'comment_'.$field.'_input'.$class.($warn ? ' comments_error' : ''), '', '', $size, '', $field);
 }
 
 // -------------------------------------------------------------
@@ -2192,6 +2197,7 @@ function comment_message_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
+        'class'       => '',
         'rows'        => $thiscommentsform['msgrows'],
         'cols'        => $thiscommentsform['msgcols'],
         'aria_label'  => '',
@@ -2203,6 +2209,10 @@ function comment_message_input($atts)
     $n_message = 'message';
     $formnonce = '';
     $message = '';
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     if (ps('preview')) {
         $comment = getComment();
@@ -2225,7 +2235,7 @@ function comment_message_input($atts)
         'placeholder' => $placeholder
     ));
 
-    return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+    return '<textarea class="txpCommentInputMessage'.$class.(($commentwarn) ? ' comments_error"' : '"').
         ' id="message" name="'.$n_message.'"'.$attr.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
         callback_event('comment.form').
@@ -2239,9 +2249,14 @@ function comment_remember($atts)
     global $thiscommentsform;
 
     extract(lAtts(array(
+        'class'         => '',
         'rememberlabel' => $thiscommentsform['rememberlabel'],
         'forgetlabel'   => $thiscommentsform['forgetlabel']
     ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' class="'.txpspecialchars($class).'"';
+    }
 
     extract(doDeEnt(psa(array('checkbox_type', 'remember', 'forget'))));
 
@@ -2261,9 +2276,9 @@ function comment_remember($atts)
     }
 
     if ($checkbox_type == 'forget') {
-        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
+        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"'.$class);
     } else {
-        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
+        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"'.$class);
     }
 
     $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
@@ -2277,9 +2292,16 @@ function comment_preview($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['previewlabel']), $atts));
+    extract(lAtts(array(
+        'class' => '',
+        'label' => $thiscommentsform['previewlabel']
+    ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
-    return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
+    return fInput('submit', 'preview', $label, 'button'.$class, '', '', '', '', 'txpCommentPreview', false);
 }
 
 // -------------------------------------------------------------
@@ -2288,13 +2310,20 @@ function comment_submit($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['submitlabel']), $atts));
+    extract(lAtts(array(
+        'class' => '',
+        'label' => $thiscommentsform['submitlabel']
+    ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
-        return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
+        return fInput('submit', 'submit', $label, 'button'.$class, '', '', '', '', 'txpCommentSubmit', false);
     } else {
-        return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+        return fInput('submit', 'submit', $label, 'button disabled'.$class, '', '', '', '', 'txpCommentSubmit', true);
     }
 }
 
