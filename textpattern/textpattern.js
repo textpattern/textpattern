@@ -1020,7 +1020,7 @@ jQuery.fn.txpAsyncForm = function (options) {
 
         var form =
         {
-            data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
+            data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
@@ -1240,7 +1240,7 @@ jQuery.fn.txpDialog = function (options) {
             }
         }],
         width: 440
-    }, options);
+    }, options, $(this).data());
 
     this.dialog(options);
 
@@ -1587,7 +1587,7 @@ $(document).keydown(function (e) {
         if (obj.length)
         {
             e.preventDefault();
-            obj.eq(0).click();
+            obj.eq(0).closest('form').submit();
         }
     }
 });
@@ -2074,22 +2074,65 @@ textpattern.Route.add('article', function () {
                 submitButton.val(textpattern.gTxt('publish'));
             }
         }
-    });
-
-    $('#article_form').on('click', '.txp-clone', function (e) {
+    }).on('submit.txpAsyncForm', function (e) {
+        if ($pane.dialog('isOpen')) {
+            $('#view_modes li.active [data-view-mode]').click();
+        }
+    }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
+        $pane.trigger('dialogclose');
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
     // Switch to Text/HTML/Preview mode.
-    $(document).on('click',
-        '[data-view-mode]',
-        function (e) {
-            e.preventDefault();
-            $('input[name="view"]').val($(this).data('view-mode'));
-            document.article_form.submit();
+    var $pane = $('#pane-view').closest('.txp-dialog'), $view = 'text';
+    $pane.on( 'dialogopen', function( event, ui ) {
+        $('#live-preview').trigger('change');
+    }).on( 'dialogclose', function( event, ui ) {
+        $('#body, #excerpt, #title').off('input', txp_article_preview);
+        $('#tab-text [data-view-mode]').click();
+    });
+
+    $('#live-preview').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#body, #excerpt, #title').on('input', txp_article_preview);
+        } else {
+            $('#body, #excerpt, #title').off('input', txp_article_preview);
+        }
+    })
+
+    textpattern.Relay.register('article.preview',
+        function (e, obj) {
+            let $this = $(obj);
+            $view = $this.data('view-mode');
+            $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+            $('input[name="view"]').val($view);
+
+            if ($view != 'text') {
+                textpattern.Relay.callback('updateList', {
+                    url: 'index.php #pane-view',
+                    data: form.serializeArray(),
+                    list: '#pane-view',
+                    callback: function (e) {
+                        $pane.dialog('option', 'title', $this.text()).dialog('open');
+                    }
+                });
+            } else {
+                $pane.dialog('close');
+            }
         }
     );
+
+    $(document).on('click', '[data-view-mode]', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('article.preview', this);
+    }).on('updateList', '#pane-view.html', function() {
+        Prism.highlightAllUnder(this);
+    });
+
+    function txp_article_preview() {
+        textpattern.Relay.callback('article.preview', $('[data-view-mode="'+$view+'"]'), 1000);
+    }
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
@@ -2225,7 +2268,7 @@ textpattern.Route.add('', function () {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                dialogClass: 'txp-dialog-container',
+                classes: {'ui-dialog': 'txp-dialog-container'},
                 autoOpen: false,
                 width: 440,
                 title: textpattern.gTxt('help'),
