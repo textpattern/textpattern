@@ -22,6 +22,7 @@ Changes in 4.8.0 (upcoming)
 * Added: Support for PHP 7.4.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
+* Added: 'class' attribute to comment form tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
