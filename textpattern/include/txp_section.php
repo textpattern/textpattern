@@ -51,7 +51,6 @@ if ($event == 'section') {
         'section_multi_edit'    => true,
         'section_set_default'   => true,
         'section_set_theme'     => true,
-        'section_use_theme'     => true,
         'section_toggle_option' => true,
     );
 
@@ -787,7 +786,7 @@ function section_set_theme($type = 'dev_skin')
     $skin = gps('skin');
     $message = '';
 
-    if (isset($all_skins[$skin])) {
+    if (isset($all_skins[$skin]) && has_privs('skin.edit')) {
         safe_update(
             'txp_section',
             "$type = '".doSlash($skin)."'",
@@ -805,15 +804,6 @@ if (typeof window.history.replaceState == 'function') {history.replaceState({}, 
 EOS
     , false);
     sec_section_list($message);
-}
-
-/**
- * Processes theme view actions.
- */
-
-function section_use_theme()
-{
-    section_set_theme('skin');
 }
 
 /**
@@ -836,15 +826,9 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
 
     $themeSelect = inputLabel(
         'multiedit_skin',
-        selectInput('skin', $all_skins, '', false, '', 'multiedit_skin'),
+        selectInput('skin', $all_skins, gps('skin'), false, '', 'multiedit_skin'),
         'skin', '', array('class' => 'multi-option multi-step'), ''
-    ).script_js(<<<EOJS
-var skin_page = {$json_page};
-var skin_style = {$json_style};
-var page_sel = '';
-var style_sel = '';
-EOJS
-    , false);
+    );
 
     $pageSelect = inputLabel(
         'multiedit_page',
@@ -885,7 +869,7 @@ EOJS
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', 0, 0, 'live_theme'),
+                    checkbox2('live_theme', 1, 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
@@ -920,7 +904,26 @@ EOJS
         unset($methods[$method]);
     }
 
-    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
+    $script = <<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '';
+var style_sel = '';
+EOJS;
+
+    if (gps('skin')) {
+        $script .= <<<EOJS
+$(function() {
+    $('#select_all').click();
+    $('[name="edit_method"]').val('changepagestyle').change();
+    var skin = $('#multiedit_skin');
+    var selected = skin.find('option[selected]').val();//console.log(selected)
+    skin.val(selected || '').change();
+});
+EOJS;
+    }
+    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method).
+    script_js($script, false);
 }
 
 /**
