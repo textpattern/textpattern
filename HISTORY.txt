@@ -3,7 +3,7 @@ Changes in 4.8.0 (upcoming)
 * Changed: Minimum system requirements increased to PHP 5.5.0.
 * Changed: Plugin tags MUST be registered or they will not work.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
-* Changed: Author's real name is used in <txp:page_url>.
+* Changed: Author's real name is available in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
