@@ -2076,7 +2076,7 @@ textpattern.Route.add('article', function () {
         }
     }).on('submit.txpAsyncForm', function (e) {
         if ($pane.dialog('isOpen')) {
-            $('#view_modes li.active [data-view-mode]').click();
+            $viewMode.click();
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
@@ -2085,12 +2085,11 @@ textpattern.Route.add('article', function () {
     });
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog'), $view = 'text';
+    var $pane = $('#pane-view').closest('.txp-dialog'), $viewMode = $('#view_modes li.active [data-view-mode]');
     $pane.on( 'dialogopen', function( event, ui ) {
         $('#live-preview').trigger('change');
     }).on( 'dialogclose', function( event, ui ) {
         $('#body, #excerpt, #title').off('input', txp_article_preview);
-        $('#tab-text [data-view-mode]').click();
     });
 
     $('#live-preview').on('change', function() {
@@ -2104,28 +2103,30 @@ textpattern.Route.add('article', function () {
     textpattern.Relay.register('article.preview',
         function (e, obj) {
             let $this = $(obj);
-            $view = $this.data('view-mode');
-            $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
-            $('input[name="view"]').val($view);
+            var $view = $this.data('view-mode');
 
-            if ($view != 'text') {
-                var data = form.serializeArray();
-                data.push({name: 'app_mode', value: 'async'});
-                textpattern.Relay.callback('updateList', {
-                    url: 'index.php #pane-view',
-                    data: data,
-                    list: '#pane-view',
-                    callback: function (e) {
-                        $pane.dialog('option', 'title', $this.text()).dialog('open');
-                    }
-                });
+            if ($view) {
+                $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+                $viewMode = $this;
             } else {
-                $pane.dialog('close');
+                $view = $viewMode.data('view-mode');
             }
+
+            $('input[name="view"]').val($view);
+            var data = form.serializeArray();
+            data.push({name: 'app_mode', value: 'async'});
+            textpattern.Relay.callback('updateList', {
+                url: 'index.php #pane-view',
+                data: data,
+                list: '#pane-view',
+                callback: function () {
+                    $pane.dialog('option', 'title', $viewMode.text()).dialog('open');
+                }
+            });
         }
     );
 
-    $(document).on('click', '[data-view-mode]', function(e) {
+    $(document).on('click', '#article-preview-link, [data-view-mode]', function(e) {
         e.preventDefault();
         textpattern.Relay.callback('article.preview', this);
     }).on('updateList', '#pane-view.html', function() {
@@ -2133,7 +2134,7 @@ textpattern.Route.add('article', function () {
     });
 
     function txp_article_preview() {
-        textpattern.Relay.callback('article.preview', $('[data-view-mode="'+$view+'"]'), 1000);
+        textpattern.Relay.callback('article.preview', $viewMode, 1000);
     }
 
     // Handle Textfilter options.

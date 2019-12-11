@@ -747,13 +747,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         hInput('LastModID', $LastModID).
         n.'<input type="hidden" name="view" />';
 
-    echo n.'<div class="txp-layout-4col-3span">'.
+        echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
 
     echo n.'<div role="region" id="main_content">';
 
     // View mode tabs.
-    echo $partials['view_modes']['html'];
+    echo href(gTxt('view_preview_short'), '#', array(
+        'title' => gTxt('view_preview'),
+        'id'    => 'article-preview-link',
+    ));//tab('preview', $view, false);
 
     if ($view == 'text') {
         echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
@@ -766,8 +769,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
-    echo n.checkbox2('', false, 0, 'live-preview').
-        n.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview'));
+    echo n.'<div>'.
+        $partials['view_modes']['html'].
+    '</div>';
     echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
 
     if ($view == 'preview') {
@@ -1154,22 +1158,22 @@ function category_popup($name, $val, $id)
  * @return string HTML
  */
 
-function tab($tabevent, $view)
+function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
 
     $link = href(gTxt('view_'.$tabevent.'_short'), '#', array(
-        'data-view-mode' => $tabevent,
+        'data-view-mode' => $tabevent ? $tabevent : false,
         'title'          => gTxt('view_'.$tabevent),
         'aria-pressed'   => $pressed,
         'role'           => 'button',
     ));
 
-    return n.tag($link, 'li', array(
+    return $tag ? n.tag($link, 'li', array(
         'class' => $state,
         'id'    => 'tab-'.$tabevent,
-    ));
+    )) : $link;
 }
 
 /**
@@ -1802,7 +1806,9 @@ function article_partial_view_modes($rs)
 {
     global $view;
 
-    $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
+    $out = n.tag(tab('preview', 'preview').tab('html', $view), 'ul').
+        checkbox2('', false, 0, 'live-preview').
+        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview'));
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
