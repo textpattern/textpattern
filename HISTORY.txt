@@ -63,6 +63,7 @@ Changes in 4.8.0 (upcoming)
   register_globals support removed.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
+* Developer: txp.article > neighbour.criteria callback on Write panel.
 * Performance optimizations via cacheing and preloading frequent content.
 * Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
   for full list of changes in this release (thanks, gocom).
