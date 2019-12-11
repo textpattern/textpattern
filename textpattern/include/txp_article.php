@@ -1073,9 +1073,10 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
     $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
+    $crit = callback_event('txp.article', 'neighbour.criteria', 0, compact('ID', 'whichway', 'sPosted'));
 
     return safe_field("ID", 'textpattern',
-        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1");
+        "(Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1");
 }
 
 /**
