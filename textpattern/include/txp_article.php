@@ -751,13 +751,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
 
     echo n.'<div role="region" id="main_content">';
-
+/*
     // View mode tabs.
     echo href(gTxt('view_preview_short'), '#', array(
         'title' => gTxt('view_preview'),
         'id'    => 'article-preview-link',
-    ));//tab('preview', $view, false);
-
+    ));
+*/
     if ($view == 'text') {
         echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
         echo $partials['author']['html'];
@@ -775,8 +775,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
 
     if ($view == 'preview') {
-        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
         echo n.'<div class="body">'.
                 n.graf(gTxt('body'), array('class' => 'alert-block information')).
                 implode('', txp_tokenize($Body_html, false, function ($tag) {
@@ -787,13 +785,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         if ($articles_use_excerpts) {
             echo n.'<div class="excerpt">'.
                 graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                $Excerpt_html.
+                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
                 '</div>';
         }
         echo n.'</div>';
     } elseif ($view == 'html') {
-        echo n.graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
             n.tag(
                 tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
@@ -1669,7 +1667,10 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = 'body';
+    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+        'title' => gTxt('view_preview'),
+        'class' => 'article-preview-link',
+    ));
 
     // Article markup selection.
     if (has_privs('article.set_markup')) {
@@ -1708,16 +1709,15 @@ function article_partial_body($rs)
                 'type'  => 'hidden',
                 'value' => $rs['textile_body'],
             ));
-        $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-                '<span class="textfilter-help">'.$help.'</span></div>'
-            );
+        $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+            '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
     }
 
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
     $out = inputLabel(
         'body',
         '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>',
-        $textarea_options,
+        array('body', $textarea_options),
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field txp-form-field-textarea body')
     );
@@ -1737,7 +1737,10 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = 'excerpt';
+    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+        'title' => gTxt('view_preview'),
+        'class' => 'article-preview-link',
+    ));
 
     // Excerpt markup selection.
     if (has_privs('article.set_markup')) {
@@ -1776,12 +1779,11 @@ function article_partial_excerpt($rs)
                 'type'  => 'hidden',
                 'value' => $rs['textile_excerpt'],
             ));
-        $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-                '<span class="textfilter-help">'.$help.'</span></div>'
-            );
+            $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+                '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
     }
 
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
     $out = inputLabel(
         'excerpt',
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',

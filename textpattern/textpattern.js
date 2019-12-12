@@ -2123,7 +2123,7 @@ textpattern.Route.add('article', function () {
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
         $('input[name="view"]').val($view);
         textpattern.Relay.callback('article.preview');
-    }).on('click', '#article-preview-link', function(e) {
+    }).on('click', '.article-preview-link', function(e) {
         e.preventDefault();
         $viewMode.click();
     }).on('updateList', '#pane-view.html', function() {
