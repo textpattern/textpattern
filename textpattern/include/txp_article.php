@@ -1787,7 +1787,7 @@ function article_partial_excerpt($rs)
     $out = inputLabel(
         'excerpt',
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
-        $textarea_options,
+        array('excerpt', $textarea_options),
         array('excerpt', 'instructions_excerpt'),
         array('class' => 'txp-form-field txp-form-field-textarea excerpt')
     );
