@@ -2086,18 +2086,19 @@ textpattern.Route.add('article', function () {
 
     // Switch to Text/HTML/Preview mode.
     var $pane = $('#pane-view').closest('.txp-dialog'),
+        $field = 'body',
         $viewMode = /*$('#view_modes li.active [data-view-mode]') || */$('#view_modes [data-view-mode]').first();
     $pane.on( 'dialogopen', function( event, ui ) {
         $('#live-preview').trigger('change');
     }).on( 'dialogclose', function( event, ui ) {
-        $('#body, #excerpt, #title').off('input', txp_article_preview);
+        $('#body, #excerpt').off('input', txp_article_preview);
     });
 
     $('#live-preview').on('change', function() {
         if ($(this).is(':checked')) {
-            $('#body, #excerpt, #title').on('input', txp_article_preview);
+            $('#body, #excerpt').on('input', txp_article_preview);
         } else {
-            $('#body, #excerpt, #title').off('input', txp_article_preview);
+            $('#body, #excerpt').off('input', txp_article_preview);
         }
     })
 
@@ -2105,12 +2106,13 @@ textpattern.Route.add('article', function () {
         function (e) {
             var data = form.serializeArray();
             data.push({name: 'app_mode', value: 'async'});
+            data.push({name: 'preview', value: $field});
             textpattern.Relay.callback('updateList', {
                 url: 'index.php #pane-view',
                 data: data,
                 list: '#pane-view',
                 callback: function () {
-                    $pane.dialog('option', 'title', $viewMode.text()).dialog('open');
+                    $pane.dialog('option', 'title', textpattern.gTxt($field)).dialog('open');
                 }
             });
         }
@@ -2123,15 +2125,17 @@ textpattern.Route.add('article', function () {
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
         $('input[name="view"]').val($view);
         textpattern.Relay.callback('article.preview');
-    }).on('click', '.article-preview-link', function(e) {
+    }).on('click', '[data-preview-link]', function(e) {
         e.preventDefault();
+        $field = $(this).data('preview-link');
         $viewMode.click();
     }).on('updateList', '#pane-view.html', function() {
         Prism.highlightAllUnder(this);
     });
 
     function txp_article_preview() {
-        textpattern.Relay.callback('article.preview', $viewMode, 1000);
+        $field = this.id;
+        textpattern.Relay.callback('article.preview', null, 1000);
     }
 
     // Handle Textfilter options.
