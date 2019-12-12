@@ -2101,18 +2101,7 @@ textpattern.Route.add('article', function () {
     })
 
     textpattern.Relay.register('article.preview',
-        function (e, obj) {
-            let $this = $(obj);
-            var $view = $this.data('view-mode');
-
-            if ($view) {
-                $this.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
-                $viewMode = $this;
-            } else {
-                $view = $viewMode.data('view-mode');
-            }
-
-            $('input[name="view"]').val($view);
+        function (e) {
             var data = form.serializeArray();
             data.push({name: 'app_mode', value: 'async'});
             textpattern.Relay.callback('updateList', {
@@ -2126,9 +2115,16 @@ textpattern.Route.add('article', function () {
         }
     );
 
-    $(document).on('click', '#article-preview-link, [data-view-mode]', function(e) {
+    $(document).on('click', '[data-view-mode]', function(e) {
         e.preventDefault();
-        textpattern.Relay.callback('article.preview', this);
+        $viewMode = $(this);
+        let $view = $viewMode.data('view-mode');
+        $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+        $('input[name="view"]').val($view);
+        textpattern.Relay.callback('article.preview');
+    }).on('click', '#article-preview-link', function(e) {
+        e.preventDefault();
+        $viewMode.click();
     }).on('updateList', '#pane-view.html', function() {
         Prism.highlightAllUnder(this);
     });
