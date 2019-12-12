@@ -2085,7 +2085,8 @@ textpattern.Route.add('article', function () {
     });
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog'), $viewMode = $('#view_modes li.active [data-view-mode]');
+    var $pane = $('#pane-view').closest('.txp-dialog'),
+        $viewMode = /*$('#view_modes li.active [data-view-mode]') || */$('#view_modes [data-view-mode]').first();
     $pane.on( 'dialogopen', function( event, ui ) {
         $('#live-preview').trigger('change');
     }).on( 'dialogclose', function( event, ui ) {

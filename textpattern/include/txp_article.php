@@ -410,7 +410,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
         // 'Text/HTML/Preview' links region.
         'view_modes' => array(
-            'mode'     => PARTIAL_VOLATILE,
+            'mode'     => PARTIAL_STATIC,
             'selector' => '#view_modes',
             'cb'       => 'article_partial_view_modes',
         ),
@@ -1811,7 +1811,7 @@ function article_partial_view_modes($rs)
         checkbox2('', false, 0, 'live-preview').
         sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
         n.'</div>'.
-        n.tag(tab('preview', 'preview').tab('html', $view), 'ul');
+        n.tag(tab('preview', $view).tab('html', $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
