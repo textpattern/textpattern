@@ -1807,9 +1807,11 @@ function article_partial_view_modes($rs)
 {
     global $view;
 
-    $out = n.tag(tab('preview', 'preview').tab('html', $view), 'ul').
+    $out = n.'<div class="txp-textarea-options txp-live-preview">'.
         checkbox2('', false, 0, 'live-preview').
-        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview'));
+        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
+        n.'</div>'.
+        n.tag(tab('preview', 'preview').tab('html', $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
