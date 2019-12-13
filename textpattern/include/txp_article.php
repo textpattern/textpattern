@@ -372,6 +372,73 @@ function article_save()
     article_edit($msg, false, true);
 }
 
+
+/**
+ * Renders article preview.
+ *
+ * @param string|array $message          The activity message
+ * @param bool         $concurrent       Treat as a concurrent save
+ * @param bool         $refresh_partials Whether to refresh partial contents
+ */
+
+function article_preview($field = false)
+{
+    global $prefs, $vars, $app_mode;
+
+    // Assume they came from post.
+    $view = gps('view', 'preview');
+    $rs = textile_main_fields(gpsa($vars));
+
+    // Preview pane
+    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
+
+    if ($view == 'preview') {
+        if (!$field || $field == 'body') {
+            $preview .= n.'<div class="body">'.
+                ($field ? '' : n.graf(gTxt('body'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+            '</div>';
+        }
+
+        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
+            $preview .= n.'<div class="excerpt">'.
+                ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+                '</div>';
+        }
+    } elseif ($view == 'html') {
+        if (!$field || $field == 'body') {
+            $preview .= ($field ? '' : graf(gTxt('body'), array('class' => 'alert-block information'))).
+            n.tag(
+                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
+                    'class' => 'language-markup',
+                    'dir'   => 'ltr',
+                )),
+                'pre', array('class' => 'body')
+            );
+        }
+
+        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
+            $preview .= ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                n.tag(
+                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
+                        'class' => 'language-markup',
+                        'dir'   => 'ltr',
+                    )),
+                    'pre', array('class' => 'excerpt')
+                );
+        }
+    }
+
+    $preview .= '</div>';// End of #pane-view.
+
+    return $preview;
+}
+
 /**
  * Renders article editor form.
  *
@@ -383,6 +450,12 @@ function article_save()
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
     global $vars, $txp_user, $prefs, $step, $view, $app_mode;
+
+    if ($field = gps('preview')) {
+        echo article_preview($field);
+
+        return;
+    }
 
     extract($prefs);
 
@@ -668,60 +741,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     }
 
-    // Preview pane
-    $field = gps('preview');
-    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
-
-    if ($view == 'preview') {
-        if (!$field || $field == 'body') {
-            $preview .= n.'<div class="body">'.
-                ($field ? '' : n.graf(gTxt('body'), array('class' => 'alert-block information'))).
-                implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-            '</div>';
-        }
-
-        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
-            $preview .= n.'<div class="excerpt">'.
-                ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
-                implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-        }
-    } elseif ($view == 'html') {
-        if (!$field || $field == 'body') {
-            $preview .= ($field ? '' : graf(gTxt('body'), array('class' => 'alert-block information'))).
-            n.tag(
-                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
-                    'class' => 'language-markup',
-                    'dir'   => 'ltr',
-                )),
-                'pre', array('class' => 'body')
-            );
-        }
-
-        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
-            $preview .= ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
-                n.tag(
-                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
-                        'class' => 'language-markup',
-                        'dir'   => 'ltr',
-                    )),
-                    'pre', array('class' => 'excerpt')
-                );
-        }
-    }
-
-    $preview .= '</div>';// End of #pane-view.
-
-    if ($field && $app_mode === 'async') {
-        echo $preview;
-
-        return;
-    }
-
     $validator = new Validator(new SectionConstraint($rs['Section']));
     if (!$validator->validate()) {
         $rs['Section'] = getDefaultSection();
@@ -814,11 +833,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo n.'</div>';
     }
 
-    echo n.'<div class="txp-dialog" data-buttons="[]" data-maxWidth="100%">';
+    echo n.'<div class="txp-dialog txp-preview-container" data-buttons="[]" data-maxWidth="100%">';
     echo n.'<div>'.
         $partials['view_modes']['html'].
     '</div>';
-    echo $preview;
+    echo article_preview();
     echo '</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
