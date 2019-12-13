@@ -2155,6 +2155,10 @@ textpattern.Route.add('article', function () {
 
         wrapper.find('.textfilter-value').val(me.data('id')).trigger('change');
         wrapper.find('.textfilter-help').html(renderHelp);
+
+        if ($pane.dialog('isOpen')) {
+            wrapper.find('[data-preview-link]').click();
+        }
     });
 
     $listoptions.hide().menu();
