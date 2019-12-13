@@ -318,18 +318,18 @@ function sec_section_list($message = '')
                     $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
 
-                    ${"sec_$item"} = href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
-                        array(
-                            'event' => $item,
-                            'name'  => $sec_item,
-                            'skin'  => $sec_skin,
-                        ), array('title' => gTxt('edit'))).
-                    (!$replaced ? '' : ' | '.
+                    ${"sec_$item"} = (!$replaced ? '' :
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''))
+                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')).br
+                    ).href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
+                        array(
+                            'event' => $item,
+                            'name'  => $sec_item,
+                            'skin'  => $sec_skin,
+                        ), array('title' => gTxt('edit'))
                     );
                 }
 
@@ -357,8 +357,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)).
-                        ($replaced ? ' | '.$sec_dev_skin : ''), '', 'txp-list-col-skin'
+                        ($replaced ? $sec_dev_skin.br : '').tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)),
+                        '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -819,7 +819,7 @@ EOS
 
 function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled = array())
 {
-    global $all_skins, $all_pages, $all_styles;
+    global $all_skins, $all_pages, $all_styles, $step;
 
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
@@ -869,7 +869,7 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', 1, 0, 'live_theme'),
+                    checkbox2('live_theme', $step != 'section_set_theme', 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
