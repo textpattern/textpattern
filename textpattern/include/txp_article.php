@@ -382,7 +382,7 @@ function article_save()
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $step, $view;
+    global $vars, $txp_user, $prefs, $step, $view, $app_mode;
 
     extract($prefs);
 
@@ -579,7 +579,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract(gpsa(array(
         'view',
-        'from_view',
     )));
 
     if ($step !== 'create') {
@@ -669,6 +668,60 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     }
 
+    // Preview pane
+    $field = gps('preview');
+    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
+
+    if ($view == 'preview') {
+        if (!$field || $field == 'body') {
+            $preview .= n.'<div class="body">'.
+                ($field ? '' : n.graf(gTxt('body'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+            '</div>';
+        }
+
+        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
+            $preview .= n.'<div class="excerpt">'.
+                ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+                '</div>';
+        }
+    } elseif ($view == 'html') {
+        if (!$field || $field == 'body') {
+            $preview .= ($field ? '' : graf(gTxt('body'), array('class' => 'alert-block information'))).
+            n.tag(
+                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
+                    'class' => 'language-markup',
+                    'dir'   => 'ltr',
+                )),
+                'pre', array('class' => 'body')
+            );
+        }
+
+        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
+            $preview .= ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                n.tag(
+                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
+                        'class' => 'language-markup',
+                        'dir'   => 'ltr',
+                    )),
+                    'pre', array('class' => 'excerpt')
+                );
+        }
+    }
+
+    $preview .= '</div>';// End of #pane-view.
+
+    if ($view !== 'text' && $app_mode === 'async') {
+        echo $preview;
+
+        return;
+    }
+
     $validator = new Validator(new SectionConstraint($rs['Section']));
     if (!$validator->validate()) {
         $rs['Section'] = getDefaultSection();
@@ -718,7 +771,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
     $page_title = $ID ? $Title : gTxt('write');
-
     pagetop($page_title, $message);
 
     $class = array('async');
@@ -753,9 +805,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div role="region" id="main_content">';
 
     if ($view == 'text') {
-        echo n.'<div class="text" id="pane-text">'.$partials['title']['html'];
-        echo $partials['author']['html'];
-        echo $partials['body']['html'];
+        echo n.'<div class="text" id="pane-text">'.$partials['title']['html'],
+            $partials['author']['html'],
+            $partials['body']['html'];
         if ($articles_use_excerpts) {
             echo $partials['excerpt']['html'];
         }
@@ -766,55 +818,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div>'.
         $partials['view_modes']['html'].
     '</div>';
-    echo n.'<div id="pane-view" class="'.($view == 'preview' ? 'preview' : 'html').'">';
-    $field = gps('preview');
-
-    if ($view == 'preview') {
-        if (!$field || $field == 'body') {
-            echo n.'<div class="body">'.
-//                n.graf(gTxt('body'), array('class' => 'alert-block information')).
-                implode('', txp_tokenize($Body_html, false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-            '</div>';
-        }
-                
-
-        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
-            echo n.'<div class="excerpt">'.
-//                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-        }
-        echo n.'</div>';
-    } elseif ($view == 'html') {
-        if (!$field || $field == 'body') {
-            echo //graf(gTxt('body'), array('class' => 'alert-block information')).
-            n.tag(
-                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
-                    'class' => 'language-markup',
-                    'dir'   => 'ltr',
-                )),
-                'pre', array('class' => 'body')
-            );
-        }
-
-        if ($articles_use_excerpts && (!$field || $field == 'excerpt')) {
-            echo //graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                n.tag(
-                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
-                        'class' => 'language-markup',
-                        'dir'   => 'ltr',
-                    )),
-                    'pre', array('class' => 'excerpt')
-                );
-        }
-    }
-
-    echo '</div>';
-    echo '</div>';
+    echo $preview;
+    echo '</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
