@@ -716,7 +716,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     $preview .= '</div>';// End of #pane-view.
 
-    if ($view !== 'text' && $app_mode === 'async') {
+    if ($field && $app_mode === 'async') {
         echo $preview;
 
         return;
