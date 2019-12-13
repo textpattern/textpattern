@@ -2088,6 +2088,11 @@ textpattern.Route.add('article', function () {
     var $pane = $('#pane-view').closest('.txp-dialog'),
         $field = 'body',
         $viewMode = /*$('#view_modes li.active [data-view-mode]') || */$('#view_modes [data-view-mode]').first();
+        
+    $pane.dialog({
+        dialogClass: 'txp-preview-container'
+    });
+
     $pane.on( 'dialogopen', function( event, ui ) {
         $('#live-preview').trigger('change');
     }).on( 'dialogclose', function( event, ui ) {
