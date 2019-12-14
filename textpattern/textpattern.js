@@ -2086,11 +2086,14 @@ textpattern.Route.add('article', function () {
 
     // Switch to Text/HTML/Preview mode.
     var $pane = $('#pane-view').closest('.txp-dialog'),
-        $field = 'body',
-        $viewMode = /*$('#view_modes li.active [data-view-mode]') || */$('#view_modes [data-view-mode]').first();
+        $field = '',
+        $viewMode = $('#view_modes li.active [data-view-mode]');
+        if (!$viewMode.length) $viewMode = $('#view_modes [data-view-mode]').first();
         
     $pane.dialog({
-        dialogClass: 'txp-preview-container'
+        dialogClass: 'txp-preview-container',
+        buttons: [],
+        maxWidth: "100%"
     });
 
     $pane.on( 'dialogopen', function( event, ui ) {
