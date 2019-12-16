@@ -324,7 +324,7 @@ function sec_section_list($message = '')
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
                         ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')).br
-                    ).href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
+                    ).href($replaced ? tag(txpspecialchars($sec_item), 'del') : txpspecialchars($sec_item),
                         array(
                             'event' => $item,
                             'name'  => $sec_item,
@@ -357,7 +357,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.br : '').tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)),
+                        ($replaced ? $sec_dev_skin.br : '').tag($sec_skin, $replaced ? 'del' : ''),
                         '', 'txp-list-col-skin'
                     ).
                     td(
@@ -914,10 +914,10 @@ EOJS;
     if (gps('skin')) {
         $script .= <<<EOJS
 $(function() {
-    $('#select_all').click();
+//    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
-    var selected = skin.find('option[selected]').val();//console.log(selected)
+    var selected = skin.find('option[selected]').val();
     skin.val(selected || '').change();
 });
 EOJS;
