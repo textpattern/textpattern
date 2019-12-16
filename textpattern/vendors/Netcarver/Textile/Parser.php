@@ -371,7 +371,7 @@ class Parser
      * @var string
      */
 
-    protected $ver = '3.7.3';
+    protected $ver = '3.7.4';
 
     /**
      * Regular expression snippets.
@@ -1980,6 +1980,8 @@ class Parser
                 $text = $this->placeNoteLists($text);
             }
         } else {
+            $text .= "\n\n";
+
             // Treat quoted quote as a special glyph.
             $text = $this->glyphQuotedQuote($text);
 
