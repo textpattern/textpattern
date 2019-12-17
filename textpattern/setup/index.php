@@ -291,7 +291,7 @@ function step_getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server'),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
