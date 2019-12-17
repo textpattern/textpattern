@@ -69,7 +69,7 @@ bombShelter();
 
 $txp_sections = array();
 $txp_current_tag = '';
-$txp_parsed = $txp_else = $txp_item = $txp_yield = $yield = array();
+$txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
 
 // Set a higher error level during initialisation.
