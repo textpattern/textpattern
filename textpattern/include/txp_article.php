@@ -67,7 +67,6 @@ $vars = array(
     'LastModID',
     'sLastMod',
     'override_form',
-    'from_view',
     'year',
     'month',
     'day',
@@ -223,13 +222,13 @@ function article_save()
         }
 
         if ($ts === false || $ts < 0) {
-            $when = $when_ts = $oldArticle['sPosted'];
+            $when_ts = $oldArticle['sPosted'];
             $msg = array(gTxt('invalid_postdate'), E_ERROR);
         } else {
-            $when = $when_ts = $ts - tz_offset($ts);
+            $when_ts = $ts - tz_offset($ts);
         }
 
-        $whenposted = "FROM_UNIXTIME($when)";
+        $whenposted = "FROM_UNIXTIME($when_ts)";
     }
 
     // Set and validate expiry timestamp.
@@ -305,6 +304,7 @@ function article_save()
     $cfq = join(', ', $cfq);
 
     $rs = compact($vars);
+
     if (article_validate($rs, $msg)) {
         $set =
            "Title           = '$Title',
@@ -332,7 +332,7 @@ function article_save()
             .(($cfs) ? ', '.$cfq : '')
             .(!empty($ID) ? '' :
             ", AuthorID        = '$user',
-            uid            = '".md5(uniqid(rand(), true))."',
+            uid             = '".md5(uniqid(rand(), true))."',
             feed_time       = NOW()");
 
         if ($ID && safe_update('textpattern', $set, "ID = $ID")
@@ -372,17 +372,90 @@ function article_save()
     article_edit($msg, false, true);
 }
 
+
+/**
+ * Renders article preview.
+ *
+ * @param string|array $message          The activity message
+ * @param bool         $concurrent       Treat as a concurrent save
+ * @param bool         $refresh_partials Whether to refresh partial contents
+ */
+
+function article_preview($field = false)
+{
+    global $prefs, $vars, $app_mode;
+
+    // Assume they came from post.
+    $view = gps('view', 'preview');
+    $rs = textile_main_fields(gpsa($vars));
+
+    // Preview pane
+    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
+
+    if ($view == 'preview') {
+        if (!$field || $field == 'body') {
+            $preview .= n.'<div class="body">'.
+                ($field ? '' : n.graf(gTxt('body'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+            '</div>';
+        }
+
+        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
+            $preview .= n.'<div class="excerpt">'.
+                ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
+                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                })).
+                '</div>';
+        }
+    } elseif ($view == 'html') {
+        if (!$field || $field == 'body') {
+            $preview .= ($field ? '' : graf(gTxt('body'), array('class' => 'alert-block information'))).
+            n.tag(
+                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
+                    'class' => 'language-markup',
+                    'dir'   => 'ltr',
+                )),
+                'pre', array('class' => 'body')
+            );
+        }
+
+        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
+            $preview .= ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                n.tag(
+                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
+                        'class' => 'language-markup',
+                        'dir'   => 'ltr',
+                    )),
+                    'pre', array('class' => 'excerpt')
+                );
+        }
+    }
+
+    $preview .= '</div>';// End of #pane-view.
+
+    return $preview;
+}
+
 /**
  * Renders article editor form.
  *
  * @param string|array $message          The activity message
  * @param bool         $concurrent       Treat as a concurrent save
- * @param bool         $refresh_partials Whether refresh partial contents
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $step, $view;
+    global $vars, $txp_user, $prefs, $step, $view, $app_mode;
+
+    if ($field = gps('preview')) {
+        echo article_preview($field);
+
+        return;
+    }
 
     extract($prefs);
 
@@ -410,7 +483,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
         // 'Text/HTML/Preview' links region.
         'view_modes' => array(
-            'mode'     => PARTIAL_VOLATILE,
+            'mode'     => PARTIAL_STATIC,
             'selector' => '#view_modes',
             'cb'       => 'article_partial_view_modes',
         ),
@@ -579,7 +652,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract(gpsa(array(
         'view',
-        'from_view',
     )));
 
     if ($step !== 'create') {
@@ -594,14 +666,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     // Switch to 'text' view upon page load and after article post.
-    if (!$view) {
-        $view = 'text';
-    }
+    $view = gps('view', 'text');
 
-    if ($view == 'text'
+    if (($view == 'text' || gps('save'))
         && !empty($ID)
-        && $from_view != 'preview'
-        && $from_view != 'html'
         && !$concurrent) {
         // It's an existing article - off we go to the database.
         $ID = assert_int($ID);
@@ -626,28 +694,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     } else {
         // Assume they came from post.
-        if ($from_view == 'preview' or $from_view == 'html') {
-            $store_out = array();
-            $store = json_decode(base64_decode(ps('store')), true);
+        $store_out = array('ID' => $ID) + gpsa($vars);
 
-            foreach ($vars as $var) {
-                if (isset($store[$var])) {
-                    $store_out[$var] = $store[$var];
-                }
-            }
-        } else {
-            $store_out = array('ID' => $ID) + gpsa($vars);
+        if ($concurrent) {
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+        }
 
-            if ($concurrent) {
-                $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
-            }
-
-            if (!has_privs('article.set_markup') && !empty($ID)) {
-                $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
-                if (!empty($oldArticle)) {
-                    $store_out['textile_body'] = $oldArticle['textile_body'];
-                    $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
-                }
+        if (!has_privs('article.set_markup') && !empty($ID)) {
+            $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
+            if (!empty($oldArticle)) {
+                $store_out['textile_body'] = $oldArticle['textile_body'];
+                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
         }
 
@@ -691,7 +748,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    if ($ID && isset($sPosted)) {
+    if ($ID && !empty($sPosted)) {
         // Previous record?
         $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
@@ -733,7 +790,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
     $page_title = $ID ? $Title : gTxt('write');
-
     pagetop($page_title, $message);
 
     $class = array('async');
@@ -753,10 +809,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         )).
         n.'<div class="txp-layout">';
 
-    if (!empty($store_out)) {
-        echo hInput('store', base64_encode(json_encode($store_out, TEXTPATTERN_JSON)));
-    }
-
     echo hInput('ID', $ID).
         eInput('article').
         sInput($step).
@@ -766,78 +818,27 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         hInput('LastModID', $LastModID).
         n.'<input type="hidden" name="view" />';
 
-    echo n.'<div class="txp-layout-4col-3span">'.
+        echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
 
     echo n.'<div role="region" id="main_content">';
 
-    // View mode tabs.
-    echo $partials['view_modes']['html'];
-
-    // Title input.
-    if ($view == 'preview') {
-        echo n.'<div class="preview">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'html') {
-        echo n.'<div class="html">'.
-            graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed(txpspecialchars($Title), 1, ' class="title"');
-    } elseif ($view == 'text') {
-        echo n.'<div class="text">'.$partials['title']['html'];
-    }
-
-    // Author.
-    if ($view == "text") {
-        echo $partials['author']['html'];
-    }
-
-    // Body.
-    if ($view == 'preview') {
-        echo n.'<div class="body">'.
-                n.graf(gTxt('body'), array('class' => 'alert-block information')).
-                implode('', txp_tokenize($Body_html, false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-    } elseif ($view == 'html') {
-        echo graf(gTxt('body'), array('class' => 'alert-block information')).
-            n.tag(
-                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
-                    'class' => 'language-markup',
-                    'dir'   => 'ltr',
-                )),
-                'pre', array('class' => 'body')
-            );
-    } else {
-        echo $partials['body']['html'];
-    }
-
-    // Excerpt.
-    if ($articles_use_excerpts) {
-        if ($view == 'preview') {
-            echo n.'<div class="excerpt">'.
-                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                implode('', txp_tokenize($Excerpt_html, false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-        } elseif ($view == 'html') {
-            echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                n.tag(
-                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
-                        'class' => 'language-markup',
-                        'dir'   => 'ltr',
-                    )),
-                    'pre', array('class' => 'excerpt')
-                );
-        } else {
+    if ($view == 'text') {
+        echo n.'<div class="text" id="pane-text">'.$partials['title']['html'],
+            $partials['author']['html'],
+            $partials['body']['html'];
+        if ($articles_use_excerpts) {
             echo $partials['excerpt']['html'];
         }
+        echo n.'</div>';
     }
 
-    echo hInput('from_view', $view),
-        n.'</div>';
+    echo n.'<div class="txp-dialog">';
+    echo n.'<div>'.
+        $partials['view_modes']['html'].
+    '</div>';
+    echo article_preview();
+    echo '</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -1094,9 +1095,10 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
     $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
+    $crit = callback_event('txp.article', 'neighbour.criteria', 0, compact('ID', 'whichway', 'sPosted'));
 
     return safe_field("ID", 'textpattern',
-        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1");
+        "(Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1");
 }
 
 /**
@@ -1179,22 +1181,22 @@ function category_popup($name, $val, $id)
  * @return string HTML
  */
 
-function tab($tabevent, $view)
+function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
 
     $link = href(gTxt('view_'.$tabevent.'_short'), '#', array(
-        'data-view-mode' => $tabevent,
+        'data-view-mode' => $tabevent ? $tabevent : false,
         'title'          => gTxt('view_'.$tabevent),
         'aria-pressed'   => $pressed,
         'role'           => 'button',
     ));
 
-    return n.tag($link, 'li', array(
+    return $tag ? n.tag($link, 'li', array(
         'class' => $state,
         'id'    => 'tab-'.$tabevent,
-    ));
+    )) : $link;
 }
 
 /**
@@ -1689,7 +1691,10 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = 'body';
+    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+        'class'             => 'txp-textarea-preview',
+        'data-preview-link' => 'body',
+    ));
 
     // Article markup selection.
     if (has_privs('article.set_markup')) {
@@ -1728,16 +1733,15 @@ function article_partial_body($rs)
                 'type'  => 'hidden',
                 'value' => $rs['textile_body'],
             ));
-        $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-                '<span class="textfilter-help">'.$help.'</span></div>'
-            );
+        $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+            '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
     }
 
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
     $out = inputLabel(
         'body',
         '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>',
-        $textarea_options,
+        array('body', $textarea_options),
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field txp-form-field-textarea body')
     );
@@ -1757,7 +1761,10 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = 'excerpt';
+    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+        'class'             => 'txp-textarea-preview',
+        'data-preview-link' => 'excerpt',
+    ));
 
     // Excerpt markup selection.
     if (has_privs('article.set_markup')) {
@@ -1796,16 +1803,15 @@ function article_partial_excerpt($rs)
                 'type'  => 'hidden',
                 'value' => $rs['textile_excerpt'],
             ));
-        $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-                '<span class="textfilter-help">'.$help.'</span></div>'
-            );
+            $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+                '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
     }
 
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
     $out = inputLabel(
         'excerpt',
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
-        $textarea_options,
+        array('excerpt', $textarea_options),
         array('excerpt', 'instructions_excerpt'),
         array('class' => 'txp-form-field txp-form-field-textarea excerpt')
     );
@@ -1827,7 +1833,11 @@ function article_partial_view_modes($rs)
 {
     global $view;
 
-    $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
+    $out = n.'<div class="txp-textarea-options txp-live-preview">'.
+        checkbox2('', false, 0, 'live-preview').
+        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
+        n.'</div>'.
+        n.tag(tab('preview', $view).tab('html', $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
@@ -1968,7 +1978,7 @@ function article_partial_comments($rs)
 
         if (!empty($ID) && $comments_disabled_after) {
             $lifespan = $comments_disabled_after * 86400;
-            $time_since = time() - $sPosted;
+            $time_since = time() - intval($sPosted);
 
             if ($time_since > $lifespan) {
                 $comments_expired = true;

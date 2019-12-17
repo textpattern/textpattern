@@ -201,7 +201,7 @@ class Filter
             $out['search_method'] =  join(',', $this->loadDefaultSearchMethod());
         }
 
-        $out['criteria'] .= callback_event('admin_criteria', $this->event.'_list', 0, $out['criteria']);
+        $out['criteria'] =  '( ' . $out['criteria'] . ' ) ' . callback_event('admin_criteria', $this->event.'_list', 0, $out['criteria']);
 
         return array_values($out);
     }

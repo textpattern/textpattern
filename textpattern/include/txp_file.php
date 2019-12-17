@@ -232,7 +232,7 @@ function file_list($message = '', $ids = array())
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
                     selectInput('filename', $existing_files, $selected, false, '', 'file-existing').
-                    fInput('submit', '', gTxt('create')),
+                    fInput('submit', '', gTxt('import')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
 

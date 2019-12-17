@@ -1020,7 +1020,7 @@ jQuery.fn.txpAsyncForm = function (options) {
 
         var form =
         {
-            data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
+            data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
@@ -1240,7 +1240,7 @@ jQuery.fn.txpDialog = function (options) {
             }
         }],
         width: 440
-    }, options);
+    }, options, $(this).data());
 
     this.dialog(options);
 
@@ -1587,7 +1587,7 @@ $(document).keydown(function (e) {
         if (obj.length)
         {
             e.preventDefault();
-            obj.eq(0).click();
+            obj.eq(0).closest('form').submit();
         }
     }
 });
@@ -2074,22 +2074,77 @@ textpattern.Route.add('article', function () {
                 submitButton.val(textpattern.gTxt('publish'));
             }
         }
-    });
-
-    $('#article_form').on('click', '.txp-clone', function (e) {
+    }).on('submit.txpAsyncForm', function (e) {
+        if ($pane.dialog('isOpen')) {
+            $viewMode.click();
+        }
+    }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
+        $pane.trigger('dialogclose');
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
     // Switch to Text/HTML/Preview mode.
-    $(document).on('click',
-        '[data-view-mode]',
+    var $pane = $('#pane-view').closest('.txp-dialog'),
+        $field = '',
+        $viewMode = $('#view_modes li.active [data-view-mode]');
+        if (!$viewMode.length) $viewMode = $('#view_modes [data-view-mode]').first();
+        
+    $pane.dialog({
+        dialogClass: 'txp-preview-container',
+        buttons: [],
+        maxWidth: "100%"
+    });
+
+    $pane.on( 'dialogopen', function( event, ui ) {
+        $('#live-preview').trigger('change');
+    }).on( 'dialogclose', function( event, ui ) {
+        $('#body, #excerpt').off('input', txp_article_preview);
+    });
+
+    $('#live-preview').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#body, #excerpt').on('input', txp_article_preview);
+        } else {
+            $('#body, #excerpt').off('input', txp_article_preview);
+        }
+    })
+
+    textpattern.Relay.register('article.preview',
         function (e) {
-            e.preventDefault();
-            $('input[name="view"]').val($(this).data('view-mode'));
-            document.article_form.submit();
+            var data = form.serializeArray();
+            data.push({name: 'app_mode', value: 'async'});
+            data.push({name: 'preview', value: $field});
+            textpattern.Relay.callback('updateList', {
+                url: 'index.php #pane-view',
+                data: data,
+                list: '#pane-view',
+                callback: function () {
+                    $pane.dialog('option', 'title', textpattern.gTxt($field)).dialog('open');
+                }
+            });
         }
     );
+
+    $(document).on('click', '[data-view-mode]', function(e) {
+        e.preventDefault();
+        $viewMode = $(this);
+        let $view = $viewMode.data('view-mode');
+        $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+        $('input[name="view"]').val($view);
+        textpattern.Relay.callback('article.preview');
+    }).on('click', '[data-preview-link]', function(e) {
+        e.preventDefault();
+        $field = $(this).data('preview-link');
+        $viewMode.click();
+    }).on('updateList', '#pane-view.html', function() {
+        Prism.highlightAllUnder(this);
+    });
+
+    function txp_article_preview() {
+        $field = this.id;
+        textpattern.Relay.callback('article.preview', null, 1000);
+    }
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
@@ -2103,6 +2158,10 @@ textpattern.Route.add('article', function () {
 
         wrapper.find('.textfilter-value').val(me.data('id')).trigger('change');
         wrapper.find('.textfilter-help').html(renderHelp);
+
+        if ($pane.dialog('isOpen')) {
+            wrapper.find('[data-preview-link]').click();
+        }
     });
 
     $listoptions.hide().menu();
@@ -2225,7 +2284,7 @@ textpattern.Route.add('', function () {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                dialogClass: 'txp-dialog-container',
+                classes: {'ui-dialog': 'txp-dialog-container'},
                 autoOpen: false,
                 width: 440,
                 title: textpattern.gTxt('help'),
