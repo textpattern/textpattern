@@ -291,13 +291,13 @@ function css($atts)
 
 function component($atts)
 {
-    global $doctype, $pretext;
+    global $doctype, $pretext, $txp_context;
     static $mimetypes = null, $dir = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
         $defaults = array(
         'format'  => 'url',
         'form'    => '',
-        'context' => '',
+        'context' => null,
         'rel'     => '',
         'title'   => '',
     );
@@ -317,7 +317,7 @@ function component($atts)
     list($mode, $format) = explode('.', $format.'.'.$format);
     $theme = urlencode($pretext['skin']);
     $out = '';
-    $qs = ($context ? get_context($context, $internals) : array()) + array_diff_key($atts, $defaults);
+    $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
     if ($mode === 'flat') {
         $url = array();
@@ -1655,7 +1655,7 @@ function search_term($atts)
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = 'next')
 {
-    global $pretext, $thisarticle;
+    global $pretext, $thisarticle, $txp_context;
 
     if (!in_array($target, array('next', 'prev'))) {
         return '';
@@ -1669,7 +1669,7 @@ function link_to($atts, $thing = null, $target = 'next')
         'form'       => '',
         'link'       => 1,
         'showalways' => 0,
-        'context'    => true
+        'context'    => empty($txp_context) ? true : null
     ), $atts));
 
     if (is_array($thisarticle)) {
@@ -1678,13 +1678,10 @@ function link_to($atts, $thing = null, $target = 'next')
         }
 
         if ($thisarticle[$target] !== false) {
-            $context = get_context($context, array('c', 'author', 'month', 'f'));
-
-            if ($context) {
-                $url = pagelinkurl(array('id' => $thisarticle[$target]['ID']), $context);
-            } else {
-                $url = permlinkurl($thisarticle[$target]);
-            }
+            $old_context = $txp_context;
+            $txp_context = get_context($context);
+            $url = permlinkurl($thisarticle[$target]);
+            $txp_context = $old_context;
 
             if ($form || $thing !== null) {
                 $oldarticle = $thisarticle;
@@ -1793,7 +1790,7 @@ function link_to_home($atts, $thing = null)
 
 function txp_pager($atts, $thing = null, $newer = true)
 {
-    global $thispage, $is_article_list, $txp_item;
+    global $thispage, $is_article_list, $txp_context, $txp_item;
     static $shown = array();
 
     if (empty($thispage) || empty($thispage['numPages'])) {
@@ -1813,7 +1810,8 @@ function txp_pager($atts, $thing = null, $newer = true)
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
-    $context = get_context();
+    $old_context = $txp_context;
+    $txp_context = get_context();
     $out = array();
 
     if (!isset($shift)) {
@@ -1836,7 +1834,7 @@ function txp_pager($atts, $thing = null, $newer = true)
             $shown[$nextpg] = true;
             $url = pagelinkurl(array(
                 'pg' => $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? '' : $nextpg
-            ) + $context);
+            ));
 
             if (isset($thing)) {
                 if ($escape == 'html') {
@@ -1860,6 +1858,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     }
 
     $txp_item['page'] = $oldpage;
+    $txp_context = $old_context;
 
     return doWrap($out, '', $break);
 }
@@ -2160,6 +2159,7 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
+        'class'       => '',
         'size'        => $thiscommentsform['isize'],
         'aria_label'  => '',
         'placeholder' => '',
@@ -2169,6 +2169,10 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
     $val = is_callable($clean) ? $clean(pcs($field)) : pcs($field);
     $h5 = ($prefs['doctype'] == 'html5');
     $required = get_pref('comments_require_'.$field);
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     if (ps('preview')) {
         $comment = getComment();
@@ -2182,7 +2186,7 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
             'autocomplete' => $field == 'web' ? 'url' : $field,
             'placeholder'  => $placeholder,
             'required'     => $h5 && $required
-        ), $val, 'comment_'.$field.'_input'.($warn ? ' comments_error' : ''), '', '', $size, '', $field);
+        ), $val, 'comment_'.$field.'_input'.$class.($warn ? ' comments_error' : ''), '', '', $size, '', $field);
 }
 
 // -------------------------------------------------------------
@@ -2192,6 +2196,7 @@ function comment_message_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
+        'class'       => '',
         'rows'        => $thiscommentsform['msgrows'],
         'cols'        => $thiscommentsform['msgcols'],
         'aria_label'  => '',
@@ -2203,6 +2208,10 @@ function comment_message_input($atts)
     $n_message = 'message';
     $formnonce = '';
     $message = '';
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     if (ps('preview')) {
         $comment = getComment();
@@ -2225,7 +2234,7 @@ function comment_message_input($atts)
         'placeholder' => $placeholder
     ));
 
-    return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+    return '<textarea class="txpCommentInputMessage'.$class.(($commentwarn) ? ' comments_error"' : '"').
         ' id="message" name="'.$n_message.'"'.$attr.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
         callback_event('comment.form').
@@ -2239,9 +2248,14 @@ function comment_remember($atts)
     global $thiscommentsform;
 
     extract(lAtts(array(
+        'class'         => '',
         'rememberlabel' => $thiscommentsform['rememberlabel'],
         'forgetlabel'   => $thiscommentsform['forgetlabel']
     ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' class="'.txpspecialchars($class).'"';
+    }
 
     extract(doDeEnt(psa(array('checkbox_type', 'remember', 'forget'))));
 
@@ -2261,9 +2275,9 @@ function comment_remember($atts)
     }
 
     if ($checkbox_type == 'forget') {
-        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
+        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"'.$class);
     } else {
-        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
+        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"'.$class);
     }
 
     $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
@@ -2277,9 +2291,16 @@ function comment_preview($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['previewlabel']), $atts));
+    extract(lAtts(array(
+        'class' => '',
+        'label' => $thiscommentsform['previewlabel']
+    ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
-    return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
+    return fInput('submit', 'preview', $label, 'button'.$class, '', '', '', '', 'txpCommentPreview', false);
 }
 
 // -------------------------------------------------------------
@@ -2288,13 +2309,20 @@ function comment_submit($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['submitlabel']), $atts));
+    extract(lAtts(array(
+        'class' => '',
+        'label' => $thiscommentsform['submitlabel']
+    ), $atts));
+    
+    if (!empty($class)) {
+        $class = ' '.txpspecialchars($class);
+    }
 
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
-        return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
+        return fInput('submit', 'submit', $label, 'button'.$class, '', '', '', '', 'txpCommentSubmit', false);
     } else {
-        return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+        return fInput('submit', 'submit', $label, 'button disabled'.$class, '', '', '', '', 'txpCommentSubmit', true);
     }
 }
 
@@ -3826,15 +3854,14 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $pretext, $thisarticle;
-    static $internals = array('c', 'author', 'month', 'f');
+    global $pretext, $thisarticle, $txp_context;
 
     extract(lAtts(array(
         'class'   => '',
         'id'      => '',
         'style'   => '',
         'title'   => '',
-        'context' => '',
+        'context' => null,
     ), $atts));
 
     if (!$id) {
@@ -3842,13 +3869,10 @@ function permlink($atts, $thing = null)
     }
 
     $thisid = $id ? $id : $thisarticle['thisid'];
-    empty($context) or $context = get_context($context, $internals);
-
-    if ($context) {
-        $url = pagelinkurl(array('id' => $thisid), $context);
-    } else {
-        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
-    }
+    $old_context = $txp_context;
+    $txp_context = get_context($context);
+    $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    $txp_context = $old_context;
 
     if ($url) {
         if ($thing === null) {
@@ -4388,9 +4412,9 @@ function if_status($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function page_url($atts)
+function page_url($atts, $thing = null)
 {
-    global $pretext;
+    global $pretext, $txp_context;
     static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f');
 
     isset($specials) or $specials = array(
@@ -4402,33 +4426,48 @@ function page_url($atts)
     );
 
     extract(lAtts(array(
-        'type'    => 'request_uri',
-        'default' => '',
+        'type'    => null,
+        'default' => false,
         'escape'  => null,
-        'context' => ''
+        'context' => null
     ), $atts));
 
-    if ($type == 'pg' && $pretext['pg'] == '') {
-        return '1';
+    $old_context = $txp_context;
+    $txp_context = get_context($context, $internals);
+
+    if ($default !== false) {
+        if ($default === true) {
+            if (isset($type)) {
+                unset($txp_context[$type]);
+            } else {
+                $txp_context = array();
+            }
+        } elseif (in_array($type, $internals)) {
+            $txp_context[$type] = $default;
+        }
     }
 
-    if (isset($specials[$type])) {
-        return $specials[$type];
+    if (!isset($type)) {
+        $type = 'request_uri';
     }
 
-    if ($context) {
-        $keys = get_context($context, $internals);
-        isset($keys[$type]) or $keys[$type] = $default;
-
-        return pagelinkurl($keys);
-    }
-
-    if (isset($pretext[$type])) {
+    if (isset($thing)) {
+        $out = parse($thing);
+        $escape = false;
+    } elseif ($context) {
+        $out = pagelinkurl($txp_context);
+    } elseif (isset($specials[$type])) {
+        $out = $specials[$type];
+    } elseif ($type == 'pg' && $pretext['pg'] == '') {
+        $out = '1';
+    } elseif (isset($pretext[$type])) {
         $out = $pretext[$type];
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
     }
+
+    $txp_context = $old_context;
 
     return $escape === null ? txpspecialchars($out) : $out;
 }

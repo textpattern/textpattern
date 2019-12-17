@@ -3,7 +3,7 @@ Changes in 4.8.0 (upcoming)
 * Changed: Minimum system requirements increased to PHP 5.5.0.
 * Changed: Plugin tags MUST be registered or they will not work.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
-* Changed: Author's real name is used in <txp:page_url>.
+* Changed: Author's real name is available in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
@@ -22,6 +22,7 @@ Changes in 4.8.0 (upcoming)
 * Added: Support for PHP 7.4.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
+* Added: 'class' attribute to comment form tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
@@ -62,8 +63,9 @@ Changes in 4.8.0 (upcoming)
   register_globals support removed.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
+* Developer: txp.article > neighbour.criteria callback on Write panel.
 * Performance optimizations via cacheing and preloading frequent content.
-* Textile 3.7.3. See https://github.com/textile/php-textile/releases/tag/v3.7.3
+* Textile 3.7.5. See https://github.com/textile/php-textile/releases/tag/v3.7.5
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.17.1.

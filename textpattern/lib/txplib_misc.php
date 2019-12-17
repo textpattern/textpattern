@@ -4326,17 +4326,24 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 
 function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
-    global $permlink_mode, $prefs, $txp_sections;
+    global $permlink_mode, $prefs, $txp_context, $txp_sections;
     static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+
+    $keys = $parts;
 
     // Unset extra stuff to link to an article.
     if (!empty($parts['id'])) {
         foreach ($internals as $key) {
-            unset($parts[$key]);
+            unset($keys[$key]);
         }
     }
 
-    $keys = $inherit ? array_merge($inherit, $parts) : $parts;
+    empty($inherit) or $keys += $inherit;
+    empty($txp_context) or $keys += $txp_context;
+    
+    if (empty($parts['id'])) {
+        unset($keys['id']);
+    }
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
@@ -4472,8 +4479,8 @@ function permlinkurl_id($id)
 
 function permlinkurl($article_array, $hu = hu)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $now = null;
+    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_context, $txp_sections;
+    static $internals = array('c' => null, 'author' => null, 'month' => null, 'f' => null), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4529,6 +4536,7 @@ function permlinkurl($article_array, $hu = hu)
 
     $section = urlencode($section);
     $url_title = urlencode($url_title);
+    $keys = $txp_context ? array_intersect_key($txp_context, $internals) : array();
 
     switch ($url_mode) {
         case 'section_id_title':
@@ -4582,11 +4590,18 @@ function permlinkurl($article_array, $hu = hu)
             $out = $url_title;
             break;
         case 'messy':
-            $out = "index.php?id=$thisid";
+            $out = "index.php";
+            $keys['id'] = $thisid;
             break;
     }
 
-    return $permlinks[$thisid] = $hu.$out;
+    if ($hu === hu) {
+        $out = $permlinks[$thisid] = hu.$out;
+    } else {
+        $out = $hu.$out;
+    }
+
+    return $out.join_qs($keys);
 }
 
 /**
@@ -4976,9 +4991,13 @@ function getMetaDescription($type = null)
 
 function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
 {
-    global $pretext;
+    global $pretext, $txp_context;
 
-    if (!is_array($context)) {
+    if (!isset($context)) {
+        return $txp_context;
+    } elseif (empty($context)) {
+        return array();
+    } elseif (!is_array($context)) {
         $context = $context === true ? $internals : do_list_unique($context);
     }
 

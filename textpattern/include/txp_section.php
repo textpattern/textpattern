@@ -51,7 +51,6 @@ if ($event == 'section') {
         'section_multi_edit'    => true,
         'section_set_default'   => true,
         'section_set_theme'     => true,
-        'section_use_theme'     => true,
         'section_toggle_option' => true,
     );
 
@@ -319,18 +318,18 @@ function sec_section_list($message = '')
                     $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
 
-                    ${"sec_$item"} = href($replaced ? tag(txpspecialchars($sec_item), 'span', array('class' => $replaced)) : txpspecialchars($sec_item),
-                        array(
-                            'event' => $item,
-                            'name'  => $sec_item,
-                            'skin'  => $sec_skin,
-                        ), array('title' => gTxt('edit'))).
-                    (!$replaced ? '' : ' | '.
+                    ${"sec_$item"} = (!$replaced ? '' :
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : ''))
+                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')).br
+                    ).href($replaced ? tag(txpspecialchars($sec_item), 'del') : txpspecialchars($sec_item),
+                        array(
+                            'event' => $item,
+                            'name'  => $sec_item,
+                            'skin'  => $sec_skin,
+                        ), array('title' => gTxt('edit'))
                     );
                 }
 
@@ -358,8 +357,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? 'span' : '', array('class' => $replaced)).
-                        ($replaced ? ' | '.$sec_dev_skin : ''), '', 'txp-list-col-skin'
+                        ($replaced ? $sec_dev_skin.br : '').tag($sec_skin, $replaced ? 'del' : ''),
+                        '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -787,7 +786,7 @@ function section_set_theme($type = 'dev_skin')
     $skin = gps('skin');
     $message = '';
 
-    if (isset($all_skins[$skin])) {
+    if (isset($all_skins[$skin]) && has_privs('skin.edit')) {
         safe_update(
             'txp_section',
             "$type = '".doSlash($skin)."'",
@@ -808,15 +807,6 @@ EOS
 }
 
 /**
- * Processes theme view actions.
- */
-
-function section_use_theme()
-{
-    section_set_theme('skin');
-}
-
-/**
  * Renders a multi-edit form widget.
  *
  * @param  int    $page          The page number
@@ -829,22 +819,16 @@ function section_use_theme()
 
 function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled = array())
 {
-    global $all_skins, $all_pages, $all_styles;
+    global $all_skins, $all_pages, $all_styles, $step;
 
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
     $themeSelect = inputLabel(
         'multiedit_skin',
-        selectInput('skin', $all_skins, '', false, '', 'multiedit_skin'),
+        selectInput('skin', $all_skins, gps('skin'), false, '', 'multiedit_skin'),
         'skin', '', array('class' => 'multi-option multi-step'), ''
-    ).script_js(<<<EOJS
-var skin_page = {$json_page};
-var skin_style = {$json_style};
-var page_sel = '';
-var style_sel = '';
-EOJS
-    , false);
+    );
 
     $pageSelect = inputLabel(
         'multiedit_page',
@@ -885,7 +869,7 @@ EOJS
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', 0, 0, 'live_theme'),
+                    checkbox2('live_theme', $step != 'section_set_theme', 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
@@ -920,7 +904,26 @@ EOJS
         unset($methods[$method]);
     }
 
-    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
+    $script = <<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '';
+var style_sel = '';
+EOJS;
+
+    if (gps('skin')) {
+        $script .= <<<EOJS
+$(function() {
+//    $('#select_all').click();
+    $('[name="edit_method"]').val('changepagestyle').change();
+    var skin = $('#multiedit_skin');
+    var selected = skin.find('option[selected]').val();
+    skin.val(selected || '').change();
+});
+EOJS;
+    }
+    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method).
+    script_js($script, false);
 }
 
 /**
