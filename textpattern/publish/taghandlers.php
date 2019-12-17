@@ -4453,23 +4453,24 @@ function page_url($atts, $thing = null)
 
     if (isset($thing)) {
         $out = parse($thing);
-        $escape = false;
     } elseif ($context) {
         $out = pagelinkurl($txp_context);
+        $escape === null or $out = str_replace('&amp;', '&', $out);
     } elseif (isset($specials[$type])) {
         $out = $specials[$type];
     } elseif ($type == 'pg' && $pretext['pg'] == '') {
         $out = '1';
     } elseif (isset($pretext[$type])) {
-        $out = $pretext[$type];
+        $out = $escape === null ? txpspecialchars($pretext[$type]) : $pretext[$type];
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
+        $escape !== null or $out = txpspecialchars($out);
     }
 
     $txp_context = $old_context;
 
-    return $escape === null ? txpspecialchars($out) : $out;
+    return $out;
 }
 
 // -------------------------------------------------------------
