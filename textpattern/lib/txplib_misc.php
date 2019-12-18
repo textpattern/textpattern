@@ -3951,28 +3951,6 @@ function rename_pref($newname, $name, $user_name = null)
 }
 
 /**
- * Get field => alias array.
- *
- * @param   string $match
- * @return  array()
- * @since   4.8.0
- * @package TagParser
- */
-
-function parse_qs($match, $sep='=')
-{
-    $pairs = array();
-
-    foreach(do_list_unique($match) as $chunk) {
-        $name = strtok($chunk, $sep);
-        $alias = strtok($sep);
-        $pairs[strtolower($name)] = $alias;
-    };
-
-    return $pairs;
-}
-
-/**
  * Gets a list of custom fields.
  *
  * @return  array
@@ -4237,6 +4215,28 @@ eod;
 
         die($out.$debug);
     }
+}
+
+/**
+ * Get field => alias array.
+ *
+ * @param   string $match
+ * @return  array()
+ * @since   4.8.0
+ * @package TagParser
+ */
+
+function parse_qs($match, $sep='=')
+{
+    $pairs = array();
+
+    foreach(do_list_unique($match) as $chunk) {
+        $name = strtok($chunk, $sep);
+        $alias = strtok($sep);
+        $pairs[strtolower($name)] = $alias;
+    };
+
+    return $pairs;
 }
 
 /**
