@@ -186,7 +186,11 @@ XPath: /resources/help/group/item        ]]></item>
     </group>
 
     <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
+        <item id="install_plugin" title=""><![CDATA[
+<h2>Instalar un plugin</h2>
+<p>Pega el contenido del archivo de texto deldel plugin aquí, luego pulsa 'Subir' para comenzar la instalación. Cualquier plugin que subas con el mismo nombre que uno que ya tengas instalado anteriormente sobreescribirá la versión anterior del plugin.</p>
+<p>El texto del plugin que pegas aquí <strong>no</strong> es el código PHP en bruto sino texto codificado en Base64, frecuentemente precedido por una cabecera que contiene información del plugin (como el nombre del plugin, versión y descripción, nombre del autor, etc).</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="">
