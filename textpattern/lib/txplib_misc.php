@@ -1660,17 +1660,18 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
-    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+    if (isset($atts['yield']) && !isset($pairs['yield'])) {
         isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
-        unset($atts['yield']);
 
-        foreach (do_list_unique($txp_atts['yield']) as $name) {
-            $value = call_user_func($partial, array('name' => $name));
+        foreach (parse_qs($atts['yield']) as $name => $alias) {
+            $value = call_user_func($partial, array('name' => $alias === false ? $name : $alias));
 
             if(isset($value)) {
                 $atts[$name] = $value;
             }
         }
+
+        unset($atts['yield']);
     }
 
     if (empty($pretext['_txp_atts'])) {
@@ -3947,6 +3948,28 @@ function rename_pref($newname, $name, $user_name = null)
     }
 
     return false;
+}
+
+/**
+ * Get field => alias array.
+ *
+ * @param   string $match
+ * @return  array()
+ * @since   4.8.0
+ * @package TagParser
+ */
+
+function parse_qs($match, $sep='=')
+{
+    $pairs = array();
+
+    foreach(do_list_unique($match) as $chunk) {
+        $name = strtok($chunk, $sep);
+        $alias = strtok($sep);
+        $pairs[strtolower($name)] = $alias;
+    };
+
+    return $pairs;
 }
 
 /**
