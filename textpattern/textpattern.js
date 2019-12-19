@@ -2120,7 +2120,7 @@ textpattern.Route.add('article', function () {
                 data: data,
                 list: '#pane-view',
                 callback: function () {
-                    $pane.dialog('option', 'title', textpattern.gTxt($field)).dialog('open');
+                    $pane.dialog('open');
                 }
             });
         }
@@ -2136,6 +2136,7 @@ textpattern.Route.add('article', function () {
     }).on('click', '[data-preview-link]', function(e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
+        $pane.dialog('option', 'title', $(this).text());
         $viewMode.click();
     }).on('updateList', '#pane-view.html', function() {
         Prism.highlightAllUnder(this);
