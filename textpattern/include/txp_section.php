@@ -206,7 +206,7 @@ function sec_section_list($message = '')
     }
 
     $paginator = new \Textpattern\Admin\Paginator();
-    $limit = $paginator->getLimit();
+    $limit = $paginator->getLimit(gps('skin') ? PHP_INT_MAX : null);
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -915,7 +915,7 @@ EOJS;
     if (gps('skin')) {
         $script .= <<<EOJS
 $(function() {
-//    $('#select_all').click();
+    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();
