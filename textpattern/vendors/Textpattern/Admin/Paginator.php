@@ -145,9 +145,9 @@ class Paginator
      *
      * @return int
      */
-    public function getLimit($val = null)
+    public function getLimit()
     {
-        return $this->closest($val);
+        return $this->closest();
     }
 
     /**

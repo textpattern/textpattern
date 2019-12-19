@@ -206,7 +206,7 @@ function sec_section_list($message = '')
     }
 
     $paginator = new \Textpattern\Admin\Paginator();
-    $limit = $paginator->getLimit(gps('skin') ? PHP_INT_MAX : null);
+    $limit = gps('skin') ? PHP_INT_MAX : $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
