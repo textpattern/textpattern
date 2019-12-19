@@ -376,9 +376,9 @@ function file_list($message = '', $ids = array())
 
                 if ($file_exists) {
                     $downloads = make_download_link($id, $downloads, $filename);
-                    $condition = span(gTxt('file_status_ok'), array('class' => 'success'));
+                    $condition = tag(gTxt('status_ok'), 'small', array('class' => 'alert-block alert-pill success'));
                 } else {
-                    $condition = span(gTxt('file_status_missing'), array('class' => 'error'));
+                    $condition = tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error'));
                 }
 
                 if ($category) {
@@ -681,9 +681,9 @@ function file_edit($message = '', $id = '')
         }
 
         $condition = span((($file_exists)
-                ? gTxt('file_status_ok')
-                : gTxt('file_status_missing')
-            ), array('class' => (($file_exists) ? 'success' : 'error')));
+                ? gTxt('status_ok')
+                : gTxt('status_missing')
+            ), array('class' => 'alert-block alert-pill '.(($file_exists) ? 'success' : 'error')));
 
         $downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 
