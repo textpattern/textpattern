@@ -357,7 +357,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).br : '').
+                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).n.'<hr class="secondary" />'.n : '').
                         $sec_skin, '', 'txp-list-col-skin'
                     ).
                     td(
