@@ -323,9 +323,10 @@ function sec_section_list($message = '')
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')).br
-                    ).href($replaced ? tag(txpspecialchars($sec_item), 'del') : txpspecialchars($sec_item),
-                        array(
+                        ), array('title' => gTxt('edit'))).
+                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
+                        n.'<hr class="secondary" />'.n
+                    ).href(txpspecialchars($sec_item), array(
                             'event' => $item,
                             'name'  => $sec_item,
                             'skin'  => $sec_skin,
