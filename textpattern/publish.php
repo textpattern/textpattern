@@ -1041,7 +1041,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         $count = 0;
         $articles = array();
-        $chunk = '';
+        $chunk = false;
         $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
         unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
@@ -1074,19 +1074,21 @@ function doArticles($atts, $iscustom, $thing = null)
                     $thisarticle = $tmparticle;
                 }
 
-                $articles[] = $chunk;
-                $chunk = '';
+                $chunk === false or $articles[] = $chunk;
+                $chunk = false;
             }
 
             if ($count <= $last) {
                 // Article form preview.
                 if (txpinterface === 'admin' && ps('Form')) {
-                    $chunk .= txp_sandbox(array(), ps('Form'));
+                    $item = txp_sandbox(array(), ps('Form'));
                 } elseif ($allowoverride && $a['override_form']) {
-                    $chunk .= txp_sandbox(array(), parse_form($a['override_form']), false);
+                    $item = txp_sandbox(array(), parse_form($a['override_form']), false);
                 } else {
-                    $chunk .= $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
+                    $item = $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
                 }
+
+                $item === false or $chunk .= $item;
             }
 
             $oldarticle = $thisarticle;

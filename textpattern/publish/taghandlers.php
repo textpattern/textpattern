@@ -194,7 +194,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate, yield')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
 
@@ -1811,7 +1811,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     $pg = $thispage['pg'];
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
     $old_context = $txp_context;
-    $txp_context = get_context();
+    $txp_context += get_context();
     $out = array();
 
     if (!isset($shift)) {
@@ -4453,23 +4453,24 @@ function page_url($atts, $thing = null)
 
     if (isset($thing)) {
         $out = parse($thing);
-        $escape = false;
     } elseif ($context) {
         $out = pagelinkurl($txp_context);
+        $escape === null or $out = str_replace('&amp;', '&', $out);
     } elseif (isset($specials[$type])) {
         $out = $specials[$type];
     } elseif ($type == 'pg' && $pretext['pg'] == '') {
         $out = '1';
     } elseif (isset($pretext[$type])) {
-        $out = $pretext[$type];
+        $out = $escape === null ? txpspecialchars($pretext[$type]) : $pretext[$type];
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
+        $escape !== null or $out = txpspecialchars($out);
     }
 
     $txp_context = $old_context;
 
-    return $escape === null ? txpspecialchars($out) : $out;
+    return $out;
 }
 
 // -------------------------------------------------------------

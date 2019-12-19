@@ -73,12 +73,10 @@
     <li>přidává, upravuje a odstraňuje obrázky a soubory</li>
     <li>upravuje rubriky</li>
     <li>upravuje stránky, formy a styly</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
         <item id="create_author" title="Vytvořit autora"><![CDATA[
 <h2>Přidat nového autora</h2>
-<p>Heslo, uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>
-        ]]></item>
+<p>Heslo, uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>        ]]></item>
     </group>
 
     <group id="article" title="Panel Psaní">
@@ -90,23 +88,18 @@
     <li>relativní URL cestu k obrázku (např. <code>/images/my_pic.jpg</code>)</li>
     <li>absolutní URL adresu obrázku (např. <code>http://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>Obrázek bude v článku zobrazen pomocí tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> ve formě pro článek, pokud tento tag forma článku obsahuje. Výstupem je HTML tag  <code>&lt;img&gt;</code> pro vybraný obrázek.</p>
-        ]]></item>
-        <item id="body" title="Tělo článku"><![CDATA[
-<h2>Tělo článku</h2>
+<p>Obrázek bude v článku zobrazen pomocí tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> ve formě pro článek, pokud tento tag forma článku obsahuje. Výstupem je HTML tag  <code>&lt;img&gt;</code> pro vybraný obrázek.</p>        ]]></item>
+        <item id="body" title="Tělo článku"><![CDATA[<h2>Tělo článku</h2>
 <p>Tělo článku obsahuje hlavní obsah článku</p>
-<p>Při psaní článku a jeho přípravě k publikování může autor přepínat mezi třemi způsoby zobrazení: prostý text, HTML (kód, ze kterého prohlížeč čůánek zobrazí) a náhled článku.</p>
-        ]]></item>
+<p>Při psaní článku a jeho přípravě k publikování může autor přepínat mezi třemi způsoby zobrazení: prostý text, HTML (kód, ze kterého prohlížeč čůánek zobrazí) a náhled článku.</p>]]></item>
         <item id="description" title="Popis"><![CDATA[
 <h2>Popis článku</h2>
 <p>Popis článku je volitelná součást, která může pomoci prohledávačům webových stránek lépe rozpoznávat a třídit obsah.</p>
 <p>Popis článku je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>
-<p> Všimněte si, že popis článku se liší od anotace článku, ačkoli mohou mít podobný, nebo stejný obsah. Popis článku je primárně určen pro použití vyhledávačům a robotům, zatímco anotace článku slouží čtenářům jako stručné shrnutí obsahu článku.</p>
-        ]]></item>
+<p> Všimněte si, že popis článku se liší od anotace článku, ačkoli mohou mít podobný, nebo stejný obsah. Popis článku je primárně určen pro použití vyhledávačům a robotům, zatímco anotace článku slouží čtenářům jako stručné shrnutí obsahu článku. </p>        ]]></item>
         <item id="excerpt" title="Anotace"><![CDATA[
 <h2>Anotace</h2>
-<p>Anotace článku není povinná. Zpravidla jde o krátké shrnutí obsahu článku, které se zobrazuje v seznamu článků, či obsahu serveru, nebo se používá namísto celého těla článku v pramenech RSS a Atom, apod.</p>
-        ]]></item>
+<p>Anotace článku není povinná. Zpravidla jde o krátké shrnutí obsahu článku, které se zobrazuje v seznamu článků, či obsahu serveru, nebo se používá namísto celého těla článku v pramenech RSS a Atom, apod.</p>        ]]></item>
         <item id="expire_date" title="Datum expirace"><![CDATA[
 <h2>Datum expirace</h2>
 <p>Datum, kdy článku vyprší platnost. Čas je volitelný a lze nastavit na libovolnou dobu v minulosti nebo budoucnosti.</p>
@@ -115,29 +108,22 @@
     <li>Rok / Měsíc / Den</li>
     <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
 </ul>
-<p>Je-li povolena možnost vydat expirované články, článek zůstává viditelný. V případě, že je možnost zobrazování prošlých článků zakázána, uvidí návštěvníci stránky namísto obsahu článku výpis Chyba HTTP 410.</p>
-        ]]></item>
-        <item id="keywords" title="Klíčová slova"><![CDATA[
-<h2>Psaní: Klíčová slova</h2>
+<p>Je-li povolena možnost vydat expirované články, článek zůstává viditelný. V případě, že je možnost zobrazování prošlých článků zakázána, uvidí návštěvníci stránky namísto obsahu článku výpis Chyba HTTP 410.</p>        ]]></item>
+        <item id="keywords" title="Klíčová slova"><![CDATA[<h2>Psaní: Klíčová slova</h2>
 <p>Klíčová slova jsou užitečná pro určení vztahů mezi články, jiných než jen podle příslušnosti k téže kategorii.</p>
-<p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>
-        ]]></item>
-        <item id="override_form" title="Přebít formu"><![CDATA[
-<h2>Přebít formu</h2>
-<p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>
-        ]]></item>
+<p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>]]></item>
+        <item id="override_form" title="Přebít formu"><![CDATA[<h2>Přebít formu</h2>
+<p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>]]></item>
         <item id="publish_date"><![CDATA[
 <h2>Datum vydání</h2>
-<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti.</p>
+<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti. </p>
 <p>Políčka jsou určená pro následující informace:</p>
 <ul>
     <li>Rok / Měsíc / Den</li>
     <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
 </ul>
-<p>Článek s datem vydání pozdějším, než je současný okamžik (tedy v budoucnosti), nebude na úvodní straně ani v pramenech RSS/Atom zobrazen až do zadaného okamžiku.</p>
-        ]]></item>
-        <item id="status" title="Stav"><![CDATA[
-<h2>Stav článku</h2>
+<p>Článek s datem vydání pozdějším, než je současný okamžik (tedy v budoucnosti), nebude na úvodní straně ani v pramenech RSS/Atom zobrazen až do zadaného okamžiku. </p>        ]]></item>
+        <item id="status" title="Stav"><![CDATA[<h2>Stav článku</h2>
 <p>Určuje viditelnost článku.</p>
 <p>Stav článku může být:</p>
 <ul>
@@ -151,18 +137,13 @@
 <p><strong>Skrytý</strong> článek není viditelný mimo administrační část Textpatternu.</p>
 <p><strong>Čekající</strong> je považován za připravený k publikování a čeká na schválení, není viditelný mimo administrační část Textpatternu.</p>
 <p><strong>Vydáno</strong> - článek je publikován a je viditelný na veřejně dostupné stránce. Je-li článek aktivní a má datum vypršení platnosti, stav <em>vydáno</em> zůstane zachován i po tomto datu, ale mimo administrační oblast bude viditelný, pouze když je v Nastavení povoleno <em>vydat expirované články</em>.</p>
-<p><strong>Trvalý</strong> - článek je podobně jako při stavu <em>Vydáno</em> viditelný i mimo administrační část, ale bude ve výpisu článků zobrazen pouze pokud tag  <code>article</code> nebo <code>article_custom</code> v šabloně stránky obsahuje atribut <code>trvalý</code>.</p>
-        ]]></item>
-        <item id="title" title="Název"><![CDATA[
-<h2>Název článku</h2>
+<p><strong>Trvalý</strong> - článek je podobně jako při stavu <em>Vydáno</em> viditelný i mimo administrační část, ale bude ve výpisu článků zobrazen pouze pokud tag  <code>article</code> nebo <code>article_custom</code> v šabloně stránky obsahuje atribut <code>trvalý</code>.</p>]]></item>
+        <item id="title" title="Název"><![CDATA[<h2>Název článku</h2>
 <p>Stručný, vystižný název pro tento článek.</p>
-<p>Délka názvu článku je omezena na maximálně 255 znaků.</p>
-        ]]></item>
-        <item id="url_title" title="Název do odkazů"><![CDATA[
-<h2>Název do URL odkazu</h2>
+<p>Délka názvu článku je omezena na maximálně 255 znaků.</p>]]></item>
+        <item id="url_title" title="Název do odkazů"><![CDATA[<h2>Název do URL odkazu</h2>
 <p>Chceš-li do trvalého odkazu na článek vložit vlastní název, zadej jej zde. (Používej malá písmena bez diakritiky, slova odděluj pomlčkami, nebo podtržítky.) Necháš-li pole prázné, název do odkazu bude automaticky odvozen z názvu článku.</p>
-<p>Je to obzvláště užitečné, pokud název článku používá znaky jiné než ASCII.</p>
-        ]]></item>
+<p>Je to obzvláště užitečné, pokud název článku používá znaky jiné než ASCII.</p>]]></item>
     </group>
 
     <group id="category" title="Panel Kategorie">
@@ -181,22 +162,18 @@
         <item id="category_description" title="Popis"><![CDATA[
 <h2>Popis</h2>
 <p>Popis kategorie je volitelná část, která může pomoci vyhledávačům a robotům lépe určit a uspořádat obsah.</p>
-<p>Popis je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>
-        ]]></item>
+<p>Popis je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>        ]]></item>
         <item id="file_category" title="Soubory"><![CDATA[
 <h2>Soubory</h2>
-<p>Kategorie souborů jsou volitelná část a umožňují snažší správu a seskupování nahraných souborů.</p>
-        ]]></item>
+<p>Kategorie souborů jsou volitelná část a umožňují snažší správu a seskupování nahraných souborů.</p>        ]]></item>
         <item id="image_category" title="Obrázky"><![CDATA[
 <h2>Obrázky</h2>
-<p>Kategorie obrázků jsou užitečné jak pro vnitřní organizaci, tak pro definování skupin obrázků, které lze zobrazit pomocí tagu<br><a rel="external" target="_blank" title="otevře se externí odkaz v novém okně" href="https://docs.textpattern.com/tags/image"><code>&lt; txp:image /&gt;</code><span class ="ui-icon ui-icon-extlink"></span></a> v šabloně (formě) článku.</p>
-        ]]></item>
+<p>Kategorie obrázků jsou užitečné jak pro vnitřní organizaci, tak pro definování skupin obrázků, které lze zobrazit pomocí tagu<br><a rel="external" target="_blank" title="otevře se externí odkaz v novém okně" href="https://docs.textpattern.com/tags/image"><code>&lt; txp:image /&gt;</code><span class ="ui-icon ui-icon-extlink"></span></a> v šabloně (formě) článku.</p>        ]]></item>
         <item id="link_category" title="Odkazy"><![CDATA[
 <h2>Odkazy</h2>
 <p>Volitelná možnost. Kategorie odkazů jsou užitečné pro členění odkazů do skupin, např. „Přátelé”, „Římané”, „Krajané”, atd.</p>
 <p>Vybraný seznam odkazů lze zobrazit pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře odkaz v novém okně)</span></a> např. takto:</p>
-<code>&lt;txp:linklist category="pratele" /&gt;</code>
-        ]]></item>
+<code>&lt;txp:linklist category="pratele" /&gt;</code>        ]]></item>
     </group>
 
     <group id="diag" title="Diagnostika">
@@ -210,8 +187,7 @@
     <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
 </ul>
 <p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
-<p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>
-        ]]></item>
+<p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>        ]]></item>
         <item id="clean_url_test_failed" title="Test hezkých URL adres selhal"><![CDATA[
 <h2>Test hezkých URL adres selhal</h2>
 <p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
@@ -221,28 +197,22 @@
     <li>server pro zprovoznění hezkých URL adres vyžaduje nějaké změny v souboru <code>.htaccess</code>.</li>
     <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
 </ul>
-<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
-        ]]></item>
+<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>        ]]></item>
         <item id="diag_clear_private" title="Skrýt soukromé informace"><![CDATA[
 <h2>Skrýt soukromé informace</h2>
-<p>Pokud mají být diagnostické informace sdíleny ve veřejně viditelném formátu, například ve fóru podpory Textpattern, vynecháním citlivých informací o serveru se snižuje bezpečnostní riziko.</p>
-        ]]></item>
+<p>Pokud mají být diagnostické informace sdíleny ve veřejně viditelném formátu, například ve fóru podpory Textpattern, vynecháním citlivých informací o serveru se snižuje bezpečnostní riziko.</p>        ]]></item>
         <item id="dev_version_live" title="Vývojová verze na živém serveru"><![CDATA[
 <h2>Vývojová verze na živém serveru</h2>
-<p>Provozuješ vývojovou verzi Textpattern, což se na živém webu nedoporučuje. Pokud je to záměrně, můžeš toto varování ignorovat.</p>
-        ]]></item>
+<p>Provozuješ vývojovou verzi Textpattern, což se na živém webu nedoporučuje. Pokud je to záměrně, můžeš toto varování ignorovat.</p>        ]]></item>
         <item id="dir_not_writable" title="Do adresáře nelze zapisovat"><![CDATA[
 <h2>Do adresáře nelze zapisovat</h2>
-<p>Chceš-li používat funkce nahrávání souborů a obrázků, musí být odpovídající adresáře zapisovatelné pro PHP. Pravděpodobně bude nutné změnit oprávnění. To lze provést pomocí FTP klienta, nebo alternativně v příkazovém řádku příkazem <code>chmod 755 /cesta/do/adresare</code> command.</p>
-        ]]></item>
+<p>Chceš-li používat funkce nahrávání souborů a obrázků, musí být odpovídající adresáře zapisovatelné pro PHP. Pravděpodobně bude nutné změnit oprávnění. To lze provést pomocí FTP klienta, nebo alternativně v příkazovém řádku příkazem <code>chmod 755 /cesta/do/adresare</code> command.</p>        ]]></item>
         <item id="dns_lookup_fails" title="DNS selhalo"><![CDATA[
 <h2>DNS selhalo</h2>
-<p>Zdá se, že URL zadaná jako adresa tvých stránek není na webu dostupná.</p>
-        ]]></item>
+<p>Zdá se, že URL zadaná jako adresa tvých stránek není na webu dostupná.</p>        ]]></item>
         <item id="file_uploads_disabled" title="Nahrávání souborů je zakázáno"><![CDATA[
 <h2>Nahrávání souborů je zakázáno</h2>
-<p>Aktuální konfigurace serveru nahrávání souborů zakázuje, takže není možné nahrávat pomocí Textpatternu soubory ani obrázky. Zkontroluj a změň nastavení <code>file_uploads</code> v souboru <code>php.ini</code> (nebo o změnu požádej poskytovatele hostingových služeb).</p>
-        ]]></item>
+<p>Aktuální konfigurace serveru nahrávání souborů zakázuje, takže není možné nahrávat pomocí Textpatternu soubory ani obrázky. Zkontroluj a změň nastavení <code>file_uploads</code> v souboru <code>php.ini</code> (nebo o změnu požádej poskytovatele hostingových služeb).</p>        ]]></item>
         <item id="htaccess_missing" title="Soubor.htaccess neexistuje"><![CDATA[
 <h2>Soubor .htaccess neexistuje</h2>
 <p>Používáš <em>permanent link mode</em>, který vyžaduje soubor <code>.htaccess</code> umístěný do kořenového adresáře webu vedle souboru <code>index.php</code> a složky <code>textpattern</code>. Doporučené směrnice jsou:</p
@@ -272,40 +242,32 @@
     AddType image/svg+xml  svg svgz
     AddEncoding gzip       svgz
   </IfModule>
-  # END Textpattern</code></pre>
-        ]]></item>
+  # END Textpattern</code></pre>        ]]></item>
         <item id="index_inaccessible" title="Soubor index.php je nedostupný"><![CDATA[
 <h2>Soubor index.php je nedostupný</h2>
-<p>Hlavní soubor <code>index.php</code>, určený pro tento web jako základní, je pro server nečitelný. Zkontroluj, zda existuje a jeho oprávnění.</p>
-        ]]></item>
+<p>Hlavní soubor <code>index.php</code>, určený pro tento web jako základní, je pro server nečitelný. Zkontroluj, zda existuje a jeho oprávnění.</p>        ]]></item>
         <item id="missing_files" title="Chybějící soubory"><![CDATA[
 <h2>Chybějící soubory</h2>
-<p>Některé základní soubory v instalaci Textpatternu chybí. Ujisti se, že všechny uvedené soubory jsou na serveru k dispozici a jsou ve správném umístění.</p>
-        ]]></item>
+<p>Některé základní soubory v instalaci Textpatternu chybí. Ujisti se, že všechny uvedené soubory jsou na serveru k dispozici a jsou ve správném umístění.</p>        ]]></item>
         <item id="mod_rewrite_missing" title="Modul mod_rewrite pro Apache není nainstalován"><![CDATA[
 <h2>Modul mod_rewrite pro Apache není nainstalován.</h2>
-<p>Modul Apache <code>mod_rewrite</code> není nainstalován, nebo není povolen. Pro správné fungování systému Textpattern je doporučený. Zkontroluj, zda je modul nainstalován a povolen, nebo se obrať o pomoc na svého poskytovatele hostingových služeb.</p>
-        ]]></item>
+<p>Modul Apache <code>mod_rewrite</code> není nainstalován, nebo není povolen. Pro správné fungování systému Textpattern je doporučený. Zkontroluj, zda je modul nainstalován a povolen, nebo se obrať o pomoc na svého poskytovatele hostingových služeb.</p>        ]]></item>
         <item id="modified_files" title="Změněné soubory"><![CDATA[
 <h2>Změněné soubory</h2>
-<p>Soubory jsou označeny jako změněné, pokud se jejich příslušný kontrolní součet liší od kontrolního soupisu v systému Textpattern. Pokud se nějaké soubory v instalaci Textpatternu liší od očekávaných, jsou zde zvýrazněny.</p>
-        ]]></item>
+<p>Soubory jsou označeny jako změněné, pokud se jejich příslušný kontrolní součet liší od kontrolního soupisu v systému Textpattern. Pokud se nějaké soubory v instalaci Textpatternu liší od očekávaných, jsou zde zvýrazněny.</p>        ]]></item>
         <item id="mysql_table_errors" title="Chyby v tabulce MySQL"><![CDATA[
 <h2>Chyby v tabulce MySQL</h2>
-<p>Něco je pravděpodobně poškozeno v tabulkách databáze MySQL. Pokus se příslušné tabulky opravit pomocí nástroje pro přístup k databázím, jako je <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>, nebo <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a></p>
-        ]]></item>
+<p>Něco je pravděpodobně poškozeno v tabulkách databáze MySQL. Pokus se příslušné tabulky opravit pomocí nástroje pro přístup k databázím, jako je <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, nebo <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></p>        ]]></item>
         <item id="no_temp_dir" title="Adresář dočasných souborů není určen"><![CDATA[
 <h2>Adresář dočasných souborů není určen</h2>
-<p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>
-        ]]></item>
+<p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>        ]]></item>
         <item id="old_placeholder_exists" title="Adresář rubriky již existuje"><![CDATA[
 <h2>Adresář rubriky již existuje</h2>
 <p>Soubory adresářů existujících rubrik budou v konfliktu se schématem v <code>.htaccess</code>. Pokud jsou hlášené soubory zástupci, odstraňte je.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Nelze číst z kořenového adresáře"><![CDATA[
 <h2>Nelze číst z kořenového adresáře</h2>
-<p>Nelze číst z adresáře obsahujícího soubor <code>index.php</code>. Zkontroluj oprávnění.</p>
-        ]]></item>
+<p>Nelze číst z adresáře obsahujícího soubor <code>index.php</code>. Zkontroluj oprávnění.</p>        ]]></item>
         <item id="php_version_required" title="Minimální systémové požadavky"><![CDATA[
 <h2>Minimální systémové požadavky</h2>
 <p>Textpattern vyžaduje funkce obsažené v programovacím jazyce PHP a MySQL. prohlédni si následující tabulku k určení minimálních systémových požadavků:</p>
@@ -344,27 +306,23 @@
 </div>
 <p>Kromě výše uvedených požadavků na systém jsou požadovány následující rozšíření PHP:</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>
-        ]]></item>
+<p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>        ]]></item>
         <item id="setup_still_exists" title="Složka setup stále existuje"><![CDATA[
-<h2>Složka setup stále existuje</h2>
-<p>Po nainstalování systému Textpattern již není složka <code>setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>
-        ]]></item>
+<h2>Složka <em>setup</em> stále existuje</h2>
+<p>Po nainstalování systému Textpattern již není složka <code>setup</code> potřeba a doporučujeme ji z bezpečnostních důvodů smazat!</p>        ]]></item>
         <item id="site_url_mismatch" title="Chybná webová adresa (doména)"><![CDATA[
 <h2>Chybná webová adresa (doména)</h2>
 <p>Adresa URL webu uvedená v Nastavení/Server neodpovídá skutečné adrese URL, kterou používáš pro prohlížení svých webových stránek.</p>
 <p>Pokud jsou tvoje webové stránky dosažitelné prostřednictvím více různých adres URL, nebo v případě, že odkazy na tvých webových stránkách fungují správně, můžeš toto upozornění bez obav ignorovat.</p>
-<p>V opačném případě je doporučeno opravit nastavení ‘Webová adresa (doména)‘ v předvolbách Správce. Kvalifikovaný odhad správné adresy URL webu je zobrazen ve zprávě Poslední kontrola před odletem na kartě Diagnostika.</p>
-        ]]></item>
+<p>V opačném případě je doporučeno opravit nastavení ‘Webová adresa (doména)‘ v předvolbách Správce. Kvalifikovaný odhad správné adresy URL webu je zobrazen ve zprávě Poslední kontrola před odletem na kartě Diagnostika.</p>        ]]></item>
         <item id="some_php_functions_disabled" title="Následující funkce PHP […] jsou na serveru vypnuty"><![CDATA[
 <h2>Následující funkce PHP: […] jsou na serveru vypnuty</h2>
 <p>To znamená, že tvoje hostingová společnost nebo správce serveru zakázal jednu nebo více PHP funkcí, z nichž některé mohou mít vliv na chod Textpatternu.</p>
-<p>Další informace najdeš v <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentaci Textpattern <span class = "ui-icon ui-icon-extlink"> (otevře externí odkaz v novém okně)</span></a>.</p>
-        ]]></item>
+<p>Další informace najdeš v <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentaci Textpattern <span class = "ui-icon ui-icon-extlink"> (otevře externí odkaz v novém okně)</span></a>.</p>        ]]></item>
         <item id="textpattern_version_update" title="Aktualizace verze Textpattern CMS"><![CDATA[
 <h2>Aktualizace Textpattern CMS</h2>
 <p>K dispozici je novější verze Textpattern CMS. Chceš-li využít nejnovějších funkcí a zvýšit bezpečnost, je doporučeno provést upgrade.</p>
@@ -374,31 +332,26 @@
     <li>V případě, že se liší poslední dvě číslice od tvojí současné verze, upgrade může vyžadovat aktualizace některých pluginů, nebo témat, i když vše bude pravděpodobně nadále v omezené míře fungovat.</li>
     <li>Pokud je odlišná první číslice nové verze od tvojí současné verze, upgrade bude pravděpodobně vyžadovat aktualizace většiny pluginů a témat. Pokud je funkce webu závislá na konkrétním pluginu nebo tématu, obrať se před zahájením upgradu na autora či komunitu.</li>
 </ul>
-        ]]></item>
+<p>Pokud se zobrazí zpráva “Vyskytl se problém při pokusu připojit se k serveru RPC”, znamená to, že nemohla být ověřena existence nové verze, nebo že server může být mimo provoz. Aktualizace jsou kontrolovány každých 24 hodin, takže je pravděpodobné, že při příští návštěvě panelu Diagnostika bude všechno v pořádku.</p>        ]]></item>
         <item id="tmp_plugin_paths_match" title="Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné"><![CDATA[
 <h2>Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné</h2>
-<p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Je to potenciální bezpečnostní riziko, které může tvé stránky nepříznivě ovlivnit. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>
-        ]]></item>
+<p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Je to potenciální bezpečnostní riziko, které může tvé stránky nepříznivě ovlivnit. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>        ]]></item>
         <item id="warn_mail_unavailable" title="V instalaci PHP chybí funkce mail()"><![CDATA[
 <h2>V instalaci PHP chybí funkce mail()</h2>
-<p>Funkce PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>
-        ]]></item>
+<p>Funkce PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>
     </group>
 
     <group id="file" title="Panel Soubory">
         <item id="file_reassign" title="Přiřadit soubor"><![CDATA[
 <h2>Přiřadit soubor</h2>
-<p>Když nahraješ soubor na místo toho, který je označen jako chybějící, je vybraný soubor nahrán na server a jsou mu v databázi přiřazeny informace původního souboru. To znamená, že název původního souboru zůstane, stejně jako všechny další související informace, jako je počet stažení a kategorie. Velikost souboru odpovídá tomu novému.</p>
-        ]]></item>
+<p>Když nahraješ soubor na místo toho, který je označen jako chybějící, je vybraný soubor nahrán na server a jsou mu v databázi přiřazeny informace původního souboru. To znamená, že název původního souboru zůstane, stejně jako všechny další související informace, jako je počet stažení a kategorie. Velikost souboru odpovídá tomu novému.</p>        ]]></item>
         <item id="file_replace" title="Nahradit soubor"><![CDATA[
 <h2>Nahradit soubor</h2>
-<p>Původní soubor bude jednoduše přepsán novým, ale původní jméno souboru zůstane zachováno. Rovněž ostatní informace o souboru, jako je počet stažení, zůstanou zachovány.</p>
-        ]]></item>
+<p>Původní soubor bude jednoduše přepsán novým, ale původní jméno souboru zůstane zachováno. Rovněž ostatní informace o souboru, jako je počet stažení, zůstanou zachovány.</p>        ]]></item>
         <item id="upload" title="Nahrát soubor"><![CDATA[
 <h2>Nahrát soubor</h2>
 <p>Tento formulář slouží k nahrávání souborů na server.</p>
-<p>Pozn.: Maximální velikost je dána hodnotou <em>Mez velikosti souborů</em> (v bajtech) v Nastavení/Správce a je také limitována konfigurací PHP v <code>php. ini</code> (post_max_size, upload_max_filesize a memory_limit).</p>
-        ]]></item>
+<p>Pozn.: Maximální velikost je dána hodnotou <em>Mez velikosti souborů</em> (v bajtech) v Nastavení/Správce a je také limitována konfigurací PHP v <code>php. ini</code> (post_max_size, upload_max_filesize a memory_limit).</p>        ]]></item>
     </group>
 
     <group id="form" title="Panel Formy">
@@ -417,30 +370,25 @@
 <pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
 <p>Formy lze použít i k opakovanému zobrazení obsahu, například záhlaví a zápatí v šablonách stránek. To znamená, že obsah existuje pouze na jednom místě a pokud se rozhodneš ho změnit, stačí to udělat jednou. Zobrazování obsahu z formuláře se obvykle provádí pomocí:</p>
 <pre><code>&lt;txp:output_form form="forma_nejakeho_jmena" /&gt;</code></pre>
-<p>Forma může mít velikost až 64 KB. Příklad zápatí může obsahovat nadpisy, odkazy, podmínkové tagy a odkazy na jiné formy, jako například <code>seznam_clanku</code>.</p>
-        ]]></item>
+<p>Forma může mít velikost až 64 KB. Příklad zápatí může obsahovat nadpisy, odkazy, podmínkové tagy a odkazy na jiné formy, jako například <code>seznam_clanku</code>.</p>        ]]></item>
     </group>
 
     <group id="image" title="Panel Obrázky">
         <item id="create_thumbnail" title="Vytvořit náhled"><![CDATA[
 <h2>Vytvořit náhled</h2>
 <p>Umožňuje vytvořit (nebo znovu vytvořit) z obrázku plné velikosti náhledový obrázek a určit mu rozměry.</p>
-<p>Lze zadat pouze jeden z rozmerů, druhý bude dopočítán automaticky podle poměru stran obrázku. Zatržením volby ‘Oříznout‘ bude náhled oříznut od středu obrázku.</p>
-        ]]></item>
+<p>Lze zadat pouze jeden z rozmerů, druhý bude dopočítán automaticky podle poměru stran obrázku. Zatržením volby ‘Oříznout‘ bude náhled oříznut od středu obrázku.</p>        ]]></item>
         <item id="replace_image_form" title="Nahradit obrázek"><![CDATA[
 <h2>Nahradit obrázek</h2>
-<p>Obrázek, který sem nahraješ, prostě přepíše ten, který již pod tímto číslem v databázi existuje.</p>
-        ]]></item>
+<p>Obrázek, který sem nahraješ, prostě přepíše ten, který již pod tímto číslem v databázi existuje.</p>        ]]></item>
         <item id="upload_image" title="Nahrát obrázek"><![CDATA[
 <h2>Obrázky: Nahrát obrázek</h2>
 <p>Nahrát jeden nebo více obrázků na server.</p>
-<p>Po nahrání obrázku do adresáře <code>images</code> zůstane původní jméno obrázku zachováno v databázi; současně je mu přiděleno nové jméno (id) ve tvaru pořadové číslo. přípona (např. 4444. jpg).</p>
-        ]]></item>
+<p>Po nahrání obrázku do adresáře <code>images</code> zůstane původní jméno obrázku zachováno v databázi; současně je mu přiděleno nové jméno (id) ve tvaru pořadové číslo. přípona (např. 4444. jpg).</p>        ]]></item>
         <item id="upload_thumbnail" title="Nahrát náhled"><![CDATA[
 <h2>Nahrát náhled</h2>
 <p>K obrázkům plné velikosti je možné přiřadit jejich miniatury. To je užitečné při vytváření odkazů na obrázky nebo jejich přehledů.</p>
-<p>Odkaz na náhled obrázku se dělá stejně jako odkaz na obrázek s tím rozdílem, že ke jménu souboru se přidává písmeno <code>t</code>. Například odkaz na miniaturu obrázku plné velikosti uloženého v adresáři <code>/images/12.jpg</code> musí znít <code>/images/12t.jpg</code>.</p>
-        ]]></item>
+<p>Odkaz na náhled obrázku se dělá stejně jako odkaz na obrázek s tím rozdílem, že ke jménu souboru se přidává písmeno <code>t</code>. Například odkaz na miniaturu obrázku plné velikosti uloženého v adresáři <code>/images/12.jpg</code> musí znít <code>/images/12t.jpg</code>.</p>        ]]></item>
     </group>
 
     <group id="lang" title="Panel Jazyky">
@@ -449,8 +397,7 @@
 <p>Vlož obsah textové sady do tohoto pole a stiskni tlačítko Nahrát.</p>
 <p>Na začátku by měla sada obsahovat údaj o tom, pro který nainstalovaný jazyk je určena:
 např.: #@language cs-cz</p>
-<p>Textové sady často uveřejňují autoři pluginů ke stažení. Potom je možné takovou textovou sadu přeložit a poskytnout autorovi pluginu k uveřejnění, nebo ji poskytnout národní komunitě.</p>
-        ]]></item>
+<p>Textové sady často uveřejňují autoři pluginů ke stažení. Potom je možné takovou textovou sadu přeložit a poskytnout autorovi pluginu k uveřejnění, nebo ji poskytnout národní komunitě.</p>        ]]></item>
     </group>
 
     <group id="link" title="Panel Odkazy">
@@ -460,98 +407,80 @@ např.: #@language cs-cz</p>
         ]]></item>
         <item id="link_sort" title="Řazení odkazů"><![CDATA[
 <h2>Řazení odkazů</h2>
-<p>Užitečné pro třídění odkazů v národním jazyce.</p>
-        ]]></item>
+<p>Užitečné pro třídění odkazů v národním jazyce.</p>        ]]></item>
         <item id="link_url" title="URL"><![CDATA[
 <h2>URL</h2>
-<p>Url adresa odkazu. Jestliže odkaz míří na jiný web, musí být na jejím začátku <code>http://</code> nebo <code>https://</code>.</p>
-        ]]></item>
+<p>Url adresa odkazu. Jestliže odkaz míří na jiný web, musí být na jejím začátku <code>http://</code> nebo <code>https://</code>.</p>        ]]></item>
     </group>
 
     <group id="login" title="Přihlašovací panel">
         <item id="remember_login" title="Uložit pro tento prohlížeč"><![CDATA[
 <h2>Uložit pro tento prohlížeč</h2>
 <p>Je-li tato volba zatržena, zůstaneš v prohlížeči do Textpattern přihlášen(a), dokud se neodhlásíš. Pokud necháš pole nezatržené, dojde po určité době nečinnosti automaticky k odhlášení.</p>
-<p>Vyžaduje, aby měl prohlížeč zapnuté cookies.</p>
-        ]]></item>
+<p>Vyžaduje, aby měl prohlížeč zapnuté cookies.</p>        ]]></item>
     </group>
 
     <group id="plugin" title="Panel Pluginy">
         <item id="install_plugin" title="Instalovat plugin"><![CDATA[
-<h2>Instalavat plugin</h2>
+<h2>Instalovat plugin</h2>
 <p>Vlož obsah z textového souboru pluginu a stiskni tlačítko Nahrát. Jestliže nahraješ plugin stejného jména již nainstalovaného pluginu, bude plugin přepsán novou verzí.</p>
-<p>Vkládaný text pluginu <strong>není</strong> PHP kód, nýbrž text kódovaný BASE64, obvykle s hlavičkou obsahující informace o pluginu (název pluginu, verze, popis, jméno autora, atd.)</p>
-        ]]></item>
+<p>Vkládaný text pluginu <strong>není</strong> PHP kód, nýbrž text kódovaný BASE64, obvykle s hlavičkou obsahující informace o pluginu (název pluginu, verze, popis, jméno autora, atd.)</p>        ]]></item>
     </group>
 
     <group id="prefs" title="Panel Nastavení">
         <item id="admin_side_plugins" title="Používat pluginy pro správu?"><![CDATA[
 <h2>Používat pluginy pro správu?</h2>
 <p>Pluginy pro administrační prostředí mohou změnit fungování administrační části systému Textpattern. Mohou se napojit na již existující procesy, jako např. tvorbu a úpravy článků. Některé přidají do administrace nové panely s rozšiřujícími funkcemi.</p>
-<p>Více se o pluginech dozvíš na stránce <a rel="external" target="_blank" href="http://docs.textpattern.io/development/">Extending Textpattern</a> obsažené v <a rel="external" target="_blank" title="docs.textpattern.io" href="http://docs.textpattern.io/">Dokumentaci Textpatternu</a>.<br>Pluginy všech kategorií jsou shromážděny na <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a>.</p>
-        ]]></item>
+<p>Více se o pluginech dozvíš na stránce <a rel="external" target="_blank" href="http://docs.textpattern.io/development/">Extending Textpattern</a> obsažené v <a rel="external" target="_blank" title="docs.textpattern.io" href="http://docs.textpattern.io/">Dokumentaci Textpatternu</a>.<br>Pluginy všech kategorií jsou shromážděny na <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a>.</p>        ]]></item>
         <item id="advanced_options" title="Rozšířené možnosti"><![CDATA[
 <h2>Rozšířené možnosti</h2>
 <p>Zobrazit skupinu pokročilých předvoleb, kde lze nakonfigurovat další nastavení, například:</p>
 <ul>
     <li>povolit PHP funkce v <code>txp:evaluate</code>.</li>
     <li>Typy šablon vlastních forem.</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
         <item id="allow_article_php_scripting" title="Povolit PHP v článcích?"><![CDATA[
 <h2>Povolit PHP v článcích?</h2>
-<p>Tato volba umožní autorům používat příkazy PHP v článcích. Autor musí mít dostatečná práva. (Ve výchozím stavu má taková práva pouze <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Vydavatel (Publisher)’ <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> a <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Šéfredaktor (Managing Editor)’ <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>).</p>
-<p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na http://docs.textpattern.io/tags/php" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>
-        ]]></item>
+<p>Tato volba umožní autorům používat příkazy PHP v článcích. Autor musí mít dostatečná práva. (Ve výchozím stavu má taková práva pouze <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Vydavatel (Publisher)’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">‘Šéfredaktor (Managing Editor)’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>).</p>
+<p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na http://docs.textpattern.io/tags/php" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
         <item id="allow_form_override" title="Povolit ruční volbu forem?"><![CDATA[
 <h2>Povolit ruční volbu forem?</h2>
-<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si jinou formu článku, která bude pro tento článek použita namísto výchozí. Políčko s výběrem je na stránce Psaní dostupné, jestliže je tato možnost v ‘Nastavení ‘ povolena.</p>
-        ]]></item>
+<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si jinou formu článku, která bude pro tento článek použita namísto výchozí. Políčko s výběrem je na stránce Psaní dostupné, jestliže je tato možnost v ‘Nastavení ‘ povolena.</p>        ]]></item>
         <item id="allow_page_php_scripting" title="Povolit PHP na stránkách?"><![CDATA[
 <h2>Povolit PHP na stránkách?</h2>
 <p>Volba <em>Ano</em> umožňuje používání PHP kódu v šablonách stránek a forem.</p>
-<p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na http://docs.textpattern.io/tags/php" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>
-        ]]></item>
+<p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na http://docs.textpattern.io/tags/php" href="http://docs.textpattern.io/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
         <item id="archive_dateformat" title="Tvar data pro archiv"><![CDATA[
 <h2>Tvar data pro archiv</h2>
-<p>Jakým způsobem se bude zobrazovat datum článků v rubrikách tvých stránek.</p>
-        ]]></item>
+<p>Jakým způsobem se bude zobrazovat datum článků v rubrikách tvých stránek.</p>        ]]></item>
         <item id="articles_use_excerpts" title="Používat anotace článků?"><![CDATA[
 <h2>Používat anotace článků?</h2>
-<p>Volba ‘Ne‘ skryje pole pro anotaci článku na stránce Psaní.</p>
-        ]]></item>
+<p>Volba ‘Ne‘ skryje pole pro anotaci článku na stránce Psaní.</p>        ]]></item>
         <item id="attach_titles_to_permalinks" title="Přidávat názvy článků do odkazů?"><![CDATA[
 <h2>Přidávat názvy článků do odkazů?</h2>
 <p>Tato volba připojí zjednodušenou podobu názvu článku do URL odkazu. Odkaz je při uložení článku vytvořený systémem automaticky, autor ho může ručně upravit (v poli ‘Název do odkazů‘ pod položkou ‘Meta‘).</p>
-<p>Tato volba má smysl jedině používáš-li ‘hezké‘ URL. V některých jazycích může být výsledkem nepěkně vyhlížející dlouhý řetězec; v takovém případě je lepší tuto funkci vypnout.</p>
-        ]]></item>
-        <item id="auto_dst" title="Automaticky nastavovat letní čas?"><![CDATA[
-<h2>Automaticky nastavovat letní čas?</h2>
+<p>Tato volba má smysl jedině používáš-li ‘hezké‘ URL. V některých jazycích může být výsledkem nepěkně vyhlížející dlouhý řetězec; v takovém případě je lepší tuto funkci vypnout.</p>        ]]></item>
+        <item id="auto_dst" title="Automaticky nastavovat letní čas?"><![CDATA[<h2>Automaticky nastavovat letní čas?</h2>
 <p>Toto nastavení umožňuje Textpatternu automaticky v příslušný den změnit letní a zimní čas.<br>Je-li tato volba nastavena na ‘Ne’, je možné volit ručně následující nastavení ‘Platí nyní letní čas?’</p>]]></item>
         <item id="comment_means_site_updated" title="Nový komentář je považován za změnu?"><![CDATA[
 <h2>Nový komentář je považován za změnu?</h2>
-<p>Databáze udržuje záznam o tom, kdy byly tvé stránky naposledy změněny. Nastavíš-li tuto volbu na ‘Ano‘, každý nový komentář bude představovat změnu. Čas poslední změny se používá např. pro funkci <code>Odesílat hlavičku poslední úpravy</code>.</p>
-        ]]></item>
+<p>Databáze udržuje záznam o tom, kdy byly tvé stránky naposledy změněny. Nastavíš-li tuto volbu na ‘Ano‘, každý nový komentář bude představovat změnu. Čas poslední změny se používá např. pro funkci <code>Odesílat hlavičku poslední úpravy</code>.</p>        ]]></item>
         <item id="comment_nofollow" title="Používat v komentářích rel=&quot;nofollow&quot;?"><![CDATA[
 <h2>Používat v komentářích rel="nofollow"?</h2>
-<p>Tato volba přidá do odkazů v komentářích další atribut. Je určený k tomu, aby odradil spammery od zneužívání komentářů na vašich stránkách, a za jeho zavedením stojí řada předních vyhledávacích služeb a programátorů. Více viz <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’s announcement <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>.</p>
-<p><strong>Poznámka:</strong> Tato volba nijak neovlivňuje funkčnost či hodnocení tvých stránek. Má snížit vliv komentářů, jestliže některé vyhledávače hodnotí stránky odkazované těmito komentáři.</p>
-        ]]></item>
+<p>Tato volba přidá do odkazů v komentářích další atribut. Je určený k tomu, aby odradil spammery od zneužívání komentářů na vašich stránkách, a za jeho zavedením stojí řada předních vyhledávacích služeb a programátorů. Více viz <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’s announcement <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p><strong>Poznámka:</strong> Tato volba nijak neovlivňuje funkčnost či hodnocení tvých stránek. Má snížit vliv komentářů, jestliže některé vyhledávače hodnotí stránky odkazované těmito komentáři.</p>        ]]></item>
         <item id="comments_are_ol" title="Vypsat komentáře jako číslovaný seznam?"><![CDATA[
 <h2>Vypisovat komentáře jako číslovaný seznam?</h2>
 <p>Určuje, zda budou komentáře článku vypsány jako číslovaný seznam<br> (v HTML bude použit tag <code>&lt;ol&gt;</code> s položkami <code>&lt;li&gt;</code>), nebo zda místo toho budou komentáře vypsány v tagu <code>&lt;div&gt;</code>.</p>
-<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>, found in the <code>comments_display</code> form.</p>
-        ]]></item>
+<p>With either value, you can override the tags used on an individual form basis by modifying the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, found in the <code>comments_display</code> form.</p>        ]]></item>
         <item id="comments_auto_append" title="Připojovat komentáře k článku automaticky?"><![CDATA[
 <h2>Připojovat komentáře k článku automaticky?</h2>
 <p>Tato volba určuje, zda budou komentářové formuláře a komentáře ke všem článkům připojovány automaticky (připojením obsahu generovaného formou <code>comments_display</code>).</p>
-<p>Ve většině případů zde bude nastaveno “Ne”, protože to umožňuje větší flexibilitu v pozicování komentářů v rámci designu stránek. Pak je ale zapotřebí tag <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> manuálně vložit do šablony článků na místo, kde chceš mít zobrazování komentářů.</p>
-<p>Jestliže jsi zjistil, že se komentáře článku zobrazují duplicitně, pak šablona obsahuje tag <code>&lt;txp:comments /&gt;</code> a zároveň je zde volba ‘Připojovat komentáře k článku automaticky?’ nastavena jako ‘ANO’.</p>
-        ]]></item>
+<p>Ve většině případů zde bude nastaveno “Ne”, protože to umožňuje větší flexibilitu v pozicování komentářů v rámci designu stránek. Pak je ale zapotřebí tag <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> manuálně vložit do šablony článků na místo, kde chceš mít zobrazování komentářů.</p>
+<p>Jestliže jsi zjistil, že se komentáře článku zobrazují duplicitně, pak šablona obsahuje tag <code>&lt;txp:comments /&gt;</code> a zároveň je zde volba ‘Připojovat komentáře k článku automaticky?’ nastavena jako ‘ANO’.</p>        ]]></item>
         <item id="comments_dateformat" title="Tvar data pro komentáře"><![CDATA[
 <h2>Tvar data pro komentáře</h2>
-<p>Podoba data zobrazeného u komentářů.</p>
-        ]]></item>
+<p>Podoba data zobrazeného u komentářů.</p>        ]]></item>
         <item id="comments_default_invite" title="Výchozí výzva pro komentáře"><![CDATA[
 <h2>Výchozí výzva pro komentáře</h2>
 <p>Povolíš-li čtenářům psát komentáře ke článkům, zde můžeš nastavit výchozí výzvu.<br>Například:</p>
@@ -561,44 +490,36 @@ např.: #@language cs-cz</p>
     <li>Ohlasy</li>
     <li>Vložit poznámku</li>
 </ul>
-<p>Pro každý článek lze tuto výzvu změnit při psaní a úpravách článku.</p>
-        ]]></item>
+<p>Pro každý článek lze tuto výzvu změnit při psaní a úpravách článku.</p>        ]]></item>
         <item id="comments_disabled_after" title="Kdy vyprší lhůta pro vkládání komentářů"><![CDATA[
 <h2>Kdy vyprší lhůta pro vkládání komentářů</h2>
-<p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba ’Nikdy’, která umožní komentovat stále).</p>
-        ]]></item>
+<p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba 'Nikdy', která umožní komentovat stále).</p>        ]]></item>
         <item id="comments_disallow_images" title="Zakázat vkládání obrázků do komentářů?"><![CDATA[
 <h2>Zakázat vkládání obrázků do komentářů?</h2>
 <p>Nastavením ‘Ano’ budou jakékoliv obrázky vložené do komentářů odstraněny.</p        ]]></item>
         <item id="comments_mode" title="Způsob zobrazení komentářů"><![CDATA[
 <h2>Způsob zobrazení komentářů</h2>
 <p>Vybereš-li ‘do stránky’ (doporučeno), po kliknutí se zobrazí obnovená stránka s článkem, pod nímž jsou zobrazeny všechny komentáře.</p>
-<p>Vybereš-li ‘do okna’, budou se komentáře zobrazovat v malém okně, které se otevře po kliknutí na odkaz komentářů (použitím formy <code>popup_comments</code>).</p>
-        ]]></item>
+<p>Vybereš-li ‘do okna’, budou se komentáře zobrazovat v malém okně, které se otevře po kliknutí na odkaz komentářů (použitím formy <code>popup_comments</code>).</p>        ]]></item>
         <item id="comments_moderate" title="Spravovat komentáře?"><![CDATA[
 <h2>Spravovat komentáře?</h2>
-<p>Je-li tato volba zapnuta, žádný komentář se na stránkách nezobrazí, dokud nebude prohlédnut a schválen. Každý komentář je třeba ručně schválit. (Autor článku bude na každý nový komentář upozorněn emailem.)</p>
-        ]]></item>
+<p>Je-li tato volba zapnuta, žádný komentář se na stránkách nezobrazí, dokud nebude prohlédnut a schválen. Každý komentář je třeba ručně schválit. (Autor článku bude na každý nový komentář upozorněn emailem.)</p>        ]]></item>
         <item id="comments_on_default" title="Implicitně zapnuty?"><![CDATA[
 <h2>Komentáře implicitně zapnuty?</h2>
 <p>Je-li tato volba zapnuta, budou komentáře automaticky pro každý nový článek povoleny. Je-li vypnuta, je možné komentáře pro každý článek, u kterého mají komentáře být, ručně zapnout při psaní článku.</p>
-<p>Poznámka: Komentáře lze kdykoliv pro každý článek vypnout či zapnout.</p>
-        ]]></item>
+<p>Poznámka: Komentáře lze kdykoliv pro každý článek vypnout či zapnout.</p>        ]]></item>
         <item id="comments_require_email" title="Komentáře vyžadují emailovou adresu?"><![CDATA[
 <h2>Komentáře vyžadují emailovou adresu?</h2>
-<p>Je-li tato volba zapnuta, čtenáři budou muset zadat svoji emailovou adresu, aby byl jejich komentář přijat.</p>
-        ]]></item>
+<p>Je-li tato volba zapnuta, čtenáři budou muset zadat svoji emailovou adresu, aby byl jejich komentář přijat.</p>        ]]></item>
         <item id="comments_require_name" title="Komentář vyžaduje jméno?"><![CDATA[
 <h2>Komentáře vyžadují jméno?</h2>
-<p>Je-li tato volba zapnuta, čtenáři budou muset vyplnit své jméno, aby byl jejich komentář přijat.</p>
-        ]]></item>
+<p>Je-li tato volba zapnuta, čtenáři budou muset vyplnit své jméno, aby byl jejich komentář přijat.</p>        ]]></item>
         <item id="comments_sendmail" title="Zasílat komentáře autorovi?"><![CDATA[
 <h2>Zasílat komentáře autorovi?</h2>
-<p>Je-li tato volba zapnuta, bude autor článku dostávat emailem kopii každého nového komentáře ke svému článku</p>
-        ]]></item>
+<p>Je-li tato volba zapnuta, bude autor článku dostávat emailem kopii každého nového komentáře ke svému článku</p>        ]]></item>
         <item id="comments_use_fat_textile" title="Povolit rozšířené Textile značkování?"><![CDATA[
 <h2>Allow more Textile markup in comments?</h2>
-<p>Pokud je tato volba nastavena na ‘Ano’, mohou komentáře obsahovat značkování <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>pro prvky, které by jinak byly zobrazeny jako prostý text:</p>
+<p>Pokud je tato volba nastavena na ‘Ano’, mohou komentáře obsahovat značkování <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>pro prvky, které by jinak byly zobrazeny jako prostý text:</p>
 <ul>
     <li>nadpisy</li>
     <li>číslované a nečíslované seznamy</li>
@@ -607,8 +528,7 @@ např.: #@language cs-cz</p>
     <li>code</li>
     <li>rozšířená syntaxe blokových prvků (bc.., bq.., atd.)</li>
 </ul>
-<p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>
-        ]]></item>
+<p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>        ]]></item>
         <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[]]></item>
         <item id="custom_overview" title="Vlastní pole"><![CDATA[
 <h2>Vlastní pole</h2>
@@ -618,16 +538,13 @@ např.: #@language cs-cz</p>
 <li>Neporuručuje se v názvu pole použítí mezer mezi slovy, protože takový název potom zpravidla <em>nelze</em> použít jako parametr řazení, nebo filtrování v tagu article_custom. Místo mezer je v názvech užitečnější používat podtržítka.</li>
 <li>Nedoporučuje se volit názvy polí shodné s názvy vyhrazených polí Textpatternu. Nepoužívej například<code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, neboť výsledky zpracování dat mohou být podivné.</li>
 <li>Data v každém poli jsou omezena na 255 znaků textu.</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
         <item id="dateformat" title="Tvar data"><![CDATA[
 <h2>Tvar data</h2>
-<p>Tato volba ovlivní podobu, v jaké bude datum zobrazováno na hlavní straně.</p>
-        ]]></item>
+<p>Tato volba ovlivní podobu, v jaké bude datum zobrazováno na hlavní straně.</p>        ]]></item>
         <item id="default_event" title="Výchozí panel administrace"><![CDATA[
 <h2>Výchozí panel administrace</h2>
-<p>Panel administračního prostředí po přihlášení (výchozí je Obsah/Psaní).</p>
-        ]]></item>
+<p>Panel administračního prostředí po přihlášení (výchozí je Obsah/Psaní).</p>        ]]></item>
         <item id="default_publish_status" title="Výchozí stav článku"><![CDATA[
 <h2>Výchozí stav článku</h2>
 <p>Určuje základní stav článku po vydání.</p>
@@ -644,17 +561,14 @@ např.: #@language cs-cz</p>
 <p><strong>Skrytý</strong> článek není viditelný mimo administrační část Textpatternu.</p>
 <p><strong>Čekající</strong> je považován za připravený k publikování a čeká na schválení. Není viditelný mimo administrační část Textpatternu.</p>
 <p><strong>Vydáno</strong> - článek je publikován a je viditelný na veřejně dostupné stránce. Je-li článek aktivní a má datum vypršení platnosti, stav <em>vydáno</em> zůstane zachován i po tomto datu, ale mimo administrační oblast bude viditelný pouze když je v Nastavení povoleno <em>vydat expirované články</em>.</p>
-<p><strong>Trvalý</strong> - článek je podobně jako při stavu <em>Vydáno</em> viditelný i mimo administrační část.</p>
-        ]]></item>
+<p><strong>Trvalý</strong> - článek je podobně jako při stavu <em>Vydáno</em> viditelný i mimo administrační část.</p>        ]]></item>
         <item id="doctype" title="Doctype"><![CDATA[
 <h2>Doctype</h2>
-<p>Nastav, jaký HTML doctype chceš používat (HTML5 nebo XHTML). Nastavení má vliv na vstupní formulář komentářů a Textile vykreslování prvků<code>&lt;abbr&gt;</code> nebo <code>&lt;acronym&gt;</code>, a <code>&lt;link&gt;</code> generovaných stylem <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>.</p>
-        ]]></item>
+<p>Nastav, jaký HTML doctype chceš používat (HTML5 nebo XHTML). Nastavení má vliv na vstupní formulář komentářů a Textile vykreslování prvků<code>&lt;abbr&gt;</code> nebo <code>&lt;acronym&gt;</code>, a <code>&lt;link&gt;</code> generovaných stylem <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>        ]]></item>
         <item id="enable_dev_preview" title="Umožnit náhled vývojové verze skinu?"><![CDATA[
 <h2>Umožnit náhled vývojové verze skinu?</h2>
 <p>Uživatelé s dostatečnými oprávněními (ve výchozím nastavení s rolí vydavatele a návrháře) mohou bezpečně vyvíjet a zobrazovat náhled nového skinu, zatímco všem ostatním uživatelům bude i nadále zobrazován starý (až do nasazení nového).</p>
-<p>Nicméně ti privilegovaní uživatelé, kteří se nechtějí na vývoji podílet, si mohou náhled vývojové verze zakázat a budou používat současný veřejný vzhled jako standardní návštěvníci stránek.</p>
-        ]]></item>
+<p>Nicméně ti privilegovaní uživatelé, kteří se nechtějí na vývoji podílet, si mohou náhled vývojové verze zakázat a budou používat současný veřejný vzhled jako standardní návštěvníci stránek.</p>        ]]></item>
         <item id="enable_short_tags" title="Povolit zkrácený zápis tagů?"><![CDATA[
 <h2>Povolit zkrácený zápis tagů</h2>
 <p>Textpattern tagy mají formu <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Povolením zkrácené notace je možné kód zredukovat vynecháním zápisu <code>txp:</code> podle následujících jednoduchých pokynů. Zde je několik příkladů na ukázku tohoto konceptu:</p>
@@ -670,45 +584,36 @@ např.: #@language cs-cz</p>
     <li>odstranit prefix <code>txp:</code>.</li>
     <li>nahradit první výskyt podtržítka zápisem <code>::</code>.</li>
 </ol>
-<p>Nastavení této volby v žádném případě neovlivňuje použití short kódů  <code>&lt;txp:output_form /&gt;</code> pro tvorbu šablon. Klidně můžeš používat zápis <code>&lt;txp::shortcode /&gt;</code>, který bude interpretován jako <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
-        ]]></item>
+<p>Nastavení této volby v žádném případě neovlivňuje použití short kódů  <code>&lt;txp:output_form /&gt;</code> pro tvorbu šablon. Klidně můžeš používat zápis <code>&lt;txp::shortcode /&gt;</code>, který bude interpretován jako <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>        ]]></item>
         <item id="enable_xmlrpc_server" title="Povolit XML-RPC server?"><![CDATA[
 <h2>Povolit XML-RPC server?</h2>
-<p>Volba ‘Ano’ umožní vzdálenou správu Textpattern (např. z desktopu, nebo mobilní aplikace) pomocí protokolu <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink"></span></a>.</p>
-        ]]></item>
+<p>Volba ‘Ano’ umožní vzdálenou správu Textpattern (např. z desktopu, nebo mobilní aplikace) pomocí protokolu <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink"></span></a>.</p>        ]]></item>
         <item id="expire_logs_after" title="Doba platnosti záznamů?"><![CDATA[
 <h2>Doba platnosti záznamů?</h2>
 <p>Používáš-li záznamy návštěv, zde můžeš nastavit, jak dlouho (kolik dní) budou záznamy uchovávány.</p>
-<p><strong>Pozn.:</strong> Staré záznamy se odstraňují vždy až v okamžiku, kdy si je zobrazíš. Pokud se na ně tedy nepodíváš několik týdnů, staré záznamy za celou tu dobu zůstanou v databázi zachovány.</p>
-        ]]></item>
+<p><strong>Pozn.:</strong> Staré záznamy se odstraňují vždy až v okamžiku, kdy si je zobrazíš. Pokud se na ně tedy nepodíváš několik týdnů, staré záznamy za celou tu dobu zůstanou v databázi zachovány.</p>        ]]></item>
         <item id="file_base_path" title="Cesta pro soubory"><![CDATA[
 <h2>Cesta pro soubory</h2>
-<p>Nastavení <strong>absolutní cesty</strong> k adresáři, kde jsou trvale uloženy soubory, které na server nahraješ. PHP musí mít oprávnění pro zápis do tohoto adresáře.</p>
-        ]]></item>
+<p>Nastavení <strong>absolutní cesty</strong> k adresáři, kde jsou trvale uloženy soubory, které na server nahraješ. PHP musí mít oprávnění pro zápis do tohoto adresáře.</p>        ]]></item>
         <item id="file_max_upload_size" title="Mez velikosti souborů (v bajtech)"><![CDATA[
 <h2>Mez velikosti souborů (v bajtech)</h2>
 Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<br>
-<strong>Pozn.</strong>: Tato hodnota je omezena také konfigurací PHP. Jestliže Textpattern zjistí, že konfigurace PHP omezuje velikost nahrávání na menší hodnotu, automaticky tuto hodnotu sníží. Pokud chceš v takovém případě nahrávání větších souborů přes prohlížeč umožnit, musíš požádat správce svého hostingu o úpravu příslušných hodnot <code>post_max_size</code>, <code>upload_max_filesize</code> a <code>memory_limit</code> v souboru <code>php.ini</code>.</p>
-        ]]></item>
+<strong>Pozn.</strong>: Tato hodnota je omezena také konfigurací PHP. Jestliže Textpattern zjistí, že konfigurace PHP omezuje velikost nahrávání na menší hodnotu, automaticky tuto hodnotu sníží. Pokud chceš v takovém případě nahrávání větších souborů přes prohlížeč umožnit, musíš požádat správce svého hostingu o úpravu příslušných hodnot <code>post_max_size</code>, <code>upload_max_filesize</code> a <code>memory_limit</code> v souboru <code>php.ini</code>.</p>        ]]></item>
         <item id="gmtoffset" title="Časové pásmo"><![CDATA[
 <h2>Časové pásmo</h2>
-<p>Pro určení správného data a času nastav zdejší časové pásmo.</p>
-        ]]></item>
+<p>Pro určení správného data a času nastav zdejší časové pásmo.</p>        ]]></item>
         <item id="img_dir" title="Adresář obrázků"><![CDATA[
 <h2>Adresář obrázků</h2>
 <p>Chceš-li změnit adresář pro obrázky, zadej ho zde. Nejprve musíš příslušný adresář vytvořit (v hlavním adresáři svých stránek) a ujistit se, že je pro PHP zapisovatelný (zpravidla nastavit práva na 777).</p>
 <p>Tato cesta je vždy <strong>relativní cesta</strong> (vzhledem k adresáři hlavní instalace Textpattern).</p>
 <p>Výchozí adreesář je <code>images</code>.</p>
-<p>Základní nastavení je <code>images</code>.</p>
-        ]]></item>
+<p>Základní nastavení je <code>images</code>.</p>        ]]></item>
         <item id="include_email_atom" title="Přidávat emailovou adresu do pramenů Atom?"><![CDATA[
 <h2>Přidávat emailovou adresu do pramenů Atom?</h2>
-<p>Tato volba umožňuje přidávat emailovou adresu autora (tak jak je nastavena ve správě autorů) do pole <code>autor</code> v pramenech Atom.</p>
-        ]]></item>
+<p>Tato volba umožňuje přidávat emailovou adresu autora (tak jak je nastavena ve správě autorů) do pole <code>autor</code> v pramenech Atom.</p>        ]]></item>
         <item id="is_dst" title="Platí nyní letní čas?"><![CDATA[
 <h2>Platí nyní letní čas?</h2>
-<p>Stanoví, zda právě platí letní čas.</p>
-        ]]></item>
+<p>Stanoví, zda právě platí letní čas.</p>        ]]></item>
         <item id="logging" title="Záznamy"><![CDATA[
 <h2>Záznamy</h2>
 <p>Zde můžeš zvolit úroveň protokolování návštěvníků:</p>
@@ -717,26 +622,21 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
     <li><strong>Jen odkazující servery:</strong> Textpattern zaznamená jen návštěvy, které byly na tvé stránky odkázány z jiných serverů</li>
     <li><strong>Žádné:</strong> Textpattern nebude návštěvy zaznamenávat</li>
 </ul>
-<p>Od verze 4.7.0 nejsou systémem Textpattern shromažďovány a uchovávány žádné infromace o IP adresách návštěvníků. Pokud shromažďujete nebo ukládáte adresy IP mimo server Textpattern, učinte prosím vhodná opatření k ukládání a použití údajů v souladu s platnými zákony, jako je například <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> a zajistětě silné zabezpečení na všech stránkách vašeho serveru a instalaci Textpattern, aby nedocházelo k ohrožení těchto údajů.</p> <p>Důrazně doporučujeme ponechat toto nastavení ve výchozím nastavení ‘Žádné‘, pokud tyto informace nutně nepotřebujete. Zároveň pak veřejně uveďte jejich zamýšlené využití.</p>
-        ]]></item>
+<p>Od verze 4.7.0 nejsou systémem Textpattern shromažďovány a uchovávány žádné infromace o IP adresách návštěvníků. Pokud shromažďujete nebo ukládáte adresy IP mimo server Textpattern, učinte prosím vhodná opatření k ukládání a použití údajů v souladu s platnými zákony, jako je například <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a zajistětě silné zabezpečení na všech stránkách vašeho serveru a instalaci Textpattern, aby nedocházelo k ohrožení těchto údajů.</p> <p>Důrazně doporučujeme ponechat toto nastavení ve výchozím nastavení ‘Žádné‘, pokud tyto informace nutně nepotřebujete. Zároveň pak veřejně uveďte jejich zamýšlené využití.</p>        ]]></item>
         <item id="max_url_len" title="Nejdelší možné URL (ve znacích)"><![CDATA[
 <h2>Maximální délka URL (ve znacích)?</h2>
-<p>Tato volba umožní ignorovat odkazy, které překročí zadanou délku. Užitečné pro omezení škod a bezpečnost webu.</p>
-        ]]></item>
+<p>Tato volba umožní ignorovat odkazy, které překročí zadanou délku. Užitečné pro omezení škod a bezpečnost webu.</p>        ]]></item>
         <item id="module_pophelp" title="Zobrazit odkazy nápovědy"><![CDATA[
 <h2>Display admin-side inline help links</h2>
-<p>Chceš-li odkazy nápovědy pro administrační prostředí skrýt, nastav zde ‘Žádné’.</p>
-        ]]></item>
+<p>Chceš-li odkazy nápovědy pro administrační prostředí skrýt, nastav zde ‘Žádné’.</p>        ]]></item>
         <item id="never_display_email" title="Skrývat emailové adresy?"><![CDATA[
 <h2>Skrývat emailové adresy?</h2>
 <p>Tato volba rozhoduje o tom, zda bude emailová adresa autora komentáře zobrazována, či ne.</p>
-<p>Ze zdvořilosti k uživatelům se doporučuje, aby emailové adresy zveřejňovány nebyly, mohou však existovat určité situace, kdy je zobrazení emailové adresy komentátora žádoucí.</p>
-        ]]></item>
+<p>Ze zdvořilosti k uživatelům se doporučuje, aby emailové adresy zveřejňovány nebyly, mohou však existovat určité situace, kdy je zobrazení emailové adresy komentátora žádoucí.</p>        ]]></item>
         <item id="override_emailcharset" title="Použít v emailech znakovou sadu ISO-8859-1 (výchozí je UTF-8)?"><![CDATA[
 <h2>Použít v emailech znakovou sadu ISO-8859-1 (výchozí je UTF-8)?</h2>
 <p>Textpattern používá kódování UTF-8, kde jen to je možné, a tedy i pro odchozí emaily. Některé starší verze poštovních klientů však toto kódování dobře nezvládají (jako např. některé verze programu Outlook). Pokud dostáváš emaily s nesmyslnými znaky, zkus zde nastavit znakovou sadu ISO-8859-1, do níž budou emaily před odesláním převedeny.</p>
-<p><strong>Pozn.:</strong> Pokud používáš jazyk, který obsahuje znaky, jež nelze v této znakové sadě zobrazit, pak ani tato volba nepomůže. Řešením je poohlédnout se po poštovním klientu s řádnou podporou UTF-8 (nebo obecně Unicode).</p>
-        ]]></item>
+<p><strong>Pozn.:</strong> Pokud používáš jazyk, který obsahuje znaky, jež nelze v této znakové sadě zobrazit, pak ani tato volba nepomůže. Řešením je poohlédnout se po poštovním klientu s řádnou podporou UTF-8 (nebo obecně Unicode).</p>        ]]></item>
         <item id="permlink_format" title="Formát adresy URL"><![CDATA[
 <h2>Formát adresy URL</h2>
 <p>Definuje metodu konstrukce URL adresy článku, když se používá v nastavení <em>Podoba stálých odkazů</em> jiný formát než ‘?=ošklivé’.</p>
@@ -745,21 +645,18 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Pokud je nastaven formát adresy URL<br> ‘<strong>s pomlčkami (nazev-clanku)</strong>’, URL adresa článku bude:</p>
 <pre><code>http://example.com/jak-trautenberk-chtel-krakonosovo-koreni</code></pre>
 <p>Pokud je nastaven formát adresy URL jako ‘<strong>velká a malá písmena (NazevClanku)</strong>’, URL adresa článku bude:</p>
-<pre><code>http://example.com/JakTrautenberkchtelKrakonosovokoreni</code></pre>
-        ]]></item>
+<pre><code>http://example.com/JakTrautenberkchtelKrakonosovokoreni</code></pre>        ]]></item>
         <item id="permlink_mode" title="Podoba stálých odkazů"><![CDATA[
 <h2>Podoba stálých odkazů</h2>
-<p>Toto nastavení určuje, jak budou vypadat stálé odkazy (URL adresy) na články, generované tagem <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>.</p>
+<p>Toto nastavení určuje, jak budou vypadat stálé odkazy (URL adresy) na články, generované tagem <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>Režim <strong>‘?=ošklivé’</strong> je nejvíce kompatibilní způsob, který bude fungovat bez jakýchkoli zásahů, je ale méně příznivý pokud jde o čitelnost a optimalizaci pro vyhledávače (SEO). V tomto režimu budou URL adresy článků na tvém webu vypadat takto:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
-<p>Všechny ostatní režimy vyžadují, aby byl na serveru nainstalován a povolen modul Apache <code>mod_rewrite</code>. Pokud server <code>mod_rewrite</code> nepodporuje, obrať se na poskytovatele webhostingu, nebo používej výše uvedený režim ‘?=ošklivé’.</p>
-        ]]></item>
+<p>Všechny ostatní režimy vyžadují, aby byl na serveru nainstalován a povolen modul Apache <code>mod_rewrite</code>. Pokud server <code>mod_rewrite</code> nepodporuje, obrať se na poskytovatele webhostingu, nebo používej výše uvedený režim ‘?=ošklivé’.</p>        ]]></item>
         <item id="plugin_cache_dir" title="Adresář pro cache pluginů"><![CDATA[
 <h2>Adresář pro cache pluginů</h2>
 <p>Toto nastavení slouží pouze tvůrcům pluginů. Do adresáře zde specifikovaného programátor vloží zdrojový kód pluginu (nezkompilovaný) a Textpattern ho automaticky načte, takže lze plugin upravovat a okamžitě vidět efekt, aniž by ho bylo nutné instalovat / aktivovat. <strong>Pozor</strong> při používání této metody – pokažený plugin (který selže při kompilaci), může pokazit i Textpattern!</p>
 <p>Standartní způsob spouštění pluginů je jejich instalace a aktivace na kartě Pluginy, nikoli z tohoto adresáře pro cache pluginů.</p>
-<p><strong>Pozn.: </strong>Nespecifikuj stejný adresář pro ‘dočasné soubory’ a ‘adresář pro cache pluginů‘. To způsobuje problémy, Textpattern se pak pokouší spustit obsah složky dočasných souborů jako pluginy.</p>
-        ]]></item>
+<p><strong>Pozn.: </strong>Nespecifikuj stejný adresář pro ‘dočasné soubory’ a ‘adresář pro cache pluginů‘. To způsobuje problémy, Textpattern se pak pokouší spustit obsah složky dočasných souborů jako pluginy.</p>        ]]></item>
         <item id="production_status" title="Stav stránek"><![CDATA[
 <h2>Stav stránek</h2>
 <p>Textpattern může běžet v jednom ze tří režimů:</p>
@@ -784,55 +681,44 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
     <li>přibližné využití paměti</li>
 </ul>
 <h3>Ostrý provoz</h3>
-<p>Na stránce se nezobrazují žádná chybová hlášení, ani diagnostické informace. Obecně platí, že nastavení ‘ostrý provoz’ je pro návštěvníky webu nejvýhodnější (vaše chyby je nezajímají a režim ostrý provoz též nejméně zatěžuje server).</p>
-        ]]></item>
+<p>Na stránce se nezobrazují žádná chybová hlášení, ani diagnostické informace. Obecně platí, že nastavení ‘ostrý provoz’ je pro návštěvníky webu nejvýhodnější (vaše chyby je nezajímají a režim ostrý provoz též nejméně zatěžuje server).</p>        ]]></item>
         <item id="public_theme_name" title="Téma vzhledu stránek"><![CDATA[
 <h2>Téma vzhledu stránek</h2>
-<p>Výchozí téma vzhledu tvých webových stránek. Předinstalované téma je součástí Textpatternu, plus možnost zahájení bez tématu. Balíčky témat můžeš přidávat do adresáře <code>textpattern/themes</code>, odkud jsou dostupné k použití.</p>
-        ]]></item>
+<p>Výchozí téma vzhledu tvých webových stránek. Předinstalované téma je součástí Textpatternu, plus možnost zahájení bez tématu. Balíčky témat můžeš přidávat do adresáře <code>textpattern/themes</code>, odkud jsou dostupné k použití.</p>        ]]></item>
         <item id="publish_expired_articles" title="Vydat expirované články?"><![CDATA[
 <h2>Vydat expirované články?</h2>
-<p>Pokud zde nastavíš ‘Ano’, budou se prošlé články nadále zobrazovat i po uplynutí jejich platnosti. Pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> můžeš prošlé články zobrazit odlišným způsobem (třeba nastavením stylu css).</p>
-<p>Je-li zde nastaveno ‘Ne’, prošlé články budou odstraněny z veřejně přístupných stránek a při pokusu o zobrazení takové stránky návštěvník uvidí HTTP zprávu ‘410 Gone’.<br>Výchozí nastavení je ‘Ne’.</p>
-        ]]></item>
+<p>Pokud zde nastavíš ‘Ano’, budou se prošlé články nadále zobrazovat i po uplynutí jejich platnosti. Pomocí tagu <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> můžeš prošlé články zobrazit odlišným způsobem (třeba nastavením stylu css).</p>
+<p>Je-li zde nastaveno ‘Ne’, prošlé články budou odstraněny z veřejně přístupných stránek a při pokusu o zobrazení takové stránky návštěvník uvidí HTTP zprávu ‘410 Gone’.<br>Výchozí nastavení je ‘Ne’.</p>        ]]></item>
         <item id="publisher_email" title="Zaslat přihlašovací údaje z této emailové adresy"><![CDATA[
 <h2>Zasílat přihlašovací údaje z této emailové adresy</h2>
 <p>Zde můžeš zadat emailovou adresu, která bude uvedena jako adresa odesilatele ve zprávách s přihlašovacími údaji pro nové uživatele.</p>
-<p>Jestliže je toto pole prázdné, nebo obsahuje chybnou emailovou adresu, použije Textpattern jméno a adresu právě přihlášeného uživatele.</p>
-        ]]></item>
+<p>Jestliže je toto pole prázdné, nebo obsahuje chybnou emailovou adresu, použije Textpattern jméno a adresu právě přihlášeného uživatele.</p>        ]]></item>
         <item id="rss_how_many" title="Kolik článků má být zahrnuto do pramenů?"><![CDATA[
 <h2>Kolik článků má být zahrnuto do pramenů?</h2>
 <p>Zde se nastavuje nejvyšší počet posledních článků, jež se budou převádět do formátu pro šíření prostřednictvím pramenů RSS a Atom.</p>
-<p>Doporučeno je nízké číslo v rozmení od <code>5</code>do <code>15</code>.</p>
-        ]]></item>
+<p>Doporučeno je nízké číslo v rozmení od <code>5</code>do <code>15</code>.</p>        ]]></item>
         <item id="send_lastmod" title="Odesílat hlavičku poslední úpravy?"><![CDATA[
 <h2>Odesílat hlavičku poslední úpravy?</h2>
 <p>Je-li tato volba zapnuta, Textpattern bude číst HTTP hlavičku <code>If-Modified-Since</code> čtenářova prohlížeče a porovná ji s časem poslední změny článku či stránky. Pokud se od poslední návštěvy nic nezměnilo, odešle se zpět hlavička, jež prohlížeči doporučí, aby použil místní kopii z vyrovnávací paměti.</p>
-<p>Tímto způsobem lze ušetřit na přenosu dat, na čase a na zatížení serveru.</p>
-        ]]></item>
+<p>Tímto způsobem lze ušetřit na přenosu dat, na čase a na zatížení serveru.</p>        ]]></item>
         <item id="show_comment_count_in_feed" title="Zobrazovat počty komentářů v pramenech?"><![CDATA[
 <h2>Zobrazovat počty komentářů v pramenech?</h2>
-<p>Tato volba zapne zobrazování počtu komentářů u článků šířených v pramenech RSS/Atom.</p>
-        ]]></item>
+<p>Tato volba zapne zobrazování počtu komentářů u článků šířených v pramenech RSS/Atom.</p>        ]]></item>
         <item id="site_slogan" title="Motto serveru"><![CDATA[
 <h2>Motto stránek</h2>
-<p><a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_slogan">Motto stránek <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> je slogan, nebo krátký popis tvého webu. Bude použit jako popis tvých stránek všude tam, kde ho je zapotřebí, jako například v pramenech RSS / Atom, či podle uvážení v libovolném místě webu.</p>
-        ]]></item>
+<p><a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_slogan">Motto stránek <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> je slogan, nebo krátký popis tvého webu. Bude použit jako popis tvých stránek všude tam, kde ho je zapotřebí, jako například v pramenech RSS / Atom, či podle uvážení v libovolném místě webu.</p>        ]]></item>
         <item id="sitename" title="Název stránek"><![CDATA[
 <h2>Název stránek</h2>
-<p><a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_name">Úplný název tvých stránek <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>. Bude se zobrazovat v záhlaví prohlížeče nebo čtečky čtenářů a podle uvážení i na jiných místech tvých stránek.</p>
-        ]]></item>
+<p><a rel="external" target="_blank" href="http://docs.textpattern.io/tags/site_name">Úplný název tvých stránek <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. Bude se zobrazovat v záhlaví prohlížeče nebo čtečky čtenářů a podle uvážení i na jiných místech tvých stránek.</p>        ]]></item>
         <item id="siteurl" title="Webová adresa (doména)"><![CDATA[
 <h2>Webová adresa (doména)</h2>
 <p>Úplná adresa tvých stránek, např.: <code>www.example.com</code>.</p>
-<p><strong>Pozn.:</strong> Nevyplňuje se protokol <code>http://</code>, <code>https://</code>, ani lomítko za adresou <code>/</code>.</p>
-        ]]></item>
+<p><strong>Pozn.:</strong> Nevyplňuje se protokol <code>http://</code>, <code>https://</code>, ani lomítko za adresou <code>/</code>.</p>        ]]></item>
         <item id="skin_dir" title="Adresář vzhledu"><![CDATA[
 <h2>Adresář vzhledu</h2>
 <p>Chceš-li změnit název adresáře pro ukládání souborů využívaných skinem tvého webu, zadej ho zde. Nejprve musíš příslušný adresář vytvořit (v hlavním adresáři svých stránek) a ujistit se, že je zapisovatelný pro PHP.</p>
 <p>Tato cesta je vždy <strong>relativní cesta</strong> (vzhledem k adresáři hlavní instalace Textpattern).</p>
-<p>Výchozí adresář je <code>themes</code>.</p>
-        ]]></item>
+<p>Výchozí adresář je <code>themes</code>.</p>        ]]></item>
         <item id="smtp_from" title="SMTP adresa odesilatele"><![CDATA[
 <h2>SMTP adresa odesilatele</h2>
 <p>Toto pole by mělo zůstat prázdné, pokud se nevyskytnou problémy s odesíláním pošty systémem Textpattern (nejsou-li emaily odesílány vůbec). Pokud se tento problém objeví, můžeš zde zadat libovolnou platnou emailovou adresu, nejlépe ale takovou, která má stejný název domény jako webové stránky, kde jsi nainstaloval Textpattern (tzn., pokud jsou tvoje webové stránky <code>http://example.com</code>, měl bys použít <code>you@example.com</code>).</p>
@@ -841,55 +727,42 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
     <li>Na serverech UNIX / Mac OS je zadaná emailová adresa použita jako 4. parametr (s předponou “-f”) pro PHP funkci  <code>mail()</code> function</li>
     <li>Na serverech se systémem Windows je zadaná emailová adresa použitá pro nastavení (nebo přepsání) <code>sendmail_from</code> v souboru <code>php.ini</code></li>
 </ul>
-<p>To zajistí, že SMTP adresa odesílatele (která nemusí být nutně stejná jako záhlaví “Od:” v emailech) je nastavena na emailovou adresu, kterou jsi zde zadal, což je na některých webových serverech podmínkou pro odesílání emailů.</p>
-        ]]></item>
+<p>To zajistí, že SMTP adresa odesílatele (která nemusí být nutně stejná jako záhlaví “Od:” v emailech) je nastavena na emailovou adresu, kterou jsi zde zadal, což je na některých webových serverech podmínkou pro odesílání emailů.</p>        ]]></item>
         <item id="spam_blacklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
 <h2>Černé listiny spamu (odděluj čárkou)</h2>
-<p>Po přijetí nového komentáře se Textpattern spojí se zde uvedenými poskytovateli <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">černých listin (spam blocklists)<span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> a ověří adresu IP autora komentáře. Pokud tuto adresu na některém ze seznamů najde, odmítne komentář přijmout, protože na tuto adresy byly v minulosti zaznamenány stížnosti kvůli spamu.</p>
-<p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p>
-<p>Můžeš zde zadat seznam domén oddělených čárkami. Vhodné listiny lze najít např. na <a rel="external" target="_blank" href="https://www.dmoz.org/Computers/Internet/E-mail/Spam/Blacklisting/Lists/">dmoz <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a>nicméně nezapomeň, že je na tobě, abys sis tyto poskytovatele prověřil dříve, než je začneš používat na svých stránkách.</p>
-        ]]></item>
+<p>Po přijetí nového komentáře se Textpattern spojí se zde uvedenými poskytovateli <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">černých listin (spam blocklists)<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a ověří adresu IP autora komentáře. Pokud tuto adresu na některém ze seznamů najde, odmítne komentář přijmout, protože na tuto adresy byly v minulosti zaznamenány stížnosti kvůli spamu.</p>
+<p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p> 
+<p>Můžeš zde zadat seznam domén oddělených čárkami. Vhodné listiny lze najít např. na <a rel="external" target="_blank" href="https://www.dmoz.org/Computers/Internet/E-mail/Spam/Blacklisting/Lists/">dmoz <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>nicméně nezapomeň, že je na tobě, abys sis tyto poskytovatele prověřil dříve, než je začneš používat na svých stránkách.</p>        ]]></item>
         <item id="syndicate_body_or_excerpt" title="Do pramenů použít pouze anotaci?"><![CDATA[
 <h2>Do pramenů použít<strong> pouze</strong> anotaci?</h2>
 <p>Je-li zde nastavení ‘Ne’, budou prameny Rss/Atom vždy obsahovat úplné tělo článku.</p>
-<p>Je-li zde nastavení ‘Ano’, Nastavíš-li ‘Ano’, budou obsahovat jen anotaci (tam kde je vyplněna).</p>
-        ]]></item>
+<p>Je-li zde nastavení ‘Ano’, Nastavíš-li ‘Ano’, budou obsahovat jen anotaci (tam kde je vyplněna).</p>        ]]></item>
         <item id="tempdir" title="Adresář dočasných souborů"><![CDATA[
 <h2>Adresář dočasných souborů?</h2>
 <p>Zadej <strong>absolutní cestu</strong> k adresáři dočasných souborů (označovaný jako‘tmp’ nebo ‘temp’). PHP musí mít do toho adresáře oprávnění pro zápis (zpravidla vyžaduje nastavení práv na 777). Tento adresář slouží pro dočasné soubory, např. při nahrávání pluginů, souborů nebo obrázků.</p>
-<p><strong>Pozn.:</strong> Nepoužívej stejný adresář pro ‘dočasné soubory’a zároveň pro ‘cache pluginů’, protože to způsobuje potíže (Textpattern by se pokoušel spustit obsah dočasných souborů jako pluginy).</p>
-        ]]></item>
+<p><strong>Pozn.:</strong> Nepoužívej stejný adresář pro ‘dočasné soubory’a zároveň pro ‘cache pluginů’, protože to způsobuje potíže (Textpattern by se pokoušel spustit obsah dočasných souborů jako pluginy).</p>        ]]></item>
         <item id="theme_name" title="Volba vzhledu administrace"><![CDATA[
 <h2>Volba vzhledu administrace</h2>
-<p>Tady zvol téma vzhledu administračního prostředí, které bude použito při každém přihlášení do systému Textpattern. Textpattern je dodáván s několika předinstalovanými motivy administrace. Také můžeš přidat vlastní balíček s tématem vzhledu do adresáře <code>textpattern/admin-themes</code>, poté ho objevíš tady jako jednu z voleb.</p>
-        ]]></item>
-        <item id="txp_evaluate_functions" title="Funkce PHP povolené v txp:evaluate"><![CDATA[
+<p>Tady zvol téma vzhledu administračního prostředí, které bude použito při každém přihlášení do systému Textpattern. Textpattern je dodáván s několika předinstalovanými motivy administrace. Také můžeš přidat vlastní balíček s tématem vzhledu do adresáře <code>textpattern/admin-themes</code>, poté ho objevíš tady jako jednu z voleb.</p>        ]]></item>
+        <item id="txp_evaluate_functions" title="Zabránit sirotkům v názvech článků?"><![CDATA[
+<h2>Zabránit sirotkům v názvech článků?</h2>
+<p>Termín ‘sirotek’ se týká jednoho slova na konci názvu článku, které je vypsáno na novém řádku, je-li je nadpis článku příliš dlouhý a nevejde se na jeden řádek. V tištěných materiálech jsou sirotci považováni za nedbalost v typografii a je třeba se jim vyhýbat. Nastavení ‘Ano’ zajistí, že poslední slova dlouhých nadpisů článků nebudou nikdy na samostatném řádku. Namísto toho se zobrazí na samostatném řádku dvě poslední slova.</p>
+<p><strong>Pozn.:</strong> Toto nastavení se může ukázat jako problematické na stránkách s responzivním designem při menších šířkách, protože nerozbitná mezera mezi posledními dvěma slovy může způsobit, že nadpis přeteče svůj nadřazený kontejner. V takovém případě nastav tuto volbu ‘Ne’.</p>        ]]></item>
+        <item id="use_comments" title="Funkce PHP povolené v txp:evaluate"><![CDATA[
 <h2>Funkce PHP povolené v txp:evaluate</h2>
 <p>Jedná se o seznam položek (oddělených čárkami)<code>funtion</code> nebo <code>alias=function</code>, např. <code>md5</code>, <code>replace=str_replace</code>. Položky uvedené v tomto seznamu lze použít pro atribut <code>query</code> v tagu <code>&lt;txp:evaluate /&gt;</code>:</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
-<p><code>function</code> should return a scalar value (<strong>not</strong> an array/object).</p>
-        ]]></item>
-        <item id="use_comments" title="Povolit komentáře?"><![CDATA[
+<p><code>function</code> should return a scalar value (<strong>not</strong> an array/object).</p>        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Povolit komentáře?"><![CDATA[
 <h2>Povolit komentáře?</h2>
-<p>Tato volba určuje, zda se komentářová funkcionalita Textpatternu bude používat, či nikoliv.</p>
-        ]]></item>
-        <item id="use_mail_on_feeds_id" title="Používat emailovou adresu pro ID pramenu?"><![CDATA[
+<p>Tato volba určuje, zda se komentářová funkcionalita Textpatternu bude používat, či nikoliv.</p>        ]]></item>
+        <item id="use_plugins" title="Používat emailovou adresu pro ID pramenu?"><![CDATA[
 <h2>Používat emailovou adresu pro ID pramenů?</h2>
 <p>Položky v pramenech Atom vyžadují jednoznačný identifikátor (ID).</p>
-<p>Pro vytváření identifikátorů může Textpattern použít buď tvou emailovou adresu, nebo doménové jméno zahrnuté do ID. Emailová adresa bude při vytváření webu použita přednostně. Pokud není pravděpodobné, že budeš v budoucnu měnit doménové jméno, je bezpečnější zde nastavit ‘Ne’.</p>
-        ]]></item>
-        <item id="use_plugins" title="Používat pluginy?"><![CDATA[
+<p>Pro vytváření identifikátorů může Textpattern použít buď tvou emailovou adresu, nebo doménové jméno zahrnuté do ID. Emailová adresa bude při vytváření webu použita přednostně. Pokud není pravděpodobné, že budeš v budoucnu měnit doménové jméno, je bezpečnější zde nastavit ‘Ne’.</p>        ]]></item>
+        <item id="use_textile" title="Používat pluginy?"><![CDATA[
 <h2>Používat pluginy?</h2>
-<p>Tato volba umožňuje zcela vypnout podporu pluginů.<br>Je to užitečné v případě, že na tvých stránkách dochází k podivným chybám a chceš zjistit, zda jsou na vině pluginy.</p>
-        ]]></item>
-        <item id="use_textile" title="Použít Textile?"><![CDATA[
-<h2>Používat Textile?</h2>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře se externí odkaz v novém okně)</span></a> je nástroj pro zjednodušení převodu textu na formátovaný dokument HTML.
-Je-li tato volba zapnuta, Textile bude zpracovávat text všech nových článků a převádět ho do formátu HTML.</p>
-<p>Textile umožňuje velmi snadno používat jednoduché příkazy pro formátování textu, vytváření struktury (seznamy, hlavičky a citace do bloku) a vkládání odkazů a obrázků.</p>
-<p>Zvolené nastavení se stane výchozí pro texty vytvořené na záložce ‘Psaní’. Můžeš si vybrat buď používání Textile, nebo převést zalomení řádků na HTML značky odstavce, nebo ponechat text beze změn.</p>
-<p>Poslední možnost (ponechat text beze změn) se používá, nainstaluješ-li plugin pro některý textový editor (např. hak_tinymce, nebo kuo_tinymce_cdn pro editor TinyMCE).</p>
-        ]]></item>
+<p>Tato volba umožňuje zcela vypnout podporu pluginů.<br>Je to užitečné v případě, že na tvých stránkách dochází k podivným chybám a chceš zjistit, zda jsou na vině pluginy.</p>        ]]></item>
     </group>
 
     <group id="section" title="Panel Rubriky">
@@ -903,54 +776,44 @@ Je-li tato volba zapnuta, Textile bude zpracovávat text všech nových článk�
     <li><strong>O-me:</strong> Stránka ‘O mě’ se může od hlavní strany a rubriky archiv značně lišit tím, že je spíše statická, vypadá zpravidla výrazně jinak a pravděpodobně obsahuje jen jeden článek. Tuto rubriku lze najít na adrese <code>http://example.com/about/</code>.</li>
     <li><strong>Fotogalerie:</strong> Rubrika se zcela jiným rozvržením (a také asi jiným stylem CSS), která slouží k zobrazení fotografií namísto článků, nebo článků s fotogalerií.</li>
 </ol>
-<p>Všimni si, že vždy existuje ještě jedna zvláštní skrytá rubrika, nazvaná default. Patří k ní šablona stránky <em>default<em>, styl CSS <em>default</em> a vytváří úvodní stránku webu.</p>
-        ]]></item>
+<p>Všimni si, že vždy existuje ještě jedna zvláštní skrytá rubrika, nazvaná default. Patří k ní šablona stránky <em>default<em>, styl CSS <em>default</em> a vytváří úvodní stránku webu.</p>        ]]></item>
         <item id="section_default" title="Výchozí rubrika pro Psaní"><![CDATA[
 <h2>Výchozí rubrika pro Psaní</h2>
 <p>Touto volbou nastavíš, která rubrika bude předvolená pro psaní článku na záložce Obsah / Psaní.</p>
 <p>Zvol rubriku, do které patří většina článků na tvém webu.</p>
-<p>Chceš-li psát článek pro jinou rubriku, než je předvolená zde, prostě ji vyber v rozbalovacím poli Rubrika při psaní článku.</p>
-        ]]></item>
+<p>Chceš-li psát článek pro jinou rubriku, než je předvolená zde, prostě ji vyber v rozbalovacím poli Rubrika při psaní článku.</p>        ]]></item>
         <item id="section_description" title="Popis"><![CDATA[
 <h2>Popis</h2>
 <p>Popis rubriky je volitelná součást, která pomůže vyhledávačům a prohledávačům webových stránek lépe identifikovat a třídit obsah.</p>
-<p>Popis článku je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>
-        ]]></item>
+<p>Popis článku je omezen na maximálně 255 znaků. Některé vyhledávače mohou mít pro <code>meta description</code> z praktických důvodů pro zobrazení stránky výsledků vyhledávání (SERPs) i menší limit znaků.</p>        ]]></item>
         <item id="section_on_frontpage" title="Na hlavní straně?"><![CDATA[
 <h2>Na hlavní straně?</h2>
 <p>Některé rubriky, obsahující spíše ‘statický’ obsah, mohou působit nepatřičně v časově orientovaném proudu článků na hlavní straně.</p>
-<p>Nastavíš-li zde ne, články této rubriky se zobrazovat mezi články na hlavní straně nebudou.</p>
-        ]]></item>
+<p>Nastavíš-li zde ne, články této rubriky se zobrazovat mezi články na hlavní straně nebudou.</p>        ]]></item>
         <item id="section_searchable" title="Zahrnout do hledání?"><![CDATA[
 <h2>Zahrnout do hledání?</h2>
-<p>Tato volba určuje, zda mají být články patřící do této rubriky zahrnuty mezi výsledky hledání.</p>
-        ]]></item>
+<p>Tato volba určuje, zda mají být články patřící do této rubriky zahrnuty mezi výsledky hledání.</p>        ]]></item>
         <item id="section_syndicate" title="Šíření?"><![CDATA[
 <h2>Šířit články této rubriky?</h2>
-<p>Volba určuje, zda články této rubriky budou zahrnuty do pramenů RSS/Atom.</p>
-        ]]></item>
+<p>Volba určuje, zda články této rubriky budou zahrnuty do pramenů RSS/Atom.</p>        ]]></item>
         <item id="section_uses_css" title="Používá styl"><![CDATA[
 <h2>Používá styl</h2>
 <p>Tato volba určuje styl CSS načtený z databáze pomocí tagu <code>&lt; txp: css format="" /&gt;</code> pro tuto rubriku.</p>
 <p>Pro větší rychlost odezvy se ale doporučuje načítat css styly ze souboru.
-Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu<br> <code>&lt; link rel="stylesheet" href="http://mojestranky. cz/css/default. css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>
-        ]]></item>
+Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu<br> <code>&lt; link rel="stylesheet" href="http://mojestranky. cz/css/default. css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>        ]]></item>
         <item id="section_uses_page" title="Používá stránku"><![CDATA[
 <h2>Používá stránku</h2>
-<p>Rubriky v Textpattern jsou provázány se šablonami stránek.</p>
-        ]]></item>
+<p>Rubriky v Textpattern jsou provázány se šablonami stránek.</p>        ]]></item>
         <item id="section_uses_skin" title="Používá skin"><![CDATA[
 <h2>Používá skin</h2>
-<p>Chceš-li změnit téma vzhledu použité pro určitou rubriku, můžeš ho zde nastavit ze seznamu aktuálně nainstalovaných skinů.</p>
-        ]]></item>
+<p>Chceš-li změnit téma vzhledu použité pro určitou rubriku, můžeš ho zde nastavit ze seznamu aktuálně nainstalovaných skinů.</p>        ]]></item>
     </group>
 
     <group id="setup" title="Panel Nastavení">
         <item id="setup_user_login" title="Přihlášovací jméno"><![CDATA[
 <h2>Přihlášovací jméno</h2>
 <p>Přihlašovací jméno administrátora (‘Vydavatel’) – účet s nejvyššími právy přístupu</p>
-<p>Ačkoli pro jméno nejsou žádná omezení, je lepší se vyhnout komplikovaným výrazům a snadno uhádnutelným slovům (např. <code>admin</code>, <code>administrator</code>, atd.)</p>
-        ]]></item>
+<p>Ačkoli pro jméno nejsou žádná omezení, je lepší se vyhnout komplikovaným výrazům a snadno uhádnutelným slovům (např. <code>admin</code>, <code>administrator</code>, atd.)</p>        ]]></item>
         <item id="setup_user_pass" title="Heslo uživatele"><![CDATA[
 <h2>Heslo uživatele</h2>
 <p>Protože tento účet bude mít nejvyšší úroveň přístupových práv do Textpatternu, zvol si velmi silné heslo.</p>
@@ -961,8 +824,7 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
     <li>použij symboly</li>
     <li>heslo má mít alespoň osm znaků</li>
     <li><strong>vyhni se</strong> jakýmkoliv osobním údajům (data, jména, místa, rodinní příslušníci, domácí zvířata apod)</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
         <item id="table_prefix" title="Předpona tabulek"><![CDATA[
 <h2>Předpona tabulek</h2>
     <p>Předpony tabulek (table prefix) je potřeba nastavit pouze v případě, že jednu databázi bude využívat více instalací Textpattern. Každá instalace Textpatternu vyžaduje jedinečnou předponu tabulek.</p>
@@ -970,8 +832,7 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
 <ul>
     <li><strong>první znak:</strong> musí být a-z, A-Z, nebo podtržítko</li>
     <li><strong>následující znaky:</strong> mohou být be a-z, A-Z, 0-9, nebo podtržítko</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
     </group>
 
     <group id="skin" title="Panel Vzhled">
@@ -994,20 +855,17 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
         ]]></item>
         <item id="skin_delete_from_disk" title="Odstranit při exportu nepoužívané šablony z disku"><![CDATA[
 <h2>Odstranit při exportu nepoužívané šablony z disku</h2>
-<p>Pokud je volba zaškrtnuta, každý soubor šablony ve vybraném skinu, který nemá odpovídající položku v databázi, bude z disku trvale odstraněn. Výsledkem po dokončení akce bude, že souborový systém skinu bude přesně odrážet to, co je v databázi.</p>
-        ]]></item>
+<p>Pokud je volba zaškrtnuta, každý soubor šablony ve vybraném skinu, který nemá odpovídající položku v databázi, bude z disku trvale odstraněn. Výsledkem po dokončení akce bude, že souborový systém skinu bude přesně odrážet to, co je v databázi.</p>        ]]></item>
         <item id="skin_description" title="Popis skinu"><![CDATA[
 <h2>Popis skinu</h2>
 <p>Stručné shrnutí návrhu / rozvržení skinu (volitelné).</p>
-<p>Popis skinu je omezen na maximálně 255 znaků.</p>
-        ]]></item>
+<p>Popis skinu je omezen na maximálně 255 znaků.</p>        ]]></item>
         <item id="skin_import" title="Import skinu"><![CDATA[
 <h2>Import skinu z disku</h2>
 <p>Tento formulář umožňuje importovat skin do databáze Textpatternu z adresáře na disku.</p>
 <p>Soubory importovaného skinu musí být umístěné ve složce nesoucí název skinu, uvnitř složky musí být rovněž soubor <code>manifest.json</code> v očekávaném formátu. Složky skinu by měla obsahovat podsložky pages, forms a styles.</p>
 <p>Šablony stránek (pages) a forem (forms) musí mít příponu <code>.txp</code>, soubory stylopisů příponu <code>.css</code>. Šablony forem by měly být seskupeny do správných podadresářů. Chybějící základní šablony Textpattern při importu vytvoří.</p>
-<p>Viz <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentace<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> s dalšími informacemi k vytváření, instalaci a používání skinů (témat vzhledu) v CMS Textpattern.</p>
-        ]]></item>
+<p>Viz <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentace<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> s dalšími informacemi k vytváření, instalaci a používání skinů (témat vzhledu) v CMS Textpattern.</p>        ]]></item>
         <item id="skin_name" title="Jméno skinu"><![CDATA[
 <h2>Jméno skinu</h2>
 <p>Jméno skinu se používá pro název adresáře skinu a další technické účely (vyžadováno).</p>
@@ -1024,17 +882,14 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
 <h3>Export a import</h3>
 <p>Skiny můžeš sdílet s komunitou. Vyber pomocí zatržítek jeden nebo více skinů a z roletkového menu zvol možnost <em>exportovat na disk</em>. Každý skin bude uložen do vlastní složky v adresáři určeném v Nastavení pro <em>Adresář vzhledu</em> (výchozí je: <code>themes</code>).</p>
 <p>Po exportu můžeš složku skinu zkomprimovat a distrubuovat v komunitě. Obdobně při importu je třeba po stažení skin rozbalit do vlastního adresáře <code>themes</code> a použít nástroj <em>import</em> k přenesení jeho položek do databáze. Pak lze přejít ke skinu na panelu Vzhled a použít ho jako pracovní skin, vše vyzkoušet jako náhled v rámci webu, případně jeho součásti upravit a nakonec skin přidělit k rubrikám, jak je popsáno výše.</p>
-<p>Funkionalita exportu skinů umožňuje také zálohovat a upravovat obsah dat na disku v textovém editoru a/nebo na ně aplikovat kontrolu verzí. Nezapomeň: neexistuje žádné propojení mezi tvým veřejným webem a verzí součástí skinu uložených na disku. Aby viděli změny návštěvníci webu, musíš nejprve importovat změny do databáze a zajistit, aby jedna či více rubrik skin používaly.</p>
-        ]]></item>
+<p>Funkionalita exportu skinů umožňuje také zálohovat a upravovat obsah dat na disku v textovém editoru a/nebo na ně aplikovat kontrolu verzí. Nezapomeň: neexistuje žádné propojení mezi tvým veřejným webem a verzí součástí skinu uložených na disku. Aby viděli změny návštěvníci webu, musíš nejprve importovat změny do databáze a zajistit, aby jedna či více rubrik skin používaly.</p>        ]]></item>
         <item id="skin_title" title="Název skinu"><![CDATA[
 <h2>Název skinu</h2>
 <p>Výstižný název skinu do seznamu skinů v panelech Textpatternu (vyžadován).</p>
-<p>Název může obsahovat speciální znaky i mezery.</p>
-        ]]></item>
+<p>Název může obsahovat speciální znaky i mezery.</p>        ]]></item>
         <item id="skin_version" title="Verze skinu"><![CDATA[
 <h2>Verze skinu</h2>
-<p>Číslo nainstalované verze skinu (volitelné).</p>
-        ]]></item>
+<p>Číslo nainstalované verze skinu (volitelné).</p>        ]]></item>
     </group>
 </help>
 </resources>
