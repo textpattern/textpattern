@@ -206,7 +206,7 @@ function sec_section_list($message = '')
     }
 
     $paginator = new \Textpattern\Admin\Paginator();
-    $limit = $paginator->getLimit();
+    $limit = gps('skin') ? PHP_INT_MAX : $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -323,9 +323,10 @@ function sec_section_list($message = '')
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'), 'class' => $missing ? 'error' : '')).br
-                    ).href($replaced ? tag(txpspecialchars($sec_item), 'del') : txpspecialchars($sec_item),
-                        array(
+                        ), array('title' => gTxt('edit'))).
+                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
+                        n.'<hr class="secondary" />'.n
+                    ).href(txpspecialchars($sec_item), array(
                             'event' => $item,
                             'name'  => $sec_item,
                             'skin'  => $sec_skin,
@@ -357,8 +358,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.br : '').tag($sec_skin, $replaced ? 'del' : ''),
-                        '', 'txp-list-col-skin'
+                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).n.'<hr class="secondary" />'.n : '').
+                        $sec_skin, '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -914,7 +915,7 @@ EOJS;
     if (gps('skin')) {
         $script .= <<<EOJS
 $(function() {
-//    $('#select_all').click();
+    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();

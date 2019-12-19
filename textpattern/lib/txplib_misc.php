@@ -1660,17 +1660,18 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
-    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+    if (isset($atts['yield']) && !isset($pairs['yield'])) {
         isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
-        unset($atts['yield']);
 
-        foreach (do_list_unique($txp_atts['yield']) as $name) {
-            $value = call_user_func($partial, array('name' => $name));
+        foreach (parse_qs($atts['yield']) as $name => $alias) {
+            $value = call_user_func($partial, array('name' => $alias === false ? $name : $alias));
 
             if(isset($value)) {
                 $atts[$name] = $value;
             }
         }
+
+        unset($atts['yield']);
     }
 
     if (empty($pretext['_txp_atts'])) {
@@ -3180,7 +3181,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f, true, false);
+        $out = parse($f);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
@@ -4217,6 +4218,28 @@ eod;
 }
 
 /**
+ * Get field => alias array.
+ *
+ * @param   string $match
+ * @return  array()
+ * @since   4.8.0
+ * @package TagParser
+ */
+
+function parse_qs($match, $sep='=')
+{
+    $pairs = array();
+
+    foreach(do_list_unique($match) as $chunk) {
+        $name = strtok($chunk, $sep);
+        $alias = strtok($sep);
+        $pairs[strtolower($name)] = $alias;
+    };
+
+    return $pairs;
+}
+
+/**
  * Gets a URL-encoded and HTML entity-escaped query string for a URL.
  *
  * Builds a HTTP query string from an associative array.
@@ -4327,23 +4350,16 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
     global $permlink_mode, $prefs, $txp_context, $txp_sections;
-    static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+
+    // Link to an article.
+    if (!empty($parts['id'])) {
+        return permlinkurl_id($parts['id']);
+    }
 
     $keys = $parts;
-
-    // Unset extra stuff to link to an article.
-    if (!empty($parts['id'])) {
-        foreach ($internals as $key) {
-            unset($keys[$key]);
-        }
-    }
-
     empty($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
-    
-    if (empty($parts['id'])) {
-        unset($keys['id']);
-    }
+    unset($keys['id']);
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
@@ -4380,10 +4396,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
 
-        if (!empty($keys['id'])) {
-            $url = permlinkurl_id($keys['id']);
-            unset($keys['id']);
-        } elseif (!empty($keys['rss'])) {
+        if (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
@@ -4444,7 +4457,7 @@ function permlinkurl_id($id)
     $id = (int) $id;
 
     if (isset($permlinks[$id])) {
-        return $permlinks[$id];
+        return permlinkurl(array('id' => $id));
     }
 
     if (isset($thisarticle['thisid']) && $thisarticle['thisid'] == $id) {
@@ -4479,8 +4492,8 @@ function permlinkurl_id($id)
 
 function permlinkurl($article_array, $hu = hu)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_context, $txp_sections;
-    static $internals = array('c' => null, 'author' => null, 'month' => null, 'f' => null), $now = null;
+    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
+    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4507,6 +4520,18 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     $thisid = (int) $thisid;
+    $keys = get_context(null);
+
+    foreach($internals as $key) {
+        unset($keys[$key]);
+    }
+
+    if (isset($permlinks[$thisid])) {
+        return $hu.($permlinks[$thisid] === true ?
+            'index.php'.join_qs(array('id' => $thisid) + $keys) :
+            $permlinks[$thisid].join_qs($keys)
+        );
+    }
 
     if (!isset($now)) {
         $now = strftime('%F %T');
@@ -4524,7 +4549,9 @@ function permlinkurl($article_array, $hu = hu)
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
-    if (!empty($section) && isset($txp_sections[$section])) {
+    if (empty($section)) {
+        $url_mode = 'messy';
+    } elseif (isset($txp_sections[$section])) {
         $url_mode = empty($txp_sections[$section]['permlink_mode']) ? $permlink_mode : $txp_sections[$section]['permlink_mode'];
     } else {
         $url_mode = $permlink_mode;
@@ -4536,7 +4563,6 @@ function permlinkurl($article_array, $hu = hu)
 
     $section = urlencode($section);
     $url_title = urlencode($url_title);
-    $keys = $txp_context ? array_intersect_key($txp_context, $internals) : array();
 
     switch ($url_mode) {
         case 'section_id_title':
@@ -4595,13 +4621,9 @@ function permlinkurl($article_array, $hu = hu)
             break;
     }
 
-    if ($hu === hu) {
-        $out = $permlinks[$thisid] = hu.$out;
-    } else {
-        $out = $hu.$out;
-    }
+    $permlinks[$thisid] = $url_mode == 'messy' ? true : $out;
 
-    return $out.join_qs($keys);
+    return $hu.$out.join_qs($keys);
 }
 
 /**
@@ -4994,7 +5016,7 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
     global $pretext, $txp_context;
 
     if (!isset($context)) {
-        return $txp_context;
+        return empty($txp_context) ? array() : $txp_context;
     } elseif (empty($context)) {
         return array();
     } elseif (!is_array($context)) {

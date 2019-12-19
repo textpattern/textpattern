@@ -70,16 +70,9 @@
                 <txp:text item="categories" />
             </strong>
             <span itemprop="keywords">
-                <txp:if_article_category number="1">
-                    <txp:if_article_category number="2">
-                        <txp:category1 title link />,
-                        <txp:category2 title link />
-                    <txp:else />
-                        <txp:category1 title link />
-                    </txp:if_article_category>
-                <txp:else />
-                    <txp:category2 title link />
-                </txp:if_article_category>
+                <txp:category_list categories='<txp:category1 />,<txp:category2 />' children="0" break=", " trim>
+                    <txp:category title link />
+                </txp:category_list>
             </span>
         </txp:if_article_category>
     </p>
