@@ -3181,7 +3181,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f, true, false);
+        $out = parse($f);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
