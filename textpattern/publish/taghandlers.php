@@ -1811,7 +1811,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     $pg = $thispage['pg'];
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
     $old_context = $txp_context;
-    $txp_context = get_context();
+    $txp_context += get_context();
     $out = array();
 
     if (!isset($shift)) {

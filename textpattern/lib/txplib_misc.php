@@ -4492,8 +4492,8 @@ function permlinkurl_id($id)
 
 function permlinkurl($article_array, $hu = hu)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_context, $txp_sections;
-    static $internals = array('c' => null, 'author' => null, 'month' => null, 'f' => null), $now = null;
+    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
+    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4520,7 +4520,11 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     $thisid = (int) $thisid;
-    $keys = $txp_context ? array_intersect_key($txp_context, $internals) : array();
+    $keys = get_context(null);
+
+    foreach($internals as $key) {
+        unset($keys[$key]);
+    }
 
     if (isset($permlinks[$thisid])) {
         return $hu.($permlinks[$thisid] === true ?
@@ -5012,7 +5016,7 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
     global $pretext, $txp_context;
 
     if (!isset($context)) {
-        return $txp_context;
+        return empty($txp_context) ? array() : $txp_context;
     } elseif (empty($context)) {
         return array();
     } elseif (!is_array($context)) {
