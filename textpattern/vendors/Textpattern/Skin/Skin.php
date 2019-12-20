@@ -1365,7 +1365,7 @@ class Skin extends CommonBase implements SkinInterface
                     .hCell(
                         href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
                         ' | '.
-                        href(gTxt('assign_sections'), 'index.php?event=section&skin='.urlencode($skin_name)).
+                        href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
                         (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '')
                         , '', array(
                             'scope' => 'row',
