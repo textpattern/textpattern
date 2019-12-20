@@ -206,7 +206,7 @@ function atom()
                 $e['issued'] = tag(safe_strftime('w3cdtf', $uPosted), 'published');
                 $e['modified'] = tag(safe_strftime('w3cdtf', $uLastMod), 'updated');
 
-                $escaped_title = htmlspecialchars($Title);
+                $escaped_title = htmlspecialchars($thisarticle['title']);
                 $e['title'] = tag($escaped_title.$count, 'title', t_html);
 
                 $permlink = permlinkurl($a);

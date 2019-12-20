@@ -160,7 +160,7 @@ function rss()
                     $content = trim(parse($thisarticle['body']));
                 }
 
-                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($Title), ENT_QUOTES, 'UTF-8'))).$count;
+                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($thisarticle['title']), ENT_QUOTES, 'UTF-8'))).$count;
 
                 $thisauthor = get_author_name($AuthorID);
 
