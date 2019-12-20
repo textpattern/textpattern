@@ -395,7 +395,7 @@ function article_preview($field = false)
     if ($view == 'preview') {
         if (!$field || $field == 'body') {
             $preview .= n.'<div class="body">'.
-                ($field ? '' : n.graf(gTxt('body'), array('class' => 'alert-block information'))).
+                n.'<h2>'.gTxt('body').'</h2>'.
                 implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
                     return '<span class="disabled">'.txpspecialchars($tag).'</span>';
                 })).
@@ -404,7 +404,7 @@ function article_preview($field = false)
 
         if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
             $preview .= n.'<div class="excerpt">'.
-                ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+                n.'<h2>'.gTxt('excerpt').'</h2>'.
                 implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
                     return '<span class="disabled">'.txpspecialchars($tag).'</span>';
                 })).
@@ -412,7 +412,7 @@ function article_preview($field = false)
         }
     } elseif ($view == 'html') {
         if (!$field || $field == 'body') {
-            $preview .= ($field ? '' : graf(gTxt('body'), array('class' => 'alert-block information'))).
+            $preview .= n.'<h2>'.gTxt('body').'</h2>'.
             n.tag(
                 tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
                     'class' => 'language-markup',
@@ -423,7 +423,7 @@ function article_preview($field = false)
         }
 
         if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
-            $preview .= ($field ? '' : graf(gTxt('excerpt'), array('class' => 'alert-block information'))).
+            $preview .= n.'<h2>'.gTxt('excerpt').'</h2>'.
                 n.tag(
                     tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
                         'class' => 'language-markup',
@@ -834,9 +834,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     echo n.'<div class="txp-dialog">';
-    echo n.'<div>'.
-        $partials['view_modes']['html'].
-    '</div>';
+    echo n.$partials['view_modes']['html'];
     echo article_preview();
     echo '</div>';// End of .txp-dialog.
 
