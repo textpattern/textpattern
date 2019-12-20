@@ -1183,6 +1183,7 @@ function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
+
     switch($tabevent) {
         case 'preview':
             $label = gTxt('text');
