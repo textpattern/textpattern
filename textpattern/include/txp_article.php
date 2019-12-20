@@ -1183,16 +1183,11 @@ function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
-
-    switch($tabevent) {
-        case 'preview':
-            $label = gTxt('text');
-            break;
-        case 'html':
-            $label = '<bdi dir="ltr">HTML</bdi>';
-            break;
-        default:
-            $label = gTxt('view_'.$tabevent.'_short');
+    
+    if (is_array($tabevent)) {
+        list($tabevent, $label) = $tabevent + array(null, gTxt('text'));
+    } else {
+        $label = gTxt('view_'.$tabevent.'_short');
     }
 
     $link = href($label, '#', array(
@@ -1845,7 +1840,7 @@ function article_partial_view_modes($rs)
         checkbox2('', false, 0, 'live-preview').
         sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
         n.'</div>'.
-        n.tag(tab('preview', $view).tab('html', $view), 'ul');
+        n.tag(tab(array('preview'), $view).tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
