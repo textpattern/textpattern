@@ -483,6 +483,11 @@
 <p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
 <p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
         ]]></item>
+        <item id="upload_plugin" title="Upload plugin"><![CDATA[
+<h2>Upload plugin</h2>
+<p>Use this form to upload a plugin file (either a PHP file or a zipped archive). Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
+<p>Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Preferences panel">
