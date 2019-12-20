@@ -738,7 +738,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'delete'       => array(
             'label' => gTxt('delete'),
             'html' => checkbox2('sync', gps('sync'), 0, 'sync').n.
-                tag(gTxt('remove'), 'label', array('for' => 'sync'))
+                tag(gTxt('plugin_delete_entirely'), 'label', array('for' => 'sync'))
         )
     );
 
