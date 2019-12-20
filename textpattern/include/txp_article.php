@@ -1183,10 +1183,19 @@ function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
+    switch($tabevent) {
+        case 'preview':
+            $label = gTxt('text');
+            break;
+        case 'html':
+            $label = '<bdi dir="ltr">HTML</bdi>';
+            break;
+        default:
+            $label = gTxt('view_'.$tabevent.'_short');
+    }
 
-    $link = href(gTxt('view_'.$tabevent.'_short'), '#', array(
+    $link = href($label, '#', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
-        'title'          => gTxt('view_'.$tabevent),
         'aria-pressed'   => $pressed,
         'role'           => 'button',
     ));
