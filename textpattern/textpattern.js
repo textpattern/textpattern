@@ -2115,6 +2115,7 @@ textpattern.Route.add('article', function () {
             var data = form.serializeArray();
             data.push({name: 'app_mode', value: 'async'});
             data.push({name: 'preview', value: $field});
+            data.push({name: 'view', value: $viewMode.data('view-mode')});
             textpattern.Relay.callback('updateList', {
                 url: 'index.php #pane-view',
                 data: data,
@@ -2131,7 +2132,6 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
-        $('input[name="view"]').val($view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function(e) {
         e.preventDefault();
