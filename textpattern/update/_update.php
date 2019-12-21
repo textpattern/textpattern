@@ -35,7 +35,7 @@ $dbupdates = array(
     '4.6.0',
     '4.7.0',
     '4.7.2',
-    '4.8.0-dev',
+    '4.8.0',
 );
 
 function newest_file()
@@ -85,6 +85,9 @@ if (!isset($updates[$thisversion])) {
 }
 
 try {
+    $versionparts = explode('-', $thisversion);
+    $baseversion = $versionparts[0];
+
     // Disable no zero dates mode
     if (version_compare($dbversion, '4.6', '<') && $sql_mode = getThing('SELECT @@SESSION.sql_mode')) {
         $tmp_mode = implode(',', array_diff(
@@ -95,7 +98,7 @@ try {
     }
 
     foreach ($updates as $dbupdate => $update) {
-        if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $thisversion, '<=')) {
+        if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $baseversion, '<=')) {
             if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
