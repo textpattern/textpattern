@@ -8,7 +8,7 @@
 /admin-themes/hiveneutral/assets/js/main.js: 61766a909f65c1df45ffe602e896a80d
 /admin-themes/hiveneutral/hiveneutral.php: f96f0e9aea2587a0c39d204f4aa654cd
 /include/txp_admin.php: 1fe44a5401634f66d4d8004b52d3eb5d
-/include/txp_article.php: 76950cbf18ec54f02775be2fffd99a95
+/include/txp_article.php: 8826fdde3aba2b3f7235bc0425754b60
 /include/txp_auth.php: a66100686e62d3077991734d2d9667b0
 /include/txp_category.php: dad3ff5deee1c5e631231339ce579048
 /include/txp_css.php: 3553b0de3a78d78e1695c1a00bde8ee6
@@ -56,7 +56,7 @@
 /publish/search.php: 43edb51c74a7623ec0d06cd45ff3f02a
 /publish/taghandlers.php: be13b63833b5981d28691cf5b61221c0
 /publish.php: 582189c8933c48fda3be0b85f83d60d8
-/textpattern.js: c3309a76bf75113bd5ec04802016636d
+/textpattern.js: e0c03dbfd8ac910abe66340aa586b722
 /update/_to_4.0.3.php: 1eb1d65224e6720617909b187d38536a
 /update/_to_4.0.4.php: a5f9972d4b12f5b42e376a7436e94995
 /update/_to_4.0.5.php: 4e75519b1af99475561484a7fda01591
