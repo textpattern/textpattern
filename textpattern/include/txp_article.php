@@ -376,9 +376,7 @@ function article_save()
 /**
  * Renders article preview.
  *
- * @param string|array $message          The activity message
- * @param bool         $concurrent       Treat as a concurrent save
- * @param bool         $refresh_partials Whether to refresh partial contents
+ * @param string $field
  */
 
 function article_preview($field = false)
@@ -451,8 +449,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 {
     global $vars, $txp_user, $prefs, $step, $view, $app_mode;
 
-    if ($field = gps('preview')) {
-        echo article_preview($field);
+    $view = gps('view', 'text');
+
+    if ($view != 'text') {
+        echo article_preview(gps('preview'));
 
         return;
     }
@@ -650,10 +650,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         );
     }
 
-    extract(gpsa(array(
-        'view',
-    )));
-
     if ($step !== 'create') {
         $step = "edit";
     }
@@ -665,12 +661,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = $step === 'create' ? 0 : intval(gps('ID'));
     }
 
-    // Switch to 'text' view upon page load and after article post.
-    $view = gps('view', 'text');
-
-    if (($view == 'text' || gps('save'))
-        && !empty($ID)
-        && !$concurrent) {
+    if (!empty($ID) && !$concurrent) {
         // It's an existing article - off we go to the database.
         $ID = assert_int($ID);
 
@@ -815,23 +806,20 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         hInput('sPosted', $sPosted).
         hInput('sLastMod', $sLastMod).
         hInput('AuthorID', $AuthorID).
-        hInput('LastModID', $LastModID).
-        n.'<input type="hidden" name="view" />';
+        hInput('LastModID', $LastModID);
 
         echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
 
     echo n.'<div role="region" id="main_content">';
 
-    if ($view == 'text') {
-        echo n.'<div class="text" id="pane-text">'.$partials['title']['html'],
-            $partials['author']['html'],
-            $partials['body']['html'];
-        if ($articles_use_excerpts) {
-            echo $partials['excerpt']['html'];
-        }
-        echo n.'</div>';
+    echo n.'<div class="text" id="pane-text">'.$partials['title']['html'],
+        $partials['author']['html'],
+        $partials['body']['html'];
+    if ($articles_use_excerpts) {
+        echo $partials['excerpt']['html'];
     }
+    echo n.'</div>';
 
     echo n.'<div class="txp-dialog">';
     echo n.$partials['view_modes']['html'];
@@ -842,212 +830,210 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         n.'</div>'; // End of .txp-layout-4col-3span.
 
     // Sidebar column (only shown if in text editing view).
-    if ($view == 'text') {
-        echo n.'<div class="txp-layout-4col-alt">'.
-            n.'<div class="txp-save-zone">';
+    echo n.'<div class="txp-layout-4col-alt">'.
+        n.'<div class="txp-save-zone">';
 
-        // 'Publish/Save' button.
-        if (empty($ID)) {
-            if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
-                $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
-            } else {
-                $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
-            }
-
-            echo graf($push_button, array('class' => 'txp-save'));
-        } elseif (
-            ($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
-            ($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
-            ($Status < STATUS_LIVE && has_privs('article.edit')) ||
-            ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
-        ) {
-            echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
-        }
-
-        echo $partials['actions']['html'].
-            n.'</div>';
-
-        echo n.'<div role="region" id="supporting_content">';
-
-        // 'Override form' selection.
-        $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
-        $html_override = $form_pop
-            ? pluggable_ui('article_ui', 'override',
-                inputLabel(
-                    'override-form',
-                    $form_pop,
-                    'override_default_form',
-                    array('override_form', 'instructions_override_form'),
-                    array('class' => 'txp-form-field override-form')
-                ),
-                $rs)
-            : '';
-
-        // 'Sort and display' section.
-        echo pluggable_ui(
-            'article_ui',
-            'sort_display',
-            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, '', gTxt('sort_display')),
-            $rs
-        );
-
-        echo graf(
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-                'class'         => 'txp-expand-all',
-                'aria-controls' => 'supporting_content',
-            )).
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-                'class'         => 'txp-collapse-all',
-                'aria-controls' => 'supporting_content',
-            )), array('class' => 'txp-actions')
-        );
-
-        // 'Date and time' collapsible section.
-        if (empty($ID)) {
-            // Timestamp.
-            // Avoiding modified date to disappear.
-
-            if (!empty($store_out['year'])) {
-                $persist_timestamp = safe_strtotime(
-                    $store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.
-                    $store_out['hour'].':'.$store_out['minute'].':'.$store_out['second']
-                );
-            } else {
-                $persist_timestamp = time();
-            }
-
-            $posted_block = tag(pluggable_ui(
-                'article_ui',
-                'timestamp',
-                inputLabel(
-                    'year',
-                    tsi('year', '%Y', $persist_timestamp, '', 'year').
-                    ' <span role="separator">/</span> '.
-                    tsi('month', '%m', $persist_timestamp, '', 'month').
-                    ' <span role="separator">/</span> '.
-                    tsi('day', '%d', $persist_timestamp, '', 'day'),
-                    'publish_date',
-                    array('publish_date', 'instructions_publish_date'),
-                    array('class' => 'txp-form-field date posted')
-                ).
-                inputLabel(
-                    'hour',
-                    tsi('hour', '%H', $persist_timestamp, '', 'hour').
-                    ' <span role="separator">:</span> '.
-                    tsi('minute', '%M', $persist_timestamp, '', 'minute').
-                    ' <span role="separator">:</span> '.
-                    tsi('second', '%S', $persist_timestamp, '', 'second'),
-                    'publish_time',
-                    array('', 'instructions_publish_time'),
-                    array('class' => 'txp-form-field time posted')
-                ).
-                n.tag(
-                    checkbox('publish_now', '1', true, '', 'publish_now').
-                    n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                    'div', array('class' => 'txp-form-field posted-now')
-                ),
-                array('sPosted' => $persist_timestamp) + $rs
-            ), 'div', array('id' => 'publish-datetime-group'));
-
-            // Expires.
-            if (!empty($store_out['exp_year'])) {
-                $persist_timestamp = safe_strtotime(
-                    $store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.
-                    $store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second']
-                );
-            } else {
-                $persist_timestamp = 0;
-            }
-
-            $expires_block = tag(pluggable_ui(
-                'article_ui',
-                'expires',
-                inputLabel(
-                    'exp_year',
-                    tsi('exp_year', '%Y', $persist_timestamp, '', 'exp_year').
-                    ' <span role="separator">/</span> '.
-                    tsi('exp_month', '%m', $persist_timestamp, '', 'exp_month').
-                    ' <span role="separator">/</span> '.
-                    tsi('exp_day', '%d', $persist_timestamp, '', 'exp_day'),
-                    'expire_date',
-                    array('expire_date', 'instructions_expire_date'),
-                    array('class' => 'txp-form-field date expires')
-                ).
-                inputLabel(
-                    'exp_hour',
-                    tsi('exp_hour', '%H', $persist_timestamp, '', 'exp_hour').
-                    ' <span role="separator">:</span> '.
-                    tsi('exp_minute', '%M', $persist_timestamp, '', 'exp_minute').
-                    ' <span role="separator">:</span> '.
-                    tsi('exp_second', '%S', $persist_timestamp, '', 'exp_second'),
-                    'expire_time',
-                    array('', 'instructions_expire_time'),
-                    array('class' => 'txp-form-field time expires')
-                ).
-                n.tag(
-                    checkbox('expire_now', '1', false, '', 'expire_now').
-                    n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
-                    'div', array('class' => 'txp-form-field expire-now')
-                ),
-                $rs
-            ), 'div', array('id' => 'expires-datetime-group'));
+    // 'Publish/Save' button.
+    if (empty($ID)) {
+        if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
+            $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
         } else {
-            // Timestamp.
-            $posted_block = $partials['posted']['html'];
-
-            // Expires.
-            $expires_block = $partials['expires']['html'];
+            $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
         }
 
-        echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
-
-        // 'Categories' section.
-        $html_categories = pluggable_ui('article_ui', 'categories', $partials['categories']['html'], $rs);
-        echo wrapRegion('txp-categories-group', $html_categories, 'txp-categories-group-content', 'categories', 'categories');
-
-        // 'Meta' collapsible section.
-
-        // 'URL-only title' field.
-        $html_url_title = $partials['url_title']['html'];
-
-        // 'Description' field.
-        $html_description = $partials['description']['html'];
-
-        // 'Keywords' field.
-        $html_keywords = $partials['keywords']['html'];
-
-        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
-
-        // 'Comment options' collapsible section.
-        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
-
-        // 'Article image' collapsible section.
-        echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
-
-        // 'Custom fields' collapsible section.
-        echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
-
-        // 'Advanced options' collapsible section.
-        // Unused by core, but leaving the placeholder for legacy plugin support.
-        $html_advanced = pluggable_ui('article_ui', 'markup', '', $rs);
-
-        if ($html_advanced) {
-            echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
-        }
-
-        // Custom menu entries.
-        echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
-
-        // 'Recent articles' collapsible section.
-        echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
-
-        echo n.'</div>'; // End of #supporting_content.
-
-        // Prev/next article links.
-        echo $partials['article_nav']['html'];
-
-        echo n.'</div>'; // End of .txp-layout-4col-alt.
+        echo graf($push_button, array('class' => 'txp-save'));
+    } elseif (
+        ($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
+        ($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
+        ($Status < STATUS_LIVE && has_privs('article.edit')) ||
+        ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
+    ) {
+        echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     }
+
+    echo $partials['actions']['html'].
+        n.'</div>';
+
+    echo n.'<div role="region" id="supporting_content">';
+
+    // 'Override form' selection.
+    $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
+    $html_override = $form_pop
+        ? pluggable_ui('article_ui', 'override',
+            inputLabel(
+                'override-form',
+                $form_pop,
+                'override_default_form',
+                array('override_form', 'instructions_override_form'),
+                array('class' => 'txp-form-field override-form')
+            ),
+            $rs)
+        : '';
+
+    // 'Sort and display' section.
+    echo pluggable_ui(
+        'article_ui',
+        'sort_display',
+        wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, '', gTxt('sort_display')),
+        $rs
+    );
+
+    echo graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'supporting_content',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'supporting_content',
+        )), array('class' => 'txp-actions')
+    );
+
+    // 'Date and time' collapsible section.
+    if (empty($ID)) {
+        // Timestamp.
+        // Avoiding modified date to disappear.
+
+        if (!empty($store_out['year'])) {
+            $persist_timestamp = safe_strtotime(
+                $store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.
+                $store_out['hour'].':'.$store_out['minute'].':'.$store_out['second']
+            );
+        } else {
+            $persist_timestamp = time();
+        }
+
+        $posted_block = tag(pluggable_ui(
+            'article_ui',
+            'timestamp',
+            inputLabel(
+                'year',
+                tsi('year', '%Y', $persist_timestamp, '', 'year').
+                ' <span role="separator">/</span> '.
+                tsi('month', '%m', $persist_timestamp, '', 'month').
+                ' <span role="separator">/</span> '.
+                tsi('day', '%d', $persist_timestamp, '', 'day'),
+                'publish_date',
+                array('publish_date', 'instructions_publish_date'),
+                array('class' => 'txp-form-field date posted')
+            ).
+            inputLabel(
+                'hour',
+                tsi('hour', '%H', $persist_timestamp, '', 'hour').
+                ' <span role="separator">:</span> '.
+                tsi('minute', '%M', $persist_timestamp, '', 'minute').
+                ' <span role="separator">:</span> '.
+                tsi('second', '%S', $persist_timestamp, '', 'second'),
+                'publish_time',
+                array('', 'instructions_publish_time'),
+                array('class' => 'txp-form-field time posted')
+            ).
+            n.tag(
+                checkbox('publish_now', '1', true, '', 'publish_now').
+                n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
+                'div', array('class' => 'txp-form-field posted-now')
+            ),
+            array('sPosted' => $persist_timestamp) + $rs
+        ), 'div', array('id' => 'publish-datetime-group'));
+
+        // Expires.
+        if (!empty($store_out['exp_year'])) {
+            $persist_timestamp = safe_strtotime(
+                $store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.
+                $store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second']
+            );
+        } else {
+            $persist_timestamp = 0;
+        }
+
+        $expires_block = tag(pluggable_ui(
+            'article_ui',
+            'expires',
+            inputLabel(
+                'exp_year',
+                tsi('exp_year', '%Y', $persist_timestamp, '', 'exp_year').
+                ' <span role="separator">/</span> '.
+                tsi('exp_month', '%m', $persist_timestamp, '', 'exp_month').
+                ' <span role="separator">/</span> '.
+                tsi('exp_day', '%d', $persist_timestamp, '', 'exp_day'),
+                'expire_date',
+                array('expire_date', 'instructions_expire_date'),
+                array('class' => 'txp-form-field date expires')
+            ).
+            inputLabel(
+                'exp_hour',
+                tsi('exp_hour', '%H', $persist_timestamp, '', 'exp_hour').
+                ' <span role="separator">:</span> '.
+                tsi('exp_minute', '%M', $persist_timestamp, '', 'exp_minute').
+                ' <span role="separator">:</span> '.
+                tsi('exp_second', '%S', $persist_timestamp, '', 'exp_second'),
+                'expire_time',
+                array('', 'instructions_expire_time'),
+                array('class' => 'txp-form-field time expires')
+            ).
+            n.tag(
+                checkbox('expire_now', '1', false, '', 'expire_now').
+                n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+                'div', array('class' => 'txp-form-field expire-now')
+            ),
+            $rs
+        ), 'div', array('id' => 'expires-datetime-group'));
+    } else {
+        // Timestamp.
+        $posted_block = $partials['posted']['html'];
+
+        // Expires.
+        $expires_block = $partials['expires']['html'];
+    }
+
+    echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
+
+    // 'Categories' section.
+    $html_categories = pluggable_ui('article_ui', 'categories', $partials['categories']['html'], $rs);
+    echo wrapRegion('txp-categories-group', $html_categories, 'txp-categories-group-content', 'categories', 'categories');
+
+    // 'Meta' collapsible section.
+
+    // 'URL-only title' field.
+    $html_url_title = $partials['url_title']['html'];
+
+    // 'Description' field.
+    $html_description = $partials['description']['html'];
+
+    // 'Keywords' field.
+    $html_keywords = $partials['keywords']['html'];
+
+    echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
+
+    // 'Comment options' collapsible section.
+    echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
+
+    // 'Article image' collapsible section.
+    echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
+
+    // 'Custom fields' collapsible section.
+    echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+
+    // 'Advanced options' collapsible section.
+    // Unused by core, but leaving the placeholder for legacy plugin support.
+    $html_advanced = pluggable_ui('article_ui', 'markup', '', $rs);
+
+    if ($html_advanced) {
+        echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
+    }
+
+    // Custom menu entries.
+    echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+
+    // 'Recent articles' collapsible section.
+    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+
+    echo n.'</div>'; // End of #supporting_content.
+
+    // Prev/next article links.
+    echo $partials['article_nav']['html'];
+
+    echo n.'</div>'; // End of .txp-layout-4col-alt.
 
     echo //tInput().
         n.'</div>'. // End of .txp-layout.
