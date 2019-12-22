@@ -1,4 +1,4 @@
-Changes in 4.8.0 (upcoming)
+Changes in 4.8.0
 
 * Changed: Minimum system requirements increased to PHP 5.5.0.
 * Changed: Plugin tags MUST be registered or they will not work.
@@ -9,6 +9,7 @@ Changes in 4.8.0 (upcoming)
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
 * Changed: Consistent Edit step search behaviour on Plugins and Links panels.
+* Changed: Text/HTML tabs now in popup dialog, with optional live preview.
 * Changed: Tag parser tweaks for secondpass handler.
 * Changed: Plugins cached and loaded from disk to avoid eval().
 * Changed: Custom fields support from/to filtering.
@@ -27,11 +28,11 @@ Changes in 4.8.0 (upcoming)
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
 * Added: Dark Mode support in Hive admin theme.
+* Added: Per-section article link format override.
 * Added: 'breadcrumb/title' article link format.
 * Added: 'section/category/title' article link format.
 * Added: Category searching to a specified depth.
-* Added: Per-section article link format override.
-* Added: Custom field URL filters via valueless attributes.
+* Added: Custom field aliases and URL filters via valueless attributes.
 * Added: Global 'evaluate' and 'yield' attributes.
 * Added: Ability to trim lists when using valueless 'trim' attribute.
 * Added: Link to phpinfo() in Diagnostics panel.
@@ -61,6 +62,7 @@ Changes in 4.8.0 (upcoming)
 * Developer: Some txplib_misc.php functions moved to txplib_admin.php.
 * Developer: PHP magic_quotes_gpc, magic_quotes_runtime, safe_mode and
   register_globals support removed.
+* Developer: Title accessible to plugins in Atom/RSS.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
