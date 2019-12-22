@@ -2075,12 +2075,11 @@ textpattern.Route.add('article', function () {
             }
         }
     }).on('submit.txpAsyncForm', function (e) {
-        if ($pane.dialog('isOpen')) {
+        if ($pane.dialog('isOpen') && !$('#live-preview').is(':checked')) {
             $viewMode.click();
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        $pane.trigger('dialogclose');
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
@@ -2093,6 +2092,7 @@ textpattern.Route.add('article', function () {
     $pane.dialog({
         dialogClass: 'txp-preview-container',
         buttons: [],
+        closeOnEscape: false,
         maxWidth: "100%"
     });
 

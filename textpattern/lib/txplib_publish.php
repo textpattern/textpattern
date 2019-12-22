@@ -812,7 +812,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = parse_qs($match);
-    $category !== true or $category = parse('<txp:category />');
+    $category !== true or $category = parse('<txp:category />', true, false);
     $category  = do_list_unique($category);
     $categories = array();
 
@@ -840,12 +840,12 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
-    $section !== true or $section = parse('<txp:section />');
+    $section !== true or $section = parse('<txp:section />', true, false);
     $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
     $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
-    $author !== true or $author = parse('<txp:author escape="" title="" />');
+    $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     // ID
@@ -885,7 +885,7 @@ function filterAtts($atts = null, $iscustom = null)
                 $customPairs[$cField] = $atts[$cField];
             } elseif (isset($match[$cField])) {
                 if ($match[$cField] === false && isset($thisarticle[$cField])) {
-                    $customPairs[$cField] = parse($thisarticle[$cField], true, false);
+                    $customPairs[$cField] = $thisarticle[$cField];
                 } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
                     $customPairs[$cField] = $val;
                 }
@@ -898,7 +898,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = parse('<txp:keywords />');
+    $keywords !== true or $keywords = parse('<txp:keywords />', true, false);
 
     if ($keywords) {
         $keyparts = array();
