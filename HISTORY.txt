@@ -1,6 +1,6 @@
 Changes in 4.8.0
 
-* Changed: Minimum system requirements increased to PHP 5.5.0.
+* Changed: Minimum system requirements increased to PHP 5.5.
 * Changed: Plugin tags MUST be registered or they will not work.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
 * Changed: Author's real name is available in <txp:page_url>.
