@@ -546,6 +546,7 @@ function doDiagnostics()
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
+    $updateTime = ($dbupdatetime) ? gmstrftime($fmt_date, $dbupdatetime).'/' : '';
 
     $dets = array(
         'low'  => gTxt('low'),
@@ -587,7 +588,7 @@ function doDiagnostics()
 
         gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-        gTxt('diag_last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update').cs.$updateTime.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
         priv.gTxt('diag_web_domain').cs.$siteurl.n,
 
