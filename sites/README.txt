@@ -7,5 +7,5 @@ single installation of Textpattern. With a multi-site setup, you may host
 multiple sites while having only a single copy of the Textpattern core code to
 maintain and update.
 
-Please see https://docs.textpattern.com/setup/multi-site-installation for full
+Please see https://textpattern.com/textpattern-multi-site-installation for full
 instructions.
