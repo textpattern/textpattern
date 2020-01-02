@@ -10,44 +10,60 @@
 
     <group id="article" title="">
         <item id="article_image" title=""><![CDATA[]]></item>
-        <item id="body" title=""><![CDATA[]]></item>
+        <item id="body" title=""><![CDATA[
+<h2>Treść</h2> 
+<p>Główny tekst artykułu jest zawarty w polu treści.</p> 
+<p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
         <item id="description" title="Opis"><![CDATA[]]></item>
-        <item id="excerpt" title=""><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
+        <item id="excerpt" title="Zajawka"><![CDATA[]]></item>
+        <item id="expire_date" title="Data wygaśnięcia"><![CDATA[]]></item>
         <item id="keywords" title="Słowa kluczowe"><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
+        <item id="override_form" title="Nadpisz formę"><![CDATA[]]></item>
         <item id="publish_date"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
-        <item id="title" title="Tytuł"><![CDATA[]]></item>
+        <item id="title" title="Tytuł"><![CDATA[
+<h2>Tytuł</h2>
+<p>Dodaj tytuł odpowiedni dla tego artykułu.</p>
+<p>Tytuł artykułu jest ograniczony do maksymalnie 255 znaków.</p>
+        ]]></item>
         <item id="url_title" title=""><![CDATA[]]></item>
     </group>
 
     <group id="category" title="Panel kategorii">
         <item id="article_category" title="Artykuły"><![CDATA[]]></item>
         <item id="category_description" title="Opis"><![CDATA[]]></item>
-        <item id="file_category" title="Pliki"><![CDATA[]]></item>
+        <item id="file_category" title="Pliki"><![CDATA[
+<h2>Pliki</h2>
+<p>Kategorie plików są opcjonalne i przydatne do grupowania wybranych plików razem.</p>
+        ]]></item>
         <item id="image_category" title="Obrazy"><![CDATA[]]></item>
         <item id="link_category" title="Linki"><![CDATA[]]></item>
     </group>
 
-    <group id="diag" title="">
+    <group id="diag" title="Panel diagnostyczny">
         <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
         <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Ukryj osobiste informacje"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Ukryj osobiste informacje"><![CDATA[
+<h2>Ukryj prywatne informacje</h2>
+<p>Ukryj prywatne informacje dla dodatkowego bezpieczeństwa. Jeśli informacje diagnostyczne mają być udostępniane w formacie widocznym publicznie, na przykład forum wsparcia Textpattern, zmniejsza to ryzyko bezpieczeństwa poprzez pominięcie wrażliwych informacji o serwerze. </p>
+        ]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title=""><![CDATA[]]></item>
         <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Wgrywanie plików jest wyłączone"><![CDATA[
+<h2>Wgrywanie plików jest wyłączone</h2>
+<p>Aktualna konfiguracja serwera wskazuje, że przesyłanie plików jest wyłączone. Sprawdź i zmień ustawienia <code>file_uploads</code> w <code>php.ini</code> lub skontaktuj się z hostem witryny w celu uzyskania pomocy.</p>
+        ]]></item>
         <item id="htaccess_missing" title="Brak pliku .htaccess"><![CDATA[]]></item>
         <item id="index_inaccessible" title=""><![CDATA[]]></item>
         <item id="missing_files" title="Brakujące pliki"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Brak mod_rewrite Apache"><![CDATA[]]></item>
         <item id="modified_files" title="Zmodyfikowane pliki"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="Błędy w tabeli MySQL"><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Nie zdefiniowano katalogu tymczasowego"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Katalog sekcji istnieje"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Katalog witryny nieczytelny"><![CDATA[]]></item>
+        <item id="php_version_required" title="Minimalne wymogi dotyczące wersji"><![CDATA[]]></item>
         <item id="setup_still_exists" title=""><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
@@ -89,6 +105,7 @@
 
     <group id="plugin" title="Panel wtyczek">
         <item id="install_plugin" title="Zainstaluj wtyczkę"><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="">

@@ -481,6 +481,10 @@
 <p>Collez le contenu du fichier texte du plugin ici, puis cliquez «Envoi» pour commencer l’installation. Tout plugin que vous ajoutez du même nom qu’un autre préalablement installé sera alors écrasé par la version nouvellement installée.</p>
 <p>Le texte du plugin collé ici n’est <strong>pas</strong> du code PHP mais du texte encodé au format Base-64, généralement précédé d’une en-tête avec les informations du plugin (comme son nom, sa version, sa description, le nom de son auteur•e, etc).</p>
         ]]></item>
+        <item id="upload_plugin" title="Téléverser un plugin"><![CDATA[
+<h2>Téléverser un plugin</h2>
+<p>Utilisez ce formulaire pour téléverser un plugin (un fichier PHP ou une archive zippée). Les plugins ainsi téléversés (et leurs éventuelles ressources associées) sont conservés dans un répertoire nommé «plugins».</p>
+<p>Tous les plugins téléversés de mêmes noms que ceux déjà installés seront écrasés par leur nouvelle version.</p>]]></item>
     </group>
 
     <group id="prefs" title="Préférences">

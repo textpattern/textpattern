@@ -425,6 +425,11 @@ např.: #@language cs-cz</p>
 <h2>Instalovat plugin</h2>
 <p>Vlož obsah z textového souboru pluginu a stiskni tlačítko Nahrát. Jestliže nahraješ plugin stejného jména již nainstalovaného pluginu, bude plugin přepsán novou verzí.</p>
 <p>Vkládaný text pluginu <strong>není</strong> PHP kód, nýbrž text kódovaný BASE64, obvykle s hlavičkou obsahující informace o pluginu (název pluginu, verze, popis, jméno autora, atd.)</p>        ]]></item>
+        <item id="upload_plugin" title="Nahrát plugin"><![CDATA[
+<h2>Nahrát plugin</h2>
+<p>Formulář pro nahrání souboru pluginu (PHP soubor nebo zip archiv). Nahrané pluginy (a všechna potřebné soubory) jsou uloženy v adresáři 'plugins'.</p>
+<p>Kdykoliv nahrajete plugin stejného názvu, jako již dříve nainstalovaný, bude tento přepsán nahranou verzí.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Panel Nastavení">
