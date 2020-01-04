@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1660,17 +1660,18 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
-    if (isset($atts['yield']) && isset($txp_atts['yield']) && !isset($pairs['yield'])) {
+    if (isset($atts['yield']) && !isset($pairs['yield'])) {
         isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
-        unset($atts['yield']);
 
-        foreach (do_list_unique($txp_atts['yield']) as $name) {
-            $value = call_user_func($partial, array('name' => $name));
+        foreach (parse_qs($atts['yield']) as $name => $alias) {
+            $value = call_user_func($partial, array('name' => $alias === false ? $name : $alias));
 
             if(isset($value)) {
                 $atts[$name] = $value;
             }
         }
+
+        unset($atts['yield']);
     }
 
     if (empty($pretext['_txp_atts'])) {
@@ -3180,7 +3181,7 @@ function parse_form($name)
             $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $out = parse($f, true, false);
+        $out = parse($f);
 
         $txp_current_form = $old_form;
         $stack[$name]--;
@@ -4282,6 +4283,28 @@ eod;
 }
 
 /**
+ * Get field => alias array.
+ *
+ * @param   string $match
+ * @return  array()
+ * @since   4.8.0
+ * @package TagParser
+ */
+
+function parse_qs($match, $sep='=')
+{
+    $pairs = array();
+
+    foreach(do_list_unique($match) as $chunk) {
+        $name = strtok($chunk, $sep);
+        $alias = strtok($sep);
+        $pairs[strtolower($name)] = $alias;
+    };
+
+    return $pairs;
+}
+
+/**
  * Gets a URL-encoded and HTML entity-escaped query string for a URL.
  *
  * Builds a HTTP query string from an associative array.
@@ -4391,17 +4414,17 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 
 function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
-    global $permlink_mode, $prefs, $txp_sections;
-    static $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+    global $permlink_mode, $prefs, $txp_context, $txp_sections;
 
-    // Unset extra stuff to link to an article.
+    // Link to an article.
     if (!empty($parts['id'])) {
-        foreach ($internals as $key) {
-            unset($parts[$key]);
-        }
+        return permlinkurl_id($parts['id']);
     }
 
-    $keys = $inherit ? array_merge($inherit, $parts) : $parts;
+    $keys = $parts;
+    empty($inherit) or $keys += $inherit;
+    empty($txp_context) or $keys += $txp_context;
+    unset($keys['id']);
 
     if (isset($prefs['custom_url_func'])
         && is_callable($prefs['custom_url_func'])
@@ -4438,10 +4461,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
 
-        if (!empty($keys['id'])) {
-            $url = permlinkurl_id($keys['id']);
-            unset($keys['id']);
-        } elseif (!empty($keys['rss'])) {
+        if (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
@@ -4502,7 +4522,7 @@ function permlinkurl_id($id)
     $id = (int) $id;
 
     if (isset($permlinks[$id])) {
-        return $permlinks[$id];
+        return permlinkurl(array('id' => $id));
     }
 
     if (isset($thisarticle['thisid']) && $thisarticle['thisid'] == $id) {
@@ -4538,7 +4558,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = hu)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $now = null;
+    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4565,6 +4585,18 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     $thisid = (int) $thisid;
+    $keys = get_context(null);
+
+    foreach($internals as $key) {
+        unset($keys[$key]);
+    }
+
+    if (isset($permlinks[$thisid])) {
+        return $hu.($permlinks[$thisid] === true ?
+            'index.php'.join_qs(array('id' => $thisid) + $keys) :
+            $permlinks[$thisid].join_qs($keys)
+        );
+    }
 
     if (!isset($now)) {
         $now = strftime('%F %T');
@@ -4582,7 +4614,9 @@ function permlinkurl($article_array, $hu = hu)
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
-    if (!empty($section) && isset($txp_sections[$section])) {
+    if (empty($section)) {
+        $url_mode = 'messy';
+    } elseif (isset($txp_sections[$section])) {
         $url_mode = empty($txp_sections[$section]['permlink_mode']) ? $permlink_mode : $txp_sections[$section]['permlink_mode'];
     } else {
         $url_mode = $permlink_mode;
@@ -4618,25 +4652,26 @@ function permlinkurl($article_array, $hu = hu)
             $out = "$section/$url_title";
             break;
         case 'section_category_title':
+            $out = $section.'/'.(empty($category1) ? '' : $category1.'/').(empty($category2) ? '' : $category2.'/').$url_title;
+            break;
         case 'breadcrumb_title':
-            $breadcrumb = ($url_mode == 'breadcrumb_title');
             $out = $section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
-                    $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category2), 'name'))) : $category2).'/';
+                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
                 }
             } elseif (empty($category2)) {
-                $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category1), 'name'))) : $category1).'/';
+                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
             } else {
                 $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
                 if (in_array($category1, $c2_path)) {
-                    $out .= ($breadcrumb ? implode('/', $c2_path) : "$category1/$category2").'/';
+                    $out .= implode('/', $c2_path).'/';
                 } else {
                     $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
                     if (in_array($category2, $c1_path)) {
-                        $out .= ($breadcrumb ? implode('/', $c1_path) : "$category2/$category1").'/';
+                        $out .= implode('/', $c1_path).'/';
                     } else {
-                        $c0_path = $breadcrumb ? array_intersect($c1_path, $c2_path) : null;
+                        $c0_path = array_intersect($c1_path, $c2_path);
                         $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
                     }
                 }
@@ -4647,11 +4682,14 @@ function permlinkurl($article_array, $hu = hu)
             $out = $url_title;
             break;
         case 'messy':
-            $out = "index.php?id=$thisid";
+            $out = "index.php";
+            $keys['id'] = $thisid;
             break;
     }
 
-    return $permlinks[$thisid] = $hu.$out;
+    $permlinks[$thisid] = $url_mode == 'messy' ? true : $out;
+
+    return $hu.$out.join_qs($keys);
 }
 
 /**
@@ -5041,9 +5079,13 @@ function getMetaDescription($type = null)
 
 function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
 {
-    global $pretext;
+    global $pretext, $txp_context;
 
-    if (!is_array($context)) {
+    if (!isset($context)) {
+        return empty($txp_context) ? array() : $txp_context;
+    } elseif (empty($context)) {
+        return array();
+    } elseif (!is_array($context)) {
         $context = $context === true ? $internals : do_list_unique($context);
     }
 

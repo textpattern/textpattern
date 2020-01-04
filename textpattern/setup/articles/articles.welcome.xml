@@ -10,7 +10,7 @@
 
 * Write a "new article":adminurl/index.php?event=article? Let your creativity flow!
 * Change this site's name, slogan or select a different article URL style? Check and modify your "preferences":adminurl/index.php?event=prefs.
-* Edit or delete this article? Your "articles list":adminurl/index.php?event=list is the place to start.
+* Edit or delete this article? Your "articles":adminurl/index.php?event=list list is the place to start.
 * Upload "images":adminurl/index.php?event=image or "files":adminurl/index.php?event=file to accompany your articles?
 * Learn Textile, the markup generator included with Textpattern? You can try it in the "Textile sandbox":https://textpattern.com/textile-sandbox.
 ** If you want to learn more, you can refer to an extensive "Textile manual":https://textpattern.com/textile-reference-manual.

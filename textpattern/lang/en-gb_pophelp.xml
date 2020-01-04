@@ -483,6 +483,11 @@
 <p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
 <p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
         ]]></item>
+        <item id="upload_plugin" title="Upload plugin"><![CDATA[
+<h2>Upload plugin</h2>
+<p>Use this form to upload a plugin file (either a PHP file or a zipped archive). Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
+<p>Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Preferences panel">
@@ -1029,14 +1034,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Introduction to Themes</h2>
 <p>A Textpattern theme is a collection of Pages, Forms and Stylesheets. Themes allow you to logically separate your site assets into groups for ease of identification, or sharing with others. The act of creating or importing a Theme, and any assets it contains, does <em>not</em> have any impact on your existing site. You are free to edit or modify any asset that is not associated with a Section of your site, and it will not affect the site itself.</p>
 <p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
-<h3>Previewing theme assets</h3>
-<p>All the while you are working on a theme, Textpattern will permit you (and only you) to preview the assets in that theme. Just visit the public website while you are still logged in to the administration area. Provided Textpattern can locate an asset with the same name as the one that is already assigned to the public Section of the site you are visiting, it will show you what your site will look like by using the working theme as a preview.</p>
-<p>This allows you to rapidly see changes to your theme‘s assets and continue to alter items prior to making them available to the public. At any time, switching your working theme from the administration area will allow you to preview those assets.</p>
-<p>When you are satisfied with the results, assign assets from any theme(s) to one or more Sections of your site. This will make those assets live, and visible to any site visitors.</p>
-<h3>Exporting and importing</h3>
-<p>Themes may be shared with the community. Select one or more themes via the checkboxes and use the multi-edit tool‘s <em>export</em> option to export the theme assets to disk. Each theme is located in its own sub-directory, beneath the directory defined in your <em>Theme directory</em> preference setting (default: <code>themes</code>).</p>
-<p>Once there, you can package it up and distribute it. Others may unpackage themes into their own directory and use the <em>import</em> tool to bring the assets into their database. From there, they may switch to the theme and use that as their working theme, permitting preview of assets within the site and, ultimately, assignment of assets to Sections as described above.</p>
-<p>The ability to export themes also allows you to make a backup, edit asset contents on disk in your text editor and/or apply version control to them. Remember: there is <em>no link</em> between your public site and the disk-based version of your assets. In order for visitors to see the changes, you must first import alterations into your database and ensure that one or more Sections are using the assets from the theme.</p>
+<p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
         <item id="skin_title" title="Theme title"><![CDATA[
 <h2>Theme title</h2>

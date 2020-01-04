@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -336,11 +336,13 @@ function parse($thing, $condition = true, $not = true)
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $short_tags = null;
 
-    if (!empty($txp_atts['evaluate'])) {
-        $condition = true;
-    } elseif ($not && !empty($txp_atts['not'])) {
-        $condition = empty($condition);
-        unset($txp_atts['not']);
+    if ($not) {
+        if (!empty($txp_atts['evaluate'])) {
+            $condition = true;
+        } elseif (!empty($txp_atts['not'])) {
+            $condition = empty($condition);
+            unset($txp_atts['not']);
+        }
     }
 
     $txp_tag = !empty($condition);
@@ -376,7 +378,7 @@ function parse($thing, $condition = true, $not = true)
 
     list($first, $last) = $txp_else[$hash];
 
-    if (!empty($txp_atts['evaluate'])) {
+    if ($not && !empty($txp_atts['evaluate'])) {
         $test = trim($txp_atts['evaluate']);
         $isempty = !empty($test);
         $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
@@ -505,7 +507,7 @@ function processTags($tag, $atts = '', $thing = null)
             $out = $out ? '' : '1';
         }
 
-        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate'], $txp_atts['yield']);
+        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
 
         if ($txp_atts) {
             $pretext['_txp_atts'] = true;
@@ -812,19 +814,19 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Categories
-    $match = do_list_unique($match);
-    $category !== true or $category = parse('<txp:category />');
+    $match = parse_qs($match);
+    $category !== true or $category = parse('<txp:category />', true, false);
     $category  = do_list_unique($category);
     $categories = array();
 
     if ($category && (!$depth || $category = getTree($category, 'article', '1', 'txp_category', $depth))) {
         $category  = join("','", doSlash($category));
 
-        if (in_array('Category1', $match)) {
+        if (isset($match['category1'])) {
             $categories[] = "Category1 IN ('$category')";
         }
 
-        if (in_array('Category2', $match)) {
+        if (isset($match['category2'])) {
             $categories[] = "Category2 IN ('$category')";
         }
     }
@@ -841,12 +843,12 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
-    $section !== true or $section = parse('<txp:section />');
+    $section !== true or $section = parse('<txp:section />', true, false);
     $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
     $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
-    $author !== true or $author = parse('<txp:author escape="" title="" />');
+    $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     // ID
@@ -884,10 +886,10 @@ function filterAtts($atts = null, $iscustom = null)
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
                 $customPairs[$cField] = $atts[$cField];
-            } elseif (in_array($cField, $match)) {
-                if (!empty($thisarticle)) {
-                    $customPairs[$cField] = parse('<txp:custom_field name="'.$cField.'" escape="" />');
-                } elseif (($val = gps($cField, false)) !== false) {
+            } elseif (isset($match[$cField])) {
+                if ($match[$cField] === false && isset($thisarticle[$cField])) {
+                    $customPairs[$cField] = $thisarticle[$cField];
+                } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
                     $customPairs[$cField] = $val;
                 }
             } else {
@@ -903,7 +905,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = parse('<txp:keywords />');
+    $keywords !== true or $keywords = parse('<txp:keywords />', true, false);
 
     if ($keywords) {
         $keyparts = array();

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -291,7 +291,7 @@ function step_getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server'),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(

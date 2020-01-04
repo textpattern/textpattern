@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1212,10 +1212,10 @@ class Skin extends CommonBase implements SkinInterface
                     ))
                     .tag(gTxt('import_from_disk'), 'label', array('for' => $event.'_import'))
                     .popHelp($event.'_import')
-                    .selectInput('skins', $new, '', true, false, 'skins')
+                    .selectInput('skins', $new, '', false, false, 'skins')
                     .eInput($this->getEvent())
                     .sInput('import')
-                    .fInput('submit', '', gTxt('upload'))
+                    .fInput('submit', '', gTxt('import'))
                     .n
                     .tag_end('form');
             }
@@ -1301,6 +1301,7 @@ class Skin extends CommonBase implements SkinInterface
         }
 
         $rs = $this->getTableData($criteria, $sortSQL, $offset, $limit);
+        $numThemes = mysqli_num_rows($rs);
 
         if ($rs) {
             $dev_preview = has_privs('skin.edit');
@@ -1363,20 +1364,11 @@ class Skin extends CommonBase implements SkinInterface
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
-                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit')))
-                        .(!$dev_preview ? '' : ' | '.
-                        href(gTxt('preview'),
-                            'index.php?event=section&step=section_set_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token()
-                        ).' | '.
-                        href(gTxt(${$event.'_section_count'} > 0 ? 'active' : 'activate'),
-                            'index.php?event=section&step=section_use_theme&skin='.urlencode($skin_name).'&_txp_token='.form_token(),
-                            array(
-                                'data-verify' => gTxt('are_you_sure'),
-                                'class' => ${$event.'_section_count'} > 0 ? 'success' : false
-                            )
-                        )),
-                        '',
-                        array(
+                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
+                        ' | '.
+                        href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
+                        ((${$event.'_section_count'} > 0 && $numThemes > 1) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '')
+                        , '', array(
                             'scope' => 'row',
                             'class' => 'txp-list-col-name',
                         )

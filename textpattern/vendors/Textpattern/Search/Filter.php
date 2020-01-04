@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -201,7 +201,7 @@ class Filter
             $out['search_method'] =  join(',', $this->loadDefaultSearchMethod());
         }
 
-        $out['criteria'] .= callback_event('admin_criteria', $this->event.'_list', 0, $out['criteria']);
+        $out['criteria'] =  '( ' . $out['criteria'] . ' ) ' . callback_event('admin_criteria', $this->event.'_list', 0, $out['criteria']);
 
         return array_values($out);
     }
