@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1301,6 +1301,7 @@ class Skin extends CommonBase implements SkinInterface
         }
 
         $rs = $this->getTableData($criteria, $sortSQL, $offset, $limit);
+        $numThemes = mysqli_num_rows($rs);
 
         if ($rs) {
             $dev_preview = has_privs('skin.edit');
@@ -1365,8 +1366,8 @@ class Skin extends CommonBase implements SkinInterface
                     .hCell(
                         href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
                         ' | '.
-                        href(gTxt('assign_sections'), 'index.php?event=section&skin='.urlencode($skin_name)).
-                        (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '')
+                        href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
+                        ((${$event.'_section_count'} > 0 && $numThemes > 1) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '')
                         , '', array(
                             'scope' => 'row',
                             'class' => 'txp-list-col-name',
