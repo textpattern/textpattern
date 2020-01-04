@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="es">
-    <group id="admin" title="Panel de usuarios">
+    <group id="admin" title="Panel de usuario">
         <item id="about_privileges" title="Sobre roles"><![CDATA[
 <h2>Acerca de los roles</h2>
 <h3>Editor</h3>
@@ -88,20 +88,20 @@ XPath: /resources/help/group/item        ]]></item>
     <group id="article" title="Panel de escritura">
         <item id="article_image" title="Imagen de artículo"><![CDATA[]]></item>
         <item id="body" title=""><![CDATA[]]></item>
-        <item id="description" title=""><![CDATA[]]></item>
+        <item id="description" title="Descripción"><![CDATA[]]></item>
         <item id="excerpt" title=""><![CDATA[]]></item>
         <item id="expire_date" title=""><![CDATA[]]></item>
         <item id="keywords" title=""><![CDATA[]]></item>
         <item id="override_form" title=""><![CDATA[]]></item>
         <item id="publish_date"><![CDATA[]]></item>
         <item id="status" title=""><![CDATA[]]></item>
-        <item id="title" title=""><![CDATA[]]></item>
+        <item id="title" title="Título"><![CDATA[]]></item>
         <item id="url_title" title=""><![CDATA[]]></item>
     </group>
 
     <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
-        <item id="category_description" title=""><![CDATA[]]></item>
+        <item id="article_category" title="Artículos"><![CDATA[]]></item>
+        <item id="category_description" title="Descripción"><![CDATA[]]></item>
         <item id="file_category" title=""><![CDATA[]]></item>
         <item id="image_category" title=""><![CDATA[]]></item>
         <item id="link_category" title=""><![CDATA[]]></item>
@@ -191,6 +191,7 @@ XPath: /resources/help/group/item        ]]></item>
 <p>Pega el contenido del archivo de texto deldel plugin aquí, luego pulsa 'Subir' para comenzar la instalación. Cualquier plugin que subas con el mismo nombre que uno que ya tengas instalado anteriormente sobreescribirá la versión anterior del plugin.</p>
 <p>El texto del plugin que pegas aquí <strong>no</strong> es el código PHP en bruto sino texto codificado en Base64, frecuentemente precedido por una cabecera que contiene información del plugin (como el nombre del plugin, versión y descripción, nombre del autor, etc).</p>
         ]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="">

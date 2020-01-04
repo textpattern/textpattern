@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -51,10 +51,11 @@ if ($event == 'section') {
         'section_multi_edit'    => true,
         'section_set_default'   => true,
         'section_set_theme'     => true,
+        'section_select_skin'   => false,
         'section_toggle_option' => true,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
+    if ($step && is_callable($step) && bouncer($step, $available_steps)) {
         $step();
     } else {
         sec_section_list();
@@ -71,7 +72,7 @@ if ($event == 'section') {
 
 function sec_section_list($message = '')
 {
-    global $event, $all_pages, $all_styles;
+    global $event, $step, $all_pages, $all_styles;
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -206,7 +207,7 @@ function sec_section_list($message = '')
     }
 
     $paginator = new \Textpattern\Admin\Paginator();
-    $limit = gps('skin') ? PHP_INT_MAX : $paginator->getLimit();
+    $limit = $step == 'section_select_skin' ? PHP_INT_MAX : $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -912,7 +913,7 @@ var page_sel = '';
 var style_sel = '';
 EOJS;
 
-    if (gps('skin')) {
+    if ($step == 'section_select_skin') {
         $script .= <<<EOJS
 $(function() {
     $('#select_all').click();

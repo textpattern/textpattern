@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -4492,8 +4492,8 @@ function permlinkurl_id($id)
 
 function permlinkurl($article_array, $hu = hu)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_context, $txp_sections;
-    static $internals = array('c' => null, 'author' => null, 'month' => null, 'f' => null), $now = null;
+    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
+    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4520,7 +4520,11 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     $thisid = (int) $thisid;
-    $keys = $txp_context ? array_intersect_key($txp_context, $internals) : array();
+    $keys = get_context(null);
+
+    foreach($internals as $key) {
+        unset($keys[$key]);
+    }
 
     if (isset($permlinks[$thisid])) {
         return $hu.($permlinks[$thisid] === true ?
@@ -4583,25 +4587,26 @@ function permlinkurl($article_array, $hu = hu)
             $out = "$section/$url_title";
             break;
         case 'section_category_title':
+            $out = $section.'/'.(empty($category1) ? '' : $category1.'/').(empty($category2) ? '' : $category2.'/').$url_title;
+            break;
         case 'breadcrumb_title':
-            $breadcrumb = ($url_mode == 'breadcrumb_title');
             $out = $section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
-                    $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category2), 'name'))) : $category2).'/';
+                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
                 }
             } elseif (empty($category2)) {
-                $out .= ($breadcrumb ? implode('/', array_reverse(array_column(getRootPath($category1), 'name'))) : $category1).'/';
+                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
             } else {
                 $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
                 if (in_array($category1, $c2_path)) {
-                    $out .= ($breadcrumb ? implode('/', $c2_path) : "$category1/$category2").'/';
+                    $out .= implode('/', $c2_path).'/';
                 } else {
                     $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
                     if (in_array($category2, $c1_path)) {
-                        $out .= ($breadcrumb ? implode('/', $c1_path) : "$category2/$category1").'/';
+                        $out .= implode('/', $c1_path).'/';
                     } else {
-                        $c0_path = $breadcrumb ? array_intersect($c1_path, $c2_path) : null;
+                        $c0_path = array_intersect($c1_path, $c2_path);
                         $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
                     }
                 }
@@ -5012,7 +5017,7 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
     global $pretext, $txp_context;
 
     if (!isset($context)) {
-        return $txp_context;
+        return empty($txp_context) ? array() : $txp_context;
     } elseif (empty($context)) {
         return array();
     } elseif (!is_array($context)) {

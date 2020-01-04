@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1811,7 +1811,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     $pg = $thispage['pg'];
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
     $old_context = $txp_context;
-    $txp_context = get_context();
+    $txp_context += get_context();
     $out = array();
 
     if (!isset($shift)) {
@@ -4234,14 +4234,10 @@ function php($atts = null, $thing = null)
 
 function txp_header($atts)
 {
-    if (!php()) {
-        return;
-    }
-
     extract(lAtts(array(
-        'name'    => 1,
+        'name'    => 'Content-Type',
         'replace' => 1,
-        'value'   => isset($atts['name']) ? true : '200 OK',
+        'value'   => isset($atts['name']) ? true : 'text/html; charset=utf-8',
         'break'   => ''
     ), $atts));
 
