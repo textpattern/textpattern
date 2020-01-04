@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2075,12 +2075,11 @@ textpattern.Route.add('article', function () {
             }
         }
     }).on('submit.txpAsyncForm', function (e) {
-        if ($pane.dialog('isOpen')) {
+        if ($pane.dialog('isOpen') && !$('#live-preview').is(':checked')) {
             $viewMode.click();
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        $pane.trigger('dialogclose');
         form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
@@ -2093,6 +2092,7 @@ textpattern.Route.add('article', function () {
     $pane.dialog({
         dialogClass: 'txp-preview-container',
         buttons: [],
+        closeOnEscape: false,
         maxWidth: "100%"
     });
 
@@ -2115,6 +2115,7 @@ textpattern.Route.add('article', function () {
             var data = form.serializeArray();
             data.push({name: 'app_mode', value: 'async'});
             data.push({name: 'preview', value: $field});
+            data.push({name: 'view', value: $viewMode.data('view-mode')});
             textpattern.Relay.callback('updateList', {
                 url: 'index.php #pane-view',
                 data: data,
@@ -2131,7 +2132,6 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
-        $('input[name="view"]').val($view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function(e) {
         e.preventDefault();
