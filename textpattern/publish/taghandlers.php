@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2019 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -4234,14 +4234,10 @@ function php($atts = null, $thing = null)
 
 function txp_header($atts)
 {
-    if (!php()) {
-        return;
-    }
-
     extract(lAtts(array(
-        'name'    => 1,
+        'name'    => 'Content-Type',
         'replace' => 1,
-        'value'   => isset($atts['name']) ? true : '200 OK',
+        'value'   => isset($atts['name']) ? true : 'text/html; charset=utf-8',
         'break'   => ''
     ), $atts));
 
