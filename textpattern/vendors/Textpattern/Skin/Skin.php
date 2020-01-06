@@ -271,13 +271,14 @@ class Skin extends CommonBase implements SkinInterface
 
     protected function getSections($skin = null)
     {
-        $skin !== null or $skin = $this->getName();
+        $skin = doSlash(is_string($skin) ? $skin : $this->getName());
+        $event = $this->getEvent();
 
         return array_values(
              safe_column(
                  'name',
                  'txp_section',
-                 $this->getEvent()." ='".doSlash($skin)."'"
+                 "$event ='$skin' OR dev_{$event} ='$skin'"
              )
          );
     }
@@ -290,16 +291,16 @@ class Skin extends CommonBase implements SkinInterface
      * @return bool          FALSE on error.
      */
 
-    public function updateSections($set = null, $where = null)
+    public function updateSections($set = null, $where = null, $dev = false)
     {
-        $event = $this->getEvent();
+        $event = ($dev ? "{$dev}_" : '').$this->getEvent();
 
         $set !== null or $set = $event." = '".doSlash($this->getName())."'";
 
         if ($where === null) {
             $base = $this->getBase();
 
-            $where = $base ? $event." = '".doSlash($this->getBase())."'" : '1 = 1';
+            $where = $base ? $event." = '".doSlash($base)."'" : '1 = 1';
         }
 
         return safe_update('txp_section', $set, $where);
@@ -579,10 +580,10 @@ class Skin extends CommonBase implements SkinInterface
 
         if ($ready) {
             // Update skin related sections.
-            $sections = $this->getSections($base);
-
-            if ($sections && !$this->updateSections()) {
-                $this->mergeResult($event.'_related_sections_update_failed', array($base => $sections));
+            if ($sections = $this->getSections($base)) {
+                $updated = $this->updateSections();
+                $updated = $this->updateSections(null, null, 'dev') && $updated;
+                $updated or $this->mergeResult($event.'_related_sections_update_failed', array($base => $sections));
             }
 
             // update the skin_editing pref if needed.
@@ -861,7 +862,7 @@ class Skin extends CommonBase implements SkinInterface
 
             if (!$this->setName($name)->isInstalled()) {
                 $this->mergeResult($event.'_unknown', $name);
-            } elseif ($sections = $this->getSections()) {
+            } elseif ($sections = $this->getSections($name)) {
                 $this->mergeResult($event.'_in_use', array($name => $sections));
             } else {
                 /**
