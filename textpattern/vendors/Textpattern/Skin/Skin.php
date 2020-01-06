@@ -468,6 +468,11 @@ class Skin extends CommonBase implements SkinInterface
                         .$asset.'_count';
         }
 
+        $things[] = '(SELECT COUNT(*) '
+            .'FROM '.safe_pfx_j('txp_section').' '
+            .'WHERE dev_'.$this->getEvent().' = '.$table.'.name) '
+            .'dev_section_count';
+
         return safe_rows_start(
             implode(', ', $things),
             $table,
@@ -1366,9 +1371,11 @@ class Skin extends CommonBase implements SkinInterface
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
                         href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
-                        ($numThemes > 1 ? ' | '.href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)) : '').
-                        ((${$event.'_section_count'} > 0 && $numThemes > 1) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '')
-                        , '', array(
+                        ($numThemes > 1 ? ' | '.href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
+                        (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) :
+                            (${$event.'_dev_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill warning')) : '')
+                        ) : ''),
+                        '', array(
                             'scope' => 'row',
                             'class' => 'txp-list-col-name',
                         )
