@@ -750,6 +750,18 @@ function gps($thing, $default = '')
         $out = doArray($out, 'deCRLF');
     } elseif (isset($_POST[$thing])) {
         $out = $_POST[$thing];
+    } elseif (is_numeric($thing)) {
+        global $pretext;
+
+        if (empty($pretext)) {
+            return $default;
+        }
+
+        $url = chopUrl($pretext['req'], null);
+        $n = count($url) - 1;
+        $thing = (int)$thing;
+        $thing >=0 or $thing = $n + $thing;
+        $out = $thing == 0 ? $url['u'.$n] : (isset($url['u'.$thing]) ? $url['u'.$thing] : $default);
     } else {
         return $default;
     }
@@ -4384,6 +4396,15 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     // 'article' context is implicit, no need to add it to the page URL.
     if (isset($keys['context']) && $keys['context'] == 'article') {
         unset($keys['context']);
+    }
+
+    $numkeys = array();
+
+    foreach ($keys as $key => $v) {
+        if (is_numeric($key)) {
+            $numkeys[$key] = urlencode($v).'/';
+            unset($keys[$key]);
+        }
     }
 
     if ($url_mode == 'messy') {
