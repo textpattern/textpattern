@@ -745,23 +745,16 @@ function link_format_info($link)
 
 function gps($thing, $default = '')
 {
+    global $pretext;
+
     if (isset($_GET[$thing])) {
         $out = $_GET[$thing];
         $out = doArray($out, 'deCRLF');
     } elseif (isset($_POST[$thing])) {
         $out = $_POST[$thing];
-    } elseif (is_numeric($thing)) {
-        global $pretext;
-
-        if (empty($pretext)) {
-            return $default;
-        }
-
-        $url = chopUrl($pretext['req'], null);
-        $n = count($url) - 1;
-        $thing = (int)$thing;
-        $thing >=0 or $thing = $n + $thing;
-        $out = $thing == 0 ? $url['u'.$n] : (isset($url['u'.$thing]) ? $url['u'.$thing] : $default);
+    } elseif (is_numeric($thing) && isset($pretext[abs($thing)])) {
+        $thing >= 0 or $thing = $pretext[0] - $thing + 1;
+        $out = $pretext[$thing];
     } else {
         return $default;
     }

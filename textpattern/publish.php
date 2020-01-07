@@ -235,7 +235,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = array_merge($pretext, preText($s, $prefs));
+$pretext = preText($s, $prefs) + $pretext;
 callback_event('pretext_end');
 extract($pretext);
 
@@ -310,6 +310,9 @@ function preText($s, $prefs)
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
         $url = chopUrl($req, 4);
+
+        for ($n = 0; isset($url['u'.($n+1)]); $out[++$n] = $url['u'.$n]);
+        $out[0] = $n;
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
@@ -387,8 +390,8 @@ function preText($s, $prefs)
                     break;
 
                 default:
-                    for ($n = 0; isset(${'u'.($n+1)}); $n++);
-                    $un = ${'u'.$n};
+                    $n = $out[0];
+                    $un = $out[$n];    
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
