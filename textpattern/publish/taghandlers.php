@@ -4458,6 +4458,13 @@ function page_url($atts, $thing = null)
         $out = '1';
     } elseif (isset($pretext[$type])) {
         $out = $escape === null ? txpspecialchars($pretext[$type]) : $pretext[$type];
+    } elseif (is_numeric($type)) {
+        $url = chopUrl($pretext['req'], null);
+        $n = count($url) - 1;
+        $type = (int)$type;
+        $type >=0 or $type = $n + $type;
+        $out = $type == 0 ? $url['u'.$n] : (isset($url['u'.$type]) ? $url['u'.$type] : $default);
+        $escape !== null or $out = txpspecialchars($out);
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);

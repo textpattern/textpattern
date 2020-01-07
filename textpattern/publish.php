@@ -309,7 +309,7 @@ function preText($s, $prefs)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        $url = chopUrl($req);
+        $url = chopUrl($req, 4);
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
@@ -330,7 +330,7 @@ function preText($s, $prefs)
     $title = null;
 
     // If messy vars exist, bypass URL parsing.
-    if (!$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
+    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
         extract($url);
 
         // Return clean URL test results for diagnostics.
@@ -417,6 +417,7 @@ function preText($s, $prefs)
 
                         if (!isset($permlink_guess)) {
                             unset($thisarticle);
+                            $is_404 = true;
                         } else {
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
@@ -429,7 +430,7 @@ function preText($s, $prefs)
                         $permlink_guess = $permlink_modes[$u1];
                     }
 
-                    if (empty($out['id'])) {
+                    if (!$is_404 && empty($out['id'])) {
                         // Then see if the prefs-defined permlink scheme is usable.
                         switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
                             case 'section_id_title':
@@ -1229,12 +1230,12 @@ function validContext($context)
  * @package URL
  */
 
-function chopUrl($req)
+function chopUrl($req, $min = 4)
 {
     $req = strtok($req, '?');
     $req = preg_replace('/index\.php$/i', '', $req);
     $r = array_map('urldecode', explode('/', strtolower($req)));
-    $n = max(4, count($r));
+    $n = isset($min) ? max($min, count($r)) : count($r);
     $o = array('u0' => $req);
 
     for ($i = 1; $i < $n; $i++) {
