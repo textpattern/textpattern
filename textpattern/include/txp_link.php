@@ -39,7 +39,22 @@ if ($event == 'link') {
     require_privs('link');
 
     global $vars;
-    $vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
+    $vars = array(
+        'category',
+        'url',
+        'linkname',
+        'linksort',
+        'description',
+        'id',
+        'publish_now',
+        'date',
+        'year',
+        'month',
+        'day',
+        'hour',
+        'minute',
+        'second',
+    );
 
     global $all_link_cats, $all_link_authors;
     $all_link_cats = getTree('root', 'link');
@@ -365,7 +380,7 @@ function link_edit($message = '')
 
     if ($is_edit) {
         $id = assert_int($id);
-        $rs = safe_row("*", 'txp_link', "id = '$id'");
+        $rs = safe_row("*, UNIX_TIMESTAMP(date) AS date", 'txp_link', "id = '$id'");
 
         if ($rs) {
             extract($rs);
@@ -382,7 +397,34 @@ function link_edit($message = '')
 
     if (has_privs('link.edit') || has_privs('link.edit.own')) {
         $caption = gTxt($is_edit ? 'edit_link' : 'create_link');
-
+        $created =
+            inputLabel(
+                'year',
+                tsi('year', '%Y', $date, '', 'year').
+                ' <span role="separator">/</span> '.
+                tsi('month', '%m', $date, '', 'month').
+                ' <span role="separator">/</span> '.
+                tsi('day', '%d', $date, '', 'day'),
+                'publish_date',
+                array('timestamp_link', 'instructions_link_date'),
+                array('class' => 'txp-form-field date posted')
+            ).
+            inputLabel(
+                'hour',
+                tsi('hour', '%H', $date, '', 'hour').
+                ' <span role="separator">:</span> '.
+                tsi('minute', '%M', $date, '', 'minute').
+                ' <span role="separator">:</span> '.
+                tsi('second', '%S', $date, '', 'second'),
+                'publish_time',
+                array('', 'instructions_link_time'),
+                array('class' => 'txp-form-field time posted')
+            ).
+            n.tag(
+                checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+                n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
+                'div', array('class' => 'posted-now')
+            );
         echo form(
             hed($caption, 2).
             inputLabel(
@@ -407,6 +449,7 @@ function link_edit($message = '')
                 n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
                 'category', 'link_category', array('class' => 'txp-form-field edit-link-category')
             ).
+            $created.
             inputLabel(
                 'link_description',
                 '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($description).'</textarea>',
@@ -474,6 +517,13 @@ function link_save()
         $linksort = $linkname;
     }
 
+    $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+    $created = "NOW()";
+
+    if ($created_ts > 0) {
+        $created = "FROM_UNIXTIME('".$created_ts."')";
+    }
+
     $constraints = array(
         'category' => new CategoryConstraint($varray['category'], array('type' => 'link')),
     );
@@ -488,6 +538,7 @@ function link_save()
                 url         = '".trim($url)."',
                 linkname    = '$linkname',
                 linksort    = '$linksort',
+                date        = $created,
                 description = '$description',
                 author      = '".doSlash($txp_user)."'",
                 "id = $id"
@@ -495,10 +546,10 @@ function link_save()
         } else {
             $ok = safe_insert('txp_link',
                 "category   = '$category',
-                date        = NOW(),
                 url         = '".trim($url)."',
                 linkname    = '$linkname',
                 linksort    = '$linksort',
+                date        = $created,
                 description = '$description',
                 author      = '".doSlash($txp_user)."'"
             );
