@@ -1026,7 +1026,7 @@
         ]]></item>
         <item id="skin_title" title="Titre du thème"><![CDATA[
 <h2>Titre du thème</h2>
-<p>Un titre descriptif pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
+<p>Un titre descriptif pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern.</p>
 <p>Le titre peut comporter des caractères spéciaux ainsi que des espaces.</p>
         ]]></item>
         <item id="skin_version" title="Version du thème"><![CDATA[

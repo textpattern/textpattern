@@ -1035,7 +1035,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         ]]></item>
         <item id="skin_title" title="Titolo tema"><![CDATA[
 <h2>Titolo tema</h2>
-<p>Titolo descrittivo di un tema, utilizzato per identificare il tema all’interno dei pannelli Textpattern (obbligatorio).</p>
+<p>Titolo descrittivo di un tema, utilizzato per identificare il tema all’interno dei pannelli Textpattern.</p>
 <p>Il titolo può contenere caratteri speciali e spazi.</p>
         ]]></item>
         <item id="skin_version" title="Versione tema"><![CDATA[

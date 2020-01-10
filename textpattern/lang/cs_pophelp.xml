@@ -884,7 +884,7 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
         ]]></item>
         <item id="skin_title" title="Název skinu"><![CDATA[
 <h2>Název skinu</h2>
-<p>Výstižný název skinu do seznamu skinů v panelech Textpatternu (vyžadován).</p>
+<p>Výstižný název skinu do seznamu skinů v panelech Textpatternu.</p>
 <p>Název může obsahovat speciální znaky i mezery.</p>        ]]></item>
         <item id="skin_version" title="Verze skinu"><![CDATA[
 <h2>Verze skinu</h2>

@@ -11,8 +11,8 @@
     <group id="article" title="">
         <item id="article_image" title=""><![CDATA[]]></item>
         <item id="body" title=""><![CDATA[
-<h2>Treść</h2> 
-<p>Główny tekst artykułu jest zawarty w polu treści.</p> 
+<h2>Treść</h2>
+<p>Główny tekst artykułu jest zawarty w polu treści.</p>
 <p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
         <item id="description" title="Opis"><![CDATA[]]></item>
         <item id="excerpt" title="Zajawka"><![CDATA[]]></item>
@@ -250,7 +250,7 @@
         <item id="skin_overview" title="Wprowadzenie do motywów"><![CDATA[]]></item>
         <item id="skin_title" title="Tytuł motywu"><![CDATA[
 <h2>Nazwa motywu</h2>
-<p>Opisowa nazwa motywu, która jest wykorzystywana przy jego identyfikacji w panelach Textpattern (wymagane).</p>
+<p>Opisowa nazwa motywu, która jest wykorzystywana przy jego identyfikacji w panelach Textpattern.</p>
 <p>Nazwa może zawierać znaki specjalne oraz spacje.</p>        ]]></item>
         <item id="skin_version" title="Wersja mowtyu"><![CDATA[
 <h2>Wersja motywu</h2>
