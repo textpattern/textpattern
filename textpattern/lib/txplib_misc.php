@@ -753,7 +753,7 @@ function gps($thing, $default = '')
     } elseif (isset($_POST[$thing])) {
         $out = $_POST[$thing];
     } elseif (is_numeric($thing) && isset($pretext[abs($thing)])) {
-        $thing >= 0 or $thing = $pretext[0] - $thing + 1;
+        $thing >= 0 or $thing += $pretext[0] + 1;
         $out = $pretext[$thing];
     } else {
         return $default;
