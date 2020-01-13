@@ -127,7 +127,7 @@
 <h2>Override form</h2>
 <p>An article can optionally use a form different from that assigned by default - for example to show an article excerpt with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> instead of the article body with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Publish date"><![CDATA[
 <h2>Publish date</h2>
 <p>The time an article or file is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
 <p>The boxes correspond to the following information:</p>

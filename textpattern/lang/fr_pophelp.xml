@@ -126,7 +126,7 @@
 <h2>Module de remplacement</h2>
 <p>Un article peut occasionnellement utiliser un module différent de celui qui lui est associé par défaut – par exemple pour afficher son résumé avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> à la place du corps de l’article avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> – et cette option se trouve ici.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Date de publication"><![CDATA[
 <h2>Date de publication</h2>
 <p>La date à laquelle un article ou un fichier est publié ou révisé le plus récemment. Cette date peut être définie au moment de la publication, ou dans un délais arbitraire du passé ou du futur.</p>
 <p>Les champs correspondent aux informations suivantes :</p>

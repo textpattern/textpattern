@@ -127,7 +127,7 @@
 <h2>Modulo di sostituzione</h2>
 <p>Un articolo può opzionalmente utilizzare un modulo diverso da quello assegnato di default - per esempio usare un modulo che mostri un sommario articolo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> al posto del corpo articolo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> - ciò può essere configurato qui.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Data di pubblicazione"><![CDATA[
 <h2>Data di pubblicazione</h2>
 <p>La data/ora in cui un articolo o file è pubblicato o recentemente rivisto. La data può essere fissata al momento in cui l’elemento è pubblicato oppure ad una data/ora arbitraria, nel passato o futuro.</p>
 <p>I campi corrispondono alle seguenti informazioni:</p>
@@ -398,7 +398,7 @@
 <h2>Sostituisci file</h2>
 <p>Caricando qui un file, si andrà a sostituire il contenuto del file esistente sul server ma si manterrà il nome file come era prima. Il conteggio dei download e altre informazioni associate al file rimarranno inalterati.</p>
         ]]></item>
-        <item id="timestamp_file" title=""><![CDATA[]]></item>
+        <item id="timestamp_file" title="Data di pubblicazione"><![CDATA[]]></item>
         <item id="upload" title="Carica file"><![CDATA[
 <h2>Carica file</h2>
 <p>Utilizza questo modulo per caricare file o immagini sul tuo server.</p>
@@ -486,7 +486,7 @@
 <p>Incolla qui il contenuto del file di testo del plugin, poi usa ‘Carica’ per iniziare l’installazione. Qualsiasi plug-in già caricato con lo stesso nome o uno che hai precedentemente installato sarà sovrascritto dalla nuova versione caricata.</p>
 <p>Il testo del plug-in che incolli qui <strong>non</strong> è in codice PHP ma testo codificato su Base64, di solito preceduto da un header contenente informazioni sul plug-in (come il nome del plugin, versione e descrizione, nome autore, etc).</p>
         ]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title="Carica plugin"><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="Pannello preferenze">

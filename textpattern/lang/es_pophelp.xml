@@ -74,11 +74,7 @@
     <li>Puede gestionar secciones</li>
     <li>puede gestionar páginas, bloques y estilo</li>
 </ul>
-        
-CONTEXTEDIT
- 
-Text 
-XPath: /resources/help/group/item        ]]></item>
+        ]]></item>
         <item id="create_author" title="Crear autor"><![CDATA[
 <h2>Añadir nuevo autor</h2>
 <p>Una contraseña, mensaje de bienvenida y instrucciones de inicio de sesión serán enviadas por correo electrónico al nuevo autor.</p>
@@ -87,74 +83,83 @@ XPath: /resources/help/group/item        ]]></item>
 
     <group id="article" title="Panel de escritura">
         <item id="article_image" title="Imagen de artículo"><![CDATA[]]></item>
-        <item id="body" title=""><![CDATA[]]></item>
-        <item id="description" title="Descripción"><![CDATA[]]></item>
-        <item id="excerpt" title=""><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title=""><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
-        <item id="publish_date"><![CDATA[]]></item>
-        <item id="status" title=""><![CDATA[]]></item>
+        <item id="body" title="Cuerpo"><![CDATA[]]></item>
+        <item id="description" title="Descripción"><![CDATA[
+<h2>Descripción</h2>
+<p>La descripción del artículo es un componente opcional que puede ayudar a los motores de búsqueda y rastreadores de sitios web a identificar y clasificar mejor el contenido.</p>
+<p>La descripción del artículo está limitada a un máximo de 255 caracteres. Tenga en cuenta que algunos motores de búsqueda colocan límites de caracteres en la longitud de la <code>meta descripción</code> de una página para la practicidad de la visualización en las páginas de resultados del motor de búsqueda (SERP) y esto puede ser menor que el límite de 255 caracteres en Textpattern.</p>
+<p>Tenga en cuenta que la descripción del artículo difiere del extracto del artículo, aunque ambos aceptan contenido similar. La descripción del artículo debe estar destinada principalmente para su uso con motores de búsqueda y rastreadores, mientras que el extracto del artículo es más adecuado para un resumen del artículo legible por humanos donde se desee.</p>        ]]></item>
+        <item id="excerpt" title="Resumen"><![CDATA[
+<h2>Resumen</h2>
+<p>Los resúmenes de artículos son opcionales. Los extractos podrían usarse como un breve resumen del artículo que se muestra como parte de una tabla de contenido, en lugar del cuerpo completo del artículo en los canales RSS/Atom del sitio, o en una serie de otros usos.</p>        ]]></item>
+        <item id="expire_date" title="Fecha de caducidad"><![CDATA[]]></item>
+        <item id="keywords" title="Palabras clave"><![CDATA[
+<h2>Palabras clave</h2>
+<p>Las palabras clave son útiles para refinar las relaciones entre artículos más allá de las proporcionadas por categorías.</p>
+<p>Las palabras clave deben ser palabras individuales separadas por comas.</p>        ]]></item>
+        <item id="override_form" title="Sobrescribir bloque"><![CDATA[]]></item>
+        <item id="publish_date" title="Fecha de publicación"><![CDATA[]]></item>
+        <item id="status" title="Estado"><![CDATA[]]></item>
         <item id="title" title="Título"><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="url_title" title="Título URL"><![CDATA[]]></item>
     </group>
 
-    <group id="category" title="">
+    <group id="category" title="Panel de categorías">
         <item id="article_category" title="Artículos"><![CDATA[]]></item>
         <item id="category_description" title="Descripción"><![CDATA[]]></item>
-        <item id="file_category" title=""><![CDATA[]]></item>
-        <item id="image_category" title=""><![CDATA[]]></item>
-        <item id="link_category" title=""><![CDATA[]]></item>
+        <item id="file_category" title="Archivos"><![CDATA[]]></item>
+        <item id="image_category" title="Imágenes"><![CDATA[]]></item>
+        <item id="link_category" title="Enlaces"><![CDATA[]]></item>
     </group>
 
     <group id="diag" title="Panel de diagnóstico">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Error al limpiar datos URL"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Prueba de URL limpia fallida"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Ocultar información privada"><![CDATA[]]></item>
+        <item id="dev_version_live" title="Código de desarrollo en un servidor en vivo"><![CDATA[]]></item>
+        <item id="dir_not_writable" title="El directorio no se puede escribir"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="DNS fallida"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Cargar archivos está deshabilitado"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Falta el archivo .htaccess"><![CDATA[]]></item>
+        <item id="index_inaccessible" title="Índice de sitio inaccesible"><![CDATA[]]></item>
+        <item id="missing_files" title="Archivos perdidos"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Falta mod_rewrite de Apache"><![CDATA[]]></item>
+        <item id="modified_files" title="Archivos modificados"><![CDATA[]]></item>
+        <item id="mysql_table_errors" title="Errores de la tabla MySQL"><![CDATA[]]></item>
+        <item id="no_temp_dir" title="No hay un directorio temporal definido"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="El directorio de secciones existe"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Directorio del sitio ilegible"><![CDATA[]]></item>
+        <item id="php_version_required" title="Requisitos mínimos de versión"><![CDATA[]]></item>
+        <item id="setup_still_exists" title="El directorio de instalación aún existe"><![CDATA[]]></item>
+        <item id="site_url_mismatch" title="La URL del sitio no coincide"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Las funciones de PHP [...] están deshabilitadas en su servidor"><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Actualización de la versión de Textpattern CMS"><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="Las rutas de directorio de caché temporal y de complemento no deben coincidir"><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title="Su instalación de PHP no tiene la función mail()"><![CDATA[]]></item>
     </group>
 
-    <group id="file" title="">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title=""><![CDATA[]]></item>
+    <group id="file" title="Panel de archivos">
+        <item id="file_reassign" title="Reasignar archivo"><![CDATA[]]></item>
+        <item id="file_replace" title="Remplazar archivo"><![CDATA[]]></item>
         <item id="timestamp_file" title="Fecha de publicación"><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
+        <item id="upload" title="Subir archivo"><![CDATA[]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+    <group id="form" title="Panel de formularios">
+        <item id="forms_overview" title="Introducción a los formularios"><![CDATA[]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title=""><![CDATA[]]></item>
-        <item id="replace_image_form" title=""><![CDATA[
+    <group id="image" title="Panel de imágenes">
+        <item id="create_thumbnail" title="Crear miniatura"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Sustituir imagen"><![CDATA[
 <h2>Reemplazar imagen</h2>
 <p>Una imagen subida aquí simplemente reemplazará a la imagen que actualmente esté asociada con esta entrada en la base de datos.</p>        ]]></item>
-        <item id="upload_image" title=""><![CDATA[
+        <item id="upload_image" title="Subir imagen"><![CDATA[
 <h2>Subir imagen</h2>
 <p>Subir una o más imágenes a tu servidor.</p>
 <p>Una vez subida al directorio de <code>imágenes</code>, el nombre de archivo de tu imagen original se mantendrá sólo internamente en la base de datos de Textpattern; el archivo de imagen en si será renombrado a un número secuencias + extensión de archivo.</p>
         ]]></item>
-        <item id="upload_thumbnail" title=""><![CDATA[
+        <item id="upload_thumbnail" title="Subir miniatura"><![CDATA[
 <h2>Subir miniatura</h2>
 <p>Las imágenes a tamaño completo pueden ser asignadas a su propia miniatura. Estas son útiles para enlazar a - y la indización de - las imágenes a tamaño completo.</p>
 <p>Una referencia a una miniatura es exactamente igual a la referencia a la imagen de tamaño completo, añadiendo <code>t</code> al final del nombre del archivo. Por ejemplo, para hacer referencia a la miniatura asociada con la imagen de tamaño completo almacenada en <code>/images/12.jpg</code> usaríamos <code>/images/12t.jpg</code>.</p>
@@ -162,7 +167,7 @@ XPath: /resources/help/group/item        ]]></item>
     </group>
 
     <group id="lang" title="Panel de idiomas">
-        <item id="get_textpack" title=""><![CDATA[
+        <item id="get_textpack" title="Instalar Textpack"><![CDATA[
 <h2>Instalar un Textpack</h2>
 <p>Pega cadenas de texto adicionales para tu sitio dentro de este campo y selecciona ‘Subir‘ para instalarlos.</p>
 <p>Las cadenas a menudo se presentan en forma de un Textpack descargable, distribuido junto a un plugin, para permitir el uso nativo dentro de Textpattern de esa cadena de texto propia del plugin.</p>
@@ -171,23 +176,23 @@ XPath: /resources/help/group/item        ]]></item>
     </group>
 
     <group id="link" title="">
-        <item id="link_description" title=""><![CDATA[
+        <item id="link_description" title="Descripción"><![CDATA[
 <h2>Descripción</h2>
 <p>Las descripciones de enlace son opcionales, y son útiles para titular enlaces, para crear atributos <code>title=""</code> (tooltip) de enlace, o simplemente para mantener tu propia documentación interna.</p>
         ]]></item>
-        <item id="link_sort" title=""><![CDATA[]]></item>
-        <item id="link_url" title=""><![CDATA[
+        <item id="link_sort" title="Ordenar valor"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[
 <h2>URL</h2>
 <p>La dirección de un enlace. Si el enlace apunta a un sitio diferente entonces debe ir precedido por <code>http://</code> o <code>https://</code>.</p>
         ]]></item>
     </group>
 
     <group id="login" title="">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+        <item id="remember_login" title="Permanecer registrado con este navegador"><![CDATA[]]></item>
     </group>
 
     <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[
+        <item id="install_plugin" title="Instalar plugin"><![CDATA[
 <h2>Instalar un plugin</h2>
 <p>Pega el contenido del archivo de texto deldel plugin aquí, luego pulsa 'Subir' para comenzar la instalación. Cualquier plugin que subas con el mismo nombre que uno que ya tengas instalado anteriormente sobreescribirá la versión anterior del plugin.</p>
 <p>El texto del plugin que pegas aquí <strong>no</strong> es el código PHP en bruto sino texto codificado en Base64, frecuentemente precedido por una cabecera que contiene información del plugin (como el nombre del plugin, versión y descripción, nombre del autor, etc).</p>
@@ -196,87 +201,87 @@ XPath: /resources/help/group/item        ]]></item>
     </group>
 
     <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title=""><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="¿Usar plugins administrativos?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Opciones avanzadas"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="¿Permitir PHP en los artículos?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="¿Permitir sobrescritura de bloques?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="¿Permitir PHP en las páginas?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Formato de fecha de archivo"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="¿Usar resúmenes en los artículos?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="¿Añadir títulos a los enlaces permanentes?"><![CDATA[]]></item>
+        <item id="auto_dst" title="¿Ajustar automáticamente la preferencia ‘Horario de verano’?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="¿Un nuevo comentario significa que el sitio se ha actualizado?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title="¿Aplicar relación=&quot;nofollow&quot; a los comentarios?"><![CDATA[]]></item>
+        <item id="comments_are_ol" title="¿Presentar comentarios como lista numerada?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="¿Adjuntar automáticamente los comentarios a los artículos?"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Formato de fecha para comentarios"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Invitación a comentar por defecto"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Cerrar comentarios después de"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="¿Ignorar imágenes del usuario en los comentarios?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Modo de comentarios"><![CDATA[]]></item>
+        <item id="comments_moderate" title="¿Moderar comentarios?"><![CDATA[]]></item>
+        <item id="comments_on_default" title="¿Comentarios activados por defecto?"><![CDATA[]]></item>
+        <item id="comments_require_email" title="¿Los comentarios requieren email del usuario?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="¿Los comentarios requieren nombre del usuario?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="¿Enviar por email los comentarios al autor?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="¿Permitir más etiquetas Textile en los comentarios?"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Tipos de plantilla para campos personalizados"><![CDATA[]]></item>
+        <item id="custom_overview" title="Campos personalizados"><![CDATA[]]></item>
+        <item id="dateformat" title="Formato de fecha"><![CDATA[]]></item>
+        <item id="default_event" title="Pestaña de administración por defecto"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Estado de publicación por defecto"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="¿Activar vista previa de tema de desarrollo?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Activar soporte para etiquetas cortas?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="¿Activar servidor XML-RPC?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="¿En cuántos días caducan los registros?"><![CDATA[]]></item>
+        <item id="file_base_path" title="Ruta para subir archivos"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Tamaño máximo de archivos para subir (en bytes)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Zona horaria"><![CDATA[]]></item>
+        <item id="img_dir" title="Directorio de imágenes"><![CDATA[]]></item>
+        <item id="include_email_atom" title="¿Incluir el email en feeds Atom?"><![CDATA[]]></item>
+        <item id="is_dst" title="¿Activar horario de verano?"><![CDATA[]]></item>
+        <item id="logging" title="Registrar visitas"><![CDATA[]]></item>
+        <item id="max_url_len" title="Longitud máxima de las URLs (en caracteres)"><![CDATA[]]></item>
+        <item id="module_pophelp" title="Mostrar enlaces de ayuda emergente"><![CDATA[]]></item>
+        <item id="never_display_email" title="¿Ocultar email del autor del comentario?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="¿Codificación ISO-8859-1 en envíos de email? Por defecto UTF-8"><![CDATA[]]></item>
+        <item id="permlink_format" title="Modelo de URL"><![CDATA[]]></item>
+        <item id="permlink_mode" title="Esquema del URL del artículo"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Ruta del directorio del caché de plugins"><![CDATA[]]></item>
+        <item id="production_status" title="Estado de producción"><![CDATA[]]></item>
+        <item id="public_theme_name" title="Tema del frontal"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="¿Mostrar los artículos caducados?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Enviar la información de registro desde esta dirección de correo"><![CDATA[]]></item>
+        <item id="rss_how_many" title="¿Cuántos artículos se incluirán en los feeds?"><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Eslogan del sitio"><![CDATA[]]></item>
+        <item id="sitename" title="Nombre del sitio"><![CDATA[]]></item>
+        <item id="siteurl" title="URL del sitio"><![CDATA[]]></item>
+        <item id="skin_dir" title="Directorios de temas"><![CDATA[]]></item>
+        <item id="smtp_from" title="Dirección del remitente del envío SMTP"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="¿Sindicar sólo el resumen del artículo?"><![CDATA[]]></item>
+        <item id="tempdir" title="Ruta al directorio temporal"><![CDATA[]]></item>
+        <item id="theme_name" title="Tema de administración"><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="¿Usar email para la ID de los feeds? Por defecto la URL del sitio"><![CDATA[]]></item>
+        <item id="use_plugins" title="¿Usar plugins?"><![CDATA[]]></item>
+        <item id="use_textile" title="Emplear Textile?"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+        <item id="section_category" title="Introducción"><![CDATA[]]></item>
+        <item id="section_default" title="Sección por defecto para publicar"><![CDATA[]]></item>
+        <item id="section_description" title="Descripción"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="¿La sección aparece en la página de inicio?"><![CDATA[]]></item>
+        <item id="section_searchable" title="¿Incluir esta sección en las búsquedas?"><![CDATA[]]></item>
+        <item id="section_syndicate" title="¿Sindicar artículos de esta sección?"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Usa estilo"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Usa página"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[]]></item>
     </group>
 
     <group id="setup" title="">
@@ -286,16 +291,16 @@ XPath: /resources/help/group/item        ]]></item>
     </group>
 
     <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
+        <item id="skin_author" title="Autor del aspecto"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Página web del aspecto"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="Borrar tema de plantillas desde el disco también"><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="Al importar, borrar las planillas no utilizadas de la base de datos"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="Al exportar, borrar las plantillas no utilizadas del disco"><![CDATA[]]></item>
+        <item id="skin_description" title="Descripción del tema"><![CDATA[]]></item>
         <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
+        <item id="skin_name" title="Nombre del aspecto"><![CDATA[]]></item>
         <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="Título del aspecto"><![CDATA[]]></item>
         <item id="skin_version" title=""><![CDATA[]]></item>
     </group>
 </help>
