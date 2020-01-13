@@ -99,26 +99,6 @@ function apache_module($m)
 }
 
 /**
- * Verifies temporary directory status.
- *
- * This function verifies that the given temporary directory is writeable.
- *
- * @param  string $dir The directory to check
- * @return bool|null NULL on error, TRUE on success
- */
-
-function test_tempdir($dir)
-{
-    $f = realpath(tempnam($dir, 'txp_'));
-
-    if (is_file($f)) {
-        @unlink($f);
-
-        return true;
-    }
-}
-
-/**
  * Lists all database tables used by the Textpattern core.
  *
  * Returned tables include prefixes.
@@ -266,6 +246,10 @@ function doDiagnostics()
 
     if (!@is_writable($tempdir)) {
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
+    }
+
+    if (!@is_writable(txpath.DS.'plugins')) {
+        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => txpath.DS.'plugins');
     }
 
     if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {

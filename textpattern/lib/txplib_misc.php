@@ -745,11 +745,16 @@ function link_format_info($link)
 
 function gps($thing, $default = '')
 {
+    global $pretext;
+
     if (isset($_GET[$thing])) {
         $out = $_GET[$thing];
         $out = doArray($out, 'deCRLF');
     } elseif (isset($_POST[$thing])) {
         $out = $_POST[$thing];
+    } elseif (is_numeric($thing) && isset($pretext[abs($thing)])) {
+        $thing >= 0 or $thing += $pretext[0] + 1;
+        $out = $pretext[$thing];
     } else {
         return $default;
     }
@@ -4384,6 +4389,15 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     // 'article' context is implicit, no need to add it to the page URL.
     if (isset($keys['context']) && $keys['context'] == 'article') {
         unset($keys['context']);
+    }
+
+    $numkeys = array();
+
+    foreach ($keys as $key => $v) {
+        if (is_numeric($key)) {
+            $numkeys[$key] = urlencode($v).'/';
+            unset($keys[$key]);
+        }
     }
 
     if ($url_mode == 'messy') {

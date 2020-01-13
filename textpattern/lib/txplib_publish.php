@@ -812,25 +812,32 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = parse_qs($match);
-    $category !== true or $category = parse('<txp:category />', true, false);
-    $category  = do_list_unique($category);
-    $categories = array();
+    $categories = $category === true ? false : do_list_unique($category);
+    $catquery = array();
+    $operator = 'OR';
 
-    if ($category && (!$depth || $category = getTree($category, 'article', '1', 'txp_category', $depth))) {
-        $category  = join("','", doSlash($category));
+    if ($categories && (!$depth || $categories = getTree($categories, 'article', '1', 'txp_category', $depth))) {
+        $categories  = join("','", doSlash($categories));
+    }
 
-        if (isset($match['category1'])) {
-            $categories[] = "Category1 IN ('$category')";
-        }
-
-        if (isset($match['category2'])) {
-            $categories[] = "Category2 IN ('$category')";
+    for($i = 1; $i <= 2; $i++) {
+        if (isset($match['category'.$i])) {
+            if ($match['category'.$i] === false) {
+                if ($categories) {
+                    $catquery[] = "Category{$i} IN ('$categories')";
+                } elseif($category === true) {
+                    $catquery[] = "Category{$i} != ''";
+                }
+            } elseif($val = gps($match['category'.$i])) {
+                $catquery[] = "Category{$i} = '".doSlash($val)."'";
+                $operator = 'AND';
+            }
         }
     }
 
     $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
-    $categories = join(" OR ", $categories);
-    $category  = !$categories  ? '' : " AND $not($categories)";
+    $catquery = join(" $operator ", $catquery);
+    $category  = !$catquery  ? '' : " AND $not($catquery)";
 
     // Section
     // searchall=0 can be used to show search results for the current

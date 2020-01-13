@@ -127,7 +127,7 @@
 <h2>Override form</h2>
 <p>An article can optionally use a form different from that assigned by default - for example to show an article excerpt with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> instead of the article body with <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Publish date"><![CDATA[
 <h2>Publish date</h2>
 <p>The time an article or file is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
 <p>The boxes correspond to the following information:</p>
@@ -395,6 +395,15 @@
         <item id="file_replace" title="Replace file"><![CDATA[
 <h2>Replace file</h2>
 <p>Uploading a file here will replace the contents of the existing file on the server but will keep the file name the same as it was before. The download count and other information associated with the file remain unaffected.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Publish date"><![CDATA[
+<h2>Publish date</h2>
+<p>The time a file is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
+<p>The boxes correspond to the following information:</p>
+<ul>
+    <li>Year / Month / Day</li>
+    <li>Hour (24-hour format) : Minute : Second</li>
+</ul>
         ]]></item>
         <item id="upload" title="Upload file"><![CDATA[
 <h2>Upload file</h2>
@@ -1038,7 +1047,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="skin_title" title="Theme title"><![CDATA[
 <h2>Theme title</h2>
-<p>A theme’s descriptive title, used to identify the theme within Textpattern’s panels (required).</p>
+<p>A theme’s descriptive title, used to identify the theme within Textpattern’s panels.</p>
 <p>The title can contain special characters and spaces.</p>
         ]]></item>
         <item id="skin_version" title="Theme version"><![CDATA[
