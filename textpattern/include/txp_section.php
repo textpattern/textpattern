@@ -482,8 +482,8 @@ function section_edit()
             );
     }
 
-    $pageSelect = selectInput('section_page', array(), '', '', '', 'section_page');
-    $styleSelect = selectInput('css', array(), '', '', '', 'section_css');
+    $pageSelect = selectInput(array('name' => 'section_page', 'required' => true), array(), '', '', '', 'section_page');
+    $styleSelect = selectInput(array('name' => 'css', 'required' => true), array(), '', '', '', 'section_css');
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
