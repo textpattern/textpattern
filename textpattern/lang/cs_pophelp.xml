@@ -348,6 +348,14 @@
         <item id="file_replace" title="Nahradit soubor"><![CDATA[
 <h2>Nahradit soubor</h2>
 <p>Původní soubor bude jednoduše přepsán novým, ale původní jméno souboru zůstane zachováno. Rovněž ostatní informace o souboru, jako je počet stažení, zůstanou zachovány.</p>        ]]></item>
+        <item id="timestamp_file" title="Datum vydání"><![CDATA[
+<h2>Psaní: Datum vydání</h2>
+<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo jako libovolný čas v minulosti, či v budoucnosti. </p>
+<p>Políčka jsou určené pro následující informace:</p>
+<ul>
+    <li>Rok / Měsíc / Den</li>
+    <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
+</ul>        ]]></item>
         <item id="upload" title="Nahrát soubor"><![CDATA[
 <h2>Nahrát soubor</h2>
 <p>Tento formulář slouží k nahrávání souborů na server.</p>

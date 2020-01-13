@@ -136,6 +136,7 @@ XPath: /resources/help/group/item        ]]></item>
     <group id="file" title="">
         <item id="file_reassign" title=""><![CDATA[]]></item>
         <item id="file_replace" title=""><![CDATA[]]></item>
+        <item id="timestamp_file" title="Fecha de publicación"><![CDATA[]]></item>
         <item id="upload" title=""><![CDATA[]]></item>
     </group>
 

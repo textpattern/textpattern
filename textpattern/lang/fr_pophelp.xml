@@ -394,6 +394,14 @@
 <h2>Remplacer le fichier</h2>
 <p>le téléversement d’un fichier ici ne remplacera pas le contenu du fichier existant sur le serveur mais conservera le nom de fichier identique au précédent. Le décompte des téléchargements ainsi que les autres informations associées au fichier resteront inchangées.</p>
         ]]></item>
+        <item id="timestamp_file" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>La date de publication d’un fichier ou de sa plus récente consultation. Cet horodatage peut être assigné au moment de la publication ou selon une référence arbitraire dans le passé voire dans le futur.</p>
+<p>Les champs de saisie correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
         <item id="upload" title="Envoyer un fichier"><![CDATA[
 <h2>Téléversement de fichier</h2>
 <p>Utilisez ce formulaire pour téléverser sur votre serveur des images ou des fichiers.</p>
