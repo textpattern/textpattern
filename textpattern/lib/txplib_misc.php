@@ -4001,10 +4001,10 @@ function buildCustomSql($custom, $pairs, $exclude = array())
             $no = array_search($k, $custom);
 
             if ($no !== false) {
-                $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT ' : '';
+                $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
 
                 if ($val === true) {
-                    $out[] = "{$not}custom_{$no}";
+                    $out[] = "({$not}custom_{$no})";
                 } else {
                     $val = doSlash($val);
                     $parts = array();

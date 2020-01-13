@@ -725,6 +725,20 @@ function filterAtts($atts = null, $iscustom = null)
         return $out = $atts;
     }
 
+    $exclude = isset($atts['exclude']) ? $atts['exclude'] : '';
+    unset($atts['exclude']);
+
+    if ($exclude && $exclude !== true) {
+        $exclude = array_map('strtolower', do_list_unique($exclude));
+        $excluded = array_filter($exclude, 'is_numeric');
+        $exclude = array_diff($exclude, $excluded);
+    } else {
+        $exclude or $exclude = array();
+        $excluded = array();
+    }
+
+    $exclude === true or $exclude = array_fill_keys($exclude, true);
+
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
@@ -746,13 +760,13 @@ function filterAtts($atts = null, $iscustom = null)
     );
 
     if ($iscustom) {
-        $extralAtts += array(
+        $customlAtts = array(
             'category'  => '',
             'section'   => '',
             'author'    => '',
             'month'     => '',
             'expired'   => get_pref('publish_expired_articles'),
-        );
+        ) + $customlAtts;
     } else {
         $extralAtts += array(
             'listform'     => '',
@@ -760,6 +774,12 @@ function filterAtts($atts = null, $iscustom = null)
             'searchall'    => 1,
             'searchsticky' => 0,
         );
+    }
+
+    foreach($customlAtts as $cField => $val) {
+        if (isset($exclude[$cField])) {
+            $customlAtts[$cField] = true;
+        }
     }
 
     // Getting attributes.
@@ -772,7 +792,6 @@ function filterAtts($atts = null, $iscustom = null)
         'match'         => 'Category1,Category2',
         'depth'         => 0,
         'id'            => '',
-        'exclude'       => '',
         'excerpted'     => ''
     ) + $extralAtts + $customlAtts, $atts);
 
@@ -792,14 +811,6 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     extract($theAtts);
-
-    if ($exclude && $exclude !== true) {
-        $exclude = array_map('strtolower', do_list_unique($exclude));
-        $excluded = array_filter($exclude, 'is_numeric');
-    } else {
-        $exclude or $exclude = array();
-        $excluded = array();
-    }
 
     // Treat sticky articles differently wrt search filtering, etc.
     $issticky = in_array(strtolower($status), array('sticky', STATUS_STICKY));
@@ -821,21 +832,25 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     for($i = 1; $i <= 2; $i++) {
+        $not = isset($exclude["category{$i}"]) ? '!' : '';
+
         if (isset($match['category'.$i])) {
             if ($match['category'.$i] === false) {
                 if ($categories) {
-                    $catquery[] = "Category{$i} IN ('$categories')";
-                } elseif($category === true) {
-                    $catquery[] = "Category{$i} != ''";
+                    $catquery[] = "$not(Category{$i} IN ('$categories'))";
+                } elseif($category === true || $not) {
+                    $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif($val = gps($match['category'.$i])) {
-                $catquery[] = "Category{$i} = '".doSlash($val)."'";
+                $catquery[] = "$not(Category{$i} = '".doSlash($val)."')";
                 $operator = 'AND';
             }
+        } elseif($not) {
+            $catquery[] = "(NOT Category{$i})";
         }
     }
 
-    $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
+    $not = $iscustom && ($exclude === true || isset($exclude['category'])) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
     $category  = !$catquery  ? '' : " AND $not($catquery)";
 
@@ -846,17 +861,17 @@ function filterAtts($atts = null, $iscustom = null)
         $section = '';
     }
 
-    $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
+    $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />', true, false);
     $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
-    $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
+    $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
     $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     // ID
-    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
+    $not = $exclude === true || isset($exclude['id']) ? 'NOT' : '';
     $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
     $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
         .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
@@ -865,7 +880,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = $iscustom && ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
+        $not = $iscustom && ($month || $time !== null) && ($exclude === true || isset($exclude['month']));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {
@@ -890,6 +905,8 @@ function filterAtts($atts = null, $iscustom = null)
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
                 $customPairs[$cField] = $atts[$cField];
+            } elseif (isset($customlAtts[$cField])) {
+                $customPairs[$cField] = $customlAtts[$cField];
             } elseif (isset($match[$cField])) {
                 if ($match[$cField] === false && isset($thisarticle[$cField])) {
                     $customPairs[$cField] = $thisarticle[$cField];
