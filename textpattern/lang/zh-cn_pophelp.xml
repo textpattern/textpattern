@@ -125,7 +125,7 @@
 <h2>覆盖默认文章模块</h2>
 <p>文章可以使用不同于默认模块的模块——例如使用摘录显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 替换默认的内容显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> - 可以在这里设置。</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title=""><![CDATA[
 <h2>发布日期</h2>
 <p>发布文章、上传文件或者修改文章的时间。时间可以设置为文章发布的实际时间，或者未来、或者过去的任何时间都可以。</p>
 <p>空白处的信息为：</p>

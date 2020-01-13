@@ -67,6 +67,8 @@ function plugin_list($message = '')
 {
     global $event;
 
+    $plugin_dir = txpath.DS.'plugins';
+
     pagetop(gTxt('tab_plugins'), $message);
 
     extract(gpsa(array(
@@ -164,7 +166,7 @@ function plugin_list($message = '')
         );
 
     $contentBlock = '';
-    $existing_files = get_filenames(txpath.DS.'plugins'.DS, GLOB_ONLYDIR) or $existing_files = array();
+    $existing_files = get_filenames($plugin_dir.DS, GLOB_ONLYDIR) or $existing_files = array();
 
     foreach(safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
@@ -352,7 +354,16 @@ function plugin_list($message = '')
             n.tag_end('form');
     }
 
-    $createBlock = tag(plugin_form($existing_files), 'div', array('class' => 'txp-control-panel'));
+    if (!is_dir($plugin_dir) || !is_writeable($plugin_dir)) {
+        $createBlock =
+            graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('plugin_dir_not_writeable', array('{plugindir}' => $plugin_dir)),
+                array('class' => 'alert-block warning')
+            ).n;
+    } else {
+        $createBlock = tag(plugin_form($existing_files), 'div', array('class' => 'txp-control-panel'));
+    }
 
     $pageBlock = $paginator->render().
         nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
@@ -585,11 +596,12 @@ function plugin_install()
 function plugin_upload()
 {
     $plugin = array();
+    $plugin_dir = txpath.DS.'plugins';
 
     if ($_FILES["theplugin"]["name"]) {
         $filename = $_FILES["theplugin"]["name"];
         $source = $_FILES["theplugin"]["tmp_name"];
-        $target_path = rtrim(get_pref('temp_dir', txpath.DS.'plugins'), DS).DS.$filename;
+        $target_path = rtrim(get_pref('temp_dir', $plugin_dir), DS).DS.$filename;
 
         if (move_uploaded_file($source, $target_path)) {
             extract(pathinfo($target_path));
@@ -610,7 +622,7 @@ function plugin_upload()
                         }
                     }
 
-                    $zip->extractTo(txpath.DS.'plugins'.(empty($makedir) ? '' : DS.$filename));
+                    $zip->extractTo($plugin_dir.(empty($makedir) ? '' : DS.$filename));
                     $zip->close();
                     $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
                 }
