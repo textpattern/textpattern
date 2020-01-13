@@ -67,10 +67,10 @@ Changes in 4.8.0
 * Developer: Tags can be registered with custom attributes/parameters.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
 * Performance optimizations via cacheing and preloading frequent content.
-* Textile 3.7.5. See https://github.com/textile/php-textile/releases/tag/v3.7.5
+* Textile 3.7.6. See https://github.com/textile/php-textile/releases/tag/v3.7.6
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
-* PrismJS 1.17.1.
+* PrismJS 1.18.0.
 * jQuery File Upload 10.7.0.
 
 Changes in 4.7.3
