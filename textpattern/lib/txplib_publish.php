@@ -777,8 +777,8 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     foreach($customlAtts as $cField => $val) {
-        if (isset($exclude[$cField])) {
-            $customlAtts[$cField] = true;
+        if (isset($exclude[$cField]) && !isset($atts[$cField])) {
+            $atts[$cField] = $exclude[$cField];
         }
     }
 
@@ -905,8 +905,6 @@ function filterAtts($atts = null, $iscustom = null)
         foreach ($customFields as $cField) {
             if (isset($atts[$cField])) {
                 $customPairs[$cField] = $atts[$cField];
-            } elseif (isset($customlAtts[$cField])) {
-                $customPairs[$cField] = $customlAtts[$cField];
             } elseif (isset($match[$cField])) {
                 if ($match[$cField] === false && isset($thisarticle[$cField])) {
                     $customPairs[$cField] = $thisarticle[$cField];
