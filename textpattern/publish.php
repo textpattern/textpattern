@@ -311,8 +311,7 @@ function preText($s, $prefs)
 
         $url = chopUrl($req, 4);
 
-        for ($n = 0; isset($url['u'.($n+1)]); $out[++$n] = $url['u'.$n]);
-        $out[0] = $n;
+        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
