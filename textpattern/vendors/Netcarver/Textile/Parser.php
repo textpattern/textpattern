@@ -371,7 +371,7 @@ class Parser
      * @var string
      */
 
-    protected $ver = '3.7.5';
+    protected $ver = '3.7.6';
 
     /**
      * Regular expression snippets.
@@ -4217,19 +4217,29 @@ class Parser
     protected function replaceLinks($text)
     {
         $stopchars = "\s|^'\"*";
+        $needle = $this->uid . 'linkStartMarker:';
+        $prev = null;
 
-        return (string)preg_replace_callback(
-            '/
-            (?P<pre>\[)?                    # Optionally open with a square bracket eg. Look ["here":url]
-            '.$this->uid.'linkStartMarker:" # marks start of the link
-            (?P<inner>(?:.|\n)*?)           # grab the content of the inner "..." part of the link, can be anything but
-                                            # do not worry about matching class, id, lang or title yet
-            ":                              # literal ": marks end of atts + text + title block
-            (?P<urlx>[^'.$stopchars.']*)    # url upto a stopchar
-            /x'.$this->regex_snippets['mod'],
-            array($this, "fLink"),
-            $text
-        );
+        while (\strpos($text, $needle) !== false) {
+            $text = (string)preg_replace_callback(
+                '/
+                (?P<pre>\[)?
+                ' . $needle . '"
+                (?P<inner>(?:.|\n)*?)
+                ":(?P<urlx>[^' . $stopchars . ']*)
+                /x' . $this->regex_snippets['mod'],
+                array($this, "fLink"),
+                $text
+            );
+
+            if ($prev === $text) {
+                break;
+            }
+
+            $prev = $text;
+        }
+
+        return $text;
     }
 
     /**
