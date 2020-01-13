@@ -9,24 +9,24 @@
     </group>
 
     <group id="article" title="">
-        <item id="article_image" title=""><![CDATA[]]></item>
-        <item id="body" title=""><![CDATA[
-<h2>Treść</h2>
-<p>Główny tekst artykułu jest zawarty w polu treści.</p>
+        <item id="article_image" title="Obrazek do artykułu"><![CDATA[]]></item>
+        <item id="body" title="Treść"><![CDATA[
+<h2>Treść</h2> 
+<p>Główny tekst artykułu jest zawarty w polu treści.</p> 
 <p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
         <item id="description" title="Opis"><![CDATA[]]></item>
         <item id="excerpt" title="Zajawka"><![CDATA[]]></item>
         <item id="expire_date" title="Data wygaśnięcia"><![CDATA[]]></item>
         <item id="keywords" title="Słowa kluczowe"><![CDATA[]]></item>
         <item id="override_form" title="Nadpisz formę"><![CDATA[]]></item>
-        <item id="publish_date"><![CDATA[]]></item>
+        <item id="publish_date" title="Data publikacji"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
         <item id="title" title="Tytuł"><![CDATA[
 <h2>Tytuł</h2>
 <p>Dodaj tytuł odpowiedni dla tego artykułu.</p>
 <p>Tytuł artykułu jest ograniczony do maksymalnie 255 znaków.</p>
         ]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="url_title" title="Adres URL"><![CDATA[]]></item>
     </group>
 
     <group id="category" title="Panel kategorii">
@@ -75,6 +75,7 @@
     <group id="file" title="Panel pliki">
         <item id="file_reassign" title=""><![CDATA[]]></item>
         <item id="file_replace" title="Zastąp plik"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Data publikacji"><![CDATA[]]></item>
         <item id="upload" title="Wgraj plik"><![CDATA[]]></item>
     </group>
 
@@ -90,35 +91,35 @@
     </group>
 
     <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+        <item id="get_textpack" title="Zainstaluj «Textpack»"><![CDATA[]]></item>
     </group>
 
     <group id="link" title="">
         <item id="link_description" title="Opis"><![CDATA[]]></item>
-        <item id="link_sort" title=""><![CDATA[]]></item>
+        <item id="link_sort" title="Sortuj według"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
     </group>
 
     <group id="login" title="Panel logowania">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+        <item id="remember_login" title="Zapamiętaj mnie na tym komputerze"><![CDATA[]]></item>
     </group>
 
     <group id="plugin" title="Panel wtyczek">
         <item id="install_plugin" title="Zainstaluj wtyczkę"><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title="Załaduj wtyczkę"><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Używać pluginów dla administracji?"><![CDATA[]]></item>
         <item id="advanced_options" title="Opcje zaawansowane"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Czy kod PHP jest dozwolony w artykułach?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Nadpisywanie form dozwolone?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Czy kod PHP jest dozwolony na stronach?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Format daty w archiwum"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Artykuły mają zajawki?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Dołączać tytuły do trwałych odsyłaczy (permalinków)?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Dostosowywać strefę czas. wg ust. lokalnych?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Nowy komentarz oznacza aktualizację witryny?"><![CDATA[]]></item>
         <item id="comment_nofollow" title="Zastosuj rel=&quot;brak&quot; do komentarzy?"><![CDATA[]]></item>
         <item id="comments_are_ol" title="Prezentować komentarze jako listę numerowaną?"><![CDATA[
 <h2>Prezentować komentarze jako listę numerowaną? </h2>
@@ -128,45 +129,45 @@
         <item id="comments_auto_append" title="Automatycznie dodawać komentarze do artykułów?"><![CDATA[]]></item>
         <item id="comments_dateformat" title="Format daty komentarzy"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Domyślne zaproszenie do komentarzy"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Komentarze zostaną wyłączone po upływie"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Obrazki w komentarzach niedozwolone?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Komentarze umieszczone"><![CDATA[]]></item>
         <item id="comments_moderate" title="Moderować komentarze?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Komentarze włączone domyślnie?"><![CDATA[]]></item>
         <item id="comments_require_email" title="Komentarze wymagają adresu e-mail komentującego?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Komentarze wymagają imienia komentującego?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Wysyłać komentarze emailem do autora?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Zezwalać na zaawansowany Textile w komentarzach?"><![CDATA[]]></item>
         <item id="custom_form_types" title="Rodzaje szablonów formularzy niestandardowych"><![CDATA[]]></item>
         <item id="custom_overview" title="Pola dodatkowe"><![CDATA[]]></item>
         <item id="dateformat" title="Format daty"><![CDATA[]]></item>
         <item id="default_event" title="Panel domyślny"><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title="Domyślny status publikacji"><![CDATA[]]></item>
         <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Włączyć podgląd motywu rozwoju?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Włącz obsługę short-tagów?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="Włączyć serwer XML-RPC?"><![CDATA[]]></item>
         <item id="expire_logs_after" title="Logi wygasają po ilu dniach?"><![CDATA[]]></item>
         <item id="file_base_path" title="Ścieżka katalogu plików"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Maksymalny rozmiar dodawanego pliku (w bajtach)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Strefa czasowa"><![CDATA[
 <h2>Strefa czasowa</h2>
 <p>Aby wyświetlić daty w lokalnej strefie czasowej, wybierz strefę czasową.</p>
         ]]></item>
         <item id="img_dir" title="Katalog obrazów"><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title="Uwzględniać adres email w kanałach Atom?"><![CDATA[]]></item>
         <item id="is_dst" title="Automatycznie zmieniać czas z letniego na zimowy?"><![CDATA[
 <h2>Włączony czas letni?</h2>
 <p>Czy DST (czas letni) jest obecnie włączone dla Twojej strefy czasowej.</p>
         ]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="logging" title="Logi odwiedzin"><![CDATA[]]></item>
         <item id="max_url_len" title="Maksymalna długość URL (w znakach)"><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title="Wyświetl wbudowane linki pomocy po stronie administratora"><![CDATA[]]></item>
+        <item id="never_display_email" title="Nigdy nie pokazywać adresów email?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Używać ISO-8859-1 w emailach (domyślnie jest UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title="Format trwałych odsyłaczy"><![CDATA[]]></item>
         <item id="permlink_mode" title="Wzór adresu URL artykułu"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Ścieżka do katalogu pamięci podręcznej pluginów"><![CDATA[]]></item>
         <item id="production_status" title="Stan witryny"><![CDATA[
 <h2>Status produkcji</h2>
 <p>Strona Textpattern ma jeden z trzech trybów:</p>
@@ -194,7 +195,7 @@
 <p>Na stronie nie zostaną wysłane żadne informacje o błędach ani diagnostyczne. Ogólnie rzecz biorąc, preferowany jest tryb rzeczywisty, ponieważ zapewnia najlepszy komfort użytkownika i najmniej obciąża na serwer.</p>
         ]]></item>
         <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Publikować wygasłe artykuły?"><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
@@ -203,12 +204,12 @@
         <item id="sitename" title="Nazwa witryny"><![CDATA[]]></item>
         <item id="siteurl" title="Adres witryny"><![CDATA[]]></item>
         <item id="skin_dir" title="Katalog motywu"><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Zsynchronizuj tylko zajawki artykułów?"><![CDATA[]]></item>
         <item id="tempdir" title="Ścieżka katalogu tymczasowego"><![CDATA[]]></item>
         <item id="theme_name" title="Motyw panelu administracyjnego"><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Funkcje PHP włączone w txp:evaluate"><![CDATA[]]></item>
         <item id="use_comments" title="Akceptować komentarze?"><![CDATA[
 <h2>Akceptować komentarze?</h2>
 <p>Określa czy funkcja komentowania Textpattern powinna być włączona, czy wyłączona.</p>

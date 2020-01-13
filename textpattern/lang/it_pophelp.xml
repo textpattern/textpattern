@@ -127,7 +127,7 @@
 <h2>Modulo di sostituzione</h2>
 <p>Un articolo può opzionalmente utilizzare un modulo diverso da quello assegnato di default - per esempio usare un modulo che mostri un sommario articolo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> al posto del corpo articolo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> - ciò può essere configurato qui.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Data di pubblicazione"><![CDATA[
 <h2>Data di pubblicazione</h2>
 <p>La data/ora in cui un articolo o file è pubblicato o recentemente rivisto. La data può essere fissata al momento in cui l’elemento è pubblicato oppure ad una data/ora arbitraria, nel passato o futuro.</p>
 <p>I campi corrispondono alle seguenti informazioni:</p>
@@ -398,10 +398,11 @@
 <h2>Sostituisci file</h2>
 <p>Caricando qui un file, si andrà a sostituire il contenuto del file esistente sul server ma si manterrà il nome file come era prima. Il conteggio dei download e altre informazioni associate al file rimarranno inalterati.</p>
         ]]></item>
+        <item id="timestamp_file" title="Data di pubblicazione"><![CDATA[]]></item>
         <item id="upload" title="Carica file"><![CDATA[
 <h2>Carica file</h2>
 <p>Utilizza questo modulo per caricare file o immagini sul tuo server.</p>
-<p>Utilizza il codice Textile per il rendering della grafica all’interno di articoli, il codice Textpattern per inserire gli elementi grafici sui tuoi template di pagina, o codice HTML per inserire la grafica altrove.</p>
+<p>Utilizza il codice Textile per il rendering della grafica all'interno di articoli, il codice Textpattern per inserire gli elementi grafici sui tuoi template di pagina, o codice HTML per inserire la grafica altrove.</p>
         ]]></item>
     </group>
 
@@ -485,6 +486,7 @@
 <p>Incolla qui il contenuto del file di testo del plugin, poi usa ‘Carica’ per iniziare l’installazione. Qualsiasi plug-in già caricato con lo stesso nome o uno che hai precedentemente installato sarà sovrascritto dalla nuova versione caricata.</p>
 <p>Il testo del plug-in che incolli qui <strong>non</strong> è in codice PHP ma testo codificato su Base64, di solito preceduto da un header contenente informazioni sul plug-in (come il nome del plugin, versione e descrizione, nome autore, etc).</p>
         ]]></item>
+        <item id="upload_plugin" title="Carica plugin"><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="Pannello preferenze">
@@ -544,8 +546,7 @@
         <item id="comments_are_ol" title="Presentare i commenti come elenco numerato?"><![CDATA[
 <h2>Presentare commenti come un elenco numerato?</h2>
 <p>Determina se i commenti agli articoli saranno contenuti in un tag HTML <code>&lt;ol&gt;</code> e i singoli commenti in un tag <code>&lt;li&gt;</code> (il che farà sì che i commenti siano presentati come un elenco numerato), oppure se i singoli commenti siano invece contenuti in un tag <code>&lt;div&gt;</code>.</p>
-<p>Qualunque sia la scelta, sarà sempre possibile modificare i tag utilizzati modificando il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>, presente nel modulo <code>comments_display</code>.</p>
-        ]]></item>
+<p>Qualunque sia la scelta, sarà sempre possibile modificare i tag utilizzati modificando il tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>, presente nel modulo <code>comments_display</code>.</p>        ]]></item>
         <item id="comments_auto_append" title="Aggiungere automaticamente i commenti agli articoli?"><![CDATA[
 <h2>Aggiungere automaticamente i commenti agli articoli?</h2>
 <p>questa impostazione determina se i commenti e il modulo commenti vengono automaticamente aggiunti a tutti i singoli articoli (includendo automaticamente il contenuto del modulo <code>comments_display</code>).</p>
@@ -879,30 +880,29 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <h2>Tema lato amministrazione</h2>
 <p>il tema lato admin di default che verrà utilizzato quando qualcuno accede a Textpattern. Una scelta di temi admin preinstallati è inclusa con Textpattern, ed è inoltre possibile aggiungere pacchetti di temi personalizzati nella directory <code>textpattern/admin-themes</code> per renderli disponibili all’uso.</p>
         ]]></item>
-        <item id="txp_evaluate_functions" title="Funzioni PHP abilitate in txp:evaluate"><![CDATA[
+        <item id="txp_evaluate_functions" title="Evitare parole ‘vedove’ nei titoli degli articoli?"><![CDATA[
+<h2>Evitare parole ‘vedove’ nei titoli degli articoli?</h2>
+<p>Per ‘parola vedova’ si intende l’ultima parola di una frase mostrata in una nuova riga quando la frase è troppo lunga per rientrare in un’unica riga. In tipografia, le parole vedove sono considerate ineleganti e da evitare. Impostare questa preferenza su ‘Sì’ vi garantirà che lunghi titoli d’articolo non avranno mai l’ultima parola tutta sola su una nuova riga, dove invece appariranno le due ultime parole.</p>
+<p><strong>Nota:</strong> questa impostazione può rivelarsi problematica in pagine dette "Responsive" con più piccole larghezze di pagina, perché l’inserimento di un carattere ‘spazio unificatore’ tra le ultime due parole può causare titoli che debordano dall’elemento parente. In questo caso, impostare questa preferenza a ‘No’.</p>
+        ]]></item>
+        <item id="use_comments" title="Funzioni PHP abilitate in txp:evaluate"><![CDATA[
 <h2>Funzioni PHP abilitate in txp:evaluate</h2>
 <p>Si tratta di un elenco delimitato da virgole di elementi <code>function</code> o <code>alias=function</code>, ad esempio <code>md5</code>, <code>replace=str_replace</code>. Gli elementi specificati in questo elenco possono essere utilizzati nell’attributo <code>query</code> del tag <code>&lt;txp:evaluate /&gt;</code>:</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
 <p><code>function</code> deve restituire un valore scalare (<strong>non</strong> un array/object).</p>
         ]]></item>
-        <item id="use_comments" title="Accettare commenti?"><![CDATA[
+        <item id="use_mail_on_feeds_id" title="Accettare commenti?"><![CDATA[
 <h2>Accettare commenti?</h2>
 <p>Imposta se attivare o disattivare la funzione Commenti di Textpattern.</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="Usare l’indirizzo email per costruire feed IDs (di default è URL del sito)?"><![CDATA[
+        <item id="use_plugins" title="Usare l’indirizzo email per costruire feed IDs (di default è URL del sito)?"><![CDATA[
 <h2>Usare l’ndirizzo email per costruire feed IDs (di default è l’URL del sito)?</h2>
 <p>Gli elementi in un feed Atom richiedono un ID univoco.</p>
 <p>Per generare ID univoci al sito, Textpattern consente di scegliere tra un indirizzo email o il tuo nome di dominio, per includerli in questi ID. L’indirizzo email sarà il primo usato al momento della creazione del sito. A meno che non si preveda di cambiare il proprio nome di dominio in futuro, è probabilmente meglio impostare questa opzione su ‘No’.</p>
         ]]></item>
-        <item id="use_plugins" title="Usare plugin?"><![CDATA[
+        <item id="use_textile" title="Usare plugin?"><![CDATA[
 <h2>Usare plugin?</h2>
 <p>L’opzione consente di disattivare del tutto il supporto per i plugin di Textpattern. Utile se si sta eseguendo il debug di errori sul sito, e si vuole controllare se e quali plugin sono coinvolti.</p>
-        ]]></item>
-        <item id="use_textile" title="Usare Textile?"><![CDATA[
-<h2>Usare Textile?</h2>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox"> Textile <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> è una utility che semplifica la conversione di testo da normale a formato HTML. Quando abilitato, Textile elabora il corpo del testo degli articoli restituendo un documento strutturato in HTML.</p>
-<p> Textile offre anche un insieme di comandi, potenti ma facili da imparare, con cui formattare il testo, definire le strutture quali elenchi, titoli e blockquote, e inserire link e immagini.</p>
-<p>L’impostazione scelta qui diventa quella predefinita per il markup di corpo e sommario nel pannello ‘Scrivi’. È possibile scegliere tra formattare con Textile, convertire le interruzioni di riga in paragrafi HTML o di non convertire affatto il testo.</p>
         ]]></item>
     </group>
 
@@ -1032,7 +1032,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Un tema Textpattern è un insieme di Pagine, Moduli e Stili. I temi consentono di separare logicamente gli asset (le risorse) di sito in gruppi per facilità di identificazione, o condivisione con gli altri. L’atto di creare o importare un tema e tutti gli asset che contiene, <em>non</em> ha alcun impatto sul vostro sito esistente. Siete liberi di editare o modificare qualsiasi risorsa che non è associata a una Sezione del sito, senza che ci siano effetti sul sito stesso.</p>
 <p>Per modificare gli asset in un tema, visitare il pannello Pagine, Moduli o Stili e utilizzare il selettore a tendina per scegliere il tema su cui si desidera lavorare. Il tema su cui si sta lavorando è ricordato in tutta l’area di amministrazione, consentendo di saltare tra tipi di asset in modo facile e veloce. Ci si riferisce a esso come il vostro <em>Tema di lavoro</em>.</p>
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
-        ]]></item>
+]]></item>
         <item id="skin_title" title="Titolo tema"><![CDATA[
 <h2>Titolo tema</h2>
 <p>Titolo descrittivo di un tema, utilizzato per identificare il tema all’interno dei pannelli Textpattern.</p>

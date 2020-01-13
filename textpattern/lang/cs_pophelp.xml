@@ -114,7 +114,7 @@
 <p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>]]></item>
         <item id="override_form" title="Přebít formu"><![CDATA[<h2>Přebít formu</h2>
 <p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Datum vydání"><![CDATA[
 <h2>Datum vydání</h2>
 <p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti. </p>
 <p>Políčka jsou určená pro následující informace:</p>
@@ -348,6 +348,14 @@
         <item id="file_replace" title="Nahradit soubor"><![CDATA[
 <h2>Nahradit soubor</h2>
 <p>Původní soubor bude jednoduše přepsán novým, ale původní jméno souboru zůstane zachováno. Rovněž ostatní informace o souboru, jako je počet stažení, zůstanou zachovány.</p>        ]]></item>
+        <item id="timestamp_file" title="Datum vydání"><![CDATA[
+<h2>Psaní: Datum vydání</h2>
+<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo jako libovolný čas v minulosti, či v budoucnosti. </p>
+<p>Políčka jsou určené pro následující informace:</p>
+<ul>
+    <li>Rok / Měsíc / Den</li>
+    <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
+</ul>        ]]></item>
         <item id="upload" title="Nahrát soubor"><![CDATA[
 <h2>Nahrát soubor</h2>
 <p>Tento formulář slouží k nahrávání souborů na server.</p>

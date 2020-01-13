@@ -126,7 +126,7 @@
 <h2>Module de remplacement</h2>
 <p>Un article peut occasionnellement utiliser un module différent de celui qui lui est associé par défaut – par exemple pour afficher son résumé avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> à la place du corps de l’article avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> – et cette option se trouve ici.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Date de publication"><![CDATA[
 <h2>Date de publication</h2>
 <p>La date à laquelle un article ou un fichier est publié ou révisé le plus récemment. Cette date peut être définie au moment de la publication, ou dans un délais arbitraire du passé ou du futur.</p>
 <p>Les champs correspondent aux informations suivantes :</p>
@@ -394,6 +394,14 @@
 <h2>Remplacer le fichier</h2>
 <p>le téléversement d’un fichier ici ne remplacera pas le contenu du fichier existant sur le serveur mais conservera le nom de fichier identique au précédent. Le décompte des téléchargements ainsi que les autres informations associées au fichier resteront inchangées.</p>
         ]]></item>
+        <item id="timestamp_file" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>La date de publication d’un fichier ou de sa plus récente consultation. Cet horodatage peut être assigné au moment de la publication ou selon une référence arbitraire dans le passé voire dans le futur.</p>
+<p>Les champs de saisie correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
         <item id="upload" title="Envoyer un fichier"><![CDATA[
 <h2>Téléversement de fichier</h2>
 <p>Utilisez ce formulaire pour téléverser sur votre serveur des images ou des fichiers.</p>
