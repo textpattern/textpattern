@@ -846,7 +846,7 @@ function filterAtts($atts = null, $iscustom = null)
                 $operator = 'AND';
             }
         } elseif($not) {
-            $catquery[] = "(NOT Category{$i})";
+            $catquery[] = "(Category{$i} = '')";
         }
     }
 
