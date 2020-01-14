@@ -4621,7 +4621,7 @@ function permlinkurl($article_array, $hu = hu)
                         $out .= implode('/', $c1_path).'/';
                     } else {
                         $c0_path = array_intersect($c1_path, $c2_path);
-                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
+                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1/$category2/";
                     }
                 }
             }

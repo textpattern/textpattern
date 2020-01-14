@@ -731,7 +731,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($exclude && $exclude !== true) {
         $exclude = array_map('strtolower', do_list_unique($exclude));
         $excluded = array_filter($exclude, 'is_numeric');
-        $exclude = array_diff($exclude, $excluded);
+        empty($excluded) or $exclude = array_diff($exclude, $excluded);
     } else {
         $exclude or $exclude = array();
         $excluded = array();
@@ -776,9 +776,11 @@ function filterAtts($atts = null, $iscustom = null)
         );
     }
 
-    foreach($customlAtts as $cField => $val) {
-        if (isset($exclude[$cField]) && !isset($atts[$cField])) {
-            $atts[$cField] = $exclude[$cField];
+    if ($exclude && is_array($exclude)) {
+        foreach($exclude as $cField => $val) {
+            if (array_key_exists($cField, $customlAtts) && !isset($atts[$cField])) {
+                $atts[$cField] = $val;
+            }
         }
     }
 
