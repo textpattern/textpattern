@@ -34,24 +34,26 @@
  * @return string An SQL qualifier for a query's 'WHERE' part
  */
 
-function filterFrontPage()
+function filterFrontPage($field = 'Section', $column = 'on_frontpage')
 {
-    static $filterFrontPage;
+    static $filterFrontPage = array();
     global $txp_sections;
+    $key = $field.'.'.$column;
 
-    if (isset($filterFrontPage)) {
-        return $filterFrontPage;
+    if (isset($filterFrontPage[$key])) {
+        return $filterFrontPage[$key];
     }
 
-    $filterFrontPage = false;
+    $filterFrontPage[$key] = false;
+    $field = doSlash($field);
 
-    $rs = array_filter(array_column($txp_sections, 'on_frontpage', 'name'));
+    $rs = array_filter(array_column($txp_sections, $column, 'name'));
 
     if ($rs) {
-        $filterFrontPage = " AND Section IN(".join(',', quote_list(array_keys($rs))).")";
+        $filterFrontPage[$key] = " AND $field IN(".join(',', quote_list(array_keys($rs))).")";
     }
 
-    return $filterFrontPage;
+    return $filterFrontPage[$key];
 }
 
 /**
@@ -865,7 +867,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />', true, false);
-    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $section   = !$section   ? filterFrontPage('Section', 'page') : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
 
     // Author
     $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';

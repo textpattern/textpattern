@@ -316,7 +316,7 @@ function sec_section_list($message = '')
                     $sec_dev_item = ${"sec_dev_$item"};
 
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
-                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
+                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
 
                     ${"sec_$item"} = (!$replaced ? '' :
@@ -482,8 +482,8 @@ function section_edit()
             );
     }
 
-    $pageSelect = selectInput(array('name' => 'section_page', 'required' => true), array(), '', '', '', 'section_page');
-    $styleSelect = selectInput(array('name' => 'css', 'required' => true), array(), '', '', '', 'section_css');
+    $pageSelect = selectInput(array('name' => 'section_page', 'required' => false), array(), '', '', '', 'section_page');
+    $styleSelect = selectInput(array('name' => 'css', 'required' => false), array(), '', '', '', 'section_css');
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
