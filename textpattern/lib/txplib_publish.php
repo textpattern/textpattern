@@ -858,7 +858,14 @@ function filterAtts($atts = null, $iscustom = null)
     $catquery = join(" $operator ", $catquery);
     $category  = !$catquery  ? '' : " AND $not($catquery)";
 
-    // Section
+    // ID
+    $not = $exclude === true || isset($exclude['id']) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
+    $getid = $ids && !$not;
+
+        // Section
     // searchall=0 can be used to show search results for the current
     // section only.
     if ($q && $searchall && !$issticky) {
@@ -867,18 +874,15 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />', true, false);
-    $section   = !$section   ? filterFrontPage('Section', 'page') : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $getid = $getid || $section && !$not;
+    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')".
+        ($getid ? '' : filterFrontPage('Section', 'page'));
+
 
     // Author
     $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
     $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
-
-    // ID
-    $not = $exclude === true || isset($exclude['id']) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
-    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
-        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
