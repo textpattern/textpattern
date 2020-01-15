@@ -327,12 +327,12 @@ function sec_section_list($message = '')
                         ), array('title' => gTxt('edit'))).
                         ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
                         n.'<hr class="secondary" />'.n
-                    ).href(txpspecialchars($sec_item), array(
+                    ).($sec_item ? href(txpspecialchars($sec_item), array(
                             'event' => $item,
                             'name'  => $sec_item,
                             'skin'  => $sec_skin,
                         ), array('title' => gTxt('edit'))
-                    );
+                    ) : tag(gTxt('none'), 'span', array('class' => 'disabled')));
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
@@ -1011,14 +1011,14 @@ function section_multi_edit()
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
-            $skinset[] = "$setskin = '".doSlash($skin)."' AND ".
+            $skinset[] = "$setskin = '".doSlash($skin)."' AND ($setpage = '' OR ".
             (empty($all_pages[$skin]) ?
                 '0' :
-                "$setpage IN (".join(',', quote_list($all_pages[$skin])).")"
-            )." AND ".
+                "$setpage IN (".join(',', quote_list($all_pages[$skin]))."))"
+            )." AND ($setcss = '' OR ".
             (empty($all_styles[$skin]) ?
                 '0' :
-                "$setcss IN (".join(',', quote_list($all_styles[$skin])).")"
+                "$setcss IN (".join(',', quote_list($all_styles[$skin]))."))"
             );
         }
 
