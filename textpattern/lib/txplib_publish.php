@@ -875,7 +875,7 @@ function filterAtts($atts = null, $iscustom = null)
     $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />', true, false);
     $getid = $getid || $section && !$not;
-    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')".
+    $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
         ($getid ? '' : filterFrontPage('Section', 'page'));
 
 
