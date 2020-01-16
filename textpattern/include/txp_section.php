@@ -231,7 +231,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
-            $dev_preview = has_privs('skin.edit');
+            $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -862,10 +862,12 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
         'css', '', array('class' => 'multi-option multi-step'), ''
     );
 
+    $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
+
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (!has_privs('skin.edit') ?
+            'html'  => (!$dev_preview ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
