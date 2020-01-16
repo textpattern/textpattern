@@ -679,6 +679,8 @@ function preText($s, $prefs)
                 empty($rs['dev_page']) or $rs['page'] = $rs['dev_page'];
                 empty($rs['dev_css']) or $rs['css'] = $rs['dev_css'];
             }
+
+            unset($rs);
         }
 
         $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
