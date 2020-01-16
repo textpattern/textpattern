@@ -38,7 +38,9 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
 {
     static $filterFrontPage = array();
     global $txp_sections;
-    $key = $field.'.'.$column;
+
+    is_array($column) or $column = do_list_unique($column);
+    $key = $field.'.'.implode('.', $column);
 
     if (isset($filterFrontPage[$key])) {
         return $filterFrontPage[$key];
@@ -46,8 +48,11 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
 
     $filterFrontPage[$key] = false;
     $field = doSlash($field);
+    $rs = array();
 
-    $rs = array_filter(array_column($txp_sections, $column, 'name'));
+    foreach($column as $col) {
+        $rs += array_filter(array_column($txp_sections, $col, 'name'));
+    }
 
     if ($rs) {
         $filterFrontPage[$key] = " AND $field IN(".join(',', quote_list(array_keys($rs))).")";
@@ -759,6 +764,7 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
+        'searchall'     => !$iscustom && !empty($pretext['q']),
     );
 
     if ($iscustom) {
@@ -773,7 +779,6 @@ function filterAtts($atts = null, $iscustom = null)
         $extralAtts += array(
             'listform'     => '',
             'searchform'   => '',
-            'searchall'    => 1,
             'searchsticky' => 0,
         );
     }
@@ -876,7 +881,7 @@ function filterAtts($atts = null, $iscustom = null)
     $section !== true or $section = parse('<txp:section />', true, false);
     $getid = $getid || $section && !$not;
     $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
-        ($getid ? '' : filterFrontPage('Section', 'page'));
+        ($getid || $searchall? '' : filterFrontPage('Section', 'page'));
 
 
     // Author
