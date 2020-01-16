@@ -126,15 +126,15 @@ function sec_section_list($message = '')
                 'label'  => gTxt('title'),
             ),
             'skin' => array(
-                'column' => 'txp_section.skin',
+                'column' => array('txp_section.skin', 'txp_section.dev_skin'),
                 'label'  => gTxt('skin'),
             ),
             'page' => array(
-                'column' => 'txp_section.page',
+                'column' => array('txp_section.page', 'txp_section.dev_page'),
                 'label'  => gTxt('page'),
             ),
             'css' => array(
-                'column' => 'txp_section.css',
+                'column' => array('txp_section.css', 'txp_section.dev_css'),
                 'label'  => gTxt('css'),
             ),
             'description' => array(
