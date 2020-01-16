@@ -871,7 +871,7 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', $step != 'section_set_theme', 0, 'live_theme'),
+                    checkbox2('live_theme', 0, 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
