@@ -126,15 +126,15 @@ function sec_section_list($message = '')
                 'label'  => gTxt('title'),
             ),
             'skin' => array(
-                'column' => 'txp_section.skin',
+                'column' => array('txp_section.skin', 'txp_section.dev_skin'),
                 'label'  => gTxt('skin'),
             ),
             'page' => array(
-                'column' => 'txp_section.page',
+                'column' => array('txp_section.page', 'txp_section.dev_page'),
                 'label'  => gTxt('page'),
             ),
             'css' => array(
-                'column' => 'txp_section.css',
+                'column' => array('txp_section.css', 'txp_section.dev_css'),
                 'label'  => gTxt('css'),
             ),
             'description' => array(
@@ -231,7 +231,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
-            $dev_preview = has_privs('skin.edit');
+            $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -316,7 +316,7 @@ function sec_section_list($message = '')
                     $sec_dev_item = ${"sec_dev_$item"};
 
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
-                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
+                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
 
                     ${"sec_$item"} = (!$replaced ? '' :
@@ -327,12 +327,12 @@ function sec_section_list($message = '')
                         ), array('title' => gTxt('edit'))).
                         ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
                         n.'<hr class="secondary" />'.n
-                    ).href(txpspecialchars($sec_item), array(
+                    ).($sec_item ? href(txpspecialchars($sec_item), array(
                             'event' => $item,
                             'name'  => $sec_item,
                             'skin'  => $sec_skin,
                         ), array('title' => gTxt('edit'))
-                    );
+                    ) : tag(gTxt('none'), 'span', array('class' => 'disabled')));
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
@@ -387,7 +387,7 @@ function sec_section_list($message = '')
                 );
             }
 
-            $disabled = $dev_set ? array() : array('switchdevlive');
+            $disabled = $dev_set ? array() : array('livetodev', 'devtolive');
 
             $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
@@ -482,8 +482,8 @@ function section_edit()
             );
     }
 
-    $pageSelect = selectInput('section_page', array(), '', '', '', 'section_page');
-    $styleSelect = selectInput('css', array(), '', '', '', 'section_css');
+    $pageSelect = selectInput(array('name' => 'section_page', 'required' => false), array(), '', '', '', 'section_page');
+    $styleSelect = selectInput(array('name' => 'css', 'required' => false), array(), '', '', '', 'section_css');
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
@@ -862,27 +862,24 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
         'css', '', array('class' => 'multi-option multi-step'), ''
     );
 
+    $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
+
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (!has_privs('skin.edit') ?
+            'html'  => (!$dev_preview ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', $step != 'section_set_theme', 0, 'live_theme'),
+                    checkbox2('live_theme', 0, 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
         ),
-        'switchdevlive' => array(
-            'label' => gTxt('switch_dev_live'),
-            'html'  => radioSet(array(
-                0 => gTxt('live_to_dev'),
-                1 => gTxt('dev_to_live'),
-                ), 'switch_dev_live', 0),
-        ),
+        'livetodev' => gTxt('live_to_dev'),
+        'devtolive' => gTxt('dev_to_live'),
         'permlinkmode' => array(
             'label' => gTxt('permlink_mode'),
             'html'  => permlinkmodes('permlink_mode', '', array('' => gTxt('default'))),
@@ -946,6 +943,7 @@ function section_multi_edit()
     }
 
     $nameVal = array();
+    $deployOpts = array('livetodev', 'devtolive');
 
     switch ($edit_method) {
         case 'delete':
@@ -969,8 +967,11 @@ function section_multi_edit()
             }
 
             break;
-        case 'switchdevlive':
-            $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
+        case 'devtolive':
+            $nameVal['switch_dev_live'] = 1;
+            break;
+        case 'livetodev':
+            $nameVal['switch_dev_live'] = 0;
             break;
         case 'permlinkmode':
             $nameVal['permlink_mode'] = (string) ps('permlink_mode');
@@ -1007,18 +1008,18 @@ function section_multi_edit()
                 '0' :
                 "css IN (".join(',', quote_list($all_styles[$skin])).")";
         }
-    } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
+    } elseif (in_array($edit_method, $deployOpts) && empty($nameVal['switch_dev_live'])) {
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
-            $skinset[] = "$setskin = '".doSlash($skin)."' AND ".
+            $skinset[] = "$setskin = '".doSlash($skin)."' AND ($setpage = '' OR ".
             (empty($all_pages[$skin]) ?
                 '0' :
-                "$setpage IN (".join(',', quote_list($all_pages[$skin])).")"
-            )." AND ".
+                "$setpage IN (".join(',', quote_list($all_pages[$skin]))."))"
+            )." AND ($setcss = '' OR ".
             (empty($all_styles[$skin]) ?
                 '0' :
-                "$setcss IN (".join(',', quote_list($all_styles[$skin])).")"
+                "$setcss IN (".join(',', quote_list($all_styles[$skin]))."))"
             );
         }
 
@@ -1032,8 +1033,8 @@ function section_multi_edit()
     );
 
     if ($nameVal && $sections) {
-        if ($edit_method == 'switchdevlive') {
-            $set = ($nameVal['switch_dev_live'] ? '' :
+        if (in_array($edit_method, $deployOpts)) {
+            $set = ($edit_method == 'devtolive' ? '' :
                 "skin = $setskin,
                 page = $setpage,
                 css = $setcss, "
