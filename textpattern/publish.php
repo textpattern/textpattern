@@ -311,8 +311,7 @@ function preText($s, $prefs)
 
         $url = chopUrl($req, 4);
 
-        for ($n = 0; isset($url['u'.($n+1)]); $out[++$n] = $url['u'.$n]);
-        $out[0] = $n;
+        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
@@ -672,19 +671,24 @@ function preText($s, $prefs)
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
-        $rs = array_intersect_key($txp_sections[$s], array_fill_keys(array('skin', 'page', 'css', 'dev_skin', 'dev_page', 'dev_css'), null));
         $userInfo = is_logged_in();
 
-        if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
-            $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
-            $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
-            $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
-        } else {
-            $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
-            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
+        if ($userInfo && has_privs('skin.preview', $userInfo)) {
+            foreach ($txp_sections as &$rs) {
+                empty($rs['dev_skin']) or $rs['skin'] = $rs['dev_skin'];
+                empty($rs['dev_page']) or $rs['page'] = $rs['dev_page'];
+                empty($rs['dev_css']) or $rs['css'] = $rs['dev_css'];
+            }
+
+            unset($rs);
         }
+
+        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
+        $rs = $txp_sections[$s];
+
+        $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -936,9 +940,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
-        include_once txpath.'/publish/search.php';
-
-        $s_filter = ($searchall ? filterSearch() : '');
+        $s_filter = ($searchall ? filterFrontPage('Section', 'searchable') : '');
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
