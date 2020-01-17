@@ -387,7 +387,7 @@ function sec_section_list($message = '')
                 );
             }
 
-            $disabled = $dev_set ? array() : array('switchdevlive');
+            $disabled = $dev_set ? array() : array('livetodev', 'devtolive');
 
             $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
@@ -878,13 +878,8 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
         ),
-        'switchdevlive' => array(
-            'label' => gTxt('switch_dev_live'),
-            'html'  => radioSet(array(
-                0 => gTxt('live_to_dev'),
-                1 => gTxt('dev_to_live'),
-                ), 'switch_dev_live', 0),
-        ),
+        'livetodev' => gTxt('live_to_dev'),
+        'devtolive' => gTxt('dev_to_live'),
         'permlinkmode' => array(
             'label' => gTxt('permlink_mode'),
             'html'  => permlinkmodes('permlink_mode', '', array('' => gTxt('default'))),
@@ -948,6 +943,7 @@ function section_multi_edit()
     }
 
     $nameVal = array();
+    $deployOpts = array('livetodev', 'devtolive');
 
     switch ($edit_method) {
         case 'delete':
@@ -971,8 +967,11 @@ function section_multi_edit()
             }
 
             break;
-        case 'switchdevlive':
-            $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
+        case 'devtolive':
+            $nameVal['switch_dev_live'] = 1;
+            break;
+        case 'livetodev':
+            $nameVal['switch_dev_live'] = 0;
             break;
         case 'permlinkmode':
             $nameVal['permlink_mode'] = (string) ps('permlink_mode');
@@ -1009,7 +1008,7 @@ function section_multi_edit()
                 '0' :
                 "css IN (".join(',', quote_list($all_styles[$skin])).")";
         }
-    } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
+    } elseif (in_array($edit_method, $deployOpts) && empty($nameVal['switch_dev_live'])) {
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
@@ -1034,8 +1033,8 @@ function section_multi_edit()
     );
 
     if ($nameVal && $sections) {
-        if ($edit_method == 'switchdevlive') {
-            $set = ($nameVal['switch_dev_live'] ? '' :
+        if (in_array($edit_method, $deployOpts)) {
+            $set = ($edit_method == 'devtolive' ? '' :
                 "skin = $setskin,
                 page = $setpage,
                 css = $setcss, "
