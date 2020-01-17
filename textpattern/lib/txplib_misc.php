@@ -4001,10 +4001,10 @@ function buildCustomSql($custom, $pairs, $exclude = array())
             $no = array_search($k, $custom);
 
             if ($no !== false) {
-                $not = ($exclude === true || in_array($k, $exclude)) ? 'NOT ' : '';
+                $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
 
                 if ($val === true) {
-                    $out[] = "{$not}custom_{$no}";
+                    $out[] = "({$not}custom_{$no})";
                 } else {
                     $val = doSlash($val);
                     $parts = array();
@@ -4621,7 +4621,7 @@ function permlinkurl($article_array, $hu = hu)
                         $out .= implode('/', $c1_path).'/';
                     } else {
                         $c0_path = array_intersect($c1_path, $c2_path);
-                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1+$category2/";
+                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1/$category2/";
                     }
                 }
             }
