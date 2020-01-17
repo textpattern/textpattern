@@ -656,6 +656,7 @@ function preText($s, $prefs)
         }
 
         if (!empty($thisarticle)) {
+            unset($thiscategory, $thissection);
             $uExpires = $thisarticle['expires'];
             $out['id_keywords'] = $thisarticle['keywords'];
             $out['id_author']   = $thisarticle['authorid'];
