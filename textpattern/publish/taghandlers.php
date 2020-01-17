@@ -1457,13 +1457,15 @@ function section_list($atts, $thing = null)
     $sql_limit = '';
     $sql_sort = sanitizeForSort($sort);
     $sql = array();
-    $sql[] = 1;
 
     if ($limit !== '' || $offset) {
         $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
-    if ($sections) {
+
+    if ($sections === true) {
+        $sql[] = '1';
+    } elseif ($sections) {
         if ($include_default) {
             $sections .= ', default';
         }
@@ -1475,20 +1477,22 @@ function section_list($atts, $thing = null)
             $sql_sort = "FIELD(name, $sections)";
         }
     } else {
-        if ($exclude === true) {
-            $sql[] = "searchable";
-        } elseif ($exclude) {
-            $exclude = join(',', quote_list(do_list_unique($exclude)));
-            $sql[] = "name NOT IN ($exclude)";
-        }
+        $sql[] = '1'.filterFrontPage('name', 'page');
+    }
 
-        if (!$include_default) {
-            $sql[] = "name != 'default'";
-        }
+    if ($exclude === true) {
+        $sql[] = "searchable";
+    } elseif ($exclude) {
+        $exclude = join(',', quote_list(do_list_unique($exclude)));
+        $sql[] = "name NOT IN ($exclude)";
+    }
 
-        if (!$sql_sort) {
-            $sql_sort = "name ASC";
-        }
+    if (!$include_default) {
+        $sql[] = "name != 'default'";
+    }
+
+    if (!$sql_sort) {
+        $sql_sort = "name ASC";
     }
 
     if ($include_default) {

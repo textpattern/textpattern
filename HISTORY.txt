@@ -37,7 +37,9 @@ Changes in 4.8.0
 * Added: Ability to trim lists when using valueless 'trim' attribute.
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
-* Added: Latest translations. Thanks to all CrowdIn translators for their work.
+* Added: Support for Bengali language translation.
+* Added: Support for Welsh language translation.
+* Added: Latest translations. Thanks to all Crowdin translators for their work.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
   config.php file. See Hive theme's README.txt file for instructions.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
@@ -70,7 +72,7 @@ Changes in 4.8.0
 * Textile 3.7.6. See https://github.com/textile/php-textile/releases/tag/v3.7.6
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
-* PrismJS 1.18.0.
+* PrismJS 1.19.0.
 * jQuery File Upload 10.7.0.
 
 Changes in 4.7.3
