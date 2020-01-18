@@ -3869,13 +3869,29 @@ function permlink($atts, $thing = null)
 
     $old_context = $txp_context;
 
-    if (!isset($atts['context']) || $atts['context'] === true) {
-        $atts = lAtts($lAtts + $txp_context, $atts);
-        empty($txp_context) or $txp_context = array_intersect_key($atts, $txp_context);
+    if (!isset($atts['context'])) {
+        if (empty($txp_context)) {
+            $atts = lAtts($lAtts, $atts);
+        } else {
+            $atts = lAtts($lAtts + $txp_context, $atts);
+
+            foreach ($txp_context as $q => &$v) {
+                $v = $atts[$q];
+            }
+
+            unset($v);
+        }
+    } elseif ($atts['context'] === true) {
+        $atts = lAtts($lAtts, $atts);
     } else {
         $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
         $atts = lAtts($lAtts + $extralAtts, $atts);
-        $extralAtts = array_intersect_key($atts, $extralAtts);
+
+        foreach ($extralAtts as $q => &$v) {
+            $v = $atts[$q];
+        }
+
+        unset($v);
     }
 
     $id = $atts['id'];
@@ -4443,16 +4459,32 @@ function page_url($atts, $thing = null)
 
     $old_context = $txp_context;
 
-    if (!isset($atts['context']) || $atts['context'] === true) {
-        $atts = lAtts($lAtts + $txp_context, $atts);
-        empty($txp_context) or $txp_context = array_intersect_key($atts, $txp_context);
+    if (!isset($atts['context'])) {
+        if (empty($txp_context)) {
+            $atts = lAtts($lAtts, $atts);
+        } else {
+            $atts = lAtts($lAtts + $txp_context, $atts);
+
+            foreach ($txp_context as $q => &$v) {
+                $v = $atts[$q];
+            }
+
+            unset($v);
+        }
+    } elseif ($atts['context'] === true) {
+        $atts = lAtts($lAtts, $atts);
     } else {
         $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
         $atts = lAtts($lAtts + $extralAtts, $atts);
-        $extralAtts = array_intersect_key($atts, $extralAtts);
+
+        foreach ($extralAtts as $q => &$v) {
+            $v = $atts[$q];
+        }
+
+        unset($v);
     }
 
-    extract(array_intersect_key($atts, $lAtts));
+    extract($atts, EXTR_SKIP);
 
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
