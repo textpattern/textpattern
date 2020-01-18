@@ -598,15 +598,10 @@ function preText($s, $prefs)
         }
 
         if (!empty($out['s']) && $out['s'] !== 'default') {
-            global $thissection;
-
-            if (isset($txp_sections[$out['s']])) {
-                $thissection = array_intersect_key($txp_sections[$out['s']], array('name' => $out['s'], 'title' => null, 'description' => null));
-            } else {
+            if (!isset($txp_sections[$out['s']])) {
                 $out['s'] = '';
+                $is_404 = true;
             }
-
-            $is_404 = $is_404 || empty($out['s']);
         }
     }
 
@@ -656,7 +651,7 @@ function preText($s, $prefs)
         }
 
         if (!empty($thisarticle)) {
-            unset($thiscategory, $thissection);
+            unset($thiscategory);
             $uExpires = $thisarticle['expires'];
             $out['id_keywords'] = $thisarticle['keywords'];
             $out['id_author']   = $thisarticle['authorid'];

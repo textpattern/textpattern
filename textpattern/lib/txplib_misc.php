@@ -3331,30 +3331,22 @@ function fetch_category_title($name, $type = 'article')
 function fetch_section_title($name)
 {
     static $sectitles = array();
-    global $thissection, $txp_sections;
+    global $txp_sections;
 
     // Try cache.
     if (isset($sectitles[$name])) {
         return $sectitles[$name];
     }
 
-    // Try global set by section_list().
-    if (!empty($thissection['title']) && $thissection['name'] == $name) {
-        $sectitles[$name] = $thissection['title'];
-
-        return $thissection['title'];
-    }
-
     if ($name == 'default' or empty($name)) {
         return '';
     } elseif (isset($txp_sections[$name])) {
-        return $txp_sections[$name]['title'];
+        return $sectitles[$name] = $txp_sections[$name]['title'];
     }
 
     $f = safe_field("title", 'txp_section', "name = '".doSlash($name)."'");
-    $sectitles[$name] = $f;
 
-    return $f;
+    return $sectitles[$name] = $f;
 }
 
 /**

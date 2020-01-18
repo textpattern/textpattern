@@ -310,6 +310,8 @@ function sec_section_list($message = '')
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
+                $in_dev = false;
+
                 foreach (array('page', 'css') as $item) {
                     $all_items = $item === 'page' ? $all_pages : $all_styles;
                     $sec_item = ${"sec_$item"};
@@ -318,25 +320,28 @@ function sec_section_list($message = '')
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
                     $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
+                    $in_dev = $in_dev || $replaced;
 
-                    ${"sec_$item"} = (!$replaced ? '' :
+                    ${"sec_$item"} = ($sec_item ? tag(href(txpspecialchars($sec_item), array(
+                        'event' => $item,
+                        'name'  => $sec_item,
+                        'skin'  => $sec_skin,
+                    ), array('title' => gTxt('edit'))
+                    ), $replaced ? 'del' : null) : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    (!$replaced ? '' : 
+                        n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
                         ), array('title' => gTxt('edit'))).
-                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
-                        n.'<hr class="secondary" />'.n
-                    ).($sec_item ? href(txpspecialchars($sec_item), array(
-                            'event' => $item,
-                            'name'  => $sec_item,
-                            'skin'  => $sec_skin,
-                        ), array('title' => gTxt('edit'))
-                    ) : tag(gTxt('none'), 'span', array('class' => 'disabled')));
+                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
+                    );
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
                 $dev_set = $dev_set || $replaced;
+                $in_dev = $in_dev || $replaced;
 
                 $contentBlock .= tr(
                     td(
@@ -350,7 +355,8 @@ function sec_section_list($message = '')
                             sp.span('&#124;', array('role' => 'separator')).
                             sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
-                        ), '', array(
+                        ).
+                        ($in_dev ? n.'<hr class="secondary" />'.n.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')) : ''), '', array(
                             'class' => 'txp-list-col-name',
                             'scope' => 'row',
                         )
@@ -359,8 +365,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).n.'<hr class="secondary" />'.n : '').
-                        $sec_skin, '', 'txp-list-col-skin'
+                        tag($sec_skin, $replaced ? 'del' : null).($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
