@@ -3859,14 +3859,23 @@ function meta_author($atts)
 function permlink($atts, $thing = null)
 {
     global $pretext, $thisarticle, $txp_context;
-
-    extract(lAtts(array(
+    static $lAtts = array(
         'class'   => '',
         'id'      => '',
         'style'   => '',
         'title'   => '',
         'context' => null,
-    ), $atts));
+    );
+
+    if (!empty($atts['context']) && $atts['context'] !== true) {
+        $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
+        $atts = lAtts($lAtts + $extralAtts, $atts);
+        $extralAtts = array_intersect_key($atts, $extralAtts);
+    } else {
+        $atts = lAtts($lAtts, $atts);
+    }
+
+    $id = $atts['id'];
 
     if (!$id) {
         assert_article();
@@ -3874,7 +3883,7 @@ function permlink($atts, $thing = null)
 
     $thisid = $id ? $id : $thisarticle['thisid'];
     $old_context = $txp_context;
-    $txp_context = get_context($context);
+    $txp_context = isset($extralAtts) ? get_context($extralAtts) : get_context($atts['context']);
     $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
     $txp_context = $old_context;
 
@@ -3886,9 +3895,9 @@ function permlink($atts, $thing = null)
         return tag(parse($thing), 'a', array(
             'rel'   => 'bookmark',
             'href'  => $url,
-            'title' => $title,
-            'style' => $style,
-            'class' => $class,
+            'title' => $atts['title'],
+            'style' => $atts['style'],
+            'class' => $atts['class'],
         ));
     }
 }

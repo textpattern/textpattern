@@ -5029,16 +5029,18 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
     } elseif (empty($context)) {
         return array();
     } elseif (!is_array($context)) {
-        $context = $context === true ? $internals : do_list_unique($context);
+        $context = array_fill_keys($context === true ? $internals : do_list_unique($context), null);
     }
 
     $out = array();
 
-    foreach ($context as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $internals)) {
+    foreach ($context as $q => $v) {
+        if (isset($pretext[$q]) && in_array($q, $internals)) {
             $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (!isset($pretext[$q]) && $value = gps($q)) {
-            $out[$q] = $value;
+        } elseif (isset($v)) {
+            $out[$q] = $v;
+        } elseif (($v = gps($q, false)) !== false) {
+            $out[$q] = $v;
         }
     }
 
