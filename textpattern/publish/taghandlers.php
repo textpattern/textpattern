@@ -3874,24 +3874,14 @@ function permlink($atts, $thing = null)
             $atts = lAtts($lAtts, $atts);
         } else {
             $atts = lAtts($lAtts + $txp_context, $atts);
-
-            foreach ($txp_context as $q => &$v) {
-                $v = $atts[$q];
-            }
-
-            unset($v);
+            $txp_context = array_intersect_key($atts, $txp_context);
         }
     } elseif ($atts['context'] === true) {
         $atts = lAtts($lAtts, $atts);
     } else {
         $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
         $atts = lAtts($lAtts + $extralAtts, $atts);
-
-        foreach ($extralAtts as $q => &$v) {
-            $v = $atts[$q];
-        }
-
-        unset($v);
+        $extralAtts = array_intersect_key($atts, $extralAtts);
     }
 
     $id = $atts['id'];
@@ -4464,24 +4454,14 @@ function page_url($atts, $thing = null)
             $atts = lAtts($lAtts, $atts);
         } else {
             $atts = lAtts($lAtts + $txp_context, $atts);
-
-            foreach ($txp_context as $q => &$v) {
-                $v = $atts[$q];
-            }
-
-            unset($v);
+            $txp_context = array_intersect_key($atts, $txp_context);
         }
     } elseif ($atts['context'] === true) {
         $atts = lAtts($lAtts, $atts);
     } else {
         $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
         $atts = lAtts($lAtts + $extralAtts, $atts);
-
-        foreach ($extralAtts as $q => &$v) {
-            $v = $atts[$q];
-        }
-
-        unset($v);
+        $extralAtts = array_intersect_key($atts, $extralAtts);
     }
 
     extract($atts, EXTR_SKIP);
