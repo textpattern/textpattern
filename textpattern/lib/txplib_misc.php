@@ -5039,8 +5039,8 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
             $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
         } elseif (isset($v)) {
             $out[$q] = $v;
-        } elseif (($v = gps($q, false)) !== false) {
-            $out[$q] = $v;
+        } else {
+            $out[$q] = gps($q, null);
         }
     }
 
