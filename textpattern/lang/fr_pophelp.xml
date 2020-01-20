@@ -635,11 +635,38 @@
 <p>Seuls les modèles de modules d’une même extension correspondant à leur type (ex. <code>myscript.js</code>) peuvent être servis comme fichiers indépendants («Flat files»). Dans ce cas, ils ne seront pas interceptés par Textpattern et seront tous accessibles via leur URL.</p>
 <p>Si un modèle de module nécessite d’être interprété (s’il contient des balisages Textpattern), vous devrez les servir depuis la base de données comme suit :</p>
 <pre><code>&lt;script&gt;
-    &lt;txp:txp:output_form form="myscript.js"
-    format="script" /&gt;
+ &lt;txp:txp:output_form form="myscript.js"
+ format="script" /&gt;
 &lt;/script&gt;</code></pre>
 <p>Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel de <code>myscript</code> (sans <code>.js</code>) afin de le rendre inaccessible via une URL standard – et en l’incluant comme suit :</p>
 <pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+<p>Liste de type de modules :</p>
+<pre><code>
+[js]
+mediatype="application/javascript"
+title="Javascript"
+[css]
+mediatype="text/css"
+title="Stylesheet"
+[json]
+mediatype="application/json"
+title="Json"
+[svg]
+mediatype="image/svg+xml"
+title="SVG"
+[xml]
+mediatype="application/xml"
+title="XML"
+[txt]
+mediatype="text/plain"
+title="TXT"
+[csv]
+mediatype="text/csv"
+title="CSV"
+[html]
+mediatype="text/html"
+title="HTML"
+</code></pre>
         ]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
