@@ -1659,22 +1659,19 @@ function search_term($atts)
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = 'next')
 {
-    global $pretext, $thisarticle, $txp_context;
-
-    if (!in_array($target, array('next', 'prev'))) {
-        return '';
-    }
-
-    if (!assert_article()) {
-        return '';
-    }
-
-    extract(lAtts(array(
+    global $thisarticle, $txp_context;
+    static $lAtts = array(
         'form'       => '',
         'link'       => 1,
-        'showalways' => 0,
-        'context'    => empty($txp_context) ? true : null
-    ), $atts));
+        'showalways' => 0
+    );
+
+    if (!in_array($target, array('next', 'prev')) || !assert_article()) {
+        return '';
+    }
+
+    $atts += array('context' => empty($txp_context) ? true : null);
+    extract($atts + $lAtts, EXTR_SKIP);
 
     if (is_array($thisarticle)) {
         if (!isset($thisarticle[$target])) {
@@ -1682,26 +1679,25 @@ function link_to($atts, $thing = null, $target = 'next')
         }
 
         if ($thisarticle[$target] !== false) {
-            $old_context = $txp_context;
-            $txp_context = get_context($context);
-            $url = permlinkurl($thisarticle[$target]);
-            $txp_context = $old_context;
+            $oldarticle = $thisarticle;
+            $thisarticle = $thisarticle[$target];
+            $url = permlink(array_diff_key($atts, $lAtts));
 
             if ($form || $thing !== null) {
-                $oldarticle = $thisarticle;
                 populateArticleData($thisarticle[$target]);
                 $thisarticle['is_first'] = $thisarticle['is_last'] = true;
                 $thing = $form ? parse_form($form) : parse($thing);
                 $target_title = escape_title($thisarticle[$target]['Title']);
-                $thisarticle = $oldarticle;
 
-                return $link ? href(
+                $url = $link ? href(
                     $thing,
                     $url,
                     ($target_title != $thing ? ' title="'.$target_title.'"' : '').
                     ' rel="'.$target.'"'
                 ) : $thing;
             }
+
+            $thisarticle = $oldarticle;
 
             return $url;
         }
