@@ -4482,7 +4482,7 @@ function page_url($atts, $thing = null)
 
     if (isset($thing)) {
         $out = parse($thing);
-    } elseif ($context) {
+    } elseif (isset($context)) {
         $out = pagelinkurl($txp_context);
         $escape === null or $out = str_replace('&amp;', '&', $out);
     } elseif (isset($specials[$type])) {
