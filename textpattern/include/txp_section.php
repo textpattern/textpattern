@@ -327,8 +327,8 @@ function sec_section_list($message = '')
                         'name'  => $sec_item,
                         'skin'  => $sec_skin,
                     ), array('title' => gTxt('edit'))
-                    ), $replaced ? 'del' : null) : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
-                    (!$replaced ? '' : 
+                    ), $replaced ? '' : null) : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    (!$replaced ? '' :
                         n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
@@ -365,7 +365,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? 'del' : null).($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        tag($sec_skin, $replaced ? '' : null).($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
                         '', 'txp-list-col-skin'
                     ).
                     td(
