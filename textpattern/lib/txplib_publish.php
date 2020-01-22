@@ -459,7 +459,8 @@ function maybe_tag($tag)
             $match = array();
 
             foreach($plugins as $p) {
-                $match[] = preg_quote(strpos($p, '_') === false ? $p : strtok($p, '_').'_', '/');
+                $pfx = strpos($p, '_') === false ? $p : strtok($p, '_').'_';
+                $match[$pfx] = preg_quote($pfx, '/');
             }
 
             $match = '/^('.implode('|', $match).')/i';
