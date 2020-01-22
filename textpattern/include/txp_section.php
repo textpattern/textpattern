@@ -327,7 +327,7 @@ function sec_section_list($message = '')
                         'name'  => $sec_item,
                         'skin'  => $sec_skin,
                     ), array('title' => gTxt('edit'))
-                    ), $replaced ? '' : null) : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
                     (!$replaced ? '' :
                         n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
@@ -365,7 +365,7 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        tag($sec_skin, $replaced ? '' : null).($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        tag($sec_skin, $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '').($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
                         '', 'txp-list-col-skin'
                     ).
                     td(
@@ -375,7 +375,7 @@ function sec_section_list($message = '')
                         $sec_css, '', 'txp-list-col-style'
                     ).
                     td(
-                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
                     ).
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
