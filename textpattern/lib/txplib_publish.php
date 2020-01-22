@@ -451,8 +451,24 @@ function maybe_tag($tag)
     static $tags = null;
 
     if ($tags === null) {
-        $tags = get_defined_functions();
-        $tags = array_flip($tags['user']);
+        global $plugins;
+
+        if (empty($plugins)) {
+            $tags = false;
+        } else {
+            $match = array();
+
+            foreach($plugins as $p) {
+                $match[] = preg_quote(strpos($p, '_') === false ? $p : strtok($p, '_').'_', '/');
+            }
+
+            $match = '/^('.implode('|', $match).')/i';
+            $tags = get_defined_functions();
+            $tags = array_filter($tags['user'], function($f) use ($match) {
+                return preg_match($match, $f);
+            });
+            $tags = array_flip($tags);
+        }
     }
 
     return isset($tags[$tag]);
