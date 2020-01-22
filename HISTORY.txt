@@ -39,6 +39,7 @@ Changes in 4.8.0
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Support for Bengali language translation.
 * Added: Support for Khmer language translation.
+* Added: Support for Norwegian language translation.
 * Added: Support for Welsh language translation.
 * Added: Latest translations. Thanks to all Crowdin translators for their work.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
