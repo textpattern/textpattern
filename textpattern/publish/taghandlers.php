@@ -196,7 +196,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, label, trim, default');
+    ->registerAttr('txp_wraptag', 'wraptag, label, trim, replace, default');
 
 // -------------------------------------------------------------
 
@@ -5329,6 +5329,7 @@ function txp_wraptag($atts, $thing = '')
         'class'    => '',
         'html_id'  => '',
         'trim'     => '',
+        'replace'  => null,
         'default'  => null,
     ), $atts, false));
 
@@ -5336,11 +5337,11 @@ function txp_wraptag($atts, $thing = '')
 
     if ((string)$trim !== '') {
         if ($trim === true) {
-            $thing = trim($thing);
+            $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
         } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsimuS]*$/As', $trim)) {
-            $thing = preg_replace($trim, '', $thing);
+            $thing = preg_replace($trim, $replace, $thing);
         } else {
-            $thing = trim($thing, $trim);
+            $thing = isset($replace) ? str_replace($trim, $replace, $thing) : trim($thing, $trim);
         }
     }
 
