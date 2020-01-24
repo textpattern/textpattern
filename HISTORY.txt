@@ -30,6 +30,7 @@ Changes in 4.8.0
 * Added: Per-section article link format override.
 * Added: 'breadcrumb/title' article link format.
 * Added: 'section/category/title' article link format.
+* Added: Links have an editable publish time and date.
 * Added: Category searching to a specified depth.
 * Added: Custom field aliases and URL filters via valueless attributes.
 * Added: Global 'evaluate', 'replace' and 'yield' attributes.
