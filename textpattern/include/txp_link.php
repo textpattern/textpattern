@@ -423,7 +423,7 @@ function link_edit($message = '')
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                 n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                'div', array('class' => 'posted-now')
+                'div', array('class' => 'txp-form-field-shim posted-now')
             );
         echo form(
             hed($caption, 2).
