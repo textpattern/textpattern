@@ -520,7 +520,7 @@ function link_save()
     $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
     $created = "NOW()";
 
-    if ($created_ts > 0) {
+    if (!$publish_now && $created_ts > 0) {
         $created = "FROM_UNIXTIME('".$created_ts."')";
     }
 
