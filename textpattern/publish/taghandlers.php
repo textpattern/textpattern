@@ -5328,14 +5328,14 @@ function txp_wraptag($atts, $thing = '')
         'wraptag'  => '',
         'class'    => '',
         'html_id'  => '',
-        'trim'     => '',
+        'trim'     => null,
         'replace'  => null,
         'default'  => null,
     ), $atts, false));
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    if ((string)$trim !== '') {
+    if (isset($trim)) {
         if ($trim === true) {
             $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
         } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsimuS]*$/As', $trim)) {
