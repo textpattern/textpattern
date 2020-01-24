@@ -42,6 +42,7 @@ Changes in 4.8.0
 * Added: Support for Norwegian language translation.
 * Added: Support for Welsh language translation.
 * Added: Latest translations. Thanks to all Crowdin translators for their work.
+* Added: Hive and Classic admin themes now support 3 column layouts.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
   config.php file. See Hive theme's README.txt file for instructions.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
