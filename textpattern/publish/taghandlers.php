@@ -1684,10 +1684,10 @@ function link_to($atts, $thing = null, $target = 'next')
             $url = permlink(array_diff_key($atts, $lAtts));
 
             if ($form || $thing !== null) {
-                populateArticleData($thisarticle[$target]);
+                populateArticleData($thisarticle);
                 $thisarticle['is_first'] = $thisarticle['is_last'] = true;
                 $thing = $form ? parse_form($form) : parse($thing);
-                $target_title = escape_title($thisarticle[$target]['Title']);
+                $target_title = escape_title($thisarticle['Title']);
 
                 $url = $link ? href(
                     $thing,
