@@ -148,6 +148,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_first_section')
     ->register('if_last_section')
     ->register('if_logged_in')
+    ->register('if_cookie')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
@@ -2170,7 +2171,7 @@ function comment_name_input($atts, $thing = null, $field = 'name', $clean = fals
     $val = is_callable($clean) ? $clean(pcs($field)) : pcs($field);
     $h5 = ($prefs['doctype'] == 'html5');
     $required = get_pref('comments_require_'.$field);
-    
+
     if (!empty($class)) {
         $class = ' '.txpspecialchars($class);
     }
@@ -2253,7 +2254,7 @@ function comment_remember($atts)
         'rememberlabel' => $thiscommentsform['rememberlabel'],
         'forgetlabel'   => $thiscommentsform['forgetlabel']
     ), $atts));
-    
+
     if (!empty($class)) {
         $class = ' class="'.txpspecialchars($class).'"';
     }
@@ -2296,7 +2297,7 @@ function comment_preview($atts)
         'class' => '',
         'label' => $thiscommentsform['previewlabel']
     ), $atts));
-    
+
     if (!empty($class)) {
         $class = ' '.txpspecialchars($class);
     }
@@ -2314,7 +2315,7 @@ function comment_submit($atts)
         'class' => '',
         'label' => $thiscommentsform['submitlabel']
     ), $atts));
-    
+
     if (!empty($class)) {
         $class = ' '.txpspecialchars($class);
     }
@@ -5081,6 +5082,34 @@ function if_variable($atts, $thing = null)
             $x = true;
         } else {
             $x = $variable[$name] == $value;
+        }
+    } else {
+        $x = false;
+    }
+
+    return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function if_cookie($atts, $thing = null)
+{
+    extract(lAtts(array(
+        'name'  => '',
+        'value' => '',
+    ), $atts));
+
+    if (empty($name)) {
+        trigger_error(gTxt('missing_attribute', array('{name}' => 'name')));
+
+        return '';
+    }
+
+    if (cs($name)) {
+        if (!isset($atts['value'])) {
+            $x = true;
+        } else {
+            $x = cs($name) == $value;
         }
     } else {
         $x = false;
