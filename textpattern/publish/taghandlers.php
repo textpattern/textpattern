@@ -1793,7 +1793,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     global $thispage, $is_article_list, $txp_context, $txp_item;
     static $shown = array();
 
-    if (empty($thispage) || empty($thispage['numPages'])) {
+    if (empty($atts['total']) && empty($thispage['numPages'])) {
         return $is_article_list ? postpone_process() : '';
     }
 
@@ -1805,10 +1805,12 @@ function txp_pager($atts, $thing = null, $newer = true)
         'rel'        => '',
         'shift'      => null,
         'break'      => '',
+        'total'      => $thispage['numPages'],
+        'pg'         => 'pg',
     ), $atts));
 
-    $numPages = $thispage['numPages'];
-    $pg = $thispage['pg'];
+    isset($shown[$pg]) or $shown[$pg] = array();
+    $thepg = $pg == 'pg' ? $thispage['pg'] : intval(gps($pg, 1));
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
     $old_context = $txp_context;
     $txp_context += get_context();
@@ -1824,17 +1826,16 @@ function txp_pager($atts, $thing = null, $newer = true)
 
     foreach ($pages as $page) {
         if ($newer) {
-            $nextpg = (int)$page < 0 ? min(-$page, $pg - 1) : $pg - $page;
+            $nextpg = (int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page;
         } else {
-            $nextpg = (int)$page < 0 ? max($numPages + $page, $pg) + 1 : $pg + $page;
+            $nextpg = (int)$page < 0 ? max($total + $page, $thepg) + 1 : $thepg + $page;
         }
 
-        if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $numPages) && ($showalways || empty($shown[$nextpg]))) {
+        if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $total) && ($showalways || empty($shown[$pg][$nextpg]))) {
             $txp_item['page'] = $nextpg;
-            $shown[$nextpg] = true;
-            $url = pagelinkurl(array(
-                'pg' => $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? '' : $nextpg
-            ));
+            $shown[$pg][$nextpg] = true;
+            $txp_context[$pg] = $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? null : $nextpg;
+            $url = pagelinkurl($txp_context);
 
             if (isset($thing)) {
                 if ($escape == 'html') {
@@ -4490,7 +4491,7 @@ function page_url($atts, $thing = null)
         $out = $specials[$type];
     } elseif ($type == 'pg' && $pretext['pg'] == '') {
         $out = '1';
-    } elseif (isset($pretext[$type])) {
+    } elseif (isset($pretext[$type]) && is_bool($default)) {
         $out = $escape === null ? txpspecialchars($pretext[$type]) : $pretext[$type];
     } else {
         $out = gps($type, $default);

@@ -4501,7 +4501,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = hu)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
+    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -5020,7 +5020,7 @@ function getMetaDescription($type = null)
  * @return array The retrieved data
  */
 
-function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
+function get_context($context = true, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
 {
     global $pretext, $txp_context;
 
