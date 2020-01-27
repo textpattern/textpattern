@@ -44,7 +44,7 @@ Changes in 4.8.0
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Support for Bengali language translation.
 * Added: Support for Khmer language translation.
-* Added: Support for Norwegian language translation.
+* Added: Support for Norwegian Nynorsk language translation.
 * Added: Support for Welsh language translation.
 * Added: Latest translations. Thanks to all Crowdin translators for their work.
 * Added: Hive and Classic admin themes now support 3 column layouts.
