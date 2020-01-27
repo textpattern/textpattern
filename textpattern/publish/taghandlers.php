@@ -2210,7 +2210,7 @@ function comment_message_input($atts)
     $n_message = 'message';
     $formnonce = '';
     $message = '';
-    
+
     if (!empty($class)) {
         $class = ' '.txpspecialchars($class);
     }
