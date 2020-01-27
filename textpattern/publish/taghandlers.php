@@ -5089,7 +5089,7 @@ function if_variable($atts, $thing = null)
 
     extract($atts = lAtts(array(
         'name'      => '',
-        'value'     => null,
+        'value'     => false,
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
@@ -5101,7 +5101,7 @@ function if_variable($atts, $thing = null)
     }
 
     if (isset($variable[$name])) {
-        $x = isset($value) ? txp_match($atts, $variable[$name]) : true;
+        $x = $value === false ? true : txp_match($atts, $variable[$name]);
     } else {
         $x = false;
     }
