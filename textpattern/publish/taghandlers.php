@@ -5122,7 +5122,11 @@ function if_request($atts, $thing = null)
     ), $atts));
 
     switch ($type = strtoupper($type)) {
-        case 'GET': case 'POST': case 'COOKIE': case 'REQUEST':
+        case 'REQUEST':
+        case 'GET':
+        case 'POST':
+        case 'COOKIE':
+        case 'SERVER':
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
             $x = txp_match($atts, $what);
