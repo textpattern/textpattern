@@ -148,7 +148,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_first_section')
     ->register('if_last_section')
     ->register('if_logged_in')
-    ->register('if_cookie')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
@@ -5082,34 +5081,6 @@ function if_variable($atts, $thing = null)
             $x = true;
         } else {
             $x = $variable[$name] == $value;
-        }
-    } else {
-        $x = false;
-    }
-
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function if_cookie($atts, $thing = null)
-{
-    extract(lAtts(array(
-        'name'  => '',
-        'value' => '',
-    ), $atts));
-
-    if (empty($name)) {
-        trigger_error(gTxt('missing_attribute', array('{name}' => 'name')));
-
-        return '';
-    }
-
-    if (cs($name)) {
-        if (!isset($atts['value'])) {
-            $x = true;
-        } else {
-            $x = cs($name) == $value;
         }
     } else {
         $x = false;
