@@ -35,7 +35,6 @@ Changes in 4.8.0
 * Added: Custom field aliases and URL filters via valueless attributes.
 * Added: Global 'evaluate', 'replace' and 'yield' attributes.
 * Added: Ability to trim lists when using valueless 'trim' attribute.
-* Added: <txp:if_cookie /> tag.
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Support for Bengali language translation.
