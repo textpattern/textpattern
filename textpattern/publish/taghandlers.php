@@ -148,7 +148,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_first_section')
     ->register('if_last_section')
     ->register('if_logged_in')
-    ->register('if_cookie')
+    ->register('if_request')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
@@ -4300,11 +4300,10 @@ function custom_field($atts, $thing = null)
 function if_custom_field($atts, $thing = null)
 {
     global $thisarticle;
-    static $dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
 
     assert_article();
 
-    extract(lAtts(array(
+    extract($atts = lAtts(array(
         'name'      => get_pref('custom_1_set'),
         'value'     => null,
         'match'     => 'exact',
@@ -4320,15 +4319,37 @@ function if_custom_field($atts, $thing = null)
     }
 
     if ($value !== null) {
+        $cond = txp_match($atts, $thisarticle[$name]);
+    } else {
+        $cond = ($thisarticle[$name] !== '');
+    }
+
+    return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);
+}
+
+// -------------------------------------------------------------
+
+function txp_match($atts, $what)
+{
+    static $dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
+
+    extract($atts + array(
+        'value'     => null,
+        'match'     => 'exact',
+        'separator' => '',
+    ));
+
+
+    if ($value !== null) {
         switch ($match) {
             case '':
             case 'exact':
-                $cond = ($thisarticle[$name] == $value);
+                $cond = (is_array($what) ? implode('', $what) == $value : $what == $value);
                 break;
             case 'any':
                 $values = do_list_unique($value);
                 $cond = false;
-                $cf_contents = $separator ? do_list_unique($thisarticle[$name], $separator) : $thisarticle[$name];
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
@@ -4340,7 +4361,7 @@ function if_custom_field($atts, $thing = null)
             case 'all':
                 $values = do_list_unique($value);
                 $cond = true;
-                $cf_contents = $separator ? do_list_unique($thisarticle[$name], $separator) : $thisarticle[$name];
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
@@ -4367,17 +4388,17 @@ function if_custom_field($atts, $thing = null)
                     $dlm = $dlm.$value.$dlm;
                 }
 
-                $cond = preg_match($dlm, $thisarticle[$name]);
+                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
                 break;
             default:
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
                 $cond = false;
         }
     } else {
-        $cond = ($thisarticle[$name] !== '');
+        $cond = ($what !== null);
     }
 
-    return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);
+    return !empty($cond);
 }
 
 // -------------------------------------------------------------
@@ -5066,9 +5087,11 @@ function if_variable($atts, $thing = null)
 {
     global $variable;
 
-    extract(lAtts(array(
-        'name'  => '',
-        'value' => '',
+    extract($atts = lAtts(array(
+        'name'      => '',
+        'value'     => null,
+        'match'     => 'exact',
+        'separator' => '',
     ), $atts));
 
     if (empty($name)) {
@@ -5078,11 +5101,7 @@ function if_variable($atts, $thing = null)
     }
 
     if (isset($variable[$name])) {
-        if (!isset($atts['value'])) {
-            $x = true;
-        } else {
-            $x = $variable[$name] == $value;
-        }
+        $x = isset($value) ? txp_match($atts, $variable[$name]) : true;
     } else {
         $x = false;
     }
@@ -5092,27 +5111,25 @@ function if_variable($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_cookie($atts, $thing = null)
+function if_request($atts, $thing = null)
 {
-    extract(lAtts(array(
-        'name'  => '',
-        'value' => '',
+    extract($atts = lAtts(array(
+        'name'      => '',
+        'type'      => 'request',
+        'value'     => null,
+        'match'     => 'exact',
+        'separator' => '',
     ), $atts));
 
-    if (empty($name)) {
-        trigger_error(gTxt('missing_attribute', array('{name}' => 'name')));
+    switch ($type = strtoupper($type)) {
+        case 'GET': case 'POST': case 'COOKIE': case 'REQUEST':
+            global ${'_'.$type};
+            $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
+            $x = txp_match($atts, $what);
 
-        return '';
-    }
-
-    if (cs($name)) {
-        if (!isset($atts['value'])) {
-            $x = true;
-        } else {
-            $x = cs($name) == $value;
-        }
-    } else {
-        $x = false;
+            break;
+        default:
+            $x = txp_match($atts, $name);
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
