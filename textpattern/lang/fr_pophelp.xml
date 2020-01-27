@@ -128,13 +128,13 @@
         ]]></item>
         <item id="publish_date" title="Date de publication"><![CDATA[
 <h2>Date de publication</h2>
-<p>La date à laquelle un article ou un fichier est publié ou révisé le plus récemment. Cette date peut être définie au moment de la publication, ou dans un délais arbitraire du passé ou du futur.</p>
+<p>La date à laquelle un article ou un fichier est publié ou révisé ultérieurement. Cette date peut être définie au moment de la publication ou arbitrairement dans le passé ou le futur.</p>
 <p>Les champs correspondent aux informations suivantes :</p>
 <ul>
 <li>Année / Mois / Jour</li>
 <li>Heures (format 24 heures) : Minutes : Secondes</li>
 </ul>
-<p>Un élément affecté d’un horodatage plus grand que l’instant présent (ex dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
+<p>Un élément affecté d’un horodatage supérieur à l’instant présent (ex. dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
         ]]></item>
         <item id="status" title="Statut"><![CDATA[
 <h2>Statut</h2>
@@ -473,6 +473,7 @@
 <h2>URL</h2>
 <p>L’adresse du lien. Si le lien pointe vers un site différent, alors il doit être précédé par <code>http://</code> ou <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
     </group>
 
     <group id="login" title="Connexion">
