@@ -20,13 +20,18 @@ Changes in 4.8.0
 * Added: Global public theme switcher.
 * Added: Dedicated live/dev theme switching.
 * Added: Support for PHP 7.4.
+* Added: <txp:if_request /> tag for checking server, URL, POST and cookie
+  variables.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
 * Added: 'class' attribute to comment form tags.
+* Added: 'match' and 'separator' attributes to <txp:if_variable /> tag.
+* Added: 'pg' and 'total' attributes to <txp:newer /> / <txp:older /> tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
 * Added: Dark Mode support in Hive admin theme.
+* Added: Pageless sections for content snippets and creative article flows.
 * Added: Per-section article link format override.
 * Added: 'breadcrumb/title' article link format.
 * Added: 'section/category/title' article link format.
