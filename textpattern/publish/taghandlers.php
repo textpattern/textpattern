@@ -506,6 +506,10 @@ function output_form($atts, $thing = null)
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
+    if ($form === true && empty($atts)) {
+        return fetch_form(do_list_unique($to_yield));
+    }
+
     if (!empty($to_yield)) {
         $to_yield = $to_yield === true ? $atts : array_fill_keys(do_list_unique($to_yield), null);
         empty($txp_atts) or $txp_atts = array_diff_key($txp_atts, $to_yield);

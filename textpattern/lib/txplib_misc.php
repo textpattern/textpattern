@@ -3111,7 +3111,7 @@ function EvalElse($thing, $condition)
  * to a 'form.fetch' callback event. Any value returned by the callback function
  * will be used as the form template markup.
  *
- * @param   string $name The form
+ * @param   array|string $name The form
  * @return  string
  * @package TagParser
  */
@@ -3123,28 +3123,41 @@ function fetch_form($name)
     static $forms = array();
     global $pretext;
 
-    $name = (string) $name;
     $skin = $pretext['skin'];
+    $fetch = is_array($name);
 
-    if (!isset($forms[$name])) {
+    if ($fetch || !isset($forms[$name])) {
+        $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
+
         if (has_handler('form.fetch')) {
-            $form = callback_event('form.fetch', '', false, compact('name', 'skin'));
+            foreach ($names as $form) {
+                $forms[$form] = callback_event('form.fetch', '', false, compact('form', 'skin'));
+            }
         } else {
-            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."' AND skin = '".doSlash($skin)."'");
+            $nameset = implode(',', quote_list($names));
+
+            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
+                while ($row = nextRow($rs)) {
+                    $forms[$row['name']] = $row['Form'];
+                }
+            }
         }
 
-        if ($form === false) {
-            trigger_error(gTxt('form_not_found').' '.$name);
+        foreach ($names as $form) {
+            if (empty($forms[$form])) {
+                trigger_error(gTxt('form_not_found').' '.$form);
+                $forms[$form] = false;
+            }
+        }
+    }
+
+    if (!$fetch) {
+        if ($production_status === 'debug') {
+            $trace->log("[Form: '$skin.$name']");
         }
 
-        $forms[$name] = $form;
+        return $forms[$name];
     }
-
-    if ($production_status === 'debug') {
-        $trace->log("[Form: '$skin.$name']");
-    }
-
-    return $forms[$name];
 }
 
 /**
