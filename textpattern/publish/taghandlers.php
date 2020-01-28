@@ -4329,80 +4329,6 @@ function if_custom_field($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_match($atts, $what)
-{
-    static $dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
-
-    extract($atts + array(
-        'value'     => null,
-        'match'     => 'exact',
-        'separator' => '',
-    ));
-
-
-    if ($value !== null) {
-        switch ($match) {
-            case '':
-            case 'exact':
-                $cond = (is_array($what) ? implode('', $what) == $value : $what == $value);
-                break;
-            case 'any':
-                $values = do_list_unique($value);
-                $cond = false;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
-
-                foreach ($values as $term) {
-                    if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
-                        $cond = true;
-                        break;
-                    }
-                }
-                break;
-            case 'all':
-                $values = do_list_unique($value);
-                $cond = true;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
-
-                foreach ($values as $term) {
-                    if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
-                        $cond = false;
-                        break;
-                    }
-                }
-                break;
-            case 'pattern':
-                // Cannot guarantee that a fixed delimiter won't break preg_match
-                // (and preg_quote doesn't help) so dynamically assign the delimiter
-                // based on the first entry in $dlmPool that is NOT in the value
-                // attribute. This minimises (does not eliminate) the possibility
-                // of a TXP-initiated preg_match error, while still preserving
-                // errors outside TXP's control (e.g. mangled user-submitted
-                // PCRE pattern).
-                if ($separator === true) {
-                    $dlm = $value;
-                } elseif ($separator && in_array($separator, $dlmPool)) {
-                    $dlm = strpos($value, $separator) === 0 ? $value : $separator.$value.$separator;
-                } else {
-                    $dlm = array_diff($dlmPool, preg_split('//', $value));
-                    $dlm = reset($dlm);
-                    $dlm = $dlm.$value.$dlm;
-                }
-
-                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
-                break;
-            default:
-                trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
-                $cond = false;
-        }
-    } else {
-        $cond = ($what !== null);
-    }
-
-    return !empty($cond);
-}
-
-// -------------------------------------------------------------
-
 function site_url($atts)
 {
     extract(lAtts(array(
@@ -5130,10 +5056,13 @@ function if_request($atts, $thing = null)
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
             $x = txp_match($atts, $what);
-
+            break;
+        case 'NAME':
+            $x = txp_match($atts, $name);
             break;
         default:
-            $x = txp_match($atts, $name);
+            $x = false;
+            trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'type')), E_USER_NOTICE);
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
