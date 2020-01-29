@@ -1805,7 +1805,7 @@ function txp_pager($atts, $thing = null, $newer = null)
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
-        'link'       => true,
+        'link'       => false,
         'escape'     => 'html',
         'rel'        => '',
         'shift'      => null,
@@ -1833,9 +1833,9 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     foreach ($pages as $page) {
         if ($newer) {
-            $nextpg = (int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page;
+            $nextpg = $shift === true ? 1 : ((int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page);
         } else {
-            $nextpg = (int)$page < 0 ? max($total + $page, $thepg) + 1 : $thepg + $page;
+            $nextpg = $shift === true ? $total : ((int)$page < 0 ? max($total + $page, $thepg) + 1 : $thepg + $page);
         }
 
         if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $total) && ($showalways || empty($shown[$pg][$nextpg]))) {
@@ -1852,7 +1852,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                     $title = txp_escape(array('escape' => $escape), $title);
                 }
 
-                $url = $link ? href(
+                $url = $link || $link === false && $nextpg != $thepg ? href(
                     parse($thing),
                     $url,
                     (empty($title) ? '' : ' title="'.$title.'"').
