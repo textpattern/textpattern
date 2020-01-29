@@ -3133,7 +3133,7 @@ function fetch_form($name)
             foreach ($names as $form) {
                 $forms[$form] = callback_event('form.fetch', '', false, compact('form', 'skin'));
             }
-        } else {
+        } elseif ($fetch) {
             $nameset = implode(',', quote_list($names));
 
             if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
@@ -3141,6 +3141,8 @@ function fetch_form($name)
                     $forms[$row['name']] = $row['Form'];
                 }
             }
+        } else {
+            $forms[$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($skin)."'");
         }
 
         foreach ($names as $form) {
