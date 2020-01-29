@@ -1860,7 +1860,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                 ) : parse($thing);
             }
         } else {
-            $url = $showalways ? parse($thing) : '';
+            $url = $showalways ? parse($thing) : parse($thing, false);
         }
 
         empty($url) or $out[] = $url;
