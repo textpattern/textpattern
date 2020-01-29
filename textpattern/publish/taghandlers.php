@@ -66,7 +66,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('site_name')
     ->register('site_slogan')
     ->register('link_to_home')
-    ->register('txp_pager', 'newer')
+    ->register('txp_pager', 'newer', true)
     ->register('txp_pager', 'older', false)
     ->register('text')
     ->register('article_id')
@@ -1793,7 +1793,7 @@ function link_to_home($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_pager($atts, $thing = null, $newer = true)
+function txp_pager($atts, $thing = null, $newer = null)
 {
     global $thispage, $is_article_list, $txp_context, $txp_item;
     static $shown = array();
@@ -1817,6 +1817,8 @@ function txp_pager($atts, $thing = null, $newer = true)
     isset($shown[$pg]) or $shown[$pg] = array();
     $thepg = $pg == 'pg' ? $thispage['pg'] : intval(gps($pg, 1));
     $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
+    $oldurl = isset($txp_item['url']) ? $txp_item['url'] : null;
+    $txp_item['page'] = $txp_item['url'] = null;
     $old_context = $txp_context;
     $txp_context += get_context();
     $out = array();
@@ -1837,10 +1839,11 @@ function txp_pager($atts, $thing = null, $newer = true)
         }
 
         if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $total) && ($showalways || empty($shown[$pg][$nextpg]))) {
-            $txp_item['page'] = $nextpg;
             $shown[$pg][$nextpg] = true;
             $txp_context[$pg] = $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? null : $nextpg;
             $url = pagelinkurl($txp_context);
+            $txp_item['page'] = $nextpg;
+            $txp_item['url'] = $url;
 
             if (isset($thing)) {
                 if ($escape == 'html') {
@@ -1864,6 +1867,7 @@ function txp_pager($atts, $thing = null, $newer = true)
     }
 
     $txp_item['page'] = $oldpage;
+    $txp_item['url'] = $oldurl;
     $txp_context = $old_context;
 
     return doWrap($out, '', $break);
