@@ -473,7 +473,14 @@
 <h2>URL</h2>
 <p>L’adresse du lien. Si le lien pointe vers un site différent, alors il doit être précédé par <code>http://</code> ou <code>https://</code>.</p>
         ]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>L’horodatage du lien lors de sa publication ou de sa révision. Peut être mis à jour au moment du téléversement ou renseigné arbitrairement dans le passé ou le futur.</p>
+<p>Les champs de saisies correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
     </group>
 
     <group id="login" title="Connexion">
