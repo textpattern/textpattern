@@ -68,6 +68,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('link_to_home')
     ->register('txp_pager', 'newer', true)
     ->register('txp_pager', 'older', false)
+    ->register('txp_pager', 'pages')
     ->register('text')
     ->register('article_id')
     ->register('article_url_title')
@@ -1796,78 +1797,129 @@ function link_to_home($atts, $thing = null)
 function txp_pager($atts, $thing = null, $newer = null)
 {
     global $thispage, $is_article_list, $txp_context, $txp_item;
-    static $shown = array();
+    static $pg = true, $numPages = null, $shown = array();
+    static $items = array('page' => null, 'total' => null, 'url' => null);
 
-    if (empty($atts['total']) && empty($thispage['numPages'])) {
-        return $is_article_list ? postpone_process() : '';
-    }
+    $set = $thing === null && $newer === null && isset($atts['pg']);
+    $get = isset($atts['total']) && $atts['total'] === true;
 
     extract(lAtts(array(
-        'showalways' => 0,
+        'showalways' => false,
         'title'      => '',
         'link'       => false,
         'escape'     => 'html',
         'rel'        => '',
-        'shift'      => null,
-        'break'      => '',
-        'total'      => $thispage['numPages'],
-        'pg'         => 'pg',
-    ), $atts));
+        'shift'      => false,
+        'break'      => '',) + 
+        ($set ? array(
+        'pg'         => $pg
+        ) : array()) + 
+        ($set || $get ? array(
+        'total'      => $numPages,
+        ) : array()), $atts));
 
-    isset($shown[$pg]) or $shown[$pg] = array();
-    $thepg = $pg == 'pg' ? $thispage['pg'] : intval(gps($pg, 1));
-    $oldpage = isset($txp_item['page']) ? $txp_item['page'] : null;
-    $oldurl = isset($txp_item['url']) ? $txp_item['url'] : null;
-    $txp_item['page'] = $txp_item['url'] = null;
+    if (isset($total) && $total !== true) {
+        $numPages = (int)$total;
+    } elseif (!isset($numPages)) {
+        if (isset($thispage['numPages'])) {
+            $numPages = $thispage['numPages'];
+        } else {
+            return $is_article_list ? postpone_process() : '';
+        }
+    }
+
+    if ($set) {
+        $shown = array();
+
+        if ($pg === true) {
+            $numPages = isset($thispage['numPages']) ? $thispage['numPages'] : null;
+        }
+
+        return;
+    }
+
+    $pgc = $pg === true ? 'pg' : $pg;
+    $thepg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, 1));
+    $thepg = max(1, min($thepg, $numPages));
+
+    if ($get) {
+        if ($thing === null && $shift === false) {
+            return $newer === null ? $numPages : ($newer ? $thepg - 1 : $numPages - $thepg);
+        } elseif ($shift === true || $shift === false) {
+            $shift = $newer === null ? false : ($newer ? $thepg.'-1' : '1-'.($numPages - $thepg + 1));
+        } else {
+            $range = (int)$shift;
+            $shift = true;
+        }
+    }
+
+    foreach ($items as $item => $val) {
+        $items[$item] = isset($txp_item[$item]) ? $txp_item[$item] : null;
+        $txp_item[$item] = null;
+    }
+
+    $txp_item['total'] = $numPages;
     $old_context = $txp_context;
     $txp_context += get_context();
     $out = array();
 
-    if (!isset($shift)) {
-        $pages = array(1);
+    if ($shift === false) {
+        $pages = $newer === null ? range(1 - $thepg, $numPages - $thepg) : array(1);
     } elseif ($shift === true) {
-        $pages = array(-1);
+        if (isset($range)) {
+            $pages = range($newer === false ? 1 : -max($range, 2*$range + $thepg - $numPages), $newer === true ? 1 : max($range, 2*$range - $thepg + 1));
+        } else {
+            $pages = array(true);
+        }
     } else {
-        $pages = array_map('intval', do_list($shift));
+        $pages = array_map('intval', do_list($shift, array(',', '-')));
     }
 
     foreach ($pages as $page) {
-        if ($newer) {
-            $nextpg = $shift === true ? 1 : ((int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page);
+        if ($newer === null) {
+            $nextpg = $thepg + $page;
+        } elseif ($newer) {
+            $nextpg = $page === true ? 1 : ((int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page);
         } else {
-            $nextpg = $shift === true ? $total : ((int)$page < 0 ? max($total + $page, $thepg) + 1 : $thepg + $page);
+            $nextpg = $page === true ? $numPages : ((int)$page < 0 ? max($numPages + $page, $thepg) + 1 : $thepg + $page);
         }
 
-        if (($newer && $nextpg >= 1 || !$newer && $nextpg <= $total) && ($showalways || empty($shown[$pg][$nextpg]))) {
-            $shown[$pg][$nextpg] = true;
-            $txp_context[$pg] = $newer && ($nextpg == 1 && !isset($shift) || $shift === true) ? null : $nextpg;
-            $url = pagelinkurl($txp_context);
-            $txp_item['page'] = $nextpg;
-            $txp_item['url'] = $url;
+        if ($nextpg >= 1 && $nextpg <= $numPages) {
+            if ($showalways || empty($shown[$nextpg])) {
+                $txp_context[$pgc] = $newer && ($nextpg == 1 && $shift === false || $shift === true) ? null : $nextpg;
+                $url = pagelinkurl($txp_context);
+                $txp_item['page'] = $nextpg;
+                $txp_item['url'] = $url;
+                $shown[$nextpg] = true;
 
-            if (isset($thing)) {
-                if ($escape == 'html') {
-                    $title = escape_title($title);
-                } elseif ($escape) {
-                    $title = txp_escape(array('escape' => $escape), $title);
+                if (isset($thing)) {
+                    if ($escape == 'html') {
+                        $title = escape_title($title);
+                    } elseif ($escape) {
+                        $title = txp_escape(array('escape' => $escape), $title);
+                    }
+
+                    $url = $link || $link === false && $nextpg != $thepg ? href(
+                        parse($thing),
+                        $url,
+                        (empty($title) ? '' : ' title="'.$title.'"').
+                        (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
+                    ) : parse($thing);
                 }
-
-                $url = $link || $link === false && $nextpg != $thepg ? href(
-                    parse($thing),
-                    $url,
-                    (empty($title) ? '' : ' title="'.$title.'"').
-                    (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
-                ) : parse($thing);
+            } else {
+                $url = false;
             }
         } else {
-            $url = $showalways ? parse($thing) : parse($thing, false);
+            $url = isset($thing) ? parse($thing, false) : false;
         }
 
         empty($url) or $out[] = $url;
     }
 
-    $txp_item['page'] = $oldpage;
-    $txp_item['url'] = $oldurl;
+    foreach ($items as $item => $val) {
+        $txp_item[$item] = $val;
+    }
+
     $txp_context = $old_context;
 
     return doWrap($out, '', $break);
