@@ -1849,7 +1849,6 @@ function txp_pager($atts, $thing = null, $newer = null)
             $shift = $newer === null ? false : ($newer ? $thepg.'-1' : '1-'.($numPages - $thepg + 1));
         } else {
             $range = (int)$shift;
-            $shift = true;
         }
     }
 
@@ -1862,15 +1861,14 @@ function txp_pager($atts, $thing = null, $newer = null)
     $old_context = $txp_context;
     $txp_context += get_context();
     $out = array();
-
-    if ($shift === false) {
+    
+    if (isset($range)) {
+        $pages = $newer === null ? range(-max($range, 2*$range + $thepg - $numPages), max($range, 2*$range - $thepg + 1)) :
+        range($newer ? max($range, 2*$range + $thepg - $numPages) : 1, $newer ? 1 : max($range, 2*$range - $thepg + 1));
+    } elseif ($shift === false) {
         $pages = $newer === null ? range(1 - $thepg, $numPages - $thepg) : array(1);
     } elseif ($shift === true) {
-        if (isset($range)) {
-            $pages = range($newer === false ? 1 : -max($range, 2*$range + $thepg - $numPages), $newer === true ? 1 : max($range, 2*$range - $thepg + 1));
-        } else {
-            $pages = array(true);
-        }
+        $pages = array(true);
     } else {
         $pages = array_map('intval', do_list($shift, array(',', '-')));
     }
