@@ -1800,8 +1800,10 @@ function txp_pager($atts, $thing = null, $newer = null)
     static $pg = true, $numPages = null, $shown = array();
     static $items = array('page' => null, 'total' => null, 'url' => null);
 
-    $set = $thing === null && $newer === null && isset($atts['pg']);
     $get = isset($atts['total']) && $atts['total'] === true;
+    $set = $newer === null && (isset($atts['pg']) || isset($atts['total']) && !$get);
+    $oldPages = $numPages;
+    $oldpg = $pg;
 
     extract(lAtts(array(
         'showalways' => false,
@@ -1818,6 +1820,10 @@ function txp_pager($atts, $thing = null, $newer = null)
         'total'      => $numPages,
         ) : array()), $atts));
 
+    if ($pg === true) {
+        $numPages = isset($thispage['numPages']) ? $thispage['numPages'] : null;
+    }
+
     if (isset($total) && $total !== true) {
         $numPages = (int)$total;
     } elseif (!isset($numPages)) {
@@ -1829,13 +1835,17 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     if ($set) {
+        $oldshown = $shown;
         $shown = array();
 
-        if ($pg === true) {
-            $numPages = isset($thispage['numPages']) ? $thispage['numPages'] : null;
+        if ($thing !== null) {
+            $thing = parse($thing);
+            $numPages = $oldPages;
+            $pg = $oldpg;
+            $shown = $oldshown;
         }
 
-        return;
+        return $thing;
     }
 
     $pgc = $pg === true ? 'pg' : $pg;
@@ -1908,7 +1918,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                 $url = false;
             }
         } else {
-            $url = isset($thing) ? parse($thing, false) : false;
+            $url = isset($thing) ? parse($thing, $shift === false) : false;
         }
 
         empty($url) or $out[] = $url;
