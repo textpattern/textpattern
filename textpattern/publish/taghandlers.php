@@ -1918,7 +1918,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                 $url = false;
             }
         } else {
-            $url = isset($thing) ? parse($thing, $shift === false) : false;
+            $url = isset($thing) ? parse($thing, $showalways && $shift === false) : false;
         }
 
         empty($url) or $out[] = $url;
