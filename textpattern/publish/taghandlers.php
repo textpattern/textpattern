@@ -1893,12 +1893,12 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
 
         if ($nextpg >= 1 && $nextpg <= $numPages) {
-            if ($showalways || empty($shown[$nextpg])) {
+            if (empty($shown[$nextpg]) || $showalways === true || $shown[$nextpg] < $showalways) {
                 $txp_context[$pgc] = $newer && ($nextpg == 1 && $shift === false || $shift === true) ? null : $nextpg;
                 $url = pagelinkurl($txp_context);
                 $txp_item['page'] = $nextpg;
                 $txp_item['url'] = $url;
-                $shown[$nextpg] = true;
+                $shown[$nextpg] = isset($shown[$nextpg]) ? $shown[$nextpg] + 1 : 1;
 
                 if (isset($thing)) {
                     if ($escape == 'html') {
