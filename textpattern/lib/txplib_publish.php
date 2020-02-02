@@ -383,18 +383,22 @@ function parse($thing, $condition = true, $not = true)
     list($first, $last) = $txp_else[$hash];
 
     if ($not && !empty($txp_atts['evaluate'])) {
-        $test = trim($txp_atts['evaluate']);
-        $isempty = !empty($test);
-        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+        $test = $txp_atts['evaluate'];
+        $isempty = !empty(trim($test));
+        $ordered = $isempty && $test !== true && is_numeric(preg_replace('/\W/', '', $test));
+        $test = !$isempty || $test === true ? false : do_list_unique($test);
         $nr = $first - 2;
         $out = array($tag[0]);
+        $tags = array();
 
-        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];
 
-            if ($test && !in_array($txp_tag[1], $test)) {
+            if ($test && !in_array($txp_tag[1], $test) && !in_array(($n+1)/2, $test)) {
                 $out[] = null;
                 $tags[] = $n;
+            } elseif ($ordered) {
+                $out[] = null;
             } else {
                 $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
                 $out[] = $nextag;
@@ -402,6 +406,21 @@ function parse($thing, $condition = true, $not = true)
             }
 
             $out[] = $tag[++$n];
+        }
+
+        if ($ordered) {
+            foreach ($test as $k) {
+                $n = 2*$k-1;
+
+                if ($n < 1 || $n > $nr) {
+                    continue;
+                }
+
+                $txp_tag = $tag[$n];
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $out[$n] = $nextag;
+                $isempty &= trim($nextag) === '';
+            }
         }
 
         if ($isempty == empty($txp_atts['not'])) {
