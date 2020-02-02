@@ -1805,7 +1805,10 @@ function txp_pager($atts, $thing = null, $newer = null)
     $oldPages = $numPages;
     $oldpg = $pg;
 
-    extract(lAtts(array(
+    extract(lAtts($set ? array(
+        'pg'         => $pg,
+        'total'      => $numPages,
+        ) : array(
         'showalways' => false,
         'title'      => '',
         'link'       => false,
@@ -1813,10 +1816,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'rel'        => '',
         'shift'      => false,
         'break'      => '',) + 
-        ($set ? array(
-        'pg'         => $pg
-        ) : array()) + 
-        ($set || $get ? array(
+        ($get ? array(
         'total'      => $numPages,
         ) : array()), $atts));
 
@@ -1901,7 +1901,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                 $txp_item['page'] = $nextpg;
                 $txp_item['url'] = $url;
 
-                if ($shift !== false || $newer === null) {
+                if ($shift !== false || $newer === null || isset($range)) {
                     $shown[$nextpg] = true;
                 }
 
