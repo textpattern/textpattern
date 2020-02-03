@@ -384,7 +384,7 @@ function parse($thing, $condition = true, $not = true)
 
     if ($not && !empty($txp_atts['evaluate'])) {
         $test = $txp_atts['evaluate'];
-        $isempty = !empty(trim($test));
+        $isempty = !empty($test);
         $ordered = $isempty && $test !== true && is_numeric(preg_replace('/\W/', '', $test));
         $test = !$isempty || $test === true ? false : do_list_unique($test);
         $nr = $first - 2;
