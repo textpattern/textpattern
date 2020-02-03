@@ -1411,7 +1411,7 @@ function load_plugins($type = false, $pre = null)
                 $trace->stop();
 
                 if ($eval_ok === false) {
-                    echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
+                    echo gTxt('plugin_load_error_above').'<strong>'.$a['name'].'</strong>'.n.br;
                 }
 
                 unset($GLOBALS['txp_current_plugin']);
