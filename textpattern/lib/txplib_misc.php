@@ -3132,8 +3132,8 @@ function fetch_form($name)
         $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
 
         if (has_handler('form.fetch')) {
-            foreach ($names as $form) {
-                $forms[$form] = callback_event('form.fetch', '', false, compact('form', 'skin'));
+            foreach ($names as $name) {
+                $forms[$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
             }
         } elseif ($fetch) {
             $nameset = implode(',', quote_list($names));
