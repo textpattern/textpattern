@@ -1391,6 +1391,8 @@ function load_plugins($type = false, $pre = null)
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
         $pre = intval($pre);
+        $plugins_dir = txpath.DS.'plugins';
+        $writable = is_dir($plugins_dir) && is_writable($plugins_dir);
 
         foreach ($rs as $a) {
             if (!isset($plugins_ver[$a['name']]) && (!$pre || $a['load_order'] < $pre)) {
@@ -1400,9 +1402,9 @@ function load_plugins($type = false, $pre = null)
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
 
                 $dir = $a['name'];
-                $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
+                $filename = $plugins_dir.DS.$dir.DS.$dir.'.php';
 
-                if (!is_file($filename)) {
+                if ($writable && !is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
@@ -1411,7 +1413,7 @@ function load_plugins($type = false, $pre = null)
                 $trace->stop();
 
                 if ($eval_ok === false) {
-                    echo gTxt('plugin_load_error_above').'<strong>'.$a['name'].'</strong>'.n.br;
+                    trigger_error(gTxt('plugin_include_error', array('{name}' => $a['name'])), E_USER_WARNING);
                 }
 
                 unset($GLOBALS['txp_current_plugin']);
