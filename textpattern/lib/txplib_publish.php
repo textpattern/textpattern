@@ -383,43 +383,39 @@ function parse($thing, $condition = true, $not = true)
     list($first, $last) = $txp_else[$hash];
 
     if ($not && !empty($txp_atts['evaluate'])) {
-        $test = $txp_atts['evaluate'];
-        $isempty = !empty($test);
-        $ordered = $isempty && $test !== true && is_numeric(preg_replace('/\W/', '', $test));
-        $test = !$isempty || $test === true ? false : do_list_unique($test);
-        $nr = $first - 2;
+        $isempty = true;
+        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
         $out = array($tag[0]);
         $tags = array();
+        $nr = $first - 2;
 
         for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];
+            $out[] = null;
 
-            if ($test && !in_array($txp_tag[1], $test) && !in_array(($n+1)/2, $test)) {
-                $out[] = null;
-                $tags[] = $n;
-            } elseif ($ordered) {
-                $out[] = null;
-            } else {
+            if (!$test) {
                 $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $out[] = $nextag;
                 $isempty &= trim($nextag) === '';
+                $out[$n] = $nextag;
+            } elseif (isset($test[($n+1)/2])) {
+                $test[($n+1)/2][] = $n;
+            } elseif (isset($test[$txp_tag[1]])) {
+                $test[$txp_tag[1]][] = $n;
+            } else {
+                $tags[] = $n;
             }
 
             $out[] = $tag[++$n];
         }
 
-        if ($ordered) {
-            foreach ($test as $k) {
-                $n = 2*$k-1;
-
-                if ($n < 1 || $n > $nr) {
-                    continue;
+        if ($test) {
+            foreach ($test as $t) {
+                foreach ($t as $n){
+                    $txp_tag = $tag[$n];
+                    $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                    $out[$n] = $nextag;
+                    $isempty &= trim($nextag) === '';
                 }
-
-                $txp_tag = $tag[$n];
-                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $out[$n] = $nextag;
-                $isempty &= trim($nextag) === '';
             }
         }
 
