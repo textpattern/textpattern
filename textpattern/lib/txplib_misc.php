@@ -4745,7 +4745,7 @@ function do_list($list, $delim = ',')
     $list = explode($delim, $list);
 
     if (isset($range)) {
-        $pattern = '/^\s*(\w|[-+]]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]]?\d+)\s*$/';
+        $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
         foreach ($list as $item) {
