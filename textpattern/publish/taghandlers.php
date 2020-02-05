@@ -186,10 +186,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
     ->register('comments_help')
-    ->register('comment_name_input')
-    ->register('comment_name_input', 'comment_email_input', 'email', 'clean_url')
-    ->register('comment_name_input', array('comment_web_input', array('placeholder' => 'http(s)://')), 'web', 'clean_url')
-//    ->register('comment_web_input')
+    ->register('comment_input', 'comment_name_input')
+    ->register('comment_input', 'comment_email_input', 'email', 'clean_url')
+    ->register('comment_input', array('comment_web_input', array('placeholder' => 'http(s)://')), 'web', 'clean_url')
     ->register('comment_message_input')
     ->register('comment_remember')
     ->register('comment_preview')
@@ -1820,13 +1819,15 @@ function txp_pager($atts, $thing = null, $newer = null)
         'total'      => $numPages,
         ) : array()), $atts));
 
-    if ($pg === true) {
-        $numPages = isset($thispage['numPages']) ? $thispage['numPages'] : null;
+    if ($set) {
+        if (isset($total) && $total !== true) {
+            $numPages = (int)$total;
+        } elseif ($pg === true) {
+            $numPages = isset($thispage['numPages']) ? $thispage['numPages'] : null;
+        }
     }
 
-    if (isset($total) && $total !== true) {
-        $numPages = (int)$total;
-    } elseif (!isset($numPages)) {
+    if (!isset($numPages)) {
         if (isset($thispage['numPages'])) {
             $numPages = $thispage['numPages'];
         } else {
@@ -1850,7 +1851,6 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     $pgc = $pg === true ? 'pg' : $pg;
     $thepg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, 1));
-    $thepg = max(1, min($thepg, $numPages));
 
     if ($get) {
         if ($thing === null && $shift === false) {
@@ -2229,7 +2229,7 @@ function comments_form($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function comment_name_input($atts, $thing = null, $field = 'name', $clean = false)
+function comment_input($atts, $thing = null, $field = 'name', $clean = false)
 {
     global $prefs, $thiscommentsform;
 
