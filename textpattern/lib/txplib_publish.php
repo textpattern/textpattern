@@ -383,25 +383,40 @@ function parse($thing, $condition = true, $not = true)
     list($first, $last) = $txp_else[$hash];
 
     if ($not && !empty($txp_atts['evaluate'])) {
-        $test = trim($txp_atts['evaluate']);
-        $isempty = !empty($test);
-        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-        $nr = $first - 2;
+        $isempty = true;
+        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
         $out = array($tag[0]);
+        $tags = array();
+        $nr = $first - 2;
 
-        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];
+            $out[] = null;
 
-            if ($test && !in_array($txp_tag[1], $test)) {
-                $out[] = null;
-                $tags[] = $n;
-            } else {
+            if (!$test) {
                 $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $out[] = $nextag;
                 $isempty &= trim($nextag) === '';
+                $out[$n] = $nextag;
+            } elseif (isset($test[($n+1)/2])) {
+                $test[($n+1)/2][] = $n;
+            } elseif (isset($test[$txp_tag[1]])) {
+                $test[$txp_tag[1]][] = $n;
+            } else {
+                $tags[] = $n;
             }
 
             $out[] = $tag[++$n];
+        }
+
+        if ($test) {
+            foreach ($test as $t) {
+                foreach ($t as $n){
+                    $txp_tag = $tag[$n];
+                    $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                    $out[$n] = $nextag;
+                    $isempty &= trim($nextag) === '';
+                }
+            }
         }
 
         if ($isempty == empty($txp_atts['not'])) {
@@ -436,6 +451,43 @@ function parse($thing, $condition = true, $not = true)
     $txp_tag = !empty($condition);
 
     return $out;
+}
+
+/**
+ * Guesstimate whether a given function name may be a valid tag handler.
+ *
+ * @param   string $tag function name
+ * @return  bool FALSE if the function name is not a valid tag handler
+ * @package TagParser
+ */
+
+function maybe_tag($tag)
+{
+    static $tags = null;
+
+    if ($tags === null) {
+        global $plugins;
+
+        if (empty($plugins)) {
+            $tags = false;
+        } else {
+            $match = array();
+
+            foreach($plugins as $p) {
+                $pfx = strpos($p, '_') === false ? $p : strtok($p, '_').'_';
+                $match[$pfx] = preg_quote($pfx, '/');
+            }
+
+            $match = '/^('.implode('|', $match).')/i';
+            $tags = get_defined_functions();
+            $tags = array_filter($tags['user'], function($f) use ($match) {
+                return preg_match($match, $f);
+            });
+            $tags = array_flip($tags);
+        }
+    }
+
+    return isset($tags[$tag]);
 }
 
 /**
@@ -500,8 +552,13 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($out === false) {
-        trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_WARNING);
-        $out = '';
+        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
+            trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_NOTICE);
+            $out = $registry->register($tag)->process($tag, $split, $thing);
+        } else {
+            trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
+            $out = '';
+        }
     }
 
     if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {

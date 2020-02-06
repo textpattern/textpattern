@@ -1,7 +1,6 @@
 Changes in 4.8.0
 
 * Changed: Minimum system requirements increased to PHP 5.5.
-* Changed: Plugin tags MUST be registered or they will not work.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
 * Changed: Author's real name is available in <txp:page_url>.
 * Changed: Refined scope of root .htaccess, and restricted directory listing
@@ -21,25 +20,34 @@ Changes in 4.8.0
 * Added: Global public theme switcher.
 * Added: Dedicated live/dev theme switching.
 * Added: Support for PHP 7.4.
+* Added: <txp:if_request /> tag for checking server, URL, POST and cookie
+  variables.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
 * Added: 'class' attribute to comment form tags.
+* Added: 'match' and 'separator' attributes to <txp:if_variable /> tag.
+* Added: 'pg' and 'total' attributes to <txp:newer /> / <txp:older /> tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
 * Added: Dark Mode support in Hive admin theme.
+* Added: Pageless sections for content snippets and creative article flows.
 * Added: Per-section article link format override.
 * Added: 'breadcrumb/title' article link format.
 * Added: 'section/category/title' article link format.
+* Added: Links have an editable publish time and date.
 * Added: Category searching to a specified depth.
 * Added: Custom field aliases and URL filters via valueless attributes.
-* Added: Global 'evaluate' and 'yield' attributes.
+* Added: Global 'evaluate', 'replace' and 'yield' attributes.
 * Added: Ability to trim lists when using valueless 'trim' attribute.
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
 * Added: Support for Bengali language translation.
+* Added: Support for Khmer language translation.
+* Added: Support for Norwegian Nynorsk language translation.
 * Added: Support for Welsh language translation.
 * Added: Latest translations. Thanks to all Crowdin translators for their work.
+* Added: Hive and Classic admin themes now support 3 column layouts.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
   config.php file. See Hive theme's README.txt file for instructions.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
@@ -68,6 +76,7 @@ Changes in 4.8.0
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
+* Developer: Please register plugin tags or they will not work in future.
 * Performance optimizations via cacheing and preloading frequent content.
 * Textile 3.7.6. See https://github.com/textile/php-textile/releases/tag/v3.7.6
   for full list of changes in this release (thanks, gocom).

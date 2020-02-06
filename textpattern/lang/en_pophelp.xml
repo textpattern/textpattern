@@ -476,6 +476,15 @@
 <h2>URL</h2>
 <p>The address of the link. If the link points to a different site, then it must be preceded by <code>http://</code> or <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title="Publish date"><![CDATA[
+<h2>Publish date</h2>
+<p>The time a link is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
+<p>The boxes correspond to the following information:</p>
+<ul>
+    <li>Year / Month / Day</li>
+    <li>Hour (24-hour format) : Minute : Second</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Login panel">

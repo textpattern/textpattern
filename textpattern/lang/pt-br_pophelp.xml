@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="pt-BR">
+    <group id="admin" title="Painel do Utilizador">
+        <item id="about_privileges" title="Sobre funções"><![CDATA[
+<h2>Sobre as funções</h2>
+<h3>Editor</h3>
+<ul>
+    <li>pode gerenciar artigos, comentários e links</li>
+    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
+    <li>pode gerenciar imagens e arquivos</li>
+    <li>pode gerenciar categorias e seções</li>
+    <li>pode gerenciar páginas, formas e estilo</li>
+    <li>pode exibir informações de diagnóstico</li>
+    <li>pode gerenciar preferências do site</li>
+    <li>pode gerenciar usuários</li>
+    <li>pode gerenciar logs de visitante</li>
+    <li>pode gerenciar plugins</li>
+    <li>pode importar dados</li>
+</ul>
+<h3>Managing Editor</h3>
+<ul>
+    <li>pode gerenciar artigos, comentários e links</li>
+    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
+    <li>pode gerenciar imagens e arquivos</li>
+    <li>pode gerenciar categorias e seções</li>
+    <li>pode gerenciar páginas, formas e estilo</li>
+    <li>pode exibir informações de diagnóstico</li>
+    <li>pode gerenciar preferências local</li>
+    <li>pode ver os usuários</li>
+    <li>pode gerenciar registros de visitas</li>
+    <li>pode gerenciar plugins</li>
+    <li>pode importar dados de</li>
+</ul>
+<h3>Editor de Cópia</h3>
+<ul>
+    <li>pode gerenciar artigos com uma limitação:
+        <ul>
+            <li>não é possível excluir aqueles pertencentes a outros usuários</li>
+        </ul>
+    </li>
+    <li>pode gerenciar comentários e links</li>
+    <li> pode gerenciar imagens e arquivos</li>
+    <li>pode gerenciar categorias</li>
+    <li>pode gerenciar páginas e formulários</li>
+    <li>pode ver os usuários</li>
+    <li>pode gerenciar registros de visitas</li>
+</ul>
+<h3>Escritor</h3>
+<ul>
+    <li>pode gerenciar os próprios artigos, Ver os artigos dos outros usuários</li>
+    <li>pode gerenciar imagens e arquivos</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>pode gerenciar artigos próprios em um sentido limitado:
+        <ul>
+            <li>só pode modificar o artigo até que é publicado</li>
+            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
+        </ul>
+    </li>
+    <li>pode ver os artigos de outros usuários</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>pode gerenciar os próprios artigos em um sentido limitado:
+        <ul>
+            <li>só pode modificar o artigo até que é publicado</li>
+            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
+        </ul> < di classe v = "notranslate" > 65</div></li>
+    <li>pode ver os artigos dos outros usuários</li>
+    <li>pode gerenciar imagens</li>
+    <li>pode gerenciar seções</li>
+    <li>pode gerenciar páginas, formas e estilo</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Criar o autor"><![CDATA[
+<h2>Adicionar novo autor</h2>
+<p>Uma senha, mensagem de bem-vindo e instruções de login serão enviadas para o novo autor.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Painel de escrever">
+        <item id="article_image" title="Imagem de artigo"><![CDATA[
+<h2>Imagem do artigo</h2>
+<p>Para associar uma única imagem a este artigo, informe as seguintes informações:</p>
+<ol>
+    <li>uma imagem Textpattern ID (por exemplo, <code>12</code>)</li>
+    <li>uma URL relativa para a imagem (por exemplo, <code>/images/my_pic.jpg</code>)</li>
+    <li>uma URL com o endereço completo (por exemplo, <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>a imagem pode ser exibida, colocando uma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> marca <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> dentro de uma forma de artigo. Ocorrerá em uma saída HTML <code>&lt;img&gt;</code>completa para a imagem escolhida.</p>
+        ]]></item>
+        <item id="body" title="Conteúdo"><![CDATA[
+<h2>Conteúdo</h2>
+<p>O conteúdo principal de um artigo está contido dentro do corpo do artigo.</p>
+<p>quando compondo ou preparando artigos para publicação em Textpattern, um autor pode alternar entre três pontos de vista do artigo: texto simples, marcação HTML (o código com o qual um navegador da web processa o artigo) e em modo visualização.</p>
+        ]]></item>
+        <item id="description" title="Descrição"><![CDATA[
+<h2>Descrição</h2>
+<p>A descrição do artigo é um componente opcional que pode ajudar os motores de busca e rastreadores site melhor identificam e classificar conteúdo.</p>
+<p>A descrição do artigo é limitada a um máximo de 255 caracteres. Nota que alguns motores de busca Coloque limites de caráter no comprimento de de uma página <code>Descrição de meta</code> para a praticidade do display no resultado das páginas no engine de busca (SERPs) e isso pode ser menor que o limite de 255 caracteres em Textpattern.</p>
+<p>Nota que a descrição do artigo difere o trecho do artigo, embora ambos aceitam conteúdo semelhante. A descrição do artigo deve ser destinada principalmente para uso com os motores de busca e rastreadores, Considerando que o trecho do artigo é mais adequado para um resumo legível do artigo quando desejado.</p>
+        ]]></item>
+        <item id="excerpt" title="Resumo"><![CDATA[
+<h2>Resumo</h2>
+<p>Resumo de artigo são opcionais. Trechos poderiam ser usados como um resumo do artigo que é exibido como parte de uma tabela de conteúdo, usado no lugar do corpo do artigo completo em feeds RSS/Atom do site, ou em inúmeros outros usos.</p>
+        ]]></item>
+        <item id="expire_date" title=""><![CDATA[]]></item>
+        <item id="keywords" title="Palavras-chave"><![CDATA[
+<h2>Palavras-chave</h2>
+<p>Palavras-chave são úteis para melhorar as relações entre artigos além dos fornecidos por categorias.</p>
+<p>Palavras-chave devem ser separadas por vírgulas.</p>
+        ]]></item>
+        <item id="override_form" title="Módulo alternativo"><![CDATA[
+<h2>Módulo alternativo</h2>
+<p>Um artigo pode, opcionalmente, usar um módulo diferente do atribuído por padrão. Por exemplo, para mostrar um resumo de um artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> em vez do corpo do artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> - você pode usar um módulo alternativo. </p>
+        ]]></item>
+        <item id="publish_date" title="Data de publicação"><![CDATA[
+<h2>Data de publicação</h2>
+<p>A data/hora em que o artigo ou arquivo é publicado ou mais recentemente revisado. Pode ser definido no horário atual em que o item é publicado, ou para um tempo arbitrário no passado ou no futuro. </p>
+<p>As caixas correspondem às seguintes informações:</p>
+<ul>
+    <li>Ano / Mês / Dia</li>
+    <li>Hora (Formato de 24h) : Minuto : Segundo</li>
+</ul>
+<p>Um item com horário definido para o futuro ficará agendado, e não será visível no site nem em feeds RSS/Atom até chegar à data e horário determinado. </p>
+        ]]></item>
+        <item id="status" title=""><![CDATA[]]></item>
+        <item id="title" title=""><![CDATA[]]></item>
+        <item id="url_title" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="">
+        <item id="article_category" title=""><![CDATA[]]></item>
+        <item id="category_description" title=""><![CDATA[]]></item>
+        <item id="file_category" title=""><![CDATA[]]></item>
+        <item id="image_category" title=""><![CDATA[]]></item>
+        <item id="link_category" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title=""><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title=""><![CDATA[]]></item>
+        <item id="timestamp_file" title=""><![CDATA[]]></item>
+        <item id="upload" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title=""><![CDATA[]]></item>
+        <item id="replace_image_form" title=""><![CDATA[]]></item>
+        <item id="upload_image" title=""><![CDATA[]]></item>
+        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title=""><![CDATA[]]></item>
+        <item id="link_sort" title=""><![CDATA[]]></item>
+        <item id="link_url" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="advanced_options" title=""><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+        <item id="archive_dateformat" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title=""><![CDATA[]]></item>
+        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title=""><![CDATA[]]></item>
+        <item id="img_dir" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="site_slogan" title=""><![CDATA[]]></item>
+        <item id="sitename" title=""><![CDATA[]]></item>
+        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="skin_dir" title=""><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title=""><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title=""><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_description" title=""><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title=""><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title=""><![CDATA[]]></item>
+        <item id="section_uses_page" title=""><![CDATA[]]></item>
+        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title=""><![CDATA[]]></item>
+        <item id="skin_author_uri" title=""><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title=""><![CDATA[]]></item>
+        <item id="skin_import" title=""><![CDATA[]]></item>
+        <item id="skin_name" title=""><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_version" title=""><![CDATA[]]></item>
+    </group>
+</help>
+</resources>
