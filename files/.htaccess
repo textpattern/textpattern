@@ -1,3 +1,5 @@
+# BEGIN Textpattern
+
 # Block access to directories without a default document.
 
 <IfModule mod_autoindex.c>
@@ -7,3 +9,5 @@
 # Inhibit direct file downloads (display 403 Forbidden error) if desired.
 
 # RedirectMatch 403 .*
+
+# END Textpattern
