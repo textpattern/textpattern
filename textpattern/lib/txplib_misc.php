@@ -4612,27 +4612,32 @@ function permlinkurl($article_array, $hu = hu)
             $out = "$section/$url_title";
             break;
         case 'section_category_title':
-            $out = $section.'/'.(empty($category1) ? '' : $category1.'/').(empty($category2) ? '' : $category2.'/').$url_title;
+            $out = $section.'/'.
+                (empty($category1) ? '' : urlencode($category1).'/').
+                (empty($category2) ? '' : urlencode($category2).'/').$url_title;
             break;
         case 'breadcrumb_title':
             $out = $section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
-                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
+                    $path = array_reverse(array_column(getRootPath($category2), 'name'));
+                    $out .= implode('/', array_map('urlencode', $path)).'/';
                 }
             } elseif (empty($category2)) {
-                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
+                $path = array_reverse(array_column(getRootPath($category1), 'name'));
+                $out .= implode('/', array_map('urlencode', $path)).'/';
             } else {
                 $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
                 if (in_array($category1, $c2_path)) {
-                    $out .= implode('/', $c2_path).'/';
+                    $out .= implode('/', array_map('urlencode', $c2_path)).'/';
                 } else {
                     $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
                     if (in_array($category2, $c1_path)) {
-                        $out .= implode('/', $c1_path).'/';
+                        $out .= implode('/', array_map('urlencode', $c1_path)).'/';
                     } else {
                         $c0_path = array_intersect($c1_path, $c2_path);
-                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1/$category2/";
+                        $out .= ($c0_path ? implode('/', array_map('urlencode', $c0_path)).'/' : '').
+                            urlencode($category1).'/'.urlencode($category2).'/';
                     }
                 }
             }
