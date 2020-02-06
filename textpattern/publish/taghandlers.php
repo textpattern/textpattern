@@ -1814,7 +1814,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'escape'     => 'html',
         'rel'        => '',
         'shift'      => false,
-        'limit'      => false,
+        'limit'      => 0,
         'break'      => '',) + 
         ($get ? array(
         'total'      => $numPages,
@@ -1882,7 +1882,7 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     $txp_item['total'] = $numPages;
-    $limit = $limit ? (int)$limit : count($pages);
+    $limit = $limit ? (int)$limit : -1;
     $old_context = $txp_context;
     $txp_context += get_context();
     $out = array();
@@ -1930,7 +1930,10 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
 
         empty($url) or $out[] = $url;
-        if (!$limit) {break;}
+
+        if (!$limit) {
+            break;
+        }
     }
 
     foreach ($items as $item => $val) {
