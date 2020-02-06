@@ -1851,7 +1851,8 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     $pgc = $pg === true ? 'pg' : $pg;
-    $thepg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, 1));
+    $thispg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, 1));
+    $thepg = max(1, min($thispg, $numPages));
 
     if ($get) {
         if ($thing === null && $shift === false) {
@@ -1915,7 +1916,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                         $title = txp_escape(array('escape' => $escape), $title);
                     }
 
-                    $url = $link || $link === false && $nextpg != $thepg ? href(
+                    $url = $link || $link === false && $nextpg != $thispg ? href(
                         parse($thing),
                         $url,
                         (empty($title) ? '' : ' title="'.$title.'"').
@@ -1926,7 +1927,7 @@ function txp_pager($atts, $thing = null, $newer = null)
                 $url = false;
             }
         } else {
-            $url = isset($thing) ? parse($thing, $showalways && $shift === false) : false;
+            $url = isset($thing) ? parse($thing, false) : false;
         }
 
         empty($url) or $out[] = $url;
