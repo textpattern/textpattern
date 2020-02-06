@@ -419,6 +419,15 @@ např.: #@language cs-cz</p>
         <item id="link_url" title="URL"><![CDATA[
 <h2>URL</h2>
 <p>Url adresa odkazu. Jestliže odkaz míří na jiný web, musí být na jejím začátku <code>http://</code> nebo <code>https://</code>.</p>        ]]></item>
+        <item id="timestamp_link" title="Datum vydání"><![CDATA[
+<h2>Datum zveřejnění</h2>
+<p>Čas, kdy je odkaz publikován nebo naposledy revidován. Čas může být nastaven na okamžik, kdy je položka publikována, nebo na libovolný čas v minulosti nebo budoucnosti.</p>
+<p>Políčka odpovídají těmto informacím:</p>
+<ul>
+    <li>Rok / Měsíc / den</li>
+    <li>Hodina (formát 24 hodin) : Minuty: Sekundy</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Přihlašovací panel">
