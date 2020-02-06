@@ -45,7 +45,7 @@ class Partial
 
         extract(lAtts(array(
             'name'    => '',
-            'default' => '',
+            'default' => false,
             'item'    => null
         ), $atts));
 
@@ -60,7 +60,7 @@ class Partial
 
         if (!isset($inner)) {
             $escape = isset($txp_atts['escape']) ? $txp_atts['escape'] : null;
-            $inner = isset($default) ?
+            $inner = $default !== false ?
                 ($default === true ? page_url(array('type' => $name, 'escape' => $escape)) : $default) :
                 ($thing ? parse($thing) : $thing);
         }
