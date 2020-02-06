@@ -1391,6 +1391,8 @@ function load_plugins($type = false, $pre = null)
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
         $pre = intval($pre);
+        $plugins_dir = txpath.DS.'plugins';
+        $writable = is_dir($plugins_dir) && is_writable($plugins_dir);
 
         foreach ($rs as $a) {
             if (!isset($plugins_ver[$a['name']]) && (!$pre || $a['load_order'] < $pre)) {
@@ -1400,9 +1402,9 @@ function load_plugins($type = false, $pre = null)
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
 
                 $dir = $a['name'];
-                $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
+                $filename = $plugins_dir.DS.$dir.DS.$dir.'.php';
 
-                if (!is_file($filename)) {
+                if ($writable && !is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
@@ -1411,7 +1413,7 @@ function load_plugins($type = false, $pre = null)
                 $trace->stop();
 
                 if ($eval_ok === false) {
-                    echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
+                    trigger_error(gTxt('plugin_include_error', array('{name}' => $a['name'])), E_USER_WARNING);
                 }
 
                 unset($GLOBALS['txp_current_plugin']);
@@ -3111,7 +3113,7 @@ function EvalElse($thing, $condition)
  * to a 'form.fetch' callback event. Any value returned by the callback function
  * will be used as the form template markup.
  *
- * @param   string $name The form
+ * @param   array|string $name The form
  * @return  string
  * @package TagParser
  */
@@ -3123,28 +3125,43 @@ function fetch_form($name)
     static $forms = array();
     global $pretext;
 
-    $name = (string) $name;
     $skin = $pretext['skin'];
+    $fetch = is_array($name);
 
-    if (!isset($forms[$name])) {
+    if ($fetch || !isset($forms[$name])) {
+        $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
+
         if (has_handler('form.fetch')) {
-            $form = callback_event('form.fetch', '', false, compact('name', 'skin'));
+            foreach ($names as $name) {
+                $forms[$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
+            }
+        } elseif ($fetch) {
+            $nameset = implode(',', quote_list($names));
+
+            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
+                while ($row = nextRow($rs)) {
+                    $forms[$row['name']] = $row['Form'];
+                }
+            }
         } else {
-            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."' AND skin = '".doSlash($skin)."'");
+            $forms[$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($skin)."'");
         }
 
-        if ($form === false) {
-            trigger_error(gTxt('form_not_found').' '.$name);
+        foreach ($names as $form) {
+            if (empty($forms[$form])) {
+                trigger_error(gTxt('form_not_found').' '.$form);
+                $forms[$form] = false;
+            }
+        }
+    }
+
+    if (!$fetch) {
+        if ($production_status === 'debug') {
+            $trace->log("[Form: '$skin.$name']");
         }
 
-        $forms[$name] = $form;
+        return $forms[$name];
     }
-
-    if ($production_status === 'debug') {
-        $trace->log("[Form: '$skin.$name']");
-    }
-
-    return $forms[$name];
 }
 
 /**
@@ -3338,23 +3355,17 @@ function fetch_section_title($name)
         return $sectitles[$name];
     }
 
-    // Try global set by section_list().
-    if (!empty($thissection['title']) && $thissection['name'] == $name) {
-        $sectitles[$name] = $thissection['title'];
-
+    if (!empty($thissection) && $thissection['name'] == $name) {
         return $thissection['title'];
-    }
-
-    if ($name == 'default' or empty($name)) {
+    } elseif ($name == 'default' or empty($name)) {
         return '';
     } elseif (isset($txp_sections[$name])) {
-        return $txp_sections[$name]['title'];
+        return $sectitles[$name] = $txp_sections[$name]['title'];
     }
 
     $f = safe_field("title", 'txp_section', "name = '".doSlash($name)."'");
-    $sectitles[$name] = $f;
 
-    return $f;
+    return $sectitles[$name] = $f;
 }
 
 /**
@@ -4507,7 +4518,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = hu)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $internals = array('s', 'context', 'pg', 'p'), $now = null;
+    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null;
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4601,27 +4612,32 @@ function permlinkurl($article_array, $hu = hu)
             $out = "$section/$url_title";
             break;
         case 'section_category_title':
-            $out = $section.'/'.(empty($category1) ? '' : $category1.'/').(empty($category2) ? '' : $category2.'/').$url_title;
+            $out = $section.'/'.
+                (empty($category1) ? '' : urlencode($category1).'/').
+                (empty($category2) ? '' : urlencode($category2).'/').$url_title;
             break;
         case 'breadcrumb_title':
             $out = $section.'/';
             if (empty($category1)) {
                 if (!empty($category2)) {
-                    $out .= implode('/', array_reverse(array_column(getRootPath($category2), 'name'))).'/';
+                    $path = array_reverse(array_column(getRootPath($category2), 'name'));
+                    $out .= implode('/', array_map('urlencode', $path)).'/';
                 }
             } elseif (empty($category2)) {
-                $out .= implode('/', array_reverse(array_column(getRootPath($category1), 'name'))).'/';
+                $path = array_reverse(array_column(getRootPath($category1), 'name'));
+                $out .= implode('/', array_map('urlencode', $path)).'/';
             } else {
                 $c2_path = array_reverse(array_column(getRootPath($category2), 'name'));
                 if (in_array($category1, $c2_path)) {
-                    $out .= implode('/', $c2_path).'/';
+                    $out .= implode('/', array_map('urlencode', $c2_path)).'/';
                 } else {
                     $c1_path = array_reverse(array_column(getRootPath($category1), 'name'));
                     if (in_array($category2, $c1_path)) {
-                        $out .= implode('/', $c1_path).'/';
+                        $out .= implode('/', array_map('urlencode', $c1_path)).'/';
                     } else {
                         $c0_path = array_intersect($c1_path, $c2_path);
-                        $out .= ($c0_path ? implode('/', $c0_path).'/' : '')."$category1/$category2/";
+                        $out .= ($c0_path ? implode('/', array_map('urlencode', $c0_path)).'/' : '').
+                            urlencode($category1).'/'.urlencode($category2).'/';
                     }
                 }
             }
@@ -4734,7 +4750,7 @@ function do_list($list, $delim = ',')
     $list = explode($delim, $list);
 
     if (isset($range)) {
-        $pattern = '/^\s*(\w|[-+]]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]]?\d+)\s*$/';
+        $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
         foreach ($list as $item) {
@@ -5026,7 +5042,7 @@ function getMetaDescription($type = null)
  * @return array The retrieved data
  */
 
-function get_context($context = true, $internals = array('s', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
+function get_context($context = true, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f'))
 {
     global $pretext, $txp_context;
 
@@ -5035,16 +5051,18 @@ function get_context($context = true, $internals = array('s', 'c', 'context', 'q
     } elseif (empty($context)) {
         return array();
     } elseif (!is_array($context)) {
-        $context = $context === true ? $internals : do_list_unique($context);
+        $context = array_fill_keys($context === true ? $internals : do_list_unique($context), null);
     }
 
     $out = array();
 
-    foreach ($context as $q) {
-        if (!empty($pretext[$q]) && in_array($q, $internals)) {
+    foreach ($context as $q => $v) {
+        if (isset($pretext[$q]) && in_array($q, $internals)) {
             $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (!isset($pretext[$q]) && $value = gps($q)) {
-            $out[$q] = $value;
+        } elseif (isset($v)) {
+            $out[$q] = $v;
+        } else {
+            $out[$q] = gps($q, null);
         }
     }
 
@@ -5629,6 +5647,80 @@ function real_max_upload_size($user_max, $php = true)
 
     // 2^53 - 1 is max safe JavaScript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
+}
+
+// -------------------------------------------------------------
+
+function txp_match($atts, $what)
+{
+    static $dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
+
+    extract($atts + array(
+        'value'     => null,
+        'match'     => 'exact',
+        'separator' => '',
+    ));
+
+
+    if ($value !== null) {
+        switch ($match) {
+            case '':
+            case 'exact':
+                $cond = (is_array($what) ? implode('', $what) == $value : $what == $value);
+                break;
+            case 'any':
+                $values = do_list_unique($value);
+                $cond = false;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+
+                foreach ($values as $term) {
+                    if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
+                        $cond = true;
+                        break;
+                    }
+                }
+                break;
+            case 'all':
+                $values = do_list_unique($value);
+                $cond = true;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+
+                foreach ($values as $term) {
+                    if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
+                        $cond = false;
+                        break;
+                    }
+                }
+                break;
+            case 'pattern':
+                // Cannot guarantee that a fixed delimiter won't break preg_match
+                // (and preg_quote doesn't help) so dynamically assign the delimiter
+                // based on the first entry in $dlmPool that is NOT in the value
+                // attribute. This minimises (does not eliminate) the possibility
+                // of a TXP-initiated preg_match error, while still preserving
+                // errors outside TXP's control (e.g. mangled user-submitted
+                // PCRE pattern).
+                if ($separator === true) {
+                    $dlm = $value;
+                } elseif ($separator && in_array($separator, $dlmPool)) {
+                    $dlm = strpos($value, $separator) === 0 ? $value : $separator.$value.$separator;
+                } else {
+                    $dlm = array_diff($dlmPool, preg_split('//', $value));
+                    $dlm = reset($dlm);
+                    $dlm = $dlm.$value.$dlm;
+                }
+
+                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
+                break;
+            default:
+                trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'match')), E_USER_NOTICE);
+                $cond = false;
+        }
+    } else {
+        $cond = ($what !== null);
+    }
+
+    return !empty($cond);
 }
 
 /*** Polyfills ***/

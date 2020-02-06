@@ -423,7 +423,7 @@ function link_edit($message = '')
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                 n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                'div', array('class' => 'posted-now')
+                'div', array('class' => 'txp-form-field-shim posted-now')
             );
         echo form(
             hed($caption, 2).
@@ -520,7 +520,7 @@ function link_save()
     $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
     $created = "NOW()";
 
-    if ($created_ts > 0) {
+    if (!$publish_now && $created_ts > 0) {
         $created = "FROM_UNIXTIME('".$created_ts."')";
     }
 

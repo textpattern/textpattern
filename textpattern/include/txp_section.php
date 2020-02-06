@@ -310,6 +310,8 @@ function sec_section_list($message = '')
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
+                $in_dev = false;
+
                 foreach (array('page', 'css') as $item) {
                     $all_items = $item === 'page' ? $all_pages : $all_styles;
                     $sec_item = ${"sec_$item"};
@@ -318,25 +320,28 @@ function sec_section_list($message = '')
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
                     $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
+                    $in_dev = $in_dev || $replaced;
 
-                    ${"sec_$item"} = (!$replaced ? '' :
+                    ${"sec_$item"} = ($sec_item ? tag(href(txpspecialchars($sec_item), array(
+                        'event' => $item,
+                        'name'  => $sec_item,
+                        'skin'  => $sec_skin,
+                    ), array('title' => gTxt('edit'))
+                    ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    (!$replaced ? '' :
+                        n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
                         ), array('title' => gTxt('edit'))).
-                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
-                        n.'<hr class="secondary" />'.n
-                    ).($sec_item ? href(txpspecialchars($sec_item), array(
-                            'event' => $item,
-                            'name'  => $sec_item,
-                            'skin'  => $sec_skin,
-                        ), array('title' => gTxt('edit'))
-                    ) : tag(gTxt('none'), 'span', array('class' => 'disabled')));
+                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
+                    );
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
                 $dev_set = $dev_set || $replaced;
+                $in_dev = $in_dev || $replaced;
 
                 $contentBlock .= tr(
                     td(
@@ -350,7 +355,8 @@ function sec_section_list($message = '')
                             sp.span('&#124;', array('role' => 'separator')).
                             sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
-                        ), '', array(
+                        ).
+                        ($in_dev ? n.'<hr class="secondary" />'.n.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')) : ''), '', array(
                             'class' => 'txp-list-col-name',
                             'scope' => 'row',
                         )
@@ -359,8 +365,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).n.'<hr class="secondary" />'.n : '').
-                        $sec_skin, '', 'txp-list-col-skin'
+                        tag($sec_skin, $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '').($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -369,7 +375,7 @@ function sec_section_list($message = '')
                         $sec_css, '', 'txp-list-col-style'
                     ).
                     td(
-                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
                     ).
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
@@ -387,7 +393,7 @@ function sec_section_list($message = '')
                 );
             }
 
-            $disabled = $dev_set ? array() : array('livetodev', 'devtolive');
+            $disabled = $dev_set ? array() : array('switchdevlive');
 
             $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
@@ -878,8 +884,13 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
         ),
-        'livetodev' => gTxt('live_to_dev'),
-        'devtolive' => gTxt('dev_to_live'),
+        'switchdevlive' => array(
+            'label' => gTxt('switch_dev_live'),
+            'html'  => radioSet(array(
+                0 => gTxt('live_to_dev'),
+                1 => gTxt('dev_to_live'),
+                ), 'switch_dev_live', 0),
+        ),
         'permlinkmode' => array(
             'label' => gTxt('permlink_mode'),
             'html'  => permlinkmodes('permlink_mode', '', array('' => gTxt('default'))),
@@ -943,7 +954,6 @@ function section_multi_edit()
     }
 
     $nameVal = array();
-    $deployOpts = array('livetodev', 'devtolive');
 
     switch ($edit_method) {
         case 'delete':
@@ -967,11 +977,8 @@ function section_multi_edit()
             }
 
             break;
-        case 'devtolive':
-            $nameVal['switch_dev_live'] = 1;
-            break;
-        case 'livetodev':
-            $nameVal['switch_dev_live'] = 0;
+        case 'switchdevlive':
+            $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
             break;
         case 'permlinkmode':
             $nameVal['permlink_mode'] = (string) ps('permlink_mode');
@@ -1008,7 +1015,7 @@ function section_multi_edit()
                 '0' :
                 "css IN (".join(',', quote_list($all_styles[$skin])).")";
         }
-    } elseif (in_array($edit_method, $deployOpts) && empty($nameVal['switch_dev_live'])) {
+    } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
@@ -1033,8 +1040,8 @@ function section_multi_edit()
     );
 
     if ($nameVal && $sections) {
-        if (in_array($edit_method, $deployOpts)) {
-            $set = ($edit_method == 'devtolive' ? '' :
+        if ($edit_method == 'switchdevlive') {
+            $set = ($nameVal['switch_dev_live'] ? '' :
                 "skin = $setskin,
                 page = $setpage,
                 css = $setcss, "

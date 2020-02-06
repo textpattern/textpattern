@@ -128,13 +128,13 @@
         ]]></item>
         <item id="publish_date" title="Date de publication"><![CDATA[
 <h2>Date de publication</h2>
-<p>La date à laquelle un article ou un fichier est publié ou révisé le plus récemment. Cette date peut être définie au moment de la publication, ou dans un délais arbitraire du passé ou du futur.</p>
+<p>La date à laquelle un article ou un fichier est publié ou révisé ultérieurement. Cette date peut être définie au moment de la publication ou arbitrairement dans le passé ou le futur.</p>
 <p>Les champs correspondent aux informations suivantes :</p>
 <ul>
 <li>Année / Mois / Jour</li>
 <li>Heures (format 24 heures) : Minutes : Secondes</li>
 </ul>
-<p>Un élément affecté d’un horodatage plus grand que l’instant présent (ex dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
+<p>Un élément affecté d’un horodatage supérieur à l’instant présent (ex. dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
         ]]></item>
         <item id="status" title="Statut"><![CDATA[
 <h2>Statut</h2>
@@ -473,6 +473,14 @@
 <h2>URL</h2>
 <p>L’adresse du lien. Si le lien pointe vers un site différent, alors il doit être précédé par <code>http://</code> ou <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>L’horodatage du lien lors de sa publication ou de sa révision. Peut être mis à jour au moment du téléversement ou renseigné arbitrairement dans le passé ou le futur.</p>
+<p>Les champs de saisies correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
     </group>
 
     <group id="login" title="Connexion">
@@ -635,11 +643,38 @@
 <p>Seuls les modèles de modules d’une même extension correspondant à leur type (ex. <code>myscript.js</code>) peuvent être servis comme fichiers indépendants («Flat files»). Dans ce cas, ils ne seront pas interceptés par Textpattern et seront tous accessibles via leur URL.</p>
 <p>Si un modèle de module nécessite d’être interprété (s’il contient des balisages Textpattern), vous devrez les servir depuis la base de données comme suit :</p>
 <pre><code>&lt;script&gt;
-    &lt;txp:txp:output_form form="myscript.js"
-    format="script" /&gt;
+ &lt;txp:txp:output_form form="myscript.js"
+ format="script" /&gt;
 &lt;/script&gt;</code></pre>
 <p>Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel de <code>myscript</code> (sans <code>.js</code>) afin de le rendre inaccessible via une URL standard – et en l’incluant comme suit :</p>
 <pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+<p>Liste de type de modules :</p>
+<pre><code>
+[js]
+mediatype="application/javascript"
+title="Javascript"
+[css]
+mediatype="text/css"
+title="Stylesheet"
+[json]
+mediatype="application/json"
+title="Json"
+[svg]
+mediatype="image/svg+xml"
+title="SVG"
+[xml]
+mediatype="application/xml"
+title="XML"
+[txt]
+mediatype="text/plain"
+title="TXT"
+[csv]
+mediatype="text/csv"
+title="CSV"
+[html]
+mediatype="text/html"
+title="HTML"
+</code></pre>
         ]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>

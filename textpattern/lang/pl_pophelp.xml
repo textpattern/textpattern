@@ -98,6 +98,15 @@
         <item id="link_description" title="Opis"><![CDATA[]]></item>
         <item id="link_sort" title="Sortuj według"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Data publikacji"><![CDATA[
+<h2>Data publikacji</h2>
+<p>Czas kiedy link został opublikowany lub ostatnim razem zmodyfikowany. Czas może zostać ustawiony na moment, w którym link zostanie opublikowany lub dowolny moment w przeszłości lub przyszłości.</p>
+<p>Pola odpowiadają następującym informacjom:</p>
+<ul>
+    <li>Rok / Miesiąc / Dzień</li>
+    <li>Godzina (format 24-godzinny)  : Minuty : Sekundy</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Panel logowania">

@@ -499,6 +499,10 @@ class Plugin
 
     public function updateFile($name, $code = null)
     {
+        if (!is_writable(txpath.DS.'plugins')) {
+            return;
+        }
+
         $filename = sanitizeForFile($name);
 
         if (!isset($code)) {
