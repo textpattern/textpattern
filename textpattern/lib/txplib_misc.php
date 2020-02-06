@@ -4412,6 +4412,10 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
+        if (!empty($keys['context'])) {
+            $keys['context'] = gTxt($keys['context'].'_context');
+        }
+
         return hu.'index.php'.join_qs($keys);
     } else {
         // All clean URL modes use the same schemes for list pages.
@@ -4424,9 +4428,11 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             $url = hu.'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
+            if (!empty($keys['context'])) {
+                $keys['context'] = gTxt($keys['context'].'_context');
+            }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
                 $catpath = $url_mode == 'breadcrumb_title' ?
                     array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
@@ -4435,16 +4441,19 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                 unset($keys['c']);
             }
         } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
+            if (!empty($keys['context'])) {
+                $keys['context'] = gTxt($keys['context'].'_context');
+            }
             $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
             unset($keys['month']);
         } elseif (!empty($keys['author'])) {
-            $ct = empty($keys['context']) ? '' : $keys['context'].'/';
-            $url = hu.'author'.'/'.$ct.urlencode($keys['author']).'/';
+            $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
+            $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c'])) {
             $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
-            $ct = empty($keys['context']) ? '' : $keys['context'].'/';
-            $url = hu.'category'.'/'.$ct.urlencode($keys['c']).'/';
+            $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
+            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
             unset($keys['c'], $keys['context']);
         }
 
