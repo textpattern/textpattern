@@ -1892,9 +1892,9 @@ function txp_pager($atts, $thing = null, $newer = null)
         if ($newer === null) {
             $nextpg = $thepg + $page;
         } elseif ($newer) {
-            $nextpg = $page === true ? 1 : ((int)$page < 0 ? min(-$page, $thepg - 1) : $thepg - $page);
+            $nextpg = $page === true ? 1 : ((int)$page < 0 ? -$page : $thepg - $page);
         } else {
-            $nextpg = $page === true ? $numPages : ((int)$page < 0 ? max($numPages + $page, $thepg) + 1 : $thepg + $page);
+            $nextpg = $page === true ? $numPages : ((int)$page < 0 ? $numPages + $page + 1 : $thepg + $page);
         }
 
         if ($nextpg >= ($newer === false ? $thepg : 1) && $nextpg <= ($newer === true ? $thepg : $numPages)) {
