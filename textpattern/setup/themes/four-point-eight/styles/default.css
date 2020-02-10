@@ -1244,7 +1244,6 @@ textarea:-moz-ui-invalid {
 [type=reset],
 [type=submit] {
     background-color: #dfdfdf;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dfdfdf));
     background-image: linear-gradient(#eeeeee, #dfdfdf);
     display: inline-block;
     position: relative;
@@ -1270,7 +1269,6 @@ textarea:-moz-ui-invalid {
 [type=reset]:hover,
 [type=submit]:hover {
     background-color: #e9e9e9;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#e9e9e9));
     background-image: linear-gradient(#f8f8f8, #e9e9e9);
     border-color: #bebebe;
     color: #333333;
@@ -1434,7 +1432,6 @@ textarea:-moz-ui-invalid {
   .search input[type=search] {
     width: 2.125em;
     padding-right: 0;
-    -webkit-transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
     transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
     background-color: #eeeeee;
     cursor: pointer;
@@ -1465,8 +1462,7 @@ textarea:-moz-ui-invalid {
    ========================================================================== */
 @media screen and (prefers-reduced-motion: reduce), (update: slow) {
   .search input[type=search] {
-    -webkit-transition-duration: 0;
-            transition-duration: 0;
+    transition-duration: 0;
   }
 }
 /* ==========================================================================
