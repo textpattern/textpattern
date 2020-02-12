@@ -518,8 +518,9 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
     }
 
     $out[] = n.tag(join($nav).n, 'nav', array(
-        'class' => 'prev-next',
-        'style' => ($numPages > 1 ? false : 'display:none'),
+        'class'      => 'prev-next',
+        'aria-label' => gTxt('page_nav'),
+        'style'      => ($numPages > 1 ? false : 'display:none'),
     ));
 
     return join('', $out);
