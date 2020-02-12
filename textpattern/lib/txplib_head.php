@@ -165,6 +165,7 @@ echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
+<noscript>Please enable JavaScript in your browser to use this application.</noscript>
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
