@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* ==========================================================================
    Styling and layout for all media
    ========================================================================== */
@@ -323,6 +324,34 @@ h6 a:active {
   }
   .paginator [rel=next] {
     float: right;
+  }
+
+  /**
+   * Visually hide unfocussed/inactive ‘skip links’.
+   *
+   * Example HTML:
+   *
+   * <a class="skip-link">
+   */
+  .skip-link {
+    position: absolute;
+    z-index: 2;
+    top: 1px;
+    left: 1px;
+    padding: 0.25em 0.5em;
+    transform: translateY(-5em);
+    transition: transform 0.25s ease-in-out;
+    background-color: white;
+    color: #333333;
+    font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+  .skip-link:focus, .skip-link:active {
+    transform: translateY(0);
+  }
+
+  [dir=rtl] .skip-link {
+    right: 1px;
+    left: auto;
   }
 
   /* Typography
@@ -1530,7 +1559,8 @@ form,
 #comments-form,
 .comments h4 a:last-child,
 .complementary-content,
-.paginator {
+.paginator,
+.skip-link {
     display: none;
   }
 
