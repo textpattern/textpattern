@@ -67,6 +67,8 @@ Changes in 4.8.0
 * Accessibility: Improved indication of required form fields.
 * Accessibility: Honour 'prefers-reduced-motion' in official themes.
 * Accessibility: Target WCAG 2.0 AAA contrast levels in official themes.
+* Accessibility: Improved ARIA experience.
+* Accessibility: Improved keyboard-only access experience.
 * Developer: Plugins can be uploaded with .php and .zip extensions.
 * Developer: Upload order and file totals sent when batch uploading files.
 * Developer: Some txplib_misc.php functions moved to txplib_admin.php.
