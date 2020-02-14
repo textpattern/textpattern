@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.8.0-dev';
+textpattern.version = '4.8.0-beta.3';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -2088,7 +2088,7 @@ textpattern.Route.add('article', function () {
         $field = '',
         $viewMode = $('#view_modes li.active [data-view-mode]');
         if (!$viewMode.length) $viewMode = $('#view_modes [data-view-mode]').first();
-        
+
     $pane.dialog({
         dialogClass: 'txp-preview-container',
         buttons: [],
