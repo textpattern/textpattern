@@ -68,6 +68,7 @@ Changes in 4.8.0
 * Fixed: Undefined variable warnings thrown via compact().
 * Fixed: Password handling when using MySQL 8+.
 * Fixed: nbsp on French opening quote broke Textile in some cases.
+* Fixed: Incorrect acronym tag in welcome article.
 * Accessibility: Improved indication of required form fields.
 * Accessibility: Honour 'prefers-reduced-motion' in official themes.
 * Accessibility: Target WCAG 2.0 AAA contrast levels in official themes.
