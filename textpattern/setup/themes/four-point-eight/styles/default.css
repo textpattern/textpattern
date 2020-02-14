@@ -181,11 +181,18 @@ nav ol::after,
    * Example HTML:
    *
    * <nav class="site-navigation">
-   *     <ul>
-   *         <li class="active"><a></li>
-   *         <li><a></li>
-   *         <li><a></li>
-   *     </ul>
+   *     <div>
+   *         <ul>
+   *             <li class="active"><a></li>
+   *             <li><a></li>
+   *             <li><a></li>
+   *         </ul>
+   *         <div class="search">
+   *             <form>
+   *                 <input type="search">
+   *             </form>
+   *        </div>
+   *    </div>
    * </nav>
    */
   .site-navigation {
@@ -199,14 +206,14 @@ nav ol::after,
   .site-navigation ul {
     margin: 0;
     padding: 0;
+    border: solid #cccccc;
+    border-width: 1px 0;
     list-style: none;
   }
   .site-navigation li {
-    border-bottom: 1px solid #cccccc;
+    border: solid #cccccc;
+    border-width: 1px 0;
     background-color: #eeeeee;
-  }
-  .site-navigation li:first-child {
-    border-top: 1px solid #cccccc;
   }
   .site-navigation li:hover {
     background-color: #f8f8f8;
@@ -347,11 +354,6 @@ h6 a:active {
   }
   .skip-link:focus, .skip-link:active {
     transform: translateY(0);
-  }
-
-  [dir=rtl] .skip-link {
-    right: 1px;
-    left: auto;
   }
 
   /* Typography
@@ -720,6 +722,15 @@ bdo[dir=rtl] {
   }
 
   /**
+   * Swap `select` icon position in RTL languages.
+   */
+  [dir=rtl] select {
+    padding-right: 0.1875em;
+    padding-left: 1.5em;
+    background-position: 0.5em center;
+  }
+
+  /**
    * Swap paginator (prev/next) navigation links on articles/article lists.
    */
   [dir=rtl] .paginator [rel=prev] {
@@ -727,6 +738,14 @@ bdo[dir=rtl] {
   }
   [dir=rtl] .paginator [rel=next] {
     float: left;
+  }
+
+  /**
+   * Swap ‘skip links’ position in RTL languages.
+   */
+  [dir=rtl] .skip-link {
+    right: 1px;
+    left: auto;
   }
 
   /**
@@ -1073,15 +1092,6 @@ textarea:focus {
   }
 
   /**
-   * Swap `select` icon position in RTL languages.
-   */
-  [dir=rtl] select {
-    padding-right: 0.1875em;
-    padding-left: 1.5em;
-    background-position: 0.5em center;
-  }
-
-  /**
    * Remove browser-specific `select` UI in IE 11.
    */
   select::-ms-expand {
@@ -1409,11 +1419,18 @@ textarea:-moz-ui-invalid {
    * Example HTML:
    *
    * <nav class="site-navigation">
-   *     <ul>
-   *         <li class="active"><a></li>
-   *         <li><a></li>
-   *         <li><a></li>
-   *     </ul>
+   *     <div>
+   *         <ul>
+   *             <li class="active"><a></li>
+   *             <li><a></li>
+   *             <li><a></li>
+   *         </ul>
+   *         <div class="search">
+   *             <form>
+   *                 <input type="search">
+   *             </form>
+   *        </div>
+   *    </div>
    * </nav>
    */
   .site-navigation {
@@ -1421,42 +1438,27 @@ textarea:-moz-ui-invalid {
     border-bottom: 1px solid #cccccc;
   }
   .site-navigation > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     width: 88%;
   }
+  .site-navigation ul {
+    display: flex;
+    flex-wrap: wrap;
+    border: 0;
+  }
   .site-navigation li {
-    float: left;
-    border-right: 1px solid #cccccc;
-    border-bottom: 0;
-  }
-  .site-navigation li:first-child {
-    border-top: 0;
-    border-left: 1px solid #cccccc;
-  }
-  [dir=rtl] .site-navigation li {
-    float: right;
-  }
-  [dir=rtl] .site-navigation li:first-child {
-    border-left: 0;
-  }
-  [dir=rtl] .site-navigation li:last-child {
-    border-left: 1px solid #cccccc;
+    border-width: 0 1px;
   }
   .site-navigation a {
     padding: 0.5em 1em;
   }
 
   .search {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    right: 0;
-    margin-top: -1.0625em;
+    margin-top: 0.2em;
     padding: 0;
     background: transparent;
-  }
-  [dir=rtl] .search {
-    right: auto;
-    left: 0;
   }
   .search input[type=search] {
     width: 2.125em;
