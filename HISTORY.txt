@@ -22,11 +22,13 @@ Changes in 4.8.0
 * Added: Support for PHP 7.4.
 * Added: <txp:if_request /> tag for checking server, URL, POST and cookie
   variables.
+* Added: <txp:pages /> tag for enhanced pagination schemes.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
 * Added: 'class' attribute to comment form tags.
 * Added: 'match' and 'separator' attributes to <txp:if_variable /> tag.
-* Added: 'pg' and 'total' attributes to <txp:newer /> / <txp:older /> tags.
+* Added: 'pg', 'total' and 'limit' attributes to <txp:newer /> and
+  <txp:older /> tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
@@ -38,7 +40,8 @@ Changes in 4.8.0
 * Added: Links have an editable publish time and date.
 * Added: Category searching to a specified depth.
 * Added: Custom field aliases and URL filters via valueless attributes.
-* Added: Global 'evaluate', 'replace' and 'yield' attributes.
+* Added: Global 'evaluate', 'replace' and 'yield' attributes. Evaluate can
+  execute contained content in arbitrary order.
 * Added: Ability to trim lists when using valueless 'trim' attribute.
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
@@ -50,6 +53,7 @@ Changes in 4.8.0
 * Added: Hive and Classic admin themes now support 3 column layouts.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
   config.php file. See Hive theme's README.txt file for instructions.
+* Added: Warning to admin panels if JavaScript is unavailable.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Removed: Some deprecated functions from long ago.
@@ -77,6 +81,7 @@ Changes in 4.8.0
 * Developer: Title accessible to plugins in Atom/RSS.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
+* Developer: Multiple forms can be fetched at once.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
 * Developer: Please register plugin tags or they will not work in future.
 * Performance optimizations via cacheing and preloading frequent content.
