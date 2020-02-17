@@ -109,6 +109,14 @@ class DB
     public $client_flags = 0;
 
     /**
+     * SSL parameters.
+     *
+     * @var string
+     */
+
+    public $ssl;
+
+    /**
      * Database connection charset.
      *
      * @var   string
@@ -158,6 +166,10 @@ class DB
     {
         global $txpcfg, $connected;
 
+        $client_flags = MYSQLI_CLIENT_FOUND_ROWS;
+
+        $this->link = mysqli_init();
+
         if (strpos($txpcfg['host'], ':') === false) {
             $this->host = $txpcfg['host'];
             $this->port = ini_get("mysqli.default_port");
@@ -172,6 +184,43 @@ class DB
             $this->socket = ini_get("mysqli.default_socket");
         }
 
+        if (isset($txpcfg['ssl']) && is_array($txpcfg['ssl'])) {
+            $client_flags = $client_flags | MYSQLI_CLIENT_SSL;
+
+            foreach (array('key', 'cert', 'ca', 'capath', 'ciphers') as $ssl_param) {
+                if (isset($txpcfg['ssl'][$ssl_param])) {
+                    $this->ssl[$ssl_param] = $txpcfg['ssl'][$ssl_param];
+                } else {
+                    $this->ssl[$ssl_param] = null;
+                }
+            }
+
+            if (isset($txpcfg['ssl']['flags']) && is_array($txpcfg['ssl']['flags'])) {
+                foreach ($txpcfg['ssl']['flags'] as $ssl_flag => $ssl_flag_value) {
+                    switch ($ssl_flag_value) {
+                        case 'true':
+                            mysqli_options($this->link, $ssl_flag, true);
+                            break;
+                        case 'false':
+                            mysqli_options($this->link, $ssl_flag, false);
+                            break;
+                        default:
+                            mysqli_options($this->link, $ssl_flag, $ssl_flag_value);
+                            break;
+                    }
+                }
+            }
+
+            mysqli_ssl_set(
+                $this->link,
+                $this->ssl['key'],
+                $this->ssl['cert'],
+                $this->ssl['ca'],
+                $this->ssl['capath'],
+                $this->ssl['ciphers']
+            );
+        }
+
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
@@ -184,14 +233,12 @@ class DB
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
         } else {
-            $this->client_flags = MYSQLI_CLIENT_FOUND_ROWS;
+            $this->client_flags = $client_flags;
         }
 
         if (isset($txpcfg['dbcharset'])) {
             $this->charset = $txpcfg['dbcharset'];
         }
-
-        $this->link = mysqli_init();
 
         // Suppress screen output from mysqli_real_connect().
         $error_reporting = error_reporting();
