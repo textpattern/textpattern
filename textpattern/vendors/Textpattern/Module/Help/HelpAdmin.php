@@ -40,7 +40,6 @@ class HelpAdmin
     private static $textile;
     protected static $pophelp_xml;
     protected static $fallback_xml;
-    protected static $isEnabled;
 
     /**
      * Constructor.
@@ -51,7 +50,6 @@ class HelpAdmin
         global $step;
 
         require_privs('help');
-        self::$isEnabled = extension_loaded('simplexml');
 
         if ($step && bouncer($step, self::$available_steps)) {
             self::$step();
@@ -75,7 +73,7 @@ class HelpAdmin
         $fallback_file = txpath."/lang/".TEXTPATTERN_DEFAULT_LANG."_pophelp.xml";
 
         if (file_exists($fallback_file) && $fallback_file !== $file) {
-            if (self::$isEnabled && empty(self::$fallback_xml)) {
+            if (empty(self::$fallback_xml)) {
                 self::$fallback_xml = simplexml_load_file($fallback_file, "SimpleXMLElement", LIBXML_NOCDATA);
             }
         }
@@ -84,7 +82,7 @@ class HelpAdmin
             return false;
         }
 
-        if (self::$isEnabled && empty(self::$pophelp_xml)) {
+        if (empty(self::$pophelp_xml)) {
             self::$pophelp_xml = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
         }
 
@@ -115,16 +113,13 @@ class HelpAdmin
 
     /**
      * pophelp.
-     *
-     * @param  string $topic Topic item to fetch from XML file or DB lang table
-     * @return string        HTML topic content
      */
 
-    public static function pophelp($topic = '')
+    public static function pophelp($string = '')
     {
         global $app_mode;
 
-        $item = empty($topic) ? gps('item') : $topic;
+        $item = empty($string) ? gps('item') : $string;
 
         if (empty($item) || preg_match('/[^\w]/i', $item)) {
             exit;

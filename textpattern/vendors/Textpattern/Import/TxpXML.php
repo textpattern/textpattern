@@ -33,12 +33,6 @@ namespace Textpattern\Import;
 class TxpXML
 {
     /**
-     * Whether import is enabled or not (i.e. PHP library loaded).
-     */
-
-    protected $isEnabled = null;
-
-    /**
      * Default allow import all data types.
      *
      * @var array
@@ -63,7 +57,6 @@ class TxpXML
 
     public function __construct($importAllow = '')
     {
-        $this->isEnabled = extension_loaded('simplexml');
         $this->setImportAllow($importAllow);
     }
 
@@ -104,35 +97,32 @@ class TxpXML
     {
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
-        if ($this->isEnabled) {
-            $oldLoader = libxml_disable_entity_loader(true);
+        $oldLoader = libxml_disable_entity_loader(true);
 
-            if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
-                $articles = array();
-                foreach ((array)$xml->children() as $key => $children) {
-                    if (! in_array($key, $importAllow)) {
-                        continue;
-                    }
-
-                    if ($key == 'articles') {
-                        $articles[] = $children;
-                        continue;
-                    }
-
-                    foreach ($children->item as $item) {
-                        safe_insert('txp_'.$key, $this->makeSqlSet($item));
-                    }
+        if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
+            $articles = array();
+            foreach ((array)$xml->children() as $key => $children) {
+                if (! in_array($key, $importAllow)) {
+                    continue;
                 }
 
-                foreach ($articles as $a) {
-                    $this->importXmlArticles($a);
+                if ($key == 'articles') {
+                    $articles[] = $children;
+                    continue;
                 }
-            } else {
-                // error XML
+
+                foreach ($children->item as $item) {
+                    safe_insert('txp_'.$key, $this->makeSqlSet($item));
+                }
             }
-
-            libxml_disable_entity_loader($oldLoader);
+            foreach ($articles as $a) {
+                $this->importXmlArticles($a);
+            }
+        } else {
+            // error XML
         }
+
+        libxml_disable_entity_loader($oldLoader);
     }
 
     /**
@@ -165,7 +155,6 @@ class TxpXML
 
             $article['Body'] = @trim($this->replaceUrls($a->body));
             $format = $a->body->attributes()->format;
-
             if ($format == 'textile') {
                 $article['Body_html']       = $textile->parse($article['Body']);
                 $article['textile_body']    = 1;
