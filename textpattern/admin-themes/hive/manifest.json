@@ -1,7 +1,7 @@
 {
   "title": "Hive",
   "txp-type": "textpattern-admin-theme",
-  "version": "4.8.0-beta.3",
+  "version": "4.8.0",
   "description": "Textpattern CMS Hive admin theme (Classic Yellow).",
   "author": "Phil Wareham",
   "author_uri": "https://github.com/philwareham/textpattern-hive-admin-theme"
