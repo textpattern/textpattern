@@ -12,7 +12,7 @@ Changes in 4.8.0
 * Changed: Tag parser tweaks for secondpass handler.
 * Changed: Plugins cached and loaded from disk to avoid eval().
 * Changed: Custom fields support from/to filtering.
-* Changed: Evaluate removes empty items from lists.
+* Changed: <txp:evaluate /> removes empty items from lists.
 * Changed: Scroll to top on list panels during navigation.
 * Changed: Random generator supports random_bytes and doesn't throw errors.
 * Changed: Improved performance of syndication feed handling for sections.
