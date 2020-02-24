@@ -106,7 +106,8 @@ system. Textpattern is free and open source.
   corresponding files in this distribution. In addition, ensure the /themes/
   directory exists if it is not already there, and is writable.
   When uploading the /textpattern/ directory, ensure you preserve any custom
-  files in your existing installation.
+  files in your existing installation. Also ensure the /textpattern/plugins
+  directory is writable.
   Note: css.php and /rpc/ may not exist if the installed version of
   Textpattern is prior to 4.2.0.
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
