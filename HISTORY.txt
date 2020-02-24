@@ -90,7 +90,7 @@ Changes in 4.8.0
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.19.0.
-* jQuery File Upload 10.7.0.
+* jQuery File Upload 10.8.0.
 
 Changes in 4.7.3
 
