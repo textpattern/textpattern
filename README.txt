@@ -31,7 +31,7 @@ system. Textpattern is free and open source.
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
-  as should the /textpattern/, /files/, /images/, /rpc/ and /themes/
+  as should the /textpattern/, /files/, /images/, /plugins/, /rpc/ and /themes/
   directories.
 * If you are running Textpattern on an Apache web server, ensure the top-level
   .htaccess file is transferred to your site. The file is hidden by default on
