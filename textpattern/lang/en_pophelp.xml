@@ -367,9 +367,9 @@
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Textpattern CMS version update"><![CDATA[
-<h2>Textpattern CMS version update</h2>
-<p>There is a newer version of Textpattern CMS available. To take advantage of the latest features and security, it is recommended you upgrade.</p>
+        <item id="textpattern_version_update" title="Textpattern version update"><![CDATA[
+<h2>Textpattern version update</h2>
+<p>There is a newer version of Textpattern available. To take advantage of the latest features and security, it is recommended you upgrade.</p>
 <p>Please note that while we strive to make the upgrade experience as seamless and pain-free as possible:</p>
 <ul>
     <li>If only the last digit differs from your current version, the upgrade is likely to be backwards compatible with plugins and themes.</li>
@@ -377,9 +377,23 @@
     <li>If the first digit is different from your current version, the upgrade is likely to require updates to most plugins and themes. If you rely heavily on a particular plugin or theme feature, please check with the author or community members before commencing the upgrade.</li>
 </ul>
         ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern pre-release available"><![CDATA[
+<h2>Textpattern pre-release update available</h2>
+<p>There is a newer pre-release version of Textpattern available. We are looking for active volunteers to test this version so we can make the final release as solid as possible. We strive to make the upgrade experience seamless and pain-free, even for beta code.</p>
+<p>Should you decide to participate, please note:</p>
+<ul>
+    <li>Do not use this beta release on a production site unless you have a working backup of both the site's files and its database, and know how to use it.</li>
+    <li>Please <a href="https://github.com/textpattern/textpattern/issues">report any issues</a>, stating the beta version that you are using. Further beta releases may be required prior to the stable release, depending on issues reported.</li>
+    <li>Ensure that if you deploy this beta release, you also update to the final version when it is released.</li>
+</ul>
+        ]]></item>
         <item id="tmp_plugin_paths_match" title="Temporary and Plugin cache directory paths should not match"><![CDATA[
 <h2>Temporary and Plugin cache directory paths should not match</h2>
 <p>Plugins should have their own directory and not share the temporary directory. This is a potential security risk and may adversely affect your site if the temporary directory is flushed. Please ensure that the temporary directory path is different to the plugin cache path.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Update server inaccessible"><![CDATA[
+<h2>Update server inaccessible</h2>
+<p>The check for updates failed, often due to network congestion or a connection timeout. This situation usually resolves itself within an hour or two so try revisiting this panel later.</p>
         ]]></item>
         <item id="warn_mail_unavailable" title="Your PHP installation is missing the mail() function"><![CDATA[
 <h2>Your PHP installation is missing the mail() function</h2>
