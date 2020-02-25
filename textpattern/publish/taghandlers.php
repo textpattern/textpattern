@@ -651,6 +651,8 @@ function linklist($atts, $thing = null)
         'pageby'      => '',
         'limit'       => 0,
         'offset'      => 0,
+        'month'       => '',
+        'time'        => null,
         'sort'        => 'linksort asc',
         'wraptag'     => '',
     ), $atts));
@@ -707,6 +709,10 @@ function linklist($atts, $thing = null)
     if (!$where && $filters) {
         // If nothing matches, output nothing.
         return '';
+    }
+
+    if ($time === null || $time || $month) {
+        $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'date');
     }
 
     if (!$where) {
@@ -4628,6 +4634,8 @@ function file_download_list($atts, $thing = null)
         'pageby'      => '',
         'limit'       => 10,
         'offset'      => 0,
+        'month'       => '',
+        'time'        => null,
         'sort'        => 'filename asc',
         'wraptag'     => '',
         'status'      => STATUS_LIVE,
@@ -4698,7 +4706,9 @@ function file_download_list($atts, $thing = null)
         return '';
     }
 
-    $where[] = "created <= ".now('created');
+    if ($time === null || $time || $month) {
+        $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'created');
+    }
 
     $where = join(" AND ", array_merge($where, $statwhere));
 

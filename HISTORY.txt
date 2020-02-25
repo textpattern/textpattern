@@ -12,7 +12,7 @@ Changes in 4.8.0
 * Changed: Tag parser tweaks for secondpass handler.
 * Changed: Plugins cached and loaded from disk to avoid eval().
 * Changed: Custom fields support from/to filtering.
-* Changed: Evaluate removes empty items from lists.
+* Changed: <txp:evaluate /> removes empty items from lists.
 * Changed: Scroll to top on list panels during navigation.
 * Changed: Random generator supports random_bytes and doesn't throw errors.
 * Changed: Improved performance of syndication feed handling for sections.
@@ -22,11 +22,15 @@ Changes in 4.8.0
 * Added: Support for PHP 7.4.
 * Added: <txp:if_request /> tag for checking server, URL, POST and cookie
   variables.
+* Added: <txp:pages /> tag for enhanced pagination schemes.
 * Added: 'item' attribute to <txp:yield /> tag.
 * Added: 'title' attribute to image tags.
 * Added: 'class' attribute to comment form tags.
 * Added: 'match' and 'separator' attributes to <txp:if_variable /> tag.
-* Added: 'pg' and 'total' attributes to <txp:newer /> / <txp:older /> tags.
+* Added: 'month' and 'time' attributes to <txp:file_download_list /> and
+  <txp:linklist> tags.
+* Added: 'pg', 'total' and 'limit' attributes to <txp:newer /> and
+  <txp:older /> tags.
 * Added: Support for id ranges in some tags and admin fields.
 * Added: Support for HTTP status 451 (Unavailable For Legal Reasons).
 * Added: Support for native PHP password hashing.
@@ -38,7 +42,8 @@ Changes in 4.8.0
 * Added: Links have an editable publish time and date.
 * Added: Category searching to a specified depth.
 * Added: Custom field aliases and URL filters via valueless attributes.
-* Added: Global 'evaluate', 'replace' and 'yield' attributes.
+* Added: Global 'evaluate', 'replace' and 'yield' attributes. Evaluate can
+  execute contained content in arbitrary order.
 * Added: Ability to trim lists when using valueless 'trim' attribute.
 * Added: Link to phpinfo() in Diagnostics panel.
 * Added: Configuration file generated during setup can be downloaded.
@@ -50,6 +55,8 @@ Changes in 4.8.0
 * Added: Hive and Classic admin themes now support 3 column layouts.
 * Added: Option to disable auto-expanding text areas in Hive admin themes via
   config.php file. See Hive theme's README.txt file for instructions.
+* Added: Warning to admin panels if JavaScript is unavailable.
+* Added: Support for SSL MySQL connections in config.php.
 * Removed: Obsolete 'No widowed words' preference setting. If this feature is
   needed it can be implemented directly with <txp:title /> tag.
 * Removed: Some deprecated functions from long ago.
@@ -64,9 +71,12 @@ Changes in 4.8.0
 * Fixed: Undefined variable warnings thrown via compact().
 * Fixed: Password handling when using MySQL 8+.
 * Fixed: nbsp on French opening quote broke Textile in some cases.
+* Fixed: Incorrect acronym tag in welcome article.
 * Accessibility: Improved indication of required form fields.
 * Accessibility: Honour 'prefers-reduced-motion' in official themes.
 * Accessibility: Target WCAG 2.0 AAA contrast levels in official themes.
+* Accessibility: Improved ARIA experience.
+* Accessibility: Improved keyboard-only access experience.
 * Developer: Plugins can be uploaded with .php and .zip extensions.
 * Developer: Upload order and file totals sent when batch uploading files.
 * Developer: Some txplib_misc.php functions moved to txplib_admin.php.
@@ -75,6 +85,7 @@ Changes in 4.8.0
 * Developer: Title accessible to plugins in Atom/RSS.
 * Developer: Merge headers on demand.
 * Developer: Tags can be registered with custom attributes/parameters.
+* Developer: Multiple forms can be fetched at once.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
 * Developer: Please register plugin tags or they will not work in future.
 * Performance optimizations via cacheing and preloading frequent content.
@@ -82,7 +93,7 @@ Changes in 4.8.0
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
 * PrismJS 1.19.0.
-* jQuery File Upload 10.7.0.
+* jQuery File Upload 10.8.0.
 
 Changes in 4.7.3
 
