@@ -55,19 +55,19 @@ The development version can be obtained from the [Textpattern repository on GitH
 
 ### Anticipated changes to future system requirements
 
-System requirements for the development version may differ from the production release [system requirements](https://textpattern.com/system-requirements).
+As a development version approaches release, minimum and recommended system requirements are confirmed and the production release system requirements is updated accordingly.
 
-As a development version approaches release, minimum and recommended system requirements are confirmed and the production release [system requirements](https://textpattern.com/system-requirements) is updated accordingly.
+The following table outlines anticipated forthcoming changes to system requirements. It takes into account vendor support, security considerations, overall performance and other factors. Note that minimum and/or recommended versions listed may change multiple times during the development process.
 
-The following table outlines anticipated forthcoming changes to system requirements for future releases. It takes into account vendor support, security considerations, overall performance and other factors.
+#### Textpattern development versions
 
-Note that minimum and/or recommended versions listed may change multiple times during the development process.
+We are targetting Textpattern 4.8.1 as the next patch release. Current [system requirements (https://textpattern.com/system-requirements) apply.
 
-#### Textpattern development version
+We are targetting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated system requirements.
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.5 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3 or 7.4) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3 or 7.4) |
 | MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | 1.10 | mainline (1.17) or stable (1.16) |
