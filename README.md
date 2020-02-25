@@ -51,7 +51,7 @@ The [Textpattern support forum](https://forum.textpattern.com) is home to a frie
 
 ## Development
 
-The development version can be obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern). Note that development versions are works-in-progress and not recommended for use on live production servers.
+The development snapshot can be obtained from the [Textpattern repository on GitHub](https://github.com/textpattern/textpattern).
 
 ### Anticipated changes to future system requirements
 
@@ -74,11 +74,11 @@ We are targetting Textpattern 4.9 as the next minor release. Refer to the follow
 
 ## Contributing
 
-Do you want to help with the development of Textpattern CMS? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
+Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
 
 ## GitHub topic tags
 
-If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can build a network of discoverable resources:
+If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can expand the network of discoverable resources:
 
 * [`textpattern`](https://github.com/topics/textpattern)
 * [`textpattern-plugin`](https://github.com/topics/textpattern-plugin)
@@ -88,7 +88,7 @@ If you use GitHub for Textpattern-related development please consider adding som
 
 ## Additional development tools
 
-Various components used within Textpattern CMS (such as the bundled themes and language translations) are maintained in standalone repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
+Various components used within Textpattern (such as the bundled themes and language translations) are maintained in standalone repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
 
 You can install Node.js using the [installer](https://nodejs.org/en/download/) or [package manager](https://nodejs.org/en/download/package-manager/).
 
