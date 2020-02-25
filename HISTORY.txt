@@ -27,6 +27,8 @@ Changes in 4.8.0
 * Added: 'title' attribute to image tags.
 * Added: 'class' attribute to comment form tags.
 * Added: 'match' and 'separator' attributes to <txp:if_variable /> tag.
+* Added: 'month' and 'time' attributes to <txp:file_download_list /> and
+  <txp:linklist> tags.
 * Added: 'pg', 'total' and 'limit' attributes to <txp:newer /> and
   <txp:older /> tags.
 * Added: Support for id ranges in some tags and admin fields.

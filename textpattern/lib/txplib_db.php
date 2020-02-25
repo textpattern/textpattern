@@ -1581,10 +1581,10 @@ eod;
  * This function can be used when constructing SQL SELECT queries as a
  * replacement for the NOW() function to allow the SQL server to cache the
  * queries. Should only be used when comparing with the Posted or Expired
- * columns from the textpattern (articles) table or the Created column from
- * the txp_file table.
+ * columns from the textpattern (articles) table, the Created column from
+ * the txp_file table or the Date column from the txp_link table.
  *
- * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
+ * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created', 'date')
  * @param  bool   $update Force update
  * @return string SQL query string partial
  */
@@ -1594,7 +1594,7 @@ function now($type, $update = false)
     static $nows = array();
     static $time = null;
 
-    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created'))) {
+    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created', 'date'))) {
         return false;
     }
 
@@ -1609,7 +1609,7 @@ function now($type, $update = false)
         $now = get_pref($pref, $time - 1);
 
         if ($time > $now or $update) {
-            $table = ($type === 'created') ? 'txp_file' : 'textpattern';
+            $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
             $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;
