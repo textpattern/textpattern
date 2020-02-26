@@ -61,9 +61,9 @@ The following table outlines anticipated forthcoming changes to system requireme
 
 #### Textpattern development versions
 
-We are targetting Textpattern 4.8.1 as the next patch release. Current [system requirements (https://textpattern.com/system-requirements) apply.
+We are targeting Textpattern 4.8.1 as the next patch release. Current [system requirements (https://textpattern.com/system-requirements) apply.
 
-We are targetting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements.
+We are targeting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements.
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
