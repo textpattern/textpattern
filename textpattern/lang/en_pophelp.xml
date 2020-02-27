@@ -869,6 +869,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="site_slogan" title="Site slogan"><![CDATA[
 <h2>Site slogan</h2>
 <p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
+<p><strong>Note:</strong> The site slogan is optional, but may be required for a valid RSS or Atom feed.</p>
         ]]></item>
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>

@@ -870,6 +870,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>
 <p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
+<p><strong>Note:</strong> The site slogan is optional, but may be required for a valid RSS or Atom feed.</p>
         ]]></item>
         <item id="siteurl" title="Site URL"><![CDATA[
 <h2>Site URL</h2>
