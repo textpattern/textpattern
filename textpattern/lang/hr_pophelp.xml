@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="hr">
+    <group id="admin" title="">
+        <item id="about_privileges" title=""><![CDATA[]]></item>
+        <item id="create_author" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="article" title="">
+        <item id="article_image" title="Slika unosa"><![CDATA[]]></item>
+        <item id="body" title="Tijelo"><![CDATA[]]></item>
+        <item id="description" title="Opis"><![CDATA[]]></item>
+        <item id="excerpt" title="Sažetak"><![CDATA[]]></item>
+        <item id="expire_date" title=""><![CDATA[]]></item>
+        <item id="keywords" title="Ključne riječi"><![CDATA[]]></item>
+        <item id="override_form" title="Zanemari formu"><![CDATA[]]></item>
+        <item id="publish_date" title="Datum objave"><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="title" title="Naslov"><![CDATA[]]></item>
+        <item id="url_title" title="Naslov samo za-URL"><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="">
+        <item id="article_category" title=""><![CDATA[]]></item>
+        <item id="category_description" title="Opis"><![CDATA[]]></item>
+        <item id="file_category" title="Datoteke"><![CDATA[]]></item>
+        <item id="image_category" title="Slike"><![CDATA[]]></item>
+        <item id="link_category" title="Linkovi"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title=""><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Textpattern ažuriranje"><![CDATA[<h2>Textpattern ažuriranje</h2>
+<p>Dostupna je nova verzija Textpatterna. Da bi iskoristio najnovije mogućnosti i siguronosne postavke preporučamo ti ažuriranje.</p>
+<p>Iako mi težimo da ažuriranje prođe glatko i bezbolno, ipak napominjemo:</p>
+<ul>
+    <li>Ako se trenutna verzija razlikuje samo u zadnjoj znamenki, nadogradnja će vjerojatno biti kompatibilna sa starim dodacima i temama.</li>
+    <li>Ako se trenutna verzija razlikuje u zadnje dvije znamenke, ažuriranjem će se tražiti i nadogradnja nekih dodataka i/ili tema, premda će oni vjerojatno i dalje ograničeno raditi.</li>
+    <li>Ako se trenutna verzija razlikuje u prvoj znamenki, ažuriranjem će se tražiti i nadogradnja većine dodataka i tema. Ako stvarno puno koristiš određeni dodatak ili temu, provjeri s autorom ili  članovima zajednice prije početka nadogradnje.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Dostupna je prijevremena verzija Textpatterna"><![CDATA[
+<h2>Dostupna je prijevremena verzija Textpatterna</h2>
+<p>Dostupna je nova prijevremena verzija Textpatterna. Tražimo aktivne volontere koji bi testirali ovu verziju kako bi konačnu verziju učinili što boljom. Nastojimo da iskustvo nadogradnje bude besprijekorno i bez muke, čak i za beta verzije. </p>
+<p> Ako odlučiš sudjelovati, imaj na umu:</p>
+<ul>
+    <li>Ne koristi ovo beta izdanje na produkciji osim ako nemaš sigurnosnu kopiju kako datoteka tako i web lokacije, te njihove baze podataka i ako ih ne znaš koristiti.</li>
+    <li>Molimo te <a href="https://github.com/textpattern/textpattern/issues">prijavi sve probleme</a> navodeći beta verziju koju koristiš. Možda će biti potrebne naredne beta verzije prije stabilne verzije, ovisno o prijavljenim problemima.</li>
+    <li>Ako implementiraš ovu beta verziju, pobrini se da je ažuriraš na konačnu verziju kad ona izađe.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Putanje mapa privremenog međuspremnika i međuspremnika dodataka ne bi se trebale podudarati"><![CDATA[
+<h2>Putanja privremenog međuspremnika i međuspremnika dodataka ne bi se trebali podudarati</h2>
+<p>Dodaci trebaju biti u vlastitoj mapi i ne smiju dijeliti mapu s privremenim datotekama. To predstavlja potencijalni sigurnosni rizik i može negativno utjecati na vašu web lokaciju ako se privremena mapa ne isprazni. Provjerite je li putanja privremene mape različita od putanje međuspremnika dodataka.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Poslužitelj za ažuriranje je nedostupan"><![CDATA[
+<h2>Poslužitelj za ažuriranje je nedostupan</h2>
+<p>Pristup ažuriranju nije uspio, često se to dešava zbog zagušenja mreže ili prekida veze. Ova se situacija obično rješava u roku od sat-dva pa pokušajte ponovno kasnije.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Tvojoj PHP instalaciji nedostaje mail () funkcija"><![CDATA[<h2>Tvojoj PHP instalaciji nedostaje mail () funkcija</h2>
+<p>PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>funkcija je onemogućena. Stoga Textpattern ne može slati elektroničku poštu, a neke funkcionalnosti neće biti dostupne. Npr. obavijesti elektroničkom poštom za nove komentare neće se slati, a novi korisnici neće primati elektroničku poštu dobrodošlice. Međutim, korisnici se i dalje mogu dodavati.</p>
+]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Zamijeni datoteku"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Datum objave"><![CDATA[]]></item>
+        <item id="upload" title="Upload datoteku"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title="Napravi thumbnail"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Zamijeni sliku"><![CDATA[]]></item>
+        <item id="upload_image" title="Postavi sliku"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Postavi thumbnail"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title="Opis"><![CDATA[]]></item>
+        <item id="link_sort" title="Vrijednost sortiranja"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title="Instaliraj plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title="Koristi admin-side plugine?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Napredne opcije"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Dozvoli PHP u unosima?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Dozvoli zanemarivanje forme?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Dozvoli PHP u stranicama?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Arhiva format datuma"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Unosi koriste sažetak?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Dodaj naslov permalinkovima?"><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Novi komentar znači; site osvježen?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Prikaži komentare kao numeriranu listu?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Automatski dodaj komentare unosima?"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Format datuma za komentare"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Default pozivnica"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Zaključano nakon"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Zabrani slike korisnika?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Mod komentara"><![CDATA[]]></item>
+        <item id="comments_moderate" title="Nadzor komentara?"><![CDATA[]]></item>
+        <item id="comments_on_default" title="Uključeno po default?"><![CDATA[]]></item>
+        <item id="comments_require_email" title="Traži posjetiteljev email?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Traži posjetiteljevo ime?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Šalji komentare autoru?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Dozvoli više Textile markupa?"><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title="Posebna polja"><![CDATA[]]></item>
+        <item id="dateformat" title="Format datuma"><![CDATA[]]></item>
+        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Maksimalna veličina datoteka (u byte-ima)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Vremenska zona"><![CDATA[]]></item>
+        <item id="img_dir" title="Direktoriji slika"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Uključi email kod Atom feeds-a?"><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title="Logiranje"><![CDATA[]]></item>
+        <item id="max_url_len" title="Maximum URL, dužina (broj karaktera)"><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title="Nikad ne prikazuj email adrese?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Upotrijebi ISO-8859-1 encoding kod poslanih emailova (default je UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Putanja direktorija do Plugin cache"><![CDATA[]]></item>
+        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title="Koliko unosa bi trebalo biti uključeno u feedove?"><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Prikaži broj komentara kod feed-ova?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Slogan site-a"><![CDATA[]]></item>
+        <item id="sitename" title="Ime site-a"><![CDATA[]]></item>
+        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="skin_dir" title=""><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindiciraj samo sažetak unosa?"><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title="Prihvati komentare?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Koristi email za konstrukciju feed id-a (default je site URL)?"><![CDATA[]]></item>
+        <item id="use_plugins" title="Koristi plugine?"><![CDATA[]]></item>
+        <item id="use_textile" title="Koristi Textile?"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title="Uvod"><![CDATA[]]></item>
+        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_description" title="Opis"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title=""><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title="Koristi stil"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Koristi stranicu"><![CDATA[]]></item>
+        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title="Prefiks tablice"><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title=""><![CDATA[]]></item>
+        <item id="skin_author_uri" title=""><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title=""><![CDATA[]]></item>
+        <item id="skin_import" title=""><![CDATA[]]></item>
+        <item id="skin_name" title=""><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_version" title=""><![CDATA[]]></item>
+    </group>
+</help>
+</resources>
