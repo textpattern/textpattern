@@ -1844,6 +1844,7 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     if ($set) {
+        $oldtop = $top;
         $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
         $oldshown = $shown;
         $shown = array();
@@ -1852,6 +1853,7 @@ function txp_pager($atts, $thing = null, $newer = null)
             $thing = parse($thing);
             $numPages = $oldPages;
             $pg = $oldpg;
+            $top = $oldtop;
             $shown = $oldshown;
         }
 
@@ -1881,9 +1883,8 @@ function txp_pager($atts, $thing = null, $newer = null)
             $pages = $newer === null ? range(-max($range, 2*$range + $thepg - $numPages), max($range, 2*$range - $thepg + 1)) :
                 range($newer ? max($range, 2*$range + $thepg - $numPages) : 1, $newer ? 1 : max($range, 2*$range - $thepg + 1));
         } else {
-            $left = $newer === null ? range(1 - $thepg, max(-$range - $thepg, -2*$range - $numPages)) : range(-1, -max(-$range, -2*$range + $thepg - $numPages));
-            $right = $newer === null ? range($numPages - $thepg - max(-$range, -2*$range - $thepg - 1), $numPages - $thepg) : range(-max(-$range, -2*$range - $thepg + 1), -1);
-            $pages = $newer === null ? array_merge($left, $right) : ($newer ? $left : $right);
+            $pages = $newer !== null ? ($newer ? range(-1, -max(-$range, -2*$range + $thepg - $numPages)) : range(-max(-$range, -2*$range - $thepg + 1), -1)) :
+                range(min(max(1 - $range - $thepg, 1 - 2*$range - $numPages), 0), max(0, min($numPages + $range - $thepg, $numPages + 2*$range - 1)));
         }
     } elseif (is_bool($shift)) {
         $pages = $newer === null ? ($shift ? range(1 - $thepg, $numPages - $thepg) : array(0)) : array($shift ? true : 1);
