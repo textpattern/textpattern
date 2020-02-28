@@ -126,15 +126,15 @@ function sec_section_list($message = '')
                 'label'  => gTxt('title'),
             ),
             'skin' => array(
-                'column' => 'txp_section.skin',
+                'column' => array('txp_section.skin', 'txp_section.dev_skin'),
                 'label'  => gTxt('skin'),
             ),
             'page' => array(
-                'column' => 'txp_section.page',
+                'column' => array('txp_section.page', 'txp_section.dev_page'),
                 'label'  => gTxt('page'),
             ),
             'css' => array(
-                'column' => 'txp_section.css',
+                'column' => array('txp_section.css', 'txp_section.dev_css'),
                 'label'  => gTxt('css'),
             ),
             'description' => array(
@@ -231,7 +231,7 @@ function sec_section_list($message = '')
 
         if ($rs) {
             $dev_set = false;
-            $dev_preview = has_privs('skin.edit');
+            $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
             $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
@@ -310,33 +310,38 @@ function sec_section_list($message = '')
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
 
+                $in_dev = false;
+
                 foreach (array('page', 'css') as $item) {
                     $all_items = $item === 'page' ? $all_pages : $all_styles;
                     $sec_item = ${"sec_$item"};
                     $sec_dev_item = ${"sec_dev_$item"};
 
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
-                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $missing) ? 'disabled' : false;
+                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
+                    $in_dev = $in_dev || $replaced;
 
-                    ${"sec_$item"} = (!$replaced ? '' :
+                    ${"sec_$item"} = ($sec_item ? tag(href(txpspecialchars($sec_item), array(
+                        'event' => $item,
+                        'name'  => $sec_item,
+                        'skin'  => $sec_skin,
+                    ), array('title' => gTxt('edit'))
+                    ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    (!$replaced ? '' :
+                        n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
                         ), array('title' => gTxt('edit'))).
-                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '').
-                        n.'<hr class="secondary" />'.n
-                    ).href(txpspecialchars($sec_item), array(
-                            'event' => $item,
-                            'name'  => $sec_item,
-                            'skin'  => $sec_skin,
-                        ), array('title' => gTxt('edit'))
+                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
                     );
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
                 $dev_set = $dev_set || $replaced;
+                $in_dev = $in_dev || $replaced;
 
                 $contentBlock .= tr(
                     td(
@@ -350,7 +355,8 @@ function sec_section_list($message = '')
                             sp.span('&#124;', array('role' => 'separator')).
                             sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
-                        ), '', array(
+                        ).
+                        ($in_dev ? n.'<hr class="secondary" />'.n.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')) : ''), '', array(
                             'class' => 'txp-list-col-name',
                             'scope' => 'row',
                         )
@@ -359,8 +365,8 @@ function sec_section_list($message = '')
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
                     ).
                     td(
-                        ($replaced ? $sec_dev_skin.sp.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')).n.'<hr class="secondary" />'.n : '').
-                        $sec_skin, '', 'txp-list-col-skin'
+                        tag($sec_skin, $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '').($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        '', 'txp-list-col-skin'
                     ).
                     td(
                         $sec_page, '', 'txp-list-col-page'
@@ -369,7 +375,7 @@ function sec_section_list($message = '')
                         $sec_css, '', 'txp-list-col-style'
                     ).
                     td(
-                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="disabled">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
                     ).
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
@@ -482,8 +488,8 @@ function section_edit()
             );
     }
 
-    $pageSelect = selectInput('section_page', array(), '', '', '', 'section_page');
-    $styleSelect = selectInput('css', array(), '', '', '', 'section_css');
+    $pageSelect = selectInput(array('name' => 'section_page', 'required' => false), array(), '', '', '', 'section_page');
+    $styleSelect = selectInput(array('name' => 'css', 'required' => false), array(), '', '', '', 'section_css');
     $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
     $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
@@ -862,16 +868,18 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
         'css', '', array('class' => 'multi-option multi-step'), ''
     );
 
+    $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
+
     $methods = array(
         'changepagestyle' => array(
             'label' => gTxt('change_page_style'),
-            'html'  => (!has_privs('skin.edit') ?
+            'html'  => (!$dev_preview ?
                 hInput('live_theme', 1) :
                 inputLabel('dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
                 ) . inputLabel('live_theme',
-                    checkbox2('live_theme', $step != 'section_set_theme', 0, 'live_theme'),
+                    checkbox2('live_theme', 0, 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
             ) . $themeSelect . $pageSelect . $styleSelect
@@ -1011,14 +1019,14 @@ function section_multi_edit()
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
-            $skinset[] = "$setskin = '".doSlash($skin)."' AND ".
+            $skinset[] = "$setskin = '".doSlash($skin)."' AND ($setpage = '' OR ".
             (empty($all_pages[$skin]) ?
                 '0' :
-                "$setpage IN (".join(',', quote_list($all_pages[$skin])).")"
-            )." AND ".
+                "$setpage IN (".join(',', quote_list($all_pages[$skin]))."))"
+            )." AND ($setcss = '' OR ".
             (empty($all_styles[$skin]) ?
                 '0' :
-                "$setcss IN (".join(',', quote_list($all_styles[$skin])).")"
+                "$setcss IN (".join(',', quote_list($all_styles[$skin]))."))"
             );
         }
 

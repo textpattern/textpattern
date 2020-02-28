@@ -34,24 +34,31 @@
  * @return string An SQL qualifier for a query's 'WHERE' part
  */
 
-function filterFrontPage()
+function filterFrontPage($field = 'Section', $column = 'on_frontpage')
 {
-    static $filterFrontPage;
+    static $filterFrontPage = array();
     global $txp_sections;
 
-    if (isset($filterFrontPage)) {
-        return $filterFrontPage;
+    is_array($column) or $column = do_list_unique($column);
+    $key = $field.'.'.implode('.', $column);
+
+    if (isset($filterFrontPage[$key])) {
+        return $filterFrontPage[$key];
     }
 
-    $filterFrontPage = false;
+    $filterFrontPage[$key] = false;
+    $field = doSlash($field);
+    $rs = array();
 
-    $rs = array_filter(array_column($txp_sections, 'on_frontpage', 'name'));
+    foreach($column as $col) {
+        $rs += array_filter(array_column($txp_sections, $col, 'name'));
+    }
 
     if ($rs) {
-        $filterFrontPage = " AND Section IN(".join(',', quote_list(array_keys($rs))).")";
+        $filterFrontPage[$key] = " AND $field IN(".join(',', quote_list(array_keys($rs))).")";
     }
 
-    return $filterFrontPage;
+    return $filterFrontPage[$key];
 }
 
 /**
@@ -379,25 +386,40 @@ function parse($thing, $condition = true, $not = true)
     list($first, $last) = $txp_else[$hash];
 
     if ($not && !empty($txp_atts['evaluate'])) {
-        $test = trim($txp_atts['evaluate']);
-        $isempty = !empty($test);
-        $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-        $nr = $first - 2;
+        $isempty = true;
+        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
         $out = array($tag[0]);
+        $tags = array();
+        $nr = $first - 2;
 
-        for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];
+            $out[] = null;
 
-            if ($test && !in_array($txp_tag[1], $test)) {
-                $out[] = null;
-                $tags[] = $n;
-            } else {
+            if (!$test) {
                 $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $out[] = $nextag;
                 $isempty &= trim($nextag) === '';
+                $out[$n] = $nextag;
+            } elseif (isset($test[($n+1)/2])) {
+                $test[($n+1)/2][] = $n;
+            } elseif (isset($test[$txp_tag[1]])) {
+                $test[$txp_tag[1]][] = $n;
+            } else {
+                $tags[] = $n;
             }
 
             $out[] = $tag[++$n];
+        }
+
+        if ($test) {
+            foreach ($test as $t) {
+                foreach ($t as $n){
+                    $txp_tag = $tag[$n];
+                    $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                    $out[$n] = $nextag;
+                    $isempty &= trim($nextag) === '';
+                }
+            }
         }
 
         if ($isempty == empty($txp_atts['not'])) {
@@ -432,6 +454,43 @@ function parse($thing, $condition = true, $not = true)
     $txp_tag = !empty($condition);
 
     return $out;
+}
+
+/**
+ * Guesstimate whether a given function name may be a valid tag handler.
+ *
+ * @param   string $tag function name
+ * @return  bool FALSE if the function name is not a valid tag handler
+ * @package TagParser
+ */
+
+function maybe_tag($tag)
+{
+    static $tags = null;
+
+    if ($tags === null) {
+        global $plugins;
+
+        if (empty($plugins)) {
+            $tags = false;
+        } else {
+            $match = array();
+
+            foreach($plugins as $p) {
+                $pfx = strpos($p, '_') === false ? $p : strtok($p, '_').'_';
+                $match[$pfx] = preg_quote($pfx, '/');
+            }
+
+            $match = '/^('.implode('|', $match).')/i';
+            $tags = get_defined_functions();
+            $tags = array_filter($tags['user'], function($f) use ($match) {
+                return preg_match($match, $f);
+            });
+            $tags = array_flip($tags);
+        }
+    }
+
+    return isset($tags[$tag]);
 }
 
 /**
@@ -496,8 +555,13 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($out === false) {
-        trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_WARNING);
-        $out = '';
+        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
+            trigger_error($tag.' '.gTxt('unregistered_tag'), E_USER_NOTICE);
+            $out = $registry->register($tag)->process($tag, $split, $thing);
+        } else {
+            trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
+            $out = '';
+        }
     }
 
     if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
@@ -728,6 +792,20 @@ function filterAtts($atts = null, $iscustom = null)
         return $out = $atts;
     }
 
+    $exclude = isset($atts['exclude']) ? $atts['exclude'] : '';
+    unset($atts['exclude']);
+
+    if ($exclude && $exclude !== true) {
+        $exclude = array_map('strtolower', do_list_unique($exclude));
+        $excluded = array_filter($exclude, 'is_numeric');
+        empty($excluded) or $exclude = array_diff($exclude, $excluded);
+    } else {
+        $exclude or $exclude = array();
+        $excluded = array();
+    }
+
+    $exclude === true or $exclude = array_fill_keys($exclude, true);
+
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
@@ -746,23 +824,31 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
+        'searchall'     => !$iscustom && !empty($pretext['q']),
     );
 
     if ($iscustom) {
-        $extralAtts += array(
+        $customlAtts = array(
             'category'  => '',
             'section'   => '',
             'author'    => '',
             'month'     => '',
             'expired'   => get_pref('publish_expired_articles'),
-        );
+        ) + $customlAtts;
     } else {
         $extralAtts += array(
             'listform'     => '',
             'searchform'   => '',
-            'searchall'    => 1,
             'searchsticky' => 0,
         );
+    }
+
+    if ($exclude && is_array($exclude)) {
+        foreach($exclude as $cField => $val) {
+            if (array_key_exists($cField, $customlAtts) && !isset($atts[$cField])) {
+                $atts[$cField] = $val;
+            }
+        }
     }
 
     // Getting attributes.
@@ -775,7 +861,6 @@ function filterAtts($atts = null, $iscustom = null)
         'match'         => 'Category1,Category2',
         'depth'         => 0,
         'id'            => '',
-        'exclude'       => '',
         'excerpted'     => ''
     ) + $extralAtts + $customlAtts, $atts);
 
@@ -796,14 +881,6 @@ function filterAtts($atts = null, $iscustom = null)
 
     extract($theAtts);
 
-    if ($exclude && $exclude !== true) {
-        $exclude = array_map('strtolower', do_list_unique($exclude));
-        $excluded = array_filter($exclude, 'is_numeric');
-    } else {
-        $exclude or $exclude = array();
-        $excluded = array();
-    }
-
     // Treat sticky articles differently wrt search filtering, etc.
     $issticky = in_array(strtolower($status), array('sticky', STATUS_STICKY));
 
@@ -815,53 +892,68 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Categories
     $match = parse_qs($match);
-    $category !== true or $category = parse('<txp:category />', true, false);
-    $category  = do_list_unique($category);
-    $categories = array();
+    $categories = $category === true ? false : do_list_unique($category);
+    $catquery = array();
+    $operator = 'OR';
 
-    if ($category && (!$depth || $category = getTree($category, 'article', '1', 'txp_category', $depth))) {
-        $category  = join("','", doSlash($category));
+    if ($categories && (!$depth || $categories = getTree($categories, 'article', '1', 'txp_category', $depth))) {
+        $categories  = join("','", doSlash($categories));
+    }
 
-        if (isset($match['category1'])) {
-            $categories[] = "Category1 IN ('$category')";
-        }
+    for($i = 1; $i <= 2; $i++) {
+        $not = isset($exclude["category{$i}"]) ? '!' : '';
 
-        if (isset($match['category2'])) {
-            $categories[] = "Category2 IN ('$category')";
+        if (isset($match['category'.$i])) {
+            if ($match['category'.$i] === false) {
+                if ($categories) {
+                    $catquery[] = "$not(Category{$i} IN ('$categories'))";
+                } elseif($category === true || $not) {
+                    $catquery[] = "$not(Category{$i} != '')";
+                }
+            } elseif($val = gps($match['category'.$i])) {
+                $catquery[] = "$not(Category{$i} = '".doSlash($val)."')";
+                $operator = 'AND';
+            }
+        } elseif($not) {
+            $catquery[] = "(Category{$i} = '')";
         }
     }
 
-    $not = $iscustom && ($exclude === true || in_array('category', $exclude)) ? '!' : '';
-    $categories = join(" OR ", $categories);
-    $category  = !$categories  ? '' : " AND $not($categories)";
+    $not = $iscustom && ($exclude === true || isset($exclude['category'])) ? '!' : '';
+    $catquery = join(" $operator ", $catquery);
+    $category  = !$catquery  ? '' : " AND $not($catquery)";
 
-    // Section
+    // ID
+    $not = $exclude === true || isset($exclude['id']) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
+    $getid = $ids && !$not;
+
+        // Section
     // searchall=0 can be used to show search results for the current
     // section only.
     if ($q && $searchall && !$issticky) {
         $section = '';
     }
 
-    $not = $iscustom && ($exclude === true || in_array('section', $exclude)) ? 'NOT' : '';
+    $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
     $section !== true or $section = parse('<txp:section />', true, false);
-    $section   = !$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $getid = $getid || $section && !$not;
+    $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
+        ($getid || $searchall? '' : filterFrontPage('Section', 'page'));
+
 
     // Author
-    $not = $iscustom && ($exclude === true || in_array('author', $exclude)) ? 'NOT' : '';
+    $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
     $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
-
-    // ID
-    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
-    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
-        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = $iscustom && ($month || $time !== null) && ($exclude === true || in_array('month', $exclude));
+        $not = $iscustom && ($month || $time !== null) && ($exclude === true || isset($exclude['month']));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {

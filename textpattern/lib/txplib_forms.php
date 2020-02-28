@@ -166,9 +166,10 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
     }
 
-    $name_m = $name.($multiple ? '[]' : '');
+    $name_m = (is_array($name) ? $name['name'] : $name).($multiple ? '[]' : '');
+
     $atts = join_atts((is_array($name) ? $name : array(
-        'name' => $name_m
+        'name' => $name.($multiple ? '[]' : '')
     )) + array(
         'id'       => $select_id,
         'disabled' => (bool) $disabled,

@@ -114,7 +114,7 @@
 <p>Klíčová slova musejí být pouze samostatná slova, oddělená čárkami.</p>]]></item>
         <item id="override_form" title="Přebít formu"><![CDATA[<h2>Přebít formu</h2>
 <p>V případě, že chceš pro určitý článek použít jinou formu než tu, která je určena jako výchozí (například můžeš chtít zobrazit pouze anotaci <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> tam, kde je normálně vypsán článek pomocí tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a>) - pak ji vyber zde.</p>]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Datum vydání"><![CDATA[
 <h2>Datum vydání</h2>
 <p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo na libovolnou dobu v minulosti nebo v budoucnosti. </p>
 <p>Políčka jsou určená pro následující informace:</p>
@@ -323,22 +323,11 @@
 <h2>Následující funkce PHP: […] jsou na serveru vypnuty</h2>
 <p>To znamená, že tvoje hostingová společnost nebo správce serveru zakázal jednu nebo více PHP funkcí, z nichž některé mohou mít vliv na chod Textpatternu.</p>
 <p>Další informace najdeš v <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentaci Textpattern <span class = "ui-icon ui-icon-extlink"> (otevře externí odkaz v novém okně)</span></a>.</p>        ]]></item>
-        <item id="textpattern_version_update" title="Aktualizace verze Textpattern CMS"><![CDATA[
-<h2>Aktualizace Textpattern CMS</h2>
-<p>K dispozici je novější verze Textpattern CMS. Chceš-li využít nejnovějších funkcí a zvýšit bezpečnost, je doporučeno provést upgrade.</p>
-<p>Ačkoliv se snažíme, aby upgrade byl bezproblémový, přečti si následující:</p>
-<ul>
-    <li>Jestliže se pouze poslední číslice nové verze liší od tvojí současné verze, je pravděpodobné, že bude zpětně kompatibilní s pluginy a tématy.</li>
-    <li>V případě, že se liší poslední dvě číslice od tvojí současné verze, upgrade může vyžadovat aktualizace některých pluginů, nebo témat, i když vše bude pravděpodobně nadále v omezené míře fungovat.</li>
-    <li>Pokud je odlišná první číslice nové verze od tvojí současné verze, upgrade bude pravděpodobně vyžadovat aktualizace většiny pluginů a témat. Pokud je funkce webu závislá na konkrétním pluginu nebo tématu, obrať se před zahájením upgradu na autora či komunitu.</li>
-</ul>
-<p>Pokud se zobrazí zpráva “Vyskytl se problém při pokusu připojit se k serveru RPC”, znamená to, že nemohla být ověřena existence nové verze, nebo že server může být mimo provoz. Aktualizace jsou kontrolovány každých 24 hodin, takže je pravděpodobné, že při příští návštěvě panelu Diagnostika bude všechno v pořádku.</p>        ]]></item>
-        <item id="tmp_plugin_paths_match" title="Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné"><![CDATA[
-<h2>Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné</h2>
-<p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Je to potenciální bezpečnostní riziko, které může tvé stránky nepříznivě ovlivnit. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>        ]]></item>
-        <item id="warn_mail_unavailable" title="V instalaci PHP chybí funkce mail()"><![CDATA[
-<h2>V instalaci PHP chybí funkce mail()</h2>
-<p>Funkce PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>
+        <item id="textpattern_version_update" title="Aktualizace verze Textpattern CMS"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Panel Soubory">
@@ -348,6 +337,14 @@
         <item id="file_replace" title="Nahradit soubor"><![CDATA[
 <h2>Nahradit soubor</h2>
 <p>Původní soubor bude jednoduše přepsán novým, ale původní jméno souboru zůstane zachováno. Rovněž ostatní informace o souboru, jako je počet stažení, zůstanou zachovány.</p>        ]]></item>
+        <item id="timestamp_file" title="Datum vydání"><![CDATA[
+<h2>Psaní: Datum vydání</h2>
+<p>Čas publikování, nebo uložení poslední úpravy článku. Čas může být zadán jako okamžik, kdy je článek publikován, nebo jako libovolný čas v minulosti, či v budoucnosti. </p>
+<p>Políčka jsou určené pro následující informace:</p>
+<ul>
+    <li>Rok / Měsíc / Den</li>
+    <li>Hodina (24-hodinový formát) : Minuta : Sekunda</li>
+</ul>        ]]></item>
         <item id="upload" title="Nahrát soubor"><![CDATA[
 <h2>Nahrát soubor</h2>
 <p>Tento formulář slouží k nahrávání souborů na server.</p>
@@ -411,6 +408,15 @@ např.: #@language cs-cz</p>
         <item id="link_url" title="URL"><![CDATA[
 <h2>URL</h2>
 <p>Url adresa odkazu. Jestliže odkaz míří na jiný web, musí být na jejím začátku <code>http://</code> nebo <code>https://</code>.</p>        ]]></item>
+        <item id="timestamp_link" title="Datum vydání"><![CDATA[
+<h2>Datum zveřejnění</h2>
+<p>Čas, kdy je odkaz publikován nebo naposledy revidován. Čas může být nastaven na okamžik, kdy je položka publikována, nebo na libovolný čas v minulosti nebo budoucnosti.</p>
+<p>Políčka odpovídají těmto informacím:</p>
+<ul>
+    <li>Rok / Měsíc / den</li>
+    <li>Hodina (formát 24 hodin) : Minuty: Sekundy</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Přihlašovací panel">
@@ -884,7 +890,7 @@ Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu
         ]]></item>
         <item id="skin_title" title="Název skinu"><![CDATA[
 <h2>Název skinu</h2>
-<p>Výstižný název skinu do seznamu skinů v panelech Textpatternu (vyžadován).</p>
+<p>Výstižný název skinu do seznamu skinů v panelech Textpatternu.</p>
 <p>Název může obsahovat speciální znaky i mezery.</p>        ]]></item>
         <item id="skin_version" title="Verze skinu"><![CDATA[
 <h2>Verze skinu</h2>

@@ -235,7 +235,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = array_merge($pretext, preText($s, $prefs));
+$pretext = preText($s, $prefs) + $pretext;
 
 if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== 'file_download') {
     doArticle(array('expired' => 1, 'status' => true, 'time' => 'any'), null, false);
@@ -325,7 +325,9 @@ function preText($s, $prefs)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        $url = chopUrl($req);
+        $url = chopUrl($req, 4);
+
+        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
@@ -346,7 +348,7 @@ function preText($s, $prefs)
     $title = null;
 
     // If messy vars exist, bypass URL parsing.
-    if (!$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
+    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
         extract($url);
 
         // Return clean URL test results for diagnostics.
@@ -403,8 +405,8 @@ function preText($s, $prefs)
                     break;
 
                 default:
-                    for ($n = 0; isset(${'u'.($n+1)}); $n++);
-                    $un = ${'u'.$n};
+                    $n = $out[0];
+                    $un = $out[$n];    
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
@@ -433,6 +435,7 @@ function preText($s, $prefs)
 
                         if (!isset($permlink_guess)) {
                             unset($thisarticle);
+                            $is_404 = true;
                         } else {
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
@@ -445,7 +448,7 @@ function preText($s, $prefs)
                         $permlink_guess = $permlink_modes[$u1];
                     }
 
-                    if (empty($out['id'])) {
+                    if (!$is_404 && empty($out['id'])) {
                         // Then see if the prefs-defined permlink scheme is usable.
                         switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
                             case 'section_id_title':
@@ -611,15 +614,10 @@ function preText($s, $prefs)
         }
 
         if (!empty($out['s']) && $out['s'] !== 'default') {
-            global $thissection;
-
-            if (isset($txp_sections[$out['s']])) {
-                $thissection = array_intersect_key($txp_sections[$out['s']], array('name' => $out['s'], 'title' => null, 'description' => null));
-            } else {
+            if (!isset($txp_sections[$out['s']])) {
                 $out['s'] = '';
+                $is_404 = true;
             }
-
-            $is_404 = $is_404 || empty($out['s']);
         }
     }
 
@@ -656,19 +654,24 @@ function preText($s, $prefs)
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
-        $rs = array_intersect_key($txp_sections[$s], array_fill_keys(array('skin', 'page', 'css', 'dev_skin', 'dev_page', 'dev_css'), null));
         $userInfo = is_logged_in();
 
-        if ($rs && $userInfo && has_privs('skin.preview', $userInfo)) {
-            $out['skin'] = empty($rs['dev_skin']) ? $rs['skin'] : $rs['dev_skin'];
-            $out['page'] = empty($rs['dev_page']) ? $rs['page'] : $rs['dev_page'];
-            $out['css'] = empty($rs['dev_css']) ? $rs['css'] : $rs['dev_css'];
-        } else {
-            $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
-            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
+        if ($userInfo && has_privs('skin.preview', $userInfo)) {
+            foreach ($txp_sections as &$rs) {
+                empty($rs['dev_skin']) or $rs['skin'] = $rs['dev_skin'];
+                empty($rs['dev_page']) or $rs['page'] = $rs['dev_page'];
+                empty($rs['dev_css']) or $rs['css'] = $rs['dev_css'];
+            }
+
+            unset($rs);
         }
+
+        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
+        $rs = $txp_sections[$s];
+
+        $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -920,9 +923,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
-        include_once txpath.'/publish/search.php';
-
-        $s_filter = ($searchall ? filterSearch() : '');
+        $s_filter = ($searchall ? filterFrontPage('Section', 'searchable') : '');
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
@@ -1213,12 +1214,12 @@ function validContext($context)
  * @package URL
  */
 
-function chopUrl($req)
+function chopUrl($req, $min = 4)
 {
     $req = strtok($req, '?');
     $req = preg_replace('/index\.php$/i', '', $req);
     $r = array_map('urldecode', explode('/', strtolower($req)));
-    $n = max(4, count($r));
+    $n = isset($min) ? max($min, count($r)) : count($r);
     $o = array('u0' => $req);
 
     for ($i = 1; $i < $n; $i++) {

@@ -99,26 +99,6 @@ function apache_module($m)
 }
 
 /**
- * Verifies temporary directory status.
- *
- * This function verifies that the given temporary directory is writeable.
- *
- * @param  string $dir The directory to check
- * @return bool|null NULL on error, TRUE on success
- */
-
-function test_tempdir($dir)
-{
-    $f = realpath(tempnam($dir, 'txp_'));
-
-    if (is_file($f)) {
-        @unlink($f);
-
-        return true;
-    }
-}
-
-/**
  * Lists all database tables used by the Textpattern core.
  *
  * Returned tables include prefixes.
@@ -221,14 +201,19 @@ function doDiagnostics()
             $lastCheck = checkUpdates();
         }
 
-        if (!empty($lastCheck['msg'])) {
-            $txpver = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
-            $fail['i'][] = array('textpattern_version_update', $lastCheck['msg'], $txpver);
-        }
+        if (isset($lastCheck['response']) && $lastCheck['response'] === false) {
+            // Problem connecting to update server.
+            $fail['i'][] = array('update_server_inaccessible', $lastCheck['msg']);
+        } else {
+            if (!empty($lastCheck['msg'])) {
+                $txpver = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
+                $fail['i'][] = array('textpattern_version_update', $lastCheck['msg'], $txpver);
+            }
 
-        if (!empty($lastCheck['msg2'])) {
-            $txpver = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
-            $fail['i'][] = array('textpattern_version_update_beta', $lastCheck['msg2'], $txpver);
+            if (!empty($lastCheck['msg2'])) {
+                $txpver = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
+                $fail['i'][] = array('textpattern_version_update_beta', $lastCheck['msg2'], $txpver);
+            }
         }
     }
 
@@ -266,6 +251,10 @@ function doDiagnostics()
 
     if (!@is_writable($tempdir)) {
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
+    }
+
+    if (!@is_writable(txpath.DS.'plugins')) {
+        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => txpath.DS.'plugins');
     }
 
     if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {
@@ -500,6 +489,7 @@ function doDiagnostics()
         // language above the fold, and in English in the textarea.
         $diagPack = $txpLang->getPack($lang, $event);
         $diagStrings = array();
+        $showPophelp = count($langs) === 1 || $langCounter > 0;
 
         foreach ($diagPack as $key => $packBlock) {
             $diagStrings[$key] = $packBlock['data'];
@@ -519,12 +509,12 @@ function doDiagnostics()
                     $help = $stringInfo[0];
                     $message = isset($stringInfo[1]) ? $stringInfo[1] : $help;
                     $args = isset($stringInfo[2]) ? $stringInfo[2] : array();
-                    $pfcStrings[$lang][] = graf(nl2br(diag_msg_wrap(gTxt($message, $args), $type)).($langCounter > 0 ? popHelp($help) : ''));
+                    $pfcStrings[$lang][] = graf(nl2br(diag_msg_wrap(gTxt($message, $args), $type)).($showPophelp ? popHelp($help) : ''));
                 }
             }
 
             if ($not_readable) {
-                $pfcStrings[$lang][] = graf(nl2br(join(n, $not_readable).($langCounter > 0 ? popHelp('dir_not_writable') : '')));
+                $pfcStrings[$lang][] = graf(nl2br(join(n, $not_readable).($showPophelp ? popHelp('dir_not_writable') : '')));
             }
         } else {
             $pfcStrings[$lang][] = graf('<span class="ui-icon ui-icon-check"></span>'.sp.gTxt('all_checks_passed'), array('class' => 'success'));
@@ -784,11 +774,12 @@ function checkUpdates()
     $version = get_pref('version');
 
     $lastCheck = array(
-        'when'    => time(),
-        'msg'     => '',
-        'msg2'    => '',
-        'msgval'  => '',
-        'msgval2' => '',
+        'when'     => time(),
+        'msg'      => '',
+        'msg2'     => '',
+        'msgval'   => array(),
+        'msgval2'  => array(),
+        'response' => true,
     );
 
     if (!empty($release)) {
@@ -804,6 +795,7 @@ function checkUpdates()
     } else {
         $lastCheck['msg'] = 'problem_connecting_update_server';
         $lastCheck['msgval'] = array();
+        $lastCheck['response'] = false;
     }
 
     set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');

@@ -125,3 +125,9 @@ $txpcfg['client_flags'] = 0;
  */
 
 // define('admin_custom_js', 'your_custom_javascript.js');
+
+/*
+ * Optional, advanced: use https in generated URLs.
+ */
+
+// define('PROTOCOL', 'https://');

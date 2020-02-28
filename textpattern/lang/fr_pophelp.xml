@@ -126,15 +126,15 @@
 <h2>Module de remplacement</h2>
 <p>Un article peut occasionnellement utiliser un module différent de celui qui lui est associé par défaut – par exemple pour afficher son résumé avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> à la place du corps de l’article avec <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> – et cette option se trouve ici.</p>
         ]]></item>
-        <item id="publish_date"><![CDATA[
+        <item id="publish_date" title="Date de publication"><![CDATA[
 <h2>Date de publication</h2>
-<p>La date à laquelle un article ou un fichier est publié ou révisé le plus récemment. Cette date peut être définie au moment de la publication, ou dans un délais arbitraire du passé ou du futur.</p>
+<p>La date à laquelle un article ou un fichier est publié ou révisé ultérieurement. Cette date peut être définie au moment de la publication ou arbitrairement dans le passé ou le futur.</p>
 <p>Les champs correspondent aux informations suivantes :</p>
 <ul>
 <li>Année / Mois / Jour</li>
 <li>Heures (format 24 heures) : Minutes : Secondes</li>
 </ul>
-<p>Un élément affecté d’un horodatage plus grand que l’instant présent (ex dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
+<p>Un élément affecté d’un horodatage supérieur à l’instant présent (ex. dans le futur) ne sera alors pas affiché ni sur le site, ni dans les flux de syndication RSS/Atom, à moins que le moment choisi n’arrive.</p>
         ]]></item>
         <item id="status" title="Statut"><![CDATA[
 <h2>Statut</h2>
@@ -365,24 +365,29 @@
 <p>L’hôte du site ou l’administrateur serveur a désactivé une ou plusieurs fonction PHP et l’absence de certaines d’entre-elles pourraient affecter le bon fonctionnement de Textpattern.</p>
 <p>Veuillez consulter le document <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Mise à jour de la version de Textpattern CMS"><![CDATA[
-<h2>Mise à jour de la version de Textpattern CMS</h2>
-<p>Il existe une version disponible de Textpattern CMS plus récente. Pour profiter des avantages des dernières fonctionnalités et des correctifs de sécurité, il est recommandé de procéder à une mise à niveau.</p>
-<p>Notez que, si nous-nous efforçons de rendre la mise à niveau aussi transparente et simple que possible :</p>
+        <item id="textpattern_version_update" title="Mise à jour de Textpattern"><![CDATA[<h2>Version de mise à jour de Textpattern</h2>
+<p>Il existe une version plus récente de Textpattern disponible. Pour profiter des avantages des dernières fonctionnalités et de l’amélioration de la sécurité, il est recommandé d’effectuer une mise à jour.</p>
+<p>En dépit de nos efforts afin de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, veuillez considérer ces recommandations :</p>
 <ul>
-   <li>Si seul le dernier chiffre diffère de votre version actuelle, la mise à niveau sera probablement compatible avec les versions antérieures des plugins et des thèmes.</li>
-   <li>Si les deux derniers chiffres diffèrent de votre version actuelle, la mise à niveau peut nécessiter la mise à jour de certains plugins et/ou thèmes, bien que, probablement, tout devrait continuer de fonctionner même avec des capacités limitées.</li>
-   <li>Si c’est le premier chiffre qui diffère de votre version actuelle, la mise à niveau nécessitera probablement la mise à jour des plugins et des thèmes. Si vous comptez beaucoup sur un plugin ou un thème en particulier, veuillez vous renseigner auprès de l’auteur ou des membres de la communauté avant de commencer la mise à niveau.</li>
+    <li>si seul le dernier chiffre diffère de votre version utilisée, la mise à jour est considérée être rétrocompatible avec les plugins et les thèmes ;</li>
+    <li>si les deux derniers chiffres diffèrent de votre version utilisée, la mise à jour nécessitera la mise à niveau de certains plugins et/ou thèmes bien qu'ils continueront probablement à fonctionner mais néanmoins de manière limitée ;</li>
+    <li>si le premier chiffre diffère de votre version utilisée, la mise à jour est fortement recommandée pour la plupart des plugins et des thèmes. Si vos besoins nécessitent l’usage d’un plugin ou une fonctionnalité de thème en particulier, veuillez vous renseigner auprès des auteurs ou des membres de la communauté avant de commencer la mise à niveau.</li>
 </ul>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="Le répertoire temporaire et le répertoire de cache des plugins doivent être différents"><![CDATA[
-<h2>Le répertoire temporaire et le répertoire de cache des plugins doivent être différents</h2>
-<p>Les plugins doivent disposer de leur propre répertoire et ne pas partager le répertoire temporaire. Cela constitue un risque potentiel de sécurité et peut nuire à votre site si le répertoire temporaire est vidé. Veuillez vous assurer que le chemin d’accès du répertoire temporaire est différent de celui du cache des plugins.</p>
+        <item id="textpattern_version_update_beta" title="Pré-version de Textpattern disponible"><![CDATA[<h2>Mise à jour de pré-version de Textpattern</h2>
+<p>Une pré-version plus récente de Textpattern est disponible. Nous recherchons des volontaires afin de tester cette version afin de réaliser la distribution finale officielle la plus stable possible. Nous-nous efforçons de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, même pour les versions bêta.</p>
+<p>Si vous décidez de participer, veuillez considérer ces recommandations :</p>
+<ul>
+    <li>n’utilisez pas cette version bêta sur un site en production sans au préalable disposer d’une sauvegarde à la fois des fichiers du site que de sa base de données et assurez-vous de savoir comment en disposer ;</li>
+    <li>assurez-vous, si vous utilisez cette version bêta, de mettre à niveau vers la version finale dès sa disponibilité.</li>
+</ul>
         ]]></item>
-        <item id="warn_mail_unavailable" title="Votre installation PHP ne dispose pas de la fonction mail()"><![CDATA[
-<h2>Votre installation PHP ne dispose pas de la fonction mail()</h2>
-<p>La fonction PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> est désactivée. Par conséquent, Textpattern ne peut pas envoyer des e-mails et certaines fonctionnalités ne seront pas disponibles. Par exemple, les notifications par courriel de nouveaux commentaires ne seront pas envoyées et les nouveaux utilisateurs ne recevront pas leur e-mail de bienvenue. Les utilisateurs peuvent toujours être ajoutés, toutefois.</p>
-        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques"><![CDATA[<h2>Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques</h2>
+<p>Le plugins doivent disposer de leur propre répertoire et ne doivent rien partager avec le répertoire temporaire. A défaut, c’est un risque de sécurité potentiel et peut nuire au bon fonctionnement de votre site si votre répertoire temporaire est vidé. Veuillez vous assurer que ces deux chemins vers des répertoires distincts sont différents.</p>]]></item>
+        <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[<h2>Serveur de mise à jour inaccessible</h2>
+<p>La vérification de mises à jour a échouée, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résous souvent d’elle-même au bout dune heure ou deux ; aussi, veuillez retournez sur cette page ultérieurement.</p>]]></item>
+        <item id="warn_mail_unavailable" title="Votre installation de PHP ne dispose pas de la fonction mail()"><![CDATA[<h2>Votre installation de PHP ne dispose pas de la fonction mail()</h2>
+<p>La fonction <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> de PHP est désactivée. Par conséquent, Textpattern ne peut envoyer de e-mails et certaines de ses fonctionnalités seront inopérantes. Par exemple, les notifications par e-mail des nouveaux commentaires ne seront pas adressées et les nouveaux utilisateurs de sites ne recevront pas de message de bienvenue. Cependant, les utilisateurs pourront être ajoutés, néanmoins.</p>]]></item>
     </group>
 
     <group id="file" title="Fichiers">
@@ -394,6 +399,14 @@
 <h2>Remplacer le fichier</h2>
 <p>le téléversement d’un fichier ici ne remplacera pas le contenu du fichier existant sur le serveur mais conservera le nom de fichier identique au précédent. Le décompte des téléchargements ainsi que les autres informations associées au fichier resteront inchangées.</p>
         ]]></item>
+        <item id="timestamp_file" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>La date de publication d’un fichier ou de sa plus récente consultation. Cet horodatage peut être assigné au moment de la publication ou selon une référence arbitraire dans le passé voire dans le futur.</p>
+<p>Les champs de saisie correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
         <item id="upload" title="Envoyer un fichier"><![CDATA[
 <h2>Téléversement de fichier</h2>
 <p>Utilisez ce formulaire pour téléverser sur votre serveur des images ou des fichiers.</p>
@@ -465,6 +478,14 @@
 <h2>URL</h2>
 <p>L’adresse du lien. Si le lien pointe vers un site différent, alors il doit être précédé par <code>http://</code> ou <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title="Date de publication"><![CDATA[
+<h2>Date de publication</h2>
+<p>L’horodatage du lien lors de sa publication ou de sa révision. Peut être mis à jour au moment du téléversement ou renseigné arbitrairement dans le passé ou le futur.</p>
+<p>Les champs de saisies correspondent aux informations suivantes :</p>
+<ul>
+   <li>Année / Mois / Jour</li>
+   <li>Heure (format 24 heures) : Minutes : Secondes</li>
+</ul>        ]]></item>
     </group>
 
     <group id="login" title="Connexion">
@@ -627,11 +648,38 @@
 <p>Seuls les modèles de modules d’une même extension correspondant à leur type (ex. <code>myscript.js</code>) peuvent être servis comme fichiers indépendants («Flat files»). Dans ce cas, ils ne seront pas interceptés par Textpattern et seront tous accessibles via leur URL.</p>
 <p>Si un modèle de module nécessite d’être interprété (s’il contient des balisages Textpattern), vous devrez les servir depuis la base de données comme suit :</p>
 <pre><code>&lt;script&gt;
-    &lt;txp:txp:output_form form="myscript.js"
-    format="script" /&gt;
+ &lt;txp:txp:output_form form="myscript.js"
+ format="script" /&gt;
 &lt;/script&gt;</code></pre>
 <p>Dans ce cas, vous n’ajouterez pas l’extension au nom du module – par simple appel de <code>myscript</code> (sans <code>.js</code>) afin de le rendre inaccessible via une URL standard – et en l’incluant comme suit :</p>
 <pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+<p>Liste de type de modules :</p>
+<pre><code>
+[js]
+mediatype="application/javascript"
+title="Javascript"
+[css]
+mediatype="text/css"
+title="Stylesheet"
+[json]
+mediatype="application/json"
+title="Json"
+[svg]
+mediatype="image/svg+xml"
+title="SVG"
+[xml]
+mediatype="application/xml"
+title="XML"
+[txt]
+mediatype="text/plain"
+title="TXT"
+[csv]
+mediatype="text/csv"
+title="CSV"
+[html]
+mediatype="text/html"
+title="HTML"
+</code></pre>
         ]]></item>
         <item id="custom_overview" title="Champs personnalisés"><![CDATA[
 <h2>Champs personnalisés</h2>
@@ -1026,7 +1074,7 @@
         ]]></item>
         <item id="skin_title" title="Titre du thème"><![CDATA[
 <h2>Titre du thème</h2>
-<p>Un titre descriptif pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern (requis).</p>
+<p>Un titre descriptif pour le thème, utilisé pour identifier le thème dans les pages de l’interface d’administration de Textpattern.</p>
 <p>Le titre peut comporter des caractères spéciaux ainsi que des espaces.</p>
         ]]></item>
         <item id="skin_version" title="Version du thème"><![CDATA[
