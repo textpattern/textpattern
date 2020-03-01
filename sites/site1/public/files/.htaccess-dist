@@ -1,4 +1,13 @@
-# Inhibit directory listing
-Options -Indexes
-# Inhibit direct file downloads
-RedirectMatch 403 .*
+# BEGIN Textpattern
+
+# Block access to directories without a default document.
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# Inhibit direct file downloads (display 403 Forbidden error) if desired.
+
+# RedirectMatch 403 .*
+
+# END Textpattern
