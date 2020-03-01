@@ -1,4 +1,13 @@
-# Inhibit directory listing
-Options -Indexes
-# Inhibit direct file downloads
+# BEGIN Textpattern
+
+# Block access to directories without a default document.
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# Inhibit direct file downloads.
+
 RewriteRule .*\.txp$ - [R=403,L]
+
+# END Textpattern
