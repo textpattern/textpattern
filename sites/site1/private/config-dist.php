@@ -102,6 +102,12 @@ $txpcfg['dbcharset'] = 'utf8';
 $txpcfg['client_flags'] = 0;
 
 /*
+ * Optional, advanced: include an external PHP script if needed.
+ */
+
+//$txpcfg['pre_publish_script'] = 'path/to/file.php';
+
+/*
  * Optional, advanced: http address of the site serving images.
  * see https://forum.textpattern.com/viewtopic.php?id=34493
  */
