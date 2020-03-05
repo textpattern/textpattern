@@ -878,6 +878,7 @@ title="HTML"
         <item id="site_slogan" title="Slogan du site"><![CDATA[
 <h2>Slogan du site</h2>
 <p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>
+<p><strong>Nota Bene</strong> : le slogan du site est optionnel mais il est requis afin d’obtenir des flux de syndication RSS ou Atom valides.</p>
         ]]></item>
         <item id="sitename" title="Nom du site"><![CDATA[
 <h2>Nom du site</h2>
