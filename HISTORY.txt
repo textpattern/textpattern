@@ -1,7 +1,10 @@
 Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
-* Fixed: multisite index.php correctly included in multisite css.php.
+* Changed: Tag builder includes new 4.8.x attributes where possible.
+* Fixed: Multisite index.php correctly included in multisite css.php.
+* Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
+* Fixed: Fall back on partial language identifier if code is not found.
 
 Changes in 4.8.0
 
