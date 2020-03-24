@@ -1386,7 +1386,7 @@ function pageby_form($event, $val, $step = null)
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null, $accept = '')
+function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null, $accept = '')
 {
     if (!$label_id) {
         $label_id = $event.'-upload';
