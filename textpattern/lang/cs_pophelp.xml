@@ -323,19 +323,32 @@
 <h2>Následující funkce PHP: […] jsou na serveru vypnuty</h2>
 <p>To znamená, že tvoje hostingová společnost nebo správce serveru zakázal jednu nebo více PHP funkcí, z nichž některé mohou mít vliv na chod Textpatternu.</p>
 <p>Další informace najdeš v <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentaci Textpattern <span class = "ui-icon ui-icon-extlink"> (otevře externí odkaz v novém okně)</span></a>.</p>        ]]></item>
-        <item id="textpattern_version_update" title="Aktualizace verze Textpattern CMS"><![CDATA[
+        <item id="textpattern_version_update" title="Aktualizace verze Textpattern"><![CDATA[
 <h2>Aktualizace Textpattern CMS</h2>
 <p>K dispozici je novější verze Textpattern CMS. Chceš-li využít nejnovějších funkcí a zvýšit bezpečnost, je doporučeno provést upgrade.</p>
 <p>Ačkoliv se snažíme, aby upgrade byl bezproblémový, přečti si následující:</p>
 <ul>
-    <li>Jestliže se pouze poslední číslice nové verze liší od tvojí současné verze, je pravděpodobné, že bude zpětně kompatibilní s pluginy a tématy.</li>
-    <li>V případě, že se liší poslední dvě číslice od tvojí současné verze, upgrade může vyžadovat aktualizace některých pluginů, nebo témat, i když vše bude pravděpodobně nadále v omezené míře fungovat.</li>
-    <li>Pokud je odlišná první číslice nové verze od tvojí současné verze, upgrade bude pravděpodobně vyžadovat aktualizace většiny pluginů a témat. Pokud je funkce webu závislá na konkrétním pluginu nebo tématu, obrať se před zahájením upgradu na autora či komunitu.</li>
+    <li>Jestliže se pouze poslední číslice nové verze liší od tvojí současné verze, je pravděpodobné, že bude zpětně kompatibilní s pluginy a tématy vzhledu.</li>
+    <li>V případě, že se liší poslední dvě číslice od tvojí současné verze, upgrade může vyžadovat aktualizace některých pluginů, nebo témat, přestože vše bude pravděpodobně nadále v omezené míře fungovat.</li>
+    <li>Pokud je odlišná první číslice nové verze od tvojí současné verze, upgrade bude pravděpodobně vyžadovat aktualizace většiny pluginů a témat. Pokud je funkčnost webu závislá na konkrétním pluginu nebo tématu, obrať se před zahájením upgradu na autora či komunitu.</li>
+</ul>     ]]></item>
+        <item id="textpattern_version_update_beta" title="Předběžné vydání nové verzeTextpattern je k dispozici"><![CDATA[
+<h2>Je k dispozici předběžná aktualizace Textpattern</h2>
+<p>Je k dispozici předběžná novější verze Textpattern. Hledáme aktivní dobrovolníky, kteří tuto verzi vyzkoušejí, aby finální verze byla co nejlepší. Snažíme se zavádět vylepšení co možné s nejmenšími problémy a k tomu slouší právě pro beta verze.</p>
+<p>Než se rozhodneš testování zúčastnit, vezmi v úvahu následující:</p>
+<ul>
+    <li>Nepoužívej beta verzi na ostrém webu, pokud neuděláš zálohu souborů a databází.</li>
+    <li>Nahlaš nám prosím<a href="https://github.com/textpattern/textpattern/issues"> jakékoliv problémy</a>s beta verzí, na které narazíš. V závislosti hlášených problémů může následovat další beta verze před vydáním stabilní verze.</li>
+    <li>Ujisti se, že po testování beta verze také zaktualizuješ na konečnou verzi po jejím zveřejnění.</li>
 </ul>
-<p>Pokud se zobrazí zpráva “Vyskytl se problém při pokusu připojit se k serveru RPC”, znamená to, že nemohla být ověřena existence nové verze, nebo že server může být mimo provoz. Aktualizace jsou kontrolovány každých 24 hodin, takže je pravděpodobné, že při příští návštěvě panelu Diagnostika bude všechno v pořádku.</p>        ]]></item>
-        <item id="tmp_plugin_paths_match" title="Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné"><![CDATA[
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Cesty k dočasným složkám pro cache pluginů by neměly být shodné."><![CDATA[
 <h2>Nastavení cesty k Adresáři dočasných souborů a k Adresáři pro cache pluginů nemá být shodné</h2>
-<p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Je to potenciální bezpečnostní riziko, které může tvé stránky nepříznivě ovlivnit. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>        ]]></item>
+<p>Pluginy by měly mít vlastní dočasný adresář, nikoli sdílet adresář dočasných souborů. Může to být potenciální bezpečnostní riziko. Ujisti se, že cesta do adresáře dočasných souborů je odlišná od cesty do adresáře pro cache pluginů.</p>        ]]></item>
+        <item id="update_server_inaccessible" title="Aktualizační server není dostupný"><![CDATA[
+<h2>Aktualizační server není dostupný</h2>
+<p>Kontrola aktualizací selhala, často kvůli přetížení sítě nebo kvůli vypršení časového limitu připojení. Tato situace se obvykle vyřeší během jedné nebo dvou hodin, zkus tento panel navštívit znovu později.</p>
+        ]]></item>
         <item id="warn_mail_unavailable" title="V instalaci PHP chybí funkce mail()"><![CDATA[
 <h2>V instalaci PHP chybí funkce mail()</h2>
 <p>Funkce PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>

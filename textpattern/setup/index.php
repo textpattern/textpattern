@@ -247,7 +247,7 @@ function txp_setup_progress_meter($stage = 1)
 
     foreach ($stages as $idx => $phase) {
         $active = ($idx == $stage);
-        $sel = $active ? ' class="active"' : '';
+        $sel = $active ? ' class="active" aria-current="step"' : '';
         $out[] = n.'<li'.$sel.'>'.($active ? strong($phase) : $phase).'</li>';
     }
 

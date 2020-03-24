@@ -91,7 +91,7 @@
         <div class="container">
 
             <!-- Main content -->
-            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
+            <main id="main" aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
                 <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_display.txp instead) -->
                 <txp:if_search>

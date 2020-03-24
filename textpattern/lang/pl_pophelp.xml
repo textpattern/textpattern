@@ -42,14 +42,17 @@
 
     <group id="diag" title="Panel diagnostyczny">
         <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Test przyjaznych adresów URL nie powiódł się"><![CDATA[]]></item>
         <item id="diag_clear_private" title="Ukryj osobiste informacje"><![CDATA[
 <h2>Ukryj prywatne informacje</h2>
 <p>Ukryj prywatne informacje dla dodatkowego bezpieczeństwa. Jeśli informacje diagnostyczne mają być udostępniane w formacie widocznym publicznie, na przykład forum wsparcia Textpattern, zmniejsza to ryzyko bezpieczeństwa poprzez pominięcie wrażliwych informacji o serwerze. </p>
         ]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Katalog nie jest zapisywalny"><![CDATA[
+<h2>Katalog nie jest zapisywalny</h2>
+<p>Aby użyć możliwości przesyłania plików i obrazów, te katalogi muszą być zapisywalne przez PHP za pośrednictwem użytkownika serwera WWW. Można to zrobić z klientem (S)FTP lub ewentualnie w wierszu poleceń, wydając polecenie <code>chmod 755 /ścieżka/do/katalogu</code></p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Błąd DNS"><![CDATA[]]></item>
         <item id="file_uploads_disabled" title="Wgrywanie plików jest wyłączone"><![CDATA[
 <h2>Wgrywanie plików jest wyłączone</h2>
 <p>Aktualna konfiguracja serwera wskazuje, że przesyłanie plików jest wyłączone. Sprawdź i zmień ustawienia <code>file_uploads</code> w <code>php.ini</code> lub skontaktuj się z hostem witryny w celu uzyskania pomocy.</p>
@@ -73,7 +76,7 @@
     </group>
 
     <group id="file" title="Panel pliki">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_reassign" title="Przypisz plik ponownie"><![CDATA[]]></item>
         <item id="file_replace" title="Zastąp plik"><![CDATA[]]></item>
         <item id="timestamp_file" title="Data publikacji"><![CDATA[]]></item>
         <item id="upload" title="Wgraj plik"><![CDATA[]]></item>
@@ -90,11 +93,11 @@
         <item id="upload_thumbnail" title="Wgraj miniaturkę"><![CDATA[]]></item>
     </group>
 
-    <group id="lang" title="">
+    <group id="lang" title="Panel językowy">
         <item id="get_textpack" title="Zainstaluj «Textpack»"><![CDATA[]]></item>
     </group>
 
-    <group id="link" title="">
+    <group id="link" title="Panel linków">
         <item id="link_description" title="Opis"><![CDATA[]]></item>
         <item id="link_sort" title="Sortuj według"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
@@ -118,7 +121,7 @@
         <item id="upload_plugin" title="Załaduj wtyczkę"><![CDATA[]]></item>
     </group>
 
-    <group id="prefs" title="">
+    <group id="prefs" title="Panel ustawień">
         <item id="admin_side_plugins" title="Używać pluginów dla administracji?"><![CDATA[]]></item>
         <item id="advanced_options" title="Opcje zaawansowane"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="Czy kod PHP jest dozwolony w artykułach?"><![CDATA[]]></item>
@@ -206,9 +209,9 @@
         <item id="public_theme_name" title=""><![CDATA[]]></item>
         <item id="publish_expired_articles" title="Publikować wygasłe artykuły?"><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title="Ile artykułów powinno być zawartych w kanałach?"><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Pokazać liczbę komentarzy w kanałach?"><![CDATA[]]></item>
         <item id="site_slogan" title="Motto witryny"><![CDATA[]]></item>
         <item id="sitename" title="Nazwa witryny"><![CDATA[]]></item>
         <item id="siteurl" title="Adres witryny"><![CDATA[]]></item>
@@ -250,14 +253,22 @@
         <item id="skin_author" title="Autor motywu"><![CDATA[
 <h2>Autor motywu</h2>
 <p>Autor/Autorzy tego motywu (opcjonalne).</p>        ]]></item>
-        <item id="skin_author_uri" title="Strona internetowa motywu"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Strona internetowa motywu"><![CDATA[
+<h2>Strona motywu</h2>
+<p>Adres URL, gdzie można znaleźć pełne informacje i/lub najnowsze wersje tego motywu (opcjonalne).</p>
+        ]]></item>
         <item id="skin_delete_entirely" title="Usuń szablony motywów również z dysku"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="Usuń niewykorzystane szablony z bazy danych przy imporcie"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="Usuń niewykorzystane szablony z dysku przy eksporcie"><![CDATA[]]></item>
         <item id="skin_description" title="Opis motywu"><![CDATA[]]></item>
         <item id="skin_import" title="Importuj motyw"><![CDATA[]]></item>
         <item id="skin_name" title="Nazwa motywu"><![CDATA[]]></item>
-        <item id="skin_overview" title="Wprowadzenie do motywów"><![CDATA[]]></item>
+        <item id="skin_overview" title="Wprowadzenie do motywów"><![CDATA[
+<h2>Wprowadzenie do motywów</h2>
+<p>Motyw Textpattern jest kolekcją stron, formularzy i arkuszy stylów. Motywy pozwalają logicznie rozdzielić zasoby witryny na grupy w celu ułatwienia identyfikacji lub dzielenia się z innymi. Akt tworzenia lub importowania motywu i jakichkolwiek zasobów, które zawiera, <em>nie</em> ma jakiegokolwiek wpływu na istniejącą witrynę. Możesz edytować lub modyfikować dowolny zasób, który nie jest powiązany z sekcją witryny, i nie wpłynie to na samą stronę.</p>
+<p>Aby edytować zasoby w szablonie, odwiedź Strony, Panel formularzy lub stylów i użyj rozwijanego selektora do wyboru motywu, na którym chcesz pracować. Motyw nad którym pracujesz jest zapamiętany w całym obszarze administracji, co pozwala na szybkie i łatwe przemieszczanie się pomiędzy typami zasobów. Nazywa się to Twoim <em>motywem roboczym</em>.</p>
+<p>Proszę zapoznać się z dokumentacją użytkownika <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern <span class="ui-icon ui-icon-extlink">(otwiera link zewnętrzny w nowym oknie)</span></a> po więcej informacji.</p>
+        ]]></item>
         <item id="skin_title" title="Tytuł motywu"><![CDATA[
 <h2>Nazwa motywu</h2>
 <p>Opisowa nazwa motywu, która jest wykorzystywana przy jego identyfikacji w panelach Textpattern.</p>
