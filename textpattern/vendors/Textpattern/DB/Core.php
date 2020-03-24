@@ -161,7 +161,7 @@ class Core
         $permlink_format = get_pref('permalink_title_format', null);
 
         if ($permlink_format === null) {
-            $permlink_format = get_pref('permlink_format', null);
+            $permlink_format = get_pref('permlink_format', 1);
         }
 
         $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($language);

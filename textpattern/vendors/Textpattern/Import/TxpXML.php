@@ -133,7 +133,7 @@ class TxpXML
     {
         global $prefs, $txp_user;
 
-        $textile = new \Netcarver\Textile\Parser();
+        $textile = new \Netcarver\Textile\Parser('html5');
 
         foreach ($xml->article as $a) {
             $article = array();

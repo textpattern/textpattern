@@ -66,7 +66,7 @@ class classic_theme extends \Textpattern\Admin\Theme
                             n.'<ul>';
 
                         foreach ($tab['items'] as $item) {
-                            $tc = ($item['active']) ? ' class="active"' : '';
+                            $tc = ($item['active']) ? ' class="active" aria-current="page"' : '';
                             $secondary .= n.'<li'.$tc.'>'.
                                 href($item['label'], array('event' => $item['event'])).
                                 '</li>';

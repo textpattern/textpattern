@@ -117,10 +117,12 @@ function list_languages($message = '')
             if ($file_updated) {
                 $cellclass = 'warning';
                 $icon = 'ui-icon-alert';
+                $status = gTxt('installed').' <span role="separator">/</span> '.gTxt('update_available');
                 $disabled = (has_privs('lang.edit') ? '' : 'disabled');
             } else {
                 $cellclass = 'success';
                 $icon = 'ui-icon-check';
+                $status = gTxt('installed');
                 $disabled = 'disabled';
             }
 
@@ -159,7 +161,7 @@ function list_languages($message = '')
         $grid .= tag(
             form(
                 graf(
-                    ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
+                    ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
                     tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
                     tag($langname, 'code', array('dir' => 'ltr')).
                     ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
