@@ -109,6 +109,14 @@ class DB
     public $client_flags = 0;
 
     /**
+     * SSL parameters.
+     *
+     * @var string
+     */
+
+    public $ssl;
+
+    /**
      * Database connection charset.
      *
      * @var   string
@@ -158,6 +166,10 @@ class DB
     {
         global $txpcfg, $connected;
 
+        $client_flags = MYSQLI_CLIENT_FOUND_ROWS;
+
+        $this->link = mysqli_init();
+
         if (strpos($txpcfg['host'], ':') === false) {
             $this->host = $txpcfg['host'];
             $this->port = ini_get("mysqli.default_port");
@@ -172,6 +184,43 @@ class DB
             $this->socket = ini_get("mysqli.default_socket");
         }
 
+        if (isset($txpcfg['ssl']) && is_array($txpcfg['ssl'])) {
+            $client_flags = $client_flags | MYSQLI_CLIENT_SSL;
+
+            foreach (array('key', 'cert', 'ca', 'capath', 'ciphers') as $ssl_param) {
+                if (isset($txpcfg['ssl'][$ssl_param])) {
+                    $this->ssl[$ssl_param] = $txpcfg['ssl'][$ssl_param];
+                } else {
+                    $this->ssl[$ssl_param] = null;
+                }
+            }
+
+            if (isset($txpcfg['ssl']['flags']) && is_array($txpcfg['ssl']['flags'])) {
+                foreach ($txpcfg['ssl']['flags'] as $ssl_flag => $ssl_flag_value) {
+                    switch ($ssl_flag_value) {
+                        case 'true':
+                            mysqli_options($this->link, $ssl_flag, true);
+                            break;
+                        case 'false':
+                            mysqli_options($this->link, $ssl_flag, false);
+                            break;
+                        default:
+                            mysqli_options($this->link, $ssl_flag, $ssl_flag_value);
+                            break;
+                    }
+                }
+            }
+
+            mysqli_ssl_set(
+                $this->link,
+                $this->ssl['key'],
+                $this->ssl['cert'],
+                $this->ssl['ca'],
+                $this->ssl['capath'],
+                $this->ssl['ciphers']
+            );
+        }
+
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
@@ -184,14 +233,12 @@ class DB
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
         } else {
-            $this->client_flags = MYSQLI_CLIENT_FOUND_ROWS;
+            $this->client_flags = $client_flags;
         }
 
         if (isset($txpcfg['dbcharset'])) {
             $this->charset = $txpcfg['dbcharset'];
         }
-
-        $this->link = mysqli_init();
 
         // Suppress screen output from mysqli_real_connect().
         $error_reporting = error_reporting();
@@ -1534,10 +1581,10 @@ eod;
  * This function can be used when constructing SQL SELECT queries as a
  * replacement for the NOW() function to allow the SQL server to cache the
  * queries. Should only be used when comparing with the Posted or Expired
- * columns from the textpattern (articles) table or the Created column from
- * the txp_file table.
+ * columns from the textpattern (articles) table, the Created column from
+ * the txp_file table or the Date column from the txp_link table.
  *
- * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
+ * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created', 'date')
  * @param  bool   $update Force update
  * @return string SQL query string partial
  */
@@ -1547,7 +1594,7 @@ function now($type, $update = false)
     static $nows = array();
     static $time = null;
 
-    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created'))) {
+    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created', 'date'))) {
         return false;
     }
 
@@ -1562,7 +1609,7 @@ function now($type, $update = false)
         $now = get_pref($pref, $time - 1);
 
         if ($time > $now or $update) {
-            $table = ($type === 'created') ? 'txp_file' : 'textpattern';
+            $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
             $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;

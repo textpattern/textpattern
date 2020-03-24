@@ -26,7 +26,7 @@
         <div class="container">
 
             <!-- Main content -->
-            <main aria-label="<txp:text item="main_content" />">
+            <main id="main" aria-label="<txp:text item="main_content" />">
                 <h1 class="error-status"><txp:error_status /></h1>
                 <p class="error-msg"><txp:error_message /></p>
             </main>

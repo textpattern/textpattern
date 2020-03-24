@@ -1937,6 +1937,10 @@ function assert_system_requirements()
     if (version_compare(REQUIRED_PHP_VERSION, PHP_VERSION) > 0) {
         txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '.REQUIRED_PHP_VERSION.' or better.');
     }
+
+    if (!extension_loaded('simplexml')) {
+        txp_die('This server does not have the required SimpleXML library installed (php-xml). Please install it.');
+    }
 }
 
 /**

@@ -168,7 +168,7 @@ function plugin_list($message = '')
     $contentBlock = '';
     $existing_files = get_filenames($plugin_dir.DS, GLOB_ONLYDIR) or $existing_files = array();
 
-    foreach(safe_column_num('name', 'txp_plugin', 1) as $name) {
+    foreach (safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
     }
 
@@ -316,10 +316,10 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href(txpspecialchars($name), $edit_url), '', ' class="txp-list-col-name" scope="row"'
+                    href($name, $edit_url), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
-                    href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
+                    ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external')) : $author), '', 'txp-list-col-author'
                 ).
                 td(
                     $version, '', 'txp-list-col-version'

@@ -165,13 +165,15 @@ echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
+<noscript>Please enable JavaScript in your browser to use this application.</noscript>
+<a class="txp-skip-link" href="#txp-main"><?php echo gTxt('go_content') ?></a>
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
+        n.'<main id="txp-main" class="txp-body">'.
         n.'<div class="messagepane" id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }

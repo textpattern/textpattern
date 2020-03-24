@@ -82,8 +82,21 @@
     </group>
 
     <group id="article" title="Panel de escritura">
-        <item id="article_image" title="Imagen de artículo"><![CDATA[]]></item>
-        <item id="body" title="Cuerpo"><![CDATA[]]></item>
+        <item id="article_image" title="Imagen de artículo"><![CDATA[
+<h2>Imagen de artículo</h2>
+<p>Si quieres asociar una imagen con este artículo, pon aquí una de las siguientes opciones:</p>
+<ol>
+  <li>la ID Texpattern de una imagen</li>
+  <li>una URL relativa a la imagen (por ej. <code>/imagenes/mi_imagen.jpg</code>)</li>
+  <li>una URL completa (por ej. <code>https://ejemplo.com/ruta/a/imagenes/mi_imagen.jpg</code>)</li>
+</ol>
+<p>La imagen se puede hacer visible poniendo una <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> etiqueta  <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una ventana nueva)</span></a>  dentro de un bloque de artículo. Proporcionará una etiqueta de HTML <code>&lt;img&gt;</code> a la imagen que elijas.</p>
+]]></item>
+        <item id="body" title="Cuerpo"><![CDATA[
+<h2>Cuerpo</h2>
+<p>El contenido principal de un artículo está contenido en el cuerpo del artículo. /1>
+<p>Al componer o preparar artículos para su publicación en Textpattern, un autor puede cambiar entre tres vistas del artículo: texto plano, marcado HTML (el código con el que un navegador web representa el artículo), y una vista previa convertida. /1>
+        ]]></item>
         <item id="description" title="Descripción"><![CDATA[
 <h2>Descripción</h2>
 <p>La descripción del artículo es un componente opcional que puede ayudar a los motores de búsqueda y rastreadores de sitios web a identificar y clasificar mejor el contenido.</p>
@@ -134,8 +147,10 @@
         <item id="site_url_mismatch" title="La URL del sitio no coincide"><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title="Las funciones de PHP [...] están deshabilitadas en su servidor"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Actualización de la versión de Textpattern CMS"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="Las rutas de directorio de caché temporal y de complemento no deben coincidir"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title="Su instalación de PHP no tiene la función mail()"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Versión adelantada de Textpattern disponible"><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title="El servidor para la actualización está inaccesible"><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Panel de archivos">
@@ -150,7 +165,10 @@
     </group>
 
     <group id="image" title="Panel de imágenes">
-        <item id="create_thumbnail" title="Crear miniatura"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Crear miniatura"><![CDATA[
+<h2>Crear miniatura</h2>
+ <p>Le permite (re)crear una miniatura de las dimensiones especificadas a partir de la imagen a tamaño completo.</p>
+ <p>La miniatura se ajustará a las dimensiones que elija, a menos que seleccione la casilla de verificación ‘Cortar’. En ese caso, la miniatura se creará desde el centro de la imagen sin ninguna escala.</p>        ]]></item>
         <item id="replace_image_form" title="Sustituir imagen"><![CDATA[
 <h2>Reemplazar imagen</h2>
 <p>Una imagen subida aquí simplemente reemplazará a la imagen que actualmente esté asociada con esta entrada en la base de datos.</p>        ]]></item>
@@ -175,7 +193,7 @@
         ]]></item>
     </group>
 
-    <group id="link" title="">
+    <group id="link" title="Panel de enlaces">
         <item id="link_description" title="Descripción"><![CDATA[
 <h2>Descripción</h2>
 <p>Las descripciones de enlace son opcionales, y son útiles para titular enlaces, para crear atributos <code>title=""</code> (tooltip) de enlace, o simplemente para mantener tu propia documentación interna.</p>
@@ -185,22 +203,23 @@
 <h2>URL</h2>
 <p>La dirección de un enlace. Si el enlace apunta a un sitio diferente entonces debe ir precedido por <code>http://</code> o <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title="Fecha de publicación"><![CDATA[]]></item>
     </group>
 
-    <group id="login" title="">
+    <group id="login" title="Panel de acceso">
         <item id="remember_login" title="Permanecer registrado con este navegador"><![CDATA[]]></item>
     </group>
 
-    <group id="plugin" title="">
+    <group id="plugin" title="Panel de plugins">
         <item id="install_plugin" title="Instalar plugin"><![CDATA[
 <h2>Instalar un plugin</h2>
 <p>Pega el contenido del archivo de texto deldel plugin aquí, luego pulsa 'Subir' para comenzar la instalación. Cualquier plugin que subas con el mismo nombre que uno que ya tengas instalado anteriormente sobreescribirá la versión anterior del plugin.</p>
 <p>El texto del plugin que pegas aquí <strong>no</strong> es el código PHP en bruto sino texto codificado en Base64, frecuentemente precedido por una cabecera que contiene información del plugin (como el nombre del plugin, versión y descripción, nombre del autor, etc).</p>
         ]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title="Subir plugin"><![CDATA[]]></item>
     </group>
 
-    <group id="prefs" title="">
+    <group id="prefs" title="Panel de preferencias">
         <item id="admin_side_plugins" title="¿Usar plugins administrativos?"><![CDATA[]]></item>
         <item id="advanced_options" title="Opciones avanzadas"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="¿Permitir PHP en los artículos?"><![CDATA[]]></item>
