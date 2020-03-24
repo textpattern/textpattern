@@ -387,9 +387,17 @@ class Locale
     public function validLocale($code)
     {
         $code = strtolower($code);
+
         if (empty($this->locales[$code])) {
             if (!empty($this->recodeLocale[$code])) {
                 $code = $this->recodeLocale[$code];
+            } else {
+                // Fall back on trying partial match.
+                $codePart = explode('-', $code);
+
+                if (array_search($codePart[0], $this->recodeLocale)) {
+                    $code = $codePart[0];
+                }
             }
         }
 

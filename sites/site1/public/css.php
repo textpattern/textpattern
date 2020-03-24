@@ -30,4 +30,4 @@
 $nolog = 1;
 
 define('txpinterface', 'css');
-include 'index.php';
+require __DIR__ . '/index.php';

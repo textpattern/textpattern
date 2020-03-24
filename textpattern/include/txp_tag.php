@@ -1384,6 +1384,9 @@ class BuilderTags
     function tag_comment_email_input()
     {
         $atts = gpsa(array(
+            'aria_label',
+            'class',
+            'placeholder',
             'size',
         ));
 
@@ -1392,7 +1395,10 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'input_size' => $this->tbInput('size', $size, INPUT_TINY),
+                'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
+                'class'       => $this->tbInput('class', $class),
+                'placeholder' => $this->tbInput('placeholder', $placeholder),
+                'aria_label'  => $this->tbInput('aria_label', $aria_label),
             )).
             $this->endform
         ).
@@ -1419,6 +1425,9 @@ class BuilderTags
         $atts = gpsa(array(
             'cols',
             'rows',
+            'aria_label',
+            'class',
+            'placeholder',
         ));
 
         extract($atts);
@@ -1426,8 +1435,11 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'msgcols' => $this->tbInput('cols', $cols, INPUT_TINY),
-                'msgrows' => $this->tbInput('rows', $rows, INPUT_TINY),
+                'msgcols'     => $this->tbInput('cols', $cols, INPUT_TINY),
+                'msgrows'     => $this->tbInput('rows', $rows, INPUT_TINY),
+                'class'       => $this->tbInput('class', $class),
+                'placeholder' => $this->tbInput('placeholder', $placeholder),
+                'aria_label'  => $this->tbInput('aria_label', $aria_label),
             )).
             $this->endform
         ).
@@ -1465,6 +1477,9 @@ class BuilderTags
     function tag_comment_name_input()
     {
         $atts = gpsa(array(
+            'aria_label',
+            'class',
+            'placeholder',
             'size',
         ));
 
@@ -1473,7 +1488,10 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'input_size' => $this->tbInput('size', $size, INPUT_TINY),
+                'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
+                'class'       => $this->tbInput('class', $class),
+                'placeholder' => $this->tbInput('placeholder', $placeholder),
+                'aria_label'  => $this->tbInput('aria_label', $aria_label),
             )).
             $this->endform
         ).
@@ -1497,7 +1515,24 @@ class BuilderTags
 
     function tag_comment_preview()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'label',
+            'class',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'class' => $this->tbInput('class', $class),
+                'label' => $this->tbInput('label', $label),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1515,7 +1550,24 @@ class BuilderTags
 
     function tag_comment_submit()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'label',
+            'class',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'class' => $this->tbInput('class', $class),
+                'label' => $this->tbInput('label', $label),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1562,6 +1614,9 @@ class BuilderTags
     function tag_comment_web_input()
     {
         $atts = gpsa(array(
+            'aria_label',
+            'class',
+            'placeholder',
             'size',
         ));
 
@@ -1570,7 +1625,10 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'input_size' => $this->tbInput('size', $size, INPUT_TINY),
+                'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
+                'class'       => $this->tbInput('class', $class),
+                'placeholder' => $this->tbInput('placeholder', $placeholder),
+                'aria_label'  => $this->tbInput('aria_label', $aria_label),
             )).
             $this->endform
         ).
