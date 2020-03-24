@@ -125,7 +125,7 @@
 <h2>覆盖默认文章模块</h2>
 <p>文章可以使用不同于默认模块的模块——例如使用摘录显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 替换默认的内容显示 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> - 可以在这里设置。</p>
         ]]></item>
-        <item id="publish_date" title=""><![CDATA[
+        <item id="publish_date" title="发布日期"><![CDATA[
 <h2>发布日期</h2>
 <p>发布文章、上传文件或者修改文章的时间。时间可以设置为文章发布的实际时间，或者未来、或者过去的任何时间都可以。</p>
 <p>空白处的信息为：</p>
@@ -361,7 +361,7 @@
 <p>网站主机或服务器管理员已禁用一个或多个PHP 功能，其中有些可能影响到Textpattern的运行。</p>
 <p>请参阅<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions"> Textpattern用户文档<span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>以获取更多信息。</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Textpattern CMS 版本更新"><![CDATA[
+        <item id="textpattern_version_update" title="Textpattern 版本更新"><![CDATA[
 <h2>Textpattern CMS 版本更新</h2>
 <p>Textpattern CMS 有较新的版本可用。为了获得最新的功能和安全性，建议您升级。</p>
 <p>请注意，尽管我们努力使升级体验尽可能无缝和轻松：</p>
@@ -371,11 +371,25 @@
     <li>如果新版的第一位数字与您当前的版本不同，升级可能需要更新大多数插件和主题。如果您严重依赖特定的插件或主题功能，请在升级之前与作者或社区成员联系。</li>
 </ul>
         ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern 预发布可用"><![CDATA[
+<h2>Textpattern 预发布更新可用 </h2>
+<p>Textpattern 有较新的预发布版本。我们正在寻找积极的志愿者来测试这个版本，以便我们能够使最后版本尽可能有把握。我们努力使升级体验完美无缝、无疼痛，即使是测试代码。 </p>
+<p>如果您决定参加， 请注意：</p>
+<ul>
+    <li>不要在生产站点上使用这个测试版，除非您对站点的文件及其数据库都有进行工作备份。并知道如何使用它。</li>
+    <li>请<a href="https://github.com/textpattern/textpattern/issues">报告任何问题</a>, 说明您使用的测试版本。根据所报告的问题，可能需要在稳定版本之前进一步发布beta版本。</li>
+    <li>确保如果您部署了此测试版版本，也会在最新版本发布后进行更新。</li>
+</ul>
+        ]]></item>
         <item id="tmp_plugin_paths_match" title="临时文件和插件缓存目录路径不应匹配"><![CDATA[
 <h2>临时文件和插件缓存目录路径不应匹配</h2>
 <p>插件应该有自己的目录，不应该共享临时目录。这有潜在的安全风险，如果刷新了临时目录，则可能会对您的站点产生不利影响。请确保临时目录路径与插件缓存路径不同。</p>
         ]]></item>
-        <item id="warn_mail_unavailable" title="您的PHP安装缺失mail() 函数"><![CDATA[
+        <item id="update_server_inaccessible" title="更新服务器不可访问"><![CDATA[
+<h2>更新服务器不可访问</h2>
+<p>检查更新失败，常常是由于网络拥塞或连接超时造成。这种情况通常在一两个小时内解决，请稍后再尝试访问此面板。</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="您的PHP安装缺少mail() 函数"><![CDATA[
 <h2>您的 PHP 安装缺少mail() 函数</h2>
 <p>PHP 的<a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a> 函数不可用。因此，Textpattern 无法发送电子邮件，某些功能将不可用。 例如，新评论的电子邮件通知将不能发送，新用户将不会收到欢迎邮件。但仍然可以添加用户。</p>
         ]]></item>
@@ -389,6 +403,15 @@
         <item id="file_replace" title="替换文件"><![CDATA[
 <h2>替换文件</h2>
 <p>在这里上传的文件将替换服务器上现有文件的内容，但将保持文件名称与以前相同。下载计数及与该文件相关的其他信息不受影响。</p>
+        ]]></item>
+        <item id="timestamp_file" title="发布日期"><![CDATA[
+<h2>发布日期</h2>
+<p>文件发布时间或最近修改时间。时间可以设置为项目发布的时间，也可以设置为过去或将来的任意时间。 </p>
+<p>方框对应以下信息：</p>
+<ul>
+    <li>年/月/日</li>
+    <li>时(24小时格式):分:秒</li>
+</ul>
         ]]></item>
         <item id="upload" title="上传文件"><![CDATA[
 <h2>上传文件</h2>
@@ -441,6 +464,15 @@
         <item id="link_description" title="描述"><![CDATA[]]></item>
         <item id="link_sort" title="排序值"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="发布日期"><![CDATA[
+<h2>发布日期</h2>
+<p>链接发布时间或最近修改时间。时间可以设置为项目发布的时间，也可以设置为过去或将来的任意时间。 </p>
+<p>方框对应以下信息：</p>
+<ul>
+    <li>年/月/日</li>
+    <li>时(24小时格式):分:秒</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="登录面板">
@@ -449,6 +481,11 @@
 
     <group id="plugin" title="">
         <item id="install_plugin" title="安装插件"><![CDATA[]]></item>
+        <item id="upload_plugin" title="上传插件"><![CDATA[
+<h2>上传插件</h2>
+<p>使用此表单上传插件文件(PHP 文件或压缩存档)。上传的插件(以及任何资源)都存储在“ plugins”目录中。</p>
+<p>您以前安装过的名称相同的插件将被上传的版本覆盖。</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="">

@@ -1,3 +1,5 @@
+<a class="skip-link" href="#main"><txp:text item="go_content" /></a>
+
 <header class="site-header">
     <h2><txp:link_to_home><txp:site_name /></txp:link_to_home></h2>
     <txp:evaluate>
@@ -5,7 +7,7 @@
     </txp:evaluate>
 </header>
 
-<nav class="site-navigation" aria-label="<txp:text item="site_nav" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
+<nav id="navigation" class="site-navigation" aria-label="<txp:text item="site_nav" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
     <div>
         <txp:section_list default_title='<txp:text item="home" />' include_default wraptag="ul" break="">
             <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
