@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ca">
+    <group id="admin" title="Panell d'usuaris">
+        <item id="about_privileges" title="Sobre els rols"><![CDATA[
+<h2>Definició dels rols</h2>
+<h3>Editor</h3>
+<ul>
+    <li>pot gestionar articles, comentaris i enllaços</li>
+    <li>pot utilitzar PHP en els articles si la preferència d'administrador 'Permetre PHP en els articles?' és definida amb un 'Si'</li>
+    <li>pot gestionar imatges i fitxers</li>
+    <li>pot gestionar seccions i categories</li>
+    <li>pot gestionar pàgines, mòduls i estils</li>
+    <li>pot visualitzar la informació de diagnòstics</li>
+    <li>pot gestionar preferències</li>
+    <li>pot administrar usuaris</li>
+    <li>pot gestionar registres de visitants</li>
+    <li>pot gestionar plugins</li>
+    <li>po importar dades</li>
+</ul>
+<h3>Editor gestor</h3>
+<ul>
+    <li>pot gestionar articles, comentaris i enllaços</li>
+    <li>pot utilitzar PHP en articles si la preferència d'administrador 'Permetre PHP en articles?' és definida com a 'Si'</li>
+    <li>pot gestionar imatges i fitxers</li>
+    <li>pot gestionar seccions i categories</li>
+    <li>pot gestionar les pàgines, mòduls i estils</li>
+    <li>pot visualitzar la informació de diagnòstics</li>
+    <li>pot gestionar preferències</li>
+    <li>pot veure usuaris</li>
+    <li>pot administrar els registres de visitants</li>
+    <li>pot gestionar plugins</li>
+    <li>pot importar dades</li>
+</ul>
+<h3>Editor copista</h3>
+<ul>
+    <li>pot gestionar articles amb una limitació:
+        <ul>
+            <li>no pot eliminar aquells que pertanyen a altres usuaris</li>
+        </ul>
+    </li>
+    <li>pot gestionar comentaris i enllaços</li>
+    <li>pot gestionar imatges i arxius</li>
+    <li>pot gestionar categories</li>
+    <li>pot administrar pàgines i mòduls</li>
+    <li>pot veure usuaris</li>
+    <li>pot gestionar registres de visitants</li>
+</ul>
+<h3>Redactor</h3>
+<ul>
+    <li>pot gestionar articles propis, veure els articles dels altres usuaris</li>
+    <li>pot gestionar imatges i fitxers</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>pot gestionar articles propis en un sentit limitat:
+        <ul>
+            <li>només pot modificar un article fins que es publica</li>
+            <li>pot aplicar l'estatus de <em>només</em>Esborrany, Ocult o Pendent</li>
+        </ul>
+    </li>
+    <li>pot veure articles d'altres usuaris</li>
+</ul>
+<h3>Dissenyador</h3>
+<ul>
+    <li>pot gestionar articles propis en un sentit limitat:
+        <ul>
+            <li>només pot modificar article fins que es publica</li>
+            <li>pot aplicar l'estatus de <em>només</em>Esborrany, Ocult o Pendent</li>
+        </ul> 
+    </li>
+    <li>pot veure articles d'altres usuaris</li>
+    <li>pot gestionar imatges</li>
+    <li>pot gestionar seccions</li>
+    <li>pot administrar pàgines, mòduls i estils</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Crear autor"><![CDATA[
+<h2>Afegir autor nou</h2>
+<p>Una contrassenya, un missatge de benvinguda i les instruccions d'accés seràn enviats al nou autor.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="">
+        <item id="article_image" title="Imatge de l’article"><![CDATA[
+<h2>Imatge de l'article</h2>
+<p>Per associar una sola imatge amb aquest article, col·loca un dels següents aquí:</p>
+<ol>
+   <li>una identificació de la imatge Textpattern (e.g.<code>12</code>)</li>
+   <li>un URL relatiu a la imatge (e.g.<code>/imatges/la_meva _foto.jpg</code>)</li>
+   <li>un URL completo (e.g.<code>https://exemple.com/ruta/a/imatge/la_meva_foto.jpg</code></li>
+</ol>
+<p>La imatge pot mostrar-se col·locant una <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code>etiqueta<span class="ui-icon ui-icon-extlink">(s'obre un enllaç extern en una nova finestra)</span></a>dins el mòdul de l'article.  Es crearà una etiqueta HTML completa<code>&lt;img&gt;</code>a la imatge seleccionada.</p>        ]]></item>
+        <item id="body" title="Cos"><![CDATA[
+<h2>Cos</h2>
+<p>El contingut principal d'un article està contingut dins del cos de l'article.</p>
+<p>Quan es redacten o es preparen articles per a publicar en Textpattern, l'autor pot canviar entre tres vistes d'article: text pla, format HTML (el codi amb el qual un navegador web llegeix l'article) i mode presentació.</p>
+        ]]></item>
+        <item id="description" title="Descripció"><![CDATA[
+<h2> Descripció </h2>
+ <p> La descripció de l’article és un component opcional que pot ajudar als motors de cerca i rastrejadors de llocs web a identificar i classificar millor el contingut. </p>
+ <p> La descripció de l’article està limitada a un màxim de 255 caràcters. Tingues en compte que alguns motors de cerca tenen límits de caràcters en la longitud de la <code> meta descripció </code> d’una pàgina per raons pràctiques degudes a la visualització en les pàgines de resultats del motor de cerca (SERP) i aquest pot ser menor que el límit de 255 caràcters en Textpattern. </p>
+ <p> Tingues en compte que la descripció de l’article difereix de l’extracte de l’article, encara que ambdós accepten un contingut similar. La descripció de l’article ha d’estar destinada principalment pel seu ús amb motors de cerca i rastrejadors, mentres que l’extracte de l’article és més adequat per un resum de l’article llegible per humans allà on es vulgui. </p>        ]]></item>
+        <item id="excerpt" title="Extracte"><![CDATA[
+<h2> Extracte </h2>
+<p> Els extractes d'articles són opcionals. Els extractes podrien usar-se com un breu resum de l'article que es mostra com a part d'una taula de contingut, en lloc del cos complet de l'article en els canals RSS / Atom del lloc, o una sèrie d'altres usos. </p>        ]]></item>
+        <item id="expire_date" title="Data de caducitat"><![CDATA[]]></item>
+        <item id="keywords" title="Paraules clau"><![CDATA[]]></item>
+        <item id="override_form" title="Sobreescriu formulari"><![CDATA[]]></item>
+        <item id="publish_date" title="Data de publicació"><![CDATA[]]></item>
+        <item id="status" title="Estat"><![CDATA[]]></item>
+        <item id="title" title="Títol"><![CDATA[]]></item>
+        <item id="url_title" title="Títol només per URL"><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="">
+        <item id="article_category" title="Articles"><![CDATA[]]></item>
+        <item id="category_description" title="Descripció"><![CDATA[]]></item>
+        <item id="file_category" title="Fitxers"><![CDATA[]]></item>
+        <item id="image_category" title="Imatges"><![CDATA[]]></item>
+        <item id="link_category" title="Enllaços"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Amagar la informació privada"><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Actualització de Textpattern"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Hi ha disponible una versió prèvia (pre-release) de Textpattern"><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir"><![CDATA[<h2>La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir</h2>
+<p>Els plugins haurien de tenir el seu propi directori i no compartir el directori temporal. És un risc potencial de seguretat i pot afectar negativament el teu lloc web si es buida el directori temporal. Sisplau, fes que la ruta del directori temporal sigui diferent que la ruta del caché dels plugins.</p>]]></item>
+        <item id="update_server_inaccessible" title="El servidor d'actualitzacions no és accesible"><![CDATA[<h2>El servidor d'actualitzacions no és accesible</h2>
+<p>Ha fallat la comprovació d'actualitzacions, potser per congestió de la xarxa o perquè s'ha tallat la connexió. Aquesta situació generalment es soluciona per si sola en una hora o dues. Prova-ho un altre cop més endavant.</p>]]></item>
+        <item id="warn_mail_unavailable" title="A la teva instal·lació de PHP li manca la funció mail()"><![CDATA[<h2>A la teva instal·lació de PHP li manca la funció mail()</h2>
+<p>La funció <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> del PHP està desactivada. Per tant, Textpattern no pot enviar correus i algunes funcionalitats no estaran disponibles. Per exemple, no s'enviaran notificacions pels nous comentaris, i els nous usuaris no rebran un missatge de benvinguda. Tanmateix, es podran afegir nous usuaris.</p>]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Substitueix el fitxer"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Data de publicació"><![CDATA[]]></item>
+        <item id="upload" title="Puja fitxer"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title="Crea miniatura"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Substitueix imatge"><![CDATA[]]></item>
+        <item id="upload_image" title="Puja imatge"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Puja miniatura"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title="Instal·lar Textpack"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title="Descripció"><![CDATA[]]></item>
+        <item id="link_sort" title="Ordena per valor"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Data de publicació"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title="Continuar registrat en aquest navegador"><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title="Instal·la plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title="Utilitzar els plugins administratius?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Opcions avançades"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Permetre PHP en els articles?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Permetre la sobreescritura de formularis?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Permetre PHP en les pàgines?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Format de data dels arxius"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Els articles utilitzen extracte?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Afegir títols als enllaços permanents?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Ajustar automàticament la configuració de l'horari d'estiu?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Un comentari nou es considera actualització del lloc web?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Presentar comentaris como llista numerada?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Format de data per comentaris"><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Desactivats després de"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="No permetre imatges de l’usuari?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Mode de comentaris"><![CDATA[]]></item>
+        <item id="comments_moderate" title="Moderar comentaris"><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="Cal l’adreça de correu de l’usuari per comentar?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Cal el nom de l’usuari per comentar?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Envia comentaris a l’autor?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Permetre utilizar Textile als comentaris?"><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title="Format de data"><![CDATA[]]></item>
+        <item id="default_event" title="Panell predeterminat"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Estat de publicació predeterminat"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Activar el suport per etiquetes curtes?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Permetre servidor de XML-RPC?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Tamany màxim del fitxers per pujar (en bytes)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Zona horària"><![CDATA[]]></item>
+        <item id="img_dir" title="Directori d’imatges"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Incloure l’adreça de correu en les fonts Atom?"><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title="No mostrar mai l’adreça de correu?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title="Format URL del títol del Permalink"><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Ruta del directori caché dels plugins"><![CDATA[]]></item>
+        <item id="production_status" title="Estat del sistema"><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Publicar els articles caducats?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Enviar la informació d'accés a aquesta direcció de correu electrònic"><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Mostrar comptador de comentaris en feeds?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Eslògan del lloc"><![CDATA[]]></item>
+        <item id="sitename" title="Nom del lloc"><![CDATA[]]></item>
+        <item id="siteurl" title="URL del lloc"><![CDATA[]]></item>
+        <item id="skin_dir" title="Directori de temes"><![CDATA[]]></item>
+        <item id="smtp_from" title="Adreça d'enviament SMTP"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Llista negra de spam (separades amb comes)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title="Directori temporal"><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Funcions PHP associades a txp:evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="Permet comentaris?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title="Utilitzar plugins?"><![CDATA[]]></item>
+        <item id="use_textile" title="Usa Textile en?"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title="Secció predeterminada per a publicar"><![CDATA[]]></item>
+        <item id="section_description" title="Descripció"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title="Incloure en la cerca dins el lloc"><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title="Utilitza estils"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Utilitza pàgina"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="Utilitza el tema"><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title="Autor del tema"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Lloc web de tema"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="Esborrar també les plantilles de tema del servidor"><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title="Tema descripció"><![CDATA[]]></item>
+        <item id="skin_import" title=""><![CDATA[]]></item>
+        <item id="skin_name" title="Nom del tema"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="Títol del tema"><![CDATA[]]></item>
+        <item id="skin_version" title="Versió del tema"><![CDATA[]]></item>
+    </group>
+</help>
+</resources>
