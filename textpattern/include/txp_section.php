@@ -247,16 +247,16 @@ function sec_section_list($message = '')
                         '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 );
 
-                foreach ($columns as $column => $label) {
-                    $thead .= column_head(
-                        $label, $column, 'section', true, $switch_dir, $crit, $search_method,
-                            (($column == $sort) ? "$dir " : '').'txp-list-col-'.$column
-                    );
-                }
+            foreach ($columns as $column => $label) {
+                $thead .= column_head(
+                    $label, $column, 'section', true, $switch_dir, $crit, $search_method,
+                        (($column == $sort) ? "$dir " : '').'txp-list-col-'.$column
+                );
+            }
 
-                $contentBlock .= tr($thead).
-                n.tag_end('thead').
-                n.tag_start('tbody');
+            $contentBlock .= tr($thead).
+            n.tag_end('thead').
+            n.tag_start('tbody');
 
             while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'sec');
@@ -306,6 +306,7 @@ function sec_section_list($message = '')
                     }
                 }
 
+                $has_dev_skin = !empty($sec_dev_skin);
                 !empty($sec_dev_skin) or $sec_dev_skin = $sec_skin;
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
@@ -318,7 +319,7 @@ function sec_section_list($message = '')
                     $sec_dev_item = ${"sec_dev_$item"};
 
                     $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
-                    $replaced = $dev_preview && ($sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
+                    $replaced = $dev_preview && ($has_dev_skin || $sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
                     $in_dev = $in_dev || $replaced;
 
@@ -328,7 +329,7 @@ function sec_section_list($message = '')
                         'skin'  => $sec_skin,
                     ), array('title' => gTxt('edit'))
                     ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
-                    (!$replaced ? '' :
+                    ($replaced ?
                         n.'<hr class="secondary" />'.n.
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
@@ -336,7 +337,7 @@ function sec_section_list($message = '')
                             'skin'  => $sec_dev_skin,
                         ), array('title' => gTxt('edit'))).
                         ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
-                    );
+                    : '');
                 }
 
                 $replaced = $dev_preview && ($sec_skin != $sec_dev_skin) ? 'disabled' : false;
