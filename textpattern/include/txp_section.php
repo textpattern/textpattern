@@ -306,7 +306,7 @@ function sec_section_list($message = '')
                     }
                 }
 
-                $has_dev_skin = !empty($sec_dev_skin);
+                $has_dev_skin = !empty($sec_dev_skin) && $sec_dev_skin !== $sec_skin;
                 !empty($sec_dev_skin) or $sec_dev_skin = $sec_skin;
                 !empty($sec_dev_page) or $sec_dev_page = $sec_page;
                 !empty($sec_dev_css) or $sec_dev_css = $sec_css;
