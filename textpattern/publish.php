@@ -390,7 +390,7 @@ function preText($s, $prefs)
 
                 default:
                     $n = $out[0];
-                    $un = $out[$n];    
+                    $un = $out[$n];
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
@@ -410,9 +410,10 @@ function preText($s, $prefs)
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if (permlinkurl($thisarticle, '/') === $u0) {
-                                $permlink_guess = $permlink_modes[$a['Section']];
+                            $thisurl = permlinkurl($thisarticle, '/');
 
+                            if ($thisurl === $u0 || strpos($u0, $thisurl) !== false) {
+                                $permlink_guess = $permlink_modes[$a['Section']];
                                 break;
                             }
                         }
@@ -425,6 +426,11 @@ function preText($s, $prefs)
                             $out['s'] = $thisarticle['section'];
                             $title = $thisarticle['url_title'];
                             $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
+                        }
+                    } elseif (empty($un)) {
+                        if (is_numeric($u1) && strlen($u1) === 4) {
+                            // Could be a year.
+                            $permlink_guess = 'year_month_day_title';
                         }
                     }
 
@@ -460,8 +466,17 @@ function preText($s, $prefs)
                                     $month = array($u1);
 
                                     if (!empty($u2)) {
-                                        $month[] = ltrim($u2);
-                                        empty($u3) or $month[] = ltrim($u3);
+                                        $month[] = str_pad(ltrim($u2), 2, '0', STR_PAD_LEFT);
+                                        empty($u3) or $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
+                                    }
+                                } elseif (@checkdate(!empty($u3) ? $u3 : 1, !empty($u4) ? $u4 : 1, $u2)) {
+                                    $title = empty($u5) ? null : $u5;
+                                    $out['s'] = $u1;
+                                    $month = array($u2);
+
+                                    if (!empty($u3)) {
+                                        $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
+                                        empty($u4) or $month[] = str_pad(ltrim($u4), 2, '0', STR_PAD_LEFT);
                                     }
                                 } elseif (empty($u3)) {
                                     $out['s'] = $u1;
