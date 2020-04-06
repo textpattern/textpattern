@@ -5,6 +5,8 @@ Changes in 4.8.1
 * Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
 * Fixed: Multi-site index.php correctly included in multi-site css.php.
 * Fixed: Fall back on partial language identifier if code is not found.
+* PrismJS 1.20.0.
+* jQuery File Upload 10.10.0.
 
 Changes in 4.8.0
 
