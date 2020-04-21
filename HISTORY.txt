@@ -2,6 +2,7 @@ Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
+* Changed: Lazy load images within Images list on supported browsers.
 * Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
 * Fixed: Multi-site index.php correctly included in multi-site css.php.
 * Fixed: Fall back on partial language identifier if code is not found.
