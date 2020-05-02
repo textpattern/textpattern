@@ -317,7 +317,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-        load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+//        load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
     }
 
     return $txpLang->txt($var, $atts, $escape);

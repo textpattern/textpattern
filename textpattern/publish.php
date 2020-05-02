@@ -224,7 +224,7 @@ include_once txpath.'/publish/taghandlers.php';
 $trace->stop();
 
 // i18n.
-//    load_lang(LANG);
+load_lang(LANG);
 
 // Tidy up the site.
 janitor();
