@@ -3,22 +3,21 @@ Changes in 4.8.1
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
 * Changed: Lazy load images within Images list on supported browsers.
-* Changed: Improved handling of yyyy/mm/dd permlinks. Single-digit months
-  and days permitted, and /section/yyyy/mm/dd will limit articles to the
+* Changed: Improved handling of yyyy/mm/dd article permlinks. Single-digit
+  months and days permitted, and /section/yyyy/mm/dd will limit articles to the
   given section.
-* Added: Latest translations. Thank you to all translators for your hard
-  work.
+* Added: Latest translations. Thank you to all translators for your hard work.
 * Fixed: Development and live assets are kept in sync when renamed.
-* Fixed: When setting development assets/themes, link to both live and
-  dev assets even if they share a name.
+* Fixed: When setting development assets/themes, link to both live and dev
+  assets even if they share a name.
 * Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
 * Fixed: Multi-site index.php correctly included in multi-site css.php.
 * Fixed: JavaScript console warning on Hive theme login screens. Thanks,
   cara-tm.
-* Fixed: Optional params come first in function defs.
+* Fixed: Optional parameters come first in function definitions.
 * Fixed: Fall back on partial language identifier if code is not found.
-* Fixed: Strings loaded from plugin cache no longer trash those already
-  loaded. Thanks, david@druna.cz.
+* Fixed: Strings loaded from plugin cache no longer trash those already loaded.
+  Thanks, david@druna.cz.
 * jQuery 3.5.0.
 * PrismJS 1.20.0.
 * jQuery File Upload 10.20.0.
