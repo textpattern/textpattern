@@ -1,7 +1,7 @@
 Changes in 4.8.1
 
-* Added: Latest translation strings. Thank you to all translators for
-  your hard work.
+* Added: Latest translations. Thank you to all translators for your hard
+  work.
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
 * Changed: Lazy load images within Images list on supported browsers.
