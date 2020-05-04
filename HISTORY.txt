@@ -13,7 +13,8 @@ Changes in 4.8.1
   dev assets even if they share a name.
 * Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
 * Fixed: Multi-site index.php correctly included in multi-site css.php.
-* Fixed: JS console warning on Hive theme login screens. Thanks, cara-tm.
+* Fixed: JavaScript console warning on Hive theme login screens. Thanks,
+  cara-tm.
 * Fixed: Optional params come first in function defs.
 * Fixed: Fall back on partial language identifier if code is not found.
 * Fixed: Strings loaded from plugin cache no longer trash those already
