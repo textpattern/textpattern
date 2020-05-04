@@ -8,7 +8,7 @@ Changes in 4.8.1
   given section.
 * Added: Latest translations. Thank you to all translators for your hard
   work.
-* Fixed: Keep development and live assets in sync when renamed.
+* Fixed: Development and live assets are kept in sync when renamed.
 * Fixed: When setting development assets/themes, link to both live and
   dev assets even if they share a name.
 * Fixed: Default value of permlink_format on new installs. Thanks, cara-tm.
