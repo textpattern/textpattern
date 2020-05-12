@@ -368,25 +368,11 @@
 <p>L’host del sito o l’amministratore del server ha disattivato una o più funzioni PHP, alcune delle quali possono influenzare il funzionamento di Textpattern.</p>
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[
-<h2>Aggiornamento versione Textpattern CMS</h2>
-<p>È disponibile una nuova versione di Textpattern CMS. Per usufruire delle ultime features e sicurezza, si raccomanda l’upgrade.</p>
-<p>Notare che anche se ci sforziamo per rendere l’esperienza di upgrade più semplice e indolore possibile:</p>
-<ul>
-    <li>Se solo l’ultima cifra differisce dalla vostra attuale versione, l’aggiornamento sarà verosimilmente retro-compatibile con plugin e temi.</li>
-    <li>Se le ultime due cifre differiscono dalla vostra attuale versione, l’aggiornamento potrebbe richiedere di aggiornare alcuni plugin e/o temi, sebbene continuerà a funzionare comunque, seppure in capacità limitata.</li>
-    <li>Se la prima cifra è differente dalla vostra attuale versione, l’aggiornamento verosimilmente richiederà di aggiornare anche gran parte di plugin e temi. Se fate molto affidamento su un particolare plugin o caratteristica del tema, controllate con l’autore o coi membri della comunità prima di cominciare l’upgrade.</li>
-</ul>
-<p>Se il messaggio dice “There is a problem trying to connect to the RPC server” vuol dire che una nuova versione non potrà essere controllata in quel momento, o che il server è momentaneamente fuori servizio. Gli aggiornamenti sono controllati ogni 24 ore per cui è probabile che alla prossima vostra visita al pannello Diagnostica, andrà tutto bene.</p>
-        ]]></item>
-        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[
-<h2>I percorsi delle directory Temporanea e di Cache dei plugin non devono essere uguali</h2>
-<p>I plugin devono avere la propria directory e non condividere la directory Temporanea. Ciò è un potenziale rischio di sicurezza e potrebbe influire negativamente sul tuo sito se la directory temporanea viene svuotata. Assicurarsi che il percorso della directory temporanea sia diverso dal percorso della cache plugin.</p>
-        ]]></item>
-        <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[
-<h2>Nella tua installazione di PHP non è presente la funzione mail()</h2>
-<p>La funzione <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> di PHP è disabilitata. Di conseguenza, Textpattern non può inviare messaggi di posta elettronica e alcune funzionalità non saranno disponibili. Ad esempio, non verranno inviate notifiche email per nuovi commenti e nuovi utenti non riceveranno un’email di benvenuto. Gli utenti, tuttavia, possono ancora essere aggiunti.</p>
-        ]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Pannello file">
@@ -470,6 +456,7 @@
 <h2>URL</h2>
 <p>L’indirizzo del link. Se il link punta ad un altro sito, allora deve essere preceduto da <code>http://</code> o <code>https://</code>.</p>
         ]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
     </group>
 
     <group id="login" title="Pannello login">

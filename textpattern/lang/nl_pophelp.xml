@@ -1,131 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<help lang="pt-BR">
-    <group id="admin" title="Painel do Utilizador">
-        <item id="about_privileges" title="Sobre funções"><![CDATA[
-<h2>Sobre as funções</h2>
-<h3>Editor</h3>
-<ul>
-    <li>pode gerenciar artigos, comentários e links</li>
-    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
-    <li>pode gerenciar imagens e arquivos</li>
-    <li>pode gerenciar categorias e seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
-    <li>pode exibir informações de diagnóstico</li>
-    <li>pode gerenciar preferências do site</li>
-    <li>pode gerenciar usuários</li>
-    <li>pode gerenciar logs de visitante</li>
-    <li>pode gerenciar plugins</li>
-    <li>pode importar dados</li>
-</ul>
-<h3>Managing Editor</h3>
-<ul>
-    <li>pode gerenciar artigos, comentários e links</li>
-    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
-    <li>pode gerenciar imagens e arquivos</li>
-    <li>pode gerenciar categorias e seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
-    <li>pode exibir informações de diagnóstico</li>
-    <li>pode gerenciar preferências local</li>
-    <li>pode ver os usuários</li>
-    <li>pode gerenciar registros de visitas</li>
-    <li>pode gerenciar plugins</li>
-    <li>pode importar dados de</li>
-</ul>
-<h3>Editor de Cópia</h3>
-<ul>
-    <li>pode gerenciar artigos com uma limitação:
-        <ul>
-            <li>não é possível excluir aqueles pertencentes a outros usuários</li>
-        </ul>
-    </li>
-    <li>pode gerenciar comentários e links</li>
-    <li> pode gerenciar imagens e arquivos</li>
-    <li>pode gerenciar categorias</li>
-    <li>pode gerenciar páginas e formulários</li>
-    <li>pode ver os usuários</li>
-    <li>pode gerenciar registros de visitas</li>
-</ul>
-<h3>Escritor</h3>
-<ul>
-    <li>pode gerenciar os próprios artigos, Ver os artigos dos outros usuários</li>
-    <li>pode gerenciar imagens e arquivos</li>
-</ul>
-<h3>Freelancer</h3>
-<ul>
-    <li>pode gerenciar artigos próprios em um sentido limitado:
-        <ul>
-            <li>só pode modificar o artigo até que é publicado</li>
-            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
-        </ul>
-    </li>
-    <li>pode ver os artigos de outros usuários</li>
-</ul>
-<h3>Designer</h3>
-<ul>
-    <li>pode gerenciar os próprios artigos em um sentido limitado:
-        <ul>
-            <li>só pode modificar o artigo até que é publicado</li>
-            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
-        </ul> < di classe v = "notranslate" > 65</div></li>
-    <li>pode ver os artigos dos outros usuários</li>
-    <li>pode gerenciar imagens</li>
-    <li>pode gerenciar seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
-</ul>
-        ]]></item>
-        <item id="create_author" title="Criar o autor"><![CDATA[
-<h2>Adicionar novo autor</h2>
-<p>Uma senha, mensagem de bem-vindo e instruções de login serão enviadas para o novo autor.</p>
-        ]]></item>
+<help lang="nl">
+    <group id="admin" title="">
+        <item id="about_privileges" title=""><![CDATA[]]></item>
+        <item id="create_author" title=""><![CDATA[]]></item>
     </group>
 
-    <group id="article" title="Painel de escrever">
-        <item id="article_image" title="Imagem de artigo"><![CDATA[
-<h2>Imagem do artigo</h2>
-<p>Para associar uma única imagem a este artigo, informe as seguintes informações:</p>
-<ol>
-    <li>uma imagem Textpattern ID (por exemplo, <code>12</code>)</li>
-    <li>uma URL relativa para a imagem (por exemplo, <code>/images/my_pic.jpg</code>)</li>
-    <li>uma URL com o endereço completo (por exemplo, <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
-</ol>
-<p>a imagem pode ser exibida, colocando uma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> marca <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> dentro de uma forma de artigo. Ocorrerá em uma saída HTML <code>&lt;img&gt;</code>completa para a imagem escolhida.</p>
-        ]]></item>
-        <item id="body" title="Conteúdo"><![CDATA[
-<h2>Conteúdo</h2>
-<p>O conteúdo principal de um artigo está contido dentro do corpo do artigo.</p>
-<p>quando compondo ou preparando artigos para publicação em Textpattern, um autor pode alternar entre três pontos de vista do artigo: texto simples, marcação HTML (o código com o qual um navegador da web processa o artigo) e em modo visualização.</p>
-        ]]></item>
-        <item id="description" title="Descrição"><![CDATA[
-<h2>Descrição</h2>
-<p>A descrição do artigo é um componente opcional que pode ajudar os motores de busca e rastreadores site melhor identificam e classificar conteúdo.</p>
-<p>A descrição do artigo é limitada a um máximo de 255 caracteres. Nota que alguns motores de busca Coloque limites de caráter no comprimento de de uma página <code>Descrição de meta</code> para a praticidade do display no resultado das páginas no engine de busca (SERPs) e isso pode ser menor que o limite de 255 caracteres em Textpattern.</p>
-<p>Nota que a descrição do artigo difere o trecho do artigo, embora ambos aceitam conteúdo semelhante. A descrição do artigo deve ser destinada principalmente para uso com os motores de busca e rastreadores, Considerando que o trecho do artigo é mais adequado para um resumo legível do artigo quando desejado.</p>
-        ]]></item>
-        <item id="excerpt" title="Resumo"><![CDATA[
-<h2>Resumo</h2>
-<p>Resumo de artigo são opcionais. Trechos poderiam ser usados como um resumo do artigo que é exibido como parte de uma tabela de conteúdo, usado no lugar do corpo do artigo completo em feeds RSS/Atom do site, ou em inúmeros outros usos.</p>
-        ]]></item>
+    <group id="article" title="">
+        <item id="article_image" title=""><![CDATA[]]></item>
+        <item id="body" title=""><![CDATA[]]></item>
+        <item id="description" title=""><![CDATA[]]></item>
+        <item id="excerpt" title=""><![CDATA[]]></item>
         <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title="Palavras-chave"><![CDATA[
-<h2>Palavras-chave</h2>
-<p>Palavras-chave são úteis para melhorar as relações entre artigos além dos fornecidos por categorias.</p>
-<p>Palavras-chave devem ser separadas por vírgulas.</p>
-        ]]></item>
-        <item id="override_form" title="Módulo alternativo"><![CDATA[
-<h2>Módulo alternativo</h2>
-<p>Um artigo pode, opcionalmente, usar um módulo diferente do atribuído por padrão. Por exemplo, para mostrar um resumo de um artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> em vez do corpo do artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> - você pode usar um módulo alternativo. </p>
-        ]]></item>
-        <item id="publish_date" title="Data de publicação"><![CDATA[
-<h2>Data de publicação</h2>
-<p>A data/hora em que o artigo ou arquivo é publicado ou mais recentemente revisado. Pode ser definido no horário atual em que o item é publicado, ou para um tempo arbitrário no passado ou no futuro. </p>
-<p>As caixas correspondem às seguintes informações:</p>
-<ul>
-    <li>Ano / Mês / Dia</li>
-    <li>Hora (Formato de 24h) : Minuto : Segundo</li>
-</ul>
-<p>Um item com horário definido para o futuro ficará agendado, e não será visível no site nem em feeds RSS/Atom até chegar à data e horário determinado. </p>
-        ]]></item>
+        <item id="keywords" title=""><![CDATA[]]></item>
+        <item id="override_form" title=""><![CDATA[]]></item>
+        <item id="publish_date" title="Publicatiedatum"><![CDATA[]]></item>
         <item id="status" title=""><![CDATA[]]></item>
         <item id="title" title=""><![CDATA[]]></item>
         <item id="url_title" title=""><![CDATA[]]></item>
@@ -160,18 +49,58 @@
         <item id="setup_still_exists" title=""><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Nieuwe textpattern versie"><![CDATA[
+<h2>Nieuwe Textpattern versie</h2>
+<p>Er is een nieuwere versie van Textpattern beschikbaar. Om te kunnen profiteren van de nieuwste functies en beveiliging, raden we aan deze upgrade uit te voeren. /1>
+<p>We doen ons best om de upgrade zo gestroomlijnd mogelijk te maken:</p>
+<ul>
+    <li>Als alleen het laatste cijfer verschilt van je huidige versie, zal de upgrade waarschijnlijk achterwaarts compatibel zijn met de gebruikte plugins en thema's. /3>
+    <li>Als de laatste twee cijfers afwijken van de huidige versie, kan het nodig zijn dat sommige plug-ins en/of thema's ook bijgewerkt moeten worden. Waarschijnlijk zal de site gewoon blijven werken met mogelijk kleine comptabiliteitsproblemen. /3>
+    <li>Als het eerste cijfer afwijkt van je huidige versie, vraagt de upgrade waarschijnlijk updates voor de meeste plugins en thema's. Als u sterk afhankelijk bent van een specifieke plugin of themafunctie, controleer dan vooraf bij de auteur ervan of op het Textpattern-forum wat er kan gebeuren als u de upgrade toepast. /3>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Er is een Textpattern pre-release beschikbaar"><![CDATA[
+<h2>Textpattern pre-release update beschikbaar</h2>
+<p>Er is een nieuwere pre-release versie van Textpattern beschikbaar. We zijn op zoek naar actieve vrijwilligers om deze versie te testen, zodat we de definitieve release zo solide mogelijk kunnen maken. We streven ernaar om de upgrade ook voor bèta versies zo soepel mogelijk te laten verlopen. /1>
+<p>Als je beslist om de upgrade toe te passen, let op:</p>
+<ul>
+    <li>Gebruik deze bèta-versie niet op een productie-site tenzij je een werkende back-up hebt van zowel de site-bestanden als de bijbehorende database, en ook weet hoe die weer terug te zetten. /3>
+    <li>Rapporteer <a href="https://github.com/textpattern/textpattern/issues">problemen </a>, met het vermelden van de bètaversie die je gebruikt. Er kunnen nieuwe beta releases nodig zijn voorafgaand aan de stabiele release, afhankelijk van de gemelde problemen. /3>
+    <li>Zorg ervoor dat je na deze bèta-versie ook overstapt naar de definitieve versie wanneer deze uitkomt. /3>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Het pad naar de tijdelijke bestanden map en de map voor de plugin cache kunnen niet identiek zijn"><![CDATA[
+<h2>De paden naar de tijdelijke bestanden-map en de plugin-map mogen niet hetzelfde zijn</h2>
+<p>Plugins moeten een eigen map hebben en kunnen de tijdelijke map niet delen. Deze map delen is een potentieel veiligheidsrisico en kan uw site negatief beïnvloeden als de tijdelijke directory wordt aangevallen. Zorg er dus voor dat het pad naar de tijdelijke bestanden-map verschilt van dat voor de plugin cache.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="De updateserver is onbereikbaar"><![CDATA[
+<h2>De update server is niet bereikbaar</h2>
+<p>Het lukt niet om te zien of er updates zijn.  Mogelijk is er een netwerkstoring of een time-out. Meestal lost dit zich vanzelf op.  Kom dus later op deze plek terug.
+        ]]></item>
+        <item id="warn_mail_unavailable" title="De mail() functie ontbreekt in uw PHP-installatie"><![CDATA[
+<h2>De mail() functie ontbreekt in uw PHP-installatie</h2>
+<p>PHP's<a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> functie is uitgeschakeld. Daarom kan Textpattern geen e-mails verzenden en zullen sommige functies niet beschikbaar zijn. E-mail-notificaties voor nieuwe reacties zullen bijvoorbeeld niet worden verzonden en nieuwe gebruikers zullen geen welkomstmail ontvangen. Gebruikers kunnen echter nog steeds worden toegevoegd.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="">
         <item id="file_reassign" title=""><![CDATA[]]></item>
         <item id="file_replace" title=""><![CDATA[]]></item>
-        <item id="timestamp_file" title=""><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
+        <item id="timestamp_file" title="Publicatiedatum"><![CDATA[
+<h2>Publicatiedatum</h2>
+<p>De tijd dat een bestand is opgeslagen of recent is herzien. Voor deze tijd kan het moment van publicatie worden gebruikt, of ieder willekeurige moment in verleden of toekomst. </p>
+<p>De vakjes komen overeen met de volgende informatie:</p>
+<ul>
+    <li>Jaar / Maand / Dag</li>
+    <li>Uur (24-uurs formaat) : Minuten : Seconden</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Bestand uploaden"><![CDATA[
+<h2>Bestand uploaden</h2>
+<p>Gebruik dit formulier om bestanden of afbeeldingen naar de server te uploaden.< /1>
+<p>Gebruik de textile code om beeld in artikelen te plaatsen, de textpattern code voor het plaatsen van beeld in pagina's, of de HTML code om afbeeldingen elders te plaatsen. </p>
+
+        ]]></item>
     </group>
 
     <group id="form" title="">
@@ -193,7 +122,15 @@
         <item id="link_description" title=""><![CDATA[]]></item>
         <item id="link_sort" title=""><![CDATA[]]></item>
         <item id="link_url" title=""><![CDATA[]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title="Publicatiedatum"><![CDATA[
+<h2>Publicatiedatum</h2>
+<p>het tijdstipt een bestand is opgeslagen of recent is herzien. Voor deze tijd kan het moment van publicatie worden gebruikt, of ieder willekeurige moment in verleden of toekomst. </p>
+<p>De vakjes komen overeen met de volgende informatie:</p>
+<ul>
+    <li>Jaar / Maand / Dag</li>
+    <li>Uur (24-uurs formaat) : Minuten : Seconden</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="">
