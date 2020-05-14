@@ -16,7 +16,7 @@ Changes in 4.8.1 (upcoming)
   cara-tm.
 * Fixed: Optional parameters come first in function definitions.
 * Fixed: Fall back on partial language identifier if code is not found.
-* Fixed: Strings loaded from plugin cache no longer trash those already loaded.
+* Fixed: Strings loaded from plugin cache no longer break those already loaded.
   Thanks, David.
 * jQuery 3.5.1.
 * PrismJS 1.20.0.
