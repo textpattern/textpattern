@@ -1212,12 +1212,6 @@ textarea:-moz-ui-invalid {
    *
    * 1. Fix placeholder font properties inheritance.
    */
-  ::-webkit-input-placeholder {
-    opacity: 1;
-    color: #999999;
-    /* 1 */
-    font: inherit;
-  }
   :-ms-input-placeholder {
     opacity: 1;
     color: #999999;

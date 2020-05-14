@@ -67,6 +67,7 @@
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
     "get-hive-admin-theme": "sh .github/get-hive-admin-theme.sh",
+    "get-admin-themes": "sh .github/get-classic-admin-theme.sh && sh .github/get-hive-admin-theme.sh",
     "get-default-theme": "sh .github/get-default-theme.sh",
     "txp-index": "php .github/txp-index.php",
     "txp-checksums": "php .github/txp-checksums.php",
