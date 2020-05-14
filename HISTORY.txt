@@ -20,7 +20,7 @@ Changes in 4.8.1 (upcoming)
   Thanks, david@druna.cz.
 * jQuery 3.5.1.
 * PrismJS 1.20.0.
-* jQuery File Upload 10.20.0.
+* jQuery File Upload 10.25.0.
 
 Changes in 4.8.0
 
