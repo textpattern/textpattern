@@ -111,8 +111,11 @@ class TxpXML
                     continue;
                 }
 
+                // Permit data to be imported into plugin tables.
+                $keyPrefix = preg_match('/^[a-z]{3,3}\_/', $key) ? '' : 'txp_';
+
                 foreach ($children->item as $item) {
-                    safe_insert('txp_'.$key, $this->makeSqlSet($item));
+                    safe_insert($keyPrefix.$key, $this->makeSqlSet($item));
                 }
             }
             foreach ($articles as $a) {

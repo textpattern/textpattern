@@ -423,7 +423,8 @@ function page_save()
                 if (safe_update('txp_page',
                         "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
-                    safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name'");
+                    safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name' AND skin='$safe_skin'");
+                    safe_update('txp_section', "dev_page = '$safe_newname'", "dev_page='$safe_name' AND dev_skin='$safe_skin'");
                     set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
 
