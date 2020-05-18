@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="tr">
+    <group id="admin" title="Kullanıcı paneli">
+        <item id="about_privileges" title="Roller hakkında"><![CDATA[
+<h2>Roller hakkında</h2>
+<h3>Yayımcı</h3>
+<ul>
+    <li>makaleleri, yorumları ve linkleri yönetebilir</li>
+    <li>eğer admin "Makalelerde PHP olmasına izin verilsin mi" seçeneğini "Evet" yaparsa makaleler de PHP'yi kullanabilir </li>
+    <li>görselleri ve dosyaları yönetebilir</li>
+    <li>bölümleri ve kategorileri yönetebilir</li>
+    <li>sayfaları, biçimleri ve stili yönetebilir</li>
+    <li>teşhişsel bilgileri görüntüleyebilir</li>
+    <li>site tercihlerini yönetebilir</li>
+    <li>kullanıcıları yönetebilir</li>
+    <li>ziyaretçi günlüklerini yönetebilir</li>
+    <li>eklentileri yönetebilir</li>
+    <li>verileri alabilir</li>
+</ul>
+<h3>Yönetim Editörü</h3>
+<ul>
+    <li>makaleleri, yorumları ve linkleri yönetebilir</li>
+    <li>eğer admin "Makalelerde PHP olmasına izin verilsin mi" seçeneğini "Evet" yaparsa makaleler de PHP'yi kullanabilir </li>
+    <li>görselleri ve dosyaları yönetebilir</li>
+    <li>bölümleri ve kategorileri yönetebilir</li>
+    <li>sayfaları, biçimleri ve stili yönetebilir</li>
+    <li>teşhişsel bilgileri görüntüleyebilir</li>
+    <li>site tercihlerini yönetebilir</li>
+    <li>kullanıcıları görüntüleyebilir/3>
+    <li>ziyaretçi günlüklerini yönetebilir</li>
+    <li>eklentileri yönetebilir</li>
+    <li>verileri alabilir</li>
+</ul>
+<h3>Kopyalama Editörü</h3>
+<ul>
+    <li>makaleleri bir tane sınırlama ile yönetebilir:
+        <ul>
+            <li>başkalarına ait şeyleri silemez</li>
+        </ul>
+    </li>
+    <li>yorumları ve linkleri yönetebilir</li>
+    <li>görselleri ve dosyaları yönetebilir</li>
+    <li>kategorileri yönetebilir</li>
+    <li>sayfaları ve biçimleri yönetebilir</li>
+    <li>kullanıcıları görüntüleyebilir</li>
+    <li>ziyaretçi günlüklerini yönetebilir</li>
+</ul>
+<h3>Kadrolu Yazar</h3>
+<ul>
+    <li>kendine ait makaleleri yönetebilir, diğer kullanıcıların makalelerini görüntüleyebilir</li>
+    <li>görsel ve dosyaları yönetebilir</li>
+</ul>
+<h3>Bağımsız yazarlar</h3>
+<ul>
+    <li>belirli sınırlar dahilinde kendi makalelerini yönetebilir:
+        <ul>
+            <li>makaleleri sadece yayınlandıktan sonra yönetebilir</li>
+            <li><em>sadece</em> Taslak, Gizlenmiş veya Beklemede olanın durumunu onaylayabilir</li>
+        </ul>
+    </li>
+    <li>diğer kullanıcıların makalelerini görebilir</li>
+</ul>
+<h3>Tasarımcı</h3>
+<ul>
+    <li>belirli sınırlar dahilinde kendi makalelerini yönetebilir:
+        <ul>
+            <li>makaleleri sadece yayınlandıktan sonra yönetebilir</li>
+            <li><em>sadece</em> Taslak, Gizlenmiş veya Beklemede olanın durumunu onaylayabilir</li>
+        </ul>
+    </li>
+    <li>diğer kullanıcıların makalelerini görüntüleyebilir</li>
+    <li>görselleri yönetebilir</li>
+    <li>sekmeleri yönetebilir</li>
+    <li>sayfaları, formları ve stilleri yönetebilir</li>
+</ul>
+        
+        ]]></item>
+        <item id="create_author" title="Yazar oluştur"><![CDATA[
+<h2>Yeni yazar ekle</h2>
+<p>Şifre, hoşgeldin mesajı ve giriş talimatları yeni yazara email üzerinden gönderilecek</p>        ]]></item>
+    </group>
+
+    <group id="article" title="Panel yaz">
+        <item id="article_image" title="Makale görseli"><![CDATA[]]></item>
+        <item id="body" title="Gövde"><![CDATA[]]></item>
+        <item id="description" title="Açıklama"><![CDATA[]]></item>
+        <item id="excerpt" title="Pasaj"><![CDATA[]]></item>
+        <item id="expire_date" title="Sona erme tarihi"><![CDATA[]]></item>
+        <item id="keywords" title="Anahtar kelimeler"><![CDATA[]]></item>
+        <item id="override_form" title=""><![CDATA[]]></item>
+        <item id="publish_date" title=""><![CDATA[]]></item>
+        <item id="status" title="Durum"><![CDATA[]]></item>
+        <item id="title" title="Başlık"><![CDATA[
+<h2>Başlık</h2>
+<p>Bu makale için uygun bir başlık ekleyin.</p>
+<p>Bir makale başlığı en fazla 255 karakterle sınırlıdır.</p>
+        ]]></item>
+        <item id="url_title" title="URL-sadece başlık"><![CDATA[
+<h2>URL-sadece başlık</h2>
+<p>Kalıcı URL linklerinde özel bi başlık koymak istiyorsanız, buraya yazın. Eğer boş bırakılırsa, URL'nin başlığı otomatik olarak makalenin başlığıyla aynı olacak.</p>
+<p>Özellikle non-ASCII karakterler içeren makale başlıklarında kullanışlıdır.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategoriler paneli">
+        <item id="article_category" title="Makaleler"><![CDATA[]]></item>
+        <item id="category_description" title="Açıklama"><![CDATA[]]></item>
+        <item id="file_category" title="Dosyalar"><![CDATA[
+<h2>Dosyalar</h2>
+<p>Dosya kategorileri opsiyoneldir ve aynı anda beraber yüklenmiş dosyaları gruplandırmak için kullanışlıdır.</p>
+        ]]></item>
+        <item id="image_category" title="Görseller"><![CDATA[]]></item>
+        <item id="link_category" title="Linkler"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="Tanılama paneli">
+        <item id="clean_url_data_failed" title="Temiz URL veri hatası"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Temiz URL deneme hatası"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Kişisel bilgileri gizlemek"><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Dizin yazılabilir değil"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="DNS hataları"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Dosya yüklemeleri etkin değil"><![CDATA[]]></item>
+        <item id="htaccess_missing" title=".htaccess dosyası mevcut değil"><![CDATA[]]></item>
+        <item id="index_inaccessible" title="Site indeksi ulaşılamaz"><![CDATA[]]></item>
+        <item id="missing_files" title="Eksik dosyalar"><![CDATA[
+<h2>Eksik dosyalar</h2>
+<p>Bir ya da birkaç önemli dosya Textpattern'de eksik. Bütün listelenmiş dosyaların serverda olduğuna ve doğru yerlerde olduğuna emin olun.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite bulunamadı"><![CDATA[
+<h2>Apache mod_rewrite bulunamadı</h2>
+<p>Apache'nin <code>mod_rewrite</code> modülü devre dışı bırakılmış ya da yüklenmemiş. Textpattern'ın düzgün işleyebilmesi için bu önerilir. Var olduğuna ve aktif durumda olduğuna emin olun, ya da site sahibiyle yardımcı olması için iletişime geçin.</p>
+        ]]></item>
+        <item id="modified_files" title="Değiştirilmiş dosyalar"><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Geçici dizin tanımlanamadı"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Site dizini okunamaz"><![CDATA[]]></item>
+        <item id="php_version_required" title="Minimum versiyon gereksinimleri"><![CDATA[]]></item>
+        <item id="setup_still_exists" title="Yükleme dizini hâlâ mevcut"><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="Dosyalar paneli">
+        <item id="file_reassign" title="Dosyayı yeniden ata"><![CDATA[]]></item>
+        <item id="file_replace" title="Dosyayı yeniden konumlandır"><![CDATA[]]></item>
+        <item id="timestamp_file" title=""><![CDATA[]]></item>
+        <item id="upload" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="Biçimler paneli">
+        <item id="forms_overview" title="Biçimlere giriş"><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="Görseller paneli">
+        <item id="create_thumbnail" title="Küçük görsel (thumbnail) oluştur"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Görseli değiştir"><![CDATA[]]></item>
+        <item id="upload_image" title="Görsel yükle"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Küçük görsel (thumbnail) yükle"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="Diller paneli">
+        <item id="get_textpack" title="Textpack yükle"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="Bağlantılar paneli">
+        <item id="link_description" title="Açıklama"><![CDATA[]]></item>
+        <item id="link_sort" title="Sıralama değeri"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Bağlantı adresi. Eğer bağlantı farklı bir siteyi gösteriyorsa, başına <code>http://</code> yada <code>https://</code> getirilmelidir.</p>
+        ]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="Oturum açma paneli">
+        <item id="remember_login" title="Bu tarayıcıda oturum açılmış olarak kalsın"><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="Eklenti paneli">
+        <item id="install_plugin" title="Eklenti yükle"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Eklenti yükle"><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="Tercihler paneli">
+        <item id="admin_side_plugins" title="Yönetici (Admin) eklentilerini kullanmak istiyor musunuz?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Gelişmiş ayarlar"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Makalelerde PHP kullanımına izin verilsin mi?"><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Sayfalarda PHP olmasına izin verilsin mi?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Arşiv tarih biçimi"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Makale başlıklarında kalıcı bağlantılar kullanılsın mı?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Yaz Saati Uygulaması otomatik olarak ayarlansın mı?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Yorum eklendiğinde site güncellenmiş olarak kabul edilsin mi?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Yorumların tarihini gösterme biçimi"><![CDATA[
+<h2>Yorumların tarihini gösterme biçimi</h2>
+<p>Yorumların tarihi site ziyaretçilerine nasıl görünecek.</p>        ]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title="Yorumları denetle?"><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="Yorum atmak için kullanıcının email adresi istensin mi?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Yorumlarda kullanıcı adı gereksin mi?"><![CDATA[
+<h2>Yorumlarda kullanıcı adı gereksin mi?</h2>
+<p>Eğer 'Evet' olarak seçilirse makalenize yorum yapmak isteyen insanlar kullanıcı adı girmeleri gerekecektir. İsim belirtmedikleri sürece yorumlarını sunamayacaklar.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Yorum yapıldığında yazara email gönderilsin mi?"><![CDATA[
+<h2>Yorum yapıldığında yazara email gönderilsin mi?</h2>
+<p>Eğer 'Evet' seçilirse, makaleye ne zaman bi yorum yapılırsa bu yorumun bi kopyası email üzerinden makalenin yazarına gönderilecek.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title="Tarih biçimi"><![CDATA[
+<h2>Tarih biçimi</h2>
+<p>Bu seçenek makale tarihlerinin sadece sizin sitenin ön sayfasında nasıl görüneceği etkileyecek</p>
+        ]]></item>
+        <item id="default_event" title="Varsayılan panel"><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Kısa etiket desteğini etkinleştir?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="XML-RPC sunucusu etkinleştirilsin mi?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="Kayıtlar kaç gün sonra silinsin?"><![CDATA[]]></item>
+        <item id="file_base_path" title="Klasör yolu"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Maksimum dosya yükleme boyutu(byte olarak)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Saat dilimi"><![CDATA[]]></item>
+        <item id="img_dir" title="Görsel klasörü"><![CDATA[]]></item>
+        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title="Maksimum URL uzunluğu (karakter olarak)"><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title="Yorum yazanların e mail adresi gizlensin mi?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="E-posta gönderirken ISO-8859-1 kodlama kullanılsın mı (varsayılan UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="production_status" title="Üretim durumu"><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Süresi dolmuş makaleler yayınlansın mı?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Bu e-posta adresinden giriş bilgilerini gönder"><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="site_slogan" title="Site Sloganı"><![CDATA[]]></item>
+        <item id="sitename" title="Site adı"><![CDATA[]]></item>
+        <item id="siteurl" title="Site URL'si"><![CDATA[]]></item>
+        <item id="skin_dir" title="Tema klasörü"><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title=""><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Yorumlara izin verilsin mi?"><![CDATA[
+<h2>Yorumlara izin verilsin mi?</h2>
+<p>Bu Textpattern'in yorum yapma işlevinin etkin olmalı mı ya da olmamalı mı ayarını düzenler.</p>
+        ]]></item>
+        <item id="use_plugins" title=""><![CDATA[]]></item>
+        <item id="use_textile" title="Eklentiler kullanılsın mı?"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="Bölümler paneli">
+        <item id="section_category" title="Giriş"><![CDATA[]]></item>
+        <item id="section_default" title="Varsayılan yayın bölümü"><![CDATA[]]></item>
+        <item id="section_description" title="Açıklama"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title="Bu bölüm site aramalarına dahil edilsin mi?"><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title="Kullanılan stil"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Kullanılan sayfa"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="Kullanılan tema"><![CDATA[
+<h2>Kullanılan tema</h2>
+<p>Eğer belirli bi bölüm için kullanılan temayı değiştirmek istiyorsanız, önceden yüklenmiş temaların listesinden seçerek buradan ayarlayabilirsiniz.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Kurulum paneli">
+        <item id="setup_user_login" title="Kullanıcı girişi"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Kullanıcı parolası"><![CDATA[]]></item>
+        <item id="table_prefix" title="Tablo öneki"><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="Temalar paneli">
+        <item id="skin_author" title="Tema yazarı"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Tema web sitesi"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title="Tema açıklaması"><![CDATA[]]></item>
+        <item id="skin_import" title="Temayı içe aktar"><![CDATA[]]></item>
+        <item id="skin_name" title="Tema adı"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_version" title=""><![CDATA[]]></item>
+    </group>
+</help>
+</resources>

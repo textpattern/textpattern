@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="de">
+    <group id="admin" title="Benutzer-Panel">
+        <item id="about_privileges" title="Über Rollen"><![CDATA[
+<h2>Über Rollen</h2>
+<h3>Herausgeber</h3>
+<ul>
+    <li>kann Artikel, Kommentare und Links verwalten</li>
+    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Sektionen und Kategorien verwalten</li>
+    <li>kann Seiten, Formulare und Stile verwalten</li>
+    <li>kann Diagnoseinformationen anzeigen</li>
+    <li>kann Website-Einstellungen verwalten</li>
+    <li>kann Benutzer verwalten</li>
+    <li>kann Besucherprotokolle verwalten</li>
+    <li>kann Plugins verwalten</li>
+    <li>kann Daten importieren</li>
+</ul>
+<h3>Editor verwalten</h3>
+<ul>
+    <li>kann Artikel, Kommentare und Links verwalten</li>
+    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Sektionen und Kategorien verwalten</li>
+    <li>kann Seiten, Formulare und Stile verwalten </li>
+    <li>kann Diagnoseinformationen anzeigen</li>
+    <li>kann Website-Einstellungen verwalten</li>
+    <li>kann Benutzer anzeigen</li>
+    <li>kann Besucherprotokolle verwalten</li>
+    <li>kann Plugins verwalten</li>
+    <li>kann Daten importieren</li>
+</ul>
+<h3>Editor kopieren </h3>
+<ul>
+    <li>kann Artikel mit einer Einschränkung verwalten:
+        <ul>
+            <li>kann nicht gelöscht werden, die anderen Benutzern gehören</li>
+        </ul>
+    </li>
+    <li>kann Kommentare und Links verwalten</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Kategorien verwalten</li>
+    <li>kann Seiten und Formulare verwalten</li>
+    <li>kann Benutzer anzeigen</li>
+    <li>kann Besucherprotokolle verwalten</li>
+</ul>
+<h3>Schriftsteller</h3>
+<ul>
+    <li>kann eigene Artikel verwalten und die Artikel anderer Nutzer anzeigen.</li>
+    <li>kann Bilder und Dateien verwalten</li>
+</ul>
+<h3>Freiberufler</h3>
+<ul>
+    <li>kann in begrenztem Umfang eigene Artikel verwalten:
+        <ul>
+            <li>kann nur Artikel verwalten, bis diese veröffentlicht werden</li>
+            <li>kann den Status von <em>nur</em> Entwurf, Ausgeblendet oder Ausstehend </li> übernehmen
+        </ul>
+    </li>
+    <li> kann Artikel anderer Nutzer anzeigen</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>kann in begrenztem Umfang eigene Artikel verwalten:
+        <ul>
+            <li>kann nur Artikel ändern, bis diese veröffentlicht werden</li>
+            <li>kann den Status von <em>nur</em> Entwurf, Ausgeblendet oder Ausstehend </li> übernehmen
+        </ul>
+    </li>
+    <li>kann die Artikel anderer Nutzer anzeigen</li>
+    <li>kann Bilder verwalten</li>
+    <li>kann Sektionen verwalten</li>
+    <li>kann Seiten, Formulare und Stile verwalten</li>
+</ul>        ]]></item>
+        <item id="create_author" title="Autor erstellen"><![CDATA[
+<h2>Neuen Autor hinzufügen</h2>
+<p>Passwort, Begrüßungsnachricht und Anweisungen zur Anmeldung werden per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
+    </group>
+
+    <group id="article" title="Schreibtafel">
+        <item id="article_image" title="Artikelbild"><![CDATA[]]></item>
+        <item id="body" title="Haupttext"><![CDATA[]]></item>
+        <item id="description" title="Beschreibung"><![CDATA[]]></item>
+        <item id="excerpt" title="Exzerpt"><![CDATA[]]></item>
+        <item id="expire_date" title="Ablaufdatum"><![CDATA[]]></item>
+        <item id="keywords" title="Stichworte"><![CDATA[<h2>Keywords</h2>
+<p>Stichwörter sind nützlich, um die Beziehungen zwischen Artikeln zu verfeinern, die über die von Kategorien bereitgestellten hinausgehen.</p>
+<p>Keywords müssen einzelne Wörter sein, die durch Kommata getrennt sind.</p>]]></item>
+        <item id="override_form" title="Alternativen Baustein verwenden"><![CDATA[]]></item>
+        <item id="publish_date" title=""><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="title" title="Titel"><![CDATA[
+<h2>Titel</h2>
+<p>Füge einen passenden Titel für den Artikel hinzu.</p>
+<p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>        ]]></item>
+        <item id="url_title" title=""><![CDATA[
+<h2>Nur URL-Titel</h2>
+<p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel generiert.</p>
+<p>Dies ist besonders nützlich, wenn der Titel des Artikels nicht-ASCII-Zeichen verwendet.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategorien-Bereich">
+        <item id="article_category" title="Artikel"><![CDATA[]]></item>
+        <item id="category_description" title="Beschreibung"><![CDATA[]]></item>
+        <item id="file_category" title="Dateien"><![CDATA[
+<h2>Dateien</h2>
+<p>Dateikategorien sind optional und nützlich, um ausgewählte hochgeladene Dateien zusammenzufassen.</p>
+        ]]></item>
+        <item id="image_category" title="Bilder"><![CDATA[]]></item>
+        <item id="link_category" title="Links"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="Diagnosetafel">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Private Informationen ausblenden"><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Verzeichnis ist nicht beschreibbar"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="DNS fehlgeschlagen"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Das Hochladen von Dateien ist deaktiviert"><![CDATA[
+<h2>Datei-Uploads sind deaktiviert</h2>
+<p>Die aktuelle Server-Konfiguration zeigt an, dass Datei-Uploads deaktiviert sind. Bitte überprüfen Sie dies indem Sie die <code>Datei-Uploads</code> Einstellung in <code>php.ini</code> oder kontaktieren Sie den Site-Host um Hilfe zu erhalten.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess Datei fehlt"><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="Fehlende Dateien"><![CDATA[
+<h2>Fehlende Dateien</h2>
+<p>Mindesten eine der betreffenden Dateien fehlt im Textmuster. Überprüfen Sie, ob sich die aufgelisteten Dateien auf dem Server und an richtiger Stelle befinden.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="Datei-Bereich">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Datei ersetzen"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Veröffentlichungsdatum"><![CDATA[]]></item>
+        <item id="upload" title="Datei hochladen"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title="Vorschaubild erstellen"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Bild ersetzen"><![CDATA[]]></item>
+        <item id="upload_image" title="Bild hochladen"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Vorschaubild hochladen"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="Sprachen-Bereich">
+        <item id="get_textpack" title="Textpack installieren"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="Links-Bereich">
+        <item id="link_description" title="Beschreibung"><![CDATA[]]></item>
+        <item id="link_sort" title="Sortierkriterium"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="Anmeldebreich">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="Plugin-Bereich">
+        <item id="install_plugin" title="Plugin installieren"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Plugin hochladen"><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="advanced_options" title=""><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="PHP in Seiten erlauben?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title="Kommentarmodus"><![CDATA[]]></item>
+        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title="Benutzerdefinierte Felder"><![CDATA[]]></item>
+        <item id="dateformat" title="Datumsformat"><![CDATA[]]></item>
+        <item id="default_event" title="Standard-Menü"><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title="Datei-Upload-Pfad"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title="Zeitzone"><![CDATA[]]></item>
+        <item id="img_dir" title="Bilderverzeichnis"><![CDATA[]]></item>
+        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="site_slogan" title=""><![CDATA[]]></item>
+        <item id="sitename" title=""><![CDATA[]]></item>
+        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="skin_dir" title="Verzeichnis für Designs"><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title="Kommentare annehmen?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title="Plugins verwenden?"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_description" title="Beschreibung"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title=""><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title=""><![CDATA[]]></item>
+        <item id="section_uses_page" title=""><![CDATA[]]></item>
+        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="Setup-Bereich">
+        <item id="setup_user_login" title="Benutzeranmeldung"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Benutzerpasswort"><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title=""><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Website des Designs"><![CDATA[
+<h2>Design-Website</h2>
+<p>URL auf der die vollständigen Informationen und/oder neueste Versionen dieses Designs gefunden werden können (optional).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Design-Vorlagen auch von der Festplatte löschen"><![CDATA[
+<h2>Design-Vorlagen auch von der Festplatte löschen</h2>
+<p>Wenn aktiviert, werden alle Vorlagen der ausgewählten Designs dauerhaft von der Festplatte gelöscht. Allerdings werden themenbezogene Verzeichnisse und deren Unterverzeichnisse nicht gelöscht, wenn andere Dateien (wie JavaScript, Bilder,...) diese beinhalten.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title="Beschreibung des Designs"><![CDATA[
+<h2>Theme Beschreibung</h2>
+<p>Eine kurze Zusammenfassung des Themes kann hinterlegt werden (optional).</p>
+<p>Die Theme Beschreibung ist auf max. 255 Zeichen limitiert.</p>
+        ]]></item>
+        <item id="skin_import" title="Design importieren"><![CDATA[]]></item>
+        <item id="skin_name" title="Name des Designs"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[
+<h2>Einführung in Themes</h2>
+<p>A Textpattern theme is a collection of Pages, Forms and Stylesheets. Themes allow you to logically separate your site assets into groups for ease of identification, or sharing with others. The act of creating or importing a Theme, and any assets it contains, does <em>not</em> have any impact on your existing site. You are free to edit or modify any asset that is not associated with a Section of your site, and it will not affect the site itself.</p>
+<p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
+<p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
+        ]]></item>
+        <item id="skin_title" title="Titel des Designs"><![CDATA[]]></item>
+        <item id="skin_version" title="Version des Designs"><![CDATA[]]></item>
+    </group>
+</help>
+</resources>

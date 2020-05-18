@@ -172,6 +172,25 @@ nav ol::after,
     word-wrap: break-word;
   }
 
+  /**
+   * Hide text but still allow screen reader access.
+   *
+   * Example HTML:
+   *
+   * <p class="accessibility">
+   */
+  .accessibility {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+    white-space: nowrap;
+  }
+
   /* Navigation
      ========================================================================== */
   /**
@@ -1212,12 +1231,6 @@ textarea:-moz-ui-invalid {
    *
    * 1. Fix placeholder font properties inheritance.
    */
-  ::-webkit-input-placeholder {
-    opacity: 1;
-    color: #999999;
-    /* 1 */
-    font: inherit;
-  }
   :-ms-input-placeholder {
     opacity: 1;
     color: #999999;
