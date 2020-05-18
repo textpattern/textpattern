@@ -410,9 +410,7 @@ function preText($s, $prefs)
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            $thisurl = permlinkurl($thisarticle, '/');
-
-                            if ($thisurl === $u0 || strpos($u0, $thisurl) !== false) {
+                            if (permlinkurl($thisarticle, '/') === $u0) {
                                 $permlink_guess = $permlink_modes[$a['Section']];
                                 break;
                             }
