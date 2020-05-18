@@ -317,11 +317,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-        $strings = $txpLang->getStrings();
-
-        if (!isset($strings)) {
-            load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
-        }
+//        load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -1014,7 +1010,7 @@ function getmicrotime()
 
 function load_plugin($name, $force = false)
 {
-    global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
+    global $plugins, $plugins_ver, $prefs, $txp_current_plugin, $textarray;
 
     if (is_array($plugins) && in_array($name, $plugins)) {
         return true;
@@ -1058,6 +1054,7 @@ function load_plugin($name, $force = false)
 
                 // Append lang strings on-the-fly.
                 Txp::get('\Textpattern\L10n\Lang')->setPack($strings, true);
+                $textarray += $strings;
             }
 
             restore_error_handler();

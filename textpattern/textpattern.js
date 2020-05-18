@@ -1918,10 +1918,10 @@ jQuery.fn.txpFileupload = function (options) {
                 textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
             } else {
                 form.uploadCount++;
-                file["order"] = form.uploadCount;
+                file['order'] = form.uploadCount;
                 files.push(file);
             }
-        };
+        }
 
         if (!files.length) {
             textpattern.Console.announce('uploadEnd');
@@ -1933,7 +1933,7 @@ jQuery.fn.txpFileupload = function (options) {
         fileInput.val('');
     }).bind('fileuploadsubmit', function (e, data) {
         data.formData = $.merge([{
-            "name" : "fileInputOrder", "value" : data.files[0].order+"/"+form.uploadCount
+            'name' : 'fileInputOrder', 'value' : data.files[0].order+'/'+form.uploadCount
         }], options.formData);
         $.merge(data.formData, form.serializeArray());
 
@@ -2093,7 +2093,7 @@ textpattern.Route.add('article', function () {
         dialogClass: 'txp-preview-container',
         buttons: [],
         closeOnEscape: false,
-        maxWidth: "100%"
+        maxWidth: '100%'
     });
 
     $pane.on( 'dialogopen', function( event, ui ) {

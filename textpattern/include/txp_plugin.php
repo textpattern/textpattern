@@ -319,7 +319,7 @@ function plugin_list($message = '')
                     href($name, $edit_url), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
-                    ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external')) : $author), '', 'txp-list-col-author'
+                    ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external noopener')) : $author), '', 'txp-list-col-author'
                 ).
                 td(
                     $version, '', 'txp-list-col-version'

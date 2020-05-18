@@ -21,21 +21,21 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "eslint": "~6",
+    "eslint": "~7",
     "phplint": "~2",
-    "uglify-js": "3.8.0"
+    "uglify-js": "3.9.3"
   },
   "dependencies": {
-    "blueimp-file-upload": "10.8.0",
-    "blueimp-md5": "2.12.0",
-    "jquery": "3.4.1",
+    "blueimp-file-upload": "10.25.0",
+    "blueimp-md5": "2.15.0",
+    "jquery": "3.5.1",
     "jquery-ui-dist": "1.12.1",
-    "prismjs": "1.19.0"
+    "prismjs": "1.20.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
-      "ecmaVersion": 5,
+      "ecmaVersion": 6,
       "ecmaFeatures": {
         "impliedStrict": true
       }
@@ -67,6 +67,7 @@
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
     "get-hive-admin-theme": "sh .github/get-hive-admin-theme.sh",
+    "get-admin-themes": "sh .github/get-classic-admin-theme.sh && sh .github/get-hive-admin-theme.sh",
     "get-default-theme": "sh .github/get-default-theme.sh",
     "txp-index": "php .github/txp-index.php",
     "txp-checksums": "php .github/txp-checksums.php",

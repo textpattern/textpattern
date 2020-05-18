@@ -333,7 +333,7 @@ function image_list($message = '')
 
                 if ($thumbnail) {
                     if ($ext != '.swf') {
-                        $thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$id.$ext.'" title="'.$id.$ext.'" />';
+                        $thumbnail = '<img class="content-image" loading="lazy" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$id.$ext.'" title="'.$id.$ext.'" />';
                         $thumbexists = 1;
                     } else {
                         $thumbnail = '';

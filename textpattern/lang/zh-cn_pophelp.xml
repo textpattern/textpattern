@@ -453,17 +453,35 @@
 <h2>上传图像</h2>
 <p>将一个或多个图像上传到您的服务器。</p>
 <p>上传到<code>images</code>目录后，原始图像的文件名将仅在内部保存在Textpattern的数据库中；图像文件本身将重命名为序号+文件扩展名。</p>        ]]></item>
-        <item id="upload_thumbnail" title="上传缩略图"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="上传缩略图"><![CDATA[
+<h2>上传缩略图</h2>
+<p>完整大小的图像可以有自己的缩略图。这将有助于链接并索引全尺寸图像。</p>
+<p>对缩略图的引用与对完整尺寸图像的引用完全相同，只需在文件名后附加<code>t</code>。 例如，引用与存储为<code>/images/12.jpg</code>的完整图像相关联的缩略图，只需使用<code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="语言面板">
-        <item id="get_textpack" title="安装 Textpack"><![CDATA[]]></item>
+        <item id="get_textpack" title="安装 Textpack"><![CDATA[
+<h2>安装文本包</h2>
+<p>粘贴您网站的附加语言字符串到此框，并选择“上传”来安装它们。</p>
+<p>字符串常常以可下载文本包的形式出现，随插件分发，允许插件的语言字符串在Textpattern内使用。</p>
+<p>翻译者可以在必要时翻译这些包，并将本地化内容重新分发给社区。</p>
+        ]]></item>
     </group>
 
     <group id="link" title="链接面板">
-        <item id="link_description" title="描述"><![CDATA[]]></item>
-        <item id="link_sort" title="排序值"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="link_description" title="描述"><![CDATA[
+<h2>描述</h2>
+<p>链接描述是可选的，对标题链接有用，用于创建链接的 <code>title=""</code> (提示) 属性，或只是保存您自己的内部文档。</p>
+        ]]></item>
+        <item id="link_sort" title="排序值"><![CDATA[
+<h2>排序值</h2>
+<p>对链接列表的自然语言排序很有用，例如：根据一个人的姓而不是名，或以定冠词或不定冠词开头的词组。</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>链接地址。如果链接指向另一个网站，则必须在前面加上<code>http://</code>或<code>https://</code>。</p>
+        ]]></item>
         <item id="timestamp_link" title="发布日期"><![CDATA[
 <h2>发布日期</h2>
 <p>链接发布时间或最近修改时间。时间可以设置为项目发布的时间，也可以设置为过去或将来的任意时间。 </p>
@@ -476,11 +494,19 @@
     </group>
 
     <group id="login" title="登录面板">
-        <item id="remember_login" title="在此浏览器中保持登录状态"><![CDATA[]]></item>
+        <item id="remember_login" title="在此浏览器中保持登录状态"><![CDATA[
+<h2>仍然使用此浏览器登录</h2>
+<p>如果选中，您将继续使用当前浏览器登录到您的Textpattern帐户，直到选择注销为止。如果未选择注销，则在一段时间不活动后自动注销。</p>
+<p>需要在您的浏览器中启用cookie。</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title="安装插件"><![CDATA[]]></item>
+    <group id="plugin" title="插件面板">
+        <item id="install_plugin" title="安装插件"><![CDATA[
+<h2>安装插件</h2>
+<p>在这里粘贴插件文本文件的内容，然后使用“上传”开始安装。您以前安装过的同名插件将被上传的版本覆盖。</p>
+<p>您在此粘贴的插件文本<strong>不</strong>是PHP原代码，而是Base64 编码的文本，通常之前有一个包含插件信息的标题(例如插件名称、 版本和描述、以及作者名称等)。 </p>
+        ]]></item>
         <item id="upload_plugin" title="上传插件"><![CDATA[
 <h2>上传插件</h2>
 <p>使用此表单上传插件文件(PHP 文件或压缩存档)。上传的插件(以及任何资源)都存储在“ plugins”目录中。</p>
@@ -488,20 +514,66 @@
         ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title="'高级选项"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="文章中允许使用PHP？"><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="页面中允许使用PHP？"><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+    <group id="prefs" title="偏好面板">
+        <item id="admin_side_plugins" title="使用管理端插件？"><![CDATA[
+<h2>使用管理端插件？</h2>
+<p>管理端插件可以更改管理界面的操作。它们可与已经存在的操作挂钩，如编辑或发表文章，或者它们可以为添加/扩展功能添加新的面板。</p>
+<p>如果您想了解更多有关管理端插件的信息，请见<a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern用户文档</a>中的<a rel="external" target="_blank" href="https://docs.textpattern.com/development/">扩展Textpattern</a>。在<a rel="external" target="_blank" href="https://textpattern.org/">Textpattern资源</a>网站中列出了各种类型的插件。</p>
+        ]]></item>
+        <item id="advanced_options" title="'高级选项"><![CDATA[
+<h2>高级选项</h2>
+<p>显示高级首选项，其他设置可以在此配置，如：</p>
+<ul>
+    <li>在<code>txp:evaluate</code>中启用PHP功能。</li>
+    <li>自定义表单类型。</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="文章中允许使用PHP？"><![CDATA[
+<h2>在文章中允许PHP?</h2>
+<p>启用时，此设置将允许在文章中使用PHP。作者必须有足够的权限(默认情况下只有<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“发布者”<span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>和<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“管理编辑”<span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 有此权限)。</p>
+<p>PHP代码必须省略打开和关闭PHP标记，并包含在<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>标签<span class="ui-icon ui-icon-extlink">(在新窗口打开外部链接)</span></a>内。</p>
+        ]]></item>
+        <item id="allow_form_override" title="允许覆盖表单？"><![CDATA[
+<h2>允许覆盖表单？</h2>
+<p>此设置允许文章作者在文章渲染时覆盖表单。如果启用，编辑文章时，将在“高级选项”菜单下提供“覆盖表单”选项。</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="页面中允许使用PHP？"><![CDATA[
+<h2>页面中允许使用PHP？</h2>
+<p>启用时，此设置允许页面模板和表格模板中使用PHP代码。</p>
+<p>PHP代码必须省略打开和关闭PHP标签，并包含在<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>标签<span class="ui-icon ui-icon-extlink">(在新窗口打开外部链接)</span></a>中。</p>
+        ]]></item>
+        <item id="archive_dateformat" title="归档日期格式"><![CDATA[
+<h2>存档日期格式</h2>
+<p>如何在网站的文章中显示日期。</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="使用文章摘录？"><![CDATA[
+<h2>使用文章摘录？</h2>
+<p>如果选择“否”，摘录字段将不会在文章编辑画面中显示给作者。</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="将标题附加到永久链接？"><![CDATA[
+<h2>将标题附加到永久链接？</h2>
+<p>此设置将自动生成含文章标题版本的URL。它是自动生成的，或者可以在编辑文章时在“URL标题”中手动覆盖。</p>
+<p>设置只有在您使用简洁URL时才会产生效果。对于某些语言，这可能会导致长而丑陋的URL，在这种情况下，您可能想要将其设置为“关闭”。 </p>
+        ]]></item>
+        <item id="auto_dst" title="自动调整夏时制设置？"><![CDATA[
+<h2>自动调整夏时制设置？</h2>
+<p>此设置允许在您的本地发生夏时制时Textpattern更改DST (夏令时)。 如果设置为“否”，您将能够手动更改'DST启用'的首选项。</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="当有新的评论即认为网站已更新？"><![CDATA[
+<h2>当有新的评论意味着网站已更新？</h2>
+<p> Textpattern数据库将跟踪您网站最近一次更改的时间。当此选项设置为“是”，新的评论也将更新此值。此值用于例如<code>"发送最后修改的标头"</code> 函数。</p>
+        ]]></item>
+        <item id="comment_nofollow" title="添加 rel=&quot;nofollow&quot; 到评论？"><![CDATA[
+<h2>添加 rel="nofollow" 到评论？</h2>
+<p>如果设置为“是”，这将为评论中的链接添加一个额外的属性。它旨在消除评论垃圾邮件者的动力，并由一系列搜索引擎和软件开发者发起。了解更多信息请阅读<a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google的通知<span class="ui-icon ui-icon-extlink">(在新窗口打开外部链接)</span></a>。</p>
+<p><strong>注释：</strong>此设置不影响您网站的功能。当某些搜索引擎在对与这些评论相关的站点排名时，它可能会防止或减少来自您网站评论的影响。</p>
+        ]]></item>
+        <item id="comments_are_ol" title="以有序列表显示评论？"><![CDATA[
+<h2>以有序列表显示评论？</h2>
+<p>决定是否将文章评论用HTML <code>&lt;ol&gt;</code> 标签包裹，每条评论将被包裹在 <code>&lt;li&gt;</code> 标签中(评论以有序列表形式显示) 还是会被包裹在 <code>&lt;div&gt;</code> 标签中。 </p>
+<p>在 <code>comments_display</code>表单中的单个表单，对于任一值，您都可以通过修改<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>从而覆盖单个表单上使用的标签 。</p>
+        ]]></item>
+        <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[]]></item>
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
@@ -589,7 +661,10 @@
         <item id="skin_name" title="主题名称"><![CDATA[]]></item>
         <item id="skin_overview" title="主题介绍"><![CDATA[]]></item>
         <item id="skin_title" title="主题标题"><![CDATA[]]></item>
-        <item id="skin_version" title="主题版本"><![CDATA[]]></item>
+        <item id="skin_version" title="主题版本"><![CDATA[
+<h2>主题版本</h2>
+<p>此主题已安装版本的版本号(可选)。</p>
+        ]]></item>
     </group>
 </help>
 </resources>
