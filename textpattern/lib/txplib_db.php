@@ -224,7 +224,7 @@ class DB
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
-        $this->table_options['type'] = 'MyISAM';
+        $this->table_options['type'] = !empty($txpcfg['dbengine']) ? $txpcfg['dbengine'] : 'MyISAM';
 
         if (!empty($txpcfg['table_prefix'])) {
             $this->table_prefix = $txpcfg['table_prefix'];
@@ -269,7 +269,7 @@ class DB
 
         // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
         if (version_compare($version, '5') >= 0 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
-            $this->table_options['engine'] = 'MyISAM';
+            $this->table_options['engine'] = $this->table_options['type'];
             unset($this->table_options['type']);
         }
     }

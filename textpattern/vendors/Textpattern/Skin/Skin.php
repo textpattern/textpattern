@@ -1366,7 +1366,7 @@ class Skin extends CommonBase implements SkinInterface
                 );
 
                 $tdAuthor = txpspecialchars($skin_author);
-                empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri);
+                empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri, array('rel' => 'external noopener'));
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
