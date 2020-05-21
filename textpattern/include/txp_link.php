@@ -334,7 +334,7 @@ function link_list($message = '')
                         $link_category, '', 'txp-list-col-category category'.$vc
                     ).
                     td(
-                        href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url txp-contain'
+                        href($view_url, $view_url, ' rel="external noopener" target="_blank"'), '', 'txp-list-col-url txp-contain'
                     ).
                     (
                         $show_authors

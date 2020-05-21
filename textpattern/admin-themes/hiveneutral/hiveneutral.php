@@ -125,7 +125,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
     {
         $out[] = graf(
             href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
-                'rel'    => 'external',
+                'rel'    => 'external noopener',
                 'target' => '_blank',
             )).
             ' (v'.txp_version.')', array('class' => 'mothership'));
