@@ -322,7 +322,7 @@ class BuilderTags
                     'https://docs.textpattern.com/tags/'.$this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
-                        'rel'    => 'external',
+                        'rel'    => 'external noopener',
                         'target' => '_blank',
                     )
                 );
