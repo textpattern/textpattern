@@ -551,6 +551,7 @@ function doDiagnostics()
                 'step'       => 'phpinfo',
                 '_txp_token' => form_token(),
             ), array(
+                'rel'    => 'external noopener',
                 'target' => '_blank',
             )).
             inputLabel(
