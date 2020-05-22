@@ -425,14 +425,12 @@ function preText($s, $prefs)
                             $title = $thisarticle['url_title'];
                             $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
                         }
-                    } elseif (empty($un)) {
-                        if (is_numeric($u1) && strlen($u1) === 4) {
-                            // Could be a year.
-                            $permlink_guess = 'year_month_day_title';
-                        }
                     }
 
-                    if (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
+                    if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
+                        // Could be a year.
+                        $permlink_guess = 'year_month_day_title';
+                    } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
                         $permlink_guess = $permlink_modes[$u1];
                     }
 
