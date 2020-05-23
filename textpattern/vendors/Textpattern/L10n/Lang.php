@@ -369,22 +369,22 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $lang_file = $this->findFilename($lang_code);
+        $entries = array();
+        $textpack = '';
 
-        if ($textpack = @file_get_contents($lang_file)) {
+        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
             $parser->parse($textpack, $group);
-            $textpack = $parser->getStrings($lang_over);
+            $entries = $parser->getStrings($lang_over);
         }
 
         // Reindex the pack so it can be merged.
         $langpack = array();
 
-        if (is_array($textpack)) {
-            foreach ($textpack as $translation) {
-                $langpack[$translation['name']] = $translation;
-            }
+        foreach ($entries as $translation) {
+            $langpack[$translation['name']] = $translation;
         }
 
         return $langpack;
