@@ -45,6 +45,7 @@ class Partial
 
         extract(lAtts(array(
             'name'    => '',
+            'else'    => false,
             'default' => false,
             'item'    => null
         ), $atts));
@@ -52,7 +53,14 @@ class Partial
         if (isset($item)) {
             $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
         } elseif ($name === '') {
-            $inner = end($yield);
+            $end = empty($yield) ? null : end($yield);
+            $key = empty($else) ? 1 : 2;
+
+            if (isset($end[$key])) {
+                $inner = $end[$key];
+            } elseif (!empty($end)) {
+                $inner = $yield[key($yield)][$key] = parse($end[0], $key == 1);
+            }
         } elseif (!empty($txp_yield[$name])) {
             list($inner) = end($txp_yield[$name]);
             $txp_yield[$name][key($txp_yield[$name])][1] = true;
@@ -82,6 +90,7 @@ class Partial
 
         extract(lAtts(array(
             'name'  => '',
+            'else'  => false,
             'value' => null,
             'item'  => null
         ), $atts));
@@ -89,13 +98,20 @@ class Partial
         if (isset($item)) {
             $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
         } elseif ($name === '') {
-            $inner = empty($yield) ? null : end($yield);
+            $end = empty($yield) ? null : end($yield);
+            $key = empty($else) ? 1 : 2;
+
+            if (isset($end[$key])) {
+                $inner = $end[$key];
+            } elseif (!empty($end)) {
+                $inner = $yield[key($yield)][$key] = parse($end[0], $key == 1);
+            }
         } elseif (empty($txp_yield[$name])) {
             $inner = null;
         } else {
             list($inner) = end($txp_yield[$name]);
         }
 
-        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
+        return parse($thing, isset($inner) && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
     }
 }
