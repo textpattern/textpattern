@@ -317,7 +317,11 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-//        load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+        $loaded = $txpLang->load(true);
+
+        if(!in_array($event, $loaded)) {
+            load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+        }
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -398,7 +402,6 @@ function dmp()
  * @param   array|string|bool $events An array of loaded events
  * @return  array
  * @package L10n
- * @see     load_lang_event()
  * @example
  * print_r(
  *     load_lang('en-gb', false)

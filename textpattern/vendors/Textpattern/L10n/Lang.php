@@ -81,6 +81,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $strings = null;
 
     /**
+     * Array of events that have been loaded.
+     *
+     * @var array
+     */
+
+    protected $loaded = array();
+
+    /**
      * Date format to use for the lastmod column.
      *
      * @var string
@@ -167,12 +175,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         $out = null;
 
-        foreach ($this->files as $file) {
-            $pathinfo = pathinfo($file);
+        if (!empty($this->files)) {
+            foreach ($this->files as $file) {
+                $pathinfo = pathinfo($file);
 
-            if ($pathinfo['filename'] === $lang_code) {
-                $out = $file;
-                break;
+                if ($pathinfo['filename'] === $lang_code) {
+                    $out = $file;
+                    break;
+                }
             }
         }
 
@@ -524,10 +534,6 @@ class Lang implements \Textpattern\Container\ReusableInterface
             "name != ''",
         );
 
-        if ($events === null && txpinterface !== 'admin') {
-            $events = array('public', 'common');
-        }
-
         if (txpinterface === 'admin') {
             $admin_events = array('admin-side', 'common');
 
@@ -537,7 +543,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
 
             $events = $admin_events;
+        } elseif ($events === null) {
+            $events = array('public', 'common');
         }
+
 
         if ($events) {
             // For the time being, load any non-core (plugin) strings on every
@@ -577,8 +586,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function load($lang_code, $events = null)
     {
-        $out = $this->extract($lang_code, $events);
-        $this->strings = $out;
+        if ($lang_code === true) {
+            return $this->loaded;
+        }
+
+        $this->strings = $this->extract($lang_code, $events);
+        $this->loaded = isset($events) ? do_list_unique($events) : array(null);
 
         return $this->strings;
     }
