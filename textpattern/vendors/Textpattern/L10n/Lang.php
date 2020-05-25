@@ -586,12 +586,18 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function load($lang_code, $events = null)
     {
-        if ($lang_code === true) {
-            return $this->loaded;
+        $loaded = isset($this->loaded[$lang_code]) ? $this->loaded[$lang_code] : null;
+
+        if ($events === true) {
+            return $loaded;
         }
 
-        $this->strings = $this->extract($lang_code, $events);
-        $this->loaded = isset($events) ? do_list_unique($events) : array(null);
+        global $DB;
+    
+        if (!empty($DB)) {
+            $this->strings = $this->extract($lang_code, $events);
+            $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));
+        }
 
         return $this->strings;
     }
