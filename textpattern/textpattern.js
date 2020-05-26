@@ -2399,6 +2399,10 @@ textpattern.Route.add('section', function ()
                 var isSelected = (item == page_sel) ? ' selected' : '';
                 $pageSelect.append('<option'+isSelected+'>'+item+'</option>');
             });
+
+            if (page_sel === null) {
+                $pageSelect.append('<option selected>*</option>');
+            }
         }
 
         if (skin in skin_style) {
@@ -2408,6 +2412,10 @@ textpattern.Route.add('section', function ()
                 var isSelected = (item == style_sel) ? ' selected' : '';
                 $styleSelect.append('<option'+isSelected+'>'+item+'</option>');
             });
+
+            if (style_sel === null) {
+                $styleSelect.append('<option selected>*</option>');
+            }
         }
     }
 
