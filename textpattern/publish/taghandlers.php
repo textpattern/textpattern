@@ -1814,6 +1814,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'pg'         => $pg,
         'total'      => $numPages,
         'shift'      => 1,
+        'showalways' => true,
         ) : array(
         'showalways' => false,
         'title'      => '',
@@ -1850,7 +1851,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         $shown = array();
 
         if ($thing !== null) {
-            $thing = parse($thing);
+            $thing = $numPages >= ($showalways ? (int)$showalways : 2) ? parse($thing) : '';
             $numPages = $oldPages;
             $pg = $oldpg;
             $top = $oldtop;
@@ -1888,8 +1889,10 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
     } elseif (is_bool($shift)) {
         $pages = $newer === null ? ($shift ? range(1 - $thepg, $numPages - $thepg) : array(0)) : array($shift ? true : 1);
+        $range = true;
     } else {
         $pages = array_map('intval', do_list($shift, array(',', '-')));
+        $range = false;
     }
 
     foreach ($items as $item => $val) {
@@ -1911,14 +1914,17 @@ function txp_pager($atts, $thing = null, $newer = null)
             $nextpg = $page === true ? $numPages : ((int)$page < 0 ? $numPages + $page + 1 : $thepg + $page);
         }
 
-        if ($nextpg >= ($newer === false ? $thepg + 1 : 1) && $nextpg <= ($newer === true ? $thepg - 1 : $numPages)) {
+        if (
+            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) && 
+            $nextpg <= ($newer === true && $range !== false ? $thepg - 1 : $numPages)
+        ) {
             if (empty($shown[$nextpg]) || $showalways) {
                 $txp_context[$pgc] = $nextpg == $top ? null : $nextpg;
                 $url = pagelinkurl($txp_context);
                 $txp_item['page'] = $nextpg;
                 $txp_item['url'] = $url;
 
-                if ($shift !== false || $newer === null || isset($range)) {
+                if ($shift !== false || $newer === null || !is_bool($range)) {
                     $shown[$nextpg] = true;
                     $limit--;
                 }
