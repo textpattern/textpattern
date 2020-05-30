@@ -1799,12 +1799,14 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         });
     }
     // Non-enclosing breaks.
-    elseif ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
-        if ($break == 'br' || $break == 'hr') {
+    elseif ($break === 'br' || $break === 'hr' || !preg_match('/^\w+$/', $break)) {
+        if ($break === 'br' || $break === 'hr') {
             $break = "<$break $breakatts/>".n;
         }
 
         $content = join($break, $list);
+    } elseif ($break === true) {
+        $content = join(n, $list);
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
