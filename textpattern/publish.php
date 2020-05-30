@@ -197,7 +197,7 @@ if ($use_plugins) {
 $s = (empty($s)) ? '' : $s;
 
 isset($pretext) or $pretext = preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false);
+$pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
 
 // Send 304 Not Modified if appropriate.
 
@@ -280,10 +280,10 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function preText($s, $prefs)
+function preText($s, $prefs = null)
 {
-    global $thisarticle, $txp_sections;
-    static $url = array(), $out = null;
+    global $pretext, $thisarticle, $txp_sections;
+    static $out = null;
 
     if (!isset($out)) {
         // Set messy variables.
@@ -309,23 +309,20 @@ function preText($s, $prefs)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        $url = chopUrl($req, 4);
-
-        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
-
-        if ($url['u1'] == 'rss' || gps('rss')) {
+        if (preg_match('@^/rss[/?$]@i', $req) || gps('rss')) {
             $out['feed'] = 'rss';
-        } elseif ($url['u1'] == 'atom' || gps('atom')) {
+        } elseif (preg_match('@^/atom[/?$]@i', $req) || gps('atom')) {
             $out['feed'] = 'atom';
         }
-    }
 
-    $out['skin'] = $out['page'] = $out['css'] = '';
+        $out['skin'] = $out['page'] = $out['css'] = '';
+    }
 
     if (!isset($prefs)) {
         return $out;
     }
 
+    empty($pretext) or $out = $pretext + $out;
     extract($prefs);
 
     $is_404 = ($out['status'] == '404');
@@ -333,12 +330,15 @@ function preText($s, $prefs)
 
     // If messy vars exist, bypass URL parsing.
     if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
-        extract($url);
-
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
             exit(show_clean_test($out));
         }
+
+        $url = chopUrl($out['req'], 4);
+        extract($url);
+
+        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
         // First we sniff out some of the preset URL schemes.
         if (strlen($u1)) {
