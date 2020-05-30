@@ -1690,6 +1690,42 @@ function load_lang_dates($lang)
 }
 
 /**
+ * Gets language strings for the given event.
+ *
+ * If no $lang is specified, the strings are loaded from the currently
+ * active language.
+ *
+ * @param   string $event The event to get, e.g. "common", "admin", "public"
+ * @param   string $lang  The language code
+ * @return  array|string Array of string on success, or an empty string when no strings were found
+ * @package L10n
+ * @see     load_lang()
+ * @example
+ * print_r(
+ *     load_lang_event('common')
+ * );
+ */
+
+function load_lang_event($event, $lang = LANG)
+{
+    $installed = (false !== safe_field("name", 'txp_lang', "lang = '".doSlash($lang)."' LIMIT 1"));
+
+    $lang_code = ($installed) ? $lang : TEXTPATTERN_DEFAULT_LANG;
+
+    $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."' AND event = '".doSlash($event)."'");
+
+    $out = array();
+
+    if ($rs && !empty($rs)) {
+        while ($a = nextRow($rs)) {
+            $out[$a['name']] = $a['data'];
+        }
+    }
+
+    return ($out) ? $out : '';
+}
+
+/**
  * Installs localisation strings from a Textpack.
  *
  * @param      string $textpack      The Textpack to install
