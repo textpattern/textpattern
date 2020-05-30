@@ -13,7 +13,7 @@ Changes in 4.8.1
 * Changed: Use noopener on target="_blank" links.
 * Changed: Optimised language loading.
 * Added: Latest translations. Thank you to all translators for your hard work.
-* Added: showalways attribute for <txp:pages /> tag.
+* Added: 'showalways' attribute for <txp:pages /> tag.
 * Added: Support for InnoDB database engine.
 * Fixed: Development and live assets are kept in sync when renamed.
 * Fixed: When setting development assets/themes, link to both live and dev
