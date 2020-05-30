@@ -283,7 +283,7 @@ log_hit($status);
 function preText($s, $prefs = null)
 {
     global $pretext, $thisarticle, $txp_sections;
-    static $out = null;
+    static $url = array(), $out = null;
 
     if (!isset($out)) {
         // Set messy variables.
@@ -309,9 +309,13 @@ function preText($s, $prefs = null)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        if (preg_match('@^/rss[/?$]@i', $req) || gps('rss')) {
+        $url = chopUrl($req, 4);
+
+        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
+
+        if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
-        } elseif (preg_match('@^/atom[/?$]@i', $req) || gps('atom')) {
+        } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
 
@@ -335,12 +339,9 @@ function preText($s, $prefs = null)
             exit(show_clean_test($out));
         }
 
-        $url = chopUrl($out['req'], 4);
+        // First we sniff out some of the preset URL schemes.
         extract($url);
 
-        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
-
-        // First we sniff out some of the preset URL schemes.
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
