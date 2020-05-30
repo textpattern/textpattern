@@ -1,4 +1,4 @@
-Changes in 4.8.1 (upcoming)
+Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
