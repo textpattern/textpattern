@@ -1,12 +1,19 @@
-Changes in 4.8.1 (upcoming)
+Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
 * Changed: Lazy load images within Images list on supported browsers.
+* Changed: Support <txp:else /> in shortcodes.
 * Changed: Improved handling of yyyy/mm/dd article permlinks. Single-digit
   months and days permitted, and /section/yyyy/mm/dd will limit articles to the
   given section.
+* Changed: Multi-assign pageless (live) sections.
+* Changed: Dedicated '*' option when altering theme/page/style to leave assets
+  as they are.
+* Changed: Use noopener on target="_blank" links.
+* Changed: Optimised language loading.
 * Added: Latest translations. Thank you to all translators for your hard work.
+* Added: 'showalways' attribute for <txp:pages /> tag.
 * Added: Support for InnoDB database engine.
 * Fixed: Development and live assets are kept in sync when renamed.
 * Fixed: When setting development assets/themes, link to both live and dev
@@ -19,9 +26,10 @@ Changes in 4.8.1 (upcoming)
 * Fixed: Fall back on partial language identifier if code is not found.
 * Fixed: Strings loaded from plugin cache no longer break those already loaded.
   Thanks, David.
+* Fixed: RPC errors when altering content from remote editors.
 * jQuery 3.5.1.
 * PrismJS 1.20.0.
-* jQuery File Upload 10.25.0.
+* jQuery File Upload 10.29.0.
 
 Changes in 4.8.0
 
@@ -334,7 +342,7 @@ Changes in 4.7.0
 * Changed: Pagination steps are more grid friendly: 12/24/48/96 items.
 * Changed: More locale-aware date handling in safe_strftime().
 * Changed: Deprecated support for uploading .swf files via Images panel (support
-  will be removed entirely at Textpattern 4.8.0).
+  will be removed entirely in a future version).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
 * Changed: Admin theme layout improvements on small devices.

@@ -318,8 +318,8 @@ function sec_section_list($message = '')
                     $sec_item = ${"sec_$item"};
                     $sec_dev_item = ${"sec_dev_$item"};
 
-                    $missing = isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
-                    $replaced = $dev_preview && ($has_dev_skin || $sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
+                    $missing = $sec_dev_item && isset($all_items[$sec_dev_skin]) && !in_array($sec_dev_item, $all_items[$sec_dev_skin]);
+                    $replaced = $dev_preview && ($has_dev_skin && $sec_dev_item || $sec_item != $sec_dev_item || $sec_dev_item && $missing) ? 'disabled' : false;
                     $dev_set = $dev_set || $replaced;
                     $in_dev = $in_dev || $replaced;
 
@@ -918,8 +918,8 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
     $script = <<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
-var page_sel = '';
-var style_sel = '';
+var page_sel = null;
+var style_sel = null;
 EOJS;
 
     if ($step == 'section_select_skin') {
@@ -1057,7 +1057,7 @@ function section_multi_edit()
             $in = array();
 
             foreach ($nameVal as $key => $val) {
-                if ((string)$val > '') {
+                if ((string)$val != '*') {
                     $in[] = "{$key} = '".doSlash($val)."'";
                 }
             }
