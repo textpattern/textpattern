@@ -121,7 +121,7 @@ class Disclosure extends Tag implements UICollectionInterface
      * Add one or more elements to the disclosure content. Chainable.
      *
      * @param mixed   $item The pre-built UI element or collection
-     * @param boolean $key  The optional unique key to associate with the tag
+     * @param string  $key  The optional unique key to associate with the tag
      */
 
     public function add($item, $key = null)
