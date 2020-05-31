@@ -27,14 +27,14 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.8.0. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
+The current production release is version 4.8.1. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/99/textpattern-4.8.0.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.0/textpattern-4.8.0.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/98/textpattern-4.8.0.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.0/textpattern-4.8.0.tar.gz) |
+| .zip   | [Download](https://textpattern.com/file_download/101/textpattern-4.8.1.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.1/textpattern-4.8.1.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/100/textpattern-4.8.1.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.1/textpattern-4.8.1.tar.gz) |
 
 
 ## Install Textpattern
@@ -63,8 +63,6 @@ The following table outlines anticipated forthcoming changes to system requireme
 
 Note that targeted versions listed may change multiple times during the development process.
 
-We are targeting Textpattern 4.8.1 as the next patch release. Current [system requirements](https://textpattern.com/system-requirements) apply.
-
 We are targeting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements.
 
 |        |  Minimum  | Recommended |
@@ -72,7 +70,7 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 | PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3 or 7.4) |
 | MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.17) or stable (1.18) |
+| Nginx  | &mdash; | mainline (1.19) or stable (1.18) |
 
 ## Contributing
 
@@ -114,8 +112,8 @@ npm run get-dependencies
 To request a specific tag or branch:
 
 ```ShellSession
-npm run get-default-theme 4.8.0
-npm run get-classic-admin-theme 4.8.0
+npm run get-default-theme 4.8.1
+npm run get-classic-admin-theme 4.8.1
 npm run get-classic-admin-theme 4.8.x
 npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
