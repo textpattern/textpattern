@@ -342,7 +342,7 @@ Changes in 4.7.0
 * Changed: Pagination steps are more grid friendly: 12/24/48/96 items.
 * Changed: More locale-aware date handling in safe_strftime().
 * Changed: Deprecated support for uploading .swf files via Images panel (support
-  will be removed entirely at Textpattern 4.8.0).
+  will be removed entirely in a future version).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
 * Changed: Admin theme layout improvements on small devices.
