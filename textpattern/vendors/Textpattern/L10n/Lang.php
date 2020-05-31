@@ -81,6 +81,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $strings = null;
 
     /**
+     * Array of events that have been loaded.
+     *
+     * @var array
+     */
+
+    protected $loaded = array();
+
+    /**
      * Date format to use for the lastmod column.
      *
      * @var string
@@ -167,12 +175,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         $out = null;
 
-        foreach ($this->files as $file) {
-            $pathinfo = pathinfo($file);
+        if (!empty($this->files)) {
+            foreach ($this->files as $file) {
+                $pathinfo = pathinfo($file);
 
-            if ($pathinfo['filename'] === $lang_code) {
-                $out = $file;
-                break;
+                if ($pathinfo['filename'] === $lang_code) {
+                    $out = $file;
+                    break;
+                }
             }
         }
 
@@ -369,22 +379,22 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $lang_file = $this->findFilename($lang_code);
+        $entries = array();
+        $textpack = '';
 
-        if ($textpack = @file_get_contents($lang_file)) {
+        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
             $parser->parse($textpack, $group);
-            $textpack = $parser->getStrings($lang_over);
+            $entries = $parser->getStrings($lang_over);
         }
 
         // Reindex the pack so it can be merged.
         $langpack = array();
 
-        if (is_array($textpack)) {
-            foreach ($textpack as $translation) {
-                $langpack[$translation['name']] = $translation;
-            }
+        foreach ($entries as $translation) {
+            $langpack[$translation['name']] = $translation;
         }
 
         return $langpack;
@@ -524,10 +534,6 @@ class Lang implements \Textpattern\Container\ReusableInterface
             "name != ''",
         );
 
-        if ($events === null && txpinterface !== 'admin') {
-            $events = array('public', 'common');
-        }
-
         if (txpinterface === 'admin') {
             $admin_events = array('admin-side', 'common');
 
@@ -537,7 +543,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
 
             $events = $admin_events;
+        } elseif ($events === null) {
+            $events = array('public', 'common');
         }
+
 
         if ($events) {
             // For the time being, load any non-core (plugin) strings on every
@@ -577,8 +586,18 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function load($lang_code, $events = null)
     {
-        $out = $this->extract($lang_code, $events);
-        $this->strings = $out;
+        $loaded = isset($this->loaded[$lang_code]) ? $this->loaded[$lang_code] : null;
+
+        if ($events === true) {
+            return $loaded;
+        }
+
+        global $DB;
+    
+        if (!empty($DB)) {
+            $this->strings = $this->extract($lang_code, $events);
+            $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));
+        }
 
         return $this->strings;
     }

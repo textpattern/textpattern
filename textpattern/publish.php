@@ -197,7 +197,7 @@ if ($use_plugins) {
 $s = (empty($s)) ? '' : $s;
 
 isset($pretext) or $pretext = preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false);
+$pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
 
 // Send 304 Not Modified if appropriate.
 
@@ -224,7 +224,7 @@ include_once txpath.'/publish/taghandlers.php';
 $trace->stop();
 
 // i18n.
-load_lang(LANG);
+//load_lang(LANG);
 
 // Tidy up the site.
 janitor();
@@ -280,9 +280,9 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function preText($s, $prefs)
+function preText($s, $prefs = null)
 {
-    global $thisarticle, $txp_sections;
+    global $pretext, $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
     if (!isset($out)) {
@@ -318,14 +318,15 @@ function preText($s, $prefs)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
-    }
 
-    $out['skin'] = $out['page'] = $out['css'] = '';
+        $out['skin'] = $out['page'] = $out['css'] = '';
+    }
 
     if (!isset($prefs)) {
         return $out;
     }
 
+    empty($pretext) or $out = $pretext + $out;
     extract($prefs);
 
     $is_404 = ($out['status'] == '404');
@@ -333,14 +334,14 @@ function preText($s, $prefs)
 
     // If messy vars exist, bypass URL parsing.
     if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
-        extract($url);
-
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
             exit(show_clean_test($out));
         }
 
         // First we sniff out some of the preset URL schemes.
+        extract($url);
+
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
@@ -425,14 +426,12 @@ function preText($s, $prefs)
                             $title = $thisarticle['url_title'];
                             $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
                         }
-                    } elseif (empty($un)) {
-                        if (is_numeric($u1) && strlen($u1) === 4) {
-                            // Could be a year.
-                            $permlink_guess = 'year_month_day_title';
-                        }
                     }
 
-                    if (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
+                    if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
+                        // Could be a year.
+                        $permlink_guess = 'year_month_day_title';
+                    } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
                         $permlink_guess = $permlink_modes[$u1];
                     }
 
