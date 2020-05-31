@@ -892,14 +892,18 @@ function safe_column($thing, $table, $where = '1', $debug = false)
 {
     if (is_array($thing)) {
         list($index, $thing) = $thing + array(null, '*');
+        $multiple = $thing === '*' || strpos($thing, ',') !== false;
+        $things = $thing === '*' ? $thing : implode(',', do_list_unique($index.','.$thing));
+    } else {
+        $things = $thing;
     }
 
-    $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
+    $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
 
     if ($rs) {
-        if (isset($index)) {
-            $out = isset($rs[0][$index]) ? array_column($rs, null, $index) : false;
+        if (isset($index) && isset($rs[0][$index])) {
+            $out = array_column($rs, $multiple ? null : $thing, $index);
         } elseif (isset($rs[0][$thing])) {
             $out = array_column($rs, $thing, $thing);
         } else {

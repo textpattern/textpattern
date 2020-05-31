@@ -39,8 +39,10 @@ require_once txpath.'/lib/class.trace.php';
 
 $trace = new Trace();
 
+require_once txpath.'/lib/constants.php';
 require_once txpath.'/lib/txplib_db.php';
 require_once txpath.'/lib/txplib_misc.php';
+require_once txpath.'/lib/txplib_admin.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
