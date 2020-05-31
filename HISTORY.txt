@@ -1,3 +1,7 @@
+Changes in 4.9.0 (upcoming)
+
+* Changed: Minimum system requirements increased to PHP 5.6.
+
 Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
