@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.0-dev';
+textpattern.version = '4.8.2-dev';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
