@@ -2,6 +2,11 @@ Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
 
+Changes in 4.8.2 (upcoming)
+
+* Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
+  (thanks, Vienuolis).
+
 Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
