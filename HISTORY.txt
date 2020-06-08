@@ -2,6 +2,7 @@ Changes in 4.8.2 (upcoming)
 
 * Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
   (thanks, Vienuolis).
+* Fixed: Sanitize custom field labels on Write panel (thanks, luuthehienhbit).
 
 Changes in 4.8.1
 
