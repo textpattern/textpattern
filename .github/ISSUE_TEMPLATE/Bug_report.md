@@ -19,3 +19,6 @@ about: Create a report to help us improve Textpattern.
 #### Additional information
 
 Textpattern version: {Please write here}
+Web server vendor and version: {Please write here}
+Database server vendor and version: {Please write here}
+PHP version: {Please write here}
