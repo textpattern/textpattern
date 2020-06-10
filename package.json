@@ -26,7 +26,7 @@
     "uglify-js": "3.9.4"
   },
   "dependencies": {
-    "blueimp-file-upload": "10.30.0",
+    "blueimp-file-upload": "10.30.1",
     "blueimp-md5": "2.16.0",
     "jquery": "3.5.1",
     "jquery-ui-dist": "1.12.1",
