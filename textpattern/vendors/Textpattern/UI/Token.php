@@ -24,7 +24,7 @@
 /**
  * A hidden &lt;input /&gt; tag containing a CSRF token.
  *
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 

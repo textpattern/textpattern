@@ -26,7 +26,7 @@
  *
  * Only used for creating select list components.
  *
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 

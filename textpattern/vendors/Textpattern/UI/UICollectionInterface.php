@@ -26,7 +26,7 @@
  *
  * An interface for grouping a set of user interface components.
  *
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 

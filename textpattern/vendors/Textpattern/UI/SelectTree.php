@@ -25,7 +25,7 @@
  * A &lt;select /&gt; list tag built from a tree-based record set.
  *
  * @see  pre-order binary tree (category) algorithms
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 

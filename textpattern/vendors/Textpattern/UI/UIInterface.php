@@ -27,7 +27,7 @@
  * An interface for creating UI components such as input fields,
  * checkboxes, and controls.
  *
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 

@@ -24,7 +24,7 @@
 /**
  * One or more tag attributes.
  *
- * @since   4.8.0
+ * @since   4.9.0
  * @package UI
  */
 
