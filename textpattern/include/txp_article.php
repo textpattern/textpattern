@@ -1054,7 +1054,7 @@ function custField($num, $field, $content)
     return inputLabel(
         'custom-'.$num,
         fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num),
-        $field,
+        txpspecialchars($field),
         array('', 'instructions_custom_'.$num),
         array('class' => 'txp-form-field custom-field custom-'.$num)
     );
