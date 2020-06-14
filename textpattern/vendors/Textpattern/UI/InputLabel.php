@@ -33,7 +33,7 @@ namespace Textpattern\UI;
 class InputLabel extends Tag implements UICollectionInterface
 {
     /**
-     * The key (id) used in the tag.
+     * The key (name) used in the tag.
      *
      * @var string
      */
@@ -104,9 +104,6 @@ class InputLabel extends Tag implements UICollectionInterface
         $this->labelTags = new \Textpattern\UI\TagCollection();
 
         parent::__construct('div');
-        $this->setAtts(array(
-                'name' => $this->key,
-            ));
 
         if ($item !== null) {
             $this->add($item);
@@ -270,6 +267,17 @@ class InputLabel extends Tag implements UICollectionInterface
 
     public function render($flavour = 'complete')
     {
+        global $event;
+
+        $arguments = array(
+            'name'        => $this->key,
+            'input'       => $this->tags,
+            'label'       => $this->label,
+            'help'        => array($this->help, $this->inlineHelp),
+            'atts'        => $this->atts,
+            'wraptag_val' => $this->wrapTags,
+        );
+
         $class = $this->getAtt('class', 'txp-form-field edit-'.str_replace('_', '-', $this->key));
         $help = ($this->help) ? popHelp($this->help) : '';
         $inlineHelp = ($this->inlineHelp) ? fieldHelp($this->inlineHelp) : '';
@@ -314,6 +322,6 @@ class InputLabel extends Tag implements UICollectionInterface
 
         $this->setContent($label.$inlineHelp.$input);
 
-        return parent::render($flavour);
+        return pluggable_ui($event.'_ui', 'inputlabel.'.$this->key, parent::render($flavour), $arguments);
     }
 }
