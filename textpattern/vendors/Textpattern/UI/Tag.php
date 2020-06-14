@@ -339,7 +339,7 @@ class Tag implements UIInterface
     }
 
     /**
-     * Render the given content as an XML element.
+     * Render the given content as an XML-style element.
      *
      * @param  string $option To affect the flavour of tag returned - complete, self-closing, open, close, content
      * @return string HTML

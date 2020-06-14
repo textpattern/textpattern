@@ -77,4 +77,21 @@ class Input extends Tag implements UIInterface
     {
         return $this->key;
     }
+
+    /**
+     * Render the tag.
+     *
+     * @return string HTML
+     */
+
+    public function render($flavour = null)
+    {
+        if ($this->getAtt('required') && !$this->getAtt('placeholder')
+            && in_array($this->getAtt('type'), array('email', 'password', 'search', 'tel', 'text', 'url'))
+        ) {
+            $this->setAtt('placeholder', gTxt('required'));
+        }
+
+        return parent::render($flavour);
+    }
 }
