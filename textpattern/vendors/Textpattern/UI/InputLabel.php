@@ -305,7 +305,7 @@ class InputLabel extends Tag implements UICollectionInterface
             $input = new \Textpattern\UI\Tag($this->wrapTags[0]);
             $input
                 ->setAtt('class', 'txp-form-field-value')
-                ->setContent($this->tags->render())
+                ->setContent(n.$this->tags->render())
                 ->render();
         }
 
@@ -316,11 +316,11 @@ class InputLabel extends Tag implements UICollectionInterface
             $label = new \Textpattern\UI\Tag($this->wrapTags[1]);
             $label
                 ->setAtt('class', 'txp-form-field-label')
-                ->setContent($labelContent)
+                ->setContent(n.$labelContent)
                 ->render();
         }
 
-        $this->setContent($label.$inlineHelp.$input);
+        $this->setContent(n.$label.$inlineHelp.$input.n);
 
         return pluggable_ui($event.'_ui', 'inputlabel.'.$this->key, parent::render($flavour), $arguments);
     }
