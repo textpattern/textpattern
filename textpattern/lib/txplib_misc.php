@@ -2507,7 +2507,9 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     } elseif ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
-        $str = strftime($format, $time + tz_offset($time));
+        $tztime = $time + tz_offset($time);
+        $format = str_replace('%s', $tztime, $format);
+        $str = strftime($format, $tztime);
     }
 
     if (!isset($charsets[$override_locale])) {

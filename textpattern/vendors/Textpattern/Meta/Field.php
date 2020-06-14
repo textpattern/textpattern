@@ -235,6 +235,7 @@ class Field
             //       BUT it's not actually stored in the DB until the content is saved. So until it's saved
             //       it _looks_ like the record has that CF value, but it actually doesn't. How to get round
             //       this so it's obvious the value is a default and not actually there until it's saved?
+            //       Placeholder? Brackets?
             if (!$content) {
                 $content = do_list($this->default);
             }
@@ -866,6 +867,6 @@ class Field
                 break;
         }
 
-        return inputLabel($id, $widget, $labelRef, array($help, $inlineHelp));
+        return inputLabel($id, $widget, txpspecialchars($labelRef), array($help, $inlineHelp));
     }
 }
