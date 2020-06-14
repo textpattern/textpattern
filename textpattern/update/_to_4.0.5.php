@@ -68,7 +68,7 @@ if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
 
         $path = build_file_path($dir, $row['filename']);
 
-        if ($path and ($stat = @stat($path))) {
+        if (file_exists($path) and ($stat = @stat($path))) {
             safe_update('txp_file', "created = '".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified = '".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");
         }
     }

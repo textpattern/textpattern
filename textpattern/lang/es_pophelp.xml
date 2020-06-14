@@ -119,9 +119,9 @@
 <h2>Palabras clave</h2>
 <p>Las palabras clave son útiles para refinar las relaciones entre artículos más allá de las proporcionadas por categorías.</p>
 <p>Las palabras clave deben ser palabras individuales separadas por comas.</p>        ]]></item>
-        <item id="override_form" title="Sobrescribir bloque"><![CDATA[
-<h2> Anular formulario </h2>
- <p> Un artículo puede usar opcionalmente un formulario diferente al asignado de manera predeterminada, por ejemplo, para mostrar un extracto del artículo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt; </code> <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en un nuevo ventana) </span> </a> en lugar del cuerpo del artículo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt; </code> <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </ 6 > - esto se puede configurar aquí. </p>        ]]></item>
+        <item id="override_form" title="Reemplazar formulario"><![CDATA[
+<h2>Reemplazar formulario</h2>
+ <p>Un artículo puede usar opcionalmente un formulario diferente al asignado de manera predeterminada, por ejemplo, para mostrar un extracto del artículo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt; </code> <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en un nuevo ventana) </span> </a> en lugar del cuerpo del artículo con <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt; </code> <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </ 6 > - esto se puede configurar aquí.</p>        ]]></item>
         <item id="publish_date" title="Fecha de publicación"><![CDATA[
 <h2> Fecha de publicación </h2>
  <p> La hora en que se publica un artículo o archivo o se revisa más recientemente.  El tiempo se puede establecer en el momento en que se publica el elemento, o en un momento arbitrario en el pasado o en el futuro. </p>
@@ -152,9 +152,9 @@
  <p> Agregue un título apropiado para este artículo. </p>
  <p> El título de un artículo está limitado a un máximo de 255 caracteres. </p>        ]]></item>
         <item id="url_title" title="Título URL"><![CDATA[
-<h2> Título solo de URL </h2>
- <p> Para usar un título específico en la URL de enlace permanente para un artículo, ingréselo aquí. Si se deja en blanco, el título de la URL se generará automáticamente a partir del título del artículo. </p>
- <p> Esto es particularmente útil si el título del artículo usa caracteres no ASCII. </p>        ]]></item>
+<h2>Título URL</h2>
+ <p>Para usar un título específico en la URL de enlace permanente para un artículo, ingréselo aquí. Si se deja en blanco, el título de la URL se generará automáticamente a partir del título del artículo.</p>
+ <p>Esto es particularmente útil si el título del artículo usa caracteres no ASCII.</p>        ]]></item>
     </group>
 
     <group id="category" title="Panel de categorías">
@@ -211,18 +211,18 @@
         <item id="diag_clear_private" title="Ocultar información privada"><![CDATA[
 <h2> Ocultar información privada </h2>
  <p> Ocultar información privada para mayor seguridad. Si la información de diagnóstico se va a compartir en un formato visible públicamente, por ejemplo, el foro de soporte Textpattern, esto reduce el riesgo de seguridad al omitir información confidencial del servidor. </p>        ]]></item>
-        <item id="dev_version_live" title="Código de desarrollo en un servidor en vivo"><![CDATA[
-<h2> Código de desarrollo en un servidor en vivo </h2>
- <p> No se recomienda el uso de versiones en desarrollo de Textpattern en sitios de producción. Esta advertencia puede ignorarse con seguridad si los riesgos se entienden y son aceptables. </p>        ]]></item>
+        <item id="dev_version_live" title="Código de desarrollo en un servidor vivo"><![CDATA[
+<h2>Código de desarrollo en un servidor vivo</h2>
+ <p>No se recomienda el uso de versiones en desarrollo de Textpattern en sitios de producción. Esta advertencia puede ignorarse con seguridad si los riesgos se entienden y son aceptables.</p>        ]]></item>
         <item id="dir_not_writable" title="El directorio no se puede escribir"><![CDATA[
 <h2> El directorio no se puede escribir </h2>
  <p> Para utilizar las capacidades de carga de archivos e imágenes, PHP debe poder escribir en estos directorios a través del usuario del servidor web. Esto se puede hacer con un cliente FTP (S), o alternativamente en la línea de comando emitiendo un comando <code> chmod 755 / path / to / dir </code>. </p>        ]]></item>
-        <item id="dns_lookup_fails" title="DNS fallida"><![CDATA[
-<h2> Error en la búsqueda de DNS </h2>
- <p> Parece que la URL especificada como la dirección del sitio es inalcanzable. </p>        ]]></item>
-        <item id="file_uploads_disabled" title="Cargar archivos está deshabilitado"><![CDATA[
-<h2> Las cargas de archivos están deshabilitadas </h2>
- <p> La configuración actual del servidor indica que las cargas de archivos están deshabilitadas. Compruebe y modifique la configuración <code> file_uploads </code> en <code> php.ini </code> o consulte al host del sitio para obtener ayuda. </p>        ]]></item>
+        <item id="dns_lookup_fails" title="Falla de búsqueda en DNS"><![CDATA[
+<h2>Falla de búsqueda en DNS</h2>
+ <p> Al parecer  la URL especificada como la dirección del sitio no se puede alcanzar. </p>        ]]></item>
+        <item id="file_uploads_disabled" title="Desabilitada la carga de archivos"><![CDATA[
+<h2>Desabilitada la carga de archivos</h2>
+ <p>La configuración actual del servidor indica que las cargas de archivos están deshabilitadas. Compruebe y modifique la configuración <code>file_uploads</code> en <code>php.ini</code> o consulte al host del sitio para obtener ayuda.</p>        ]]></item>
         <item id="htaccess_missing" title="Falta el archivo .htaccess"><![CDATA[
 <h2> Falta el archivo  .htaccess </h2>
  <p> Se está utilizando un modo de enlace permanente que requiere un archivo <code> .htaccess </code> y no se puede encontrar el archivo.  El archivo se incluye con Textpattern y reside en la raíz de Textpattern, junto con <code> index.php </code> y el directorio <code> textpattern </code>.  Las directivas recomendadas son: </p>
@@ -253,15 +253,15 @@
      AddEncoding gzip svgz
    </IfModule>
    # END Textpattern </code></pre>        ]]></item>
-        <item id="index_inaccessible" title="Índice de sitio inaccesible"><![CDATA[
-<h2> Índice de sitio inaccesible </h2>
- <p> El servidor raíz no puede leer el archivo raíz <code> index.php </code> especificado como el índice del sitio. Por favor verifique su existencia y permisos. </p>        ]]></item>
+        <item id="index_inaccessible" title="Índice del sitio inaccesible"><![CDATA[
+<h2>Índice del sitio inaccesible</h2>
+ <p>El servidor raíz no puede leer el archivo raíz <code>index.php</code> especificado como el índice del sitio. Por favor verifique su existencia y permisos.</p>        ]]></item>
         <item id="missing_files" title="Archivos perdidos"><![CDATA[
 <h2> Faltan archivos </h2>
  <p> Faltan uno o más archivos esenciales en Textpattern. Asegúrese de que todos los archivos enumerados estén presentes en el servidor y se encuentren en las ubicaciones correctas. </p>        ]]></item>
         <item id="mod_rewrite_missing" title="Falta mod_rewrite de Apache"><![CDATA[
 <h2> Falta mod_rewrite de Apache </h2>
- <p> El módulo <code> mod_rewrite </code> de Apache no está instalado o deshabilitado. Esto se recomienda para que Textpattern funcione correctamente. Asegúrese de su existencia y estado activado, o póngase en contacto con el host del sitio para obtener ayuda. </p>        ]]></item>
+ <p> El módulo <code> mod_rewrite </code> de Apache no está instalado o  está deshabilitado. Esto se recomienda para que Textpattern funcione correctamente. Asegúrese de su existencia y estado activado, o póngase en contacto con el host del sitio para obtener ayuda. </p>        ]]></item>
         <item id="modified_files" title="Archivos modificados"><![CDATA[
 <h2> Archivos modificados </h2>
  <p> Se determina que los archivos se modificarán si su suma de verificación respectiva difiere de la lista de suma de verificación válida conocida proporcionada con Textpattern. Si alguno de los archivos de la instalación de Textpattern es diferente de lo esperado, los archivos se resaltarán aquí. </p>        ]]></item>
@@ -274,8 +274,8 @@
         <item id="old_placeholder_exists" title="El directorio de secciones existe"><![CDATA[
 <h2> El directorio de sección existe </h2>
  <p> Los archivos de directorio de sección existentes entrarán en conflicto con el esquema <code>.htaccess </code>. Si los archivos informados son marcadores de posición, elimínelos. </p>        ]]></item>
-        <item id="path_to_site_inaccessible" title="Directorio del sitio ilegible"><![CDATA[
-<h2> Directorio del sitio ilegible </h2>
+        <item id="path_to_site_inaccessible" title="Directorio del sitio inaccesible"><![CDATA[
+<h2> Directorio del sitio inaccesible </h2>
  <p> El directorio que contiene el archivo raíz <code> index.php </code> especificado como el índice del sitio no puede ser leído por el servidor. Por favor revise los permisos. </p>        ]]></item>
         <item id="php_version_required" title="Requisitos mínimos de versión"><![CDATA[
 <h2> Requisitos mínimos de versión </h2>
@@ -324,10 +324,10 @@
 <h2> El directorio de instalación todavía existe </h2>
  <p> Cuando se ha instalado Textpattern, el directorio <code> textpattern / setup </code> y su contenido ya no son necesarios, y deben eliminarse por razones de seguridad. </p>        ]]></item>
         <item id="site_url_mismatch" title="La URL del sitio no coincide"><![CDATA[
-<h2> La URL del sitio no coincide </h2>
- <p> La URL del sitio establecida en el panel "Preferencias" no coincide con la URL real utilizada para visitar el sitio. </p>
- <p> Si se puede acceder al sitio a través de múltiples URL diferentes, y si el sitio se comporta como se esperaba, este mensaje puede ignorarse de forma segura. </p>
- <p> De lo contrario, verifique y modifique la configuración de "URL del sitio" en Preferencias de administrador según sea necesario. En el mensaje de advertencia previa al vuelo en el panel "Diagnóstico" se muestra una suposición informada de la URL correcta del sitio. </p>        ]]></item>
+<h2>La URL del sitio no coincide</h2>
+ <p>La URL del sitio establecida en el panel "Preferencias" no coincide con la URL real utilizada para visitar el sitio.</p>
+ <p>Si se puede acceder al sitio a través de múltiples URL diferentes, y si el sitio se comporta como se esperaba, este mensaje puede ignorarse de forma segura.</p>
+ <p>De lo contrario, verifique y modifique la configuración de "URL del sitio" en Preferencias de administrador según sea necesario. En el mensaje de advertencia previa al  piloto en el panel "Diagnóstico" se muestra una opción  informada de la URL correcta del sitio.</p>        ]]></item>
         <item id="some_php_functions_disabled" title="Las funciones de PHP [...] están deshabilitadas en su servidor"><![CDATA[
 <h2> Las funciones PHP [...] están deshabilitadas en su servidor </h2>
  <p> El host del sitio o el administrador del servidor ha deshabilitado una o más funciones de PHP, algunas de las cuales pueden afectar la ejecución de Textpattern. </p>

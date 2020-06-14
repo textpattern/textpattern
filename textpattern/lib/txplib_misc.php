@@ -317,7 +317,12 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-//        load_lang(txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG, $event);
+        $lang = txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG;
+        $loaded = $txpLang->load($lang, true);
+
+        if(empty($loaded) || !in_array($event, $loaded)) {
+            load_lang($lang, $event);
+        }
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -398,7 +403,6 @@ function dmp()
  * @param   array|string|bool $events An array of loaded events
  * @return  array
  * @package L10n
- * @see     load_lang_event()
  * @example
  * print_r(
  *     load_lang('en-gb', false)
@@ -2503,7 +2507,9 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     } elseif ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
-        $str = strftime($format, $time + tz_offset($time));
+        $tztime = $time + tz_offset($time);
+        $format = str_replace('%s', $tztime, $format);
+        $str = strftime($format, $tztime);
     }
 
     if (!isset($charsets[$override_locale])) {
