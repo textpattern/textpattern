@@ -183,7 +183,11 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
         $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : '';
 
         foreach ($this->items as $item) {
-            $out[] = $item->render();
+            if (is_object($item)) {
+                $out[] = $item->render();
+            } else {
+                $out[] = $item;
+            }
         }
 
         return join(n, $out).$break;
