@@ -531,7 +531,7 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
-    $yield[] = isset($thing) ? array($thing) : null ;//$thing; ? parse($thing) : $thing;
+    $yield[] = isset($thing) ? array($thing) : null;//$thing; ? parse($thing) : $thing;
     $out = parse_form($form);
     array_pop($yield);
 
@@ -1823,7 +1823,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'rel'        => '',
         'shift'      => false,
         'limit'      => 0,
-        'break'      => '',) + 
+        'break'      => '',) +
         ($get ? array(
         'total'      => true,
         ) : array()), $atts));
@@ -1876,7 +1876,7 @@ function txp_pager($atts, $thing = null, $newer = null)
             $range = (int)$shift;
         }
     }
-    
+
     if (isset($range)) {
         if (!$range) {
             $pages = array();
@@ -1915,7 +1915,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
 
         if (
-            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) && 
+            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) &&
             $nextpg <= ($newer === true && $range !== false ? $thepg - 1 : $numPages)
         ) {
             if (empty($shown[$nextpg]) || $showalways) {
