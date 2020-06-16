@@ -148,7 +148,7 @@ function link_list($message = '')
             ),
             'name' => array(
                 'column' => 'txp_link.linkname',
-                'label'  => gTxt('title'),
+                'label'  => gTxt('name'),
             ),
             'url' => array(
                 'column' => 'txp_link.url',
