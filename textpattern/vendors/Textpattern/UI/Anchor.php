@@ -37,11 +37,11 @@ class Anchor extends Tag implements UIInterface
     /**
      * Construct content and anchor.
      *
-     * @param string        $content The link content
-     * @param string|array  $anchor  The link itself or a set of parts
+     * @param string        $linktext Link content
+     * @param string|array  $anchor   The link itself or a set of name-val parts
      */
 
-    public function __construct($content, $anchor = '#')
+    public function __construct($linktext, $anchor = '#')
     {
         parent::__construct('a');
 
@@ -49,7 +49,7 @@ class Anchor extends Tag implements UIInterface
             $anchor = join_qs($anchor);
         }
 
-        $this->setContent($content);
+        $this->setContent($linktext);
         $this->setAtt('href', $anchor);
     }
 }
