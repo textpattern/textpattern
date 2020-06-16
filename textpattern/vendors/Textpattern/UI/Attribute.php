@@ -30,7 +30,7 @@
 
 namespace Textpattern\UI;
 
-class Attribute
+class Attribute implements \IteratorAggregate
 {
     /**
      * The attribute value(s), keyed via their index.
@@ -252,5 +252,17 @@ class Attribute
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * IteratorAggregate interface.
+     *
+     * @return ArrayIterator
+     * @see    IteratorAggregate
+     */
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->values);
     }
 }
