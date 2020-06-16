@@ -215,7 +215,7 @@ function sec_section_list($message = '')
     $contentBlock = '';
 
     if ($total < 1) {
-        if ($criteria != 1) {
+        if ($crit !== '') {
             $contentBlock .= graf(
                 span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                 gTxt('no_results_found'),
