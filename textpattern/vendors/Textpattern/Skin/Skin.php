@@ -1287,7 +1287,7 @@ class Skin extends CommonBase implements SkinInterface
         $switchDir = ($dir == 'desc') ? 'asc' : 'desc';
 
         if ($total < 1) {
-            if ($criteria != 1) {
+            if ($crit !== '') {
                 $out = graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_results_found'),

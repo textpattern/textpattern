@@ -213,7 +213,7 @@ function list_list($message = '', $post = '')
         LEFT JOIN ".safe_pfx('txp_section')." section ON section.name = textpattern.Section
         LEFT JOIN ".safe_pfx('txp_users')." user ON user.name = textpattern.AuthorID";
 
-    if ($criteria === 1) {
+    if ($crit === '') {
         $total = safe_count('textpattern', $criteria);
     } else {
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
@@ -248,7 +248,7 @@ function list_list($message = '', $post = '')
     if ($total < 1) {
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt($criteria != 1 ? 'no_results_found' : 'no_articles_recorded'),
+            gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
             array('class' => 'alert-block information')
         );
     } else {
