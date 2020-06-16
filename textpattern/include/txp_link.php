@@ -182,7 +182,7 @@ function link_list($message = '')
         LEFT JOIN ".safe_pfx_j('txp_category')." ON txp_category.name = txp_link.category AND txp_category.type = 'link'
         LEFT JOIN ".safe_pfx_j('txp_users')." ON txp_users.name = txp_link.author";
 
-    if ($criteria === 1) {
+    if ($crit === '') {
         $total = safe_count('txp_link', $criteria);
     } else {
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
@@ -218,7 +218,7 @@ function link_list($message = '')
     if ($total < 1) {
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt($criteria == 1 ? 'no_links_recorded' : 'no_results_found'),
+            gTxt($crit === '' ? 'no_links_recorded' : 'no_results_found'),
             array('class' => 'alert-block information')
         );
     } else {
