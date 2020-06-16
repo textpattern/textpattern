@@ -185,7 +185,7 @@ function file_list($message = '', $ids = array())
         LEFT JOIN ".safe_pfx_j('txp_category')." ON txp_category.name = txp_file.category AND txp_category.type = 'file'
         LEFT JOIN ".safe_pfx_j('txp_users')." ON txp_users.name = txp_file.author";
 
-    if ($criteria === 1) {
+    if ($crit === '') {
         $total = safe_count('txp_file', $criteria);
     } else {
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
@@ -197,7 +197,7 @@ function file_list($message = '', $ids = array())
             'div', array(
                 'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
-                'style' => $total || $criteria == 1 ? false : 'display:none',
+                'style' => $total || $crit === '' ? false : 'display:none',
             )
         );
 
@@ -250,7 +250,7 @@ function file_list($message = '', $ids = array())
     if ($total < 1) {
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt($criteria != 1 ? 'no_results_found' : 'no_files_recorded'),
+            gTxt($crit === '' ? 'no_files_recorded' : 'no_results_found'),
             array('class' => 'alert-block information')
         );
     } else {
