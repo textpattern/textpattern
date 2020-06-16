@@ -168,7 +168,7 @@ function log_list($message = '')
         $contentBlock .=
             graf(
                 span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt($criteria == 1 ? 'no_refers_recorded' : 'no_results_found'),
+                gTxt($crit === '' ? 'no_refers_recorded' : 'no_results_found'),
                 array('class' => 'alert-block information')
             );
     } else {

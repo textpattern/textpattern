@@ -342,7 +342,7 @@ function author_list($message = '')
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
         if ($total < 1) {
-            if ($criteria != 1) {
+            if ($crit !== '') {
                 $contentBlock .=
                     graf(
                         span(null, array('class' => 'ui-icon ui-icon-info')).' '.

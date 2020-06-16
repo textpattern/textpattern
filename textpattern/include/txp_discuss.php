@@ -270,7 +270,7 @@ function discuss_list($message = '')
     if ($total < 1) {
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt($criteria == 1 ? 'no_comments_recorded' : 'no_results_found'),
+            gTxt($crit === '' ? 'no_comments_recorded' : 'no_results_found'),
             array('class' => 'alert-block information')
         );
     } else {
