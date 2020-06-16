@@ -81,7 +81,7 @@ class InputLabel extends Tag implements UICollectionInterface
     protected $labelTags = null;
 
     /**
-     * Tags to wrap the content and label in, respectively.
+     * Tags in which to wrap the content and label, respectively.
      *
      * @var array
      */
