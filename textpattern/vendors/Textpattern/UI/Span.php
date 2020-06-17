@@ -40,10 +40,12 @@ class Span extends Tag implements UIInterface
      * @param string  $content The span content
      */
 
-    public function __construct($content)
+    public function __construct($content = null)
     {
         parent::__construct('span');
 
-        $this->setContent($content);
+        if ($content !== null) {
+            $this->setContent($content);
+        }
     }
 }

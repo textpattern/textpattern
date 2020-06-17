@@ -22,9 +22,9 @@
  */
 
 /**
- * An anchor tag for creating URL links.
+ * A paragraph tag.
  *
- * Replaces href().
+ * Replaces graf().
  *
  * @since   4.9.0
  * @package UI
@@ -32,24 +32,18 @@
 
 namespace Textpattern\UI;
 
-class Anchor extends Tag implements UIInterface
+class Para extends Tag implements UIInterface
 {
     /**
-     * Construct content and anchor.
+     * Construct content and &lt;p&gt; tag.
      *
-     * @param string        $linktext Link content
-     * @param string|array  $anchor   The link itself or a set of name-val parts
+     * @param string  $content Tag content
      */
 
-    public function __construct($linktext, $anchor = '#')
+    public function __construct($content)
     {
-        parent::__construct('a');
+        parent::__construct('p');
 
-        if (is_array($anchor)) {
-            $anchor = join_qs($anchor);
-        }
-
-        $this->setContent($linktext);
-        $this->setAtt('href', $anchor);
+        $this->setContent($content);
     }
 }
