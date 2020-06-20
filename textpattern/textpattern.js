@@ -303,12 +303,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     });
                 }
 
+                let count = boxes.filter(':checked').length;
+
                 if (typeof(e.originalEvent) != 'undefined') {
-                    form.selectAll.prop('checked', box.prop('checked') && boxes.filter(':checked').length === boxes.length).change();
+                    form.selectAll.prop('checked', box.prop('checked') && count === boxes.length).change();
                 }
 
-                form.editMethod.find('[value=""]').gTxt('with_selected_option', {
-                    '{count}': boxes.filter(':checked').length
+                form.editMethod.prop('disabled', !count).find('[value=""]').gTxt('with_selected_option', {
+                    '{count}': count
                 });
             });
 
