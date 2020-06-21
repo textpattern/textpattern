@@ -525,16 +525,18 @@ function step_fbCreate()
     if (defined('is_multisite')) {
         $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['admin_url'];
     }
-    // Clear the session so no data is leaked.
-    $_SESSION = $cfg = array();
+
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
     if (defined('is_multisite')) {
-        $login_url  = $multisite_admin_login_url.DS.'index.php';
+        $login_url  = $multisite_admin_login_url.DS.'index.php?lang='.$cfg['site']['language_code'];
         $setup_path = multisite_root_path.DS.'admin'.DS;
     } else {
-        $login_url  = $GLOBALS['rel_txpurl'].DS.'index.php';
+        $login_url  = $GLOBALS['rel_txpurl'].DS.'index.php?lang='.$cfg['site']['language_code'];
         $setup_path = DS.basename(txpath).DS;
     }
+
+    // Clear the session so no data is leaked.
+    $_SESSION = $cfg = array();
 
     echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">'.
