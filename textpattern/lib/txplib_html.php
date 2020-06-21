@@ -1154,20 +1154,27 @@ function assHead()
  * The rendered link can be customised via a 'admin_help > {$help_var}'
  * pluggable UI callback event.
  *
- * @param  string $help_var Help topic
- * @param  int    $width    Popup window width
- * @param  int    $height   Popup window height
- * @param  string $class    HTML class
- * @param  string $inline   Inline pophelp
- * @return string HTML
+ * @param  string|array $help_var Help topic or topic and lang in an array
+ * @param  int          $width    Popup window width
+ * @param  int          $height   Popup window height
+ * @param  string       $class    HTML class
+ * @param  string       $inline   Inline pophelp
+ * @return string       HTML
  */
 
 function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline = '')
 {
     global $txp_user, $prefs;
 
+    $lang = null;
+
     if (empty($help_var) || empty($prefs['module_pophelp'])) {
         return '';
+    }
+
+    if (is_array($help_var)) {
+        $lang = empty($help_var[1]) ? null : $help_var[1];
+        $help_var = $help_var[0];
     }
 
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
@@ -1186,7 +1193,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         } elseif (empty($txp_user)) {
             // Use inline pophelp, if unauthorized user or setup stage
             if (class_exists('\Textpattern\Module\Help\HelpAdmin')) {
-                $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+                $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var, $lang);
             }
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
