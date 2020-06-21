@@ -7,6 +7,10 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Notification on list panels if there were no assets recorded.
 * Fixed: Incorrect search label for 'name' on Links panel.
 * Added: 'size' attribute to <txp:images> tag to filter by aspect ratio.
+* Added: Language selector on login and User Edit panels (if >1 installed).
+* Changed: When logging in, chosen login language is used as admin language.
+* Changed: Password reset/welcome/activation emails sent in author language.
+* Fixed: Update language list upon deletion to prevent stale entries.
 
 Changes in 4.8.1
 
