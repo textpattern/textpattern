@@ -855,7 +855,7 @@ function filterAtts($atts = null, $iscustom = null)
         'time'          => null,
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
-        'match'         => 'Category1,Category2',
+        'match'         => 'Category',
         'depth'         => 0,
         'id'            => '',
         'excerpted'     => ''
@@ -888,10 +888,16 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Categories
+    $operator = 'AND';
     $match = parse_qs($match);
+
+    if (isset($match['category'])) {
+        $match['category1'] = $match['category2'] = $match['category'];
+        $operator = 'OR';
+    }
+
     $categories = $category === true ? false : do_list_unique($category);
     $catquery = array();
-    $operator = 'OR';
 
     if ($categories && (!$depth || $categories = getTree($categories, 'article', '1', 'txp_category', $depth))) {
         $categories  = join("','", doSlash($categories));
@@ -908,8 +914,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif ($val = gps($match['category'.$i])) {
-                $catquery[] = "$not(Category{$i} = '".doSlash($val)."')";
-                $operator = 'AND';
+                $catquery[] = "$not(Category{$i} IN (".implode(',', (array) quote_list($val))."))";
             }
         } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";
