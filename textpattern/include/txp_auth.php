@@ -103,7 +103,9 @@ function doLoginForm($message)
 
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
-    $lang = in_array($lang, $txpLang->installed()) ? $lang : TEXTPATTERN_DEFAULT_LANG;
+    $installed = $txpLang->installed();
+
+    $lang = in_array($lang, $installed) ? $lang : $installed[0];
     $langList = $txpLang->languageList();
     $txpLang->swapStrings($lang, 'admin');
 
@@ -164,7 +166,7 @@ function doLoginForm($message)
                     'lang',
                     $txpLang->languageSelect('lang', $lang),
                     'language', '', array('class' => 'txp-form-field language')
-                ) : '').
+                ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
                 fInput('text',
@@ -267,8 +269,8 @@ function doTxpValidate()
 
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
-    $lang = in_array($lang, $txpLang->installed()) ? $lang : TEXTPATTERN_DEFAULT_LANG;
-
+    $installed = $txpLang->installed();
+    $lang = in_array($lang, $installed) ? $lang : $installed[0];
     $txpLang->swapStrings($lang, 'admin, common');
 
     if ($c_userid && strlen($c_hash) === 32) {
