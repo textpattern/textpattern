@@ -106,7 +106,6 @@ function doLoginForm($message)
     $lang = in_array($lang, $txpLang->installed()) ? $lang : TEXTPATTERN_DEFAULT_LANG;
     $langList = $txpLang->languageList();
     $txpLang->swapStrings($lang, 'admin');
-    $usesLang = $lang !== TEXTPATTERN_DEFAULT_LANG;
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');
@@ -125,9 +124,9 @@ function doLoginForm($message)
                 fInput('submit', '', gTxt('password_reset_button'), 'publish')
             ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'.($usesLang ? '?lang='.$lang : '')), array('class' => 'login-return')
+                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
             ).
-            ($usesLang ? hInput('lang', $lang) : '').
+            hInput('lang', $lang).
             hInput('p_reset', 1);
     } elseif ($confirm || $activate) {
         $pageTitle = ($confirm) ? gTxt('change_password') : gTxt('set_password');
@@ -152,10 +151,10 @@ function doLoginForm($message)
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish')
             ).
             ($confirm ? graf(
-                href(gTxt('back_to_login'), 'index.php'.($usesLang ? '?lang='.$lang : '')), array('class' => 'login-return')
+                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
             ) : '').
             hInput('hash', gps('confirm').gps('activate')).
-            ($usesLang ? hInput('lang', $lang) : '').
+            hInput('lang', $lang).
             hInput(($confirm ? 'p_alter' : 'p_set'), 1);
     } else {
         $pageTitle = gTxt('login');
@@ -194,7 +193,7 @@ function doLoginForm($message)
                 fInput('submit', '', gTxt('log_in_button'), 'publish')
             ).
             graf(
-                href(gTxt('password_forgotten'), '?reset=1'.($usesLang ? '&lang='.$lang : '')), array('class' => 'login-forgot')
+                href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
             ).
             graf(
                 href(htmlspecialchars(get_pref('sitename')), hu, array(
@@ -271,7 +270,6 @@ function doTxpValidate()
     $lang = in_array($lang, $txpLang->installed()) ? $lang : TEXTPATTERN_DEFAULT_LANG;
 
     $txpLang->swapStrings($lang, 'admin, common');
-    $usesLang = $lang !== TEXTPATTERN_DEFAULT_LANG;
 
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
@@ -394,7 +392,7 @@ EOS
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php'.($usesLang ? '?lang='.$lang : ''));
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 
