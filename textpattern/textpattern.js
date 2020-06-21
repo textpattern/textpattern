@@ -397,7 +397,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     methods.select({
                         'checked': $(this).prop('checked')
                     });
-                    lib.highlight();
                 }
 
                 $this.toggleClass(opt.filteredClass, !$(this).prop('checked'));
