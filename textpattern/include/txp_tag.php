@@ -704,6 +704,7 @@ class BuilderTags
     private function tbMatchCatPop($value)
     {
         $vals = array(
+            'Category'            => gTxt('category1').' '.gTxt('or').' '.gTxt('category2'),
             'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
             'Category1'           => gTxt('category1'),
             'Category2'           => gTxt('category2'),
