@@ -202,6 +202,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             }
 
             obj.filter(settings.checked ? ':not(:checked)' : ':checked').prop('checked', settings.checked).change();
+            lib.highlight();
 
             return methods;
         };

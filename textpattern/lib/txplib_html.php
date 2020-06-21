@@ -1342,7 +1342,7 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
     }
 
     return n.tag(
-        selectInput('edit_method', $methods, '', false, '', '', false, true).
+        selectInput('edit_method', $methods, '').
         eInput($event).
         sInput($step).
         hInput('page', $page).
