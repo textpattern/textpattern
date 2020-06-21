@@ -320,7 +320,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
         $lang = txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG;
         $loaded = $txpLang->load($lang, true);
 
-        if(empty($loaded) || !in_array($event, $loaded)) {
+        if (empty($loaded) || !in_array($event, $loaded)) {
             load_lang($lang, $event);
         }
     }
