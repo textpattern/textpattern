@@ -25,7 +25,7 @@
  * UI interface.
  *
  * An interface for creating UI components such as input fields,
- * checkboxes, and controls.
+ * checkboxes and controls.
  *
  * @since   4.9.0
  * @package UI

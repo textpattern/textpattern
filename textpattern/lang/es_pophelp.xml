@@ -2,45 +2,45 @@
 <resources>
 <help lang="es">
     <group id="admin" title="Panel de usuario">
-        <item id="about_privileges" title="Sobre roles"><![CDATA[
+        <item id="about_privileges" title="Acerca de roles"><![CDATA[
 <h2>Acerca de los roles</h2>
 <h3>Editor</h3>
 <ul>
     <li>Puede gestionar artículos, comentarios y enlaces</li>
     <li>Puede usar PHP en los artículos si la preferencia de administración ’Permitir PHP en los artículos’ está marcada como ’Sí’</li>
-    <li>puede gestiornar imágenes y archivos</li>
-    <li>puede gestiornar secciones y categorías</li>
-    <li>puede gestiornar Páginas, bloques y estilo</li>
-    <li>puede ver la información de diagnósitico</li>
+    <li>puede gestionar imágenes y archivos</li>
+    <li>puede gestionar secciones y categorías</li>
+    <li>puede gestionar Páginas, bloques y estilo</li>
+    <li>puede ver la información de diagnóstico</li>
     <li>puede gestionar las preferencias del sitio</li>
     <li>puede gestionar usuarios</li>
     <li>puede gestionar el registro de visitas</li>
-    <li>puede gestionar plugins</li>
+    <li>puede gestionar complementos</li>
     <li>puede importar datos</li>
 </ul>
 <h3>Director editorial</h3>
 <ul>
     <li>Puede gestionar artículos, comentarios y enlaces</li>
     <li>Puede usar PHP en los artículos si la preferencia de administración ’Permitir PHP en los artículos’ está marcada como ’Sí’</li>
-    <li>puede gestiornar imágenes y archivos</li>
-    <li>puede gestiornar secciones y categorías</li>
-    <li>puede gestiornar Páginas, bloques y estilo</li>
-    <li>puede ver la información de diagnósitico</li>
+    <li>puede gestionar imágenes y archivos</li>
+    <li>puede gestionar secciones y categorías</li>
+    <li>puede gestionar páginas, bloques y estilo</li>
+    <li>puede ver la información de diagnóstico</li>
     <li>can manage site preferences</li>
     <li>Puede ver usuarios</li>
     <li>puede gestionar el registro de visitas</li>
-   <li>puede gestionar plugins</li>
+   <li>puede gestionar complementos</li>
     <li>puede importar datos</li>
 </ul>
 <h3>Editor de contenido</h3>
 <ul>
-    <li>can manage articles with one limitation:
+    <li>puede manejar artículos con una limitante:
         <ul>
-            <li>No puede borrar contenidos que no le pertenezcan</li>
+            <li>No puede borrar contenidos que pertenezcan a otros usuarios</li>
         </ul>
     </li>
       <li>Puede gestionar comentarios y enlaces</li>
-    <li>puede gestiornar imágenes y archivos</li>
+    <li>puede gestionar imágenes y archivos</li>
     <li>puede gestionar categorías</li>
     <li>puede gestionar páginas y bloques</li>
     <li>Puede ver usuarios</li>
@@ -48,14 +48,14 @@
 </ul>
 <h3>Escritor de plantilla</h3>
 <ul>
-    <li>can manage own articles, view other users’ articles</li>
-    <li>can manage images and files</li>
+    <li>puede manejar sus artículos con un límite, ver los  artículos de otros usuarios</li>
+    <li>puede manejar imágenes y archivos </li>
 </ul>
 <h3>Freelancer</h3>
 <ul>
-    <li>Puede gestionar sus propios artículos de modo limitado:
+    <li>Puede gestionar sus  artículos limitadamente:
         <ul>
-            <li>Puede modificar un artículo sólo antes de que sea publicado</li>
+            <li>Puede modificar un artículo solo antes que sea publicado</li>
             <li><em>Sólo</em> puede aplicar los estados de Borrador, Oculto o Pendiente</li>
         </ul>
     </li>
@@ -344,12 +344,12 @@
         ]]></item>
         <item id="textpattern_version_update_beta" title="Versión pre-lanzamiento de Textpattern disponible"><![CDATA[
 <h2>Versión pre-lanzamiento de Textpattern disponible</h2>
-<p>Hay una versión beta más reciente  de Textpattern disponible. Estamos buscando voluntarios activos para probar esta versión y poder hacer la versión final lo más robusta posible. Buscamos hacer la experiencia de actualización lo más fluida y fácil, aún para la versión beta.</p>
+<p>Hay una versión beta más reciente  de Textpattern disponible. Estamos buscando voluntarios activos para probar esta versión y poder hacer la versión final tan solida como sea posible. Buscamos hacer la experiencia de actualización lo  fluida y fácil, aún para la versión beta.</p>
 <p>Si decidiera participar, por favor note:</p>
 <ul>
-    <li>No use esta versión beta en un sitio en producción a menos de que tenga un backup funcional de los archivos y la base de datos del sitio, y sepa cómo usarlos.</li>
-    <li>Por favor <a href="https://github.com/textpattern/textpattern/issues">reporte cualquier problema</a>, mencionando la versión beta que está usando. Pueden requerirse otras versiones beta antes de la versión estable, dependiendo de los problemas repostados.</li>
-    <li>Asegúrese que si instala esta versión beta, también actualice a la versión final cuando sea lanzada.</li>
+    <li>No use esta versión beta en un sitio en producción a menos de que tenga una copia de seguridad funcional de los archivos, así como la base de datos del sitio, y conocimiento de cómo usarlos.</li>
+    <li>Por favor <a href="https://github.com/textpattern/textpattern/issues">reporte cualquier problema</a>, mencionando la versión beta que está usando. Pueden requerirse otras versiones beta antes de la versión estable, dependiendo de los problemas reportados.</li>
+    <li>Asegúrese que si implementa este lanzamiento beta, también actualice a la versión final cuando sea lanzada.</li>
 </ul>
         ]]></item>
         <item id="tmp_plugin_paths_match" title="Las rutas del directorio temporal y del directorio de caché de plugins no deben coincidir"><![CDATA[

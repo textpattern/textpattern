@@ -303,5 +303,4 @@ class Disclosure extends Tag implements UICollectionInterface
 
         return parent::render($flavour);
     }
-
 }

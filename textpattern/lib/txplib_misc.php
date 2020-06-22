@@ -320,7 +320,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
         $lang = txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG;
         $loaded = $txpLang->load($lang, true);
 
-        if(empty($loaded) || !in_array($event, $loaded)) {
+        if (empty($loaded) || !in_array($event, $loaded)) {
             load_lang($lang, $event);
         }
     }
@@ -1674,7 +1674,7 @@ function lAtts($pairs, $atts, $warn = true)
         foreach (parse_qs($atts['yield']) as $name => $alias) {
             $value = call_user_func($partial, array('name' => $alias === false ? $name : $alias));
 
-            if(isset($value)) {
+            if (isset($value)) {
                 $atts[$name] = $value;
             }
         }
@@ -4249,7 +4249,7 @@ function parse_qs($match, $sep='=')
 {
     $pairs = array();
 
-    foreach(do_list_unique($match) as $chunk) {
+    foreach (do_list_unique($match) as $chunk) {
         $name = strtok($chunk, $sep);
         $alias = strtok($sep);
         $pairs[strtolower($name)] = $alias;
@@ -4550,7 +4550,7 @@ function permlinkurl($article_array, $hu = hu)
     $thisid = (int) $thisid;
     $keys = get_context(null);
 
-    foreach($internals as $key) {
+    foreach ($internals as $key) {
         unset($keys[$key]);
     }
 

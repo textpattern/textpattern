@@ -167,7 +167,7 @@ class Select extends Tag implements UIInterface
     }
 
     /**
-     * Fetch the key (id) in use by this radio button.
+     * Fetch the key (id) in use by this select list.
      *
      * @return string
      */
