@@ -239,11 +239,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.extendedClick = function () {
-            if (opt.rowClick) {
-                var selector = opt.row;
-            } else {
-                var selector = opt.checkbox;
-            }
+            var selector = opt.rowClick ? opt.row : opt.checkbox;
 
             $this.on('click', selector, function (e) {
                 var self = ($(e.target).is(opt.checkbox) || $(this).is(opt.checkbox));
@@ -281,11 +277,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     box.prop('checked', !checked).change();
                 }
 
-                if (checked === false) {
-                    form.lastCheck = box;
-                } else {
-                    form.lastCheck = null;
-                }
+                form.lastCheck = box;
             });
 
             return lib;
