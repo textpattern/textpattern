@@ -81,6 +81,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $strings = null;
 
     /**
+     * List of cached strings that have been temporarily overridden.
+     *
+     * @var array
+     */
+
+    protected $cachedStrings = null;
+
+    /**
      * Array of events that have been loaded.
      *
      * @var array
@@ -401,6 +409,41 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Temporarily override a bunch of strings with a set from a different language.
+     *
+     * @param  string|null $lang   The language from which to extract strings.
+     *                             If it matches the current language, nothing happens.
+     *                             If null is passed in, the overwritten strings are restored.
+     * @param  string|array $group List of groups (comma-separated or an array) to fetch in the new language.
+     * @return null|true           Returns true if language swap took place, null otherwise.
+     */
+    function swapStrings($lang, $group = 'admin')
+    {
+        if ($lang && in_array($lang, $this->installed()) && ($lang !== get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG))) {
+            $this->cachedStrings = $this->getStrings();
+
+            // Override the language strings in the given groups with those of the passed language.
+            $userPack = $this->getPack($lang, $group);
+            $userStrings = array();
+
+            foreach ($userPack as $key => $packBlock) {
+                $userStrings[$key] = $packBlock['data'];
+            }
+
+            $this->setPack($userStrings, true);
+
+            return true;
+        } elseif ($lang === null && $this->cachedStrings) {
+            $this->setPack($this->cachedStrings, true);
+            $this->cachedStrings = null;
+
+            return true;
+        }
+
+        return null;
+    }
+
+    /**
      * Install a language pack from a file.
      *
      * @param string $lang_code The lang identifier to load
@@ -593,7 +636,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         global $DB;
-    
+
         if (!empty($DB)) {
             $this->strings = $this->extract($lang_code, $events);
             $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));

@@ -81,6 +81,7 @@ function doLoginForm($message)
     $event = 'login';
 
     $stay = (cs('txp_login') && !gps('logout') ? 1 : 0);
+    $lang = sanitizeForUrl(gps('lang'));
     $reset = gps('reset');
     $confirm = gps('confirm');
     $activate = gps('activate');
@@ -97,6 +98,16 @@ function doLoginForm($message)
 
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
     $out = array();
+
+    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
+
+    // Override language strings if indicated.
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $installed = $txpLang->installed();
+
+    $lang = in_array($lang, $installed) ? $lang : $installed[0];
+    $langList = $txpLang->languageList();
+    $txpLang->swapStrings($lang, 'admin');
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');
@@ -115,8 +126,9 @@ function doLoginForm($message)
                 fInput('submit', '', gTxt('password_reset_button'), 'publish')
             ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
+                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
             ).
+            hInput('lang', $lang).
             hInput('p_reset', 1);
     } elseif ($confirm || $activate) {
         $pageTitle = ($confirm) ? gTxt('change_password') : gTxt('set_password');
@@ -140,14 +152,21 @@ function doLoginForm($message)
             graf(
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish')
             ).
-            graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
-            ).
+            ($confirm ? graf(
+                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
+            ) : '').
             hInput('hash', gps('confirm').gps('activate')).
+            hInput('lang', $lang).
             hInput(($confirm ? 'p_alter' : 'p_set'), 1);
     } else {
         $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
+            (count($langList) > 1
+                ? inputLabel(
+                    'lang',
+                    $txpLang->languageSelect('lang', $lang),
+                    'language', '', array('class' => 'txp-form-field language')
+                ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
                 fInput('text',
@@ -170,13 +189,13 @@ function doLoginForm($message)
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
                 tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
-                popHelp('remember_login'), array('class' => 'login-stay')
+                popHelp(array('remember_login', $lang)), array('class' => 'login-stay')
             ).
             graf(
                 fInput('submit', '', gTxt('log_in_button'), 'publish')
             ).
             graf(
-                href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot')
+                href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
             ).
             graf(
                 href(htmlspecialchars(get_pref('sitename')), hu, array(
@@ -232,6 +251,7 @@ function doTxpValidate()
     $stay       = ps('stay');
     $p_confirm  = gps('confirm');
     $logout     = gps('logout');
+    $lang       = sanitizeForUrl(gps('lang'));
     $message    = '';
     $pub_path   = preg_replace('|//$|', '/', rhu.'/');
     $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
@@ -244,6 +264,14 @@ function doTxpValidate()
         $c_hash   = '';
         $c_userid = '';
     }
+
+    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
+
+    // Override language strings if indicated.
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $installed = $txpLang->installed();
+    $lang = in_array($lang, $installed) ? $lang : $installed[0];
+    $txpLang->swapStrings($lang, 'admin, common');
 
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
@@ -316,6 +344,11 @@ function doTxpValidate()
             $txp_user = $name;
             Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
 
+            // Set admin language to the one set in the login screen.
+            if ($lang) {
+                set_pref('language_ui', $lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+            }
+
             script_js(<<<EOS
 $(document).ready(function ()
 {
@@ -361,7 +394,7 @@ EOS
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php');
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 
