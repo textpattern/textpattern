@@ -1152,22 +1152,25 @@ function related_articles($atts, $thing = null)
         'form'     => '',
         'limit'    => 10,
         'offset'   => 0,
-        'match'    => 'Category1,Category2',
+        'match'    => 'Category',
         'no_widow' => '',
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
     ), $atts);
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords'), getCustomFields()));
     $categories = $cats = array();
 
     foreach ($match as $cf) {
         switch ($cf) {
+            case 'category':
             case 'category1':
             case 'category2':
-                if (!empty($thisarticle[$cf])) {
-                    $cats[] = $thisarticle[$cf];
+                foreach(($cf == 'category' ? array('category1', 'category2') : array($cf)) as $cat) {
+                    if (!empty($thisarticle[$cat])) {
+                        $cats[] = $thisarticle[$cat];
+                    }
                 }
 
                 $categories[] = ucwords($cf);
@@ -1823,7 +1826,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'rel'        => '',
         'shift'      => false,
         'limit'      => 0,
-        'break'      => '',) + 
+        'break'      => '',) +
         ($get ? array(
         'total'      => true,
         ) : array()), $atts));
@@ -1876,7 +1879,7 @@ function txp_pager($atts, $thing = null, $newer = null)
             $range = (int)$shift;
         }
     }
-    
+
     if (isset($range)) {
         if (!$range) {
             $pages = array();
@@ -1915,7 +1918,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
 
         if (
-            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) && 
+            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) &&
             $nextpg <= ($newer === true && $range !== false ? $thepg - 1 : $numPages)
         ) {
             if (empty($shown[$nextpg]) || $showalways) {
