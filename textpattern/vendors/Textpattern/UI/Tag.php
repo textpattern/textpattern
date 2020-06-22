@@ -164,6 +164,48 @@ class Tag implements UIInterface
     }
 
     /**
+     * Append a value to an existing attribute, if a value already exists. Chainable.
+     *
+     * @param  string $key   Attribute key
+     * @param  string $value Attribute value
+     * @param  string $glue  The string to use to join the values together
+     * @return this
+     */
+
+    public function appendAtt($key, $value, $glue = ' ')
+    {
+        $currentVal = $this->atts->getValue($key);
+        $parts = array();
+
+        if ($currentVal !== null) {
+            $parts[] = $currentVal;
+        }
+
+        $parts[] = $value;
+
+        $this->setAtt($key, implode($glue, $parts));
+
+        return $this;
+    }
+
+    /**
+     * Append a value to an existing attribute, if a value already exists. Chainable.
+     *
+     * @param  array  $atts  Name-value attributes
+     * @param  string $glue  The string to use to join each value to its existing content
+     * @return this
+     */
+
+    public function appendAtts($atts, $glue = ' ')
+    {
+        foreach ($atts as $key => $value) {
+            $this->appendAtt($key, $value, $glue);
+        }
+
+        return $this;
+    }
+
+    /**
      * Retrieve the given attribute or assign default if not set.
      *
      * @param  string $key     Attribute key

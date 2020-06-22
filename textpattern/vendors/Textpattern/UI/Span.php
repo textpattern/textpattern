@@ -22,7 +22,7 @@
  */
 
 /**
- * Create a &lt;span&gt; tag.
+ * A &lt;span&gt; tag.
  *
  * Replaces span().
  *

@@ -143,7 +143,7 @@ class OptGroup extends Tag implements UICollectionInterface
 
     public function keys()
     {
-        return array_keys($this->items);
+        return array_keys($this->options);
     }
 
     /**

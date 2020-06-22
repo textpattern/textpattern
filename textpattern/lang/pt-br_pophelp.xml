@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="pt-BR">
-    <group id="admin" title="Painel do Utilizador">
+    <group id="admin" title="Painel de usuários">
         <item id="about_privileges" title="Sobre funções"><![CDATA[
 <h2>Sobre as funções</h2>
 <h3>Editor</h3>
@@ -106,7 +106,17 @@
 <h2>Resumo</h2>
 <p>Resumo de artigo são opcionais. Trechos poderiam ser usados como um resumo do artigo que é exibido como parte de uma tabela de conteúdo, usado no lugar do corpo do artigo completo em feeds RSS/Atom do site, ou em inúmeros outros usos.</p>
         ]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
+        <item id="expire_date" title=""><![CDATA[
+<h2>Data de validade</h2>
+<p>Quando um artigo for rotulado como expirado. Este período é opcional e pode ser fixado como prazo arbitrário no passado ou no futuro.</p>
+<p>As caixas correspondem às seguintes informações:</p>
+<ul>
+    <li>Ano / Mês / Dia</li>
+    <li>Hora (formato de 24 horas) : Minuto: Segundo</li>
+</ul>
+<p>Quando o tempo chegar, ou no caso em que um tempo no passado é fornecido, o artigo expira.</p>
+<p>Se a opção de exibir artigos expirados estiver ativada, o artigo permanece visível. Se a opção de exibir artigos expirados estiver desativada, Os visitantes da página do artigo serão receberão o erro HTTP 410 no lugar do conteúdo do artigo.</p>
+        ]]></item>
         <item id="keywords" title="Palavras-chave"><![CDATA[
 <h2>Palavras-chave</h2>
 <p>Palavras-chave são úteis para melhorar as relações entre artigos além dos fornecidos por categorias.</p>
@@ -126,39 +136,59 @@
 </ul>
 <p>Um item com horário definido para o futuro ficará agendado, e não será visível no site nem em feeds RSS/Atom até chegar à data e horário determinado. </p>
         ]]></item>
-        <item id="status" title=""><![CDATA[]]></item>
-        <item id="title" title=""><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="status" title="Situação"><![CDATA[]]></item>
+        <item id="title" title="Título"><![CDATA[
+<h2>Title</h2>
+<p>Adicione um título apropriado a este artigo.</p>
+<p>Um título de artigo está limitado a um máximo de 255 caracteres.</p>
+        ]]></item>
+        <item id="url_title" title="Título da URL"><![CDATA[]]></item>
     </group>
 
-    <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
-        <item id="category_description" title=""><![CDATA[]]></item>
-        <item id="file_category" title=""><![CDATA[]]></item>
-        <item id="image_category" title=""><![CDATA[]]></item>
-        <item id="link_category" title=""><![CDATA[]]></item>
+    <group id="category" title="Painel de categorias">
+        <item id="article_category" title="Artigos"><![CDATA[
+<h2>Artigos</h2>
+<p>Ao contrário de seções, que definem a estrutura de navegação de um site, as categorias de artigo permitem organização de artigos pelo seu assunto. Uma vez que as categorias são atribuídas, as listas de artigos pertencentes a categorias específicas podem ser pesquisadas.</p>
+<p>Por exemplo, provavelmente categorias de artigos em um site sobre alimentos podem ser:</p>
+<ul>
+    <li>ingredientes</li>
+    <li>loja</li>
+    <li>receitas</li>
+    <li>apresentação</li>
+    <li>restaurantes</li>
+    <li>chefes</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Descrição"><![CDATA[
+<h2>Descrição da categoria</h2>
+<p>A descrição da categoria é um componente opcional que pode ajudar os rastreadores a identificar e classificar melhor o conteúdo.</p>
+<p>A descrição da categoria é limitada a um máximo de 255 caracteres. Note que alguns motores de busca colocam limites de caracteres sobre o comprimento da <code>meta description</code> para a prática da exibição em páginas de resultados de motores de busca (SERPs) e isto pode ser menor que o limite de 255 caracteres no Textpattern. </p>
+        ]]></item>
+        <item id="file_category" title="Arquivos"><![CDATA[]]></item>
+        <item id="image_category" title="Imagens"><![CDATA[]]></item>
+        <item id="link_category" title="Links"><![CDATA[]]></item>
     </group>
 
-    <group id="diag" title="">
+    <group id="diag" title="Painel de diagnósticos">
         <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
         <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Ocultar informações privadas"><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Diretório não permite gravação"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="O arquivo .htaccess está em falta"><![CDATA[]]></item>
         <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="Arquivos em falta"><![CDATA[]]></item>
         <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="modified_files" title="Arquivos modificados"><![CDATA[]]></item>
+        <item id="mysql_table_errors" title="Erros na tabela MySQL"><![CDATA[]]></item>
         <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Diretório de seção existe"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Diretório do site ilegível"><![CDATA[]]></item>
+        <item id="php_version_required" title="Requisitos mínimos da versão"><![CDATA[]]></item>
         <item id="setup_still_exists" title=""><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title="Incompatibilidade de URL do site"><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
         <item id="textpattern_version_update" title=""><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
