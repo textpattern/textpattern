@@ -50,7 +50,7 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
     $field = doSlash($field);
     $rs = array();
 
-    foreach($column as $col) {
+    foreach ($column as $col) {
         $rs += array_filter(array_column($txp_sections, $col, 'name'));
     }
 
@@ -410,7 +410,7 @@ function parse($thing, $condition = true, $not = true)
 
         if ($test) {
             foreach ($test as $t) {
-                foreach ($t as $n){
+                foreach ($t as $n) {
                     $txp_tag = $tag[$n];
                     $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
                     $out[$n] = $nextag;
@@ -473,14 +473,14 @@ function maybe_tag($tag)
         } else {
             $match = array();
 
-            foreach($plugins as $p) {
+            foreach ($plugins as $p) {
                 $pfx = strpos($p, '_') === false ? $p : strtok($p, '_').'_';
                 $match[$pfx] = preg_quote($pfx, '/');
             }
 
             $match = '/^('.implode('|', $match).')/i';
             $tags = get_defined_functions();
-            $tags = array_filter($tags['user'], function($f) use ($match) {
+            $tags = array_filter($tags['user'], function ($f) use ($match) {
                 return preg_match($match, $f);
             });
             $tags = array_flip($tags);
@@ -841,7 +841,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     if ($exclude && is_array($exclude)) {
-        foreach($exclude as $cField => $val) {
+        foreach ($exclude as $cField => $val) {
             if (array_key_exists($cField, $customlAtts) && !isset($atts[$cField])) {
                 $atts[$cField] = $val;
             }
@@ -903,20 +903,20 @@ function filterAtts($atts = null, $iscustom = null)
         $categories  = join("','", doSlash($categories));
     }
 
-    for($i = 1; $i <= 2; $i++) {
+    for ($i = 1; $i <= 2; $i++) {
         $not = isset($exclude["category{$i}"]) ? '!' : '';
 
         if (isset($match['category'.$i])) {
             if ($match['category'.$i] === false) {
                 if ($categories) {
                     $catquery[] = "$not(Category{$i} IN ('$categories'))";
-                } elseif($category === true || $not) {
+                } elseif ($category === true || $not) {
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif ($val = gps($match['category'.$i])) {
                 $catquery[] = "$not(Category{$i} IN (".implode(',', (array) quote_list($val))."))";
             }
-        } elseif($not) {
+        } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";
         }
     }
@@ -932,7 +932,7 @@ function filterAtts($atts = null, $iscustom = null)
         .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
     $getid = $ids && !$not;
 
-        // Section
+    // Section
     // searchall=0 can be used to show search results for the current
     // section only.
     if ($q && $searchall && !$issticky) {

@@ -1826,7 +1826,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         'rel'        => '',
         'shift'      => false,
         'limit'      => 0,
-        'break'      => '',) + 
+        'break'      => '',) +
         ($get ? array(
         'total'      => true,
         ) : array()), $atts));
@@ -1879,7 +1879,7 @@ function txp_pager($atts, $thing = null, $newer = null)
             $range = (int)$shift;
         }
     }
-    
+
     if (isset($range)) {
         if (!$range) {
             $pages = array();
@@ -1918,7 +1918,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
 
         if (
-            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) && 
+            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) &&
             $nextpg <= ($newer === true && $range !== false ? $thepg - 1 : $numPages)
         ) {
             if (empty($shown[$nextpg]) || $showalways) {
