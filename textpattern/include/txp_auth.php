@@ -162,10 +162,10 @@ function doLoginForm($message)
         $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             (count($langList) > 1
-                ? inputLabel(
-                    'lang',
-                    $txpLang->languageSelect('lang', $lang),
-                    'language', '', array('class' => 'txp-form-field language')
+                ? graf(
+                     tag(gTxt('language'), 'label', array('for' => 'lang')).
+                     $txpLang->languageSelect('lang', $lang)
+                     , array('class' => 'login-language txp-reduced-ui')
                 ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
