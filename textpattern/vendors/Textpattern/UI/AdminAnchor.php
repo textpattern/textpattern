@@ -99,7 +99,6 @@ class AdminAnchor extends Tag implements UIInterface
                 'event' => $event,
                 'step'  => $step,
             ));
-
         } else {
             parent::__construct('form');
         }

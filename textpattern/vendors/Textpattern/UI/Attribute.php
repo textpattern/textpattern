@@ -88,7 +88,6 @@ class Attribute implements \IteratorAggregate
     public function setAttribute($key, $value = null, $props = array())
     {
         if ($key) {
-
             if ($value === true) {
                 $props['format'] = 'bool';
             }
