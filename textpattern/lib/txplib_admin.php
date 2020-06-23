@@ -54,12 +54,18 @@ function send_account_activation($name)
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
         $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
+        $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '".doSlash($name)."'");
+        $authorLang = ($authorLang) ? $authorLang : TEXTPATTERN_DEFAULT_LANG;
+
+        $txpLang = Txp::get('\Textpattern\L10n\Lang');
+        $txpLang->swapStrings($authorLang, 'admin, common');
+
         $message = gTxt('salutation', array('{name}' => $RealName)).
             n.n.gTxt('you_have_been_registered').' '.$sitename.
 
             n.n.gTxt('your_login_is').' '.$name.
             n.n.gTxt('account_activation_confirmation').
-            n.ahu.'index.php?activate='.$activation_code.
+            n.ahu.'index.php?lang='.$authorLang.'&activate='.$activation_code.
             n.n.gTxt('link_expires', array(
                 '{year}'  => $expiryYear,
                 '{month}' => $expiryMonth,
@@ -67,7 +73,11 @@ function send_account_activation($name)
                 '{time}'  => $expiryTime,
             ));
 
-        if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
+        $subject = gTxt('account_activation');
+
+        $txpLang->swapStrings(null);
+
+        if (txpMail($email, "[$sitename] ".$subject, $message)) {
             return gTxt('login_sent_to', array('{email}' => $email));
         } else {
             return array(gTxt('could_not_mail'), E_ERROR);
@@ -95,6 +105,7 @@ function send_reset_confirmation_request($name)
     global $sitename;
 
     $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+    $safeName = doSlash($name);
 
     $rs = safe_query(
         "SELECT
@@ -105,7 +116,7 @@ function send_reset_confirmation_request($name)
         LEFT JOIN ".safe_pfx('txp_token')." txp_token
         ON txp_users.user_id = txp_token.reference_id
         AND txp_token.type = 'password_reset'
-        WHERE txp_users.name = '".doSlash($name)."'"
+        WHERE txp_users.name = '$safeName'"
     );
 
     $row = nextRow($rs);
@@ -129,16 +140,26 @@ function send_reset_confirmation_request($name)
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
         $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
+        $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '$safeName'");
+        $authorLang = ($authorLang) ? $authorLang : TEXTPATTERN_DEFAULT_LANG;
+
+        $txpLang = Txp::get('\Textpattern\L10n\Lang');
+        $txpLang->swapStrings($authorLang, 'admin, common');
+
         $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
-            n.ahu.'index.php?confirm='.$confirm.
+            n.ahu.'index.php?lang='.$authorLang.'&confirm='.$confirm.
             n.n.gTxt('link_expires', array(
                 '{year}'  => $expiryYear,
                 '{month}' => $expiryMonth,
                 '{day}'   => $expiryDay,
                 '{time}'  => $expiryTime,
             ));
-        if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
+
+        $subject = gTxt('password_reset_confirmation_request');
+        $txpLang->swapStrings(null);
+
+        if (txpMail($email, "[$sitename] ".$subject, $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
             return array(gTxt('could_not_mail'), E_ERROR);

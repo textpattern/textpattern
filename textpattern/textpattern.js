@@ -239,11 +239,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.extendedClick = function () {
-            if (opt.rowClick) {
-                var selector = opt.row;
-            } else {
-                var selector = opt.checkbox;
-            }
+            var selector = opt.rowClick ? opt.row : opt.checkbox;
 
             $this.on('click', selector, function (e) {
                 var self = ($(e.target).is(opt.checkbox) || $(this).is(opt.checkbox));
@@ -281,11 +277,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     box.prop('checked', !checked).change();
                 }
 
-                if (checked === false) {
-                    form.lastCheck = box;
-                } else {
-                    form.lastCheck = null;
-                }
+                form.lastCheck = box;
             });
 
             return lib;
@@ -2687,7 +2679,7 @@ $(document).ready(function () {
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
 
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&_txp_token='+textpattern._txp_token);
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang='+textpattern.prefs.language_ui+'&_txp_token='+textpattern._txp_token);
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
