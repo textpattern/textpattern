@@ -1080,7 +1080,7 @@ function load_plugin($name, $force = false)
 
         $txp_current_plugin = $name;
         $dir = sanitizeForFile($name);
-        $filename = txpath.DS.'plugins'.DS.$dir.DS.$dir.'.php';
+        $filename = PLUGINPATH.DS.$dir.DS.$dir.'.php';
 
         if (!is_file($filename)) {
             $code = safe_field("code", 'txp_plugin', "name = '".doSlash($name)."'");
@@ -1392,8 +1392,8 @@ function load_plugins($type = false, $pre = null)
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
         $pre = intval($pre);
-        $plugins_dir = txpath.DS.'plugins';
-        $writable = is_dir($plugins_dir) && is_writable($plugins_dir);
+
+        $writable = is_dir(PLUGINPATH) && is_writable(PLUGINPATH);
 
         foreach ($rs as $a) {
             if (!isset($plugins_ver[$a['name']]) && (!$pre || $a['load_order'] < $pre)) {
@@ -1403,7 +1403,7 @@ function load_plugins($type = false, $pre = null)
                 $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
 
                 $dir = $a['name'];
-                $filename = $plugins_dir.DS.$dir.DS.$dir.'.php';
+                $filename = PLUGINPATH.DS.$dir.DS.$dir.'.php';
 
                 if ($writable && !is_file($filename)) {
                     $code = safe_field('code', 'txp_plugin', "name='".doSlash($a['name'])."'");
