@@ -406,7 +406,10 @@ function remove_language()
     if ($ret) {
         callback_event('lang_deleted', '', 0, $lang_code);
         $msg = gTxt('language_deleted', array('{name}' => $langName));
-        $represented_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED);
+        $represented_lang = Txp::get('\Textpattern\L10n\Lang')->available(
+            TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED,
+            TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE
+        );
 
         $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
         $ui_lang = get_pref('language_ui', $site_lang, true);
