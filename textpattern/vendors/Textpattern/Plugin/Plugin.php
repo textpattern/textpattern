@@ -246,7 +246,7 @@ class Plugin
             }
         } else {
             $name = sanitizeForFile($name);
-            $dir = txpath.DS.'plugins'.DS.$name;
+            $dir = PLUGINPATH.DS.$name;
 
             if (!is_dir($dir)) {
                 return false;
@@ -466,7 +466,7 @@ class Plugin
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
-            $langDir = txpath.DS.'plugins'.DS.$name.DS.'lang'.DS;
+            $langDir = PLUGINPATH.DS.$name.DS.'lang'.DS;
 
             if (is_dir($langDir) && is_readable($langDir)) {
                 $plugLang = new \Textpattern\L10n\Lang($langDir);
@@ -499,17 +499,17 @@ class Plugin
 
     public function updateFile($name, $code = null)
     {
-        if (!is_writable(txpath.DS.'plugins')) {
+        if (!is_writable(PLUGINPATH)) {
             return;
         }
 
         $filename = sanitizeForFile($name);
 
         if (!isset($code)) {
-            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'plugins', $filename);
+            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(PLUGINPATH, $filename);
         }
 
-        if (!is_dir($dir = txpath.DS.'plugins'.DS.$filename)) {
+        if (!is_dir($dir = PLUGINPATH.DS.$filename)) {
             mkdir($dir);
         }
 

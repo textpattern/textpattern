@@ -172,6 +172,12 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     define('IMPATH', $path_to_site.DS.$img_dir.DS);
 
+    /**
+     * @ignore
+     */
+
+    define('PLUGINPATH', txpath.DS.'plugins');
+
     if (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
