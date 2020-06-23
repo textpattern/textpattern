@@ -691,7 +691,7 @@
         <item id="publish_expired_articles" title="¿Mostrar los artículos caducados?"><![CDATA[]]></item>
         <item id="publisher_email" title="Enviar la información de registro desde esta dirección de correo"><![CDATA[]]></item>
         <item id="rss_how_many" title="¿Cuántos artículos se incluirán en los feeds?"><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title="¿Enviar &quot;Última modificación&quot; encabezado?"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[]]></item>
         <item id="site_slogan" title="Eslogan del sitio"><![CDATA[]]></item>
         <item id="sitename" title="Nombre del sitio"><![CDATA[]]></item>
@@ -702,14 +702,14 @@
         <item id="syndicate_body_or_excerpt" title="¿Sindicar sólo el resumen del artículo?"><![CDATA[]]></item>
         <item id="tempdir" title="Ruta al directorio temporal"><![CDATA[]]></item>
         <item id="theme_name" title="Tema de administración"><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Funciones PHP habilitadas en txp:evaluate"><![CDATA[]]></item>
         <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title="¿Usar email para la ID de los feeds? Por defecto la URL del sitio"><![CDATA[]]></item>
         <item id="use_plugins" title="¿Usar plugins?"><![CDATA[]]></item>
         <item id="use_textile" title="Emplear Textile?"><![CDATA[]]></item>
     </group>
 
-    <group id="section" title="">
+    <group id="section" title="Panel de secciones">
         <item id="section_category" title="Introducción"><![CDATA[]]></item>
         <item id="section_default" title="Sección por defecto para publicar"><![CDATA[]]></item>
         <item id="section_description" title="Descripción"><![CDATA[]]></item>
@@ -721,7 +721,7 @@
         <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[]]></item>
     </group>
 
-    <group id="setup" title="">
+    <group id="setup" title="Panel de configuración">
         <item id="setup_user_login" title="Nombre de usuario"><![CDATA[]]></item>
         <item id="setup_user_pass" title="Contraseña de Usuario"><![CDATA[]]></item>
         <item id="table_prefix" title="Prefijo de tabla"><![CDATA[]]></item>
