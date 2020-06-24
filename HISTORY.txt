@@ -12,6 +12,8 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Incorrect search label for 'name' on Links panel.
 * Added: 'size' attribute to <txp:images> tag to filter by aspect ratio.
 * Added: Language selector on login and User Edit panels (if >1 installed).
+* Changed: Matching categories in <txp:article_custom> now performs AND. Use
+  match="Category" for previous OR behaviour.
 * Changed: When logging in, chosen login language is used as admin language.
 * Changed: Password reset/welcome/activation emails sent in author language.
 * Fixed: Update language list upon deletion to prevent stale entries.
