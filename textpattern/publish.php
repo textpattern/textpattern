@@ -192,11 +192,14 @@ if ($use_plugins) {
     load_plugins(false, 5);
 }
 
+// Request URI rewrite, anyone?
+callback_event('pretext', '', 1);
+
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
 
-isset($pretext) or $pretext = preText($s, null);
+$pretext = isset($pretext) ? $pretext + preText($s, null) : preText($s, null);
 $pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
 
 // Send 304 Not Modified if appropriate.
@@ -282,7 +285,7 @@ log_hit($status);
 
 function preText($s, $prefs = null)
 {
-    global $pretext, $thisarticle, $txp_sections;
+    global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
     if (!isset($out)) {
@@ -326,7 +329,6 @@ function preText($s, $prefs = null)
         return $out;
     }
 
-    empty($pretext) or $out = $pretext + $out;
     extract($prefs);
 
     $is_404 = ($out['status'] == '404');
