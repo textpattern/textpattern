@@ -197,10 +197,10 @@ callback_event('pretext', '', 1);
 
 // This step deprecated as of 1.0 - really only useful with old-style section
 // placeholders, which passed $s='section_name'.
-$s = (empty($s)) ? '' : $s;
+$s = empty($s) ? '' : $s;
 
 $pretext = isset($pretext) ? $pretext + preText($s, null) : preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
+$pretext += array('secondpass' => 0, '_txp_atts' => false);
 
 // Send 304 Not Modified if appropriate.
 
@@ -209,7 +209,7 @@ if (empty($pretext['feed'])) {
 }
 
 if (txpinterface === 'css') {
-    output_css($pretext['s'], gps('n'), gps('t'));
+    output_css(gps('s'), gps('n'), gps('t'));
 
     exit;
 }
@@ -238,7 +238,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = preText($s, $prefs) + $pretext;
+$pretext += preText($s, $prefs);
 callback_event('pretext_end');
 extract($pretext);
 
@@ -273,7 +273,7 @@ if (gps('parentid')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download') {
+if ($s == 'file_download') {
     empty($filename) or output_file_download($filename);
     exit(0);
 }
@@ -289,9 +289,6 @@ function preText($s, $prefs = null)
     static $url = array(), $out = null;
 
     if (!isset($out)) {
-        // Set messy variables.
-        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
-
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
@@ -321,8 +318,6 @@ function preText($s, $prefs = null)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
-
-        $out['skin'] = $out['page'] = $out['css'] = '';
     }
 
     if (!isset($prefs)) {
@@ -330,6 +325,10 @@ function preText($s, $prefs = null)
     }
 
     extract($prefs);
+
+    // Set messy variables.
+    $out += makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+    $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
     $title = null;
