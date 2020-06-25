@@ -195,12 +195,7 @@ if ($use_plugins) {
 // Request URI rewrite, anyone?
 callback_event('pretext', '', 1);
 
-// This step deprecated as of 1.0 - really only useful with old-style section
-// placeholders, which passed $s='section_name'.
-$s = empty($s) ? '' : $s;
-
-$pretext = isset($pretext) ? $pretext + preText($s, null) : preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false);
+$pretext = preText(isset($pretext) ? $pretext : null, null);
 
 // Send 304 Not Modified if appropriate.
 
@@ -238,7 +233,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext += preText($s, $prefs);
+$pretext = preText($pretext, $prefs) + array('secondpass' => 0, '_txp_atts' => false);
 callback_event('pretext_end');
 extract($pretext);
 
@@ -283,12 +278,12 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function preText($s, $prefs = null)
+function preText($store, $prefs = null)
 {
     global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
-    if (!isset($out)) {
+    if (empty($url)) {
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
@@ -318,6 +313,10 @@ function preText($s, $prefs = null)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
+    }
+
+    if (is_array($store)) {
+        $out = $store + $out;
     }
 
     if (!isset($prefs)) {
