@@ -219,69 +219,112 @@ class Plugin
     }
 
     /**
-     * Read a plugin from file.
+     * Read a plugin from file - either template .php or .zip.
      *
-     * @param  string|array $name|$path Plugin name
+     * @param  string       $path       Plugin filename path to read
      * @param  boolean      $normalize  Check/normalize some fields
-     * @return array
+     * @return string|array
      */
 
-    public function read($name, $normalize = true)
+    public function read($path, $normalize = true)
     {
         global $txp_user;
 
-        if (is_array($name)) {
-            list($name, $target_path) = $name + array(null, null);
-
-            if (!(@$pack = file_get_contents($target_path))) {
-                return false;
-            }
-
-            list($pack, $code, $help_raw) = $this->extractSection($pack, array('CODE', 'HELP'));
-            $plugin = array_filter(compact('code', 'help_raw'));
-
-            if (!empty($code)) {
-                file_put_contents($target_path, $pack);
-                include $target_path;
-            }
-        } else {
-            $name = sanitizeForFile($name);
-            $dir = PLUGINPATH.DS.$name;
-
-            if (!is_dir($dir)) {
-                return false;
-            }
-
-            $dir .= DS;
-            $target_path = $dir.$name.'.php';
+        // Assume file has already been uploaded if only name given.
+        if (strpos($path, DS) === false) {
+            $safePath  = sanitizeForFile($path);
+            $path = PLUGINPATH.DS.$safePath.DS.$path.'.php';
         }
 
-        if (empty($plugin['code']) && @$code = file_get_contents($target_path)) {
-            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
-            $plugin['code'] = $code;
+        extract(pathinfo($path));
+
+        $extension = strtolower($extension);
+        $codeContents = $helpContents = '';
+        $zipFiles = $plugin = array();
+
+        $keyFiles = array(
+            'code'     => $filename.'.php',
+            'manifest' => 'manifest.json',
+            'help'     => 'help.html',
+            'help_raw' => 'help.textile',
+            'textpack' => 'textpack.txp',
+            'data'     => 'data.txp',
+        );
+
+        $keyContent = array_fill_keys(array_keys($keyFiles), '');
+
+        if ($extension === 'zip' && is_readable($path) && class_exists('ZipArchive')) {
+            $zip = new \ZipArchive();
+            $zh = $zip->open($path);
+
+            if ($zh === true) {
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $zipFiles[] = $zip->getNameIndex($i);
+                }
+
+                foreach ($keyFiles as $key => $fn) {
+                    $keyFile = $filename.DS.$fn;
+
+                    if (in_array($keyFile, $zipFiles)) {
+                        $fp = $zip->getStream($keyFile);
+
+                        if ($fp) {
+                            while (!feof($fp)) {
+                                $keyContent[$key] .= fread($fp, 1024);
+                            }
+
+                            fclose($fp);
+                        }
+                    }
+                }
+
+                $zip->close();
+            }
+        } elseif ($extension === 'php' && is_readable($path)) {
+            // Test to see if this is a template file or regular .php file.
+            $pack = file_get_contents($path);
+
+            list($pack, $keyContent['code'], $keyContent['help_raw']) = $this->extractSection($pack, array('CODE', 'HELP'));
+
+            if ($keyContent['code']) {
+                // Populate the $plugin array from the template file.
+                include $path;
+            } else {
+                $keyContent['code'] = $pack;
+            }
         }
 
-        if (!empty($dir)) {
-            if (@$info = file_get_contents($dir.'manifest.json')) {
-                $plugin += json_decode($info, true);
-            }
-
-            if (@$textpack = file_get_contents($dir.'textpack.txp')) {
-                $plugin['textpack'] = $textpack;
-            }
-
-            if (@$data = file_get_contents($dir.'data.txp')) {
-                $plugin['data'] = $data;
-            }
-
-            if (@$help = file_get_contents($dir.'help.html')) {
-                $plugin['help'] = $help;
-            } elseif (@$help = file_get_contents($dir.'help.textile')) {
-                $plugin['help_raw'] = $help;
+        // Populate the $plugin array with metadata from the filesystem if present.
+        foreach ($keyFiles as $key => $fn) {
+            if ($key === 'code' && $keyContent['code']) {
+                $keyContent[$key] = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $keyContent[$key]);
+                $plugin[$key] = $keyContent[$key];
+            } elseif ($key === 'help_raw') {
+                if ($keyContent[$key]) {
+                    $plugin[$key] = $keyContent[$key];
+                } else {
+                    if (is_readable($dirname.DS.$fn)) {
+                        if ($help = file_get_contents($dirname.DS.$fn)) {
+                            $plugin[$key] = $help;
+                        }
+                    }
+                }
+            } elseif ($key === 'manifest') {
+                if (is_readable($dirname.DS.$fn)) {
+                    if ($info = file_get_contents($dirname.DS.$fn)) {
+                        $plugin += json_decode($info, true);
+                    }
+                }
+            } else {
+                if (is_readable($dirname.DS.$fn)) {
+                    if ($content = file_get_contents($dirname.DS.$fn)) {
+                        $plugin[$key] = $content;
+                    }
+                }
             }
         }
 
-        $plugin += array('name' => $name, 'author' => get_author_name($txp_user));
+        $plugin += array('name' => $filename, 'author' => get_author_name($txp_user));
 
         if ($normalize) {
             $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
@@ -289,7 +332,7 @@ class Plugin
             $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
         }
 
-        return $plugin;
+        return $zipFiles ? array($plugin, $zipFiles) : $plugin;
     }
 
     /**
@@ -519,13 +562,13 @@ class Plugin
             }
 
             foreach (array(
-                'help' => 'help.html',
+                'help'     => 'help.html',
                 'help_raw' => 'help.textile',
                 'textpack' => 'textpack.txp',
-                'data' => 'data.txp'
+                'data'     => 'data.txp'
                 ) as $key => $file
             ) {
-                if (isset($code[$key])) {
+                if (!empty($code[$key])) {
                     file_put_contents($dir.DS.$file, $code[$key], LOCK_EX);
                 }
             }
