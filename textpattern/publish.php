@@ -196,8 +196,7 @@ if ($use_plugins) {
 
 // Request URI rewrite, anyone?
 callback_event('pretext', '', 1);
-
-$pretext = preText($pretext, null);
+$pretext = preText($pretext, null) + array('secondpass' => 0, '_txp_atts' => false);
 
 // Send 304 Not Modified if appropriate.
 
@@ -235,7 +234,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = preText($pretext, $prefs) + array('secondpass' => 0, '_txp_atts' => false);
+$pretext = preText($pretext, $prefs);
 callback_event('pretext_end');
 extract($pretext);
 
