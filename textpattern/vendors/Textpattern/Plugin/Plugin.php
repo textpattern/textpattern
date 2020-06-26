@@ -221,7 +221,7 @@ class Plugin
     /**
      * Read a plugin from file - either template .php or .zip.
      *
-     * @param  string       $path       Plugin filename path to read
+     * @param  string       $path       Plugin filename or path to read
      * @param  boolean      $normalize  Check/normalize some fields
      * @return string|array
      */
