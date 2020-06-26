@@ -72,6 +72,8 @@ $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
 
+isset($pretext) or $pretext = array();
+
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
 
@@ -195,7 +197,7 @@ if ($use_plugins) {
 // Request URI rewrite, anyone?
 callback_event('pretext', '', 1);
 
-$pretext = preText(isset($pretext) ? $pretext : null, null);
+$pretext = preText($pretext, null);
 
 // Send 304 Not Modified if appropriate.
 
