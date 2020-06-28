@@ -1612,7 +1612,7 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
     // Using the selector in the hash just injects randomness, otherwise two requests
     // back-to-back would generate the same code.
     // Old requests for the same user id are purged when password is set.
-    $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce.$selector.$pass), 0, SALT_LENGTH)));
+    $token = construct_token($selector, $pass, $nonce);
     $user_token = $token.$selector;
 
     // Remove any previous activation tokens and insert the new one.
@@ -1627,6 +1627,20 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
         ");
 
     return $user_token;
+}
+
+/**
+ * Construct a token value from the cryptographic combination of the passed params.
+ *
+ * @param  string $selector The stretch
+ * @param  string $pass     The secret
+ * @param  string $nonce    The salt
+ * @return string           Token
+ */
+
+function construct_token($selector, $pass, $nonce)
+{
+    return bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce.$selector.$pass), 0, SALT_LENGTH)));
 }
 
 /**
