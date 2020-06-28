@@ -43,6 +43,22 @@ class Plugin
     );
 
     /**
+     * The plugin name that has been extracted/read.
+     *
+     * @var string
+     */
+
+    protected $name = null;
+
+    /**
+     * The computed hash of the plugin for integrity purposes.
+     *
+     * @var string
+     */
+
+    protected $hash = null;
+
+    /**
      * Constructor.
      */
 
@@ -166,6 +182,7 @@ class Plugin
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         }
 
+        $this->computeHash($plugin);
         $plugin = preg_replace('/^#.*$/m', '', $plugin);
         $plugin = base64_decode($plugin);
 
@@ -178,6 +195,8 @@ class Plugin
         if (empty($plugin['name'])) {
             return false;
         }
+
+        $this->name = sanitizeForFile($plugin['name']);
 
         if ($normalize) {
             $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
@@ -221,6 +240,8 @@ class Plugin
     /**
      * Read a plugin from file - either template .php or .zip.
      *
+     * Note the class 'name' is only set after the file is successfully read.
+     *
      * @param  string       $path       Plugin filename or path to read
      * @param  boolean      $normalize  Check/normalize some fields
      * @return string|array
@@ -236,10 +257,13 @@ class Plugin
             $path = PLUGINPATH.DS.$safePath.DS.$path.'.php';
         }
 
+        $this->computeHash($path);
+
         extract(pathinfo($path));
 
         $extension = strtolower($extension);
         $codeContents = $helpContents = '';
+        $filename = sanitizeForFile($filename);
         $zipFiles = $plugin = array();
 
         $keyFiles = array(
@@ -299,6 +323,7 @@ class Plugin
             if ($key === 'code' && $keyContent['code']) {
                 $keyContent[$key] = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $keyContent[$key]);
                 $plugin[$key] = $keyContent[$key];
+                $this->name = $filename;
             } elseif ($key === 'help_raw') {
                 if ($keyContent[$key]) {
                     $plugin[$key] = $keyContent[$key];
@@ -599,4 +624,87 @@ class Plugin
 
         return $data;
     }
+
+    /**
+     * Generate a cryptographic token and stash it in the database
+     */
+
+    public function generateToken()
+    {
+        $out = null;
+
+        if ($this->name && $this->hash) {
+            // Limit the size of the integer due to php_int_max.
+            $ref = substr(hexdec(hash('crc32b', $this->name)), 0, 8);
+
+            // An hour should do it.
+            $expiryTimestamp = time() + (60 * 60);
+            $out = generate_user_token($ref, 'plugin_verify', $expiryTimestamp, $this->hash, form_token());
+        }
+
+        return $out;
+    }
+
+
+    /**
+     * Compute a hash of a file or a string. Chainable.
+     *
+     * @param  string $src File path or plugin string to hash
+     */
+
+    protected function computeHash($src)
+    {
+        if (!$this->hash) {
+            if ($src && (is_readable($src) !== false)) {
+                $this->hash = sha1_file($src);
+            } elseif ($src) {
+                $this->hash = sha1(preg_replace('/\s+/', '', $src));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check the passed token matches the one stored in the database.
+     *
+     * If the token isn't yet set for this object, compute it from the passed
+     * source.
+     *
+     * Note that the passed hash isn't all that important. If the first part is
+     * mangled, it can still find the entry in the database via the selector.
+     * Since the database token is immutable from when the plugin was at the verify
+     * step and is not recreated, even if someone else tampers with the file, uploads
+     * a hacked copy that replaces the token, the selector won't match and the
+     * upload will fail.
+     *
+     * @param  string $hash The passed hash to compare, from which the selector is extracted
+     * @param  string $src  Path to a plugin or string plugin text
+     * @return true|string  Error message if something was in valid, otherwise true
+     */
+
+    public function verifyToken($hash, $src = null)
+    {
+        $message = array(gTxt('bad_plugin_code'), E_ERROR);
+        $selector = substr($hash, SALT_LENGTH);
+
+        if (!$this->hash) {
+            $this->computeHash($src);
+        }
+
+        $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='plugin_verify'");
+
+        if ($tokenInfo) {
+            if (strtotime($tokenInfo['expires']) <= time()) {
+                $message = array(gTxt('plugin_token_expired'), E_ERROR);
+            } else {
+                if (construct_token($selector, $this->hash, form_token()) === $tokenInfo['token']) {
+                    $message = true;
+                }
+            }
+        }
+
+        return $message;
+    }
+
 }
