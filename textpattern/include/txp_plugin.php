@@ -629,6 +629,7 @@ function plugin_install()
     $srcFile = ps('plugin-filename');
     $source = $srcFile ? rtrim(get_pref('temp_dir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
     $name = sanitizeForFile(ps('plugin-name'));
+    $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
     if (ps('plugin-cancel')) {
         if ($source) {
@@ -638,7 +639,6 @@ function plugin_install()
         $message = array(gTxt('plugin_install_cancelled'), E_WARNING);
     } elseif (ps('plugin-go')) {
         $hash = assert_string(ps('plugin-token'));
-        $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
         if ($source && is_readable($source)) {
             if ($hash) {
@@ -702,6 +702,8 @@ function plugin_install()
             }
         }
     }
+
+    Txp::get('\Textpattern\Security\Token')->remove('plugin_verify', $txpPlugin->computeRef($name), '2 HOUR');
 
     plugin_list($message);
 }

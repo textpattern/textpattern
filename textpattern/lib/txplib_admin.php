@@ -39,7 +39,7 @@ function send_account_activation($name)
     global $sitename;
 
     require_privs('admin.edit');
-
+    $type = 'account_activation';
     $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
 
     if ($rs) {
@@ -47,7 +47,8 @@ function send_account_activation($name)
 
         $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
 
-        $activation_code = generate_user_token($user_id, 'account_activation', $expiryTimestamp, $pass, $nonce);
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+        $activation_code = $txpToken->generate($user_id, $type, $expiryTimestamp, $pass, $nonce);
 
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
@@ -73,8 +74,10 @@ function send_account_activation($name)
                 '{time}'  => $expiryTime,
             ));
 
-        $subject = gTxt('account_activation');
+        // Tidy up expired activation requests.
+        $txpToken->remove($type, null, (ACTIVATION_EXPIRY_HOURS + 1).' HOUR');
 
+        $subject = gTxt('account_activation');
         $txpLang->swapStrings(null);
 
         if (txpMail($email, "[$sitename] ".$subject, $message)) {
@@ -106,6 +109,7 @@ function send_reset_confirmation_request($name)
 
     $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
     $safeName = doSlash($name);
+    $type = 'password_reset';
 
     $rs = safe_query(
         "SELECT
@@ -133,7 +137,8 @@ function send_reset_confirmation_request($name)
             }
         }
 
-        $confirm = generate_user_token($user_id, 'password_reset', $expiryTimestamp, $pass, $nonce);
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+        $confirm = $txpToken->generate($user_id, $type, $expiryTimestamp, $pass, $nonce);
 
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
@@ -155,6 +160,9 @@ function send_reset_confirmation_request($name)
                 '{day}'   => $expiryDay,
                 '{time}'  => $expiryTime,
             ));
+
+        // Tidy up expired password reset requests.
+        $txpToken->remove($type, null, (RESET_EXPIRY_MINUTES + 1).' MINUTE');
 
         $subject = gTxt('password_reset_confirmation_request');
         $txpLang->swapStrings(null);
@@ -1594,53 +1602,12 @@ function txp_hash_password($password)
  * @param  string $nonce           Random nonce associated with the user's account
  * @return string                  Secure token suitable for emailing as part of a link
  * @since  4.6.1
+ * @deprecated in 4.9.0
  */
 
 function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 {
-    $ref = assert_int($ref);
-    $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
-
-    // The selector becomes an indirect reference to the user row id,
-    // and thus does not leak information when publicly displayed.
-    $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-
-    // Use a hash of the nonce, selector and password.
-    // This ensures that requests expire automatically when:
-    //  a) The person logs in, or
-    //  b) They successfully set/change their password
-    // Using the selector in the hash just injects randomness, otherwise two requests
-    // back-to-back would generate the same code.
-    // Old requests for the same user id are purged when password is set.
-    $token = construct_token($selector, $pass, $nonce);
-    $user_token = $token.$selector;
-
-    // Remove any previous activation tokens and insert the new one.
-    $safe_type = doSlash($type);
-    safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
-    safe_insert("txp_token",
-            "reference_id = '$ref',
-            type = '$safe_type',
-            selector = '".doSlash($selector)."',
-            token = '".doSlash($token)."',
-            expires = '".doSlash($expiry)."'
-        ");
-
-    return $user_token;
-}
-
-/**
- * Construct a token value from the cryptographic combination of the passed params.
- *
- * @param  string $selector The stretch
- * @param  string $pass     The secret
- * @param  string $nonce    The salt
- * @return string           Token
- */
-
-function construct_token($selector, $pass, $nonce)
-{
-    return bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce.$selector.$pass), 0, SALT_LENGTH)));
+    return Txp::get('\Textpattern\Security\Token')->generate($ref, $type, $expiryTimestamp, $pass, $nonce);
 }
 
 /**
@@ -1665,7 +1632,7 @@ function modal_halt($thing)
 /**
  * Sends an activity message to the client.
  *
- * @param   string|array $message The message
+ * @param   string|array $message The message
  * @param   int          $type    The type, either 0, E_ERROR, E_WARNING
  * @param   int          $flags   Flags, consisting of TEXTPATTERN_ANNOUNCE_ADAPTIVE | TEXTPATTERN_ANNOUNCE_ASYNC | TEXTPATTERN_ANNOUNCE_MODAL | TEXTPATTERN_ANNOUNCE_REGULAR
  * @package Announce
@@ -1780,24 +1747,15 @@ function install_textpack($textpack, $add_new_langs = false)
  *
  * The token is reproducible, unique among sites and users, expires later.
  *
- * @return  string The token
- * @see     bouncer()
- * @package CSRF
+ * @return     string The token
+ * @see        bouncer()
+ * @package    CSRF
+ * @deprecated in 4.9.0
  */
 
 function form_token()
 {
-    static $token = null;
-    global $txp_user;
-
-    // Generate a ciphered token from the current user's nonce (thus valid for
-    // login time plus 30 days) and a pinch of salt from the blog UID.
-    if ($token === null && $txp_user) {
-        $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
-        $token = md5($nonce.get_pref('blog_uid'));
-    }
-
-    return $token;
+    return Txp::get('\Textpattern\Security\Token')->csrf();
 }
 
 /**
@@ -1819,46 +1777,12 @@ function form_token()
  * @return  bool If the $step is valid, proceeds and returns TRUE. Dies on CSRF attempt.
  * @see     form_token()
  * @package CSRF
- * @example
- * global $step;
- * if (bouncer($step, array(
- *     'browse'     => false,
- *     'edit'       => false,
- *     'save'       => true,
- *     'multi_edit' => true,
- * )))
- * {
- *     echo "The '{$step}' is valid.";
- * }
+ * @deprecated in 4.9.0
  */
 
 function bouncer($step, $steps)
 {
-    global $event;
-
-    if (empty($step)) {
-        return true;
-    }
-
-    // Validate step.
-    if (!array_key_exists($step, $steps)) {
-        return false;
-    }
-
-    // Does this step require a token?
-    if (!$steps[$step]) {
-        return true;
-    }
-
-    // Validate token.
-    if (gps('_txp_token') === form_token()) {
-        return true;
-    }
-
-    die(gTxt('get_off_my_lawn', array(
-        '{event}' => $event,
-        '{step}'  => $step,
-    )));
+    return Txp::get('\Textpattern\Security\Token')->bouncer($step, $steps);
 }
 
 /**

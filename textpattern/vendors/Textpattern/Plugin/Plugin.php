@@ -22,7 +22,7 @@
  */
 
 /**
- * Plugin
+ * Plugin management.
  *
  * @since   4.7.0
  * @package Plugin
@@ -635,11 +635,12 @@ class Plugin
 
         if ($this->name && $this->hash) {
             // Limit the size of the integer due to php_int_max.
-            $ref = substr(hexdec(hash('crc32b', $this->name)), 0, 8);
+            $ref = $this->computeRef($this->name);
+            $txpToken = \Txp::get('\Textpattern\Security\Token');
 
             // An hour should do it.
             $expiryTimestamp = time() + (60 * 60);
-            $out = generate_user_token($ref, 'plugin_verify', $expiryTimestamp, $this->hash, form_token());
+            $out = $txpToken->generate($ref, 'plugin_verify', $expiryTimestamp, $this->hash, $txpToken->csrf());
         }
 
         return $out;
@@ -663,6 +664,18 @@ class Plugin
         }
 
         return $this;
+    }
+
+    /**
+     * Generate a reference ID based on the passed plugin name
+     *
+     * @param  string $name Plugin name
+     * @return int
+     */
+
+    public function computeRef($name)
+    {
+        return substr(hexdec(hash('crc32b', $name)), 0, 8);
     }
 
     /**
@@ -692,13 +705,15 @@ class Plugin
             $this->computeHash($src);
         }
 
-        $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='plugin_verify'");
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+
+        $tokenInfo = $txpToken->fetch('plugin_verify', $selector);
 
         if ($tokenInfo) {
             if (strtotime($tokenInfo['expires']) <= time()) {
                 $message = array(gTxt('plugin_token_expired'), E_ERROR);
             } else {
-                if (construct_token($selector, $this->hash, form_token()) === $tokenInfo['token']) {
+                if ($txpToken->constructHash($selector, $this->hash, $txpToken->csrf()) === $tokenInfo['token']) {
                     $message = true;
                 }
             }
@@ -706,5 +721,4 @@ class Plugin
 
         return $message;
     }
-
 }
