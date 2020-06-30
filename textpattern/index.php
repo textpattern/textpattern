@@ -181,7 +181,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     // Article or form preview.
     if (isset($_GET['txpreview'])) {
-        load_lang(LANG, array('public'));
+        load_lang(LANG, 'public');
         include txpath.'/publish.php';
         textpattern();
         echo $trace->summary();
