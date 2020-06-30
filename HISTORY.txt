@@ -13,6 +13,11 @@ Changes in 4.8.2 (upcoming)
 * Changed: When logging in, chosen login language is used as admin language.
 * Changed: Password reset/welcome/activation emails sent in author language.
 * Fixed: Update language list upon deletion to prevent stale entries.
+* Fixed: Language errors when using article preview (thanks, Destry and jakob).
+* Fixed: Removed TRADITIONAL sql_mode for a smoother upgrade (thanks, Adi).
+* Developer: New 'pre' pretext callback.
+* Developer: Plugins can alter $pretext.
+* Developer: Add ability to filter strings in Lang->getPack() and extract().
 
 Changes in 4.8.1
 
