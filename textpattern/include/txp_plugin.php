@@ -529,6 +529,14 @@ function plugin_verify($payload = array(), $txpPlugin = null)
         $plugin = $payload['plugin'];
     } else {
         $plugin64 = assert_string(empty($payload['plugin64']) ? ps('plugin') : $payload['plugin64']);
+
+        if (preg_match("#^https?://.+#", $plugin64) && @fopen($plugin64, 'r')) {
+            // Dealing with a URL so forge a call to 'upload' it, which will redirect
+            // back to this function when done to handle it properly.
+            plugin_upload($plugin64);
+            return;
+        }
+
         $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
         $plugin = $txpPlugin->extract($plugin64);
         $extras .= hInput('plugin64', $plugin64).
@@ -710,19 +718,41 @@ function plugin_install()
 
 /**
  * Uploads a plugin.
+ *
+ * @param string $url Fetch the plugin from this remote location instead
  */
 
-function plugin_upload()
+function plugin_upload($url = null)
 {
     $payload = array();
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
+    $dest = rtrim(get_pref('temp_dir', sys_get_temp_dir()), DS);
+    $ready = false;
 
-    if ($_FILES["theplugin"]["name"]) {
-        $filename = $_FILES["theplugin"]["name"];
-        $source = $_FILES["theplugin"]["tmp_name"];
-        $target = rtrim(get_pref('temp_dir', sys_get_temp_dir()), DS).DS.$filename;
+    if ($url || $_FILES["theplugin"]["name"]) {
+        if ($url) {
+            $urlParts = parse_url($url);
+            $pathParts = pathinfo($urlParts['path']);
+            $filename = $pathParts['basename'];
+            $target = $dest.DS.sanitizeForFile($filename);
+            $content = file_get_contents($url);
 
-        if (move_uploaded_file($source, $target)) {
+            // Don't need to test for 'false', since '0' (number of returned bytes) is
+            // still a 'failure' to write anything meaningful.
+            if (file_put_contents($target, $content)) {
+                $ready = true;
+            }
+        } else {
+            $filename = $_FILES["theplugin"]["name"];
+            $source = $_FILES["theplugin"]["tmp_name"];
+            $target = $dest.DS.$filename;
+
+            if (move_uploaded_file($source, $target)) {
+                $ready = true;
+            }
+        }
+
+        if ($ready) {
             extract(pathinfo($target));
 
             $extension = strtolower($extension);
