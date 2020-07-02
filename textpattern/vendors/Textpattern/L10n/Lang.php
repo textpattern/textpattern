@@ -423,7 +423,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      */
     function swapStrings($lang, $group = 'admin')
     {
-        if ($lang && in_array($lang, $this->installed()) && ($lang !== get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG))) {
+        if ($lang && in_array($lang, $this->installed())) {
             $this->cachedStrings = $this->getStrings();
 
             // Override the language strings in the given groups with those of the passed language.
