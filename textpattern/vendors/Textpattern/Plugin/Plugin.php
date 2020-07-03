@@ -583,7 +583,7 @@ class Plugin
 
         if (is_array($code)) {
             if ($manifest = array_intersect_key($code, self::$metaData)) {
-                file_put_contents($dir.DS.'manifest.json', json_encode($manifest), LOCK_EX);
+                file_put_contents($dir.DS.'manifest.json', json_encode($manifest, JSON_PRETTY_PRINT), LOCK_EX);
             }
 
             foreach (array(
