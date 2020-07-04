@@ -224,7 +224,7 @@ class DB
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
-        $this->table_options['type'] = !empty($txpcfg['dbengine']) ? $txpcfg['dbengine'] : 'MyISAM';
+        $this->table_options['engine'] = !empty($txpcfg['dbengine']) ? $txpcfg['dbengine'] : 'MyISAM';
 
         if (!empty($txpcfg['table_prefix'])) {
             $this->table_prefix = $txpcfg['table_prefix'];
@@ -254,7 +254,7 @@ class DB
         $connected = true;
 
         // Be backwards compatible.
-        if ($this->charset && (version_compare($version, '5') >= 0 || preg_match('#^4\.[1-9]#', $version))) {
+        if ($this->charset) {
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
 
@@ -266,12 +266,6 @@ class DB
         }
 
         $this->default_charset = mysqli_character_set_name($this->link);
-
-        // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-        if (version_compare($version, '5') >= 0 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
-            $this->table_options['engine'] = $this->table_options['type'];
-            unset($this->table_options['type']);
-        }
     }
 }
 
