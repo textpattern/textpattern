@@ -111,10 +111,11 @@ if (!empty($event) && $event == 'article') {
     }
 
     bouncer($step, array(
-        'create'  => false,
-        'publish' => true,
-        'edit'    => false,
-        'save'    => true,
+        'create'         => false,
+        'publish'        => true,
+        'edit'           => false,
+        'save'           => true,
+        'section_change' => true,
     ));
 
     switch ($step) {
@@ -125,6 +126,9 @@ if (!empty($event) && $event == 'article') {
         case 'publish':
         case 'save':
             article_save();
+            break;
+        case 'section_change':
+            article_section_change();
             break;
     }
 }
@@ -372,7 +376,6 @@ function article_save()
     article_edit($msg, false, true);
 }
 
-
 /**
  * Renders article preview.
  *
@@ -435,6 +438,28 @@ function article_preview($field = false)
     $preview .= '</div>';// End of #pane-view.
 
     return $preview;
+}
+
+/**
+ * Fetch forms in use by the given section (async).
+ *
+ * @return JSON string of comma-separated forms
+ */
+function article_section_change()
+{
+    extract(psa(array('section')));
+
+    $skin = safe_field("skin", 'txp_section', "name = '".doSlash($section)."'");
+
+    if ($skin) {
+        $forms = safe_column('name', 'txp_form', "name != 'default' AND type = 'article' AND skin = '".doSlash($skin)."'");
+
+        send_json_response(array('forms' => implode(',', $forms)));
+
+        return;
+    }
+
+    return;
 }
 
 /**
@@ -857,7 +882,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div role="region" id="supporting_content">';
 
     // 'Override form' selection.
-    $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
+    $form_pop = $allow_form_override ? form_pop($override_form, 'override-form', $rs['Section']) : '';
     $html_override = $form_pop
         ? pluggable_ui('article_ui', 'override',
             inputLabel(
@@ -1202,17 +1227,22 @@ function getDefaultSection()
 /**
  * Renders 'override form' field.
  *
- * @param  string $form The selected form
- * @param  string $id   The HTML id
+ * @param  string $form    The selected form
+ * @param  string $id      HTML id to apply to the input control
+ * @param  string $section The section that is currently in use
  * @return string HTML &lt;select&gt; input
  */
 
-function form_pop($form, $id)
+function form_pop($form, $id, $section)
 {
-    $rs = safe_column("name", 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
+    $skin = safe_field("skin", 'txp_section', "name = '".doSlash($section)."'");
 
-    if ($rs) {
-        return selectInput('override_form', $rs, $form, true, '', $id);
+    if ($skin) {
+        $rs = safe_column('name', 'txp_form', "type = 'article' AND name != 'default' AND skin='".doSlash($skin)."' ORDER BY name");
+
+        if ($rs) {
+            return selectInput('override_form', $rs, $form, true, '', $id);
+        }
     }
 }
 
