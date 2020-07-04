@@ -2064,6 +2064,38 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    textpattern.Relay.register('article.section_changed',
+        function (event, data) {
+            var $overrideForm = $('#override-form');
+            var override_sel = $overrideForm.val();
+
+            $overrideForm.empty().append('<option></option>');
+
+            $.each(data.data.split(','), function(key, item) {
+                var isSelected = (item == override_sel) ? ' selected' : '';
+                $overrideForm.append('<option'+isSelected+'>'+item+'</option>');
+            });
+        }
+    );
+
+    $('#txp-write-sort-group').on('change', '#section',
+        function () {
+            sendAsyncEvent({
+                    event: textpattern.event,
+                    step : 'section_change',
+                    section: $(this).val()
+                }, function () {}, 'json')
+                    .done(function (data, textStatus, jqXHR) {
+                        textpattern.Relay.callback('article.section_changed', {
+                            data: data.forms
+                        });
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        // Do nothing?
+                    });
+        }
+    );
+
     var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
 
     $('#article_form').on('change', status, function () {
