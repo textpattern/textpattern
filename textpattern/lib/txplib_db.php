@@ -258,10 +258,14 @@ class DB
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
 
-            if ($this->charset == 'utf8mb4') {
-                $this->table_options['collate'] = "utf8mb4_unicode_ci";
-            } elseif ($this->charset == 'utf8') {
-                $this->table_options['collate'] = "utf8_general_ci";
+            if (isset($txpcfg['table_collation'])) {
+                $this->table_options['collate'] = $txpcfg['table_collation'];
+            } else {
+                if ($this->charset == 'utf8mb4') {
+                    $this->table_options['collate'] = "utf8mb4_unicode_ci";
+                } elseif ($this->charset == 'utf8') {
+                    $this->table_options['collate'] = "utf8_general_ci";
+                }
             }
         }
 
