@@ -133,6 +133,10 @@ function pagetop($pagetitle = '', $message = '')
                         '#page-file #description,'.
                         '#page-link #link-title, #page-link #link-description'
                     ),
+                    'language_ui' => get_pref(
+                        'language_ui',
+                        TEXTPATTERN_DEFAULT_LANG
+                    ),
                     'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
                     'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
     {message}

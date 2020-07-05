@@ -892,7 +892,8 @@ function filterAtts($atts = null, $iscustom = null)
     $match = parse_qs($match);
 
     if (isset($match['category'])) {
-        $match['category1'] = $match['category2'] = $match['category'];
+        isset($match['category1']) or $match['category1'] = $match['category'];
+        isset($match['category2']) or $match['category2'] = $match['category'];
         $operator = 'OR';
     }
 
@@ -914,7 +915,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif ($val = gps($match['category'.$i])) {
-                $catquery[] = "$not(Category{$i} IN (".implode(',', (array) quote_list($val))."))";
+                $catquery[] = "$not(Category{$i} IN (".implode(',', quote_list(is_array($val) ? $val : do_list($val)))."))";
             }
         } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";

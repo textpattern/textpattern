@@ -81,6 +81,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $strings = null;
 
     /**
+     * List of cached strings that have been temporarily overridden.
+     *
+     * @var array
+     */
+
+    protected $cachedStrings = null;
+
+    /**
      * Array of events that have been loaded.
      *
      * @var array
@@ -366,10 +374,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string|array $lang_code The language code to fetch, or array(lang_code, override_lang_code)
      * @param  string|array $group     Comma-separated list or array of headings from which to extract strings
+     * @param  string|array $filter    Comma-separated list or array of strings that should be returned
      * @return array
      */
 
-    public function getPack($lang_code, $group = null)
+    public function getPack($lang_code, $group = null, $filter = null)
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
@@ -392,12 +401,50 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         // Reindex the pack so it can be merged.
         $langpack = array();
+        $filter = is_array($filter) ? $filter : do_list_unique($filter);
 
         foreach ($entries as $translation) {
-            $langpack[$translation['name']] = $translation;
+            if (!$filter || in_array($translation['name'], $filter)) {
+                $langpack[$translation['name']] = $translation;
+            }
         }
 
         return $langpack;
+    }
+
+    /**
+     * Temporarily override a bunch of strings with a set from a different language.
+     *
+     * @param  string|null $lang   The language from which to extract strings.
+     *                             If it matches the current language, nothing happens.
+     *                             If null is passed in, the overwritten strings are restored.
+     * @param  string|array $group List of groups (comma-separated or an array) to fetch in the new language.
+     * @return null|true           Returns true if language swap took place, null otherwise.
+     */
+    function swapStrings($lang, $group = 'admin')
+    {
+        if ($lang && in_array($lang, $this->installed())) {
+            $this->cachedStrings = $this->getStrings();
+
+            // Override the language strings in the given groups with those of the passed language.
+            $userPack = $this->getPack($lang, $group);
+            $userStrings = array();
+
+            foreach ($userPack as $key => $packBlock) {
+                $userStrings[$key] = $packBlock['data'];
+            }
+
+            $this->setPack($userStrings, true);
+
+            return true;
+        } elseif ($lang === null && $this->cachedStrings) {
+            $this->setPack($this->cachedStrings, true);
+            $this->cachedStrings = null;
+
+            return true;
+        }
+
+        return null;
     }
 
     /**
@@ -524,10 +571,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string       $lang_code The language code
      * @param  array|string $events    A list of loaded events to extract
+     * @param  string|array $filter    Comma-separated list or array of strings that should be returned
      * @return array
      */
 
-    public function extract($lang_code, $events = null)
+    public function extract($lang_code, $events = null, $filter = null)
     {
         $where = array(
             "lang = '".doSlash($lang_code)."'",
@@ -545,8 +593,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = $admin_events;
         } elseif ($events === null) {
             $events = array('public', 'common');
+        } else {
+            $events = is_array($events) ? $events : do_list_unique($events);
         }
-
 
         if ($events) {
             // For the time being, load any non-core (plugin) strings on every
@@ -559,11 +608,15 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $out = array();
 
+        $filter = is_array($filter) ? $filter : do_list_unique($filter);
+
         $rs = safe_rows_start("name, data", 'txp_lang', join(' AND ', $where));
 
         if (!empty($rs)) {
             while ($a = nextRow($rs)) {
-                $out[$a['name']] = $a['data'];
+                if (!$filter || in_array($a['name'], $filter)) {
+                    $out[$a['name']] = $a['data'];
+                }
             }
         }
 
@@ -593,7 +646,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         global $DB;
-    
+
         if (!empty($DB)) {
             $this->strings = $this->extract($lang_code, $events);
             $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));

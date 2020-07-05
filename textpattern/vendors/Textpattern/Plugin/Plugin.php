@@ -22,7 +22,7 @@
  */
 
 /**
- * Plugin
+ * Plugin management.
  *
  * @since   4.7.0
  * @package Plugin
@@ -41,6 +41,22 @@ class Plugin
         'order'         => 5,
         'flags'         => 0
     );
+
+    /**
+     * The plugin name that has been extracted/read.
+     *
+     * @var string
+     */
+
+    protected $name = null;
+
+    /**
+     * The computed hash of the plugin for integrity purposes.
+     *
+     * @var string
+     */
+
+    protected $hash = null;
 
     /**
      * Constructor.
@@ -166,6 +182,7 @@ class Plugin
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         }
 
+        $this->computeHash($plugin);
         $plugin = preg_replace('/^#.*$/m', '', $plugin);
         $plugin = base64_decode($plugin);
 
@@ -178,6 +195,8 @@ class Plugin
         if (empty($plugin['name'])) {
             return false;
         }
+
+        $this->name = sanitizeForFile($plugin['name']);
 
         if ($normalize) {
             $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
@@ -219,69 +238,118 @@ class Plugin
     }
 
     /**
-     * Read a plugin from file.
+     * Read a plugin from file - either template .php or .zip.
      *
-     * @param  string|array $name|$path Plugin name
+     * Note the class 'name' is only set after the file is successfully read.
+     *
+     * @param  string       $path       Plugin filename or path to read
      * @param  boolean      $normalize  Check/normalize some fields
-     * @return array
+     * @return string|array
      */
 
-    public function read($name, $normalize = true)
+    public function read($path, $normalize = true)
     {
         global $txp_user;
 
-        if (is_array($name)) {
-            list($name, $target_path) = $name + array(null, null);
-
-            if (!(@$pack = file_get_contents($target_path))) {
-                return false;
-            }
-
-            list($pack, $code, $help_raw) = $this->extractSection($pack, array('CODE', 'HELP'));
-            $plugin = array_filter(compact('code', 'help_raw'));
-
-            if (!empty($code)) {
-                file_put_contents($target_path, $pack);
-                include $target_path;
-            }
-        } else {
-            $name = sanitizeForFile($name);
-            $dir = txpath.DS.'plugins'.DS.$name;
-
-            if (!is_dir($dir)) {
-                return false;
-            }
-
-            $dir .= DS;
-            $target_path = $dir.$name.'.php';
+        // Assume file has already been uploaded if only name given.
+        if (strpos($path, DS) === false) {
+            $safePath  = sanitizeForFile($path);
+            $path = PLUGINPATH.DS.$safePath.DS.$path.'.php';
         }
 
-        if (empty($plugin['code']) && @$code = file_get_contents($target_path)) {
-            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
-            $plugin['code'] = $code;
+        $this->computeHash($path);
+
+        extract(pathinfo($path));
+
+        $extension = strtolower($extension);
+        $codeContents = $helpContents = '';
+        $filename = sanitizeForFile($filename);
+        $zipFiles = $plugin = array();
+
+        $keyFiles = array(
+            'code'     => $filename.'.php',
+            'manifest' => 'manifest.json',
+            'help'     => 'help.html',
+            'help_raw' => 'help.textile',
+            'textpack' => 'textpack.txp',
+            'data'     => 'data.txp',
+        );
+
+        $keyContent = array_fill_keys(array_keys($keyFiles), '');
+
+        if ($extension === 'zip' && is_readable($path) && class_exists('ZipArchive')) {
+            $zip = new \ZipArchive();
+            $zh = $zip->open($path);
+
+            if ($zh === true) {
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $zipFiles[] = $zip->getNameIndex($i);
+                }
+
+                foreach ($keyFiles as $key => $fn) {
+                    $keyFile = $filename.'/'.$fn;
+
+                    if (in_array($keyFile, $zipFiles)) {
+                        $fp = $zip->getStream($keyFile);
+
+                        if ($fp) {
+                            while (!feof($fp)) {
+                                $keyContent[$key] .= fread($fp, 1024);
+                            }
+
+                            fclose($fp);
+                        }
+                    }
+                }
+
+                $zip->close();
+            }
+        } elseif ($extension === 'php' && is_readable($path)) {
+            // Test to see if this is a template file or regular .php file.
+            $pack = file_get_contents($path);
+
+            list($pack, $keyContent['code'], $keyContent['help_raw']) = $this->extractSection($pack, array('CODE', 'HELP'));
+
+            if ($keyContent['code']) {
+                // Populate the $plugin array from the template file.
+                include $path;
+            } else {
+                $keyContent['code'] = $pack;
+            }
         }
 
-        if (!empty($dir)) {
-            if (@$info = file_get_contents($dir.'manifest.json')) {
-                $plugin += json_decode($info, true);
-            }
-
-            if (@$textpack = file_get_contents($dir.'textpack.txp')) {
-                $plugin['textpack'] = $textpack;
-            }
-
-            if (@$data = file_get_contents($dir.'data.txp')) {
-                $plugin['data'] = $data;
-            }
-
-            if (@$help = file_get_contents($dir.'help.html')) {
-                $plugin['help'] = $help;
-            } elseif (@$help = file_get_contents($dir.'help.textile')) {
-                $plugin['help_raw'] = $help;
+        // Populate the $plugin array with metadata from the filesystem if present.
+        foreach ($keyFiles as $key => $fn) {
+            if ($key === 'code' && $keyContent['code']) {
+                $keyContent[$key] = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $keyContent[$key]);
+                $plugin[$key] = $keyContent[$key];
+                $this->name = $filename;
+            } elseif ($key === 'help_raw') {
+                if ($keyContent[$key]) {
+                    $plugin[$key] = $keyContent[$key];
+                } else {
+                    if (is_readable($dirname.DS.$fn)) {
+                        if ($help = file_get_contents($dirname.DS.$fn)) {
+                            $plugin[$key] = $help;
+                        }
+                    }
+                }
+            } elseif ($key === 'manifest') {
+                if (is_readable($dirname.DS.$fn)) {
+                    if ($info = file_get_contents($dirname.DS.$fn)) {
+                        $plugin += json_decode($info, true);
+                    }
+                }
+            } else {
+                if (is_readable($dirname.DS.$fn)) {
+                    if ($content = file_get_contents($dirname.DS.$fn)) {
+                        $plugin[$key] = $content;
+                    }
+                }
             }
         }
 
-        $plugin += array('name' => $name, 'author' => get_author_name($txp_user));
+        $plugin += array('name' => $filename, 'author' => get_author_name($txp_user));
 
         if ($normalize) {
             $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
@@ -289,7 +357,7 @@ class Plugin
             $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
         }
 
-        return $plugin;
+        return $zipFiles ? array($plugin, $zipFiles) : $plugin;
     }
 
     /**
@@ -466,7 +534,7 @@ class Plugin
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
-            $langDir = txpath.DS.'plugins'.DS.$name.DS.'lang'.DS;
+            $langDir = PLUGINPATH.DS.$name.DS.'lang'.DS;
 
             if (is_dir($langDir) && is_readable($langDir)) {
                 $plugLang = new \Textpattern\L10n\Lang($langDir);
@@ -499,33 +567,33 @@ class Plugin
 
     public function updateFile($name, $code = null)
     {
-        if (!is_writable(txpath.DS.'plugins')) {
+        if (!is_writable(PLUGINPATH)) {
             return;
         }
 
         $filename = sanitizeForFile($name);
 
         if (!isset($code)) {
-            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'plugins', $filename);
+            return \Txp::get('\Textpattern\Admin\Tools')->removeFiles(PLUGINPATH, $filename);
         }
 
-        if (!is_dir($dir = txpath.DS.'plugins'.DS.$filename)) {
+        if (!is_dir($dir = PLUGINPATH.DS.$filename)) {
             mkdir($dir);
         }
 
         if (is_array($code)) {
             if ($manifest = array_intersect_key($code, self::$metaData)) {
-                file_put_contents($dir.DS.'manifest.json', json_encode($manifest), LOCK_EX);
+                file_put_contents($dir.DS.'manifest.json', json_encode($manifest, JSON_PRETTY_PRINT), LOCK_EX);
             }
 
             foreach (array(
-                'help' => 'help.html',
+                'help'     => 'help.html',
                 'help_raw' => 'help.textile',
                 'textpack' => 'textpack.txp',
-                'data' => 'data.txp'
+                'data'     => 'data.txp'
                 ) as $key => $file
             ) {
-                if (isset($code[$key])) {
+                if (!empty($code[$key])) {
                     file_put_contents($dir.DS.$file, $code[$key], LOCK_EX);
                 }
             }
@@ -555,5 +623,102 @@ class Plugin
         }
 
         return $data;
+    }
+
+    /**
+     * Generate a cryptographic token and stash it in the database
+     */
+
+    public function generateToken()
+    {
+        $out = null;
+
+        if ($this->name && $this->hash) {
+            // Limit the size of the integer due to php_int_max.
+            $ref = $this->computeRef($this->name);
+            $txpToken = \Txp::get('\Textpattern\Security\Token');
+
+            // An hour should do it.
+            $expiryTimestamp = time() + (60 * 60);
+            $out = $txpToken->generate($ref, 'plugin_verify', $expiryTimestamp, $this->hash, $txpToken->csrf());
+        }
+
+        return $out;
+    }
+
+
+    /**
+     * Compute a hash of a file or a string. Chainable.
+     *
+     * @param  string $src File path or plugin string to hash
+     */
+
+    protected function computeHash($src)
+    {
+        if (!$this->hash) {
+            if ($src && (is_readable($src) !== false)) {
+                $this->hash = sha1_file($src);
+            } elseif ($src) {
+                $this->hash = sha1(preg_replace('/\s+/', '', $src));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generate a reference ID based on the passed plugin name
+     *
+     * @param  string $name Plugin name
+     * @return int
+     */
+
+    public function computeRef($name)
+    {
+        return substr(hexdec(hash('crc32b', $name)), 0, 8);
+    }
+
+    /**
+     * Check the passed token matches the one stored in the database.
+     *
+     * If the token isn't yet set for this object, compute it from the passed
+     * source.
+     *
+     * Note that the passed hash isn't all that important. If the first part is
+     * mangled, it can still find the entry in the database via the selector.
+     * Since the database token is immutable from when the plugin was at the verify
+     * step and is not recreated, even if someone else tampers with the file, uploads
+     * a hacked copy that replaces the token, the selector won't match and the
+     * upload will fail.
+     *
+     * @param  string $hash The passed hash to compare, from which the selector is extracted
+     * @param  string $src  Path to a plugin or string plugin text
+     * @return true|string  Error message if something was in valid, otherwise true
+     */
+
+    public function verifyToken($hash, $src = null)
+    {
+        $message = array(gTxt('bad_plugin_code'), E_ERROR);
+        $selector = substr($hash, SALT_LENGTH);
+
+        if (!$this->hash) {
+            $this->computeHash($src);
+        }
+
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+
+        $tokenInfo = $txpToken->fetch('plugin_verify', $selector);
+
+        if ($tokenInfo) {
+            if (strtotime($tokenInfo['expires']) <= time()) {
+                $message = array(gTxt('plugin_token_expired'), E_ERROR);
+            } else {
+                if ($txpToken->constructHash($selector, $this->hash, $txpToken->csrf()) === $tokenInfo['token']) {
+                    $message = true;
+                }
+            }
+        }
+
+        return $message;
     }
 }

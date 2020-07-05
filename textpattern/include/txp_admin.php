@@ -71,6 +71,7 @@ function author_save()
         'name',
         'RealName',
         'email',
+        'language',
     )));
 
     $privs = assert_int($privs);
@@ -83,6 +84,21 @@ function author_save()
     }
 
     $rs = update_user($name, $email, $RealName);
+
+    if ($rs && $language) {
+        safe_upsert(
+            'txp_prefs',
+            "val = '".doSlash($language)."',
+            event = 'admin',
+            html = 'text_input',
+            type = ".PREF_HIDDEN.",
+            position = 0",
+            array(
+                'name'      => 'language_ui',
+                'user_name' => doSlash((string) $name)
+            )
+        );
+    }
 
     if (has_privs('admin.edit') && $rs && ($txp_user === $name || change_user_group($name, $privs))) {
         author_list(gTxt('author_updated', array('{name}' => $RealName)));
@@ -142,6 +158,7 @@ function author_save_new()
         'name',
         'email',
         'RealName',
+        'language',
     )));
 
     $privs = assert_int($privs);
@@ -158,6 +175,21 @@ function author_save_new()
         $rs = create_user($name, $email, $password, $RealName, $privs);
 
         if ($rs) {
+            if ($language) {
+                safe_upsert(
+                    'txp_prefs',
+                    "val = '".doSlash($language)."',
+                    event = 'admin',
+                    html = 'text_input',
+                    type = ".PREF_HIDDEN.",
+                    position = 0",
+                    array(
+                        'name'      => 'language_ui',
+                        'user_name' => doSlash((string) $name)
+                    )
+                );
+            }
+
             $message = send_account_activation($name);
 
             author_list($message);
@@ -531,6 +563,22 @@ function author_edit($message = '', $fullEdit = false)
         );
     }
 
+    // Get author's current admin language, if defined,
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $langList = $txpLang->languageList();
+    $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '".doSlash($name)."'");
+    $authorLang = in_array($authorLang, $txpLang->installed()) ? $authorLang : TEXTPATTERN_DEFAULT_LANG;
+
+    if (count($langList) > 1) {
+        $langField = inputLabel(
+            'language',
+            selectInput('language', $langList, $authorLang, true, false, 'language'),
+            'active_language_ui', '', array('class' => 'txp-form-field edit-admin-language')
+        );
+    } else {
+        $langField = hInput('language', $authorLang);
+    }
+
     $out[] = inputLabel(
             'real_name',
             fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
@@ -557,6 +605,7 @@ function author_edit($message = '', $fullEdit = false)
         hInput('privs', $privs);
     }
 
+    $out[] = $langField;
     $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
         graf(
             ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')).

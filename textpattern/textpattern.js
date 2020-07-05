@@ -239,11 +239,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.extendedClick = function () {
-            if (opt.rowClick) {
-                var selector = opt.row;
-            } else {
-                var selector = opt.checkbox;
-            }
+            var selector = opt.rowClick ? opt.row : opt.checkbox;
 
             $this.on('click', selector, function (e) {
                 var self = ($(e.target).is(opt.checkbox) || $(this).is(opt.checkbox));
@@ -281,11 +277,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     box.prop('checked', !checked).change();
                 }
 
-                if (checked === false) {
-                    form.lastCheck = box;
-                } else {
-                    form.lastCheck = null;
-                }
+                form.lastCheck = box;
             });
 
             return lib;
@@ -2068,6 +2060,49 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    var allForms = {};
+
+    textpattern.Relay.register('article.section_changed',
+        function (event, data) {
+            var $overrideForm = $('#override-form');
+            var override_sel = $overrideForm.val();
+
+            $overrideForm.empty().append('<option></option>');
+
+            $.each(data.data, function(key, item) {
+                var $option = $('<option />');
+                $option.text(item).prop('selected', item == override_sel);
+                $overrideForm.append($option);
+            });
+        }
+    );
+
+    $('#txp-write-sort-group').on('change', '#section',
+        function () {
+            var $this = $(this);
+            if (typeof allForms[$this.val()] == 'undefined') {
+                sendAsyncEvent({
+                        event: textpattern.event,
+                        step : 'section_change',
+                        section: $this.val()
+                    }, function () {}, 'json')
+                        .done(function (data, textStatus, jqXHR) {
+                            allForms[$this.val()] = data.forms;
+                            textpattern.Relay.callback('article.section_changed', {
+                                data: data.forms
+                            });
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            // Do nothing?
+                        });
+            } else {
+                textpattern.Relay.callback('article.section_changed', {
+                    data: allForms[$this.val()]
+                });
+            }
+        }
+    );
+
     var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
 
     $('#article_form').on('change', status, function () {
@@ -2687,7 +2722,7 @@ $(document).ready(function () {
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
 
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&_txp_token='+textpattern._txp_token);
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang='+textpattern.prefs.language_ui+'&_txp_token='+textpattern._txp_token);
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();

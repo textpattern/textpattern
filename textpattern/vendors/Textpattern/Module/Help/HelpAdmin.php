@@ -91,9 +91,9 @@ class HelpAdmin
     }
 
     /**
-     * Get pophelp group keys
+     * Fetch pophelp group keys.
      *
-     * @param string $group
+     * @param string $group The help topic group to return
      */
 
     public static function pophelp_keys($group)
@@ -113,10 +113,13 @@ class HelpAdmin
     }
 
     /**
-     * pophelp.
+     * Popup help topic.
+     *
+     * @param string $string The help topic item identifier to return
+     * @param string $lang   The language in which to return the topic. Default=current
      */
 
-    public static function pophelp($string = '')
+    public static function pophelp($string = '', $lang = null)
     {
         global $app_mode;
 
@@ -126,7 +129,7 @@ class HelpAdmin
             exit;
         }
 
-        $lang_ui = get_pref('language_ui', LANG);
+        $lang_ui = ($lang) ? $lang : get_pref('language_ui', LANG);
 
         if (!$xml = self::pophelp_load($lang_ui)) {
             $lang_ui = TEXTPATTERN_DEFAULT_LANG;
@@ -182,7 +185,7 @@ class HelpAdmin
     }
 
     /**
-     * tab_help and custom help
+     * Stub, awaiting implementation.
      */
 
     public static function dashboard()
