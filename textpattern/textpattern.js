@@ -2064,6 +2064,8 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    var allForms = {};
+
     textpattern.Relay.register('article.section_changed',
         function (event, data) {
             var $overrideForm = $('#override-form');
@@ -2071,28 +2073,37 @@ textpattern.Route.add('article', function () {
 
             $overrideForm.empty().append('<option></option>');
 
-            $.each(data.data.split(','), function(key, item) {
-                var isSelected = (item == override_sel) ? ' selected' : '';
-                $overrideForm.append('<option'+isSelected+'>'+item+'</option>');
+            $.each(data.data, function(key, item) {
+                var $option = $('<option />');
+                $option.text(item).prop('selected', item == override_sel);
+                $overrideForm.append($option);
             });
         }
     );
 
     $('#txp-write-sort-group').on('change', '#section',
         function () {
-            sendAsyncEvent({
-                    event: textpattern.event,
-                    step : 'section_change',
-                    section: $(this).val()
-                }, function () {}, 'json')
-                    .done(function (data, textStatus, jqXHR) {
-                        textpattern.Relay.callback('article.section_changed', {
-                            data: data.forms
+            var $this = $(this);
+            if (typeof allForms[$this.val()] == 'undefined') {
+                sendAsyncEvent({
+                        event: textpattern.event,
+                        step : 'section_change',
+                        section: $this.val()
+                    }, function () {}, 'json')
+                        .done(function (data, textStatus, jqXHR) {
+                            allForms[$this.val()] = data.forms;
+                            textpattern.Relay.callback('article.section_changed', {
+                                data: data.forms
+                            });
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            // Do nothing?
                         });
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        // Do nothing?
-                    });
+            } else {
+                textpattern.Relay.callback('article.section_changed', {
+                    data: allForms[$this.val()]
+                });
+            }
         }
     );
 

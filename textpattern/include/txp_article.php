@@ -454,7 +454,7 @@ function article_section_change()
     if ($skin) {
         $forms = safe_column('name', 'txp_form', "name != 'default' AND type = 'article' AND skin = '".doSlash($skin)."'");
 
-        send_json_response(array('forms' => implode(',', $forms)));
+        send_json_response(array('forms' => $forms));
 
         return;
     }
