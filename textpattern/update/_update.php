@@ -92,7 +92,7 @@ try {
     if (version_compare($dbversion, '4.6', '<') && $sql_mode = getThing('SELECT @@SESSION.sql_mode')) {
         $tmp_mode = implode(',', array_diff(
             do_list_unique($sql_mode),
-            array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE')
+            array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE', 'TRADITIONAL')
         ));
         safe_query("SET SESSION sql_mode = '".doSlash($tmp_mode)."'");
     }
