@@ -72,6 +72,8 @@ $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
 
+isset($pretext) or $pretext = array();
+
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
 
@@ -192,12 +194,9 @@ if ($use_plugins) {
     load_plugins(false, 5);
 }
 
-// This step deprecated as of 1.0 - really only useful with old-style section
-// placeholders, which passed $s='section_name'.
-$s = (empty($s)) ? '' : $s;
-
-isset($pretext) or $pretext = preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
+// Request URI rewrite, anyone?
+callback_event('pretext', '', 1);
+$pretext = preText($pretext, null) + array('secondpass' => 0, '_txp_atts' => false);
 
 // Send 304 Not Modified if appropriate.
 
@@ -206,7 +205,7 @@ if (empty($pretext['feed'])) {
 }
 
 if (txpinterface === 'css') {
-    output_css($pretext['s'], gps('n'), gps('t'));
+    output_css(gps('s'), gps('n'), gps('t'));
 
     exit;
 }
@@ -235,7 +234,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = preText($s, $prefs) + $pretext;
+$pretext = preText($pretext, $prefs);
 callback_event('pretext_end');
 extract($pretext);
 
@@ -270,7 +269,7 @@ if (gps('parentid')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download') {
+if ($s == 'file_download') {
     empty($filename) or output_file_download($filename);
     exit(0);
 }
@@ -280,15 +279,12 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function preText($s, $prefs = null)
+function preText($store, $prefs = null)
 {
-    global $pretext, $thisarticle, $txp_sections;
+    global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
-    if (!isset($out)) {
-        // Set messy variables.
-        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
-
+    if (empty($url)) {
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
@@ -318,16 +314,21 @@ function preText($s, $prefs = null)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
+    }
 
-        $out['skin'] = $out['page'] = $out['css'] = '';
+    if (is_array($store)) {
+        $out = $store + $out;
     }
 
     if (!isset($prefs)) {
         return $out;
     }
 
-    empty($pretext) or $out = $pretext + $out;
     extract($prefs);
+
+    // Set messy variables.
+    $out += makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+    $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
     $title = null;
