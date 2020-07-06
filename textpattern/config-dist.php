@@ -80,8 +80,7 @@ $txpcfg['txpath'] = '/home/path/to/textpattern';
 /**
  * Database connection charset.
  *
- * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1
- * or utf8.
+ * Must be equal to the table-charset, e.g. latin1 or utf8.
  *
  * @global string $txpcfg['dbcharset']
  */
@@ -101,17 +100,25 @@ $txpcfg['dbcharset'] = 'utf8';
 
 $txpcfg['client_flags'] = 0;
 
-/*
- * Optional, advanced: include an external PHP script if needed.
+/**
+ * Optional, advanced: use a particular collation for tables.
+ *
+ * @global string $txpcfg['table_collation']
  */
 
-//$txpcfg['pre_publish_script'] = 'path/to/file.php';
+//$txpcfg['table_collation'] = 'utf8mb4_general_ci';
 
 /*
  * Optional, advanced: use a different database engine.
  */
 
 //$txpcfg['dbengine'] = 'InnoDB';
+
+/*
+ * Optional, advanced: include an external PHP script if needed.
+ */
+
+//$txpcfg['pre_publish_script'] = 'path/to/file.php';
 
 /*
  * Optional, advanced: http address of the site serving images.

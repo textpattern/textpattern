@@ -356,10 +356,12 @@ function preText($store, $prefs = null)
                 // urldecode(strtolower(urlencode())) looks ugly but is the
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
+                case 'section':
                 case urldecode(strtolower(urlencode(gTxt('section')))):
                     $out['s'] = $u2;
                     break;
 
+                case 'category':
                 case urldecode(strtolower(urlencode(gTxt('category')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
@@ -370,6 +372,7 @@ function preText($store, $prefs = null)
                     }
                     break;
 
+                case 'author':
                 case urldecode(strtolower(urlencode(gTxt('author')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
@@ -383,8 +386,8 @@ function preText($store, $prefs = null)
                     break;
                     // AuthorID gets resolved from Name further down.
 
-                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                 case 'file_download':
+                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
                     $out['id'] = (!empty($u2)) ? $u2 : '';
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
@@ -1227,6 +1230,7 @@ function validContext($context)
     if (empty($valid)) {
         foreach (array('article', 'image', 'file', 'link') as $type) {
             $valid[gTxt($type.'_context')] = $type;
+            $valid[$type] = $type;
         }
     }
 
