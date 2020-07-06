@@ -115,7 +115,6 @@ if (!empty($event) && $event == 'article') {
         'publish'        => true,
         'edit'           => false,
         'save'           => true,
-        'section_change' => true,
     ));
 
     switch ($step) {
@@ -126,9 +125,6 @@ if (!empty($event) && $event == 'article') {
         case 'publish':
         case 'save':
             article_save();
-            break;
-        case 'section_change':
-            article_section_change();
             break;
     }
 }
@@ -438,28 +434,6 @@ function article_preview($field = false)
     $preview .= '</div>';// End of #pane-view.
 
     return $preview;
-}
-
-/**
- * Fetch forms in use by the given section (async).
- *
- * @return JSON string of comma-separated forms
- */
-function article_section_change()
-{
-    extract(psa(array('section')));
-
-    $skin = safe_field("skin", 'txp_section', "name = '".doSlash($section)."'");
-
-    if ($skin) {
-        $forms = safe_column('name', 'txp_form', "name != 'default' AND type = 'article' AND skin = '".doSlash($skin)."'");
-
-        send_json_response(array('forms' => $forms));
-
-        return;
-    }
-
-    return;
 }
 
 /**
@@ -1235,14 +1209,30 @@ function getDefaultSection()
 
 function form_pop($form, $id, $section)
 {
-    $skin = safe_field("skin", 'txp_section', "name = '".doSlash($section)."'");
+    global $txp_sections;
 
-    if ($skin) {
-        $rs = safe_column('name', 'txp_form', "type = 'article' AND name != 'default' AND skin='".doSlash($skin)."' ORDER BY name");
+    $forms = $skinforms = array();
+    $rs = safe_rows('skin, name', 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
 
-        if ($rs) {
-            return selectInput('override_form', $rs, $form, true, '', $id);
+    foreach ($txp_sections as $name => $row) {
+        $skin = $row['skin'];
+
+        if (!isset($skinforms[$skin])) {
+            $skinforms[$skin] = array_column(array_filter($rs, function($v) use ($skin) {
+                return $v['skin'] == $skin;
+            }), 'name');
         }
+    
+        $forms[$name] = $skinforms[$skin];
+    }
+
+    script_js('var allForms = '.json_encode($forms, TEXTPATTERN_JSON), false);
+
+    $skin = isset($txp_sections[$section]['skin']) ? $txp_sections[$section]['skin'] : false;
+    $rs = $skin && isset($skinforms[$skin]) ? array_combine($skinforms[$skin], $skinforms[$skin]) : false;
+
+    if ($rs) {
+        return selectInput('override_form', $rs, $form, true, '', $id);
     }
 }
 
