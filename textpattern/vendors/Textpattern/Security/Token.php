@@ -126,7 +126,6 @@ class Token implements \Textpattern\Container\ReusableInterface
      * @param  string $pass            Password, used as part of the token generation
      * @param  string $nonce           Random nonce associated with the token
      * @return string                  Secure token suitable for emailing as part of a link
-     * @since  4.6.1
      */
 
     public function generate($ref, $type, $expiryTimestamp, $pass, $nonce)
@@ -169,7 +168,6 @@ class Token implements \Textpattern\Container\ReusableInterface
      * @param  string $pass     The secret
      * @param  string $nonce    The salt
      * @return string           Token
-     * @since  4.9.0
      */
 
     public function constructHash($selector, $pass, $nonce)
