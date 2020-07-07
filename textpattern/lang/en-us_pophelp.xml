@@ -523,7 +523,7 @@
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
 <h2>Use admin-side plugins?</h2>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
-<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a> site.</p>
+<p>If you would like to learn more about admin-side plugins, please see the <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> page in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plugins of all sorts are listed in the <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins</a> site.</p>
         ]]></item>
         <item id="advanced_options" title="Advanced options"><![CDATA[
 <h2>Advanced options</h2>
