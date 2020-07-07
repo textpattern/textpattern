@@ -518,7 +518,7 @@
         <item id="admin_side_plugins" title="使用管理端插件？"><![CDATA[
 <h2>使用管理端插件？</h2>
 <p>管理端插件可以更改管理界面的操作。它们可与已经存在的操作挂钩，如编辑或发表文章，或者它们可以为添加/扩展功能添加新的面板。</p>
-<p>如果您想了解更多有关管理端插件的信息，请见<a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern用户文档</a>中的<a rel="external" target="_blank" href="https://docs.textpattern.com/development/">扩展Textpattern</a>。在<a rel="external" target="_blank" href="https://textpattern.org/">Textpattern资源</a>网站中列出了各种类型的插件。</p>
+<p>如果您想了解更多有关管理端插件的信息，请见<a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern用户文档</a>中的<a rel="external" target="_blank" href="https://docs.textpattern.com/development/">扩展Textpattern</a>。在<a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins</a>网站中列出了各种类型的插件。</p>
         ]]></item>
         <item id="advanced_options" title="'高级选项"><![CDATA[
 <h2>高级选项</h2>
