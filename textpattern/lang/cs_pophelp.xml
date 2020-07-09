@@ -466,7 +466,7 @@ např.: #@language cs-cz</p>
         <item id="admin_side_plugins" title="Používat pluginy pro správu?"><![CDATA[
 <h2>Používat pluginy pro správu?</h2>
 <p>Pluginy pro administrační prostředí mohou změnit fungování administrační části systému Textpattern. Mohou se napojit na již existující procesy, jako např. tvorbu a úpravy článků. Některé přidají do administrace nové panely s rozšiřujícími funkcemi.</p>
-<p>Více se o pluginech dozvíš na stránce <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> obsažené v <a rel="external" target="_blank" title="docs.textpattern.com" href="https://docs.textpattern.com/">Dokumentaci Textpatternu</a>.<br>Pluginy všech kategorií jsou shromážděny na <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a>.</p>        ]]></item>
+<p>Více se o pluginech dozvíš na stránce <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> obsažené v <a rel="external" target="_blank" title="docs.textpattern.com" href="https://docs.textpattern.com/">Dokumentaci Textpatternu</a>.<br>Pluginy všech kategorií jsou shromážděny na <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins</a>.</p>        ]]></item>
         <item id="advanced_options" title="Rozšířené možnosti"><![CDATA[
 <h2>Rozšířené možnosti</h2>
 <p>Zobrazit skupinu pokročilých předvoleb, kde lze nakonfigurovat další nastavení, například:</p>
