@@ -150,16 +150,19 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     }
 
     foreach ($array as $avalue => $alabel) {
+        $atts = array('value' => $avalue, 'dir' => 'auto', 'disabled' => in_array($avalue, $disable));
+
         if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
-            $sel = ' selected="selected"';
-            $selected = true;
-        } else {
-            $sel = '';
+            $atts['selected'] = $selected = true;
         }
 
-        $sel .= in_array($avalue, $disable) ? ' disabled="disabled"' : '';
+        if (is_array($alabel)) {
+            $atts = $alabel + $atts;
+            $alabel = isset($atts['title']) ? $atts['title'] : $avalue;
+            unset($atts['title']);
+        }
 
-        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.' dir="auto">'.txpspecialchars($alabel).'</option>';
+        $out[] = tag(txpspecialchars($alabel), 'option', $atts);
     }
 
     if ($blank_first) {
