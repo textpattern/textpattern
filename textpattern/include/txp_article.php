@@ -1121,13 +1121,16 @@ function status_display($status = 0)
 
 function section_popup($Section, $id)
 {
-    $rs = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title ASC, name ASC");
+    global $txp_sections;
+
+    $rs = $txp_sections;
+    unset($rs['default']);
 
     if ($rs) {
         $options = array();
 
         foreach ($rs as $a) {
-            $options[$a['name']] = $a['title'];
+            $options[$a['name']] = array('title' => $a['title'], 'data-skin' => $a['skin']);
         }
 
         return selectInput('Section', $options, $Section, false, '', $id);
@@ -1211,7 +1214,7 @@ function form_pop($form, $id, $section)
 {
     global $txp_sections;
 
-    $forms = $skinforms = array();
+    $skinforms = array();
     $rs = safe_rows('skin, name', 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
 
     foreach ($txp_sections as $name => $row) {
@@ -1222,11 +1225,9 @@ function form_pop($form, $id, $section)
                 return $v['skin'] == $skin;
             }), 'name');
         }
-    
-        $forms[$name] = $skinforms[$skin];
     }
 
-    script_js('var allForms = '.json_encode($forms, TEXTPATTERN_JSON), false);
+    script_js('var allForms = '.json_encode($skinforms, TEXTPATTERN_JSON), false);
 
     $skin = isset($txp_sections[$section]['skin']) ? $txp_sections[$section]['skin'] : false;
     $rs = $skin && isset($skinforms[$skin]) ? array_combine($skinforms[$skin], $skinforms[$skin]) : false;
