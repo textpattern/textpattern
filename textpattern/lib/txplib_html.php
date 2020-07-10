@@ -920,18 +920,25 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
 function tag($content, $tag, $atts = '')
 {
+    static $tags = array();
+
     if (empty($tag) || $content === '') {
         return $content;
     }
 
-    $atts = $atts ? join_atts($atts) : '';
+    if (!isset($tags[$tag])) {
+        $tags[$tag] = preg_match('/^\w[\w\-\.\:]*$/', $tag) ? 1 :
+            (strpos($tag, '<+>') === false ? 2 : 3);
+    }
 
-    if ($atts || preg_match('/^\w[\w\-\.\:]*$/', $tag)) {
-        return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
-    } elseif (strpos($tag, '<+>') === false) {
-        return $tag.$content.$tag;
-    } else {
-        return str_replace('<+>', $content, $tag);
+    switch ($tags[$tag]) {
+        case 1:
+            $atts = $atts ? join_atts($atts) : '';
+            return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
+        case 2:
+            return $tag.$content.$tag;
+        default:
+            return str_replace('<+>', $content, $tag);
     }
 }
 
