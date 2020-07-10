@@ -4321,14 +4321,14 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
         return $atts ? ' '.trim($atts) : '';
     }
 
-    $list = array();
+    $list = '';
     $txp = $flags & TEXTPATTERN_STRIP_TXP;
 
     foreach ($atts as $name => $value) {
         if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false) || ($txp && $value === null)) {
             continue;
         } elseif ($value === null || $txp && $value === true) {
-            $list[] = $name;
+            $list .= ' '.$name;
             continue;
         } elseif (is_array($value)) {
             if ($name == 'href' || $name == 'src') {
@@ -4343,11 +4343,11 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
         }
 
         if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
-            $list[] = $name.'="'.$value.'"';
+            $list .= ' '.$name.'="'.$value.'"';
         }
     }
 
-    return $list ? ' '.join(' ', $list) : '';
+    return $list;
 }
 
 /**
