@@ -1805,7 +1805,7 @@ function link_to_home($atts, $thing = null)
 function txp_pager($atts, $thing = null, $newer = null)
 {
     global $thispage, $is_article_list, $txp_context, $txp_item;
-    static $pg = true, $numPages = null, $top = 1, $shown = array();
+    static $pg = true, $numPages = null, $linkall = false, $top = 1, $shown = array();
     static $items = array('page' => null, 'total' => null, 'url' => null);
 
     $get = isset($atts['total']) && $atts['total'] === true;
@@ -1818,10 +1818,11 @@ function txp_pager($atts, $thing = null, $newer = null)
         'total'      => $numPages,
         'shift'      => 1,
         'showalways' => true,
+        'link'       => false,
         ) : array(
         'showalways' => false,
         'title'      => '',
-        'link'       => false,
+        'link'       => $linkall,
         'escape'     => 'html',
         'rel'        => '',
         'shift'      => false,
@@ -1851,6 +1852,8 @@ function txp_pager($atts, $thing = null, $newer = null)
         $oldtop = $top;
         $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
         $oldshown = $shown;
+        $oldlink = $linkall;
+        $linkall = $link;
         $shown = array();
 
         if ($thing !== null) {
@@ -1858,6 +1861,7 @@ function txp_pager($atts, $thing = null, $newer = null)
             $numPages = $oldPages;
             $pg = $oldpg;
             $top = $oldtop;
+            $linkall = $oldlink;
             $shown = $oldshown;
         }
 
