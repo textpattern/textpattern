@@ -1,8 +1,8 @@
 {
-  "title": "Four Point Eight",
+  "title": "Four Point Nine",
   "txp-type": "textpattern-theme",
-  "version": "4.8.2",
-  "description": "The default theme shipped with Textpattern CMS 4.8.",
+  "version": "4.9.0-dev",
+  "description": "The default theme shipped with Textpattern CMS 4.9.",
   "author": "Team Textpattern",
   "author_uri": "https://github.com/textpattern/textpattern-default-theme"
 }

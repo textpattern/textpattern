@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.8.2-dev';
+textpattern.version = '4.9.0-dev';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -107,7 +107,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             opt = $.extend(form.opt, opt);
         } else {
             opt = $.extend(defaults, opt);
-            form.boxes = opt.checkbox;
+            form.boxes = $this.find(opt.checkbox);
             form.editMethod = $this.find(opt.actions);
             form.lastCheck = null;
             form.opt = opt;
@@ -187,7 +187,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 'checked': true
             }, options);
 
-            var obj = $this.find(form.boxes);
+            var obj = $this.find(opt.checkbox);
 
             if (settings.value !== null) {
                 obj = obj.filter(function () {
@@ -202,6 +202,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             }
 
             obj.filter(settings.checked ? ':not(:checked)' : ':checked').prop('checked', settings.checked).change();
+            lib.highlight();
 
             return methods;
         };
@@ -213,9 +214,21 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.highlight = function () {
-            var element = $this.find(form.boxes);
-            element.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
-            element.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
+            var checked = form.boxes.filter(':checked'), count = checked.length,
+                option = form.editMethod.find('[value=""]');
+            checked.closest(opt.highlighted).addClass(opt.selectedClass);
+            form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
+
+            option.gTxt('with_selected_option', {
+                '{count}': count
+            });
+            form.selectAll.prop('checked', count === form.boxes.length).change();
+            form.editMethod.prop('disabled', !count);
+
+            if (!count) {
+                form.editMethod.val('').change();
+            }
+
             return lib;
         };
 
@@ -226,14 +239,10 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.extendedClick = function () {
-            if (opt.rowClick) {
-                var selector = opt.row;
-            } else {
-                var selector = form.boxes;
-            }
+            var selector = opt.rowClick ? opt.row : opt.checkbox;
 
             $this.on('click', selector, function (e) {
-                var self = ($(e.target).is(form.boxes) || $(this).is(form.boxes));
+                var self = ($(e.target).is(opt.checkbox) || $(this).is(opt.checkbox));
 
                 if (!self && (e.target != this || $(this).is('a, :input') || $(e.target).is('a, :input'))) {
                     return;
@@ -243,7 +252,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     return;
                 }
 
-                var box = $(this).closest(opt.highlighted).find(form.boxes);
+                var box = $(this).closest(opt.highlighted).find(opt.checkbox);
 
                 if (box.length < 1) {
                     return;
@@ -256,7 +265,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 }
 
                 if (e.shiftKey && form.lastCheck) {
-                    var boxes = $this.find(form.boxes);
+                    var boxes = form.boxes;
                     var start = boxes.index(box);
                     var end = boxes.index(form.lastCheck);
 
@@ -268,11 +277,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     box.prop('checked', !checked).change();
                 }
 
-                if (checked === false) {
-                    form.lastCheck = box;
-                } else {
-                    form.lastCheck = null;
-                }
+                form.lastCheck = box;
             });
 
             return lib;
@@ -285,31 +290,22 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.checked = function () {
-            $this.on('change', form.boxes, function (e) {
+            $this.on('change', opt.checkbox, function (e) {
                 var box = $(this);
-                var boxes = $this.find(form.boxes);
 
                 if (box.prop('checked')) {
-                    $(this).closest(opt.highlighted).addClass(opt.selectedClass);
-
                     if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
                         textpattern.Relay.data.selected.push(box.val());
                     }
                 } else {
-                    $(this).closest(opt.highlighted).removeClass(opt.selectedClass);
-
                     textpattern.Relay.data.selected = $.grep(textpattern.Relay.data.selected, function(value) {
                         return value != box.val();
                     });
                 }
 
                 if (typeof(e.originalEvent) != 'undefined') {
-                    form.selectAll.prop('checked', box.prop('checked') && boxes.filter(':checked').length === boxes.length).change();
+                    lib.highlight();
                 }
-
-                form.editMethod.find('[value=""]').gTxt('with_selected_option', {
-                    '{count}': boxes.filter(':checked').length
-                });
             });
 
             return lib;
