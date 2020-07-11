@@ -163,10 +163,9 @@ function doLoginForm($message)
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             (count($langList) > 1
                 ? graf(
-                    tag(gTxt('language'), 'label', array('for' => 'lang')).
-                    $txpLang->languageSelect('lang', $lang)
-                    , array('class' => 'login-language txp-reduced-ui')
-
+                     tag(gTxt('language'), 'label', array('for' => 'lang')).
+                     $txpLang->languageSelect('lang', $lang)
+                     , array('class' => 'login-language txp-reduced-ui')
                 ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
@@ -392,7 +391,7 @@ EOS
                     $uid = assert_int($tokenInfo['reference_id']);
                     $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = '$uid'");
 
-                    if ($row && $row['nonce'] && ($hash === Txp::get('\Textpattern\Security\Token')->constructHash($selector, $row['old_pass'], $row['nonce']).$selector)) {
+                    if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
                                 n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);

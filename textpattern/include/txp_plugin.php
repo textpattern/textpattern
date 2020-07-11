@@ -43,7 +43,7 @@ if ($event == 'plugin') {
         'plugin_install'    => true,
         'plugin_save'       => true,
         'plugin_upload'     => true,
-        'plugin_import'     => true,
+        'plugin_load'       => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
@@ -66,6 +66,8 @@ if ($event == 'plugin') {
 function plugin_list($message = '')
 {
     global $event;
+
+    $plugin_dir = txpath.DS.'plugins';
 
     pagetop(gTxt('tab_plugins'), $message);
 
@@ -164,7 +166,7 @@ function plugin_list($message = '')
         );
 
     $contentBlock = '';
-    $existing_files = get_filenames(PLUGINPATH.DS, GLOB_ONLYDIR) or $existing_files = array();
+    $existing_files = get_filenames($plugin_dir.DS, GLOB_ONLYDIR) or $existing_files = array();
 
     foreach (safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
@@ -352,11 +354,11 @@ function plugin_list($message = '')
             n.tag_end('form');
     }
 
-    if (!is_dir(PLUGINPATH) || !is_writeable(PLUGINPATH)) {
+    if (!is_dir($plugin_dir) || !is_writeable($plugin_dir)) {
         $createBlock =
             graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('plugin_dir_not_writeable', array('{plugindir}' => PLUGINPATH)),
+                gTxt('plugin_dir_not_writeable', array('{plugindir}' => $plugin_dir)),
                 array('class' => 'alert-block warning')
             ).n;
     } else {
@@ -505,68 +507,33 @@ function status_link($status, $name, $linktext)
 /**
  * Plugin installation's preview step.
  *
- * Outputs a panel displaying the plugin's source code,
- * the included help file, Textpack strings, additional
- * data and any bundled files (if a zipped archive).
- *
- * @param array                      $payload   Information passed from the upload step, if applicable
- * @param \Textpattern\Plugin\Plugin $txpPlugin Plugin object from upload step
+ * Outputs a panel displaying the plugin's source code
+ * and the included help file.
  */
 
-function plugin_verify($payload = array(), $txpPlugin = null)
+function plugin_verify()
 {
-    $extras = '';
+    $plugin64 = assert_string(ps('plugin'));
 
-    if (!empty($payload['plugin-filename'])) {
-        $extras .= hInput('plugin-filename', assert_string($payload['plugin-filename'])).
-            hInput('plugin-token', $txpPlugin->generateToken());
-
-        if (!empty($payload['files'])) {
-            $extras .= hed(gTxt('upload'), 2).
-                tag(implode(br, (array)$payload['files']), 'pre', array('id' => 'preview-data'));
-        }
-
-        $plugin = $payload['plugin'];
-    } else {
-        $plugin64 = assert_string(empty($payload['plugin64']) ? ps('plugin') : $payload['plugin64']);
-
-        if (preg_match("#^https?://.+#", $plugin64) && @fopen($plugin64, 'r')) {
-            // Dealing with a URL so forge a call to 'upload' it, which will redirect
-            // back to this function when done to handle it properly.
-            plugin_upload($plugin64);
-            return;
-        }
-
-        $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
-        $plugin = $txpPlugin->extract($plugin64);
-        $extras .= hInput('plugin64', $plugin64).
-            hInput('plugin-token', $txpPlugin->generateToken());
-    }
-
-    if ($plugin) {
+    if ($plugin = Txp::get('\Textpattern\Plugin\Plugin')->extract($plugin64)) {
         $source = '';
         $textpack = '';
-        $data = '';
 
         if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
             $textile = new \Textpattern\Textile\RestrictedParser();
             $help_source = $textile->setLite(false)->setImages(true)->parse($plugin['help_raw']);
         } else {
-            $help_source = isset($plugin['help']) ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
+            $help_source = $plugin['help'] ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
         }
 
         if (isset($plugin['textpack'])) {
             $textpack = $plugin['textpack'];
         }
 
-        if (isset($plugin['data'])) {
-            $data = txpspecialchars($plugin['data']);
-        }
-
         $source .= txpspecialchars($plugin['code']);
         $sub = graf(
-            fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button').
-            fInput('submit', 'plugin-go', gTxt('install'), 'publish'),
+            sLink('plugin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('install'), 'publish'),
             array('class' => 'txp-edit-actions')
         );
 
@@ -598,20 +565,10 @@ function plugin_verify($payload = array(), $txpPlugin = null)
                     )
                 : ''
             ).
-            ($data
-                ? hed(gTxt('meta'), 2).
-                    tag(
-                        tag($data, 'code', array('dir' => 'ltr')),
-                        'pre', array('id' => 'preview-plugin')
-                    )
-                : ''
-            ).
-            $extras.
             $sub.
             sInput('plugin_install').
             eInput('plugin').
-            hInput('plugin-name', $plugin['name'])
-            , '', '', 'post', 'plugin-info', '', 'plugin_preview'
+            hInput('plugin64', $plugin64), '', '', 'post', 'plugin-info', '', 'plugin_preview'
         );
 
         return;
@@ -622,164 +579,68 @@ function plugin_verify($payload = array(), $txpPlugin = null)
 
 /**
  * Installs a plugin.
- *
- * Also handles cancellation of plugin installation by tidying up temp files.
- *
- * @todo During upload, stash an sha1 digest of the code to the token table with
- *       an hour's expiry. Then verify this on installation to check the file/code
- *       has not been tampered with.
  */
 
 function plugin_install()
 {
-    $message = array(gTxt('bad_plugin_code'), E_ERROR);
-
-    $srcFile = ps('plugin-filename');
-    $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
-    $name = sanitizeForFile(ps('plugin-name'));
-    $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
-
-    if (ps('plugin-cancel')) {
-        if ($source) {
-            unlink($source);
-        }
-
-        $message = array(gTxt('plugin_install_cancelled'), E_WARNING);
-    } elseif (ps('plugin-go')) {
-        $hash = assert_string(ps('plugin-token'));
-
-        if ($source && is_readable($source)) {
-            if ($hash) {
-                $message = $txpPlugin->verifyToken($hash, $source);
-            }
-
-            if ($message === true) {
-                $target_dir = rtrim(PLUGINPATH, DS).DS.$name;
-                $target_path = $target_dir.DS.basename($source);
-
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir);
-                }
-
-                if (rename($source, $target_path)) {
-                    extract(pathinfo($target_path));
-                    $extension = strtolower($extension);
-
-                    if ($extension === 'txt') {
-                        $write = true;
-                        $plugin = $txpPlugin->extract(file_get_contents($target_path));
-                        unlink($target_path);
-                    } elseif ($extension === 'php') {
-                        $write = true;
-                        $plugin = $txpPlugin->read($target_path);
-                    } elseif ($extension === 'zip' && class_exists('ZipArchive')) {
-                        $zip = new \ZipArchive();
-                        $zh = $zip->open($target_path);
-
-                        if ($zh === true) {
-                            for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
-                                    $makedir = true;
-
-                                    break;
-                                }
-                            }
-
-                            $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
-                            $zip->close();
-
-                            list($plugin, $files) = $txpPlugin->read($target_path);
-                            unlink($target_path);
-                        }
-                    }
-
-                    $message = $txpPlugin->install($plugin, null, !empty($write));
-                }
-            } else {
-                unlink($source);
-            }
-        } else {
-            $plugin64 = assert_string(ps('plugin64'));
-
-            if ($hash) {
-                $message = $txpPlugin->verifyToken($hash, $plugin64);
-
-                if ($message === true) {
-                    $message = $txpPlugin->install($plugin64);
-                }
-            }
-        }
-    }
-
-    Txp::get('\Textpattern\Security\Token')->remove('plugin_verify', $txpPlugin->computeRef($name), '2 HOUR');
+    $plugin64 = assert_string(ps('plugin64'));
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin64);
 
     plugin_list($message);
 }
 
 /**
  * Uploads a plugin.
- *
- * @param string $url Fetch the plugin from this remote location instead
  */
 
-function plugin_upload($url = null)
+function plugin_upload()
 {
-    $payload = array();
-    $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
-    $dest = rtrim(get_pref('tempdir', sys_get_temp_dir()), DS);
-    $ready = false;
+    $plugin = array();
+    $plugin_dir = txpath.DS.'plugins';
 
-    if ($url || $_FILES["theplugin"]["name"]) {
-        if ($url) {
-            $urlParts = parse_url($url);
-            $pathParts = pathinfo($urlParts['path']);
-            $filename = $pathParts['basename'];
-            $target = $dest.DS.sanitizeForFile($filename);
-            $content = file_get_contents($url);
+    if ($_FILES["theplugin"]["name"]) {
+        $filename = $_FILES["theplugin"]["name"];
+        $source = $_FILES["theplugin"]["tmp_name"];
+        $target_path = rtrim(get_pref('temp_dir', $plugin_dir), DS).DS.$filename;
 
-            // Don't need to test for 'false', since '0' (number of returned bytes) is
-            // still a 'failure' to write anything meaningful.
-            if (file_put_contents($target, $content)) {
-                $ready = true;
+        if (move_uploaded_file($source, $target_path)) {
+            extract(pathinfo($target_path));
+
+            if (strtolower($extension) === 'php') {
+                $write = true;
+                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read(array($filename, $target_path));
+            } elseif (class_exists('ZipArchive')) {
+                $zip = new ZipArchive();
+                $x = $zip->open($target_path);
+
+                if ($x === true) {
+                    for ($i = 0; $i < $zip->numFiles; $i++) {
+                        if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
+                            $makedir = true;
+
+                            break;
+                        }
+                    }
+
+                    $zip->extractTo($plugin_dir.(empty($makedir) ? '' : DS.$filename));
+                    $zip->close();
+                    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
+                }
             }
-        } else {
-            $filename = $_FILES["theplugin"]["name"];
-            $source = $_FILES["theplugin"]["tmp_name"];
-            $target = $dest.DS.$filename;
 
-            if (move_uploaded_file($source, $target)) {
-                $ready = true;
-            }
-        }
-
-        if ($ready) {
-            extract(pathinfo($target));
-
-            $extension = strtolower($extension);
-            $payload['plugin-filename'] = basename($target);
-
-            if ($extension === 'txt') {
-                $payload['plugin64'] = file_get_contents($target);
-                $payload['plugin-filename'] = '';
-                unlink($target);
-            } elseif ($extension === 'php') {
-                $payload['plugin'] = $txpPlugin->read($target);
-            } elseif ($extension === 'zip' && class_exists('ZipArchive')) {
-                list($plugin, $files) = $txpPlugin->read($target);
-                $payload['plugin'] = $plugin;
-                $payload['files'] = $files;
-            }
+            unlink($target_path);
         }
     }
 
-    plugin_verify($payload, $txpPlugin);
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin, null, !empty($write));
+    plugin_list($message);
 }
 
 /**
- * Imports a plugin that is already in the filesystem but is not yet in the DB.
+ * Uploads a plugin.
  */
 
-function plugin_import()
+function plugin_load()
 {
     $plugin = array();
 
@@ -808,7 +669,7 @@ function plugin_form($existing_files = array())
             'type'     => 'file',
             'name'     => 'theplugin',
             'id'       => 'plugin-upload',
-            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php, .txt",
+            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php",
             'required' => 'required',
         )).
         fInput('submit', 'install_new', gTxt('upload')).
@@ -824,7 +685,7 @@ function plugin_form($existing_files = array())
     ).br.
     ($existing_files ? form(
         eInput('plugin').
-        sInput('plugin_import').
+        sInput('plugin_load').
         tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
         selectInput('filename', $existing_files, null, false, '', 'file-existing').
         fInput('submit', '', gTxt('import')),

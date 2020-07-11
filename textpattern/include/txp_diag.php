@@ -253,8 +253,8 @@ function doDiagnostics()
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
     }
 
-    if (!@is_writable(PLUGINPATH)) {
-        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => PLUGINPATH);
+    if (!@is_writable(txpath.DS.'plugins')) {
+        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => txpath.DS.'plugins');
     }
 
     if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {

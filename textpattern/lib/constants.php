@@ -295,12 +295,6 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
-/**
- * Plugin storage directory.
- */
-
-define('PLUGINPATH', txpath.DS.'plugins');
-
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
      * Sets accepted protocols for HTTP referrer header.
@@ -696,7 +690,7 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  * @package System
  */
 
-define('REQUIRED_PHP_VERSION', '5.6.0');
+define('REQUIRED_PHP_VERSION', '5.5.0');
 
 /**
  * File integrity status good.

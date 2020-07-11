@@ -1,5 +1,8 @@
 # Textpattern CMS
 
+[![Dependencies Status](https://david-dm.org/textpattern/textpattern/status.svg)](https://david-dm.org/textpattern/textpattern)
+[![devDependencies Status](https://david-dm.org/textpattern/textpattern/dev-status.svg)](https://david-dm.org/textpattern/textpattern?type=dev)
+
 [![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-64px.svg)](https://textpattern.com/)
 
 **A flexible, elegant, fast and easy-to-use content management system written in PHP.** Textpattern is [free and open source](#legal) software.

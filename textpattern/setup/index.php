@@ -405,7 +405,7 @@ function step_getTxpLogin()
     $public_themes_class->setDirPath(txpath.DS.'setup'.DS.'themes');
     $vals = array_merge($public_themes_class->getUploaded(false), $vals);
 
-    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-nine' : $cfg['site']['public_theme']);
+    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-eight' : $cfg['site']['public_theme']);
 
     $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 
