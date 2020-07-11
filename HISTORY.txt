@@ -3,7 +3,7 @@ Changes in 4.8.2 (upcoming)
 * Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
   (thanks, Vienuolis).
 * Fixed: Sanitize custom field labels on Write panel (thanks, luuthehienhbit).
-* Fixed: Date tags return -1 in some server setups. Thanks, the blue dragon.
+* Fixed: Date tags return -1 in some server setups (thanks, the blue dragon).
 * Fixed: Notification on list panels if there were no assets recorded.
 * Fixed: Incorrect search label for 'name' on Links panel.
 * Fixed: Override forms on Write panel stay in step with live Theme/Section
