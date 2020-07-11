@@ -312,7 +312,7 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    global $event;
+    global $event, $plugin;
     static $txpLang = null;
 
     if ($txpLang === null) {
@@ -323,6 +323,11 @@ function gTxt($var, $atts = array(), $escape = 'html')
         if (empty($loaded) || !in_array($event, $loaded)) {
             load_lang($lang, $event);
         }
+    }
+
+    if (isset($plugin['textpack'])) {
+        $txpLang->loadTextpack($plugin['textpack']);
+        unset($plugin['textpack']);
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -1014,7 +1019,7 @@ function getmicrotime()
 
 function load_plugin($name, $force = false)
 {
-    global $plugins, $plugins_ver, $prefs, $txp_current_plugin, $textarray;
+    global $plugin, $plugins, $plugins_ver, $prefs, $txp_current_plugin, $textarray;
 
     if (is_array($plugins) && in_array($name, $plugins)) {
         return true;
@@ -1039,28 +1044,13 @@ function load_plugin($name, $force = false)
             $txp_current_plugin = $name;
             include $dir.$name.'.php';
             $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
-            $plugins_ver[$name] = @$plugin['version'];
+            $plugins_ver[$name] = isset($plugin['version']) ? $plugin['version'] : 0;
 
             if (isset($plugin['textpack'])) {
-                $strings = array();
-                $pack = Txp::get('\Textpattern\Textpack\Parser');
-                $pack->parse($plugin['textpack']);
-                $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
-                $wholePack = $pack->getStrings($useLang);
-
-                if (!$wholePack) {
-                    $wholePack = $pack->getStrings(TEXTPATTERN_DEFAULT_LANG);
-                }
-
-                foreach ($wholePack as $entry) {
-                    $strings[$entry['name']] = $entry['data'];
-                }
-
-                // Append lang strings on-the-fly.
-                Txp::get('\Textpattern\L10n\Lang')->setPack($strings, true);
-                $textarray += $strings;
+                Txp::get('\Textpattern\L10n\Lang')->loadTextpack($plugin['textpack']);
             }
 
+            unset($plugin);
             restore_error_handler();
 
             return true;
