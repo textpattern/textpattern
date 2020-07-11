@@ -275,12 +275,12 @@ class Skin extends CommonBase implements SkinInterface
         $event = $this->getEvent();
 
         return array_values(
-             safe_column(
-                 'name',
-                 'txp_section',
-                 "$event ='$skin' OR dev_{$event} ='$skin'"
-             )
-         );
+            safe_column(
+                'name',
+                'txp_section',
+                "$event ='$skin' OR dev_{$event} ='$skin'"
+            )
+        );
     }
 
     /**

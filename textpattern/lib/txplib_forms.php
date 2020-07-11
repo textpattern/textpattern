@@ -162,8 +162,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
             unset($atts['title']);
         }
 
-        $atts = join_atts($atts, TEXTPATTERN_STRIP_NONE);
-        $out[] = '<option'.$atts.'>'.txpspecialchars($alabel).'</option>';
+        $out[] = tag(txpspecialchars($alabel), 'option', $atts);
     }
 
     if ($blank_first) {
