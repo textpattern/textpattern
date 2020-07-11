@@ -1,6 +1,9 @@
 Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
+* Added: .txt plugins can now be uploaded via Browse... feature.
+* Added: Plugins can now be uploaded from URL by dragging to upload textarea.
+* Changed: Plugins of all types trigger verify step.
 
 Changes in 4.8.2 (upcoming)
 
