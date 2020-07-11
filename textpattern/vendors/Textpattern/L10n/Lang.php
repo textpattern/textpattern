@@ -471,6 +471,43 @@ class Lang implements \Textpattern\Container\ReusableInterface
         return ($this->upsertPack($langpack, $owner) === false) ? false : true;
     }
 
+
+    /**
+     * Install localisation strings from a Textpack.
+     *
+     * @param   array  $textpack    The Textpack to install
+     * @param   string $useLang     Import strings for this language
+     * @package L10n
+     */
+
+    public function loadTextpack($textpack, $useLang = null)
+    {
+        global $textarray;
+
+        $strings = array();
+        $pack = new \Textpattern\Textpack\Parser();
+        $pack->parse($textpack);
+
+        if (!isset($useLang)) {
+            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+        }
+
+        $wholePack = $pack->getStrings($useLang);
+
+        if (!$wholePack) {
+            $wholePack = $pack->getStrings(TEXTPATTERN_DEFAULT_LANG);
+        }
+
+        foreach ($wholePack as $entry) {
+            $strings[$entry['name']] = $entry['data'];
+        }
+
+        // Append lang strings on-the-fly.
+        $this->setPack($strings, true);
+        $textarray += $strings;
+    }
+
+
     /**
      * Install localisation strings from a Textpack.
      *
