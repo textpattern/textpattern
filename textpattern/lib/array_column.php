@@ -106,8 +106,10 @@ if (!function_exists('array_column')) {
                     $resultArray[] = $value;
                 }
             }
+
         }
 
         return $resultArray;
     }
+
 }

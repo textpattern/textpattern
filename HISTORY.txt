@@ -1,13 +1,9 @@
-Changes in 4.9.0 (upcoming)
-
-* Changed: Minimum system requirements increased to PHP 5.6.
-
 Changes in 4.8.2 (upcoming)
 
 * Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
   (thanks, Vienuolis).
 * Fixed: Sanitize custom field labels on Write panel (thanks, luuthehienhbit).
-* Fixed: Date tags return -1 in some server setups (thanks, the blue dragon).
+* Fixed: Date tags return -1 in some server setups. Thanks, the blue dragon.
 * Fixed: Notification on list panels if there were no assets recorded.
 * Fixed: Incorrect search label for 'name' on Links panel.
 * Fixed: Override forms on Write panel stay in step with live Theme/Section
@@ -27,7 +23,7 @@ Changes in 4.8.2 (upcoming)
 * Developer: Plugins can alter $pretext.
 * Developer: Add ability to filter strings in Lang->getPack() and extract().
 
-Changes in 4.8.1 (31 May 2020)
+Changes in 4.8.1
 
 * Changed: Improved pophelp for update check status on Diagnostics panel.
 * Changed: Tag builder includes new 4.8.x attributes where possible.
@@ -60,7 +56,7 @@ Changes in 4.8.1 (31 May 2020)
 * PrismJS 1.20.0.
 * jQuery File Upload 10.29.0.
 
-Changes in 4.8.0 (25 Feb 2020)
+Changes in 4.8.0
 
 * Changed: Minimum system requirements increased to PHP 5.5.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
@@ -157,7 +153,7 @@ Changes in 4.8.0 (25 Feb 2020)
 * PrismJS 1.19.0.
 * jQuery File Upload 10.8.0.
 
-Changes in 4.7.3 (25 Feb 2019)
+Changes in 4.7.3
 
 * Maintenance release with enhancements and bug fixes.
 * Fixed: 'Export to disk' checkbox state inconsistencies for new assets.
@@ -176,7 +172,7 @@ Changes in 4.7.3 (25 Feb 2019)
 * Textile 3.7.1. See https://github.com/textile/php-textile/releases/tag/v3.7.1
   for full list of changes in this release (thanks, gocom).
 
-Changes in 4.7.2 (20 Dec 2018)
+Changes in 4.7.2
 
 * Maintenance release with enhancements and bug fixes.
 * Fixed: A bug with <txp:link_to_[next|prev] /> tags in 'month' URL mode.
@@ -237,7 +233,7 @@ Changes in 4.7.2 (20 Dec 2018)
   for full list of changes in this release (thanks, gocom).
 * jQuery File Upload 9.28.0.
 
-Changes in 4.7.1 (26 Jun 2018)
+Changes in 4.7.1
 
 * Maintenance release with bug fixes.
 * Fixed: <txp:article /> and <txp:article_custom /> correctly parse their
@@ -258,7 +254,7 @@ Changes in 4.7.1 (26 Jun 2018)
 * PrismJS 1.15.0.
 * jQuery File Upload 9.22.0.
 
-Changes in 4.7.0 (15 May 2018)
+Changes in 4.7.0
 
 * In memory of Dean Cameron Allen, creator of Textpattern CMS.
 * Changed: Minimum system requirements increased to PHP 5.4.0.
@@ -404,7 +400,7 @@ Changes in 4.7.0 (15 May 2018)
 * PHPass 0.5.
 * jQuery File Upload 9.21.0.
 
-Changes in 4.6.2 (21 Oct 2016)
+Changes in 4.6.2
 
 * Maintenance release with bug fixes.
 * Fixed: More complete SQL trace on non-row-based queries.
@@ -417,7 +413,7 @@ Changes in 4.6.2 (21 Oct 2016)
 * Added: Support for printing of admin panels.
 * Added: Additional Latvian setup translations.
 
-Changes in 4.6.1 (05 Oct 2016)
+Changes in 4.6.1
 
 * Maintenance release with bug fixes.
 * Added: A modern interpretation of the 'Classic' admin theme.
@@ -442,7 +438,7 @@ Changes in 4.6.1 (05 Oct 2016)
 * jQuery UI 1.12.1.
 * zxcvbn 4.4.0.
 
-Changes in 4.6.0 (10 Sep 2016)
+Changes in 4.6.0
 
 * Textile v3.5.
 * Improved RTL language support.
@@ -550,7 +546,7 @@ Changes in 4.6.0 (10 Sep 2016)
 * jQuery 1.12.4.
 * jQuery UI 1.12.0.
 
-Changes in 4.5.7 (20 Sep 2014)
+Changes in 4.5.7
 
 * Maintenance release with bug fixes.
 * Textile v2.4.3 resolves PHP 5.5 compatibility issues.
@@ -581,7 +577,7 @@ Changes in 4.5.6
 
 * Skipped due to broken update path for SVN users.
 
-Changes in 4.5.5 (04 Oct 2013)
+Changes in 4.5.5
 
 * Maintenance release with bug fixes, no security implications.
 * Fixed: Compatibility issues with PHP 5.5 in <txp:yield> and setup routines.
@@ -592,11 +588,11 @@ Changes in 4.5.5 (04 Oct 2013)
   allow re-defining keywords or constructs as variables).
 * jQuery 1.8.3.
 
-Changes in 4.5.4 (05 Dec 2012)
+Changes in 4.5.4
 
 * Corrects a packaging error in the 4.5.3 archives.
 
-Changes in 4.5.3 (04 Dec 2012)
+Changes in 4.5.3
 
 * Maintenance release with bug fixes, no security implications.
 * Fix <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and
@@ -606,7 +602,7 @@ Changes in 4.5.3 (04 Dec 2012)
 * Developer: In http_accept_format(), discard MIME formats with a quality factor
   below 0.1.
 
-Changes in 4.5.2 (10 Oct 2012)
+Changes in 4.5.2
 
 * Maintenance release with bug fixes, no security implications.
 * Fix <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and
@@ -618,7 +614,7 @@ Changes in 4.5.2 (10 Oct 2012)
   $rs['partials_meta'].
 * Developer: Escape '<script>' tags in script_js(). Use jQuery in dom_attach().
 
-Changes in 4.5.1 (12 Sep 2012)
+Changes in 4.5.1
 
 * Maintenance release with bug fixes, no security implications.
 * Default front-side template: Remove duplicate search input field.
@@ -633,7 +629,7 @@ Changes in 4.5.1 (12 Sep 2012)
   'discuss_deleted', 'file_deleted', 'forms_deleted', 'thumbnail_deleted',
   'links_deleted', 'articles_deleted', 'page_deleted', 'sections_deleted'.
 
-Changes in 4.5.0 (27 Aug 2012)
+Changes in 4.5.0
 
 * Minimum system requirement: PHP 5.2.
 * Modern default site theme (responsive, HTML5, CSS3).
@@ -715,7 +711,7 @@ Changes in 4.5.0 (27 Aug 2012)
 * Bug and security fixes.
 * jQuery 1.7.2.
 
-Changes in 4.4.1 (18 Jun 2011)
+Changes in 4.4.1
 
 * Security: Add admin-side CSRF protection measures. Updates are highly
   recommended. Thanks, Neal Poole.
@@ -728,7 +724,7 @@ Changes in 4.4.1 (18 Jun 2011)
 * phpass 0.4 / genuine.
 * jQuery 1.6.1.
 
-Changes in 4.4.0 (26 Mar 2011)
+Changes in 4.4.0
 
 * Security: Fix several vulnerabilities. Updates are *absolutely* recommended
   for sites running any older version. Thanks, Neal Poole.
@@ -753,7 +749,7 @@ Changes in 4.4.0 (26 Mar 2011)
   Persistent hash values in database are incompatible with previous versions.
 * jQuery 1.5.1.
 
-Changes in 4.3.0 (04 Nov 2010)
+Changes in 4.3.0
 
 * Security: Fixed two XSS vulnerabilities (thanks Jorge Hoya and High-Tech
   Bridge). Updates are recommended.
@@ -808,7 +804,7 @@ Changes in 4.3.0 (04 Nov 2010)
 * jQuery 1.4.3.
 * Incutio XML-RPC Library 1.7.4.
 
-Changes in 4.2.0 (17 Sep 2009)
+Changes in 4.2.0
 
 * Feature: Extendable admin-side themes. 'Classic' and 'Remora' theme contained
   in the core package.
@@ -862,7 +858,7 @@ Changes in 4.1.0
 * Version 4.1.0 was assigned to the experimental "crockery" branch and never
   officially released.
 
-Changes in 4.0.8 (23 Jan 2009)
+Changes in 4.0.8
 
 * Fixed: Current section/category is overwritten in <txp:section_list> and
   <txp:category_list> (container or form mode).
@@ -885,7 +881,7 @@ Changes in 4.0.8 (23 Jan 2009)
   returns FALSE.
 * Developer: set_pref() accepts an optional "position" parameter.
 
-Changes in 4.0.7 (28 Nov 2008)
+Changes in 4.0.7
 
 * Parser: full nesting support, allowing unlimited nesting of identical tags.
 * Parser: attribute values are parsed when enclosed in single quotes.
@@ -963,7 +959,7 @@ Changes in 4.0.7 (28 Nov 2008)
 * jQuery 1.2.6.
 * Ability to connect to the MySQL server through SSL.
 
-Changes in 4.0.6 (02 Feb 2008)
+Changes in 4.0.6
 
 * Security: add missing escape in SQL query (admin side).
 * Security: safer use of txp_login cookie + nonce (note: users are logged out
@@ -1028,7 +1024,7 @@ Changes in 4.0.6 (02 Feb 2008)
 * Enable separate search section for messy URL mode.
 * Many, many minor improvements.
 
-Changes in 4.0.5 (01 Jul 2007)
+Changes in 4.0.5
 
 * Fixed security issue on public-side (XSS) (thanks zarathu).
 * Fixed path disclosure issue (thanks zarathu).
@@ -1069,7 +1065,7 @@ Changes in 4.0.5 (01 Jul 2007)
   part.
 * Many, many minor improvements.
 
-Changes in 4.0.4 (17 Oct 2006)
+Changes in 4.0.4
 
 * RSS 2.0 support.
 * RSS and Atom feed fixes and improvements.
@@ -1126,7 +1122,7 @@ Changes in 4.0.4 (17 Oct 2006)
   (mary).
 * Many minor bugfixes.
 
-Changes in 4.0.3 (29 Dec 2005)
+Changes in 4.0.3
 
 * Fixed 2 potential security holes(detected in internal code review). Update is
   recommended.
@@ -1162,7 +1158,7 @@ Changes in 4.0.3 (29 Dec 2005)
 * Add extra info to the tag trace (SQL queries, conditional tag results, page
   template and form names).
 
-Changes in 4.0.2 (01 Nov 2005)
+Changes in 4.0.2
 
 * Fix a bug in 404 handling on some fastcgi servers.
 * Fix a bug that prevented file_download_list from working properly.
@@ -1237,7 +1233,7 @@ Changes in 4.0.2 (01 Nov 2005)
 * Textile: stop footnote links from clashing in article lists.
 * Added fi_FI locale support.
 
-Changes in 4.0.1 (06 Sep 2005)
+Changes in 4.0.1
 
 * Fixed some serious security issues. Updates are strongly recommended.
 * Fixed textile problems (missing block-elements in some cases; notextile;
