@@ -473,7 +473,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
 
     /**
-     * Install localisation strings from a Textpack.
+     * Load localisation strings from a Textpack using the given language.
      *
      * @param   array  $textpack    The Textpack to install
      * @param   string $useLang     Import strings for this language
