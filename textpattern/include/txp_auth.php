@@ -166,7 +166,6 @@ function doLoginForm($message)
                     tag(gTxt('language'), 'label', array('for' => 'lang')).
                     $txpLang->languageSelect('lang', $lang)
                     , array('class' => 'login-language txp-reduced-ui')
-
                 ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
