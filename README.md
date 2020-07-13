@@ -1,5 +1,7 @@
 # Textpattern CMS
 
+[![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
+
 [![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-64px.svg)](https://textpattern.com/)
 
 **A flexible, elegant, fast and easy-to-use content management system written in PHP.** Textpattern is [free and open source](#legal) software.
