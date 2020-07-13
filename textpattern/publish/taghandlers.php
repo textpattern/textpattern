@@ -531,7 +531,7 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
-    $yield[] = isset($thing) ? array($thing) : null;//$thing; ? parse($thing) : $thing;
+    $yield[] = $thing;
     $out = parse_form($form);
     array_pop($yield);
 
