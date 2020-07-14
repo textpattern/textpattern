@@ -5452,7 +5452,11 @@ function txp_wraptag($atts, $thing = '')
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    if (isset($trim)) {
+    if ($replace === true) {
+        $sep = isset($trim) && $trim !== true ? $trim : ',';
+        $thing = isset($trim) ? do_list_unique($thing, $sep) : array_filter(explode($sep, $thing));
+        $thing = implode($sep, $thing);
+    } elseif (isset($trim)) {
         if ($trim === true) {
             $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
         } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $trim)) {
