@@ -98,7 +98,7 @@ class Partial
             $end = empty($yield) ? null : end($yield);
 
             if (isset($end)) {
-                $inner = $value === null ? true : parse($end, empty($else));
+                $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
             }
         } elseif (empty($txp_yield[$name])) {
             $inner = null;

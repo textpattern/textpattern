@@ -3056,28 +3056,25 @@ function txp_tokenize($thing, $hash = null, $transform = null)
  * @param   string  $thing     Statement in Textpattern tag markup presentation
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string             Either if or else statement
- * @deprecated in 4.6.0
+ * @since   4.8.2
  * @see     parse
  * @package TagParser
  * @example
- * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
+ * echo getIfElse('true &lt;txp:else /&gt; false', 1 === 1);
  */
 
-function EvalElse($thing, $condition)
+function getIfElse($thing, $condition = true)
 {
-    global $txp_parsed, $txp_else, $txp_atts;
+    global $txp_parsed, $txp_else;
 
-    if (!empty($txp_atts['not'])) {
-        $condition = empty($condition);
-        unset($txp_atts['not']);
+    if (!$thing || strpos($thing, ':else') === false) {
+        return $condition ? $thing : null;
     }
 
-    if (empty($condition)) {
-        $txp_atts = null;
-    }
+    $hash = sha1($thing);
 
-    if (!$thing || strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
-        return $condition ? $thing : '';
+    if (!isset($txp_parsed[$hash])) {
+        txp_tokenize($thing, $hash);
     }
 
     $tag = $txp_parsed[$hash];
@@ -3089,7 +3086,7 @@ function EvalElse($thing, $condition)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return '';
+        return null;
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
@@ -3097,6 +3094,35 @@ function EvalElse($thing, $condition)
     }
 
     return $out;
+}
+
+/**
+ * Extracts a statement from a if/else condition to parse.
+ *
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string             Either if or else statement
+ * @deprecated in 4.6.0
+ * @see     parse
+ * @package TagParser
+ * @example
+ * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
+ */
+
+function EvalElse($thing, $condition)
+{
+    global $txp_atts;
+
+    if (!empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
+    }
+
+    if (empty($condition)) {
+        $txp_atts = null;
+    }
+
+    return getIfElse($thing, $condition);
 }
 
 /**
