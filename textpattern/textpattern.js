@@ -107,13 +107,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             opt = $.extend(form.opt, opt);
         } else {
             opt = $.extend(defaults, opt);
-            form.boxes = $this.find(opt.checkbox);
             form.editMethod = $this.find(opt.actions);
             form.lastCheck = null;
             form.opt = opt;
             form.selectAll = $this.find(opt.selectAll);
             form.button = $this.find(opt.submitButton);
         }
+
+        form.boxes = $this.find(opt.checkbox);
 
         /**
          * Registers a multi-edit option.
@@ -187,7 +188,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 'checked': true
             }, options);
 
-            var obj = $this.find(opt.checkbox);
+            var obj = form.boxes;//$this.find(opt.checkbox);
 
             if (settings.value !== null) {
                 obj = obj.filter(function () {
@@ -2334,6 +2335,7 @@ textpattern.Route.add('form', function () {
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function () {
+        $('#allforms_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected});
         $('#allforms_form_sections').restorePanes();
     });
 });
