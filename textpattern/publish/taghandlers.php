@@ -5454,7 +5454,7 @@ function txp_wraptag($atts, $thing = '')
 
     if ($replace === true) {
         $sep = isset($trim) && $trim !== true ? $trim : ',';
-        $thing = isset($trim) ? do_list_unique($thing, $sep) : array_filter(do_list($thing, $sep));
+        $thing = isset($trim) ? do_list_unique($thing, $sep, $trim === true ? TEXTPATTERN_STRIP_EMPTY : TEXTPATTERN_STRIP_EMPTY_STRING) : array_unique(explode($sep, $thing));
         $thing = implode($sep, $thing);
     } elseif (isset($trim)) {
         if ($trim === true) {
