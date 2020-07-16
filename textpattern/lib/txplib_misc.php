@@ -325,6 +325,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
         }
     }
 
+    // Hackish
     if (isset($plugin['textpack'])) {
         $txpLang->loadTextpack($plugin['textpack']);
         unset($plugin['textpack']);
@@ -1035,6 +1036,7 @@ function load_plugin($name, $force = false)
 
         if (is_file($dir.$name.'.php')) {
             $plugins[] = $name;
+            $old_plugin = isset($plugin) ? $plugin : null;
             set_error_handler("pluginErrorHandler");
 
             if (isset($txp_current_plugin)) {
@@ -1050,8 +1052,8 @@ function load_plugin($name, $force = false)
                 Txp::get('\Textpattern\L10n\Lang')->loadTextpack($plugin['textpack']);
             }
 
-            unset($plugin);
             restore_error_handler();
+            $plugin = $old_plugin;
 
             return true;
         }
