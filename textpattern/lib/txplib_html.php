@@ -1820,7 +1820,33 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
 
         $content = join($break, $list);
     } elseif ($break === true) {
-        $content = join(n, $list);
+        switch (strtolower($wraptag)) {
+            case 'ul':
+            case 'ol':
+                $break = 'li';
+            break;
+            case 'p':
+            case 'blockquote':
+                $break = 'br';
+            break;
+            case 'div':
+            case 'article':
+                $break = 'p';
+            break;
+            case 'table':
+            case 'tbody':
+            case 'thead':
+            case 'tfoot':
+                $break = 'tr';
+            break;
+            case 'tr':
+                $break = 'td';
+            break;
+            default:
+                $break = n;
+        }
+
+        $content = $break === n ? join(n, $list) : "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }

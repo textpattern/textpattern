@@ -531,7 +531,7 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
-    $yield[] = isset($thing) ? array($thing) : null;//$thing; ? parse($thing) : $thing;
+    $yield[] = $thing;
     $out = parse_form($form);
     array_pop($yield);
 
@@ -5452,7 +5452,11 @@ function txp_wraptag($atts, $thing = '')
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    if (isset($trim)) {
+    if ($replace === true) {
+        $sep = isset($trim) && $trim !== true ? $trim : ',';
+        $thing = isset($trim) ? do_list_unique($thing, $sep, $trim === true ? TEXTPATTERN_STRIP_EMPTY : TEXTPATTERN_STRIP_EMPTY_STRING) : array_unique(explode($sep, $thing));
+        $thing = implode($sep, $thing);
+    } elseif (isset($trim)) {
         if ($trim === true) {
             $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
         } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $trim)) {
