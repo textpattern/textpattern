@@ -11,6 +11,7 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Plugins loaded from cache show correct Textpack menu labels instead
   of untranslated strings.
 * Added: 'size' attribute to <txp:images> tag to filter by aspect ratio.
+* Added: valueless 'replace' attribute filters out duplicates.
 * Added: Language selector on login and User Edit panels (if >1 installed).
 * Added: Support for table_collation variable in config.php to affect
   safe_create() calls, when used in tandem with dbcharset.
@@ -24,6 +25,8 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Removed TRADITIONAL sql_mode for a smoother upgrade (thanks, Adi).
 * Developer: New 'pre' pretext callback.
 * Developer: Plugins can alter $pretext.
+* Developer: getIfElse() function returns 'else' part of <txp:if_yield else />,
+  and may be used as an EvalElse() replacement.
 * Developer: Add ability to filter strings in Lang->getPack() and extract().
 
 Changes in 4.8.1 (31 May 2020)
