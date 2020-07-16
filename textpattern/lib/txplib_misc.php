@@ -312,7 +312,7 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    global $event, $plugin;
+    global $event, $plugin, $txp_current_plugin;
     static $txpLang = null;
 
     if ($txpLang === null) {
@@ -326,7 +326,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
     }
 
     // Hackish
-    if (isset($plugin['textpack'])) {
+    if (isset($txp_current_plugin) && isset($plugin['textpack'])) {
         $txpLang->loadTextpack($plugin['textpack']);
         unset($plugin['textpack']);
     }
