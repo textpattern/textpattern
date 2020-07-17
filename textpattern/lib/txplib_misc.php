@@ -4472,9 +4472,12 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c'])) {
-            $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
+            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $catpath = $url_mode == 'breadcrumb_title' ?
+                array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
+                array($keys['c']);
+            $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
         }
 

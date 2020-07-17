@@ -243,11 +243,22 @@ function save_language()
     $langName = fetchLangName($language);
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
+        $txpLocale->setLocale(LC_TIME, LANG);
+        $old_formats = txp_dateformats();
         $candidates = array_unique(array($language, $txpLocale->getLocaleLanguage($language)));
         $locale = $txpLocale->getLanguageLocale($language);
         $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
         $new_language = $txpLocale->getLocaleLanguage($new_locale);
         set_pref('locale', $new_locale);
+        $new_formats = txp_dateformats();
+
+        foreach (array('dateformat', 'archive_dateformat', 'comments_dateformat') as $dateformat) {
+            $key = array_search(get_pref($dateformat), $old_formats);
+
+            if ($key !== false) {
+                set_pref($dateformat, $new_formats[$key]);
+            }
+        }
 
         if ($new_locale == $locale || $new_language == $language) {
             $msg = gTxt('preferences_saved');
