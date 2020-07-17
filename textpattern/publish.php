@@ -344,6 +344,9 @@ function preText($store, $prefs = null)
         extract($url);
 
         if (strlen($u1)) {
+            $n = $out[0];
+            $un = $out[$n];
+
             switch ($u1) {
                 case 'atom':
                     $out['feed'] = 'atom';
@@ -363,13 +366,8 @@ function preText($store, $prefs = null)
 
                 case 'category':
                 case urldecode(strtolower(urlencode(gTxt('category')))):
-                    if ($u3) {
-                        $out['context'] = validContext($u2);
-                        $out['c'] = $u3;
-                    } else {
-                        $out['context'] = 'article';
-                        $out['c'] = $u2;
-                    }
+                    $out['context'] = validContext($u2);
+                    $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
                     break;
 
                 case 'author':
@@ -394,8 +392,6 @@ function preText($store, $prefs = null)
                     break;
 
                 default:
-                    $n = $out[0];
-                    $un = $out[$n];
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
@@ -457,7 +453,7 @@ function preText($store, $prefs = null)
                             case 'breadcrumb_title':
                                 $out['s'] = $u1;
                                 $title = $n < 2 || empty($un) ? null : $un;
-                                isset($title) || $n <= 2 or $out['c'] = ${'u'.($n-1)};
+                                isset($title) || $n <= 2 or $out['c'] = $out[$n-1];
 
                                 break;
 
