@@ -243,6 +243,7 @@ function save_language()
     $langName = fetchLangName($language);
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
+        $txpLocale->setLocale(LC_TIME, LANG);
         $old_formats = txp_dateformats();
         $candidates = array_unique(array($language, $txpLocale->getLocaleLanguage($language)));
         $locale = $txpLocale->getLanguageLocale($language);
