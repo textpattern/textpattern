@@ -366,8 +366,12 @@ function preText($store, $prefs = null)
 
                 case 'category':
                 case urldecode(strtolower(urlencode(gTxt('category')))):
-                    $out['context'] = validContext($u2);
-                    $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
+                    $out['context'] = $u3 ? validContext($u2) : 'article';
+                    if ($permlink_mode == 'breadcrumb_title') {
+                        $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
+                    } else {
+                        $out['c'] = $u3 ? $u3 : $u2;
+                    }
                     break;
 
                 case 'author':
