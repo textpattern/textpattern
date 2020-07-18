@@ -567,7 +567,7 @@ function author_edit($message = '', $fullEdit = false)
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $langList = $txpLang->languageList();
     $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '".doSlash($name)."'");
-    $authorLang = in_array($authorLang, $txpLang->installed()) ? $authorLang : TEXTPATTERN_DEFAULT_LANG;
+    $authorLang = in_array($authorLang, $txpLang->installed()) ? $authorLang : ($is_edit? null : TEXTPATTERN_DEFAULT_LANG);
 
     if (count($langList) > 1) {
         $langField = inputLabel(
