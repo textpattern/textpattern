@@ -21,6 +21,7 @@ Changes in 4.8.2 (upcoming)
 * Changed: When logging in, chosen login language is used as admin language.
 * Changed: Password reset/welcome/activation emails sent in author language.
 * Changed: Multi-edit only active when checkboxes are selected.
+* Fixed: Multi-edit rearmed correctly after async saves on Forms panel.
 * Fixed: Update language list when deleting/switching to prevent stale entries.
 * Fixed: Language errors when using article preview (thanks, Destry and jakob).
 * Fixed: Date/time format when switching front-end language.
