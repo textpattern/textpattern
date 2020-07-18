@@ -61,7 +61,8 @@ function list_languages($message = '')
 {
     global $txp_user, $prefs;
 
-    $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
+    $allTypes = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE;
+    $available_lang = Txp::get('\Textpattern\L10n\Lang')->available($allTypes, $allTypes);
     $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
     $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
     $represented_lang = array_merge($active_lang, $installed_lang);
