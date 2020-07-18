@@ -25,6 +25,7 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Language errors when using article preview (thanks, Destry and jakob).
 * Fixed: Date/time format when switching front-end language.
 * Fixed: Removed TRADITIONAL sql_mode for a smoother upgrade (thanks, Adi).
+* Fixed: Plugin panel uses the tempdir pref correctly.
 * Developer: New 'pre' pretext callback.
 * Developer: Plugins can alter $pretext.
 * Developer: getIfElse() function returns 'else' part of <txp:if_yield else />,
