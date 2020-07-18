@@ -598,7 +598,7 @@ function plugin_upload()
     if ($_FILES["theplugin"]["name"]) {
         $filename = $_FILES["theplugin"]["name"];
         $source = $_FILES["theplugin"]["tmp_name"];
-        $target_path = rtrim(get_pref('temp_dir', PLUGINPATH), DS).DS.$filename;
+        $target_path = rtrim(get_pref('tempdir', PLUGINPATH), DS).DS.$filename;
 
         if (move_uploaded_file($source, $target_path)) {
             extract(pathinfo($target_path));
