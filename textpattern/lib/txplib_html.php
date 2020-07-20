@@ -1460,7 +1460,6 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
-                'style'   => 'position:relative',
             )
         ),
         $argv
