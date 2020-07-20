@@ -255,7 +255,6 @@ class UploadForm extends Form
         $this->setAtts(array(
             'class'   => $className,
             'enctype' => 'multipart/form-data',
-            'style'   => 'position:relative',
         ));
 
         $this->setAction("index.php?event={$this->event}&step={$this->step}");
