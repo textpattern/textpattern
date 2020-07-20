@@ -872,9 +872,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadProgress', function (event, data) {
     $('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).show();
+    $('progress.txp-upload-progress').val(0).removeClass('ui-helper-hidden');
 }).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').hide();
+    $('progress.txp-upload-progress').addClass('ui-helper-hidden');
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',

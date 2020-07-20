@@ -263,8 +263,7 @@ class UploadForm extends Form
         $progressBar
             ->setContent('')
             ->setAtts(array(
-                'class' => 'txp-upload-progress',
-                'style' =>  'display:none',
+                'class' => 'txp-upload-progress ui-helper-hidden',
             ));
 
         // Build the form content.
