@@ -157,12 +157,10 @@ echo script_js("
         }
     })", false);
 
-    // Mandatory un-themable Textpattern core styles ?>
-<style>
-.not-ready main {
-    opacity: 0;
-}
-</style>
+    // Mandatory un-themable Textpattern core style
+    // You can allow this in CSP 'style-src' directives using the following hash:
+    // 'sha256-mK22bmuXErXwCImu0Z61NSj0db7M8udIaIzV/LjTSqY=' ?>
+<style>.not-ready main {opacity:0;}</style>
 <?php
 echo $theme->html_head();
 echo $theme->html_head_custom();
