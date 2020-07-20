@@ -195,8 +195,9 @@ function file_list($message = '', $ids = array())
         n.tag(
             $search->renderForm('file_list', $search_render_options),
             'div', array(
-                'class' => $total || $crit === '' ? 'txp-layout-4col-3span' : 'txp-layout-4col-3span ui-helper-hidden',
+                'class' => 'toggle',
                 'id'    => $event.'_control',
+                'style' => $total || $crit === '' ? false : 'display:none',
             )
         );
 
