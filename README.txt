@@ -36,9 +36,8 @@ system. Textpattern is free and open source.
 * If you are running Textpattern on an Apache web server, ensure the top-level
   .htaccess file is transferred to your site. The file is hidden by default on
   some operating systems, including macOS. FTP clients and IDEs typically have
-  an option to show these hidden files. Otherwise, you can temporarily show
-  hidden files in macOS using Terminal.app - follow these instructions:
-    https://textpattern.com/hidden-files-osx
+  an option to show these hidden files. You can show or hide hidden files in
+  macOS Finder with the Cmd + Shift + . keyboard shortcut.
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
   permissions in addition to pre-existing permissions. Refer to the system
