@@ -4307,7 +4307,7 @@ function if_section($atts, $thing = null)
 
 function if_article_section($atts, $thing = null)
 {
-    global $thisarticle;
+    global $thisarticle, $txp_sections;
 
     assert_article();
 
@@ -4315,7 +4315,7 @@ function if_article_section($atts, $thing = null)
 
     $section = $thisarticle['section'];
 
-    $x = in_list($section, $name);
+    $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
