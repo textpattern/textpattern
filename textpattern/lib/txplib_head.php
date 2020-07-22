@@ -156,12 +156,6 @@ echo script_js("
             alert('Please force-reload the page or clear your browser caches.')
         }
     })", false);
-
-    // Mandatory un-themable Textpattern core style
-    // You can allow this in CSP 'style-src' directives using the following hash:
-    // 'sha256-mK22bmuXErXwCImu0Z61NSj0db7M8udIaIzV/LjTSqY=' ?>
-<style>.not-ready main {opacity:0;}</style>
-<?php
 echo $theme->html_head();
 echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
