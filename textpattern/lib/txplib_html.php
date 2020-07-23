@@ -1551,8 +1551,13 @@ EOF;
 
 function script_js($js, $flags = '', $route = array())
 {
-    static $store = '';
+    static $store = '', $token = null;
     global $event, $step;
+
+    if ($token === null) {
+        $token = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
+        header("Content-Security-Policy: script-src 'self' 'nonce-$token'", false);
+    }
 
     $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
     $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
@@ -1571,7 +1576,7 @@ function script_js($js, $flags = '', $route = array())
                     $js .= '.v'.txp_version.$ext;
                 }
 
-                return n.tag(null, 'script', array('src' => $js));
+                return n.tag(null, 'script', array('src' => $js, 'nonce' => $token));
             }
         }
 
@@ -1589,7 +1594,7 @@ function script_js($js, $flags = '', $route = array())
         }
 
         $js = trim($js);
-        $out = $js ? n.tag(n.$js.n, 'script') : '';
+        $out = $js ? n.tag(n.$js.n, 'script', array('nonce' => $token)) : '';
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
