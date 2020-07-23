@@ -1977,7 +1977,7 @@ function noWidow($str)
  * @example
  * if (is_blacklisted('127.0.0.1'))
  * {
- *     echo "'127.0.0.1' is blocklisted.";
+ *     echo "'127.0.0.1' is on the blocklist.";
  * }
  */
 
