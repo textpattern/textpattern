@@ -18,9 +18,12 @@ Changes in 4.8.2 (upcoming)
 * Changed: Matching categories in <txp:article_custom> now performs AND. Use
   match="Category" for previous OR behaviour.
 * Changed: Category links in breadcrumb permlink mode.
+* Changed: 'searchall="0"' attribute filters by section.
 * Changed: When logging in, chosen login language is used as admin language.
-* Changed: Password reset/welcome/activation emails sent in author language.
+* Changed: Password reset/welcome/activation and comment notification emails
+  sent in author language.
 * Changed: Multi-edit only active when checkboxes are selected.
+* Changed: Comments made by logged-in authors don't go through moderation.
 * Fixed: Multi-edit rearmed correctly after async saves on Forms panel.
 * Fixed: Update language list when deleting/switching to prevent stale entries.
 * Fixed: Language errors when using article preview (thanks, Destry and jakob).
