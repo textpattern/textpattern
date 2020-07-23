@@ -4016,8 +4016,8 @@ function permlink($atts, $thing = null)
 
     $id = $atts['id'];
 
-    if (!$id) {
-        assert_article();
+    if (!$id && !assert_article()) {
+        return;
     }
 
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
