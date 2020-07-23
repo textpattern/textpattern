@@ -1975,9 +1975,9 @@ function noWidow($str)
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('127.0.0.1'))
+ * if (is_blacklisted('192.0.2.1'))
  * {
- *     echo "'127.0.0.1' is on the blocklist.";
+ *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
