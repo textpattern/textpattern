@@ -622,11 +622,6 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
         return;
     }
 
-    // Don't notify yourself of your own comments!
-    if (is_logged_in()) {
-        return;
-    }
-
     $parentid = assert_int($parentid);
     $discussid = assert_int($discussid);
     $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", 'textpattern', "ID = $parentid");
