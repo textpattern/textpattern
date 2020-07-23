@@ -273,7 +273,7 @@ function saveComment()
 
                 txp_status_header('302 Found');
 
-                if ($comments_moderate) {
+                if ($comments_moderate && !is_logged_in()) {
                     header('Location: '.$backpage.'#txpCommentInputForm');
                 } else {
                     header('Location: '.$backpage.'#c'.sprintf("%06s", $commentid));
@@ -384,7 +384,7 @@ class comment_evaluation
         $this->message = $this->status;
         $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'], time()).")";
 
-        if ($prefs['comments_moderate']) {
+        if ($prefs['comments_moderate'] && !is_logged_in()) {
             $this->status[MODERATE][] = 0.5;
         } else {
             $this->status[VISIBLE][] = 0.5;
@@ -619,6 +619,11 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $evaluator = & get_comment_evaluator();
 
     if ($comments_sendmail == 2 && $evaluator->get_result() == SPAM) {
+        return;
+    }
+
+    // Don't notify yourself of your own comments!
+    if (is_logged_in()) {
         return;
     }
 
