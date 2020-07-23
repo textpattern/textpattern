@@ -2219,7 +2219,7 @@ function comments_form($atts, $thing = null)
     if (!checkCommentsAllowed($thisid)) {
         $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
     } elseif ($blacklisted) {
-        $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
+        $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blocklisted"');
     } elseif (gps('commented') !== '') {
         $out = gTxt('comment_posted');
 
