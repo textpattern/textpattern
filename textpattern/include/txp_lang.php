@@ -256,7 +256,7 @@ function save_language()
         foreach (array('dateformat', 'archive_dateformat', 'comments_dateformat') as $dateformat) {
             $key = array_search(get_pref($dateformat), $old_formats);
 
-            if ($key !== false) {
+            if ($key !== false && $new_formats[$key] != $old_formats[$key]) {
                 set_pref($dateformat, $new_formats[$key]);
             }
         }

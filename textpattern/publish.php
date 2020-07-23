@@ -949,7 +949,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
-        $s_filter = ($searchall ? filterFrontPage('Section', 'searchable') : '');
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);

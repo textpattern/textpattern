@@ -660,7 +660,11 @@
         <item id="skin_import" title="导入主题"><![CDATA[]]></item>
         <item id="skin_name" title="主题名称"><![CDATA[]]></item>
         <item id="skin_overview" title="主题介绍"><![CDATA[]]></item>
-        <item id="skin_title" title="主题标题"><![CDATA[]]></item>
+        <item id="skin_title" title="主题标题"><![CDATA[
+<h2>主题标题</h2>
+<p>主题的描述性标题，用于识别 Textpattern 面板的主题。 </p>
+<p>标题可以包含特殊字符和空格。</p>
+        ]]></item>
         <item id="skin_version" title="主题版本"><![CDATA[
 <h2>主题版本</h2>
 <p>此主题已安装版本的版本号(可选)。</p>

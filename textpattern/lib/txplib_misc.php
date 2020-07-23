@@ -1968,16 +1968,16 @@ function noWidow($str)
 }
 
 /**
- * Checks if an IP is on a spam blacklist.
+ * Checks if an IP is on a spam blocklist.
  *
  * @param   string       $ip     The IP address
  * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('127.0.0.1'))
+ * if (is_blacklisted('192.0.2.1'))
  * {
- *     echo "'127.0.0.1' is blacklisted.";
+ *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
