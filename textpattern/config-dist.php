@@ -164,7 +164,7 @@ $txpcfg['client_flags'] = 0;
 //    "script-src-attr 'unsafe-inline';".
 //    "script-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
 //    "style-src 'self' 'unsafe-inline';".
-//    "style-src-attr 'unsafe-inline';".
+//    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
 //    "style-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
 //    "worker-src 'none'";
 //define('CONTENT_SECURITY_POLICY', $headerCsp);
