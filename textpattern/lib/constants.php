@@ -78,10 +78,10 @@ if (!defined('HELP_URL')) {
      * This constant can be overridden from the config.php.
      *
      * @example
-     * define('HELP_URL', 'https://rpc.example.com/help/');
+     * define('HELP_URL', 'https://example.com/help/');
      */
 
-    define('HELP_URL', 'https://rpc.textpattern.com/help/');
+    define('HELP_URL', 'https://textile-lang.com');
 }
 
 /**
