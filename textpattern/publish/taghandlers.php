@@ -2219,7 +2219,7 @@ function comments_form($atts, $thing = null)
     if (!checkCommentsAllowed($thisid)) {
         $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
     } elseif ($blacklisted) {
-        $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
+        $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blocklisted"');
     } elseif (gps('commented') !== '') {
         $out = gTxt('comment_posted');
 
@@ -4016,8 +4016,8 @@ function permlink($atts, $thing = null)
 
     $id = $atts['id'];
 
-    if (!$id) {
-        assert_article();
+    if (!$id && !assert_article()) {
+        return;
     }
 
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
@@ -4307,7 +4307,7 @@ function if_section($atts, $thing = null)
 
 function if_article_section($atts, $thing = null)
 {
-    global $thisarticle;
+    global $thisarticle, $txp_sections;
 
     assert_article();
 
@@ -4315,7 +4315,7 @@ function if_article_section($atts, $thing = null)
 
     $section = $thisarticle['section'];
 
-    $x = in_list($section, $name);
+    $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 

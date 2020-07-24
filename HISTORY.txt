@@ -25,13 +25,18 @@ Changes in 4.8.2 (upcoming)
 * Changed: Matching categories in <txp:article_custom> now performs AND. Use
   match="Category" for previous OR behaviour.
 * Changed: Category links in breadcrumb permlink mode.
+* Changed: 'searchall="0"' attribute filters by section.
 * Changed: When logging in, chosen login language is used as admin language.
-* Changed: Password reset/welcome/activation emails sent in author language.
+* Changed: Password reset/welcome/activation and comment notification emails
+  sent in author language.
 * Changed: Multi-edit only active when checkboxes are selected.
+* Changed: Comments made by logged-in authors don't go through moderation.
+* Fixed: Multi-edit rearmed correctly after async saves on Forms panel.
 * Fixed: Update language list when deleting/switching to prevent stale entries.
 * Fixed: Language errors when using article preview (thanks, Destry and jakob).
 * Fixed: Date/time format when switching front-end language.
 * Fixed: Removed TRADITIONAL sql_mode for a smoother upgrade (thanks, Adi).
+* Fixed: Plugin panel uses the tempdir pref correctly.
 * Developer: New 'pre' pretext callback.
 * Developer: Plugins can alter $pretext.
 * Developer: getIfElse() function returns 'else' part of <txp:if_yield else />,
@@ -1059,7 +1064,7 @@ Changes in 4.0.5 (01 Jul 2007)
 * Fix "infinite" pagination in rare edge cases.
 * Work around apache bug for file-downloads (in connection with mod_deflate).
 * Fix error messages on wrong logins for older MySQL versions.
-* Fix comment spam blacklist false positives (see FAQ for 4.0.4).
+* Fix comment spam blocklist false positives (see FAQ for 4.0.4).
 * Fix file_download-tag from showing the same URL for different downloads (see
   FAQ for 4.0.4).
 * Fix disappearing comment preferences in certain circumstances (see FAQ for

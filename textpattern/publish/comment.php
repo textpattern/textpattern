@@ -197,10 +197,10 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-    $blacklisted = is_blacklisted($ip);
+    $blocklist = is_blacklisted($ip);
 
-    if ($blacklisted) {
-        txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');
+    if ($blocklist) {
+        txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blocklist), '403');
     }
 
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
@@ -273,7 +273,7 @@ function saveComment()
 
                 txp_status_header('302 Found');
 
-                if ($comments_moderate) {
+                if ($comments_moderate && !is_logged_in()) {
                     header('Location: '.$backpage.'#txpCommentInputForm');
                 } else {
                     header('Location: '.$backpage.'#c'.sprintf("%06s", $commentid));
@@ -384,7 +384,7 @@ class comment_evaluation
         $this->message = $this->status;
         $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'], time()).")";
 
-        if ($prefs['comments_moderate']) {
+        if ($prefs['comments_moderate'] && !is_logged_in()) {
             $this->status[MODERATE][] = 0.5;
         } else {
             $this->status[VISIBLE][] = 0.5;
@@ -626,7 +626,15 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $discussid = assert_int($discussid);
     $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", 'textpattern', "ID = $parentid");
     extract($article);
-    extract(safe_row("RealName, email", 'txp_users', "name = '".doSlash($AuthorID)."'"));
+    $safeAuthor = doSlash($AuthorID);
+    extract(safe_row("RealName, email", 'txp_users', "name = '$safeAuthor'"));
+
+    // Override language strings if indicated.
+    $adminLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '$safeAuthor'");
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $installed = $txpLang->installed();
+    $adminLang = in_array($adminLang, $installed) ? $adminLang : LANG;
+    $txpLang->swapStrings($adminLang, 'common, public');
 
     $out = gTxt('salutation', array('{name}' => $RealName)).n;
     $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
@@ -651,6 +659,8 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     if (!is_valid_email($cemail)) {
         $cemail = null;
     }
+
+    $txpLang->swapStrings(null);
 
     $success = txpMail($email, $subject, $out, $cemail);
 }
