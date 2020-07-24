@@ -161,7 +161,7 @@ $txpcfg['client_flags'] = 0;
 //    "img-src data: 'self';".
 //    "media-src 'self';".
 //    "script-src 'self' 'unsafe-inline';".
-//    "script-src-attr 'unsafe-inline';".
+//    "script-src-attr 'none';".
 //    "script-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
 //    "style-src 'self' 'unsafe-inline';".
 //    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
