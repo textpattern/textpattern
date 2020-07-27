@@ -109,8 +109,8 @@ class classic_theme extends \Textpattern\Admin\Theme
             n.span(txpspecialchars($txp_user), array('class' => 'txp-username')).
             n.span('&#183;', array('role' => 'separator')).
             n.href(gTxt('logout'), 'index.php?logout=1', array(
-                'class'   => 'txp-logout',
-                'onclick' => 'return verify(\''.gTxt('are_you_sure').'\')',
+                'id' => 'txp-logout-button',
+                'class' => 'txp-logout',
             ));
 
         return join(n, $out);

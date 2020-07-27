@@ -2002,7 +2002,6 @@ jQuery.fn.txpUploadPreview = function(template) {
     return this;
 };
 
-
 /**
  * Cookie status.
  *
@@ -2578,6 +2577,10 @@ $(document).ready(function () {
         .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
 
     // Confirmation dialogs.
+    $('#txp-logout-button').on('click', function (e) {
+        return verify(textpattern.gTxt('are_you_sure'));
+    });
+
     $(document).on('click.txpVerify', 'a[data-verify]', function (e) {
         return verify($(this).data('verify'));
     });

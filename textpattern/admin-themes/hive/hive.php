@@ -113,9 +113,12 @@ class hive_theme extends \Textpattern\Admin\Theme
                     'id'         => 'lightswitch',
                     'title'      => gTxt('lightswitch'),
                     'aria-label' => gTxt('lightswitch'),
-                )), array('class' => 'txp-lightswitch'));
+                ))
+            , array('class' => 'txp-lightswitch'));
+
             $out[] = graf(
-                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
+                href(gTxt('logout'), 'index.php?logout=1', array('id' => 'txp-logout-button'))
+            , array('class' => 'txp-logout'));
         }
 
         return join(n, $out);
