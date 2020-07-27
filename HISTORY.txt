@@ -30,6 +30,7 @@ Changes in 4.8.2 (upcoming)
 * Fixed: Date/time format when switching front-end language.
 * Fixed: Removed TRADITIONAL sql_mode for a smoother upgrade (thanks, Adi).
 * Fixed: Plugin panel uses the tempdir pref correctly.
+* Fixed: Image/thumb uploaders default to image types (thanks, Adi).
 * Developer: New 'pre' pretext callback.
 * Developer: Plugins can alter $pretext.
 * Developer: getIfElse() function returns 'else' part of <txp:if_yield else />,
