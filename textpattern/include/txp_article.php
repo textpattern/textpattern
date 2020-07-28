@@ -105,10 +105,10 @@ if (!empty($event) && $event == 'article') {
     }
 
     bouncer($step, array(
-        'create'  => false,
-        'publish' => true,
-        'edit'    => false,
-        'save'    => true,
+        'create'         => false,
+        'publish'        => true,
+        'edit'           => false,
+        'save'           => true,
     ));
 
     switch ($step) {
@@ -364,7 +364,6 @@ function article_save()
 
     article_edit($msg, false, true);
 }
-
 
 /**
  * Renders article preview.
@@ -850,7 +849,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div role="region" id="supporting_content">';
 
     // 'Override form' selection.
-    $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
+    $form_pop = $allow_form_override ? form_pop($override_form, 'override-form', $rs['Section']) : '';
     $html_override = $form_pop
         ? pluggable_ui('article_ui', 'override',
             inputLabel(
@@ -1095,13 +1094,16 @@ function status_display($status = 0)
 
 function section_popup($Section, $id)
 {
-    $rs = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title ASC, name ASC");
+    global $txp_sections;
+
+    $rs = $txp_sections;
+    unset($rs['default']);
 
     if ($rs) {
         $options = array();
 
         foreach ($rs as $a) {
-            $options[$a['name']] = $a['title'];
+            $options[$a['name']] = array('title' => $a['title'], 'data-skin' => $a['skin']);
         }
 
         return selectInput('Section', $options, $Section, false, '', $id);
@@ -1175,14 +1177,33 @@ function getDefaultSection()
 /**
  * Renders 'override form' field.
  *
- * @param  string $form The selected form
- * @param  string $id   The HTML id
+ * @param  string $form    The selected form
+ * @param  string $id      HTML id to apply to the input control
+ * @param  string $section The section that is currently in use
  * @return string HTML &lt;select&gt; input
  */
 
-function form_pop($form, $id)
+function form_pop($form, $id, $section)
 {
-    $rs = safe_column("name", 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
+    global $txp_sections;
+
+    $skinforms = array();
+    $rs = safe_rows('skin, name', 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
+
+    foreach ($txp_sections as $name => $row) {
+        $skin = $row['skin'];
+
+        if (!isset($skinforms[$skin])) {
+            $skinforms[$skin] = array_column(array_filter($rs, function($v) use ($skin) {
+                return $v['skin'] == $skin;
+            }), 'name');
+        }
+    }
+
+    script_js('var allForms = '.json_encode($skinforms, TEXTPATTERN_JSON), false);
+
+    $skin = isset($txp_sections[$section]['skin']) ? $txp_sections[$section]['skin'] : false;
+    $rs = $skin && isset($skinforms[$skin]) ? array_combine($skinforms[$skin], $skinforms[$skin]) : false;
 
     if ($rs) {
         return selectInput('override_form', $rs, $form, true, '', $id);

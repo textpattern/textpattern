@@ -253,8 +253,8 @@ function doDiagnostics()
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
     }
 
-    if (!@is_writable(txpath.DS.'plugins')) {
-        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => txpath.DS.'plugins');
+    if (!@is_writable(PLUGINPATH)) {
+        $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => PLUGINPATH);
     }
 
     if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {
@@ -769,7 +769,17 @@ function doDiagnostics()
 
 function checkUpdates()
 {
-    $response = @json_decode(file_get_contents('https://textpattern.com/version.json'), true);
+    $endpoint = 'https://textpattern.com/version.json';
+
+    if (function_exists('curl_version')) {
+        $ch = curl_init($endpoint);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $contents = curl_exec($ch);
+    } else {
+        $contents = file_get_contents($endpoint);
+    }
+
+    $response = @json_decode($contents, true);
     $release = @$response['textpattern-version']['release'];
     $prerelease = @$response['textpattern-version']['prerelease'];
     $version = get_pref('version');

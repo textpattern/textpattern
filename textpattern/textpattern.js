@@ -107,13 +107,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             opt = $.extend(form.opt, opt);
         } else {
             opt = $.extend(defaults, opt);
-            form.boxes = $this.find(opt.checkbox);
             form.editMethod = $this.find(opt.actions);
             form.lastCheck = null;
             form.opt = opt;
             form.selectAll = $this.find(opt.selectAll);
             form.button = $this.find(opt.submitButton);
         }
+
+        form.boxes = $this.find(opt.checkbox);
 
         /**
          * Registers a multi-edit option.
@@ -187,7 +188,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 'checked': true
             }, options);
 
-            var obj = $this.find(opt.checkbox);
+            var obj = form.boxes;//$this.find(opt.checkbox);
 
             if (settings.value !== null) {
                 obj = obj.filter(function () {
@@ -871,9 +872,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadProgress', function (event, data) {
     $('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).show();
+    $('progress.txp-upload-progress').val(0).removeClass('ui-helper-hidden');
 }).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').hide();
+    $('progress.txp-upload-progress').addClass('ui-helper-hidden');
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -2060,6 +2061,29 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    textpattern.Relay.register('article.section_changed',
+        function (event, data) {
+            var $overrideForm = $('#override-form');
+            var override_sel = $overrideForm.val();
+
+            $overrideForm.empty().append('<option></option>');
+
+            $.each(data.data, function(key, item) {
+                var $option = $('<option />');
+                $option.text(item).attr('dir', 'auto').prop('selected', item == override_sel);
+                $overrideForm.append($option);
+            });
+        }
+    );
+
+    $('#txp-write-sort-group').on('change', '#section',
+        function () {
+            textpattern.Relay.callback('article.section_changed', {
+                data: allForms[$(this).find(':selected').data('skin')]
+            });
+        }
+    ).change();
+
     var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
 
     $('#article_form').on('change', status, function () {
@@ -2312,6 +2336,7 @@ textpattern.Route.add('form', function () {
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function () {
+        $('#allforms_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected});
         $('#allforms_form_sections').restorePanes();
     });
 });
@@ -2508,7 +2533,8 @@ textpattern.Route.add('plugin.plugin_help', function ()
             $(anchor).contents().unwrap();
         });
 
-        var tabTitle = $tabHead.html();
+        // Grab the heading, strip out markup, then sanitize.
+        var tabTitle = $("<div>").html($tabHead.html()).text();
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 

@@ -72,6 +72,8 @@ $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
 
+isset($pretext) or $pretext = array();
+
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
 
@@ -192,12 +194,9 @@ if ($use_plugins) {
     load_plugins(false, 5);
 }
 
-// This step deprecated as of 1.0 - really only useful with old-style section
-// placeholders, which passed $s='section_name'.
-$s = (empty($s)) ? '' : $s;
-
-isset($pretext) or $pretext = preText($s, null);
-$pretext += array('secondpass' => 0, '_txp_atts' => false, 's' => $s);
+// Request URI rewrite, anyone?
+callback_event('pretext', '', 1);
+$pretext = preText($pretext, null) + array('secondpass' => 0, '_txp_atts' => false);
 
 // Send 304 Not Modified if appropriate.
 
@@ -206,7 +205,7 @@ if (empty($pretext['feed'])) {
 }
 
 if (txpinterface === 'css') {
-    output_css($pretext['s'], gps('n'), gps('t'));
+    output_css(gps('s'), gps('n'), gps('t'));
 
     exit;
 }
@@ -235,7 +234,7 @@ if ($use_plugins) {
 }
 
 callback_event('pretext');
-$pretext = preText($s, $prefs) + $pretext;
+$pretext = preText($pretext, $prefs);
 
 if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== 'file_download') {
     doArticle(array('expired' => 1, 'status' => true, 'time' => 'any'), null, false);
@@ -286,7 +285,7 @@ if (gps('parentid')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download') {
+if ($s == 'file_download') {
     empty($filename) or output_file_download($filename);
     exit(0);
 }
@@ -296,15 +295,12 @@ log_hit($status);
 
 // -------------------------------------------------------------
 
-function preText($s, $prefs = null)
+function preText($store, $prefs = null)
 {
-    global $pretext, $thisarticle, $txp_sections;
+    global $thisarticle, $txp_sections;
     static $url = array(), $out = null;
 
-    if (!isset($out)) {
-        // Set messy variables.
-        $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
-
+    if (empty($url)) {
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
@@ -334,16 +330,21 @@ function preText($s, $prefs = null)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
+    }
 
-        $out['skin'] = $out['page'] = $out['css'] = '';
+    if (is_array($store)) {
+        $out = $store + $out;
     }
 
     if (!isset($prefs)) {
         return $out;
     }
 
-    empty($pretext) or $out = $pretext + $out;
     extract($prefs);
+
+    // Set messy variables.
+    $out += makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+    $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
     $title = null;
@@ -359,6 +360,9 @@ function preText($s, $prefs = null)
         extract($url);
 
         if (strlen($u1)) {
+            $n = $out[0];
+            $un = $out[$n];
+
             switch ($u1) {
                 case 'atom':
                     $out['feed'] = 'atom';
@@ -371,20 +375,22 @@ function preText($s, $prefs = null)
                 // urldecode(strtolower(urlencode())) looks ugly but is the
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
+                case 'section':
                 case urldecode(strtolower(urlencode(gTxt('section')))):
                     $out['s'] = $u2;
                     break;
 
+                case 'category':
                 case urldecode(strtolower(urlencode(gTxt('category')))):
-                    if ($u3) {
-                        $out['context'] = validContext($u2);
-                        $out['c'] = $u3;
+                    $out['context'] = $u3 ? validContext($u2) : 'article';
+                    if ($permlink_mode == 'breadcrumb_title') {
+                        $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
                     } else {
-                        $out['context'] = 'article';
-                        $out['c'] = $u2;
+                        $out['c'] = $u3 ? $u3 : $u2;
                     }
                     break;
 
+                case 'author':
                 case urldecode(strtolower(urlencode(gTxt('author')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
@@ -398,16 +404,14 @@ function preText($s, $prefs = null)
                     break;
                     // AuthorID gets resolved from Name further down.
 
-                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                 case 'file_download':
+                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
                     $out['id'] = (!empty($u2)) ? $u2 : '';
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
                     break;
 
                 default:
-                    $n = $out[0];
-                    $un = $out[$n];
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
@@ -469,7 +473,7 @@ function preText($s, $prefs = null)
                             case 'breadcrumb_title':
                                 $out['s'] = $u1;
                                 $title = $n < 2 || empty($un) ? null : $un;
-                                isset($title) || $n <= 2 or $out['c'] = ${'u'.($n-1)};
+                                isset($title) || $n <= 2 or $out['c'] = $out[$n-1];
 
                                 break;
 
@@ -932,7 +936,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
-        $s_filter = ($searchall ? filterFrontPage('Section', 'searchable') : '');
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
@@ -1209,6 +1213,7 @@ function validContext($context)
     if (empty($valid)) {
         foreach (array('article', 'image', 'file', 'link') as $type) {
             $valid[gTxt($type.'_context')] = $type;
+            $valid[$type] = $type;
         }
     }
 

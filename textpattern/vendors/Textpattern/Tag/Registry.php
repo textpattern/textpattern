@@ -135,7 +135,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             return isset($this->params[$tag]) ?
-                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
+                (string) call_user_func($this->tags[$tag], $atts, $thing, ...$this->params[$tag]) :
                 (string) call_user_func($this->tags[$tag], $atts, $thing);
         } else {
             return false;

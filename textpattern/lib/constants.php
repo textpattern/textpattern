@@ -78,10 +78,10 @@ if (!defined('HELP_URL')) {
      * This constant can be overridden from the config.php.
      *
      * @example
-     * define('HELP_URL', 'https://rpc.example.com/help/');
+     * define('HELP_URL', 'https://example.com/help/');
      */
 
-    define('HELP_URL', 'https://rpc.textpattern.com/help/');
+    define('HELP_URL', 'https://textile-lang.com');
 }
 
 /**
@@ -294,6 +294,12 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
  */
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
+
+/**
+ * Plugin storage directory.
+ */
+
+define('PLUGINPATH', txpath.DS.'plugins');
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**

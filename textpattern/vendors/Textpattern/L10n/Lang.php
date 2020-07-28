@@ -374,10 +374,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string|array $lang_code The language code to fetch, or array(lang_code, override_lang_code)
      * @param  string|array $group     Comma-separated list or array of headings from which to extract strings
+     * @param  string|array $filter    Comma-separated list or array of strings that should be returned
      * @return array
      */
 
-    public function getPack($lang_code, $group = null)
+    public function getPack($lang_code, $group = null, $filter = null)
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
@@ -400,9 +401,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         // Reindex the pack so it can be merged.
         $langpack = array();
+        $filter = is_array($filter) ? $filter : do_list_unique($filter);
 
         foreach ($entries as $translation) {
-            $langpack[$translation['name']] = $translation;
+            if (!$filter || in_array($translation['name'], $filter)) {
+                $langpack[$translation['name']] = $translation;
+            }
         }
 
         return $langpack;
@@ -419,7 +423,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      */
     function swapStrings($lang, $group = 'admin')
     {
-        if ($lang && in_array($lang, $this->installed()) && ($lang !== get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG))) {
+        if ($lang && in_array($lang, $this->installed())) {
             $this->cachedStrings = $this->getStrings();
 
             // Override the language strings in the given groups with those of the passed language.
@@ -466,6 +470,43 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         return ($this->upsertPack($langpack, $owner) === false) ? false : true;
     }
+
+
+    /**
+     * Load localisation strings from a Textpack using the given language.
+     *
+     * @param   array  $textpack    The Textpack to install
+     * @param   string $useLang     Import strings for this language
+     * @package L10n
+     */
+
+    public function loadTextpack($textpack, $useLang = null)
+    {
+        global $textarray;
+
+        $strings = array();
+        $pack = new \Textpattern\Textpack\Parser();
+        $pack->parse($textpack);
+
+        if (!isset($useLang)) {
+            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+        }
+
+        $wholePack = $pack->getStrings($useLang);
+
+        if (!$wholePack) {
+            $wholePack = $pack->getStrings(TEXTPATTERN_DEFAULT_LANG);
+        }
+
+        foreach ($wholePack as $entry) {
+            $strings[$entry['name']] = $entry['data'];
+        }
+
+        // Append lang strings on-the-fly.
+        $this->setPack($strings, true);
+        $textarray += $strings;
+    }
+
 
     /**
      * Install localisation strings from a Textpack.
@@ -567,10 +608,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * @param  string       $lang_code The language code
      * @param  array|string $events    A list of loaded events to extract
+     * @param  string|array $filter    Comma-separated list or array of strings that should be returned
      * @return array
      */
 
-    public function extract($lang_code, $events = null)
+    public function extract($lang_code, $events = null, $filter = null)
     {
         $where = array(
             "lang = '".doSlash($lang_code)."'",
@@ -588,8 +630,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = $admin_events;
         } elseif ($events === null) {
             $events = array('public', 'common');
+        } else {
+            $events = is_array($events) ? $events : do_list_unique($events);
         }
-
 
         if ($events) {
             // For the time being, load any non-core (plugin) strings on every
@@ -602,11 +645,15 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $out = array();
 
+        $filter = is_array($filter) ? $filter : do_list_unique($filter);
+
         $rs = safe_rows_start("name, data", 'txp_lang', join(' AND ', $where));
 
         if (!empty($rs)) {
             while ($a = nextRow($rs)) {
-                $out[$a['name']] = $a['data'];
+                if (!$filter || in_array($a['name'], $filter)) {
+                    $out[$a['name']] = $a['data'];
+                }
             }
         }
 

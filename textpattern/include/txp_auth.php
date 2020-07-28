@@ -99,13 +99,11 @@ function doLoginForm($message)
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
     $out = array();
 
-    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
-
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $installed = $txpLang->installed();
 
-    $lang = in_array($lang, $installed) ? $lang : $installed[0];
+    $lang = in_array($lang, $installed) ? $lang : LANG;
     $langList = $txpLang->languageList();
     $txpLang->swapStrings($lang, 'admin');
 
@@ -265,12 +263,10 @@ function doTxpValidate()
         $c_userid = '';
     }
 
-    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
-
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $installed = $txpLang->installed();
-    $lang = in_array($lang, $installed) ? $lang : $installed[0];
+    $lang = in_array($lang, $installed) ? $lang : LANG;
     $txpLang->swapStrings($lang, 'admin, common');
 
     if ($c_userid && strlen($c_hash) === 32) {
@@ -391,7 +387,7 @@ EOS
                     $uid = assert_int($tokenInfo['reference_id']);
                     $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = '$uid'");
 
-                    if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
+                    if ($row && $row['nonce'] && ($hash === Txp::get('\Textpattern\Security\Token')->constructHash($selector, $row['old_pass'], $row['nonce']).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
                                 n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);
