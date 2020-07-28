@@ -340,9 +340,9 @@
 </div>
 <p>除上述系统要求外，还需要以下PHP扩展：</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
 </ul>
 <p>网站的<code>php.ini</code> 文件，无论是全局还是局部的，都需要包含 <code>date.timezone</code> 设置。</p>
         ]]></item>
@@ -391,7 +391,7 @@
         ]]></item>
         <item id="warn_mail_unavailable" title="您的PHP安装缺少mail() 函数"><![CDATA[
 <h2>您的 PHP 安装缺少mail() 函数</h2>
-<p>PHP 的<a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a> 函数不可用。因此，Textpattern 无法发送电子邮件，某些功能将不可用。 例如，新评论的电子邮件通知将不能发送，新用户将不会收到欢迎邮件。但仍然可以添加用户。</p>
+<p>PHP 的<a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a> 函数不可用。因此，Textpattern 无法发送电子邮件，某些功能将不可用。 例如，新评论的电子邮件通知将不能发送，新用户将不会收到欢迎邮件。但仍然可以添加用户。</p>
         ]]></item>
     </group>
 

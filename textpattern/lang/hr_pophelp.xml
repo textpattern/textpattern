@@ -77,7 +77,7 @@
 <p>Pristup ažuriranju nije uspio, često se to dešava zbog zagušenja mreže ili prekida veze. Ova se situacija obično rješava u roku od sat-dva pa pokušajte ponovno kasnije.</p>
         ]]></item>
         <item id="warn_mail_unavailable" title="Tvojoj PHP instalaciji nedostaje mail () funkcija"><![CDATA[<h2>Tvojoj PHP instalaciji nedostaje mail () funkcija</h2>
-<p>PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>funkcija je onemogućena. Stoga Textpattern ne može slati elektroničku poštu, a neke funkcionalnosti neće biti dostupne. Npr. obavijesti elektroničkom poštom za nove komentare neće se slati, a novi korisnici neće primati elektroničku poštu dobrodošlice. Međutim, korisnici se i dalje mogu dodavati.</p>
+<p>PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>funkcija je onemogućena. Stoga Textpattern ne može slati elektroničku poštu, a neke funkcionalnosti neće biti dostupne. Npr. obavijesti elektroničkom poštom za nove komentare neće se slati, a novi korisnici neće primati elektroničku poštu dobrodošlice. Međutim, korisnici se i dalje mogu dodavati.</p>
 ]]></item>
     </group>
 
