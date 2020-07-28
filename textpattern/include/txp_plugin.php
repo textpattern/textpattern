@@ -639,7 +639,7 @@ function plugin_install()
     $message = array(gTxt('bad_plugin_code'), E_ERROR);
 
     $srcFile = ps('plugin-filename');
-    $source = $srcFile ? rtrim(get_pref('temp_dir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
+    $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
     $name = sanitizeForFile(ps('plugin-name'));
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
@@ -730,7 +730,7 @@ function plugin_upload($url = null)
 {
     $payload = array();
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
-    $dest = rtrim(get_pref('temp_dir', sys_get_temp_dir()), DS);
+    $dest = rtrim(get_pref('tempdir', sys_get_temp_dir()), DS);
     $ready = false;
 
     if ($url || $_FILES["theplugin"]["name"]) {

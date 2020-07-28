@@ -265,10 +265,9 @@ class Disclosure extends Tag implements UICollectionInterface
             $pane_token = md5($this->pane_id.$event.form_token().get_pref('blog_uid'));
             $heading_class = 'txp-summary'.($state ? ' expanded' : '');
             $display_state = array(
-                'class' => 'toggle',
+                'class' => $state ? 'toggle' : 'toggle ui-helper-hidden',
                 'id'    => $this->lever_id,
                 'role'  => 'group',
-                'style' => $state ? '' : 'display:none',
             );
 
             $anchor = new \Textpattern\UI\Tag('a');

@@ -156,14 +156,6 @@ echo script_js("
             alert('Please force-reload the page or clear your browser caches.')
         }
     })", false);
-
-    // Mandatory un-themable Textpattern core styles ?>
-<style>
-.not-ready main {
-    opacity: 0;
-}
-</style>
-<?php
 echo $theme->html_head();
 echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
