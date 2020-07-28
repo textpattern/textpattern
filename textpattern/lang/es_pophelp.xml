@@ -315,9 +315,9 @@
  </div>
  <p> Además de los requisitos del sistema anteriores, se requieren las siguientes extensiones de PHP: </p>
  <ul>
-     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php"> mysqli <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
-     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php"> XML <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
-     <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php"> JSON <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
+     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php"> mysqli <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
+     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php"> XML <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
+     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php"> JSON <span class="ui-icon ui-icon-extlink"> (abre un enlace externo en una nueva ventana) </span> </a></li>
  </ul>
  <p> El archivo <code> php.ini </code> del sitio, ya sea global o local, debe contener una configuración <code> date.timezone </code>configuración. </p>        ]]></item>
         <item id="setup_still_exists" title="El directorio de instalación aún existe"><![CDATA[
@@ -361,7 +361,7 @@
         ]]></item>
         <item id="warn_mail_unavailable" title="Su instalación de PHP no tiene la función mail()"><![CDATA[
 <h2> Su instalación de PHP no tiene la función mail()</h2>
-<p>La función PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> está desactivada. Por lo tanto, Textpattern no puede enviar correos electrónicos y algunas funciones no estarán disponibles. Por ejemplo, no se enviarán notificaciones por correo electrónico para nuevos comentarios, y los nuevos usuarios no recibirán un correo electrónico de bienvenida. Sin embargo, se pueden agregar usuarios.</p>        ]]></item>
+<p>La función PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> está desactivada. Por lo tanto, Textpattern no puede enviar correos electrónicos y algunas funciones no estarán disponibles. Por ejemplo, no se enviarán notificaciones por correo electrónico para nuevos comentarios, y los nuevos usuarios no recibirán un correo electrónico de bienvenida. Sin embargo, se pueden agregar usuarios.</p>        ]]></item>
     </group>
 
     <group id="file" title="Panel de archivos">
