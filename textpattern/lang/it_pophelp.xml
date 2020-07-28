@@ -480,7 +480,7 @@
         <item id="admin_side_plugins" title="Usare plugin lato-amministrazione?"><![CDATA[
 <h2>Usare plugin lato-amministrazione?</h2>
 <p>I plug-in lato-amministrazione possono cambiare il funzionamento dell’interfaccia di amministrazione. Potrebbero agire su azioni già esistenti, come modificare o pubblicare articoli, o potrebbero aggiungere nuovi pannelli per funzionalità supplementari/estese.</p>
-<p>Per saperne di più sui plugin lato-amministrazione, vedi la pagina (in inglese) <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plug-in di tutti i tipi sono elencati nel sito <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Resources</a>.</p>
+<p>Per saperne di più sui plugin lato-amministrazione, vedi la pagina (in inglese) <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> in <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Plug-in di tutti i tipi sono elencati nel sito <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins</a>.</p>
         ]]></item>
         <item id="advanced_options" title="Opzioni avanzate"><![CDATA[
 <h2>Opzioni avanzate</h2>

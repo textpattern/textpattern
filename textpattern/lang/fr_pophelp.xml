@@ -512,7 +512,7 @@
         <item id="admin_side_plugins" title="Utiliser les plugins administratifs ?"><![CDATA[
 <h2>Utiliser les plugins administratifs ?</h2>
 <p>Les plugins administratifs modifient le fonctionnement de l’interface d’administration. Ils peuvent agir sur des actions existantes, comme l’édition ou la publication des articles, ou ils peuvent ajouter de nouvelles pages avec des fonctionnalités supplémentaires/étendues.</p>
-<p>Si vous souhaitez en savoir plus à propos des plugins administratifs, veuillez consulter la page <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> de la documentation officielle <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Des plugins de toutes sortes sont disponibles sur le site <a rel="external" target="_blank" href="https://textpattern.org/">Textpattern Ressources</a>.</p>
+<p>Si vous souhaitez en savoir plus à propos des plugins administratifs, veuillez consulter la page <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern</a> de la documentation officielle <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation</a>. Des plugins de toutes sortes sont disponibles sur le site <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins</a>.</p>
         ]]></item>
         <item id="advanced_options" title="Configuration avancée"><![CDATA[
 <h2>Configuration avancée</h2>

@@ -312,7 +312,7 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    global $event;
+    global $event, $plugin, $txp_current_plugin;
     static $txpLang = null;
 
     if ($txpLang === null) {
@@ -323,6 +323,12 @@ function gTxt($var, $atts = array(), $escape = 'html')
         if (empty($loaded) || !in_array($event, $loaded)) {
             load_lang($lang, $event);
         }
+    }
+
+    // Hackish
+    if (isset($txp_current_plugin) && isset($plugin['textpack'])) {
+        $txpLang->loadTextpack($plugin['textpack']);
+        unset($plugin['textpack']);
     }
 
     return $txpLang->txt($var, $atts, $escape);
@@ -1014,7 +1020,7 @@ function getmicrotime()
 
 function load_plugin($name, $force = false)
 {
-    global $plugins, $plugins_ver, $prefs, $txp_current_plugin, $textarray;
+    global $plugin, $plugins, $plugins_ver, $prefs, $txp_current_plugin, $textarray;
 
     if (is_array($plugins) && in_array($name, $plugins)) {
         return true;
@@ -1030,6 +1036,7 @@ function load_plugin($name, $force = false)
 
         if (is_file($dir.$name.'.php')) {
             $plugins[] = $name;
+            $old_plugin = isset($plugin) ? $plugin : null;
             set_error_handler("pluginErrorHandler");
 
             if (isset($txp_current_plugin)) {
@@ -1039,29 +1046,14 @@ function load_plugin($name, $force = false)
             $txp_current_plugin = $name;
             include $dir.$name.'.php';
             $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
-            $plugins_ver[$name] = @$plugin['version'];
+            $plugins_ver[$name] = isset($plugin['version']) ? $plugin['version'] : 0;
 
             if (isset($plugin['textpack'])) {
-                $strings = array();
-                $pack = Txp::get('\Textpattern\Textpack\Parser');
-                $pack->parse($plugin['textpack']);
-                $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
-                $wholePack = $pack->getStrings($useLang);
-
-                if (!$wholePack) {
-                    $wholePack = $pack->getStrings(TEXTPATTERN_DEFAULT_LANG);
-                }
-
-                foreach ($wholePack as $entry) {
-                    $strings[$entry['name']] = $entry['data'];
-                }
-
-                // Append lang strings on-the-fly.
-                Txp::get('\Textpattern\L10n\Lang')->setPack($strings, true);
-                $textarray += $strings;
+                Txp::get('\Textpattern\L10n\Lang')->loadTextpack($plugin['textpack']);
             }
 
             restore_error_handler();
+            $plugin = $old_plugin;
 
             return true;
         }
@@ -1976,16 +1968,16 @@ function noWidow($str)
 }
 
 /**
- * Checks if an IP is on a spam blacklist.
+ * Checks if an IP is on a spam blocklist.
  *
  * @param   string       $ip     The IP address
  * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('127.0.0.1'))
+ * if (is_blacklisted('192.0.2.1'))
  * {
- *     echo "'127.0.0.1' is blacklisted.";
+ *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
@@ -3066,28 +3058,25 @@ function txp_tokenize($thing, $hash = null, $transform = null)
  * @param   string  $thing     Statement in Textpattern tag markup presentation
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string             Either if or else statement
- * @deprecated in 4.6.0
+ * @since   4.8.2
  * @see     parse
  * @package TagParser
  * @example
- * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
+ * echo getIfElse('true &lt;txp:else /&gt; false', 1 === 1);
  */
 
-function EvalElse($thing, $condition)
+function getIfElse($thing, $condition = true)
 {
-    global $txp_parsed, $txp_else, $txp_atts;
+    global $txp_parsed, $txp_else;
 
-    if (!empty($txp_atts['not'])) {
-        $condition = empty($condition);
-        unset($txp_atts['not']);
+    if (!$thing || strpos($thing, ':else') === false) {
+        return $condition ? $thing : null;
     }
 
-    if (empty($condition)) {
-        $txp_atts = null;
-    }
+    $hash = sha1($thing);
 
-    if (!$thing || strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
-        return $condition ? $thing : '';
+    if (!isset($txp_parsed[$hash])) {
+        txp_tokenize($thing, $hash);
     }
 
     $tag = $txp_parsed[$hash];
@@ -3099,7 +3088,7 @@ function EvalElse($thing, $condition)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return '';
+        return null;
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
@@ -3107,6 +3096,35 @@ function EvalElse($thing, $condition)
     }
 
     return $out;
+}
+
+/**
+ * Extracts a statement from a if/else condition to parse.
+ *
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string             Either if or else statement
+ * @deprecated in 4.6.0
+ * @see     parse
+ * @package TagParser
+ * @example
+ * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
+ */
+
+function EvalElse($thing, $condition)
+{
+    global $txp_atts;
+
+    if (!empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
+    }
+
+    if (empty($condition)) {
+        $txp_atts = null;
+    }
+
+    return getIfElse($thing, $condition);
 }
 
 /**
@@ -4321,14 +4339,14 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
         return $atts ? ' '.trim($atts) : '';
     }
 
-    $list = array();
+    $list = '';
     $txp = $flags & TEXTPATTERN_STRIP_TXP;
 
     foreach ($atts as $name => $value) {
         if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false) || ($txp && $value === null)) {
             continue;
         } elseif ($value === null || $txp && $value === true) {
-            $list[] = $name;
+            $list .= ' '.$name;
             continue;
         } elseif (is_array($value)) {
             if ($name == 'href' || $name == 'src') {
@@ -4343,11 +4361,11 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
         }
 
         if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
-            $list[] = $name.'="'.$value.'"';
+            $list .= ' '.$name.'="'.$value.'"';
         }
     }
 
-    return $list ? ' '.join(' ', $list) : '';
+    return $list;
 }
 
 /**
@@ -4454,9 +4472,12 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c'])) {
-            $catpath = array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name');
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
+            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $catpath = $url_mode == 'breadcrumb_title' ?
+                array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
+                array($keys['c']);
+            $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
         }
 
