@@ -448,7 +448,7 @@ function step_getTxpLogin()
         inputLabel(
             'setup_site_url',
             fInput('text', 'siteurl', @$cfg['site']['public_url'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            'please_enter_url', 'setup_site_url', array('class' => 'txp-form-field')
+            'please_enter_url', 'siteurl', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_admin_theme',
