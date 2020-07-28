@@ -99,8 +99,6 @@ function doLoginForm($message)
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
     $out = array();
 
-    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
-
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $installed = $txpLang->installed();
@@ -166,7 +164,6 @@ function doLoginForm($message)
                     tag(gTxt('language'), 'label', array('for' => 'lang')).
                     $txpLang->languageSelect('lang', $lang)
                     , array('class' => 'login-language txp-reduced-ui')
-
                 ) : hInput('lang', $lang)).
             inputLabel(
                 'login_name',
@@ -265,8 +262,6 @@ function doTxpValidate()
         $c_hash   = '';
         $c_userid = '';
     }
-
-    gTxt('nothing'); // @todo: Remove hack to get the initial strings loaded.
 
     // Override language strings if indicated.
     $txpLang = Txp::get('\Textpattern\L10n\Lang');

@@ -518,9 +518,8 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
     }
 
     $out[] = n.tag(join($nav).n, 'nav', array(
-        'class'      => 'prev-next',
+        'class'      => ($numPages > 1 ? 'prev-next' : 'prev-next ui-helper-hidden'),
         'aria-label' => gTxt('page_nav'),
-        'style'      => ($numPages > 1 ? false : 'display:none'),
     ));
 
     return join('', $out);
@@ -548,10 +547,9 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($anchor_id && $pane) {
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'class' => 'toggle',
+            'class' => $visible ? 'toggle' : 'toggle ui-helper-hidden',
             'id'    => $anchor_id,
             'role'  => 'group',
-            'style' => $visible ? '' : 'display:none',
         );
 
         $label = href($label, '#'.$anchor_id, array(
@@ -920,18 +918,25 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
 function tag($content, $tag, $atts = '')
 {
+    static $tags = array();
+
     if (empty($tag) || $content === '') {
         return $content;
     }
 
-    $atts = $atts ? join_atts($atts) : '';
+    if (!isset($tags[$tag])) {
+        $tags[$tag] = preg_match('/^\w[\w\-\.\:]*$/', $tag) ? 1 :
+            (strpos($tag, '<+>') === false ? 2 : 3);
+    }
 
-    if (preg_match('/^\w[\w\-\.\:]*$/', $tag)) {
-        return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
-    } elseif (strpos($tag, '<+>') === false) {
-        return $tag.$content.$tag;
-    } else {
-        return str_replace('<+>', $content, $tag);
+    switch ($tags[$tag]) {
+        case 1:
+            $atts = $atts ? join_atts($atts) : '';
+            return '<'.$tag.$atts.'>'.$content.'</'.$tag.'>';
+        case 2:
+            return $tag.$content.$tag;
+        default:
+            return str_replace('<+>', $content, $tag);
     }
 }
 
@@ -1443,17 +1448,13 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 $wraptag_class,
                 $wraptag_val
             ).
-            tag(null, 'progress', array(
-                'class' => 'txp-upload-progress',
-                'style' =>  'display:none',
-            )),
+            tag(null, 'progress', array('class' => 'txp-upload-progress ui-helper-hidden')),
             'form',
             array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
-                'style'   => 'position:relative',
             )
         ),
         $argv
@@ -1821,7 +1822,33 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
 
         $content = join($break, $list);
     } elseif ($break === true) {
-        $content = join(n, $list);
+        switch (strtolower($wraptag)) {
+            case 'ul':
+            case 'ol':
+                $break = 'li';
+            break;
+            case 'p':
+            case 'blockquote':
+                $break = 'br';
+            break;
+            case 'div':
+            case 'article':
+                $break = 'p';
+            break;
+            case 'table':
+            case 'tbody':
+            case 'thead':
+            case 'tfoot':
+                $break = 'tr';
+            break;
+            case 'tr':
+                $break = 'td';
+            break;
+            default:
+                $break = n;
+        }
+
+        $content = $break === n ? join(n, $list) : "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }

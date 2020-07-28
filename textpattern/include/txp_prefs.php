@@ -561,45 +561,8 @@ function weeks($name, $val)
 
 function dateformats($name, $val)
 {
-    $dayname = '%A';
-    $dayshort = '%a';
-    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
-    $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
-    $monthname = '%B';
-    $monthshort = '%b';
-    $monthnum = '%m';
-    $year = '%Y';
-    $yearshort = '%y';
-    $time24 = '%H:%M';
-    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
-    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
-
-    $formats = array(
-        "$monthshort $daynumord, $time12",
-        "$daynum.$monthnum.$yearshort",
-        "$daynumord $monthname, $time12",
-        "$yearshort.$monthnum.$daynumlead, $time12",
-        "$dayshort $monthshort $daynumord, $time12",
-        "$dayname $monthname $daynumord, $year",
-        "$monthshort $daynumord",
-        "$daynumord $monthname $yearshort",
-        "$daynumord $monthnum $year - $time24",
-        "$daynumord $monthname $year",
-        "$daynumord $monthname $year, $time24",
-        "$daynumord. $monthname $year",
-        "$daynumord. $monthname $year, $time24",
-        "$year-$monthnum-$daynumlead",
-        "$year-$daynumlead-$monthnum",
-        "$date $time12",
-        "$date",
-        "$time24",
-        "$time12",
-        "$year-$monthnum-$daynumlead $time24",
-    );
-
+    $formats = txp_dateformats();
     $ts = time();
-
     $vals = array();
 
     foreach ($formats as $f) {

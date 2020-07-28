@@ -255,7 +255,6 @@ class UploadForm extends Form
         $this->setAtts(array(
             'class'   => $className,
             'enctype' => 'multipart/form-data',
-            'style'   => 'position:relative',
         ));
 
         $this->setAction("index.php?event={$this->event}&step={$this->step}");
@@ -263,10 +262,7 @@ class UploadForm extends Form
         $progressBar = new \Textpattern\UI\Tag('progress');
         $progressBar
             ->setContent('')
-            ->setAtts(array(
-                'class' => 'txp-upload-progress',
-                'style' =>  'display:none',
-            ));
+            ->setAtts(array('class' => 'txp-upload-progress ui-helper-hidden'));
 
         // Build the form content.
         $input = new \Textpattern\UI\Input($name, 'file');

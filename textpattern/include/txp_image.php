@@ -625,7 +625,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' ,'image/*'),
                 $rs)
             : ''
         );
@@ -646,7 +646,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
-            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload'),
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' ,'image/*'),
             $rs)
             : ''
         );

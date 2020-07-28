@@ -148,7 +148,7 @@ function link_list($message = '')
             ),
             'name' => array(
                 'column' => 'txp_link.linkname',
-                'label'  => gTxt('name'),
+                'label'  => gTxt('title'),
             ),
             'url' => array(
                 'column' => 'txp_link.url',
@@ -259,7 +259,7 @@ function link_list($message = '')
                             (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                     ).
                     column_head(
-                        'name', 'name', 'link', true, $switch_dir, $crit, $search_method,
+                        'title', 'name', 'link', true, $switch_dir, $crit, $search_method,
                             (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                     ).
                     column_head(

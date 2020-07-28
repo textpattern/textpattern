@@ -344,6 +344,9 @@ function preText($store, $prefs = null)
         extract($url);
 
         if (strlen($u1)) {
+            $n = $out[0];
+            $un = $out[$n];
+
             switch ($u1) {
                 case 'atom':
                     $out['feed'] = 'atom';
@@ -356,20 +359,22 @@ function preText($store, $prefs = null)
                 // urldecode(strtolower(urlencode())) looks ugly but is the
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
+                case 'section':
                 case urldecode(strtolower(urlencode(gTxt('section')))):
                     $out['s'] = $u2;
                     break;
 
+                case 'category':
                 case urldecode(strtolower(urlencode(gTxt('category')))):
-                    if ($u3) {
-                        $out['context'] = validContext($u2);
-                        $out['c'] = $u3;
+                    $out['context'] = $u3 ? validContext($u2) : 'article';
+                    if ($permlink_mode == 'breadcrumb_title') {
+                        $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
                     } else {
-                        $out['context'] = 'article';
-                        $out['c'] = $u2;
+                        $out['c'] = $u3 ? $u3 : $u2;
                     }
                     break;
 
+                case 'author':
                 case urldecode(strtolower(urlencode(gTxt('author')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
@@ -383,16 +388,14 @@ function preText($store, $prefs = null)
                     break;
                     // AuthorID gets resolved from Name further down.
 
-                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                 case 'file_download':
+                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
                     $out['id'] = (!empty($u2)) ? $u2 : '';
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
                     break;
 
                 default:
-                    $n = $out[0];
-                    $un = $out[$n];
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
                         return $v && $v !== $permlink_mode;
@@ -454,7 +457,7 @@ function preText($store, $prefs = null)
                             case 'breadcrumb_title':
                                 $out['s'] = $u1;
                                 $title = $n < 2 || empty($un) ? null : $un;
-                                isset($title) || $n <= 2 or $out['c'] = ${'u'.($n-1)};
+                                isset($title) || $n <= 2 or $out['c'] = $out[$n-1];
 
                                 break;
 
@@ -946,7 +949,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Give control to search, if necessary.
     if ($q && !$issticky) {
-        $s_filter = ($searchall ? filterFrontPage('Section', 'searchable') : '');
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
@@ -1227,6 +1230,7 @@ function validContext($context)
     if (empty($valid)) {
         foreach (array('article', 'image', 'file', 'link') as $type) {
             $valid[gTxt($type.'_context')] = $type;
+            $valid[$type] = $type;
         }
     }
 
