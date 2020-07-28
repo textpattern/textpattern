@@ -149,7 +149,7 @@
         <item id="update_server_inaccessible" title="El servidor d'actualitzacions no és accesible"><![CDATA[<h2>El servidor d'actualitzacions no és accesible</h2>
 <p>Ha fallat la comprovació d'actualitzacions, potser per congestió de la xarxa o perquè s'ha tallat la connexió. Aquesta situació generalment es soluciona per si sola en una hora o dues. Prova-ho un altre cop més endavant.</p>]]></item>
         <item id="warn_mail_unavailable" title="A la teva instal·lació de PHP li manca la funció mail()"><![CDATA[<h2>A la teva instal·lació de PHP li manca la funció mail()</h2>
-<p>La funció <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> del PHP està desactivada. Per tant, Textpattern no pot enviar correus i algunes funcionalitats no estaran disponibles. Per exemple, no s'enviaran notificacions pels nous comentaris, i els nous usuaris no rebran un missatge de benvinguda. Tanmateix, es podran afegir nous usuaris.</p>]]></item>
+<p>La funció <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> del PHP està desactivada. Per tant, Textpattern no pot enviar correus i algunes funcionalitats no estaran disponibles. Per exemple, no s'enviaran notificacions pels nous comentaris, i els nous usuaris no rebran un missatge de benvinguda. Tanmateix, es podran afegir nous usuaris.</p>]]></item>
     </group>
 
     <group id="file" title="">
