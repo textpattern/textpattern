@@ -54,12 +54,9 @@ class Partial
             $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
         } elseif ($name === '') {
             $end = empty($yield) ? null : end($yield);
-            $key = empty($else) ? 1 : 2;
 
-            if (isset($end[$key])) {
-                $inner = $end[$key];
-            } elseif (!empty($end)) {
-                $inner = $yield[key($yield)][$key] = parse($end[0], $key == 1);
+            if (isset($end)) {
+                $inner = parse($end, empty($else));
             }
         } elseif (!empty($txp_yield[$name])) {
             list($inner) = end($txp_yield[$name]);
@@ -99,12 +96,9 @@ class Partial
             $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
         } elseif ($name === '') {
             $end = empty($yield) ? null : end($yield);
-            $key = empty($else) ? 1 : 2;
 
-            if (isset($end[$key])) {
-                $inner = $end[$key];
-            } elseif (!empty($end)) {
-                $inner = $yield[key($yield)][$key] = parse($end[0], $key == 1);
+            if (isset($end)) {
+                $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
             }
         } elseif (empty($txp_yield[$name])) {
             $inner = null;
