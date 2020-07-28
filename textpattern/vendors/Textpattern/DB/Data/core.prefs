@@ -554,7 +554,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.1",
+        "val": "4.8.2",
         "type": "2",
         "event": "publish",
         "html": "text_input",
