@@ -94,7 +94,7 @@
         ]]></item>
         <item id="warn_mail_unavailable" title="De mail() functie ontbreekt in uw PHP-installatie"><![CDATA[
 <h2>De mail() functie ontbreekt in uw PHP-installatie</h2>
-<p>PHP's<a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> functie is uitgeschakeld. Daarom kan Textpattern geen e-mails verzenden en zullen sommige functies niet beschikbaar zijn. E-mail-notificaties voor nieuwe reacties zullen bijvoorbeeld niet worden verzonden en nieuwe gebruikers zullen geen welkomstmail ontvangen. Gebruikers kunnen echter nog steeds worden toegevoegd.</p>
+<p>PHP's<a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> functie is uitgeschakeld. Daarom kan Textpattern geen e-mails verzenden en zullen sommige functies niet beschikbaar zijn. E-mail-notificaties voor nieuwe reacties zullen bijvoorbeeld niet worden verzonden en nieuwe gebruikers zullen geen welkomstmail ontvangen. Gebruikers kunnen echter nog steeds worden toegevoegd.</p>
         ]]></item>
     </group>
 

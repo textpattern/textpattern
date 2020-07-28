@@ -183,7 +183,7 @@ function doLike($in)
  * @param   string $encoding Defines encoding used in conversion. The default is UTF-8
  * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
  * @return  string
- * @see     https://secure.php.net/manual/en/function.htmlspecialchars.php
+ * @see     https://www.php.net/manual/en/function.htmlspecialchars.php
  * @since   4.5.0
  * @package Filter
  */
