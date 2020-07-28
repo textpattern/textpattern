@@ -86,7 +86,7 @@
 <ol>
     <li>ID – identifikační číslo obrázku v systému Textpattern (např. <code>12</code>)</li>
     <li>relativní URL cestu k obrázku (např. <code>/images/my_pic.jpg</code>)</li>
-    <li>absolutní URL adresu obrázku (např. <code>http://example.com/path/to/images/my_pic.jpg</code>)</li>
+    <li>absolutní URL adresu obrázku (např. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
 <p>Obrázek bude v článku zobrazen pomocí tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> ve formě pro článek, pokud tento tag forma článku obsahuje. Výstupem je HTML tag  <code>&lt;img&gt;</code> pro vybraný obrázek.</p>        ]]></item>
         <item id="body" title="Tělo článku"><![CDATA[<h2>Tělo článku</h2>
@@ -179,25 +179,25 @@
     <group id="diag" title="Diagnostika">
         <item id="clean_url_data_failed" title="Test hezkých URL selhal"><![CDATA[
 <h2>Test hezkých URL adres selhal</h2>
-<p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
+<p>Zdá se, že hezké URL adresy (<code>https://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
 <p>Pokud čisté URL <em>nefungují</em>, může to být způsobeno:</p>
 <ul>
     <li>nastavení ‘webová adresa’ není správné</li>
     <li>server pro zprovoznění hezkých URL adres vyžaduje nějaké změny v souboru <code>.htaccess</code>.</li>
     <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
 </ul>
-<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
+<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>https://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>
 <p>Pozn.: toto varování může vyvolat použití pluginu k uvedení serveru do “režimu údržby”.</p>        ]]></item>
         <item id="clean_url_test_failed" title="Test hezkých URL adres selhal"><![CDATA[
 <h2>Test hezkých URL adres selhal</h2>
-<p>Zdá se, že hezké URL adresy (<code>http://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
+<p>Zdá se, že hezké URL adresy (<code>https://example.com/rubrika/clanek</code>) v současné době nefungují, nebo server nepodporuje zkušební proceduru jejich funkčnosti. Pokud hezké URL na tvých stránkách fungují, můžeš tuto zprávu ignorovat.</p>
 <p>Pokud čisté URL <em>nefungují</em>, může to být způsobeno:</p>
 <ul>
     <li>nastavení ‘webová adresa’ není správné</li>
     <li>server pro zprovoznění hezkých URL adres vyžaduje nějaké změny v souboru <code>.htaccess</code>.</li>
     <li>server hezké URL adresy (clean URL) vůbec nepodporuje.</li>
 </ul>
-<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>http://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>        ]]></item>
+<p>Test čistých URL se pokusí načíst stránku z adresy uvedené v nastavení serveru <em>Webová adresa (doména)</em> s cílem ověřit, zda všechny parametry ‘hezkých’ URL fungují správně. V případě, že webová adresa je zadána chybně, nebo byla nahrazena statickou stránkou apod., test selže. Dokud nebude problém vyřešen, budeš muset na svých stránkách používat ošklivé adresy URL (<code>https://example.com?s=section&amp;id=4</code>). Ujisti se, že “Podoba stálých odkazů” v nastavení serveru je nastavena odpovídajícím způsobem.</p>        ]]></item>
         <item id="diag_clear_private" title="Skrýt soukromé informace"><![CDATA[
 <h2>Skrýt soukromé informace</h2>
 <p>Pokud mají být diagnostické informace sdíleny ve veřejně viditelném formátu, například ve fóru podpory Textpattern, vynecháním citlivých informací o serveru se snižuje bezpečnostní riziko.</p>        ]]></item>
@@ -306,9 +306,9 @@
 </div>
 <p>Kromě výše uvedených požadavků na systém jsou požadovány následující rozšíření PHP:</p>
 <ul>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
-    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
 <p>Soubor <code>php.ini</code> ať už globální, nebo lokální, musí obsahovat nastavení <code>date.timezone</code>.</p>        ]]></item>
         <item id="setup_still_exists" title="Složka setup stále existuje"><![CDATA[
@@ -351,7 +351,7 @@
         ]]></item>
         <item id="warn_mail_unavailable" title="V instalaci PHP chybí funkce mail()"><![CDATA[
 <h2>V instalaci PHP chybí funkce mail()</h2>
-<p>Funkce PHP <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>
+<p>Funkce PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>
     </group>
 
     <group id="file" title="Panel Soubory">
@@ -678,14 +678,14 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Když je článek publikován, jeho URL adresa je generována z názvu článku, pokud není ručně zadána v políčku <em>Název do odkazů</em>.</p>
 <p>Vezměme si následující příklad názvu článku: <em> Jak Trautenberk chtěl Krakonošovo koření</em></p>
 <p>Pokud je nastaven formát adresy URL<br> ‘<strong>s pomlčkami (nazev-clanku)</strong>’, URL adresa článku bude:</p>
-<pre><code>http://example.com/jak-trautenberk-chtel-krakonosovo-koreni</code></pre>
+<pre><code>https://example.com/jak-trautenberk-chtel-krakonosovo-koreni</code></pre>
 <p>Pokud je nastaven formát adresy URL jako ‘<strong>velká a malá písmena (NazevClanku)</strong>’, URL adresa článku bude:</p>
-<pre><code>http://example.com/JakTrautenberkchtelKrakonosovokoreni</code></pre>        ]]></item>
+<pre><code>https://example.com/JakTrautenberkchtelKrakonosovokoreni</code></pre>        ]]></item>
         <item id="permlink_mode" title="Podoba stálých odkazů"><![CDATA[
 <h2>Podoba stálých odkazů</h2>
 <p>Toto nastavení určuje, jak budou vypadat stálé odkazy (URL adresy) na články, generované tagem <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>Režim <strong>‘?=ošklivé’</strong> je nejvíce kompatibilní způsob, který bude fungovat bez jakýchkoli zásahů, je ale méně příznivý pokud jde o čitelnost a optimalizaci pro vyhledávače (SEO). V tomto režimu budou URL adresy článků na tvém webu vypadat takto:</p>
-<pre><code>http://example.com/index.php?id=123</code></pre>
+<pre><code>https://example.com/index.php?id=123</code></pre>
 <p>Všechny ostatní režimy vyžadují, aby byl na serveru nainstalován a povolen modul Apache <code>mod_rewrite</code>. Pokud server <code>mod_rewrite</code> nepodporuje, obrať se na poskytovatele webhostingu, nebo používej výše uvedený režim ‘?=ošklivé’.</p>        ]]></item>
         <item id="plugin_cache_dir" title="Adresář pro cache pluginů"><![CDATA[
 <h2>Adresář pro cache pluginů</h2>
@@ -756,7 +756,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Výchozí adresář je <code>themes</code>.</p>        ]]></item>
         <item id="smtp_from" title="SMTP adresa odesilatele"><![CDATA[
 <h2>SMTP adresa odesilatele</h2>
-<p>Toto pole by mělo zůstat prázdné, pokud se nevyskytnou problémy s odesíláním pošty systémem Textpattern (nejsou-li emaily odesílány vůbec). Pokud se tento problém objeví, můžeš zde zadat libovolnou platnou emailovou adresu, nejlépe ale takovou, která má stejný název domény jako webové stránky, kde jsi nainstaloval Textpattern (tzn., pokud jsou tvoje webové stránky <code>http://example.com</code>, měl bys použít <code>you@example.com</code>).</p>
+<p>Toto pole by mělo zůstat prázdné, pokud se nevyskytnou problémy s odesíláním pošty systémem Textpattern (nejsou-li emaily odesílány vůbec). Pokud se tento problém objeví, můžeš zde zadat libovolnou platnou emailovou adresu, nejlépe ale takovou, která má stejný název domény jako webové stránky, kde jsi nainstaloval Textpattern (tzn., pokud jsou tvoje webové stránky <code>https://example.com</code>, měl bys použít <code>you@example.com</code>).</p>
 <p>Pro zájemce o technické detaily:</p>
 <ul>
     <li>Na serverech UNIX / Mac OS je zadaná emailová adresa použita jako 4. parametr (s předponou “-f”) pro PHP funkci  <code>mail()</code> function</li>
@@ -808,7 +808,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h3>Pravděpodobný scénář pro web se třemi rubrikami:</h3>
 <ol>
     <li><strong>Archív:</strong> Jakmile čtenář klikne na trvalý odkaz článku, článek se zobrazí pomocí šablony stránky příslušející této rubrice. Výpis článků spadajících do rubriky Archív pak lze najít na adrese <code>http://mojestranky.com/archiv/</code>.</li>
-    <li><strong>O-me:</strong> Stránka ‘O mě’ se může od hlavní strany a rubriky archiv značně lišit tím, že je spíše statická, vypadá zpravidla výrazně jinak a pravděpodobně obsahuje jen jeden článek. Tuto rubriku lze najít na adrese <code>http://example.com/about/</code>.</li>
+    <li><strong>O-me:</strong> Stránka ‘O mě’ se může od hlavní strany a rubriky archiv značně lišit tím, že je spíše statická, vypadá zpravidla výrazně jinak a pravděpodobně obsahuje jen jeden článek. Tuto rubriku lze najít na adrese <code>https://example.com/about/</code>.</li>
     <li><strong>Fotogalerie:</strong> Rubrika se zcela jiným rozvržením (a také asi jiným stylem CSS), která slouží k zobrazení fotografií namísto článků, nebo článků s fotogalerií.</li>
 </ol>
 <p>Všimni si, že vždy existuje ještě jedna zvláštní skrytá rubrika, nazvaná default. Patří k ní šablona stránky <em>default<em>, styl CSS <em>default</em> a vytváří úvodní stránku webu.</p>        ]]></item>
