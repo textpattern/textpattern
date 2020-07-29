@@ -4036,7 +4036,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                 $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
 
                 if ($val === true) {
-                    $out[] = "({$not}custom_{$no})";
+                    $out[] = "({$not}custom_{$no} != '')";
                 } else {
                     $val = doSlash($val);
                     $parts = array();
