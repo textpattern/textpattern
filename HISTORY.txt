@@ -5,7 +5,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Plugins can now be uploaded from URL by dragging to upload textarea.
 * Changed: Plugins of all types trigger verify step.
 
-Changes in 4.8.2 (upcoming)
+Changes in 4.8.2
 
 * Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
   (thanks, Vienuolis).
