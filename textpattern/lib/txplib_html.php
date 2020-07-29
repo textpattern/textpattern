@@ -1806,31 +1806,14 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $list = array_map('trim', $list);
     }
 
-    if (strpos($break, '<+>') !== false) {
-        $content = array_reduce($list, function ($carry, $item) use ($break) {
-            return $carry.str_replace('<+>', $item, $break);
-        });
-    }
-    // Non-enclosing breaks.
-    elseif ($break === 'br' || $break === 'hr' || !preg_match('/^\w+$/', $break)) {
-        if ($break === 'br' || $break === 'hr') {
-            $break = "<$break $breakatts/>".n;
-        }
-
-        $content = join($break, $list);
-    } elseif ($break === true) {
+    if ($break === true) {
         switch (strtolower($wraptag)) {
             case 'ul':
             case 'ol':
                 $break = 'li';
             break;
             case 'p':
-            case 'blockquote':
                 $break = 'br';
-            break;
-            case 'div':
-            case 'article':
-                $break = 'p';
             break;
             case 'table':
             case 'tbody':
@@ -1844,8 +1827,20 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
             default:
                 $break = n;
         }
+    }
 
-        $content = $break === n ? join(n, $list) : "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
+    if (strpos($break, '<+>') !== false) {
+        $content = array_reduce($list, function ($carry, $item) use ($break) {
+            return $carry.str_replace('<+>', $item, $break);
+        });
+    }
+    // Non-enclosing breaks.
+    elseif ($break === 'br' || $break === 'hr' || !preg_match('/^\w+$/', $break)) {
+        if ($break === 'br' || $break === 'hr') {
+            $break = "<$break $breakatts/>".n;
+        }
+
+        $content = join($break, $list);
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
