@@ -4081,7 +4081,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     // TBC
                     if ($val === true) {
                         $where[] = $unique ? "$not $k" : "$k IS NOT NULL";
-                        $filter[] = "$not value";
+                        $filter[] = "$not value != ''";
                     } else {
                         $val = doSlash($val);
                         $parts = array();
