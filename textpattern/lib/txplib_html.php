@@ -1551,18 +1551,20 @@ EOF;
 
 function script_js($js, $flags = '', $route = array())
 {
-    static $store = '', $token = null;
-    global $event, $step;
-
-    if ($token === null) {
-        $token = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
-        header("Content-Security-Policy: script-src 'self' 'nonce-$token'", false);
-    }
+    static $store = '';
+    global $event, $step, $csp_nonce;
 
     $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
     $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
 
     if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
+        // Only include the nonce if a script-src element uses it.
+        if ($csp_nonce && preg_match_all("/script-src(-elem|-attr)?\s+'nonce/", CONTENT_SECURITY_POLICY) > 0) {
+            $scriptAtts = array('nonce' => $csp_nonce);
+        } else {
+            $scriptAtts = array();
+        }
+
         if (is_int($flags)) {
             if ($flags & TEXTPATTERN_SCRIPT_URL) {
                 if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
@@ -1576,7 +1578,9 @@ function script_js($js, $flags = '', $route = array())
                     $js .= '.v'.txp_version.$ext;
                 }
 
-                return n.tag(null, 'script', array('src' => $js, 'nonce' => $token));
+                $scriptAtts['src'] = $js;
+
+                return n.tag(null, 'script', $scriptAtts);
             }
         }
 
@@ -1594,7 +1598,7 @@ function script_js($js, $flags = '', $route = array())
         }
 
         $js = trim($js);
-        $out = $js ? n.tag(n.$js.n, 'script', array('nonce' => $token)) : '';
+        $out = $js ? n.tag(n.$js.n, 'script', $scriptAtts) : '';
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');

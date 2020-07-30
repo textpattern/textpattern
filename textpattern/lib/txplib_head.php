@@ -48,9 +48,13 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size, $csp_nonce;
 
-    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
+    if (strpos(CONTENT_SECURITY_POLICY, '{TEXTPATTERN_CSP_NONCE}') !== false && $csp_nonce === null) {
+        $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
+    }
+
+    header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', $csp_nonce, CONTENT_SECURITY_POLICY));
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
     if ($app_mode == 'async') {
