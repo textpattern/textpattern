@@ -367,7 +367,7 @@ function plugin_list($message = '')
         nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table();
-    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_plugins'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
+    echo $table->render(compact('total', 'crit') + array('heading' => 'tab_plugins'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**
