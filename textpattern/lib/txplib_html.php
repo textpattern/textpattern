@@ -1553,63 +1553,32 @@ EOF;
 
 function script_js($js, $flags = '', $route = array())
 {
-    static $store = '';
-    global $event, $step, $csp_nonce;
+    $scriptTag = new \Textpattern\UI\Script;
 
-    $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
-    $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
-
-    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
-        // Only include the nonce if a script-src element uses it.
-        if ($csp_nonce && preg_match_all("/script-src(-elem|-attr)?\s+('[a-zA-Z0-9\-]+'\s+)*'nonce-.*?(?=;)/", CONTENT_SECURITY_POLICY) > 0) {
-            $scriptAtts = array('nonce' => $csp_nonce);
-        } else {
-            $scriptAtts = array();
-        }
-
-        if (is_int($flags)) {
-            if ($flags & TEXTPATTERN_SCRIPT_URL) {
-                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
-                    $ext = pathinfo($js, PATHINFO_EXTENSION);
-
-                    if ($ext) {
-                        $js = substr($js, 0, (strlen($ext) + 1) * -1);
-                        $ext = '.'.$ext;
-                    }
-
-                    $js .= '.v'.txp_version.$ext;
-                }
-
-                $scriptAtts['src'] = $js;
-
-                return n.tag(null, 'script', $scriptAtts);
-            }
-        }
-
-        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
-
-        if (is_bool($flags)) {
-            if (!$flags) {
-                $store .= n.$js;
-
-                return;
-            } else {
-                $js = $store.n.$js;
-                $store = '';
-            }
-        }
-
-        $js = trim($js);
-        $out = $js ? n.tag(n.$js.n, 'script', $scriptAtts) : '';
-
-        if ($flags && $flags !== true) {
-            $out .= n.tag(n.trim($flags).n, 'noscript');
-        }
-
-        return $out;
+    if ($route) {
+        $events = isset($route[0]) ? $route[0] : null;
+        $steps = isset($route[1]) ? $route[1] : null;
+        $scriptTag->setRoute($events, $steps);
     }
 
-    return '';
+    if (is_int($flags)) {
+        $addVersion = ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION) ? 'version' : '';
+        $scriptTag->setSource($js, $addVersion);
+    } elseif (is_bool($flags)) {
+        $scriptTag->setContent($js, $flags);
+
+        if (!$flags) {
+            return;
+        }
+    } else {
+        $scriptTag->setContent($js);
+    }
+
+    if ($flags && is_string($flags)) {
+        $scriptTag->setNoscript($flags);
+    }
+
+    return $scriptTag;
 }
 
 /**
