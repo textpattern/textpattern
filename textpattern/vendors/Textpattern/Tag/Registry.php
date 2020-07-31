@@ -134,10 +134,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
                 $atts += $this->atts[$tag];
             }
 
-            //TODO: switch to args unpacking for php 5.6+
             return isset($this->params[$tag]) ?
                 (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
-//                (string) call_user_func_array($this->tags[$tag], array_merge(array($atts, $thing), $this->params[$tag])) :
                 (string) call_user_func($this->tags[$tag], $atts, $thing);
         } else {
             return false;
