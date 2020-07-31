@@ -895,7 +895,7 @@ function file_create()
         $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).');'.n;
     }
 
-    script_js($response, false);
+    Txp::get('\Textpattern\UI\Script')->setContent($response, false);
     file_list();
 }
 
