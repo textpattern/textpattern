@@ -136,7 +136,7 @@ class Script extends Tag implements UIInterface
 
     public function setNoscript($content)
     {
-        $this->noscript = $content;
+        $this->noscript = n.$content.n;
 
         return $this;
     }
@@ -219,7 +219,7 @@ class Script extends Tag implements UIInterface
 
             if ($this->noscript) {
                 $noscript = new \Textpattern\UI\Tag('noscript');
-                $noscript->setContent(n.$this->noscript.n);
+                $noscript->setContent($this->noscript);
                 $out .= n.$noscript->render('complete');
             }
 
