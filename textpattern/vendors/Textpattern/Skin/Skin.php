@@ -1145,7 +1145,7 @@ class Skin extends CommonBase implements SkinInterface
         $table = \Txp::get('Textpattern\Admin\Table');
 
         return $table->render(
-            compact('total', 'criteria') + array('help' => 'skin_overview'),
+            compact('total', 'crit') + array('help' => 'skin_overview'),
             $this->getSearchBlock($search),
             $this->getCreateBlock(),
             $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
