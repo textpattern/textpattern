@@ -147,7 +147,7 @@ $txpcfg['client_flags'] = 0;
 
 /*
  * Optional, advanced: define a Content Security Policy header.
- * see TBC
+ * see TODO
  */
 
 //$headerCsp =
@@ -162,7 +162,7 @@ $txpcfg['client_flags'] = 0;
 //    "media-src 'self';".
 //    "script-src 'self' 'unsafe-inline';".
 //    "script-src-attr 'none';".
-//    "script-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+//    "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
 //    "style-src 'self' 'unsafe-inline';".
 //    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
 //    "style-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
