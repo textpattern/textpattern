@@ -147,7 +147,7 @@ $txpcfg['client_flags'] = 0;
 
 /*
  * Optional, advanced: define a Content Security Policy header.
- * see TBC
+ * see TODO
  */
 
 //$headerCsp =
