@@ -115,51 +115,52 @@ function pagetop($pagetitle = '', $message = '')
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-    script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/blueimp/fileupload/jquery.fileupload.js', TEXTPATTERN_SCRIPT_URL, array("file, image")).
-    script_js(
-        'var textpattern = '.json_encode(
-            array(
-                '_txp_uid' => get_pref('blog_uid'),
-                'event' => $event,
-                'step' => $step,
-                '_txp_token' => form_token(),
-                'ajax_timeout' => (int) AJAX_TIMEOUT,
-                'prefs' => array(
-                    'max_file_size' => $file_max_upload_size,
-                    'max_upload_size' => real_max_upload_size(0),
-                    'production_status' => get_pref('production_status'),
-                    'do_spellcheck' => get_pref(
-                        'do_spellcheck',
-                        '#page-article #body, #page-article #title,'.
-                        '#page-image #image_alt_text, #page-image #caption,'.
-                        '#page-file #description,'.
-                        '#page-link #link-title, #page-link #link-description'
-                    ),
-                    'language_ui' => get_pref(
-                        'language_ui',
-                        TEXTPATTERN_DEFAULT_LANG
-                    ),
-                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
-                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
-    {message}
-    <a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
-</span>'
-                ),
-                'textarray' => (object) null,
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
+    ->setRoute('file, image');
+$txpOut = 'var textpattern = '.json_encode(
+    array(
+        '_txp_uid' => get_pref('blog_uid'),
+        'event' => $event,
+        'step' => $step,
+        '_txp_token' => form_token(),
+        'ajax_timeout' => (int) AJAX_TIMEOUT,
+        'prefs' => array(
+            'max_file_size' => $file_max_upload_size,
+            'max_upload_size' => real_max_upload_size(0),
+            'production_status' => get_pref('production_status'),
+            'do_spellcheck' => get_pref(
+                'do_spellcheck',
+                '#page-article #body, #page-article #title,'.
+                '#page-image #image_alt_text, #page-image #caption,'.
+                '#page-file #description,'.
+                '#page-link #link-title, #page-link #link-description'
             ),
-            TEXTPATTERN_JSON
-        ).';'
-    ).
-    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+            'language_ui' => get_pref(
+                'language_ui',
+                TEXTPATTERN_DEFAULT_LANG
+            ),
+            'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+            'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+{message}
+<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
+</span>'
+        ),
+        'textarray' => (object) null,
+    ),
+    TEXTPATTERN_JSON
+).';';
 
-echo script_js("
-    $(function() {
-        if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
-            alert('Please force-reload the page or clear your browser caches.')
-        }
-    })", false);
+echo Txp::get('\Textpattern\UI\Script')->setContent($txpOut).
+    Txp::get('\Textpattern\UI\Script')->setSource('textpattern.js').n;
+$txpOut = "$(function() {
+    if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
+        alert('Please force-reload the page or clear your browser caches.')
+    }
+})";
+// Set but don't display this bit yet.
+Txp::get('\Textpattern\UI\Script')->setContent($txpOut, false);
 echo $theme->html_head();
 echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
