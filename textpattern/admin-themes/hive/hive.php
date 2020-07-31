@@ -33,10 +33,10 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script defer src="'.$this->url.'assets/js/main.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/main.js')->setBool('defer');
 
         if (!defined('no_autosize')) {
-            $out[] = '<script defer src="'.$this->url.'assets/js/autosize.js"></script>'.n;
+            $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/autosize.js')->setBool('defer');
         }
 
         return join(n, $out);
@@ -44,7 +44,7 @@ class hive_theme extends \Textpattern\Admin\Theme
 
     function header()
     {
-        $out[] = '<script src="'.$this->url.'assets/js/darkmode.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/darkmode.js');
 
         global $txp_user;
 
