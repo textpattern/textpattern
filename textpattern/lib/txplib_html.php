@@ -46,9 +46,8 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-        $txpOut = 'textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON);
-        echo Txp::get('\Textpattern\UI\Script')->setSource('vendors/PrismJS/prism/prism.js').
-            Txp::get('\Textpattern\UI\Script')->setContent($txpOut, true).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
