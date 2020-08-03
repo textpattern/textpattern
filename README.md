@@ -36,11 +36,11 @@ If you want to use the multi-site functionality in Textpattern, get the .tar.gz 
 
 ## Install Textpattern
 
-Please see [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt) for details on installing Textpattern.
+Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/README.txt) for details on installing Textpattern.
 
 ## Upgrade Textpattern
 
-Please see [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt) for details on upgrading Textpattern.
+Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/README.txt) for details on upgrading Textpattern.
 
 ## Help and Support
 
@@ -144,10 +144,10 @@ We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opens
 
 ## Legal
 
-Released under the GNU General Public License. See [LICENSE.txt](https://github.com/textpattern/textpattern/blob/master/LICENSE.txt) for terms and conditions.
+Released under the GNU General Public License. See [LICENSE.txt](https://github.com/textpattern/textpattern/blob/main/LICENSE.txt) for terms and conditions.
 
-Includes contributions licensed under the GNU Lesser General Public License. See [LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-LESSER.txt) for terms and conditions.
+Includes contributions licensed under the GNU Lesser General Public License. See [LICENSE-LESSER.txt](https://github.com/textpattern/textpattern/blob/main/textpattern/lib/LICENSE-LESSER.txt) for terms and conditions.
 
-Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/master/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
+Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/main/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
 ![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.jpg)
