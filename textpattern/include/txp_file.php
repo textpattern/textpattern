@@ -195,7 +195,7 @@ function file_list($message = '', $ids = array())
         n.tag(
             $search->renderForm('file_list', $search_render_options),
             'div', array(
-                'class' => 'toggle',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
                 'style' => $total || $crit === '' ? false : 'display:none',
             )
@@ -479,7 +479,7 @@ function file_list($message = '', $ids = array())
         nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
-    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
+    echo $table->render(compact('total', 'crit'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
         n.tag(
         null,
         'div', array(
