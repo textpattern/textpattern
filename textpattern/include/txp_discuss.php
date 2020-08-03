@@ -460,7 +460,7 @@ function discuss_list($message = '')
         nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
-    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
+    echo $table->render(compact('total', 'crit') + array('heading' => 'tab_comments'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**
