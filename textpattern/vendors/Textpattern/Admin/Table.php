@@ -70,7 +70,7 @@ class Table
         extract($data + array(
             'heading'  => 'tab_'.$event,
             'total'    => 0,
-            'criteria' => 1,
+            'crit'     => '',
             'html_id'  => 'txp-list-container',
             'help'     => null,
         ));
@@ -91,7 +91,7 @@ class Table
 
         if ($total >= 1) {
             $out .= script_js('$(".txp-search").show()');
-        } elseif ($criteria == 1) {
+        } elseif ($crit === '') {
             $out .= script_js('$(".txp-search").hide()');
         }
 
