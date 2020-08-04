@@ -78,7 +78,7 @@ Sure, we break our own rules sometimes. But, as a rule, we err on the side of si
 
 ## License
 
-[GNU General Public License, version 2](https://github.com/textpattern/textpattern/blob/master/LICENSE.txt) (also known as GPLv2). By contributing to the project, you agree to license your contributions under the GPLv2 license.
+[GNU General Public License, version 2](https://github.com/textpattern/textpattern/blob/main/LICENSE.txt) (also known as GPLv2). By contributing to the project, you agree to license your contributions under the GPLv2 license.
 
 ## Code of conduct
 
