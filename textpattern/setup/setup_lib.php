@@ -297,7 +297,7 @@ function setup_makeConfig($cfg, $doSpecial = false)
     }
 
     $config_details .=
-    "?".">";
+    "// For more customization options, please consult config-dist.php file.";
 
     return $config_details;
 }
