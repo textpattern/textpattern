@@ -1,5 +1,8 @@
 Changes in 4.8.3 (upcoming)
 
+* Added: Latest translations. Thank you to all translators for your hard work.
+* PrismJS 1.21.0.
+
 Changes in 4.8.2 (29 Jul 2020)
 
 * Fixed: <txp:if_yield> 'else' container returning 1 instead of contents
