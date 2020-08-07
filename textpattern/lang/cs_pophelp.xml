@@ -807,7 +807,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Pro většinu webových stránek je nutné jen opravdu nezbytné minimum rubrik.</p>
 <h3>Pravděpodobný scénář pro web se třemi rubrikami:</h3>
 <ol>
-    <li><strong>Archív:</strong> Jakmile čtenář klikne na trvalý odkaz článku, článek se zobrazí pomocí šablony stránky příslušející této rubrice. Výpis článků spadajících do rubriky Archív pak lze najít na adrese <code>http://mojestranky.com/archiv/</code>.</li>
+    <li><strong>Archív:</strong> Jakmile čtenář klikne na trvalý odkaz článku, článek se zobrazí pomocí šablony stránky příslušející této rubrice. Výpis článků spadajících do rubriky Archív pak lze najít na adrese <code>https://example.com/archiv/</code>.</li>
     <li><strong>O-me:</strong> Stránka ‘O mě’ se může od hlavní strany a rubriky archiv značně lišit tím, že je spíše statická, vypadá zpravidla výrazně jinak a pravděpodobně obsahuje jen jeden článek. Tuto rubriku lze najít na adrese <code>https://example.com/about/</code>.</li>
     <li><strong>Fotogalerie:</strong> Rubrika se zcela jiným rozvržením (a také asi jiným stylem CSS), která slouží k zobrazení fotografií namísto článků, nebo článků s fotogalerií.</li>
 </ol>
@@ -835,7 +835,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Používá styl</h2>
 <p>Tato volba určuje styl CSS načtený z databáze pomocí tagu <code>&lt; txp: css format="" /&gt;</code> pro tuto rubriku.</p>
 <p>Pro větší rychlost odezvy se ale doporučuje načítat css styly ze souboru.
-Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu<br> <code>&lt; link rel="stylesheet" href="http://mojestranky. cz/css/default. css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>        ]]></item>
+Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu <code>&lt;link rel="stylesheet" href="https://example.com/css/default.css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>        ]]></item>
         <item id="section_uses_page" title="Používá stránku"><![CDATA[
 <h2>Používá stránku</h2>
 <p>Rubriky v Textpattern jsou provázány se šablonami stránek.</p>        ]]></item>
