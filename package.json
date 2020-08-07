@@ -1,7 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
-  "version": "4.8.2",
+  "version": "4.8.3-dev",
   "description": "A flexible, elegant, fast and easy-to-use content management system written in PHP.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
@@ -23,14 +23,14 @@
   "devDependencies": {
     "eslint": "~7",
     "phplint": "~2",
-    "uglify-js": "3.10.0"
+    "uglify-js": "3.10.1"
   },
   "dependencies": {
-    "blueimp-file-upload": "10.30.1",
+    "blueimp-file-upload": "10.31.0",
     "blueimp-md5": "2.17.0",
     "jquery": "3.5.1",
     "jquery-ui-dist": "1.12.1",
-    "prismjs": "1.20.0"
+    "prismjs": "1.21.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
