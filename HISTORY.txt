@@ -1,5 +1,6 @@
 Changes in 4.8.3 (upcoming)
 
+* Fixed: A bug in 4.8.2 that can break some legacy plugins (thanks, Yiannis).
 * Added: Latest translations. Thank you to all translators for your hard work.
 * PrismJS 1.21.0.
 
