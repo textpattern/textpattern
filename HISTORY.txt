@@ -4,6 +4,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Plugins can now be uploaded from URL by dragging to upload textarea.
 * Added: Compiled .txt plugins can now be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
+* PrismJS 1.21.0.
 
 Changes in 4.8.2 (29 Jul 2020)
 
