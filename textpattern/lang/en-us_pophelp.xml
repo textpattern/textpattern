@@ -603,9 +603,9 @@
 <h2>Comments disabled after</h2>
 <p>Use this to set the amount of time after which commenting will be turned off for articles (can be set to ‘Never’ to allow indefinite time to comment).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Strip commenter‘s images from comments?"><![CDATA[
-<h2>Strip commenter‘s images from comments?</h2>
-<p>With this option set to ‘Yes’, any images included in comments will be stripped out.</p>
+        <item id="comments_disallow_images" title="Allow commenter images in comments?"><![CDATA[
+<h2>Allow commenter images in comments?</h2>
+<p>With this option set to ‘No’, any images included in comments will be stripped out.</p>
         ]]></item>
         <item id="comments_mode" title="Comments mode"><![CDATA[
 <h2>Comments mode</h2>

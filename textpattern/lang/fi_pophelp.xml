@@ -116,7 +116,9 @@
         <item id="comments_dateformat" title="Kommenttien päiväysmuoto"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Kommenttien oletuskehoite"><![CDATA[]]></item>
         <item id="comments_disabled_after" title="Kommentointi vanhentuu kun on kulunut"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Poista kommentoijan kuvat kommenteista?"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Salli kommentoijan kuvat kommenteissa?"><![CDATA[<h2>Salli kommentoijan kuvat kommenteissa?</h2>
+<p>Kun tämä asetus on 'Ei', kaikki kommentteihin sisältyvät kuvat tullaan poistamaan.</p>
+        ]]></item>
         <item id="comments_mode" title="Kommentointitapa"><![CDATA[]]></item>
         <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[]]></item>
