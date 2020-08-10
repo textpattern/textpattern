@@ -18,7 +18,7 @@
     <li>kann Plugins verwalten</li>
     <li>kann Daten importieren</li>
 </ul>
-<h3>Editor verwalten</h3>
+<h3>Chefredakteur</h3>
 <ul>
     <li>kann Artikel, Kommentare und Links verwalten</li>
     <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
@@ -32,7 +32,7 @@
     <li>kann Plugins verwalten</li>
     <li>kann Daten importieren</li>
 </ul>
-<h3>Editor kopieren </h3>
+<h3>Redakteur</h3>
 <ul>
     <li>kann Artikel mit einer Einschränkung verwalten:
         <ul>
@@ -46,7 +46,7 @@
     <li>kann Benutzer anzeigen</li>
     <li>kann Besucherprotokolle verwalten</li>
 </ul>
-<h3>Schriftsteller</h3>
+<h3>angestellter Journalist</h3>
 <ul>
     <li>kann eigene Artikel verwalten und die Artikel anderer Nutzer anzeigen.</li>
     <li>kann Bilder und Dateien verwalten</li>
@@ -202,7 +202,10 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Kommentarbilder zulassen?"><![CDATA[
+<h2>Kommentarbilder zulassen?</h2>
+<p>Mit dieser Option auf "Nein" werden alle in Kommentaren enthaltenen Bilder entfernt.</p>
+        ]]></item>
         <item id="comments_mode" title="Kommentarmodus"><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
