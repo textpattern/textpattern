@@ -1896,7 +1896,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         }
     } elseif (is_bool($shift)) {
         $pages = $newer === null ? ($shift ? range(1 - $thepg, $numPages - $thepg) : array(0)) : array($shift ? true : 1);
-        $range = true;
+        $range = !$shift;
     } else {
         $pages = array_map('intval', do_list($shift, array(',', '-')));
         $range = false;
