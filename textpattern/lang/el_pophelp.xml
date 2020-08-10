@@ -140,7 +140,8 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Επιτρέπονται εικόνες στα σχόλια;"><![CDATA[<h2>Επιτρέπονται εικόνες στα σχόλια;</h2>
+<p>Αν επιλέξετε "Όχι",  θα αφαιρεθούν όλες οι εικόνες που περιλαμβάνονται στα σχόλια.</p>]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>

@@ -529,9 +529,10 @@ např.: #@language cs-cz</p>
         <item id="comments_disabled_after" title="Kdy vyprší lhůta pro vkládání komentářů"><![CDATA[
 <h2>Kdy vyprší lhůta pro vkládání komentářů</h2>
 <p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba ‘Nikdy’, která umožní komentovat stále).</p>        ]]></item>
-        <item id="comments_disallow_images" title="Zakázat vkládání obrázků do komentářů?"><![CDATA[
-<h2>Zakázat vkládání obrázků do komentářů?</h2>
-<p>Nastavením ‘Ano’ budou jakékoliv obrázky vložené do komentářů odstraněny.</p        ]]></item>
+        <item id="comments_disallow_images" title="Povolit obrázky v komentářích?"><![CDATA[
+<h2>Povolit obrázky v komentářích?</h2>
+<p>Nastavením „ne“ budou všechny obrázky obsažené v komentářích odstraněny.</p>
+        ]]></item>
         <item id="comments_mode" title="Způsob zobrazení komentářů"><![CDATA[
 <h2>Způsob zobrazení komentářů</h2>
 <p>Vybereš-li ‘do stránky’ (doporučeno), po kliknutí se zobrazí obnovená stránka s článkem, pod nímž jsou zobrazeny všechny komentáře.</p>
