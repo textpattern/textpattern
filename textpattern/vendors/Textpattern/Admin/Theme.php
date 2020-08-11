@@ -349,12 +349,12 @@ abstract class Theme
 
         if (!empty($prefs['textpattern'])) {
             $content = json_encode($prefs['textpattern'], TEXTPATTERN_JSON);
-            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
+            $out .= \Txp::get('\Textpattern\UI\Script', "textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
         }
 
         if (!empty($prefs['style'])) {
             $content = $prefs['style'];
-            $out .= "<style>\n{$content}\n</style>".n;
+            $out .= \Txp::get('\Textpattern\UI\Style', n.$content.n);
         }
 
         // Custom CSS (see theme README for usage instructions).
@@ -382,7 +382,7 @@ abstract class Theme
         $custom = empty($this->jsPath) ? $custom_js : $this->jsPath.DS.$custom_js;
 
         if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
-            $out .= \Txp::get('\Textpattern\UI\Script')->setSource($this->url.$custom);
+            $out .= \Txp::get('\Textpattern\UI\Script')->setSource($this->url.$custom).n;
 
         }
 
