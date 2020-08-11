@@ -3124,7 +3124,7 @@ function EvalElse($thing, $condition)
         $txp_atts = null;
     }
 
-    return getIfElse($thing, $condition);
+    return (string)getIfElse($thing, $condition);
 }
 
 /**

@@ -30,7 +30,7 @@ class classic_theme extends \Textpattern\Admin\Theme
     function html_head()
     {
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
 
@@ -109,8 +109,8 @@ class classic_theme extends \Textpattern\Admin\Theme
             n.span(txpspecialchars($txp_user), array('class' => 'txp-username')).
             n.span('&#183;', array('role' => 'separator')).
             n.href(gTxt('logout'), 'index.php?logout=1', array(
-                'class'   => 'txp-logout',
-                'onclick' => 'return verify(\''.gTxt('are_you_sure').'\')',
+                'id' => 'txp-logout-button',
+                'class' => 'txp-logout',
             ));
 
         return join(n, $out);

@@ -1531,7 +1531,7 @@ function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid 
         });
 EOF;
 
-    return script_js($js, (string) $noscript);
+    return Txp::get('\Textpattern\UI\Script', $js)->setNoscript((string) $noscript);
 }
 
 /**
@@ -1545,60 +1545,40 @@ EOF;
  * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
  * @param  array      $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
+ * @deprecated in 4.9.0
+ * @see  \Textpattern\UI\Script
  * @example
  * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
  */
 
 function script_js($js, $flags = '', $route = array())
 {
-    static $store = '';
-    global $event, $step;
+    $scriptTag = new \Textpattern\UI\Script;
 
-    $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
-    $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
-
-    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
-        if (is_int($flags)) {
-            if ($flags & TEXTPATTERN_SCRIPT_URL) {
-                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
-                    $ext = pathinfo($js, PATHINFO_EXTENSION);
-
-                    if ($ext) {
-                        $js = substr($js, 0, (strlen($ext) + 1) * -1);
-                        $ext = '.'.$ext;
-                    }
-
-                    $js .= '.v'.txp_version.$ext;
-                }
-
-                return n.tag(null, 'script', array('src' => $js));
-            }
-        }
-
-        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
-
-        if (is_bool($flags)) {
-            if (!$flags) {
-                $store .= n.$js;
-
-                return;
-            } else {
-                $js = $store.n.$js;
-                $store = '';
-            }
-        }
-
-        $js = trim($js);
-        $out = $js ? n.tag(n.$js.n, 'script') : '';
-
-        if ($flags && $flags !== true) {
-            $out .= n.tag(n.trim($flags).n, 'noscript');
-        }
-
-        return $out;
+    if ($route) {
+        $events = isset($route[0]) ? $route[0] : null;
+        $steps = isset($route[1]) ? $route[1] : null;
+        $scriptTag->setRoute($events, $steps);
     }
 
-    return '';
+    if (is_int($flags)) {
+        $addVersion = ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION) ? 'version' : '';
+        $scriptTag->setSource($js, $addVersion);
+    } elseif (is_bool($flags)) {
+        $scriptTag->setContent($js, $flags);
+
+        if (!$flags) {
+            return;
+        }
+    } else {
+        $scriptTag->setContent($js);
+    }
+
+    if ($flags && is_string($flags)) {
+        $scriptTag->setNoscript($flags);
+    }
+
+    return $scriptTag;
 }
 
 /**
@@ -1642,7 +1622,7 @@ function cookie_box($classname, $form = true)
         });
 EOF;
 
-    $out .= script_js($js);
+    $out .= Txp::get('\Textpattern\UI\Script', $js);
 
     if ($form) {
         if (serverSet('QUERY_STRING')) {

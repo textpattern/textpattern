@@ -30,13 +30,13 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
     function html_head()
     {
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script defer src="'.$this->url.'assets/js/main.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/main.js')->setBool('defer');
 
         if (!defined('no_autosize')) {
-            $out[] = '<script defer src="'.$this->url.'assets/js/autosize.js"></script>'.n;
+            $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/autosize.js')->setBool('defer');
         }
 
         return join(n, $out);
@@ -44,7 +44,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 
     function header()
     {
-        $out[] = '<script src="'.$this->url.'assets/js/darkmode.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/darkmode.js');
 
         global $txp_user;
 
@@ -113,9 +113,12 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
                     'id'         => 'lightswitch',
                     'title'      => gTxt('lightswitch'),
                     'aria-label' => gTxt('lightswitch'),
-                )), array('class' => 'txp-lightswitch'));
+                ))
+            , array('class' => 'txp-lightswitch'));
+
             $out[] = graf(
-                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
+                href(gTxt('logout'), 'index.php?logout=1', array('id' => 'txp-logout-button'))
+            , array('class' => 'txp-logout'));
         }
 
         return join(n, $out);
