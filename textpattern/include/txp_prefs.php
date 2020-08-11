@@ -135,7 +135,9 @@ function prefs_save()
             safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
-        update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        if ((string) $post[$name] !== $val) {
+            update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        }
     }
 
     update_lastmod('preferences_saved');
