@@ -385,7 +385,7 @@
         <item id="tmp_plugin_paths_match" title="Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques"><![CDATA[<h2>Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques</h2>
 <p>Le plugins doivent disposer de leur propre répertoire et ne doivent rien partager avec le répertoire temporaire. A défaut, c’est un risque de sécurité potentiel et peut nuire au bon fonctionnement de votre site si votre répertoire temporaire est vidé. Veuillez vous assurer que ces deux chemins vers des répertoires distincts sont différents.</p>]]></item>
         <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[<h2>Serveur de mise à jour inaccessible</h2>
-<p>La vérification de mises à jour a échouée, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résous souvent d’elle-même au bout dune heure ou deux ; aussi, veuillez retournez sur cette page ultérieurement.</p>]]></item>
+<p>La vérification de mises à jour a échouée, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résout souvent d’elle-même au bout dune heure ou deux ; aussi, veuillez retournez sur cette page ultérieurement.</p>]]></item>
         <item id="warn_mail_unavailable" title="Votre installation de PHP ne dispose pas de la fonction mail()"><![CDATA[<h2>Votre installation de PHP ne dispose pas de la fonction mail()</h2>
 <p>La fonction <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> de PHP est désactivée. Par conséquent, Textpattern ne peut envoyer de e-mails et certaines de ses fonctionnalités seront inopérantes. Par exemple, les notifications par e-mail des nouveaux commentaires ne seront pas adressées et les nouveaux utilisateurs de sites ne recevront pas de message de bienvenue. Cependant, les utilisateurs pourront être ajoutés, néanmoins.</p>]]></item>
     </group>
@@ -592,10 +592,8 @@
 <h2>Commentaires désactivés après</h2>
 <p>Utiliser ceci pour définir le délai après lequel la possibilité de commenter sera fermée pour les articles (possibilité de régler sur «Jamais» pour supprimer la limite d’autorisation à commenter).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Interdire les images dans les commentaires ?"><![CDATA[
-<h2>Interdire les images dans les commentaires ?</h2>
-<p>Avec cette option réglée sur «Oui», les images incluses dans les commentaires seront supprimées.</p>
-        ]]></item>
+        <item id="comments_disallow_images" title="Autoriser les images dans les commentaires ?"><![CDATA[<h2>Autoriser les images dans les commentaires ?</h2>
+<p>Pour cette option renseignée à «Non», toutes les images incluses dans les commentaires seront supprimées</p>]]></item>
         <item id="comments_mode" title="Affichage des commentaires"><![CDATA[
 <h2>Affichage des commentaires</h2>
 <p>Si «nopopup» est sélectionné (recommandé), la page courante sera rafraîchie pour afficher uniquement l’article suivit de ses commentaires.</p>

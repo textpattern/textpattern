@@ -562,9 +562,9 @@
 <h2>Comentarios deshabilitados después de</h2>
 <p>Utilice esta opción para establecer el tiempo después del cual los comentarios serán deshabilitados para los artículos (puede configurarse como 'Nunca' para permitir tiempo indefinido para comentar).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="¿Ignorar imágenes del usuario en los comentarios?"><![CDATA[
-<h2>¿Ignorar imágenes del usuario de los comentarios?</h2>
-<p>Si se selecciona  'Sí', las imágenes incluidas en los comentarios serán eliminadas.</p>
+        <item id="comments_disallow_images" title="¿Permitir imágenes de comentaristas en comentarios?"><![CDATA[
+<h2>¿Permitir imágenes de comentaristas en comentarios?</h2>
+<p>Con esta opción puesta en 'No', cualquier imagen incluida en los comentarios será eliminada.</p>
         ]]></item>
         <item id="comments_mode" title="Modo de comentarios"><![CDATA[
 <h2>Modo de comentarios</h2>
