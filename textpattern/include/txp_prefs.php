@@ -42,7 +42,7 @@ if ($event == 'prefs') {
     switch (strtolower($step)) {
         case '':
         case 'prefs_list':
-            prefs_list($step ? gTxt('preferences_saved') : '');
+            prefs_list();
             break;
         case 'prefs_save':
             prefs_save();
@@ -56,7 +56,7 @@ if ($event == 'prefs') {
 
 function prefs_save()
 {
-    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user;
+    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user, $theme;
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
@@ -146,13 +146,11 @@ function prefs_save()
     $prefs = get_prefs(array('', $txp_user));
     plug_privs();
 
-
     if (!empty($post['theme_name']) && $post['theme_name'] != $theme_name) {
-        header('Location: ?event=prefs&step=prefs_list');
-        exit;
-    } else {
-        prefs_list(gTxt('preferences_saved'));
+        $theme = \Textpattern\Admin\Theme::init();
     }
+
+    prefs_list(gTxt('preferences_saved'));
 }
 
 /**
