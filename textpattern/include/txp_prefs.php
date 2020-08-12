@@ -42,7 +42,7 @@ if ($event == 'prefs') {
     switch (strtolower($step)) {
         case '':
         case 'prefs_list':
-            prefs_list();
+            prefs_list($step ? gTxt('preferences_saved') : '');
             break;
         case 'prefs_save':
             prefs_save();
@@ -116,6 +116,8 @@ function prefs_save()
         $post['siteurl'] = preg_replace('#^https?://#', '', rtrim($post['siteurl'], '/ '));
     }
 
+    $theme_name = get_pref('theme_name');
+
     while ($a = nextRow($prefnames)) {
         extract($a);
 
@@ -135,14 +137,22 @@ function prefs_save()
             safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
-        update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        if ((string) $post[$name] !== $val) {
+            update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        }
     }
 
     update_lastmod('preferences_saved');
-    $prefs = get_prefs();
+    $prefs = get_prefs(array('', $txp_user));
     plug_privs();
 
-    prefs_list(gTxt('preferences_saved'));
+
+    if (!empty($post['theme_name']) && $post['theme_name'] != $theme_name) {
+        header('Location: ?event=prefs&step=prefs_list');
+        exit;
+    } else {
+        prefs_list(gTxt('preferences_saved'));
+    }
 }
 
 /**
