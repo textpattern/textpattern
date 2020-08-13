@@ -2,6 +2,8 @@ Changes in 4.8.3 (upcoming)
 
 * Fixed: A bug in 4.8.2 that can break some legacy plugins (thanks, Yiannis).
 * Fixed: Correctly label 'Allow commenter images in comments' pref.
+* Fixed: Reload private prefs on preferences save (thanks, phiw13).
+* Added: Instantly refresh admin theme on change.
 * Added: Latest translations. Thank you to all translators for your hard work.
 * PrismJS 1.21.0.
 
