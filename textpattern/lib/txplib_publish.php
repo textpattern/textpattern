@@ -383,11 +383,11 @@ function parse($thing, $condition = true, $not = true)
     list($first, $last) = $txp_else[$hash];
 
     if ($not && !empty($txp_atts['evaluate'])) {
-        $isempty = true;
         $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
         $out = array($tag[0]);
         $tags = array();
         $nr = $first - 2;
+        $isempty = $nr > 0;
 
         for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];

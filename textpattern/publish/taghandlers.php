@@ -5219,7 +5219,12 @@ function txp_eval($atts, $thing = null)
         'test'  => !isset($atts['query']),
     ), $atts));
 
-    if (!isset($query)) {
+    if (!isset($thing) && isset($atts['test']) && $atts['test'] !== true) {
+        $thing = $atts['test'];
+        $test = null;
+    }
+
+    if (!isset($query) || $query === true) {
         $x = true;
     } elseif (!($query = trim($query))) {
         $x = $query;
@@ -5261,46 +5266,47 @@ function txp_eval($atts, $thing = null)
         }
 
         if (strpos($query, '<+>') !== false) {
-            if (!$test) {
-                $quoted = txp_escape(array('escape' => 'quote'), parse($thing));
-                $query = str_replace('<+>', $quoted, $query);
-                $staged = false;
-            } else {
-                $staged = true;
+            $staged = $x = true;
+        } else {
+            $x = $xpath->evaluate($query);
+
+            if ($x instanceof DOMNodeList) {
+                $x = $x->length;
             }
-        }
-
-        $x = $staged ? true : $xpath->evaluate($query);
-
-        if ($x instanceof DOMNodeList) {
-            $x = $x->length;
         }
     } else {
         trigger_error(gTxt('missing_dom_extension'));
         return '';
     }
 
-    if (!isset($thing) || $x && $staged === false) {
-        return $x;
+    if (!isset($thing)) {
+        return $test === true ? !empty($x) : $x;
     } elseif (empty($x)) {
         return parse($thing, false);
     }
 
     $txp_atts['evaluate'] = $test;
-    $thing = parse($thing);
+    $x = parse($thing);
     unset($txp_atts['evaluate']);
 
     if ($txp_tag) {
         if ($staged) {
-            $quoted = txp_escape(array('escape' => 'quote'), $thing);
+            $quoted = txp_escape(array('escape' => 'quote'), $x);
             $query = str_replace('<+>', $quoted, $query);
-            $thing = $xpath->evaluate($query);
+            $query = $xpath->evaluate($query);
+            $query = $query instanceof DOMNodeList ? $query->length : $query;
+
+            if (empty($query)) {
+                return parse($thing, false);
+            } else {
+                return $test === true ? $x : $query;
+            }
         }
     } else {
         $txp_atts = null;
     }
 
-    return $thing instanceof DOMNodeList ? $thing->length : $thing;
+    return $test === null && $query !== true ? !empty($x) : $x;
 }
 
 // -------------------------------------------------------------
