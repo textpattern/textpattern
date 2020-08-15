@@ -387,7 +387,7 @@ function parse($thing, $condition = true, $not = true)
         $out = array($tag[0]);
         $tags = array();
         $nr = $first - 2;
-        $isempty = $nr > 0;
+        $isempty = $nr > 0 || $test !== false;
 
         for ($n = 1; $n <= $nr; $n++) {
             $txp_tag = $tag[$n];
