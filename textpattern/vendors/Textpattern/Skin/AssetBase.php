@@ -582,7 +582,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
                 $filenames = array();
                 $extension = self::getExtension();
 
-                foreach ($this->getNames() as $name) {
+                foreach ($names as $name) {
                     $ext = pathinfo($name, PATHINFO_EXTENSION);
                     $filenames[] = $name.(isset(static::$mimeTypes[$ext]) ? '' : '.'.$extension);
                 }
@@ -601,7 +601,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
             if (!$this->createRows($rows)) {
                 $this->mergeResult($event.'_import_failed', array($skin => $names));
             } else {
-                $done[] = $names;
+                $done = array_column($rows, 'name');
 
                 $this->mergeResult($event.'_imported', array($skin => $names), 'success');
             }
@@ -609,6 +609,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
             // Drops extra rows…
             if ($sync) {
                 if (!$this->deleteExtraRows()) {
+                    $notCleaned = array_diff(array_column($this->getRows('name'), 'name'), $done);
                     $this->mergeResult($event.'_files_deletion_failed', array($skin => $notCleaned));
                 }
             }
