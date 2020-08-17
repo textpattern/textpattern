@@ -164,17 +164,17 @@
         <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[]]></item>
         <item id="allow_page_php_scripting" title="PHP in pagina’s toestaan?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Datumweergave archief"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Samenvattingen gebruiken?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Titels aan permalinks verbinden?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Zomer- en wintertijd automatisch bijstellen?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Reacties als updates beschouwen?"><![CDATA[]]></item>
         <item id="comment_nofollow" title="Gebruik rel=&quot;nofollow&quot; bij reacties?"><![CDATA[]]></item>
         <item id="comments_are_ol" title="Reacties als genummerde lijst weergeven?"><![CDATA[]]></item>
         <item id="comments_auto_append" title="Reacties automatisch toevoegen onder artikelen?"><![CDATA[]]></item>
         <item id="comments_dateformat" title="Datumweergave reacties"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Standaard uitnodiging voor reacties"><![CDATA[]]></item>
         <item id="comments_disabled_after" title="Inactief na"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Afbeeldingen in reacties verbieden"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
         <item id="comments_mode" title="Reactietype"><![CDATA[]]></item>
         <item id="comments_moderate" title="Reacties controleren?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Standaard aan?"><![CDATA[]]></item>
