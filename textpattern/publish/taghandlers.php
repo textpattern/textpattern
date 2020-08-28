@@ -1850,7 +1850,7 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     if ($set) {
         $oldtop = $top;
-        $top = $shift === true ? $numPages : ((int)$shift < 0 ? $numPages + $shift : $shift);
+        $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
         $oldshown = $shown;
         $oldlink = $linkall;
         $linkall = $link;
