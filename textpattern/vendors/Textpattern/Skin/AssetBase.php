@@ -511,6 +511,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
         $filenames = array();
         $extension = self::getExtension();
         $hasSubdir = self::getSubdirField();
+        $notRemoved = $subdirPaths = array();
 
         foreach ($this->getNames() as $name) {
             $ext = pathinfo($name, PATHINFO_EXTENSION);
@@ -520,8 +521,6 @@ abstract class AssetBase extends CommonBase implements AssetInterface
         $files = $this->getFiles($filenames, $hasSubdir ? 1 : 0);
 
         if ($files) {
-            $notRemoved = $subdirPaths = array();
-
             foreach ($files as $file) {
                 $name = $file->getFilename();
                 $ext = pathinfo($name, PATHINFO_EXTENSION);
@@ -535,21 +534,21 @@ abstract class AssetBase extends CommonBase implements AssetInterface
                     !$hasSubdir or $subdirPaths[] = $file->getPath();
                 }
             }
+        }
 
-            if (!$notRemoved) {
-                if ($hasSubdir) {
-                    foreach ($subdirPaths as $subdirPath) {
-                        if (self::isDirEmpty($subdirPath) && !@rmdir($subdirPath)) {
-                            $notRemoved[] = $subdirPath;
-                        }
+        if (!$notRemoved) {
+            if ($hasSubdir) {
+                foreach ($subdirPaths as $subdirPath) {
+                    if (self::isDirEmpty($subdirPath) && !@rmdir($subdirPath)) {
+                        $notRemoved[] = $subdirPath;
                     }
                 }
+            }
 
-                $dirPath = $this->getDirPath();
+            $dirPath = $this->getDirPath();
 
-                if (self::isDirEmpty($dirPath) && !@rmdir($dirPath)) {
-                    $notRemoved[] = $dirPath;
-                }
+            if (self::isDirEmpty($dirPath) && !@rmdir($dirPath)) {
+                $notRemoved[] = $dirPath;
             }
         }
 
@@ -573,16 +572,12 @@ abstract class AssetBase extends CommonBase implements AssetInterface
 
         callback_event('txp.'.$event, 'import', 1, $callbackExtra);
 
-        if (!$dirIsReadable) {
-            $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
-        }
-
         if ($dirIsReadable || !$override) {
             if ($dirIsReadable) {
                 $filenames = array();
                 $extension = self::getExtension();
 
-                foreach ($this->getNames() as $name) {
+                foreach ($names as $name) {
                     $ext = pathinfo($name, PATHINFO_EXTENSION);
                     $filenames[] = $name.(isset(static::$mimeTypes[$ext]) ? '' : '.'.$extension);
                 }
@@ -595,13 +590,14 @@ abstract class AssetBase extends CommonBase implements AssetInterface
 
                 $rows = $this->parseFiles($files);
             } else {
+                $this->mergeResult('path_not_readable', array($skin => array($dirPath)), 'warning');
                 $rows = self::getEssential();
             }
 
             if (!$this->createRows($rows)) {
                 $this->mergeResult($event.'_import_failed', array($skin => $names));
             } else {
-                $done[] = $names;
+                $done = array_column($rows, 'name');
 
                 $this->mergeResult($event.'_imported', array($skin => $names), 'success');
             }
@@ -609,6 +605,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
             // Drops extra rows…
             if ($sync) {
                 if (!$this->deleteExtraRows()) {
+                    $notCleaned = array_diff(array_column($this->getRows('name'), 'name'), $done);
                     $this->mergeResult($event.'_files_deletion_failed', array($skin => $notCleaned));
                 }
             }
@@ -641,7 +638,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
             $rows = $this->getRows();
 
             if (!$rows) {
-                $this->mergeResult($event.'_not_found', $skin);
+                $this->mergeResult($event.'_not_found', $skin, 'warning');
             } else {
                 foreach ($rows as $row) {
                     extract($row);
@@ -677,14 +674,14 @@ abstract class AssetBase extends CommonBase implements AssetInterface
                         }
                     }
                 }
+            }
 
-                // Drops extra files…
-                if ($sync && isset($done)) {
-                    $notUnlinked = $this->deleteExtraFiles($done);
+            // Drops extra files…
+            if ($sync) {
+                $notUnlinked = $this->deleteExtraFiles($done);
 
-                    if ($notUnlinked) {
-                        $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
-                    }
+                if ($notUnlinked) {
+                    $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
                 }
             }
         }

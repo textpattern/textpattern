@@ -1869,7 +1869,7 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     $pgc = $pg === true ? 'pg' : $pg;
-    $thispg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, 1));
+    $thispg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, $top));
     $thepg = max(1, min($thispg, $numPages));
 
     if ($get) {
