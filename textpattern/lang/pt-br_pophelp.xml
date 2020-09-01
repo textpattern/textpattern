@@ -2,37 +2,37 @@
 <resources>
 <help lang="pt-BR">
     <group id="admin" title="Painel de usuários">
-        <item id="about_privileges" title="Sobre funções"><![CDATA[
+        <item id="about_privileges" title=""><![CDATA[
 <h2>Sobre as funções</h2>
-<h3>Editor</h3>
+<h3>Administrador</h3>
 <ul>
     <li>pode gerenciar artigos, comentários e links</li>
-    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
+    <li>pode usar PHP em artigos se 'Permitir PHP em artigos?' é definida como 'Sim' no painel de preferências</li>
     <li>pode gerenciar imagens e arquivos</li>
     <li>pode gerenciar categorias e seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
+    <li>pode gerenciar páginas, formulários e estilos</li>
     <li>pode exibir informações de diagnóstico</li>
     <li>pode gerenciar preferências do site</li>
     <li>pode gerenciar usuários</li>
-    <li>pode gerenciar logs de visitante</li>
+    <li>pode gerenciar registros de visitantes</li>
     <li>pode gerenciar plugins</li>
     <li>pode importar dados</li>
 </ul>
-<h3>Managing Editor</h3>
+<h3>Editor</h3>
 <ul>
     <li>pode gerenciar artigos, comentários e links</li>
-    <li>pode usar PHP em artigos se preferência de administrador ‘Permitir PHP em artigos?’ é definida como ‘Sim’</li>
+    <li>pode usar PHP em artigos se 'Permitir PHP em artigos?' é definida como 'Sim' no painel de preferências</li>
     <li>pode gerenciar imagens e arquivos</li>
     <li>pode gerenciar categorias e seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
+    <li>pode gerenciar páginas, formulários e estilos</li>
     <li>pode exibir informações de diagnóstico</li>
-    <li>pode gerenciar preferências local</li>
+    <li>pode gerenciar preferências do site</li>
     <li>pode ver os usuários</li>
-    <li>pode gerenciar registros de visitas</li>
+    <li>pode gerenciar registros de visitantes</li>
     <li>pode gerenciar plugins</li>
-    <li>pode importar dados de</li>
+    <li>pode importar dados</li>
 </ul>
-<h3>Editor de Cópia</h3>
+<h3>Editor de textos</h3>
 <ul>
     <li>pode gerenciar artigos com uma limitação:
         <ul>
@@ -40,23 +40,23 @@
         </ul>
     </li>
     <li>pode gerenciar comentários e links</li>
-    <li> pode gerenciar imagens e arquivos</li>
+    <li>pode gerenciar imagens e arquivos</li>
     <li>pode gerenciar categorias</li>
     <li>pode gerenciar páginas e formulários</li>
     <li>pode ver os usuários</li>
-    <li>pode gerenciar registros de visitas</li>
+    <li>pode gerenciar registros de visitantes</li>
 </ul>
 <h3>Escritor</h3>
 <ul>
-    <li>pode gerenciar os próprios artigos, Ver os artigos dos outros usuários</li>
+    <li>pode gerenciar os próprios artigos e ver os artigos de outros usuários</li>
     <li>pode gerenciar imagens e arquivos</li>
 </ul>
 <h3>Freelancer</h3>
 <ul>
     <li>pode gerenciar artigos próprios em um sentido limitado:
         <ul>
-            <li>só pode modificar o artigo até que é publicado</li>
-            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
+            <li>só pode modificar o artigo até que seja publicado</li>
+            <li>só pode aplicar os status do artigo como rascunho, oculto ou pendente</li>
         </ul>
     </li>
     <li>pode ver os artigos de outros usuários</li>
@@ -65,18 +65,19 @@
 <ul>
     <li>pode gerenciar os próprios artigos em um sentido limitado:
         <ul>
-            <li>só pode modificar o artigo até que é publicado</li>
-            <li>pode aplicar o status de <em>apenas</em> rascunho, oculto ou pendente</li>
-        </ul> < di classe v = "notranslate" > 65</div></li>
-    <li>pode ver os artigos dos outros usuários</li>
+            <li>só pode modificar o artigo até que seja publicado</li>
+            <li>só pode aplicar os status do artigo como rascunho, oculto ou pendente</li>
+        </ul>
+    </li>
+    <li>pode ver os artigos de outros usuários</li>
     <li>pode gerenciar imagens</li>
     <li>pode gerenciar seções</li>
-    <li>pode gerenciar páginas, formas e estilo</li>
+    <li>pode gerenciar páginas, formulários e estilos</li>
 </ul>
         ]]></item>
         <item id="create_author" title="Criar o autor"><![CDATA[
 <h2>Adicionar novo autor</h2>
-<p>Uma senha, mensagem de bem-vindo e instruções de login serão enviadas para o novo autor.</p>
+<p>Uma senha, uma mensagem de boas vindas e instruções de login serão enviadas para o novo autor.</p>
         ]]></item>
     </group>
 
@@ -89,7 +90,7 @@
     <li>uma URL relativa para a imagem (por exemplo, <code>/images/my_pic.jpg</code>)</li>
     <li>uma URL com o endereço completo (por exemplo, <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>a imagem pode ser exibida, colocando uma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> marca <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> dentro de uma forma de artigo. Ocorrerá em uma saída HTML <code>&lt;img&gt;</code>completa para a imagem escolhida.</p>
+<p>A imagem pode ser exibida, colocando uma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> marca <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> dentro de um formulário de artigo. Ocorrerá em uma saída HTML <code>&lt;img&gt;</code>completa para a imagem escolhida.</p>
         ]]></item>
         <item id="body" title="Conteúdo"><![CDATA[
 <h2>Conteúdo</h2>
@@ -98,33 +99,33 @@
         ]]></item>
         <item id="description" title="Descrição"><![CDATA[
 <h2>Descrição</h2>
-<p>A descrição do artigo é um componente opcional que pode ajudar os motores de busca e rastreadores site melhor identificam e classificar conteúdo.</p>
-<p>A descrição do artigo é limitada a um máximo de 255 caracteres. Nota que alguns motores de busca Coloque limites de caráter no comprimento de de uma página <code>Descrição de meta</code> para a praticidade do display no resultado das páginas no engine de busca (SERPs) e isso pode ser menor que o limite de 255 caracteres em Textpattern.</p>
-<p>Nota que a descrição do artigo difere o trecho do artigo, embora ambos aceitam conteúdo semelhante. A descrição do artigo deve ser destinada principalmente para uso com os motores de busca e rastreadores, Considerando que o trecho do artigo é mais adequado para um resumo legível do artigo quando desejado.</p>
+<p>A descrição do artigo é um componente opcional que pode ajudar os motores de busca e rastreadores a melhor identificar e classificar o conteúdo.</p>
+<p>A descrição do artigo é limitada a um máximo de 255 caracteres. Observe que alguns mecanismos de pesquisa colocam limites de caracteres no comprimento da descrição de uma página para a praticidade de exibição nas páginas de resultados do mecanismo de pesquisa (SERPs) e isso pode ser inferior ao limite de 255 caracteres.</p>
+<p>Observe que a descrição do artigo difere do resumo do artigo, embora ambos aceitem conteúdo semelhante. A descrição do artigo deve ser destinada principalmente para uso com mecanismos de pesquisa e rastreadores, enquanto o resumo do artigo é mais adequado para um resumo de artigo legível quando desejado.</p>
         ]]></item>
         <item id="excerpt" title="Resumo"><![CDATA[
 <h2>Resumo</h2>
-<p>Resumo de artigo são opcionais. Trechos poderiam ser usados como um resumo do artigo que é exibido como parte de uma tabela de conteúdo, usado no lugar do corpo do artigo completo em feeds RSS/Atom do site, ou em inúmeros outros usos.</p>
+<p>Resumos de artigo são opcionais. Os resumos podem ser usados como um breve resumo do artigo que é exibido como parte de um índice, usado no lugar do corpo completo do artigo nos feeds RSS/Atom do site ou uma série de outros usos.</p>
         ]]></item>
         <item id="expire_date" title=""><![CDATA[
 <h2>Data de validade</h2>
-<p>Quando um artigo for rotulado como expirado. Este período é opcional e pode ser fixado como prazo arbitrário no passado ou no futuro.</p>
+<p>A hora em que um artigo é rotulado como expirado. A hora é opcional e pode ser definida como uma hora arbitrária no passado ou futuro. </p>
 <p>As caixas correspondem às seguintes informações:</p>
 <ul>
     <li>Ano / Mês / Dia</li>
     <li>Hora (formato de 24 horas) : Minuto: Segundo</li>
 </ul>
-<p>Quando o tempo chegar, ou no caso em que um tempo no passado é fornecido, o artigo expira.</p>
-<p>Se a opção de exibir artigos expirados estiver ativada, o artigo permanece visível. Se a opção de exibir artigos expirados estiver desativada, Os visitantes da página do artigo serão receberão o erro HTTP 410 no lugar do conteúdo do artigo.</p>
+<p>Quando chegar a hora, ou no caso de ser fornecida uma hora no passado, o artigo expira.</p>
+<p>Se a opção de exibir artigos expirados estiver habilitada, o artigo permanece visível. Se a opção de exibir artigos expirados estiver desabilitada, os visitantes da página do artigo receberão um erro HTTP 410 no lugar do conteúdo do artigo.</p>
         ]]></item>
         <item id="keywords" title="Palavras-chave"><![CDATA[
 <h2>Palavras-chave</h2>
 <p>Palavras-chave são úteis para melhorar as relações entre artigos além dos fornecidos por categorias.</p>
 <p>Palavras-chave devem ser separadas por vírgulas.</p>
         ]]></item>
-        <item id="override_form" title="Módulo alternativo"><![CDATA[
-<h2>Módulo alternativo</h2>
-<p>Um artigo pode, opcionalmente, usar um módulo diferente do atribuído por padrão. Por exemplo, para mostrar um resumo de um artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> em vez do corpo do artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> - você pode usar um módulo alternativo. </p>
+        <item id="override_form" title="Formulário alternativo"><![CDATA[
+<h2>Formulário alternativo</h2>
+<p>Um artigo pode, opcionalmente, usar um formulário diferente do atribuído por padrão. Por exemplo, para mostrar um resumo de um artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> em vez do corpo do artigo com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> - você pode usar um formulário alternativo. </p>
         ]]></item>
         <item id="publish_date" title="Data de publicação"><![CDATA[
 <h2>Data de publicação</h2>
@@ -136,19 +137,35 @@
 </ul>
 <p>Um item com horário definido para o futuro ficará agendado, e não será visível no site nem em feeds RSS/Atom até chegar à data e horário determinado. </p>
         ]]></item>
-        <item id="status" title="Situação"><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[<h2>Status</h2>
+<p>Define o status de visibilidade deste artigo.</p>
+<p>O status de publicação são os seguintes:</p>
+<ul>
+    <li>Rascunho</li>
+    <li>Oculto</li>
+    <li>Pendente</li>
+    <li>Publicado</li>
+    <li>Persistente</li>
+</ul>
+<p>Um artigo definido como <strong>rascunho</strong> é considerado um trabalho em andamento e não pode ser visto fora da área de administração do Textpattern (ou seja, não é visível no seu site e não é distribuído em feeds)</p>
+<p>Um artigo definido como <strong>oculto</strong> consiste apenas em um artigo que não pode ser visualizado fora da área de administração do Textpattern.</p>
+<p>Um artigo definido como <strong>pendente</strong> é considerado pronto para publicação e aguardando aprovação. Não pode ser visualizado fora da área de administração do Textpattern.</p>
+<p>Um artigo definido como <strong>publicado</strong> normalmente pode ser visualizado fora da área de administração do Textpattern (ou seja, visível no seu site e distribuído em feeds se tiverem permissão). Se um artigo estiver publicado e tiver uma data de validade, o status permanecerá como <strong>publicado</strong> após essa data ser atingida, no entanto o artigo só aparecerá fora da área de administração se artigos expirados tiverem permissão para serem publicados.</p>
+<p>Um artigo definido como <strong>persistente</strong> é semelhante a um artigo <strong>publicado</strong> na medida em que pode ser visualizado fora da área de administração do Textpattern, mas <4>não</4> aparecerá nas listas de artigos, a menos que a respectiva tag <code>article</code> ou <code>article_custom</code> inclua um atributo <code>status</code> com o valor de <code>sticky</code>.</p>]]></item>
         <item id="title" title="Título"><![CDATA[
 <h2>Title</h2>
 <p>Adicione um título apropriado a este artigo.</p>
 <p>Um título de artigo está limitado a um máximo de 255 caracteres.</p>
         ]]></item>
-        <item id="url_title" title="Título da URL"><![CDATA[]]></item>
+        <item id="url_title" title="Título do URL"><![CDATA[<h2>Título do URL</h2>
+<p>Para usar um título específico no URL do link permanente de um artigo, insira-o aqui. Se for deixado em branco, o título do URL será gerado automaticamente a partir do título do artigo.</p>
+<p>Isso é particularmente útil se o título do artigo usar caracteres não ASCII.</p>]]></item>
     </group>
 
     <group id="category" title="Painel de categorias">
         <item id="article_category" title="Artigos"><![CDATA[
 <h2>Artigos</h2>
-<p>Ao contrário de seções, que definem a estrutura de navegação de um site, as categorias de artigo permitem organização de artigos pelo seu assunto. Uma vez que as categorias são atribuídas, as listas de artigos pertencentes a categorias específicas podem ser pesquisadas.</p>
+<p>Ao contrário de seções, que definem a estrutura de navegação de um site, as categorias de artigo permitem organização de artigos pelo seu assunto. Uma vez que as categorias são atribuídas, as listas de artigos pertencentes a categorias específicas podem ser navegadas.</p>
 <p>Por exemplo, provavelmente categorias de artigos em um site sobre alimentos podem ser:</p>
 <ul>
     <li>ingredientes</li>
