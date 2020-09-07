@@ -107,7 +107,7 @@
 <h2>Resumo</h2>
 <p>Resumos de artigo são opcionais. Os resumos podem ser usados como um breve resumo do artigo que é exibido como parte de um índice, usado no lugar do corpo completo do artigo nos feeds RSS/Atom do site ou uma série de outros usos.</p>
         ]]></item>
-        <item id="expire_date" title=""><![CDATA[
+        <item id="expire_date" title="Data de validade"><![CDATA[
 <h2>Data de validade</h2>
 <p>A hora em que um artigo é rotulado como expirado. A hora é opcional e pode ser definida como uma hora arbitrária no passado ou futuro. </p>
 <p>As caixas correspondem às seguintes informações:</p>
@@ -181,7 +181,10 @@
 <p>A descrição da categoria é um componente opcional que pode ajudar os rastreadores a identificar e classificar melhor o conteúdo.</p>
 <p>A descrição da categoria é limitada a um máximo de 255 caracteres. Note que alguns motores de busca colocam limites de caracteres sobre o comprimento da <code>meta description</code> para a prática da exibição em páginas de resultados de motores de busca (SERPs) e isto pode ser menor que o limite de 255 caracteres no Textpattern. </p>
         ]]></item>
-        <item id="file_category" title="Arquivos"><![CDATA[]]></item>
+        <item id="file_category" title="Arquivos"><![CDATA[
+<h2>Arquivos</h2>
+<p>As categorias de arquivo são opcionais e úteis para agrupar os arquivos enviados juntos.</p>
+        ]]></item>
         <item id="image_category" title="Imagens"><![CDATA[]]></item>
         <item id="link_category" title="Links"><![CDATA[]]></item>
     </group>
@@ -269,7 +272,10 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Permitir imagens nos comentários?"><![CDATA[
+<h2>Permitir imagens nos comentários?</h2>
+<p>Com esta opção definida como "Não", quaisquer imagens incluídas nos comentários serão removidas.</p>
+        ]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
@@ -289,8 +295,8 @@
         <item id="expire_logs_after" title=""><![CDATA[]]></item>
         <item id="file_base_path" title=""><![CDATA[]]></item>
         <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title="Fuso horário"><![CDATA[]]></item>
+        <item id="img_dir" title="Diretório de imagens"><![CDATA[]]></item>
         <item id="include_email_atom" title=""><![CDATA[]]></item>
         <item id="is_dst" title=""><![CDATA[]]></item>
         <item id="logging" title=""><![CDATA[]]></item>
@@ -298,12 +304,12 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title="Padrão de URL  de link permanente"><![CDATA[]]></item>
+        <item id="permlink_mode" title="Padrão de URL do artigo"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="production_status" title="Situação de produção"><![CDATA[]]></item>
         <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Publicar artigo expirado?"><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
@@ -318,10 +324,10 @@
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
+        <item id="use_comments" title="Permitir comentários?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title="Usar plugins?"><![CDATA[]]></item>
+        <item id="use_textile" title="Usar Textile?"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">
@@ -348,12 +354,15 @@
         <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
         <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
+        <item id="skin_description" title="Descrição do tema"><![CDATA[]]></item>
+        <item id="skin_import" title="Importação de tema"><![CDATA[]]></item>
+        <item id="skin_name" title="Nome do tema"><![CDATA[]]></item>
         <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="Titulo do tema"><![CDATA[]]></item>
+        <item id="skin_version" title="Versão do tema"><![CDATA[
+<h2>Versão do tema</h2>
+<p>O número da versão instalada deste tema (opcional).</p>
+        ]]></item>
     </group>
 </help>
 </resources>

@@ -13,6 +13,7 @@ Changes in 4.8.3 (upcoming)
 * Fixed: Correctly label 'Allow commenter images in comments' pref.
 * Fixed: Reload private prefs on preferences save (thanks, phiw13).
 * Fixed: More notifications on list panels if there were no assets recorded.
+* Fixed: Improved upgrade path for Textpattern prior to version 4.5.0.
 * Added: Instantly refresh admin theme on change.
 * Added: Latest translations. Thank you to all translators for your hard work.
 * PrismJS 1.21.0.
