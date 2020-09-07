@@ -309,7 +309,9 @@ abstract class AssetBase extends CommonBase implements AssetInterface
     public function getEditing()
     {
         $editing = get_pref('last_'.$this->getEvent().'_saved', '', true);
-        $installed = $this->getInstalled()[$this->getSkin()->getName()];
+        $skin = $this->getSkin()->getName();
+        $installed = $this->getInstalled() + array($skin => array(''));
+        $installed = $installed[$skin];
 
         if (!$editing || !in_array($editing, $installed)) {
             reset($installed);
