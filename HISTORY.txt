@@ -7,7 +7,7 @@ Changes in 4.8.3 (upcoming)
 * Fixed: Improved upgrade path for Textpattern prior to version 4.5.0.
 * Added: Instantly refresh admin theme on change.
 * Added: Latest translations. Thank you to all translators for your hard work.
-* Changed: Styles in themes are optional.
+* Changed: Theme styles are optional.
 * PrismJS 1.21.0.
 
 Changes in 4.8.2 (29 Jul 2020)
