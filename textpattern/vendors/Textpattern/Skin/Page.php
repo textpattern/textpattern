@@ -36,6 +36,7 @@ class Page extends AssetBase implements PageInterface
 {
     protected static $dir = 'pages';
     protected static $fileContentsField = 'user_html';
+    protected static $mimeTypes = array();
     protected static $essential = array(
         array(
             'name'      => 'default',
