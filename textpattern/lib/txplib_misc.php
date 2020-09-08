@@ -2959,7 +2959,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
     $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-    $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
+    $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
@@ -3008,7 +3008,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
             }
 
-            $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
+            $tags[$level][] = array($chunk, $tag[$level][2], trim(rtrim($tag[$level][3], '/')), null, null);
             $inside[$level] .= $chunk;
         } elseif ($chunk[1] !== '/') {
             // Opening tag.
