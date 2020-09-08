@@ -74,6 +74,7 @@ class Locale
         'ja'    => array('ja_JP.UTF-8', 'Japanese_Japan.932', 'ja_JP', 'ja', 'jpn', 'japanese'),
         'km'    => array('km_KH.UTF-8', 'Khmer.65001', 'km_KH', 'km', 'khm', 'kxm', 'khmer'),
         'ko'    => array('ko_KR.UTF-8', 'Korean_Korea.949', 'ko_KR', 'ko', 'kor', 'korean'),
+        'ky'    => array('ky.UTF-8', 'ky-KG.ISO_8859-5', 'Kyrgyz_Kyrgyzstan.1251', 'ky-KG', 'ky', 'kir', 'kyrgyz', 'kirghiz'),
         'lt'    => array('lt_LT.UTF-8', 'lt_LT.ISO_8859-4', 'Lithuanian_Lithuania.1257', 'lt_LT', 'lt', 'lit', 'lithuanian'),
         'lv'    => array('lv_LV.UTF-8', 'lv_LV.ISO_8859-4', 'Latvian_Latvia.1257', 'lv_LV', 'lv', 'lav', 'latvian'),
         'nb'    => array('nb_NO.UTF-8', 'nb_NO.ISO_8859-1', 'Norwegian_Norway.1252', 'nb_NO', 'no', 'nb', 'nob', 'norwegian'),

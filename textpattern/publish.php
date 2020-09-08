@@ -924,7 +924,7 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thispage, $txp_item;
+    global $pretext, $thispage, $trace, $txp_item;
     extract($pretext);
 
     // Article form preview.
@@ -1014,6 +1014,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $grand_total = safe_count('textpattern', $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
+            $trace->log("[Found: $total articles, $numPages pages]");
 
             // Send paging info to txp:newer and txp:older.
             $thispage = array(
