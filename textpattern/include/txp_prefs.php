@@ -56,7 +56,7 @@ if ($event == 'prefs') {
 
 function prefs_save()
 {
-    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user;
+    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user, $theme;
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
@@ -116,6 +116,8 @@ function prefs_save()
         $post['siteurl'] = preg_replace('#^https?://#', '', rtrim($post['siteurl'], '/ '));
     }
 
+    $theme_name = get_pref('theme_name');
+
     while ($a = nextRow($prefnames)) {
         extract($a);
 
@@ -135,12 +137,18 @@ function prefs_save()
             safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
-        update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        if ((string) $post[$name] !== $val) {
+            update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        }
     }
 
     update_lastmod('preferences_saved');
-    $prefs = get_prefs();
+    $prefs = get_prefs(array('', $txp_user));
     plug_privs();
+
+    if (!empty($post['theme_name']) && $post['theme_name'] != $theme_name) {
+        $theme = \Textpattern\Admin\Theme::init();
+    }
 
     prefs_list(gTxt('preferences_saved'));
 }
