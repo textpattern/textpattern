@@ -6,6 +6,7 @@ Changes in 4.8.3 (upcoming)
 * Fixed: More notifications on list panels if there were no assets recorded.
 * Fixed: Improved upgrade path for Textpattern prior to version 4.5.0.
 * Added: Instantly refresh admin theme on change.
+* Added: 'loading' attribute to single image tags.
 * Added: Latest translations. Thank you to all translators for your hard work.
 * Changed: Theme styles are now optional.
 * PrismJS 1.21.0.
