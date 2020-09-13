@@ -142,6 +142,8 @@ npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
 ## Thank You
 
+Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
+
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
 ## Legal

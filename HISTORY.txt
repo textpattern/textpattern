@@ -1,13 +1,4 @@
-Changes in 4.9.0 (upcoming)
-
-* Changed: Minimum system requirements increased to PHP 5.6.
-* Added: Option to define a comprehensive Content Security Policy header for the
-  Textpattern admin panel via config.php.
-* Added: Plugins can now be uploaded from URL by dragging to upload textarea.
-* Added: Compiled .txt plugins can now be uploaded via Browse... feature.
-* Changed: Plugins of all types trigger verify step.
-
-Changes in 4.8.3 (upcoming)
+Changes in 4.8.3 (13 Sep 2020)
 
 * Fixed: A bug in 4.8.2 that can break some legacy plugins (thanks, Yiannis).
 * Fixed: Correctly label 'Allow commenter images in comments' pref.
