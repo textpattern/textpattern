@@ -1,4 +1,7 @@
 @charset "UTF-8";
+/* ==========================================================================
+   Styling and layout for all media
+   ========================================================================== */
 /* Reset
    ========================================================================== */
 /**
@@ -23,38 +26,18 @@ summary {
   display: list-item;
 }
 
-/**
- * Add the correct display in IE 11.
- */
-template {
-  display: none;
-}
-
-/**
- * Remove tap delay in modern browsers.
- */
-a,
-input,
-button {
-  touch-action: manipulation;
-}
-
 /* Clearfix
    ========================================================================== */
 header::after,
 footer::after,
 nav ul::after,
 nav ol::after,
-.container::after,
-.paginator::after {
+.container::after {
   content: "";
   display: table;
   clear: both;
 }
 
-/* ==========================================================================
-   Styling and layout for all media
-   ========================================================================== */
 /* ==========================================================================
    Styling and layout for screen media (mobile first)
    ========================================================================== */
@@ -68,7 +51,6 @@ nav ol::after,
   html {
     /* 1 */
     -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
   }
 
@@ -295,6 +277,7 @@ nav ol::after,
    * 2. Remove default underline style from non-hover state links.
    * 3. Interrupt the decoration line to let the shape of the text show through
    *    in supported browsers.
+   * 4. Remove tap delay in modern browsers.
    */
   a {
     /* 1 */
@@ -304,6 +287,8 @@ nav ol::after,
     /* 3 */
     -webkit-text-decoration-skip: ink;
             text-decoration-skip-ink: auto;
+    /* 4 */
+    touch-action: manipulation;
   }
 
   a:hover, a:active {
@@ -358,15 +343,8 @@ h6 a:active {
    *     <a rel="next">
    */
   .paginator {
-    clear: both;
-  }
-
-  .paginator [rel=prev] {
-    float: left;
-  }
-
-  .paginator [rel=next] {
-    float: right;
+    display: flex;
+    justify-content: space-between;
   }
 
   /**
@@ -771,17 +749,6 @@ bdo[dir=rtl] {
   }
 
   /**
-   * Swap paginator (prev/next) navigation links on articles/article lists.
-   */
-  [dir=rtl] .paginator [rel=prev] {
-    float: right;
-  }
-
-  [dir=rtl] .paginator [rel=next] {
-    float: left;
-  }
-
-  /**
    * Swap ‘skip links’ position in RTL languages.
    */
   [dir=rtl] .skip-link {
@@ -1010,11 +977,15 @@ li > ol {
   }
 
   /**
-   * Show the overflow in Edge.
+   * 1. Show the overflow in Edge.
+   * 2. Remove tap delay in modern browsers.
    */
   button,
 input {
+    /* 1 */
     overflow: visible;
+    /* 2 */
+    touch-action: manipulation;
   }
 
   /**
@@ -1264,12 +1235,6 @@ textarea:-moz-ui-invalid {
    * 1. Fix placeholder font properties inheritance.
    */
   :-ms-input-placeholder {
-    opacity: 1;
-    color: #999999;
-    /* 1 */
-    font: inherit;
-  }
-  ::-ms-input-placeholder {
     opacity: 1;
     color: #999999;
     /* 1 */

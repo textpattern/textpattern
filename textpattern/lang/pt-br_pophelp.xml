@@ -185,14 +185,20 @@
 <h2>Arquivos</h2>
 <p>As categorias de arquivo são opcionais e úteis para agrupar os arquivos enviados juntos.</p>
         ]]></item>
-        <item id="image_category" title="Imagens"><![CDATA[]]></item>
+        <item id="image_category" title="Imagens"><![CDATA[<h2>Imagens</h2>
+<p>As categorias de imagens são opcionais e úteis tanto para organização interna quanto para definir conjuntos de imagens que podem ser exibidos usando<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">
+(abre um link externo em uma nova janela)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">
+(abre um link externo em uma nova janela)</span></a> tags.</p>]]></item>
         <item id="link_category" title="Links"><![CDATA[]]></item>
     </group>
 
     <group id="diag" title="Painel de diagnósticos">
         <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
         <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Ocultar informações privadas"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Ocultar informações privadas"><![CDATA[
+<h2>Ocultar informações privadas</h2>
+<p>Ocultar informações privadas para uma segurança extra. Se a informação de diagnóstico for compartilhada em um formato publicamente visível, por exemplo no fórum de suporte do Textpattern, isto reduz um risco de segurança ao omitir informações confidenciais do servidor.</p>
+        ]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title="Diretório não permite gravação"><![CDATA[]]></item>
         <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[]]></item>
