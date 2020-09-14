@@ -26,14 +26,14 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.8.2. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
+The current production release is version 4.8.3. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/103/textpattern-4.8.2.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.2/textpattern-4.8.2.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/102/textpattern-4.8.2.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.2/textpattern-4.8.2.tar.gz) |
+| .zip   | [Download](https://textpattern.com/file_download/105/textpattern-4.8.3.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.3/textpattern-4.8.3.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/104/textpattern-4.8.3.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.3/textpattern-4.8.3.tar.gz) |
 
 
 ## Install Textpattern
@@ -141,6 +141,8 @@ npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
 ## Thank You
+
+Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
 
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
