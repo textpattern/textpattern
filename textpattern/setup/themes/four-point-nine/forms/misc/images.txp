@@ -5,7 +5,7 @@
 <txp:if_variable name="caption" value="">
 
     <p itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-        <img itemprop="url contentUrl" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
+        <img loading="lazy" itemprop="url contentUrl" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
         <meta itemprop="width" content="<txp:image_info type="w" />">
         <meta itemprop="height" content="<txp:image_info type="h" />">
     </p>
@@ -14,7 +14,7 @@
 
     <figure itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
 
-        <img itemprop="url contentUrl" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
+        <img loading="lazy" itemprop="url contentUrl" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
         <meta itemprop="width" content="<txp:image_info type="w" />">
         <meta itemprop="height" content="<txp:image_info type="h" />">
 

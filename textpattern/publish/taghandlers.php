@@ -389,6 +389,8 @@ function image($atts)
 
 function thumbnail($atts)
 {
+    global $doctype;
+
     extract(lAtts(array(
         'escape'    => true,
         'title'     => '',
@@ -398,6 +400,7 @@ function thumbnail($atts)
         'id'        => '',
         'link'      => 0,
         'link_rel'  => '',
+        'loading'   => null,
         'name'      => '',
         'poplink'   => 0, // Deprecated, 4.7
         'style'     => '',
@@ -466,6 +469,10 @@ function thumbnail($atts)
             $out .= ' height="'.(int) $height.'"';
         }
 
+        if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
+            $out .= ' loading="'.$loading.'"';
+        }
+
         $out .= ' />';
 
         if ($link && $thumb_) {
@@ -482,11 +489,7 @@ function thumbnail($atts)
                 '\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
         }
 
-        if ($wraptag) {
-            return doTag($out, $wraptag, $class, '', $html_id);
-        }
-
-        return $out;
+        return $wraptag ? doTag($out, $wraptag, $class, '', $html_id) : $out;
     }
 }
 
@@ -3218,7 +3221,7 @@ function if_article_image($atts, $thing = null)
 
 function article_image($atts)
 {
-    global $thisarticle;
+    global $doctype, $thisarticle;
 
     assert_article();
 
@@ -3232,6 +3235,7 @@ function article_image($atts)
         'height'    => '',
         'thumbnail' => 0,
         'wraptag'   => '',
+        'loading'   => null,
     ), $atts));
 
     if ($thisarticle['article_image']) {
@@ -3264,23 +3268,23 @@ function article_image($atts)
 
         $out = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
             '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
-            ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '').
-            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
-            ($width ? ' width="'.(int) $width.'"' : '').
-            ($height ? ' height="'.(int) $height.'"' : '').
-            ' />';
+            ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
     } else {
         $out = '<img src="'.txpspecialchars($image).'" alt=""'.
-            ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '').
-            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
-            ($width ? ' width="'.(int) $width.'"' : '').
-            ($height ? ' height="'.(int) $height.'"' : '').
-            ' />';
+            ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
     }
+
+    if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
+        $out .= ' loading="'.$loading.'"';
+    }
+
+    $out .=
+        (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+        (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+        ($style ? ' style="'.txpspecialchars($style).'"' : '').
+        ($width ? ' width="'.(int) $width.'"' : '').
+        ($height ? ' height="'.(int) $height.'"' : '').
+        ' />';
 
     return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 }
