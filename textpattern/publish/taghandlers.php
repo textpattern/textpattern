@@ -262,7 +262,7 @@ function css($atts)
         $skin_dir = urlencode(get_pref('skin_dir'));
 
         foreach (do_list_unique($name) as $n) {
-            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/styles/'.urlencode($n).'.css';
+            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.TXP_THEME_TREE['styles'].'/'.urlencode($n).'.css';
         }
     } else {
         $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
@@ -293,7 +293,7 @@ function css($atts)
 function component($atts)
 {
     global $doctype, $pretext, $txp_context;
-    static $mimetypes = null, $dir = null,
+    static $mimetypes = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
         $defaults = array(
         'format'  => 'url',
@@ -302,11 +302,6 @@ function component($atts)
         'rel'     => '',
         'title'   => '',
     );
-
-    if (!isset($mimetypes)) {
-        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
-        $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
-    }
 
     extract(lAtts($defaults, $atts, false));
 
@@ -321,13 +316,18 @@ function component($atts)
     $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
     if ($mode === 'flat') {
+        if (!isset($mimetypes)) {
+            $null = null;
+            $mimetypes = get_mediatypes($null);
+        }
+
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
         foreach (do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
-                $url[] = hu.$skin_dir.'/'.$theme.'/'.$dir.'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
+                $url[] = hu.$skin_dir.'/'.$theme.'/'.TXP_THEME_TREE['forms'].'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
             } else {
                 $url[] = pagelinkurl(array('f' => $n) + $qs);
             }

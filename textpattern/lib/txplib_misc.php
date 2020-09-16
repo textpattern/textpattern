@@ -5747,6 +5747,37 @@ function txp_match($atts, $what)
     return !empty($cond);
 }
 
+// -------------------------------------
+
+function get_mediatypes(&$textarray)
+{
+    global $lang_ui;
+
+    $mimeTypes = array();
+
+    if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
+        foreach ($custom_types as $type => $langpack) {
+            if (!empty($langpack['mediatype'])) {
+                $mimeTypes[$type] = $langpack['mediatype'];
+            }
+
+            if ($textarray !== null) {
+                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                    $langpack[$lang_ui] :
+                    (isset($langpack['title']) ?
+                        $langpack['title'] :
+                        (isset($mimeTypes[$type]) ?
+                            strtoupper($type)." (".$mimeTypes[$type].")"
+                            : $type
+                        )
+                    );
+            }
+        }
+    }
+
+    return $mimeTypes;
+}
+
 /*** Polyfills ***/
 
 if (!function_exists('array_column')) {
