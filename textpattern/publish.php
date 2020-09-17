@@ -749,7 +749,8 @@ function output_component($n = '')
     static $mimetypes = null, $typequery = null;
 
     if (!isset($mimetypes)) {
-        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+        $null = null;
+        $mimetypes = get_mediatypes($null);
         $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
     }
 
