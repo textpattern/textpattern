@@ -128,19 +128,15 @@ class Encode
 
     public function entityObfuscateAddress($address)
     {
-        $ent = array();
-        $mb = extension_loaded('mbstring') && mb_detect_encoding($address) != 'ASCII';
-        $length = $mb ? mb_strlen($address, 'UTF-8') : strlen($address);
-        $mb_ord = function_exists('mb_ord') ? 'mb_ord' : array($this, 'mb_ord');
+        if (extension_loaded('mbstring') && mb_detect_encoding($address) != 'ASCII') {
+            return mb_encode_numericentity ($address, array (0x0, 0xfffff, 0, 0xfffff), 'UTF-8');
+        }
 
-        if ($mb) {
-            for ($i = 0; $i < $length; $i++) {
-                $ent[] = "&#".$mb_ord(mb_substr($address, $i, 1, 'UTF-8'), 'UTF-8').";";
-            }
-        } else {
-            for ($i = 0; $i < $length; $i++) {
-                $ent[] = "&#".ord(substr($address, $i, 1)).";";
-            }
+        $ent = array();
+        $length = strlen($address);
+
+        for ($i = 0; $i < $length; $i++) {
+            $ent[] = "&#".ord(substr($address, $i, 1)).";";
         }
 
         return join('', $ent);
@@ -157,36 +153,5 @@ class Encode
     public function escapeHeader($string)
     {
         return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string)$string);
-    }
-
-    /**
-     * mb_ord polyfill borrowed from Symphony.
-     *
-     * @param  string $s        The character
-     * @param  string $encoding The encoding
-     * @return int    Order value
-     */
-
-    public static function mb_ord($s, $encoding = null)
-    {
-        if ('UTF-8' !== $encoding) {
-            $s = mb_convert_encoding($s, 'UTF-8', $encoding);
-        }
-
-        if (1 === strlen($s)) {
-            return ord($s);
-        }
-
-        $code = ($s = unpack('C*', substr($s, 0, 4))) ? $s[1] : 0;
-
-        if (0xF0 <= $code) {
-            return (($code - 0xF0) << 18) + (($s[2] - 0x80) << 12) + (($s[3] - 0x80) << 6) + $s[4] - 0x80;
-        } elseif (0xE0 <= $code) {
-            return (($code - 0xE0) << 12) + (($s[2] - 0x80) << 6) + $s[3] - 0x80;
-        } elseif (0xC0 <= $code) {
-            return (($code - 0xC0) << 6) + $s[2] - 0x80;
-        }
-
-        return $code;
     }
 }
