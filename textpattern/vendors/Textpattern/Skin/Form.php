@@ -38,7 +38,7 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
      * {@inheritdoc}
      */
 
-    protected static $dir = 'forms';
+    protected static $dir = TXP_THEME_TREE['forms'];
 
     /**
      * {@inheritdoc}
@@ -112,26 +112,10 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
 
     public function getInstance()
     {
-        global $lang_ui;
-
         $textarray = array();
 
         if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
-            foreach ($custom_types as $type => $langpack) {
-                if (!empty($langpack['mediatype'])) {
-                    static::$mimeTypes[$type] = $langpack['mediatype'];
-                }
-
-                $textarray[$type] = isset($langpack[$lang_ui]) ?
-                    $langpack[$lang_ui] :
-                    (isset($langpack['title']) ?
-                        $langpack['title'] :
-                        (isset(static::$mimeTypes[$type]) ?
-                            strtoupper($type)." (".static::$mimeTypes[$type].")"
-                            : $type
-                        )
-                    );
-            }
+            static::$mimeTypes = get_mediatypes($textarray);
         } else {
             $custom_types = array();
         }
