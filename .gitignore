@@ -27,4 +27,5 @@ Thumbs.db
 /yarn.lock
 /yarn-error.log
 .github/index
-.vscode/settings.json
+.nova
+.vscode
