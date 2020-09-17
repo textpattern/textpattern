@@ -34,7 +34,7 @@ namespace Textpattern\Skin;
 
 class Page extends AssetBase implements PageInterface
 {
-    protected static $dir = 'pages';
+    protected static $dir = TXP_THEME_TREE['pages'];
     protected static $fileContentsField = 'user_html';
     protected static $mimeTypes = array();
     protected static $essential = array(
