@@ -929,6 +929,18 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 /**
+ * Define the default theme directories
+ *
+ * @since   4.9.0
+ */
+
+ const TXP_THEME_TREE = array(
+     'forms'  => 'forms',
+     'pages'  => 'pages',
+     'styles' => 'styles'
+ );
+
+/**
  * A tab character.
  *
  * @var string
