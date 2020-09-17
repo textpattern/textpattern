@@ -1,3 +1,7 @@
+Changes in 4.8.4 (upcoming)
+
+*
+
 Changes in 4.8.3 (13 Sep 2020)
 
 * Fixed: A bug in 4.8.2 that can break some legacy plugins (thanks, Yiannis).
