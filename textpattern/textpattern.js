@@ -426,7 +426,7 @@ function setCookie(name, value, days)
         expires = '; expires=' + date.toGMTString();
     }
 
-    document.cookie = name + '=' + value + expires + '; path=/';
+    document.cookie = name + '=' + value + expires + '; path=/; SameSite=Lax';
 }
 
 /**
