@@ -975,6 +975,35 @@ function cs($thing)
 }
 
 /**
+ * Sets a HTTP cookie (polyfill).
+ *
+ * @param   string $name The cookie name
+ * @param   string $value The cookie value
+ * @param   array  $options The cookie options
+ * @package Network
+ */
+
+function set_cookie($name, $value = '', $options = array())
+{
+    $options += array (
+        'expires' => time() - 3600,
+        'path' => '',
+        'domain' => '',
+        'secure' => false,
+        'httponly' => false,
+        'samesite' => 'Lax' // None || Lax  || Strict
+    );
+
+    if (version_compare(phpversion(), '7.3.0') >= 0) {
+        return setcookie($name, $value, $options);
+    }
+
+    extract($options);
+
+    return setcookie($name, $value, $expires, $path.';samesite='.$samesite, $domain, $secure, $httponly);
+}
+
+/**
  * Converts a boolean to a localised "Yes" or "No" string.
  *
  * @param   bool $status The boolean. Ignores type and as such can also take a string or an integer
