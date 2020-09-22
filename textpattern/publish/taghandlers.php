@@ -2728,17 +2728,19 @@ function author($atts)
         $link = 1;
     }
 
+    $fetchRealName = $link || $title || $format === 'url';
+
     if ($thisauthor) {
         $realname = $thisauthor['realname'];
         $name = $thisauthor['name'];
     } elseif ($author) {
-        $realname = get_author_name($author);
         $name = $author;
     } else {
         assert_article();
-        $realname = get_author_name($thisarticle['authorid']);
         $name = $thisarticle['authorid'];
     }
+
+    isset($realname) or $realname = $fetchRealName ? get_author_name($name) : $name;
 
     if ($title) {
         $display_name = $realname;
@@ -2752,6 +2754,10 @@ function author($atts)
         $display_name = txp_escape(array('escape' => $escape), $display_name);
     }
 
+    if (!$link && $format !== 'url') {
+        return $display_name;
+    }
+
     if ($this_section && $s != 'default') {
         $section = $s;
     }
@@ -2761,15 +2767,7 @@ function author($atts)
             'author' => $realname,
         ));
 
-    if ($format === 'url') {
-        return $href;
-    }
-
-    if ($link) {
-        return href($display_name, $href, ' rel="author"');
-    }
-
-    return $display_name;
+    return $format === 'url' ? $href : href($display_name, $href, ' rel="author"');
 }
 
 // -------------------------------------------------------------
