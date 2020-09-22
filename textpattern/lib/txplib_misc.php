@@ -3139,49 +3139,44 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name)
+function fetch_form($name, $theme = null)
 {
-    global $production_status, $trace;
-
+    global $skin;
     static $forms = array();
-    global $pretext;
 
-    $skin = $pretext['skin'];
+    isset($theme) or $theme = $skin;
+    isset($forms[$theme]) or $forms[$theme] = array();
     $fetch = is_array($name);
 
-    if ($fetch || !isset($forms[$name])) {
-        $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
+    if ($fetch || !isset($forms[$theme][$name])) {
+        $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : array($name);
 
         if (has_handler('form.fetch')) {
             foreach ($names as $name) {
-                $forms[$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
+                $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
             }
         } elseif ($fetch) {
             $nameset = implode(',', quote_list($names));
 
-            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
+            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
                 while ($row = nextRow($rs)) {
-                    $forms[$row['name']] = $row['Form'];
+                    $forms[$theme][$row['name']] = $row['Form'];
                 }
             }
         } else {
-            $forms[$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($skin)."'");
+            $forms[$theme][$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$form])) {
-                trigger_error(gTxt('form_not_found').' '.$form);
-                $forms[$form] = false;
+            if (empty($forms[$theme][$form])) {
+                trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
+                $forms[$theme][$form] = false;
             }
         }
     }
 
     if (!$fetch) {
-        if ($production_status === 'debug') {
-            $trace->log("[Form: '$skin.$name']");
-        }
-
-        return $forms[$name];
+        return $forms[$theme][$name];
     }
 }
 
@@ -3193,42 +3188,45 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $theme = null)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $skin, $txp_current_form, $trace;
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
         $depth = get_pref('form_circular_depth', 15);
     }
 
-    $out = '';
+    isset($theme) or $theme = $skin;
     $name = (string) $name;
-    $f = fetch_form($name);
+    $f = fetch_form($name, $theme);
 
-    if ($f !== false) {
-        if (!isset($stack[$name])) {
-            $stack[$name] = 1;
-        } elseif ($stack[$name] >= $depth) {
-            trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
-
-            return '';
-        } else {
-            $stack[$name]++;
-        }
-
-        $old_form = $txp_current_form;
-        $txp_current_form = $name;
-
-        if ($production_status === 'debug') {
-            $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
-        }
-
-        $out = parse($f);
-
-        $txp_current_form = $old_form;
-        $stack[$name]--;
+    if ($f === false) {
+        return false;
     }
+
+    if (!isset($stack[$name])) {
+        $stack[$name] = 1;
+    } elseif ($stack[$name] >= $depth) {
+        trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
+
+        return '';
+    } else {
+        $stack[$name]++;
+    }
+
+    $old_form = $txp_current_form;
+    $txp_current_form = $name;
+
+    if ($production_status === 'debug') {
+        $trace->log("[Form: '$theme.$name']");
+        $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
+    }
+
+    $out = parse($f);
+
+    $txp_current_form = $old_form;
+    $stack[$name]--;
 
     return $out;
 }

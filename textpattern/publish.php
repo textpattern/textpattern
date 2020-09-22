@@ -762,7 +762,8 @@ function output_component($n = '')
     static $mimetypes = null, $typequery = null;
 
     if (!isset($mimetypes)) {
-        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+        $null = null;
+        $mimetypes = get_mediatypes($null);
         $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
     }
 
@@ -924,18 +925,8 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thispage, $trace, $txp_item;
+    global $pretext, $thispage, $trace, $txp_item, $txp_sections;
     extract($pretext);
-
-    // Article form preview.
-    if (txpinterface === 'admin' && ps('Form')) {
-        doAuth();
-
-        if (!has_privs('form')) {
-            txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-        }
-    }
 
     if ($iscustom) {
         // Custom articles must not render search results.
@@ -943,6 +934,10 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Getting attributes.
+    if (isset($thing) && !isset($atts['form'])) {
+        $atts['form'] = '';
+    }
+
     $theAtts = filterAtts($atts, $iscustom);
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
@@ -983,7 +978,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         $cols = join(" OR ", $cols);
         $search = " AND ($cols) $s_filter";
-        $fname = ($searchform ? $searchform : 'search_results');
+        $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
 
         if (!$sort) {
             $sort = "score DESC";
@@ -1050,11 +1045,6 @@ function doArticles($atts, $iscustom, $thing = null)
     );
 
     if ($rs && $last = numRows($rs)) {
-        // If a listform is specified, $thing is for doArticle() - hence ignore here.
-        if (!empty($listform)) {
-            $thing = null;
-        }
-
         $count = 0;
         $articles = array();
         $chunk = false;
@@ -1095,13 +1085,18 @@ function doArticles($atts, $iscustom, $thing = null)
             }
 
             if ($count <= $last) {
-                // Article form preview.
-                if (txpinterface === 'admin' && ps('Form')) {
-                    $item = txp_sandbox(array(), ps('Form'));
-                } elseif ($allowoverride && $a['override_form']) {
-                    $item = txp_sandbox(array(), parse_form($a['override_form']), false);
-                } else {
-                    $item = $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
+                $item = false;
+
+                if ($allowoverride && $a['override_form']) {
+                    $item = parse_form($a['override_form'], $txp_sections[$a['Section']]['skin']);
+                } elseif ($fname) {
+                    $item = parse_form($fname);
+                }
+
+                if ($item !== false) {
+                    $item = txp_sandbox(array(), $item, false);
+                } elseif (isset($thing)) {
+                    $item = txp_sandbox(array(), $thing);
                 }
 
                 $item === false or $chunk .= $item;
@@ -1129,6 +1124,10 @@ function doArticles($atts, $iscustom, $thing = null)
 function doArticle($atts, $thing = null)
 {
     global $pretext, $thisarticle;
+
+    if (isset($thing) && !isset($atts['form'])) {
+        $atts['form'] = '';
+    }
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
@@ -1158,11 +1157,16 @@ function doArticle($atts, $thing = null)
     if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
+        $article = false;
 
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
-        } else {
-            $article = $thing ? parse($thing) : parse_form($form);
+        } elseif ($form) {
+            $article = parse_form($form);
+        }
+
+        if (isset($thing) && $article === false) {
+            $article = parse($thing);
         }
 
         if (get_pref('use_comments') && get_pref('comments_auto_append')) {
