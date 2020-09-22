@@ -55,7 +55,8 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
-            setcookie('txp_test_cookie', '1');
+            header("Set-Cookie: txp_test_cookie=1; SameSite=Lax");
+            //setcookie('txp_test_cookie', '1');
             doLoginForm($message);
         }
     }
