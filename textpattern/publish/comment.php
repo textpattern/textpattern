@@ -102,11 +102,11 @@ function setCookies($name, $email, $web)
 {
     $cookietime = time() + (365 * 24 * 3600);
     ob_start();
-    setcookie("txp_name", $name, $cookietime, "/");
-    setcookie("txp_email", $email, $cookietime, "/");
-    setcookie("txp_web", $web, $cookietime, "/");
-    setcookie("txp_last", date("H:i d/m/Y"), $cookietime, "/");
-    setcookie("txp_remember", '1', $cookietime, "/");
+    set_cookie("txp_name", $name, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_email", $email, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_web", $web, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_last", date("H:i d/m/Y"), array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_remember", '1', array('expires' => $cookietime, 'path' => '/'));
 }
 
 /**
@@ -117,11 +117,11 @@ function destroyCookies()
 {
     $cookietime = time() - 3600;
     ob_start();
-    setcookie("txp_name", '', $cookietime, "/");
-    setcookie("txp_email", '', $cookietime, "/");
-    setcookie("txp_web", '', $cookietime, "/");
-    setcookie("txp_last", '', $cookietime, "/");
-    setcookie("txp_remember", '', $cookietime, "/");
+    set_cookie("txp_name", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_email", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_web", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_last", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_remember", '', array('expires' => $cookietime, 'path' => '/'));
 }
 
 /**

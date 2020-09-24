@@ -1000,7 +1000,7 @@ function set_cookie($name, $value = '', $options = array())
 
     extract($options);
 
-    return setcookie($name, $value, $expires, $path.';samesite='.$samesite, $domain, $secure, $httponly);
+    return setcookie($name, $value, $expires, $path.'; samesite='.$samesite, $domain, $secure, $httponly);
 }
 
 /**
