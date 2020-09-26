@@ -2078,9 +2078,11 @@ textpattern.Route.add('article', function () {
 
     $('#txp-write-sort-group').on('change', '#section',
         function () {
-            textpattern.Relay.callback('article.section_changed', {
-                data: allForms[$(this).find(':selected').data('skin')]
-            });
+            if (typeof allForms !== 'undefined') {
+                textpattern.Relay.callback('article.section_changed', {
+                        data: allForms[$(this).find(':selected').data('skin')]
+                });
+            }
         }
     ).change();
 
