@@ -230,6 +230,8 @@ class Plugin
     {
         global $txp_user;
 
+        $plugin = array();
+
         if (is_array($name)) {
             list($name, $target_path) = $name + array(null, null);
 
