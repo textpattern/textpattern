@@ -4798,23 +4798,25 @@ function do_list($list, $delim = ',')
         list($delim, $range) = $delim + array(null, null);
     }
 
-    $list = explode($delim, $list);
+    $array = explode($delim, $list);
 
-    if (isset($range)) {
+    if (isset($range) && strpos($list, $range) !== false) {
         $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
-        foreach ($list as $item) {
+        foreach ($array as $item) {
             if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
                 list($m, $start, $end) = $match;
-                $out = array_merge($out, range($start, $end));
+                foreach(range($start, $end) as $v) {
+                    $out[] = $v;
+                }
             }
         }
     }
 
-    return isset($out) ? $out : array_map('trim', $list);
+    return isset($out) ? $out : array_map('trim', $array);
 }
 
 /**
