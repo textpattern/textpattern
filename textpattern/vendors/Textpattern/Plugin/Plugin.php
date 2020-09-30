@@ -235,7 +235,7 @@ class Plugin
         if (is_array($name)) {
             list($name, $target_path) = $name + array(null, null);
 
-            if (!(@$pack = file_get_contents($target_path))) {
+            if (!($pack = txp_get_contents($target_path))) {
                 return false;
             }
 
@@ -258,27 +258,27 @@ class Plugin
             $target_path = $dir.$name.'.php';
         }
 
-        if (empty($plugin['code']) && @$code = file_get_contents($target_path)) {
+        if (empty($plugin['code']) && $code = txp_get_contents($target_path)) {
             $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
             $plugin['code'] = $code;
         }
 
         if (!empty($dir)) {
-            if (@$info = file_get_contents($dir.'manifest.json')) {
+            if ($info = txp_get_contents($dir.'manifest.json')) {
                 $plugin += json_decode($info, true);
             }
 
-            if (@$textpack = file_get_contents($dir.'textpack.txp')) {
+            if ($textpack = txp_get_contents($dir.'textpack.txp')) {
                 $plugin['textpack'] = $textpack;
             }
 
-            if (@$data = file_get_contents($dir.'data.txp')) {
+            if ($data = txp_get_contents($dir.'data.txp')) {
                 $plugin['data'] = $data;
             }
 
-            if (@$help = file_get_contents($dir.'help.html')) {
+            if ($help = txp_get_contents($dir.'help.html')) {
                 $plugin['help'] = $help;
-            } elseif (@$help = file_get_contents($dir.'help.textile')) {
+            } elseif ($help = txp_get_contents($dir.'help.textile')) {
                 $plugin['help_raw'] = $help;
             }
         }
