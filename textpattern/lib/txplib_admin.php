@@ -804,15 +804,15 @@ function register_tab($area, $panel, $title)
 function pluggable_ui($event, $element, $default = '')
 {
     $argv = func_get_args();
-    $argv = array_slice($argv, 2);
+    $argv = array_merge(array(
+        $event,
+        $element,
+       (string) $default === '' ? 0 : array(0, 0)
+    ), array_slice($argv, 2));
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array(
-        'event' => $event,
-        'step'  => $element,
-        'pre'   => (string) $default === '' ? 0 : array(0, 0),
-    ) + $argv);
+    $ui = call_user_func_array('callback_event', $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;

@@ -1529,10 +1529,10 @@ function callback_event($event, $step = '', $pre = 0)
                         (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
-                $return_value = call_user_func_array($c['function'], array(
-                    'event' => $event,
-                    'step'  => $step,
-                ) + $argv);
+                $return_value = call_user_func_array($c['function'], array_merge(array(
+                    $event,
+                    $step
+                ), $argv));
 
                 if (isset($renew)) {
                     $argv[$renew] = $return_value;
