@@ -393,7 +393,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $entries = array();
         $textpack = '';
 
-        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
+        if ($lang_file && ($textpack = txp_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);

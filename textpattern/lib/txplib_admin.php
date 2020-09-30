@@ -1971,7 +1971,7 @@ function assert_system_requirements()
 
 function get_prefs_theme()
 {
-    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    $out = json_decode(txp_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
     }

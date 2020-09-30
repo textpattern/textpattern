@@ -200,7 +200,7 @@ abstract class Theme
 
             foreach ($files as $file) {
                 $file = realpath($file);
-                if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = json_decode(txp_get_contents($file), true)) {
                     if (@$manifest['txp-type'] == 'textpattern-admin-theme' && is_file($mm[1].DS.$mm[2].'.php')) {
                         $manifest['title'] = empty($manifest['title']) ? ucwords($mm[2]) : $manifest['title'];
                         if ($format == 1) {

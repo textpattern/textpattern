@@ -38,7 +38,7 @@ EOF
     );
 }
 
-$cfg = @json_decode(file_get_contents($file), true);
+$cfg = json_decode(txp_get_contents($file), true);
 
 if (empty($cfg)) {
     msg("Error json config file", MSG_ERROR);
