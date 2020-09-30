@@ -473,6 +473,6 @@ abstract class Theme
 
     public function manifest($type = 'manifest')
     {
-        return @json_decode(file_get_contents($this->url.$type.'.json'), true);
+        return json_decode(txp_get_contents($this->url.$type.'.json'), true);
     }
 }

@@ -2844,6 +2844,16 @@ function fileDownloadFormatTime($params)
 }
 
 /**
+ * file_get_contents wrapper.
+ *
+ */
+
+function txp_get_contents($file)
+{
+    return is_readable($file) ? file_get_contents($file) : null;
+}
+
+/**
  * Returns the contents of the found files as an array.
  *
  */
