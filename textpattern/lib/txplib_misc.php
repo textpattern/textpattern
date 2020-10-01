@@ -1529,10 +1529,10 @@ function callback_event($event, $step = '', $pre = 0)
                         (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
-                $return_value = call_user_func_array($c['function'], array(
-                    'event' => $event,
-                    'step'  => $step,
-                ) + $argv);
+                $return_value = call_user_func_array($c['function'], array_merge(array(
+                    $event,
+                    $step
+                ), $argv));
 
                 if (isset($renew)) {
                     $argv[$renew] = $return_value;
@@ -2841,6 +2841,16 @@ function fileDownloadFormatTime($params)
     }
 
     return '';
+}
+
+/**
+ * file_get_contents wrapper.
+ *
+ */
+
+function txp_get_contents($file)
+{
+    return is_readable($file) ? file_get_contents($file) : null;
 }
 
 /**
@@ -4798,23 +4808,25 @@ function do_list($list, $delim = ',')
         list($delim, $range) = $delim + array(null, null);
     }
 
-    $list = explode($delim, $list);
+    $array = explode($delim, $list);
 
-    if (isset($range)) {
+    if (isset($range) && strpos($list, $range) !== false) {
         $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
-        foreach ($list as $item) {
+        foreach ($array as $item) {
             if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
                 list($m, $start, $end) = $match;
-                $out = array_merge($out, range($start, $end));
+                foreach(range($start, $end) as $v) {
+                    $out[] = $v;
+                }
             }
         }
     }
 
-    return isset($out) ? $out : array_map('trim', $list);
+    return isset($out) ? $out : array_map('trim', $array);
 }
 
 /**

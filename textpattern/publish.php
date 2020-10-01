@@ -994,7 +994,8 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['*'].$search;
     $pg or $pg = 1;
-    $pgby = intval(empty($pageby) || $pageby === true ? $limit : $pageby);
+    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
         $offset = $offset === true ? 0 : intval($offset);
@@ -1006,7 +1007,9 @@ function doArticles($atts, $iscustom, $thing = null)
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = safe_count('textpattern', $where);
+            $grand_total = $custom_pg && trim($pgonly) !== '*' ?
+                getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
+                safe_count('textpattern', $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -1027,7 +1030,11 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = safe_count('textpattern', $where) - $offset;
+        $total = $custom_pg && trim($pgonly) !== '*' ?
+            getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
+            safe_count('textpattern', $where);
+        $total -= $offset;
+
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
