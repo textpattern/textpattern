@@ -2,6 +2,7 @@ Changes in 4.8.4 (upcoming)
 
 * Fixed: Write panel JS error when override forms were switched off
   (thanks, GugUser).
+* Added: Latest translations. Thank you to all translators for your hard work.
 
 Changes in 4.8.3 (13 Sep 2020)
 
