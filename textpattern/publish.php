@@ -1068,7 +1068,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $rs = safe_rows_start(
-        $fields !== '*' ? "$fields, COUNT(*) AS total" : ("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
+        $fields !== '*' ? "$fields, COUNT(*) AS count" : ("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
@@ -1077,8 +1077,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = false;
-        $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
-        $oldtotal = isset($txp_item['total']) ? $txp_item['total'] : null;
+        $old_item = $txp_item;
+        $txp_item['total'] = $last;
         unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
@@ -1091,7 +1091,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
-                $txp_item['total'] = isset($a['total']) ? $a['total'] : $count;
+                $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
 
                 $newbreak = !$groupby ? $count :
                     ($groupby === 1 ?
@@ -1142,8 +1142,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $breakby = '';
         }
 
-        $txp_item['breakby'] = $oldbreak;
-        $txp_item['total'] = $oldtotal;
+        $txp_item = $old_item;
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
