@@ -92,12 +92,12 @@ function populateArticleData($rs)
 {
     global $production_status, $thisarticle, $trace;
 
-    if ($production_status === 'debug') {
-        $trace->log("[Article: '{$rs['ID']}']");
-    }
-
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = isset($rs[$column]) ? $rs[$column] : null;
+    }
+
+    if ($production_status === 'debug') {
+        $trace->log("[Article: '{$thisarticle['thisid']}']");
     }
 }
 
@@ -135,37 +135,38 @@ function article_format_info($rs)
 
 function article_column_map()
 {
-    $custom = getCustomFields();
-    $custom_map = array();
+    static $column_map = array();
 
-    if ($custom) {
-        foreach ($custom as $i => $name) {
-            $custom_map[$name] = 'custom_'.$i;
+    if (empty($column_map)) {
+        $column_map = array(
+            'thisid'          => 'ID',
+            'posted'          => 'uPosted', // Calculated value!
+            'expires'         => 'uExpires', // Calculated value!
+            'modified'        => 'uLastMod', // Calculated value!
+            'annotate'        => 'Annotate',
+            'comments_invite' => 'AnnotateInvite',
+            'authorid'        => 'AuthorID',
+            'title'           => 'Title',
+            'url_title'       => 'url_title',
+            'description'     => 'description',
+            'category1'       => 'Category1',
+            'category2'       => 'Category2',
+            'section'         => 'Section',
+            'keywords'        => 'Keywords',
+            'article_image'   => 'Image',
+            'comments_count'  => 'comments_count',
+            'body'            => 'Body_html',
+            'excerpt'         => 'Excerpt_html',
+            'override_form'   => 'override_form',
+            'status'          => 'Status',
+        );
+
+        foreach (getCustomFields() as $i => $name) {
+            isset($column_map[$name]) or $column_map[$name] = 'custom_'.$i;
         }
     }
 
-    return array(
-        'thisid'          => 'ID',
-        'posted'          => 'uPosted', // Calculated value!
-        'expires'         => 'uExpires', // Calculated value!
-        'modified'        => 'uLastMod', // Calculated value!
-        'annotate'        => 'Annotate',
-        'comments_invite' => 'AnnotateInvite',
-        'authorid'        => 'AuthorID',
-        'title'           => 'Title',
-        'url_title'       => 'url_title',
-        'description'     => 'description',
-        'category1'       => 'Category1',
-        'category2'       => 'Category2',
-        'section'         => 'Section',
-        'keywords'        => 'Keywords',
-        'article_image'   => 'Image',
-        'comments_count'  => 'comments_count',
-        'body'            => 'Body_html',
-        'excerpt'         => 'Excerpt_html',
-        'override_form'   => 'override_form',
-        'status'          => 'Status',
-    ) + $custom_map;
+    return $column_map;
 }
 
 /**
@@ -850,6 +851,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Getting attributes.
     $theAtts = lAtts(array(
+        'fields'        => null,
         'sort'          => '',
         'keywords'      => '',
         'time'          => null,

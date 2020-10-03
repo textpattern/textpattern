@@ -994,7 +994,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['*'].$search;
     $pg or $pg = 1;
-    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
+    $custom_pg = isset($fields) || $pgonly && $pgonly !== true && !is_numeric($pgonly);
     $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
@@ -1004,12 +1004,32 @@ function doArticles($atts, $iscustom, $thing = null)
         $pgoffset = $offset = intval($offset);
     }
 
+    if (isset($fields)) {
+        $what = array();
+        $column_map = article_column_map();
+
+        foreach (do_list_unique(strtolower($fields)) as $field) {
+            if (isset($column_map[$field])) {
+                switch ($field) {
+                    case 'posted': $what[] = 'UNIX_TIMESTAMP(Posted) AS uPosted'; break;
+                    case 'modified': $what[] = 'UNIX_TIMESTAMP(LastMod) AS uLastMod'; break;
+                    case 'expires': $what[] = 'UNIX_TIMESTAMP(Expires) AS uExpires'; break;
+                    default: $what[] = $column_map[$field];
+                }
+            }
+        }
+
+        $fields = implode(',', $what);
+    } elseif ($custom_pg) {
+        $fields = trim($pgonly);
+    }
+
+    !empty($fields) or $fields = '*';
+
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = $custom_pg && trim($pgonly) !== '*' ?
-                getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
-                safe_count('textpattern', $where);
+            $grand_total = getCount(array('textpattern', $fields !== '*' ? "DISTINCT $fields" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -1030,9 +1050,7 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = $custom_pg && trim($pgonly) !== '*' ?
-            getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
-            safe_count('textpattern', $where);
+        $total = getCount(array('textpattern', $fields !== '*' ? "DISTINCT $fields" : '*'), $where);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;
@@ -1045,8 +1063,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = $sort;
     }
 
+    if ($fields !== '*') {
+        $where .= " GROUP BY $fields";
+    }
+
     $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
+        $fields !== '*' ? "$fields, COUNT(*) AS total" : ("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
@@ -1056,6 +1078,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $articles = array();
         $chunk = false;
         $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
+        $oldtotal = isset($txp_item['total']) ? $txp_item['total'] : null;
         unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
@@ -1068,6 +1091,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
+                $txp_item['total'] = isset($a['total']) ? $a['total'] : $count;
 
                 $newbreak = !$groupby ? $count :
                     ($groupby === 1 ?
@@ -1094,7 +1118,7 @@ function doArticles($atts, $iscustom, $thing = null)
             if ($count <= $last) {
                 $item = false;
 
-                if ($allowoverride && $a['override_form']) {
+                if ($allowoverride && !empty($a['override_form'])) {
                     $item = parse_form($a['override_form'], $txp_sections[$a['Section']]['skin']);
                 } elseif ($fname) {
                     $item = parse_form($fname);
@@ -1119,6 +1143,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         $txp_item['breakby'] = $oldbreak;
+        $txp_item['total'] = $oldtotal;
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {
