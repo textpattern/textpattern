@@ -942,6 +942,44 @@ function doArticles($atts, $iscustom, $thing = null)
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 
+    $pg or $pg = 1;
+    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
+
+    if ($offset === true || !$iscustom && !$issticky) {
+        $offset = $offset === true ? 0 : intval($offset);
+        $pgoffset = ($pg - 1) * $pgby + $offset;
+    } else {
+        $pgoffset = $offset = intval($offset);
+    }
+
+    if (isset($fields)) {
+        $group = true;
+        $what = array();
+        $column_map = article_column_map();
+
+        foreach (do_list_unique(strtolower($fields)) as $field) {
+            switch ($field) {
+                case 'id':
+                case 'thisid': $what['id'] = 'ID'; $group = false; break;
+                case 'posted': $what[] = 'UNIX_TIMESTAMP(Posted) AS uPosted'; break;
+                case 'modified': $what[] = 'UNIX_TIMESTAMP(LastMod) AS uLastMod'; break;
+                case 'expires': $what[] = 'UNIX_TIMESTAMP(Expires) AS uExpires'; break;
+                default: if (isset($column_map[$field])) {
+                    $what[] = $column_map[$field];
+                }
+            }
+        }
+
+        $fields = implode(',', $what);
+
+        if ($group && !$sort) {
+            $sort = $fields;
+        }
+    } elseif ($custom_pg) {
+        $fields = trim($pgonly);
+    }
+
     // Give control to search, if necessary.
     if ($q && !$issticky) {
         $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
@@ -957,8 +995,8 @@ function doArticles($atts, $iscustom, $thing = null)
             $cols = array('Title', 'Body');
         }
 
-        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
+        $score = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') DESC";
 
         if ($quoted || empty($m) || $m === 'exact') {
             for ($i = 0; $i < count($cols); $i++) {
@@ -981,10 +1019,10 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
 
         if (!$sort) {
-            $sort = "score DESC";
+            $sort = $score;
         }
     } else {
-        $score = $search = '';
+        $search = '';
         $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
@@ -993,37 +1031,6 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['*'].$search;
-    $pg or $pg = 1;
-    $custom_pg = isset($fields) || $pgonly && $pgonly !== true && !is_numeric($pgonly);
-    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
-
-    if ($offset === true || !$iscustom && !$issticky) {
-        $offset = $offset === true ? 0 : intval($offset);
-        $pgoffset = ($pg - 1) * $pgby + $offset;
-    } else {
-        $pgoffset = $offset = intval($offset);
-    }
-
-    if (isset($fields)) {
-        $what = array();
-        $column_map = article_column_map();
-
-        foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (isset($column_map[$field])) {
-                switch ($field) {
-                    case 'posted': $what[] = 'UNIX_TIMESTAMP(Posted) AS uPosted'; break;
-                    case 'modified': $what[] = 'UNIX_TIMESTAMP(LastMod) AS uLastMod'; break;
-                    case 'expires': $what[] = 'UNIX_TIMESTAMP(Expires) AS uExpires'; break;
-                    default: $what[] = $column_map[$field];
-                }
-            }
-        }
-
-        $fields = implode(',', $what);
-    } elseif ($custom_pg) {
-        $fields = trim($pgonly);
-    }
-
     !empty($fields) or $fields = '*';
 
     // Do not paginate if we are on a custom list.
@@ -1057,18 +1064,19 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort'])) {
+    if (!empty($id) && empty($atts['sort']) && empty($group)) {
         $safe_sort = "FIELD(ID, ".$id."), ".$sort;
     } else {
         $safe_sort = $sort;
     }
 
-    if ($fields !== '*') {
+    if ($fields !== '*' && !empty($group)) {
         $where .= " GROUP BY $fields";
+        $fields .= ', COUNT(*) AS count';
     }
 
     $rs = safe_rows_start(
-        $fields !== '*' ? "$fields, COUNT(*) AS count" : ("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
+        $fields !== '*' ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
