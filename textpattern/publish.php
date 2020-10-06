@@ -926,6 +926,8 @@ function article($atts, $thing = null)
 function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage, $trace, $txp_item, $txp_sections;
+    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
+
     extract($pretext);
 
     if ($iscustom) {
@@ -955,26 +957,31 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if (isset($fields)) {
         $group = true;
-        $what = array();
-        $column_map = article_column_map();
+        $what = $groupby = $sortby = array();
+        $column_map = $date_fields + article_column_map();
+        $reg_fields = 'id|'.implode('|', array_keys($column_map));
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            switch ($field) {
-                case 'id':
-                case 'thisid': $what['id'] = 'ID'; $group = false; break;
-                case 'posted': $what[] = 'UNIX_TIMESTAMP(Posted) AS uPosted'; break;
-                case 'modified': $what[] = 'UNIX_TIMESTAMP(LastMod) AS uLastMod'; break;
-                case 'expires': $what[] = 'UNIX_TIMESTAMP(Expires) AS uExpires'; break;
-                default: if (isset($column_map[$field])) {
-                    $what[] = $column_map[$field];
-                }
+            if (preg_match("/^($reg_fields)=(avg|max|min|sum)$/", $field, $matches)) {
+                $column = $column_map[$matches[1]];
+                $what[$matches[1]] = strtoupper($matches[2]).'('.$column.') AS '.$column;
+                $sortby[$matches[1]] = $column;
+            } elseif (isset($date_fields[$field])) {
+                $what[$field] = 'UNIX_TIMESTAMP('.$date_fields[$field].') AS '.$date_fields[$field];
+                $groupby[$field] = $sortby[$field] = $date_fields[$field];
+            } elseif ($field === 'id' || $field === 'thisid') {
+                $what['id'] = 'ID';
+                $group = false;
+            } elseif (isset($column_map[$field])) {
+                $what[$field] = $groupby[$field] = $sortby[$field] = $column_map[$field];
             }
         }
 
-        $fields = implode(',', $what);
+        $fields = implode(', ', $what);
+        $groupby = implode(', ', $groupby);
 
         if ($group && !$sort) {
-            $sort = $fields;
+            $sort = implode(', ', $sortby);
         }
     } elseif ($custom_pg) {
         $fields = trim($pgonly);
@@ -1071,12 +1078,14 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     if ($fields !== '*' && !empty($group)) {
-        $where .= " GROUP BY $fields";
+        $where .= empty($groupby) ? '' : " GROUP BY $groupby";
         $fields .= ', COUNT(*) AS count';
     }
 
+    $fields !== '*' or $fields = null;
+
     $rs = safe_rows_start(
-        $fields !== '*' ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
@@ -1096,7 +1105,7 @@ function doArticles($atts, $iscustom, $thing = null)
             global $thisarticle;
 
             if ($a = nextRow($rs)) {
-                populateArticleData($a);
+                $fields ? article_format_info($a) : populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
