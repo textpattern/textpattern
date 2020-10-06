@@ -965,7 +965,7 @@ function doArticles($atts, $iscustom, $thing = null)
             if (preg_match("/^($reg_fields)=(avg|max|min|sum)$/", $field, $matches)) {
                 $column = $column_map[$matches[1]];
                 $what[$matches[1]] = strtoupper($matches[2]).'('.$column.') AS '.$column;
-                $sortby[$matches[1]] = $column;
+                $sortby[$matches[1]] = $column.($matches[2] == 'max' ? ' DESC' : '');
             } elseif (isset($date_fields[$field])) {
                 $what[$field] = 'UNIX_TIMESTAMP('.$date_fields[$field].') AS '.$date_fields[$field];
                 $groupby[$field] = $sortby[$field] = $date_fields[$field];
