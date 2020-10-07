@@ -965,19 +965,18 @@ function doArticles($atts, $iscustom, $thing = null)
             if (preg_match("/^($reg_fields)(?:\=(avg|max|min|sum))?$/", $field, $matches)) {
                 $field = $matches[1];
                 $column = $column_map[$field];
-                $alias = isset($matches[2]) ? $column : '';
+                $alias = isset($matches[2]) ? ' AS '.$column : '';
                 $what[$field] = $alias ? strtoupper($matches[2]).'('.$column.')' : $column;
                 $sortby[$field] = $column;
                 $alias or $groupby[$field] = $column;
 
                 if (isset($date_fields[$field])) {
-                    $what[$field] .= ' AS '.$column.', UNIX_TIMESTAMP('.$column.') AS u'.$column;
-                    $alias = '';
-                } elseif ($field === 'thisid' && !$alias) {
+                    $what[$field] .= $alias.', UNIX_TIMESTAMP('.$what[$field].') AS u'.$column;
+                } elseif ($alias) {
+                    $what[$field] .= $alias;
+                } elseif ($field === 'thisid') {
                     $group = false;
                 }
-
-                $what[$field] .= $alias ? ' AS '.$alias : '';
             }
         }
 
