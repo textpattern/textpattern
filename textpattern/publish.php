@@ -1011,7 +1011,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
-        $score = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') DESC";
+        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
 
         if ($quoted || empty($m) || $m === 'exact') {
             for ($i = 0; $i < count($cols); $i++) {
@@ -1034,10 +1034,10 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
 
         if (!$sort) {
-            $sort = $score;
+            $sort = 'score DESC';
         }
     } else {
-        $search = '';
+        $search = $score = '';
         $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
@@ -1090,10 +1090,11 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($fields && !empty($groupby)) {
         $where .= " GROUP BY $groupby";
         $fields .= ', COUNT(*) AS count';
+        $score = '';
     }
 
     $rs = safe_rows_start(
-        $fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
