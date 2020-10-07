@@ -959,21 +959,25 @@ function doArticles($atts, $iscustom, $thing = null)
         $group = true;
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
-        $reg_fields = 'id|'.implode('|', array_keys($column_map));
+        $reg_fields = implode('|', array_keys($column_map));
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^($reg_fields)=(avg|max|min|sum)$/", $field, $matches)) {
-                $column = $column_map[$matches[1]];
-                $what[$matches[1]] = strtoupper($matches[2]).'('.$column.') AS '.$column;
-                $sortby[$matches[1]] = $column.($matches[2] == 'max' ? ' DESC' : '');
-            } elseif (isset($date_fields[$field])) {
-                $what[$field] = 'UNIX_TIMESTAMP('.$date_fields[$field].') AS '.$date_fields[$field];
-                $groupby[$field] = $sortby[$field] = $date_fields[$field];
-            } elseif ($field === 'id' || $field === 'thisid') {
-                $what['id'] = 'ID';
-                $group = false;
-            } elseif (isset($column_map[$field])) {
-                $what[$field] = $groupby[$field] = $sortby[$field] = $column_map[$field];
+            if (preg_match("/^($reg_fields)(?:\=(avg|max|min|sum))?$/", $field, $matches)) {
+                $field = $matches[1];
+                $column = $column_map[$field];
+                $alias = isset($matches[2]) ? $column : '';
+                $what[$field] = $alias ? strtoupper($matches[2]).'('.$column.')' : $column;
+                $sortby[$field] = $column;
+                $alias or $groupby[$field] = $column;
+
+                if (isset($date_fields[$field])) {
+                    $what[$field] .= ' AS '.$column.', UNIX_TIMESTAMP('.$column.') AS u'.$column;
+                    $alias = '';
+                } elseif ($field === 'thisid' && !$alias) {
+                    $group = false;
+                }
+
+                $what[$field] .= $alias ? ' AS '.$alias : '';
             }
         }
 
@@ -1077,12 +1081,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = $sort;
     }
 
-    if ($fields !== '*' && !empty($group)) {
+    $fields !== '*' or $fields = null;
+
+    if ($fields && !empty($group)) {
         $where .= empty($groupby) ? '' : " GROUP BY $groupby";
         $fields .= ', COUNT(*) AS count';
     }
-
-    $fields !== '*' or $fields = null;
 
     $rs = safe_rows_start(
         $fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
@@ -1105,7 +1109,7 @@ function doArticles($atts, $iscustom, $thing = null)
             global $thisarticle;
 
             if ($a = nextRow($rs)) {
-                $fields ? article_format_info($a) : populateArticleData($a);
+                populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
