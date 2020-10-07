@@ -956,7 +956,6 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     if (isset($fields)) {
-        $group = true;
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
@@ -965,29 +964,35 @@ function doArticles($atts, $iscustom, $thing = null)
             if (preg_match("/^($reg_fields)(?:\=(avg|max|min|sum))?$/", $field, $matches)) {
                 $field = $matches[1];
                 $column = $column_map[$field];
-                $alias = isset($matches[2]) ? ' AS '.$column : '';
-                $what[$field] = $alias ? strtoupper($matches[2]).'('.$column.')' : $column;
                 $sortby[$field] = $column;
-                $alias or $groupby[$field] = $column;
+
+                if (isset($matches[2])) {
+                    $alias = ' AS '.$column;
+                    $what[$field] = strtoupper($matches[2]).'('.$column.')';
+                } else {
+                    $alias = '';
+                    $what[$field] = $column;
+                    !is_array($groupby) or $groupby[$field] = $column;
+                }
 
                 if (isset($date_fields[$field])) {
                     $what[$field] .= $alias.', UNIX_TIMESTAMP('.$what[$field].') AS u'.$column;
                 } elseif ($alias) {
                     $what[$field] .= $alias;
                 } elseif ($field === 'thisid') {
-                    $group = false;
+                    $groupby = false;
                 }
             }
         }
 
         $fields = implode(', ', $what);
-        $groupby = implode(', ', $groupby);
+        $groupby = $groupby ? implode(', ', $groupby) : '';
 
-        if ($group && !$sort) {
+        if ($groupby && !$sort) {
             $sort = implode(', ', $sortby);
         }
     } elseif ($custom_pg) {
-        $fields = trim($pgonly);
+        $groupby = trim($pgonly);
     }
 
     // Give control to search, if necessary.
@@ -1046,7 +1051,7 @@ function doArticles($atts, $iscustom, $thing = null)
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = getCount(array('textpattern', $fields !== '*' ? "DISTINCT $fields" : '*'), $where);
+            $grand_total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -1067,14 +1072,14 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = getCount(array('textpattern', $fields !== '*' ? "DISTINCT $fields" : '*'), $where);
+        $total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort']) && empty($group)) {
+    if (!empty($id) && empty($atts['sort']) && empty($groupby)) {
         $safe_sort = "FIELD(ID, ".$id."), ".$sort;
     } else {
         $safe_sort = $sort;
@@ -1082,8 +1087,8 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $fields !== '*' or $fields = null;
 
-    if ($fields && !empty($group)) {
-        $where .= empty($groupby) ? '' : " GROUP BY $groupby";
+    if ($fields && !empty($groupby)) {
+        $where .= " GROUP BY $groupby";
         $fields .= ', COUNT(*) AS count';
     }
 
