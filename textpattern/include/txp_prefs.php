@@ -526,7 +526,34 @@ function overrideTypes($name, $val)
         $form_types[$type] = gTxt($type);
     }
 
-    return selectInput($name, $form_types, $val, false, '', $name);
+    $js = script_js(<<<EOS
+        $(document).ready(function ()
+        {
+            var block = $("#prefs-override_form_types");
+            var overrideOn = $("#allow_form_override-1");
+            var overrideOff = $("#allow_form_override-0");
+
+            if (block.length) {
+                if (overrideOff.prop("checked")) {
+                    block.hide();
+                } else {
+                    block.show();
+                }
+
+                overrideOff.click(function () {
+                    block.hide();
+                });
+
+                overrideOn.click(function () {
+                    block.show();
+                });
+            }
+        });
+EOS
+    , false);
+
+
+    return selectInput($name, $form_types, $val, false, '', $name).$js;
 }
 
 /**
