@@ -346,7 +346,7 @@ function prefs_list($message = '')
 }
 
 /**
- * Calls a core or custom function to render a preference input widget.
+ * Calls a core or custom function to render a preference input input control.
  *
  * @param  string $func Callable in a string presentation
  * @param  string $name HTML name/id of the input control
@@ -443,7 +443,7 @@ function gmtoffset_select($name, $val)
  * Can be altered by plugins via the 'prefs_ui > is_dst'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -509,9 +509,30 @@ function logging($name, $val)
 }
 
 /**
+ * Render a multi-select list of Form Types
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected item(s)
+ * @return string HTML
+ */
+function overrideTypes($name, $val)
+{
+    $instance = Txp::get('Textpattern\Skin\Form');
+    $form_types = array();
+
+    $val = do_list($val);
+
+    foreach ($instance->getTypes() as $type) {
+        $form_types[$type] = gTxt($type);
+    }
+
+    return selectInput($name, $form_types, $val, false, '', $name);
+}
+
+/**
  * Renders a HTML choice of comment popup modes.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -532,7 +553,7 @@ function commentmode($name, $val)
  * Can be altered by plugins via the 'prefs_ui > weeks'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -562,7 +583,7 @@ function weeks($name, $val)
  * Can be altered by plugins via the 'prefs_ui > dateformats'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -587,7 +608,7 @@ function dateformats($name, $val)
 /**
  * Renders a HTML &lt;select&gt; list of content permlink options.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -605,7 +626,7 @@ function permlink_format($name, $val)
 /**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -625,7 +646,7 @@ function prod_levels($name, $val)
  * Renders a HTML &lt;select&gt; list of available panels to show immediately
  * after login.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -656,7 +677,7 @@ function default_event($name, $val)
 /**
  * Renders a HTML &lt;select&gt; list of sendmail options.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -678,7 +699,7 @@ function commentsendmail($name, $val)
  * Can be altered by plugins via the 'prefs_ui > custom_set'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) content
  * @return string HTML
  * @todo   deprecate or move this when CFs are migrated to the meta store
@@ -695,7 +716,7 @@ function custom_set($name, $val)
  * Can be altered by plugins via the 'prefs_ui > theme_name'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -713,7 +734,7 @@ function themename($name, $val)
  * Renders a HTML &lt;select&gt; list of available public site markup schemes to
  * adhere to.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -732,7 +753,7 @@ function doctypes($name, $val)
  * Renders a HTML &lt;select&gt; list of available publishing
  * status values.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
