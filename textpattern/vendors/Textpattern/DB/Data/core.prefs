@@ -337,10 +337,10 @@
         "position": "40"
     },
     "allow_form_override": {
-        "val": "article",
+        "val": "1",
         "type": "0",
         "event": "publish",
-        "html": "overrideTypes",
+        "html": "yesnoradio",
         "position": "60"
     },
     "attach_titles_to_permalinks": {
