@@ -763,7 +763,7 @@ function output_component($n = '')
 
     if (!isset($mimetypes)) {
         $null = null;
-        $mimetypes = get_mediatypes($null);
+        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
         $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
     }
 
@@ -926,6 +926,8 @@ function article($atts, $thing = null)
 function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage, $trace, $txp_item, $txp_sections;
+    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
+
     extract($pretext);
 
     if ($iscustom) {
@@ -942,6 +944,57 @@ function doArticles($atts, $iscustom, $thing = null)
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 
+    $pg or $pg = 1;
+    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
+
+    if ($offset === true || !$iscustom && !$issticky) {
+        $offset = $offset === true ? 0 : intval($offset);
+        $pgoffset = ($pg - 1) * $pgby + $offset;
+    } else {
+        $pgoffset = $offset = intval($offset);
+    }
+
+    if (isset($fields)) {
+        $what = $groupby = $sortby = array();
+        $column_map = $date_fields + article_column_map();
+        $reg_fields = implode('|', array_keys($column_map));
+
+        foreach (do_list_unique(strtolower($fields)) as $field) {
+            if (preg_match("/^($reg_fields)(?:\=(avg|max|min|sum))?$/", $field, $matches)) {
+                $field = $matches[1];
+                $column = $column_map[$field];
+                $sortby[$field] = $column;
+
+                if (isset($matches[2])) {
+                    $alias = ' AS '.$column;
+                    $what[$field] = strtoupper($matches[2]).'('.$column.')';
+                } else {
+                    $alias = '';
+                    $what[$field] = $column;
+                    !is_array($groupby) or $groupby[$field] = $column;
+                }
+
+                if (isset($date_fields[$field])) {
+                    $what[$field] .= $alias.', UNIX_TIMESTAMP('.$what[$field].') AS u'.$column;
+                } elseif ($alias) {
+                    $what[$field] .= $alias;
+                } elseif ($field === 'thisid') {
+                    $groupby = false;
+                }
+            }
+        }
+
+        $fields = implode(', ', $what);
+        $groupby = $groupby ? implode(', ', $groupby) : '';
+
+        if ($groupby && !$sort) {
+            $sort = implode(', ', $sortby);
+        }
+    } elseif ($custom_pg) {
+        $groupby = trim($pgonly);
+    }
+
     // Give control to search, if necessary.
     if ($q && !$issticky) {
         $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
@@ -957,8 +1010,8 @@ function doArticles($atts, $iscustom, $thing = null)
             $cols = array('Title', 'Body');
         }
 
-        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
+        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
 
         if ($quoted || empty($m) || $m === 'exact') {
             for ($i = 0; $i < count($cols); $i++) {
@@ -981,10 +1034,10 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
 
         if (!$sort) {
-            $sort = "score DESC";
+            $sort = 'score DESC';
         }
     } else {
-        $score = $search = '';
+        $search = $score = '';
         $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
@@ -993,23 +1046,12 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['*'].$search;
-    $pg or $pg = 1;
-    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
-    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
-
-    if ($offset === true || !$iscustom && !$issticky) {
-        $offset = $offset === true ? 0 : intval($offset);
-        $pgoffset = ($pg - 1) * $pgby + $offset;
-    } else {
-        $pgoffset = $offset = intval($offset);
-    }
+    !empty($fields) or $fields = '*';
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = $custom_pg && trim($pgonly) !== '*' ?
-                getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
-                safe_count('textpattern', $where);
+            $grand_total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -1030,23 +1072,29 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = $custom_pg && trim($pgonly) !== '*' ?
-            getCount(array('textpattern', "DISTINCT $pgonly"), $where) :
-            safe_count('textpattern', $where);
+        $total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort'])) {
+    if (!empty($id) && empty($atts['sort']) && empty($groupby)) {
         $safe_sort = "FIELD(ID, ".$id."), ".$sort;
     } else {
         $safe_sort = $sort;
     }
 
+    $fields !== '*' or $fields = null;
+
+    if ($fields && !empty($groupby)) {
+        $where .= " GROUP BY $groupby";
+        $fields .= ', COUNT(*) AS count';
+        $score = '';
+    }
+
     $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
+        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
@@ -1055,7 +1103,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $count = 0;
         $articles = array();
         $chunk = false;
-        $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
+        $old_item = $txp_item;
+        $txp_item['total'] = $last;
         unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
@@ -1068,6 +1117,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
+                $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
 
                 $newbreak = !$groupby ? $count :
                     ($groupby === 1 ?
@@ -1094,7 +1144,7 @@ function doArticles($atts, $iscustom, $thing = null)
             if ($count <= $last) {
                 $item = false;
 
-                if ($allowoverride && $a['override_form']) {
+                if ($allowoverride && !empty($a['override_form'])) {
                     $item = parse_form($a['override_form'], $txp_sections[$a['Section']]['skin']);
                 } elseif ($fname) {
                     $item = parse_form($fname);
@@ -1118,7 +1168,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $breakby = '';
         }
 
-        $txp_item['breakby'] = $oldbreak;
+        $txp_item = $old_item;
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     } else {

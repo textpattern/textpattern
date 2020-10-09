@@ -1215,7 +1215,14 @@ function form_pop($form, $id, $section)
     global $txp_sections;
 
     $skinforms = array();
-    $rs = safe_rows('skin, name', 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
+    $form_types = get_pref('allow_form_override');
+
+    // Backwards-compatibility with pre-4.8.4.
+    if ($form_types == 1) {
+        $form_types = 'article';
+    }
+
+    $rs = safe_rows('skin, name, type', 'txp_form', "type IN ('".implode("','", do_list($form_types))."') AND name != 'default' ORDER BY type,name");
 
     foreach ($txp_sections as $name => $row) {
         $skin = $row['skin'];
