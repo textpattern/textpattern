@@ -518,7 +518,7 @@ function logging($name, $val)
 function overrideTypes($name, $val)
 {
     $instance = Txp::get('Textpattern\Skin\Form');
-    $form_types = array();
+    $form_types = array('' => gTxt('none'));
 
     if ($val == 1) {
         $val = 'article';
@@ -530,7 +530,7 @@ function overrideTypes($name, $val)
         $form_types[$type] = gTxt($type);
     }
 
-    return selectInput($name, $form_types, $val, true, '', $name);
+    return selectInput($name, $form_types, $val, false, '', $name);
 }
 
 /**
