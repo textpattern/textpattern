@@ -337,11 +337,18 @@
         "position": "40"
     },
     "allow_form_override": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "60"
+    },
+    "override_form_types": {
         "val": "article",
         "type": "0",
         "event": "publish",
         "html": "overrideTypes",
-        "position": "60"
+        "position": "70"
     },
     "attach_titles_to_permalinks": {
         "val": "1",

@@ -25,7 +25,6 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-$override = safe_field('html', 'txp_prefs', "name='allow_form_override'");
-if ($override === 'yesnoradio') {
-    safe_update('txp_prefs', "html='overrideTypes'", "name='allow_form_override'");
+if (get_pref('override_form_types', false, true) === false) {
+    set_pref('override_form_types', 'article', 'publish', PREF_CORE, 'overrideTypes', 70, PREF_GLOBAL);
 }

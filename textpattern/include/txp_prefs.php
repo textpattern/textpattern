@@ -520,17 +520,40 @@ function overrideTypes($name, $val)
     $instance = Txp::get('Textpattern\Skin\Form');
     $form_types = array();
 
-    if ($val == 1) {
-        $val = 'article';
-    }
-
     $val = do_list($val);
 
     foreach ($instance->getTypes() as $type) {
         $form_types[$type] = gTxt($type);
     }
 
-    return selectInput($name, $form_types, $val, true, '', $name);
+    $js = script_js(<<<EOS
+        $(document).ready(function ()
+        {
+            var block = $("#prefs-override_form_types");
+            var overrideOn = $("#allow_form_override-1");
+            var overrideOff = $("#allow_form_override-0");
+
+            if (block.length) {
+                if (overrideOff.prop("checked")) {
+                    block.hide();
+                } else {
+                    block.show();
+                }
+
+                overrideOff.click(function () {
+                    block.hide();
+                });
+
+                overrideOn.click(function () {
+                    block.show();
+                });
+            }
+        });
+EOS
+    , false);
+
+
+    return selectInput($name, $form_types, $val, false, '', $name).$js;
 }
 
 /**
