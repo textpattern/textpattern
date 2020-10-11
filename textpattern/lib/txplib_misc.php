@@ -3192,7 +3192,7 @@ function fetch_form($name, $theme = null)
 
         if (has_handler('form.fetch')) {
             foreach ($names as $name) {
-                $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
+                $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
             $nameset = implode(',', quote_list($names));
