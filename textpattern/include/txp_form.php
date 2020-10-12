@@ -173,7 +173,11 @@ function form_list($current)
                 'label' => gTxt('changetype'),
                 'html' => formTypes('', false, 'changetype'),
             ),
-            'delete'     => gTxt('delete'),
+            'delete'     => array(
+                'label' => gTxt('delete'),
+                'html' => tag(gTxt('override'), 'label', array('for' => 'changeform')).
+                    form_pop($current['skin'], 'changeform'),
+            )
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -198,12 +202,7 @@ function form_multi_edit()
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
-            foreach ($forms as $name) {
-                if (form_delete($name, $skin)) {
-                    $affected[] = $name;
-                }
-            }
-
+            $affected = form_delete($forms, $skin, ps('override_form'));
             callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
             update_lastmod('form_deleted', $affected);
 
@@ -580,21 +579,33 @@ function form_save()
  * @return bool FALSE on error
  */
 
-function form_delete($name, $skin)
+function form_delete($name, $skin, $replace = '')
 {
-    global $prefs, $essential_forms;
+    global $prefs, $essential_forms, $txp_sections;
 
-    if (in_array($name, $essential_forms)) {
-        return false;
-    } elseif ($name === get_pref('last_form_saved')) {
-        unset($prefs['last_form_saved']);
-        remove_pref('last_form_saved', 'form');
+    $sections = join(',', quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;}))));
+    $last_form = get_pref('last_form_saved');
+    $skin = doSlash($skin);
+    $replace = doSlash($replace);
+    $deleted = array();
+
+    foreach ((array)$name as $form) {
+        if ($form == '' || in_array($form, $essential_forms)) {
+            continue;
+        } elseif ($form === $last_form) {
+            unset($prefs['last_form_saved']);
+            remove_pref('last_form_saved', 'form');
+        }
+
+        $safe_form = doSlash($form);
+
+        if (safe_delete("txp_form", "name = '$safe_form' AND skin = '$skin'")) {
+            !$sections or safe_update('textpattern', "override_form='$replace'", "override_form='$safe_form' AND Section IN($sections)");
+            $deleted[] = $form;
+        }
     }
 
-    $name = doSlash($name);
-    $skin = doSlash($skin);
-
-    return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
+    return is_array($name) ? $deleted : !empty($deleted);
 }
 
 /**
@@ -652,6 +663,31 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
     global $form_types;
 
     return selectInput('type', $form_types, $type, $blank_first, '', $id, false, $disabled);
+}
+
+/**
+ * Renders 'override form' field.
+ *
+ * @param  string $id      HTML id to apply to the input control
+ * @param  string $skin The theme that is currently in use
+ * @return string HTML &lt;select&gt; input
+ */
+
+function form_pop($skin, $id)
+{
+    static $skinforms = null;
+
+    if (!isset($skinforms)) {
+        $form_types = get_pref('override_form_types', 'article');
+        $safe_skin = doSlash($skin);
+
+        $rs = safe_column('name', 'txp_form', "type IN ('".implode("','", do_list($form_types))."') AND name != 'default' AND skin='$safe_skin' ORDER BY name");
+        $skinforms = $rs ? array_combine($rs, $rs) : false;
+    }
+
+    if ($skinforms) {
+        return selectInput('override_form', $skinforms, '', true, '', $id);
+    }
 }
 
 /**
