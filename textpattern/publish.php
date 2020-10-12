@@ -961,14 +961,14 @@ function doArticles($atts, $iscustom, $thing = null)
         $reg_fields = implode('|', array_keys($column_map));
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^($reg_fields)(?:\=(avg|max|min|sum))?$/", $field, $matches)) {
-                $field = $matches[1];
+            if (preg_match("/^(?:(avg|max|min|sum)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
+                $field = $matches[2];
                 $column = $column_map[$field];
                 $sortby[$field] = $column;
 
-                if (isset($matches[2])) {
+                if (!empty($matches[1])) {
                     $alias = ' AS '.$column;
-                    $what[$field] = strtoupper($matches[2]).'('.$column.')';
+                    $what[$field] = strtoupper($matches[1]).'('.$column.')';
                 } else {
                     $alias = '';
                     $what[$field] = $column;
