@@ -1217,7 +1217,7 @@ function form_pop($form, $id, $section)
     $skinforms = array();
     $form_types = get_pref('override_form_types');
 
-    $rs = safe_rows('skin, name, type', 'txp_form', "type IN ('".implode("','", do_list($form_types))."') AND name != 'default' ORDER BY type,name");
+    $rs = safe_rows('skin, name, type', 'txp_form', "type IN (".implode(",", quote_list(do_list($form_types))).") AND name != 'default' ORDER BY type,name");
 
     foreach ($txp_sections as $name => $row) {
         $skin = $row['skin'];
@@ -2191,7 +2191,7 @@ function article_validate($rs, &$msg)
     if ($prefs['allow_form_override']) {
         $constraints['override_form'] = new FormConstraint(
             $rs['override_form'],
-            array('type' => 'article')
+            array('type' => get_pref('override_form_types'))
         );
     } else {
         $constraints['override_form'] = new BlankConstraint(
