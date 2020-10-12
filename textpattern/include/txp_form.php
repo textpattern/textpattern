@@ -110,7 +110,7 @@ if ($event == 'form') {
 
 function form_list($current)
 {
-    global $essential_forms, $form_types;
+    global $essential_forms, $form_types, $txp_sections;
 
     $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
@@ -122,6 +122,9 @@ function form_list($current)
     );
 
     if ($rs) {
+        $sections = array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($current) {return $v === $current['skin'];}));
+        $sections = join(',', quote_list($sections));
+        $forms_in_use = !$sections ? array() : safe_column('override_form', 'textpattern', "override_form != '' AND Section IN($sections) GROUP BY override_form");
         $prev_type = null;
 
         // Add a hidden field, in case only one skin is in use and multi-edit is the
@@ -146,6 +149,7 @@ function form_list($current)
             }
 
             $editlink = eLink('form', 'form_edit', 'name', $name, $name);
+            $in_use = isset($forms_in_use[$name]) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '';
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(
@@ -154,7 +158,7 @@ function form_list($current)
                 $modbox = '';
             }
 
-            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array('class' => $active ? 'active' : ''));
+            $group_out[] = tag(n.$modbox.$editlink.$in_use.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
         if ($prev_type !== null) {
