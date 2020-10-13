@@ -62,7 +62,6 @@ if ($event == 'form') {
     bouncer($step, array(
         'form_edit'        => false,
         'form_create'      => false,
-        'form_delete'      => true,
         'form_multi_edit'  => true,
         'form_save'        => true,
         'form_skin_change' => true,
@@ -71,16 +70,9 @@ if ($event == 'form') {
 
     switch (strtolower($step)) {
         case '':
-            form_edit();
-            break;
         case 'form_edit':
-            form_edit();
-            break;
         case 'form_create':
-            form_create();
-            break;
-        case 'form_delete':
-            form_delete();
+            form_edit();
             break;
         case 'form_multi_edit':
             form_multi_edit();
@@ -88,7 +80,7 @@ if ($event == 'form') {
         case 'form_save':
             form_save();
             break;
-        case "form_skin_change":
+        case 'form_skin_change':
             $instance->selectEdit();
             form_edit();
             break;
@@ -177,11 +169,12 @@ function form_list($current)
                 'label' => gTxt('changetype'),
                 'html' => formTypes('', false, 'changetype'),
             ),
-            'delete'     => array(
-                'label' => gTxt('delete'),
-                'html' => tag(gTxt('override'), 'label', array('for' => 'changeform')).
+            'replace'     => array(
+                'label' => gTxt('override'),
+                'html' => tag(gTxt('form'), 'label', array('for' => 'changeform')).
                     form_pop($current['skin'], 'changeform'),
-            )
+            ),
+            'delete' => gTxt('delete')
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -206,14 +199,12 @@ function form_multi_edit()
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
-            $affected = form_delete($forms, $skin, ps('override_form'));
+            $affected = form_delete($forms, $skin);
             callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
             update_lastmod('form_deleted', $affected);
 
             $message = gTxt('form_deleted', array('{list}' => join(', ', $affected)));
-        }
-
-        if ($method == 'changetype') {
+        } elseif ($method == 'changetype') {
             $new_type = ps('type');
 
             foreach ($forms as $name) {
@@ -221,8 +212,11 @@ function form_multi_edit()
                     $affected[] = $name;
                 }
             }
+        } elseif ($method == 'replace' && form_replace($forms, $skin, ps('override_form'))) {
+            callback_event('forms_replaced', '', 0, compact('forms', 'skin'));
+            update_lastmod('form_replaced', $forms);
 
-            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
+            $message = gTxt('form_updated', array('{list}' => join(', ', $forms)));
         }
     }
 
@@ -583,14 +577,13 @@ function form_save()
  * @return bool FALSE on error
  */
 
-function form_delete($name, $skin, $replace = '')
+function form_delete($name, $skin)
 {
     global $prefs, $essential_forms, $txp_sections;
 
     $sections = quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;})), ',');
     $last_form = get_pref('last_form_saved');
     $skin = doSlash($skin);
-    $replace = doSlash($replace);
     $deleted = array();
 
     foreach ((array)$name as $form) {
@@ -604,12 +597,38 @@ function form_delete($name, $skin, $replace = '')
         $safe_form = doSlash($form);
 
         if (safe_delete("txp_form", "name = '$safe_form' AND skin = '$skin'")) {
-            !$sections or safe_update('textpattern', "override_form='$replace'", "override_form='$safe_form' AND Section IN($sections)");
+            !$sections or safe_update('textpattern', "override_form=''", "override_form='$safe_form' AND Section IN($sections)");
             $deleted[] = $form;
         }
     }
 
     return is_array($name) ? $deleted : !empty($deleted);
+}
+
+/**
+ * Replaces a form template in articles.
+ *
+ * @param  string $name The form template
+ * @param  string $skin The form skin in use
+ * @param  string $newform The form skin in use
+ * @return bool FALSE on error
+ */
+
+function form_replace($name, $skin, $newform = '')
+{
+    global $txp_sections;
+
+    $sections = quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;})), ',');
+
+    if (!$sections) {
+        return;
+    }
+
+    $forms = quote_list((array)$name, ',');
+    $skin = doSlash($skin);
+    $newform = doSlash($newform);
+
+    return safe_update('textpattern', "override_form='$newform'", "override_form IN($forms) AND Section IN($sections)");
 }
 
 /**
