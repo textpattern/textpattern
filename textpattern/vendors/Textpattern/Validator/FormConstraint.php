@@ -49,7 +49,7 @@ class FormConstraint extends ChoiceConstraint
         ), $options, false);
 
         if (null === $choices) {
-            $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+            $choices = safe_column('name', 'txp_form', !empty($options['type']) ? 'type IN ('.implode(',', quote_list(do_list($options['type']))).')' : '1=1');
         }
 
         $options['choices'] = $choices;
