@@ -368,7 +368,7 @@
 <p>L’host del sito o l’amministratore del server ha disattivato una o più funzioni PHP, alcune delle quali possono influenzare il funzionamento di Textpattern.</p>
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
         ]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
         <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
@@ -559,10 +559,7 @@
 <h2>Commenti disabilitati dopo</h2>
 <p>Consente di definire la quantità di tempo trascorsa la quale viene disattivata la possibilità di commentare (può essere impostato su ‘Mai’ per consentire di commentare a tempo indeterminato).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Rimuovere immagini utente dai commenti?"><![CDATA[
-<h2>Rimuovere immagini utente dai commenti?</h2>
-<p>Con questa opzione impostata su ‘Sì’, qualsiasi immagine inclusa nei commenti verrà rimossa.</p>
-        ]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
         <item id="comments_mode" title="Modalità commenti"><![CDATA[
 <h2>Modalità commenti</h2>
 <p>Se è selezionato ‘nopopup’ (modo consigliato) la finestra corrente verrà aggiornata mostrando solo l’articolo corrente, con sotto i commenti.</p>

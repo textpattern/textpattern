@@ -49,7 +49,7 @@ function checkCookies()
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1]);
     } else {
-        document.cookie = 'txp_test_cookie=; Max-Age=0;';
+        document.cookie = 'txp_test_cookie=; Max-Age=0; SameSite=Lax';
     }
 }
 
@@ -426,7 +426,7 @@ function setCookie(name, value, days)
         expires = '; expires=' + date.toGMTString();
     }
 
-    document.cookie = name + '=' + value + expires + '; path=/';
+    document.cookie = name + '=' + value + expires + '; path=/; SameSite=Lax';
 }
 
 /**
@@ -2077,9 +2077,11 @@ textpattern.Route.add('article', function () {
 
     $('#txp-write-sort-group').on('change', '#section',
         function () {
-            textpattern.Relay.callback('article.section_changed', {
-                data: allForms[$(this).find(':selected').data('skin')]
-            });
+            if (typeof allForms !== 'undefined') {
+                textpattern.Relay.callback('article.section_changed', {
+                        data: allForms[$(this).find(':selected').data('skin')]
+                });
+            }
         }
     ).change();
 

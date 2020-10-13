@@ -1286,17 +1286,23 @@ function getThings($query, $debug = false)
  *
  * This function is identical to safe_count().
  *
- * @param  string   $table The table
- * @param  string   $where The where clause
- * @param  bool     $debug Dump query
- * @return int|bool Number of rows or FALSE on error
+ * @param  array|string $table The table/thing to count
+ * @param  string       $where The where clause
+ * @param  bool         $debug Dump query
+ * @return int|bool     Number of rows or FALSE on error
  * @access private
  * @see    safe_count()
  */
 
 function getCount($table, $where, $debug = false)
 {
-    return getThing("SELECT COUNT(*) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
+    if (is_array($table)) {
+        list($table, $thing) = $table + array(null, '*');
+    }
+
+    $thing = isset($thing) ? doSlash($thing) : '*';
+
+    return getThing("SELECT COUNT($thing) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
 }
 
 /**

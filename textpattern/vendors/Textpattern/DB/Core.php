@@ -143,7 +143,7 @@ class Core
     {
         global $permlink_mode, $siteurl, $theme_name, $pref, $language;
 
-        $out = @json_decode(file_get_contents($this->data_dir.DS.'core.prefs'), true);
+        $out = json_decode(txp_get_contents($this->data_dir.DS.'core.prefs'), true);
 
         if (empty($out)) {
             return array();
@@ -208,7 +208,7 @@ class Core
         global $prefs, $txp_user;
 
         // Rename previous Global/Private prefs.
-        $renamed = @json_decode(file_get_contents($this->data_dir.DS.'renamed.prefs'), true);
+        $renamed = json_decode(txp_get_contents($this->data_dir.DS.'renamed.prefs'), true);
 
         if (!empty($renamed['global'])) {
             foreach ($renamed['global'] as $oldKey => $newKey) {
@@ -223,7 +223,7 @@ class Core
         }
 
         // Delete old Global/Private prefs.
-        $deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true);
+        $deleted = json_decode(txp_get_contents($this->data_dir.DS.'deleted.prefs'), true);
 
         if (!empty($deleted['global'])) {
             safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['global']))."') AND user_name = ''");
