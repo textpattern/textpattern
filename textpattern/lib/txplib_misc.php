@@ -4877,23 +4877,24 @@ function doQuote($val)
  * Escapes special characters for use in an SQL statement and wraps the value
  * in quote.
  *
- * Useful for creating an array of values for use in an SQL statement.
+ * Useful for creating an array/string of values for use in an SQL statement.
  *
  * @param   string|array $in The input value
+ * @param   string|null  $separator The separator
  * @return  mixed
  * @package DB
  * @example
- * if ($r = safe_row('name', 'myTable', 'type in(' . join(',', quote_list(array('value1', 'value2'))) . ')')
+ * if ($r = safe_row('name', 'myTable', 'type in(' . quote_list(array('value1', 'value2'), ',') . ')')
  * {
  *     echo "Found '{$r['name']}'.";
  * }
  */
 
-function quote_list($in)
+function quote_list($in, $separator = null)
 {
-    $out = doSlash($in);
+    $out = doArray(doSlash($in), 'doQuote');
 
-    return doArray($out, 'doQuote');
+    return isset($separator) ? implode($separator, $out) : $out;
 }
 
 /**

@@ -118,12 +118,12 @@ function form_list($current)
     $rs = safe_rows_start(
         "name, type",
         'txp_form',
-        "$criteria ORDER BY FIELD(type, ".join(',', quote_list(array_keys($form_types))).") ASC, name ASC"
+        "$criteria ORDER BY FIELD(type, ".quote_list(array_keys($form_types), ',').") ASC, name ASC"
     );
 
     if ($rs) {
         $sections = array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($current) {return $v === $current['skin'];}));
-        $sections = join(',', quote_list($sections));
+        $sections = quote_list($sections, ',');
         $forms_in_use = !$sections ? array() : safe_column('override_form', 'textpattern', "override_form != '' AND Section IN($sections) GROUP BY override_form");
         $prev_type = null;
 
@@ -587,7 +587,7 @@ function form_delete($name, $skin, $replace = '')
 {
     global $prefs, $essential_forms, $txp_sections;
 
-    $sections = join(',', quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;}))));
+    $sections = quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;})), ',');
     $last_form = get_pref('last_form_saved');
     $skin = doSlash($skin);
     $replace = doSlash($replace);
