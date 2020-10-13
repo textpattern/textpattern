@@ -607,7 +607,10 @@
         ]]></item>
         <item id="custom_form_types" title="Tipos de plantilla para campos personalizados"><![CDATA[]]></item>
         <item id="custom_overview" title="Campos personalizados"><![CDATA[]]></item>
-        <item id="dateformat" title="Formato de fecha"><![CDATA[]]></item>
+        <item id="dateformat" title="Formato de fecha"><![CDATA[
+<h2>Formato de fecha</h2>
+<p>Esta opción afectará cómo las fechas del artículo aparecen solo en la página principal de tu sitio.</p>
+        ]]></item>
         <item id="default_event" title="Pestaña de administración por defecto"><![CDATA[
 <h2>Panel predeterminado</h2>
 <p>El panel de la interfaz de administración de Textpattern que aparecerá primero cuando alguien inicie sesión.</p>
@@ -676,7 +679,10 @@
 <p>Si el horario de verano está actualmente habilitado para tu zona horaria.</p>
         ]]></item>
         <item id="logging" title="Registrar visitas"><![CDATA[]]></item>
-        <item id="max_url_len" title="Longitud máxima de las URLs (en caracteres)"><![CDATA[]]></item>
+        <item id="max_url_len" title="Longitud máxima de las URLs (en caracteres)"><![CDATA[
+<h2>Longitud máxima de URL (en caracteres)</h2>
+<p>Esto previene que las URLs que son más largas que la longitud especificada no funcionan. Podría ser útil en la limitación de daños y en la seguridad del sitio.</p>
+        ]]></item>
         <item id="module_pophelp" title="Mostrar enlaces de ayuda emergente"><![CDATA[]]></item>
         <item id="never_display_email" title="¿Ocultar email del autor del comentario?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="¿Codificación ISO-8859-1 en envíos de email? Por defecto UTF-8"><![CDATA[]]></item>
@@ -692,10 +698,17 @@
         <item id="publisher_email" title="Enviar la información de registro desde esta dirección de correo"><![CDATA[]]></item>
         <item id="rss_how_many" title="¿Cuántos artículos se incluirán en los feeds?"><![CDATA[]]></item>
         <item id="send_lastmod" title="¿Enviar &quot;Última modificación&quot; encabezado?"><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[
+<h2>¿Mostrar número de comentarios en los feeds?</h2>
+<p>Cuando se establece 'Sí', esta opción añadirá el número de comentarios a los títulos de sus artículos en RSS/Atom feeds.</p>
+        ]]></item>
         <item id="site_slogan" title="Eslogan del sitio"><![CDATA[]]></item>
         <item id="sitename" title="Nombre del sitio"><![CDATA[]]></item>
-        <item id="siteurl" title="URL del sitio"><![CDATA[]]></item>
+        <item id="siteurl" title="URL del sitio"><![CDATA[
+<h2>URL del sitio</h2>
+<p>Ésta es la dirección de este sitio de Textpattern, por ejemplo <code>www. xample.com</code>.</p>
+<p><strong>Nota:</strong> No necesita <code>http://</code>, <code>https://</code> o barra final <code>/</code>.</p>
+        ]]></item>
         <item id="skin_dir" title="Directorios de temas"><![CDATA[]]></item>
         <item id="smtp_from" title="Dirección del remitente del envío SMTP"><![CDATA[]]></item>
         <item id="spam_blacklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
@@ -703,9 +716,15 @@
         <item id="tempdir" title="Ruta al directorio temporal"><![CDATA[]]></item>
         <item id="theme_name" title="Tema de administración"><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title="Funciones PHP habilitadas en txp:evaluate"><![CDATA[]]></item>
-        <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[]]></item>
+        <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[
+<h2>¿Aceptar comentarios?</h2>
+<p>Esto establece si la funcionalidad de comentarios de Textpattern debe estar habilitada o deshabilitada.</p>
+        ]]></item>
         <item id="use_mail_on_feeds_id" title="¿Usar email para la ID de los feeds? Por defecto la URL del sitio"><![CDATA[]]></item>
-        <item id="use_plugins" title="¿Usar plugins?"><![CDATA[]]></item>
+        <item id="use_plugins" title="¿Usar plugins?"><![CDATA[
+<h2>¿Usar plugins?</h2>
+<p>Esto permite desactivar todo el soporte para plugins de Textpattern. Es útil para depurar errores en el sitio y hacer una comprobación si uno o más plugins están involucrados.</p>
+        ]]></item>
         <item id="use_textile" title="Emplear Textile?"><![CDATA[]]></item>
     </group>
 
@@ -714,11 +733,20 @@
         <item id="section_default" title="Sección por defecto para publicar"><![CDATA[]]></item>
         <item id="section_description" title="Descripción"><![CDATA[]]></item>
         <item id="section_on_frontpage" title="¿La sección aparece en la página de inicio?"><![CDATA[]]></item>
-        <item id="section_searchable" title="¿Incluir esta sección en las búsquedas?"><![CDATA[]]></item>
+        <item id="section_searchable" title="¿Incluir esta sección en las búsquedas?"><![CDATA[
+<h2>¿Incluir esta sección en la búsqueda del sitio?</h2>
+<p>Esto rige si los artículos pertenecientes a esta sección deben aparecer como parte de los resultados de búsqueda en todo el sitio.</p>
+        ]]></item>
         <item id="section_syndicate" title="¿Sindicar artículos de esta sección?"><![CDATA[]]></item>
         <item id="section_uses_css" title="Usa estilo"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Usa página"><![CDATA[]]></item>
-        <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Usa página"><![CDATA[
+<h2>Utiliza la página</h2>
+<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente…</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[
+<h2>Utiliza el tema</h2>
+<p>Si deseas cambiar el tema utilizado para una sección en particular, puede establecerse aquí desde la lista de temas instalados actualmente.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Panel de configuración">
@@ -728,8 +756,14 @@
     </group>
 
     <group id="skin" title="Panel de temas">
-        <item id="skin_author" title="Autor del tema"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="Sitio web del tema"><![CDATA[]]></item>
+        <item id="skin_author" title="Autor del tema"><![CDATA[
+<h2>Tema autor</h2>
+<p>El autor (los autores) de este tema (opcional).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Sitio web del tema"><![CDATA[
+<h2>Tema sitio web</h2>
+<p>La URL donde se puede encontrar información completa y/o las últimas versiones de este tema (opcional).</p>
+        ]]></item>
         <item id="skin_delete_entirely" title="Borrar tema de plantillas desde el disco también"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="Al importar, borrar las planillas no utilizadas de la base de datos"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="Al exportar, borrar las plantillas no utilizadas del disco"><![CDATA[]]></item>

@@ -1416,7 +1416,7 @@ function category_list($atts, $thing = null)
                     isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
                     ? category_list(array(
                         'parent'  => $name,
-                        'exclude' => implode(',', array_merge($exclude, array($name))),
+                        'exclude' => ($exclude ? implode(',', $exclude).',' : '').$name,
                         'label'   => '',
                         'html_id' => '',
                     ) + $atts)
@@ -2728,17 +2728,19 @@ function author($atts)
         $link = 1;
     }
 
+    $fetchRealName = $link || $title || $format === 'url';
+
     if ($thisauthor) {
         $realname = $thisauthor['realname'];
         $name = $thisauthor['name'];
     } elseif ($author) {
-        $realname = get_author_name($author);
         $name = $author;
     } else {
         assert_article();
-        $realname = get_author_name($thisarticle['authorid']);
         $name = $thisarticle['authorid'];
     }
+
+    isset($realname) or $realname = $fetchRealName ? get_author_name($name) : $name;
 
     if ($title) {
         $display_name = $realname;
@@ -2752,6 +2754,10 @@ function author($atts)
         $display_name = txp_escape(array('escape' => $escape), $display_name);
     }
 
+    if (!$link && $format !== 'url') {
+        return $display_name;
+    }
+
     if ($this_section && $s != 'default') {
         $section = $s;
     }
@@ -2761,15 +2767,7 @@ function author($atts)
             'author' => $realname,
         ));
 
-    if ($format === 'url') {
-        return $href;
-    }
-
-    if ($link) {
-        return href($display_name, $href, ' rel="author"');
-    }
-
-    return $display_name;
+    return $format === 'url' ? $href : href($display_name, $href, ' rel="author"');
 }
 
 // -------------------------------------------------------------
@@ -4688,7 +4686,7 @@ function file_download_list($atts, $thing = null)
     }
 
     // Note: status treated slightly differently.
-    $where = $statwhere = array();
+    $where = array();
     $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
     $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
@@ -4697,14 +4695,10 @@ function file_download_list($atts, $thing = null)
         $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
-    $ids = array_map('intval', do_list_unique($id, array(',', '-')));
+    $ids = $id ? array_map('intval', do_list_unique($id, array(',', '-'))) : array();
 
-    if ($id) {
+    if ($ids) {
         $where[] = "id IN ('".join("','", $ids)."')";
-    }
-
-    if ($status) {
-        $statwhere[] = "status = '".doSlash($status)."'";
     }
 
     if ($author) {
@@ -4743,7 +4737,9 @@ function file_download_list($atts, $thing = null)
         }
     }
 
-    if (!$where && !$statwhere && $filters) {
+    if ($status) {
+        $where[] = "status = '".doSlash($status)."'";
+    } elseif (!$where && $filters) {
         // If nothing matches, output nothing.
         return '';
     }
@@ -4752,7 +4748,7 @@ function file_download_list($atts, $thing = null)
         $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'created');
     }
 
-    $where = join(" AND ", array_merge($where, $statwhere));
+    $where = join(" AND ", $where);
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -4779,7 +4775,7 @@ function file_download_list($atts, $thing = null)
     }
 
     // Preserve order of custom file ids unless 'sort' attribute is set.
-    if (!empty($atts['id']) && empty($atts['sort'])) {
+    if (!empty($ids) && empty($atts['sort'])) {
         $safe_sort = "FIELD(id, ".join(',', $ids).")";
     } else {
         $safe_sort = sanitizeForSort($sort);

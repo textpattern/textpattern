@@ -183,24 +183,57 @@
         ]]></item>
         <item id="file_category" title="Arquivos"><![CDATA[
 <h2>Arquivos</h2>
-<p>As categorias de arquivo são opcionais e úteis para agrupar os arquivos enviados juntos.</p>
+<p>As categorias de arquivo são opcionais e úteis para agrupar os arquivos enviados.</p>
         ]]></item>
         <item id="image_category" title="Imagens"><![CDATA[<h2>Imagens</h2>
 <p>As categorias de imagens são opcionais e úteis tanto para organização interna quanto para definir conjuntos de imagens que podem ser exibidos usando<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">
 (abre um link externo em uma nova janela)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">
 (abre um link externo em uma nova janela)</span></a> tags.</p>]]></item>
-        <item id="link_category" title="Links"><![CDATA[]]></item>
+        <item id="link_category" title="Links"><![CDATA[
+<h2>Links</h2>
+<p>As categorias de links são opcionais e úteis para exibir diferentes agrupamentos de links, por exemplo: ‘Friends’, ‘Romans’, ‘Countrymen’.</p>
+<p>Listas de links seletivas como essas podem são geradas com <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"> <code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> desta forma:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Painel de diagnósticos">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title=""><![CDATA[
+<h2>Dados de URLs limpos falharam</h2>
+<p>Parece que os URLs do site (exemplo: <code>https://example.com/section/article</code>) não estão funcionando no momento ou o servidor da web não oferece suporte ao procedimento de teste para determinar se os URLs limpos funcionam ou não; se URLs limpos no site funcionarem conforme o esperado, essa mensagem pode ser ignorada com segurança.</p>
+<p>Se URLs limpos <em>não</em> estão funcionando, pode significar que:</p>
+<ul>
+    <li>a configuração de "URL do site" está incorreta ou a página nesse endereço não é gerenciada por esta instância do Textpattern</li>
+    <li>o servidor requer algumas alterações em <code> .htaccess </code> ou diretiva de servidor semelhante para fazer URLs limpos funcionarem</li>
+    <li>o servidor não oferece suporte a URLs limpos</li>
+</ul>
+<p>O teste de URL limpo tenta buscar uma página do endereço da web especificado na preferência "URL do site" para verificar se todos os parâmetros de URL limpo estão funcionando corretamente. Se esse URL for de um site diferente ou tiver sido substituído por uma página estática ou semelhante, o teste falhará. Até que o problema seja resolvido, URLs confusos (exemplo: <code>https://example.com?s=section&amp;id=4</code>) serão usados. Certifique-se de que o 'modo de link permanente' em Preferências está definido de acordo.</p>
+<p>Observe que usar um plug-in para colocar um site em "modo de manutenção" pode acionar esse aviso.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[
+<h2>Teste de URLs limpos falharam</h2>
+<p>Parece que os URLs do site (exemplo: <code>https://example.com/section/article</code>) não estão funcionando no momento ou o servidor da web não oferece suporte ao procedimento de teste para determinar se os URLs limpos funcionam ou não; se URLs limpos no site funcionarem conforme o esperado, essa mensagem pode ser ignorada com segurança.</p>
+<p>Se URLs limpos <em>não</em> estão funcionando, pode significar que:</p>
+<ul>
+    <li>a configuração de "URL do site" está incorreta ou a página nesse endereço não é gerenciada por esta instância do Textpattern</li>
+    <li>o servidor requer algumas alterações em <code> .htaccess </code> ou diretiva de servidor semelhante para fazer URLs limpos funcionarem</li>
+    <li>o servidor não oferece suporte a URLs limpos</li>
+</ul>
+<p>O teste de URL limpo tenta buscar uma página do endereço da web especificado na preferência "URL do site" para verificar se todos os parâmetros de URL limpo estão funcionando corretamente. Se esse URL for de um site diferente ou tiver sido substituído por uma página estática ou semelhante, o teste falhará. Até que o problema seja resolvido, URLs confusos (exemplo: <code>https://example.com?s=section&amp;id=4</code>) serão usados. Certifique-se de que o 'modo de link permanente' em Preferências está definido de acordo.</p>
+<1>Observe que usar um plug-in para colocar um site em "modo de manutenção" pode acionar esse aviso.</1>
+        ]]></item>
         <item id="diag_clear_private" title="Ocultar informações privadas"><![CDATA[
 <h2>Ocultar informações privadas</h2>
-<p>Ocultar informações privadas para uma segurança extra. Se a informação de diagnóstico for compartilhada em um formato publicamente visível, por exemplo no fórum de suporte do Textpattern, isto reduz um risco de segurança ao omitir informações confidenciais do servidor.</p>
+<p>Oculte informações privadas para segurança extra. Se as informações de diagnóstico forem compartilhadas publicamente, por exemplo no fórum de suporte do Textpattern, recomenda-se marcar esta caixa afim de omitir informações confidenciais do servidor.</p>
         ]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Diretório não permite gravação"><![CDATA[]]></item>
+        <item id="dev_version_live" title="Códigos em desenvolvimento em um servidor ativo"><![CDATA[
+<h2>Códigos em desenvolvimento em um servidor ativo</h2>
+<p>As versões em desenvolvimento do Textpattern não são recomendadas para uso em sites em produção. Este aviso pode ser ignorado com segurança se os riscos forem compreendidos e aceitos.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Diretório não permite gravação"><![CDATA[
+<h2>Diretório não permite gravação</h2>
+<p>Para usar os recursos de upload de arquivo e imagem, esses diretórios devem ser graváveis pelo PHP por meio do usuário do servidor web. Isso pode ser feito com um  cliente (S)FTP ou, alternativamente, na linha de comando, emitindo um comando <code>chmod 755 /path/to/dir</code></p>
+        ]]></item>
         <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[]]></item>
         <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[]]></item>
         <item id="htaccess_missing" title="O arquivo .htaccess está em falta"><![CDATA[]]></item>

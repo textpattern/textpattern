@@ -1754,7 +1754,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     }
 
     if ($break && !empty($breakby)) { // array_merge to reindex
-        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
+        $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
 
         switch ($count = count($breakby)) {
             case 0:

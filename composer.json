@@ -11,7 +11,7 @@
     "content management"
   ],
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.6.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*"
