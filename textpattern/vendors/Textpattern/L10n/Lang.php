@@ -357,8 +357,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function setPack(array $strings, $merge = false)
     {
-        if ((bool)$merge) {
-            $this->strings = is_array($this->strings) ? array_merge($this->strings, (array)$strings) : (array)$strings;
+        if ((bool)$merge && is_array($this->strings)) {
+            foreach ((array)$strings as $k => $v) {
+                $this->strings[$k] = $v;
+            }
         } else {
             $this->strings = (array)$strings;
         }
@@ -391,7 +393,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $entries = array();
         $textpack = '';
 
-        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
+        if ($lang_file && ($textpack = txp_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
@@ -465,7 +467,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // Load the fallback strings so we're not left with untranslated strings.
             // Note that the language is overridden to match the to-be-installed lang.
             $fallpack = $this->getPack(array(TEXTPATTERN_DEFAULT_LANG, $lang_code));
-            $langpack = array_merge($fallpack, $langpack);
+            $langpack += $fallpack;
         }
 
         return ($this->upsertPack($langpack, $owner) === false) ? false : true;

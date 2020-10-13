@@ -975,6 +975,35 @@ function cs($thing)
 }
 
 /**
+ * Sets a HTTP cookie (polyfill).
+ *
+ * @param   string $name The cookie name
+ * @param   string $value The cookie value
+ * @param   array  $options The cookie options
+ * @package Network
+ */
+
+function set_cookie($name, $value = '', $options = array())
+{
+    $options += array (
+        'expires' => time() - 3600,
+        'path' => '',
+        'domain' => '',
+        'secure' => false,
+        'httponly' => false,
+        'samesite' => 'Lax' // None || Lax  || Strict
+    );
+
+    if (version_compare(phpversion(), '7.3.0') >= 0) {
+        return setcookie($name, $value, $options);
+    }
+
+    extract($options);
+
+    return setcookie($name, $value, $expires, $path.'; samesite='.$samesite, $domain, $secure, $httponly);
+}
+
+/**
  * Converts a boolean to a localised "Yes" or "No" string.
  *
  * @param   bool $status The boolean. Ignores type and as such can also take a string or an integer
@@ -1500,10 +1529,10 @@ function callback_event($event, $step = '', $pre = 0)
                         (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
-                $return_value = call_user_func_array($c['function'], array(
-                    'event' => $event,
-                    'step'  => $step,
-                ) + $argv);
+                $return_value = call_user_func_array($c['function'], array_merge(array(
+                    $event,
+                    $step
+                ), $argv));
 
                 if (isset($renew)) {
                     $argv[$renew] = $return_value;
@@ -2815,6 +2844,16 @@ function fileDownloadFormatTime($params)
 }
 
 /**
+ * file_get_contents wrapper.
+ *
+ */
+
+function txp_get_contents($file)
+{
+    return is_readable($file) ? file_get_contents($file) : null;
+}
+
+/**
  * Returns the contents of the found files as an array.
  *
  */
@@ -3139,49 +3178,44 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name)
+function fetch_form($name, $theme = null)
 {
-    global $production_status, $trace;
-
+    global $skin;
     static $forms = array();
-    global $pretext;
 
-    $skin = $pretext['skin'];
+    isset($theme) or $theme = $skin;
+    isset($forms[$theme]) or $forms[$theme] = array();
     $fetch = is_array($name);
 
-    if ($fetch || !isset($forms[$name])) {
-        $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
+    if ($fetch || !isset($forms[$theme][$name])) {
+        $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : array($name);
 
         if (has_handler('form.fetch')) {
             foreach ($names as $name) {
-                $forms[$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
+                $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
             $nameset = implode(',', quote_list($names));
 
-            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
+            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
                 while ($row = nextRow($rs)) {
-                    $forms[$row['name']] = $row['Form'];
+                    $forms[$theme][$row['name']] = $row['Form'];
                 }
             }
         } else {
-            $forms[$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($skin)."'");
+            $forms[$theme][$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$form])) {
-                trigger_error(gTxt('form_not_found').' '.$form);
-                $forms[$form] = false;
+            if (empty($forms[$theme][$form])) {
+                trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
+                $forms[$theme][$form] = false;
             }
         }
     }
 
     if (!$fetch) {
-        if ($production_status === 'debug') {
-            $trace->log("[Form: '$skin.$name']");
-        }
-
-        return $forms[$name];
+        return $forms[$theme][$name];
     }
 }
 
@@ -3193,42 +3227,45 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $theme = null)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $skin, $txp_current_form, $trace;
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
         $depth = get_pref('form_circular_depth', 15);
     }
 
-    $out = '';
+    isset($theme) or $theme = $skin;
     $name = (string) $name;
-    $f = fetch_form($name);
+    $f = fetch_form($name, $theme);
 
-    if ($f !== false) {
-        if (!isset($stack[$name])) {
-            $stack[$name] = 1;
-        } elseif ($stack[$name] >= $depth) {
-            trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
-
-            return '';
-        } else {
-            $stack[$name]++;
-        }
-
-        $old_form = $txp_current_form;
-        $txp_current_form = $name;
-
-        if ($production_status === 'debug') {
-            $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
-        }
-
-        $out = parse($f);
-
-        $txp_current_form = $old_form;
-        $stack[$name]--;
+    if ($f === false) {
+        return false;
     }
+
+    if (!isset($stack[$name])) {
+        $stack[$name] = 1;
+    } elseif ($stack[$name] >= $depth) {
+        trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
+
+        return '';
+    } else {
+        $stack[$name]++;
+    }
+
+    $old_form = $txp_current_form;
+    $txp_current_form = $name;
+
+    if ($production_status === 'debug') {
+        $trace->log("[Form: '$theme.$name']");
+        $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
+    }
+
+    $out = parse($f);
+
+    $txp_current_form = $old_form;
+    $stack[$name]--;
 
     return $out;
 }
@@ -4771,23 +4808,25 @@ function do_list($list, $delim = ',')
         list($delim, $range) = $delim + array(null, null);
     }
 
-    $list = explode($delim, $list);
+    $array = explode($delim, $list);
 
-    if (isset($range)) {
+    if (isset($range) && strpos($list, $range) !== false) {
         $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
-        foreach ($list as $item) {
+        foreach ($array as $item) {
             if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
                 list($m, $start, $end) = $match;
-                $out = array_merge($out, range($start, $end));
+                foreach(range($start, $end) as $v) {
+                    $out[] = $v;
+                }
             }
         }
     }
 
-    return isset($out) ? $out : array_map('trim', $list);
+    return isset($out) ? $out : array_map('trim', $array);
 }
 
 /**
@@ -4838,23 +4877,24 @@ function doQuote($val)
  * Escapes special characters for use in an SQL statement and wraps the value
  * in quote.
  *
- * Useful for creating an array of values for use in an SQL statement.
+ * Useful for creating an array/string of values for use in an SQL statement.
  *
  * @param   string|array $in The input value
+ * @param   string|null  $separator The separator
  * @return  mixed
  * @package DB
  * @example
- * if ($r = safe_row('name', 'myTable', 'type in(' . join(',', quote_list(array('value1', 'value2'))) . ')')
+ * if ($r = safe_row('name', 'myTable', 'type in(' . quote_list(array('value1', 'value2'), ',') . ')')
  * {
  *     echo "Found '{$r['name']}'.";
  * }
  */
 
-function quote_list($in)
+function quote_list($in, $separator = null)
 {
-    $out = doSlash($in);
+    $out = doArray(doSlash($in), 'doQuote');
 
-    return doArray($out, 'doQuote');
+    return isset($separator) ? implode($separator, $out) : $out;
 }
 
 /**
