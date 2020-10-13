@@ -597,9 +597,13 @@ function form_delete($name, $skin)
         $safe_form = doSlash($form);
 
         if (safe_delete("txp_form", "name = '$safe_form' AND skin = '$skin'")) {
-            !$sections or safe_update('textpattern', "override_form=''", "override_form='$safe_form' AND Section IN($sections)");
             $deleted[] = $form;
         }
+    }
+
+    if ($sections && $deleted) {
+        $safe_form = quote_list($deleted, ',');
+        safe_update('textpattern', "override_form=''", "override_form IN($safe_form) AND Section IN($sections)");
     }
 
     return is_array($name) ? $deleted : !empty($deleted);
