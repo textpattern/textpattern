@@ -33,8 +33,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('image')
     ->register('thumbnail')
     ->register('output_form')
-    ->register(array('\Textpattern\Tag\Syntax\Partial', 'renderYield'), 'yield')
-    ->register(array('\Textpattern\Tag\Syntax\Partial', 'renderIfYield'), 'if_yield')
+    ->register('txp_yield', 'yield')
+    ->register('txp_if_yield', 'if_yield')
     ->register('feed_link')
     ->register('link_feed_link')
     ->register('linklist')
@@ -47,8 +47,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('link_date')
     ->register('link_category')
     ->register('link_id')
-    ->register(array('\Textpattern\Tag\Syntax\Link', 'renderIfFirstLink'), 'if_first_link')
-    ->register(array('\Textpattern\Tag\Syntax\Link', 'renderIfLastLink'), 'if_last_link')
+    ->register('if_first', 'if_first_link', 'link')
+    ->register('if_last', 'if_last_link', 'link')
     ->register('email')
     ->register('password_protect')
     ->register('recent_articles')
@@ -123,8 +123,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('image_url')
     ->register('image_author')
     ->register('image_date')
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'renderIfFirstImage'), 'if_first_image')
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'renderIfLastImage'), 'if_last_image')
+    ->register('if_first', 'if_first_image', 'image')
+    ->register('if_last', 'if_last_image', 'image')
     ->register('if_thumbnail')
     ->register('if_comments')
     ->register('if_comments_allowed')
@@ -142,12 +142,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_search_results')
     ->register('if_category')
     ->register('if_article_category')
-    ->register('if_first_category')
-    ->register('if_last_category')
+    ->register('if_first', 'if_first_category', 'category')
+    ->register('if_last', 'if_last_category', 'category')
     ->register('if_section')
     ->register('if_article_section')
-    ->register('if_first_section')
-    ->register('if_last_section')
+    ->register('if_first', 'if_first_section', 'section')
+    ->register('if_last', 'if_last_section', 'section')
     ->register('if_logged_in')
     ->register('if_request')
     ->register('php')
@@ -160,8 +160,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_status')
     ->register('page_url')
     ->register('if_different')
-    ->register('if_first_article')
-    ->register('if_last_article')
+    ->register('if_first', 'if_first_article')
+    ->register('if_last', 'if_last_article')
     ->register('if_plugin')
     ->register('file_download_list')
     ->register('file_download')
@@ -175,8 +175,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('file_download_author')
     ->register('file_download_downloads')
     ->register('file_download_description')
-    ->register(array('\Textpattern\Tag\Syntax\File', 'renderIfFirstFile'), 'if_first_file')
-    ->register(array('\Textpattern\Tag\Syntax\File', 'renderIfLastFile'), 'if_last_file')
+    ->register('if_first', 'if_first_file', 'file')
+    ->register('if_last', 'if_last_file', 'file')
     ->register('hide')
     ->register('rsd')
     ->register('variable')
@@ -547,6 +547,71 @@ function output_form($atts, $thing = null)
     }
 
     return $out;
+}
+
+// -------------------------------------------------------------
+
+function txp_yield($atts, $thing = null)
+{
+    global $yield, $txp_yield, $txp_atts, $txp_item;
+
+    extract(lAtts(array(
+        'name'    => '',
+        'else'    => false,
+        'default' => false,
+        'item'    => null
+    ), $atts));
+
+    if (isset($item)) {
+        $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
+    } elseif ($name === '') {
+        $end = empty($yield) ? null : end($yield);
+
+        if (isset($end)) {
+            $inner = parse($end, empty($else));
+        }
+    } elseif (!empty($txp_yield[$name])) {
+        list($inner) = end($txp_yield[$name]);
+        $txp_yield[$name][key($txp_yield[$name])][1] = true;
+    }
+
+    if (!isset($inner)) {
+        $escape = isset($txp_atts['escape']) ? $txp_atts['escape'] : null;
+        $inner = $default !== false ?
+            ($default === true ? page_url(array('type' => $name, 'escape' => $escape)) : $default) :
+            ($thing ? parse($thing) : $thing);
+    }
+
+    return $inner;
+}
+
+
+function txp_if_yield($atts, $thing = null)
+{
+    global $yield, $txp_yield, $txp_item;
+
+    extract(lAtts(array(
+        'name'  => '',
+        'else'  => false,
+        'value' => null,
+        'item'  => null
+    ), $atts));
+
+    if (isset($item)) {
+        $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
+    } elseif ($name === '') {
+        $end = empty($yield) ? null : end($yield);
+
+        if (isset($end)) {
+            $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
+        }
+    } elseif (empty($txp_yield[$name])) {
+        $inner = null;
+    } else {
+        list($inner) = end($txp_yield[$name]);
+    }
+
+    return parse($thing, isset($inner) && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
 }
 
 // -------------------------------------------------------------
@@ -4258,30 +4323,6 @@ function if_article_category($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_first_category($atts, $thing = null)
-{
-    global $thiscategory;
-
-    assert_category();
-
-    $x = !empty($thiscategory['is_first']);
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function if_last_category($atts, $thing = null)
-{
-    global $thiscategory;
-
-    assert_category();
-
-    $x = !empty($thiscategory['is_last']);
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
 function if_section($atts, $thing = null)
 {
     global $s, $thissection;
@@ -4318,30 +4359,6 @@ function if_article_section($atts, $thing = null)
     $section = $thisarticle['section'];
 
     $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function if_first_section($atts, $thing = null)
-{
-    global $thissection;
-
-    assert_section();
-
-    $x = !empty($thissection['is_first']);
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function if_last_section($atts, $thing = null)
-{
-    global $thissection;
-
-    assert_section();
-
-    $x = !empty($thissection['is_last']);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -4619,25 +4636,27 @@ function if_different($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_first_article($atts, $thing = null)
+function if_first($atts, $thing = null, $type = 'article')
 {
-    global $thisarticle;
+    global ${"this$type"};
 
-    assert_article();
+    $assert = 'assert_'.$type;
+    $assert();
 
-    $x = !empty($thisarticle['is_first']);
+    $x = !empty(${"this$type"}['is_first']);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_article($atts, $thing = null)
+function if_last($atts, $thing = null, $type = 'article')
 {
-    global $thisarticle;
+    global ${"this$type"};
 
-    assert_article();
+    $assert = 'assert_'.$type;
+    $assert();
 
-    $x = !empty($thisarticle['is_last']);
+    $x = !empty(${"this$type"}['is_last']);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
