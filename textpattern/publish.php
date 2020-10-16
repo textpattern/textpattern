@@ -1169,11 +1169,11 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         $txp_item = $old_item;
-
-        return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
-    } else {
-        return $thing ? parse($thing, false) : '';
     }
+
+    return !empty($articles) ?
+        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class')) :
+        ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------
@@ -1226,19 +1226,17 @@ function doArticle($atts, $thing = null)
             $article = parse($thing);
         }
 
-        if (get_pref('use_comments') && get_pref('comments_auto_append')) {
+        if ($article !== false && get_pref('use_comments') && get_pref('comments_auto_append')) {
             $article .= parse_form('comments_display');
         }
 
         unset($GLOBALS['thisarticle']);
-
-        return $article;
     } else {
         // Restore atts to the previous article filter criteria.
         filterAtts($oldAtts ? $oldAtts : false);
-
-        return $thing ? parse($thing, false) : '';
     }
+
+    return $article !== false ? $article : ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------

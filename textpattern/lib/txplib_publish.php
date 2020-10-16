@@ -341,13 +341,9 @@ function parse($thing, $condition = true, $not = true)
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $short_tags = null;
 
-    if ($not) {
-        if (!empty($txp_atts['evaluate'])) {
-            $condition = true;
-        } elseif (!empty($txp_atts['not'])) {
-            $condition = empty($condition);
-            unset($txp_atts['not']);
-        }
+    if ($not && !empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
     }
 
     $txp_tag = !empty($condition);
@@ -383,16 +379,29 @@ function parse($thing, $condition = true, $not = true)
 
     list($first, $last) = $txp_else[$hash];
 
-    if ($not && !empty($txp_atts['evaluate'])) {
-        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
-        $out = array($tag[0]);
-        $tags = array();
-        $nr = $first - 2;
-        $isempty = $nr > 0 || $test !== false;
+    if ($condition) {
+        $last = $first - 2;
+        $first   = 1;
+    } elseif ($first <= $last) {
+        $first  += 2;
+    } else {
+        return '';
+    }
 
-        for ($n = 1; $n <= $nr; $n++) {
+    if (isset($txp_else[$hash]['test']) && (!isset($txp_atts['evaluate']) || $txp_atts['evaluate'] === true)) {
+        $txp_atts['evaluate'] = $txp_else[$hash]['test'];
+        $notest = empty($txp_atts['evaluate']);
+    }
+
+    if ($not && !empty($txp_atts['evaluate'])) {
+        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list($txp_atts['evaluate']), array());
+        $out = array($first-1 => $tag[$first-1]);
+        $tags = array();
+        $isempty = $last > 0 || $test !== false;
+
+        for ($n = $first; $n <= $last; $n++) {
             $txp_tag = $tag[$n];
-            $out[] = null;
+            $out[$n] = null;
 
             if (!$test) {
                 $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
@@ -406,7 +415,7 @@ function parse($thing, $condition = true, $not = true)
                 $tags[] = $n;
             }
 
-            $out[] = $tag[++$n];
+            $out[$n] = $tag[++$n];
         }
 
         if ($test) {
@@ -420,7 +429,7 @@ function parse($thing, $condition = true, $not = true)
             }
         }
 
-        if ($isempty == empty($txp_atts['not'])) {
+        if (empty($notest) && $isempty == empty($txp_atts['not'])) {
             $out = false;
             $condition = $txp_tag = false;
         } else {
@@ -431,18 +440,7 @@ function parse($thing, $condition = true, $not = true)
 
             $out = implode('', $out);
         }
-    }
-
-    if (!isset($out) || $out === false) {
-        if ($condition) {
-            $last = $first - 2;
-            $first   = 1;
-        } elseif ($first <= $last) {
-            $first  += 2;
-        } else {
-            return isset($out) ? false : '';
-        }
-
+    } else {
         for ($out = $tag[$first - 1]; $first <= $last; $first++) {
             $txp_tag = $tag[$first];
             $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
