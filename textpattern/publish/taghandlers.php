@@ -5323,6 +5323,7 @@ function txp_eval($atts, $thing = null)
         }
     } else {
         $txp_atts = null;
+        $x = parse($thing, false);
     }
 
     return $test === null && $query !== true ? !empty($x) : $x;

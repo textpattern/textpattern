@@ -343,10 +343,6 @@ function parse($thing, $condition = true, $in_tag = true)
 
     if ($in_tag) {
         empty($txp_atts['not']) or $condition = empty($condition);
-
-        if (!$condition && $txp_atts && empty($pretext['_txp_atts'])) {
-            $txp_atts[0] = true;
-        }
     }
 
     $txp_tag = !empty($condition);
@@ -575,7 +571,7 @@ function processTags($tag, $atts = '', $thing = null)
 
         unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
 
-        if ($txp_atts && empty($txp_atts[0])) {
+        if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
             foreach ($txp_atts as $attr => &$val) {
