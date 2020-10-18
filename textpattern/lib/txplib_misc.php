@@ -3078,13 +3078,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 }
 
                 $sha = sha1($inside[$level]);
-                $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
-                $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
-
-                if (!empty($order[$level])) {
-                    asort($order[$level]);
-                    $txp_else[$sha]['test'] = implode(',', array_keys($order[$level]));
-                }
+                txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
     
                 $level--;
                 $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][4]), $inside[$level+1], $chunk);
@@ -3097,14 +3091,33 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $inside[$level] .= $chunk;
     }
 
-    $txp_parsed[$hash] = $tags[0];
-    $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+    txp_fill_parsed($hash, $tags[0], $order[0], $count[0] + 2, $else[0]);
+}
 
-    if (!empty($order[0])) {
-        asort($order[0]);
-        $txp_else[$hash]['test'] = implode(',', array_keys($order[0]));
+/** Auxiliary **/
+
+function txp_fill_parsed($sha, $tags, $order, $count, $else) {
+    global $txp_parsed, $txp_else;
+
+    $txp_parsed[$sha] = $count > 2 ? $tags : false;
+    $txp_else[$sha] = array($else > 0 ? $else : $count, $count - 2);
+
+    if (!empty($order)) {
+        $pre = array_filter($order, function ($v) {return $v > 0;});
+        $post = array_filter($order, function ($v) {return $v < 0;});
+
+        if  ($pre) {
+            asort($pre);
+        }
+
+        if  ($post) {
+            asort($post);
+        }
+
+        $txp_else[$sha]['test'] = rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
     }
 }
+
 
 /**
  * Extracts a statement from a if/else condition.
