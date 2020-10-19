@@ -10,7 +10,16 @@
     </group>
 
     <group id="article" title="Schrijf paneel">
-        <item id="article_image" title="Artikelafbeelding"><![CDATA[]]></item>
+        <item id="article_image" title="Artikelafbeelding"><![CDATA[
+<h2>Artikelafbeelding</h2>
+<p>Om een enkele afbeelding aan dit artikel te koppelen, plaats hier een van de volgende voorbeelden:</p>
+<ol>
+    <li>een Textpattern image ID (bijv. . <code>12</code>)</li>
+    <li>een relatieve URL naar de afbeelding (bijv. <code>/images/my_pic.jpg</code>)</li>
+    <li>een volledig gekwalificeerde URL (bijv. <code>https://example.com/path/to/images/my_pic. pg</code>)</li>
+</ol>
+<p>De afbeelding kan worden weergegeven door het plaatsen van een <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> binnen een artikel formulier. Het geeft een volledige HTML <code>&lt;img&gt;</code> tag naar de gekozen afbeelding.</p>
+        ]]></item>
         <item id="body" title="Artikelinhoud"><![CDATA[
 <h2>Artikelinhoud</h2>
 <p>De hoofdinhoud van een artikel staat in de inhoud van het artikel.<p>
@@ -27,12 +36,24 @@
 <p>Artikel samenvatting zijn optioneel. Deze kunnen worden gebruikt als een korte samenvatting van het artikel dat wordt weergegeven als onderdeel van een inhoudsopgave, gebruikt in plaats van de volledige inhoud van het artikel in de RSS/Atom feeds van de site, of een aantal andere toepassingen.</p>
         ]]></item>
         <item id="expire_date" title="Vervaldatum"><![CDATA[]]></item>
-        <item id="keywords" title="Trefwoorden"><![CDATA[]]></item>
+        <item id="keywords" title="Trefwoorden"><![CDATA[
+<h2>Trefwoorden</h2>
+<p>Trefwoorden zijn nuttig om de verbanden tussen artikelen buiten de categorieën te verfijnen.</p>
+<p>Trefwoorden moeten individuele woorden zijn, gescheiden door komma's.</p>
+        ]]></item>
         <item id="override_form" title="Gebruik andere module"><![CDATA[]]></item>
         <item id="publish_date" title="Publicatiedatum"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
-        <item id="title" title="Titel"><![CDATA[]]></item>
-        <item id="url_title" title="Eigen titel voor URL"><![CDATA[]]></item>
+        <item id="title" title="Titel"><![CDATA[
+<h2>Titel</h2>
+<p>Voeg een passende titel toe voor dit artikel.</p>
+<p>Een artikeltitel is beperkt tot maximaal 255 tekens.</p>
+        ]]></item>
+        <item id="url_title" title="Eigen titel voor URL"><![CDATA[
+<h2>URL-only URL-titel</h2>
+<p>Om een specifieke titel te gebruiken voor de permalink URL voor een artikel, vul het hier in. Als u deze leeg laat, wordt de URL-titel automatisch gegenereerd op basis van de artikeltitel.</p>
+<p>Dit is bijzonder handig als de titel van het artikel niet-ASCII-tekens gebruikt.</p>
+        ]]></item>
     </group>
 
     <group id="category" title="Categorieën paneel">
