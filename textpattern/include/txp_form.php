@@ -629,7 +629,6 @@ function form_replace($name, $skin, $newform = '')
     }
 
     $forms = quote_list((array)$name, ',');
-    $skin = doSlash($skin);
     $newform = doSlash($newform);
 
     return safe_update('textpattern', "override_form='$newform'", "override_form IN($forms) AND Section IN($sections)");

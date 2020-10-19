@@ -2997,8 +2997,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-    $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)\>$@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
@@ -3021,6 +3021,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     $tags    = array($inside);
     $tag     = array();
     $outside = array();
+    $order = array(array());
     $else    = array(-1);
     $count   = array(-1);
     $level   = 0;
@@ -3034,7 +3035,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
             $else[$level] = $count[$level];
         } elseif ($tag[$level][1] === 'txp:') {
             // Handle <txp::shortcode />.
-            $tag[$level][3] .= ' form="'.$tag[$level][2].'"';
+            $tag[$level][4] .= ' form="'.$tag[$level][2].'"';
             $tag[$level][2] = 'output_form';
         } elseif ($short_tags && $tag[$level][1] !== 'txp') {
             // Handle <short::tags />.
@@ -3047,16 +3048,19 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
             }
 
-            $tags[$level][] = array($chunk, $tag[$level][2], trim(rtrim($tag[$level][3], '/')), null, null);
+            $tags[$level][] = array($chunk, $tag[$level][2], trim(rtrim($tag[$level][4], '/')), null, null);
             $inside[$level] .= $chunk;
+            empty($tag[$level][3]) or $order[$level][count($tags[$level])/2] = $tag[$level][3];
         } elseif ($chunk[1] !== '/') {
             // Opening tag.
             $inside[$level] .= $chunk;
+            empty($tag[$level][3]) or $order[$level][(count($tags[$level])+1)/2] = $tag[$level][3];
             $level++;
             $outside[$level] = $chunk;
             $inside[$level] = '';
             $else[$level] = $count[$level] = -1;
             $tags[$level] = array();
+            $order[$level] = array();
         } else {
             // Closing tag.
             if ($level < 1) {
@@ -3074,10 +3078,10 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 }
 
                 $sha = sha1($inside[$level]);
-                $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
-                $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
+                txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
+    
                 $level--;
-                $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], $chunk);
+                $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][4]), $inside[$level+1], $chunk);
                 $inside[$level] .= $inside[$level+1].$chunk;
             }
         }
@@ -3087,9 +3091,33 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $inside[$level] .= $chunk;
     }
 
-    $txp_parsed[$hash] = $tags[0];
-    $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+    txp_fill_parsed($hash, $tags[0], $order[0], $count[0] + 2, $else[0]);
 }
+
+/** Auxiliary **/
+
+function txp_fill_parsed($sha, $tags, $order, $count, $else) {
+    global $txp_parsed, $txp_else;
+
+    $txp_parsed[$sha] = $count > 2 ? $tags : false;
+    $txp_else[$sha] = array($else > 0 ? $else : $count, $count - 2);
+
+    if (!empty($order)) {
+        $pre = array_filter($order, function ($v) {return $v > 0;});
+        $post = array_filter($order, function ($v) {return $v < 0;});
+
+        if  ($pre) {
+            asort($pre);
+        }
+
+        if  ($post) {
+            asort($post);
+        }
+
+        $txp_else[$sha]['test'] = rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
+    }
+}
+
 
 /**
  * Extracts a statement from a if/else condition.
