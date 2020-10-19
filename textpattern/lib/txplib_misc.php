@@ -2997,8 +2997,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-    $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(\d+)\])?(.*)\>$@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
