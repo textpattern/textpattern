@@ -336,28 +336,19 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true, $not = true)
+function parse($thing, $condition = true, $in_tag = true)
 {
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $short_tags = null;
 
-    if ($not) {
-        if (!empty($txp_atts['evaluate'])) {
-            $condition = true;
-        } elseif (!empty($txp_atts['not'])) {
-            $condition = empty($condition);
-            unset($txp_atts['not']);
-        }
+    if ($in_tag) {
+        empty($txp_atts['not']) or $condition = empty($condition);
     }
 
     $txp_tag = !empty($condition);
 
     if ($production_status === 'debug') {
         $trace->log('['.($condition ? 'true' : 'false').']');
-    }
-
-    if (!$condition && empty($pretext['_txp_atts'])) {
-        $txp_atts = null;
     }
 
     if (!isset($short_tags)) {
@@ -383,70 +374,79 @@ function parse($thing, $condition = true, $not = true)
 
     list($first, $last) = $txp_else[$hash];
 
-    if ($not && !empty($txp_atts['evaluate'])) {
-        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
-        $out = array($tag[0]);
-        $tags = array();
-        $nr = $first - 2;
-        $isempty = $nr > 0 || $test !== false;
+    if ($condition) {
+        $last = $first - 2;
+        $first   = 1;
+    } elseif ($first <= $last) {
+        $first  += 2;
+    } else {
+        return '';
+    }
 
-        for ($n = 1; $n <= $nr; $n++) {
+    $dotest = $in_tag && isset($txp_atts['evaluate']);
+    $evaluate = $dotest ? $txp_atts['evaluate'] : null;
+    $isempty = false;
+
+    if (isset($txp_else[$hash]['test']) && (!$evaluate || $evaluate === true)) {
+        $evaluate = $txp_else[$hash]['test'];
+    }
+
+    if ($in_tag && $evaluate) {
+        $test = $evaluate === true ? false : array_fill_keys(do_list($evaluate), array());
+        $isempty = $last > 0 || $test !== false;
+    }
+
+    if (empty($test)) {
+        for ($out = $tag[$first - 1]; $first <= $last; $first++) {
+            $txp_tag = $tag[$first];
+            $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+            $out .= $nextag.$tag[++$first];
+            $isempty = $isempty && trim($nextag) === '';
+        }
+    } else {
+        if ($pre = !isset($test[0])) {
+            $test[0] = array();
+        }
+
+        $out = array($first-1 => $tag[$first-1]);
+
+        for ($n = $first; $n <= $last; $n++) {
             $txp_tag = $tag[$n];
-            $out[] = null;
+            $out[$n] = null;
 
-            if (!$test) {
-                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $isempty &= trim($nextag) === '';
-                $out[$n] = $nextag;
-            } elseif (isset($test[($n+1)/2])) {
+            if (isset($test[($n+1)/2])) {
                 $test[($n+1)/2][] = $n;
             } elseif (isset($test[$txp_tag[1]])) {
                 $test[$txp_tag[1]][] = $n;
             } else {
-                $tags[] = $n;
+                $test[0][] = $n;
             }
 
-            $out[] = $tag[++$n];
+            $out[$n] = $tag[++$n];
         }
 
-        if ($test) {
-            foreach ($test as $t) {
-                foreach ($t as $n) {
-                    $txp_tag = $tag[$n];
-                    $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                    $out[$n] = $nextag;
-                    $isempty &= trim($nextag) === '';
-                }
+        foreach ($test as $k => $t) {
+            if (!$k && $pre && $dotest && $isempty == empty($txp_atts['not'])) {
+                $out = false;    
+                break;
             }
-        }
 
-        if ($isempty == empty($txp_atts['not'])) {
-            $out = false;
-            $condition = $txp_tag = false;
-        } else {
-            foreach ($tags as $n) {
+            foreach ($t as $n) {
                 $txp_tag = $tag[$n];
-                $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $out[$n] = $nextag;
+                $k and ($isempty = $isempty && trim($nextag) === '');
             }
+        }
 
+        if (is_array($out)) {
             $out = implode('', $out);
         }
     }
 
-    if (!isset($out) || $out === false) {
-        if ($condition) {
-            $last = $first - 2;
-            $first   = 1;
-        } elseif ($first <= $last) {
-            $first  += 2;
-        } else {
-            return isset($out) ? false : '';
-        }
-
-        for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-            $txp_tag = $tag[$first];
-            $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
-        }
+    if ($dotest && $isempty == empty($txp_atts['not'])) {
+        $out = false;
+        $condition = false;
     }
 
     $txp_tag = !empty($condition);
@@ -510,14 +510,6 @@ function processTags($tag, $atts = '', $thing = null)
         return;
     }
 
-    $old_tag = $txp_current_tag;
-    $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
-
-    if ($production_status !== 'live') {
-        $tag_stop = $txp_tag[4];
-        $trace->start($txp_tag[0]);
-    }
-
     if ($registry === null) {
         $maxpass = get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
@@ -529,7 +521,15 @@ function processTags($tag, $atts = '', $thing = null)
         );
     }
 
+    $old_tag = $txp_current_tag;
     $old_atts = $txp_atts;
+    $dotrace = $production_status !== 'live' && is_array($txp_tag);
+
+    if ($dotrace) {
+        $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
+        $tag_stop = $txp_tag[4];
+        $trace->start($txp_tag[0]);
+    }
 
     if ($atts) {
         $split = splat($atts);
@@ -571,7 +571,7 @@ function processTags($tag, $atts = '', $thing = null)
 
         unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
 
-        if ($txp_atts) {
+        if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
             foreach ($txp_atts as $attr => &$val) {
@@ -587,7 +587,7 @@ function processTags($tag, $atts = '', $thing = null)
     $txp_atts = $old_atts;
     $txp_current_tag = $old_tag;
 
-    if ($production_status !== 'live') {
+    if ($dotrace) {
         $trace->stop($tag_stop);
     }
 
@@ -943,7 +943,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
-    $section !== true or $section = parse('<txp:section />', true, false);
+    $section !== true or $section = processTags('section');
     $getid = $getid || $section && !$not;
     $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
         ($getid || $searchall? '' : filterFrontPage('Section', 'page'));
@@ -951,7 +951,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Author
     $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
-    $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
+    $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
@@ -1000,7 +1000,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = parse('<txp:keywords />', true, false);
+    $keywords !== true or $keywords = processTags('keywords');
 
     if ($keywords) {
         $keyparts = array();
