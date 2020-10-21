@@ -189,16 +189,16 @@
     <group id="image" title="Panel gambar">
         <item id="create_thumbnail" title="Buat keluku"><![CDATA[]]></item>
         <item id="replace_image_form" title="Ganti gambar"><![CDATA[]]></item>
-        <item id="upload_image" title=""><![CDATA[]]></item>
-        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
+        <item id="upload_image" title="Unggah gambar"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Unggah keluku"><![CDATA[]]></item>
     </group>
 
-    <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+    <group id="lang" title="Panel Bahasa">
+        <item id="get_textpack" title="Pasang paket-teks (Textpack)"><![CDATA[]]></item>
     </group>
 
-    <group id="link" title="">
-        <item id="link_description" title=""><![CDATA[]]></item>
+    <group id="link" title="Panel tautan">
+        <item id="link_description" title="Deskripsi"><![CDATA[]]></item>
         <item id="link_sort" title="Urutkan nilai"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
         <item id="timestamp_link" title="Tanggal terbit"><![CDATA[]]></item>
@@ -227,7 +227,7 @@
         <item id="attach_titles_to_permalinks" title="Lampirkan judul ke pranala (permalink)"><![CDATA[]]></item>
         <item id="auto_dst" title="Secara otomatis menyesuaikan Waktu Musim Panas (DST)?"><![CDATA[]]></item>
         <item id="comment_means_site_updated" title="Komentar baru berarti situs diperbarui?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title="Terapkan atribut rel=&quot;nofollow&quot; pada komentar?"><![CDATA[]]></item>
         <item id="comments_are_ol" title="Sajikan komentar sebagai daftar bernomor?"><![CDATA[]]></item>
         <item id="comments_auto_append" title="Sertakan komentar di artikel secara otomatis?"><![CDATA[]]></item>
         <item id="comments_dateformat" title="Format tanggal komentar"><![CDATA[]]></item>
@@ -235,89 +235,133 @@
         <item id="comments_disabled_after" title="Komentar dinonaktifkan setelah"><![CDATA[]]></item>
         <item id="comments_disallow_images" title="Izinkan penggunaan gambar dalam komentar?"><![CDATA[]]></item>
         <item id="comments_mode" title="Mode komentar"><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title=""><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title="Moderasi komentar"><![CDATA[]]></item>
+        <item id="comments_on_default" title="Komentar aktif sebagai bawaan?"><![CDATA[]]></item>
+        <item id="comments_require_email" title="Komentar memerlukan email pengguna?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Komentar memerlukan nama pengguna?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Kirim email komentar ke penulis?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Ijinkan markup Textile lebih banyak di komentar?"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Formulir ubahsuai jenis acuan"><![CDATA[]]></item>
+        <item id="custom_overview" title="Kolom ubahsuai"><![CDATA[]]></item>
+        <item id="dateformat" title="Format tanggal"><![CDATA[]]></item>
+        <item id="default_event" title="Panel bawaan"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Status bawaan publikasi"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Aktifkan pratinjau tema pengembangan?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Aktifkan dukungan tag singkat?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Aktifkan peladen XML-RPC?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="Catatan kadaluwarsa setelah berapa hari?"><![CDATA[]]></item>
+        <item id="file_base_path" title="Jalur unggah berkas"><![CDATA[
+<h2>Jalur/alamat (path) unggah berkas</h2>
+<p>Ini menyetel <strong>jalur absolut</strong> ke direktori tempat unggahan berkas akan disimpan secara permanen. PHP harus memiliki akses tulis ke direktori ini.</p>
+        ]]></item>
+        <item id="file_max_upload_size" title="Ukuran maksimal unggah berkas (dalam bita/byte)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Zona waktu"><![CDATA[
+<h2>Zona waktu</h2>
+<p>Untuk menampilkan tanggal dalam zona waktu lokal Anda, pilih zona waktu Anda.</p>
+        ]]></item>
+        <item id="img_dir" title="Direktori gambar"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Sertakan surel di umpan Atom?"><![CDATA[]]></item>
+        <item id="is_dst" title="&lt;abbr title=&quot;Daylight Saving Time/Waktu Musim Panas&quot;>DST&lt;/abbr> diaktifkan?"><![CDATA[]]></item>
+        <item id="logging" title="Pencatatan"><![CDATA[]]></item>
+        <item id="max_url_len" title="Panjang maksimal URL (dalam karakter)"><![CDATA[]]></item>
+        <item id="module_pophelp" title="Tampilkan taut bantuan sebaris sisi-admin"><![CDATA[]]></item>
+        <item id="never_display_email" title="Sembunyikan surel (di komentar)?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Gunakan ISO-8859-1 untuk surel (standarnya UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title="Format URL pranala judul"><![CDATA[]]></item>
+        <item id="permlink_mode" title="Mode URL artikel"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Jalur direktori tembolok plugin"><![CDATA[]]></item>
+        <item id="production_status" title="Status Produksi"><![CDATA[]]></item>
+        <item id="public_theme_name" title="Tema sisi-depan"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Terbitkan artikel kadaluarsa?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Kirim rincian masuk dari surel ini"><![CDATA[]]></item>
+        <item id="rss_how_many" title="Berapa artikel yang masuk dalam umpan RSS?"><![CDATA[]]></item>
+        <item id="send_lastmod" title="Kirim tajuk &quot;Last-Modified&quot;?"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Tampilkan hitungan komentar di RSS?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Slogan situs"><![CDATA[]]></item>
+        <item id="sitename" title="Nama situs"><![CDATA[]]></item>
+        <item id="siteurl" title="URL situs"><![CDATA[]]></item>
+        <item id="skin_dir" title="Direktori tema"><![CDATA[]]></item>
+        <item id="smtp_from" title="Pengaturan alamat pengirim SMTP"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Senarai-hitam spam (dipisahkan koma)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindikasikan kutipan artikel saja?"><![CDATA[]]></item>
+        <item id="tempdir" title="Jalur/path direktori temporer"><![CDATA[]]></item>
+        <item id="theme_name" title="Tema sisi-admin"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Fungsi-fungsi PHP yang aktif: txp:evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="Terima komentar?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Gunakan surel untuk membentuk id RSS (standarnya adalah URL situs)?"><![CDATA[]]></item>
+        <item id="use_plugins" title="Gunakan plugins?"><![CDATA[]]></item>
+        <item id="use_textile" title="Gunakan Textile?"><![CDATA[]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    <group id="section" title="Panel seksi">
+        <item id="section_category" title="Pengenalan"><![CDATA[]]></item>
+        <item id="section_default" title="Bawaan seksi penerbitan"><![CDATA[]]></item>
+        <item id="section_description" title="Deskripsi"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="Seksi artikel yang muncul di halaman depan?"><![CDATA[]]></item>
+        <item id="section_searchable" title="Sertakan seksi ini dalam pencarian situs?"><![CDATA[]]></item>
+        <item id="section_syndicate" title="Sindikasikan artikel dalam seksi ini?"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Gunakan gaya"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
+<h2>Gunakan halaman</h2>
+<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh…</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Gunakan tema"><![CDATA[
+<h2>Gunakan tema</h2>
+<p>Jika Anda ingin mengganti tema yang digunakan untuk bagian tertentu, ini dapat diatur di sini dari daftar tema yang saat ini terpasang.</p>
+        ]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+    <group id="setup" title="Panel setelan">
+        <item id="setup_user_login" title="Login pengguna"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Sandi pengguna"><![CDATA[]]></item>
+        <item id="table_prefix" title="Awalan tabel (pada pangkalan-data)"><![CDATA[]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+    <group id="skin" title="Panel tema">
+        <item id="skin_author" title="Pembuat tema"><![CDATA[
+<h2>Pembuat tema</h2>
+<p>Pembuat tema (bisa nama pribadi/perusahaan/organisasi/alias dll.) ini (opsi).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Situs web tema"><![CDATA[
+<h2>Situs web tema</h2>
+<p>Alamat URL tempat informasi lengkap dan/atau versi terbaru dari tema ini dapat ditemukan (opsi).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Hapus acuan tema dari diska juga"><![CDATA[
+<h2>Hapus acuan tema dari diska juga</h2>
+<p>Jika dicentang, semua berkas acuan dalam tema yang dipilih akan dihapus secara permanen dari diska. Namun, direktori terkait tema dan sub-direktorinya tidak akan dihapus jika ada file lain (seperti JavaScript, gambar, ...) di dalamnya.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Hapus acuan tidak terpakai dari pangkalan-data hasil impor-an"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="Hapus acuan tidak terpakai dari diska hasil ekspor-an"><![CDATA[
+<h2>Hapus acuan tidak terpakai dari diska hasil ekspor-an</h2>
+<p>Jika dicentang, setiap berkas acuan dalam tema yang dipilih yang tidak memiliki item terkait di pangkalan-data akan dihapus secara permanen dari tema di diska. Hasil setelah tindakan selesai adalah acuan di berkas sistem Anda akan mencerminkan dengan tepat apa yang ada di pangkalan-data.</p>
+        ]]></item>
+        <item id="skin_description" title="Deskripsi tema"><![CDATA[
+<h2>Deskripsi tema</h2>
+<p>Ringkasan singkat dari desain/tata letak tema ini dapat disediakan (opsi).</p>
+<p>Deskripsi tema dibatasi hingga 255 karakter.</p>
+        ]]></item>
+        <item id="skin_import" title="Tema impor"><![CDATA[]]></item>
+        <item id="skin_name" title="Nama tema"><![CDATA[
+<h2>Nama tema</h2>
+<p>Nama tema digunakan untuk nama direktori dan tujuan teknis lainnya (wajib diisi).</p>
+<p>Nama tidak boleh mengandung karakter khusus atau spasi.</p>
+        ]]></item>
+        <item id="skin_overview" title="Gambaran singkat tema"><![CDATA[
+<h2>Gambaran singkat tema</h2>
+<p>Tema Textpattern adalah kumpulan Pages, Forms, dan Stylesheets. Tema memungkinkan Anda untuk secara logis memisahkan aset situs Anda ke dalam grup untuk kemudahan identifikasi, atau berbagi dengan orang lain. Tindakan membuat atau mengimpor Tema, dan aset apa pun di dalamnya, <em>tidak</em> berdampak apa pun pada situs Anda yang sudah ada. Anda bebas mengedit atau memodifikasi aset apa pun yang tidak terkait dengan Seksi situs Anda, dan itu tidak akan memengaruhi situs itu sendiri.</p>
+<p>Untuk mengedit aset dalam sebuah tema, kunjungi panel Pages, Forms atau Styles dan gunakan pemilih dropdown untuk memilih tema yang ingin Anda kerjakan. Tema yang sedang Anda kerjakan akan diingat di seluruh area administrasi, memungkinkan Anda untuk beralih di antara jenis aset dengan cepat dan mudah. Ini disebut sebagai <em>mengerjakan tema</em> Anda.</p>
+<p>Silakan baca <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Dokumentasi Pengguna Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> untuk informasi lebih lanjut.</p>
+        ]]></item>
+        <item id="skin_title" title="Judul tema"><![CDATA[
+<h2>Judul tema</h2>
+<p>Judul deskriptif tema, digunakan untuk mengidentifikasi tema dalam panel Textpattern.</p>
+<p>Judul dapat berisi karakter khusus dan spasi.</p>
+        ]]></item>
+        <item id="skin_version" title="Versi tema"><![CDATA[
+<h2>Versi tema</h2>
+<p>Nomor versi dari versi yang diinstal dari tema ini (opsi).</p>
+        ]]></item>
     </group>
 </help>
 </resources>
