@@ -11,9 +11,9 @@
 "Textpattern in Two Minutes":https://textpattern.com/two-minutes provides an overview of Textpattern. "Textpattern docs":https://docs.textpattern.com/ provides more detailed information.
 
 Have fun!]]></body>
-    <excerpt format="textile"><![CDATA[This is a an excerpt for the welcome article.
+    <excerpt format="textile"><![CDATA[This is an excerpt for the welcome article.
 
-Article excerpts are optional and can be used to summarize an article's content for display on article list pages or as opening teaser paragraphs.]]></excerpt>
+Article excerpts are optional and can be used to summarize an article's content.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>
