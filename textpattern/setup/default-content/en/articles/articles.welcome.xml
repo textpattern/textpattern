@@ -14,7 +14,7 @@
     <excerpt format="textile"><![CDATA[This is an excerpt for the welcome article. Article excerpts can be used to summarize an article's content.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
-        <email>donald-swain@example.com</email>
+        <email>donald.swain@example.com</email>
         <web>https://docs.textpattern.com/brand/donald-swain</web>
         <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
     </comment>
