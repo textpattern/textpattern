@@ -383,17 +383,18 @@ function parse($thing, $condition = true, $in_tag = true)
         return '';
     }
 
-    $dotest = $in_tag && isset($txp_atts['evaluate']);
-    $evaluate = $dotest ? $txp_atts['evaluate'] : null;
     $isempty = false;
+    $dotest = !empty($txp_atts['evaluate']) && $in_tag;
+    $evaluate = !$dotest ? null :
+        ($txp_atts['evaluate'] === true ? true : do_list($txp_atts['evaluate']));
 
     if (isset($txp_else[$hash]['test']) && (!$evaluate || $evaluate === true)) {
         $evaluate = $txp_else[$hash]['test'];
     }
 
-    if ($in_tag && $evaluate) {
-        $test = $evaluate === true ? false : array_fill_keys(do_list($evaluate), array());
-        $isempty = $last > 0 || $test !== false;
+    if ($evaluate) {
+        $test = is_array($evaluate) ? array_fill_keys($evaluate, array()) : false;
+        $isempty = $last >= $first || $test !== false;
     }
 
     if (empty($test)) {

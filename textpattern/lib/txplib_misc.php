@@ -3114,7 +3114,8 @@ function txp_fill_parsed($sha, $tags, $order, $count, $else) {
             asort($post);
         }
 
-        $txp_else[$sha]['test'] = rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
+        $txp_else[$sha]['test'] = $post ? array_merge(array_keys($pre), array(0), array_keys($post)) : ($pre ? array_keys($pre) : null);
+        //rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
     }
 }
 
