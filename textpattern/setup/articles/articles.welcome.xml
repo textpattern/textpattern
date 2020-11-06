@@ -2,39 +2,17 @@
 <resources>
 <articles>
 <article>
-    <title>Welcome to your site</title>
+    <title>Welcome to Textpattern</title>
     <section>articles</section>
     <category>hope-for-the-future</category>
-    <category>meaningful-labor</category>
-    <body format="textile"><![CDATA[h3. What do you want to do next?
+    <category>meaningful-labour</category>
+    <body format="textile"><![CDATA[This is the Textpattern welcome article. You can delete or edit it and then start creating your own content.
 
-* Write a "new article":adminurl/index.php?event=article? Let your creativity flow!
-* Change this site's name, slogan or select a different article URL style? Check and modify your "preferences":adminurl/index.php?event=prefs.
-* Edit or delete this article? Your "articles":adminurl/index.php?event=list list is the place to start.
-* Upload "images":adminurl/index.php?event=image or "files":adminurl/index.php?event=file to accompany your articles?
-* Learn Textile, the markup generator included with Textpattern? You can try it in the "Textile sandbox":https://textpattern.com/textile-sandbox.
-** If you want to learn more, you can refer to an extensive "Textile manual":https://textpattern.com/textile-reference-manual.
-* Be guided through your "Textpattern first steps":https://textpattern.com/textpattern-first-steps by completing some tasks?
-* Study the "Textpattern Semantic Model":https://textpattern.com/textpattern-semantic-model?
-* Add one or more additional "users":adminurl/index.php?event=admin, or extend Textpattern's capabilities with "plugins":adminurl/index.php?event=plugin from the "Textpattern plugin directory":https://textpattern.com/plugins?
-* Dive in and learn by doing? Please note:
-** When you write an article you assign it to a "section":adminurl/index.php?event=section of your site.
-** Sections use a "page":adminurl/index.php?event=page template and a "style":adminurl/index.php?event=css to define how site content appears in a browser.
-** Page templates typically use HTML(HyperText Markup Language) and "Textpattern tags":https://docs.textpattern.com/tags/ (like this: @<txp:article />@) to build the output code.
-** Some Textpattern tags use "forms":adminurl/index.php?event=form, reusable building blocks that provide extensive control and customization over your site construction.
-** Pages, styles and forms can be packaged into "themes":adminurl/index.php?event=skin and assigned to one or more sections.
-
-Textpattern tags, their attributes and values are explained within the "Textpattern User Documentation":https://docs.textpattern.com/, where you will also find valuable examples, advice and tutorials.
-
-There's also a group of friendly, helpful Textpattern users and administrators at the "Textpattern support forum":https://forum.textpattern.com/.
-
-Additional language translations and corrections are welcomed. Please visit "Textpattern language translations":https://textpattern.com/languages for further details.
-
-This is an <txp:permlink id="1">example article</txp:permlink> included with Textpattern to demonstrate some of the first steps you can undertake. An example comment is associated with this article. The article and comment can be safely deleted using the "articles":adminurl/index.php?event=list and "comments":adminurl/index.php?event=discuss lists.]]></body>
-    <excerpt format="textile"><![CDATA[This is a Textpattern article excerpt. Article excerpts are optional and can be used effectively to summarize an article's content, for example with Textpattern's built-in article syndication.]]></excerpt>
+"Textpattern in two minutes":https://textpattern.com/two-minutes provides an overview of Textpattern. "Textpattern user documentation":https://docs.textpattern.com/ provides more detailed information.]]></body>
+    <excerpt format="textile"><![CDATA[This is an excerpt for the welcome article.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
-        <email>donald-swain@example.com</email>
+        <email>donald.swain@example.com</email>
         <web>https://docs.textpattern.com/brand/donald-swain</web>
         <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
     </comment>
