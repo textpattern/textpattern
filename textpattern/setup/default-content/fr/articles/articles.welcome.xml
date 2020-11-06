@@ -2,39 +2,17 @@
 <resources>
 <articles>
 <article>
-    <title>Bienvenue sur votre site</title>
+    <title>Bienvenue sur Textpattern</title>
     <section>articles</section>
     <category>espoir-pour-le-futur</category>
     <category>travail-significatif</category>
-    <body format="textile"><![CDATA[h3. Que souhaitez-vous faire, maintenant ?
+    <body format="textile"><![CDATA[Ceci est l’article de bienvenue de Textpattern. Vous pouvez le supprimer, le modifier voire commencer à créer vos propres contenus.
 
-* Rédiger un "nouvel article":adminurl/index.php?event=article ? Laissez votre créativité s’exprimer !
-* Modifier le nom de ce site, son slogan ou choisir un autre type d’URL ? Vérifiez et modifiez vous "préférences de site":adminurl/index.php?event=prefs.
-* Éditer ou supprimer cet article ? La "liste de vos articles":adminurl/index.php?event=list c’est là où cela se passe.
-* Ajouter des "images":adminurl/index.php?event=image ou des "fichiers":adminurl/index.php?event=file pour accompagner vos articles ?
-* Apprendre Textile, la convention d’écriture HTML simplifiée incluse avec Textpattern ? Amusez-vous dans le "bac à sable Textile":https://textpattern.com/textile-sandbox.
-** Si vous voulez vous perfectionner, consultez le manuel exhaustif "Textile manual":https://textpattern.com/textile-reference-manual.
-* Trouver de l’aide pour appréhender les "premières étapes avec Textpattern":https://textpattern.com/textpattern-first-steps en complétant quelques réglages ?
-* Étudier le "modèle interne de Textpattern":https://textpattern.com/textpattern-semantic-model ?
-* Ajouter un•e ou plusieurs "utilisat•rice•eur•s":adminurl/index.php?event=admin, ou étendre les possibilités de Textpattern avec des "plugins":adminurl/index.php?event=plugin depuis l’offre du "catalogue":https://textpattern.com/plugins ?
-* Approfondir et apprendre par la pratique ? Veuillez noter :
-** Lorsque vous rédigez un article, vous l’associez à "une «section»":adminurl/index.php?event=section (Page) de votre site ;
-** Les sections utilisent des "gabarits":adminurl/index.php?event=page de pages, ainsi que des "styles":adminurl/index.php?event=css en charge de l’apparence du site dans les navigateurs ;
-** Les modèles de pages comportent habituellement du HTML(HyperText Markup Language) ainsi que des "balises spécifiques Textpattern":https://docs.textpattern.com/tags/ (comme celle-ci : @<txp:article />@) pour générer le code ;
-** Certaines balises Textpattern utilisent des "modules":adminurl/index.php?event=form, réutilisables sous forme de blocs autorisant un contrôle étendu et la personnalisation nécessaire pour la construction de votre site ;
-** Les gabarits, les styles ainsi que les modules peuvent être incorporés dans des "thèmes":adminurl/index.php?event=skin et associés à une, voire plusieurs sections.
-
-Le balisage spécifique Textpattern, leurs attributs ainsi que leurs valeurs d’attribut sont expliqués dans le document "Textpattern User Documentation":https://docs.textpattern.com/ où vous découvrirez, également, des exemples efficaces, des conseils ainsi que des tutoriels.
-
-Il existe aussi une communauté d’entraide particulièrement amicale d’utilisateurs et d’administrateurs sur le "Textpattern support forum":https://forum.textpattern.com/.
-
-Les traductions de langues supplémentaires et leur correction sont toutes les bienvenues. Veuillez consulter la page "Textpattern language translations":https://textpattern.com/languages pour de plus amples détails.
-
-Ce texte est un <txp:permlink id="1">article d’exemple</txp:permlink> inclus avec Textpattern pour illustrer certaines des premières étapes que vous pouvez entreprendre. Un exemple de commentaire est associé à cet article. L’article et le commentaire peuvent être supprimés en toute sécurité depuis la page des "articles":adminurl/index.php?event=list et la liste des "commentaires":adminurl/index.php?event=discuss.]]></body>
-    <excerpt format="textile"><![CDATA[Ceci est un extrait d’article dans Textpattern. Les extraits d’article sont facultatifs et peuvent être utilisés efficacement pour résumer le contenu d’un article comme, par exemple, avec la syndication d’articles intégrée de Textpattern.]]></excerpt>
+"Textpattern in two minutes":https://textpattern.com/two-minutes présente un aperçu de Textpattern. "Textpattern user documentation":https://docs.textpattern.com/ propose des informations plus détaillées.]]></body>
+    <excerpt format="textile"><![CDATA[Ceci est un résumé de l’article de bienvenue.]]></excerpt>
     <comment>
         <name>Donald Swain</name>
-        <email>donald-swain@example.com</email>
+        <email>donald.swain@example.com</email>
         <web>https://docs.textpattern.com/brand/donald-swain</web>
         <message><![CDATA[<p>J’aime beaucoup votre site.</p>]]></message>
     </comment>
