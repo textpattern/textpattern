@@ -548,9 +548,10 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($anchor_id && $pane) {
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'class' => $visible ? 'toggle' : 'toggle ui-helper-hidden',
+            'class' => 'toggle',
             'id'    => $anchor_id,
             'role'  => 'group',
+            'style' => $visible ? '' : 'display:none',
         );
 
         $label = href($label, '#'.$anchor_id, array(

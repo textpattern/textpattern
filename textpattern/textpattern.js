@@ -504,7 +504,7 @@ function toggleDisplay(id)
     var obj = $('#' + id);
 
     if (obj.length) {
-        obj.toggleClass('ui-helper-hidden');
+        obj.toggle();
 
         // Send state of toggle pane to localStorage.
         var pane = $(this).data('txp-pane') || obj.attr('id');
@@ -1737,7 +1737,7 @@ jQuery.fn.txpColumnize = function ()
             try {
                 if (textpattern.storage.data[textpattern.event]['columns'][$id] == false) {
                     selectAll = false;
-                    $target.addClass('ui-helper-hidden');
+                    $target.hide();
                     me.prop('checked', false);
                 }
             } catch (e) {
@@ -1853,7 +1853,7 @@ jQuery.fn.restorePanes = function () {
                 try {
                     if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
                         $elm.parent('.txp-summary').addClass('expanded');
-                        $region.removeClass('ui-helper-hidden');
+                        $region.show();
                     }
                 } catch (e) {
                     stored = false;
