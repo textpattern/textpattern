@@ -97,7 +97,7 @@ class Table
 
         $out .= $content;
         $out .= n.tag_start('div', array(
-                'class' => $total < 1 ? 'txp-layout-cell-row txp-navigation ui-helper-hidden' : 'txp-layout-cell-row txp-navigation',
+                'class' => $total < 1 ? 'txp-layout-cell-row txp-navigation hidden' : 'txp-layout-cell-row txp-navigation',
                 'id'    => $event.'_navigation',
             )).
             $footer.

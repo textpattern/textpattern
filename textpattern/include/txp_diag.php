@@ -574,8 +574,8 @@ function doDiagnostics()
         '</textarea>',
 
         (isset($txpcfg['multisite_root_path']))
-        ? '<textarea class="code ui-helper-hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(dirname($txpcfg['multisite_root_path'])).'" dir="ltr" readonly>'
-        : '<textarea class="code ui-helper-hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(txpath).'" dir="ltr" readonly>',
+        ? '<textarea class="code hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(dirname($txpcfg['multisite_root_path'])).'" dir="ltr" readonly>'
+        : '<textarea class="code hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(txpath).'" dir="ltr" readonly>',
 
         gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
