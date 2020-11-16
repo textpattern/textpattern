@@ -23,7 +23,7 @@
   "devDependencies": {
     "eslint": "~7",
     "phplint": "~2",
-    "uglify-js": "3.11.5"
+    "uglify-js": "3.11.6"
   },
   "dependencies": {
     "blueimp-file-upload": "10.31.0",
