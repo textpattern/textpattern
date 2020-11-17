@@ -20,15 +20,15 @@ Want to get involved in the Textpattern CMS user documentation project? Spot any
 
 Core developers and project maintainers accept Pull Requests. The [main code repository](https://github.com/textpattern/textpattern) uses [Git](https://www.sitepoint.com/git-for-beginners/) for its version control and is split into at least three branches:
 
-* `master`: for stable releases only. Core devs only ever merge production-ready code here at release time.
-* `maint-x.y.z`: for patching the most recent stable release.
+* `main`: for stable releases only. Core devs only ever merge production-ready code here at release time.
+* `x.y.z`: for patching the most recent stable release.
 * `dev`: for development of the next major version.
 
 There may be other branches with partially-completed features awaiting merge, but the above are always present. Once you have cloned/forked the repository, ensure you have checked out the correct branch before submitting a Pull Request.
 
 The general steps for Pull Requests:
 
-* Switch to the correct branch (`git checkout branch-name`), where `branch-name` is either `maint-x.y.z` to patch or bug fix the existing stable product, or `dev` for a feature/fix to go in the next major version.
+* Switch to the correct branch (`git checkout branch-name`), where `branch-name` is either `x.y.z` to patch or bug fix the existing stable product, or `dev` for a feature/fix to go in the next major version.
 * Pick an [existing issue](https://github.com/textpattern/textpattern/issues) you intend to work on, or [create a new issue](https://github.com/textpattern/textpattern/issues/new) if no existing issue matches your topic.
 * Make a new branch for your work.
 * Hack along.
