@@ -81,7 +81,7 @@
         ]]></item>
     </group>
 
-    <group id="article" title="">
+    <group id="article" title="Panell d’escritura">
         <item id="article_image" title="Imatge de l’article"><![CDATA[
 <h2>Imatge de l'article</h2>
 <p>Per associar una sola imatge amb aquest article, col·loca un dels següents aquí:</p>
@@ -139,9 +139,12 @@
         <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
         <item id="php_version_required" title=""><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title="El directori d’instal·lació (setup) encara existeix"><![CDATA[
+<h2>El directori d’instal·lació (setup) encara existeix</h2>
+<p>Un cop instal·lat Textpattern, el directori  <code>textpattern/setup</code> i el seu contingut ja no es necessiten més, i cal esborrar-los per raons de seguretat.</p>
+        ]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Les funcions de PHP […] són desactivades al teu servidor"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Actualització de Textpattern"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title="Hi ha disponible una versió prèvia (pre-release) de Textpattern"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title="La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir"><![CDATA[<h2>La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir</h2>
@@ -205,9 +208,22 @@
         <item id="comments_are_ol" title="Presentar comentaris como llista numerada?"><![CDATA[]]></item>
         <item id="comments_auto_append" title=""><![CDATA[]]></item>
         <item id="comments_dateformat" title="Format de data per comentaris"><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Invitació a comentar predeterminada"><![CDATA[
+<h2>Invitació a comentar predeterminada</h2>
+<p>Si permets que els visitants deixin comentaris al teu lloc web, aquest és el text d’invitació predeterminat. Per exemple:</p>
+<ul>
+    <li>Comentaris</li>
+    <li>Escriu un comentari</li>
+    <li>Deixa la teva opinió</li>
+    <li>Anota</li>
+</ul>
+<p>Tingues present que el text d’invitació sempre es pot modificar article per article.</p>
+        ]]></item>
         <item id="comments_disabled_after" title="Desactivats després de"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="No permetre imatges de l’usuari?"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Es permeten imatges dins dels comentaris?"><![CDATA[
+<h2>Es permeten imatges dins dels comentaris?</h2>
+<p>Si aquest opció es deixa en ‘No’, qualsevol imatge que s'inclogui en els comentaris serà eliminada.</p>
+        ]]></item>
         <item id="comments_mode" title="Mode de comentaris"><![CDATA[]]></item>
         <item id="comments_moderate" title="Moderar comentaris"><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
