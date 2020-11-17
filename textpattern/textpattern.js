@@ -504,7 +504,7 @@ function toggleDisplay(id)
     var obj = $('#' + id);
 
     if (obj.length) {
-        obj.toggle();
+        obj.toggleClass('hidden');
 
         // Send state of toggle pane to localStorage.
         var pane = $(this).data('txp-pane') || obj.attr('id');
@@ -872,9 +872,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadProgress', function (event, data) {
     $('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).removeClass('ui-helper-hidden');
+    $('progress.txp-upload-progress').val(0).removeClass('hidden');
 }).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').addClass('ui-helper-hidden');
+    $('progress.txp-upload-progress').addClass('hidden');
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -1737,7 +1737,7 @@ jQuery.fn.txpColumnize = function ()
             try {
                 if (textpattern.storage.data[textpattern.event]['columns'][$id] == false) {
                     selectAll = false;
-                    $target.hide();
+                    $target.addClass('hidden');
                     me.prop('checked', false);
                 }
             } catch (e) {
@@ -1853,7 +1853,7 @@ jQuery.fn.restorePanes = function () {
                 try {
                     if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
                         $elm.parent('.txp-summary').addClass('expanded');
-                        $region.show();
+                        $region.removeClass('hidden');
                     }
                 } catch (e) {
                     stored = false;
@@ -2691,8 +2691,8 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault();
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden');
-        else $(this).find('.txp-search-clear').addClass('ui-helper-hidden');
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('hidden');
+        else $(this).find('.txp-search-clear').addClass('hidden');
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('updateList', '#txp-list-container', function() {
         if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {

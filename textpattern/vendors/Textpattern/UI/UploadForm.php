@@ -262,7 +262,7 @@ class UploadForm extends Form
         $progressBar = new \Textpattern\UI\Tag('progress');
         $progressBar
             ->setContent('')
-            ->setAtts(array('class' => 'txp-upload-progress ui-helper-hidden'));
+            ->setAtts(array('class' => 'txp-upload-progress hidden'));
 
         // Build the form content.
         $input = new \Textpattern\UI\Input($name, 'file');
