@@ -400,7 +400,11 @@ function author_list($message = '')
                         'method' => 'post',
                         'action' => 'index.php',
                     )).
-                    n.tag_start('div', array('class' => 'txp-listtables')).
+                    n.tag_start('div', array(
+                        'class'      => 'txp-listtables',
+                        'tabindex'   => 0,
+                        'aria-label' => gTxt('list'),
+                    )).
                     n.tag_start('table', array('class' => 'txp-list')).
                     n.tag_start('thead').
                     tr(
