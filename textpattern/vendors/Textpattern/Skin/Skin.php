@@ -1318,7 +1318,7 @@ class Skin extends CommonBase implements SkinInterface
                         'method' => 'post',
                         'action' => 'index.php',
                     )).
-                    n.tag_start('div', arrayarray(
+                    n.tag_start('div', array(
                         'class'      => 'txp-listtables',
                         'tabindex'   => 0,
                         'aria-label' => gTxt('list'),
