@@ -1191,31 +1191,6 @@ function tab($tabevent, $view, $tag = 'li')
 }
 
 /**
- * Gets the name of the default section.
- *
- * @return string The section
- */
-
-function getDefaultSection()
-{
-    global $txp_sections;
-
-    $name = get_pref('default_section');
-
-    if (!isset($txp_sections[$name])) {
-        foreach ($txp_sections as $name => $section) {
-            if ($name != 'default') {
-                break;
-            }
-        }
-
-        set_pref('default_section', $name, 'section', PREF_HIDDEN);
-    }
-
-    return $name;
-}
-
-/**
  * Renders 'override form' field.
  *
  * @param  string $form    The selected form

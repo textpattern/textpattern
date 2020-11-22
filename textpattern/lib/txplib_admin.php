@@ -907,6 +907,31 @@ function permlinkmodes($name, $val, $blank = false)
 }
 
 /**
+ * Gets the name of the default publishing section.
+ *
+ * @return string The section
+ */
+
+function getDefaultSection()
+{
+    global $txp_sections;
+
+    $name = get_pref('default_section');
+
+    if (!isset($txp_sections[$name])) {
+        foreach ($txp_sections as $name => $section) {
+            if ($name != 'default') {
+                break;
+            }
+        }
+
+        set_pref('default_section', $name, 'section', PREF_HIDDEN);
+    }
+
+    return $name;
+}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and

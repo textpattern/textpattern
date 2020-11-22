@@ -70,9 +70,13 @@ if ($event == 'section') {
  * @param string|array $message The activity message
  */
 
-function sec_section_list($message = '')
+function sec_section_list($message = '', $update = false)
 {
-    global $event, $step, $all_pages, $all_styles;
+    global $event, $step, $all_pages, $all_styles, $txp_sections;
+
+    if ($update) {
+        $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
+    }
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -183,6 +187,8 @@ function sec_section_list($message = '')
             )
         );
 
+    
+    getDefaultSection();
     $createBlock = array();
 
     if (has_privs('section.edit')) {
@@ -671,7 +677,7 @@ function section_save()
     }
 
     if ($ok) {
-        sec_section_list(gTxt(($safe_old_name ? 'section_updated' : 'section_created'), array('{name}' => $name)));
+        sec_section_list(gTxt(($safe_old_name ? 'section_updated' : 'section_created'), array('{name}' => $name)), true);
     } else {
         sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
     }
@@ -749,14 +755,18 @@ function section_set_default()
 
 function section_select_list()
 {
+    global $txp_sections;
+
     $val = get_pref('default_section');
-    $sections = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title, name");
     $vals = array();
-    foreach ($sections as $row) {
-        $vals[$row['name']] = $row['title'];
+
+    foreach ($txp_sections as $name => $row) {
+        $name == 'default' or $vals[$name] = $row['title'];
     }
 
-    return selectInput('default_section', $vals, $val, false, true, 'default_section');
+    return selectInput(array(
+        'name' => 'default_section', 'class' => 'txp-async-update'
+    ), $vals, $val, false, true, 'default_section');
 }
 
 /**
@@ -765,6 +775,8 @@ function section_select_list()
 
 function section_delete()
 {
+    global $txp_sections;
+
     $selectedList = ps('selected');
     $selected = join(',', quote_list($selectedList));
     $message = '';
@@ -778,6 +790,10 @@ function section_delete()
     $sectionsNotDeleted = array_diff($selectedList, $sections);
 
     if ($sections && safe_delete('txp_section', "name IN (".join(',', quote_list($sections)).")")) {
+        foreach ($sections as $section) {
+            unset($txp_sections[$section]);
+        }
+
         callback_event('sections_deleted', '', 0, $sections);
         $message = gTxt('section_deleted', array('{name}' => join(', ', $sections)));
     }
@@ -818,7 +834,7 @@ function section_set_theme($type = 'dev_skin')
 if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=section')}
 EOS
     , false);
-    sec_section_list($message);
+    sec_section_list($message, true);
 }
 
 /**
@@ -1088,5 +1104,5 @@ function section_multi_edit()
         $message = array(gTxt('section_save_failed'), E_ERROR);
     }
 
-    sec_section_list($message);
+    sec_section_list($message, $nameVal && $sections);
 }
