@@ -613,7 +613,6 @@ function section_save()
             // Invalid input. Halt all further processing (e.g. plugin event
             // handlers).
             $message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-//            modal_halt($message);
             sec_section_list($message);
 
             return;
@@ -664,6 +663,9 @@ function section_save()
     }
 
     if ($ok) {
+        if ($name != $lower_name && $lower_name == get_pref('default_section')) {
+            set_pref('default_section', $name, 'section', PREF_HIDDEN);
+        }
         update_lastmod('section_saved', compact('name', 'title', 'section_page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable', 'permlink_mode'));
         Txp::get('Textpattern\Skin\Skin')->setEditing($safe_skin);
     }

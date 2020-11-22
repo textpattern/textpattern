@@ -1198,7 +1198,21 @@ function tab($tabevent, $view, $tag = 'li')
 
 function getDefaultSection()
 {
-    return get_pref('default_section');
+    global $txp_sections;
+
+    $name = get_pref('default_section');
+
+    if (!isset($txp_sections[$name])) {
+        foreach ($txp_sections as $name => $section) {
+            if ($name != 'default') {
+                break;
+            }
+        }
+
+        set_pref('default_section', $name, 'section', PREF_HIDDEN);
+    }
+
+    return $name;
 }
 
 /**
