@@ -2947,6 +2947,7 @@ function if_logged_in($atts, $thing = null)
 
     return isset($thing) ? parse($thing, $x) : $x;
 }
+
 // -------------------------------------------------------------
 
 function txp_sandbox($atts = array(), $thing = null, $parse = true)
@@ -2966,16 +2967,18 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true)
         return;
     }
 
-    if (!isset($stack[$id])) {
-        $stack[$id] = 1;
-    } elseif ($stack[$id] >= $depth) {
-        trigger_error(gTxt('form_circular_reference', array(
-            '{name}' => '<txp:article id="'.$id.'"/>'
-        )));
+    if ($field) {
+        if (!isset($stack[$id])) {
+            $stack[$id] = 1;
+        } elseif ($stack[$id] >= $depth) {
+            trigger_error(gTxt('form_circular_reference', array(
+                '{name}' => '<txp:article id="'.$id.'"/>'
+            )));
 
-        return '';
-    } else {
-        $stack[$id]++;
+            return '';
+        } else {
+            $stack[$id]++;
+        }
     }
 
     if ($parse) {
@@ -2990,14 +2993,14 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true)
         $thisarticle = $oldarticle;
     }
 
-    $stack[$id]--;
+    !$field or $stack[$id]--;
 
     if (!preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $thing;
     }
 
     if (!isset($uniqid)) {
-        $uniqid = strtr(uniqid('sandbox_', true), '.', '_');
+        $uniqid = 'sandbox_'.strtr(uniqid('', true), '.', '_');
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
 
