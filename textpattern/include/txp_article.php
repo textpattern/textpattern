@@ -1191,17 +1191,6 @@ function tab($tabevent, $view, $tag = 'li')
 }
 
 /**
- * Gets the name of the default section.
- *
- * @return string The section
- */
-
-function getDefaultSection()
-{
-    return get_pref('default_section');
-}
-
-/**
  * Renders 'override form' field.
  *
  * @param  string $form    The selected form
