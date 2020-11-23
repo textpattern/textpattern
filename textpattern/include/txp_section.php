@@ -187,7 +187,7 @@ function sec_section_list($message = '', $update = false)
             )
         );
 
-    
+
     getDefaultSection();
     $createBlock = array();
 
@@ -525,11 +525,15 @@ function section_edit()
             'uses_style',
             'section_uses_css',
             array('class' => 'txp-form-field edit-section-uses-css')
-        ).inputLabel(
+        ).
+        inputLabel(
             'permlink_mode',
             permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
-            '', 'permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
-        ).script_js(<<<EOJS
+            'permlink_mode',
+            'permlink_mode',
+            array('class' => 'txp-form-field edit-section-permlink-mode')
+        ).
+        script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
 var page_sel = '{$sec_page}';
