@@ -413,7 +413,7 @@ class Skin extends CommonBase implements SkinInterface
             $contracted = array();
 
             foreach ($this->uploaded as $name => $infos) {
-                $contracted[$name] = $infos['title'];
+                $contracted[$name] = $infos['title'] . ' ('.$infos['version'].')';
             }
 
             return $contracted;
