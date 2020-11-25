@@ -11,7 +11,10 @@ Changes in 4.8.4 (upcoming)
 
 * Fixed: Write panel JS error when override forms were switched off
   (thanks, GugUser).
+* Added: Additional public-side language strings, primarily for theming.
 * Added: Latest translations. Thank you to all translators for your hard work.
+* Changed: Improved keyboard focus within responsive tables (to allow scrolling
+  via arrow keys).
 * PrismJS 1.22.0.
 
 Changes in 4.8.3 (13 Sep 2020)
