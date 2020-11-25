@@ -5,6 +5,8 @@ Changes in 4.8.4 (upcoming)
   (thanks, GugUser).
 * Added: Additional public-side language strings, primarily for theming.
 * Added: Latest translations. Thank you to all translators for your hard work.
+* Changed: Admin-side theme name references are appended with the version
+  number.
 * Changed: Improved keyboard focus within responsive tables (to allow scrolling
   via arrow keys).
 * PrismJS 1.22.0.
