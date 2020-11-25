@@ -1,6 +1,6 @@
 Changes in 4.8.4 (upcoming)
 
-* Added: Compatibility with PHP 8.0.
+* Maintenance release to add support for PHP 8.0.
 * Fixed: Write panel JS error when override forms were switched off
   (thanks, GugUser).
 * Added: Additional public-side language strings, primarily for theming.
