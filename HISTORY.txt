@@ -5,7 +5,7 @@ Changes in 4.8.4 (upcoming)
   (thanks, GugUser).
 * Fixed: Default publishing section is not updated on section delete/rename.
 * Added: 'fields' attribute to <txp:article />.
-* Added: tags syntax extension to allow for custom processing order.
+* Added: Tags syntax extension to allow for custom processing order.
 * Added: Additional public-side language strings, primarily for theming.
 * Added: Latest translations. Thank you to all translators for your hard work.
 * Changed: Admin-side theme name references are appended with the theme version
