@@ -9,10 +9,16 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.8.4 (upcoming)
 
+* Maintenance release including support for PHP 8.0 and bug fixes.
 * Fixed: Write panel JS error when override forms were switched off
   (thanks, GugUser).
+* Fixed: Default publishing section is not updated on section delete/rename.
 * Added: Additional public-side language strings, primarily for theming.
 * Added: Latest translations. Thank you to all translators for your hard work.
+* Added: 'fields' attribute to <txp:article />.
+* Added: tags syntax extension to allow for custom processing order.
+* Changed: Admin-side theme name references are appended with the theme version
+  number.
 * Changed: Improved keyboard focus within responsive tables (to allow scrolling
   via arrow keys).
 * PrismJS 1.22.0.
