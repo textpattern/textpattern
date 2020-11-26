@@ -6,8 +6,9 @@ Changes in 4.8.4 (upcoming)
 * Fixed: Default publishing section is not updated on section delete/rename.
 * Added: 'fields' attribute to <txp:article />.
 * Added: Tags syntax extension to allow for custom processing order.
-* Added: Additional public-side language strings, primarily for theming.
+* Added: Additional public-side language strings, primarily for themes.
 * Added: Latest translations. Thank you to all translators for your hard work.
+* Changed: Override forms can be of any type, not just article. See prefs.
 * Changed: Admin-side theme name references are appended with the theme version
   number.
 * Changed: Improved keyboard focus within responsive tables (to allow scrolling
