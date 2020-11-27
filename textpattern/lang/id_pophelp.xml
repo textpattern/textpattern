@@ -301,7 +301,11 @@
         <item id="section_on_frontpage" title="Seksi artikel yang muncul di halaman depan?"><![CDATA[]]></item>
         <item id="section_searchable" title="Sertakan seksi ini dalam pencarian situs?"><![CDATA[]]></item>
         <item id="section_syndicate" title="Sindikasikan artikel dalam seksi ini?"><![CDATA[]]></item>
-        <item id="section_uses_css" title="Gunakan gaya"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Gunakan gaya"><![CDATA[
+<h2>Penggunaan gaya</h2>
+<p>Jika Anda ingin mengganti lembar gaya bawaan untuk seksi tertentu, ini dapat disetel di sini.</p>
+<p>Ini hanya relevan dengan stylesheet yang disimpan dalam panel 'Styles' Textpattern - jika Anda menghosting CSS Anda secara eksternal dari Textpattern (yang sangat disarankan), opsi ini tidak berpengaruh.</p>
+        ]]></item>
         <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
 <h2>Gunakan halaman</h2>
 <p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh…</p>
@@ -313,7 +317,11 @@
     </group>
 
     <group id="setup" title="Panel setelan">
-        <item id="setup_user_login" title="Login pengguna"><![CDATA[]]></item>
+        <item id="setup_user_login" title="Login pengguna"><![CDATA[
+<h2>Login pengguna</h2>
+<p>Nama login akun administrator ('Penerbit') yang akan Anda gunakan untuk mengelola situs Anda.</p>
+<p>Meskipun tidak ada batasan pada nama, sebaiknya hindari urutan karakter yang rumit dan nama pengguna yang mudah ditebak (misalnya <code>admin</code>, <code>administrator</code>, dll.)</p>
+        ]]></item>
         <item id="setup_user_pass" title="Sandi pengguna"><![CDATA[]]></item>
         <item id="table_prefix" title="Awalan tabel (pada pangkalan-data)"><![CDATA[]]></item>
     </group>
