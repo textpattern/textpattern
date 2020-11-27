@@ -758,7 +758,7 @@ abstract class CommonBase implements CommonInterface
     {
         $things = 'name';
         $isAsset = property_exists($this, 'skin');
-        $thing = $isAsset ? 'skin' : 'title';
+        $thing = $isAsset ? 'skin' : 'title, version';
         $things .= ', '.$thing;
 
         $rows = $this->getRows($things, '1 ORDER BY name');
@@ -769,7 +769,7 @@ abstract class CommonBase implements CommonInterface
             if ($isAsset) {
                 $this->installed[$row[$thing]][] = $row['name'];
             } else {
-                $this->installed[$row['name']] = $row[$thing];
+                $this->installed[$row['name']] = $row['title'] . ' ('.$row['version'].')';
             }
         }
 

@@ -413,7 +413,7 @@ class Skin extends CommonBase implements SkinInterface
             $contracted = array();
 
             foreach ($this->uploaded as $name => $infos) {
-                $contracted[$name] = $infos['title'];
+                $contracted[$name] = $infos['title'] . ' ('.$infos['version'].')';
             }
 
             return $contracted;
@@ -1317,10 +1317,14 @@ class Skin extends CommonBase implements SkinInterface
                         'name'   => 'longform',
                         'method' => 'post',
                         'action' => 'index.php',
-                    ))
-                    .n.tag_start('div', array('class' => 'txp-listtables'))
-                    .n.tag_start('table', array('class' => 'txp-list'))
-                    .n.tag_start('thead');
+                    )).
+                    n.tag_start('div', array(
+                        'class'      => 'txp-listtables',
+                        'tabindex'   => 0,
+                        'aria-label' => gTxt('list'),
+                    )).
+                    n.tag_start('table', array('class' => 'txp-list')).
+                    n.tag_start('thead');
 
             $ths = hCell(
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
