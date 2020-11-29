@@ -27,9 +27,9 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.8.4';
+$thisversion = '4.9.0-dev';
 // $txp_using_svn deprecated in 4.7.0.
-$txp_using_svn = $txp_is_dev = false; // Set false for releases.
+$txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
 ob_start(null, 2048);
 
