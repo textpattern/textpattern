@@ -1,4 +1,4 @@
-Textpattern CMS 4.8.2
+Textpattern CMS 4.8.4
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
@@ -104,8 +104,6 @@ system. Textpattern is free and open source.
   /textpattern/config.php and the /textpattern/setup/ directory) with the
   corresponding files in this distribution. In addition, ensure the /themes/
   directory exists if it is not already there, and is writable.
-  Remove the /textpattern/setup/ directory from a working Textpattern site if
-  it exists.
   When uploading the /textpattern/ directory, ensure you preserve any custom
   files in your existing installation. Also ensure the /textpattern/plugins
   directory is writable.
