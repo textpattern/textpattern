@@ -109,6 +109,8 @@ system. Textpattern is free and open source.
   directory is writable.
   Note: css.php and /rpc/ may not exist if the installed version of
   Textpattern is prior to 4.2.0.
+* You should not replace the /files/, /images/ and /themes/ directories if they
+  are already present (doing so may delete your own content).
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
   automatically. Check the site diagnostics (Admin -> Diagnostics) to confirm
   the correct Textpattern version number is displayed and whether there are any
