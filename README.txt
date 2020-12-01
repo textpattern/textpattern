@@ -106,7 +106,7 @@ system. Textpattern is free and open source.
   directory exists if it is not already there, and is writable.
   When uploading the /textpattern/ directory, ensure you preserve any custom
   files in your existing installation. Also ensure the /textpattern/plugins
-  directory is writable.
+  directory is writable (avoid replacing this directory if already present).
   Note: css.php and /rpc/ may not exist if the installed version of
   Textpattern is prior to 4.2.0.
 * You should not replace the /files/, /images/ and /themes/ directories if they
