@@ -2577,7 +2577,7 @@ $(document).ready(function () {
     $('body').restorePanes();
 
     // Collapse/Expand all support.
-    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
+    $('#tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
         .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
 
     // Confirmation dialogs.
