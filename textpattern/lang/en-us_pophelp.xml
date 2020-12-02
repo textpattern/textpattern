@@ -931,11 +931,11 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Use plugins?</h2>
 <p>This allows you to turn off all support for Textpattern plugins. This is useful if you are debugging errors on your site, and you want to make check if one or more plugins are involved.</p>
         ]]></item>
-        <item id="use_textile" title="Use Textile?"><![CDATA[
-<h2>Use Textile?</h2>
+        <item id="use_textile" title="Default text formatting"><![CDATA[
+<h2>Default text formatting</h2>
+<p>The text format setting you choose here becomes the default for excerpt and body markup on the ‘Write’ panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a utility intended to simplify the conversion of plain text to HTML. When enabled, Textile will process the body text of articles and return structurally sound HTML.</p>
 <p>Textile also offers a powerful but easy-to-learn set of commands with which to format text, define structures such as lists, headers and blockquotes, and insert links and images.</p>
-<p>The setting you choose here becomes the default for excerpt and body markup on the ‘Write’ panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
         ]]></item>
     </group>
 
