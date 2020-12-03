@@ -171,7 +171,7 @@
         <item id="use_comments" title="Salli kommentointi?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title="Salli kommentointi?"><![CDATA[]]></item>
         <item id="use_plugins" title="Käytä liitännäisiä?"><![CDATA[]]></item>
-        <item id="use_textile" title="Käytä liitännäisiä?"><![CDATA[]]></item>
+        <item id="use_textile" title="Tekstin oletusmuotoilu"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Osiot-paneeli">
