@@ -877,6 +877,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $rs
     );
 
+    echo graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'supporting_content',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'supporting_content',
+        )), array('class' => 'txp-actions')
+    );
+
     // 'Date and time' collapsible section.
     if (empty($ID)) {
         // Timestamp.
@@ -1160,7 +1171,7 @@ function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
-
+    
     if (is_array($tabevent)) {
         list($tabevent, $label) = $tabevent + array(null, gTxt('text'));
     } else {
