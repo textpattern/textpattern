@@ -7,6 +7,10 @@ Changes in 4.9.0 (upcoming)
 * Added: Compiled .txt plugins can now be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
 
+Changes in 4.8.5 (upcoming)
+
+*
+
 Changes in 4.8.4 (29 Nov 2020)
 
 * Maintenance release including support for PHP 8.0 and bug fixes.
