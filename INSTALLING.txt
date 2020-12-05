@@ -31,8 +31,19 @@
 
 == Upgrades ==
 
-* Check back regularly at https://textpattern.com/ to see if an update is
-  available. Updates are as painless as possible, often extending functionality,
-  fixing bugs and/or security-related issues. Textpattern's diagnostics
-  (Admin -> Diagnostics) will display a message if a new version is available.
-  
+* Textpattern is actively developed. Updates are released to enhance & extend
+  functionality, fix bugs and address security-related issues. It is recommended
+  to periodically check for newer releases. Updates are engineered to be low
+  friction and are accompanied by release notes indicating changes.
+* The software version number is displayed on every admin-side page by default.
+  The latest production Textpattern release can be obtained from:
+    Main site landing page:   https://textpattern.com/download
+    GitHub releases page:     https://github.com/textpattern/textpattern/releases
+
+    Latest release (.zip):    https://textpattern.com/latest.zip
+    Latest release (.tar.gz): https://textpattern.com/latest.zip    
+
+  Administrators wishing to automate checking for new releases may refer to the
+  following JSON URLs:
+    Main site:   https://textpattern.com/version.json
+    GitHub:   https://github.com/textpattern/textpattern/blob/main/package.json
