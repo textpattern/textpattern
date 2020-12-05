@@ -28,14 +28,14 @@ system. Textpattern is free and open source.
 
 == Resources ==
 
-* Documentation: https://docs.textpattern.com
 * Support forum: https://forum.textpattern.com
-* Development:   https://textpattern.com/github
+* Documentation: https://docs.textpattern.com
 
 * Social:        https://textpattern.com/twitter
 
+* Development:   https://textpattern.com/github
 * Contributing:  https://docs.textpattern.com/development/contributing
-* Donate:        https://textpattern.com/about/patrons
+
 * Sponsor:       https://github.com/sponsors/textpattern
                  https://opencollective.com/textpattern-collective
- 
+* Donate:        https://textpattern.com/about/patrons
