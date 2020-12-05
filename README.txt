@@ -32,7 +32,7 @@ system. Textpattern is free and open source.
 * Support forum: https://forum.textpattern.com
 * Development:   https://textpattern.com/github
 
-* Twitter:       https://textpattern.com/textpattern
+* Twitter:       https://textpattern.com/@textpattern
 
 * Contributing:  https://docs.textpattern.com/development/contributing
 * Donate:        https://textpattern.com/about/patrons
