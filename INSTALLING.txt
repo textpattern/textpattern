@@ -40,6 +40,7 @@
     Main site landing page:   https://textpattern.com/download
     GitHub releases page:     https://github.com/textpattern/textpattern/releases
 
+  The following URLs are updated as part of every production release cycle:
     Latest release (.zip):    https://textpattern.com/latest.zip
     Latest release (.tar.gz): https://textpattern.com/latest.zip    
 
