@@ -46,5 +46,5 @@
 
   Administrators wishing to automate checking for new releases may refer to the
   following JSON URLs:
-    Main site:   https://textpattern.com/version.json
-    GitHub:   https://github.com/textpattern/textpattern/blob/main/package.json
+    Main site: https://textpattern.com/version.json
+    GitHub:    https://github.com/textpattern/textpattern/blob/main/package.json
