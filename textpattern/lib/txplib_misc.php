@@ -1173,7 +1173,7 @@ function include_plugin($name)
 
 function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 {
-    global $production_status, $txp_current_plugin;
+    global $production_status, $txp_current_plugin, $plugins_ver;
 
     $error = array();
 
@@ -1204,8 +1204,9 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
     }
 
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s (%s)</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
+        $plugins_ver[$txp_current_plugin],
         $error[$errno],
         $errstr,
         $errline
