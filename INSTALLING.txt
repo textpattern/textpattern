@@ -1,3 +1,8 @@
+== Preflight ==
+
+* Ensure the server meets or exceeds the system requirements:
+    https://textpattern.com/system-requirements
+
 == Installation ==
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
@@ -11,9 +16,7 @@
   macOS Finder with the Cmd + Shift + . keyboard shortcut.
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
-  permissions in addition to pre-existing permissions. Refer to the system
-  requirements for a complete list:
-    https://textpattern.com/system-requirements
+  permissions in addition to pre-existing permissions.
 * Load /textpattern/setup/ (or /subdirectory/textpattern/setup/) in your
   browser to start the installation process and follow the directions.
 * When the installation is complete, remove the /textpattern/setup/ directory
@@ -26,10 +29,10 @@
   location. Once moved, you can specify your new directory location from the
   Textpattern Admin Preferences (Admin -> Preferences -> Admin).
 
-
-== IMPORTANT ==
+== Upgrades ==
 
 * Check back regularly at https://textpattern.com/ to see if an update is
   available. Updates are as painless as possible, often extending functionality,
   fixing bugs and/or security-related issues. Textpattern's diagnostics
   (Admin -> Diagnostics) will display a message if a new version is available.
+  
