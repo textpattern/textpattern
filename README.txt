@@ -16,16 +16,6 @@ Textpattern CMS is a flexible, elegant and easy-to-use content management
 system. Textpattern is free and open source.
 
 
-== Getting Started ==
-
-* In-depth documentation and a comprehensive tag index is available in the
-  Textpattern user documentation at https://docs.textpattern.com/
-* You can get support and information via:
-   Forum:    https://forum.textpattern.com/
-   GitHub:   https://textpattern.com/github
-   Twitter:  https://textpattern.com/@textpattern
-
-
 == Installation ==
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
@@ -115,11 +105,12 @@ system. Textpattern is free and open source.
 * Verify all preference settings (Admin -> Preferences).
 
 
-== Additional Resources ==
+== Resources ==
 
-* There are additional resources for the default front-side theme, such as
-  Sass preprocessor files, available at:
-    https://github.com/textpattern/textpattern-default-theme/
+* Documentation: https://docs.textpattern.com
+* Support forum: https://forum.textpattern.com
+* Development:   https://textpattern.com/github
+* Twitter:       https://textpattern.com/textpattern
 
 
 == Contributing ==
