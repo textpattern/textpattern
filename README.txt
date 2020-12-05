@@ -16,7 +16,7 @@ Textpattern CMS is a flexible, elegant and easy-to-use content management
 system. Textpattern is free and open source.
 
 
-== Installating Textpattern ==
+== Installing Textpattern ==
 
 * Refer to INSTALLING.txt for details.
 
@@ -32,7 +32,7 @@ system. Textpattern is free and open source.
 * Support forum: https://forum.textpattern.com
 * Development:   https://textpattern.com/github
 
-* Twitter:       https://textpattern.com/@textpattern
+* Social:        https://textpattern.com/twitter
 
 * Contributing:  https://docs.textpattern.com/development/contributing
 * Donate:        https://textpattern.com/about/patrons
