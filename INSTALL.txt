@@ -54,7 +54,7 @@ Textpattern CMS 4.8.4
 
 -- Updates --
 
-* Textpattern is actively developed. Update are released to enhance & extend
+* Textpattern is actively developed. Updates are released to enhance and extend
   functionality, fix bugs and address security-related issues. It is recommended
   to periodically check for newer releases. Updates are engineered to be low
   friction and are accompanied by release notes indicating historical changes.
