@@ -2,20 +2,31 @@ Textpattern CMS 4.8.4
 
 == Upgrade ==
 
+Table of Contents
+  
+#
+  
 -- Preflight --
 
-* Read the release notes in HISTORY.txt, both for the version you are upgrading
-  to and any prior versions you are skipping as these changes will apply.
-  Ensure you understand any changes and enhancements that may affect your
-  Textpattern site functionality. If in doubt, refer to the resources in the
-  Getting Started section above before you undertake the upgrade process.
-* Confirm your web server meets or exceeds the Textpattern system requirements:
+* Ensure the server meets or exceeds the system requirements for the upgrade
+  release:
     https://textpattern.com/system-requirements
-* It is recommended that the browser cache is cleared to ensure the newer files
-  are used in preference to the older files.
-* NOTE: Versions prior to 4.2.0 should be upgraded to 4.2.0 before subsequent
-  version upgrades. Upgrades from versions prior to 4.2.0 will present warnings
-  and/or errors upon the first login to the admin-side. These may include:
+* Ensure the database user permissions meet the system requirements.
+* Refer to the release notes in HISTORY.txt, including changes made since the
+  Textpattern version of the site to be upgraded. Ensure you understand any
+  changes that may affect your site. Seek advice or assistance before you begin
+  the upgrade process
+  Note: refer to the resources at the end of this file for further details.
+* Log out of the Textpattern site to be upgraded.
+* Clear the browser cache for the Textpattern site to be upgraded.
+* Verify the existence of a known-good Textpattern database and file backup.
+
+
+- Legacy Upgrades -
+
+* Textpattern <4.2.0 should be upgraded to 4.2.0 before subsequent upgrades.
+  Upgrades from <4.2.0 will present warnings and/or errors upon the first login
+  to the admin-side. These may include:
     Unknown column 'user_name' in 'where clause' select name,
     val from txp_prefs where prefs_id=1 AND user_name='' in
     /path/to/your/site/textpattern/lib/txplib_db.php on line xx
@@ -23,19 +34,15 @@ Textpattern CMS 4.8.4
     /path/to/your/site/textpattern/index.php at line xx
     Undefined variable: gmtoffset in
     /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
-  This is expected behaviour. The messages will disappear with subsequent
-  navigation in the admin-side.
-* NOTE: Upgrades from versions prior to 4.7.0 may present an 'Unknown section'
-  message on the front side after updated files have been transferred and
-  before the first admin-side log in. The message will disappear following the
-  first log in when the database upgrade scripts are run.
+  This is expected, harmless behaviour. The messages will be not appear after
+  subsequent navigation in the admin-side.
+* Upgrades from <4.7.0 may present an 'Unknown section' message on the
+  front-side after upgraded files have been transferred and before the first
+  admin-side log in. The message will disappear following the first log in
+  when the upgrade scripts are run.
 
 -- Upgrading --
 
-* Log out of the Textpattern admin-side.
-* Verify the existence of a known-good Textpattern database and file backup.
-* Ensure your Textpattern database user has INDEX permissions in addition to
-  any permissions previously granted.
 * Replace the top-level index.php, css.php and .htaccess files (if Textpattern
   is running on an Apache or derivative web server), everything in the /rpc/
   directory and everything in the /textpattern/ directory (except
