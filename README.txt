@@ -28,6 +28,7 @@ system. Textpattern is free and open source.
 
 == Resources ==
 
+* Website:       https://textpattern.com/
 * Support forum: https://forum.textpattern.com
 * Documentation: https://docs.textpattern.com
 
