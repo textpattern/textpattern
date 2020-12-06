@@ -18,12 +18,12 @@ system. Textpattern is free and open source.
 
 == Installing Textpattern ==
 
-* Refer to INSTALLING.txt for details.
+* Refer to INSTALL.txt for details.
 
 
 == Upgrading Textpattern ==
 
-* Refer to UPGRADING.txt for details.
+* Refer to UPGRADE.txt for details.
 
 
 == Resources ==
