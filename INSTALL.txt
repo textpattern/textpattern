@@ -2,13 +2,13 @@ Textpattern CMS 4.8.4
 
 == Install ==
 
-  Table of Contents
+Table of Contents
   
-  # Preflight
-  # Installation
-  ## Files and Directories
-  ## Setup
-  # Updates
+# Preflight
+# Installation
+## Files and Directories
+## Setup
+# Updates
 
 -- Preflight --
 
