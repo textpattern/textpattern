@@ -12,6 +12,8 @@ Table of Contents
   release:
     https://textpattern.com/system-requirements
 * Ensure the database user permissions meet the system requirements.
+* Verify the existence of a known-good Textpattern database and file backup.
+* Note any site-specific custom files and/or directories in /textpattern/.
 * Refer to the release notes in HISTORY.txt, including changes made since the
   Textpattern version of the site to be upgraded. Ensure you understand any
   changes that may affect your site. Seek advice or assistance before you begin
@@ -19,8 +21,6 @@ Table of Contents
   Note: refer to the resources at the end of this file for further details.
 * Log out of the Textpattern site to be upgraded.
 * Clear the browser cache for the Textpattern site to be upgraded.
-* Verify the existence of a known-good Textpattern database and file backup.
-
 
 - Legacy Upgrades -
 
@@ -43,21 +43,26 @@ Table of Contents
 
 -- Upgrading --
 
-* Replace the top-level index.php, css.php and .htaccess files (if Textpattern
-  is running on an Apache or derivative web server), everything in the /rpc/
-  directory and everything in the /textpattern/ directory (except
-  /textpattern/config.php and the /textpattern/setup/ directory) with the
-  corresponding files in this distribution. In addition, ensure the /themes/
-  directory exists if it is not already there, and is writable.
-  When uploading the /textpattern/ directory, ensure you preserve any custom
-  files in your existing installation. Also ensure the /textpattern/plugins
-  directory is writable.
-  Note: css.php and /rpc/ may not exist if the installed version of
-  Textpattern is prior to 4.2.0.
+* Replace the following files and directories in the site:
+    /css.php
+    /index.php
+  Note: css.php may not exist if Textpattern <4.2.0 is installed.
+* Replace the following files and directories in the site if they exist:
+    /.htaccess
+    /rpc/
+  Note: /rpc/ may not exist if Textpattern <4.2.0 is installed.
+* Replace everything in the /textpattern/ directory except:
+    /textpattern/config.php
+    any site-specific custom files/directories
+  Note: do not upload or copy the /textpattern/setup/ directory, it is not
+  required.
+* Ensure the following directories exist on the site and are writable:
+    /textpattern/plugins
+    /themes/
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
-  automatically. Check the site diagnostics (Admin -> Diagnostics) to confirm
-  the correct Textpattern version number is displayed and whether there are any
-  errors.
+  automatically. Refer to the site diagnostics (Admin -> Diagnostics) to
+  confirm the Textpattern version and note any warnings or errors.
+  Note: refer to the resources at the end of this file for further details.
 * Verify all preference settings (Admin -> Preferences).
 
 
