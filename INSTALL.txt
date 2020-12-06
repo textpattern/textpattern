@@ -15,7 +15,7 @@ Textpattern CMS 4.8.4
 * Ensure the server meets or exceeds the system requirements:
     https://textpattern.com/system-requirements
 * Create or verify the existence of a database with valid username and password.
-  Ensure the user permissions meet the system requirements.
+  Ensure the database user permissions meet the system requirements.
 
 
 -- Installation --
