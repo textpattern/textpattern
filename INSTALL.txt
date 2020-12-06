@@ -1,9 +1,13 @@
-== Preflight ==
+Textpattern CMS 4.8.4
+
+== Install ==
+
+-- Preflight --
 
 * Ensure the server meets or exceeds the system requirements:
     https://textpattern.com/system-requirements
 
-== Installation ==
+-- Installation --
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
@@ -29,7 +33,7 @@
   location. Once moved, you can specify your new directory location from the
   Textpattern Admin Preferences (Admin -> Preferences -> Admin).
 
-== Upgrades ==
+-- Upgrades --
 
 * Textpattern is actively developed. Updates are released to enhance & extend
   functionality, fix bugs and address security-related issues. It is recommended
