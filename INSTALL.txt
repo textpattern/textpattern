@@ -6,32 +6,43 @@ Textpattern CMS 4.8.4
 
 * Ensure the server meets or exceeds the system requirements:
     https://textpattern.com/system-requirements
+* Create or verify the existence of a MySQL database with valid username and
+  password. Ensure the user permissions meet the system requirements.
+* If you require Textpattern's multi-site functionality, obtain and extract the
+  .tar.gz archive. The .zip archive is not suitable for multi-site installations.
+
 
 -- Installation --
 
-* Extract the Textpattern files to your site (in the web root, subdomain or
-  subdirectory). The top-level index.php file should reside in this directory,
-  as should the /textpattern/, /files/, /images/, /rpc/ and /themes/
-  directories.
-* If you are running Textpattern on an Apache web server, ensure the top-level
-  .htaccess file is transferred to your site. The file is hidden by default on
-  some operating systems, including macOS. FTP clients and IDEs typically have
-  an option to show these hidden files. You can show or hide hidden files in
-  macOS Finder with the Cmd + Shift + . keyboard shortcut.
-* Create or verify the existence of a working MySQL database with valid username
-  and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
-  permissions in addition to pre-existing permissions.
-* Load /textpattern/setup/ (or /subdirectory/textpattern/setup/) in your
-  browser to start the installation process and follow the directions.
-* When the installation is complete, remove the /textpattern/setup/ directory
-  from your site.
-* If you are running Textpattern on an Apache web server, you can rename
-  /files/.htaccess-dist to /files/.htaccess to prohibit direct URL access to
-  your uploaded files. Thus the only route to these files becomes through the
-  /file_download/ directory. It is recommended you consider employing this
-  feature. Alternatively, move your /files/ directory out of a web-accessible
-  location. Once moved, you can specify your new directory location from the
-  Textpattern Admin Preferences (Admin -> Preferences -> Admin).
+- Files and directories -
+
+* Copy or upload the following Textpattern files and directories to the web
+  site (domain root, subdirectory or subdomain):
+    /css.php
+    /files/
+    /images/
+    /index.php
+    /textpattern/
+    /themes/
+* If multi-site functionality is required, copy or upload the following:
+    /sites/
+* If XML-RPC server functionality is required, copy or upload the following:
+    /rpc/
+* For Apache web server and derivatives, copy or upload the following:
+    /.htaccess
+  Note: This file is hidden by default on some operating systems. File transfer
+  clients typically have an option to show these hidden files.
+  
+
+- Setup -
+  
+* From a web browser, open /textpattern/setup/ on the site to start the setup
+  process. Follow the directions.
+* When the setup is complete, remove the /textpattern/setup/ directory
+  from the site.
+* Log into Textpattern with your account username and password, and check
+  Admin -> Diagnostics.
+
 
 -- Upgrades --
 
