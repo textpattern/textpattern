@@ -45,7 +45,7 @@ Table of Contents
 
 -- Upgrading --
 
-* Replace the following files and directories in the site:
+* Replace the following files in the site:
     /css.php
     /index.php
   Note: /css.php may not exist if Textpattern <4.2.0 is installed.
@@ -55,14 +55,15 @@ Table of Contents
   Note: /rpc/ may not exist if Textpattern <4.2.0 is installed.
 * Replace everything in the /textpattern/ directory except:
     /textpattern/config.php
+    /textpattern/plugins/
     any site-specific custom files/directories
   Note: do not upload or copy the /textpattern/setup/ directory, it is not
   required.
 * Ensure the following directories exist on the site and are writable:
-    /textpattern/plugins
+    /textpattern/plugins/
     /themes/
-* If needed, reset file and directory permissions according to your site.
-* Log in to the Textpattern admin-side. The upgrade script(s) will run
+* Set file and directory permissions according to your site.
+* Log in to the Textpattern admin-side. Any upgrade script(s) will run
   automatically. Refer to the site diagnostics (Admin -> Diagnostics) to
   confirm the Textpattern version and note any warnings or errors.
   Note: refer to the resources at the end of this file for further details.
