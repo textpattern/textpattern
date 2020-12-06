@@ -6,10 +6,8 @@ Textpattern CMS 4.8.4
 
 * Ensure the server meets or exceeds the system requirements:
     https://textpattern.com/system-requirements
-* Create or verify the existence of a MySQL database with valid username and
-  password. Ensure the user permissions meet the system requirements.
-* If you require Textpattern's multi-site functionality, obtain and extract the
-  .tar.gz archive. The .zip archive is not suitable for multi-site installations.
+* Create or verify the existence of a database with valid username and password.
+  Ensure the user permissions meet the system requirements.
 
 
 -- Installation --
@@ -26,6 +24,8 @@ Textpattern CMS 4.8.4
     /themes/
 * If multi-site functionality is required, copy or upload the following:
     /sites/
+  Note: obtain and extract the Textpattern .tar.gz archive. The .zip archive is
+    not suitable for multi-site installations.
 * If XML-RPC server functionality is required, copy or upload the following:
     /rpc/
 * For Apache web server and derivatives, copy or upload the following:
