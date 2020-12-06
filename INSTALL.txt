@@ -48,3 +48,18 @@
   following JSON URLs:
     Main site: https://textpattern.com/version.json
     GitHub:    https://github.com/textpattern/textpattern/blob/main/package.json
+    
+
+== Resources ==
+
+* Support forum: https://forum.textpattern.com
+* Documentation: https://docs.textpattern.com
+
+* Social:        https://textpattern.com/twitter
+
+* Development:   https://textpattern.com/github
+* Contributing:  https://docs.textpattern.com/development/contributing
+
+* Sponsor:       https://github.com/sponsors/textpattern
+                 https://opencollective.com/textpattern-collective
+* Donate:        https://textpattern.com/about/patrons
