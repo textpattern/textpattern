@@ -1,4 +1,8 @@
-== Upgrading: preflight ==
+Textpattern CMS 4.8.4
+
+== Upgrade ==
+
+-- Preflight --
 
 * Read the release notes in HISTORY.txt, both for the version you are upgrading
   to and any prior versions you are skipping as these changes will apply.
@@ -26,7 +30,7 @@
   before the first admin-side log in. The message will disappear following the
   first log in when the database upgrade scripts are run.
 
-== Upgrading ==
+-- Upgrading --
 
 * Log out of the Textpattern admin-side.
 * Verify the existence of a known-good Textpattern database and file backup.
