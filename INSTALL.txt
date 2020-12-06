@@ -64,7 +64,7 @@ Textpattern CMS 4.8.4
     GitHub releases page:     https://github.com/textpattern/textpattern/releases
   The following URLs are updated as part of every production release cycle:
     Latest release (.zip):    https://textpattern.com/latest.zip
-    Latest release (.tar.gz): https://textpattern.com/latest.zip    
+    Latest release (.tar.gz): https://textpattern.com/latest.tar.gz    
 
   Administrators wishing to automate checking for new releases can refer to the
   following JSON endpoints:
