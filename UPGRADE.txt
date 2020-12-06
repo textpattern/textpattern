@@ -4,8 +4,11 @@ Textpattern CMS 4.8.4
 
 Table of Contents
   
-#
-  
+# Preflight
+## Legacy Upgrades
+# Upgrading
+
+
 -- Preflight --
 
 * Ensure the server meets or exceeds the system requirements for the upgrade
@@ -15,9 +18,9 @@ Table of Contents
 * Verify the existence of a known-good Textpattern database and file backup.
 * Note any site-specific custom files and/or directories in /textpattern/.
 * Refer to the release notes in HISTORY.txt, including changes made since the
-  Textpattern version of the site to be upgraded. Ensure you understand any
-  changes that may affect your site. Seek advice or assistance before you begin
-  the upgrade process
+  Textpattern version of the site to be upgraded. Pay attention to changes that
+  may affect the site to be upgraded. Seek advice, assistance or clarification
+  before the upgrade process to avoid unexpected disruption.
   Note: refer to the resources at the end of this file for further details.
 * Log out of the Textpattern site to be upgraded.
 * Clear the browser cache for the Textpattern site to be upgraded.
@@ -25,8 +28,8 @@ Table of Contents
 - Legacy Upgrades -
 
 * Textpattern <4.2.0 should be upgraded to 4.2.0 before subsequent upgrades.
-  Upgrades from <4.2.0 will present warnings and/or errors upon the first login
-  to the admin-side. These may include:
+  Upgrades from <4.2.0 will present warnings and/or errors upon the first login.
+  These may include:
     Unknown column 'user_name' in 'where clause' select name,
     val from txp_prefs where prefs_id=1 AND user_name='' in
     /path/to/your/site/textpattern/lib/txplib_db.php on line xx
@@ -34,19 +37,18 @@ Table of Contents
     /path/to/your/site/textpattern/index.php at line xx
     Undefined variable: gmtoffset in
     /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
-  This is expected, harmless behaviour. The messages will be not appear after
-  subsequent navigation in the admin-side.
+  The messages will be not appear after subsequent navigation in the admin-side.
 * Upgrades from <4.7.0 may present an 'Unknown section' message on the
   front-side after upgraded files have been transferred and before the first
   admin-side log in. The message will disappear following the first log in
-  when the upgrade scripts are run.
+  after the upgrade scripts are automatically run.
 
 -- Upgrading --
 
 * Replace the following files and directories in the site:
     /css.php
     /index.php
-  Note: css.php may not exist if Textpattern <4.2.0 is installed.
+  Note: /css.php may not exist if Textpattern <4.2.0 is installed.
 * Replace the following files and directories in the site if they exist:
     /.htaccess
     /rpc/
@@ -59,6 +61,7 @@ Table of Contents
 * Ensure the following directories exist on the site and are writable:
     /textpattern/plugins
     /themes/
+* If needed, reset file and directory permissions according to your site.
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
   automatically. Refer to the site diagnostics (Admin -> Diagnostics) to
   confirm the Textpattern version and note any warnings or errors.
