@@ -48,3 +48,18 @@
   the correct Textpattern version number is displayed and whether there are any
   errors.
 * Verify all preference settings (Admin -> Preferences).
+
+
+== Resources ==
+
+* Support forum: https://forum.textpattern.com
+* Documentation: https://docs.textpattern.com
+
+* Social:        https://textpattern.com/twitter
+
+* Development:   https://textpattern.com/github
+* Contributing:  https://docs.textpattern.com/development/contributing
+
+* Sponsor:       https://github.com/sponsors/textpattern
+                 https://opencollective.com/textpattern-collective
+* Donate:        https://textpattern.com/about/patrons
