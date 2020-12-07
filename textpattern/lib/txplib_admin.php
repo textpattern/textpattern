@@ -983,11 +983,8 @@ function event_multi_edit($table, $id_key)
 }
 
 /**
- * Verifies temporary directory.
+ * Verifies temporary directory existence and that it's writeable.
  *
- * Verifies that the temporary directory is writeable.
- *
- * @param   string $dir The directory to check
  * @return  bool|null NULL on error, TRUE on success
  * @package Debug
  */
@@ -1014,7 +1011,7 @@ function find_temp_dir()
     } else {
         $guess = array(
             txpath.DS.'tmp',
-            '',
+            sys_get_temp_dir(),
             DS.'tmp',
             $path_to_site.DS.$img_dir,
         );
