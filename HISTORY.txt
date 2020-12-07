@@ -3,6 +3,7 @@ Changes in 4.8.5 (upcoming)
 * Maintenance release including improvements for PHP 8.0 and bug fixes.
 * Fixed: Database connection issue for new installations on PHP 8.0.
 * Fixed: libxml_disable_entity_loader() deprecation warning on PHP 8.0.
+* Added: Latest text translations. Thank you to all our translators.
 * Changed: Plugin load warning includes version number.
 
 Changes in 4.8.4 (29 Nov 2020)
