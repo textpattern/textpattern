@@ -242,7 +242,9 @@ class Core
             while ($row = nextRow($rs)) {
                 $name = array_shift($row);
 
-                if ($def = @$prefs_check[$name]) {
+                if (!empty($prefs_check[$name])) {
+                    $def = $prefs_check[$name];
+
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
 
