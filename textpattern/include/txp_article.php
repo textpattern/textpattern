@@ -535,11 +535,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'cb'       => 'article_partial_value',
         ),
         // 'Previous/Next' article links region.
-        'article_nav' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'nav.nav-tertiary',
-            'cb'       => 'article_partial_article_nav',
-        ),
+//        'article_nav' => array(
+//            'mode'     => PARTIAL_VOLATILE,
+//            'selector' => 'nav.nav-tertiary',
+//            'cb'       => 'article_partial_article_nav',
+//        ),
         // 'Status' region.
         'status' => array(
             'mode'     => PARTIAL_VOLATILE,
@@ -625,11 +625,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'cb'       => 'article_partial_custom_fields',
         ),
         // 'Recent articles' values.
-        'recent_articles' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
-            'cb'       => 'article_partial_recent_articles',
-        ),
+//        'recent_articles' => array(
+//            'mode'     => PARTIAL_VOLATILE,
+//            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
+//            'cb'       => 'article_partial_recent_articles',
+//        ),
     );
 
     // Add partials for custom fields (and their values which is redundant by
@@ -1025,12 +1025,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
 
     // 'Recent articles' collapsible section.
-    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
     echo n.'</div>'; // End of #supporting_content.
 
     // Prev/next article links.
-    echo $partials['article_nav']['html'];
+//    echo $partials['article_nav']['html'];
 
     echo n.'</div>'; // End of .txp-layout-4col-alt.
 
@@ -1605,8 +1605,9 @@ function article_partial_custom_fields($rs)
  * The rendered widget can be customised via the 'article_ui > recent_articles'
  * pluggable UI callback event.
  *
- * @param  array $rs Article data
- * @return string HTML
+ * @param      array $rs Article data
+ * @return     string HTML
+ * @deprecated in 4.9.0
  */
 
 function article_partial_recent_articles($rs)
@@ -1847,8 +1848,9 @@ function article_partial_view_modes($rs)
 /**
  * Renders next/prev links.
  *
- * @param  array $rs Article data
- * @return string HTML
+ * @param      array $rs Article data
+ * @return     string HTML
+ * @deprecated in 4.9.0
  */
 
 function article_partial_article_nav($rs)
