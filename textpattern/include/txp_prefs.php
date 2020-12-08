@@ -69,7 +69,7 @@ function prefs_save()
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
-    if (!get_pref('use_comments', 1, 1)) {
+    if (!get_pref('use_comments', 0, 1)) {
         $sql[] = "event != 'comments'";
     }
 
@@ -194,7 +194,7 @@ function prefs_list($message = '')
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
-    if (!get_pref('use_comments', 1, 1)) {
+    if (!get_pref('use_comments', 0, 1)) {
         $sql[] = "event != 'comments'";
     }
 

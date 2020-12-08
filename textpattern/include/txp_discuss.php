@@ -38,7 +38,7 @@ if (!defined('txpinterface')) {
 if ($event == 'discuss') {
     require_privs('discuss');
 
-    if (!get_pref('use_comments', 1)) {
+    if (!get_pref('use_comments', 0)) {
         require_privs();
     }
 

@@ -197,7 +197,7 @@ function doDiagnostics()
         // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($now > (@(int)$lastCheck['when'] + (60 * 60))) {
+        if (empty($lastCheck) || $now > ($lastCheck['when'] + (60 * 60))) {
             $lastCheck = checkUpdates();
         }
 
@@ -770,6 +770,7 @@ function doDiagnostics()
 function checkUpdates()
 {
     $endpoint = 'https://textpattern.com/version.json';
+    $release = $prerelease = null;
 
     if (function_exists('curl_version')) {
         $ch = curl_init($endpoint);
@@ -780,8 +781,12 @@ function checkUpdates()
     }
 
     $response = @json_decode($contents, true);
-    $release = @$response['textpattern-version']['release'];
-    $prerelease = @$response['textpattern-version']['prerelease'];
+
+    if (isset($response['textpattern-version'])) {
+        $release = $response['textpattern-version']['release'];
+        $prerelease = $response['textpattern-version']['prerelease'];
+    }
+
     $version = get_pref('version');
 
     $lastCheck = array(
