@@ -46,7 +46,7 @@ class Textile extends Base implements TextfilterInterface
 
     public function __construct()
     {
-        parent::__construct(USE_TEXTILE, gTxt('use_textile'));
+        parent::__construct(USE_TEXTILE, 'Textile');
         $this->textile = new \Textpattern\Textile\Parser();
         $this->textileRestricted = new \Textpattern\Textile\RestrictedParser();
         $this->version = $this->textile->getVersion();

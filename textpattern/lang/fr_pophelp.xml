@@ -941,10 +941,11 @@ title="HTML"
 <p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
 <p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p>
         ]]></item>
-        <item id="use_textile" title="Utiliser les plugins ?"><![CDATA[
-<h2>Utiliser les plugins ?</h2>
-<p>Permet de désactiver totalement le support des plugins dans Textpattern. Utile pour le débogage d’erreurs sur votre site et pour identifier le dysfonctionnement, éventuel, d’un plugin.</p>
-        ]]></item>
+        <item id="use_textile" title="Formatage du texte par défaut"><![CDATA[<h2>Formatage du texte par défaut</h2>
+<p>Le paramètre de format du texte choisi devient celui par défaut pour les résumés et corps de textes dans la page « Rédiger ». Vous pouvez choisir d’autoriser la transcription complète en Textile, de convertir seulement les retours de lignes dans le format des paragraphes HTML ou, encore, de laisser le texte tel quel.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention destinée à la conversion de texte brut en HTML. Lorsque activé, Textile interprétera le corps de texte des articles pour afficher du balisage structurel en HTML.</p>
+<p>Textile offre aussi de puissantes commandes facilement compréhensibles afin de formater du texte, définir des structures comme des listes, des titres et citations, insérer des liens ou des images.</p>
+]]></item>
     </group>
 
     <group id="section" title="Nom de la section">

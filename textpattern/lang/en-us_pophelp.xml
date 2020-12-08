@@ -77,7 +77,7 @@
         ]]></item>
         <item id="create_author" title="Create author"><![CDATA[
 <h2>Add new author</h2>
-<p>A password, welcome message and login instructions will be emailed to the new author.</p>
+<p>A welcome message and login instructions will be emailed to the new author.</p>
         ]]></item>
     </group>
 
@@ -542,6 +542,10 @@
 <h2>Allow form override?</h2>
 <p>This setting allows article authors to override the form to be used when their article is rendered. If enabled, an ‘Override form’ dropdown will be available under ‘Advanced options’, when editing an article.</p>
         ]]></item>
+        <item id="allow_form_types" title="Override form types"><![CDATA[
+<h2>Override form types</h2>
+<p>Choose which form types will have their templates made available in the Write panel as override forms.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page templates and form templates.</p>
@@ -931,11 +935,11 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Use plugins?</h2>
 <p>This allows you to turn off all support for Textpattern plugins. This is useful if you are debugging errors on your site, and you want to make check if one or more plugins are involved.</p>
         ]]></item>
-        <item id="use_textile" title="Use Textile?"><![CDATA[
-<h2>Use Textile?</h2>
+        <item id="use_textile" title="Default text formatting"><![CDATA[
+<h2>Default text formatting</h2>
+<p>The text format setting you choose here becomes the default for excerpt and body markup on the ‘Write’ panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a utility intended to simplify the conversion of plain text to HTML. When enabled, Textile will process the body text of articles and return structurally sound HTML.</p>
 <p>Textile also offers a powerful but easy-to-learn set of commands with which to format text, define structures such as lists, headers and blockquotes, and insert links and images.</p>
-<p>The setting you choose here becomes the default for excerpt and body markup on the ‘Write’ panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
         ]]></item>
     </group>
 
