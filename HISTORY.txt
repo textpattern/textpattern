@@ -17,6 +17,7 @@ Changes in 4.8.5 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
+
 Changes in 4.8.4 (29 Nov 2020)
 
 * Maintenance release including support for PHP 8.0 and bug fixes.
