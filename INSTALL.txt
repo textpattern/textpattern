@@ -1,0 +1,89 @@
+Textpattern CMS 4.8.4
+
+== Install ==
+
+Table of Contents
+  
+# Preflight
+# Installation
+## Files and Directories
+## Setup
+# Updates
+
+
+-- Preflight --
+
+* Ensure the server meets or exceeds the system requirements:
+    https://textpattern.com/system-requirements
+* Create or verify the existence of a database with valid username and password.
+  Ensure the database user permissions meet the system requirements.
+
+
+-- Installation --
+
+- Files and Directories -
+
+* Copy or upload the following Textpattern files and directories to the web
+  site (domain root, subdirectory or subdomain):
+    /css.php
+    /files/
+    /images/
+    /index.php
+    /textpattern/
+    /themes/
+* If multi-site functionality is required, copy or upload the following:
+    /sites/
+  Note: obtain and extract the Textpattern .tar.gz archive. The .zip archive is
+    not suitable for multi-site installations.
+* If XML-RPC server functionality is required, copy or upload the following:
+    /rpc/
+* For Apache web server and derivatives, copy or upload the following:
+    /.htaccess
+  Note: This file is hidden by default on some operating systems. File transfer
+  clients typically have an option to show these hidden files.
+  
+
+- Setup -
+  
+* From a web browser, open /textpattern/setup/ on the site to start the setup
+  process. Follow the directions.
+* When the setup is complete, remove the /textpattern/setup/ directory
+  from the site.
+* Log into Textpattern with your account username and password, and check
+  Admin -> Diagnostics.
+
+
+-- Updates --
+
+* Textpattern is actively developed. Updates are released to enhance and extend
+  functionality, fix bugs and address security-related issues. It is recommended
+  to periodically check for newer releases. Updates are engineered to be low
+  friction and are accompanied by release notes indicating historical changes.
+* The software version number is displayed on every admin-side page by default.
+  The latest production Textpattern release can be obtained from:
+    Website landing page:     https://textpattern.com/download
+    GitHub releases page:     https://github.com/textpattern/textpattern/releases
+  The following URLs are updated as part of every production release cycle:
+    Latest release (.zip):    https://textpattern.com/latest.zip
+    Latest release (.tar.gz): https://textpattern.com/latest.tar.gz    
+
+  Administrators wishing to automate checking for new releases can refer to the
+  following JSON endpoints:
+    Website: https://textpattern.com/version.json
+    GitHub:  https://github.com/textpattern/textpattern/blob/main/package.json
+    
+
+== Resources ==
+
+* Website:       https://textpattern.com/
+* Support forum: https://forum.textpattern.com
+* Documentation: https://docs.textpattern.com
+
+* Social:        https://textpattern.com/twitter
+
+* Development:   https://textpattern.com/github
+* Contributing:  https://docs.textpattern.com/development/contributing
+
+* Sponsor:       https://github.com/sponsors/textpattern
+                 https://opencollective.com/textpattern-collective
+* Donate:        https://textpattern.com/about/patrons

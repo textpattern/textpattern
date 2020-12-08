@@ -363,14 +363,14 @@ function setup_connect()
     if (mysqli_get_server_version($mylink) < 50503) {
         $cfg['database']['charset'] = "utf8";
     } else {
-        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+        if (false !== strpos(mysqli_get_client_info(), 'mysqlnd')) {
             // mysqlnd 5.0.9+ required
-            if (mysqli_get_client_version($mylink) < 50009) {
+            if (mysqli_get_client_version() < 50009) {
                 $cfg['database']['charset'] = "utf8";
             }
         } else {
             // libmysqlclient 5.5.3+ required
-            if (mysqli_get_client_version($mylink) < 50503) {
+            if (mysqli_get_client_version() < 50503) {
                 $cfg['database']['charset'] = "utf8";
             }
         }

@@ -498,7 +498,7 @@ class BuilderTags
         $vals = array(
             'past'   => gTxt('time_past'),
             'future' => gTxt('time_future'),
-            'any'    => gTxt('time_any'),
+            'any'    => gTxt('any'),
         );
 
         return ' '.selectInput('time', $vals, $time, true, '', 'time');

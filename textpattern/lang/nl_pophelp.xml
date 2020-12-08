@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="nl">
-    <group id="admin" title="Gebruikers paneel">
+    <group id="admin" title="Gebruikerspaneel">
         <item id="about_privileges" title="Over privileges"><![CDATA[]]></item>
         <item id="create_author" title="Auteur aanmaken"><![CDATA[
 <h2>Nieuwe auteur toevoegen</h2>
@@ -247,7 +247,12 @@
         <item id="use_comments" title="Reacties accepteren?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Plugins toestaan?"><![CDATA[]]></item>
-        <item id="use_textile" title="Textile gebruiken?"><![CDATA[]]></item>
+        <item id="use_textile" title="Standaard tekstopmaak"><![CDATA[
+<h2>Standaard tekstopmaak</h2>
+<p>De door u gekozen tekst vormgeving wordt standaard gebruikt voor de samenvatting en body tekstopmaak op de 'Schrijven' tab. Je kunt ervoor kiezen om volledige Textile vormgevingstags toe te staan, alleen lijnen om te zetten in HTML alinea-markeringen of  de tekst helemaal niet aan te passen.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een hulpmiddel om de omzetting van platte tekst naar HTML te vereenvoudigen. Indien ingeschakeld, zal Textile de tekst van artikelen verwerken en naar correcte HTML omzetten.</p>
+<p>Textile biedt ook een krachtige maar eenvoudig te leren set code's waarmee tekst kan worden opgemaakt. Je kunt er structuren zoals lijsten, kop- en blokalinea's mee maken en links en afbeeldingen invoegen.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="">
