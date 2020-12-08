@@ -666,7 +666,7 @@
         "position": "230"
     },
     "use_comments": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "site",
         "html": "yesnoradio",
