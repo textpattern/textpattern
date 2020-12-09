@@ -134,8 +134,6 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             )).
             ' (v'.txp_version.')', array('class' => 'mothership'));
 
-        $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
-
         return join(n, $out);
     }
 }
