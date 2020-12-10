@@ -16,7 +16,7 @@
 * [Thank you](#thank-you)
 * [Legal](#legal)
 
-![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/readme-device-screens.jpg)
+![Textpattern CMS screenshots](https://textpattern.com/assets/img/com/readme-device-screens.png)
 
 ## System requirements
 
@@ -154,4 +154,4 @@ Includes contributions licensed under the GNU Lesser General Public License. See
 
 Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/main/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
-![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.jpg)
+![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.png)
