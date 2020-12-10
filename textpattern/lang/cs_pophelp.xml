@@ -796,9 +796,12 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Používat emailovou adresu pro ID pramenů?</h2>
 <p>Položky v pramenech Atom vyžadují jednoznačný identifikátor (ID).</p>
 <p>Pro vytváření identifikátorů může Textpattern použít buď tvou emailovou adresu, nebo doménové jméno zahrnuté do ID. Emailová adresa bude při vytváření webu použita přednostně. Pokud není pravděpodobné, že budeš v budoucnu měnit doménové jméno, je bezpečnější zde nastavit ‘Ne’.</p>        ]]></item>
-        <item id="use_textile" title="Používat pluginy?"><![CDATA[
-<h2>Používat pluginy?</h2>
-<p>Tato volba umožňuje zcela vypnout podporu pluginů.<br>Je to užitečné v případě, že na tvých stránkách dochází k podivným chybám a chceš zjistit, zda jsou na vině pluginy.</p>        ]]></item>
+        <item id="use_textile" title="Výchozí formátování textu"><![CDATA[
+<h2>Výchozí formátování textu</h2>
+<p>Nastavení způsobu formátování textu, který zde vyberete, se stane výchozí pro anotaci a tělo článku v panelu "Psaní". Máte možnost volby "Použít Textile", převést zalomení řádků na HTML značky pro odstavce nebo ponechat text  beze změn.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> je nástroj určený ke zjednodušení konverze prostého textu na HTML. Pokud je povoleno toto formátování, Textile text článků zpracuje a konvertuje ho do struktury HTML.</p>
+<p>Textile rovněž nabízí výkonnou, ale snadno naučitelnou sadu příkazů, pomocí kterých lze formátovat text, definovat struktury, jako jsou seznamy, záhlaví a blockquotes, a vkládat odkazy a obrázky.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Panel Rubriky">

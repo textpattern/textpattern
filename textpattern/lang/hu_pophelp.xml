@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="hu">
+    <group id="admin" title="Felhasználók panel">
+        <item id="about_privileges" title="Szerepkörök"><![CDATA[<h2>A szerepkörökről</h2>
+<h3>Publicista</h3>
+<ul>
+    <li>kezelheti a cikkeket, a megjegyzéseket és a hivatkozásokat</li>
+    <li>használhat PHP-t a cikkekben, ha a 'Engedélyezett a PHP a cikkekben?' beállítás 'Igen'-re van állítva.</li>
+    <li>kezelheti a képeket és a fájlokat</li>
+    <li>kezelheti a szakaszokat és a kategóriákat</li>
+    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
+    <li>megtekintheti a diagnosztikai információkat</li>
+    <li>kezelheti a webhelyek beállításait</li>
+    <li>kezelheti a felhasználókat</li>
+    <li>kezelheti a vendégkönyvet</li>
+    <li>kezelheti a beépülő modulokat</li>
+    <li>adatokat importálhat</li>
+</ul>
+<h3>Felelős szerkesztő</h3>
+<ul>
+    <li>kezelheti a cikkeket, a megjegyzéseket és a hivatkozásokat</li>
+    <li>használhat PHP-t a cikkekben, ha a 'Engedélyezett a PHP a cikkekben?' beállítás 'Igen'-re van állítva.</li>
+    <li>kezelheti a képeket és a fájlokat</li>
+    <li>kezelheti a szakaszokat és a kategóriákat</li>
+    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
+    <li>megtekintheti a diagnosztikai információkat</li>
+    <li>kezelheti a webhelyek beállításait</li>
+    <li>kezelheti a felhasználókat</li>
+    <li>kezelheti a vendégkönyvet</li>
+    <li>kezelheti a beépülő modulokat</li>
+    <li>adatokat importálhat</li>
+</ul>
+<h3>Olvasószerkesztő</h3>
+<ul>
+    <li>kezelheti a cikkeket egyetlen megszorítással:
+        <ul>
+            <li>nem törölheti más felhasználók cikkeit</li>
+        </ul>
+    </li>
+    <li>kezelheti a megjegyzéseket és a hivatkozásokat</li>
+    <li>kezelheti a képeket és a fájlokat</li>
+    <li>kezelheti a kategóriákat</li>
+    <li>kezelheti az oldalakat és az űrlapokat</li>
+    <li>megtekintheti a felhasználókat</li>
+    <li>kezelheti a vendégkönyvet</li>
+</ul>
+<h3>Író munkatárs</h3>
+<ul>
+    <li>kezelheti saját cikkeit, megtekintheti mások cikkeit</li>
+    <li>kezelheti a képeket és a fájlokat</li>
+</ul>
+<h3>Szabadúszó</h3>
+<ul>
+    <li>kezelheti saját cikkeit az alábbi korlátozásokkal:
+        <ul>
+            <li>csak a publikálásig tudja módosítani</li>
+            <li><em>csak</em> Piszkozat, Rejtett vagy Függőben állapotot állíthat be</li>
+        </ul>
+    </li>
+    <li>megtekintheti más felhasználók cikkeit</li>
+</ul>
+<h3>Tördelő</h3>
+<ul>
+   <li>kezelheti saját cikkeit az alábbi korlátozásokkal:
+        <ul>
+            <li>csak a publikálásig tudja módosítani</li>
+            <li><em>csak</em> Piszkozat, Rejtett vagy Függőben állapotot állíthat be</li>
+        </ul>
+    </li>
+    <li>megtekintheti más felhasználók cikkeit</li>
+    <li>kezelheti a képeket</li>
+    <li>kezelheti a szakaszokat</li>
+    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="article" title="">
+        <item id="article_image" title=""><![CDATA[]]></item>
+        <item id="body" title=""><![CDATA[<h2>Body</h2>
+<p>A cikk fő tartalma a cikk törzsében található.</p>
+<p>Amikor cikkeket ír meg vagy készít közzétételt a Textpatternben, a szerző átválthat a cikk három nézete között: egyszerű szöveg, HTML jelölés (a kód, amellyel a böngésző megjeleníti a cikket), és egy megjelenített előnézet között.</p>
+
+        ]]></item>
+        <item id="description" title=""><![CDATA[]]></item>
+        <item id="excerpt" title=""><![CDATA[]]></item>
+        <item id="expire_date" title=""><![CDATA[]]></item>
+        <item id="keywords" title=""><![CDATA[]]></item>
+        <item id="override_form" title=""><![CDATA[]]></item>
+        <item id="publish_date" title=""><![CDATA[]]></item>
+        <item id="status" title=""><![CDATA[]]></item>
+        <item id="title" title=""><![CDATA[]]></item>
+        <item id="url_title" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="">
+        <item id="article_category" title=""><![CDATA[]]></item>
+        <item id="category_description" title=""><![CDATA[]]></item>
+        <item id="file_category" title=""><![CDATA[]]></item>
+        <item id="image_category" title=""><![CDATA[]]></item>
+        <item id="link_category" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title=""><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title=""><![CDATA[]]></item>
+        <item id="timestamp_file" title=""><![CDATA[]]></item>
+        <item id="upload" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title=""><![CDATA[]]></item>
+        <item id="replace_image_form" title=""><![CDATA[]]></item>
+        <item id="upload_image" title=""><![CDATA[]]></item>
+        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title=""><![CDATA[]]></item>
+        <item id="link_sort" title=""><![CDATA[]]></item>
+        <item id="link_url" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="advanced_options" title=""><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+        <item id="archive_dateformat" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title=""><![CDATA[]]></item>
+        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title=""><![CDATA[]]></item>
+        <item id="img_dir" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="site_slogan" title=""><![CDATA[]]></item>
+        <item id="sitename" title=""><![CDATA[]]></item>
+        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="skin_dir" title=""><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title=""><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title=""><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_description" title=""><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title=""><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title=""><![CDATA[]]></item>
+        <item id="section_uses_page" title=""><![CDATA[]]></item>
+        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title=""><![CDATA[]]></item>
+        <item id="skin_author_uri" title=""><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title=""><![CDATA[]]></item>
+        <item id="skin_import" title=""><![CDATA[]]></item>
+        <item id="skin_name" title=""><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_version" title=""><![CDATA[]]></item>
+    </group>
+</help>
+</resources>
