@@ -1,107 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<help lang="hu">
-    <group id="admin" title="Felhasználók panel">
-        <item id="about_privileges" title="Szerepkörök"><![CDATA[<h2>A szerepkörökről</h2>
-<h3>Publicista</h3>
-<ul>
-    <li>kezelheti a cikkeket, a megjegyzéseket és a hivatkozásokat</li>
-    <li>használhat PHP-t a cikkekben, ha a 'Engedélyezett a PHP a cikkekben?' beállítás 'Igen'-re van állítva.</li>
-    <li>kezelheti a képeket és a fájlokat</li>
-    <li>kezelheti a szakaszokat és a kategóriákat</li>
-    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
-    <li>megtekintheti a diagnosztikai információkat</li>
-    <li>kezelheti a webhelyek beállításait</li>
-    <li>kezelheti a felhasználókat</li>
-    <li>kezelheti a vendégkönyvet</li>
-    <li>kezelheti a beépülő modulokat</li>
-    <li>adatokat importálhat</li>
-</ul>
-<h3>Felelős szerkesztő</h3>
-<ul>
-    <li>kezelheti a cikkeket, a megjegyzéseket és a hivatkozásokat</li>
-    <li>használhat PHP-t a cikkekben, ha a 'Engedélyezett a PHP a cikkekben?' beállítás 'Igen'-re van állítva.</li>
-    <li>kezelheti a képeket és a fájlokat</li>
-    <li>kezelheti a szakaszokat és a kategóriákat</li>
-    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
-    <li>megtekintheti a diagnosztikai információkat</li>
-    <li>kezelheti a webhelyek beállításait</li>
-    <li>kezelheti a felhasználókat</li>
-    <li>kezelheti a vendégkönyvet</li>
-    <li>kezelheti a beépülő modulokat</li>
-    <li>adatokat importálhat</li>
-</ul>
-<h3>Olvasószerkesztő</h3>
-<ul>
-    <li>kezelheti a cikkeket egyetlen megszorítással:
-        <ul>
-            <li>nem törölheti más felhasználók cikkeit</li>
-        </ul>
-    </li>
-    <li>kezelheti a megjegyzéseket és a hivatkozásokat</li>
-    <li>kezelheti a képeket és a fájlokat</li>
-    <li>kezelheti a kategóriákat</li>
-    <li>kezelheti az oldalakat és az űrlapokat</li>
-    <li>megtekintheti a felhasználókat</li>
-    <li>kezelheti a vendégkönyvet</li>
-</ul>
-<h3>Író munkatárs</h3>
-<ul>
-    <li>kezelheti saját cikkeit, megtekintheti mások cikkeit</li>
-    <li>kezelheti a képeket és a fájlokat</li>
-</ul>
-<h3>Szabadúszó</h3>
-<ul>
-    <li>kezelheti saját cikkeit az alábbi korlátozásokkal:
-        <ul>
-            <li>csak a publikálásig tudja módosítani</li>
-            <li><em>csak</em> Piszkozat, Rejtett vagy Függőben állapotot állíthat be</li>
-        </ul>
-    </li>
-    <li>megtekintheti más felhasználók cikkeit</li>
-</ul>
-<h3>Tördelő</h3>
-<ul>
-   <li>kezelheti saját cikkeit az alábbi korlátozásokkal:
-        <ul>
-            <li>csak a publikálásig tudja módosítani</li>
-            <li><em>csak</em> Piszkozat, Rejtett vagy Függőben állapotot állíthat be</li>
-        </ul>
-    </li>
-    <li>megtekintheti más felhasználók cikkeit</li>
-    <li>kezelheti a képeket</li>
-    <li>kezelheti a szakaszokat</li>
-    <li>kezelheti az oldalakat, az űrlapokat és a stílusokat</li>
-</ul>
-        ]]></item>
-        <item id="create_author" title="Szerző létrehozása"><![CDATA[
-<h2>Új szerző hozzáadása</h2>
-<p>Az új szerző üdvözlő e-mail üzenetet fog kapni a bejelentkezéshez szükséges információkkal.</p>
-        ]]></item>
+<help lang="sr">
+    <group id="admin" title="">
+        <item id="about_privileges" title=""><![CDATA[]]></item>
+        <item id="create_author" title=""><![CDATA[<h2>Dodaj novog autora</h2>
+<p>Poruka dobrodošlice i uputstva za prijavu biće poslati novom autoru e-mail-om.</p>]]></item>
     </group>
 
-    <group id="article" title="Írás panel">
-        <item id="article_image" title="Cikk kép"><![CDATA[
-<h2>Cikk kép</h2>
-<p>Egyetlen kép elhelyezéséhez a cikkben adja meg itt az alábbiak egyikét:</p>
-<ol>
-    <li>Textpattern képazonosító (pl.: <code>12</code>)</li>
-    <li>a képre mutató relatív URL (pl.: <code>/kepek/az_en_kepem.jpg</code>)</li>
-    <li>teljesen minősített URL (pl.: <code>https://pelda.com/eleresi/ut/kepek/az_en_kepem.jpg</code>)</li>
-</ol>
-<p>A kép megjeleníthető egy <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> címke <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> elem elhelyezésével a cikk űrlapjában. Ennek kimenete egy, a kiválasztott képre mutató teljes <code>&lt;img&gt;</code> HTML jelölő.</p>
-        ]]></item>
-        <item id="body" title="Törzs"><![CDATA[<h2>Törzs</h2>
-<p>A cikk fő tartalma a cikk törzsében található.</p>
-<p>Cikk írásakor vagy Textpatternes közzétételének előkészítésekor a szerző a következő három nézet közül választhat: egyszerű szöveg, HTML jelölés (a kód, amelynek alapján a böngésző megjeleníti a cikket) és megjelenített előnézet.</p>
-        ]]></item>
-        <item id="description" title="Leírás"><![CDATA[
-<h2>Leírás</h2>
-<p>A cikk leírását nem kötelező megadni. Segítségével az internetes keresők és a webbejárók hatékonyabban azonosítják és rendezik a tartalmakat.</p>
-<p>A cikk leírásának hossza korlátozott, maximum 255 karakter lehet. Érdemes megjegyezni, hogy néhány internetes kereső a találati listákban való hatékonyabb megjelenítés érdekében korlátozza az oldal <code>meta leírásának</code> hosszát és ez rövidebb lehet, mint a Textpattern 255 karakteres határa.</p>
-<p>Érdemes megjegyezni, hogy a cikk leírása nem azonos a cikk szemelvényével, bár tartalmuk hasonló lehet. A cikk leírását elsősorban az internetes keresők és webbejárók hivatottak használni, míg a cikk szemelvénye sokkal inkább emberi olvasásra szánt, a kívánt esetben megjeleníthető összefoglaló.</p>
-        ]]></item>
-        <item id="excerpt" title="Szemelvény"><![CDATA[]]></item>
+    <group id="article" title="">
+        <item id="article_image" title=""><![CDATA[]]></item>
+        <item id="body" title=""><![CDATA[]]></item>
+        <item id="description" title=""><![CDATA[]]></item>
+        <item id="excerpt" title=""><![CDATA[]]></item>
         <item id="expire_date" title=""><![CDATA[]]></item>
         <item id="keywords" title=""><![CDATA[]]></item>
         <item id="override_form" title=""><![CDATA[]]></item>
@@ -202,7 +112,8 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Dozvoli slike korisnika u komentarima?"><![CDATA[<h2>Dozvoli slike korisnika u komentarima?</h2>
+<p>Ako je ova opcija postavljena na 'Ne', sve slike uključene u komentare biće obrisane.</p>]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
@@ -254,8 +165,11 @@
         <item id="use_comments" title=""><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="use_textile" title="Podrazumevano formatiranje teksta"><![CDATA[<h2>Podrazumevano formatiranje teksta</h2>
+<p>Podešavanje tekstualnog formata koje ovde odaberete postaje podrazumevano za odlomak i obeležavanje tela na tabli „Napišite“. Možete da dozvolite potpunu obradu Tekstil-a, da pretvorite prelome redova u HTML markere pasusa ili da uopšte ne konvertujete bilo koji tekst.</p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Tekstil <span class="ui-icon ui-icon-extlink">(otvara spoljni link u novom prozoru)</span></a> je uslužni program namenjen pojednostavljenju pretvaranja običnog teksta u HTML. Kada je omogućeno, Tekstil će obrađivati osnovni tekst članaka i vraćati strukturno zvučni HTML.</p>
+<p>Tekstil takođe nudi moćan, ali lak za učenje skup naredbi pomoću kojih se formatira tekst, definišu strukture kao što su liste, zaglavlja i blok citati i ubacuju linkove i slike.</p>]]></item>
+        <item id="override_form_types" title="Zameni tipove obrazaca"><![CDATA[<h2>Zameni tipove obrazaca</h2>
+<p>Izaberite za koje tipove obrazaca će njihovi šabloni biti dostupni na tabli „Napiši“ kao zamenjivi obrasci.</p>]]></item>
     </group>
 
     <group id="section" title="">
