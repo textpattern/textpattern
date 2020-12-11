@@ -462,22 +462,27 @@ function preText($store, $prefs = null)
                                 break;
 
                             case 'year_month_day_title':
-                                if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
+                                $m1 = (int)$u1;
+                                $m2 = !empty($u2) ? (int)$u2 : 1;
+                                $m3 = !empty($u3) ? (int)$u3 : 1;
+                                $m4 = !empty($u4) ? (int)$u4 : 1;
+
+                                if (checkdate($m2, $m3, $m1)) {
                                     $title = empty($u4) ? null : $u4;
-                                    $month = array($u1);
+                                    $month = array($m1);
 
                                     if (!empty($u2)) {
-                                        $month[] = str_pad(ltrim($u2), 2, '0', STR_PAD_LEFT);
-                                        empty($u3) or $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
+                                        $month[] = str_pad(ltrim($m2), 2, '0', STR_PAD_LEFT);
+                                        empty($u3) or $month[] = str_pad(ltrim($m3), 2, '0', STR_PAD_LEFT);
                                     }
-                                } elseif (@checkdate(!empty($u3) ? $u3 : 1, !empty($u4) ? $u4 : 1, $u2)) {
+                                } elseif (checkdate($m3, $m4, $m2)) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
-                                    $month = array($u2);
+                                    $month = array($m2);
 
                                     if (!empty($u3)) {
-                                        $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
-                                        empty($u4) or $month[] = str_pad(ltrim($u4), 2, '0', STR_PAD_LEFT);
+                                        $month[] = str_pad(ltrim($m3), 2, '0', STR_PAD_LEFT);
+                                        empty($u4) or $month[] = str_pad(ltrim($m4), 2, '0', STR_PAD_LEFT);
                                     }
                                 } elseif (empty($u3)) {
                                     $out['s'] = $u1;
