@@ -415,7 +415,14 @@ function preText($store, $prefs = null)
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if (permlinkurl($thisarticle, '/') === $u0) {
+                            if ('/'.$a['url_title'] === $u0 || '/'.$a['Section'].'/'.$a['url_title'] === $u0) {
+                                $permlink_guess = 'section_title';
+                                break;
+                            }
+
+                            $thisurl = permlinkurl($thisarticle, '/');
+
+                            if ($thisurl === $u0 || '/'.$a['Section'].$thisurl === $u0) {
                                 $permlink_guess = $permlink_modes[$a['Section']];
                                 break;
                             }
@@ -432,14 +439,14 @@ function preText($store, $prefs = null)
                         }
                     }
 
-                    if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
-                        // Could be a year.
-                        $permlink_guess = 'year_month_day_title';
-                    } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
-                        $permlink_guess = $permlink_modes[$u1];
-                    }
-
                     if (!$is_404 && empty($out['id'])) {
+                        if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
+                            // Could be a year.
+                            $permlink_guess = 'year_month_day_title';
+                        } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
+                            $permlink_guess = $permlink_modes[$u1];
+                        }
+
                         // Then see if the prefs-defined permlink scheme is usable.
                         switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
                             case 'section_id_title':
@@ -475,7 +482,7 @@ function preText($store, $prefs = null)
                                         $month[] = str_pad(ltrim($m2), 2, '0', STR_PAD_LEFT);
                                         empty($u3) or $month[] = str_pad(ltrim($m3), 2, '0', STR_PAD_LEFT);
                                     }
-                                } elseif (checkdate($m3, $m4, $m2)) {
+                                } elseif (!empty($u2) && checkdate($m3, $m4, $m2)) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
                                     $month = array($m2);
