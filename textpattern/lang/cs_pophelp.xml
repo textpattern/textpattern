@@ -76,7 +76,7 @@
 </ul>        ]]></item>
         <item id="create_author" title="Vytvořit autora"><![CDATA[
 <h2>Přidat nového autora</h2>
-<p>Heslo, uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>        ]]></item>
+<p>Uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>        ]]></item>
     </group>
 
     <group id="article" title="Panel Psaní">
@@ -801,6 +801,10 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Nastavení způsobu formátování textu, který zde vyberete, se stane výchozí pro anotaci a tělo článku v panelu "Psaní". Máte možnost volby "Použít Textile", převést zalomení řádků na HTML značky pro odstavce nebo ponechat text  beze změn.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> je nástroj určený ke zjednodušení konverze prostého textu na HTML. Pokud je povoleno toto formátování, Textile text článků zpracuje a konvertuje ho do struktury HTML.</p>
 <p>Textile rovněž nabízí výkonnou, ale snadno naučitelnou sadu příkazů, pomocí kterých lze formátovat text, definovat struktury, jako jsou seznamy, záhlaví a blockquotes, a vkládat odkazy a obrázky.</p>
+        ]]></item>
+        <item id="override_form_types" title="Přepsat typy forem"><![CDATA[
+<h2>Přepsat typy forem</h2>
+<p>Vyberte, které typy forem budou k dispozici jako možnost "Přebít formu" na panelu Psaní .</p>
         ]]></item>
     </group>
 
