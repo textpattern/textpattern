@@ -1111,7 +1111,7 @@ function recent_articles($atts, $thing = null)
 {
     global $prefs;
 
-    $atts = lAtts(array(
+    $atts += array(
         'break'    => 'br',
         'category' => '',
         'class'    => __FUNCTION__,
@@ -1124,7 +1124,7 @@ function recent_articles($atts, $thing = null)
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
         'no_widow' => '',
-    ), $atts);
+    );
 
     if (!isset($thing) && !$atts['form']) {
         $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
@@ -1214,7 +1214,7 @@ function related_articles($atts, $thing = null)
 
     assert_article();
 
-    $atts = lAtts(array(
+    $atts += array(
         'break'    => br,
         'class'    => __FUNCTION__,
         'form'     => '',
@@ -1225,9 +1225,9 @@ function related_articles($atts, $thing = null)
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
-    ), $atts);
+    );
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
 
     foreach ($match as $cf) {
@@ -1245,6 +1245,9 @@ function related_articles($atts, $thing = null)
                 break;
             case 'author':
                 $atts['author'] = $thisarticle['authorid'];
+                break;
+            case 'section':
+                !empty($atts['section']) or $atts['section'] = $thisarticle['section'];
                 break;
             default:
                 if (empty($thisarticle[$cf])) {
