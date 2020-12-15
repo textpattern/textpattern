@@ -75,10 +75,7 @@
     <li>puede gestionar páginas, bloques y estilo</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Crear autor"><![CDATA[
-<h2>Añadir nuevo autor</h2>
-<p>Una contraseña, mensaje de bienvenida y instrucciones de inicio de sesión serán enviadas por correo electrónico al nuevo autor.</p>
-        ]]></item>
+        <item id="create_author" title="Crear autor"><![CDATA[]]></item>
     </group>
 
     <group id="article" title="Panel de escritura">
@@ -725,7 +722,8 @@
 <h2>¿Usar plugins?</h2>
 <p>Esto permite desactivar todo el soporte para plugins de Textpattern. Es útil para depurar errores en el sitio y hacer una comprobación si uno o más plugins están involucrados.</p>
         ]]></item>
-        <item id="use_textile" title="Emplear Textile?"><![CDATA[]]></item>
+        <item id="use_textile" title="Formato de texto por defecto"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel de secciones">

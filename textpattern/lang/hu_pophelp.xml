@@ -101,12 +101,57 @@
 <p>A cikk leírásának hossza korlátozott, maximum 255 karakter lehet. Érdemes megjegyezni, hogy néhány internetes kereső a találati listákban való hatékonyabb megjelenítés érdekében korlátozza az oldal <code>meta leírásának</code> hosszát és ez rövidebb lehet, mint a Textpattern 255 karakteres határa.</p>
 <p>Érdemes megjegyezni, hogy a cikk leírása nem azonos a cikk szemelvényével, bár tartalmuk hasonló lehet. A cikk leírását elsősorban az internetes keresők és webbejárók hivatottak használni, míg a cikk szemelvénye sokkal inkább emberi olvasásra szánt, a kívánt esetben megjeleníthető összefoglaló.</p>
         ]]></item>
-        <item id="excerpt" title="Szemelvény"><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title=""><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
-        <item id="publish_date" title=""><![CDATA[]]></item>
-        <item id="status" title=""><![CDATA[]]></item>
+        <item id="excerpt" title="Szemelvény"><![CDATA[
+<h2>Szemelvény</h2>
+<p>A cikk szemelvényének megadása nem kötelező. A szemelvény a cikk egy rövid összefoglalójaként használható, megjelenhet a tartalomjegyzék részeként, a cikk teljes törzse helyett RSS/Atom hírfolyamokban és számos más helyen.</p>
+        ]]></item>
+        <item id="expire_date" title="Lejárati dátum"><![CDATA[
+<h2>Lejárati dátum</h2>
+<p>Az időpont, amikor a cikk lejártként lesz megjelölve. Az időpont megadása nem kötelező és tetszőleges múltbeli vagy jövőbeli időpont lehet.</p>
+<p>A mezők a következő információknak felelnek meg:</p>
+<ul>
+    <li>év / hónap / nap</li>
+    <li>óra (24-órás formátumban) : perc : másodperc</li>
+</ul>
+<p>Amikor elérkezik az idő, vagy múltbeli időpont megadása esetén, a cikk lejár.</p>
+<p>Amennyiben a lejárt cikkek megjelenítése engedélyezett, a cikk elérhető marad. Ha a lejárt cikkek megjelenítése le van tiltva, a cikk oldalának látogatói HTTP 410-es hibát fognak kapni a cikk tartalma helyett.</p>
+        ]]></item>
+        <item id="keywords" title="Kulcsszavak"><![CDATA[
+<h2>Kulcsszavak</h2>
+<p>A kulcsszavak - a kategóriák által nyújtott információk mellett - a cikkek közötti kapcsolat pontosítására szolgálnak.</p>
+<p>A kulcsszavaknak egyedi szavaknak kell lenniük, vesszővel elválasztva.</p>
+        ]]></item>
+        <item id="override_form" title="Sablon felülírása"><![CDATA[
+<h2>Sablon felülírása</h2>
+<p>Egy cikk megjelenhet az alapértelmezettől eltérő sablon alapján - például a cikk szemelvényének megjelenítése <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> sablonnal a cikk törzse helyett <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> - ezt lehet itt beállítani.</p>
+        ]]></item>
+        <item id="publish_date" title=""><![CDATA[
+<h2>Közzétételi dátum</h2>
+<p>Az időpont, amikor a cikk vagy a fájl közzé lesz téve vagy legutóbb módosítva lett. Az időpontot be lehet állítani az elem tényleges közzétételének idejére, vagy tetszőleges múltbeli vagy jövőbeli időpontra.</p>
+<p>A mezők a következő információknak felelnek meg:</p>
+<ul>
+    <li>év / hónap / nap</li>
+    <li>óra (24-órás formátumban) : perc : másodperc</li>
+</ul>
+<p>A jelenleginél későbbi időbélyegű (jövőbeli) cikkek nem fognak megjelenni az RSS/Atom hírfolyamok kezdő oldalán, amíg el nem érkezik az idő.</p>
+        ]]></item>
+        <item id="status" title="Állapot"><![CDATA[
+<h2>Állapot</h2>
+<p>Megadja ezen Textpattern cikk közzétételi láthatósági állapotát.</p>
+<p>A közzétételi állapot az alábbiak egyike:</p>
+<ul>
+    <li>Vázlatos</li>
+    <li>Rejtett</li>
+    <li>Függőben lévő</li>
+    <li>Élő</li>
+    <li>Állandó</li>
+</ul>
+<p>A <strong>vázlatos</strong> cikkek szerkesztés alatt állnak és nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről (azaz nem tekinthetők meg a Textpattern kezdőoldalról és nem jelennek meg a hírfolyamokban).</p>
+<p>A <strong>rejtett</strong> cikkek nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről.</p>
+<p>A <strong>függőben lévő</strong> cikkek közzétételre készek és jóváhagyásra várnak, azonban nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről.</p>
+<p>Az <strong>élő</strong> cikkek jellemzően megtekinthetők a Textpattern adminisztrációs felületén kívülről is (azaz megjelennek a Textpattern kezdőoldalán, és a hírfolyamokban, ha a beállítás megengedi). Az élő cikkek a lejárati dátum elérése után is élő állapotban maradnak, viszont csak abban az esetben jelennek meg az adminisztrációs felületen kívül, ha a lejárt cikkek közzététele engedélyezve van.</p>
+<p>Az <strong>állandó</strong> cikkek abból a szempontból hasonlóak az <strong>élő</strong> cikkekhez, hogy megtekinthetők a Textpattern adminisztrációs felületen kívül, viszont <strong>nem</strong> jelennek meg a cikkek listájában hacsak a hozzájuk tartozó <code>article</code> vagy <code>article_custom</code> elem nem tartalmazza a <code>status</code> attribútumot a <code>sticky</code> értékkel.</p>
+        ]]></item>
         <item id="title" title=""><![CDATA[]]></item>
         <item id="url_title" title=""><![CDATA[]]></item>
     </group>
