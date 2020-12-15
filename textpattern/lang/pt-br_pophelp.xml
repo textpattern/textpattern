@@ -2,7 +2,7 @@
 <resources>
 <help lang="pt-BR">
     <group id="admin" title="Painel de usuários">
-        <item id="about_privileges" title=""><![CDATA[
+        <item id="about_privileges" title="Sobre os cargos"><![CDATA[
 <h2>Sobre as funções</h2>
 <h3>Administrador</h3>
 <ul>
@@ -75,10 +75,11 @@
     <li>pode gerenciar páginas, formulários e estilos</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Criar o autor"><![CDATA[
-<h2>Adicionar novo autor</h2>
-<p>Uma senha, uma mensagem de boas vindas e instruções de login serão enviadas para o novo autor.</p>
-        ]]></item>
+        <item id="create_author" title="Criar o autor"><![CDATA[<h2>Adicionar novo autor</h2>
+<p>Uma mensagem de boas-vindas e as instruções de login serão enviadas por e-mail para o novo autor.</p>
+        
+ 
+]]></item>
     </group>
 
     <group id="article" title="Painel de escrever">
@@ -234,8 +235,14 @@
 <h2>Diretório não permite gravação</h2>
 <p>Para usar os recursos de upload de arquivo e imagem, esses diretórios devem ser graváveis pelo PHP por meio do usuário do servidor web. Isso pode ser feito com um  cliente (S)FTP ou, alternativamente, na linha de comando, emitindo um comando <code>chmod 755 /path/to/dir</code></p>
         ]]></item>
-        <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[<h2>A pesquisa de DNS falhou</h2>
+<p>A URL do endereço do site não pode ser acessada .</p>
+        
+ 
+]]></item>
+        <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[<h2>Uploads de arquivos estâo desabilitados</h2>
+<p>A configuraç~~ao do servidor atual indica que uploads de arquivos estão desabilitados. Por favor altere <code>file_uploads</code> configurações em <code>php.ini</code> ou consulte o host do site pra assistencia.</p>
+        ]]></item>
         <item id="htaccess_missing" title="O arquivo .htaccess está em falta"><![CDATA[]]></item>
         <item id="index_inaccessible" title=""><![CDATA[]]></item>
         <item id="missing_files" title="Arquivos em falta"><![CDATA[]]></item>
@@ -258,9 +265,9 @@
 
     <group id="file" title="">
         <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title=""><![CDATA[]]></item>
-        <item id="timestamp_file" title=""><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Sobrescrever arquivo"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Data de publicação"><![CDATA[]]></item>
+        <item id="upload" title="Upload arquivo"><![CDATA[]]></item>
     </group>
 
     <group id="form" title="">
@@ -268,10 +275,10 @@
     </group>
 
     <group id="image" title="">
-        <item id="create_thumbnail" title=""><![CDATA[]]></item>
-        <item id="replace_image_form" title=""><![CDATA[]]></item>
-        <item id="upload_image" title=""><![CDATA[]]></item>
-        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Criar Miniatura"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Substituir imagem"><![CDATA[]]></item>
+        <item id="upload_image" title="Upload imagem"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Upload miniatura"><![CDATA[]]></item>
     </group>
 
     <group id="lang" title="">
@@ -280,9 +287,9 @@
 
     <group id="link" title="">
         <item id="link_description" title=""><![CDATA[]]></item>
-        <item id="link_sort" title=""><![CDATA[]]></item>
-        <item id="link_url" title=""><![CDATA[]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="link_sort" title="Valor para ordenação"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Data de publicação"><![CDATA[]]></item>
     </group>
 
     <group id="login" title="">
@@ -290,33 +297,33 @@
     </group>
 
     <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+        <item id="install_plugin" title="Instalar plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Upload plugin"><![CDATA[]]></item>
     </group>
 
     <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Usar plugins de administração?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Opções avançadas"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Aceitar código PHP nos artigos?"><![CDATA[]]></item>
         <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Aceitar código PHP nas páginas?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Formato de data no arquivo"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Artigos usam resumos?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Acrescentar títulos às links permanentes?"><![CDATA[]]></item>
         <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Novo comentário significa site atualizado?"><![CDATA[]]></item>
         <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Apresentar comentários como lista numerada?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Acrescentar automaticamente os comentários dos artigos?"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Formato de data para os comentários"><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Desativar a partir de"><![CDATA[]]></item>
         <item id="comments_disallow_images" title="Permitir imagens nos comentários?"><![CDATA[
 <h2>Permitir imagens nos comentários?</h2>
 <p>Com esta opção definida como "Não", quaisquer imagens incluídas nos comentários serão removidas.</p>
         ]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title="Moderar comentários?"><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
         <item id="comments_require_email" title=""><![CDATA[]]></item>
         <item id="comments_require_name" title=""><![CDATA[]]></item>
@@ -326,34 +333,34 @@
         <item id="custom_overview" title=""><![CDATA[]]></item>
         <item id="dateformat" title=""><![CDATA[]]></item>
         <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title="Status de publicação padrão"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Ativar visualização do tema de desenvolvimento?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Habilitar o suporte a tag curta?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Habilitar XML-RPC no servidor?"><![CDATA[]]></item>
         <item id="expire_logs_after" title=""><![CDATA[]]></item>
         <item id="file_base_path" title=""><![CDATA[]]></item>
         <item id="file_max_upload_size" title=""><![CDATA[]]></item>
         <item id="gmtoffset" title="Fuso horário"><![CDATA[]]></item>
         <item id="img_dir" title="Diretório de imagens"><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title="Incluir email nos feeds atom?"><![CDATA[]]></item>
         <item id="is_dst" title=""><![CDATA[]]></item>
         <item id="logging" title=""><![CDATA[]]></item>
         <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title="Exibir links de ajuda online da administração"><![CDATA[]]></item>
+        <item id="never_display_email" title="Nunca mostar endereço de email?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="No email usar ISO-8859-1 (UTF-8 por padrão)?"><![CDATA[]]></item>
         <item id="permlink_format" title="Padrão de URL  de link permanente"><![CDATA[]]></item>
         <item id="permlink_mode" title="Padrão de URL do artigo"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
         <item id="production_status" title="Situação de produção"><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title="Tema da parte frontal"><![CDATA[]]></item>
         <item id="publish_expired_articles" title="Publicar artigo expirado?"><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title="Enviar informações de login a partir deste endereço de email"><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Mostrar contador de comentários nos feeds?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Slogan do site"><![CDATA[]]></item>
         <item id="sitename" title=""><![CDATA[]]></item>
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
@@ -366,13 +373,14 @@
         <item id="use_comments" title="Permitir comentários?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Usar plugins?"><![CDATA[]]></item>
-        <item id="use_textile" title="Usar Textile?"><![CDATA[]]></item>
+        <item id="use_textile" title="Formatação padrão de texto"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
+        <item id="section_category" title="Introdução"><![CDATA[]]></item>
+        <item id="section_default" title="Seção de publicação padrão"><![CDATA[]]></item>
+        <item id="section_description" title="Descrição"><![CDATA[]]></item>
         <item id="section_on_frontpage" title=""><![CDATA[]]></item>
         <item id="section_searchable" title=""><![CDATA[]]></item>
         <item id="section_syndicate" title=""><![CDATA[]]></item>

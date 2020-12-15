@@ -74,7 +74,10 @@
 <li>peut gérer les gabarits, les modules et les styles</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Créer un auteur"><![CDATA[]]></item>
+        <item id="create_author" title="Créer un auteur"><![CDATA[
+<h2>Utilisateurs : Ajouter un nouvel auteur</h2>
+<p>Un message de bienvenue et des instructions de connexion seront envoyés au nouvel auteur.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Page «Rédiger»">
@@ -943,7 +946,8 @@ title="HTML"
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention destinée à la conversion de texte brut en HTML. Lorsque activé, Textile interprétera le corps de texte des articles pour afficher du balisage structurel en HTML.</p>
 <p>Textile offre aussi de puissantes commandes facilement compréhensibles afin de formater du texte, définir des structures comme des listes, des titres et citations, insérer des liens ou des images.</p>
 ]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Sélection des modules de remplacements"><![CDATA[<h2>Sélection des modules de remplacements</h2>
+<p>Choisissez ici quels types de modules vous souhaitez donner accès depuis la page Rédiger pour modules de remplacement (sélection multiple autorisée).</p>]]></item>
     </group>
 
     <group id="section" title="Nom de la section">
