@@ -956,7 +956,10 @@ function file_insert()
         }
 
         // Clean up file.
-        @unlink($tmp_name);
+        
+        if (file_exists($tmp_name)) {
+            unlink($tmp_name);
+        }
     }
 
     if ($ids) {

@@ -811,7 +811,10 @@ function image_insert()
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
-        @unlink($file['tmp_name']);
+        
+        if (file_exists($file['tmp_name'])) {
+            unlink($file['tmp_name']);
+        }
 
         if (is_array($img_result)) {
             list($message, $id) = $img_result;
