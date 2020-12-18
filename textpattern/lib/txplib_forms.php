@@ -435,12 +435,13 @@ function tInput()
  * @param  bool   $checked  If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
+ * @param  string $form     The HTML form id to associate
  * @return string HTML input
  * @example
  * echo checkbox('name', 'value', true);
  */
 
-function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
+function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $form = '')
 {
     $class = 'checkbox';
 
@@ -453,6 +454,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
         'id'       => $id,
         'name'     => $name,
         'type'     => 'checkbox',
+        'form'     => $form,
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
     ), TEXTPATTERN_STRIP_EMPTY);
@@ -469,14 +471,15 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
  * @param  bool   $value    If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
+ * @param  string $form     The HTML form id to associate
  * @return string HTML input
  * @access private
  * @see    checkbox()
  */
 
-function checkbox2($name, $value, $tabindex = 0, $id = '')
+function checkbox2($name, $value, $tabindex = 0, $id = '', $form = '')
 {
-    return checkbox($name, 1, $value, $tabindex, $id);
+    return checkbox($name, 1, $value, $tabindex, $id, $form);
 }
 
 /**
