@@ -545,10 +545,6 @@
 <h2>Allow form override?</h2>
 <p>This setting allows article authors to override the form to be used when their article is rendered. If enabled, an ‘Override form’ dropdown will be available under ‘Advanced options’, when editing an article.</p>
         ]]></item>
-        <item id="allow_form_types" title="Override form types"><![CDATA[
-<h2>Override form types</h2>
-<p>Choose which form types will have their templates made available in the Write panel as override forms.</p>
-        ]]></item>
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page templates and form templates.</p>
@@ -792,6 +788,10 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Use ISO-8859-1 encoding in emails (default is UTF-8)?</h2>
 <p>Textpattern uses UTF-8 encoding wherever possible by default, including for outgoing emails. However, some older email clients (including some versions of Microsoft Outlook) do not have proper UTF-8 support. If you encounter garbled characters in emails, this setting will convert text to ISO-8859-1 encoding before sending them.</p>
 <p><strong>Note:</strong> If you are using a language the characters of which cannot be represented in ISO-8859-1, this setting will unfortunately not help you. You should try finding a UTF-8 (or Unicode) compatible email client.</p>
+        ]]></item>
+        <item id="override_form_types" title="Override form types"><![CDATA[
+<h2>Override form types</h2>
+<p>Choose which form types will have their templates made available in the Write panel as override forms.</p>
         ]]></item>
         <item id="permlink_format" title="Permalink title URL pattern"><![CDATA[
 <h2>Permalink title URL pattern</h2>

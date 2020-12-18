@@ -15,9 +15,16 @@
 <p>Główny tekst artykułu jest zawarty w polu treści.</p> 
 <p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
         <item id="description" title="Opis"><![CDATA[]]></item>
-        <item id="excerpt" title="Zajawka"><![CDATA[]]></item>
+        <item id="excerpt" title="Zajawka"><![CDATA[
+<h2>Fragment</h2>
+<p>Fragmenty artykułu są opcjonalne. Fragmenty mogą być używane jako krótkie podsumowanie artykułu, które jest wyświetlane jako część spisu treści, wykorzystane zamiast całego artykułu w kanale RSS/Atom lub w wielu innych zastosowaniach.</p>
+        ]]></item>
         <item id="expire_date" title="Data wygaśnięcia"><![CDATA[]]></item>
-        <item id="keywords" title="Słowa kluczowe"><![CDATA[]]></item>
+        <item id="keywords" title="Słowa kluczowe"><![CDATA[
+<h2>Słowa kluczowe</h2>
+<p>Słowa kluczowe są przydatne do uszczegółowienia relacji między artykułami nawet z różnych kategorii.</p>
+<p>Słowa kluczowe muszą być oddzielone przecinkami.</p>
+        ]]></item>
         <item id="override_form" title="Nadpisz formę"><![CDATA[]]></item>
         <item id="publish_date" title="Data publikacji"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
@@ -36,7 +43,10 @@
 <h2>Pliki</h2>
 <p>Kategorie plików są opcjonalne i przydatne do grupowania wybranych plików razem.</p>
         ]]></item>
-        <item id="image_category" title="Obrazy"><![CDATA[]]></item>
+        <item id="image_category" title="Obrazy"><![CDATA[
+<h2>Obrazy</h2>
+<p>Kategorie obrazów są opcjonalne, ale przydatne zarówno dla organizacji, jak i do definiowania zestawów obrazów, które mogą być wyświetlane za pomocą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera link zewnętrzny w nowym oknie)</span></a> i <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera link zewnętrzny w nowym oknie)</span></a> tagów.</p>
+        ]]></item>
         <item id="link_category" title="Linki"><![CDATA[]]></item>
     </group>
 
@@ -67,11 +77,13 @@
         <item id="old_placeholder_exists" title="Katalog sekcji istnieje"><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="Katalog witryny nieczytelny"><![CDATA[]]></item>
         <item id="php_version_required" title="Minimalne wymogi dotyczące wersji"><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title="Katalog instalacji nadal istnieje"><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Aktualizacja wersji Textpattern CMS"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
@@ -82,7 +94,7 @@
         <item id="upload" title="Wgraj plik"><![CDATA[]]></item>
     </group>
 
-    <group id="form" title="">
+    <group id="form" title="Panel formularzy">
         <item id="forms_overview" title=""><![CDATA[]]></item>
     </group>
 
@@ -142,24 +154,33 @@
         <item id="comments_dateformat" title="Format daty komentarzy"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Domyślne zaproszenie do komentarzy"><![CDATA[]]></item>
         <item id="comments_disabled_after" title="Komentarze zostaną wyłączone po upływie"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Obrazki w komentarzach niedozwolone?"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
         <item id="comments_mode" title="Komentarze umieszczone"><![CDATA[]]></item>
         <item id="comments_moderate" title="Moderować komentarze?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Komentarze włączone domyślnie?"><![CDATA[]]></item>
         <item id="comments_require_email" title="Komentarze wymagają adresu e-mail komentującego?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Komentarze wymagają imienia komentującego?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Wysyłać komentarze emailem do autora?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Wysyłać komentarze emailem do autora?"><![CDATA[
+<h2>Wyślij komentarze do autora?</h2>
+<p>Jeśli ustawiono na „Tak”, za każdym razem, gdy pojawi się nowy komentarz do artykułu, jego kopia zostanie wysłana pocztą elektroniczną do autora tego artykułu.</p>
+        ]]></item>
         <item id="comments_use_fat_textile" title="Zezwalać na zaawansowany Textile w komentarzach?"><![CDATA[]]></item>
         <item id="custom_form_types" title="Rodzaje szablonów formularzy niestandardowych"><![CDATA[]]></item>
         <item id="custom_overview" title="Pola dodatkowe"><![CDATA[]]></item>
-        <item id="dateformat" title="Format daty"><![CDATA[]]></item>
+        <item id="dateformat" title="Format daty"><![CDATA[
+<h2>Format daty</h2>
+<p>Ta opcja wpłynie jedynie na to, jak daty artykułu pojawiają się na stronie głównej twojej witryny.</p>
+        ]]></item>
         <item id="default_event" title="Panel domyślny"><![CDATA[]]></item>
         <item id="default_publish_status" title="Domyślny status publikacji"><![CDATA[]]></item>
         <item id="doctype" title="Doctype"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="Włączyć podgląd motywu rozwoju?"><![CDATA[]]></item>
         <item id="enable_short_tags" title="Włącz obsługę short-tagów?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="Włączyć serwer XML-RPC?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title="Logi wygasają po ilu dniach?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Włączyć serwer XML-RPC?"><![CDATA[
+<h2>Włączyć serwer XML-RPC?</h2>
+<p>Jeśli chcesz użyć <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> do zdalnego sterowania Textpattern (np. aplikacje na komputer lub mobilne) musisz włączyć serwer XML-RPC ustawiając tę opcję na „Tak”.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Po ilu dniach wygasają logi?"><![CDATA[]]></item>
         <item id="file_base_path" title="Ścieżka katalogu plików"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Maksymalny rozmiar dodawanego pliku (w bajtach)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Strefa czasowa"><![CDATA[
@@ -214,7 +235,11 @@
         <item id="show_comment_count_in_feed" title="Pokazać liczbę komentarzy w kanałach?"><![CDATA[]]></item>
         <item id="site_slogan" title="Motto witryny"><![CDATA[]]></item>
         <item id="sitename" title="Nazwa witryny"><![CDATA[]]></item>
-        <item id="siteurl" title="Adres witryny"><![CDATA[]]></item>
+        <item id="siteurl" title="Adres witryny"><![CDATA[
+<h2>Adres URL witryny</h2>
+<p>Jest to adres strony Textpattern na przykład <code>www.example.com</code>.</p>
+<p><strong>Uwaga:</strong> Protokoły <code>http://</code> i <code>https://</code> oraz kończący slash <code>/</code> nie są wymagane wymagane.</p>
+        ]]></item>
         <item id="skin_dir" title="Katalog motywu"><![CDATA[]]></item>
         <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[]]></item>
         <item id="spam_blacklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
@@ -228,10 +253,10 @@
         ]]></item>
         <item id="use_mail_on_feeds_id" title="Akceptować komentarze?"><![CDATA[]]></item>
         <item id="use_plugins" title="Używać wtyczek?"><![CDATA[]]></item>
-        <item id="use_textile" title="Używać wtyczek?"><![CDATA[]]></item>
+        <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[]]></item>
     </group>
 
-    <group id="section" title="">
+    <group id="section" title="Panel sekcji">
         <item id="section_category" title="Wprowadzenie"><![CDATA[]]></item>
         <item id="section_default" title="Domyślna sekcja publikacji"><![CDATA[]]></item>
         <item id="section_description" title="Opis"><![CDATA[]]></item>
@@ -260,9 +285,17 @@
         <item id="skin_delete_entirely" title="Usuń szablony motywów również z dysku"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="Usuń niewykorzystane szablony z bazy danych przy imporcie"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="Usuń niewykorzystane szablony z dysku przy eksporcie"><![CDATA[]]></item>
-        <item id="skin_description" title="Opis motywu"><![CDATA[]]></item>
+        <item id="skin_description" title="Opis motywu"><![CDATA[
+<h2>Opis motywu</h2>
+<p>Można podać krótkie podsumowanie projektu/układu motywu (opcjonalne).</p>
+<p>Opis tematu jest ograniczony do maksymalnie 255 znaków.</p>
+        ]]></item>
         <item id="skin_import" title="Importuj motyw"><![CDATA[]]></item>
-        <item id="skin_name" title="Nazwa motywu"><![CDATA[]]></item>
+        <item id="skin_name" title="Nazwa motywu"><![CDATA[
+<h2>Nazwa motywu</h2>
+<p>Nazwa motywu jest używana w nazwach katalogu motywu i innych celach technicznych (wymagana).</p>
+<p>Nazwa nie powinna zawierać żadnych znaków specjalnych ani spacji.</p>
+        ]]></item>
         <item id="skin_overview" title="Wprowadzenie do motywów"><![CDATA[
 <h2>Wprowadzenie do motywów</h2>
 <p>Motyw Textpattern jest kolekcją stron, formularzy i arkuszy stylów. Motywy pozwalają logicznie rozdzielić zasoby witryny na grupy w celu ułatwienia identyfikacji lub dzielenia się z innymi. Akt tworzenia lub importowania motywu i jakichkolwiek zasobów, które zawiera, <em>nie</em> ma jakiegokolwiek wpływu na istniejącą witrynę. Możesz edytować lub modyfikować dowolny zasób, który nie jest powiązany z sekcją witryny, i nie wpłynie to na samą stronę.</p>

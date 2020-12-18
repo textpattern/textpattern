@@ -172,6 +172,7 @@
         <item id="use_mail_on_feeds_id" title="Salli kommentointi?"><![CDATA[]]></item>
         <item id="use_plugins" title="Käytä liitännäisiä?"><![CDATA[]]></item>
         <item id="use_textile" title="Tekstin oletusmuotoilu"><![CDATA[]]></item>
+        <item id="override_form_types" title="Ohita lomaketyypit"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Osiot-paneeli">

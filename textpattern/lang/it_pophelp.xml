@@ -75,10 +75,7 @@
     <li>può gestire pagine, moduli e stile</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Crea Autore"><![CDATA[
-<h2>Aggiungi nuovo autore</h2>
-<p>Al nuovo autore verranno inviati via e-mail una password, un messaggio di benvenuto e istruzioni per l’accesso.</p>
-        ]]></item>
+        <item id="create_author" title="Crea Autore"><![CDATA[]]></item>
     </group>
 
     <group id="article" title="Pannello Scrivi">
@@ -884,10 +881,8 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Gli elementi in un feed Atom richiedono un ID univoco.</p>
 <p>Per generare ID univoci al sito, Textpattern consente di scegliere tra un indirizzo email o il tuo nome di dominio, per includerli in questi ID. L’indirizzo email sarà il primo usato al momento della creazione del sito. A meno che non si preveda di cambiare il proprio nome di dominio in futuro, è probabilmente meglio impostare questa opzione su ‘No’.</p>
         ]]></item>
-        <item id="use_textile" title="Usare plugin?"><![CDATA[
-<h2>Usare plugin?</h2>
-<p>L’opzione consente di disattivare del tutto il supporto per i plugin di Textpattern. Utile se si sta eseguendo il debug di errori sul sito, e si vuole controllare se e quali plugin sono coinvolti.</p>
-        ]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Pannello sezioni">
