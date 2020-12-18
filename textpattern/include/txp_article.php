@@ -535,11 +535,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'cb'       => 'article_partial_value',
         ),
         // 'Previous/Next' article links region.
-        'article_nav' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'nav.nav-tertiary',
-            'cb'       => 'article_partial_article_nav',
-        ),
+//        'article_nav' => array(
+//            'mode'     => PARTIAL_VOLATILE,
+//            'selector' => 'nav.nav-tertiary',
+//            'cb'       => 'article_partial_article_nav',
+//        ),
         // 'Status' region.
         'status' => array(
             'mode'     => PARTIAL_VOLATILE,
@@ -625,11 +625,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'cb'       => 'article_partial_custom_fields',
         ),
         // 'Recent articles' values.
-        'recent_articles' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
-            'cb'       => 'article_partial_recent_articles',
-        ),
+//        'recent_articles' => array(
+//            'mode'     => PARTIAL_VOLATILE,
+//            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
+//            'cb'       => 'article_partial_recent_articles',
+//        ),
     );
 
     // Add partials for custom fields (and their values which is redundant by
@@ -840,14 +840,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
         }
 
-        echo graf($push_button, array('class' => 'txp-save'));
+        echo graf('<span class="txp-save-button">'.$push_button.'</span>', array('class' => 'txp-save'));
     } elseif (
         ($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
         ($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
         ($Status < STATUS_LIVE && has_privs('article.edit')) ||
         ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
     ) {
-        echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+        echo graf('<span class="txp-save-button">'.fInput('submit', 'save', gTxt('save'), 'publish').'</span>', array('class' => 'txp-save'));
     }
 
     echo $partials['actions']['html'].
@@ -1025,12 +1025,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
 
     // 'Recent articles' collapsible section.
-    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
     echo n.'</div>'; // End of #supporting_content.
 
     // Prev/next article links.
-    echo $partials['article_nav']['html'];
+//    echo $partials['article_nav']['html'];
 
     echo n.'</div>'; // End of .txp-layout-4col-alt.
 
@@ -1171,7 +1171,7 @@ function tab($tabevent, $view, $tag = 'li')
 {
     $state = ($view == $tabevent) ? 'active' : '';
     $pressed = ($view == $tabevent) ? 'true' : 'false';
-    
+
     if (is_array($tabevent)) {
         list($tabevent, $label) = $tabevent + array(null, gTxt('text'));
     } else {
@@ -1419,7 +1419,7 @@ function article_partial_author($rs)
 function article_partial_actions($rs)
 {
     return graf($rs['ID']
-        ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
+        ? href('<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_article').'"></span> <span class="screen-large">'.gTxt('create_article').'</span>', 'index.php?event=article', array('class' => 'txp-new'))
         .article_partial_article_clone($rs)
         .article_partial_article_view($rs)
         : null,
@@ -1605,8 +1605,9 @@ function article_partial_custom_fields($rs)
  * The rendered widget can be customised via the 'article_ui > recent_articles'
  * pluggable UI callback event.
  *
- * @param  array $rs Article data
- * @return string HTML
+ * @param      array $rs Article data
+ * @return     string HTML
+ * @deprecated in 4.9.0
  */
 
 function article_partial_recent_articles($rs)
@@ -1644,7 +1645,7 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+    return n.href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
         'class' => 'txp-clone',
         'id'    => 'article_partial_article_clone',
     ));
@@ -1672,7 +1673,7 @@ function article_partial_article_view($rs)
         $url = permlinkurl_id($ID);
     }
 
-    return n.href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('view'), $url, array(
+    return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'rel'    => 'noopener',
@@ -1847,8 +1848,9 @@ function article_partial_view_modes($rs)
 /**
  * Renders next/prev links.
  *
- * @param  array $rs Article data
- * @return string HTML
+ * @param      array $rs Article data
+ * @return     string HTML
+ * @deprecated in 4.9.0
  */
 
 function article_partial_article_nav($rs)

@@ -1019,7 +1019,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
+            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span class="spinner-sticker" /><span class="spinner ui-icon ui-icon-refresh" />')
         };
 
         $inputs.prop('disabled', false);// Safari workaround.

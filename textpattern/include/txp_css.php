@@ -194,8 +194,8 @@ function css_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_css'), 'txp-new')
-        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_css').'"></span> <span class="screen-large">'.gTxt('create_css').'</span>', 'txp-new')
+        .href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'style_form',
         ));
@@ -203,24 +203,27 @@ function css_edit($message = '', $refresh_partials = false)
 
     $actions = graf(
         $actionsExtras,
-        array('class' => 'txp-actions txp-actions-inline')
+        array('class' => 'txp-actions')
     );
 
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
-        (!is_writable($instance->getDirPath()) ? '' :
-            span(
-                checkbox2('export', gps('export'), 0, 'export').
-                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
-            , array('class' => 'txp-save-export'))
-        ).n.
-        tag_void('input', array(
+        '<span class="txp-save-button">'.
+        n.tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
+            'form'   => 'style_form',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        )).
+        '</span>'.
+        (!is_writable($instance->getDirPath()) ? '' :
+            n.span(
+                checkbox2('export', gps('export'), 0, 'export', 'style_form').
+                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ), ' class="txp-save"'
     );
 
     $rs = array(
@@ -248,32 +251,34 @@ function css_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_style'), $message);
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        );
+    echo n.'<div class="txp-layout">';
 
-    // Styles create/switcher column.
+    // Styles code column.
     echo n.tag(
-        $skinBlock.$partials['list']['html'].n,
+        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
+        $skinBlock.
+        form(
+            $partials['name']['html'].
+            $partials['css']['html'],
+            '', '', 'post', $class, '', 'style_form'),
         'div', array(
-            'class' => 'txp-layout-4col-alt',
-            'id'    => 'content_switcher',
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
             'role'  => 'region',
         )
     );
 
-    // Styles code column.
+    // Styles create/switcher column.
     echo n.tag(
-        form(
-            $actions.
-            $partials['name']['html'].
-            $partials['css']['html'].
-            $buttons, '', '', 'post', $class, '', 'style_form'),
+        n.tag(
+            $buttons.
+            $actions,
+            'div', array('class' => 'txp-save-zone')
+        ).
+        $partials['list']['html'].n,
         'div', array(
-            'class' => 'txp-layout-4col-3span',
-            'id'    => 'main_content',
+            'class' => 'txp-layout-4col-alt',
+            'id'    => 'content_switcher',
             'role'  => 'region',
         )
     );

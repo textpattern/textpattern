@@ -41,7 +41,7 @@ EOF
 $cfg = json_decode(file_get_contents($file), true);
 
 if (empty($cfg)) {
-    msg("Error json config file", MSG_ERROR);
+    msg("Error in JSON config file", MSG_ERROR);
 }
 
 define("txpinterface", "admin");
