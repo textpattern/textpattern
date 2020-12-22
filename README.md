@@ -147,6 +147,10 @@ Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpatte
 
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
+This project is supported by:
+
+<a href="https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern"><img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px"></a>
+
 [![DigitalOcean Logo](https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg =250x)](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern)
 
 ## Legal
