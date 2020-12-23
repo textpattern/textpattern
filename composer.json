@@ -19,8 +19,5 @@
     "netcarver/textile": "3.7.6",
     "phpmailer/phpmailer": "6.2.0"
   },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "3.*"
-  },
   "license": "GPL-2.0-only"
 }
