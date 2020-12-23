@@ -109,6 +109,8 @@ class Loader
 
     public function __construct($directory, $namespace = null, $separator = '\\', $extension = '.php')
     {
+        include_once txpath.'/vendors/autoload.php';
+
         if (file_exists($directory) && is_dir($directory)) {
             $this->directory = $directory;
             $this->namespace = $namespace;
