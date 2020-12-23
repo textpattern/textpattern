@@ -16,13 +16,18 @@
     "issues": "https://github.com/textpattern/textpattern/issues",
     "source": "https://github.com/textpattern/textpattern"
   },
+  "funding": [
+    {
+      "url": "https://github.com/sponsors/textpattern",
+      "type": "github"
+    }
+  ],
   "config": {
      "vendor-dir": "textpattern/vendors"
   },
   "require": {
     "php": ">=5.6.0",
-    "netcarver/textile": "3.7.6",
-    "phpmailer/phpmailer": "6.2.0"
+    "netcarver/textile": "3.7.6"
   },
   "license": "GPL-2.0-only"
 }
