@@ -3,19 +3,24 @@
   "description": "A flexible, elegant, fast and easy-to-use content management system written in PHP.",
   "type": "project",
   "author": "Team Textpattern",
-  "homepage": "https://textpattern.com/",
+  "homepage": "https://textpattern.com",
   "keywords": [
     "textpattern",
     "blogging",
     "cms",
     "content management"
   ],
+  "support": {
+    "docs": "https://docs.textpattern.com",
+    "forum": "https://forum.textpattern.com",
+    "issues": "https://github.com/textpattern/textpattern/issues",
+    "source": "https://github.com/textpattern/textpattern"
+  },
   "config": {
      "vendor-dir": "textpattern/vendors"
   },
   "require": {
     "php": ">=5.6.0",
-    "league/glide": "1.7.0",
     "netcarver/textile": "3.7.6",
     "phpmailer/phpmailer": "6.2.0"
   },
