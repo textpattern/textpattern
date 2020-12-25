@@ -1891,7 +1891,9 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     static $files = null, $files_md5 = array(), $checksum_table = array();
 
     if ($files === null) {
-        if ($cs = @file(txpath.'/checksums.txt')) {
+        $checksums = txpath.'/checksums.txt';
+
+        if (is_readable($checksums) && ($cs = file($checksums))) {
             $files = array();
 
             foreach ($cs as $c) {
