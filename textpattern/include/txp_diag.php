@@ -218,11 +218,11 @@ function doDiagnostics()
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
-        $fail['e'][] = array('php_version_required', 'php_version_required', array('{version}' => REQUIRED_PHP_VERSION));
+        $fail['e'][] = array('php_version_required', null, array('{version}' => REQUIRED_PHP_VERSION));
     }
 
     if (@gethostbyname($mydomain) === $mydomain) {
-        $fail['w'][] = array('dns_lookup_fails', 'dns_lookup_fails', array('{domain}' => $mydomain));
+        $fail['w'][] = array('dns_lookup_fails', null, array('{domain}' => $mydomain));
     }
 
     if (!@is_dir($path_to_site)) {
@@ -230,7 +230,7 @@ function doDiagnostics()
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
-        $fail['w'][] = array('site_trailing_slash', 'site_trailing_slash', array('{path}' => $path_to_site));
+        $fail['w'][] = array('site_trailing_slash', null, array('{path}' => $path_to_site));
     }
 
     if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
@@ -307,7 +307,7 @@ function doDiagnostics()
 
     // Files that don't match their checksums.
     if (!$txp_is_dev && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
-        $fail['w'][] = array('modified_files', 'modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files)));
+        $fail['w'][] = array('modified_files', null, array('{list}' => n.t.implode(', '.n.t, $modified_files)));
     }
 
     // Running development code in live mode is not recommended.
@@ -321,7 +321,7 @@ function doDiagnostics()
         array_keys($cs, INTEGRITY_NOT_FILE),
         array_keys($cs, INTEGRITY_NOT_READABLE)
     )) {
-        $fail['e'][] = array('missing_files', 'missing_files', array('{list}' => n.t.implode(', '.n.t, $missing)));
+        $fail['e'][] = array('missing_files', null, array('{list}' => n.t.implode(', '.n.t, $missing)));
     }
 
     // Anything might break if arbitrary functions are disabled.
@@ -347,7 +347,7 @@ function doDiagnostics()
         )), function($func) {return strpos($func, 'pcntl_') !== 0;});
 
         if ($disabled_funcs) {
-            $fail['w'][] = array('some_php_functions_disabled', 'some_php_functions_disabled', array('{list}' => implode(', ', array_filter($disabled_funcs))));
+            $fail['w'][] = array('some_php_functions_disabled', null, array('{list}' => implode(', ', array_filter($disabled_funcs))));
         }
     }
 
@@ -360,7 +360,7 @@ function doDiagnostics()
     if ($siteurl && strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // Skip warning if multi-site setup, as $guess_site_url and $siteurl will mismatch.
         if (!isset($txpcfg['multisite_root_path'])) {
-            $fail['w'][] = array('site_url_mismatch', 'site_url_mismatch', array('{url}' => $guess_site_url));
+            $fail['w'][] = array('site_url_mismatch', null, array('{url}' => $guess_site_url));
         }
     }
 
@@ -376,7 +376,7 @@ function doDiagnostics()
                 $pretext_req = trim(@$pretext_data[0]);
 
                 if ($pretext_req != md5('/'.$s.'/?txpcleantest=1')) {
-                    $fail['w'][] = array('clean_url_data_failed', 'clean_url_data_failed', array('{data}' => txpspecialchars($pretext_req)));
+                    $fail['w'][] = array('clean_url_data_failed', null, array('{data}' => txpspecialchars($pretext_req)));
                 }
             } else {
                 $fail['w'][] = array('clean_url_test_failed');
@@ -388,7 +388,7 @@ function doDiagnostics()
         $table_errors = check_tables($tables);
 
         if ($table_errors) {
-            $fail['e'][] = array('mysql_table_errors', 'mysql_table_errors', array('{list}' => n.t.implode(', '.n.t, $table_errors)));
+            $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n.t.implode(', '.n.t, $table_errors)));
         }
     }
 
@@ -487,7 +487,7 @@ function doDiagnostics()
         // Overwrite the lang strings to English, then revert on second pass.
         // This allows the pre-flight check to be displayed in the local
         // language above the fold, and in English in the textarea.
-        $diagPack = $txpLang->getPack($lang, $event);
+        $diagPack = $txpLang->getPack($lang, array($event, 'admin-side'));
         $diagStrings = array();
         $showPophelp = count($langs) === 1 || $langCounter > 0;
 
@@ -507,17 +507,31 @@ function doDiagnostics()
             foreach ($fail as $type => $content) {
                 foreach ($content as $stringInfo) {
                     $help = $stringInfo[0];
-                    $message = isset($stringInfo[1]) ? $stringInfo[1] : $help;
+                    $message = !empty($stringInfo[1]) ? $stringInfo[1] : $help;
                     $args = isset($stringInfo[2]) ? $stringInfo[2] : array();
-                    $pfcStrings[$lang][] = graf(nl2br(diag_msg_wrap(gTxt($message, $args), $type)).($showPophelp ? popHelp($help) : ''));
+                    $pfcStrings[$lang][] = array(
+                        'msg'  => nl2br(diag_msg_wrap(gTxt($message, $args), $type)),
+                        'help' => ($showPophelp ? popHelp($help) : ''),
+                        'type' => array(),
+                    );
                 }
             }
 
             if ($not_readable) {
-                $pfcStrings[$lang][] = graf(nl2br(join(n, $not_readable).($showPophelp ? popHelp('dir_not_writable') : '')));
+                foreach ($not_readable as $nr) {
+                    $pfcStrings[$lang][] = array(
+                        'msg'  => nl2br($nr),
+                        'help' => ($showPophelp ? popHelp('dir_not_writable') : ''),
+                        'type' => array(),
+                    );
+                }
             }
         } else {
-            $pfcStrings[$lang][] = graf('<span class="ui-icon ui-icon-check"></span>'.sp.gTxt('all_checks_passed'), array('class' => 'success'));
+            $pfcStrings[$lang][] = array(
+                'msg' => '<span class="ui-icon ui-icon-check"></span>'.sp.gTxt('all_checks_passed'),
+                'help' => '',
+                'type' => array('class' => 'success')
+            );
         }
 
         $langCounter++;
@@ -525,7 +539,9 @@ function doDiagnostics()
 
     // The lang will now be back to the local lingo so we can use $lang
     // to display the correct pre-flight check.
-    echo implode(n, $pfcStrings[$lang]);
+    foreach ($pfcStrings[$lang] as $preflight) {
+        echo n.graf($preflight['msg'].$preflight['help'], $preflight['type']);
+    }
 
     // End of #pre_flight_check.
     echo n.tag_end('div');
@@ -648,7 +664,7 @@ function doDiagnostics()
         ($active_plugins ? gTxt('diag_active_plugins').cs.n.t.implode(n.t, $active_plugins).n : ''),
 
         ($fail || $not_readable)
-        ? n.gTxt('diag_preflight_check').cs.n.ln.implode(n, doStripTags($pfcStrings['en'])).n.ln
+        ? n.gTxt('diag_preflight_check').cs.n.ln.implode(n, doStripTags(array_column($pfcStrings['en'], 'msg'))).n.ln
         : '',
 
         ($is_apache && is_readable($path_to_site.'/.htaccess'))
