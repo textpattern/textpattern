@@ -271,6 +271,22 @@ function step_getDbInfo()
 
     check_config_exists();
 
+    $changes = check_file_integrity() or array();
+
+    unset(
+        $changes['/../rpc/index.php'],
+        $changes['/../rpc/TXP_RPCServer.php']
+    );
+
+    // Report files that are missing or don't match their checksums.
+    if ($mangled_files = array_keys($changes, INTEGRITY_MISSING)) {
+        echo '<pre>'.gTxt('missing_files', array('{list}' => n.t.implode(', '.n.t, $mangled_files))).'</pre>';
+    }
+
+    if ($modified_files = array_keys($changes, INTEGRITY_MODIFIED)) {
+        echo '<pre>'.gTxt('modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files))).'</pre>';
+    }
+
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
         hed(tag('MySQL', 'bdi', array('dir' => 'ltr')), 2).
