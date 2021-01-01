@@ -10,6 +10,7 @@ Changes in 4.8.5 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
+* PrismJS 1.23.0.
 
 Changes in 4.8.4 (29 Nov 2020)
 
