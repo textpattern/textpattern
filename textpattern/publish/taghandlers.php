@@ -4410,7 +4410,7 @@ function php($atts = null, $thing = null)
 function txp_header($atts)
 {
     extract(lAtts(array(
-        'name'    => 'Content-Type',
+        'name'    => isset($atts['value']) ? '' : 'Content-Type',
         'replace' => 1,
         'value'   => isset($atts['name']) ? true : 'text/html; charset=utf-8',
         'break'   => ''

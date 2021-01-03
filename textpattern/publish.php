@@ -938,7 +938,8 @@ function article($atts, $thing = null)
 function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage, $trace, $txp_item, $txp_sections;
-    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
+    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
+        $aggregate = array('avg', 'max', 'min', 'sum');
 
     extract($pretext);
 
@@ -971,21 +972,27 @@ function doArticles($atts, $iscustom, $thing = null)
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
+        $agg_reg = implode('|', $aggregate).'|date|day|month|year|week';
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^(?:(avg|max|min|sum)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
+            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
                 $field = $matches[2];
                 $column = $column_map[$field];
-                $sortby[$field] = $column;
+                $is_agg = in_array($matches[1], $aggregate);
 
-                if (!empty($matches[1])) {
-                    $alias = ' AS '.$column;
+                if ($is_agg) {
                     $what[$field] = strtoupper($matches[1]).'('.$column.')';
+                } elseif ($matches[1]) {
+                    isset($what[$field]) or $what[$field] = "MIN($column)";
+                    $group = strtoupper($matches[1]).'('.$column.')';
+                    !is_array($groupby) or $groupby[] = $group;
                 } else {
-                    $alias = '';
                     $what[$field] = $column;
-                    !is_array($groupby) or $groupby[$field] = $column;
+                    !is_array($groupby) or $groupby[] = $column;
                 }
+
+                $sortby[] = $is_agg || !$matches[1] ? $column : $group;
+                $alias = $matches[1] ? ' AS '.$column : '';
 
                 if (isset($date_fields[$field])) {
                     $what[$field] .= $alias.', UNIX_TIMESTAMP('.$what[$field].') AS u'.$column;
