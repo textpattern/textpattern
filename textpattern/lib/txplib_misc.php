@@ -4078,6 +4078,8 @@ function getCustomFields()
                 $out[$match[1]] = strtolower($prefs[$name]);
             }
         }
+
+        ksort($out, SORT_NUMERIC);
     }
 
     return $out;
