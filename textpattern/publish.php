@@ -939,7 +939,7 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage, $trace, $txp_item, $txp_sections;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
-        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'join' => 'GROUP_CONCAT(? SEPARATOR ",")');
+        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => 'GROUP_CONCAT(? SEPARATOR ",")');
 
     extract($pretext);
 
