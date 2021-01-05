@@ -2397,6 +2397,38 @@ function is_valid_form($name)
 }
 
 /**
+ * Validates a string as a date% query.
+ *
+ * @param   string $date The partial date
+ * @return  bool TRUE if the string validates
+ * @since   4.8.5
+ * @package Template
+ */
+
+function is_date($month, $full = true)
+{
+    $regexp = $full ? '/^\d{4}\-?$|^\d{4}\-\d{2}\-?$|^\d{4}\-\d{2}\-\d{2}$/' :
+        '/^\d{1,4}$|^\d{4}\-\d{0,2}$|^\d{4}\-\d{2}\-\d{0,2}$/';
+
+    if (!preg_match($regexp, $month)) {
+        return false;
+    }
+
+    $month = explode('-', $month, 3);
+
+    switch (count($month)) {
+        case 1:
+            return true;
+        case 2:
+            return (int)$month[1] < 13;
+        case 3:
+            return checkdate($month[1], $month[2] ? $month[2] : 1, $month[0]);
+    }
+
+    return false;
+}
+
+/**
  * Gets a "since days ago" date format from a given UNIX timestamp.
  *
  * @param   int $stamp UNIX timestamp
@@ -4502,11 +4534,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        if (!empty($keys['context'])) {
-            $keys['context'] = gTxt($keys['context'].'_context');
-        }
-
-        return hu.'index.php'.join_qs($keys);
+        $url = hu.'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
@@ -4518,9 +4546,6 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             $url = hu.'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
@@ -4529,18 +4554,15 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
+            } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+                $url .= implode('/', explode('-', urlencode($keys['month']))).'/';
+                unset($keys['month']);
             }
-        } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
-            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
-            unset($keys['month']);
-        } elseif (!empty($keys['author'])) {
+        } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
-        } elseif (!empty($keys['c'])) {
+        } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4548,10 +4570,17 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
+        } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            unset($keys['month']);
         }
-
-        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
+
+    if (!empty($keys['context'])) {
+        $keys['context'] = gTxt($keys['context'].'_context');
+    }
+
+    return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
