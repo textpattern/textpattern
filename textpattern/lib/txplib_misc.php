@@ -4554,7 +4554,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
-            } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+            } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title' && is_date($keys['month'])) {
                 $url .= implode('/', explode('-', urlencode($keys['month']))).'/';
                 unset($keys['month']);
             }
