@@ -497,7 +497,7 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $txp_atts, $yield, $txp_yield;
+    global $txp_atts, $yield, $txp_yield, $is_form;
 
     if (empty($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
@@ -534,9 +534,11 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
+    $is_form++;
     $yield[] = $thing;
     $out = parse_form($form);
     array_pop($yield);
+    $is_form--;
 
     foreach ($atts as $name => $value) {
         $result = array_pop($txp_yield[$name]);
@@ -553,7 +555,7 @@ function output_form($atts, $thing = null)
 
 function txp_yield($atts, $thing = null)
 {
-    global $yield, $txp_yield, $txp_atts, $txp_item;
+    global $yield, $txp_yield, $txp_atts, $txp_item, $is_form;
 
     extract(lAtts(array(
         'name'    => '',
@@ -568,7 +570,10 @@ function txp_yield($atts, $thing = null)
         $end = empty($yield) ? null : end($yield);
 
         if (isset($end)) {
+            $was_form = $is_form;
+            $is_form--;
             $inner = parse($end, empty($else));
+            $is_form = $was_form;
         }
     } elseif (!empty($txp_yield[$name])) {
         list($inner) = end($txp_yield[$name]);
@@ -2953,15 +2958,15 @@ function if_logged_in($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_sandbox($atts = array(), $thing = null, $parse = true)
+function txp_sandbox($atts = array(), $thing = null)
 {
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
-    global $thisarticle, $is_article_body;
+    global $thisarticle, $is_article_body, $is_form, $txp_atts;
 
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
-    extract($atts + array('field' => ''));
-    unset($atts['field']);
+    $id = isset($atts['id']) ? $atts['id'] : null;
+    $field = isset($atts['field']) ? $atts['field'] : null;
 
     if (empty($id)) {
         assert_article();
@@ -2984,19 +2989,20 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true)
         }
     }
 
-    if ($parse) {
-        $oldarticle = $thisarticle;
-        isset($articles[$id]) and $thisarticle = $articles[$id];
-        $was_article_body = $is_article_body;
-        !$field or $is_article_body = 1;
+    $oldarticle = $thisarticle;
+    isset($articles[$id]) and $thisarticle = $articles[$id];
+    $was_article_body = $is_article_body;
+    $is_article_body = $id;
+    $was_form = $is_form;
+    $is_form = 0;
 
-        $thing = parse(isset($thing) ? $thing : $thisarticle[$field]);
+    $thing = parse(isset($thing) ? $thing : $thisarticle[$field]);
 
-        $is_article_body = $was_article_body;
-        $thisarticle = $oldarticle;
-    }
+    $is_article_body = $was_article_body;
+    $is_form = $was_form;
+    $thisarticle = $oldarticle;
 
-    !$field or $stack[$id]--;
+    $field and $stack[$id]--;
 
     if (!preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $thing;
@@ -3007,24 +3013,19 @@ function txp_sandbox($atts = array(), $thing = null, $parse = true)
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
 
-    if ($field) {
-        $tag = $field;
-        unset($atts['id']);
-    } else {
-        $tag = $uniqid;
-        $atts['id'] = $id;
-    }
-
+    $txp_atts = null;
+    $atts['id'] = $id;
+    unset($atts['field']);
     isset($articles[$id]) or $articles[$id] = $thisarticle;
 
-    return "<txp:$tag".($atts ? join_atts($atts) : '').">{$thing}</txp:$tag>";
+    return "<txp:$uniqid".($atts ? join_atts($atts) : '').">{$thing}</txp:$uniqid>";
 }
 
 // -------------------------------------------------------------
 
-function body($atts = array(), $thing = null)
+function body($atts = array())
 {
-    return txp_sandbox(array('field' => 'body'), $thing);
+    return txp_sandbox(array('id' => null, 'field' => 'body') + $atts);
 }
 
 // -------------------------------------------------------------
@@ -3051,9 +3052,9 @@ function title($atts)
 
 // -------------------------------------------------------------
 
-function excerpt($atts = array(), $thing = null)
+function excerpt($atts = array())
 {
-    return txp_sandbox(array('field' => 'excerpt'), $thing);
+    return txp_sandbox(array('id' => null, 'field' => 'excerpt') + $atts);
 }
 
 // -------------------------------------------------------------
@@ -4372,7 +4373,7 @@ function if_article_section($atts, $thing = null)
 
 function php($atts = null, $thing = null)
 {
-    global $is_article_body, $thisarticle, $prefs, $pretext;
+    global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
 
     $error = null;
 
@@ -4382,7 +4383,7 @@ function php($atts = null, $thing = null)
         }
     } else {
         if (!empty($prefs['allow_article_php_scripting'])) {
-            if (!has_privs('article.php', $thisarticle['authorid'])) {
+            if (empty($is_form) && !has_privs('article.php', $thisarticle['authorid'])) {
                 $error = 'php_code_forbidden_user';
             }
         } else {
@@ -4423,7 +4424,7 @@ function txp_header($atts)
 
 // -------------------------------------------------------------
 
-function custom_field($atts, $thing = null)
+function custom_field($atts = array())
 {
     global $thisarticle;
 
@@ -4443,13 +4444,9 @@ function custom_field($atts, $thing = null)
         return '';
     }
 
-    if (!isset($thing)) {
-        $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
-    }
+    $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
 
-    $thing = ($escape === null ? txpspecialchars($thing) : parse($thing));
-
-    return txp_sandbox(array('field' => 'custom_field') + $atts, $thing, false);
+    return $escape === null ? txpspecialchars($thing) : txp_sandbox(array('id' => null, 'field' => $name) + $atts, $thing);
 }
 
 // -------------------------------------------------------------

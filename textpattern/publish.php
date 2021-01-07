@@ -1150,10 +1150,8 @@ function doArticles($atts, $iscustom, $thing = null)
                     $item = parse_form($fname);
                 }
 
-                if ($item !== false) {
-                    $item = txp_sandbox(array(), $item, false);
-                } elseif (isset($thing)) {
-                    $item = txp_sandbox(array(), $thing);
+                if ($item === false && isset($thing)) {
+                    $item = parse($thing);
                 }
 
                 $item === false or $chunk .= $item;
