@@ -469,13 +469,11 @@ function preText($store, $prefs = null)
                                 break;
 
                             case 'year_month_day_title':
-                                if (is_date($ymd = trim($u1.'-'.$u2.'-'.$u3, '-'))) {
+                                if ($month = is_date(trim($u1.'-'.$u2.'-'.$u3, '-'))) {
                                     $title = empty($u4) ? null : $u4;
-                                    $month = explode('-', $ymd);
-                                } elseif (!empty($u2) && is_date($ymd = trim($u2.'-'.$u3.'-'.$u4, '-'))) {
+                                } elseif (!empty($u2) && $month = is_date(trim($u2.'-'.$u3.'-'.$u4, '-'))) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
-                                    $month = explode('-', $ymd);
                                 } elseif (empty($u3)) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
@@ -520,18 +518,16 @@ function preText($store, $prefs = null)
     $out['context'] = validContext($out['context']);
 
     // Validate dates
-    if ($out['month']) {
-        $date = empty($month) ? '' : implode('-', $month);
-        $month = explode('-', $out['month'], 3) + (!empty($month) ? $month : array());
-
-        if (is_date($out['month'], false) && (!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0)) {
-            $month = implode('-', $month);
+    if ($out['month'] && $out['month'] = is_date($out['month'])) {
+        if (empty($month) || strpos($out['month'], $month) === 0) {
+            $month = $out['month'];
+        } elseif (strpos($month, $out['month']) === 0) {
+            $out['month'] = $month;
         } else {
             $out['month'] = $month = '';
             $is_404 = true;
         }
-    } elseif (isset($month)) {
-        $month = implode('-', $month);
+    } elseif (!empty($month)) {
         !empty($title) or $out['month'] = $month;
     }
 

@@ -2400,32 +2400,33 @@ function is_valid_form($name)
  * Validates a string as a date% query.
  *
  * @param   string $date The partial date
- * @return  bool TRUE if the string validates
+ * @return  bool|string FALSE if the string does not validate
  * @since   4.8.5
  * @package Template
  */
 
-function is_date($month, $full = true)
+function is_date($month)
 {
-    $regexp = $full ? '/^\d{4}\-?$|^\d{4}\-\d{2}\-?$|^\d{4}\-\d{2}\-\d{2}$/' :
-        '/^\d{1,4}$|^\d{4}\-\d{0,2}$|^\d{4}\-\d{2}\-\d{0,2}$/';
-
-    if (!preg_match($regexp, $month)) {
+    if (!preg_match('/^\d{1,4}(?:\-\d{1,2}){0,2}$/', $month)) {
         return false;
     }
 
     $month = explode('-', $month, 3);
+    $result = true;
 
     switch (count($month)) {
-        case 1:
-            return true;
-        case 2:
-            return (int)$month[1] < 13;
         case 3:
-            return checkdate($month[1], $month[2] ? $month[2] : 1, $month[0]);
+            $result = checkdate($month[1], $month[2], $month[0]) and
+            $month[2] = str_pad($month[2], 2, '0', STR_PAD_LEFT);
+        case 2:
+            $result = $result && $month[1] > 0 && $month[1] < 13;
+            !$result or $month[1] = str_pad($month[1], 2, '0', STR_PAD_LEFT);
+        case 1:
+            $result = $result && $month[0] > 0;
+            !$result or $month[0] = str_pad($month[0], 4, '0', STR_PAD_LEFT);
     }
 
-    return false;
+    return $result ? implode('-', $month) : false;
 }
 
 /**
@@ -4554,7 +4555,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
-            } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+            } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title' && is_date($keys['month'])) {
                 $url .= implode('/', explode('-', urlencode($keys['month']))).'/';
                 unset($keys['month']);
             }
