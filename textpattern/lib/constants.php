@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -697,6 +697,17 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  */
 
 define('REQUIRED_PHP_VERSION', '5.6.0');
+
+/**
+ * Required OPENSSL version.
+ *
+ * Used when fetching resources via file_get_contents() or cURL.
+ *
+ * @since   4.8.5
+ * @package System
+ */
+
+define('REQUIRED_OPENSSL_VERSION', '268439567');
 
 /**
  * File integrity status good.
