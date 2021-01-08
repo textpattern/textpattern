@@ -3398,7 +3398,7 @@ function parse_page($name, $theme, $page = '')
     }
 
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+        while ($pretext['secondpass'] <= (int)get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
             $is_form = 1;
             $page = parse($page);
             // the function so nice, he ran it twice
