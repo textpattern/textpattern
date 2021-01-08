@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2397,6 +2397,39 @@ function is_valid_form($name)
 }
 
 /**
+ * Validates a string as a date% query.
+ *
+ * @param   string $date The partial date
+ * @return  bool|string FALSE if the string does not validate
+ * @since   4.8.5
+ * @package Template
+ */
+
+function is_date($month)
+{
+    if (!preg_match('/^\d{1,4}(?:\-\d{1,2}){0,2}$/', $month)) {
+        return false;
+    }
+
+    $month = explode('-', $month, 3);
+    $result = true;
+
+    switch (count($month)) {
+        case 3:
+            $result = checkdate($month[1], $month[2], $month[0]) and
+            $month[2] = str_pad($month[2], 2, '0', STR_PAD_LEFT);
+        case 2:
+            $result = $result && $month[1] > 0 && $month[1] < 13;
+            !$result or $month[1] = str_pad($month[1], 2, '0', STR_PAD_LEFT);
+        case 1:
+            $result = $result && $month[0] > 0;
+            !$result or $month[0] = str_pad($month[0], 4, '0', STR_PAD_LEFT);
+    }
+
+    return $result ? implode('-', $month) : false;
+}
+
+/**
  * Gets a "since days ago" date format from a given UNIX timestamp.
  *
  * @param   int $stamp UNIX timestamp
@@ -3358,18 +3391,19 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $pretext, $trace, $is_form;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
     }
 
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+        while ($pretext['secondpass'] <= (int)get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+            $is_form = 1;
             $page = parse($page);
             // the function so nice, he ran it twice
             $pretext['secondpass']++;
-            $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
+            $trace->log('[ ~~~ end of pass '.$pretext['secondpass'].' ~~~ ]');
         }
     }
 
@@ -4078,6 +4112,8 @@ function getCustomFields()
                 $out[$match[1]] = strtolower($prefs[$name]);
             }
         }
+
+        ksort($out, SORT_NUMERIC);
     }
 
     return $out;
@@ -4500,11 +4536,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        if (!empty($keys['context'])) {
-            $keys['context'] = gTxt($keys['context'].'_context');
-        }
-
-        return hu.'index.php'.join_qs($keys);
+        $url = hu.'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
         $url = hu;
@@ -4516,9 +4548,6 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             $url = hu.'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
@@ -4527,18 +4556,15 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
+            } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title' && is_date($keys['month'])) {
+                $url .= implode('/', explode('-', urlencode($keys['month']))).'/';
+                unset($keys['month']);
             }
-        } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
-            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
-            unset($keys['month']);
-        } elseif (!empty($keys['author'])) {
+        } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
-        } elseif (!empty($keys['c'])) {
+        } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4546,10 +4572,17 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
+        } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            unset($keys['month']);
         }
-
-        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
+
+    if (!empty($keys['context'])) {
+        $keys['context'] = gTxt($keys['context'].'_context');
+    }
+
+    return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
