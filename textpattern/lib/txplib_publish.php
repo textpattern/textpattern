@@ -512,7 +512,7 @@ function processTags($tag, $atts = '', $thing = null)
     }
 
     if ($registry === null) {
-        $maxpass = get_pref('secondpass', 1);
+        $maxpass = (int)get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),

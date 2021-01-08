@@ -1800,7 +1800,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 $break = 'td';
             break;
             default:
-                $break = n;
+                $break = ',';
         }
     }
 

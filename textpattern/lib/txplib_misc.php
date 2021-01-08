@@ -3391,18 +3391,19 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $pretext, $trace, $is_form;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
     }
 
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+        while ($pretext['secondpass'] <= (int)get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+            $is_form = 1;
             $page = parse($page);
             // the function so nice, he ran it twice
             $pretext['secondpass']++;
-            $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
+            $trace->log('[ ~~~ end of pass '.$pretext['secondpass'].' ~~~ ]');
         }
     }
 
