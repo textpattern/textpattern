@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -305,7 +305,7 @@ function preText($store, $prefs = null)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        $url = chopUrl($req, 4);
+        $url = chopUrl($req, 5);
 
         for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
@@ -469,28 +469,11 @@ function preText($store, $prefs = null)
                                 break;
 
                             case 'year_month_day_title':
-                                $m1 = (int)$u1;
-                                $m2 = !empty($u2) ? (int)$u2 : 1;
-                                $m3 = !empty($u3) ? (int)$u3 : 1;
-                                $m4 = !empty($u4) ? (int)$u4 : 1;
-
-                                if (checkdate($m2, $m3, $m1)) {
+                                if ($month = is_date(trim($u1.'-'.$u2.'-'.$u3, '-'))) {
                                     $title = empty($u4) ? null : $u4;
-                                    $month = array($m1);
-
-                                    if (!empty($u2)) {
-                                        $month[] = str_pad(ltrim($m2), 2, '0', STR_PAD_LEFT);
-                                        empty($u3) or $month[] = str_pad(ltrim($m3), 2, '0', STR_PAD_LEFT);
-                                    }
-                                } elseif (!empty($u2) && checkdate($m3, $m4, $m2)) {
+                                } elseif (!empty($u2) && $month = is_date(trim($u2.'-'.$u3.'-'.$u4, '-'))) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
-                                    $month = array($m2);
-
-                                    if (!empty($u3)) {
-                                        $month[] = str_pad(ltrim($m3), 2, '0', STR_PAD_LEFT);
-                                        empty($u4) or $month[] = str_pad(ltrim($m4), 2, '0', STR_PAD_LEFT);
-                                    }
                                 } elseif (empty($u3)) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
@@ -535,18 +518,16 @@ function preText($store, $prefs = null)
     $out['context'] = validContext($out['context']);
 
     // Validate dates
-    if ($out['month']) {
-        $date = empty($month) ? '' : implode('-', $month);
-        $month = explode('-', $out['month'], 3) + (!empty($month) ? $month : array());
-
-        if (!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) {
-            $month = implode('-', $month);
+    if ($out['month'] && $out['month'] = is_date($out['month'])) {
+        if (empty($month) || strpos($out['month'], $month) === 0) {
+            $month = $out['month'];
+        } elseif (strpos($month, $out['month']) === 0) {
+            $out['month'] = $month;
         } else {
             $out['month'] = $month = '';
             $is_404 = true;
         }
-    } elseif (isset($month)) {
-        $month = implode('-', $month);
+    } elseif (!empty($month)) {
         !empty($title) or $out['month'] = $month;
     }
 
@@ -938,7 +919,8 @@ function article($atts, $thing = null)
 function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thispage, $trace, $txp_item, $txp_sections;
-    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
+    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
+        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => 'GROUP_CONCAT(? SEPARATOR ",")');
 
     extract($pretext);
 
@@ -971,20 +953,26 @@ function doArticles($atts, $iscustom, $thing = null)
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
+        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week';
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^(?:(avg|max|min|sum)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
+            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
                 $field = $matches[2];
                 $column = $column_map[$field];
-                $sortby[$field] = $column;
+                $alias = $matches[1] ? ' AS '.$column : '';
+                $is_agg = isset($aggregate[$matches[1]]);
 
-                if (!empty($matches[1])) {
-                    $alias = ' AS '.$column;
-                    $what[$field] = strtoupper($matches[1]).'('.$column.')';
+                if ($is_agg) {
+                    $what[$field] = str_replace('?', $column, $aggregate[$matches[1]]);
+                } elseif ($matches[1]) {
+                    isset($what[$field]) or $what[$field] = "MIN($column)";
+                    $group = strtoupper($matches[1]).'('.$column.')';
+                    !is_array($groupby) or $groupby[] = $group;
+                    $sortby[] = $group;
                 } else {
-                    $alias = '';
                     $what[$field] = $column;
-                    !is_array($groupby) or $groupby[$field] = $column;
+                    !is_array($groupby) or $groupby[] = $column;
+                    $sortby[] = $column;
                 }
 
                 if (isset($date_fields[$field])) {
@@ -1162,10 +1150,8 @@ function doArticles($atts, $iscustom, $thing = null)
                     $item = parse_form($fname);
                 }
 
-                if ($item !== false) {
-                    $item = txp_sandbox(array(), $item, false);
-                } elseif (isset($thing)) {
-                    $item = txp_sandbox(array(), $thing);
+                if ($item === false && isset($thing)) {
+                    $item = parse($thing);
                 }
 
                 $item === false or $chunk .= $item;
