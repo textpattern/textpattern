@@ -699,6 +699,17 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
 define('REQUIRED_PHP_VERSION', '5.6.0');
 
 /**
+ * Required OPENSSL version.
+ *
+ * Used when fetching resources via file_get_contents() or cURL.
+ *
+ * @since   4.8.5
+ * @package System
+ */
+
+define('REQUIRED_OPENSSL_VERSION', '268439567');
+
+/**
  * File integrity status good.
  *
  * @since   4.6.0

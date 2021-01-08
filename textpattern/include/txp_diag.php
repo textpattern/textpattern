@@ -655,6 +655,8 @@ function doDiagnostics()
 
         gTxt('diag_php_sapi_mode').cs.PHP_SAPI.n,
 
+        gTxt('diag_ssl_version').cs.OPENSSL_VERSION_TEXT.n,
+
         gTxt('diag_rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
 
         gTxt('diag_server_os_version').cs.php_uname('s').' '.php_uname('r').n,
@@ -787,24 +789,6 @@ function checkUpdates()
 {
     $endpoint = 'https://textpattern.com/version.json';
     $release = $prerelease = null;
-
-    if (function_exists('curl_version')) {
-        $ch = curl_init($endpoint);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $contents = curl_exec($ch);
-    } else {
-        $contents = file_get_contents($endpoint);
-    }
-
-    $response = @json_decode($contents, true);
-
-    if (isset($response['textpattern-version'])) {
-        $release = $response['textpattern-version']['release'];
-        $prerelease = $response['textpattern-version']['prerelease'];
-    }
-
-    $version = get_pref('version');
-
     $lastCheck = array(
         'when'     => time(),
         'msg'      => '',
@@ -814,20 +798,41 @@ function checkUpdates()
         'response' => true,
     );
 
-    if (!empty($release)) {
-        if (version_compare($version, $release) < 0) {
-            $lastCheck['msg'] = 'textpattern_update_available';
-            $lastCheck['msgval'] = array('{version}' => $release);
+    if (OPENSSL_VERSION_NUMBER < REQUIRED_OPENSSL_VERSION) {
+        $lastCheck['msg'] = 'problem_connecting_update_server';
+        $lastCheck['response'] = false;
+    } else {
+        if (function_exists('curl_version')) {
+            $ch = curl_init($endpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $contents = curl_exec($ch);
+        } else {
+            $contents = file_get_contents($endpoint);
         }
 
-        if (version_compare($version, $prerelease) < 0) {
-            $lastCheck['msg2'] = 'textpattern_update_available_beta';
-            $lastCheck['msgval2'] = array('{version}' => $prerelease);
+        $response = @json_decode($contents, true);
+
+        if (isset($response['textpattern-version'])) {
+            $release = $response['textpattern-version']['release'];
+            $prerelease = $response['textpattern-version']['prerelease'];
         }
-    } else {
-        $lastCheck['msg'] = 'problem_connecting_update_server';
-        $lastCheck['msgval'] = array();
-        $lastCheck['response'] = false;
+
+        $version = get_pref('version');
+
+        if (!empty($release)) {
+            if (version_compare($version, $release) < 0) {
+                $lastCheck['msg'] = 'textpattern_update_available';
+                $lastCheck['msgval'] = array('{version}' => $release);
+            }
+
+            if (version_compare($version, $prerelease) < 0) {
+                $lastCheck['msg2'] = 'textpattern_update_available_beta';
+                $lastCheck['msgval2'] = array('{version}' => $prerelease);
+            }
+        } else {
+            $lastCheck['msg'] = 'problem_connecting_update_server';
+            $lastCheck['response'] = false;
+        }
     }
 
     set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
