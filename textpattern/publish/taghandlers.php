@@ -197,7 +197,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, label, trim, replace, default');
+    ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
 
 // -------------------------------------------------------------
 
@@ -5468,12 +5468,14 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
     extract(lAtts(array(
         'label'    => '',
         'labeltag' => '',
         'wraptag'  => '',
         'class'    => '',
         'html_id'  => '',
+        'break'    => null,
         'trim'     => null,
         'replace'  => null,
         'default'  => null,
@@ -5481,21 +5483,44 @@ function txp_wraptag($atts, $thing = '')
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    if ($replace === true) {
-        $sep = isset($trim) && $trim !== true ? $trim : ',';
-        $thing = isset($trim) ? do_list_unique($thing, $sep, $trim === true ? TEXTPATTERN_STRIP_EMPTY : TEXTPATTERN_STRIP_EMPTY_STRING) : array_unique(explode($sep, $thing));
-        $thing = implode($sep, $thing);
+    if (isset($break) || $replace === true) {
+        $is_reg = strlen($trim) > 2 && preg_match($regex, $trim);
+        $sep = isset($trim) && $trim !== true && !$is_reg ? $trim : ',';
+        $thing = $is_reg ?
+            preg_split($trim, $thing, -1, PREG_SPLIT_NO_EMPTY) :
+            ($trim === true ?
+                array_filter(do_list($thing, $sep)) :
+                array_filter(isset($trim) ?
+                    explode($sep, $thing) : 
+                    do_list($thing, $sep), function($v) {return $v !== '';}
+                )
+            );
+
+        if ($replace === true) {
+            $thing = array_unique($thing);
+        } elseif ($replace) {
+            $thing = array_filter($thing, strlen($replace) > 2 && preg_match($regex, $replace) ?
+                function ($v) use ($replace) {return preg_match($replace, $v);} :
+                function ($v) use ($replace) {return $v == $replace;}
+            );
+        }
+
+        isset($break) or $thing = implode($sep, $thing);
     } elseif (isset($trim)) {
         if ($trim === true) {
             $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
-        } elseif (strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $trim)) {
+        } elseif (strlen($trim) > 2 && preg_match($regex, $trim)) {
             $thing = preg_replace($trim, $replace, $thing);
         } else {
             $thing = isset($replace) ? str_replace($trim, $replace, $thing) : trim($thing, $trim);
         }
     }
 
-    $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+    if (is_array($thing)) {
+        $thing = doWrap($thing, $wraptag, $break, $class, null, null, null, $html_id);
+    } else {
+        $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+    }
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }
