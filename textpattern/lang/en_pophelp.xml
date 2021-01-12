@@ -861,6 +861,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>This is the maximum number of current articles to be syndicated at a time, in RSS and Atom formats.</p>
 <p>A low value, such as <code>5</code> through <code>15</code> is recommended.</p>
         ]]></item>
+        <item id="secondpass" title="Number of extra parser sweeps"><![CDATA[
+<h2>Number of extra parser sweeps</h2>
+<p>The Textpattern tag parser usually replaces all your tags with content from the database in one sweep of the page template. In some cases, this may be insufficient, for example:</p>
+<ul>
+    <li>When using low load order plugins as tag attributes</li>
+    <li>Code replacements inside <code>&lt;txp:php&gt;</code> tags</li>
+    <li>Skipping page elements earlier in the page so they may receive content that is derived from a tag that is processed later<</li>
+</ul>
+<p>Textpattern has traditionally run one extra sweep (called ‘secondpass’) for legacy reasons, hence the default value of this preference being <code>1</code>. More sweeps, however, increase the chances of unintended tags slipping through and being processed. Recent improvements in the tag parser have reduced the need for this second pass. So, unless you are using the second sweep for a dedicated reason, please reduce this value to <code>0</code> to make your site more secure.</p>
+<p>If you subsequently find unprocessed tags being rendered on your website (and there are no other tag errors shown in Testing/Debugging modes due to mismatched tag pairs) then please contact us with your page template/code/plugin example. We are trying to eradicate the need for extra parser passes, and this information will help us achieve that.</p>
+        ]]></item>
         <item id="send_lastmod" title="Send &quot;Last-Modified&quot; header?"><![CDATA[
 <h2>Send "Last-Modified" header?</h2>
 <p>When set, Textpattern will read a visitor’s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor’s browser to use its cached version of the page.</p>
