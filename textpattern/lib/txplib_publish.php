@@ -1025,7 +1025,7 @@ function postpone_process($pass = null)
     global $pretext, $txp_atts, $txp_current_tag;
 
     if ($pretext['secondpass'] < (int)get_pref('secondpass', 1)) {
-        unset($txp_atts);
+        $txp_atts = null;
 
         return $txp_current_tag;
     } else {
