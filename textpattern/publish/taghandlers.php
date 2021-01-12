@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process, breakby, breakclass, wrapform, evaluate')
+    ->registerAttr(true, 'not, breakby, breakclass, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
 

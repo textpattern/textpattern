@@ -505,14 +505,13 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $pretext, $production_status, $txp_current_tag, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $maxpass, $globals;
+    static $registry = null, $globals;
 
     if (empty($tag)) {
         return;
     }
 
     if ($registry === null) {
-        $maxpass = (int)get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
@@ -539,19 +538,7 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    if (!isset($txp_atts['txp-process'])) {
-        $out = $registry->process($tag, $split, $thing);
-    } else {
-        $process = empty($txp_atts['txp-process']) || is_numeric($txp_atts['txp-process']) ? (int) $txp_atts['txp-process'] : 1;
-
-        if ($process <= $pretext['secondpass'] + 1) {
-            unset($txp_atts['txp-process']);
-            $out = $process > 0 ? $registry->process($tag, $split, $thing) : '';
-        } else {
-            $txp_atts['txp-process'] = $process;
-            $out = '';
-        }
-    }
+    $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -563,26 +550,22 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
-        $out = $pretext['secondpass'] < $maxpass ? $txp_current_tag : '';
-    } else {
-        if ($thing === null && !empty($txp_atts['not'])) {
-            $out = $out ? '' : '1';
-        }
+    if ($thing === null && !empty($txp_atts['not'])) {
+        $out = $out ? '' : '1';
+    }
 
-        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
+    unset($txp_atts['not'], $txp_atts['evaluate']);
 
-        if ($txp_atts && $txp_tag !== false) {
-            $pretext['_txp_atts'] = true;
+    if ($txp_atts && $txp_tag !== false) {
+        $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => &$val) {
-                if (isset($val) && isset($globals[$attr])) {
-                    $out = $registry->processAttr($attr, $split, $out);
-                }
+        foreach ($txp_atts as $attr => &$val) {
+            if (isset($val) && isset($globals[$attr])) {
+                $out = $registry->processAttr($attr, $split, $out);
             }
-
-            $pretext['_txp_atts'] = false;
         }
+
+        $pretext['_txp_atts'] = false;
     }
 
     $txp_atts = $old_atts;
@@ -1039,7 +1022,13 @@ function filterAtts($atts = null, $iscustom = null)
 
 function postpone_process($pass = null)
 {
-    global $pretext, $txp_atts;
+    global $pretext, $txp_atts, $txp_current_tag;
 
-    $txp_atts['txp-process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
+    if ($pretext['secondpass'] < (int)get_pref('secondpass', 1)) {
+        unset($txp_atts);
+
+        return $txp_current_tag;
+    } else {
+        trigger_error(gTxt('secondpass').' < '.($pretext['secondpass']+1), E_USER_WARNING);
+    }
 }
