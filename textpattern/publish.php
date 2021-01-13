@@ -1083,8 +1083,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $score = '';
     }
 
-    $rs = safe_rows_start(($fields ? $fields : $columns).$score
-/*        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score*/,
+    $rs = safe_rows_start((
+        $fields ? $fields : $columns).$score,
         $tables,
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
