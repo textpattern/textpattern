@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -92,12 +92,12 @@ function populateArticleData($rs)
 {
     global $production_status, $thisarticle, $trace;
 
-    if ($production_status === 'debug') {
-        $trace->log("[Article: '{$rs['ID']}']");
-    }
-
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = isset($rs[$column]) ? $rs[$column] : null;
+    }
+
+    if ($production_status === 'debug') {
+        $trace->log("[Article: '{$thisarticle['thisid']}']");
     }
 }
 
@@ -119,9 +119,9 @@ function populateArticleData($rs)
 
 function article_format_info($rs)
 {
-    $rs['uPosted']  = (($unix_ts = @strtotime($rs['Posted']))  !== false) ? $unix_ts : null;
-    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) !== false) ? $unix_ts : null;
-    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) !== false) ? $unix_ts : null;
+    $rs['uPosted']  = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
+    $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
+    $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
     populateArticleData($rs);
 }
 
@@ -135,37 +135,39 @@ function article_format_info($rs)
 
 function article_column_map()
 {
-    $custom = getCustomFields();
-    $custom_map = array();
+    static $column_map = array();
+
+    if (empty($column_map)) {
+        $column_map = array(
+            'thisid'          => 'ID',
+            'posted'          => 'uPosted', // Calculated value!
+            'expires'         => 'uExpires', // Calculated value!
+            'modified'        => 'uLastMod', // Calculated value!
+            'annotate'        => 'Annotate',
+            'comments_invite' => 'AnnotateInvite',
+            'authorid'        => 'AuthorID',
+            'title'           => 'Title',
+            'url_title'       => 'url_title',
+            'description'     => 'description',
+            'category1'       => 'Category1',
+            'category2'       => 'Category2',
+            'section'         => 'Section',
+            'keywords'        => 'Keywords',
+            'article_image'   => 'Image',
+            'comments_count'  => 'comments_count',
+            'body'            => 'Body_html',
+            'excerpt'         => 'Excerpt_html',
+            'override_form'   => 'override_form',
+            'status'          => 'Status',
+        );
 
     if ($custom) {
         foreach ($custom as $i => $name) {
-            $custom_map[$name] = $name;//'custom_'.$i;
+            isset($column_map[$name]) or $custom_map[$name] = $name;//'custom_'.$i;
         }
     }
 
-    return array(
-        'thisid'          => 'ID',
-        'posted'          => 'uPosted', // Calculated value!
-        'expires'         => 'uExpires', // Calculated value!
-        'modified'        => 'uLastMod', // Calculated value!
-        'annotate'        => 'Annotate',
-        'comments_invite' => 'AnnotateInvite',
-        'authorid'        => 'AuthorID',
-        'title'           => 'Title',
-        'url_title'       => 'url_title',
-        'description'     => 'description',
-        'category1'       => 'Category1',
-        'category2'       => 'Category2',
-        'section'         => 'Section',
-        'keywords'        => 'Keywords',
-        'article_image'   => 'Image',
-        'comments_count'  => 'comments_count',
-        'body'            => 'Body_html',
-        'excerpt'         => 'Excerpt_html',
-        'override_form'   => 'override_form',
-        'status'          => 'Status',
-    ) + $custom_map;
+    return $column_map;
 }
 
 /**
@@ -338,28 +340,20 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = true, $not = true)
+function parse($thing, $condition = true, $in_tag = true)
 {
-    global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
+    global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag, $txp_current_tag;
     static $short_tags = null;
 
-    if ($not) {
-        if (!empty($txp_atts['evaluate'])) {
-            $condition = true;
-        } elseif (!empty($txp_atts['not'])) {
-            $condition = empty($condition);
-            unset($txp_atts['not']);
-        }
+    if ($in_tag) {
+        empty($txp_atts['not']) or $condition = empty($condition);
     }
 
     $txp_tag = !empty($condition);
+    $log = $production_status === 'debug';
 
-    if ($production_status === 'debug') {
+    if ($log) {
         $trace->log('['.($condition ? 'true' : 'false').']');
-    }
-
-    if (!$condition && empty($pretext['_txp_atts'])) {
-        $txp_atts = null;
     }
 
     if (!isset($short_tags)) {
@@ -385,73 +379,87 @@ function parse($thing, $condition = true, $not = true)
 
     list($first, $last) = $txp_else[$hash];
 
-    if ($not && !empty($txp_atts['evaluate'])) {
-        $test = $txp_atts['evaluate'] === true ? false : array_fill_keys(do_list_unique($txp_atts['evaluate']), array());
-        $out = array($tag[0]);
-        $tags = array();
-        $nr = $first - 2;
-        $isempty = $nr > 0 || $test !== false;
+    if ($condition) {
+        $last = $first - 2;
+        $first   = 1;
+    } elseif ($first <= $last) {
+        $first  += 2;
+    } else {
+        return '';
+    }
 
-        for ($n = 1; $n <= $nr; $n++) {
+    $old_tag = $txp_current_tag;
+    $isempty = false;
+    $dotest = !empty($txp_atts['evaluate']) && $in_tag;
+    $evaluate = !$dotest ? null :
+        ($txp_atts['evaluate'] === true ? true : do_list($txp_atts['evaluate']));
+
+    if (isset($txp_else[$hash]['test']) && (!$evaluate || $evaluate === true)) {
+        $evaluate = $txp_else[$hash]['test'];
+    }
+
+    if ($evaluate) {
+        $test = is_array($evaluate) ? array_fill_keys($evaluate, array()) : false;
+        $isempty = $last >= $first || $test !== false;
+    }
+
+    if (empty($test)) {
+        for ($out = $tag[$first - 1]; $first <= $last; $first++) {
+            $txp_tag = $tag[$first];
+            $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
+            $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3], $log);
+            $out .= $nextag.$tag[++$first];
+            $isempty = $isempty && trim($nextag) === '';
+        }
+    } else {
+        if ($pre = !isset($test[0])) {
+            $test[0] = array();
+        }
+
+        $out = array($first-1 => $tag[$first-1]);
+
+        for ($n = $first; $n <= $last; $n++) {
             $txp_tag = $tag[$n];
-            $out[] = null;
+            $out[$n] = null;
 
-            if (!$test) {
-                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                $isempty &= trim($nextag) === '';
-                $out[$n] = $nextag;
-            } elseif (isset($test[($n+1)/2])) {
+            if (isset($test[($n+1)/2])) {
                 $test[($n+1)/2][] = $n;
             } elseif (isset($test[$txp_tag[1]])) {
                 $test[$txp_tag[1]][] = $n;
             } else {
-                $tags[] = $n;
+                $test[0][] = $n;
             }
 
-            $out[] = $tag[++$n];
+            $out[$n] = $tag[++$n];
         }
 
-        if ($test) {
-            foreach ($test as $t) {
-                foreach ($t as $n) {
-                    $txp_tag = $tag[$n];
-                    $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
-                    $out[$n] = $nextag;
-                    $isempty &= trim($nextag) === '';
-                }
+        foreach ($test as $k => $t) {
+            if (!$k && $pre && $dotest && $isempty == empty($txp_atts['not'])) {
+                $out = false;
+                break;
             }
-        }
 
-        if ($isempty == empty($txp_atts['not'])) {
-            $out = false;
-            $condition = $txp_tag = false;
-        } else {
-            foreach ($tags as $n) {
+            foreach ($t as $n) {
                 $txp_tag = $tag[$n];
-                $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
+                $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
+                $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3], $log);
+                $out[$n] = $nextag;
+                $k and ($isempty = $isempty && trim($nextag) === '');
             }
+        }
 
+        if (is_array($out)) {
             $out = implode('', $out);
         }
     }
 
-    if (!isset($out) || $out === false) {
-        if ($condition) {
-            $last = $first - 2;
-            $first   = 1;
-        } elseif ($first <= $last) {
-            $first  += 2;
-        } else {
-            return isset($out) ? false : '';
-        }
-
-        for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-            $txp_tag = $tag[$first];
-            $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
-        }
+    if ($dotest && $isempty == empty($txp_atts['not'])) {
+        $out = false;
+        $condition = false;
     }
 
     $txp_tag = !empty($condition);
+    $txp_current_tag = $old_tag;
 
     return $out;
 }
@@ -499,29 +507,21 @@ function maybe_tag($tag)
  * @param  string      $tag   The tag name
  * @param  string      $atts  The attribute string
  * @param  string|null $thing The tag's content in case of container tags
+ * @param  bool        $log   Trace log
  * @return string Parsed tag result
  * @package TagParser
  */
 
-function processTags($tag, $atts = '', $thing = null)
+function processTags($tag, $atts = '', $thing = null, $log = false)
 {
-    global $pretext, $production_status, $txp_current_tag, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $maxpass, $globals;
+    global $pretext, $txp_atts, $txp_tag, $trace;
+    static $registry = null, $globals;
 
     if (empty($tag)) {
         return;
     }
 
-    $old_tag = $txp_current_tag;
-    $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
-
-    if ($production_status !== 'live') {
-        $tag_stop = $txp_tag[4];
-        $trace->start($txp_tag[0]);
-    }
-
     if ($registry === null) {
-        $maxpass = get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
@@ -533,6 +533,11 @@ function processTags($tag, $atts = '', $thing = null)
 
     $old_atts = $txp_atts;
 
+    if ($log) {
+        $tag_stop = $txp_tag[4];
+        $trace->start($txp_tag[0]);
+    }
+
     if ($atts) {
         $split = splat($atts);
     } else {
@@ -540,19 +545,7 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    if (!isset($txp_atts['txp-process'])) {
-        $out = $registry->process($tag, $split, $thing);
-    } else {
-        $process = empty($txp_atts['txp-process']) || is_numeric($txp_atts['txp-process']) ? (int) $txp_atts['txp-process'] : 1;
-
-        if ($process <= $pretext['secondpass'] + 1) {
-            unset($txp_atts['txp-process']);
-            $out = $process > 0 ? $registry->process($tag, $split, $thing) : '';
-        } else {
-            $txp_atts['txp-process'] = $process;
-            $out = '';
-        }
-    }
+    $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -564,32 +557,27 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
-        $out = $pretext['secondpass'] < $maxpass ? $txp_current_tag : '';
-    } else {
-        if ($thing === null && !empty($txp_atts['not'])) {
-            $out = $out ? '' : '1';
-        }
+    if ($thing === null && !empty($txp_atts['not'])) {
+        $out = $out ? '' : '1';
+    }
 
-        unset($txp_atts['txp-process'], $txp_atts['not'], $txp_atts['evaluate']);
+    unset($txp_atts['not'], $txp_atts['evaluate']);
 
-        if ($txp_atts) {
-            $pretext['_txp_atts'] = true;
+    if ($txp_atts && $txp_tag !== false) {
+        $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => &$val) {
-                if (isset($val) && isset($globals[$attr])) {
-                    $out = $registry->processAttr($attr, $split, $out);
-                }
+        foreach ($txp_atts as $attr => &$val) {
+            if (isset($val) && isset($globals[$attr])) {
+                $out = $registry->processAttr($attr, $split, $out);
             }
-
-            $pretext['_txp_atts'] = false;
         }
+
+        $pretext['_txp_atts'] = false;
     }
 
     $txp_atts = $old_atts;
-    $txp_current_tag = $old_tag;
 
-    if ($production_status !== 'live') {
+    if ($log) {
         $trace->stop($tag_stop);
     }
 
@@ -853,6 +841,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Getting attributes.
     $theAtts = lAtts(array(
+        'fields'        => null,
         'sort'          => '',
         'keywords'      => '',
         'time'          => null,
@@ -944,7 +933,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
-    $section !== true or $section = parse('<txp:section />', true, false);
+    $section !== true or $section = processTags('section');
     $getid = $getid || $section && !$not;
     $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
         ($getid || $searchall? '' : filterFrontPage('Section', 'page'));
@@ -952,7 +941,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Author
     $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
-    $author !== true or $author = parse('<txp:author escape="" title="" />', true, false);
+    $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
@@ -1005,7 +994,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = parse('<txp:keywords />', true, false);
+    $keywords !== true or $keywords = processTags('keywords');
 
     if ($keywords) {
         $keyparts = array();
@@ -1036,17 +1025,24 @@ function filterAtts($atts = null, $iscustom = null)
 }
 
 /**
- * Set a flag to postpone tag processing.
+ * Postpone tag processing.
  *
  * @param   int $pass
- * @return  null
+ * @return  null|string
  * @since   4.7.0
  * @package TagParser
  */
 
 function postpone_process($pass = null)
 {
-    global $pretext, $txp_atts;
+    global $pretext, $txp_atts, $txp_current_tag;
 
-    $txp_atts['txp-process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
+    $txp_atts = null;
+    $pass = max($pretext['secondpass'] + 2, (int)$pass) - 1;
+
+    if ($pass <= (int)get_pref('secondpass', 1)) {
+        return $txp_current_tag;
+    } else {
+        trigger_error(gTxt('secondpass').' < '.$pass, E_USER_WARNING);
+    }
 }

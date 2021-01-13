@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,7 +38,7 @@ if (!defined('txpinterface')) {
 if ($event == 'discuss') {
     require_privs('discuss');
 
-    if (!get_pref('use_comments', 1)) {
+    if (!get_pref('use_comments', 0)) {
         require_privs();
     }
 
@@ -310,7 +310,11 @@ function discuss_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(

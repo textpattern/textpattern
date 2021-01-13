@@ -273,6 +273,13 @@
         "html": "yesnoradio",
         "position": "60"
     },
+    "override_form_types": {
+        "val": "article",
+        "type": "0",
+        "event": "publish",
+        "html": "overrideTypes",
+        "position": "70"
+    },
     "attach_titles_to_permalinks": {
         "val": "1",
         "type": "0",
@@ -484,7 +491,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.2",
+        "val": "4.8.4",
         "type": "2",
         "event": "publish",
         "html": "text_input",
@@ -589,7 +596,7 @@
         "position": "230"
     },
     "use_comments": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "site",
         "html": "yesnoradio",
@@ -624,5 +631,12 @@
         "event": "advanced_options",
         "html": "longtext_input",
         "position": "200"
+    },
+    "secondpass": {
+        "val": "1",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "text_input",
+        "position": "300"
     }
 }

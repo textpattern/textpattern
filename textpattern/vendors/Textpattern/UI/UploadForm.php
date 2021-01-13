@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -262,7 +262,7 @@ class UploadForm extends Form
         $progressBar = new \Textpattern\UI\Tag('progress');
         $progressBar
             ->setContent('')
-            ->setAtts(array('class' => 'txp-upload-progress ui-helper-hidden'));
+            ->setAtts(array('class' => 'txp-upload-progress hidden'));
 
         // Build the form content.
         $input = new \Textpattern\UI\Input($name, 'file');

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -328,23 +328,17 @@ class Plugin
                 if ($keyContent[$key]) {
                     $plugin[$key] = $keyContent[$key];
                 } else {
-                    if (is_readable($dirname.DS.$fn)) {
-                        if ($help = file_get_contents($dirname.DS.$fn)) {
-                            $plugin[$key] = $help;
-                        }
+                    if ($help = txp_get_contents($dirname.DS.$fn)) {
+                        $plugin[$key] = $help;
                     }
                 }
             } elseif ($key === 'manifest') {
-                if (is_readable($dirname.DS.$fn)) {
-                    if ($info = file_get_contents($dirname.DS.$fn)) {
-                        $plugin += json_decode($info, true);
-                    }
+                if ($info = txp_get_contents($dirname.DS.$fn)) {
+                    $plugin += json_decode($info, true);
                 }
             } else {
-                if (is_readable($dirname.DS.$fn)) {
-                    if ($content = file_get_contents($dirname.DS.$fn)) {
-                        $plugin[$key] = $content;
-                    }
+                if ($content = txp_get_contents($dirname.DS.$fn)) {
+                    $plugin[$key] = $content;
                 }
             }
         }

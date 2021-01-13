@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -312,6 +312,8 @@ function setup_connect()
 {
     global $cfg;
 
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
     if (strpos($cfg['database']['host'], ':') === false) {
         $dhost = $cfg['database']['host'];
         $dport = ini_get("mysqli.default_port");
@@ -324,11 +326,16 @@ function setup_connect()
 
     $mylink = mysqli_init();
 
-    if (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
-        $cfg['database']['client_flags'] = 0;
-    } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
-        $cfg['database']['client_flags'] = 'MYSQLI_CLIENT_SSL';
-    } else {
+    try {
+        if (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
+            $cfg['database']['client_flags'] = 0;
+        } elseif (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
+            $cfg['database']['client_flags'] = 'MYSQLI_CLIENT_SSL';
+        } else {
+            msg(gTxt('db_cant_connect'), MSG_ERROR, true);
+        }
+    } catch (mysqli_sql_exception $e) {
+        error_log($e->getMessage());
         msg(gTxt('db_cant_connect'), MSG_ERROR, true);
     }
 
@@ -341,14 +348,28 @@ function setup_connect()
         );
     }
 
-    if (!$mydb = mysqli_select_db($mylink, $cfg['database']['db_name'])) {
+    try {
+        if (!$mydb = mysqli_select_db($mylink, $cfg['database']['db_name'])) {
+            msg(gTxt('db_doesnt_exist',
+                array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
+                MSG_ERROR, true
+            );
+        }
+    } catch (mysqli_sql_exception $e) {
+        error_log($e->getMessage());
         msg(gTxt('db_doesnt_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
-            MSG_ERROR, true
-        );
+                array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
+                MSG_ERROR, true
+            );
     }
 
-    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
+    try {
+        $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
+    } catch (mysqli_sql_exception $e) {
+        // It's good if the tables don't exist!
+        $tables_exist = false;
+    }
+
     if ($tables_exist) {
         msg(gTxt('tables_exist',
             array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
@@ -363,19 +384,20 @@ function setup_connect()
     if (mysqli_get_server_version($mylink) < 50503) {
         $cfg['database']['charset'] = "utf8";
     } else {
-        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+        if (false !== strpos(mysqli_get_client_info(), 'mysqlnd')) {
             // mysqlnd 5.0.9+ required
-            if (mysqli_get_client_version($mylink) < 50009) {
+            if (mysqli_get_client_version() < 50009) {
                 $cfg['database']['charset'] = "utf8";
             }
         } else {
             // libmysqlclient 5.5.3+ required
-            if (mysqli_get_client_version($mylink) < 50503) {
+            if (mysqli_get_client_version() < 50503) {
                 $cfg['database']['charset'] = "utf8";
             }
         }
     }
-    @mysqli_close($mylink);
+
+    mysqli_close($mylink);
     echo msg(gTxt('using_db', array(
         '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' <bdi dir="ltr">('.$cfg['database']['charset'].')</bdi>');
 

@@ -74,9 +74,7 @@
     <li>kann Sektionen verwalten</li>
     <li>kann Seiten, Formulare und Stile verwalten</li>
 </ul>        ]]></item>
-        <item id="create_author" title="Autor erstellen"><![CDATA[
-<h2>Neuen Autor hinzufügen</h2>
-<p>Passwort, Begrüßungsnachricht und Anweisungen zur Anmeldung werden per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
+        <item id="create_author" title="Autor erstellen"><![CDATA[]]></item>
     </group>
 
     <group id="article" title="Schreibtafel">
@@ -89,13 +87,13 @@
 <p>Stichwörter sind nützlich, um die Beziehungen zwischen Artikeln zu verfeinern, die über die von Kategorien bereitgestellten hinausgehen.</p>
 <p>Keywords müssen einzelne Wörter sein, die durch Kommata getrennt sind.</p>]]></item>
         <item id="override_form" title="Alternativen Baustein verwenden"><![CDATA[]]></item>
-        <item id="publish_date" title=""><![CDATA[]]></item>
+        <item id="publish_date" title="Veröffentlichungsdatum"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Füge einen passenden Titel für den Artikel hinzu.</p>
 <p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>        ]]></item>
-        <item id="url_title" title=""><![CDATA[
+        <item id="url_title" title="Nur URL-Titel"><![CDATA[
 <h2>Nur URL-Titel</h2>
 <p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel generiert.</p>
 <p>Dies ist besonders nützlich, wenn der Titel des Artikels nicht-ASCII-Zeichen verwendet.</p>
@@ -114,8 +112,8 @@
     </group>
 
     <group id="diag" title="Diagnosetafel">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Saubere URL-Daten fehlgeschlagen"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Der Test für saubere URLs ist fehlgeschlagen"><![CDATA[]]></item>
         <item id="diag_clear_private" title="Private Informationen ausblenden"><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title="Verzeichnis ist nicht beschreibbar"><![CDATA[]]></item>
@@ -258,6 +256,7 @@
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Plugins verwenden?"><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">

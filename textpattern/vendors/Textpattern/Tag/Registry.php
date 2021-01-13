@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -61,9 +61,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
         if (is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
                 $tag = $callback;
-            }
-
-            if (is_array($tag)) {
+            } elseif (is_array($tag)) {
                 list($tag, $atts) = $tag + array(null, null);
             }
 

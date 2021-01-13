@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -32,6 +32,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">';
         $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
+        $out[] = '<meta name="color-scheme" content="dark light">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/main.js')->setBool('defer');
 
@@ -132,8 +133,6 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
                 'target' => '_blank',
             )).
             ' (v'.txp_version.')', array('class' => 'mothership'));
-
-        $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
 
         return join(n, $out);
     }

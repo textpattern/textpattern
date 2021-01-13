@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -88,7 +88,7 @@ $rel_siteurl = preg_replace($pattern, '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), DS);
 
 if (empty($_SESSION['cfg'])) {
-    $cfg = @json_decode(file_get_contents(dirname(__FILE__).DS.'.default.json'), true);
+    $cfg = json_decode(txp_get_contents(dirname(__FILE__).DS.'.default.json'), true);
 } else {
     $cfg = $_SESSION['cfg'];
 }
@@ -270,6 +270,22 @@ function step_getDbInfo()
         n.'<div class="txp-setup">';
 
     check_config_exists();
+
+    $changes = check_file_integrity() or array();
+
+    unset(
+        $changes['/../rpc/index.php'],
+        $changes['/../rpc/TXP_RPCServer.php']
+    );
+
+    // Report files that are missing or don't match their checksums.
+    if ($mangled_files = array_keys($changes, INTEGRITY_MISSING)) {
+        echo '<pre>'.gTxt('missing_files', array('{list}' => n.t.implode(', '.n.t, $mangled_files))).'</pre>';
+    }
+
+    if ($modified_files = array_keys($changes, INTEGRITY_MODIFIED)) {
+        echo '<pre>'.gTxt('modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files))).'</pre>';
+    }
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).

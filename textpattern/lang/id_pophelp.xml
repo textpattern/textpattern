@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="id">
+    <group id="admin" title="Panel pengguna">
+        <item id="about_privileges" title="Tentang peran pengguna"><![CDATA[
+<h2>Tentang peran pengguna</h2>
+<h3>Penerbit</h3>
+<ul>
+    <li>bisa mengelola artikel, komentar, dan tautan</li>
+    <li>bisa menggunakan PHP di artikel jika pengaturan admin ‘Izinkan PHP dalam artikel?’ di atur ke ’Yes’</li>
+    <li>bisa mengelola gambar dan berkas</li>
+    <li>bisa mengelola seksi dan kategori</li>
+    <li>bisa mengelola halaman, form dan style</li>
+    <li>bisa melihat informasi diagnosa</li>
+    <li>bisa mengelola pengaturan situs</li>
+    <li>bisa mengelola pengguna</li>
+    <li>bisa mengelola log pengunjung</li>
+    <li>bisa mengelola plugins</li>
+    <li>bisa impor data</li>
+</ul>
+<h3>Redaktur Pelaksana</h3>
+<ul>
+    <li>bisa mengelola artikel, komentar, dan tautan</li>
+    <li>bisa menggunakan PHP di artikel jika pengaturan admin ‘Izinkan PHP dalam artikel?’ di atur ke ’Yes’</li>
+    <li>bisa mengelola gambar dan berkas</li>
+    <li>bisa mengelola seksi dan kategori</li>
+    <li>bisa mengelola halaman, form dan style</li>
+    <li>bisa melihat informasi diagnosa</li>
+    <li>bisa mengelola pengaturan situs</li>
+    <li>bisa melihat pengguna</li>
+    <li>bisa mengelola log pengunjung</li>
+    <li>bisa mengelola plugins</li>
+    <li>bisa impor data</li>
+</ul>
+<h3>Pemeriksa Naskah</h3>
+<ul>
+    <li>bisa mengelola artikel dengan satu batasan:
+        <ul>
+            <li>tidak bisa menghapus milik pengguna lain</li>
+        </ul>
+    </li>
+    <li>bisa mengelola komentar dan tautan</li>
+    <li>bisa mengelola gambar dan berkas</li>
+    <li>bisa mengelola kategori</li>
+    <li>bisa mengelola halaman dan form</li>
+    <li>bisa melihat pengguna</li>
+    <li>bisa mengelola log pengunjung</li>
+</ul>
+<h3>Staff Penulis</h3>
+<ul>
+    <li>bisa mengelola artikel sendiri, lihat artikel pengguna lain</li>
+    <li>bisa mengelola gambar dan berkas</li>
+</ul>
+<h3>Penulis Lepas</h3>
+<ul>
+    <li>dapat mengelola artikel sendiri dalam arti terbatas:
+        <ul>
+            <li>hanya dapat mengubah artikel sampai diterbitkan</li>
+            <li>dapat <em>hanya</em> menerapkan status Draft, Hidden atau Pending</li>
+        </ul>
+    </li>
+    <li>bisa lihat artikel pengguna lain</li>
+</ul>
+<h3>Perancang</h3>
+<ul>
+    <li>dapat mengelola artikel sendiri dalam arti terbatas:
+        <ul>
+            <li>hanya dapat mengubah artikel sampai diterbitkan</li>
+            <li>dapat <em>hanya</em> menerapkan status Draft, Hidden atau Pending</li>
+        </ul>
+    </li>
+    <li>bisa lihat artikel pengguna lain</li>
+    <li>bisa mengelola gambar</li>
+    <li>bisa mengelola seksi</li>
+    <li>bisa mengelola halaman, form dan style</li>
+</ul>]]></item>
+        <item id="create_author" title="Buat penulis"><![CDATA[
+<h2>Tambah penulis baru</h2>
+<p>Sebuah kata sandi, pesan selamat datang dan instruksi login akan dikirimkan ke email penulis baru.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Panel tulis">
+        <item id="article_image" title="Gambar artikel"><![CDATA[
+<h2>Gambar artikel</h2>
+<p>Untuk mengaitkan satu gambar dengan artikel ini, tempatkan salah satu dari yang berikut di sini:</p>
+<ol>
+    <li>ID gambar (misal <code>12</code>)</li>
+    <li>tautan URL relatif ke gambar <code>/images/my_pic.jpg</code>)</li>
+    <li>tautan lengkap URL (misal <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Gambar dapat ditampilkan dengan menempatkan sebuah <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(buka tautan luar di jendela baru)</span></a> dalam sebuah form artikel. Ini akan menampilkan HTML lengkap tag <code>&lt;img&gt;</code> ke gambar yang dipilih.</p>
+        ]]></item>
+        <item id="body" title="Badan"><![CDATA[
+<h2>Badan</h2>
+<p>Isi utama sebuah artikel terdapat di dalam badan artikel.</p>
+<p>Saat membuat atau menyiapkan artikel untuk publikasi di Textpattern, penulis dapat beralih di antara tiga tampilan artikel: teks biasa, markup HTML (kode yang digunakan browser web untuk merender artikel), dan pratinjau yang dibangun.</p>
+        ]]></item>
+        <item id="description" title="Deskripsi"><![CDATA[<h2>Deskripsi</h2>
+<p>Deskripsi artikel adalah komponen opsional yang dapat membantu mesin pencari (search engine) dan perayap situs (website crawler) mengidentifikasi dan mengurutkan konten dengan lebih baik.</p>
+<p>Deskripsi artikel dibatasi hingga 255 karakter. Perhatikan bahwa beberapa mesin pencari menempatkan batas panjang karakter pada halaman <code>meta description</code> untuk kepraktisan tampilan di halaman hasil mesin pencari (SERPs) dan ini mungkin kurang dari batas 255 karakter di Textpattern.</ 1>
+<p>Perhatikan bahwa deskripsi artikel berbeda dengan kutipan artikel, meskipun keduanya menerima konten yang serupa. Deskripsi artikel sebaiknya ditujukan terutama untuk digunakan dengan mesin pencari dan crawler, sedangkan kutipan artikel lebih cocok untuk ringkasan artikel yang dapat dibaca manusia jika diinginkan.</p>]]></item>
+        <item id="excerpt" title="Kutipan"><![CDATA[
+<h2>Kutipan</h2>
+<p>Kutipan artikel bersifat opsional. Kutipan dapat digunakan sebagai ringkasan singkat dari artikel yang ditampilkan sebagai bagian dari daftar isi, digunakan sebagai pengganti badan artikel lengkap di halaman web RSS/Atom, atau sejumlah penggunaan lainnya.</p>
+        ]]></item>
+        <item id="expire_date" title="Tanggal kadaluarsa"><![CDATA[
+<h2>Tanggal Kadaluarsa</h2>
+<p>Waktu artikel diberi label kedaluwarsa. Waktu bersifat opsional dan dapat diatur bebas baik itu dibuat masa lalu atau masa depan.</p>
+<p>Kotak formulir disesuaikan dengan informasi berikut:</p>
+<ul>
+    <li>Tahun / Bulan / Hari</li>
+    <li>Jam (format 24-jam) : Menit : Detik</li>
+</ul>
+<p>Ketika waktunya tiba, atau dalam kasus di mana waktu di masa lalu diberikan, artikel itu kedaluwarsa.</p>
+<p>Jika opsi untuk menampilkan artikel kedaluwarsa diaktifkan, artikel tersebut tetap terlihat. Jika opsi untuk menampilkan artikel kedaluwarsa dinonaktifkan, pengunjung halaman artikel akan disajikan kesalahan HTTP 410 sebagai pengganti konten artikel.</p>
+        ]]></item>
+        <item id="keywords" title="Kata kunci"><![CDATA[
+<h2>Kata kunci</h2>
+<p>Kata kunci berguna untuk menghubungkan antar artikel yang disediakan melalui kategori.</p>
+<p>Kata kunci harus kata individu yang dipisahkan dengan koma.</p>
+        ]]></item>
+        <item id="override_form" title="Pengganti Kutipan"><![CDATA[
+<h2>Pengganti Kutipan</h2>
+<p>Sebuah artikel secara opsional dapat menggunakan formulir yang berbeda dari yang ditetapkan secara default - misalnya untuk menampilkan kutipan artikel dengan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan di jendela baru)</span></a> bukan badan artikel dengan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan di jendela baru)</span></a> - ini dapat diatur di sini.</p>
+        ]]></item>
+        <item id="publish_date" title="Tanggal terbit"><![CDATA[
+<h2>Tanggal terbit</h2>
+<p>Ketika artikel atau file diterbitkan atau paling baru direvisi. Waktu dapat diatur saat item diterbitkan, atau diatur bebas baik di masa lalu atau masa depan.</p>
+<p>Kotak formulir disesuaikan dengan informasi berikut:</p>
+<ul>
+    <li>Tahun / Bulan / Hari</li>
+    <li>Jam (format 24-jam) : Menit : Detik</li>
+</ul>
+<p>Item dengan waktu lebih baru dari waktu sekarang (baca: masa depan) tidak akan tampil di halaman depan dan umpan RSS/Atom sampai waktunya tiba.</p>
+        ]]></item>
+        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="title" title="Judul"><![CDATA[]]></item>
+        <item id="url_title" title="Judul URL-saja"><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="Panel Kategori">
+        <item id="article_category" title="Artikel"><![CDATA[]]></item>
+        <item id="category_description" title="Deskripsi"><![CDATA[]]></item>
+        <item id="file_category" title="Berkas"><![CDATA[]]></item>
+        <item id="image_category" title="Gambar"><![CDATA[]]></item>
+        <item id="link_category" title="Tautan"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="Panel Diagnosa">
+        <item id="clean_url_data_failed" title="Uji data tautan (URL) gagal"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Pengujian tautan (URL) gagal"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Sembunyikan informasi pribadi"><![CDATA[]]></item>
+        <item id="dev_version_live" title="Code pengembangan di peladen langsung"><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Direktori tidak dapat ditulisi"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="Kegagalan DNS"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Unggah berkas dinonaktifkan"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Berkas .htaccess tidak ditemukan"><![CDATA[]]></item>
+        <item id="index_inaccessible" title="Indeks situs tidak dapat diakses"><![CDATA[]]></item>
+        <item id="missing_files" title="Berkas-berkas yang hilang"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite tidak ditemukan"><![CDATA[]]></item>
+        <item id="modified_files" title="Berkas yang diubah"><![CDATA[]]></item>
+        <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Direktori &quot;sementara&quot; tidak ditentukan"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Direktori seksi sudah tersedia"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Direktori situs tidak terbaca"><![CDATA[]]></item>
+        <item id="php_version_required" title="Keperluan versi minimum"><![CDATA[]]></item>
+        <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
+        <item id="site_url_mismatch" title="Ketidakcocokan URL situs"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP […] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Versi pembaruan Textpattern"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Versi pra-rilis Textpattern tersedia"><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="Jalur direktori &quot;Sementara&quot; dan Kes Plugin tidak boleh sama"><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title="Pembaruan peladen tidak dapat diakses"><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title="Fungsi mail() pada instalasi PHP tidak ditemukan"><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="Panel berkas">
+        <item id="file_reassign" title="Penetapan kembali berkas"><![CDATA[]]></item>
+        <item id="file_replace" title="Ganti berkas"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Tanggal terbit"><![CDATA[]]></item>
+        <item id="upload" title="Unggah berkas"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="Panel formulir">
+        <item id="forms_overview" title="Pengantar Formulir"><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="Panel gambar">
+        <item id="create_thumbnail" title="Buat keluku"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Ganti gambar"><![CDATA[]]></item>
+        <item id="upload_image" title="Unggah gambar"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Unggah keluku"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="Panel Bahasa">
+        <item id="get_textpack" title="Pasang paket-teks (Textpack)"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="Panel tautan">
+        <item id="link_description" title="Deskripsi"><![CDATA[]]></item>
+        <item id="link_sort" title="Urutkan nilai"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Tanggal terbit"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="Panel masuk">
+        <item id="remember_login" title="Tetap masuk dengan peramban ini"><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="Panel plugin">
+        <item id="install_plugin" title="Pasang plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Unggah plugin"><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="Panel preferensi">
+        <item id="admin_side_plugins" title="Gunakan plugin sisi-admin?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Opsi-opsi lanjutan"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Izinkan PHP dalam artikel"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Izinkan penggantian formulir?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Izinkan PHP dalam halaman"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Format tanggal arsip"><![CDATA[
+<h2>Format tanggal arsip</h2>
+<p>Bagaimana tanggal akan muncul di artikel di seksi situs Anda.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Gunakan kutipan artikel?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Lampirkan judul ke pranala (permalink)"><![CDATA[]]></item>
+        <item id="auto_dst" title="Secara otomatis menyesuaikan Waktu Musim Panas (DST)?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Komentar baru berarti situs diperbarui?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title="Terapkan atribut rel=&quot;nofollow&quot; pada komentar?"><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Sajikan komentar sebagai daftar bernomor?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Sertakan komentar di artikel secara otomatis?"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Format tanggal komentar"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Undangan komentar bawaan"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Komentar dinonaktifkan setelah"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Izinkan penggunaan gambar dalam komentar?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Mode komentar"><![CDATA[]]></item>
+        <item id="comments_moderate" title="Moderasi komentar"><![CDATA[]]></item>
+        <item id="comments_on_default" title="Komentar aktif sebagai bawaan?"><![CDATA[]]></item>
+        <item id="comments_require_email" title="Komentar memerlukan email pengguna?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Komentar memerlukan nama pengguna?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Kirim email komentar ke penulis?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Ijinkan markup Textile lebih banyak di komentar?"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Formulir ubahsuai jenis acuan"><![CDATA[]]></item>
+        <item id="custom_overview" title="Kolom ubahsuai"><![CDATA[]]></item>
+        <item id="dateformat" title="Format tanggal"><![CDATA[]]></item>
+        <item id="default_event" title="Panel bawaan"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Status bawaan publikasi"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Aktifkan pratinjau tema pengembangan?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Aktifkan dukungan tag singkat?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Aktifkan peladen XML-RPC?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="Catatan kadaluwarsa setelah berapa hari?"><![CDATA[]]></item>
+        <item id="file_base_path" title="Jalur unggah berkas"><![CDATA[
+<h2>Jalur/alamat (path) unggah berkas</h2>
+<p>Ini menyetel <strong>jalur absolut</strong> ke direktori tempat unggahan berkas akan disimpan secara permanen. PHP harus memiliki akses tulis ke direktori ini.</p>
+        ]]></item>
+        <item id="file_max_upload_size" title="Ukuran maksimal unggah berkas (dalam bita/byte)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Zona waktu"><![CDATA[
+<h2>Zona waktu</h2>
+<p>Untuk menampilkan tanggal dalam zona waktu lokal Anda, pilih zona waktu Anda.</p>
+        ]]></item>
+        <item id="img_dir" title="Direktori gambar"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Sertakan surel di umpan Atom?"><![CDATA[]]></item>
+        <item id="is_dst" title="&lt;abbr title=&quot;Daylight Saving Time/Waktu Musim Panas&quot;>DST&lt;/abbr> diaktifkan?"><![CDATA[]]></item>
+        <item id="logging" title="Pencatatan"><![CDATA[]]></item>
+        <item id="max_url_len" title="Panjang maksimal URL (dalam karakter)"><![CDATA[]]></item>
+        <item id="module_pophelp" title="Tampilkan taut bantuan sebaris sisi-admin"><![CDATA[]]></item>
+        <item id="never_display_email" title="Sembunyikan surel (di komentar)?"><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Gunakan ISO-8859-1 untuk surel (standarnya UTF-8)?"><![CDATA[]]></item>
+        <item id="permlink_format" title="Format URL pranala judul"><![CDATA[]]></item>
+        <item id="permlink_mode" title="Mode URL artikel"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Jalur direktori tembolok plugin"><![CDATA[]]></item>
+        <item id="production_status" title="Status Produksi"><![CDATA[]]></item>
+        <item id="public_theme_name" title="Tema sisi-depan"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Terbitkan artikel kadaluarsa?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Kirim rincian masuk dari surel ini"><![CDATA[]]></item>
+        <item id="rss_how_many" title="Berapa artikel yang masuk dalam umpan RSS?"><![CDATA[]]></item>
+        <item id="send_lastmod" title="Kirim tajuk &quot;Last-Modified&quot;?"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Tampilkan hitungan komentar di RSS?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Slogan situs"><![CDATA[]]></item>
+        <item id="sitename" title="Nama situs"><![CDATA[]]></item>
+        <item id="siteurl" title="URL situs"><![CDATA[]]></item>
+        <item id="skin_dir" title="Direktori tema"><![CDATA[]]></item>
+        <item id="smtp_from" title="Pengaturan alamat pengirim SMTP"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="Senarai-hitam spam (dipisahkan koma)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindikasikan kutipan artikel saja?"><![CDATA[]]></item>
+        <item id="tempdir" title="Jalur/path direktori temporer"><![CDATA[]]></item>
+        <item id="theme_name" title="Tema sisi-admin"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Fungsi-fungsi PHP yang aktif: txp:evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="Terima komentar?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Gunakan surel untuk membentuk id RSS (standarnya adalah URL situs)?"><![CDATA[]]></item>
+        <item id="use_plugins" title="Gunakan plugins?"><![CDATA[]]></item>
+        <item id="use_textile" title="Gunakan Textile?"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="Panel seksi">
+        <item id="section_category" title="Pengenalan"><![CDATA[]]></item>
+        <item id="section_default" title="Bawaan seksi penerbitan"><![CDATA[]]></item>
+        <item id="section_description" title="Deskripsi"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="Seksi artikel yang muncul di halaman depan?"><![CDATA[]]></item>
+        <item id="section_searchable" title="Sertakan seksi ini dalam pencarian situs?"><![CDATA[]]></item>
+        <item id="section_syndicate" title="Sindikasikan artikel dalam seksi ini?"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Gunakan gaya"><![CDATA[
+<h2>Penggunaan gaya</h2>
+<p>Jika Anda ingin mengganti lembar gaya bawaan untuk seksi tertentu, ini dapat disetel di sini.</p>
+<p>Ini hanya relevan dengan stylesheet yang disimpan dalam panel 'Styles' Textpattern - jika Anda menghosting CSS Anda secara eksternal dari Textpattern (yang sangat disarankan), opsi ini tidak berpengaruh.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
+<h2>Gunakan halaman</h2>
+<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh…</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Gunakan tema"><![CDATA[
+<h2>Gunakan tema</h2>
+<p>Jika Anda ingin mengganti tema yang digunakan untuk bagian tertentu, ini dapat diatur di sini dari daftar tema yang saat ini terpasang.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Panel setelan">
+        <item id="setup_user_login" title="Login pengguna"><![CDATA[
+<h2>Login pengguna</h2>
+<p>Nama login akun administrator ('Penerbit') yang akan Anda gunakan untuk mengelola situs Anda.</p>
+<p>Meskipun tidak ada batasan pada nama, sebaiknya hindari urutan karakter yang rumit dan nama pengguna yang mudah ditebak (misalnya <code>admin</code>, <code>administrator</code>, dll.)</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Sandi pengguna"><![CDATA[]]></item>
+        <item id="table_prefix" title="Awalan tabel (pada pangkalan-data)"><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="Panel tema">
+        <item id="skin_author" title="Pembuat tema"><![CDATA[
+<h2>Pembuat tema</h2>
+<p>Pembuat tema (bisa nama pribadi/perusahaan/organisasi/alias dll.) ini (opsi).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Situs web tema"><![CDATA[
+<h2>Situs web tema</h2>
+<p>Alamat URL tempat informasi lengkap dan/atau versi terbaru dari tema ini dapat ditemukan (opsi).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Hapus acuan tema dari diska juga"><![CDATA[
+<h2>Hapus acuan tema dari diska juga</h2>
+<p>Jika dicentang, semua berkas acuan dalam tema yang dipilih akan dihapus secara permanen dari diska. Namun, direktori terkait tema dan sub-direktorinya tidak akan dihapus jika ada file lain (seperti JavaScript, gambar, ...) di dalamnya.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Hapus acuan tidak terpakai dari pangkalan-data hasil impor-an"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="Hapus acuan tidak terpakai dari diska hasil ekspor-an"><![CDATA[
+<h2>Hapus acuan tidak terpakai dari diska hasil ekspor-an</h2>
+<p>Jika dicentang, setiap berkas acuan dalam tema yang dipilih yang tidak memiliki item terkait di pangkalan-data akan dihapus secara permanen dari tema di diska. Hasil setelah tindakan selesai adalah acuan di berkas sistem Anda akan mencerminkan dengan tepat apa yang ada di pangkalan-data.</p>
+        ]]></item>
+        <item id="skin_description" title="Deskripsi tema"><![CDATA[
+<h2>Deskripsi tema</h2>
+<p>Ringkasan singkat dari desain/tata letak tema ini dapat disediakan (opsi).</p>
+<p>Deskripsi tema dibatasi hingga 255 karakter.</p>
+        ]]></item>
+        <item id="skin_import" title="Tema impor"><![CDATA[]]></item>
+        <item id="skin_name" title="Nama tema"><![CDATA[
+<h2>Nama tema</h2>
+<p>Nama tema digunakan untuk nama direktori dan tujuan teknis lainnya (wajib diisi).</p>
+<p>Nama tidak boleh mengandung karakter khusus atau spasi.</p>
+        ]]></item>
+        <item id="skin_overview" title="Gambaran singkat tema"><![CDATA[
+<h2>Gambaran singkat tema</h2>
+<p>Tema Textpattern adalah kumpulan Pages, Forms, dan Stylesheets. Tema memungkinkan Anda untuk secara logis memisahkan aset situs Anda ke dalam grup untuk kemudahan identifikasi, atau berbagi dengan orang lain. Tindakan membuat atau mengimpor Tema, dan aset apa pun di dalamnya, <em>tidak</em> berdampak apa pun pada situs Anda yang sudah ada. Anda bebas mengedit atau memodifikasi aset apa pun yang tidak terkait dengan Seksi situs Anda, dan itu tidak akan memengaruhi situs itu sendiri.</p>
+<p>Untuk mengedit aset dalam sebuah tema, kunjungi panel Pages, Forms atau Styles dan gunakan pemilih dropdown untuk memilih tema yang ingin Anda kerjakan. Tema yang sedang Anda kerjakan akan diingat di seluruh area administrasi, memungkinkan Anda untuk beralih di antara jenis aset dengan cepat dan mudah. Ini disebut sebagai <em>mengerjakan tema</em> Anda.</p>
+<p>Silakan baca <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Dokumentasi Pengguna Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> untuk informasi lebih lanjut.</p>
+        ]]></item>
+        <item id="skin_title" title="Judul tema"><![CDATA[
+<h2>Judul tema</h2>
+<p>Judul deskriptif tema, digunakan untuk mengidentifikasi tema dalam panel Textpattern.</p>
+<p>Judul dapat berisi karakter khusus dan spasi.</p>
+        ]]></item>
+        <item id="skin_version" title="Versi tema"><![CDATA[
+<h2>Versi tema</h2>
+<p>Nomor versi dari versi yang diinstal dari tema ini (opsi).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

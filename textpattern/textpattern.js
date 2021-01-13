@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -49,7 +49,7 @@ function checkCookies()
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1]);
     } else {
-        document.cookie = 'txp_test_cookie=; Max-Age=0;';
+        document.cookie = 'txp_test_cookie=; Max-Age=0; SameSite=Lax';
     }
 }
 
@@ -426,7 +426,7 @@ function setCookie(name, value, days)
         expires = '; expires=' + date.toGMTString();
     }
 
-    document.cookie = name + '=' + value + expires + '; path=/';
+    document.cookie = name + '=' + value + expires + '; path=/; SameSite=Lax';
 }
 
 /**
@@ -872,9 +872,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadProgress', function (event, data) {
     $('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).removeClass('ui-helper-hidden');
+    $('progress.txp-upload-progress').val(0).show();
 }).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').addClass('ui-helper-hidden');
+    $('progress.txp-upload-progress').hide();
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -1019,7 +1019,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
+            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span class="spinner-sticker" /><span class="spinner ui-icon ui-icon-refresh" />')
         };
 
         $inputs.prop('disabled', false);// Safari workaround.
@@ -2002,6 +2002,7 @@ jQuery.fn.txpUploadPreview = function(template) {
     return this;
 };
 
+
 /**
  * Cookie status.
  *
@@ -2077,9 +2078,11 @@ textpattern.Route.add('article', function () {
 
     $('#txp-write-sort-group').on('change', '#section',
         function () {
-            textpattern.Relay.callback('article.section_changed', {
-                data: allForms[$(this).find(':selected').data('skin')]
-            });
+            if (typeof allForms !== 'undefined') {
+                textpattern.Relay.callback('article.section_changed', {
+                        data: allForms[$(this).find(':selected').data('skin')]
+                });
+            }
         }
     ).change();
 
@@ -2618,10 +2621,6 @@ $(document).ready(function () {
         .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
 
     // Confirmation dialogs.
-    $('#txp-logout-button').on('click', function (e) {
-        return verify(textpattern.gTxt('are_you_sure'));
-    });
-
     $(document).on('click.txpVerify', 'a[data-verify]', function (e) {
         return verify($(this).data('verify'));
     });

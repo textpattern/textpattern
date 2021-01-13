@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -156,7 +156,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     doAuth();
 
     // Add private preferences.
-    $prefs = array_merge(get_prefs($txp_user), $prefs);
+    $prefs += get_prefs($txp_user);
     plug_privs();
     extract($prefs);
 

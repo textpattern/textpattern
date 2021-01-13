@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -498,7 +498,7 @@ class BuilderTags
         $vals = array(
             'past'   => gTxt('time_past'),
             'future' => gTxt('time_future'),
-            'any'    => gTxt('time_any'),
+            'any'    => gTxt('any'),
         );
 
         return ' '.selectInput('time', $vals, $time, true, '', 'time');

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -265,7 +265,7 @@ class Disclosure extends Tag implements UICollectionInterface
             $pane_token = md5($this->pane_id.$event.form_token().get_pref('blog_uid'));
             $heading_class = 'txp-summary'.($state ? ' expanded' : '');
             $display_state = array(
-                'class' => $state ? 'toggle' : 'toggle ui-helper-hidden',
+                'class' => $state ? 'toggle' : 'toggle hidden',
                 'id'    => $this->lever_id,
                 'role'  => 'group',
             );

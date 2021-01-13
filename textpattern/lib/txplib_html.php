@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -518,7 +518,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
     }
 
     $out[] = n.tag(join($nav).n, 'nav', array(
-        'class'      => ($numPages > 1 ? 'prev-next' : 'prev-next ui-helper-hidden'),
+        'class'      => ($numPages > 1 ? 'prev-next' : 'prev-next hidden'),
         'aria-label' => gTxt('page_nav'),
     ));
 
@@ -547,7 +547,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($anchor_id && $pane) {
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'class' => $visible ? 'toggle' : 'toggle ui-helper-hidden',
+            'class' => $visible ? 'toggle' : 'toggle hidden',
             'id'    => $anchor_id,
             'role'  => 'group',
         );
@@ -1448,7 +1448,7 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 $wraptag_class,
                 $wraptag_val
             ).
-            tag(null, 'progress', array('class' => 'txp-upload-progress ui-helper-hidden')),
+            tag(null, 'progress', array('class' => 'txp-upload-progress hidden')),
             'form',
             array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
@@ -1754,7 +1754,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     }
 
     if ($break && !empty($breakby)) { // array_merge to reindex
-        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
+        $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
 
         switch ($count = count($breakby)) {
             case 0:
@@ -1800,7 +1800,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 $break = 'td';
             break;
             default:
-                $break = n;
+                $break = ',';
         }
     }
 

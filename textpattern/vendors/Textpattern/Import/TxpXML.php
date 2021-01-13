@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -97,7 +97,9 @@ class TxpXML
     {
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
-        $oldLoader = libxml_disable_entity_loader(true);
+        if (\PHP_VERSION_ID < 80000) {
+            $oldLoader = libxml_disable_entity_loader(true);
+        }
 
         if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
             $articles = array();
@@ -125,7 +127,9 @@ class TxpXML
             // error XML
         }
 
-        libxml_disable_entity_loader($oldLoader);
+        if (\PHP_VERSION_ID < 80000) {
+            libxml_disable_entity_loader($oldLoader);
+        }
     }
 
     /**

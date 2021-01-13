@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -812,15 +812,15 @@ function register_tab($area, $panel, $title)
 function pluggable_ui($event, $element, $default = '')
 {
     $argv = func_get_args();
-    $argv = array_slice($argv, 2);
+    $argv = array_merge(array(
+        $event,
+        $element,
+       (string) $default === '' ? 0 : array(0, 0)
+    ), array_slice($argv, 2));
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array(
-        'event' => $event,
-        'step'  => $element,
-        'pre'   => (string) $default === '' ? 0 : array(0, 0),
-    ) + $argv);
+    $ui = call_user_func_array('callback_event', $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -915,6 +915,31 @@ function permlinkmodes($name, $val, $blank = false)
 }
 
 /**
+ * Gets the name of the default publishing section.
+ *
+ * @return string The section
+ */
+
+function getDefaultSection()
+{
+    global $txp_sections;
+
+    $name = get_pref('default_section');
+
+    if (!isset($txp_sections[$name])) {
+        foreach ($txp_sections as $name => $section) {
+            if ($name != 'default') {
+                break;
+            }
+        }
+
+        set_pref('default_section', $name, 'section', PREF_HIDDEN);
+    }
+
+    return $name;
+}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
@@ -966,11 +991,8 @@ function event_multi_edit($table, $id_key)
 }
 
 /**
- * Verifies temporary directory.
+ * Verifies temporary directory existence and that it's writeable.
  *
- * Verifies that the temporary directory is writeable.
- *
- * @param   string $dir The directory to check
  * @return  bool|null NULL on error, TRUE on success
  * @package Debug
  */
@@ -997,7 +1019,7 @@ function find_temp_dir()
     } else {
         $guess = array(
             txpath.DS.'tmp',
-            '',
+            sys_get_temp_dir(),
             DS.'tmp',
             $path_to_site.DS.$img_dir,
         );
@@ -1807,7 +1829,9 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     static $files = null, $files_md5 = array(), $checksum_table = array();
 
     if ($files === null) {
-        if ($cs = @file(txpath.'/checksums.txt')) {
+        $checksums = txpath.'/checksums.txt';
+
+        if (is_readable($checksums) && ($cs = file($checksums))) {
             $files = array();
 
             foreach ($cs as $c) {
@@ -1909,7 +1933,7 @@ function assert_system_requirements()
 
 function get_prefs_theme()
 {
-    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    $out = json_decode(txp_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
     }

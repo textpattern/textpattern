@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -270,7 +270,7 @@ class Filter
             (
                 span(
                     href(gTxt('search_clear'), array('event' => $event)),
-                    array('class' => 'txp-search-clear'.($this->crit ? '' : ' ui-helper-hidden'))
+                    array('class' => 'txp-search-clear'.($this->crit ? '' : ' hidden'))
                 )
             ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).

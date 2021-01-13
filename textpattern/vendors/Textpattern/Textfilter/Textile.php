@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -46,7 +46,7 @@ class Textile extends Base implements TextfilterInterface
 
     public function __construct()
     {
-        parent::__construct(USE_TEXTILE, gTxt('use_textile'));
+        parent::__construct(USE_TEXTILE, 'Textile');
         $this->textile = new \Textpattern\Textile\Parser();
         $this->textileRestricted = new \Textpattern\Textile\RestrictedParser();
         $this->version = $this->textile->getVersion();

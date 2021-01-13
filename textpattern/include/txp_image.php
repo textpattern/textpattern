@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -269,7 +269,11 @@ function image_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(
@@ -807,7 +811,10 @@ function image_insert()
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
-        @unlink($file['tmp_name']);
+        
+        if (file_exists($file['tmp_name'])) {
+            unlink($file['tmp_name']);
+        }
 
         if (is_array($img_result)) {
             list($message, $id) = $img_result;

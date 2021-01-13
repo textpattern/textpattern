@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -62,7 +62,6 @@ if ($event == 'form') {
     bouncer($step, array(
         'form_edit'        => false,
         'form_create'      => false,
-        'form_delete'      => true,
         'form_multi_edit'  => true,
         'form_save'        => true,
         'form_skin_change' => true,
@@ -71,16 +70,9 @@ if ($event == 'form') {
 
     switch (strtolower($step)) {
         case '':
-            form_edit();
-            break;
         case 'form_edit':
-            form_edit();
-            break;
         case 'form_create':
-            form_create();
-            break;
-        case 'form_delete':
-            form_delete();
+            form_edit();
             break;
         case 'form_multi_edit':
             form_multi_edit();
@@ -88,7 +80,7 @@ if ($event == 'form') {
         case 'form_save':
             form_save();
             break;
-        case "form_skin_change":
+        case 'form_skin_change':
             $instance->selectEdit();
             form_edit();
             break;
@@ -110,7 +102,7 @@ if ($event == 'form') {
 
 function form_list($current)
 {
-    global $essential_forms, $form_types;
+    global $essential_forms, $form_types, $txp_sections;
 
     $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
@@ -118,10 +110,13 @@ function form_list($current)
     $rs = safe_rows_start(
         "name, type",
         'txp_form',
-        "$criteria ORDER BY FIELD(type, ".join(',', quote_list(array_keys($form_types))).") ASC, name ASC"
+        "$criteria ORDER BY FIELD(type, ".quote_list(array_keys($form_types), ',').") ASC, name ASC"
     );
 
     if ($rs) {
+        $sections = array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($current) {return $v === $current['skin'];}));
+        $sections = quote_list($sections, ',');
+        $forms_in_use = !$sections ? array() : safe_column('override_form', 'textpattern', "override_form != '' AND Section IN($sections) GROUP BY override_form");
         $prev_type = null;
 
         // Add a hidden field, in case only one skin is in use and multi-edit is the
@@ -146,6 +141,7 @@ function form_list($current)
             }
 
             $editlink = eLink('form', 'form_edit', 'name', $name, $name);
+            $in_use = isset($forms_in_use[$name]) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '';
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(
@@ -154,7 +150,7 @@ function form_list($current)
                 $modbox = '';
             }
 
-            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array('class' => $active ? 'active' : ''));
+            $group_out[] = tag(n.$modbox.$editlink.$in_use.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
         if ($prev_type !== null) {
@@ -173,7 +169,12 @@ function form_list($current)
                 'label' => gTxt('changetype'),
                 'html' => formTypes('', false, 'changetype'),
             ),
-            'delete'     => gTxt('delete'),
+            'replace'     => array(
+                'label' => gTxt('override'),
+                'html' => tag(gTxt('form'), 'label', array('for' => 'changeform')).
+                    form_pop($current['skin'], 'changeform'),
+            ),
+            'delete' => gTxt('delete')
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -198,19 +199,12 @@ function form_multi_edit()
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
-            foreach ($forms as $name) {
-                if (form_delete($name, $skin)) {
-                    $affected[] = $name;
-                }
-            }
-
+            $affected = form_delete($forms, $skin);
             callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
             update_lastmod('form_deleted', $affected);
 
             $message = gTxt('form_deleted', array('{list}' => join(', ', $affected)));
-        }
-
-        if ($method == 'changetype') {
+        } elseif ($method == 'changetype') {
             $new_type = ps('type');
 
             foreach ($forms as $name) {
@@ -218,8 +212,11 @@ function form_multi_edit()
                     $affected[] = $name;
                 }
             }
+        } elseif ($method == 'replace' && form_replace($forms, $skin, ps('override_form'))) {
+            callback_event('forms_replaced', '', 0, compact('forms', 'skin'));
+            update_lastmod('form_replaced', $forms);
 
-            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
+            $message = gTxt('form_updated', array('{list}' => join(', ', $forms)));
         }
     }
 
@@ -335,8 +332,8 @@ function form_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_form'), 'txp-new')
-        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_form').'"></span> <span class="screen-large">'.gTxt('create_form').'</span>', 'txp-new')
+        .href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'form_form',
         ));
@@ -344,24 +341,27 @@ function form_edit($message = '', $refresh_partials = false)
 
     $actions = graf(
         $actionsExtras,
-        array('class' => 'txp-actions txp-actions-inline')
+        array('class' => 'txp-actions')
     );
 
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
-        (!is_writable($instance->getDirPath()) ? '' :
-            span(
-                checkbox2('export', gps('export'), 0, 'export').
-                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
-            , array('class' => 'txp-save-export'))
-        ).
+        '<span class="txp-save-button">'.
         n.tag_void('input', array(
             'class'  => 'publish',
             'type'   => 'submit',
+            'form'   => 'form_form',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        )).
+        '</span>'.
+        (!is_writable($instance->getDirPath()) ? '' :
+            n.span(
+                checkbox2('export', gps('export'), 0, 'export', 'form_form').
+                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
+            , array('class' => 'txp-save-export'))
+        ), ' class="txp-save"'
     );
 
     $listActions = graf(
@@ -400,34 +400,36 @@ function form_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_forms'), $message);
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        );
+    echo n.'<div class="txp-layout">';
 
-    // Forms create/switcher column.
+    // Forms code column.
     echo n.tag(
-        $skinBlock.$listActions.n.
-        $partials['list']['html'].n,
+        hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
+        $skinBlock.
+        form(
+            $partials['name']['html'].
+            $partials['type']['html'].
+            $partials['template']['html'],
+            '', '', 'post', $class, '', 'form_form'),
         'div', array(
-            'class' => 'txp-layout-4col-alt',
-            'id'    => 'content_switcher',
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
             'role'  => 'region',
         )
     );
 
-    // Forms code column.
+    // Forms create/switcher column.
     echo n.tag(
-        form(
-            $actions.
-            $partials['name']['html'].
-            $partials['type']['html'].
-            $partials['template']['html'].
-            $buttons, '', '', 'post', $class, '', 'form_form'),
+        n.tag(
+            $buttons.
+            $actions,
+            'div', array('class' => 'txp-save-zone')
+        ).
+        $listActions.n.
+        $partials['list']['html'].n,
         'div', array(
-            'class' => 'txp-layout-4col-3span',
-            'id'    => 'main_content',
+            'class' => 'txp-layout-4col-alt',
+            'id'    => 'content_switcher',
             'role'  => 'region',
         )
     );
@@ -582,19 +584,59 @@ function form_save()
 
 function form_delete($name, $skin)
 {
-    global $prefs, $essential_forms;
+    global $prefs, $essential_forms, $txp_sections;
 
-    if (in_array($name, $essential_forms)) {
-        return false;
-    } elseif ($name === get_pref('last_form_saved')) {
-        unset($prefs['last_form_saved']);
-        remove_pref('last_form_saved', 'form');
+    $sections = quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;})), ',');
+    $last_form = get_pref('last_form_saved');
+    $skin = doSlash($skin);
+    $deleted = array();
+
+    foreach ((array)$name as $form) {
+        if ($form == '' || in_array($form, $essential_forms)) {
+            continue;
+        } elseif ($form === $last_form) {
+            unset($prefs['last_form_saved']);
+            remove_pref('last_form_saved', 'form');
+        }
+
+        $safe_form = doSlash($form);
+
+        if (safe_delete("txp_form", "name = '$safe_form' AND skin = '$skin'")) {
+            $deleted[] = $form;
+        }
     }
 
-    $name = doSlash($name);
-    $skin = doSlash($skin);
+    if ($sections && $deleted) {
+        $safe_form = quote_list($deleted, ',');
+        safe_update('textpattern', "override_form=''", "override_form IN($safe_form) AND Section IN($sections)");
+    }
 
-    return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
+    return is_array($name) ? $deleted : !empty($deleted);
+}
+
+/**
+ * Replaces a form template in articles.
+ *
+ * @param  string $name The form template
+ * @param  string $skin The form skin in use
+ * @param  string $newform The form skin in use
+ * @return bool FALSE on error
+ */
+
+function form_replace($name, $skin, $newform = '')
+{
+    global $txp_sections;
+
+    $sections = quote_list(array_keys(array_filter(array_column($txp_sections, 'skin', 'name'), function($v) use ($skin) {return $v === $skin;})), ',');
+
+    if (!$sections) {
+        return;
+    }
+
+    $forms = quote_list((array)$name, ',');
+    $newform = doSlash($newform);
+
+    return safe_update('textpattern', "override_form='$newform'", "override_form IN($forms) AND Section IN($sections)");
 }
 
 /**
@@ -652,6 +694,31 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
     global $form_types;
 
     return selectInput('type', $form_types, $type, $blank_first, '', $id, false, $disabled);
+}
+
+/**
+ * Renders 'override form' field.
+ *
+ * @param  string $id      HTML id to apply to the input control
+ * @param  string $skin The theme that is currently in use
+ * @return string HTML &lt;select&gt; input
+ */
+
+function form_pop($skin, $id)
+{
+    static $skinforms = null;
+
+    if (!isset($skinforms)) {
+        $form_types = get_pref('override_form_types', 'article');
+        $safe_skin = doSlash($skin);
+
+        $rs = safe_column('name', 'txp_form', "type IN ('".implode("','", do_list($form_types))."') AND name != 'default' AND skin='$safe_skin' ORDER BY name");
+        $skinforms = $rs ? array_combine($rs, $rs) : false;
+    }
+
+    if ($skinforms) {
+        return selectInput('override_form', $skinforms, '', true, '', $id);
+    }
 }
 
 /**
