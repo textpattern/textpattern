@@ -1033,7 +1033,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     }
 
-    $where = $theAtts['*'].$search;
+    $where = $theAtts['?'].$search;
     $tables = $theAtts['#'];
     $columns = $theAtts['*'];
     !empty($fields) or $fields = '*';
@@ -1083,8 +1083,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $score = '';
     }
 
-    $rs = safe_rows_start(//$columns$score
-        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
+    $rs = safe_rows_start(($fields ? $fields : $columns).$score
+/*        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score*/,
         $tables,
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
@@ -1197,15 +1197,15 @@ function doArticle($atts, $thing = null, $parse = true)
         }
     }
 
-    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
+    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
         $article = false;
 
-        if ($allowoverride && $override_form) {
+        if ($atts['allowoverride'] && $override_form) {
             $article = parse_form($override_form);
-        } elseif ($form) {
-            $article = parse_form($form);
+        } elseif ($atts['form']) {
+            $article = parse_form($atts['form']);
         }
 
         if (isset($thing) && $article === false) {

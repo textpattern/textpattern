@@ -161,9 +161,10 @@ function article_column_map()
             'status'          => 'Status',
         );
 
-    if ($custom) {
-        foreach ($custom as $i => $name) {
-            isset($column_map[$name]) or $custom_map[$name] = $name;//'custom_'.$i;
+        if ($custom = getCustomFields()) {
+            foreach ($custom as $i => $name) {
+                isset($column_map[$name]) or $custom_map[$name] = $name;//'custom_'.$i;
+            }
         }
     }
 
