@@ -8,8 +8,13 @@ Changes in 4.8.5 (upcoming)
 * Fixed: Diagnostics panel strings no longer have 'Help' appended, and
   the textarea is rendered fully in English to aid support requests.
 * Added: Latest text translations. Thank you to all our translators.
+* Added: More aggregators in <txp:article /> 'fields' attribute.
+* Added: Global 'break', 'replace' and 'trim' attributes.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
+* Changed: If allowed, <txp:php /> is processed in forms even in article body.
+* Changed: Staff writers are allowed to use <txp:php /> (they were able to do
+  it in forms anyway).
 * PrismJS 1.23.0.
 
 Changes in 4.8.4 (29 Nov 2020)
