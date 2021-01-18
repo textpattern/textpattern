@@ -5464,6 +5464,7 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
+    global $txp_atts;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
@@ -5478,22 +5479,14 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    if (isset($break) || $replace === true) {
-        $thing = $trim === true ?
-            explode(',', $thing) :
-            preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
-    } elseif (isset($trim)) {
-        if ($trim === true) {
-            $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
-        } elseif (strlen($trim) > 2 && preg_match($regex, $trim)) {
-            $thing = preg_replace($trim, $replace, $thing);
+    if (isset($break) || isset($trim) || isset($replace)) {
+        if (isset($break) || $replace === true) {
+            $thing = $trim === true ?
+                explode(',', $thing) :
+                preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
         } else {
-            $thing = isset($replace) ? str_replace($trim, $replace, $thing) : trim($thing, $trim);
+            $thing = array($thing);
         }
-    }
-
-    if (is_array($thing)) {
-        global $txp_atts;
 
         $txp_atts['trim'] = $trim;
         $txp_atts['replace'] = $replace;
