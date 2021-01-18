@@ -1743,16 +1743,20 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     if (isset($trim) || isset($replace)) {
         $replacement = $replace === true ? null : $replace;
 
-        if (!isset($trim) || $trim === true) {
-            !$trim or $list = array_map('trim', $list);
+        if ($trim === true) {
+            $list = array_map('trim', $list);
             !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
-        } else {
+        } elseif (isset($trim)) {
             $list = strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $trim) ?
                 preg_replace($trim, $replacement, $list) :
                 (isset($replacement) ?
                     str_replace($trim, $replacement, $list) :
-                    aray_map(function ($v) use ($trim) {return trim($v, $trim);})
+                    array_map(function ($v) use ($trim) {return trim($v, $trim);})
                 );
+        } elseif (isset($replacement)) {
+            $list = strlen($replacement) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $replacement) ?
+                array_filter($list, function ($v) use ($replacement) {return preg_match($replacement, $v);}) :
+                array_filter($list, function ($v) use ($replacement) {return strpos($v, $replacement) !== false;});
         }
 
         $list = array_filter($list, function ($v) {return $v !== '';});
