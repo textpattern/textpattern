@@ -5850,6 +5850,28 @@ function txp_match($atts, $what)
     return !empty($cond);
 }
 
+// -------------------------------------------------------------
+
+function txp_break($wraptag)
+{
+    switch (strtolower($wraptag)) {
+        case 'ul':
+        case 'ol':
+            return 'li';
+        case 'p':
+            return 'br';
+        case 'table':
+        case 'tbody':
+        case 'thead':
+        case 'tfoot':
+            return 'tr';
+        case 'tr':
+            return 'td';
+        default:
+            return ',';
+    }
+}
+
 /*** Polyfills ***/
 
 if (!function_exists('array_column')) {

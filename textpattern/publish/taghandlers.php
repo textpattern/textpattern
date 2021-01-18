@@ -5465,7 +5465,6 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     global $txp_atts;
-    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
         'label'    => '',
@@ -5484,18 +5483,23 @@ function txp_wraptag($atts, $thing = '')
             $thing = $trim === true ?
                 explode(',', $thing) :
                 preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
-        } else {
-            $thing = array($thing);
+        }
+
+        if ($break === true) {
+            $break = txp_break($wraptag);
         }
 
         $txp_atts['trim'] = $trim;
         $txp_atts['replace'] = $replace;
-        $thing = doWrap($thing, $wraptag, isset($break) ? $break : ',', $class, null, null, null, $html_id);
-    } else {
-        $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+        $thing = doWrap($thing, null, isset($break) ? $break : ',');
     }
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+    if (trim($thing) !== '') {
+        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+        $thing = $label ? doLabel($label, $labeltag).n.$thing : $thing;
+    }
+
+    return $thing;
 }
