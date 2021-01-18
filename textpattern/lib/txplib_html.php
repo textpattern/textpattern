@@ -1724,9 +1724,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
         $import = array('break', 'breakby', 'breakclass', 'wrapform', 'trim', 'replace');
 
-    $list = is_array($list) ? array_filter($list, function ($v) {
+    $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
-    }) : array();
+    });
 
     if (is_array($break)) {
         extract($break + array('break' => ''));
@@ -1749,7 +1749,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 preg_replace($trim, $replacement, $list) :
                 (isset($replacement) ?
                     str_replace($trim, $replacement, $list) :
-                    array_map(function ($v) use ($trim) {return trim($v, $trim);})
+                    array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
                 );
             $list = array_filter($list, function ($v) {return $v !== '';});
         } elseif (isset($replacement)) {
@@ -1804,26 +1804,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     }
 
     if ($break === true) {
-        switch (strtolower($wraptag)) {
-            case 'ul':
-            case 'ol':
-                $break = 'li';
-            break;
-            case 'p':
-                $break = 'br';
-            break;
-            case 'table':
-            case 'tbody':
-            case 'thead':
-            case 'tfoot':
-                $break = 'tr';
-            break;
-            case 'tr':
-                $break = 'td';
-            break;
-            default:
-                $break = ',';
-        }
+        $break = txp_break($wraptag);
     }
 
     if ((string)$break === '') {
