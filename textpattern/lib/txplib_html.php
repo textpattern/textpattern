@@ -1746,7 +1746,7 @@ function asyncHref($item, $parms, $atts = '')
 function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('breakby', 'breakclass', 'wrapform');
+    static $import = array('break', 'breakby', 'breakclass', 'wrapform', 'trim', 'replace');
 
     $list = is_array($list) ? array_filter($list, function ($v) {
         return $v !== false;
@@ -1761,8 +1761,29 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
     }
 
     foreach ($import as $global) {
-        if (!isset($$global) && isset($txp_atts[$global])) {
-            $$global = $txp_atts[$global];
+        isset($$global) or $$global = isset($txp_atts[$global]) ? $txp_atts[$global] : null;
+        unset($txp_atts[$global]);
+    }
+
+    if (isset($trim) || isset($replace)) {
+        $replacement = $replace === true ? null : $replace;
+
+        if (!isset($trim) || $trim === true) {
+            !$trim or $list = array_map('trim', $list);
+            !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
+        } else {
+            $list = strlen($trim) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $trim) ?
+                preg_replace($trim, $replacement, $list) :
+                (isset($replacement) ?
+                    str_replace($trim, $replacement, $list) :
+                    aray_map(function ($v) use ($trim) {return trim($v, $trim);})
+                );
+        }
+
+        $list = array_filter($list, function ($v) {return $v !== '';});
+
+        if ($replace === true) {
+            $list = array_unique($list);
         }
     }
 
@@ -1800,10 +1821,6 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         }
 
         empty($newlist) or $list = array_map('implode', $newlist);
-    }
-
-    if (isset($txp_atts['trim']) && $txp_atts['trim'] === true) {
-        $list = array_map('trim', $list);
     }
 
     if ($break === true) {

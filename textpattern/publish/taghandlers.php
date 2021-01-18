@@ -4377,18 +4377,14 @@ function php($atts = null, $thing = null)
 
     $error = null;
 
-    if (empty($is_article_body)) {
+    if (empty($is_article_body) || !empty($is_form)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
-    } else {
-        if (!empty($prefs['allow_article_php_scripting'])) {
-            if (empty($is_form) && !has_privs('article.php', $thisarticle['authorid'])) {
-                $error = 'php_code_forbidden_user';
-            }
-        } else {
-            $error = 'php_code_disabled_article';
-        }
+    } elseif (empty($prefs['allow_article_php_scripting'])) {
+        $error = 'php_code_disabled_article';
+    } elseif (!has_privs('article.php', $thisarticle['authorid'])) {
+        $error = 'php_code_forbidden_user';
     }
 
     if ($thing !== null) {
@@ -5469,6 +5465,7 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
+
     extract(lAtts(array(
         'label'    => '',
         'labeltag' => '',
@@ -5481,31 +5478,10 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    !isset($default) or trim($thing) !== '' or $thing = $default;
-
     if (isset($break) || $replace === true) {
-        $is_reg = strlen($trim) > 2 && preg_match($regex, $trim);
-        $sep = isset($trim) && $trim !== true && !$is_reg ? $trim : ',';
-        $thing = $is_reg ?
-            preg_split($trim, $thing, -1, PREG_SPLIT_NO_EMPTY) :
-            ($trim === true ?
-                array_filter(do_list($thing, $sep)) :
-                array_filter(isset($trim) ?
-                    explode($sep, $thing) : 
-                    do_list($thing, $sep), function($v) {return $v !== '';}
-                )
-            );
-
-        if ($replace === true) {
-            $thing = array_unique($thing);
-        } elseif ($replace) {
-            $thing = array_filter($thing, strlen($replace) > 2 && preg_match($regex, $replace) ?
-                function ($v) use ($replace) {return preg_match($replace, $v);} :
-                function ($v) use ($replace) {return $v == $replace;}
-            );
-        }
-
-        isset($break) or $thing = implode($sep, $thing);
+        $thing = $trim === true ?
+            explode(',', $thing) :
+            preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
     } elseif (isset($trim)) {
         if ($trim === true) {
             $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
@@ -5517,10 +5493,16 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (is_array($thing)) {
-        $thing = doWrap($thing, $wraptag, $break, $class, null, null, null, $html_id);
+        global $txp_atts;
+
+        $txp_atts['trim'] = $trim;
+        $txp_atts['replace'] = $replace;
+        $thing = doWrap($thing, $wraptag, isset($break) ? $break : ',', $class, null, null, null, $html_id);
     } else {
         $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
     }
+
+    !isset($default) or trim($thing) !== '' or $thing = $default;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }
