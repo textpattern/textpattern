@@ -5,11 +5,14 @@ Changes in 4.8.5 (upcoming)
 * Fixed: libxml_disable_entity_loader() deprecation warning on PHP 8.0.
 * Fixed: Undefined array key/offset warnings on PHP 8.0.
 * Fixed: System temp directory notice on PHP 8.0.
+* Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended, and
   the textarea is rendered fully in English to aid support requests.
+* Added: SSL version verification on Diagnostics panel during update checks.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: More aggregators in <txp:article /> 'fields' attribute.
 * Added: Global 'break', 'replace' and 'trim' attributes.
+* Changed: Expose secondpass Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
