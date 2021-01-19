@@ -1721,24 +1721,50 @@ function asyncHref($item, $parms, $atts = '')
 function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('breakby', 'breakclass', 'wrapform');
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
+        $import = array('break', 'breakby', 'breakclass', 'wrapform', 'trim', 'replace');
 
-    $list = is_array($list) ? array_filter($list, function ($v) {
+    $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
-    }) : null;
-
-    if (!$list) {
-        return '';
-    }
+    });
 
     if (is_array($break)) {
         extract($break + array('break' => ''));
     }
 
     foreach ($import as $global) {
-        if (!isset($$global) && isset($txp_atts[$global])) {
-            $$global = $txp_atts[$global];
+        isset($$global) or $$global = isset($txp_atts[$global]) ? $txp_atts[$global] : null;
+        unset($txp_atts[$global]);
+    }
+
+    if (isset($trim) || isset($replace)) {
+        $replacement = $replace === true ? null : $replace;
+
+        if ($trim === true) {
+            $list = array_map('trim', $list);
+            !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
+            $list = array_filter($list, function ($v) {return $v !== '';});
+        } elseif (isset($trim)) {
+            $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
+                preg_replace($trim, $replacement, $list) :
+                (isset($replacement) ?
+                    str_replace($trim, $replacement, $list) :
+                    array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
+                );
+            $list = array_filter($list, function ($v) {return $v !== '';});
+        } elseif (isset($replacement)) {
+            $list = strlen($replacement) > 2 && preg_match($regex, $replacement) ?
+                array_filter($list, function ($v) use ($replacement) {return preg_match($replacement, $v);}) :
+                array_filter($list, function ($v) use ($replacement) {return strpos($v, $replacement) !== false;});
         }
+
+        if ($replace === true) {
+            $list = array_unique($list);
+        }
+    }
+
+    if (!$list) {
+        return '';
     }
 
     if ($html_id) {
@@ -1777,34 +1803,13 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         empty($newlist) or $list = array_map('implode', $newlist);
     }
 
-    if (isset($txp_atts['trim']) && $txp_atts['trim'] === true) {
-        $list = array_map('trim', $list);
-    }
-
     if ($break === true) {
-        switch (strtolower($wraptag)) {
-            case 'ul':
-            case 'ol':
-                $break = 'li';
-            break;
-            case 'p':
-                $break = 'br';
-            break;
-            case 'table':
-            case 'tbody':
-            case 'thead':
-            case 'tfoot':
-                $break = 'tr';
-            break;
-            case 'tr':
-                $break = 'td';
-            break;
-            default:
-                $break = ',';
-        }
+        $break = txp_break($wraptag);
     }
 
-    if (strpos($break, '<+>') !== false) {
+    if ((string)$break === '') {
+        $content = join('', $list);
+    } elseif (strpos($break, '<+>') !== false) {
         $content = array_reduce($list, function ($carry, $item) use ($break) {
             return $carry.str_replace('<+>', $item, $break);
         });
@@ -1824,11 +1829,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $content = str_replace('<+>', $content, parse_form($wrapform));
     }
 
-    if (empty($wraptag)) {
-        return $content;
-    } else {
-        return tag($content, $wraptag, $atts);
-    }
+    return empty($wraptag) ? $content : tag($content, $wraptag, $atts);
 }
 
 /**

@@ -3113,7 +3113,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
                 $sha = sha1($inside[$level]);
                 txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
-    
+
                 $level--;
                 $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][4]), $inside[$level+1], $chunk);
                 $inside[$level] .= $inside[$level+1].$chunk;
@@ -5879,6 +5879,28 @@ function get_mediatypes(&$textarray)
     }
 
     return $mimeTypes;
+}
+
+// -------------------------------------------------------------
+
+function txp_break($wraptag)
+{
+    switch (strtolower($wraptag)) {
+        case 'ul':
+        case 'ol':
+            return 'li';
+        case 'p':
+            return 'br';
+        case 'table':
+        case 'tbody':
+        case 'thead':
+        case 'tfoot':
+            return 'tr';
+        case 'tr':
+            return 'td';
+        default:
+            return ',';
+    }
 }
 
 /*** Polyfills ***/
