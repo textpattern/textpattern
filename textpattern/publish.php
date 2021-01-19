@@ -1108,7 +1108,7 @@ function doArticles($atts, $iscustom, $thing = null)
         unset($txp_item['breakby']);
         $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
             false :
-            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? (int)php(null, null, 'form') : 2);
 
         while ($count++ <= $last) {
             global $thisarticle;
@@ -1119,11 +1119,10 @@ function doArticles($atts, $iscustom, $thing = null)
                 $thisarticle['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
 
-                $newbreak = !$groupby ? $count :
-                    ($groupby === 1 ?
-                        parse($breakby, true, false) :
-                        parse_form($breakby)
-                    );
+                $newbreak = !$groupby ? $count : ($groupby === 1 ?
+                    parse($breakby, true, false) :
+                    parse_form($breakby)
+                );
             } else {
                 $newbreak = null;
             }
