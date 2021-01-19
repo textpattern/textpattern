@@ -4371,13 +4371,15 @@ function if_article_section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function php($atts = null, $thing = null)
+function php($atts = null, $thing = null, $priv = null)
 {
     global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
 
     $error = null;
 
-    if (empty($is_article_body) || !empty($is_form)) {
+    if ($priv) {
+        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
+    } elseif (empty($is_article_body) || !empty($is_form)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
