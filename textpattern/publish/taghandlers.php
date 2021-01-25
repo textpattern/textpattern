@@ -30,7 +30,7 @@
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
-    ->register('image')
+    ->register('thumbnail', array('image', array('thumbnail' => false)))
     ->register('thumbnail')
     ->register('output_form')
     ->register('txp_yield', 'yield')
@@ -376,13 +376,6 @@ function component($atts)
     }
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function image($atts)
-{
-    return thumbnail(array('thumbnail' => isset($atts['thumbnail']) ? $atts['thumbnail'] : false) + $atts);
 }
 
 // -------------------------------------------------------------
