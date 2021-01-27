@@ -30,7 +30,7 @@
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
-    ->register('image')
+    ->register('thumbnail', array('image', array('thumbnail' => false)))
     ->register('thumbnail')
     ->register('output_form')
     ->register('txp_yield', 'yield')
@@ -376,13 +376,6 @@ function component($atts)
     }
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function image($atts)
-{
-    return thumbnail(array('thumbnail' => isset($atts['thumbnail']) ? $atts['thumbnail'] : false) + $atts);
 }
 
 // -------------------------------------------------------------
@@ -4371,24 +4364,22 @@ function if_article_section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function php($atts = null, $thing = null)
+function php($atts = null, $thing = null, $priv = null)
 {
     global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
 
     $error = null;
 
-    if (empty($is_article_body)) {
+    if ($priv) {
+        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
+    } elseif (empty($is_article_body) || !empty($is_form)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
-    } else {
-        if (!empty($prefs['allow_article_php_scripting'])) {
-            if (empty($is_form) && !has_privs('article.php', $thisarticle['authorid'])) {
-                $error = 'php_code_forbidden_user';
-            }
-        } else {
-            $error = 'php_code_disabled_article';
-        }
+    } elseif (empty($prefs['allow_article_php_scripting'])) {
+        $error = 'php_code_disabled_article';
+    } elseif (!has_privs('article.php', $thisarticle['authorid'])) {
+        $error = 'php_code_forbidden_user';
     }
 
     if ($thing !== null) {
@@ -5478,7 +5469,8 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
+    global $txp_atts;
+
     extract(lAtts(array(
         'label'    => '',
         'labeltag' => '',
@@ -5491,46 +5483,28 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
+    if (isset($break) || isset($trim) || isset($replace)) {
+        if (isset($break) || $replace === true) {
+            $thing = $trim === true ?
+                explode(',', $thing) :
+                preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
+        }
+
+        if ($break === true) {
+            $break = txp_break($wraptag);
+        }
+
+        $txp_atts['trim'] = $trim;
+        $txp_atts['replace'] = $replace;
+        $thing = doWrap($thing, null, isset($break) ? $break : ',');
+    }
+
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
-    if (isset($break) || $replace === true) {
-        $is_reg = strlen($trim) > 2 && preg_match($regex, $trim);
-        $sep = isset($trim) && $trim !== true && !$is_reg ? $trim : ',';
-        $thing = $is_reg ?
-            preg_split($trim, $thing, -1, PREG_SPLIT_NO_EMPTY) :
-            ($trim === true ?
-                array_filter(do_list($thing, $sep)) :
-                array_filter(isset($trim) ?
-                    explode($sep, $thing) :
-                    do_list($thing, $sep), function($v) {return $v !== '';}
-                )
-            );
-
-        if ($replace === true) {
-            $thing = array_unique($thing);
-        } elseif ($replace) {
-            $thing = array_filter($thing, strlen($replace) > 2 && preg_match($regex, $replace) ?
-                function ($v) use ($replace) {return preg_match($replace, $v);} :
-                function ($v) use ($replace) {return $v == $replace;}
-            );
-        }
-
-        isset($break) or $thing = implode($sep, $thing);
-    } elseif (isset($trim)) {
-        if ($trim === true) {
-            $thing = isset($replace) ? preg_replace('/\s+/', $replace, trim($thing)) : trim($thing);
-        } elseif (strlen($trim) > 2 && preg_match($regex, $trim)) {
-            $thing = preg_replace($trim, $replace, $thing);
-        } else {
-            $thing = isset($replace) ? str_replace($trim, $replace, $thing) : trim($thing, $trim);
-        }
+    if (trim($thing) !== '') {
+        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+        $thing = $label ? doLabel($label, $labeltag).n.$thing : $thing;
     }
 
-    if (is_array($thing)) {
-        $thing = doWrap($thing, $wraptag, $break, $class, null, null, null, $html_id);
-    } else {
-        $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
-    }
-
-    return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+    return $thing;
 }
