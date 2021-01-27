@@ -30,7 +30,7 @@
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
-    ->register('image')
+    ->register('thumbnail', array('image', array('thumbnail' => false)))
     ->register('thumbnail')
     ->register('output_form')
     ->register('txp_yield', 'yield')
@@ -376,13 +376,6 @@ function component($atts)
     }
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function image($atts)
-{
-    return thumbnail(array('thumbnail' => isset($atts['thumbnail']) ? $atts['thumbnail'] : false) + $atts);
 }
 
 // -------------------------------------------------------------
@@ -4371,13 +4364,15 @@ function if_article_section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function php($atts = null, $thing = null)
+function php($atts = null, $thing = null, $priv = null)
 {
     global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
 
     $error = null;
 
-    if (empty($is_article_body) || !empty($is_form)) {
+    if ($priv) {
+        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
+    } elseif (empty($is_article_body) || !empty($is_form)) {
         if (empty($prefs['allow_page_php_scripting'])) {
             $error = 'php_code_disabled_page';
         }
