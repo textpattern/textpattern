@@ -171,11 +171,11 @@
         <item id="link_description" title="Beschreibung"><![CDATA[]]></item>
         <item id="link_sort" title="Sortierkriterium"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title="Veröffentlichungsdatum"><![CDATA[]]></item>
     </group>
 
     <group id="login" title="Anmeldebreich">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+        <item id="remember_login" title="Mit diesem Browser eingeloggt bleiben"><![CDATA[]]></item>
     </group>
 
     <group id="plugin" title="Plugin-Bereich">
@@ -184,19 +184,19 @@
     </group>
 
     <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Adminplugins verwenden?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Erweiterte Einstellungen"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="PHP in Artikeln erlauben?"><![CDATA[]]></item>
         <item id="allow_form_override" title=""><![CDATA[]]></item>
         <item id="allow_page_php_scripting" title="PHP in Seiten erlauben?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Archivdatumsformat"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Artikel verwenden Exzerpte?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Titel zu Permalinks anfügen?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Sommer-/Winterzeit automatisch umstellen?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Neue Kommentare setzen Seitenstatus auf aktualisiert?"><![CDATA[]]></item>
         <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Kommentare als nummerierte Liste einfügen?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Kommentare automatisch an Artikel anhängen?"><![CDATA[]]></item>
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
@@ -207,22 +207,22 @@
         <item id="comments_mode" title="Kommentarmodus"><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="E-Mail des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Name des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
         <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Zusätzliches Textile-Markup zulassen?"><![CDATA[]]></item>
         <item id="custom_form_types" title=""><![CDATA[]]></item>
         <item id="custom_overview" title="Benutzerdefinierte Felder"><![CDATA[]]></item>
         <item id="dateformat" title="Datumsformat"><![CDATA[]]></item>
         <item id="default_event" title="Standard-Menü"><![CDATA[]]></item>
         <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Vorschau des in Entwicklung befindlichen Designs aktivieren?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Verwendung von Kurz-Tags aktivieren?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="XML-RPC-Server aktivieren?"><![CDATA[]]></item>
         <item id="expire_logs_after" title=""><![CDATA[]]></item>
         <item id="file_base_path" title="Datei-Upload-Pfad"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Maximale Upload-Dateigröße (in Bytes)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Zeitzone"><![CDATA[]]></item>
         <item id="img_dir" title="Bilderverzeichnis"><![CDATA[]]></item>
         <item id="include_email_atom" title=""><![CDATA[]]></item>

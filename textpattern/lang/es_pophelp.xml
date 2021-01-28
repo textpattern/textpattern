@@ -723,7 +723,7 @@
 <p>Esto permite desactivar todo el soporte para plugins de Textpattern. Es útil para depurar errores en el sitio y hacer una comprobación si uno o más plugins están involucrados.</p>
         ]]></item>
         <item id="use_textile" title="Formato de texto por defecto"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Sustituir tipos de formulario"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel de secciones">
@@ -767,7 +767,11 @@
         <item id="skin_delete_from_disk" title="Al exportar, borrar las plantillas no utilizadas del disco"><![CDATA[]]></item>
         <item id="skin_description" title="Descripción del tema"><![CDATA[]]></item>
         <item id="skin_import" title="Importar tema"><![CDATA[]]></item>
-        <item id="skin_name" title="Nombre del tema"><![CDATA[]]></item>
+        <item id="skin_name" title="Nombre del tema"><![CDATA[
+<h2>Nombre del tema</h2>
+<p>El nombre de un tema se utiliza para el nombre del directorio del tema y otros propósitos técnicos (requerido).</p>
+<p>El nombre no debe contener ningún carácter especial o espacios.</p>
+        ]]></item>
         <item id="skin_overview" title="Introducción a temas"><![CDATA[
 <h2>Introducción a temas</h2>
 <p>Un tema Textpattern es una colección de páginas, formularios y hojas de estilo. Los temas te permiten separar lógicamente los recursos de su sitio en grupos para facilitar la identificación o compartir con otros. El crear o importar un tema, y cualquier recurso que contenga, <em>no</em> tiene ningún impacto en tu sitio existente. Puedes editar o modificar cualquier recurso que no esté asociado con una sección de tu sitio, y no afectará al propio sitio.</p>

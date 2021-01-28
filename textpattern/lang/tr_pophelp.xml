@@ -76,9 +76,8 @@
 </ul>
         
         ]]></item>
-        <item id="create_author" title="Yazar oluştur"><![CDATA[
-<h2>Yeni yazar ekle</h2>
-<p>Şifre, hoşgeldin mesajı ve giriş talimatları yeni yazara email üzerinden gönderilecek</p>        ]]></item>
+        <item id="create_author" title="Yazar oluştur"><![CDATA[<h2>Yeni yazar ekle</h2>
+<p>Hoş geldin mesajı ve giriş talimatları yeni yazara mail olarak ulaştırılacaktır.</p>]]></item>
     </group>
 
     <group id="article" title="Panel yaz">
@@ -272,7 +271,8 @@
 <p>Bu Textpattern'in yorum yapma işlevinin etkin olmalı mı ya da olmamalı mı ayarını düzenler.</p>
         ]]></item>
         <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title="Eklentiler kullanılsın mı?"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Bölümler paneli">
