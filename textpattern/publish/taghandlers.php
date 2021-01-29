@@ -892,9 +892,9 @@ function linkdesctitle($atts)
 {
     global $thislink;
 
-    assert_link();
-
     extract(lAtts(array('rel' => '', 'escape' => true), $atts));
+
+    assert_link();
 
     $description = ($thislink['description'])
         ? ' title="'.txpspecialchars($thislink['description']).'"'
@@ -913,9 +913,9 @@ function link_name($atts)
 {
     global $thislink;
 
-    assert_link();
-
     extract(lAtts(array('escape' => null), $atts));
+
+    assert_link();
 
     return ($escape === null)
         ? txpspecialchars($thislink['linkname'])
@@ -939,14 +939,14 @@ function link_author($atts)
 {
     global $thislink, $s;
 
-    assert_link();
-
     extract(lAtts(array(
         'link'         => 0,
         'title'        => 1,
         'section'      => '',
         'this_section' => '',
     ), $atts));
+
+    assert_link();
 
     if ($thislink['author']) {
         $author_name = get_author_name($thislink['author']);
@@ -972,9 +972,9 @@ function link_description($atts)
 {
     global $thislink;
 
-    assert_link();
-
     extract(lAtts(array('escape' => null), $atts));
+
+    assert_link();
 
     if ($thislink['description']) {
         return ($escape === null) ?
@@ -989,13 +989,13 @@ function link_date($atts)
 {
     global $thislink, $dateformat;
 
-    assert_link();
-
     extract(lAtts(array(
         'format' => $dateformat,
         'gmt'    => '',
         'lang'   => '',
     ), $atts));
+
+    assert_link();
 
     return safe_strftime($format, $thislink['date'], $gmt, $lang);
 }
@@ -1006,9 +1006,9 @@ function link_category($atts)
 {
     global $thislink;
 
-    assert_link();
-
     extract(lAtts(array('title' => 0), $atts));
+
+    assert_link();
 
     if ($thislink['category']) {
         $category = ($title)
@@ -1749,41 +1749,41 @@ function link_to($atts, $thing = null, $target = 'next')
         'showalways' => 0
     );
 
-    if (!in_array($target, array('next', 'prev')) || !assert_article()) {
-        return '';
-    }
-
     $atts += array('context' => empty($txp_context) ? true : null);
     extract($atts + $lAtts, EXTR_SKIP);
 
-    if (is_array($thisarticle)) {
-        if (!isset($thisarticle[$target])) {
-            $thisarticle = $thisarticle + getNextPrev();
+    if (!in_array($target, array('next', 'prev'))) {
+        return '';
+    }
+
+    assert_article();
+
+    if (!isset($thisarticle[$target])) {
+        $thisarticle = $thisarticle + getNextPrev();
+    }
+
+    if ($thisarticle[$target] !== false) {
+        $oldarticle = $thisarticle;
+        $thisarticle = $thisarticle[$target];
+        $url = permlink(array_diff_key($atts, $lAtts));
+
+        if ($form || $thing !== null) {
+            populateArticleData($thisarticle);
+            $thisarticle['is_first'] = $thisarticle['is_last'] = true;
+            $thing = $form ? parse_form($form) : parse($thing);
+            $target_title = escape_title($thisarticle['Title']);
+
+            $url = $link ? href(
+                $thing,
+                $url,
+                ($target_title != $thing ? ' title="'.$target_title.'"' : '').
+                ' rel="'.$target.'"'
+            ) : $thing;
         }
 
-        if ($thisarticle[$target] !== false) {
-            $oldarticle = $thisarticle;
-            $thisarticle = $thisarticle[$target];
-            $url = permlink(array_diff_key($atts, $lAtts));
+        $thisarticle = $oldarticle;
 
-            if ($form || $thing !== null) {
-                populateArticleData($thisarticle);
-                $thisarticle['is_first'] = $thisarticle['is_last'] = true;
-                $thing = $form ? parse_form($form) : parse($thing);
-                $target_title = escape_title($thisarticle['Title']);
-
-                $url = $link ? href(
-                    $thing,
-                    $url,
-                    ($target_title != $thing ? ' title="'.$target_title.'"' : '').
-                    ' rel="'.$target.'"'
-                ) : $thing;
-            }
-
-            $thisarticle = $oldarticle;
-
-            return $url;
-        }
+        return $url;
     }
 
     return ($showalways) ? parse($thing) : '';
@@ -1795,7 +1795,7 @@ function next_title()
 {
     global $thisarticle, $is_article_list;
 
-    if (!assert_article()) {
+    if (!assert_article('article', false)) {
         return $is_article_list ? '' : null;
     }
 
@@ -1816,7 +1816,7 @@ function prev_title()
 {
     global $thisarticle, $is_article_list;
 
-    if (!assert_article()) {
+    if (!assert_article('article', false)) {
         return $is_article_list ? '' : null;
     }
 
@@ -2177,15 +2177,6 @@ function comments_invite($atts)
 {
     global $thisarticle, $is_article_list;
 
-    assert_article();
-
-    extract($thisarticle);
-    global $comments_mode;
-
-    if (!$comments_invite) {
-        $comments_invite = get_pref('comments_default_invite');
-    }
-
     extract(lAtts(array(
         'class'      => __FUNCTION__,
         'showcount'  => true,
@@ -2193,6 +2184,14 @@ function comments_invite($atts)
         'showalways' => false,  // FIXME in crockery. This is only for BC.
         'wraptag'    => '',
     ), $atts));
+
+    assert_article();
+
+    extract($thisarticle);
+
+    if (!$comments_invite) {
+        $comments_invite = get_pref('comments_default_invite');
+    }
 
     $invite_return = '';
 
@@ -2203,6 +2202,7 @@ function comments_invite($atts)
         if ($textonly) {
             $invite_return = $comments_invite.$ccount;
         } else {
+            global $comments_mode;
             if (!$comments_mode) {
                 $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" ').$ccount;
             } else {
@@ -2552,6 +2552,7 @@ function comments($atts, $thing = null)
     ), $atts));
 
     assert_article();
+
     extract($thisarticle);
 
     if (!$comments_count) {
@@ -3432,6 +3433,7 @@ function search_result_url($atts)
 
 function search_result_date($atts)
 {
+
     assert_article();
 
     return posted($atts);
@@ -4634,8 +4636,7 @@ function if_first($atts, $thing = null, $type = 'article')
 {
     global ${"this$type"};
 
-    $assert = 'assert_'.$type;
-    $assert();
+    assert_article($type, false);
 
     $x = !empty(${"this$type"}['is_first']);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4647,8 +4648,7 @@ function if_last($atts, $thing = null, $type = 'article')
 {
     global ${"this$type"};
 
-    $assert = 'assert_'.$type;
-    $assert();
+    assert_article($type, false);
 
     $x = !empty(${"this$type"}['is_last']);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4665,7 +4665,7 @@ function if_plugin($atts, $thing = null)
         'version' => '',
     ), $atts));
 
-    $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    $x = $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -4906,12 +4906,12 @@ function file_download_size($atts)
 {
     global $thisfile;
 
-    assert_file();
-
     extract(lAtts(array(
         'decimals' => 2,
         'format'   => '',
     ), $atts));
+
+    assert_file();
 
     if (is_numeric($decimals) && $decimals >= 0) {
         $decimals = intval($decimals);
@@ -4934,9 +4934,9 @@ function file_download_time($atts, $thing = null, $time = 'created')
 {
     global $thisfile;
 
-    assert_file();
-
     extract(lAtts(array('format' => ''), $atts));
+
+    assert_file();
 
     if (!empty($thisfile[$time])) {
         return fileDownloadFormatTime(array(
@@ -4963,9 +4963,9 @@ function file_download_name($atts)
 {
     global $thisfile;
 
-    assert_file();
-
     extract(lAtts(array('title' => 0), $atts));
+
+    assert_file();
 
     return ($title) ? $thisfile['title'] : $thisfile['filename'];
 }
@@ -4976,9 +4976,9 @@ function file_download_category($atts)
 {
     global $thisfile;
 
-    assert_file();
-
     extract(lAtts(array('title' => 0), $atts));
+
+    assert_file();
 
     if ($thisfile['category']) {
         $category = ($title)
@@ -4995,14 +4995,14 @@ function file_download_author($atts)
 {
     global $thisfile, $s;
 
-    assert_file();
-
     extract(lAtts(array(
         'link'         => 0,
         'title'        => 1,
         'section'      => '',
         'this_section' => '',
     ), $atts));
+
+    assert_file();
 
     if ($thisfile['author']) {
         $author_name = get_author_name($thisfile['author']);
@@ -5039,9 +5039,9 @@ function file_download_description($atts)
 {
     global $thisfile;
 
-    assert_file();
-
     extract(lAtts(array('escape' => null), $atts));
+
+    assert_file();
 
     if ($thisfile['description']) {
         return ($escape === null)
