@@ -5200,7 +5200,7 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
  * Assert context error.
  */
 
-function assert_article($type = 'article', $throw = true)
+function assert_context($type = 'article', $throw = true)
 {
     global ${'this'.$type};
 
@@ -5216,12 +5216,21 @@ function assert_article($type = 'article', $throw = true)
 }
 
 /**
+ * Assert article context error.
+ */
+
+function assert_article($throw = true)
+{
+    return assert_context('article', $throw);
+}
+
+/**
  * Assert comment context error.
  */
 
 function assert_comment($throw = true)
 {
-    return assert_article('comment', $throw);
+    return assert_context('comment', $throw);
 }
 
 /**
@@ -5230,7 +5239,7 @@ function assert_comment($throw = true)
 
 function assert_file($throw = true)
 {
-    return assert_article('file', $throw);
+    return assert_context('file', $throw);
 }
 
 /**
@@ -5239,7 +5248,7 @@ function assert_file($throw = true)
 
 function assert_image($throw = true)
 {
-    return assert_article('image', $throw);
+    return assert_context('image', $throw);
 }
 
 /**
@@ -5248,7 +5257,7 @@ function assert_image($throw = true)
 
 function assert_link($throw = true)
 {
-    return assert_article('link', $throw);
+    return assert_context('link', $throw);
 }
 
 /**
@@ -5257,7 +5266,7 @@ function assert_link($throw = true)
 
 function assert_section($throw = true)
 {
-    return assert_article('section', $throw);
+    return assert_context('section', $throw);
 }
 
 /**
@@ -5266,7 +5275,7 @@ function assert_section($throw = true)
 
 function assert_category($throw = true)
 {
-    return assert_article('category', $throw);
+    return assert_context('category', $throw);
 }
 
 /**

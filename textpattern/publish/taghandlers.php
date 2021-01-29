@@ -1795,7 +1795,7 @@ function next_title()
 {
     global $thisarticle, $is_article_list;
 
-    if (!assert_article('article', false)) {
+    if (empty($thisarticle)) {
         return $is_article_list ? '' : null;
     }
 
@@ -1816,7 +1816,7 @@ function prev_title()
 {
     global $thisarticle, $is_article_list;
 
-    if (!assert_article('article', false)) {
+    if (empty($thisarticle)) {
         return $is_article_list ? '' : null;
     }
 
@@ -2097,9 +2097,9 @@ function if_article_id($atts, $thing = null)
 {
     global $thisarticle, $pretext;
 
-    assert_article();
-
     extract(lAtts(array('id' => $pretext['id']), $atts));
+
+    assert_article();
 
     $x = $id && in_list($thisarticle['thisid'], $id);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -2111,17 +2111,17 @@ function posted($atts, $thing = null, $time = 'posted')
 {
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
 
-    assert_article();
-
-    if (empty($thisarticle[$time])) {
-        return '';
-    }
-
     extract(lAtts(array(
         'format'  => '',
         'gmt'     => '',
         'lang'    => '',
     ), $atts));
+
+    assert_article();
+
+    if (empty($thisarticle[$time])) {
+        return '';
+    }
 
     if ($format) {
         $out = safe_strftime($format, $thisarticle[$time], $gmt, $lang);
@@ -2644,11 +2644,12 @@ function comment_permlink($atts, $thing)
 {
     global $thisarticle, $thiscomment;
 
+    extract(lAtts(array('anchor' => empty($thiscomment['has_anchor_tag'])), $atts));
+
     assert_article();
     assert_comment();
 
     extract($thiscomment);
-    extract(lAtts(array('anchor' => empty($thiscomment['has_anchor_tag'])), $atts));
 
     $dlink = permlinkurl($thisarticle).'#c'.$discussid;
 
@@ -2677,13 +2678,13 @@ function comment_name($atts)
     global $thiscomment, $prefs;
     static $encoder = null;
 
+    extract(lAtts(array('link' => 1), $atts));
+
     assert_comment();
     isset($encoder) or $encoder = Txp::get('\Textpattern\Mail\Encode');
 
     extract($prefs);
     extract($thiscomment);
-
-    extract(lAtts(array('link' => 1), $atts));
 
     $name = txpspecialchars($name);
 
@@ -2740,13 +2741,13 @@ function comment_time($atts)
 {
     global $thiscomment, $comments_dateformat;
 
-    assert_comment();
-
     extract(lAtts(array(
         'format' => $comments_dateformat,
         'gmt'    => '',
         'lang'   => '',
     ), $atts));
+
+    assert_comment();
 
     return safe_strftime($format, $thiscomment['time'], $gmt, $lang);
 }
@@ -2901,9 +2902,9 @@ function if_article_author($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array('name' => ''), $atts));
+
+    assert_article();
 
     $author = $thisarticle['authorid'];
 
@@ -3028,12 +3029,12 @@ function title($atts)
 {
     global $thisarticle, $prefs;
 
-    assert_article();
-
     extract(lAtts(array(
         'escape'   => null,
         'no_widow' => '',
     ), $atts));
+
+    assert_article();
 
     $t = $escape === null ? escape_title($thisarticle['title']) : $thisarticle['title'];
 
@@ -3057,8 +3058,6 @@ function article_category($atts, $thing = null)
 {
     global $thisarticle, $s, $permlink_mode;
 
-    assert_article();
-
     extract(lAtts(array(
         'number'       => 1,
         'class'        => '',
@@ -3069,6 +3068,8 @@ function article_category($atts, $thing = null)
         'this_section' => 0,
         'wraptag'      => '',
     ), $atts));
+
+    assert_article();
 
     $cat = 'category'.intval($number);
 
@@ -3238,13 +3239,13 @@ function keywords($atts)
 {
     global $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array(
         'class'   => '',
         'break'   => ',',
         'wraptag' => '',
     ), $atts));
+
+    assert_article();
 
     $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
 
@@ -3257,9 +3258,9 @@ function if_keywords($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array('keywords' => ''), $atts));
+
+    assert_article();
 
     $condition = empty($keywords)
         ? $thisarticle['keywords']
@@ -3287,8 +3288,6 @@ function article_image($atts)
 {
     global $doctype, $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array(
         'escape'    => true,
         'title'     => '',
@@ -3301,6 +3300,8 @@ function article_image($atts)
         'wraptag'   => '',
         'loading'   => null,
     ), $atts));
+
+    assert_article();
 
     if ($thisarticle['article_image']) {
         $image = $thisarticle['article_image'];
@@ -3366,14 +3367,14 @@ function search_result_excerpt($atts)
 {
     global $thisarticle, $pretext;
 
-    assert_article();
-
     extract(lAtts(array(
         'break'     => ' &#8230;', // Deprecated in 4.7.0.
         'hilight'   => 'strong',
         'limit'     => 5,
         'separator' => ' &#8230;',
     ), $atts));
+
+    assert_article();
 
     if (isset($atts['break'])) {
         trigger_error(gTxt('deprecated_attribute_with', array(
@@ -3433,7 +3434,6 @@ function search_result_url($atts)
 
 function search_result_date($atts)
 {
-
     assert_article();
 
     return posted($atts);
@@ -4085,7 +4085,7 @@ function permlink($atts, $thing = null)
 
     $id = $atts['id'];
 
-    if (!$id && !assert_article()) {
+    if (!$id && empty($thisarticle)) {
         return;
     }
 
@@ -4289,12 +4289,12 @@ function if_article_category($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array(
         'name'   => '',
         'number' => '',
     ), $atts));
+
+    assert_article();
 
     $cats = array();
 
@@ -4354,9 +4354,9 @@ function if_article_section($atts, $thing = null)
 {
     global $thisarticle, $txp_sections;
 
-    assert_article();
-
     extract(lAtts(array('name' => ''), $atts));
+
+    assert_article();
 
     $section = $thisarticle['section'];
 
@@ -4421,13 +4421,13 @@ function custom_field($atts = array())
 {
     global $thisarticle;
 
-    assert_article();
-
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
         'escape'  => null,
         'default' => '',
     ), $atts));
+
+    assert_article();
 
     $name = strtolower($name);
 
@@ -4448,14 +4448,14 @@ function if_custom_field($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
-
     extract($atts = lAtts(array(
         'name'      => get_pref('custom_1_set'),
         'value'     => null,
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
+
+    assert_article();
 
     $name = strtolower($name);
 
@@ -4636,8 +4636,6 @@ function if_first($atts, $thing = null, $type = 'article')
 {
     global ${"this$type"};
 
-    assert_article($type, false);
-
     $x = !empty(${"this$type"}['is_first']);
     return isset($thing) ? parse($thing, $x) : $x;
 }
@@ -4647,8 +4645,6 @@ function if_first($atts, $thing = null, $type = 'article')
 function if_last($atts, $thing = null, $type = 'article')
 {
     global ${"this$type"};
-
-    assert_article($type, false);
 
     $x = !empty(${"this$type"}['is_last']);
     return isset($thing) ? parse($thing, $x) : $x;
