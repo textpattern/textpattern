@@ -1743,7 +1743,7 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
+function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',

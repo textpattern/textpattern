@@ -4406,13 +4406,12 @@ function txp_header($atts)
     extract(lAtts(array(
         'name'    => isset($atts['value']) ? '' : 'Content-Type',
         'replace' => 1,
-        'value'   => isset($atts['name']) ? true : 'text/html; charset=utf-8',
-        'break'   => ''
+        'value'   => isset($atts['name']) ? true : 'text/html; charset=utf-8'
     ), $atts));
 
     $out = set_headers(array($name => $value), $replace);
 
-    return $out ? doWrap($out, null, $break) : null;
+    return $out ? doWrap($out) : null;
 }
 
 // -------------------------------------------------------------
