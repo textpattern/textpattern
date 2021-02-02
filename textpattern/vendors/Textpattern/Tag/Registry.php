@@ -132,9 +132,13 @@ class Registry implements \Textpattern\Container\ReusableInterface
                 $atts += $this->atts[$tag];
             }
 
-            return isset($this->params[$tag]) ?
-                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
-                (string) call_user_func($this->tags[$tag], $atts, $thing);
+            try {
+                return isset($this->params[$tag]) ?
+                    (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
+                    (string) call_user_func($this->tags[$tag], $atts, $thing);
+            } catch (\Exception $e) {
+                trigger_error($e->getMessage());
+            }
         } else {
             return false;
         }
