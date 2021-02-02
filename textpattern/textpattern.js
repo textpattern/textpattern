@@ -1584,8 +1584,13 @@ $(document).keydown(function (e) {
         if (obj.length)
         {
             e.preventDefault();
-            var target = '#' + obj.attr('form');
-            $(target).submit();
+            var target = obj.attr('form');
+
+            if(typeof target !== 'undefined') {
+                $('#' + target).submit();
+            } else {
+                obj.eq(0).closest('form').submit();
+            }
         }
     }
 });

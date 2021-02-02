@@ -835,21 +835,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // 'Publish/Save' button.
     if (empty($ID)) {
         if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
-            $push_button = n.tag_void('input', array(
-                'class' => 'publish',
-                'name'  =>  'publish',
-                'type'  => 'submit',
-                'form'  => 'article_form',
-                'value' =>  gTxt('publish'),
-            ));
+            $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
         } else {
-            $push_button = n.tag_void('input', array(
-                'class' => 'publish',
-                'name'  =>  'publish',
-                'type'  => 'submit',
-                'form'  => 'article_form',
-                'value' =>  gTxt('save'),
-            ));
+            $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
         }
 
         echo graf('<span class="txp-save-button">'.$push_button.'</span>', array('class' => 'txp-save'));
@@ -859,13 +847,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ($Status < STATUS_LIVE && has_privs('article.edit')) ||
         ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
     ) {
-        echo graf('<span class="txp-save-button">'.tag_void('input', array(
-            'class' => 'publish',
-            'name'  =>  'save',
-            'type'  => 'submit',
-            'form'  => 'article_form',
-            'value' =>  gTxt('save'),
-        )).'</span>', array('class' => 'txp-save'));
+        echo graf('<span class="txp-save-button">'.fInput('submit', 'save', gTxt('save'), 'publish').'</span>', array('class' => 'txp-save'));
     }
 
     echo $partials['actions']['html'].
