@@ -350,9 +350,9 @@ function form_edit($message = '', $refresh_partials = false)
         '<span class="txp-save-button">'.
         n.tag_void('input', array(
             'class'  => 'publish',
+            'name'  =>  'save',
             'type'   => 'submit',
             'form'   => 'form_form',
-            'method' => 'post',
             'value'  =>  gTxt('save'),
         )).
         '</span>'.

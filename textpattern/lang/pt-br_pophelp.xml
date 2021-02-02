@@ -282,11 +282,11 @@
     </group>
 
     <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+        <item id="get_textpack" title="Instalar Textpack"><![CDATA[]]></item>
     </group>
 
     <group id="link" title="">
-        <item id="link_description" title=""><![CDATA[]]></item>
+        <item id="link_description" title="Descrição"><![CDATA[]]></item>
         <item id="link_sort" title="Valor para ordenação"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
         <item id="timestamp_link" title="Data de publicação"><![CDATA[]]></item>
@@ -331,8 +331,8 @@
         <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
         <item id="custom_form_types" title=""><![CDATA[]]></item>
         <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title=""><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="dateformat" title="Formato de data"><![CDATA[]]></item>
+        <item id="default_event" title="Tab default do admin"><![CDATA[]]></item>
         <item id="default_publish_status" title="Status de publicação padrão"><![CDATA[]]></item>
         <item id="doctype" title="Doctype"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="Ativar visualização do tema de desenvolvimento?"><![CDATA[]]></item>
@@ -362,7 +362,7 @@
         <item id="show_comment_count_in_feed" title="Mostrar contador de comentários nos feeds?"><![CDATA[]]></item>
         <item id="site_slogan" title="Slogan do site"><![CDATA[]]></item>
         <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="siteurl" title="URL do site"><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
         <item id="spam_blacklists" title=""><![CDATA[]]></item>
