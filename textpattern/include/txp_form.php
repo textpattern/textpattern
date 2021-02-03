@@ -347,21 +347,21 @@ function form_edit($message = '', $refresh_partials = false)
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
-        '<span class="txp-save-button">'.
-        n.tag_void('input', array(
-            'class'  => 'publish',
-            'name'  =>  'save',
-            'type'   => 'submit',
-            'form'   => 'form_form',
-            'value'  =>  gTxt('save'),
-        )).
-        '</span>'.
         (!is_writable($instance->getDirPath()) ? '' :
             n.span(
                 checkbox2('export', gps('export'), 0, 'export', 'form_form').
                 n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
-        ), ' class="txp-save"'
+        ).
+        '<span class="txp-save-button">'.
+        n.tag_void('input', array(
+            'class' => 'publish',
+            'name'  =>  'save',
+            'type'  => 'submit',
+            'form'  => 'form_form',
+            'value' =>  gTxt('save'),
+        )).
+        '</span>', ' class="txp-save"'
     );
 
     $listActions = graf(
