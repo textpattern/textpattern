@@ -2283,12 +2283,12 @@ function comments_form($atts, $thing = null)
 
     $out = '';
     $ip = serverSet('REMOTE_ADDR');
-    $blacklisted = is_blacklisted($ip);
+    $blocklisted = is_blocklisted($ip);
 
     if (!checkCommentsAllowed($thisid)) {
         $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
-    } elseif ($blacklisted) {
-        $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blocklisted"');
+    } elseif ($blocklisted) {
+        $out = graf(gTxt('your_ip_is_blocklisted_by'.' '.$blocklisted), ' id="comments_blocklisted"');
     } elseif (gps('commented') !== '') {
         $out = gTxt('comment_posted');
 

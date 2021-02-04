@@ -618,7 +618,7 @@
         <item id="siteurl" title="网站 URL"><![CDATA[]]></item>
         <item id="skin_dir" title="主题目录"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP 发送地址"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="垃圾信息黑名单（半角逗号分隔）"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="垃圾信息黑名单（半角逗号分隔）"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="仅同步文章摘要？"><![CDATA[]]></item>
         <item id="tempdir" title="临时目录路径"><![CDATA[]]></item>
         <item id="theme_name" title="管理端主题"><![CDATA[]]></item>

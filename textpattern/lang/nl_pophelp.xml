@@ -239,7 +239,7 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Spam blocklists (komma gescheiden)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Spam blocklists (komma gescheiden)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title="Tijdelijke bestanden map"><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>

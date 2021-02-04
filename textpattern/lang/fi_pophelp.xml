@@ -163,7 +163,7 @@
         <item id="siteurl" title="Sivuston URL"><![CDATA[]]></item>
         <item id="skin_dir" title="Teemahakemisto"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP-kirjeen lähettäjän osoite"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndikoi vain artikkelin johdanto?"><![CDATA[]]></item>
         <item id="tempdir" title="Tilapäisten tiedostojen hakemistopolku"><![CDATA[]]></item>
         <item id="theme_name" title="Hallintapaneelin teema"><![CDATA[]]></item>
