@@ -6,7 +6,7 @@ REPO="pophelp";
 EXTRACT="textpattern/lang";
 
 
-TAG="master";
+TAG="main";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi
