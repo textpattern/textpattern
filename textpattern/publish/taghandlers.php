@@ -3506,7 +3506,7 @@ function image_display($atts)
     global $p;
 
     if ($p) {
-        return image(array('id' => $p));
+        return thumbnail(array('id' => $p, 'thumbnail' => false));
     }
 }
 
