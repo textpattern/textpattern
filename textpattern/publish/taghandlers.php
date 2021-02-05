@@ -3506,7 +3506,7 @@ function image_display($atts)
     global $p;
 
     if ($p) {
-        return image(array('id' => $p));
+        return thumbnail(array('id' => $p, 'thumbnail' => false));
     }
 }
 
@@ -3523,7 +3523,7 @@ function images($atts, $thing = null)
         'author'      => '',
         'realname'    => '',
         'extension'   => '',
-        'thumbnail'   => '',
+        'thumbnail'   => true,
         'size'        => '',
         'auto_detect' => 'article, category, author',
         'break'       => br,
@@ -3539,7 +3539,8 @@ function images($atts, $thing = null)
 
     $safe_sort = sanitizeForSort($sort);
     $where = array();
-    $has_content = $thing || $form;
+    $has_content = isset($thing) || $form;
+    ($has_content || $thumbnail) or $thumbnail = null;
     $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || isset($atts['size']) || $thumbnail === '1' || $thumbnail === '0';
     $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
@@ -3707,7 +3708,7 @@ function images($atts, $thing = null)
                     's'       => $s,
                     'p'       => $thisimage['id'],
                 ));
-                $src = image_url(array('thumbnail' => '1'));
+                $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
                 $thing = href(
                     '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
                     $url
