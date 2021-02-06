@@ -255,7 +255,12 @@ class DB
 
         // Be backwards compatible.
         if ($this->charset) {
-            mysqli_query($this->link, "SET NAMES ".$this->charset);
+            if (method_exists('mysqli', 'set_charset')) {
+                mysqli_set_charset($this->link, $this->charset);
+            } else {
+                mysqli_query($this->link, "SET NAMES ".$this->charset);
+            }
+
             $this->table_options['charset'] = $this->charset;
 
             if (isset($txpcfg['table_collation'])) {

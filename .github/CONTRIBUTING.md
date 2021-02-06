@@ -10,7 +10,7 @@ Anyone can contribute. You do not have to ask for permission.
 
 ### Help with translations
 
-To make corrections to existing translations, or to add new ones, [please follow these instructions](https://github.com/textpattern/textpacks/blob/master/README.md).
+To make corrections to existing translations, or to add new ones, [please follow these instructions](https://github.com/textpattern/textpacks/blob/main/README.md).
 
 ### Write documentation
 

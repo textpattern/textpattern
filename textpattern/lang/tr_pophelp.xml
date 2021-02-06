@@ -260,7 +260,7 @@
         <item id="siteurl" title="Site URL'si"><![CDATA[]]></item>
         <item id="skin_dir" title="Tema klasörü"><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title=""><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
