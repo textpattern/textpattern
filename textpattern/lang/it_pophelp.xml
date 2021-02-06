@@ -842,9 +842,9 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 </ul>
 <p>Ciò garantisce che l’indirizzo mittente sulla busta SMTP (che non è necessariamente lo stesso dell’intestazione "From:" che vedete normalmente nelle email) sia impostato all’indirizzo email che avete inserito qui, cosa che in alcuni server web è un requisito per l’invio di email.</p>
         ]]></item>
-        <item id="spam_blacklists" title="Liste nere degli spammer (separate da virgola)"><![CDATA[
+        <item id="spam_blocklists" title="Liste nere degli spammer (separate da virgola)"><![CDATA[
 <h2>Liste nere degli spammer (separate da virgola)</h2>
-<p>che i provider <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> inseriti qui sarà interrogata quando un commento viene pubblicato sul tuo blog, e l’indirizzo IP del poster commento verrà controllato. Se l’indirizzo IP è elencato vuol dire c’ha stato una o più relazioni fatte circa questo IP in passato di spamming, e il commento sarà respinta. Indipendentemente dai risultati del controllo, l’indirizzo IP del poster commento non viene memorizzato da Textpattern.</p>
+<p>che i provider <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> inseriti qui sarà interrogata quando un commento viene pubblicato sul tuo blog, e l’indirizzo IP del poster commento verrà controllato. Se l’indirizzo IP è elencato vuol dire c’ha stato una o più relazioni fatte circa questo IP in passato di spamming, e il commento sarà respinta. Indipendentemente dai risultati del controllo, l’indirizzo IP del poster commento non viene memorizzato da Textpattern.</p>
 <p>è possibile immettere un elenco di nomi di dominio qui, separati da virgole. Siete pregati di notare che è tua responsabilità assicurarti blocklists sono adatto allo scopo.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Condividi solo il sommario degli articoli?"><![CDATA[

@@ -283,7 +283,7 @@
         <item id="siteurl" title="URL situs"><![CDATA[]]></item>
         <item id="skin_dir" title="Direktori tema"><![CDATA[]]></item>
         <item id="smtp_from" title="Pengaturan alamat pengirim SMTP"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Senarai-hitam spam (dipisahkan koma)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Senarai-hitam spam (dipisahkan koma)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Sindikasikan kutipan artikel saja?"><![CDATA[]]></item>
         <item id="tempdir" title="Jalur/path direktori temporer"><![CDATA[]]></item>
         <item id="theme_name" title="Tema sisi-admin"><![CDATA[]]></item>

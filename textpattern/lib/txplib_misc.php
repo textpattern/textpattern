@@ -2001,20 +2001,20 @@ function noWidow($str)
  * Checks if an IP is on a spam blocklist.
  *
  * @param   string       $ip     The IP address
- * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
+ * @param   string|array $checks The checked lists. Defaults to 'spam_blocklists' preferences string
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('192.0.2.1'))
+ * if (is_blocklisted('192.0.2.1'))
  * {
  *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
-function is_blacklisted($ip, $checks = '')
+function is_blocklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list_unique(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blocklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));

@@ -180,7 +180,7 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Sindiciraj samo sažetak unosa?"><![CDATA[]]></item>
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
