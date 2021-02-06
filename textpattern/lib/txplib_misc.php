@@ -2001,20 +2001,20 @@ function noWidow($str)
  * Checks if an IP is on a spam blocklist.
  *
  * @param   string       $ip     The IP address
- * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
+ * @param   string|array $checks The checked lists. Defaults to 'spam_blocklists' preferences string
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('192.0.2.1'))
+ * if (is_blocklisted('192.0.2.1'))
  * {
  *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
-function is_blacklisted($ip, $checks = '')
+function is_blocklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list_unique(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blocklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));
@@ -3633,7 +3633,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         if ((string)$header === '') {
             !$rewrite or header_remove($name && $name != 1 ? $name : null);
         } elseif ($header === true) {
-            if ($name == 1) {
+            if ($name == '' || $name == 1) {
                 $out = array_merge($out, $headers_low);
             } elseif (isset($headers_low[$name_low])) {
                 $out[$name_low] = $headers_low[$name_low];
@@ -5262,98 +5262,85 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
 }
 
 /**
- * Assert article context error.
+ * Assert context error.
  */
 
-function assert_article()
+function assert_context($type = 'article', $throw = true)
 {
-    global $thisarticle;
+    global ${'this'.$type};
 
-    if (empty($thisarticle)) {
-        trigger_error(gTxt('error_article_context'));
-
-        return false;
+    if (empty(${'this'.$type})) {
+        if ($throw) {
+            throw new \Exception(gTxt("error_{$type}_context"));
+        } else {
+            return false;
+        }
     }
 
     return true;
 }
 
 /**
+ * Assert article context error.
+ */
+
+function assert_article($throw = true)
+{
+    return assert_context('article', $throw);
+}
+
+/**
  * Assert comment context error.
  */
 
-function assert_comment()
+function assert_comment($throw = true)
 {
-    global $thiscomment;
-
-    if (empty($thiscomment)) {
-        trigger_error(gTxt('error_comment_context'));
-    }
+    return assert_context('comment', $throw);
 }
 
 /**
  * Assert file context error.
  */
 
-function assert_file()
+function assert_file($throw = true)
 {
-    global $thisfile;
-
-    if (empty($thisfile)) {
-        trigger_error(gTxt('error_file_context'));
-    }
+    return assert_context('file', $throw);
 }
 
 /**
  * Assert image context error.
  */
 
-function assert_image()
+function assert_image($throw = true)
 {
-    global $thisimage;
-
-    if (empty($thisimage)) {
-        trigger_error(gTxt('error_image_context'));
-    }
+    return assert_context('image', $throw);
 }
 
 /**
  * Assert link context error.
  */
 
-function assert_link()
+function assert_link($throw = true)
 {
-    global $thislink;
-
-    if (empty($thislink)) {
-        trigger_error(gTxt('error_link_context'));
-    }
+    return assert_context('link', $throw);
 }
 
 /**
  * Assert section context error.
  */
 
-function assert_section()
+function assert_section($throw = true)
 {
-    global $thissection;
-
-    if (empty($thissection)) {
-        trigger_error(gTxt('error_section_context'));
-    }
+    return assert_context('section', $throw);
 }
 
 /**
  * Assert category context error.
  */
 
-function assert_category()
+function assert_category($throw = true)
 {
-    global $thiscategory;
-
-    if (empty($thiscategory)) {
-        trigger_error(gTxt('error_category_context'));
-    }
+    return assert_context('category', $throw);
 }
 
 /**

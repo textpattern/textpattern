@@ -903,9 +903,9 @@ title="HTML"
 </ul>
 <p>Cela garanti que l’enveloppe SMTP de l’adresse d’expédition (qui n’est par nécessairement la même que celle de l’entête "From:" visible dans les messages) est configurée avec l’adresse renseignée ici, ce qui est requis pour l’envoi de e-mail sur certains serveurs.</p>
         ]]></item>
-        <item id="spam_blacklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[
+        <item id="spam_blocklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[
 <h2>Listes noires anti-spam (séparées par une virgule)</h2>
-<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">liste noire <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
+<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">liste noire <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
 <p>Vous pouvez renseigner une liste de noms de domaine, séparés par une virgule. Veuillez prendre note que ces listes relèvent de votre responsabilité et correspondent, effectivement, à vos besoins.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Le résumé plutôt que l’article complet dans les flux XML ?"><![CDATA[

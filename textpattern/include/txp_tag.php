@@ -328,7 +328,7 @@ class BuilderTags
                 );
 
             $this->endform = graf(
-                fInput('submit', '', gTxt('build'))
+                span(fInput('submit', '', gTxt('build')), array('class' => 'txp-save-button'))
             ).
             eInput('tag').
             sInput('build').

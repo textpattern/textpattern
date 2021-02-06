@@ -3,9 +3,7 @@
 <help lang="pl">
     <group id="admin" title="Panel użytkownika">
         <item id="about_privileges" title="O rolach"><![CDATA[]]></item>
-        <item id="create_author" title="Utwórz autora"><![CDATA[
-<h2>Dodaj nowego autora</h2>
-<p>Hasło, wiadomość powitalna i instrukcje dotyczące logowania zostaną wysłane mailem do nowego autora.</p>        ]]></item>
+        <item id="create_author" title="Utwórz autora"><![CDATA[]]></item>
     </group>
 
     <group id="article" title="">
@@ -242,7 +240,7 @@
         ]]></item>
         <item id="skin_dir" title="Katalog motywu"><![CDATA[]]></item>
         <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Zsynchronizuj tylko zajawki artykułów?"><![CDATA[]]></item>
         <item id="tempdir" title="Ścieżka katalogu tymczasowego"><![CDATA[]]></item>
         <item id="theme_name" title="Motyw panelu administracyjnego"><![CDATA[]]></item>
@@ -254,6 +252,7 @@
         <item id="use_mail_on_feeds_id" title="Akceptować komentarze?"><![CDATA[]]></item>
         <item id="use_plugins" title="Używać wtyczek?"><![CDATA[]]></item>
         <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel sekcji">

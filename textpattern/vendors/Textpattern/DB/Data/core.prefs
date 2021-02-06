@@ -217,7 +217,7 @@
         "html": "yesnoradio",
         "position": "320"
     },
-    "spam_blacklists": {
+    "spam_blocklists": {
         "val": "",
         "type": "0",
         "event": "comments",

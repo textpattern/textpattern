@@ -900,9 +900,9 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
 <p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you’ve entered here, which is a requirement for sending email on some web servers.</p>
         ]]></item>
-        <item id="spam_blacklists" title="Spam blocklists (comma-separated)"><![CDATA[
+        <item id="spam_blocklists" title="Spam blocklists (comma-separated)"><![CDATA[
 <h2>Spam blocklists (comma-separated)</h2>
-<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
+<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
