@@ -1049,7 +1049,7 @@ function doArticles($atts, $iscustom, $thing = null)
     !empty($fields) or $fields = '*';
 
     // Do not paginate if we are on a custom list.
-    if (!$iscustom && !$issticky) {
+    if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
             $grand_total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;

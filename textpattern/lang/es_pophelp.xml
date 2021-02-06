@@ -708,7 +708,7 @@
         ]]></item>
         <item id="skin_dir" title="Directorios de temas"><![CDATA[]]></item>
         <item id="smtp_from" title="Dirección del remitente del envío SMTP"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="¿Sindicar sólo el resumen del artículo?"><![CDATA[]]></item>
         <item id="tempdir" title="Ruta al directorio temporal"><![CDATA[]]></item>
         <item id="theme_name" title="Tema de administración"><![CDATA[]]></item>

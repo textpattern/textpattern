@@ -240,7 +240,7 @@
         ]]></item>
         <item id="skin_dir" title="Katalog motywu"><![CDATA[]]></item>
         <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Zsynchronizuj tylko zajawki artykułów?"><![CDATA[]]></item>
         <item id="tempdir" title="Ścieżka katalogu tymczasowego"><![CDATA[]]></item>
         <item id="theme_name" title="Motyw panelu administracyjnego"><![CDATA[]]></item>
