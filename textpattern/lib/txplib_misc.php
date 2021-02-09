@@ -517,7 +517,7 @@ function plug_privs($pluggable = null, $user = null)
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
-                    return;
+                    break;
                 }
 
                 unset($pane[0]);
@@ -526,13 +526,12 @@ function plug_privs($pluggable = null, $user = null)
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function (&$item) use ($level) {
-            if ($item === true) {
-                $item = $level;
-            }
-        });
-
         if (get_pref($pref)) {
+            array_walk($pane, function (&$item) use ($level) {
+                if ($item === true) {
+                    $item = $level;
+                }
+            });
             add_privs($pane);
         } else {
             add_privs(array_fill_keys(array_keys($pane), null));
@@ -562,7 +561,7 @@ function add_privs($res, $perm = '1')
 
     foreach ($res as $priv => $group) {
         if ($group === null) {
-            unset($txp_permissions[$priv]);
+            $txp_permissions[$priv] = null;
         } else {
             $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
@@ -4613,7 +4612,7 @@ function permlinkurl_id($id)
         return permlinkurl($thisarticle);
     }
 
-    $rs = safe_row(
+    $rs = empty($id) ? array() : safe_row(
         "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
@@ -4669,6 +4668,11 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     $thisid = (int) $thisid;
+
+    if (empty($thisid)) {
+        return false;
+    }
+
     $keys = get_context(null);
 
     foreach ($internals as $key) {
