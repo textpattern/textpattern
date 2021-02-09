@@ -59,7 +59,7 @@ $txp_user = empty($userInfo) ? null : $userInfo['name'];
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs(null, $userInfo);
+empty($userInfo) or plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);

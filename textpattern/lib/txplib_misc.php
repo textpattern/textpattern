@@ -517,7 +517,7 @@ function plug_privs($pluggable = null, $user = null)
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
-                    return;
+                    break;
                 }
 
                 unset($pane[0]);
@@ -526,13 +526,12 @@ function plug_privs($pluggable = null, $user = null)
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function (&$item) use ($level) {
-            if ($item === true) {
-                $item = $level;
-            }
-        });
-
         if (get_pref($pref)) {
+            array_walk($pane, function (&$item) use ($level) {
+                if ($item === true) {
+                    $item = $level;
+                }
+            });
             add_privs($pane);
         } else {
             add_privs(array_fill_keys(array_keys($pane), null));
@@ -562,7 +561,7 @@ function add_privs($res, $perm = '1')
 
     foreach ($res as $priv => $group) {
         if ($group === null) {
-            unset($txp_permissions[$priv]);
+            $txp_permissions[$priv] = null;
         } else {
             $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
@@ -4613,7 +4612,7 @@ function permlinkurl_id($id)
         return permlinkurl($thisarticle);
     }
 
-    $rs = safe_row(
+    $rs = empty($id) ? array() : safe_row(
         "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
@@ -4642,7 +4641,20 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = hu)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null;
+    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
+        $fields = array(
+            'thisid'    => null,
+            'id'        => null,
+            'title'     => null,
+            'url_title' => null,
+            'section'   => null,
+            'category1' => null,
+            'category2' => null,
+            'posted'    => null,
+            'uposted'   => null,
+            'expires'   => null,
+            'uexpires'  => null,
+        );
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4650,19 +4662,11 @@ function permlinkurl($article_array, $hu = hu)
         return $url;
     }
 
-    extract(lAtts(array(
-        'thisid'    => null,
-        'id'        => null,
-        'title'     => null,
-        'url_title' => null,
-        'section'   => null,
-        'category1' => null,
-        'category2' => null,
-        'posted'    => null,
-        'uposted'   => null,
-        'expires'   => null,
-        'uexpires'  => null,
-    ), array_change_key_case($article_array, CASE_LOWER), false));
+    if (empty($article_array)) {
+        return false;
+    }
+
+    extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
 
     if (empty($thisid)) {
         $thisid = $id;
