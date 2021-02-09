@@ -59,7 +59,7 @@ $txp_user = empty($userInfo) ? null : $userInfo['name'];
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-empty($userInfo) or plug_privs(null, $userInfo);
+plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);
@@ -1047,11 +1047,10 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['*'].$search;
     !empty($fields) or $fields = '*';
-    $pageby !== true or $thispage = null;
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
-        if (empty($thispage) && (!isset($pageby) || $pageby)) {
+        if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
             $grand_total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
