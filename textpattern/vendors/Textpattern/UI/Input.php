@@ -63,7 +63,7 @@ class Input extends Tag implements UIInterface
             ));
 
         if ($value !== null) {
-            $this->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+            $this->setAtt('value', $value, array('strip' => TEXTPATTERN_STRIP_NONE));
         }
     }
 

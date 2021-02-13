@@ -237,7 +237,7 @@ class Tag implements UIInterface
         $props = array('format' => 'bool');
 
         if (self::$flags['boolean'] === 'html5') {
-            $props['flag'] = TEXTPATTERN_STRIP_TXP;
+            $props['strip'] = TEXTPATTERN_STRIP_TXP;
         }
 
         foreach ($keys as $key) {

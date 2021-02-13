@@ -55,7 +55,7 @@ class Option extends Tag implements UIInterface
         $this->key = $value;
 
         parent::__construct('option');
-        $this->setAtt('value', $this->key, array('flag' => TEXTPATTERN_STRIP_NONE));
+        $this->setAtt('value', $this->key, array('strip' => TEXTPATTERN_STRIP_NONE));
 
         $this->setContent($label);
 

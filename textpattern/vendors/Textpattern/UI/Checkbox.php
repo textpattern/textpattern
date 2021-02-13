@@ -65,7 +65,7 @@ class Checkbox extends Tag implements UIInterface
                 'name'  => $name,
                 'type'  => $type,
             ))
-            ->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+            ->setAtt('value', $value, array('strip' => TEXTPATTERN_STRIP_NONE));
     }
 
     /**
