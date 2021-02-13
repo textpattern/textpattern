@@ -12,6 +12,9 @@ Changes in 4.8.5 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Added: More aggregators in <txp:article /> 'fields' attribute.
 * Added: Global 'break', 'replace' and 'trim' attributes.
+* Changed: <txp:article_custom /> can paginate content using pageby attribute.
+* Changed: <txp:images /> outputs full-size images if thumbs don't exist and
+* <txp:images thumbnail="0" /> displays full-size images as expected.
 * Changed: Expose secondpass Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
