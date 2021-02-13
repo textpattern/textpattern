@@ -311,7 +311,6 @@ function component($atts)
 
     $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format.'.'.$format);
-    $theme = urlencode($pretext['skin']);
     $out = '';
     $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
