@@ -303,11 +303,6 @@ function component($atts)
         'title'   => '',
     );
 
-    if (!isset($mimetypes)) {
-        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
-        $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
-    }
-
     extract(lAtts($defaults, $atts, false));
 
     if (empty($form)) {
@@ -316,11 +311,16 @@ function component($atts)
 
     $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format.'.'.$format);
-    $theme = urlencode($pretext['skin']);
     $out = '';
     $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
     if ($mode === 'flat') {
+        if (!isset($mimetypes)) {
+            $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
+            $dir = urlencode(Txp::get('Textpattern\Skin\Form')->getDir());
+        }
+
+        $theme = urlencode($pretext['skin']);
         $url = array();
         $skin_dir = urlencode(get_pref('skin_dir'));
 
