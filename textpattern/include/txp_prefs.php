@@ -616,7 +616,7 @@ EOS
     , false);
 
 
-    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name).$js;
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple().$js;
 }
 
 /**
