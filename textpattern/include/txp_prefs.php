@@ -440,20 +440,7 @@ function text_input($name, $val, $constraints = array())
 
 function pref_number($name, $val, $constraints = array())
 {
-    $validConstraints = array('max', 'min', 'step');
-    $atts = array();
-
-    foreach ($constraints as $constraint => $option) {
-        if (in_array($constraint, $validConstraints)) {
-            $toSet = (int)$option;
-
-            if ($toSet !== '') {
-                $atts[$constraint] = $toSet;
-            }
-        }
-    }
-
-    return Txp::get('\Textpattern\UI\Number', $name, $val)->setAtts($atts);
+    return Txp::get('\Textpattern\UI\Number', $name, $val, $constraints);
 }
 
 /**
