@@ -40,21 +40,22 @@ class Number extends Input implements UIInterface
      * @param array  $constraints Array indices for min/max/step if desired.
      */
 
-    public function __construct($name, $val, $constraints)
+    public function __construct($name, $val, $constraints = array())
     {
         parent::__construct($name, 'number', $val);
-
-        $min = isset($constraints['min']) ? $constraints['min'] : 0;
-        $max = isset($constraints['max']) ? $constraints['max'] : '';
-        $step = isset($constraints['step']) ? $constraints['step'] : 1;
+        $validConstraints = array('min', 'max', 'step');
 
         $this->setAtts(array(
                 'id'    => $this->key,
                 'name'  => $name,
-                'min'   => $min,
-                'max'   => $max,
-                'step'  => $step,
-            ), array('strip' => TEXTPATTERN_STRIP_NONE)
-        );
+            ));
+
+        foreach ($validConstraints as $key) {
+            $toSet = isset($constraints[$key]) ? $constraints[$key] : null;
+
+            if ($toSet !== null) {
+                $this->setAtt($key, $toSet, array('strip' => TEXTPATTERN_STRIP_NONE));
+            }
+        }
     }
 }
