@@ -33,14 +33,6 @@ namespace Textpattern\UI;
 class Checkbox extends Tag implements UIInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * Construct a single checkbox button.
      *
      * @param string $name    The Checkbox key (HTML name attribute)
@@ -52,7 +44,8 @@ class Checkbox extends Tag implements UIInterface
     {
         parent::__construct('input');
         $type = $class = 'checkbox';
-        $this->key = ($value !== null) ? $name.'-'.$value : $name;
+        $key = ($value !== null) ? $name.'-'.$value : $name;
+        $this->setKey($key);
 
         if ((bool)$checked === true) {
             $this->setBool('checked');
@@ -61,21 +54,10 @@ class Checkbox extends Tag implements UIInterface
 
         $this->setAtts(array(
                 'class' => $class,
-                'id'    => $this->key,
+                'id'    => $key,
                 'name'  => $name,
                 'type'  => $type,
             ))
             ->setAtt('value', $value, array('strip' => TEXTPATTERN_STRIP_NONE));
-    }
-
-    /**
-     * Fetch the key (id) in use by this radio button.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
     }
 }

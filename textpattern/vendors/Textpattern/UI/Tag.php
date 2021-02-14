@@ -49,6 +49,14 @@ class Tag implements UIInterface
     protected $tag = null;
 
     /**
+     * The key (id) used in the tag.
+     *
+     * @var string
+     */
+
+    protected $key = null;
+
+    /**
      * The tag's contained contents.
      *
      * @var string
@@ -114,6 +122,31 @@ class Tag implements UIInterface
         $this->tag = (string)$tag;
 
         return $this;
+    }
+
+    /**
+     * Set the tag name (key). Chainable.
+     *
+     * @param  string $key The tag's reference key (name)
+     * @return this
+     */
+
+    public function setKey($key)
+    {
+        $this->key = (string)$key;
+
+        return $this;
+    }
+
+    /**
+     * Fetch the key (id) in use by this tag.
+     *
+     * @return string
+     */
+
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**

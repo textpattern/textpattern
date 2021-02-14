@@ -35,14 +35,6 @@ namespace Textpattern\UI;
 class Option extends Tag implements UIInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * Construct a single option element.
      *
      * @param string  $value   The option key (HTML value attribute)
@@ -52,12 +44,11 @@ class Option extends Tag implements UIInterface
 
     public function __construct($value, $label = '', $checked = false)
     {
-        $this->key = $value;
+        $this->setKey($value);
 
         parent::__construct('option');
-        $this->setAtt('value', $this->key, array('strip' => TEXTPATTERN_STRIP_NONE));
-
-        $this->setContent($label);
+        $this->setAtt('value', $value, array('strip' => TEXTPATTERN_STRIP_NONE))
+            ->setContent($label);
 
         if ($checked) {
             $this->setSelected();
@@ -73,16 +64,5 @@ class Option extends Tag implements UIInterface
         $this->setBool('selected');
 
         return $this;
-    }
-
-    /**
-     * Fetch the key (id) in use by this text input.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
     }
 }

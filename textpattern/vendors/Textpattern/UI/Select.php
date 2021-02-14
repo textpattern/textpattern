@@ -33,14 +33,6 @@ namespace Textpattern\UI;
 class Select extends Tag implements UIInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * List of option key => labels in the select.
      *
      * @var array
@@ -77,9 +69,9 @@ class Select extends Tag implements UIInterface
     public function __construct($name, $options = array(), $default = null)
     {
         parent::__construct('select');
-        $this->key = $name;
 
-        $this->setAtt('name', $name);
+        $this->setKey($name)
+            ->setAtt('name', $name);
 
         if ($default === null) {
             $default = array();
@@ -164,17 +156,6 @@ class Select extends Tag implements UIInterface
         array_unshift($this->options, $emptyOption);
 
         return $this;
-    }
-
-    /**
-     * Fetch the key (id) in use by this select list.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
     }
 
     /**

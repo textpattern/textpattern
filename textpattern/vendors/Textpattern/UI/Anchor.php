@@ -49,7 +49,7 @@ class Anchor extends Tag implements UIInterface
             $anchor = join_qs($anchor);
         }
 
-        $this->setContent($linktext);
-        $this->setAtt('href', $anchor);
+        $this->setContent($linktext)
+            ->setAtt('href', $anchor);
     }
 }
