@@ -750,7 +750,7 @@ function doDiagnostics()
             $out[] = n.gTxt('diag_apache_modules').cs.implode(', ', apache_get_modules()).n;
         }
 
-        if (@is_array($pretext_data) and count($pretext_data) > 1) {
+        if (isset($pretext_data) && is_array($pretext_data) and count($pretext_data) > 1) {
             $out[] = n.gTxt('diag_pretext_data').cs.txpspecialchars(implode('', array_slice($pretext_data, 1, 20))).n;
         }
 
