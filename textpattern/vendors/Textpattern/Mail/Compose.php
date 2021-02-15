@@ -38,6 +38,10 @@ class Compose extends \Textpattern\Adaptable\Providable
 
     public function getDefaultAdapter()
     {
-        return new \Textpattern\Mail\Adapter\Mail();
+        if (get_pref('enhanced_email')) {
+            return new \Textpattern\Mail\Adapter\SMTPMail();
+        } else {
+            return new \Textpattern\Mail\Adapter\Mail();
+        }
     }
 }
