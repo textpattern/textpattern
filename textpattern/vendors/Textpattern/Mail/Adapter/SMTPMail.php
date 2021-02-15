@@ -94,6 +94,9 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         }
 
         $this->mailer->SMTPAuth = !empty($this->mailer->Username);
+        $this->mailer->Debugoutput = function($str, $level) {
+            file_put_contents(get_pref('tempdir').'/txp_smtp.log', gmdate('Y-m-d H:i:s'). "\t$level\t$str\n", FILE_APPEND | LOCK_EX);
+        };
 
         $prod_status = get_pref('production_status');
 
