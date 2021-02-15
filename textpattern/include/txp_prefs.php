@@ -591,8 +591,10 @@ function smtp_handler($name, $val, $constraints = array())
     switch ($name) {
         case 'smtp_host':
         case 'smtp_user':
-        case 'smtp_pass':
             $ui = text_input($name, $val);
+            break;
+        case 'smtp_pass':
+            $ui = Txp::get('\Textpattern\UI\Input', $name, 'password', $val)->setAtt('id', $name);
             break;
         case 'smtp_port':
             $ui = pref_number($name, $val, $constraints);
