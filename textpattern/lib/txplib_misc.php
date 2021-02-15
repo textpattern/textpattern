@@ -2221,8 +2221,8 @@ function is_valid_email($address)
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
- * @param   string $reply_to The reply to address
- * @return  bool   Returns FALSE when sending failed
+ * @param   string $reply_to   The reply to address
+ * @return  bool   FALSE when sending failed
  * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
@@ -2256,8 +2256,8 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('\Textpattern\Mail\Compose')
-                ->from($email, $RealName)
+            $message = Txp::get('\Textpattern\Mail\Compose')->getDefaultAdapter();
+            $message->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
                 ->body($body);
