@@ -254,6 +254,27 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             }
         }
 
+        // Optionally sign the message.
+        if (defined('SMTP_CERT_INFO')) {
+            $certinfo = constant('SMTP_CERT_INFO');
+
+            // Certificate file location.
+            $cfile = isset($certinfo['certfile']) ? $certinfo['certfile'] : '';
+
+            // Private key file location.
+            $pkfile = isset($certinfo['pkfile']) ? $certinfo['pkfile'] : '';
+
+            // Private key protection password (not the Import Password!). May be empty.
+            $pkpass = isset($certinfo['pkpass']) ? $certinfo['pkpass'] : '';
+
+            // Chain file location.
+            $chain = isset($certinfo['certchain']) ? $certinfo['certchain'] : '';
+
+            if ($cfile && $pkfile && $chain) {
+                $this->mailer->sign($cfile, $pkfile, $pkpass, $chain);
+            }
+        }
+
         try {
             $this->mailer->send();
         } catch (\PHPMailer\PHPMailer\Exception $e) {
