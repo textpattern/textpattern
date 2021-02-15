@@ -543,7 +543,7 @@
         ]]></item>
         <item id="allow_form_override" title="Allow form override?"><![CDATA[
 <h2>Allow form override?</h2>
-<p>This setting allows article authors to override the form to be used when their article is rendered. If enabled, an ‘Override form’ dropdown will be available under ‘Advanced options’, when editing an article.</p>
+<p>This setting allows article authors to override the form to be used when their article is rendered. If enabled, an ‘Override form’ dropdown will be available when editing an article.</p>
         ]]></item>
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
