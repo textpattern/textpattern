@@ -283,7 +283,7 @@ class Tag implements UIInterface
     /**
      * Permit multiple values to be sent by the tag. Chainable.
      *
-     * @param string $flavour The type of mulitple to assign: 'all', 'name', or 'attribute'
+     * @param string $flavour The type of multiple to assign: 'all', 'name', or 'attribute'
      */
 
     public function setMultiple($flavour = 'all')
