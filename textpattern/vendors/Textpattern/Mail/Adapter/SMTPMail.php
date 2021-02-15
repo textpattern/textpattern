@@ -264,6 +264,12 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
                     break;
                 case 'from':
                     $this->mailer->setFrom($address, $name);
+
+                    if (empty($this->mail->replyTo)) {
+                        $this->mail->replyTo = array_merge($this->mail->replyTo, array($address => $name));
+                        $this->mailer->addReplyTo($address, $name);
+                    }
+
                     break;
                 case 'to':
                 default:
