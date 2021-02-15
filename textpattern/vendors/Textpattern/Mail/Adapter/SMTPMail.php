@@ -139,9 +139,6 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
                 $this->mail->from = $smtp_from;
             }
         }
-
-        // @todo Apply DKIM and signing settings from config.php.
-
     }
 
     /**
@@ -240,6 +237,22 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
 
         if (!$reply) {
             $this->mailer->addReplyTo($from);
+        }
+
+        // @todo Apply signing settings from config.php.
+        $reps = array(
+            '{SMTP_FROM}'     => $from,
+            '{SMTP_REPLY_TO}' => $reply,
+        );
+
+        // Optional DKIM settings read from config.php
+        foreach (array('domain', 'private', 'selector', 'passphrase', 'identity', 'copyHeaderFields') as $dkey) {
+            $dkparam = 'DKIM_'.strtoupper($dkey);
+
+            if (defined($dkparam)) {
+                $dkeyname = 'DKIM_'.$dkey;
+                $this->mailer->$dkeyname = strtr(constant($dkparam), $reps);
+            }
         }
 
         try {
