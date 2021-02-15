@@ -4038,7 +4038,7 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         $family = $event[1];
         $event = $event[0];
     } else {
-        $family = '';
+        $family = null;
     }
 
     foreach (array('val', 'event', 'family', 'type', 'html', 'position') as $field) {
