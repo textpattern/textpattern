@@ -67,9 +67,21 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         // Bypass the fact that PHPMailer clashes with <txp:php>.
         $this->mailer::$validator = 'phpinternal';
 
-        // @todo $this->mailer->SetLanguage('lang-code'); and fallback.
+        // Use admin-side language if logged in, site language otherwise.
+        if (is_logged_in()) {
+            $lang = get_pref('language_ui');
+        } else {
+            $lang = get_pref('language');
+        }
 
+        $langpath = txpath.DS.'vendors'.DS.'phpmailer'.DS.'phpmailer'.DS.'language'.DS;
 
+        foreach (array($lang, TEXTPATTERN_DEFAULT_LANG, 'en') as $langcode) {
+            if (is_readable($langpath.'phpmailer.lang-'.$langcode.'.php')) {
+                $this->mailer->SetLanguage($langcode);
+                break;
+            }
+        }
 
         $sectype = defined('SMTP_SECTYPE') ? constant('SMTP_SECTYPE') : get_pref('smtp_sectype');
 
