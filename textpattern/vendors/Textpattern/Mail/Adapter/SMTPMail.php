@@ -239,10 +239,9 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             $this->mailer->addReplyTo($from);
         }
 
-        // @todo Apply signing settings from config.php.
         $reps = array(
-            '{SMTP_FROM}'     => $from,
-            '{SMTP_REPLY_TO}' => $reply,
+            '{SMTP_FROM}'     => (is_array($from) ? key($from) : $from),
+            '{SMTP_REPLY_TO}' => (is_array($reply) ? key($reply) : $reply),
         );
 
         // Optional DKIM settings read from config.php
