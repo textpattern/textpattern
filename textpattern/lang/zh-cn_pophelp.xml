@@ -74,10 +74,7 @@
     <li>可管理板块</li>
     <li>可管理页面、模块和样式</li>
 </ul>        ]]></item>
-        <item id="create_author" title="添加作者"><![CDATA[
-<h2>添加作者</h2>
-<p>邮寄密码、欢迎信息和登录说明给新作者。</p>
-        ]]></item>
+        <item id="create_author" title="添加作者"><![CDATA[]]></item>
     </group>
 
     <group id="article" title="写作面板">
@@ -629,7 +626,8 @@
         <item id="use_comments" title="接受评论？"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title="使用电子邮件地址构建 feed ID （默认为网站 URL）？"><![CDATA[]]></item>
         <item id="use_plugins" title="使用插件？"><![CDATA[]]></item>
-        <item id="use_textile" title="使用 Textile?"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="章节面板">
