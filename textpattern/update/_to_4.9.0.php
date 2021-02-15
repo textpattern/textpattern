@@ -26,3 +26,11 @@ if (!defined('TXP_UPDATE')) {
 }
 
 safe_update('txp_prefs', "name = 'spam_blocklists'", "name = 'spam_blacklists'");
+
+$cols = getThings('describe `'.PFX.'txp_prefs`');
+
+if (!in_array('family', $cols)) {
+    safe_alter('txp_prefs',
+        "ADD family VARCHAR(255) NOT NULL DEFAULT '' AFTER event");
+}
+

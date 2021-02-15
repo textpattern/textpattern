@@ -3743,13 +3743,13 @@ function get_prefs($user = '')
 /**
  * Creates or updates a preference.
  *
- * @param   string $name       The name
- * @param   string $val        The value
- * @param   string $event      The section the preference appears in
- * @param   int    $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string $html       The HTML control type the field uses. Can take a custom function name
- * @param   int    $position   Used to sort the field on the Preferences panel
- * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   bool         $is_private If PREF_PRIVATE, is created as a user pref
  * @return  bool FALSE on error
  * @package Pref
  * @example
@@ -3922,13 +3922,13 @@ function pref_exists($name, $user_name = null)
  *
  * When a string is created, will trigger a 'preference.create > done' callback event.
  *
- * @param   string      $name       The name
- * @param   string      $val        The value
- * @param   string      $event      The section the preference appears in
- * @param   int         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int         $position   Used to sort the field on the Preferences panel
- * @param   string|bool $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool  $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
  * @return  bool TRUE if the string exists, FALSE on error
  * @since   4.6.0
  * @package Pref
@@ -3957,12 +3957,20 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
 
     $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
+    if (is_array($event)) {
+        $family = $event[1];
+        $event = $event[0];
+    } else {
+        $family = '';
+    }
+
     if (
         safe_insert(
             'txp_prefs',
             "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
+            family = '".doSlash($family)."',
             html = '".doSlash($html)."',
             type = ".intval($type).",
             position = ".intval($position).",
@@ -3972,7 +3980,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return false;
     }
 
-    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
 
     return true;
 }
@@ -3986,14 +3994,14 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
  *
  * When a string is updated, will trigger a 'preference.update > done' callback event.
  *
- * @param   string           $name       The update preference string's name
- * @param   string|null      $val        The value
- * @param   string|null      $event      The section the preference appears in
- * @param   int|null         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string|null      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int|null         $position   Used to sort the field on the Preferences panel
- * @param   string|bool|null $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
- * @return  bool             FALSE on error
+ * @param   string            $name       The update preference string's name
+ * @param   string|null       $val        The value
+ * @param   string|array|null $event      The section or array(section, family) the preference appears in
+ * @param   int|null          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string|null       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int|null          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool|null  $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4026,14 +4034,21 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
-    foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
+    if (is_array($event)) {
+        $family = $event[1];
+        $event = $event[0];
+    } else {
+        $family = '';
+    }
+
+    foreach (array('val', 'event', 'family', 'type', 'html', 'position') as $field) {
         if ($$field !== null) {
             $set[] = $field." = '".doSlash($$field)."'";
         }
     }
 
     if ($set && safe_update('txp_prefs', join(', ', $set), join(" AND ", $where))) {
-        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
 
         return true;
     }
