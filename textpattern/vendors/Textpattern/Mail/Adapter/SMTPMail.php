@@ -198,6 +198,22 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * {@inheritdoc}
      */
 
+    public function header($name, $value)
+    {
+        if ((string)$value === '' || !preg_match('/^[\041-\071\073-\176]+$/', $name)) {
+            throw new Exception(gTxt('invalid_header'));
+        }
+
+        $this->mail->headers[$name] = $value;
+        $this->encoded->headers[$name] = $this->encoder->header($this->encoder->escapeHeader($value), 'phrase');
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function send()
     {
         if (!$this->mail->from || !$this->mail->to) {
@@ -213,7 +229,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
 
         try {
             $this->mailer->send();
-        } catch (PHPMailer\PHPMailer\Exception $e) {
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
            throw $e;
         } catch (\Exception $e) {
            throw $e;
