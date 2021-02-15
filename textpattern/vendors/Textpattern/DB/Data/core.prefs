@@ -44,23 +44,78 @@
     "smtp_from": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "110"
     },
     "publisher_email": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "115"
     },
     "override_emailcharset": {
         "val": "0",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "yesnoradio",
         "position": "120"
+    },
+    "html_email": {
+        "val": "0",
+        "type": "0",
+        "event": "mail",
+        "html": "html_email",
+        "position": "125"
+    },
+    "enhanced_email": {
+        "val": "0",
+        "type": "0",
+        "event": "mail",
+        "html": "enhanced_email",
+        "position": "150"
+    },
+    "smtp_host": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "family": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "160"
+    },
+    "smtp_port": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "family": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "170",
+        "constraints": "1,65535"
+    },
+    "smtp_user": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "family": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "180"
+    },
+    "smtp_pass": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "family": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "190"
+    },
+    "smtp_sectype": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "family": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "200"
     },
     "enable_xmlrpc_server": {
         "val": "0",

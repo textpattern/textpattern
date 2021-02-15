@@ -27,6 +27,8 @@
  * @package Admin\Prefs
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -74,7 +76,7 @@ function prefs_save()
     }
 
     $prefnames = safe_rows_start(
-        "name, event, user_name, val",
+        "name, event, family, user_name, val",
         'txp_prefs',
         join(" AND ", $sql)
     );
@@ -177,7 +179,7 @@ function prefs_list($message = '')
     echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
-    $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
+    $core_events = array('site', 'admin', 'publish', 'feeds', 'mail', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
     $level = has_privs();
 
@@ -201,7 +203,7 @@ function prefs_list($message = '')
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, family, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -219,7 +221,7 @@ function prefs_list($message = '')
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
-            $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['family'];
 
             if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
@@ -270,7 +272,8 @@ function prefs_list($message = '')
             $constraints = array();
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
-                $out[] = hed(gTxt($subEvent), 3);
+                $familyClass = (!empty($a['family']) ? $a['family'] : '');
+                $out[] = hed(gTxt($subEvent), 3, array('class' => $familyClass));
                 $last_sub_event = $subEvent;
             }
 
@@ -280,7 +283,7 @@ function prefs_list($message = '')
                 $label,
                 array($help, 'instructions_'.$a['name']),
                 array(
-                    'class' => 'txp-form-field',
+                    'class' => 'txp-form-field'.(!empty($a['family']) ? ' '.$a['family'] : ''),
                     'id'    => 'prefs-'.$a['name'],
                 )
             );
@@ -572,12 +575,118 @@ function logging($name, $val)
 }
 
 /**
+ * Renders a HTML input control overridable by constants.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function smtp_handler($name, $val, $constraints = array())
+{
+    $constName = strtoupper($name);
+    $enabled = defined($constName) ? false : true;
+    $ui = '';
+
+    switch ($name) {
+        case 'smtp_host':
+        case 'smtp_user':
+        case 'smtp_pass':
+            $ui = text_input($name, $val);
+            break;
+        case 'smtp_port':
+            $ui = pref_number($name, $val, $constraints);
+            break;
+        case 'smtp_sectype':
+            $vals = array(
+                PHPMailer::ENCRYPTION_SMTPS    => 'SSL',
+                PHPMailer::ENCRYPTION_STARTTLS => 'TLS',
+                'none'                         => gTxt('none'),
+            );
+            $ui = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+    }
+
+    if ($enabled === false) {
+        if ($ui instanceof \Textpattern\UI\TagCollection) {
+            $elems = $ui->keys();
+
+            foreach ($elems as $elem) {
+                $elem->setAtt('disabled', true);
+            }
+        } elseif ($ui instanceof \Textpattern\UI\Tag) {
+            $ui->setAtt('disabled', true);
+        }
+    }
+
+    return $ui;
+}
+
+/**
+ * Renders a yes/no radio button with toggle for the other SMTP settings.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function enhanced_email($name, $val)
+{
+    $js = script_js(<<<EOS
+        $(document).ready(function ()
+        {
+            var block = $(".mail_enhanced");
+            var smtpOn = $("#enhanced_email-1");
+            var smtpOff = $("#enhanced_email-0");
+
+            if (block.length) {
+                if (smtpOff.prop("checked")) {
+                    block.hide();
+                } else {
+                    block.show();
+                }
+
+                smtpOff.click(function () {
+                    block.hide();
+                });
+
+                smtpOn.click(function () {
+                    block.show();
+                });
+            }
+        });
+EOS
+    , false);
+
+    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).$js;
+}
+
+/**
+ * Renders a HTML &lt;select&gt; list of HTML email options.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function html_email($name, $val)
+{
+    $vals = array(
+        'plain'     => gTxt('email_plain'),
+        'html'      => 'HTML',
+        'plainhtml' => gTxt('email_plain_html'),
+    );
+
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+}
+
+/**
  * Render a multi-select list of Form Types
  *
  * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item(s)
  * @return string HTML
  */
+
 function overrideTypes($name, $val)
 {
     $instance = Txp::get('Textpattern\Skin\Form');
@@ -616,7 +725,7 @@ EOS
     , false);
 
 
-    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple().$js;
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name').$js;
 }
 
 /**
