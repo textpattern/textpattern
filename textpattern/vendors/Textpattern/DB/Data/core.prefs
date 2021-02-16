@@ -85,7 +85,7 @@
         "position": "160"
     },
     "smtp_port": {
-        "val": "",
+        "val": "587",
         "type": "0",
         "event": "mail",
         "family": "mail_enhanced",
@@ -110,7 +110,7 @@
         "position": "190"
     },
     "smtp_sectype": {
-        "val": "",
+        "val": "ssl",
         "type": "0",
         "event": "mail",
         "family": "mail_enhanced",

@@ -47,7 +47,7 @@ if (get_pref('smtp_host', null, true) === null) {
     set_pref('smtp_host', '', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 160, PREF_GLOBAL);
 }
 if (get_pref('smtp_port', null, true) === null) {
-    set_pref('smtp_port', '465', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 170, PREF_GLOBAL);
+    set_pref('smtp_port', '587', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 170, PREF_GLOBAL);
 }
 if (get_pref('smtp_user', null, true) === null) {
     set_pref('smtp_user', '', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 180, PREF_GLOBAL);
