@@ -366,10 +366,10 @@
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
         ]]></item>
         <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern pre-rilascio disponibile"><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title="Aggiorna server inaccessibile"><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Pannello file">
@@ -453,7 +453,7 @@
 <h2>URL</h2>
 <p>L’indirizzo del link. Se il link punta ad un altro sito, allora deve essere preceduto da <code>http://</code> o <code>https://</code>.</p>
         ]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title="Data di pubblicazione"><![CDATA[]]></item>
     </group>
 
     <group id="login" title="Pannello login">
@@ -556,7 +556,7 @@
 <h2>Commenti disabilitati dopo</h2>
 <p>Consente di definire la quantità di tempo trascorsa la quale viene disattivata la possibilità di commentare (può essere impostato su ‘Mai’ per consentire di commentare a tempo indeterminato).</p>
         ]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Consentire le immagini di commento nei commenti?"><![CDATA[]]></item>
         <item id="comments_mode" title="Modalità commenti"><![CDATA[
 <h2>Modalità commenti</h2>
 <p>Se è selezionato ‘nopopup’ (modo consigliato) la finestra corrente verrà aggiornata mostrando solo l’articolo corrente, con sotto i commenti.</p>
@@ -881,8 +881,8 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Gli elementi in un feed Atom richiedono un ID univoco.</p>
 <p>Per generare ID univoci al sito, Textpattern consente di scegliere tra un indirizzo email o il tuo nome di dominio, per includerli in questi ID. L’indirizzo email sarà il primo usato al momento della creazione del sito. A meno che non si preveda di cambiare il proprio nome di dominio in futuro, è probabilmente meglio impostare questa opzione su ‘No’.</p>
         ]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="use_textile" title="Formattazione testo predefinita"><![CDATA[]]></item>
+        <item id="override_form_types" title="Sovrascrivi i tipi di modulo"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Pannello sezioni">
