@@ -210,6 +210,8 @@ if (txpinterface === 'css') {
     exit;
 }
 
+callback_event('pretext_end', '', 1);
+
 $txp_sections = safe_column(array('name'), 'txp_section');
 
 $trace->start('[PHP includes, stage 3]');
