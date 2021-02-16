@@ -428,7 +428,7 @@ function preText($store, $prefs = null)
                             }
                         }
 
-                        if (!isset($permlink_guess)) {
+                        if (!isset($permlink_guess) || !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
                             unset($thisarticle);
                             $is_404 = true;
                         } else {
