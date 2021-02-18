@@ -13,15 +13,19 @@ Changes in 4.8.5 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Added: More aggregators in <txp:article /> 'fields' attribute.
 * Added: Global 'break', 'replace' and 'trim' attributes.
+* Added: <txp:image_info type="mime" />.
 * Changed: <txp:article_custom /> can paginate content using pageby attribute.
 * Changed: <txp:images /> outputs full-size images if thumbs don't exist and
-* <txp:images thumbnail="0" /> displays full-size images as expected.
+  <txp:images thumbnail="0" /> displays full-size images as expected.
+* Changed: <txp:images> accepts <txp:else />.
 * Changed: Expose secondpass Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
 * Changed: Staff writers are allowed to use <txp:php /> (they were able to do
   it in forms anyway).
+* Developer: New pre-pretext_end callback.
+* Developer: New txp.image>types callback.
 * PrismJS 1.23.0.
 
 Changes in 4.8.4 (29 Nov 2020)
