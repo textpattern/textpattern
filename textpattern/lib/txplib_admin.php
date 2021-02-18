@@ -519,10 +519,11 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     }
 
     list($w, $h, $extension) = getimagesize($file);
-    $ext = get_safe_image_types($extension);
+    $exts = get_safe_image_types();
+    $ext = !empty($exts[$extension]) ? $exts[$extension] : false;
 
     if (!$ext) {
-        return gTxt('only_graphic_files_allowed');
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $exts)));
     }
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;

@@ -938,7 +938,7 @@ function thumbnail_insert()
         if ($file === false) {
             image_edit(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR), $id);
         } else {
-            image_edit(array(gTxt('only_graphic_files_allowed'), E_ERROR), $id);
+            image_edit(array(gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $extensions))), E_ERROR), $id);
         }
     }
 }
