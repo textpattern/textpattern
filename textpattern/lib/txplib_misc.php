@@ -618,6 +618,41 @@ function the_privileged($res, $real = false)
 }
 
 /**
+ * Lists image types that can be safely uploaded.
+ *
+ * Returns different results based on the logged in user's privileges.
+ *
+ * @param   int         $type If set, validates the given value
+ * @return  mixed
+ * @package Image
+ * @since   4.6.0
+ * @example
+ * list($width, $height, $extension) = getimagesize('image');
+ * if ($type = get_safe_image_types($extension))
+ * {
+ *     echo "Valid image of {$type}.";
+ * }
+ */
+
+function get_safe_image_types($type = null)
+{
+    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+    if (has_privs('image.create.trusted')) {
+        $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
+    }
+
+    callback_event_ref('txp.image', 'types', 0, $extensions);
+
+    if (func_num_args() > 0) {
+        return !empty($extensions[$type]) ? $extensions[$type] : false;
+    }
+
+    return $extensions;
+}
+
+
+/**
  * Gets the dimensions of an image for a HTML &lt;img&gt; tag.
  *
  * @param   string      $name The filename

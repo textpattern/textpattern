@@ -813,7 +813,7 @@ function image_insert()
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
-        
+
         if (file_exists($file['tmp_name'])) {
             unlink($file['tmp_name']);
         }
@@ -938,7 +938,7 @@ function thumbnail_insert()
         if ($file === false) {
             image_edit(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR), $id);
         } else {
-            image_edit(array(gTxt('only_graphic_files_allowed'), E_ERROR), $id);
+            image_edit(array(gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $extensions))), E_ERROR), $id);
         }
     }
 }
