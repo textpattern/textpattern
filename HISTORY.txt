@@ -8,6 +8,7 @@ Changes in 4.8.5 (upcoming)
 * Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended, and
   the textarea is rendered fully in English to aid support requests.
+* Added: Support for WebP image format, on PHP 7.1 or higher.
 * Added: SSL version verification on Diagnostics panel during update checks.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: More aggregators in <txp:article /> 'fields' attribute.
