@@ -205,6 +205,7 @@ function image_list($message = '')
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
+        $imagetypes = array_filter(get_safe_image_types());
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
@@ -216,7 +217,7 @@ function image_list($message = '')
                             array('class' => 'inline-file-uploader-actions'))
                         : ''
                     )),
-                    'image/*'
+                    implode(',', $imagetypes)
                 ),
                 'div', array('class' => 'txp-control-panel')
             );
@@ -624,12 +625,13 @@ function image_edit($message = '', $id = '')
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
         $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
+        $imagetypes = array_filter(get_safe_image_types());
 
         $imageBlock[] = ($can_upload
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' ,'image/*'),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
                 $rs)
             : ''
         );
@@ -650,7 +652,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
-            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' ,'image/*'),
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' , $ext),
             $rs)
             : ''
         );
@@ -905,6 +907,7 @@ function thumbnail_insert()
     $file = $_FILES['thefile']['tmp_name'];
     $name = $_FILES['thefile']['name'];
     $file = get_uploaded_file($file);
+    $extension = 0;
 
     if (empty($file)) {
         image_edit(array(upload_get_errormsg(UPLOAD_ERR_NO_FILE), E_ERROR), $id);
@@ -912,9 +915,11 @@ function thumbnail_insert()
         return;
     }
 
-    list($w, $h, $extension) = getimagesize($file);
+    if ($imagesize = getimagesize($file)) {
+        list($w, $h, $extension) = $imagesize;
+    }
 
-    if (($file !== false) && @$extensions[$extension]) {
+    if (($file !== false) && !empty($extensions[$extension])) {
         $ext = $extensions[$extension];
         $newpath = IMPATH.$id.'t'.$ext;
 

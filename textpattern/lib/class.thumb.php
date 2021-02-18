@@ -302,6 +302,8 @@ class wet_thumb
             $this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
         } elseif ($this->_SRC['type'] == 3) {
             $this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 18) {
+            $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
         }
 
         // Crop image.
@@ -359,7 +361,7 @@ class wet_thumb
         $this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
 
         // GIF or PNG destination, set the transparency up.
-        if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3) {
+        if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3 || $this->_DST['type'] == 18) {
             $trans_idx = imagecolortransparent($this->_SRC['image']);
             $pallet_size = imagecolorstotal($this->_SRC['image']);
 
@@ -443,6 +445,8 @@ class wet_thumb
             imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
         } elseif ($this->_DST['type'] == 3) {
             imagepng($this->_DST['image'], $this->_DST['file']);
+        } elseif ($this->_DST['type'] == 18) {
+            imagewebp($this->_DST['image'], $this->_DST['file']);
         }
 
         if ($verbose) {
