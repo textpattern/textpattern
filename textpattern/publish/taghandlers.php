@@ -3644,7 +3644,7 @@ function images($atts, $thing = null)
 
     // If nothing matches from the filterable attributes, output nothing.
     if (!$where && $filters) {
-        return '';
+        return isset($thing) ? parse($thing, false) : '';
     }
 
     // If no images are filtered, start with all images.
@@ -3709,13 +3709,13 @@ function images($atts, $thing = null)
                     'p'       => $thisimage['id'],
                 ));
                 $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
-                $thing = href(
+                $out[] = href(
                     '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
                     $url
                 );
+            } else {
+                $out[] = isset($thing) ? parse($thing) : parse_form($form);
             }
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
         }
 
         $thisimage = (isset($old_image) ? $old_image : null);
@@ -3725,7 +3725,7 @@ function images($atts, $thing = null)
         }
     }
 
-    return '';
+    return isset($thing) ? parse($thing, false) : '';
 }
 
 // -------------------------------------------------------------
