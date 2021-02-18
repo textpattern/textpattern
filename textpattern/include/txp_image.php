@@ -652,7 +652,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
-            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' , $ext),
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' , $ext == '.jpg' ? '.jpg,.jpeg' : $ext),
             $rs)
             : ''
         );

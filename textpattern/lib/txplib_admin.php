@@ -450,7 +450,7 @@ function updateVolatilePartials($partials)
 
 function get_safe_image_types($type = null)
 {
-    $extensions = array(0, IMAGETYPE_GIF => '.gif', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
         (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
     if (has_privs('image.create.trusted')) {
         $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
@@ -484,6 +484,7 @@ function check_gd($image_type)
             return ($gd_info['GIF Create Support'] == true);
             break;
         case '.jpg':
+        case '.jpeg':
             return ($gd_info['JPEG Support'] == true);
             break;
         case '.png':
