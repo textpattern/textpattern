@@ -813,7 +813,7 @@ function image_insert()
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
-        
+
         if (file_exists($file['tmp_name'])) {
             unlink($file['tmp_name']);
         }
