@@ -376,7 +376,7 @@ class wet_thumb
                 );
                 imagefill($this->_DST['image'], 0, 0, $trans_idx);
                 imagecolortransparent($this->_DST['image'], $trans_idx);
-            } elseif ($this->_DST['type'] == 3) {
+            } elseif ($this->_DST['type'] == 3 || $this->_DST['type'] == 18) {
                 imagealphablending($this->_DST['image'], false);
                 $transparent = imagecolorallocatealpha($this->_DST['image'], 0, 0, 0, 127);
                 imagefill($this->_DST['image'], 0, 0, $transparent);
