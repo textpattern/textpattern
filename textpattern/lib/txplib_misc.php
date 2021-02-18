@@ -708,9 +708,17 @@ function imageFetchInfo($id = "", $name = "")
 
 function image_format_info($image)
 {
+    static $mimetypes;
+
     if (($unix_ts = @strtotime($image['date'])) > 0) {
         $image['date'] = $unix_ts;
     }
+
+    if (!isset($mimetypes)) {
+        $mimetypes = get_safe_image_types();
+    }
+
+    $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? image_type_to_mime_type($mime) : '';
 
     return $image;
 }
