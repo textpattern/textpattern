@@ -205,7 +205,7 @@ function image_list($message = '')
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
-        $imagetypes = array_filter(get_safe_image_types());
+        $imagetypes = get_safe_image_types();
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
@@ -625,7 +625,7 @@ function image_edit($message = '', $id = '')
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
         $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
-        $imagetypes = array_filter(get_safe_image_types());
+        $imagetypes = get_safe_image_types();
 
         $imageBlock[] = ($can_upload
             ? pluggable_ui(
