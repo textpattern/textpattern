@@ -3742,7 +3742,7 @@ function image_info($atts)
         'break'      => '',
     ), $atts));
 
-    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
+    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
     $out = array();
