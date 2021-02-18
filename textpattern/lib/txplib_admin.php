@@ -458,10 +458,10 @@ function updateVolatilePartials($partials)
 
 function get_safe_image_types($type = null)
 {
-    if (!has_privs('image.create.trusted')) {
-        $extensions = array(0, '.gif', '.jpg', '.png');
-    } else {
-        $extensions = array(0, '.gif', '.jpg', '.png', '.swf', 0, 0, 0, 0, 0, 0, 0, 0, '.swf');
+    $extensions = array(0, IMAGETYPE_GIF => '.gif', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+    if (has_privs('image.create.trusted')) {
+        $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
     }
 
     if (func_num_args() > 0) {
@@ -496,6 +496,9 @@ function check_gd($image_type)
             break;
         case '.png':
             return ($gd_info['PNG Support'] == true);
+            break;
+        case '.webp':
+            return ($gd_info['WebP Support'] == true);
             break;
     }
 
