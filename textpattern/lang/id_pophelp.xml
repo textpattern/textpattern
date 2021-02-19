@@ -76,7 +76,7 @@
 </ul>]]></item>
         <item id="create_author" title="Buat penulis"><![CDATA[
 <h2>Tambah penulis baru</h2>
-<p>Sebuah kata sandi, pesan selamat datang dan instruksi login akan dikirimkan ke email penulis baru.</p>
+<p>Pesan selamat datang dan instruksi masuk akan diemail ke penulis baru.</p>
         ]]></item>
     </group>
 
@@ -135,15 +135,25 @@
 <p>Item dengan waktu lebih baru dari waktu sekarang (baca: masa depan) tidak akan tampil di halaman depan dan umpan RSS/Atom sampai waktunya tiba.</p>
         ]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
-        <item id="title" title="Judul"><![CDATA[]]></item>
+        <item id="title" title="Judul"><![CDATA[
+<h2>Judul</h2>
+<p>Tambahkan judul yang sesuai untuk artikel ini.</p>
+<p>Judul artikel dibatasi maksimal 255 karakter.</p>
+        ]]></item>
         <item id="url_title" title="Judul URL-saja"><![CDATA[]]></item>
     </group>
 
     <group id="category" title="Panel Kategori">
         <item id="article_category" title="Artikel"><![CDATA[]]></item>
         <item id="category_description" title="Deskripsi"><![CDATA[]]></item>
-        <item id="file_category" title="Berkas"><![CDATA[]]></item>
-        <item id="image_category" title="Gambar"><![CDATA[]]></item>
+        <item id="file_category" title="Berkas"><![CDATA[
+<h2>Berkas</h2>
+<p>Kategori berkas bersifat opsional, dan berguna untuk mengelompokkan berkas unggahan yang dipilih menjadi satu.</p>
+        ]]></item>
+        <item id="image_category" title="Gambar"><![CDATA[
+<h2>Gambar</h2>
+<p>Kategori gambar adalah opsional, dan berguna untuk penataan internal dan untuk menentukan kumpulan gambar yang dapat ditampilkan menggunakan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> tag.</p>
+        ]]></item>
         <item id="link_category" title="Tautan"><![CDATA[]]></item>
     </group>
 
@@ -291,7 +301,8 @@
         <item id="use_comments" title="Terima komentar?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title="Gunakan surel untuk membentuk id RSS (standarnya adalah URL situs)?"><![CDATA[]]></item>
         <item id="use_plugins" title="Gunakan plugins?"><![CDATA[]]></item>
-        <item id="use_textile" title="Gunakan Textile?"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel seksi">

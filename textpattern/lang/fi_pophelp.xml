@@ -103,7 +103,9 @@
         <item id="admin_side_plugins" title="Käytetäänkö admin-puolen liitännäisiä?"><![CDATA[]]></item>
         <item id="advanced_options" title="Lisävalinnat"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="Salli PHP artikkeleissa?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Salli lomakkeen kumoaminen?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Salli lomakkeen kumoaminen?"><![CDATA[<h2>Salli lomakkeen kumoaminen?</h2>
+<p>Tämä asetus tekee mahdolliseksi kirjoittajien kumota artikkelin näyttämiseen tarkoitetun lomakkeen asetukset. Jos käytössä, 'Kumoa lomake' -pudotusvalikko on käytettävissä kun artikkelia muokataan.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="Salli PHP sivuissa?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Arkiston päiväysmuoto"><![CDATA[]]></item>
         <item id="articles_use_excerpts" title="Käytä johdantoa artikkeleissa?"><![CDATA[]]></item>

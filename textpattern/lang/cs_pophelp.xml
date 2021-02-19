@@ -480,7 +480,7 @@ např.: #@language cs-cz</p>
 <p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na https://docs.textpattern.com/tags/php" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
         <item id="allow_form_override" title="Povolit ruční volbu forem?"><![CDATA[
 <h2>Povolit ruční volbu forem?</h2>
-<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si jinou formu článku, která bude pro tento článek použita namísto výchozí. Políčko s výběrem je na stránce Psaní dostupné, jestliže je tato možnost v ‘Nastavení ‘ povolena.</p>        ]]></item>
+<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si formu, která bude pro tento článek použita namísto výchozí.Pokud je tato možnost povolena, je při úpravách článku k dispozici rozbalovací nabídka ‘Přebít formu’.  </p>        ]]></item>
         <item id="allow_page_php_scripting" title="Povolit PHP na stránkách?"><![CDATA[
 <h2>Povolit PHP na stránkách?</h2>
 <p>Volba <em>Ano</em> umožňuje používání PHP kódu v šablonách stránek a forem.</p>
@@ -802,9 +802,9 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> je nástroj určený ke zjednodušení konverze prostého textu na HTML. Pokud je povoleno toto formátování, Textile text článků zpracuje a konvertuje ho do struktury HTML.</p>
 <p>Textile rovněž nabízí výkonnou, ale snadno naučitelnou sadu příkazů, pomocí kterých lze formátovat text, definovat struktury, jako jsou seznamy, záhlaví a blockquotes, a vkládat odkazy a obrázky.</p>
         ]]></item>
-        <item id="override_form_types" title="Přepsat typy forem"><![CDATA[
-<h2>Přepsat typy forem</h2>
-<p>Vyberte, které typy forem budou k dispozici jako možnost "Přebít formu" na panelu Psaní .</p>
+        <item id="override_form_types" title="Druhy forem pro ruční volbu"><![CDATA[
+<h2>Druhy forem pro ruční volbu</h2>
+<p>Vyberte, které druhy forem budou k dispozici v rozbalovací nabídce "Přebít formu" na panelu Psaní .</p>
         ]]></item>
     </group>
 

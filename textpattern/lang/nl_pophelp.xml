@@ -182,7 +182,11 @@
         <item id="admin_side_plugins" title="Admin plugins toestaan?"><![CDATA[]]></item>
         <item id="advanced_options" title="Meer opties"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="PHP in artikelen toestaan?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[
+<h2>Mogen medewerker andere modules kiezen?</h2>
+<p>Met deze instelling kunnen medewerkers aan een artikel
+zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toegestaan zal er een 'Pas module aan' uitklapmenu zichtbaar zijn bij het bewerken van het artikel.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="PHP in pagina’s toestaan?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Datumweergave archief"><![CDATA[]]></item>
         <item id="articles_use_excerpts" title="Samenvattingen gebruiken?"><![CDATA[]]></item>
