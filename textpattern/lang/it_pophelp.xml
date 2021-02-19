@@ -804,6 +804,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Questo è il numero massimo di articoli attuali da sindacare alla volta, in formati RSS e Atom.</p>
 <p>Si consiglia un valore basso, ad esempio <code>5</code> piuttosto che <code>15</code>.</p>
         ]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="Inviare testata &quot;Last-Modified&quot;?"><![CDATA[
 <h2>Inviare testata "Last-Modified"?</h2>
 <p>Se impostata, Textpattern confronterà l’intestazione HTTP <code>If-Modified-Since</code> di un visitatore (se presente) con l’ultimo aggiornamento del sito. Se nulla è cambiato dall’ultima volta che il visitatore ha caricato la pagina (ad esempio, se il timestamp che invia il browser è lo stesso dell’ultimo aggiornamento del sito), allora un’intestazione viene re-inviata con l’istruzione per il browser del visitatore di usare la versione della pagina memorizzata nella cache.</p>

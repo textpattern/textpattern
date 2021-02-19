@@ -236,6 +236,7 @@ zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toeg
         <item id="publish_expired_articles" title="Verlopen artikelen tonen?"><![CDATA[]]></item>
         <item id="publisher_email" title="Verstuur logingegevens vanuit dit emailadres"><![CDATA[]]></item>
         <item id="rss_how_many" title="Hoe veel artikelen in RSS?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Aantal reacties in feeds tonen?"><![CDATA[]]></item>
         <item id="site_slogan" title=""><![CDATA[]]></item>
