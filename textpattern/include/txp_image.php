@@ -38,7 +38,7 @@ if (!defined('txpinterface')) {
 global $extensions;
 $extensions = get_safe_image_types();
 
-include txpath.'/lib/class.thumb.php';
+include_once txpath.'/lib/class.thumb.php';
 
 if ($event == 'image') {
     require_privs('image');
