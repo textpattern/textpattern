@@ -165,6 +165,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title="Nikad ne prikazuj email adrese?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Upotrijebi ISO-8859-1 encoding kod poslanih emailova (default je UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Putanja direktorija do Plugin cache"><![CDATA[]]></item>
