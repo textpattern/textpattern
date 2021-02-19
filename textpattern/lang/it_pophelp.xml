@@ -736,6 +736,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Textpattern utilizza la codifica UTF-8 dove possibile per impostazione predefinita, anche per le email in uscita. Tuttavia, alcuni client di posta elettronica meno recenti (tra cui alcune versioni di Microsoft Outlook) non hanno un corretto supporto UTF-8. Se si riscontrano caratteri illeggibili nelle email, con questa impostazione il testo verrà convertito nella codifica ISO-8859-1prima di inviarli.</p>
 <p><strong>Nota:</strong> Se si utilizza un linguaggio i cui caratteri non possono essere rappresentati in ISO-8859-1, questa impostazione purtroppo non vi aiuterà. Si dovrebbe cercare di trovare un client di posta elettronica compatibile UTF-8 (o Unicode).</p>
         ]]></item>
+        <item id="override_form_types" title="Sovrascrivi i tipi di modulo"><![CDATA[]]></item>
         <item id="permlink_format" title="Formato URL titolo permalink"><![CDATA[
 <h2>Formato URL titolo permalink</h2>
 <p>Determina il metodo con cui sono costruiti e assegnati gli URL dell’articolo quando si utilizza il modo ‘non-sporchi’.</p>
@@ -883,7 +884,6 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Per generare ID univoci al sito, Textpattern consente di scegliere tra un indirizzo email o il tuo nome di dominio, per includerli in questi ID. L’indirizzo email sarà il primo usato al momento della creazione del sito. A meno che non si preveda di cambiare il proprio nome di dominio in futuro, è probabilmente meglio impostare questa opzione su ‘No’.</p>
         ]]></item>
         <item id="use_textile" title="Formattazione testo predefinita"><![CDATA[]]></item>
-        <item id="override_form_types" title="Sovrascrivi i tipi di modulo"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Pannello sezioni">

@@ -196,6 +196,7 @@
         <item id="module_pophelp" title="Wyświetl wbudowane linki pomocy po stronie administratora"><![CDATA[]]></item>
         <item id="never_display_email" title="Nigdy nie pokazywać adresów email?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Używać ISO-8859-1 w emailach (domyślnie jest UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title="Format trwałych odsyłaczy"><![CDATA[]]></item>
         <item id="permlink_mode" title="Wzór adresu URL artykułu"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Ścieżka do katalogu pamięci podręcznej pluginów"><![CDATA[]]></item>
@@ -253,7 +254,6 @@
         <item id="use_mail_on_feeds_id" title="Akceptować komentarze?"><![CDATA[]]></item>
         <item id="use_plugins" title="Używać wtyczek?"><![CDATA[]]></item>
         <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel sekcji">

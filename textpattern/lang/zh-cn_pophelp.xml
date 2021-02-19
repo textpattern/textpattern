@@ -603,6 +603,7 @@
         <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[]]></item>
         <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[]]></item>
         <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码 (默认为 UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title="永久链接标题 URL 模式"><![CDATA[]]></item>
         <item id="permlink_mode" title="文章的 URL 模式"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="插件缓存目录路径"><![CDATA[]]></item>
@@ -628,7 +629,6 @@
         <item id="use_mail_on_feeds_id" title="使用电子邮件地址构建 feed ID （默认为网站 URL）？"><![CDATA[]]></item>
         <item id="use_plugins" title="使用插件？"><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="章节面板">
