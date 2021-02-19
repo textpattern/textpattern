@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="sr">
-    <group id="admin" title="">
-        <item id="about_privileges" title=""><![CDATA[]]></item>
-        <item id="create_author" title=""><![CDATA[<h2>Dodaj novog autora</h2>
+    <group id="admin" title="Panel korisnika">
+        <item id="about_privileges" title="O ulogama"><![CDATA[]]></item>
+        <item id="create_author" title="Dodaj novog autora"><![CDATA[<h2>Dodaj novog autora</h2>
 <p>Poruka dobrodošlice i uputstva za prijavu biće poslati novom autoru e-mail-om.</p>]]></item>
     </group>
 
-    <group id="article" title="">
-        <item id="article_image" title=""><![CDATA[]]></item>
-        <item id="body" title=""><![CDATA[]]></item>
-        <item id="description" title=""><![CDATA[]]></item>
-        <item id="excerpt" title=""><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title=""><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
-        <item id="publish_date" title=""><![CDATA[]]></item>
-        <item id="status" title=""><![CDATA[]]></item>
-        <item id="title" title=""><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+    <group id="article" title="Panel za pisanje">
+        <item id="article_image" title="Slika za ovaj unos"><![CDATA[<h2>Slika članka</h2>
+<p>Da biste pridružili jednu sliku ovom članku, ovde stavite jedno od sledećeg:</p>
+<ol>
+    <li>Textpattern ID slike (na primer. <code>12</code>)</li>
+    <li>relativni URL slike (na primer. <code>/images/moja_slika.jpg</code>)</li>
+    <li>apsolutni URL (na primer. <code>https://example.com/path/to/images/moja_slika.jpg</code>)</li>
+</ol>
+<p>Slika se može prikazati postavljanjem  <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> taga <span class="ui-icon ui-icon-extlink">(otvara spoljnu vezu u novom prozoru)</span></a> unutar obrasca članka.  Prikazaće se kompletan HTML  <code>&lt;img&gt;</code> tag za izabranu sliku</p>
+        ]]></item>
+        <item id="body" title="Sadržaj"><![CDATA[<h2>Sadržaj (telo)</h2>
+<p>Glavni sadržaj članka sadrži telo članka.</p>
+<p>Prilikom sastavljanja ili pripreme članaka za objavljivanje u Textpattern-u, autor može da se prebacuje između tri prikaza članka: običnog teksta, HTML oznake (koda kojim veb pregledač prikazuje članak) i prikazanog pregleda.</p>]]></item>
+        <item id="description" title="Opis"><![CDATA[]]></item>
+        <item id="excerpt" title="Kratak opis (uvodna reč)"><![CDATA[]]></item>
+        <item id="expire_date" title="Datum isteka"><![CDATA[]]></item>
+        <item id="keywords" title="Ključne reči"><![CDATA[]]></item>
+        <item id="override_form" title="Zamenite obrazac"><![CDATA[]]></item>
+        <item id="publish_date" title="Datum objave"><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="title" title="Naslov"><![CDATA[]]></item>
+        <item id="url_title" title="Naslov samo za URL adresu"><![CDATA[]]></item>
     </group>
 
-    <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
+    <group id="category" title="Panel kategorija">
+        <item id="article_category" title="Članci"><![CDATA[]]></item>
         <item id="category_description" title=""><![CDATA[]]></item>
-        <item id="file_category" title=""><![CDATA[]]></item>
-        <item id="image_category" title=""><![CDATA[]]></item>
-        <item id="link_category" title=""><![CDATA[]]></item>
+        <item id="file_category" title="Fajlovi"><![CDATA[<h2>Fajlovi</h2>
+<p>Kategorije datoteka nisu obavezne, i korisne su za grupisanje izabranih učitanih datoteka zajedno.</p>
+        ]]></item>
+        <item id="image_category" title="Slike"><![CDATA[]]></item>
+        <item id="link_category" title="Linkovi"><![CDATA[]]></item>
     </group>
 
-    <group id="diag" title="">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
+    <group id="diag" title="Dijagnostički panel">
+        <item id="clean_url_data_failed" title="Test za čiste URL adrese nije uspeo"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Test za čiste URL adrese nije uspeo"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Sakrij privatne informacije"><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title=""><![CDATA[]]></item>
         <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
@@ -99,9 +111,9 @@
         <item id="admin_side_plugins" title=""><![CDATA[]]></item>
         <item id="advanced_options" title=""><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[<h2>Dozvoliti zamenu obrasca?</h2>
-<p>Ova postavka omogućava autorima članaka da ponište obrazac koji će se koristiti kada se njihov članak generiše. Ako je omogućeno, „Zameni obrazac“ padajući meni  biće dostupan prilikom uređivanja članka.</p>]]></item>
-        <item id="allow_page_php_scripting" title="Dozvoli PHP u stranicama?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Dozvoliti zamenu obrasca?"><![CDATA[<h2>Dozvoliti zamenu obrasca?</h2>
+<p>Ova postavka omogućava autorima članaka da ponište obrazac koji će se koristiti kada se njihov članak generiše. Ako je omogućeno, „Zameni obrazac“ padajući meni  biće dostupan prilikom uređivanja članka.</p>]]></item>
+        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
         <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
@@ -113,8 +125,7 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Dozvoli slike korisnika u komentarima?"><![CDATA[<h2>Dozvoli slike korisnika u komentarima?</h2>
-<p>Ako je ova opcija postavljena na 'Ne', sve slike uključene u komentare biće obrisane.</p>]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
@@ -144,7 +155,7 @@
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
         <item id="override_form_types" title="Zameni tipove obrazaca"><![CDATA[<h2>Zameni tipove obrazaca</h2>
-<p>Izaberite za koje tipove obrazaca će njihovi šabloni biti dostupni na tabli „Napiši“ kao zamenjivi obrasci.</p>]]></item>
+<p>Izaberite za koje tipove obrazaca će njihovi šabloni biti dostupni na tabli „Napiši“ kao zamenjivi obrasci.</p>]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
