@@ -673,6 +673,10 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Použít v emailech znakovou sadu ISO-8859-1 (výchozí je UTF-8)?</h2>
 <p>Textpattern používá kódování UTF-8, kde jen to je možné, a tedy i pro odchozí emaily. Některé starší verze poštovních klientů však toto kódování dobře nezvládají (jako např. některé verze programu Outlook). Pokud dostáváš emaily s nesmyslnými znaky, zkus zde nastavit znakovou sadu ISO-8859-1, do níž budou emaily před odesláním převedeny.</p>
 <p><strong>Pozn.:</strong> Pokud používáš jazyk, který obsahuje znaky, jež nelze v této znakové sadě zobrazit, pak ani tato volba nepomůže. Řešením je poohlédnout se po poštovním klientu s řádnou podporou UTF-8 (nebo obecně Unicode).</p>        ]]></item>
+        <item id="override_form_types" title="Druhy forem pro ruční volbu"><![CDATA[
+<h2>Druhy forem pro ruční volbu</h2>
+<p>Vyberte, které druhy forem budou k dispozici v rozbalovací nabídce "Přebít formu" na panelu Psaní .</p>
+        ]]></item>
         <item id="permlink_format" title="Formát adresy URL"><![CDATA[
 <h2>Formát adresy URL</h2>
 <p>Definuje metodu konstrukce URL adresy článku, když se používá v nastavení <em>Podoba stálých odkazů</em> jiný formát než ‘?=ošklivé’.</p>
@@ -802,10 +806,6 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Nastavení způsobu formátování textu, který zde vyberete, se stane výchozí pro anotaci a tělo článku v panelu "Psaní". Máte možnost volby "Použít Textile", převést zalomení řádků na HTML značky pro odstavce nebo ponechat text  beze změn.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> je nástroj určený ke zjednodušení konverze prostého textu na HTML. Pokud je povoleno toto formátování, Textile text článků zpracuje a konvertuje ho do struktury HTML.</p>
 <p>Textile rovněž nabízí výkonnou, ale snadno naučitelnou sadu příkazů, pomocí kterých lze formátovat text, definovat struktury, jako jsou seznamy, záhlaví a blockquotes, a vkládat odkazy a obrázky.</p>
-        ]]></item>
-        <item id="override_form_types" title="Druhy forem pro ruční volbu"><![CDATA[
-<h2>Druhy forem pro ruční volbu</h2>
-<p>Vyberte, které druhy forem budou k dispozici v rozbalovací nabídce "Přebít formu" na panelu Psaní .</p>
         ]]></item>
     </group>
 

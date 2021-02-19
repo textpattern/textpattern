@@ -795,6 +795,8 @@ title="HTML"
 <p>Textpattern utilise l’encodage UTF-8  par défaut dans la mesure du possible, y compris pour les e-mails sortants. Toutefois, certains anciens clients de messagerie électronique (y compris certaines versions de Microsoft Outlook) ne dispose pas d’un bon support UTF-8. Si vous obtenez des caractères inintelligibles dans vos messages, ce paramètre permettra d’utiliser l’encodage ISO-8859-1.</p>
 <p><strong>Remarque :</strong> si vous utilisez une langue dont les caractères ne peuvent être représentés en ISO-8859-1, ce paramètre ne vous aidera malheureusement pas. Vous devrez faire usage d’un client de messagerie compatible UTF-8.</p>
         ]]></item>
+        <item id="override_form_types" title="Sélection des modules de remplacements"><![CDATA[<h2>Sélection des modules de remplacements</h2>
+<p>Choisissez ici quels types de modules vous souhaitez donner accès depuis la page Rédiger pour modules de remplacement (sélection multiple autorisée).</p>]]></item>
         <item id="permlink_format" title="Permaliens : forme des titres d’URL"><![CDATA[
 <h2>Permaliens : forme des titres d’URL</h2>
 <p>Détermine la méthode à employer pour la construction et l’association des URL des articles lorsque la forme brute n’est pas en usage.</p>
@@ -945,8 +947,6 @@ title="HTML"
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention destinée à la conversion de texte brut en HTML. Lorsque activé, Textile interprétera le corps de texte des articles pour afficher du balisage structurel en HTML.</p>
 <p>Textile offre aussi de puissantes commandes facilement compréhensibles afin de formater du texte, définir des structures comme des listes, des titres et citations, insérer des liens ou des images.</p>
 ]]></item>
-        <item id="override_form_types" title="Sélection des modules de remplacements"><![CDATA[<h2>Sélection des modules de remplacements</h2>
-<p>Choisissez ici quels types de modules vous souhaitez donner accès depuis la page Rédiger pour modules de remplacement (sélection multiple autorisée).</p>]]></item>
     </group>
 
     <group id="section" title="Nom de la section">

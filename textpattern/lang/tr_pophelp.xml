@@ -245,6 +245,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title="Yorum yazanların e mail adresi gizlensin mi?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="E-posta gönderirken ISO-8859-1 kodlama kullanılsın mı (varsayılan UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
@@ -273,7 +274,6 @@
         ]]></item>
         <item id="use_plugins" title=""><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Bölümler paneli">

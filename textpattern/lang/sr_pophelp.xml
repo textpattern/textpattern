@@ -143,6 +143,8 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Zameni tipove obrazaca"><![CDATA[<h2>Zameni tipove obrazaca</h2>
+<p>Izaberite za koje tipove obrazaca će njihovi šabloni biti dostupni na tabli „Napiši“ kao zamenjivi obrasci.</p>]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
@@ -170,8 +172,6 @@
         <item id="use_textile" title="Podrazumevano formatiranje teksta"><![CDATA[<h2>Podrazumevano formatiranje teksta</h2>
 <p>Podešavanje tekstualnog formata koje ovde odaberete postaje podrazumevano za odlomak i obeležavanje tela na tabli „Napišite“. Možete da dozvolite potpunu obradu Tekstil-a, da pretvorite prelome redova u HTML markere pasusa ili da uopšte ne konvertujete bilo koji tekst.</p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Tekstil <span class="ui-icon ui-icon-extlink">(otvara spoljni link u novom prozoru)</span></a> je uslužni program namenjen pojednostavljenju pretvaranja običnog teksta u HTML. Kada je omogućeno, Tekstil će obrađivati osnovni tekst članaka i vraćati strukturno zvučni HTML.</p>
 <p>Tekstil takođe nudi moćan, ali lak za učenje skup naredbi pomoću kojih se formatira tekst, definišu strukture kao što su liste, zaglavlja i blok citati i ubacuju linkove i slike.</p>]]></item>
-        <item id="override_form_types" title="Zameni tipove obrazaca"><![CDATA[<h2>Zameni tipove obrazaca</h2>
-<p>Izaberite za koje tipove obrazaca će njihovi šabloni biti dostupni na tabli „Napiši“ kao zamenjivi obrasci.</p>]]></item>
     </group>
 
     <group id="section" title="">

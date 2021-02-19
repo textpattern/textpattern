@@ -683,6 +683,7 @@
         <item id="module_pophelp" title="Mostrar enlaces de ayuda emergente"><![CDATA[]]></item>
         <item id="never_display_email" title="¿Ocultar email del autor del comentario?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="¿Codificación ISO-8859-1 en envíos de email? Por defecto UTF-8"><![CDATA[]]></item>
+        <item id="override_form_types" title="Sustituir tipos de formulario"><![CDATA[]]></item>
         <item id="permlink_format" title="Modelo de URL"><![CDATA[]]></item>
         <item id="permlink_mode" title="Esquema del URL del artículo"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Ruta del directorio del caché de plugins"><![CDATA[]]></item>
@@ -724,7 +725,6 @@
 <p>Esto permite desactivar todo el soporte para plugins de Textpattern. Es útil para depurar errores en el sitio y hacer una comprobación si uno o más plugins están involucrados.</p>
         ]]></item>
         <item id="use_textile" title="Formato de texto por defecto"><![CDATA[]]></item>
-        <item id="override_form_types" title="Sustituir tipos de formulario"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel de secciones">

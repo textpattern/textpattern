@@ -350,6 +350,7 @@
         <item id="module_pophelp" title="Exibir links de ajuda online da administração"><![CDATA[]]></item>
         <item id="never_display_email" title="Nunca mostar endereço de email?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="No email usar ISO-8859-1 (UTF-8 por padrão)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title="Padrão de URL  de link permanente"><![CDATA[]]></item>
         <item id="permlink_mode" title="Padrão de URL do artigo"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
@@ -375,7 +376,6 @@
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Usar plugins?"><![CDATA[]]></item>
         <item id="use_textile" title="Formatação padrão de texto"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">

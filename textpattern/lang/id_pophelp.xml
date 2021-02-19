@@ -278,6 +278,7 @@
         <item id="module_pophelp" title="Tampilkan taut bantuan sebaris sisi-admin"><![CDATA[]]></item>
         <item id="never_display_email" title="Sembunyikan surel (di komentar)?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Gunakan ISO-8859-1 untuk surel (standarnya UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title="Format URL pranala judul"><![CDATA[]]></item>
         <item id="permlink_mode" title="Mode URL artikel"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Jalur direktori tembolok plugin"><![CDATA[]]></item>
@@ -303,7 +304,6 @@
         <item id="use_mail_on_feeds_id" title="Gunakan surel untuk membentuk id RSS (standarnya adalah URL situs)?"><![CDATA[]]></item>
         <item id="use_plugins" title="Gunakan plugins?"><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel seksi">

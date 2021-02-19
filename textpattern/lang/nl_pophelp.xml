@@ -228,6 +228,10 @@ zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toeg
         <item id="module_pophelp" title="Hulplinks aan de administratiekant tonen"><![CDATA[]]></item>
         <item id="never_display_email" title="Emailadressen altijd verbergen?"><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Moduletype aanpassen"><![CDATA[
+<h2>Pas het moduletype aan</h2>
+<p>Kies welke modules beschikbaar moeten zijn onder de Schrijf tab als speciale modules.</p>
+        ]]></item>
         <item id="permlink_format" title="URL van de permanente link naar de titel"><![CDATA[]]></item>
         <item id="permlink_mode" title="URL-vorm voor het artikel"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Pad naar de plugincache"><![CDATA[]]></item>
@@ -257,10 +261,6 @@ zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toeg
 <p>De door u gekozen tekst vormgeving wordt standaard gebruikt voor de samenvatting en body tekstopmaak op de 'Schrijven' tab. Je kunt ervoor kiezen om volledige Textile vormgevingstags toe te staan, alleen lijnen om te zetten in HTML alinea-markeringen of  de tekst helemaal niet aan te passen.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een hulpmiddel om de omzetting van platte tekst naar HTML te vereenvoudigen. Indien ingeschakeld, zal Textile de tekst van artikelen verwerken en naar correcte HTML omzetten.</p>
 <p>Textile biedt ook een krachtige maar eenvoudig te leren set code's waarmee tekst kan worden opgemaakt. Je kunt er structuren zoals lijsten, kop- en blokalinea's mee maken en links en afbeeldingen invoegen.</p>
-        ]]></item>
-        <item id="override_form_types" title="Moduletype aanpassen"><![CDATA[
-<h2>Pas het moduletype aan</h2>
-<p>Kies welke modules beschikbaar moeten zijn onder de Schrijf tab als speciale modules.</p>
         ]]></item>
     </group>
 
