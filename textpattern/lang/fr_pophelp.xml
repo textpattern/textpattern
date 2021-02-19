@@ -863,6 +863,7 @@ title="HTML"
 <p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
 <p>Une valeur faible, comme <code>5</code> plutôt que <code>15</code>, est préférable.</p>
         ]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
 <h2>Envoyer l’entête de dernière modification ?</h2>
 <p>Si renseigné, Textpattern comparera l’entête HTTP <code>If-Modified-Since</code> des visiteurs (si elle existe) avec la dernière modification intervenue sur le site. Si rien n’a changé depuis la dernière visite de l’Internaute (ex. si l’horodatage transmis par le navigateur est identique à celui de la dernière mise à jour du site), alors une entête sera envoyée pour que le navigateur du visiteur affiche la version de la page mise dans son cache.</p>
@@ -903,7 +904,7 @@ title="HTML"
         ]]></item>
         <item id="spam_blacklists" title="Liste de blocage des spams (séparés par une virgule)"><![CDATA[
 <h2>Liste de blocage des spams (séparés par une virgule)</h2>
-<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">liste de blocage <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire de votre blog et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
+<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blacklisting">liste de blocage <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire de votre blog et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
 <p>Vous pouvez renseigner une liste de noms de domaine, séparés par une virgule. Veuillez prendre note que ces listes relèvent de votre responsabilité et correspondent, effectivement, à vos besoins.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Le résumé plutôt que l’article complet dans les flux XML ?"><![CDATA[

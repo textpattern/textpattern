@@ -77,8 +77,8 @@
         ]]></item>
         <item id="create_author" title="Criar o autor"><![CDATA[<h2>Adicionar novo autor</h2>
 <p>Uma mensagem de boas-vindas e as instruções de login serão enviadas por e-mail para o novo autor.</p>
-        
- 
+
+
 ]]></item>
     </group>
 
@@ -237,8 +237,8 @@
         ]]></item>
         <item id="dns_lookup_fails" title="DNS falhou"><![CDATA[<h2>A pesquisa de DNS falhou</h2>
 <p>A URL do endereço do site não pode ser acessada .</p>
-        
- 
+
+
 ]]></item>
         <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[<h2>Uploads de arquivos estâo desabilitados</h2>
 <p>A configuraç~~ao do servidor atual indica que uploads de arquivos estão desabilitados. Por favor altere <code>file_uploads</code> configurações em <code>php.ini</code> ou consulte o host do site pra assistencia.</p>
@@ -358,6 +358,7 @@
         <item id="publish_expired_articles" title="Publicar artigo expirado?"><![CDATA[]]></item>
         <item id="publisher_email" title="Enviar informações de login a partir deste endereço de email"><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Mostrar contador de comentários nos feeds?"><![CDATA[]]></item>
         <item id="site_slogan" title="Slogan do site"><![CDATA[]]></item>

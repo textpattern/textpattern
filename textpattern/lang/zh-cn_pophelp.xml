@@ -611,6 +611,7 @@
         <item id="publish_expired_articles" title="发布过期的文章？"><![CDATA[]]></item>
         <item id="publisher_email" title="发送此电子邮件地址的登录详情"><![CDATA[]]></item>
         <item id="rss_how_many" title="订阅中的文章数目"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="在订阅中显示评论计数？"><![CDATA[]]></item>
         <item id="site_slogan" title="网站标语"><![CDATA[]]></item>

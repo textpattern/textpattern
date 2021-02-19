@@ -158,6 +158,7 @@
         <item id="publish_expired_articles" title="Julkaise vanhentuneet artikkelit?"><![CDATA[]]></item>
         <item id="publisher_email" title="Lähetä kirjautumistiedot tästä osoitteesta"><![CDATA[]]></item>
         <item id="rss_how_many" title="Kuinka monta artikkelia tulisi näyttää syötteissä?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="Lähetetäänkö &quot;Last-Modified&quot;-otsikkotietue?"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Näytä kommenttien lukumäärä syötteissä?"><![CDATA[]]></item>
         <item id="site_slogan" title="Sivuston tunnuslause"><![CDATA[]]></item>

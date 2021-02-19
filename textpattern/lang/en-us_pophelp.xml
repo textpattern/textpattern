@@ -411,13 +411,14 @@
 <p>Uploading a file here will replace the contents of the existing file on the server but will keep the file name the same as it was before. The download count and other information associated with the file remain unaffected.</p>
         ]]></item>
         <item id="timestamp_file" title="Publish date"><![CDATA[
-<h2>Write: Publish date</h2>
+<h2>Publish date</h2>
 <p>The time a file is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
 <p>The boxes correspond to the following information:</p>
 <ul>
     <li>Year / Month / Day</li>
     <li>Hour (24-hour format) : Minute : Second</li>
-</ul>        ]]></item>
+</ul>
+        ]]></item>
         <item id="upload" title="Upload file"><![CDATA[
 <h2>Upload file</h2>
 <p>Use this form to upload files or images to your server.</p>
@@ -514,9 +515,11 @@
 <p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
 <p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
         ]]></item>
-        <item id="upload_plugin" title="Upload plugin"><![CDATA[<h2>Upload plugin</h2>
+        <item id="upload_plugin" title="Upload plugin"><![CDATA[
+<h2>Upload plugin</h2>
 <p>Use this form to upload a plugin file (either a PHP file or a zipped archive). Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
-<p>Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>]]></item>
+<p>Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Preferences panel">
@@ -858,6 +861,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>This is the maximum number of current articles to be syndicated at a time, in RSS and Atom formats.</p>
 <p>A low value, such as <code>5</code> through <code>15</code> is recommended.</p>
         ]]></item>
+        <item id="secondpass" title="Number of extra parser sweeps"><![CDATA[
+<h2>Number of extra parser sweeps</h2>
+<p>The Textpattern tag parser usually replaces all your tags with content from the database in one sweep of the page template. In some cases, this may be insufficient, for example:</p>
+<ul>
+    <li>When using low load order plugins as tag attributes</li>
+    <li>Code replacements inside <code>&lt;txp:php&gt;</code> tags</li>
+    <li>Skipping page elements earlier in the page so they may receive content that is derived from a tag that is processed later<</li>
+</ul>
+<p>Textpattern has traditionally run one extra sweep (called ‘secondpass’) for legacy reasons, hence the default value of this preference being <code>1</code>. More sweeps, however, increase the chances of unintended tags slipping through and being processed. Recent improvements in the tag parser have reduced the need for this second pass. So, unless you are using the second sweep for a dedicated reason, please reduce this value to <code>0</code> to make your site more secure.</p>
+<p>If you subsequently find unprocessed tags being rendered on your website (and there are no other tag errors shown in Testing/Debugging modes due to mismatched tag pairs) then please contact us with your page template/code/plugin example. We are trying to eradicate the need for extra parser passes, and this information will help us achieve that.</p>
+        ]]></item>
         <item id="send_lastmod" title="Send &quot;Last-Modified&quot; header?"><![CDATA[
 <h2>Send "Last-Modified" header?</h2>
 <p>When set, Textpattern will read a visitor’s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor’s browser to use its cached version of the page.</p>
@@ -870,11 +884,11 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="site_slogan" title="Site slogan"><![CDATA[
 <h2>Site slogan</h2>
 <p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a summary or description of your site. It will be used as the description of your site wherever required, such as in your RSS/Atom feeds, and may be used at any number of places throughout your site, at your discretion.</p>
+<p><strong>Note:</strong> The site slogan is optional, but may be required for a valid RSS or Atom feed.</p>
         ]]></item>
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>
 <p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
-<p><strong>Note:</strong> The site slogan is optional, but may be required for a valid RSS or Atom feed.</p>
         ]]></item>
         <item id="siteurl" title="Site URL"><![CDATA[
 <h2>Site URL</h2>

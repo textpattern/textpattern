@@ -67,7 +67,7 @@
         <ul>
             <li>només pot modificar article fins que es publica</li>
             <li>pot aplicar l'estatus de <em>només</em>Esborrany, Ocult o Pendent</li>
-        </ul> 
+        </ul>
     </li>
     <li>pot veure articles d'altres usuaris</li>
     <li>pot gestionar imatges</li>
@@ -260,6 +260,7 @@
         <item id="publish_expired_articles" title="Publicar els articles caducats?"><![CDATA[]]></item>
         <item id="publisher_email" title="Enviar la informació d'accés a aquesta direcció de correu electrònic"><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Mostrar comptador de comentaris en feeds?"><![CDATA[]]></item>
         <item id="site_slogan" title="Eslògan del lloc"><![CDATA[]]></item>

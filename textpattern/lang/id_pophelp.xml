@@ -286,6 +286,7 @@
         <item id="publish_expired_articles" title="Terbitkan artikel kadaluarsa?"><![CDATA[]]></item>
         <item id="publisher_email" title="Kirim rincian masuk dari surel ini"><![CDATA[]]></item>
         <item id="rss_how_many" title="Berapa artikel yang masuk dalam umpan RSS?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="Kirim tajuk &quot;Last-Modified&quot;?"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Tampilkan hitungan komentar di RSS?"><![CDATA[]]></item>
         <item id="site_slogan" title="Slogan situs"><![CDATA[]]></item>
