@@ -99,8 +99,9 @@
         <item id="admin_side_plugins" title=""><![CDATA[]]></item>
         <item id="advanced_options" title=""><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[<h2>Dozvoliti zamenu obrasca?</h2>
+<p>Ova postavka omogućava autorima članaka da ponište obrazac koji će se koristiti kada se njihov članak generiše. Ako je omogućeno, „Zameni obrazac“ padajući meni  biće dostupan prilikom uređivanja članka.</p>]]></item>
+        <item id="allow_page_php_scripting" title="Dozvoli PHP u stranicama?"><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
         <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>

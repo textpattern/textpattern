@@ -495,8 +495,8 @@
 <p>El código PHP debe tener omitidas las etiquetas PHP de apertura y cierre, y también encerrarse dentro de <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"> etiquetas <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="¿Permitir sobrescritura de bloques?"><![CDATA[
-<h2>¿Permitir sobreescritura de formularios?</h2>
-<p>Esta opción permite a los autores de artículos anular el formulario para ser usado cuando su artículo es desplegado. Si está activado, un menú desplegable 'Sobreescribir formulario' estará disponible en 'Opciones avanzadas', al editar un artículo.</p>
+<h2>¿Permitir sobrescritura de bloques?</h2>
+<p>Esta opción permite a los autores de artículos sobrescribir el bloque para ser usado cuando su artículo es desplegado. Si está activado, un menú desplegable 'Sobrescribir bloque' estará disponible en 'Opciones avanzadas', al editar un artículo.</p>
         ]]></item>
         <item id="allow_page_php_scripting" title="¿Permitir PHP en las páginas?"><![CDATA[
 <h2>¿Permitir PHP en páginas?</h2>

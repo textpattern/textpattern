@@ -127,7 +127,10 @@
         <item id="admin_side_plugins" title=""><![CDATA[]]></item>
         <item id="advanced_options" title=""><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[
+<h2>Να επιτρέπεται η αντικατάσταση της φόρμας?</h2>
+<p>Αυτή η ρύθμιση επιτρέπει στους συντάκτες των άρθρων να παρακάμψουν τη φόρμα για χρήση όταν το άρθρο τους αποδίδεται. Αν ενεργοποιηθεί, ένα αναπτυσσόμενο μενού 'Παράκαμψη φόρμας' θα είναι διαθέσιμο κατά την επεξεργασία των άρθρων.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
@@ -194,6 +197,7 @@
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title=""><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="">

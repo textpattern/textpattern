@@ -527,10 +527,8 @@
 <p>Lorsque activé, ce paramètre permettra l’utilisation du code PHP dans les articles. L’auteur•e doit néanmoins disposer de privilèges suffisants (par défaut, seul•le•s les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Administrat•eur•rice•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> et les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Assistant•e•s administrat•eur•rice<span class="ui-icon ui-icon-extlink">(ouvrir le lien dans une fenêtre externe)</span></a> y sont autorisé•e•s).</p>
 <p>Le code PHP ne doit pas comporter de balises d’ouverture et de fermeture propres à PHP mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
-        <item id="allow_form_override" title="Autoriser l’usage du module de remplacement par article ?"><![CDATA[
-<h2>Autoriser l’usage du module de remplacement par article ?</h2>
-<p>Ce paramètre permet aux auteur•e•s d’écraser et de remplacer le module utilisé afin de restituer leurs articles. Si activé, une liste déroulante «Module de remplacement» sera disponible sous les options avancées «Affectation et affichage de l’article», lors de l’édition d’un article.</p>
-        ]]></item>
+        <item id="allow_form_override" title="Autoriser l’usage du module de remplacement par article ?"><![CDATA[<h2>Autoriser l’usage du module de remplacement par article ?</h2>
+<p>Ce paramètre permet aux auteur•e•s de remplacer le module utilisé pour présenter leurs articles. Si activé, une liste déroulante «Module de remplacement» sera disponible sous les options avancées «Affectation et affichage de l’article», lors de l’édition d’un article.</p>]]></item>
         <item id="allow_page_php_scripting" title="Autoriser l’usage de PHP dans les gabarits ?"><![CDATA[
 <h2>Autoriser l’usage de PHP dans les gabarits ?</h2>
 <p>Si activé, ce paramètre permet l’ajout de code PHP dans les gabarits de pages et les modules.</p>
@@ -903,9 +901,9 @@ title="HTML"
 </ul>
 <p>Cela garanti que l’enveloppe SMTP de l’adresse d’expédition (qui n’est par nécessairement la même que celle de l’entête "From:" visible dans les messages) est configurée avec l’adresse renseignée ici, ce qui est requis pour l’envoi de e-mail sur certains serveurs.</p>
         ]]></item>
-        <item id="spam_blocklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[
-<h2>Listes noires anti-spam (séparées par une virgule)</h2>
-<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">liste noire <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
+        <item id="spam_blocklists" title="Liste de blocage des spams (séparés par une virgule)"><![CDATA[
+<h2>Liste de blocage des spams (séparés par une virgule)</h2>
+<p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blacklisting">liste de blocage <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire de votre blog et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
 <p>Vous pouvez renseigner une liste de noms de domaine, séparés par une virgule. Veuillez prendre note que ces listes relèvent de votre responsabilité et correspondent, effectivement, à vos besoins.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Le résumé plutôt que l’article complet dans les flux XML ?"><![CDATA[
