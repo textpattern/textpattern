@@ -873,7 +873,7 @@ title="HTML"
 <li>Quand des éléments d’une page sont différés afin de recevoir du contenu d’une balise interprétée ultérieurement</li>
 </ul>
 <p>Textpattern procède toujours par une analyse supplémentaire (nommé "secondpass") pour des raisons d’antériorité d’où la raison du réglage de cette préférence  sur <code>1</code>. L’augmentation de ce cycle, cependant, accroît le risque que des balises inattendues soient interprétées. Les récentes améliorations apportées à l’interpréteur de balises ont réduit le besoin de cette seconde analyse. Aussi, à moins que vous n’utilisiez le deuxième balayage pour une raison spécifique, veuillez réduire cette valeur à <code>0</code> afin de mieux sécuriser votre site.</p>
-<p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en de raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
+<p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
         
 ]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
