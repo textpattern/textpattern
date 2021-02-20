@@ -5059,7 +5059,7 @@ function hide($atts = array(), $thing = null)
     extract(lAtts(array('process' => null), $atts));
 
     if (!$process) {
-        return $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
+        return trim($process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
     } elseif (is_numeric($process)) {
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
