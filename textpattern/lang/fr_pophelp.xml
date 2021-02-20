@@ -865,7 +865,17 @@ title="HTML"
 <p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
 <p>Une valeur faible, comme <code>5</code> plutôt que <code>15</code>, est préférable.</p>
         ]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="secondpass" title="Nombre d’itérations de l’interpréteur "><![CDATA[<h2>Nombre d’itérations de l’interpréteur</h2>
+<p>L’interpréteur de Textpattern remplace généralement vos balises spécifiques par le contenu de la base de données en une seule itération des pages. Dans certains cas cela peut s’avérer être insuffisant. Par exemple :</p>
+<ul>
+<li>Lors de l’usage de plugins dans des attributs de balises et dont l’ordre de chargement est de bas niveau</li>
+<li>L’usage de code entre les balises <code>&lt;txp:php&gt;</code></li>
+<li>Quand des éléments d’une page sont différés afin de recevoir du contenu d’une balise interprétée ultérieurement</li>
+</ul>
+<p>Textpattern procède toujours par une analyse supplémentaire (nommé "secondpass") pour des raisons d’antériorité d’où la raison du réglage de cette préférence  sur <code>1</code>. L’augmentation de ce cycle, cependant, accroît le risque que des balises inattendues soient interprétées. Les récentes améliorations apportées à l’interpréteur de balises ont réduit le besoin de cette seconde analyse. Aussi, à moins que vous n’utilisiez le deuxième balayage pour une raison spécifique, veuillez réduire cette valeur à <code>0</code> afin de mieux sécuriser votre site.</p>
+<p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
+        
+]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
 <h2>Envoyer l’entête de dernière modification ?</h2>
 <p>Si renseigné, Textpattern comparera l’entête HTTP <code>If-Modified-Since</code> des visiteurs (si elle existe) avec la dernière modification intervenue sur le site. Si rien n’a changé depuis la dernière visite de l’Internaute (ex. si l’horodatage transmis par le navigateur est identique à celui de la dernière mise à jour du site), alors une entête sera envoyée pour que le navigateur du visiteur affiche la version de la page mise dans son cache.</p>

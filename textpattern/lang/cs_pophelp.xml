@@ -480,7 +480,7 @@ např.: #@language cs-cz</p>
 <p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na https://docs.textpattern.com/tags/php" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
         <item id="allow_form_override" title="Povolit ruční volbu forem?"><![CDATA[
 <h2>Povolit ruční volbu forem?</h2>
-<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si formu, která bude pro tento článek použita namísto výchozí.Pokud je tato možnost povolena, je při úpravách článku k dispozici rozbalovací nabídka ‘Přebít formu’.  </p>        ]]></item>
+<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si formu, která bude pro tento článek použita namísto výchozí. Pokud je tato možnost povolena, je při úpravách článku k dispozici rozbalovací nabídka ‘Přebít formu’.  </p>        ]]></item>
         <item id="allow_page_php_scripting" title="Povolit PHP na stránkách?"><![CDATA[
 <h2>Povolit PHP na stránkách?</h2>
 <p>Volba <em>Ano</em> umožňuje používání PHP kódu v šablonách stránek a forem.</p>
@@ -565,7 +565,20 @@ např.: #@language cs-cz</p>
     <li>rozšířená syntaxe blokových prvků (bc.., bq.., atd.)</li>
 </ul>
 <p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>        ]]></item>
-        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[
+<h2>Vlastní typy šablon forem</h2>
+<p>Kromě standardních typů forem (článek, soubor, ostatní, atd. , mohou vydavatelé definovat vlastní typy. Účel vlastních typů forem je dvojí: snadnější klasifikace a vlastní definice aktiv.</p>
+<p>Formát nastavení je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a>s každým oddílem, který odpovídá typu šablony pro formu.</p>
+<p>Pro definování vlastního typu formy (např. <code>js</code>) musí být připojena (na samostatném řádku) sekce  <code>[js]</code>. Výchozí název lze nastavit pomocí položky <code>title="Javascript"</code> v odpovídající sekci. V případě potřeby mohou být připojeny také lokalizované názvy (např. <code>ru="Скрипт"</code>).</p>
+<p>Navíc lze definovat jako šablonu formy <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml"> typ média <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> (dříve známý jako typ MIME), e. . <code>mediatype="application/javascript"</code>. Toto mění šablony tohoto typu na vlastní položky, které mohou být použity jako nastavený typ médií buď z databáze, nebo z disku (flat files) přes značku <code>&lt;txp:output_form /&gt;</code> . Například šablona formy s názvem <code>myscript. s</code> z <code>[js]</code> s typem média <code>aplikace/javascript</code> může být zahrnuta do kódu:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>To vygeneruje následující HTML <code>&lt;script&gt;</code> tag:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Pouze šablony forem s příponou názvem odpovídající jejich typu (např. <code>myscript.js</code>) lze použít jako flat files. V tomto případě je Textpattern vůbec nezpracuje a je přístupný prostřednictvím jejich URL.</p>
+Pokud šablona formy vyžaduje zpracování (pokud obsahuje tagy Textpattern), musíte ji obsluhovat z databáze. V tomto případě byste k názvu formy  neměli přidat rozšíření a pouze zavolat  <code>myscript</code> (bez <code>. s</code>) - aby byl nedostupný přes standardní URL - a byl zpracován takto:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
         <item id="custom_overview" title="Vlastní pole"><![CDATA[
 <h2>Vlastní pole</h2>
 <p>Vlastní pole se používají k uložení doplňkových dat článků.<br>Můžeš definovat až deset vlastních polí. Každé se objeví jako samostatné pole na panelu Psaní.</p>
