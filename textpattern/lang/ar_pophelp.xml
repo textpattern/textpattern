@@ -304,7 +304,7 @@
         <item id="siteurl" title="URL الخاص بالموقع"><![CDATA[]]></item>
         <item id="skin_dir" title="مسار الموضوع"><![CDATA[]]></item>
         <item id="smtp_from" title="عنوان مرسل SMTP"><![CDATA[]]></item>
-        <item id="spam_blocklists" title="anti spam القائمة السوداء المضادة لـ {متقطعة بفاصلة}"><![CDATA[]]></item>
+        <item id="spam_blacklists" title="anti spam القائمة السوداء المضادة لـ {متقطعة بفاصلة}"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title="مصنف مؤقت"><![CDATA[]]></item>
         <item id="theme_name" title="مظهر الإدارة"><![CDATA[]]></item>
