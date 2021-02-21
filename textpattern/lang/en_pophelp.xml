@@ -947,7 +947,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="use_plugins" title="Use plugins?"><![CDATA[
 <h2>Use plugins?</h2>
-<p>This allows you to turn off all support for Textpattern plugins. This is useful if you are debugging errors on your site, and you want to make check if one or more plugins are involved.</p>
+<p>This allows you to turn off all support for Textpattern plugins. This is useful if you are debugging errors on your site, and you want to check if one or more plugins are involved.</p>
         ]]></item>
         <item id="use_textile" title="Default text formatting"><![CDATA[
 <h2>Default text formatting</h2>
