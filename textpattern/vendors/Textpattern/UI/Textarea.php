@@ -33,14 +33,6 @@ namespace Textpattern\UI;
 class Textarea extends Tag implements UIInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * Construct a single textarea field.
      *
      * @param string $name    The textarea key (HTML name attribute)
@@ -49,21 +41,10 @@ class Textarea extends Tag implements UIInterface
 
     public function __construct($name, $content = '')
     {
-        $this->key = $name;
-
         parent::__construct('textarea');
-        $this->setAtt('name', $this->key);
-        $this->setContent(txpspecialchars($content));
-    }
 
-    /**
-     * Fetch the key (id) in use by this text input.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
+        $this->setKey($name)
+            ->setAtt('name', $name)
+            ->setContent(txpspecialchars($content));
     }
 }

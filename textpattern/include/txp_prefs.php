@@ -27,6 +27,8 @@
  * @package Admin\Prefs
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -74,7 +76,7 @@ function prefs_save()
     }
 
     $prefnames = safe_rows_start(
-        "name, event, user_name, val",
+        "name, event, family, user_name, val",
         'txp_prefs',
         join(" AND ", $sql)
     );
@@ -133,7 +135,7 @@ function prefs_save()
             safe_truncate('txp_log');
         }
 
-        if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val) {
+        if ($name === 'expire_logs_after' && (int)$post[$name] !== (int) $val) {
             safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
@@ -177,7 +179,7 @@ function prefs_list($message = '')
     echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
-    $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
+    $core_events = array('site', 'admin', 'publish', 'feeds', 'mail', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
     $level = has_privs();
 
@@ -201,7 +203,7 @@ function prefs_list($message = '')
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, family, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -219,7 +221,7 @@ function prefs_list($message = '')
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
-            $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['family'];
 
             if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
@@ -266,24 +268,22 @@ function prefs_list($message = '')
 
             $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
-            if ($a['html'] == 'text_input') {
-                $size = INPUT_REGULAR;
-            } else {
-                $size = '';
-            }
+            // @todo: Ready for contraints to be read from $a['constraints'].
+            $constraints = array();
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
-                $out[] = hed(gTxt($subEvent), 3);
+                $familyClass = (!empty($a['family']) ? $a['family'] : '');
+                $out[] = hed(gTxt($subEvent), 3, array('class' => $familyClass));
                 $last_sub_event = $subEvent;
             }
 
             $out[] = inputLabel(
                 $a['name'],
-                pref_func($a['html'], $a['name'], $a['val'], $size),
+                pref_func($a['html'], $a['name'], $a['val'], $constraints),
                 $label,
                 array($help, 'instructions_'.$a['name']),
                 array(
-                    'class' => 'txp-form-field',
+                    'class' => 'txp-form-field'.(!empty($a['family']) ? ' '.$a['family'] : ''),
                     'id'    => 'prefs-'.$a['name'],
                 )
             );
@@ -348,14 +348,14 @@ function prefs_list($message = '')
 /**
  * Calls a core or custom function to render a preference input input control.
  *
- * @param  string $func Callable in a string presentation
- * @param  string $name HTML name/id of the input control
- * @param  string $val  Initial (or current) value of the input control
- * @param  int    $size Size of the input control (width or depth, dependent on control)
+ * @param  string    $func        Callable in a string presentation
+ * @param  string    $name        HTML name/id of the input control
+ * @param  string    $val         Initial (or current) value of the input control
+ * @param  int|array $constraints Input constraints (width, depth, pattern, size, min, max, etc)
  * @return string HTML
  */
 
-function pref_func($func, $name, $val, $size = '')
+function pref_func($func, $name, $val, $constraints = array())
 {
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
@@ -368,48 +368,113 @@ function pref_func($func, $name, $val, $size = '')
         }
     }
 
-    return call_user_func($func, $name, $val, $size);
+    return call_user_func($func, $name, $val, $constraints);
 }
 
 /**
  * Renders a HTML &lt;input&gt; element.
  *
- * @param  string $name HTML name and id of the text box
- * @param  string $val  Initial (or current) content of the text box
- * @param  int    $size Width of the textbox. Options are INPUT_MEDIUM | INPUT_SMALL | INPUT_XSMALL
+ * @param  string    $name        HTML name and id of the text box
+ * @param  string    $val         Initial (or current) content of the text box
+ * @param  int|array $constraints Textbox size constraints or single size int. Array options:
+ *                                -> size (medium, small, xsmall)
+ *                                -> minlength
+ *                                -> maxlength
+ *                                -> pattern
  * @return string HTML
  */
 
-function text_input($name, $val, $size = 0)
+function text_input($name, $val, $constraints = array())
 {
-    $class = '';
-    switch ($size) {
-        case INPUT_MEDIUM:
-            $class = 'input-medium';
-            break;
-        case INPUT_SMALL:
-            $class = 'input-small';
-            break;
-        case INPUT_XSMALL:
-            $class = 'input-xsmall';
-            break;
+    $validConstraints = array('maxlength', 'minlength', 'pattern', 'size');
+
+    $atts['class'] = '';
+    $atts['id'] = $name;
+    $atts['size'] = is_numeric($constraints) ? (int)$constraints : INPUT_REGULAR;
+
+    if (is_numeric($constraints)) {
+        $atts['size'] = (int)$constraints;
+        $sizemap = array(
+            INPUT_LARGE   => 'large',
+            INPUT_XLARGE  => 'xlarge',
+            INPUT_REGULAR => 'regular',
+            INPUT_MEDIUM  => 'medium',
+            INPUT_SMALL   => 'small',
+            INPUT_XSMALL  => 'xsmall',
+            INPUT_TINY    => 'tiny',
+        );
+
+        if (isset($sizemap[$constraints])) {
+            $atts['class'] = $sizemap[$constraints];
+        }
+    } else {
+        foreach ($constraints as $constraint => $option) {
+            if ($constraint === 'size') {
+                $atts['class'] = 'input-'.$option;
+
+                switch ($option) {
+                    case 'medium':
+                        $atts['size'] = INPUT_MEDIUM;
+                        break;
+                    case 'small':
+                        $atts['size'] = INPUT_SMALL;
+                        break;
+                    case 'xsmall':
+                        $atts['size'] = INPUT_XSMALL;
+                        break;
+                }
+            } elseif (in_array($constraint, $validConstraints)) {
+                $atts[$constraint] = $option;
+            }
+        }
     }
 
-    return fInput('text', $name, $val, $class, '', '', $size, '', $name);
+    return Txp::get('\Textpattern\UI\Input', $name, 'text', $val)->setAtts($atts);
+}
+
+/**
+ * Renders a HTML &lt;input&gt; element of number type with min/max/step.
+ *
+ * @param  string $name        HTML name and id of the number box
+ * @param  int    $val         Initial (or current) value of the number box
+ * @param  array  $constraints Number box size constraints (min, max step)
+ * @return string HTML
+ */
+
+function pref_number($name, $val, $constraints = array())
+{
+    return Txp::get('\Textpattern\UI\Number', $name, $val, $constraints);
 }
 
 /**
  * Renders a HTML &lt;textarea&gt; element.
  *
- * @param  string $name HTML name of the textarea
- * @param  string $val  Initial (or current) content of the textarea
- * @param  int    $size Number of rows the textarea has
+ * @param  string    $name        HTML name of the textarea
+ * @param  string    $val         Initial (or current) content of the textarea
+ * @param  int|array $constraints Textbox size constraints or single number of rows. Array options:
+ *                                -> rows
+ *                                -> cols
+ *                                -> minlength
+ *                                -> maxlength
  * @return string HTML
  */
 
-function pref_longtext_input($name, $val, $size = '')
+function pref_longtext_input($name, $val, $constraints = array())
 {
-    return text_area($name, '', '', $val, '', $size);
+    $validConstraints = array('cols', 'maxlength', 'minlength', 'rows');
+    $atts = array();
+
+    if (is_numeric($constraints)) {
+        $atts['rows'] = (int)$constraints;
+    } else {
+        foreach ($constraints as $constraint => $option) {
+            if (in_array($constraint, $validConstraints)) {
+                $atts[$constraint] = (int)$option;
+            }
+        }
+    }
+
+    return Txp::get('\Textpattern\UI\Textarea', $name, $val)->setAtts($atts);
 }
 
 /**
@@ -456,7 +521,8 @@ function is_dst($name, $val)
         $val = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
     }
 
-    $ui = yesnoRadio($name, $val).
+
+    $ui = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).
     script_js(<<<EOS
         $(document).ready(function ()
         {
@@ -505,7 +571,114 @@ function logging($name, $val)
         'none'  => gTxt('none'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+}
+
+/**
+ * Renders a HTML input control overridable by constants.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function smtp_handler($name, $val, $constraints = array())
+{
+    $constName = strtoupper($name);
+    $enabled = defined($constName) ? false : true;
+    $ui = '';
+
+    switch ($name) {
+        case 'smtp_host':
+        case 'smtp_user':
+            $ui = text_input($name, $val);
+            break;
+        case 'smtp_pass':
+            $ui = Txp::get('\Textpattern\UI\Input', $name, 'password', $val)->setAtt('id', $name);
+            break;
+        case 'smtp_port':
+            $ui = pref_number($name, $val, $constraints);
+            break;
+        case 'smtp_sectype':
+            $vals = array(
+                PHPMailer::ENCRYPTION_SMTPS    => 'SSL',
+                PHPMailer::ENCRYPTION_STARTTLS => 'TLS',
+                'none'                         => gTxt('none'),
+            );
+            $ui = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+    }
+
+    if ($enabled === false) {
+        if ($ui instanceof \Textpattern\UI\TagCollection) {
+            $elems = $ui->keys();
+
+            foreach ($elems as $elem) {
+                $elem->setAtt('disabled', true);
+            }
+        } elseif ($ui instanceof \Textpattern\UI\Tag) {
+            $ui->setAtt('disabled', true);
+        }
+    }
+
+    return $ui;
+}
+
+/**
+ * Renders a yes/no radio button with toggle for the other SMTP settings.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function enhanced_email($name, $val)
+{
+    $js = script_js(<<<EOS
+        $(document).ready(function ()
+        {
+            var block = $(".mail_enhanced");
+            var smtpOn = $("#enhanced_email-1");
+            var smtpOff = $("#enhanced_email-0");
+
+            if (block.length) {
+                if (smtpOff.prop("checked")) {
+                    block.hide();
+                } else {
+                    block.show();
+                }
+
+                smtpOff.click(function () {
+                    block.hide();
+                });
+
+                smtpOn.click(function () {
+                    block.show();
+                });
+            }
+        });
+EOS
+    , false);
+
+    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).$js;
+}
+
+/**
+ * Renders a HTML &lt;select&gt; list of HTML email options.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function html_email($name, $val)
+{
+    $vals = array(
+        'plain'     => gTxt('email_plain'),
+        'html'      => 'HTML',
+        'plainhtml' => gTxt('email_plain_html'),
+    );
+
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -515,6 +688,7 @@ function logging($name, $val)
  * @param  string $val  Initial (or current) selected item(s)
  * @return string HTML
  */
+
 function overrideTypes($name, $val)
 {
     $instance = Txp::get('Textpattern\Skin\Form');
@@ -553,7 +727,7 @@ EOS
     , false);
 
 
-    return selectInput($name, $form_types, $val, false, '', $name).$js;
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name').$js;
 }
 
 /**
@@ -571,7 +745,7 @@ function commentmode($name, $val)
         '1' => gTxt('popup'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -601,7 +775,7 @@ function weeks($name, $val)
         84  => '12 '.$weeks,
     );
 
-    return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);
+    return pluggable_ui('prefs_ui', 'weeks', Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name), $name, $val);
 }
 
 /**
@@ -629,7 +803,7 @@ function dateformats($name, $val)
 
     $vals['since'] = gTxt('hours_days_ago');
 
-    return pluggable_ui('prefs_ui', 'dateformats', selectInput($name, array_unique($vals), $val, '', '', $name), compact('vals', 'name', 'val', 'ts'));
+    return pluggable_ui('prefs_ui', 'dateformats', Txp::get('\Textpattern\UI\Select', $name, array_unique($vals), $val)->setAtt('id', $name), compact('vals', 'name', 'val', 'ts'));
 }
 
 /**
@@ -647,7 +821,7 @@ function permlink_format($name, $val)
         '1' => gTxt('permlink_hyphenated'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -666,7 +840,7 @@ function prod_levels($name, $val)
         'live'    => gTxt('production_live'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -717,7 +891,7 @@ function commentsendmail($name, $val)
         '2' => gTxt('ham'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -753,8 +927,7 @@ function themename($name, $val)
     $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
-    return pluggable_ui('prefs_ui', 'theme_name', selectInput($name, $vals, $val, '', '', $name)
-    );
+    return pluggable_ui('prefs_ui', 'theme_name', Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name));
 }
 
 /**
@@ -773,7 +946,7 @@ function doctypes($name, $val)
         'html5' => 'HTML5',
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -790,7 +963,7 @@ function defaultPublishStatus($name, $val)
     $statuses = status_list();
     $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
 
-    return selectInput($name, $statusa, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $statusa, $val)->setAtt('id', $name);
 }
 
 /**
@@ -808,5 +981,5 @@ function module_pophelp($name, $val)
         '1' => gTxt('pophelp'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }

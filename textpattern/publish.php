@@ -59,7 +59,7 @@ $txp_user = empty($userInfo) ? null : $userInfo['name'];
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs(null, $userInfo);
+empty($userInfo) or plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);
@@ -209,6 +209,8 @@ if (txpinterface === 'css') {
 
     exit;
 }
+
+callback_event('pretext_end', '', 1);
 
 $txp_sections = safe_column(array('name'), 'txp_section');
 
@@ -428,7 +430,7 @@ function preText($store, $prefs = null)
                             }
                         }
 
-                        if (!isset($permlink_guess)) {
+                        if (!isset($permlink_guess) || !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
                             unset($thisarticle);
                             $is_404 = true;
                         } else {

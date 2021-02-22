@@ -35,14 +35,6 @@ namespace Textpattern\UI;
 class Disclosure extends Tag implements UICollectionInterface
 {
     /**
-     * The key (id) used for the disclosure wrapper.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * The pane (id) to store open/closed state for the disclosure.
      *
      * @var string
@@ -101,7 +93,7 @@ class Disclosure extends Tag implements UICollectionInterface
     {
         parent::__construct('section');
         $class = 'txp-details';
-        $this->key = $key;
+        $this->setKey($key);
         $this->label_id = $key.'-label';
 
         if ($pane !== null) {
@@ -113,7 +105,7 @@ class Disclosure extends Tag implements UICollectionInterface
         $this->tags = new \Textpattern\UI\TagCollection();
         $this->setAtts(array(
                 'class' => $class,
-                'id'    => $this->key,
+                'id'    => $key,
             ));
     }
 
