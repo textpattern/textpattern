@@ -35,14 +35,6 @@ namespace Textpattern\UI;
 class OptGroup extends Tag implements UICollectionInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * TagCollection of options in the group.
      *
      * @var array
@@ -59,10 +51,10 @@ class OptGroup extends Tag implements UICollectionInterface
 
     public function __construct($label, $options = null)
     {
-        $this->key = $label;
+        $this->setKey($label);
 
         parent::__construct('optgroup');
-        $this->setAtt('label', $this->key);
+        $this->setAtt('label', $label);
 
         if ($options instanceof \Textpattern\UI\TagCollection) {
             $this->options = $options;
@@ -144,17 +136,6 @@ class OptGroup extends Tag implements UICollectionInterface
     public function keys()
     {
         return array_keys($this->options);
-    }
-
-    /**
-     * Fetch the key (id) in use by this optgroup.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
     }
 
     /**

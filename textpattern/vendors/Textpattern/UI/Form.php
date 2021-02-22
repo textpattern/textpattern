@@ -33,14 +33,6 @@ namespace Textpattern\UI;
 class Form extends Tag implements UICollectionInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * Collection of tags to be used as content.
      *
      * @var array
@@ -62,9 +54,8 @@ class Form extends Tag implements UICollectionInterface
         $this->setAtts(array(
                 'class' => 'txp-form',
                 'method' => $method,
-            ));
-
-        $this->setAction('index.php');
+            ))
+            ->setAction('index.php');
 
         $this->tags = new \Textpattern\UI\TagCollection();
 

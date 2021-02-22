@@ -659,7 +659,7 @@ function doDiagnostics()
 
         gTxt('diag_rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
 
-        gTxt('diag_server_os_version').cs.php_uname('s').' '.php_uname('r').n,
+        gTxt('diag_server_os_version').cs.php_uname('s').' '.php_uname('r').($step === 'high' ? ' '.php_uname('v').' '.php_uname('m') : '').n,
 
         gTxt('diag_theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
 
@@ -750,7 +750,7 @@ function doDiagnostics()
             $out[] = n.gTxt('diag_apache_modules').cs.implode(', ', apache_get_modules()).n;
         }
 
-        if (@is_array($pretext_data) and count($pretext_data) > 1) {
+        if (isset($pretext_data) && is_array($pretext_data) and count($pretext_data) > 1) {
             $out[] = n.gTxt('diag_pretext_data').cs.txpspecialchars(implode('', array_slice($pretext_data, 1, 20))).n;
         }
 

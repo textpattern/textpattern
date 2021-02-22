@@ -50,8 +50,8 @@ class RadioSet extends TagCollection implements UICollectionInterface
             $id = $radio->getKey();
             $label = new \Textpattern\UI\Label($label, $id);
 
-            $this->add($radio, 'radio-'.$id);
-            $this->add($label, 'label-'.$id);
+            $this->add($radio, 'radio-'.$id)
+                ->add($label, 'label-'.$id);
         }
     }
 }

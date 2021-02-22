@@ -6,7 +6,7 @@ REPO="textpattern-classic-admin-theme";
 EXTRACT="textpattern/admin-themes/classic";
 
 
-TAG="master";
+TAG="main";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi

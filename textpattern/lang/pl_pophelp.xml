@@ -9,8 +9,8 @@
     <group id="article" title="">
         <item id="article_image" title="Obrazek do artykułu"><![CDATA[]]></item>
         <item id="body" title="Treść"><![CDATA[
-<h2>Treść</h2> 
-<p>Główny tekst artykułu jest zawarty w polu treści.</p> 
+<h2>Treść</h2>
+<p>Główny tekst artykułu jest zawarty w polu treści.</p>
 <p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
         <item id="description" title="Opis"><![CDATA[]]></item>
         <item id="excerpt" title="Zajawka"><![CDATA[
@@ -196,6 +196,7 @@
         <item id="module_pophelp" title="Wyświetl wbudowane linki pomocy po stronie administratora"><![CDATA[]]></item>
         <item id="never_display_email" title="Nigdy nie pokazywać adresów email?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Używać ISO-8859-1 w emailach (domyślnie jest UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title="Format trwałych odsyłaczy"><![CDATA[]]></item>
         <item id="permlink_mode" title="Wzór adresu URL artykułu"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Ścieżka do katalogu pamięci podręcznej pluginów"><![CDATA[]]></item>
@@ -229,6 +230,7 @@
         <item id="publish_expired_articles" title="Publikować wygasłe artykuły?"><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
         <item id="rss_how_many" title="Ile artykułów powinno być zawartych w kanałach?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Pokazać liczbę komentarzy w kanałach?"><![CDATA[]]></item>
         <item id="site_slogan" title="Motto witryny"><![CDATA[]]></item>
@@ -252,7 +254,6 @@
         <item id="use_mail_on_feeds_id" title="Akceptować komentarze?"><![CDATA[]]></item>
         <item id="use_plugins" title="Używać wtyczek?"><![CDATA[]]></item>
         <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel sekcji">
