@@ -74,7 +74,9 @@
     <li>kann Sektionen verwalten</li>
     <li>kann Seiten, Formulare und Stile verwalten</li>
 </ul>        ]]></item>
-        <item id="create_author" title="Autor erstellen"><![CDATA[]]></item>
+        <item id="create_author" title="Autor erstellen"><![CDATA[
+<h2>Neuen Autor hinzufügen</h2>
+<p>Passwort, Begrüßungsnachricht und Anweisungen zur Anmeldung werden per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
     </group>
 
     <group id="article" title="Schreibtafel">
@@ -135,11 +137,11 @@
         <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
         <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title="Setup-Verzeichnis existiert noch"><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="PHP-Funktionen […] sind auf Ihrem Server deaktiviert"><![CDATA[]]></item>
         <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern Pre-Release verfügbar"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
         <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
