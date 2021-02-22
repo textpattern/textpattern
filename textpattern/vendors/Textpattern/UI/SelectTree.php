@@ -78,9 +78,9 @@ class SelectTree extends Select implements UIInterface
     public function __construct($name, $options = array(), $default = null, $properties = null)
     {
         parent::__construct('select');
-        $this->key = $name;
 
-        $this->setAtt('name', $name);
+        $this->setKey($name)
+            ->setAtt('name', $name);
 
         if ($default === null) {
             $default = array();

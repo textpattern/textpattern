@@ -517,7 +517,7 @@ function plug_privs($pluggable = null, $user = null)
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
-                    return;
+                    break;
                 }
 
                 unset($pane[0]);
@@ -526,13 +526,12 @@ function plug_privs($pluggable = null, $user = null)
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function (&$item) use ($level) {
-            if ($item === true) {
-                $item = $level;
-            }
-        });
-
         if (get_pref($pref)) {
+            array_walk($pane, function (&$item) use ($level) {
+                if ($item === true) {
+                    $item = $level;
+                }
+            });
             add_privs($pane);
         } else {
             add_privs(array_fill_keys(array_keys($pane), null));
@@ -562,7 +561,7 @@ function add_privs($res, $perm = '1')
 
     foreach ($res as $priv => $group) {
         if ($group === null) {
-            unset($txp_permissions[$priv]);
+            $txp_permissions[$priv] = null;
         } else {
             $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
@@ -617,6 +616,41 @@ function the_privileged($res, $real = false)
 
     return $out;
 }
+
+/**
+ * Lists image types that can be safely uploaded.
+ *
+ * Returns different results based on the logged in user's privileges.
+ *
+ * @param   int         $type If set, validates the given value
+ * @return  mixed
+ * @package Image
+ * @since   4.6.0
+ * @example
+ * list($width, $height, $extension) = getimagesize('image');
+ * if ($type = get_safe_image_types($extension))
+ * {
+ *     echo "Valid image of {$type}.";
+ * }
+ */
+
+function get_safe_image_types($type = null)
+{
+    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+    if (has_privs('image.create.trusted')) {
+        $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
+    }
+
+    callback_event_ref('txp.image', 'types', 0, $extensions);
+
+    if (func_num_args() > 0) {
+        return !empty($extensions[$type]) ? $extensions[$type] : false;
+    }
+
+    return $extensions;
+}
+
 
 /**
  * Gets the dimensions of an image for a HTML &lt;img&gt; tag.
@@ -709,9 +743,17 @@ function imageFetchInfo($id = "", $name = "")
 
 function image_format_info($image)
 {
+    static $mimetypes;
+
     if (($unix_ts = @strtotime($image['date'])) > 0) {
         $image['date'] = $unix_ts;
     }
+
+    if (!isset($mimetypes)) {
+        $mimetypes = get_safe_image_types();
+    }
+
+    $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? image_type_to_mime_type($mime) : '';
 
     return $image;
 }
@@ -2222,8 +2264,8 @@ function is_valid_email($address)
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
- * @param   string $reply_to The reply to address
- * @return  bool   Returns FALSE when sending failed
+ * @param   string $reply_to   The reply to address
+ * @return  bool   FALSE when sending failed
  * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
@@ -2257,8 +2299,8 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('\Textpattern\Mail\Compose')
-                ->from($email, $RealName)
+            $message = Txp::get('\Textpattern\Mail\Compose')->getDefaultAdapter();
+            $message->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
                 ->body($body);
@@ -3744,13 +3786,13 @@ function get_prefs($user = '')
 /**
  * Creates or updates a preference.
  *
- * @param   string $name       The name
- * @param   string $val        The value
- * @param   string $event      The section the preference appears in
- * @param   int    $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string $html       The HTML control type the field uses. Can take a custom function name
- * @param   int    $position   Used to sort the field on the Preferences panel
- * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   bool         $is_private If PREF_PRIVATE, is created as a user pref
  * @return  bool FALSE on error
  * @package Pref
  * @example
@@ -3923,13 +3965,13 @@ function pref_exists($name, $user_name = null)
  *
  * When a string is created, will trigger a 'preference.create > done' callback event.
  *
- * @param   string      $name       The name
- * @param   string      $val        The value
- * @param   string      $event      The section the preference appears in
- * @param   int         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int         $position   Used to sort the field on the Preferences panel
- * @param   string|bool $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool  $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
  * @return  bool TRUE if the string exists, FALSE on error
  * @since   4.6.0
  * @package Pref
@@ -3958,12 +4000,20 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
 
     $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
+    if (is_array($event)) {
+        $family = $event[1];
+        $event = $event[0];
+    } else {
+        $family = '';
+    }
+
     if (
         safe_insert(
             'txp_prefs',
             "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
+            family = '".doSlash($family)."',
             html = '".doSlash($html)."',
             type = ".intval($type).",
             position = ".intval($position).",
@@ -3973,7 +4023,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return false;
     }
 
-    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
 
     return true;
 }
@@ -3987,14 +4037,14 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
  *
  * When a string is updated, will trigger a 'preference.update > done' callback event.
  *
- * @param   string           $name       The update preference string's name
- * @param   string|null      $val        The value
- * @param   string|null      $event      The section the preference appears in
- * @param   int|null         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string|null      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int|null         $position   Used to sort the field on the Preferences panel
- * @param   string|bool|null $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
- * @return  bool             FALSE on error
+ * @param   string            $name       The update preference string's name
+ * @param   string|null       $val        The value
+ * @param   string|array|null $event      The section or array(section, family) the preference appears in
+ * @param   int|null          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string|null       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int|null          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool|null  $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4027,14 +4077,21 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
-    foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
+    if (is_array($event)) {
+        $family = $event[1];
+        $event = $event[0];
+    } else {
+        $family = null;
+    }
+
+    foreach (array('val', 'event', 'family', 'type', 'html', 'position') as $field) {
         if ($$field !== null) {
             $set[] = $field." = '".doSlash($$field)."'";
         }
     }
 
     if ($set && safe_update('txp_prefs', join(', ', $set), join(" AND ", $where))) {
-        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
 
         return true;
     }
@@ -4678,7 +4735,7 @@ function permlinkurl_id($id)
         return permlinkurl($thisarticle);
     }
 
-    $rs = safe_row(
+    $rs = empty($id) ? array() : safe_row(
         "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
@@ -4707,7 +4764,20 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = hu)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null;
+    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
+        $fields = array(
+            'thisid'    => null,
+            'id'        => null,
+            'title'     => null,
+            'url_title' => null,
+            'section'   => null,
+            'category1' => null,
+            'category2' => null,
+            'posted'    => null,
+            'uposted'   => null,
+            'expires'   => null,
+            'uexpires'  => null,
+        );
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4715,19 +4785,11 @@ function permlinkurl($article_array, $hu = hu)
         return $url;
     }
 
-    extract(lAtts(array(
-        'thisid'    => null,
-        'id'        => null,
-        'title'     => null,
-        'url_title' => null,
-        'section'   => null,
-        'category1' => null,
-        'category2' => null,
-        'posted'    => null,
-        'uposted'   => null,
-        'expires'   => null,
-        'uexpires'  => null,
-    ), array_change_key_case($article_array, CASE_LOWER), false));
+    if (empty($article_array)) {
+        return false;
+    }
+
+    extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
 
     if (empty($thisid)) {
         $thisid = $id;

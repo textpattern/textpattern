@@ -1229,7 +1229,7 @@ class Skin extends CommonBase implements SkinInterface
             return n
                 .graf(
                     span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                    gTxt('path_not_writable', array('list' => $this->getDirPath())),
+                    gTxt('path_not_writable', array('{list}' => $this->getDirPath())),
                     array('class' => 'alert-block warning')
                 );
         }

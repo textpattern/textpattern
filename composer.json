@@ -28,7 +28,7 @@
   "require": {
     "php": ">=5.6.0",
     "netcarver/textile": "3.7.6",
-    "phpmailer/phpmailer": "6.2.0"
+    "phpmailer/phpmailer": "6.3.0"
   },
   "license": "GPL-2.0-only"
 }

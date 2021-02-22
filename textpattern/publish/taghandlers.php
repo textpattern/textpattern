@@ -311,7 +311,6 @@ function component($atts)
 
     $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format.'.'.$format);
-    $theme = urlencode($pretext['skin']);
     $out = '';
     $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
@@ -3644,7 +3643,7 @@ function images($atts, $thing = null)
 
     // If nothing matches from the filterable attributes, output nothing.
     if (!$where && $filters) {
-        return '';
+        return isset($thing) ? parse($thing, false) : '';
     }
 
     // If no images are filtered, start with all images.
@@ -3709,13 +3708,13 @@ function images($atts, $thing = null)
                     'p'       => $thisimage['id'],
                 ));
                 $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
-                $thing = href(
+                $out[] = href(
                     '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
                     $url
                 );
+            } else {
+                $out[] = isset($thing) ? parse($thing) : parse_form($form);
             }
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
         }
 
         $thisimage = (isset($old_image) ? $old_image : null);
@@ -3725,7 +3724,7 @@ function images($atts, $thing = null)
         }
     }
 
-    return '';
+    return isset($thing) ? parse($thing, false) : '';
 }
 
 // -------------------------------------------------------------
@@ -3742,7 +3741,7 @@ function image_info($atts)
         'break'      => '',
     ), $atts));
 
-    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
+    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
     $out = array();
@@ -5069,7 +5068,7 @@ function hide($atts = array(), $thing = null)
     extract(lAtts(array('process' => null), $atts));
 
     if (!$process) {
-        return $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
+        return trim($process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
     } elseif (is_numeric($process)) {
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :

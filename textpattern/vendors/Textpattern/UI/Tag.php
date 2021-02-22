@@ -49,6 +49,14 @@ class Tag implements UIInterface
     protected $tag = null;
 
     /**
+     * The key (id) used in the tag.
+     *
+     * @var string
+     */
+
+    protected $key = null;
+
+    /**
      * The tag's contained contents.
      *
      * @var string
@@ -114,6 +122,31 @@ class Tag implements UIInterface
         $this->tag = (string)$tag;
 
         return $this;
+    }
+
+    /**
+     * Set the tag name (key). Chainable.
+     *
+     * @param  string $key The tag's reference key (name)
+     * @return this
+     */
+
+    public function setKey($key)
+    {
+        $this->key = (string)$key;
+
+        return $this;
+    }
+
+    /**
+     * Fetch the key (id) in use by this tag.
+     *
+     * @return string
+     */
+
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
@@ -237,7 +270,7 @@ class Tag implements UIInterface
         $props = array('format' => 'bool');
 
         if (self::$flags['boolean'] === 'html5') {
-            $props['flag'] = TEXTPATTERN_STRIP_TXP;
+            $props['strip'] = TEXTPATTERN_STRIP_TXP;
         }
 
         foreach ($keys as $key) {
@@ -250,7 +283,7 @@ class Tag implements UIInterface
     /**
      * Permit multiple values to be sent by the tag. Chainable.
      *
-     * @param string $flavour The type of mulitple to assign: 'all', 'name', or 'attribute'
+     * @param string $flavour The type of multiple to assign: 'all', 'name', or 'attribute'
      */
 
     public function setMultiple($flavour = 'all')
