@@ -60,7 +60,7 @@ class Attribute implements \IteratorAggregate
 
     protected $defaultProperties = array(
         'format'   => 'string',
-        'flag'     => TEXTPATTERN_STRIP_EMPTY,
+        'strip'    => TEXTPATTERN_STRIP_EMPTY,
     );
 
     /**
@@ -185,7 +185,7 @@ class Attribute implements \IteratorAggregate
         if ($addAttr) {
             $this->setAttribute('multiple', true, array(
                 'format' => 'bool',
-                'flag'   => TEXTPATTERN_STRIP_TXP,
+                'strip'  => TEXTPATTERN_STRIP_TXP,
             ));
         }
 
@@ -217,7 +217,7 @@ class Attribute implements \IteratorAggregate
         foreach ($this->values as $key => $value) {
             $props = $this->properties[$key];
             $type = (empty($props['format'])) ? $this->defaultProperties['format'] : $props['format'];
-            $flag = (is_numeric($props['flag'])) ? $props['flag'] : $this->defaultProperties['flag'];
+            $flag = (is_numeric($props['strip'])) ? $props['strip'] : $this->defaultProperties['strip'];
 
             switch ($type) {
                 case 'bool':

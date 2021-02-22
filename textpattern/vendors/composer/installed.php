@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '2a999d8c11ab9f2fd3767865c9b8c34b04d14161',
+    'reference' => '2dbb1f37dbfd38d84904094775be068c08f0ec2f',
     'name' => 'textpattern/textpattern',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.2.0',
-      'version' => '6.2.0.0',
+      'pretty_version' => 'v6.3.0',
+      'version' => '6.3.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'e38888a75c070304ca5514197d4847a59a5c853f',
+      'reference' => '4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb',
     ),
     'textpattern/textpattern' => 
     array (
@@ -36,7 +36,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '2a999d8c11ab9f2fd3767865c9b8c34b04d14161',
+      'reference' => '2dbb1f37dbfd38d84904094775be068c08f0ec2f',
     ),
   ),
 );

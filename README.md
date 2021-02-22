@@ -2,8 +2,9 @@
 
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
+[![Known Vulnerabilities](https://snyk.io/test/github/textpattern/textpattern/badge.svg?targetFile=package.json)](https://snyk.io/test/github/textpattern/textpattern?targetFile=package.json)
 
-[![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-64px.svg)](https://textpattern.com/)
+<img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
 
 **A flexible, elegant, fast and easy-to-use content management system written in PHP.** Textpattern is [free and open source](#legal) software.
 
@@ -67,8 +68,8 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3 or 7.4) |
-| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3, 7.4 or 8.0) |
+| MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | &mdash; | mainline (1.19) or stable (1.18) |
 
@@ -141,6 +142,7 @@ npm run txp-index
 npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
+
 ## Thank You
 
 Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!

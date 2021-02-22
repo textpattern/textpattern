@@ -440,38 +440,6 @@ function updateVolatilePartials($partials)
 }
 
 /**
- * Lists image types that can be safely uploaded.
- *
- * Returns different results based on the logged in user's privileges.
- *
- * @param   int         $type If set, validates the given value
- * @return  mixed
- * @package Image
- * @since   4.6.0
- * @example
- * list($width, $height, $extension) = getimagesize('image');
- * if ($type = get_safe_image_types($extension))
- * {
- *     echo "Valid image of {$type}.";
- * }
- */
-
-function get_safe_image_types($type = null)
-{
-    if (!has_privs('image.create.trusted')) {
-        $extensions = array(0, '.gif', '.jpg', '.png');
-    } else {
-        $extensions = array(0, '.gif', '.jpg', '.png', '.swf', 0, 0, 0, 0, 0, 0, 0, 0, '.swf');
-    }
-
-    if (func_num_args() > 0) {
-        return !empty($extensions[$type]) ? $extensions[$type] : false;
-    }
-
-    return $extensions;
-}
-
-/**
  * Checks if GD supports the given image type.
  *
  * @param   string $image_type Either '.gif', '.jpg', '.png'
@@ -492,10 +460,14 @@ function check_gd($image_type)
             return ($gd_info['GIF Create Support'] == true);
             break;
         case '.jpg':
+        case '.jpeg':
             return ($gd_info['JPEG Support'] == true);
             break;
         case '.png':
             return ($gd_info['PNG Support'] == true);
+            break;
+        case '.webp':
+            return ($gd_info['WebP Support'] == true);
             break;
     }
 
@@ -555,10 +527,11 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     }
 
     list($w, $h, $extension) = getimagesize($file);
-    $ext = get_safe_image_types($extension);
+    $exts = get_safe_image_types();
+    $ext = !empty($exts[$extension]) ? $exts[$extension] : false;
 
     if (!$ext) {
-        return gTxt('only_graphic_files_allowed');
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $exts)));
     }
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;

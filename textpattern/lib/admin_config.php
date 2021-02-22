@@ -85,6 +85,7 @@ $txp_permissions = array(
     'prefs.site'                 => '1,2',
     'prefs.admin'                => '1,2',
     'prefs.publish'              => '1,2',
+    'prefs.mail'                 => '1,2',
     'prefs.feeds'                => '1,2',
     'prefs.custom'               => '1,2',
 //    'prefs.comments'             => '1,2',
