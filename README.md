@@ -2,7 +2,6 @@
 
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
-[![Known Vulnerabilities](https://snyk.io/test/github/textpattern/textpattern/badge.svg?targetFile=composer.json)](https://snyk.io/test/github/textpattern/textpattern?targetFile=composer.json)
 
 <img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
 
