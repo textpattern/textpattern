@@ -5,6 +5,7 @@
             <name>articles</name>
             <page>archive</page>
             <css>default</css>
+            <permlink_mode></permlink_mode>
             <description></description>
             <in_rss>1</in_rss>
             <on_frontpage>1</on_frontpage>
