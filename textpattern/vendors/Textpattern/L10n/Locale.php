@@ -190,12 +190,12 @@ class Locale
             $code = strtolower($name);
             $code = isset($this->locales[$code]) ? $this->locales[$code] : $name;
 
-            if (@setlocale($category, $code)) {
+            if (!empty($code) && setlocale($category, $code)) {
                 return $this;
             }
         }
 
-        @setlocale($category, null);
+        // setlocale($category, null);
 
         return $this;
     }
