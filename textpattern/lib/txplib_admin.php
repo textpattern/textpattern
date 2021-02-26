@@ -991,16 +991,18 @@ function find_temp_dir()
     }
 
     foreach ($guess as $dir) {
-        $tf = @tempnam($dir, 'txp_');
+        if (is_writable($dir)) {
+            $tf = tempnam($dir, 'txp_');
 
-        if ($tf) {
-            $tf = realpath($tf);
-        }
+            if ($tf) {
+                $tf = realpath($tf);
+            }
 
-        if ($tf and file_exists($tf)) {
-            unlink($tf);
+            if ($tf and file_exists($tf)) {
+                unlink($tf);
 
-            return dirname($tf);
+                return dirname($tf);
+            }
         }
     }
 

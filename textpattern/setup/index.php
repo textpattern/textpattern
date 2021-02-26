@@ -27,7 +27,7 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
-@ini_set("display_errors", "1");
+ini_set("display_errors", "1");
 
 define('MSG_OK', 'alert-block success');
 define('MSG_ALERT', 'alert-block warning');
@@ -96,9 +96,11 @@ if (empty($_SESSION['cfg'])) {
 if (ps('lang')) {
     $cfg['site']['language_code'] = ps('lang');
 }
+
 if (empty($cfg['site']['language_code'])) {
     $cfg['site']['language_code'] = TEXTPATTERN_DEFAULT_LANG;
 }
+
 setup_load_lang($cfg['site']['language_code']);
 
 if (defined('is_multisite')) {
@@ -108,23 +110,27 @@ if (defined('is_multisite')) {
 }
 
 
-$protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+$protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+
 if (defined('is_multisite')) {
     if (empty($cfg['site']['admin_url'])) {
         $cfg['site']['admin_url'] = $protocol.
-        (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        (!empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
     }
+
     if (empty($cfg['site']['cookie_domain'])) {
         $cfg['site']['cookie_domain'] = substr($cfg['site']['admin_url'], strpos($cfg['site']['admin_url'], '.') + 1);
     }
+
     if (empty($cfg['site']['public_url'])) {
         $cfg['site']['public_url'] = $protocol.'www.'.$cfg['site']['cookie_domain'];
     }
 }
+
 if (empty($cfg['site']['public_url'])) {
-    if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
+    if (!empty($_SERVER['SCRIPT_NAME']) && (!empty($_SERVER['SERVER_NAME']) || !empty($_SERVER['HTTP_HOST']))) {
         $cfg['site']['public_url'] = $protocol.
-        ((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
+        (!empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
     } else {
         $cfg['site']['public_url'] = $protocol.'mysite.com';
     }
@@ -271,18 +277,24 @@ function step_getDbInfo()
 
     check_config_exists();
 
+    $dbuser = !empty($cfg['database']['user']) ? $cfg['database']['user'] : '';
+    $dbpass = !empty($cfg['database']['password']) ? $cfg['database']['password'] : '';
+    $dbname = !empty($cfg['database']['db_name']) ? $cfg['database']['db_name'] : '';
+    $dbtpfx = !empty($cfg['database']['table_prefix']) ? $cfg['database']['table_prefix'] : '';
+    $dbhost = !empty($cfg['database']['host']) ? $cfg['database']['host'] : 'localhost';
+
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
         hed(tag('MySQL', 'bdi', array('dir' => 'ltr')), 2).
         graf(gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',
-            fInput('text', 'duser', @$cfg['database']['user'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
+            fInput('text', 'duser', $dbuser, '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
             'mysql_login', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_pass',
-            fInput('password', 'dpass', @$cfg['database']['password'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            fInput('password', 'dpass', $dbpass, 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -291,33 +303,36 @@ function step_getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server'),
+            fInput('text', 'dhost', $dbhost, '', '', '', INPUT_REGULAR, '', 'setup_mysql_server'),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_db',
-            fInput('text', 'ddb', @$cfg['database']['db_name'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
+            fInput('text', 'ddb', $dbname, '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
             'mysql_database', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_table_prefix',
-            fInput('text', 'dprefix', @$cfg['database']['table_prefix'], 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
+            fInput('text', 'dprefix', $dbtpfx, 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         );
 
     if (defined('is_multisite')) {
+        $saurl = !empty($cfg['site']['admin_url']) ? $cfg['site']['admin_url'] : '';
+        $scdom = !empty($cfg['site']['cookie_domain']) ? $cfg['site']['cookie_domain'] : '';
+
         echo hed(
                 gTxt('multisite_config'), 2
             ).
             graf(gTxt('multisite_please_enter_details')).
             inputLabel(
                 'setup_admin_url',
-                fInput('text', 'adminurl', @$cfg['site']['admin_url'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                fInput('text', 'adminurl', $saurl, '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
                 'multisite_admin_domain', 'setup_admin_url', array('class' => 'txp-form-field')
             ).
             inputLabel(
                 'setup_cookie_domain',
-                fInput('text', 'cookiedomain', @$cfg['site']['cookie_domain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                fInput('text', 'cookiedomain', $scdom, '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
                 'multisite_cookie_domain', 'setup_cookie_domain', array('class' => 'txp-form-field')
             );
     }
@@ -409,6 +424,11 @@ function step_getTxpLogin()
 
     $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 
+    $usname = !empty($cfg['user']['full_name']) ? $cfg['user']['full_name'] : '';
+    $uspass = !empty($cfg['user']['password']) ? $cfg['user']['password'] : '';
+    $usmail = !empty($cfg['user']['email']) ? $cfg['user']['email'] : '';
+    $uslogin = !empty($cfg['user']['login_name']) ? $cfg['user']['login_name'] : '';
+
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">'.
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -420,22 +440,22 @@ function step_getTxpLogin()
         ).
         inputLabel(
             'setup_user_realname',
-            fInput('text', 'RealName', @$cfg['user']['full_name'], '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
+            fInput('text', 'RealName', $usname, '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
             'your_full_name', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_email',
-            fInput('email', 'email', @$cfg['user']['email'], '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            fInput('email', 'email', $usmail, '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
             'your_email', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_login',
-            fInput('text', 'name', @$cfg['user']['login_name'], '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
+            fInput('text', 'name', $uslogin, '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
             'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', @$cfg['user']['password'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            fInput('password', 'pass', $uspass, 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -447,7 +467,7 @@ function step_getTxpLogin()
         ).
         inputLabel(
             'setup_site_url',
-            fInput('text', 'siteurl', @$cfg['site']['public_url'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            fInput('text', 'siteurl', $cfg['site']['public_url'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
             'please_enter_url', 'siteurl', array('class' => 'txp-form-field')
         ).
         inputLabel(
@@ -519,14 +539,17 @@ function step_fbCreate()
 
     unset($cfg['database']['client_flags']);
     unset($cfg['database']['charset']);
+
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, TEXTPATTERN_JSON | JSON_PRETTY_PRINT).
         "</pre>";
+
     if (defined('is_multisite')) {
         $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['admin_url'];
     }
 
-    $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
+    $warnings = find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
+
     if (defined('is_multisite')) {
         $login_url  = $multisite_admin_login_url.DS.'index.php?lang='.$cfg['site']['language_code'];
         $setup_path = multisite_root_path.DS.'admin'.DS;
@@ -659,13 +682,16 @@ function langs()
 function check_config_txp($meter)
 {
     global $txpcfg, $cfg, $config_path;
+
+    $cfg_file = $config_path.DS.'config.php';
+
     if (!isset($txpcfg['db'])) {
-        if (!is_readable($config_path.DS.'config.php')) {
+        if (!is_readable($cfg_file)) {
             $problems[] = msg(gTxt('config_php_not_found', array(
-                    '{file}' => txpspecialchars($config_path.DS.'config.php')
+                    '{file}' => txpspecialchars($cfg_file)
                 ), 'raw'), MSG_ERROR);
         } else {
-            @include $config_path.DS.'config.php';
+            include $cfg_file;
         }
     }
 
@@ -689,8 +715,10 @@ function check_config_exists()
 {
     global $txpcfg, $config_path;
 
-    if (!isset($txpcfg['db'])) {
-        @include $config_path.DS.'config.php';
+    $cfg_file = $config_path.DS.'config.php';
+
+    if (!isset($txpcfg['db']) && is_readable($cfg_file)) {
+        include $cfg_file;
     }
 
     if (!empty($txpcfg['db'])) {
