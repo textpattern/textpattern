@@ -156,11 +156,11 @@ class TxpXML
 
             $article['Title']     = trim($a->title);
             $article['url_title'] = stripSpace($article['Title'], 1);
-            $article['section']   = @$a->section;
-            $article['Category1'] = @$a->category[0];
-            $article['Category2'] = @$a->category[1];
+            $article['section']   = (isset($a->section) ? (string)$a->section : '');
+            $article['Category1'] = (isset($a->category[0]) ? (string)$a->category[0] : '');
+            $article['Category2'] = (isset($a->category[1]) ? (string)$a->category[1] : '');
 
-            $article['Body'] = @trim($this->replaceUrls($a->body));
+            $article['Body'] = trim($this->replaceUrls(isset($a->body) ? $a->body : ''));
             $format = $a->body->attributes()->format;
             if ($format == 'textile') {
                 $article['Body_html']       = $textile->parse($article['Body']);
@@ -170,7 +170,7 @@ class TxpXML
                 $article['textile_body']    = 0;
             }
 
-            $article['Excerpt'] = @trim($this->replaceUrls($a->excerpt));
+            $article['Excerpt'] = trim($this->replaceUrls(isset($a->excerpt) ? $a->excerpt : ''));
             $format = $a->excerpt->attributes()->format;
             if ($format == 'textile') {
                 $article['Excerpt_html']    = $textile->parse($article['Excerpt']);
