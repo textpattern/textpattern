@@ -54,6 +54,7 @@ class Locale
         'da'    => array('da_DK.UTF-8', 'da_DK.ISO_8859-1', 'Danish_Denmark.1252', 'da_DK', 'da', 'dan', 'danish'),
         'de'    => array('de_DE.UTF-8', 'de_DE.ISO_8859-1', 'de_DE.ISO_8859-16', 'German_Germany.1252', 'de_DE', 'de', 'deu', 'german'),
         'el'    => array('el_GR.UTF-8', 'el_GR.ISO_8859-7', 'Greek_Greece.1253', 'el_GR', 'el', 'gre', 'greek'),
+        'en'    => array('en_US.UTF-8', 'en_GB.ISO_8859-1', 'English_USA.1252', 'en_US', 'english-us', 'eng', 'en', 'english', 'C'),
         'en-gb' => array('en_GB.UTF-8', 'en_GB.ISO_8859-1', 'English_UK.1252', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'C'),
         'en-us' => array('en_US.UTF-8', 'en_US.ISO_8859-1', 'English_USA.1252', 'en_US', 'english-us', 'eng', 'en', 'english'),
         'es'    => array('es_ES.UTF-8', 'es_ES.ISO_8859-1', 'Spanish_Spain.1252', 'es_ES', 'esp', 'spanish'),
@@ -189,12 +190,12 @@ class Locale
             $code = strtolower($name);
             $code = isset($this->locales[$code]) ? $this->locales[$code] : $name;
 
-            if (@setlocale($category, $code)) {
+            if (!empty($code) && setlocale($category, $code)) {
                 return $this;
             }
         }
 
-        @setlocale($category, null);
+        // setlocale($category, null);
 
         return $this;
     }
