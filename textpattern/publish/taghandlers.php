@@ -1895,7 +1895,10 @@ function txp_pager($atts, $thing = null, $newer = null)
         'rel'        => '',
         'shift'      => false,
         'limit'      => 0,
-        'break'      => '',) +
+        'wraptag'    => '',
+        'break'      => '',
+        'class'      => '',
+        'html_id'    => '') +
         ($get ? array(
         'total'      => true,
         ) : array()), $atts));
@@ -1979,6 +1982,17 @@ function txp_pager($atts, $thing = null, $newer = null)
     $old_context = $txp_context;
     $txp_context += get_context();
     $out = array();
+    $rel_att = $rel === '' ? '' : ' rel="'.txpspecialchars($rel).'"';
+    $class_att = $wraptag === '' && $class !== '' ? ' class="'.txpspecialchars($class).'"' : '';
+    $id_att = $wraptag === '' && $html_id !== '' ? ' id="'.txpspecialchars($html_id).'"' : '';
+
+    if ($title !== '') {
+        $title_att = ' title="'.($escape == 'html' ? escape_title($title) :
+            ($escape ? txp_escape(array('escape' => $escape), $title) : $title)
+        ).'"';
+    } else {
+        $title_att = '';
+    }
 
     foreach ($pages as $page) {
         if ($newer === null) {
@@ -2005,17 +2019,11 @@ function txp_pager($atts, $thing = null, $newer = null)
                 }
 
                 if (isset($thing)) {
-                    if ($escape == 'html') {
-                        $title = escape_title($title);
-                    } elseif ($escape) {
-                        $title = txp_escape(array('escape' => $escape), $title);
-                    }
 
                     $url = $link || $link === false && $nextpg != $thispg ? href(
                         parse($thing),
                         $url,
-                        (empty($title) ? '' : ' title="'.$title.'"').
-                        (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
+                        $id_att.$title_att.$rel_att.$class_att
                     ) : parse($thing);
                 }
             } else {
@@ -2038,7 +2046,7 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     $txp_context = $old_context;
 
-    return doWrap($out, '', $break);
+    return $wraptag !== '' ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : doWrap($out, '', $break);
 }
 
 // -------------------------------------------------------------
