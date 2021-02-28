@@ -2937,9 +2937,12 @@ function txp_get_contents($file)
 function get_files_content($dir, $ext)
 {
     $result = array();
-    foreach ((array)@scandir($dir) as $file) {
-        if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
-            $result[$match[1]] = file_get_contents("$dir/$file");
+
+    if (is_readable($dir)) {
+        foreach ((array)scandir($dir) as $file) {
+            if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
+                $result[$match[1]] = file_get_contents("$dir/$file");
+            }
         }
     }
 
@@ -3805,6 +3808,7 @@ function get_prefs($user = '')
 function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 {
     global $prefs;
+
     $prefs[$name] = $val;
     $user_name = null;
 

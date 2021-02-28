@@ -59,14 +59,14 @@ class Core
      * @param table name or empty
      */
 
-    public function getStructure($table='')
+    public function getStructure($table = '')
     {
         if (empty($this->tables_structure)) {
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
         }
 
         if (!empty($table)) {
-            return @$this->tables_structure[$table];
+            return isset($this->tables_structure[$table]) ? $this->tables_structure[$table] : '';
         }
 
         return $this->tables_structure;
@@ -78,7 +78,7 @@ class Core
 
     public function createAllTables()
     {
-        foreach ($this->getStructure() as $key=>$data) {
+        foreach ($this->getStructure() as $key => $data) {
             safe_create($key, $data);
         }
     }
@@ -104,7 +104,7 @@ class Core
     {
         $import = new \Textpattern\Import\TxpXML();
 
-        foreach (get_files_content($this->data_dir, 'xml') as $key=>$data) {
+        foreach (get_files_content($this->data_dir, 'xml') as $key => $data) {
             $import->importXml($data);
         }
     }
@@ -117,7 +117,7 @@ class Core
     {
         foreach ($this->getPrefsDefault() as $name => $p) {
             if (empty($p['private'])) {
-                @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
             }
         }
     }
@@ -250,7 +250,7 @@ class Core
 
 
                     if ($def['event'] != 'custom' && $def != $row) {
-                        @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
+                        set_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
                     }
 
                     unset($prefs_check[$name]);
@@ -261,7 +261,7 @@ class Core
         // Create missing prefs.
         foreach ($prefs_check as $name => $p) {
             $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
-            @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+            create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
         }
 
         $prefs = get_prefs();

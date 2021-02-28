@@ -28,7 +28,7 @@ function setup_db($cfg = array())
     include_once txpath.'/lib/txplib_db.php';
     include_once txpath.'/lib/admin_config.php';
 
-    $siteurl = rtrim(@$cfg['site']['public_url'], '/');
+    $siteurl = rtrim($cfg['site']['public_url'], '/');
 
     if (!preg_match('%^https?://%', $siteurl)) {
         $siteurl = 'http://'.$siteurl;
@@ -37,7 +37,7 @@ function setup_db($cfg = array())
     if (empty($cfg['site']['admin_url'])) {
         $adminurl = $siteurl.'/textpattern';
     } else {
-        $adminurl = rtrim(@$cfg['site']['admin_url'], '/');
+        $adminurl = rtrim($cfg['site']['admin_url'], '/');
 
         if (!preg_match('%^https?://%', $adminurl)) {
             $adminurl = 'http://'.$adminurl;
@@ -47,16 +47,20 @@ function setup_db($cfg = array())
     // Determine the mode of permanent links.
     ini_set('default_socket_timeout', 10);
     $s = md5(uniqid(rand(), true));
+    $permlink_mode = 'messy';
+
+    // @todo Find a way to remove the error suppression here. Custom error handler?
     $pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1");
 
-    if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
+    if (!empty($pretext_data[0]) && trim($pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
         $permlink_mode = 'section_title';
-    } else {
-        $permlink_mode = 'messy';
     }
 
     // Variable set.
-    @define('hu', $siteurl.'/');
+    if (!defined('hu')) {
+        define('hu', $siteurl.'/');
+    }
+
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['admin_theme']) ? 'hive' : $cfg['site']['admin_theme'];
@@ -89,9 +93,9 @@ function setup_db($cfg = array())
             txp-data == 'none'  - Nothing to import.
         */
 
-        if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
+        if (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'theme') {
             $datadir = $is_from_setup ? $setup_themes_path.DS.$public_theme : $root_public_themes.DS.$public_theme;
-        } elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
+        } elseif (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'none') {
             $datadir = '';
         } else {
             $datadir = $setup_path;
@@ -106,7 +110,7 @@ function setup_db($cfg = array())
             echo txp_setup_progress_meter(4).n.'<div class="txp-setup">';
         }
 
-        msg(gTxt('tables_exist', array('{dbname}' => @$txpcfg['db'])), MSG_ERROR, true);
+        msg(gTxt('tables_exist', array('{dbname}' => (!empty($txpcfg['db']) ? $txpcfg['db'] : ''))), MSG_ERROR, true);
     }
 
     $setup = new \Textpattern\DB\Core();
@@ -136,12 +140,12 @@ function setup_db($cfg = array())
                                         private - Will be created after user login
         */
         foreach (get_files_content($datadir.'/data', 'prefs') as $key => $data) {
-            if ($out = @json_decode($data, true)) {
+            if (($out = json_decode($data, true)) !== null) {
                 msg("Prefs: 'data/{$key}'");
 
                 foreach ($out as $name => $p) {
                     if (empty($p['private'])) {
-                        @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                        set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
                     }
                 }
             }
@@ -241,7 +245,10 @@ function setup_load_lang($langs)
     $lang_textpack = Txp::get('\Textpattern\L10n\Lang', $lang_path)->getPack($lang, $group);
 
     $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
-    @define('LANG', $language);
+
+    if (!defined('LANG')) {
+        define('LANG', $language);
+    }
 
     $allStrings = array_merge($default_textpack, $lang_textpack);
 
@@ -327,6 +334,7 @@ function setup_connect()
     $mylink = mysqli_init();
 
     try {
+        // @todo Custom error handler to catch warnings if host is mangled?
         if (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
             $cfg['database']['client_flags'] = 0;
         } elseif (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
