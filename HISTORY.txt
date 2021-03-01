@@ -23,8 +23,8 @@ Changes in 4.8.5 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Added: More aggregators in <txp:article /> 'fields' attribute.
 * Added: Global 'break', 'replace' and 'trim' attributes.
-* Added: Support for Fulah language translation.
 * Added: <txp:image_info type="mime" />.
+* Added: Support for Fulah language translation.
 * Changed: <txp:article_custom /> can paginate content using pageby attribute.
 * Changed: <txp:images /> outputs full-size images if thumbs don't exist and
   <txp:images thumbnail="0" /> displays full-size images as expected.
