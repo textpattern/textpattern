@@ -61,6 +61,7 @@ class Locale
         'es-ve' => array('es_VE.UTF-8', 'es_VE.ISO_8859-1', 'Spanish_Venezuela.1252', 'es_VE', 'esv', 'spanish-venezuela'),
         'et'    => array('et_EE.UTF-8', 'et_EE.ISO_8859-1', 'et_EE.ISO_8859-15', 'Estonian_Estonia.1257', 'et_EE', 'et', 'est', 'estonian'),
         'fa'    => array('fa_IR.UTF-8', 'Farsi_Iran.1256', 'fa_IR', 'fa', 'persian', 'per', 'fas', 'farsi'),
+        'ff'    => array('ff_SN.UTF-8', 'ff', 'ful', 'fula', 'fulah'),
         'fi'    => array('fi_FI.UTF-8', 'fi_FI.ISO_8859-1', 'fi_FI.ISO-8859-15', 'fi_FI.ISO_8859-16', 'Finnish_Finland.1252', 'fi_FI', 'fin', 'fi', 'finnish'),
         'fil'   => array('ph_PH.UTF-8', 'ph_PH.ISO_8859-1', 'Filipino_Philippines.1252', 'ph_PH', 'fil', 'filipino'),
         'fr'    => array('fr_FR.UTF-8', 'fr_FR.ISO_8859-1', 'fr_FR.ISO-8859-15', 'fr_FR.ISO_8859-16', 'French_France.1252', 'fr_FR', 'fra', 'fre', 'fr', 'french'),
