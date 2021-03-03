@@ -29,7 +29,7 @@
   "dependencies": {
     "blueimp-file-upload": "10.31.0",
     "blueimp-md5": "2.18.0",
-    "jquery": "3.5.1",
+    "jquery": "3.6.0",
     "jquery-ui-dist": "1.12.1",
     "prismjs": "1.23.0"
   },
