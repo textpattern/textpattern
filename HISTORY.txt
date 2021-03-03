@@ -6,6 +6,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Plugins can now be uploaded from URL by dragging to upload textarea.
 * Added: Compiled .txt plugins can now be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
+* jQuery 3.6.0.
 
 Changes in 4.8.5 (upcoming)
 
