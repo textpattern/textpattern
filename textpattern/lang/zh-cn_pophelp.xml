@@ -571,13 +571,36 @@
 <p>在 <code>comments_display</code>表单中的单个表单，对于任一值，您都可以通过修改<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>从而覆盖单个表单上使用的标签 。</p>
         ]]></item>
         <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title="评论日期格式"><![CDATA[
+<h2>评论日期格式</h2>
+<p>评论日期将如何显示给您的网站访问者。</p>
+        ]]></item>
+        <item id="comments_default_invite" title="默认评论邀请"><![CDATA[
+<h2>默认评论邀请</h2>
+<p>如果您允许访客在您的网站上发表评论，这是默认的邀请文本。例如：</p>
+<ul>
+    <li>评论</li>
+    <li>添加评论</li>
+    <li>反馈</li>
+    <li>注释</li>
+</ul>
+<p>请注意，邀请文本总是可以根据每篇文章被更改的。</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="关闭评论于"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[
+<h2>在评论中允许评论者发图像？</h2>
+<p>使用此选项设置为“否”，评论中包含的任何图像都将被删除掉。</p>
+        ]]></item>
+        <item id="comments_mode" title="评论模式"><![CDATA[
+<h2>评论模式</h2>
+<p>如果选择了“不弹出” (推荐)，当前窗口将被刷新以只显示当前文章与下面的注释。</p>
+<p>如果选择“弹出”，点击评论链接时将打开一个新的浏览器窗口(使用 <code>弹出评论</code> 表单)。</p>
+        ]]></item>
+        <item id="comments_moderate" title="审核评论？"><![CDATA[
+<h2>审核评论？</h2>
+<p>通过这个设置为“是”，每个新的评论都会关闭其可见性，直到它被审核。 您必须手动管理每个评论并使每个评论可见(收到新评论时信息将发送给文章作者)。</p>
+        ]]></item>
+        <item id="comments_on_default" title="评论功能默认开放？"><![CDATA[]]></item>
         <item id="comments_require_email" title=""><![CDATA[]]></item>
         <item id="comments_require_name" title=""><![CDATA[]]></item>
         <item id="comments_sendmail" title=""><![CDATA[]]></item>
