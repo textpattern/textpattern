@@ -74,7 +74,10 @@
     <li>可管理板块</li>
     <li>可管理页面、模块和样式</li>
 </ul>        ]]></item>
-        <item id="create_author" title="添加作者"><![CDATA[]]></item>
+        <item id="create_author" title="添加作者"><![CDATA[
+<h2>添加作者</h2>
+<p>邮寄密码、欢迎信息和登录说明给新作者。</p>
+        ]]></item>
     </group>
 
     <group id="article" title="写作面板">
@@ -586,8 +589,11 @@
 </ul>
 <p>请注意，邀请文本总是可以根据每篇文章被更改的。</p>
         ]]></item>
-        <item id="comments_disabled_after" title="关闭评论于"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[
+        <item id="comments_disabled_after" title="关闭评论于"><![CDATA[
+<h2>关闭评论于</h2>
+<p>用它来设置文章评论被关闭的时间长度(可以设置为“永远”以允许无限时间评论)。</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="在评论中允许评论者发图片？"><![CDATA[
 <h2>在评论中允许评论者发图像？</h2>
 <p>使用此选项设置为“否”，评论中包含的任何图像都将被删除掉。</p>
         ]]></item>
@@ -600,17 +606,30 @@
 <h2>审核评论？</h2>
 <p>通过这个设置为“是”，每个新的评论都会关闭其可见性，直到它被审核。 您必须手动管理每个评论并使每个评论可见(收到新评论时信息将发送给文章作者)。</p>
         ]]></item>
-        <item id="comments_on_default" title="评论功能默认开放？"><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title="默认允许评论？"><![CDATA[
+<h2>默认允许评论？</h2>
+<p>如果将此设置为“是”，每篇已发布的文章将自动启用评论。如果设置为“否”，您必须在每次接受评论时启用文章“写作”面板的评论。</p>
+<p>请注意，允许评论可以随时在每篇文章的基础上打开或关闭。</p>
+        ]]></item>
+        <item id="comments_require_email" title="评论需要评论者的电子邮件地址？"><![CDATA[
+<h2>评论需要用户的电子邮件地址？</h2>
+<p>如果设置为“是”， 想对您的文章发表评论的人必须在评论输入表单中输入电子邮件地址。 如果他们不提供电子邮件地址，他们将无法发表评论。</p>
+        ]]></item>
+        <item id="comments_require_name" title="评论需要评论者的姓名？"><![CDATA[
+<h2>评论需要评论者的姓名？</h2>
+<p>如果设置为“是”，想对您的文章发表评论的人必须在评论输入表单中输入姓名。 如果他们不提供姓名，他们将无法提交评论。</p>
+        ]]></item>
+        <item id="comments_sendmail" title="把评论寄给作者？"><![CDATA[
+<h2>发送评论给作者？</h2>
+<p>如果设置为“是”，每当在文章上收到新的评论将通过电子邮件发送一份副本给文章作者。</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="评论中允许更多的 Textile 标记？"><![CDATA[]]></item>
+        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[]]></item>
+        <item id="custom_overview" title="自定义栏"><![CDATA[]]></item>
         <item id="dateformat" title="日期格式"><![CDATA[]]></item>
         <item id="default_event" title=""><![CDATA[]]></item>
         <item id="default_publish_status" title="默认发布状态"><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="doctype" title="文档类型声明（Doctype）"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="启用开发主题预览？"><![CDATA[]]></item>
         <item id="enable_short_tags" title="启用短标签支持?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="启用 XML-RPC 服务器？"><![CDATA[]]></item>
@@ -626,7 +645,7 @@
         <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[]]></item>
         <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[]]></item>
         <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码 (默认为 UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="覆盖表单类型"><![CDATA[]]></item>
         <item id="permlink_format" title="永久链接标题 URL 模式"><![CDATA[]]></item>
         <item id="permlink_mode" title="文章的 URL 模式"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="插件缓存目录路径"><![CDATA[]]></item>
@@ -635,7 +654,7 @@
         <item id="publish_expired_articles" title="发布过期的文章？"><![CDATA[]]></item>
         <item id="publisher_email" title="发送此电子邮件地址的登录详情"><![CDATA[]]></item>
         <item id="rss_how_many" title="订阅中的文章数目"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="secondpass" title="额外的解析器扫描的次数"><![CDATA[]]></item>
         <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="在订阅中显示评论计数？"><![CDATA[]]></item>
         <item id="site_slogan" title="网站标语"><![CDATA[]]></item>
@@ -675,7 +694,7 @@
     <group id="skin" title="主题面板">
         <item id="skin_author" title="主题作者"><![CDATA[]]></item>
         <item id="skin_author_uri" title="主题网站"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="从磁盘中删除该主题模板"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="导入时从磁盘中删除未使用的模板"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="导出时从磁盘中删除未使用的模板"><![CDATA[]]></item>
         <item id="skin_description" title="主题描述"><![CDATA[]]></item>
