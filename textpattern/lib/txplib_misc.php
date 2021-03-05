@@ -2484,17 +2484,37 @@ function since($stamp)
     $diff = (time() - $stamp);
 
     if ($diff <= 3600) {
-        $mins = round($diff / 60);
-        $since = ($mins <= 1) ? ($mins == 1) ? '1 '.gTxt('minute') : gTxt('a_few_seconds') : "$mins ".gTxt('minutes');
+        $qty = round($diff / 60);
+
+        if ($qty < 1) {
+            $qty = '';
+            $period = gTxt('a_few_seconds');
+        } elseif ($qty == 1) {
+            $period = gTxt('minute');
+        } else {
+            $period = gTxt('minutes');
+        }
     } elseif (($diff <= 86400) && ($diff > 3600)) {
-        $hours = round($diff / 3600);
-        $since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
+        $qty = round($diff / 3600);
+
+        if ($qty <= 1) {
+            $qty = 1;
+            $period = gTxt('hour');
+        } else {
+            $period = gTxt('hours');
+        }
     } elseif ($diff >= 86400) {
-        $days = round($diff / 86400);
-        $since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
+        $qty = round($diff / 86400);
+
+        if ($qty <= 1) {
+            $qty = 1;
+            $period = gTxt('day');
+        } else {
+            $period = gTxt('days');
+        }
     }
 
-    return gTxt('ago', array('{since}' => $since));
+    return gTxt('ago', array('{qty}' => $qty, '{period}' => $period));
 }
 
 /**
