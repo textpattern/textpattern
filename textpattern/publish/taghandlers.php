@@ -5102,6 +5102,7 @@ function variable($atts, $thing = null)
         'escape'    => $set,
         'name'      => '',
         'value'     => null,
+        'default'   => false,
         'add'       => null,
         'reset'     => null,
         'separator' => null,
@@ -5134,13 +5135,17 @@ function variable($atts, $thing = null)
                 $value :
                 (isset($thing) ? parse($thing) : $var);
         }
+    }
 
-        if (isset($add)) {
-            if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
-                $var += $add;
-            } else {
-                $var .= ($var ? $separator : '').$add;
-            }
+    if ($default !== false && trim($var) === '') {
+        $var = $default;
+    }
+
+    if (isset($add)) {
+        if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
+            $var += $add;
+        } else {
+            $var .= ($var ? $separator : '').$add;
         }
     }
 
