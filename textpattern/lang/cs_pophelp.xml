@@ -810,10 +810,9 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
         <item id="use_mail_on_feeds_id" title="Povolit komentáře?"><![CDATA[
 <h2>Povolit komentáře?</h2>
 <p>Tato volba určuje, zda se komentářová funkcionalita Textpatternu bude používat, či nikoliv.</p>        ]]></item>
-        <item id="use_plugins" title="Používat emailovou adresu pro ID pramenu?"><![CDATA[
-<h2>Používat emailovou adresu pro ID pramenů?</h2>
-<p>Položky v pramenech Atom vyžadují jednoznačný identifikátor (ID).</p>
-<p>Pro vytváření identifikátorů může Textpattern použít buď tvou emailovou adresu, nebo doménové jméno zahrnuté do ID. Emailová adresa bude při vytváření webu použita přednostně. Pokud není pravděpodobné, že budeš v budoucnu měnit doménové jméno, je bezpečnější zde nastavit ‘Ne’.</p>        ]]></item>
+        <item id="use_plugins" title="Používat pluginy?"><![CDATA[
+<h2>Používat pluginy?</h2>
+<p>Tato volba umožňuje zcela vypnout podporu pluginů.<br>Je to užitečné v případě, že na tvých stránkách dochází k podivným chybám a chceš zjistit, zda jsou na vině pluginy.</p>        ]]></item>
         <item id="use_textile" title="Výchozí formátování textu"><![CDATA[
 <h2>Výchozí formátování textu</h2>
 <p>Nastavení způsobu formátování textu, který zde vyberete, se stane výchozí pro anotaci a tělo článku v panelu "Psaní". Máte možnost volby "Použít Textile", převést zalomení řádků na HTML značky pro odstavce nebo ponechat text  beze změn.</p>
