@@ -19,6 +19,7 @@ Changes in 4.8.5 (upcoming)
 * Fixed: Diagnostics panel strings no longer have 'Help' appended, and
   the textarea is rendered fully in English to aid support requests.
 * Fixed: Draft/hidden/pending articles output 404 status as they should.
+* Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
 * Added: Support for WebP image format, on PHP 7.1 or higher.
 * Added: SSL version verification on Diagnostics panel during update checks.
 * Added: Latest text translations. Thank you to all our translators.
@@ -26,17 +27,21 @@ Changes in 4.8.5 (upcoming)
 * Added: Global 'break', 'replace' and 'trim' attributes.
 * Added: <txp:image_info type="mime" />.
 * Added: Support for Fulah language translation.
+* Added: Locale for en, and improved locale fallbacks.
 * Changed: <txp:article_custom /> can paginate content using pageby attribute.
 * Changed: <txp:images /> outputs full-size images if thumbs don't exist and
   <txp:images thumbnail="0" /> displays full-size images as expected.
 * Changed: <txp:images> accepts <txp:else />.
 * Changed: <txp:header /> attributes are unset by default.
+* Changed: <txp:variable> default attribute can be used during assignment.
+  (thanks, cara-tm).
 * Changed: Expose secondpass Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
 * Changed: Staff writers are allowed to use <txp:php /> (they were able to do
   it in forms anyway).
+* Changed: Better i18n handling for 'ago'.
 * Developer: New pre-pretext_end callback.
 * Developer: New txp.image>types callback.
 * PrismJS 1.23.0.
