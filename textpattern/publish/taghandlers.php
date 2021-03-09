@@ -583,7 +583,6 @@ function txp_yield($atts, $thing = null)
     return $inner;
 }
 
-
 function txp_if_yield($atts, $thing = null)
 {
     global $yield, $txp_yield, $txp_item;
@@ -1544,7 +1543,6 @@ function section_list($atts, $thing = null)
     if ($limit !== '' || $offset) {
         $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
-
 
     if ($sections === true) {
         $sql[] = '1';
@@ -4032,7 +4030,6 @@ function if_description($atts, $thing = null)
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
-
 // -------------------------------------------------------------
 
 function meta_author($atts)
@@ -4669,7 +4666,8 @@ function if_plugin($atts, $thing = null)
         'version' => '',
     ), $atts));
 
-    $x = $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    $x = empty($name) ? version_compare(get_pref('version'), $version) >= 0 :
+        $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
