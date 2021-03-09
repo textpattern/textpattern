@@ -573,7 +573,10 @@
 <p>决定是否将文章评论用HTML <code>&lt;ol&gt;</code> 标签包裹，每条评论将被包裹在 <code>&lt;li&gt;</code> 标签中(评论以有序列表形式显示) 还是会被包裹在 <code>&lt;div&gt;</code> 标签中。 </p>
 <p>在 <code>comments_display</code>表单中的单个表单，对于任一值，您都可以通过修改<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>从而覆盖单个表单上使用的标签 。</p>
         ]]></item>
-        <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[]]></item>
+        <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[<h2>在文章后自动附加评论？</h2>
+<p>此设置确定是否将注释和注释表单自动附加到所有单篇文章（通过自动包含<code>comments_display</code>表单的内容）。</p>
+<p>大多数情况下，你会希望这个设置为'否'，因为这允许更大的灵活性，以决定在您的网站设计中放置评论的位置。您需要在希望出现评论的任何基于文章的模板中手动添加<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code>标记<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>。</p>
+<p>如果您在文章中遇到重复显示评论的情况，那么您的模板中很可能有<code>&lt;txp:comments /&gt;</code>标记，但又将“自动将评论附加到文章中？”也设置为“是”。]]></item>
         <item id="comments_dateformat" title="评论日期格式"><![CDATA[
 <h2>评论日期格式</h2>
 <p>评论日期将如何显示给您的网站访问者。</p>
@@ -623,7 +626,18 @@
 <h2>发送评论给作者？</h2>
 <p>如果设置为“是”，每当在文章上收到新的评论将通过电子邮件发送一份副本给文章作者。</p>
         ]]></item>
-        <item id="comments_use_fat_textile" title="评论中允许更多的 Textile 标记？"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="评论中允许更多的 Textile 标记？"><![CDATA[<h2>评论中允许更多的 Textile 标记？</h2>
+<p>当设置为“是”时，评论可以包含<a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>元素，否则这些元素将被视为纯文本，例如：</p>
+<ul>
+    <li>标题</li>
+    <li>有序和无序列表</li>
+    <li>脚注</li>
+    <li>表格</li>
+    <li>代码</li>
+    <li>扩展块语法 (<code>bc..</code>, <code>bq..</code>, etc.)</li>
+</ul>
+<p><strong>注意：</strong>出于安全原因，原始HTML被转换为常规文本。</p>
+        ]]></item>
         <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[]]></item>
         <item id="custom_overview" title="自定义栏"><![CDATA[]]></item>
         <item id="dateformat" title="日期格式"><![CDATA[]]></item>
@@ -638,11 +652,19 @@
         <item id="file_max_upload_size" title="最大上传文件大小（字节）"><![CDATA[]]></item>
         <item id="gmtoffset" title="时区"><![CDATA[]]></item>
         <item id="img_dir" title="图片目录"><![CDATA[]]></item>
-        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[]]></item>
-        <item id="is_dst" title="启用夏令时？"><![CDATA[]]></item>
+        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[<h2>在 Atom 供稿中包含电子邮件地址？</h2>
+<p>这允许您在Atom供稿的<code>作者</code>部分包含文章作者的电子邮件地址（在其用户帐户中设置）。</p>
+        ]]></item>
+        <item id="is_dst" title="启用夏令时？"><![CDATA[<h2>启用夏令时？</h2>
+<p>当前是否为当前时区启用DST（夏令时）。</p>
+        ]]></item>
         <item id="logging" title="日志"><![CDATA[]]></item>
-        <item id="max_url_len" title="最大 URL 长度 (字符)"><![CDATA[]]></item>
-        <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[]]></item>
+        <item id="max_url_len" title="最大 URL 长度 (字符)"><![CDATA[<h2>最大 URL 长度 (字符)</h2>
+<p>这将阻止超过指定长度的URL无法正常工作。这有助于限制破坏和网站安全。</p>
+        ]]></item>
+        <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[<h2>显示管理端内联帮助链接</h2>
+<p>如果要在整个系统中隐藏管理端内联帮助链接（Textpattern帮助弹出窗口），请将此设置切换为“无”。</p>
+        ]]></item>
         <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[]]></item>
         <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码 (默认为 UTF-8)?"><![CDATA[]]></item>
         <item id="override_form_types" title="覆盖表单类型"><![CDATA[]]></item>
