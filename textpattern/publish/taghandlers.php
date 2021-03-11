@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, breakby, breakclass, wrapform, evaluate')
+    ->registerAttr(true, 'not, breakby, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
 
@@ -582,7 +582,6 @@ function txp_yield($atts, $thing = null)
     return $inner;
 }
 
-
 function txp_if_yield($atts, $thing = null)
 {
     global $yield, $txp_yield, $txp_item;
@@ -711,7 +710,7 @@ function linklist($atts, $thing = null)
         'realname'    => '',
         'auto_detect' => 'category, author',
         'class'       => __FUNCTION__,
-        'form'        => 'plainlinks',
+        'form'        => isset($thing) ? '' : 'plainlinks',
         'id'          => '',
         'pageby'      => '',
         'limit'       => 0,
@@ -818,31 +817,14 @@ function linklist($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', join(' ', $qparts));
+    $out = parseList($rs, $thislink, function($a) {
+        global $thislink; 
+        $thislink = $a;
+        $thislink['date'] = $thislink['uDate'];
+        unset($thislink['uDate']);
+    }, compact('form', 'thing'));
 
-    if ($rs) {
-        $count = 0;
-        $last = numRows($rs);
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thislink = $a;
-            $thislink['date'] = $thislink['uDate'];
-            $thislink['is_first'] = ($count == 1);
-            $thislink['is_last'] = ($count == $last);
-            unset($thislink['uDate']);
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
-
-            $thislink = '';
-        }
-
-        if ($out) {
-            return doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return $out ? doWrap($out, $wraptag, $break, $class) : '';
 }
 
 // -------------------------------------------------------------
@@ -1543,7 +1525,6 @@ function section_list($atts, $thing = null)
     if ($limit !== '' || $offset) {
         $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
-
 
     if ($sections === true) {
         $sql[] = '1';
@@ -3693,7 +3674,9 @@ function images($atts, $thing = null)
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
 
-    if ($rs) {
+    if ($has_content) {
+        $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
+    } elseif ($rs) {
         $out = array();
         $count = 0;
         $last = numRows($rs);
@@ -3708,31 +3691,25 @@ function images($atts, $thing = null)
             $thisimage['is_first'] = ($count == 1);
             $thisimage['is_last'] = ($count == $last);
 
-            if (!$has_content) {
-                $url = pagelinkurl(array(
-                    'c'       => $thisimage['category'],
-                    'context' => 'image',
-                    's'       => $s,
-                    'p'       => $thisimage['id'],
-                ));
-                $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
-                $out[] = href(
-                    '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
-                    $url
-                );
-            } else {
-                $out[] = isset($thing) ? parse($thing) : parse_form($form);
-            }
+            $url = pagelinkurl(array(
+                'c'       => $thisimage['category'],
+                'context' => 'image',
+                's'       => $s,
+                'p'       => $thisimage['id'],
+            ));
+            $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
+            $out[] = href(
+                '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
+                $url
+            );
         }
 
         $thisimage = (isset($old_image) ? $old_image : null);
-
-        if ($out) {
-            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
-        }
     }
 
-    return isset($thing) ? parse($thing, false) : '';
+    return empty($out) ?
+        (isset($thing) ? parse($thing, false) : '') :
+        doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
 }
 
 // -------------------------------------------------------------
@@ -4030,7 +4007,6 @@ function if_description($atts, $thing = null)
 
     return isset($thing) ? parse($thing, $x) : $x;
 }
-
 
 // -------------------------------------------------------------
 
@@ -4668,7 +4644,8 @@ function if_plugin($atts, $thing = null)
         'version' => '',
     ), $atts));
 
-    $x = $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    $x = empty($name) ? version_compare(get_pref('version'), $version) >= 0 :
+        $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -4685,7 +4662,7 @@ function file_download_list($atts, $thing = null)
         'realname'    => '',
         'auto_detect' => 'category, author',
         'class'       => __FUNCTION__,
-        'form'        => 'files',
+        'form'        => isset($thing) ? '' : 'files',
         'id'          => '',
         'pageby'      => '',
         'limit'       => 10,
@@ -4803,29 +4780,9 @@ function file_download_list($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_file', $where.' '.join(' ', $qparts));
+    $out = parseList($rs, $thisfile, 'file_download_format_info', compact('form', 'thing'));
 
-    if ($rs) {
-        $count = 0;
-        $last = numRows($rs);
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thisfile = file_download_format_info($a);
-            $thisfile['is_first'] = ($count == 1);
-            $thisfile['is_last'] = ($count == $last);
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
-
-            $thisfile = '';
-        }
-
-        if ($out) {
-            return doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return $out ? doWrap($out, $wraptag, compact('break', 'class')) : '';
 }
 
 // -------------------------------------------------------------
