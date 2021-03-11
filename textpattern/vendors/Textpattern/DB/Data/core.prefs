@@ -80,7 +80,7 @@
         "val": "",
         "type": "0",
         "event": "mail",
-        "family": "mail_enhanced",
+        "collection": "mail_enhanced",
         "html": "smtp_handler",
         "position": "160"
     },
@@ -88,7 +88,7 @@
         "val": "587",
         "type": "0",
         "event": "mail",
-        "family": "mail_enhanced",
+        "collection": "mail_enhanced",
         "html": "smtp_handler",
         "position": "170",
         "constraints": "1,65535"
@@ -97,7 +97,7 @@
         "val": "",
         "type": "0",
         "event": "mail",
-        "family": "mail_enhanced",
+        "collection": "mail_enhanced",
         "html": "smtp_handler",
         "position": "180"
     },
@@ -105,7 +105,7 @@
         "val": "",
         "type": "0",
         "event": "mail",
-        "family": "mail_enhanced",
+        "collection": "mail_enhanced",
         "html": "smtp_handler",
         "position": "190"
     },
@@ -113,7 +113,7 @@
         "val": "ssl",
         "type": "0",
         "event": "mail",
-        "family": "mail_enhanced",
+        "collection": "mail_enhanced",
         "html": "smtp_handler",
         "position": "200"
     },

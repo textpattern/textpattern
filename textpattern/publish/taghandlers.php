@@ -3502,7 +3502,7 @@ function image_display($atts)
 
 function images($atts, $thing = null)
 {
-    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $pretext;
+    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $prefs, $pretext;
 
     extract(lAtts(array(
         'name'        => '',
@@ -3673,38 +3673,34 @@ function images($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
+    if (!$has_content) {
+        global $is_form, $prefs;
+        $old_allow_page_php_scripting = $prefs['allow_page_php_scripting'];
+        $prefs['allow_page_php_scripting'] = true;
+        $is_form++;
 
-    if ($has_content) {
-        $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
-    } elseif ($rs) {
-        $out = array();
-        $count = 0;
-        $last = numRows($rs);
+        $import = join_atts(compact('thumbnail'), TEXTPATTERN_STRIP_TXP);
+        $thing = '<txp:php'.$import.'>
+global $s, $thisimage;
+$url = pagelinkurl(array(
+    "c"       => $thisimage["category"],
+    "context" => "image",
+    "s"       => $s,
+    "p"       => $thisimage["id"]
+));
+$src = image_url(array("thumbnail" => isset($thumbnail) && ($thumbnail !== true or $thisimage["thumbnail"])));
+echo href(
+    "<img src=\'$src\' alt=\'".txpspecialchars($thisimage["alt"])."\' />",
+    $url
+);
+</txp:php>';
+    }
 
-        if (isset($thisimage)) {
-            $old_image = $thisimage;
-        }
+    $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
 
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thisimage = image_format_info($a);
-            $thisimage['is_first'] = ($count == 1);
-            $thisimage['is_last'] = ($count == $last);
-
-            $url = pagelinkurl(array(
-                'c'       => $thisimage['category'],
-                'context' => 'image',
-                's'       => $s,
-                'p'       => $thisimage['id'],
-            ));
-            $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
-            $out[] = href(
-                '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
-                $url
-            );
-        }
-
-        $thisimage = (isset($old_image) ? $old_image : null);
+    if (!$has_content) {
+        $prefs['allow_page_php_scripting'] = $old_allow_page_php_scripting;
+        $is_form--;
     }
 
     return empty($out) ?
@@ -4352,17 +4348,17 @@ function if_article_section($atts, $thing = null)
 
 function php($atts = null, $thing = null, $priv = null)
 {
-    global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
+    global $is_article_body, $is_form, $thisarticle;
 
     $error = null;
 
     if ($priv) {
         $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
     } elseif (empty($is_article_body) || !empty($is_form)) {
-        if (empty($prefs['allow_page_php_scripting'])) {
+        if (empty(get_pref('allow_page_php_scripting'))) {
             $error = 'php_code_disabled_page';
         }
-    } elseif (empty($prefs['allow_article_php_scripting'])) {
+    } elseif (empty(get_pref('allow_article_php_scripting'))) {
         $error = 'php_code_disabled_article';
     } elseif (!has_privs('article.php', $thisarticle['authorid'])) {
         $error = 'php_code_forbidden_user';
@@ -4374,6 +4370,7 @@ function php($atts = null, $thing = null, $priv = null)
         if ($error) {
             trigger_error(gTxt($error));
         } else {
+            empty($atts) or extract($atts);
             eval($thing);
         }
 

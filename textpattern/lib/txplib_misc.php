@@ -3811,7 +3811,7 @@ function get_prefs($user = '')
  *
  * @param   string       $name       The name
  * @param   string       $val        The value
- * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   string|array $event      The section or array(section, collection) the preference appears in
  * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
  * @param   string       $html       The HTML control type the field uses. Can take a custom function name
  * @param   int          $position   Used to sort the field on the Preferences panel
@@ -3991,7 +3991,7 @@ function pref_exists($name, $user_name = null)
  *
  * @param   string       $name       The name
  * @param   string       $val        The value
- * @param   string|array $event      The section or array(section, family) the preference appears in
+ * @param   string|array $event      The section or array(section, collection) the preference appears in
  * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
  * @param   string       $html       The HTML control type the field uses. Can take a custom function name
  * @param   int          $position   Used to sort the field on the Preferences panel
@@ -4025,10 +4025,10 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
     $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
     if (is_array($event)) {
-        $family = $event[1];
+        $collection = $event[1];
         $event = $event[0];
     } else {
-        $family = '';
+        $collection = '';
     }
 
     if (
@@ -4037,7 +4037,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
             "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
-            family = '".doSlash($family)."',
+            collection = '".doSlash($collection)."',
             html = '".doSlash($html)."',
             type = ".intval($type).",
             position = ".intval($position).",
@@ -4047,7 +4047,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return false;
     }
 
-    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
+    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'collection', 'type', 'html', 'position', 'user_name'));
 
     return true;
 }
@@ -4063,7 +4063,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
  *
  * @param   string            $name       The update preference string's name
  * @param   string|null       $val        The value
- * @param   string|array|null $event      The section or array(section, family) the preference appears in
+ * @param   string|array|null $event      The section or array(section, collection) the preference appears in
  * @param   int|null          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
  * @param   string|null       $html       The HTML control type the field uses. Can take a custom function name
  * @param   int|null          $position   Used to sort the field on the Preferences panel
@@ -4102,20 +4102,20 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
     }
 
     if (is_array($event)) {
-        $family = $event[1];
+        $collection = $event[1];
         $event = $event[0];
     } else {
-        $family = null;
+        $collection = null;
     }
 
-    foreach (array('val', 'event', 'family', 'type', 'html', 'position') as $field) {
+    foreach (array('val', 'event', 'collection', 'type', 'html', 'position') as $field) {
         if ($$field !== null) {
             $set[] = $field." = '".doSlash($$field)."'";
         }
     }
 
     if ($set && safe_update('txp_prefs', join(', ', $set), join(" AND ", $where))) {
-        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'family', 'type', 'html', 'position', 'user_name'));
+        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'collection', 'type', 'html', 'position', 'user_name'));
 
         return true;
     }

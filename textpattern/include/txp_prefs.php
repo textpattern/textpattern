@@ -76,7 +76,7 @@ function prefs_save()
     }
 
     $prefnames = safe_rows_start(
-        "name, event, family, user_name, val",
+        "name, event, collection, user_name, val",
         'txp_prefs',
         join(" AND ", $sql)
     );
@@ -203,7 +203,7 @@ function prefs_list($message = '')
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, family, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, collection, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -221,7 +221,7 @@ function prefs_list($message = '')
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
-            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['family'];
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['collection'];
 
             if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
@@ -272,8 +272,8 @@ function prefs_list($message = '')
             $constraints = array();
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
-                $familyClass = (!empty($a['family']) ? $a['family'] : '');
-                $out[] = hed(gTxt($subEvent), 3, array('class' => $familyClass));
+                $collectionClass = (!empty($a['collection']) ? $a['collection'] : '');
+                $out[] = hed(gTxt($subEvent), 3, array('class' => $collectionClass));
                 $last_sub_event = $subEvent;
             }
 
@@ -283,7 +283,7 @@ function prefs_list($message = '')
                 $label,
                 array($help, 'instructions_'.$a['name']),
                 array(
-                    'class' => 'txp-form-field'.(!empty($a['family']) ? ' '.$a['family'] : ''),
+                    'class' => 'txp-form-field'.(!empty($a['collection']) ? ' '.$a['collection'] : ''),
                     'id'    => 'prefs-'.$a['name'],
                 )
             );
