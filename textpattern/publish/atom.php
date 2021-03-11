@@ -190,9 +190,6 @@ function atom()
                 $cb = callback_event('atom_entry');
                 $e = array();
 
-                $a['posted'] = $uPosted;
-                $a['expires'] = $uExpires;
-
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
                 } else {
@@ -209,7 +206,7 @@ function atom()
                 $escaped_title = htmlspecialchars($thisarticle['title']);
                 $e['title'] = tag($escaped_title.$count, 'title', t_html);
 
-                $permlink = permlinkurl($a);
+                $permlink = permlinkurl($thisarticle);
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
                 $e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'id');
@@ -217,8 +214,8 @@ function atom()
                 $e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
                 $e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
 
-                $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
-                $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
+                $summary = trim(replace_relative_urls(parse($Excerpt_html), $permlink));
+                $content = trim(replace_relative_urls(parse($Body_html), $permlink));
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.

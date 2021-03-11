@@ -138,9 +138,6 @@ function rss()
 
                 $cb = callback_event('rss_entry');
 
-                $a['posted'] = $uPosted;
-                $a['expires'] = $uExpires;
-
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
                 } else {
@@ -148,28 +145,26 @@ function rss()
                 }
 
                 $permlink = permlinkurl($thisarticle);
-                $summary = trim(parse($thisarticle['excerpt']), $permlink);
+                $thisauthor = get_author_name($AuthorID);
+                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($thisarticle['title']), ENT_QUOTES, 'UTF-8'))).$count;
+                $summary = trim(parse($Excerpt_html));
                 $content = '';
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
                     if ($summary === '') {
-                        $summary = trim(parse($thisarticle['body']));
+                        $summary = trim(parse($Body_html));
                     }
                 } else {
-                    $content = trim(parse($thisarticle['body']));
+                    $content = trim(parse($Body_html));
                 }
-
-                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($thisarticle['title']), ENT_QUOTES, 'UTF-8'))).$count;
-
-                $thisauthor = get_author_name($AuthorID);
 
                 $item =
                     n.t.t.tag($Title, 'title').
                     ($summary !== '' ? n.t.t.tag(escape_cdata($summary), 'description') : '').
                     ($content !== '' ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
                     n.t.t.tag($permlink, 'link').
-                    n.t.t.tag(safe_strftime('rfc822', $a['posted']), 'pubDate').
+                    n.t.t.tag(safe_strftime('rfc822', $uPosted), 'pubDate').
                     n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
                     n.t.t.tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'guid', ' isPermaLink="false"').n.
                     $cb;
