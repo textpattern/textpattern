@@ -4026,9 +4026,10 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
 
     if (is_array($event)) {
         $collection = $event[1];
+        $collectionSet = ", collection = '".doSlash($collection)."'";
         $event = $event[0];
     } else {
-        $collection = '';
+        $collection = $collectionSet = '';
     }
 
     if (
@@ -4036,8 +4037,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
             'txp_prefs',
             "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
-            event = '".doSlash($event)."',
-            collection = '".doSlash($collection)."',
+            event = '".doSlash($event)."'".$collectionSet.",
             html = '".doSlash($html)."',
             type = ".intval($type).",
             position = ".intval($position).",
@@ -4101,14 +4101,17 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
+    $cols = array('val', 'event', 'type', 'html', 'position');
+
     if (is_array($event)) {
         $collection = $event[1];
         $event = $event[0];
+        $cols[] = 'collection';
     } else {
         $collection = null;
     }
 
-    foreach (array('val', 'event', 'collection', 'type', 'html', 'position') as $field) {
+    foreach ($cols as $field) {
         if ($$field !== null) {
             $set[] = $field." = '".doSlash($$field)."'";
         }
