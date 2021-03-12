@@ -37,24 +37,55 @@ if (!in_array('collection', $cols)) {
 // Populate new Mail subsection in Prefs, migrating some prefs there.
 safe_update('txp_prefs', "event = 'mail'", "name IN('smtp_from', 'publisher_email', 'override_emailcharset') AND event='admin'");
 
-if (get_pref('html_email', null, true) === null) {
-    set_pref('html_email', '0', 'mail', PREF_CORE, 'html_email', 125, PREF_GLOBAL);
-}
-if (get_pref('enhanced_email', null, true) === null) {
-    set_pref('enhanced_email', '0', 'mail', PREF_CORE, 'enhanced_email', 150, PREF_GLOBAL);
-}
-if (get_pref('smtp_host', null, true) === null) {
-    set_pref('smtp_host', '', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 160, PREF_GLOBAL);
-}
-if (get_pref('smtp_port', null, true) === null) {
-    set_pref('smtp_port', '587', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 170, PREF_GLOBAL);
-}
-if (get_pref('smtp_user', null, true) === null) {
-    set_pref('smtp_user', '', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 180, PREF_GLOBAL);
-}
-if (get_pref('smtp_pass', null, true) === null) {
-    set_pref('smtp_pass', '', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 190, PREF_GLOBAL);
-}
-if (get_pref('smtp_sectype', null, true) === null) {
-    set_pref('smtp_sectype', 'ssl', array('mail', 'mail_enhanced'), PREF_CORE, 'smtp_handler', 200, PREF_GLOBAL);
+$smtp_prefs = array(
+    'html_email'   => array(
+        'val'      => '0',
+        'event'    => 'mail',
+        'html'     => 'html_email',
+        'position' => 125,
+    ),
+    'enhanced_email' => array(
+        'val'        => '0',
+        'event'      => 'mail',
+        'html'       => 'enhanced_email',
+        'position'   => 150,
+    ),
+    'smtp_host'   => array(
+        'val'      => '',
+        'event'    => array('mail', 'mail_enhanced'),
+        'html'     => 'smtp_handler',
+        'position' => 160,
+    ),
+    'smtp_port'   => array(
+        'val'      => '587',
+        'event'    => array('mail', 'mail_enhanced'),
+        'html'     => 'smtp_handler',
+        'position' => 170,
+    ),
+    'smtp_user'   => array(
+        'val'      => '',
+        'event'    => array('mail', 'mail_enhanced'),
+        'html'     => 'smtp_handler',
+        'position' => 180,
+    ),
+    'smtp_pass'   => array(
+        'val'      => '',
+        'event'    => array('mail', 'mail_enhanced'),
+        'html'     => 'smtp_handler',
+        'position' => 190,
+    ),
+    'smtp_sectype'   => array(
+        'val'        => 'ssl',
+        'event'      => array('mail', 'mail_enhanced'),
+        'html'       => 'smtp_handler',
+        'position'   => 200,
+    ),
+);
+
+foreach ($smtp_prefs as $prefname => $block) {
+    if (get_pref($prefname, null) === null) {
+        create_pref($prefname, $block['val'], $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
+    } else {
+        update_pref($prefname, null, $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
+    }
 }
