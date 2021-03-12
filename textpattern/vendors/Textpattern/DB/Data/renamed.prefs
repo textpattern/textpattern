@@ -1,6 +1,7 @@
 {
     "global": {
-        "permalink_title_format": "permlink_format"
+        "permalink_title_format": "permlink_format",
+        "spam_blacklists": "spam_blocklists"
     },
     "private": {}
 }
