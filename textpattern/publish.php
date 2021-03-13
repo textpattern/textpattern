@@ -290,7 +290,6 @@ function preText($store, $prefs = null)
         // Some useful vars for taghandlers, plugins.
         $out['request_uri'] = preg_replace("|^https?://[^/]+|i", "", serverSet('REQUEST_URI'));
         $out['qs'] = serverSet('QUERY_STRING');
-        $out['hu'] = hu;
 
         // IIS fix.
         if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {

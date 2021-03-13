@@ -4562,7 +4562,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
-    $hu = isset($pretext['hu']) ? $pretext['hu'] : hu;
+    $hu = txpinterface === 'public' ? page_url(null) : hu;
     $keys = $parts;
     !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
@@ -4708,7 +4708,7 @@ function permlinkurl_id($id)
 
 function permlinkurl($article_array, $hu = null)
 {
-    global $permlink_mode, $prefs, $pretext, $permlinks, $txp_sections;
+    global $permlink_mode, $prefs, $permlinks, $txp_sections;
     static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
         $fields = array(
             'thisid'    => null,
@@ -4735,7 +4735,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
-    isset($hu) or $hu = isset($pretext['hu']) ? $pretext['hu'] : hu;
+    isset($hu) or $hu = txpinterface === 'public' ? page_url(null) : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
