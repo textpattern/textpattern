@@ -4504,8 +4504,8 @@ function if_status($atts, $thing = null)
 
 function page_url($atts, $thing = null)
 {
-    global $pretext, $txp_context;
-    static $hu = hu, $specials = null,
+    global $prefs, $pretext, $txp_context;
+    static $specials = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
         $lAtts = array(
             'type'    => null,
@@ -4514,10 +4514,6 @@ function page_url($atts, $thing = null)
             'context' => null,
             'root'    => hu
         );
-
-    if ($atts === null) {
-        return $hu;
-    }
 
     isset($specials) or $specials = array(
         'admin_root'  => ahu,
@@ -4528,7 +4524,7 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
-    $oldhu = $hu;
+    $old_base = isset($prefs['url_base']) ? $prefs['url_base'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -4547,7 +4543,7 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
-    $hu = $root === true ? rhu : $root;
+    $prefs['url_base'] = $root === true ? rhu : $root;
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -4584,7 +4580,7 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
-    $hu = $oldhu;
+    $prefs['url_base'] = $old_base;
 
     return $out;
 }

@@ -4555,14 +4555,14 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 
 function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
-    global $permlink_mode, $prefs, $pretext, $txp_context, $txp_sections;
+    global $permlink_mode, $prefs, $txp_context, $txp_sections;
 
     // Link to an article.
     if (!empty($parts['id'])) {
         return permlinkurl_id($parts['id']);
     }
 
-    $hu = txpinterface === 'public' ? page_url(null) : hu;
+    $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
     $keys = $parts;
     !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
@@ -4735,7 +4735,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
-    isset($hu) or $hu = txpinterface === 'public' ? page_url(null) : hu;
+    isset($hu) or $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
