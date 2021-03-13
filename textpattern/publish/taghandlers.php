@@ -292,7 +292,7 @@ function css($atts)
 
 function component($atts)
 {
-    global $doctype, $pretext, $txp_context;
+    global $doctype, $pretext;
     static $mimetypes = null, $dir = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
         $defaults = array(
@@ -4038,7 +4038,7 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $pretext, $thisarticle, $txp_context;
+    global $thisarticle, $txp_context;
     static $lAtts = array(
         'class'   => '',
         'id'      => '',
@@ -4510,7 +4510,8 @@ function page_url($atts, $thing = null)
             'type'    => null,
             'default' => false,
             'escape'  => null,
-            'context' => null
+            'context' => null,
+            'root'    => hu
         );
 
     isset($specials) or $specials = array(
@@ -4522,6 +4523,7 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
+    $oldhu = isset($pretext['hu']) ? $pretext['hu'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -4540,6 +4542,7 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
+    $pretext['hu'] = $root === true ? rhu : $root;
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -4576,6 +4579,7 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
+    $pretext['hu'] = $oldhu;
 
     return $out;
 }
