@@ -124,7 +124,7 @@
 <h2>Pengganti Kutipan</h2>
 <p>Sebuah artikel secara opsional dapat menggunakan formulir yang berbeda dari yang ditetapkan secara default - misalnya untuk menampilkan kutipan artikel dengan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan di jendela baru)</span></a> bukan badan artikel dengan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan di jendela baru)</span></a> - ini dapat diatur di sini.</p>
         ]]></item>
-        <item id="publish_date" title="Tanggal terbit"><![CDATA[
+        <item id="publish_date" title="Tanggal publikasi"><![CDATA[
 <h2>Tanggal terbit</h2>
 <p>Ketika artikel atau file diterbitkan atau paling baru direvisi. Waktu dapat diatur saat item diterbitkan, atau diatur bebas baik di masa lalu atau masa depan.</p>
 <p>Kotak formulir disesuaikan dengan informasi berikut:</p>
@@ -134,7 +134,21 @@
 </ul>
 <p>Item dengan waktu lebih baru dari waktu sekarang (baca: masa depan) tidak akan tampil di halaman depan dan umpan RSS/Atom sampai waktunya tiba.</p>
         ]]></item>
-        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[<h2>Status</h2>
+<p>Menentukan status visibilitas publikasi dari artikel Textpattern ini.</p>
+<p>Status publikasi adalah salah satu dari yang berikut:</p>
+<ul>
+    <li>Konsep</li>
+    <li>Tersembunyi</li>
+    <li>Tertunda</li>
+    <li>Langsung</li>
+    <li>Sticky</li>
+</ul>
+<p>Sebuah artikel <strong>konsep</strong> dianggap sebagai pekerjaan-dalam-pengerjaan dan tidak dapat dilihat diluar area administrasi TextPattern (tidak terlihat pada halaman depan Textpattern dan tidak disindikasi dalam feed).</p>
+<p>Sebuah artikel <strong>Tersembunyi</strong> tidak dapat dilihat diluar area administrasi Textpattern.</p>
+<p>Sebuah artikel <strong>Tertunda</strong> dianggap siap untuk publikasi dan menunggu persetujuan, tetapi tidak dapat dilihat diluar area administrasi Textpattern.</p>
+<p>Sebuah artikel  <strong>Langsung</strong> biasanya dapat dilihat diluar area Administrasi Textpattern (cont. terlihat pada halaman depan Textpattern, sindikasi dalam feed jika preferensi memungkinkan). Jika sebuah artikel langsung dan memiliki tanggal kadaluarsa, status akan tetap sejalan setelah tanggal itu telah tercapai, tetapi artikel itu hanya muncul di luar area administrasi jika artikel kadaluarsa diizinkan untuk dipublikasikan.</p>
+<p>Sebuah artikel <strong>Sticky</strong> mirip dengan artikel <strong>Langsung</strong> sejauh yang dapat dilihat diluar area administrasi Textpattern tetapi <strong>tidak</strong> akan muncul dalam artikel. Daftar kecuali masing-masing <code>article</code> atau tag <code>article_custom</code> mencakup atribut <code>status</code> dengan nilai <code>sticky</code>.</p> ]]></item>
         <item id="title" title="Judul"><![CDATA[
 <h2>Judul</h2>
 <p>Tambahkan judul yang sesuai untuk artikel ini.</p>
@@ -144,8 +158,21 @@
     </group>
 
     <group id="category" title="Panel Kategori">
-        <item id="article_category" title="Artikel"><![CDATA[]]></item>
-        <item id="category_description" title="Deskripsi"><![CDATA[]]></item>
+        <item id="article_category" title="Artikel"><![CDATA[<h2>Artikel</h2>
+<p>Tidak seperti bagian, yang menentukan struktur navigasi suatu situs, kategori artikel memungkinkan organisasi artikel oleh subjek mereka. Setelah kategori ditugaskan, daftar artikel milik kategori tertentu dapat dijelajahi. </p>
+<p>Misalnya, kemungkinan kategori artikel di situs tentang makanan mungkin: </p>
+<ul>
+     <li>bahan mentah </li>
+     <li>belanja </li>
+     <li>resep </li>
+     <li>presentasi </li>
+     <li>restoran </li>
+     <li>koki </li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Deskripsi"><![CDATA[<h2>Deskripsi kategori</h2>
+<p>Deskripsi kategori adalah komponen opsional yang dapat membantu mesin pencari dan perayap situs web lebih baik mengidentifikasi dan mengurutkan konten.</p>
+<p>Deskripsi kategori terbatas hingga maksimal 255 karakter. Perhatikan bahwa beberapa mesin pencari menempatkan batas karakter pada panjang<code>meta description</code>halaman untuk kepraktisan tampilan di halaman hasil mesin pencari (SERP) dan ini mungkin kurang dari batas 255 karakter dalam Textpattern.</p> ]]></item>
         <item id="file_category" title="Berkas"><![CDATA[
 <h2>Berkas</h2>
 <p>Kategori berkas bersifat opsional, dan berguna untuk mengelompokkan berkas unggahan yang dipilih menjadi satu.</p>
@@ -361,7 +388,12 @@
 <p>Ringkasan singkat dari desain/tata letak tema ini dapat disediakan (opsi).</p>
 <p>Deskripsi tema dibatasi hingga 255 karakter.</p>
         ]]></item>
-        <item id="skin_import" title="Tema impor"><![CDATA[]]></item>
+        <item id="skin_import" title="Tema impor"><![CDATA[<h2>Impor tema dari disk peyimpanan</h2>
+<p>Formulir ini memungkinkan Anda untuk mengimpor tema ke dalam basis data Textpattern dari direktori tema Anda.</p>
+<p>Tema yang dapat diimpor harus terdiri dari folder induk yang dapat dibaca menggunakan nama tema sebagai nama folder, dan dalam folder yang terdapat berkas <code>manifest.json</code> dalam format yang diharapkan. Folder tema juga harus berisi halaman, bentuk dan gaya ke dalam subfolder eponym.</p>
+<p>Sementara halaman dan formulir harus menggunakan ekstensi <code>.txp</code>, stylesheet yang diharapkan adalah berkas <code>.css</code>. Formulir juga harus dikelompokkan berdasarkan jenis ke direktori khusus. Textpattern akan membuat template penting yang hilang pada impor.</p>
+<p>Lihat <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentasi tema <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span> </a> untuk informasi lebih lanjut tentang membuat, menginstal dan menggunakan tema dalam CMS Textpattern.</p> 
+        ]]></item>
         <item id="skin_name" title="Nama tema"><![CDATA[
 <h2>Nama tema</h2>
 <p>Nama tema digunakan untuk nama direktori dan tujuan teknis lainnya (wajib diisi).</p>
