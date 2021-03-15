@@ -92,6 +92,14 @@ class Tag implements UIInterface
     );
 
     /**
+     * A constraint validator.
+     *
+     * @var \Textpattern\Validator\Validator
+     */
+
+    protected $validator = null;
+
+    /**
      * General constructor for the tag.
      *
      * @param  string $tag The tag name
@@ -330,6 +338,31 @@ class Tag implements UIInterface
                 'self-closing' => $scheme,
                 'boolean'      => $scheme,
             ));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set up any tag constraints. Chainable.
+     *
+     * @param \Textpattern\Validator\Constraint|\Textpattern\Validator\Constraint[] $constraints Single or array-of \Textpattern\Validator\Constraint object(s)
+     */
+
+    public function setConstraints($constraints)
+    {
+        if ($this->validator === null) {
+            $this->validator = new \Textpattern\Validator\Validator();
+        }
+
+        $this->validator->setConstraints($constraints);
+
+        foreach ($this->validator->getConstraints() as $c) {
+            $attMap = $c->getAttsMap();
+
+            if ($attMap) {
+                $this->setAtts($attMap, array('strip' => TEXTPATTERN_STRIP_NONE));
+            }
         }
 
         return $this;

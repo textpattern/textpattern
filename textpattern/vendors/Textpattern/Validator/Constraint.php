@@ -51,6 +51,14 @@ class Constraint
     protected $options;
 
     /**
+     * An array of constraint values -> HTML attributes.
+     *
+     * @var array
+     */
+
+    protected $attributeMap = array();
+
+    /**
      * Constructs a constraint.
      *
      * @param mixed $value The validee
@@ -68,7 +76,7 @@ class Constraint
     }
 
     /**
-     * Sets validee's value.
+     * Sets validee's value. Chainable.
      *
      * @param $value mixed Validee
      */
@@ -76,10 +84,12 @@ class Constraint
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**
-     * Sets options.
+     * Sets options. Chainable.
      *
      * @param $options Scalar or array of options
      * @param null $key Key for scalar option
@@ -92,6 +102,62 @@ class Constraint
         } else {
             $this->options[$key] = $options;
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets attribute map, singly or en masse. Chainable.
+     *
+     * @param array|string $map Scalar or array of options
+     * @param string|null  $key Key for scalar option
+     */
+
+    public function setAttsMap($map, $key = null)
+    {
+        if ($key === null) {
+            foreach ($map as $idx => $att) {
+                // Permit shortcutting where attributes match parameters.
+                $idx = is_numeric($idx) ? $att : $idx;
+
+                if (array_key_exists($idx, $this->options)) {
+                    $this->attributeMap[$idx] = $att;
+                }
+            }
+        } else {
+            if (array_key_exists($key, $this->options)) {
+                $this->attributeMap[$key] = $map;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets attribute map.
+     *
+     * @param  $key option to return just one of the values. If omitted, all are returned
+     * @return array of HTML attribute->value pairs suitable for passing to a UI control
+     */
+
+    public function getAttsMap($key = null)
+    {
+        $out = array();
+
+        foreach ($this->attributeMap as $idx => $att) {
+            // Permit shortcuts where attributes match parameters.
+            $idx = is_numeric($idx) ? $att : $idx;
+
+            if ($this->options[$idx] !== null) {
+                $out[$att] = $this->options[$idx];
+            }
+        }
+
+        if ($key !== null) {
+            return isset($out[$key]) ? array($key => $out[$key]) : array();
+        }
+
+        return $out;
     }
 
     /**

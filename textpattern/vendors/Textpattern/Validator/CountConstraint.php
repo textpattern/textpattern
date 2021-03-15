@@ -22,29 +22,29 @@
  */
 
 /**
- * Tests one or more values against a list of valid options.
+ * Tests the number of options selected.
  *
- * @since   4.6.0
+ * @since   4.9.0
  * @package Validator
  */
 
 namespace Textpattern\Validator;
 
-class ChoiceConstraint extends Constraint
+class CountConstraint extends Constraint
 {
     /**
      * Constructor.
      *
      * @param mixed $value
-     * @param array $options
+     * @param array $options Contains any/all of: min/max/message
      */
 
     public function __construct($value, $options = array())
     {
         $options = lAtts(array(
-            'choices'     => array(),
-            'allow_blank' => false,
-            'message'     => 'unknown_choice',
+            'message' => 'out_of_range',
+            'min'     => null,
+            'max'     => null,
         ), $options, false);
         parent::__construct($value, $options);
     }
@@ -61,9 +61,12 @@ class ChoiceConstraint extends Constraint
 
         $out = true;
 
-        foreach ($values as $val) {
-            $out = $out && (($this->options['allow_blank'] && ($val === '')) ||
-                in_array($val, $this->options['choices']));
+        if ($this->options['min'] !== null) {
+            $out = $out && (count($values) >= $this->options['min']);
+        }
+
+        if ($this->options['max'] !== null) {
+            $out = $out && (count($values) <= $this->options['max']);
         }
 
         return $out;
