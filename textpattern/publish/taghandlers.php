@@ -292,8 +292,8 @@ function css($atts)
 
 function component($atts)
 {
-    global $doctype, $pretext, $txp_context;
-    static $mimetypes = null,
+    global $doctype, $pretext;
+    static $mimetypes = null, $dir = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
         $defaults = array(
         'format'  => 'url',
@@ -818,7 +818,7 @@ function linklist($atts, $thing = null)
 
     $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', join(' ', $qparts));
     $out = parseList($rs, $thislink, function($a) {
-        global $thislink; 
+        global $thislink;
         $thislink = $a;
         $thislink['date'] = $thislink['uDate'];
         unset($thislink['uDate']);
@@ -4037,7 +4037,7 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $pretext, $thisarticle, $txp_context;
+    global $thisarticle, $txp_context;
     static $lAtts = array(
         'class'   => '',
         'id'      => '',
@@ -4503,13 +4503,15 @@ function if_status($atts, $thing = null)
 
 function page_url($atts, $thing = null)
 {
-    global $pretext, $txp_context;
-    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
+    global $prefs, $pretext, $txp_context;
+    static $specials = null,
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
         $lAtts = array(
             'type'    => null,
             'default' => false,
             'escape'  => null,
-            'context' => null
+            'context' => null,
+            'root'    => hu
         );
 
     isset($specials) or $specials = array(
@@ -4521,6 +4523,7 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
+    $old_base = isset($prefs['url_base']) ? $prefs['url_base'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -4539,6 +4542,7 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
+    $prefs['url_base'] = $root === true ? rhu : $root;
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -4575,6 +4579,7 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
+    $prefs['url_base'] = $old_base;
 
     return $out;
 }
