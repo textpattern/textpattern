@@ -1,6 +1,8 @@
 Changes in 4.8.5 (upcoming)
 
 * Maintenance release including improvements for PHP 8.0 and bug fixes.
+* Changed: <txp:header /> attributes are unset by default. Ensure any 'name'
+  attributes are set before updating to avoid issues with custom headers.
 * Fixed: Database connection issue for new installations on PHP 8.0.
 * Fixed: libxml_disable_entity_loader() deprecation warning on PHP 8.0.
 * Fixed: Undefined array key/offset warnings on PHP 8.0.
@@ -25,7 +27,6 @@ Changes in 4.8.5 (upcoming)
 * Changed: <txp:images /> outputs full-size images if thumbs don't exist and
   <txp:images thumbnail="0" /> displays full-size images as expected.
 * Changed: <txp:images> accepts <txp:else />.
-* Changed: <txp:header /> attributes are unset by default.
 * Changed: <txp:variable> default attribute can be used during assignment.
   (thanks, cara-tm).
 * Changed: Expose secondpass Advanced pref for testing.
