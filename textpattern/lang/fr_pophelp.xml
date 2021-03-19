@@ -524,8 +524,8 @@
         ]]></item>
         <item id="allow_article_php_scripting" title="Autoriser l’usage de PHP dans les articles ?"><![CDATA[
 <h2>Autoriser l’usage de PHP dans les articles ?</h2>
-<p>Lorsque activé, ce paramètre permettra l’utilisation du code PHP dans les articles. L’auteur•e doit néanmoins disposer de privilèges suffisants (par défaut, seul•le•s les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Administrat•eur•rice•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> et les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Assistant•e•s administrat•eur•rice<span class="ui-icon ui-icon-extlink">(ouvrir le lien dans une fenêtre externe)</span></a> y sont autorisé•e•s).</p>
-<p>Le code PHP ne doit pas comporter de balises d’ouverture et de fermeture propres à PHP mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>Lorsque activé, ce paramètre permettra l’utilisation du code PHP dans les articles. L’auteur•e doit néanmoins disposer de privilèges suffisants (par défaut, seul•le•s les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédact•eur•rice•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> et les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédact•eur•rice•s en chef•fe•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien dans une fenêtre externe)</span></a> y sont autorisé•e•s).</p>
+<p>Le code PHP ne doit pas comporter de balises d’ouverture et de fermeture propres à PHP, mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="Autoriser l’usage du module de remplacement par article ?"><![CDATA[<h2>Autoriser l’usage du module de remplacement par article ?</h2>
 <p>Ce paramètre permet aux auteur•e•s de remplacer le module utilisé pour présenter leurs articles. Si activé, une liste déroulante «Module de remplacement» sera disponible sous les options avancées «Affectation et affichage de l’article», lors de l’édition d’un article.</p>]]></item>
@@ -874,7 +874,7 @@ title="HTML"
 </ul>
 <p>Textpattern procède toujours par une analyse supplémentaire (nommé "secondpass") pour des raisons d’antériorité d’où la raison du réglage de cette préférence  sur <code>1</code>. L’augmentation de ce cycle, cependant, accroît le risque que des balises inattendues soient interprétées. Les récentes améliorations apportées à l’interpréteur de balises ont réduit le besoin de cette seconde analyse. Aussi, à moins que vous n’utilisiez le deuxième balayage pour une raison spécifique, veuillez réduire cette valeur à <code>0</code> afin de mieux sécuriser votre site.</p>
 <p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
-        
+
 ]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
 <h2>Envoyer l’entête de dernière modification ?</h2>
