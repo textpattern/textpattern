@@ -237,7 +237,9 @@ if ($use_plugins) {
 
 callback_event('pretext');
 $pretext = preText($pretext, $prefs);
+extract($pretext);
 callback_event('pretext_end');
+// Right, twice.
 extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
