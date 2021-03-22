@@ -12,7 +12,7 @@ Changes in 4.8.5 (upcoming)
   the textarea is rendered fully in English to aid support requests.
 * Fixed: Draft/hidden/pending articles output 404 status as they should.
 * Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
-* Fixed: Form processing in error_503 documents and other error conditions.
+* Fixed: Form processing on 'pretext_end' callback.
 * Added: Support for WebP image format, on PHP 7.1 or higher.
 * Added: SSL version verification on Diagnostics panel during update checks.
 * Added: Latest text translations. Thank you to all our translators.
