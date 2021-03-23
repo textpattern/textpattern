@@ -300,9 +300,9 @@
 <h2>No temporary directory defined</h2>
 <p>While Textpattern will run without a temporary directory, some functionality may not work as expected if this preference is not set. Please visit Admin Preferences and set up the ‘Temporary directory path’.</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="Section directory exists"><![CDATA[
-<h2>Section directory exists</h2>
-<p>Existing section directory files will conflict with the the <code>.htaccess</code> scheme. If the reported files are placeholders, please delete them.</p>
+        <item id="old_placeholder_exists" title="Section named the same as directory"><![CDATA[
+<h2>Section named the same as directory</h2>
+<p>Existing directory names may conflict with section names used in the article permlink scheme. To avoid issues, check and delete the affected directory name(s) if it is safe to do so, or alter section name(s) so they do not clash.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Site directory unreadable"><![CDATA[
 <h2>Site directory unreadable</h2>
