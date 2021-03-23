@@ -2975,7 +2975,7 @@ function txp_sandbox($atts = array(), $thing = null)
     $oldarticle = $thisarticle;
     isset($articles[$id]) and $thisarticle = $articles[$id];
     $was_article_body = $is_article_body;
-    $is_article_body = $id;
+    $is_article_body = $thisarticle['authorid'];
     $was_form = $is_form;
     $is_form = 0;
 
@@ -4348,19 +4348,19 @@ function if_article_section($atts, $thing = null)
 
 function php($atts = null, $thing = null, $priv = null)
 {
-    global $is_article_body, $is_form, $thisarticle;
+    global $is_article_body, $is_form;
 
     $error = null;
 
     if ($priv) {
-        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
+        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $is_article_body);
     } elseif (empty($is_article_body) || !empty($is_form)) {
         if (empty(get_pref('allow_page_php_scripting'))) {
             $error = 'php_code_disabled_page';
         }
     } elseif (empty(get_pref('allow_article_php_scripting'))) {
         $error = 'php_code_disabled_article';
-    } elseif (!has_privs('article.php', $thisarticle['authorid'])) {
+    } elseif (!has_privs('article.php', $is_article_body)) {
         $error = 'php_code_forbidden_user';
     }
 
