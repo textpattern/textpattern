@@ -4355,10 +4355,10 @@ function php($atts = null, $thing = null, $priv = null)
     if ($priv) {
         $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $is_article_body);
     } elseif (empty($is_article_body) || !empty($is_form)) {
-        if (empty(get_pref('allow_page_php_scripting'))) {
+        if (!get_pref('allow_page_php_scripting')) {
             $error = 'php_code_disabled_page';
         }
-    } elseif (empty(get_pref('allow_article_php_scripting'))) {
+    } elseif (!get_pref('allow_article_php_scripting')) {
         $error = 'php_code_disabled_article';
     } elseif (!has_privs('article.php', $is_article_body)) {
         $error = 'php_code_forbidden_user';
