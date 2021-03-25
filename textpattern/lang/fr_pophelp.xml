@@ -299,10 +299,7 @@
 <h2>Aucun répertoire temporaire déclaré</h2>
 <p>Si Textpattern est en mesure de fonctionner sans répertoire temporaire, certaines fonctionnalités, cependant, peuvent demeurer inopérantes si cette préférence n’est pas renseignée. Veuillez vérifier vos préférences d’administration et renseigner le champ «Chemin du répertoire temporaire».</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="La section existe déjà"><![CDATA[
-<h2>La section existe déjà</h2>
-<p>Le répertoire de fichiers section existant est en conflit avec la règle présente dans <code>.htaccess</code>. Si les fichiers signalés sont génériques, veuillez les supprimer.</p>
-        ]]></item>
+        <item id="old_placeholder_exists" title="La section est nommée identiquement au répertoire"><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="Répertoire du site non accessible en écriture"><![CDATA[
 <h2>Répertoire du site non accessible en écriture</h2>
 <p>Le répertoire contenant le fichier <code>index.php</code> reconnu comme index du site est inaccessible en écriture par le serveur. Veuillez vérifier ses permissions d’accès.</p>
@@ -874,7 +871,7 @@ title="HTML"
 </ul>
 <p>Textpattern procède toujours par une analyse supplémentaire (nommé "secondpass") pour des raisons d’antériorité d’où la raison du réglage de cette préférence  sur <code>1</code>. L’augmentation de ce cycle, cependant, accroît le risque que des balises inattendues soient interprétées. Les récentes améliorations apportées à l’interpréteur de balises ont réduit le besoin de cette seconde analyse. Aussi, à moins que vous n’utilisiez le deuxième balayage pour une raison spécifique, veuillez réduire cette valeur à <code>0</code> afin de mieux sécuriser votre site.</p>
 <p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
-
+        
 ]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
 <h2>Envoyer l’entête de dernière modification ?</h2>

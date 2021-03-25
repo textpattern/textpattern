@@ -261,9 +261,9 @@
         <item id="no_temp_dir" title="Adresář dočasných souborů není určen"><![CDATA[
 <h2>Adresář dočasných souborů není určen</h2>
 <p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>        ]]></item>
-        <item id="old_placeholder_exists" title="Adresář rubriky již existuje"><![CDATA[
-<h2>Adresář rubriky již existuje</h2>
-<p>Soubory adresářů existujících rubrik budou v konfliktu se schématem v <code>.htaccess</code>. Pokud jsou hlášené soubory zástupci, odstraňte je.</p>
+        <item id="old_placeholder_exists" title="Rubrika se stejným názvem jako adresář"><![CDATA[
+<h2>Rubrika se shodným názvem adresáře</h2>
+<p>Existující názvy adresářů mohou být v konfliktu s názvy rubrik používanými v adresách url článků. Chcete-li se vyhnout problémům, zkontrolujte a smažte názvy dotčených adresářů (pokud je to bezpečné), nebo změňte název rubriky tak, aby se neshodovaly.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Nelze číst z kořenového adresáře"><![CDATA[
 <h2>Nelze číst z kořenového adresáře</h2>

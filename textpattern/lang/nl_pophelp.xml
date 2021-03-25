@@ -79,7 +79,10 @@
         <item id="modified_files" title="Gewijzigde bestanden"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="MySQL tabel fouten"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Er is gen tijdelijke map aangegeven"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Deze sectie heeft de naam van een al bestaande map"><![CDATA[
+<h2>Deze sectie heeft de naam van een al bestaande map</h2>
+<p>Namen van al bestaande mappen kunnen problemen opleveren met sectienamen bij de permanente links van artikelen. Om problemen te voorkomen, controleer en verander je de naam van de betrokken map, als dit veilig kan, of wijzig je de sectienaam, zodat ze niet botsen.</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
         <item id="php_version_required" title="Minimale versie vereisten"><![CDATA[]]></item>
         <item id="setup_still_exists" title="Setup map bestaat nog steeds"><![CDATA[]]></item>
