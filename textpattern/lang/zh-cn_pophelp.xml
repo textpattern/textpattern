@@ -294,10 +294,7 @@
 <h2>未指定临时文件夹</h2>
 <p>尽管Textpattern 可以在没有临时文件夹的情况下运行，但如果没有设置此预设，某些功能可能无法正常工作。请访问管理预设并设置“临时文件夹”。</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="部分目录不存在"><![CDATA[
-<h2>区段目录存在</h2>
-<p>现有区段目录文件将与 <code>.htaccess</code> 方案冲突。如果报告的文件属于预留文件，请将它们删除。</p>
-        ]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="站点目录不可读"><![CDATA[
 <h2>站点目录不可读</h2>
 <p>服务器无法读取包含指定为站点索引的根<code>index.php</code>文件的目录。请检查权限。</p>
