@@ -299,7 +299,8 @@
 <h2>Aucun répertoire temporaire déclaré</h2>
 <p>Si Textpattern est en mesure de fonctionner sans répertoire temporaire, certaines fonctionnalités, cependant, peuvent demeurer inopérantes si cette préférence n’est pas renseignée. Veuillez vérifier vos préférences d’administration et renseigner le champ «Chemin du répertoire temporaire».</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="La section est nommée identiquement au répertoire"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="La section est nommée identiquement au répertoire"><![CDATA[<h2>La section est nommée identiquement au répertoire</h2>
+<p>Un(des) nom(s) de répertoire(s) déjà existant(s) entre(nt) en conflit avec les noms de sections en usage avec le modèle de liens permanents des articles. Pour éluder ce problème, vérifiez et supprimez le(s) nom(s) de(s) répertoire(s) concerné(s) si cela est possible ou modifiez le(s) nom(s) de(s) section(s).</p>]]></item>
         <item id="path_to_site_inaccessible" title="Répertoire du site non accessible en écriture"><![CDATA[
 <h2>Répertoire du site non accessible en écriture</h2>
 <p>Le répertoire contenant le fichier <code>index.php</code> reconnu comme index du site est inaccessible en écriture par le serveur. Veuillez vérifier ses permissions d’accès.</p>

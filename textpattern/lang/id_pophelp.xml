@@ -199,7 +199,8 @@
         <item id="modified_files" title="Berkas yang diubah"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Direktori &quot;sementara&quot; tidak ditentukan"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Direktori seksi sudah tersedia"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Bagian dinamai sama seperti direktori"><![CDATA[<h2>Bagian dinamai sama seperti direktori</h2>
+<p>Nama direktori yang telah ada mungkin akan bermasalah dengan nama bagian yang digunakan dalam skema permlink di artikel. Untuk menghindari masalah, periksa dan hapus nama direktori yang bersangkutan jika langkah ini aman untuk dilakukan, atau ubah nama bagian agar tidak bermasalah. </p>        ]]></item>
         <item id="path_to_site_inaccessible" title="Direktori situs tidak terbaca"><![CDATA[]]></item>
         <item id="php_version_required" title="Keperluan versi minimum"><![CDATA[]]></item>
         <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
