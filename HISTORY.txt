@@ -10,7 +10,7 @@ Changes in 4.8.5 (upcoming)
 * Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended, and
   the textarea is rendered fully in English to aid support requests.
-* Fixed: Draft/hidden/pending articles output 404 status as they should.
+* Fixed: Draft/hidden/pending articles output 404 Not Found status as they should.
 * Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
 * Fixed: Form processing on 'pretext_end' callback.
 * Added: Support for WebP image format, on PHP 7.1 or higher.
