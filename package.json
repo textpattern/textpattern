@@ -1,7 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
-  "version": "4.8.5-dev",
+  "version": "4.8.5",
   "description": "A flexible, elegant, fast and easy-to-use content management system written in PHP.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
