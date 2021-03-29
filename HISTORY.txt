@@ -8,7 +8,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
 
-Changes in 4.8.5 (upcoming)
+Changes in 4.8.5 (29 Mar 2021)
 
 * Maintenance release including improvements for PHP 8.0 and bug fixes.
 * Changed: <txp:header /> attributes are unset by default. Ensure any 'name'
@@ -44,7 +44,7 @@ Changes in 4.8.5 (upcoming)
 * Changed: Comments off by default on new installations.
 * Changed: Diagnostics textarea is rendered fully in English to aid support requests.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
-* Changed: Staff writers are allowed to use <txp:php /> in articles.
+* Changed: Copy Editors are allowed to use <txp:php /> in articles.
 * Changed: Better i18n handling for 'ago'.
 * Developer: New pre-pretext_end callback.
 * Developer: New txp.image>types callback.
