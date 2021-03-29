@@ -154,7 +154,10 @@
 <p>Tambahkan judul yang sesuai untuk artikel ini.</p>
 <p>Judul artikel dibatasi maksimal 255 karakter.</p>
         ]]></item>
-        <item id="url_title" title="Judul URL-saja"><![CDATA[]]></item>
+        <item id="url_title" title="Judul URL-saja"><![CDATA[<h2>URL-hanya judul</h2>
+<p> Untuk menggunakan judul tertentu ke URL permalink untuk sebuah artikel, masukkan di sini. Jika dibiarkan kosong, judul URL akan secara otomatis dihasilkan dari judul artikel. </p>
+<p> Ini sangat berguna jika judul artikel menggunakan karakter non-ASCII. </p> 
+        ]]></item>
     </group>
 
     <group id="category" title="Panel Kategori">
@@ -181,7 +184,11 @@
 <h2>Gambar</h2>
 <p>Kategori gambar adalah opsional, dan berguna untuk penataan internal dan untuk menentukan kumpulan gambar yang dapat ditampilkan menggunakan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> tag.</p>
         ]]></item>
-        <item id="link_category" title="Tautan"><![CDATA[]]></item>
+        <item id="link_category" title="Tautan"><![CDATA[<h2>Tautan</h2>
+<p>Kategori Tautan bersifat opsional, dan berguna untuk menampilkan pengelompokan tautan yang berbeda, mis. 'Teman', 'Teman Akrab', 'Sekampung'</p>
+<p>Daftar tautan selektif seperti ini output dengan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code> &lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru) </span></a>seperti:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Teman" /&gt;&lt;/code&gt;</code>.</pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Panel Diagnosa">
@@ -262,7 +269,10 @@
 <p>Bagaimana tanggal akan muncul di artikel di seksi situs Anda.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Gunakan kutipan artikel?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Lampirkan judul ke pranala (permalink)"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Lampirkan judul ke pranala (permalink)"><![CDATA[<h2>Lampirkan judul untuk Permalinks?</h2>
+<p>Pengaturan ini akan melampirkan versi artikel yang dihasilkan secara otomatis ke URL. Ini dihasilkan secara otomatis atau dapat secara manual ditimpa dalam 'judul hanya URL' saat menyunting artikel.</p>
+<p>Pengaturan hanya akan memiliki efek saat Anda menggunakan URL yang bersih. Untuk bahasa tertentu ini dapat menghasilkan URL yang panjang dan jelek, dalam hal ini Anda mungkin ingin mengatur ini ke 'Mati'.</p>
+        ]]></item>
         <item id="auto_dst" title="Secara otomatis menyesuaikan Waktu Musim Panas (DST)?"><![CDATA[]]></item>
         <item id="comment_means_site_updated" title="Komentar baru berarti situs diperbarui?"><![CDATA[]]></item>
         <item id="comment_nofollow" title="Terapkan atribut rel=&quot;nofollow&quot; pada komentar?"><![CDATA[]]></item>

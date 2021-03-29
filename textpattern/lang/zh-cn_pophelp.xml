@@ -294,7 +294,10 @@
 <h2>未指定临时文件夹</h2>
 <p>尽管Textpattern 可以在没有临时文件夹的情况下运行，但如果没有设置此预设，某些功能可能无法正常工作。请访问管理预设并设置“临时文件夹”。</p>
         ]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="章节名称与目录相同"><![CDATA[
+<h2>章节名称与目录</h2>
+<p>现有目录名称可能与文章永久链接方案中使用的部分名称冲突。为了避免出现问题，如果受影响的目录名称是安全的，请检查并删除它。或更改部分名称，从而避免冲突。</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title="站点目录不可读"><![CDATA[
 <h2>站点目录不可读</h2>
 <p>服务器无法读取包含指定为站点索引的根<code>index.php</code>文件的目录。请检查权限。</p>
@@ -636,9 +639,24 @@
 <p><strong>注意：</strong>出于安全原因，原始HTML被转换为常规文本。</p>
         ]]></item>
         <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[]]></item>
-        <item id="custom_overview" title="自定义栏"><![CDATA[]]></item>
-        <item id="dateformat" title="日期格式"><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title="自定义栏"><![CDATA[
+<h2>自定义栏</h2>
+<p>自定义栏用于保存额外的文章数据。您可以在这里给它们命名，最多可以定义十个自定义栏。每个字段将作为一个单独栏出现在写入面板上，允许自定义数据与每篇文章相关联。</p>
+<p>您可以按您想要的任何方式命名字段，但要注意以下几点：</p>
+<ul>
+<li>使用空格可提高在写入面板的可见性，但这些字段可能 <em>不能</em> 用于在文章自定义标签中排序或过滤参数。如果您想要使用这些功能，请考虑使用下划线。</li>
+<li>请小心命名字段不与Textpattern中的保留字段名称冲突。例如，不要使用 <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> 等，否则您获得奇怪的结果或破损的站点。</li>
+<li>每个字段中的数据仅限文本255个字符。</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="日期格式"><![CDATA[
+<h2>日期格式</h2>
+<p>此选项将仅影响文章日期怎样显示在您网站的首页。</p>
+        ]]></item>
+        <item id="default_event" title="默认面板"><![CDATA[
+<h2>默认面板</h2>
+<p> Textpattern管理界面面板将在任何人登录时首次出现。</p>
+        ]]></item>
         <item id="default_publish_status" title="默认发布状态"><![CDATA[]]></item>
         <item id="doctype" title="文档类型声明（Doctype）"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="启用开发主题预览？"><![CDATA[]]></item>
@@ -647,7 +665,10 @@
         <item id="expire_logs_after" title="保留访问记录天数"><![CDATA[]]></item>
         <item id="file_base_path" title="文件目录路径"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="最大上传文件大小（字节）"><![CDATA[]]></item>
-        <item id="gmtoffset" title="时区"><![CDATA[]]></item>
+        <item id="gmtoffset" title="时区"><![CDATA[
+<h2>时区</h2>
+<p>为了以您的本地时区显示日期，请选择您的时区。</p>
+        ]]></item>
         <item id="img_dir" title="图片目录"><![CDATA[]]></item>
         <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[<h2>在 Atom 供稿中包含电子邮件地址？</h2>
 <p>这允许您在Atom供稿的<code>作者</code>部分包含文章作者的电子邮件地址（在其用户帐户中设置）。</p>
@@ -677,7 +698,10 @@
         <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="在订阅中显示评论计数？"><![CDATA[]]></item>
         <item id="site_slogan" title="网站标语"><![CDATA[]]></item>
-        <item id="sitename" title="网站名称"><![CDATA[]]></item>
+        <item id="sitename" title="网站名称"><![CDATA[
+<h2>网站名称</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">您网站的名称或标题 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>。这将出现在访客浏览器或同步新闻源阅读器的标题栏中，以及您所有站点的任何其他位置，由您斟酌决定。</p>
+        ]]></item>
         <item id="siteurl" title="网站 URL"><![CDATA[]]></item>
         <item id="skin_dir" title="主题目录"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP 发送地址"><![CDATA[]]></item>
@@ -711,8 +735,14 @@
     </group>
 
     <group id="skin" title="主题面板">
-        <item id="skin_author" title="主题作者"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="主题网站"><![CDATA[]]></item>
+        <item id="skin_author" title="主题作者"><![CDATA[
+<h2>主题作者</h2>
+<p>主题的作者 (可选)。</p>
+        ]]></item>
+        <item id="skin_author_uri" title="主题网站"><![CDATA[
+<h2>主题网站</h2>
+<p>能找到此主题的完整信息和/或最新版本的网址(可选)。</p>
+        ]]></item>
         <item id="skin_delete_entirely" title="从磁盘中删除该主题模板"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="导入时从磁盘中删除未使用的模板"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="导出时从磁盘中删除未使用的模板"><![CDATA[]]></item>
