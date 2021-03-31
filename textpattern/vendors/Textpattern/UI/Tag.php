@@ -160,13 +160,18 @@ class Tag implements UIInterface
     /**
      * Set the tag's contained content. Chainable.
      *
-     * @param  array $content Thew content to put between the opening/closing tags
+     * @param  array $content The content to put between the opening/closing tags
+     * @param  bool  $append  Whether to replace (false) or append (true) content
      * @return this
      */
 
-    public function setContent($content)
+    public function setContent($content, $append = false)
     {
-        $this->content = (string)$content;
+        if ($append && $this->content !== null) {
+            $this->content .= (string)$content;
+        } else {
+            $this->content = (string)$content;
+        }
 
         return $this;
     }
