@@ -254,6 +254,7 @@ if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== '
 }
 
 callback_event('pretext_end');
+// Right, twice.
 extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
@@ -1219,7 +1220,7 @@ function parseList($rs, &$object, $populate, $atts = array())
                 if (is_array($res)) {
                     $object = $res;
                 }
- 
+
                 $object['is_first'] = ($count == 1);
                 $object['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2020 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -21,16 +21,16 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Validator;
+
 /**
- * Tests one or more values against a list of valid options.
+ * Validates that a value is numeric.
  *
- * @since   4.6.0
+ * @since   4.9.0
  * @package Validator
  */
 
-namespace Textpattern\Validator;
-
-class ChoiceConstraint extends Constraint
+class NumericConstraint extends Constraint
 {
     /**
      * Constructor.
@@ -42,9 +42,8 @@ class ChoiceConstraint extends Constraint
     public function __construct($value, $options = array())
     {
         $options = lAtts(array(
-            'choices'     => array(),
-            'allow_blank' => false,
-            'message'     => 'unknown_choice',
+            'message' => 'should_be_numeric',
+            'integer' => false,
         ), $options, false);
         parent::__construct($value, $options);
     }
@@ -57,13 +56,10 @@ class ChoiceConstraint extends Constraint
 
     public function validate()
     {
-        $values = !is_array($this->value) ? (array) $this->value : $this->value;
+        $out = is_numeric($this->value);
 
-        $out = true;
-
-        foreach ($values as $val) {
-            $out = $out && (($this->options['allow_blank'] && ($val === '')) ||
-                in_array($val, $this->options['choices']));
+        if ($this->options['integer']) {
+            $out = $out && (filter_var($this->value, FILTER_VALIDATE_INT) !== false);
         }
 
         return $out;

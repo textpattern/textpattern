@@ -92,6 +92,14 @@ class Tag implements UIInterface
     );
 
     /**
+     * A constraint validator.
+     *
+     * @var \Textpattern\Validator\Validator
+     */
+
+    protected $validator = null;
+
+    /**
      * General constructor for the tag.
      *
      * @param  string $tag The tag name
@@ -152,13 +160,18 @@ class Tag implements UIInterface
     /**
      * Set the tag's contained content. Chainable.
      *
-     * @param  array $content Thew content to put between the opening/closing tags
+     * @param  array $content The content to put between the opening/closing tags
+     * @param  bool  $append  Whether to replace (false) or append (true) content
      * @return this
      */
 
-    public function setContent($content)
+    public function setContent($content, $append = false)
     {
-        $this->content = (string)$content;
+        if ($append && $this->content !== null) {
+            $this->content .= (string)$content;
+        } else {
+            $this->content = (string)$content;
+        }
 
         return $this;
     }
@@ -330,6 +343,31 @@ class Tag implements UIInterface
                 'self-closing' => $scheme,
                 'boolean'      => $scheme,
             ));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set up any tag constraints. Chainable.
+     *
+     * @param \Textpattern\Validator\Constraint|\Textpattern\Validator\Constraint[] $constraints Single or array-of \Textpattern\Validator\Constraint object(s)
+     */
+
+    public function setConstraints($constraints)
+    {
+        if ($this->validator === null) {
+            $this->validator = new \Textpattern\Validator\Validator();
+        }
+
+        $this->validator->setConstraints($constraints);
+
+        foreach ($this->validator->getConstraints() as $c) {
+            $attMap = $c->getAttsMap();
+
+            if ($attMap) {
+                $this->setAtts($attMap, array('strip' => TEXTPATTERN_STRIP_NONE));
+            }
         }
 
         return $this;
