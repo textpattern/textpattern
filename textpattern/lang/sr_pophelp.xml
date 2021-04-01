@@ -56,7 +56,9 @@
         <item id="modified_files" title=""><![CDATA[]]></item>
         <item id="mysql_table_errors" title=""><![CDATA[]]></item>
         <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Sekcija je nazvana isto kao i direktorijum"><![CDATA[<h2>Sekcija je nazvana isto kao i direktorijum</h2>
+<p>Postojeća imena direktorijuma mogu biti u sukobu sa imenima sekcija koja se koriste u šemi permlink članka. Da biste izbegli probleme, proverite i izbrišite pogođena imena direktorijuma ako je to bezbedno ili promenite imena sekcija kako se ne bi sukobili.</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
         <item id="php_version_required" title=""><![CDATA[]]></item>
         <item id="setup_still_exists" title=""><![CDATA[]]></item>

@@ -38,7 +38,7 @@ class Validator
      * @var \Textpattern\Validator\Constraint[]
      */
 
-    protected $constraints;
+    protected $constraints = array();
 
     /**
      * An array of messages.
@@ -46,7 +46,7 @@ class Validator
      * @var array
      */
 
-    protected $messages;
+    protected $messages = array();
 
     /**
      * Constructs a validator.
@@ -56,7 +56,9 @@ class Validator
 
     public function __construct($constraints = array())
     {
-        $this->setConstraints($constraints);
+        if (!empty($constraints)) {
+            $this->setConstraints($constraints);
+        }
     }
 
     /**
@@ -77,10 +79,10 @@ class Validator
     }
 
     /**
-     * Gets an array of messages.
+     * Get any notification messages.
      *
-     * This method returns an array of message strings with constraint-violation
-     * details collected from Validator::validate().
+     * Returns an array of message strings with constraint-violation details
+     * collected from Validator::validate().
      *
      * @return array An array of messages
      */
@@ -91,7 +93,18 @@ class Validator
     }
 
     /**
-     * Sets new constraints.
+     * Get all defined constraints.
+     *
+     * @return array An array of constraints
+     */
+
+    public function getConstraints()
+    {
+        return $this->constraints;
+    }
+
+    /**
+     * Set new constraints.
      *
      * This method takes an array of Textpattern\Validator\Constraint instances, and adds it to end of
      * the current stack.

@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, breakby, breakclass, wrapform, evaluate')
+    ->registerAttr(true, 'not, breakby, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
 
@@ -292,8 +292,8 @@ function css($atts)
 
 function component($atts)
 {
-    global $doctype, $pretext, $txp_context;
-    static $mimetypes = null,
+    global $doctype, $pretext;
+    static $mimetypes = null, $dir = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author'),
         $defaults = array(
         'format'  => 'url',
@@ -582,7 +582,6 @@ function txp_yield($atts, $thing = null)
     return $inner;
 }
 
-
 function txp_if_yield($atts, $thing = null)
 {
     global $yield, $txp_yield, $txp_item;
@@ -711,7 +710,7 @@ function linklist($atts, $thing = null)
         'realname'    => '',
         'auto_detect' => 'category, author',
         'class'       => __FUNCTION__,
-        'form'        => 'plainlinks',
+        'form'        => isset($thing) ? '' : 'plainlinks',
         'id'          => '',
         'pageby'      => '',
         'limit'       => 0,
@@ -818,31 +817,14 @@ function linklist($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', join(' ', $qparts));
+    $out = parseList($rs, $thislink, function($a) {
+        global $thislink;
+        $thislink = $a;
+        $thislink['date'] = $thislink['uDate'];
+        unset($thislink['uDate']);
+    }, compact('form', 'thing'));
 
-    if ($rs) {
-        $count = 0;
-        $last = numRows($rs);
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thislink = $a;
-            $thislink['date'] = $thislink['uDate'];
-            $thislink['is_first'] = ($count == 1);
-            $thislink['is_last'] = ($count == $last);
-            unset($thislink['uDate']);
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
-
-            $thislink = '';
-        }
-
-        if ($out) {
-            return doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return $out ? doWrap($out, $wraptag, $break, $class) : '';
 }
 
 // -------------------------------------------------------------
@@ -1543,7 +1525,6 @@ function section_list($atts, $thing = null)
     if ($limit !== '' || $offset) {
         $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
-
 
     if ($sections === true) {
         $sql[] = '1';
@@ -2994,7 +2975,7 @@ function txp_sandbox($atts = array(), $thing = null)
     $oldarticle = $thisarticle;
     isset($articles[$id]) and $thisarticle = $articles[$id];
     $was_article_body = $is_article_body;
-    $is_article_body = $id;
+    $is_article_body = $thisarticle['authorid'];
     $was_form = $is_form;
     $is_form = 0;
 
@@ -3521,7 +3502,7 @@ function image_display($atts)
 
 function images($atts, $thing = null)
 {
-    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $pretext;
+    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $prefs, $pretext;
 
     extract(lAtts(array(
         'name'        => '',
@@ -3692,47 +3673,39 @@ function images($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
+    if (!$has_content) {
+        global $is_form, $prefs;
+        $old_allow_page_php_scripting = $prefs['allow_page_php_scripting'];
+        $prefs['allow_page_php_scripting'] = true;
+        $is_form++;
 
-    if ($rs) {
-        $out = array();
-        $count = 0;
-        $last = numRows($rs);
-
-        if (isset($thisimage)) {
-            $old_image = $thisimage;
-        }
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thisimage = image_format_info($a);
-            $thisimage['is_first'] = ($count == 1);
-            $thisimage['is_last'] = ($count == $last);
-
-            if (!$has_content) {
-                $url = pagelinkurl(array(
-                    'c'       => $thisimage['category'],
-                    'context' => 'image',
-                    's'       => $s,
-                    'p'       => $thisimage['id'],
-                ));
-                $src = image_url(array('thumbnail' => isset($thumbnail) && ($thumbnail !== true or $a['thumbnail'])));
-                $out[] = href(
-                    '<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
-                    $url
-                );
-            } else {
-                $out[] = isset($thing) ? parse($thing) : parse_form($form);
-            }
-        }
-
-        $thisimage = (isset($old_image) ? $old_image : null);
-
-        if ($out) {
-            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
-        }
+        $import = join_atts(compact('thumbnail'), TEXTPATTERN_STRIP_TXP);
+        $thing = '<txp:php'.$import.'>
+global $s, $thisimage;
+$url = pagelinkurl(array(
+    "c"       => $thisimage["category"],
+    "context" => "image",
+    "s"       => $s,
+    "p"       => $thisimage["id"]
+));
+$src = image_url(array("thumbnail" => isset($thumbnail) && ($thumbnail !== true or $thisimage["thumbnail"])));
+echo href(
+    "<img src=\'$src\' alt=\'".txpspecialchars($thisimage["alt"])."\' />",
+    $url
+);
+</txp:php>';
     }
 
-    return isset($thing) ? parse($thing, false) : '';
+    $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
+
+    if (!$has_content) {
+        $prefs['allow_page_php_scripting'] = $old_allow_page_php_scripting;
+        $is_form--;
+    }
+
+    return empty($out) ?
+        (isset($thing) ? parse($thing, false) : '') :
+        doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
 }
 
 // -------------------------------------------------------------
@@ -4031,7 +4004,6 @@ function if_description($atts, $thing = null)
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
-
 // -------------------------------------------------------------
 
 function meta_author($atts)
@@ -4065,7 +4037,7 @@ function meta_author($atts)
 
 function permlink($atts, $thing = null)
 {
-    global $pretext, $thisarticle, $txp_context;
+    global $thisarticle, $txp_context;
     static $lAtts = array(
         'class'   => '',
         'id'      => '',
@@ -4376,19 +4348,19 @@ function if_article_section($atts, $thing = null)
 
 function php($atts = null, $thing = null, $priv = null)
 {
-    global $is_article_body, $is_form, $thisarticle, $prefs, $pretext;
+    global $is_article_body, $is_form;
 
     $error = null;
 
     if ($priv) {
-        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $thisarticle['authorid']);
+        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $is_article_body);
     } elseif (empty($is_article_body) || !empty($is_form)) {
-        if (empty($prefs['allow_page_php_scripting'])) {
+        if (!get_pref('allow_page_php_scripting')) {
             $error = 'php_code_disabled_page';
         }
-    } elseif (empty($prefs['allow_article_php_scripting'])) {
+    } elseif (!get_pref('allow_article_php_scripting')) {
         $error = 'php_code_disabled_article';
-    } elseif (!has_privs('article.php', $thisarticle['authorid'])) {
+    } elseif (!has_privs('article.php', $is_article_body)) {
         $error = 'php_code_forbidden_user';
     }
 
@@ -4398,6 +4370,7 @@ function php($atts = null, $thing = null, $priv = null)
         if ($error) {
             trigger_error(gTxt($error));
         } else {
+            empty($atts) or extract($atts);
             eval($thing);
         }
 
@@ -4530,13 +4503,15 @@ function if_status($atts, $thing = null)
 
 function page_url($atts, $thing = null)
 {
-    global $pretext, $txp_context;
-    static $specials = null, $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
+    global $prefs, $pretext, $txp_context;
+    static $specials = null,
+        $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
         $lAtts = array(
             'type'    => null,
             'default' => false,
             'escape'  => null,
-            'context' => null
+            'context' => null,
+            'root'    => hu
         );
 
     isset($specials) or $specials = array(
@@ -4548,6 +4523,7 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
+    $old_base = isset($prefs['url_base']) ? $prefs['url_base'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -4566,6 +4542,7 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
+    $prefs['url_base'] = $root === true ? rhu : $root;
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -4602,6 +4579,7 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
+    $prefs['url_base'] = $old_base;
 
     return $out;
 }
@@ -4668,7 +4646,8 @@ function if_plugin($atts, $thing = null)
         'version' => '',
     ), $atts));
 
-    $x = $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    $x = empty($name) ? version_compare(get_pref('version'), $version) >= 0 :
+        $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -4685,7 +4664,7 @@ function file_download_list($atts, $thing = null)
         'realname'    => '',
         'auto_detect' => 'category, author',
         'class'       => __FUNCTION__,
-        'form'        => 'files',
+        'form'        => isset($thing) ? '' : 'files',
         'id'          => '',
         'pageby'      => '',
         'limit'       => 10,
@@ -4803,29 +4782,9 @@ function file_download_list($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_file', $where.' '.join(' ', $qparts));
+    $out = parseList($rs, $thisfile, 'file_download_format_info', compact('form', 'thing'));
 
-    if ($rs) {
-        $count = 0;
-        $last = numRows($rs);
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $thisfile = file_download_format_info($a);
-            $thisfile['is_first'] = ($count == 1);
-            $thisfile['is_last'] = ($count == $last);
-
-            $out[] = ($thing) ? parse($thing) : parse_form($form);
-
-            $thisfile = '';
-        }
-
-        if ($out) {
-            return doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return $out ? doWrap($out, $wraptag, compact('break', 'class')) : '';
 }
 
 // -------------------------------------------------------------
@@ -5095,16 +5054,20 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? false : null;
 
     extract(lAtts(array(
         'escape'    => $set,
         'name'      => '',
         'value'     => null,
+        'default'   => false,
         'add'       => null,
         'reset'     => null,
         'separator' => null,
-        'output'    => null
+        'output'    => null,
+        'break'     => $set,
+        'trim'      => $set,
+        'replace'   => $set
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5133,17 +5096,25 @@ function variable($atts, $thing = null)
                 $value :
                 (isset($thing) ? parse($thing) : $var);
         }
+    }
 
-        if (isset($add)) {
-            if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
-                $var += $add;
-            } else {
-                $var .= ($var ? $separator : '').$add;
-            }
+    if ($default !== false && trim($var) === '') {
+        $var = $default;
+    }
+
+    if (isset($add)) {
+        if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
+            $var += $add;
+        } else {
+            $var .= ($var ? $separator : '').$add;
         }
     }
 
     if ($set !== null) {
+        if ($break !== false || $trim !== false || $replace !== false) {
+            $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
+        }
+
         $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
 
         if (isset($reset)) {

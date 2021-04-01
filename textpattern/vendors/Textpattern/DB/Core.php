@@ -248,9 +248,14 @@ class Core
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
 
-
                     if ($def['event'] != 'custom' && $def != $row) {
-                        set_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
+                        $evt = $def['event'];
+
+                        if (!empty($def['collection'])) {
+                            $evt = array($def['event'], $def['collection']);
+                        }
+
+                        set_pref($name, null, $evt, $def['type'], $def['html'], $def['position'], $private);
                     }
 
                     unset($prefs_check[$name]);
