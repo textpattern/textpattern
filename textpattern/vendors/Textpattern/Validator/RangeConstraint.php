@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,48 +22,62 @@
  */
 
 /**
- * Tests one or more values against a list of valid options.
+ * Constraint for number ranges (min/max/step).
  *
- * @since   4.6.0
+ * @since   4.9.0
  * @package Validator
  */
 
 namespace Textpattern\Validator;
 
-class ChoiceConstraint extends Constraint
+class RangeConstraint extends Constraint
 {
+    /**
+     * Function parameter => HTML attribute map.
+     *
+     * @var array
+     */
+
+    protected $attributeMap = array('min', 'max', 'step');
+
     /**
      * Constructor.
      *
      * @param mixed $value
-     * @param array $options
+     * @param array $options Contains any/all of: min/max/step/message
      */
 
     public function __construct($value, $options = array())
     {
         $options = lAtts(array(
-            'choices'     => array(),
-            'allow_blank' => false,
-            'message'     => 'unknown_choice',
+            'message' => 'out_of_range',
+            'min'     => null,
+            'max'     => null,
+            'step'    => null,
         ), $options, false);
         parent::__construct($value, $options);
     }
 
     /**
-     * Validates.
+     * Validates filter values.
      *
      * @return bool
      */
 
     public function validate()
     {
-        $values = !is_array($this->value) ? (array) $this->value : $this->value;
+        $out = is_numeric($this->value);
 
-        $out = true;
+        if ($this->options['min'] !== null) {
+            $out = $out && ($this->value >= $this->options['min']);
+        }
 
-        foreach ($values as $val) {
-            $out = $out && (($this->options['allow_blank'] && ($val === '')) ||
-                in_array($val, $this->options['choices']));
+        if ($this->options['max'] !== null) {
+            $out = $out && ($this->value <= $this->options['max']);
+        }
+
+        if ($this->options['step'] !== null) {
+            $out = $out && (($this->value - ($this->options['min'] !== null ? $this->options['min'] : 0)) % $this->options['step'] == 0);
         }
 
         return $out;

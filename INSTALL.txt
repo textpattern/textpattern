@@ -1,9 +1,9 @@
-Textpattern CMS 4.8.4
+Textpattern CMS 4.8.5
 
 == Install ==
 
 Table of Contents
-  
+
 # Preflight
 # Installation
 ## Files and Directories
@@ -41,10 +41,10 @@ Table of Contents
     /.htaccess
   Note: This file is hidden by default on some operating systems. File transfer
   clients typically have an option to show these hidden files.
-  
+
 
 - Setup -
-  
+
 * From a web browser, open /textpattern/setup/ on the site to start the setup
   process. Follow the directions.
 * When the setup is complete, remove the /textpattern/setup/ directory
@@ -65,13 +65,13 @@ Table of Contents
     GitHub releases page:     https://github.com/textpattern/textpattern/releases
   The following URLs are updated as part of every production release cycle:
     Latest release (.zip):    https://textpattern.com/latest.zip
-    Latest release (.tar.gz): https://textpattern.com/latest.tar.gz    
+    Latest release (.tar.gz): https://textpattern.com/latest.tar.gz
 
   Administrators wishing to automate checking for new releases can refer to the
   following JSON endpoints:
     Website: https://textpattern.com/version.json
     GitHub:  https://github.com/textpattern/textpattern/blob/main/package.json
-    
+
 
 == Resources ==
 

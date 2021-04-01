@@ -184,7 +184,7 @@ function getComment($obfuscated = false)
 
 function saveComment()
 {
-    global $siteurl, $comments_moderate, $comments_sendmail, $comments_disallow_images, $prefs;
+    global $comments_moderate, $comments_sendmail, $comments_disallow_images, $prefs;
 
     $ref = serverset('HTTP_REFERRER');
     $comment = getComment(true);

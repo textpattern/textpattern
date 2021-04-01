@@ -223,7 +223,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             option.gTxt('with_selected_option', {
                 '{count}': count
             });
-            form.selectAll.prop('checked', count === form.boxes.length).change();
+            form.selectAll.prop('checked', count && count === form.boxes.length).change();
             form.editMethod.prop('disabled', !count);
 
             if (!count) {
