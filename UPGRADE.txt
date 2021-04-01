@@ -1,9 +1,9 @@
-Textpattern CMS 4.8.4
+Textpattern CMS 4.8.5
 
 == Upgrade ==
 
 Table of Contents
-  
+
 # Preflight
 ## Legacy Upgrades
 # Upgrading

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2019 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,48 +22,53 @@
  */
 
 /**
- * Tests one or more values against a list of valid options.
+ * Constraint for field patterns (regexes).
  *
- * @since   4.6.0
+ * @since   4.9.0
  * @package Validator
  */
 
 namespace Textpattern\Validator;
 
-class ChoiceConstraint extends Constraint
+class PatternConstraint extends Constraint
 {
+    /**
+     * Function parameter => HTML attribute map.
+     *
+     * @var array
+     */
+
+    protected $attributeMap = array('pattern');
+
     /**
      * Constructor.
      *
      * @param mixed $value
-     * @param array $options
+     * @param array $options Contains any/all of: pattern/message/global
      */
 
     public function __construct($value, $options = array())
     {
         $options = lAtts(array(
-            'choices'     => array(),
-            'allow_blank' => false,
-            'message'     => 'unknown_choice',
+            'message' => 'invalid_pattern',
+            'pattern' => null,
+            'global' => false,
         ), $options, false);
         parent::__construct($value, $options);
     }
 
     /**
-     * Validates.
+     * Validates filter values.
      *
      * @return bool
      */
 
     public function validate()
     {
-        $values = !is_array($this->value) ? (array) $this->value : $this->value;
-
-        $out = true;
-
-        foreach ($values as $val) {
-            $out = $out && (($this->options['allow_blank'] && ($val === '')) ||
-                in_array($val, $this->options['choices']));
+        if ($this->options['global']) {
+            $out = (preg_match_all($this->options['pattern'], $this->value) >= 1);
+        } else {
+            $out = (preg_match($this->options['pattern'], $this->value) >= 1);
         }
 
         return $out;

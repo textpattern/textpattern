@@ -119,8 +119,8 @@ class Disclosure extends Tag implements UICollectionInterface
     public function add($item, $key = null)
     {
         if ($item instanceof \Textpattern\UI\TagCollection) {
-            foreach ($item as $key => $element) {
-                $this->tags->add($element, $key);
+            foreach ($item as $ref => $element) {
+                $this->tags->add($element, $ref);
             }
 
             // Original object is not needed any more as it's been merged in this object.

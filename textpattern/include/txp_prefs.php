@@ -76,7 +76,7 @@ function prefs_save()
     }
 
     $prefnames = safe_rows_start(
-        "name, event, family, user_name, val",
+        "name, event, collection, user_name, val",
         'txp_prefs',
         join(" AND ", $sql)
     );
@@ -203,7 +203,7 @@ function prefs_list($message = '')
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, family, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, collection, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -221,7 +221,7 @@ function prefs_list($message = '')
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
-            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['family'];
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['collection'];
 
             if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
@@ -268,12 +268,12 @@ function prefs_list($message = '')
 
             $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
-            // @todo: Ready for contraints to be read from $a['constraints'].
+            // @todo: Ready for constraints to be read from $a['constraints'].
             $constraints = array();
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
-                $familyClass = (!empty($a['family']) ? $a['family'] : '');
-                $out[] = hed(gTxt($subEvent), 3, array('class' => $familyClass));
+                $collectionClass = (!empty($a['collection']) ? $a['collection'] : '');
+                $out[] = hed(gTxt($subEvent), 3, array('class' => $collectionClass));
                 $last_sub_event = $subEvent;
             }
 
@@ -283,7 +283,7 @@ function prefs_list($message = '')
                 $label,
                 array($help, 'instructions_'.$a['name']),
                 array(
-                    'class' => 'txp-form-field'.(!empty($a['family']) ? ' '.$a['family'] : ''),
+                    'class' => 'txp-form-field'.(!empty($a['collection']) ? ' '.$a['collection'] : ''),
                     'id'    => 'prefs-'.$a['name'],
                 )
             );
@@ -346,7 +346,7 @@ function prefs_list($message = '')
 }
 
 /**
- * Calls a core or custom function to render a preference input input control.
+ * Calls a core or custom function to render a preference input control.
  *
  * @param  string    $func        Callable in a string presentation
  * @param  string    $name        HTML name/id of the input control
@@ -386,50 +386,46 @@ function pref_func($func, $name, $val, $constraints = array())
 
 function text_input($name, $val, $constraints = array())
 {
-    $validConstraints = array('maxlength', 'minlength', 'pattern', 'size');
-
-    $atts['class'] = '';
     $atts['id'] = $name;
-    $atts['size'] = is_numeric($constraints) ? (int)$constraints : INPUT_REGULAR;
+    $atts['size'] = INPUT_REGULAR;
 
-    if (is_numeric($constraints)) {
-        $atts['size'] = (int)$constraints;
-        $sizemap = array(
-            INPUT_LARGE   => 'large',
-            INPUT_XLARGE  => 'xlarge',
-            INPUT_REGULAR => 'regular',
-            INPUT_MEDIUM  => 'medium',
-            INPUT_SMALL   => 'small',
-            INPUT_XSMALL  => 'xsmall',
-            INPUT_TINY    => 'tiny',
-        );
+    $siz = array();
+    $pat = array();
+    $cons = array();
 
-        if (isset($sizemap[$constraints])) {
-            $atts['class'] = $sizemap[$constraints];
-        }
-    } else {
+    if (is_numeric($constraints) || is_string($constraints)) {
+        // Backwards compatibility with old text_input signature.
+        $siz['size'] = $constraints;
+    } elseif (!empty($constraints)) {
         foreach ($constraints as $constraint => $option) {
-            if ($constraint === 'size') {
-                $atts['class'] = 'input-'.$option;
-
-                switch ($option) {
-                    case 'medium':
-                        $atts['size'] = INPUT_MEDIUM;
-                        break;
-                    case 'small':
-                        $atts['size'] = INPUT_SMALL;
-                        break;
-                    case 'xsmall':
-                        $atts['size'] = INPUT_XSMALL;
-                        break;
-                }
-            } elseif (in_array($constraint, $validConstraints)) {
-                $atts[$constraint] = $option;
+            switch ($constraint) {
+                case 'size':
+                case 'min':
+                case 'max':
+                    $siz[$constraint] = $option;
+                    break;
+                case 'pattern':
+                    $pat[$constraint] = $option;
+                    break;
             }
         }
     }
 
-    return Txp::get('\Textpattern\UI\Input', $name, 'text', $val)->setAtts($atts);
+    if ($siz) {
+        $cons[] = Txp::get('Textpattern\Validator\SizeConstraint', null, $siz);
+    }
+
+    if ($pat) {
+        $cons[] = Txp::get('Textpattern\Validator\PatternConstraint', null, $pat);
+    }
+
+    $out = Txp::get('\Textpattern\UI\Input', $name, 'text', $val)->setAtts($atts);
+
+    if (!empty($cons)) {
+        $out->setConstraints($cons);
+    }
+
+    return $out;
 }
 
 /**
@@ -443,7 +439,13 @@ function text_input($name, $val, $constraints = array())
 
 function pref_number($name, $val, $constraints = array())
 {
-    return Txp::get('\Textpattern\UI\Number', $name, $val, $constraints);
+    $out = Txp::get('\Textpattern\UI\Number', $name, $val);
+
+    if (!empty($constraints)) {
+        $out->setConstraints(Txp::get('\Textpattern\Validator\RangeConstraint', null, $constraints));
+    }
+
+    return $out;
 }
 
 /**
@@ -461,20 +463,19 @@ function pref_number($name, $val, $constraints = array())
 
 function pref_longtext_input($name, $val, $constraints = array())
 {
-    $validConstraints = array('cols', 'maxlength', 'minlength', 'rows');
-    $atts = array();
-
     if (is_numeric($constraints)) {
         $atts['rows'] = (int)$constraints;
     } else {
-        foreach ($constraints as $constraint => $option) {
-            if (in_array($constraint, $validConstraints)) {
-                $atts[$constraint] = (int)$option;
-            }
-        }
+        $atts = $constraints;
     }
 
-    return Txp::get('\Textpattern\UI\Textarea', $name, $val)->setAtts($atts);
+    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val);
+
+    if (!empty($atts)) {
+        $out->setConstraints(Txp::get('Textpattern\Validator\SizeConstraint', null, $atts));
+    }
+
+    return $out;
 }
 
 /**
@@ -591,12 +592,14 @@ function smtp_handler($name, $val, $constraints = array())
     switch ($name) {
         case 'smtp_host':
         case 'smtp_user':
-            $ui = text_input($name, $val);
+            $ui = text_input($name, $val, $constraints);
             break;
         case 'smtp_pass':
             $ui = Txp::get('\Textpattern\UI\Input', $name, 'password', $val)->setAtt('id', $name);
             break;
         case 'smtp_port':
+            // @todo: remove this and read constraints from prefs table.
+            $constraints = array('min' => 1, 'max' => '65535');
             $ui = pref_number($name, $val, $constraints);
             break;
         case 'smtp_sectype':

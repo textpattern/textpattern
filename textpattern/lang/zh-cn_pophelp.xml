@@ -74,7 +74,10 @@
     <li>可管理板块</li>
     <li>可管理页面、模块和样式</li>
 </ul>        ]]></item>
-        <item id="create_author" title="添加作者"><![CDATA[]]></item>
+        <item id="create_author" title="添加作者"><![CDATA[
+<h2>添加作者</h2>
+<p>邮寄密码、欢迎信息和登录说明给新作者。</p>
+        ]]></item>
     </group>
 
     <group id="article" title="写作面板">
@@ -291,9 +294,9 @@
 <h2>未指定临时文件夹</h2>
 <p>尽管Textpattern 可以在没有临时文件夹的情况下运行，但如果没有设置此预设，某些功能可能无法正常工作。请访问管理预设并设置“临时文件夹”。</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="部分目录不存在"><![CDATA[
-<h2>区段目录存在</h2>
-<p>现有区段目录文件将与 <code>.htaccess</code> 方案冲突。如果报告的文件属于预留文件，请将它们删除。</p>
+        <item id="old_placeholder_exists" title="章节名称与目录相同"><![CDATA[
+<h2>章节名称与目录</h2>
+<p>现有目录名称可能与文章永久链接方案中使用的部分名称冲突。为了避免出现问题，如果受影响的目录名称是安全的，请检查并删除它。或更改部分名称，从而避免冲突。</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="站点目录不可读"><![CDATA[
 <h2>站点目录不可读</h2>
@@ -570,40 +573,119 @@
 <p>决定是否将文章评论用HTML <code>&lt;ol&gt;</code> 标签包裹，每条评论将被包裹在 <code>&lt;li&gt;</code> 标签中(评论以有序列表形式显示) 还是会被包裹在 <code>&lt;div&gt;</code> 标签中。 </p>
 <p>在 <code>comments_display</code>表单中的单个表单，对于任一值，您都可以通过修改<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>从而覆盖单个表单上使用的标签 。</p>
         ]]></item>
-        <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title="日期格式"><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title="在文章后自动附加评论？  "><![CDATA[<h2>在文章后自动附加评论？</h2>
+<p>此设置确定是否将注释和注释表单自动附加到所有单篇文章（通过自动包含<code>comments_display</code>表单的内容）。</p>
+<p>大多数情况下，你会希望这个设置为'否'，因为这允许更大的灵活性，以决定在您的网站设计中放置评论的位置。您需要在希望出现评论的任何基于文章的模板中手动添加<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code>标记<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>。</p>
+<p>如果您在文章中遇到重复显示评论的情况，那么您的模板中很可能有<code>&lt;txp:comments /&gt;</code>标记，但又将“自动将评论附加到文章中？”也设置为“是”。]]></item>
+        <item id="comments_dateformat" title="评论日期格式"><![CDATA[
+<h2>评论日期格式</h2>
+<p>评论日期将如何显示给您的网站访问者。</p>
+        ]]></item>
+        <item id="comments_default_invite" title="默认评论邀请"><![CDATA[
+<h2>默认评论邀请</h2>
+<p>如果您允许访客在您的网站上发表评论，这是默认的邀请文本。例如：</p>
+<ul>
+    <li>评论</li>
+    <li>添加评论</li>
+    <li>反馈</li>
+    <li>注释</li>
+</ul>
+<p>请注意，邀请文本总是可以根据每篇文章被更改的。</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="关闭评论于"><![CDATA[
+<h2>关闭评论于</h2>
+<p>用它来设置文章评论被关闭的时间长度(可以设置为“永远”以允许无限时间评论)。</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="在评论中允许评论者发图片？"><![CDATA[
+<h2>在评论中允许评论者发图像？</h2>
+<p>使用此选项设置为“否”，评论中包含的任何图像都将被删除掉。</p>
+        ]]></item>
+        <item id="comments_mode" title="评论模式"><![CDATA[
+<h2>评论模式</h2>
+<p>如果选择了“不弹出” (推荐)，当前窗口将被刷新以只显示当前文章与下面的注释。</p>
+<p>如果选择“弹出”，点击评论链接时将打开一个新的浏览器窗口(使用 <code>弹出评论</code> 表单)。</p>
+        ]]></item>
+        <item id="comments_moderate" title="审核评论？"><![CDATA[
+<h2>审核评论？</h2>
+<p>通过这个设置为“是”，每个新的评论都会关闭其可见性，直到它被审核。 您必须手动管理每个评论并使每个评论可见(收到新评论时信息将发送给文章作者)。</p>
+        ]]></item>
+        <item id="comments_on_default" title="默认允许评论？"><![CDATA[
+<h2>默认允许评论？</h2>
+<p>如果将此设置为“是”，每篇已发布的文章将自动启用评论。如果设置为“否”，您必须在每次接受评论时启用文章“写作”面板的评论。</p>
+<p>请注意，允许评论可以随时在每篇文章的基础上打开或关闭。</p>
+        ]]></item>
+        <item id="comments_require_email" title="评论需要评论者的电子邮件地址？"><![CDATA[
+<h2>评论需要用户的电子邮件地址？</h2>
+<p>如果设置为“是”， 想对您的文章发表评论的人必须在评论输入表单中输入电子邮件地址。 如果他们不提供电子邮件地址，他们将无法发表评论。</p>
+        ]]></item>
+        <item id="comments_require_name" title="评论需要评论者的姓名？"><![CDATA[
+<h2>评论需要评论者的姓名？</h2>
+<p>如果设置为“是”，想对您的文章发表评论的人必须在评论输入表单中输入姓名。 如果他们不提供姓名，他们将无法提交评论。</p>
+        ]]></item>
+        <item id="comments_sendmail" title="把评论寄给作者？"><![CDATA[
+<h2>发送评论给作者？</h2>
+<p>如果设置为“是”，每当在文章上收到新的评论将通过电子邮件发送一份副本给文章作者。</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="评论中允许更多的 Textile 标记？"><![CDATA[<h2>评论中允许更多的 Textile 标记？</h2>
+<p>当设置为“是”时，评论可以包含<a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>元素，否则这些元素将被视为纯文本，例如：</p>
+<ul>
+    <li>标题</li>
+    <li>有序和无序列表</li>
+    <li>脚注</li>
+    <li>表格</li>
+    <li>代码</li>
+    <li>扩展块语法 (<code>bc..</code>, <code>bq..</code>, etc.)</li>
+</ul>
+<p><strong>注意：</strong>出于安全原因，原始HTML被转换为常规文本。</p>
+        ]]></item>
+        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[]]></item>
+        <item id="custom_overview" title="自定义栏"><![CDATA[
+<h2>自定义栏</h2>
+<p>自定义栏用于保存额外的文章数据。您可以在这里给它们命名，最多可以定义十个自定义栏。每个字段将作为一个单独栏出现在写入面板上，允许自定义数据与每篇文章相关联。</p>
+<p>您可以按您想要的任何方式命名字段，但要注意以下几点：</p>
+<ul>
+<li>使用空格可提高在写入面板的可见性，但这些字段可能 <em>不能</em> 用于在文章自定义标签中排序或过滤参数。如果您想要使用这些功能，请考虑使用下划线。</li>
+<li>请小心命名字段不与Textpattern中的保留字段名称冲突。例如，不要使用 <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> 等，否则您获得奇怪的结果或破损的站点。</li>
+<li>每个字段中的数据仅限文本255个字符。</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="日期格式"><![CDATA[
+<h2>日期格式</h2>
+<p>此选项将仅影响文章日期怎样显示在您网站的首页。</p>
+        ]]></item>
+        <item id="default_event" title="默认面板"><![CDATA[
+<h2>默认面板</h2>
+<p> Textpattern管理界面面板将在任何人登录时首次出现。</p>
+        ]]></item>
         <item id="default_publish_status" title="默认发布状态"><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="doctype" title="文档类型声明（Doctype）"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="启用开发主题预览？"><![CDATA[]]></item>
         <item id="enable_short_tags" title="启用短标签支持?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="启用 XML-RPC 服务器？"><![CDATA[]]></item>
         <item id="expire_logs_after" title="保留访问记录天数"><![CDATA[]]></item>
         <item id="file_base_path" title="文件目录路径"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="最大上传文件大小（字节）"><![CDATA[]]></item>
-        <item id="gmtoffset" title="时区"><![CDATA[]]></item>
+        <item id="gmtoffset" title="时区"><![CDATA[
+<h2>时区</h2>
+<p>为了以您的本地时区显示日期，请选择您的时区。</p>
+        ]]></item>
         <item id="img_dir" title="图片目录"><![CDATA[]]></item>
-        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[]]></item>
-        <item id="is_dst" title="启用夏令时？"><![CDATA[]]></item>
+        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[<h2>在 Atom 供稿中包含电子邮件地址？</h2>
+<p>这允许您在Atom供稿的<code>作者</code>部分包含文章作者的电子邮件地址（在其用户帐户中设置）。</p>
+        ]]></item>
+        <item id="is_dst" title="启用夏令时？"><![CDATA[<h2>启用夏令时？</h2>
+<p>当前是否为当前时区启用DST（夏令时）。</p>
+        ]]></item>
         <item id="logging" title="日志"><![CDATA[]]></item>
-        <item id="max_url_len" title="最大 URL 长度 (字符)"><![CDATA[]]></item>
-        <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[]]></item>
+        <item id="max_url_len" title="最大 URL 长度 (字符)"><![CDATA[<h2>最大 URL 长度 (字符)</h2>
+<p>这将阻止超过指定长度的URL无法正常工作。这有助于限制破坏和网站安全。</p>
+        ]]></item>
+        <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[<h2>显示管理端内联帮助链接</h2>
+<p>如果要在整个系统中隐藏管理端内联帮助链接（Textpattern帮助弹出窗口），请将此设置切换为“无”。</p>
+        ]]></item>
         <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[]]></item>
         <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码 (默认为 UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="覆盖表单类型"><![CDATA[]]></item>
         <item id="permlink_format" title="永久链接标题 URL 模式"><![CDATA[]]></item>
         <item id="permlink_mode" title="文章的 URL 模式"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="插件缓存目录路径"><![CDATA[]]></item>
@@ -612,11 +694,14 @@
         <item id="publish_expired_articles" title="发布过期的文章？"><![CDATA[]]></item>
         <item id="publisher_email" title="发送此电子邮件地址的登录详情"><![CDATA[]]></item>
         <item id="rss_how_many" title="订阅中的文章数目"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="secondpass" title="额外的解析器扫描的次数"><![CDATA[]]></item>
         <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="在订阅中显示评论计数？"><![CDATA[]]></item>
         <item id="site_slogan" title="网站标语"><![CDATA[]]></item>
-        <item id="sitename" title="网站名称"><![CDATA[]]></item>
+        <item id="sitename" title="网站名称"><![CDATA[
+<h2>网站名称</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">您网站的名称或标题 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>。这将出现在访客浏览器或同步新闻源阅读器的标题栏中，以及您所有站点的任何其他位置，由您斟酌决定。</p>
+        ]]></item>
         <item id="siteurl" title="网站 URL"><![CDATA[]]></item>
         <item id="skin_dir" title="主题目录"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP 发送地址"><![CDATA[]]></item>
@@ -650,9 +735,15 @@
     </group>
 
     <group id="skin" title="主题面板">
-        <item id="skin_author" title="主题作者"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="主题网站"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_author" title="主题作者"><![CDATA[
+<h2>主题作者</h2>
+<p>主题的作者 (可选)。</p>
+        ]]></item>
+        <item id="skin_author_uri" title="主题网站"><![CDATA[
+<h2>主题网站</h2>
+<p>能找到此主题的完整信息和/或最新版本的网址(可选)。</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="从磁盘中删除该主题模板"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="导入时从磁盘中删除未使用的模板"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="导出时从磁盘中删除未使用的模板"><![CDATA[]]></item>
         <item id="skin_description" title="主题描述"><![CDATA[]]></item>
