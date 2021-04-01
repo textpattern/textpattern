@@ -2135,7 +2135,7 @@ function updateSitePath($here)
 /**
  * Converts Textpattern tag's attribute list to an array.
  *
- * @param   string $text The attribute list, e.g. foobar="1" barfoo="0"
+ * @param   array|string $text The attribute list, e.g. foobar="1" barfoo="0"
  * @return  array Array of attributes
  * @access  private
  * @package TagParser
@@ -2148,6 +2148,11 @@ function splat($text)
 
     if ($globals === null) {
         $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    }
+
+    if (is_array($text)) {
+        $txp_atts = array_intersect_key($text, $globals);
+        return $text;
     }
 
     $sha = sha1($text);
