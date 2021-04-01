@@ -1103,11 +1103,11 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
-    $articles = parseList($rs, $thisarticle, 'populateArticleData', array('form' => $fname, 'thing' => $thing));
+    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
 //    unset($GLOBALS['thisarticle']);
 
     return !empty($articles) ?
-        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('allowoverride', 'break', 'class')) :
+        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'class')) :
         ($thing ? parse($thing, false) : '');
 }
 
