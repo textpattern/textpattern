@@ -5064,7 +5064,7 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? '' : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? false : null;
 
     extract(lAtts(array(
         'escape'    => $set,
@@ -5074,7 +5074,10 @@ function variable($atts, $thing = null)
         'add'       => null,
         'reset'     => null,
         'separator' => null,
-        'output'    => null
+        'output'    => null,
+        'break'     => $set,
+        'trim'      => $set,
+        'replace'   => $set
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5118,6 +5121,10 @@ function variable($atts, $thing = null)
     }
 
     if ($set !== null) {
+        if ($break !== false || $trim !== false || $replace !== false) {
+            $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
+        }
+
         $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
 
         if (isset($reset)) {
