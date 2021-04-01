@@ -163,7 +163,7 @@ function article_column_map()
 
         if ($custom = getCustomFields()) {
             foreach ($custom as $i => $name) {
-                isset($column_map[$name]) or $custom_map[$name] = $name;//'custom_'.$i;
+                isset($column_map[$name]) or $column_map[$name] = $name;//'custom_'.$i;
             }
         }
     }

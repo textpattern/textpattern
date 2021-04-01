@@ -4244,7 +4244,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs, $exclude = array())
+function buildCustomSql($custom, $pairs = null, $exclude = array())
 {
     static $delimited = null;
 
@@ -4256,6 +4256,15 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                 $delimited[] = $k;
             }
         }
+    }
+
+    if (!is_array($custom)) {
+        $custom = getCustomFields($custom, null, null);
+    }
+
+    if (!isset($pairs)) {
+        $customFields = getCustomFields();
+        $pairs = array_fill_keys($customFields, null);
     }
 
     $columns = $where = array();
