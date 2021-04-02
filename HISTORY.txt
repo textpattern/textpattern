@@ -1,3 +1,9 @@
+Changes in 4.8.6 (upcoming)
+
+* Maintenance release with bug fixes.
+* Fixed: Regression in override form usage in lists.
+* Changed: <txp:variable trim> trims its own output.
+
 Changes in 4.8.5 (29 Mar 2021)
 
 * Maintenance release including improvements for PHP 8.0 and bug fixes.
