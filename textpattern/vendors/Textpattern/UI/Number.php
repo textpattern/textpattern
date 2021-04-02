@@ -33,22 +33,13 @@ namespace Textpattern\UI;
 class Number extends Input implements UIInterface
 {
     /**
-     * Set of valid constraint values.
-     *
-     * @var array
-     */
-
-    protected $validConstraints = array('min', 'max', 'step');
-
-    /**
      * Construct a single numeric input field.
      *
-     * @param string $name        The input key (HTML name attribute)
-     * @param string $value       The initial value
-     * @param array  $constraints Array indices for min/max/step if desired.
+     * @param string $name  The input key (HTML name attribute)
+     * @param string $value The initial value
      */
 
-    public function __construct($name, $val, $constraints = array())
+    public function __construct($name, $val)
     {
         parent::__construct($name, 'number', $val);
 
@@ -56,13 +47,5 @@ class Number extends Input implements UIInterface
                 'id'    => $this->key,
                 'name'  => $name,
             ));
-
-        foreach ($this->validConstraints as $key) {
-            $toSet = isset($constraints[$key]) ? (int)$constraints[$key] : null;
-
-            if ($toSet !== null) {
-                $this->setAtt($key, $toSet, array('strip' => TEXTPATTERN_STRIP_NONE));
-            }
-        }
     }
 }

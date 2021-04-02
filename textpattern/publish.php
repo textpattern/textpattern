@@ -254,6 +254,7 @@ if ($pretext['status'] != '404' && !empty($pretext['id']) && $pretext['s'] !== '
 }
 
 callback_event('pretext_end');
+// Right, twice.
 extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
@@ -423,9 +424,11 @@ function preText($store, $prefs = null)
                         $permlink_guess = $permlink_mode;
                     } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
                         $safe_un = doSlash($un);
+                        $customData = buildCustomSql('article');
+                        $customColumns = $customData ? $customData['columns'] : false;
 
                         $guessarticles = safe_rows(
-                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
+                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns,
                             'textpattern',
                             "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
                         );
@@ -1219,7 +1222,7 @@ function parseList($rs, &$object, $populate, $atts = array())
                 if (is_array($res)) {
                     $object = $res;
                 }
- 
+
                 $object['is_first'] = ($count == 1);
                 $object['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;

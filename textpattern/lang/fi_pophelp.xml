@@ -45,7 +45,7 @@
         <item id="modified_files" title="Muokattuja tiedostoja"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="MySQL-taulussa virheitä"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Väliaikaishakemistoa ei ole määritetty"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Osion hakemisto on jo olemassa"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Osio nimetty samaksi kuin hakemisto"><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="Sivuston hakemistoon ei ole kirjoitusoikeutta"><![CDATA[
 <h2>Sivuston hakemistoon ei voi kirjoittaa</h2>
 <p>Juuritason <code>index.php</code>-tiedosto, jota käytetään sivuston aloituspaikkana, on sellaisessa hakemistossa, johon palvelimella ei ole kirjoitusoikeuksia. Ole hyvä ja tarkista kirjoitusoikeudet.</p>

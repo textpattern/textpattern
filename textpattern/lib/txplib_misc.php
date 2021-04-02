@@ -2135,7 +2135,7 @@ function updateSitePath($here)
 /**
  * Converts Textpattern tag's attribute list to an array.
  *
- * @param   string $text The attribute list, e.g. foobar="1" barfoo="0"
+ * @param   array|string $text The attribute list, e.g. foobar="1" barfoo="0"
  * @return  array Array of attributes
  * @access  private
  * @package TagParser
@@ -2148,6 +2148,11 @@ function splat($text)
 
     if ($globals === null) {
         $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    }
+
+    if (is_array($text)) {
+        $txp_atts = array_intersect_key($text, $globals);
+        return $text;
     }
 
     $sha = sha1($text);
@@ -4239,7 +4244,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs, $exclude = array())
+function buildCustomSql($custom, $pairs = null, $exclude = array())
 {
     static $delimited = null;
 
@@ -4251,6 +4256,15 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                 $delimited[] = $k;
             }
         }
+    }
+
+    if (!is_array($custom)) {
+        $custom = getCustomFields($custom, null, null);
+    }
+
+    if (!isset($pairs)) {
+        $customFields = getCustomFields();
+        $pairs = array_fill_keys($customFields, null);
     }
 
     $columns = $where = array();
@@ -4645,8 +4659,9 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
+    $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
     $keys = $parts;
-    empty($inherit) or $keys += $inherit;
+    !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
     unset($keys['id']);
 
@@ -4685,19 +4700,19 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        $url = hu.'index.php';
+        $url = $hu.'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = hu;
+        $url = $hu;
 
         if (!empty($keys['rss'])) {
-            $url = hu.'rss/';
+            $url = $hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
-            $url = hu.'atom/';
+            $url = $hu.'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            $url = hu.urlencode($keys['s']).'/';
+            $url = $hu.urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
                 $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4711,18 +4726,18 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             }
         } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = $hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = $hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
         } elseif (!empty($keys['month']) && is_date($keys['month'])) {
-            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            $url = $hu.implode('/', explode('-', urlencode($keys['month']))).'/';
             unset($keys['month']);
         }
     }
@@ -4788,9 +4803,9 @@ function permlinkurl_id($id)
  * ));
  */
 
-function permlinkurl($article_array, $hu = hu)
+function permlinkurl($article_array, $hu = null)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
+    global $permlink_mode, $prefs, $permlinks, $txp_sections;
     static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
         $fields = array(
             'thisid'    => null,
@@ -4817,6 +4832,7 @@ function permlinkurl($article_array, $hu = hu)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
+    isset($hu) or $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
@@ -4842,7 +4858,7 @@ function permlinkurl($article_array, $hu = hu)
 
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
-        $production_status != 'live' &&
+        $prefs['production_status'] != 'live' &&
         txpinterface == 'public' &&
         (is_numeric($expires) ? $expires < time()
             : (isset($uexpires) ? $uexpires < time()
