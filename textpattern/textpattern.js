@@ -2086,9 +2086,11 @@ textpattern.Route.add('article', function () {
         }
     ).change();
 
-    var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
+    var status = 'select[name=Status]', form = $(status).parents('form');
 
     $('#article_form').on('change', status, function () {
+        let submitButton = form.find('input[type=submit]');
+
         if (!form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
