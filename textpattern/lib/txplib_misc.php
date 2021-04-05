@@ -1643,7 +1643,7 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
 
     $return_value = array();
 
-    foreach (callbacks as $c) {
+    foreach ($callbacks as $c) {
         if (is_callable($c)) {
             // Cannot call event handler via call_user_func() as this would
             // dereference all arguments. Side effect: callback handler
