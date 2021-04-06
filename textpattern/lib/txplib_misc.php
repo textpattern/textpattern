@@ -1511,12 +1511,19 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $plugin_callback[] = array(
-        'function' => $func,
-        'event'    => $event,
-        'step'     => $step,
-        'pre'      => $pre,
-    );
+    $pre = (int)$pre;
+    isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
+    isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
+    isset($plugin_callback[$event][$pre][$step]) or $plugin_callback[$event][$pre][$step] =
+        isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array();
+
+    if ($step == '') {
+        foreach($plugin_callback[$event][$pre] as $key => $val) {
+            $plugin_callback[$event][$pre][$key][] = $func;
+        }
+    } else {
+        $plugin_callback[$event][$pre][$step][] = $func;
+    }
 }
 
 /**
@@ -1551,54 +1558,54 @@ function register_callback($func, $event, $step = '', $pre = 0)
 
 function callback_event($event, $step = '', $pre = 0)
 {
-    global $plugin_callback, $production_status, $trace;
+    global $production_status, $trace;
 
-    if (!is_array($plugin_callback)) {
+    list($pre, $renew) = (array)$pre + array(0, null);
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return '';
     }
 
-    list($pre, $renew) = (array)$pre + array(0, null);
     $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                if ($production_status !== 'live') {
-                    $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString()."'".
-                        (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
-                }
-
-                $return_value = call_user_func_array($c['function'], array_merge(array(
-                    $event,
-                    $step
-                ), $argv));
-
-                if (isset($renew)) {
-                    $argv[$renew] = $return_value;
-                }
-
-                if (isset($out) && !isset($renew)) {
-                    if (is_array($return_value) && is_array($out)) {
-                        $out = array_merge($out, $return_value);
-                    } elseif (is_bool($return_value) && is_bool($out)) {
-                        $out = $return_value && $out;
-                    } else {
-                        $out .= $return_value;
-                    }
-                } else {
-                    $out = $return_value;
-                }
-
-                if ($production_status !== 'live') {
-                    $trace->stop();
-                }
-            } elseif ($production_status === 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            if ($production_status !== 'live') {
+                $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c)->toString()."'".
+                    (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
             }
+
+            $return_value = call_user_func_array($c, array_merge(array(
+                $event,
+                $step
+            ), $argv));
+
+            if (isset($renew)) {
+                $argv[$renew] = $return_value;
+            }
+
+            if (isset($out) && !isset($renew)) {
+                if (is_array($return_value) && is_array($out)) {
+                    $out = array_merge($out, $return_value);
+                } elseif (is_bool($return_value) && is_bool($out)) {
+                    $out = $return_value && $out;
+                } else {
+                    $out .= $return_value;
+                }
+            } else {
+                $out = $return_value;
+            }
+
+            if ($production_status !== 'live') {
+                $trace->stop();
+            }
+        } elseif ($production_status === 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1626,25 +1633,25 @@ function callback_event($event, $step = '', $pre = 0)
 
 function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$options = null)
 {
-    global $plugin_callback, $production_status;
+    global $production_status;
 
-    if (!is_array($plugin_callback)) {
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return array();
     }
 
     $return_value = array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                // Cannot call event handler via call_user_func() as this would
-                // dereference all arguments. Side effect: callback handler
-                // *must* be ordinary function, *must not* be class method in
-                // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
-                $return_value[] = $c['function']($event, $step, $data, $options);
-            } elseif ($production_status == 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
-            }
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            // Cannot call event handler via call_user_func() as this would
+            // dereference all arguments. Side effect: callback handler
+            // *must* be ordinary function, *must not* be class method in
+            // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
+            $return_value[] = $c($event, $step, $data, $options);
+        } elseif ($production_status == 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1693,23 +1700,21 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
+    $pre = (int)$pre;
+    $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : false);
+
+    if (!$as_string) {
+        return $callbacks;
+    }
+
     $out = array();
 
-    foreach ((array) $plugin_callback as $c) {
-        if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre) {
-            if ($as_string) {
-                $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString();
-            } else {
-                $out[] = $c['function'];
-            }
-        }
+    foreach ($callbacks as $c) {
+        $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c)->toString();
     }
 
-    if ($out) {
-        return $out;
-    }
-
-    return false;
+    return $out;
 }
 
 /**
