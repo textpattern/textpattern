@@ -2,6 +2,7 @@ Changes in 4.8.6 (upcoming)
 
 * Maintenance release with bug fixes.
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
+* Added: Latest text translations. Thank you to all our translators.
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 
 Changes in 4.8.5 (29 Mar 2021)
