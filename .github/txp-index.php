@@ -7,6 +7,7 @@ $outdir = '.github/index';
 
     index_code('callback_event');
     index_code('callback_event_ref');
+    index_code('pluggable_ui');
 
     $files_php = array_merge(
         glob('*\.php'),
@@ -19,7 +20,7 @@ $outdir = '.github/index';
     index_file_save('gtxt_parse_ok', array_keys($gtxt_ok));
     index_file_save('gtxt_parse_ok_count', print_r($gtxt_ok, true));
 
-    $lang_gtxt = lang_gtxt('textpattern/lang/en.txt');
+    $lang_gtxt = lang_gtxt('textpattern/lang/en.ini');
     foreach (array_keys($gtxt_ok) as $key) {
         if (isset($lang_gtxt[$key])) {
             unset($lang_gtxt[$key]);
@@ -27,7 +28,7 @@ $outdir = '.github/index';
         }
     }
 
-    $lang_debug = parse_ini_file('textpattern/config.ini');
+    $lang_debug = parse_ini_file('textpattern/mode.ini');
     foreach (array_keys($lang_debug) as $key) {
         unset($gtxt_ok[$key]);
     }
@@ -103,7 +104,7 @@ function index_code($search)
     global $gitview, $branch;
     $out = array();
     $out2 = array();
-    $txt = shell_exec('grep --exclude-dir=.github --include=\*.php -rn . -e "'.escapeshellcmd($search).'("');
+    $txt = shell_exec('grep --exclude-dir={.github,sites} --include=\*.php -rn . -e "'.escapeshellcmd($search).'("');
 
     if (preg_match_all('%^\./(.*?):(.*?):(?:\s+)?(.*?'.preg_quote($search).'\((.*))$%ium', $txt, $mm)) {
         foreach ($mm[3] as $key=>$d) {
