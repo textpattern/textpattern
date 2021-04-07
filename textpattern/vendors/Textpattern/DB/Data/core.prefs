@@ -62,13 +62,6 @@
         "html": "yesnoradio",
         "position": "120"
     },
-    "html_email": {
-        "val": "plain",
-        "type": "0",
-        "event": "mail",
-        "html": "html_email",
-        "position": "125"
-    },
     "enhanced_email": {
         "val": "0",
         "type": "0",
