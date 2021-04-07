@@ -676,9 +676,9 @@ EOS
 function html_email($name, $val)
 {
     $vals = array(
-        'plain'     => gTxt('email_plain'),
-        'html'      => 'HTML',
-        'plainhtml' => gTxt('email_plain_html'),
+        'text'     => gTxt('email_plain'),
+        'html'     => 'HTML',
+        'texthtml' => gTxt('email_plain_html'),
     );
 
     return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
