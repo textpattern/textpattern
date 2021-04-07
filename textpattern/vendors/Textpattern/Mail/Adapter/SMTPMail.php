@@ -217,7 +217,6 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         }
 
         $this->mail->headers[$name] = $value;
-        $this->encoded->headers[$name] = $this->encoder->header($this->encoder->escapeHeader($value), 'phrase');
 
         return $this;
     }
