@@ -2382,12 +2382,14 @@ function stripPHP($in)
  *
  * On a successful run, will trigger a 'form.create > done' callback event.
  *
- * @param   string $name The name
- * @param   string $type The type
- * @param   string $Form The template
- * @return  bool FALSE on error
- * @since   4.6.0
- * @package Template
+ * @param      string $name The name
+ * @param      string $type The type
+ * @param      string $Form The template
+ * @return     bool FALSE on error
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\Skin
+ * @package    Template
  */
 
 function create_form($name, $type, $Form)
@@ -2417,10 +2419,12 @@ function create_form($name, $type, $Form)
 /**
  * Checks if a form template exists.
  *
- * @param   string $name The form
- * @return  bool TRUE if the form exists
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form
+ * @return     bool TRUE if the form exists
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function form_exists($name)
@@ -2431,10 +2435,12 @@ function form_exists($name)
 /**
  * Validates a string as a form template name.
  *
- * @param   string $name The form name
- * @return  bool TRUE if the string validates
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form name
+ * @return     bool TRUE if the string validates
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function is_valid_form($name)
