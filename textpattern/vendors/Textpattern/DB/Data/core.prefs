@@ -63,7 +63,7 @@
         "position": "120"
     },
     "html_email": {
-        "val": "text",
+        "val": "plain",
         "type": "0",
         "event": "mail",
         "html": "html_email",
