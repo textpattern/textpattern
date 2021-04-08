@@ -60,7 +60,8 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
     public function __construct()
     {
         // Although the Message is populated, its values are not used.
-        // Its primary purpose is to validate the allowed mail properties.
+        // Its primary purpose is to validate the allowed mail properties
+        // so we control what is passed to PHPMailer.
         $this->mail = new Message();
         $this->mailer = new PHPMailer(true);
 
@@ -85,13 +86,15 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
 
         $sectype = defined('SMTP_SECTYPE') ? constant('SMTP_SECTYPE') : get_pref('smtp_sectype');
 
-        $this->mailer->isSMTP(true);
-        $this->mailer->isHTML(strpos(get_pref('html_email'), 'html') !== false);
         $this->mailer->Host = (string) defined('SMTP_HOST') ? constant('SMTP_HOST') : get_pref('smtp_host');
         $this->mailer->Port = (int) defined('SMTP_PORT') ? constant('SMTP_PORT') : get_pref('smtp_port');
         $this->mailer->Username = (string) defined('SMTP_USER') ? constant('SMTP_USER') : get_pref('smtp_user');
         $this->mailer->Password = (string) defined('SMTP_PASS') ? constant('SMTP_PASS') : get_pref('smtp_pass');
         $this->mailer->SMTPSecure = ($sectype === 'none') ? '' : $sectype;
+
+        if (get_pref('enhanced_email') && $this->mailer->Host && $this->mailer->Port) {
+            $this->mailer->isSMTP();
+        }
 
         // Not a good idea, but allow it.
         if ($sectype === 'none') {
@@ -142,7 +145,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
     }
 
     /**
-     * Sets or gets a message field.
+     * Set or get a message field.
      *
      * @param  string $name The field
      * @param  array  $args Arguments
@@ -192,16 +195,24 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * {@inheritdoc}
      */
 
-    public function body($body)
+    public function body($body, $type = 'plain')
     {
-        $this->mail->body = $body;
+        $type = in_array($type, SELF::TYPES) ? $type : 'plain';
+        $in = is_array($body) ? $body : array($type => $body);
 
-        if ($this->mailer->CharSet !== 'UTF-8') {
-            $body = utf8_decode($body);
+        foreach ($in as $key => $block) {
+            $this->mail->body[$key] = $block;
+
+            if ($this->mailer->CharSet !== 'UTF-8') {
+                $block = utf8_decode($block);
+            }
+
+            if ($key === 'plain') {
+                $this->mailer->AltBody = $block;
+            } elseif ($key === 'html') {
+                $this->mailer->Body = $block;
+            }
         }
-
-        // @todo which body? HTML? AltBody for plaintext?
-        $this->mailer->Body = $body;
 
         return $this;
     }
@@ -229,6 +240,16 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
     {
         if (!$this->mail->from || !$this->mail->to) {
             throw new Exception(gTxt('from_or_to_address_missing'));
+        }
+
+        // If there's a body set, assume HTML content...
+        $this->mailer->isHTML(!empty($this->mailer->Body));
+
+        // ... but if there's only plaintext, swap AltBody and Body to
+        // prevent PHPMailer complaining about an empty message.
+        if ($this->mailer->AltBody && !$this->mailer->Body) {
+            $this->mailer->Body = $this->mailer->AltBody;
+            $this->mailer->AltBody = '';
         }
 
         $from = $this->mail->from;
@@ -286,7 +307,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
     }
 
     /**
-     * Adds an address to the specified field.
+     * Add an address to the specified field.
      *
      * @param  string $field   The field
      * @param  string $address The email address
