@@ -2307,6 +2307,11 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
 
     if ($sender) {
         extract($sender);
+        $ret = callback_event('mail', 'format.body', 0, $body);
+
+        if ($ret) {
+            $body = $ret;
+        }
 
         try {
             $message = Txp::get('\Textpattern\Mail\Compose')->getDefaultAdapter();
