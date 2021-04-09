@@ -18,7 +18,8 @@ Changes in 4.8.5 (29 Mar 2021)
 * Fixed: System temp directory notice on PHP 8.0.
 * Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended.
-* Fixed: Draft/hidden/pending articles output 404 Not Found status as they should.
+* Fixed: Draft/hidden/pending articles output 404 Not Found status as they
+  should.
 * Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
 * Fixed: Form processing on 'pretext_end' callback.
 * Added: Support for WebP image format, on PHP 7.1 or higher.
@@ -41,7 +42,8 @@ Changes in 4.8.5 (29 Mar 2021)
 * Changed: Expose 'secondpass' Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
-* Changed: Diagnostics textarea is rendered fully in English to aid support requests.
+* Changed: Diagnostics textarea is rendered fully in English to aid support
+  requests.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
 * Changed: Copy Editors are allowed to use <txp:php /> in articles.
 * Changed: Better i18n handling for 'ago'.
