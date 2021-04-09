@@ -1910,7 +1910,7 @@ function article_partial_section($rs)
     $out = inputLabel(
         'section',
         section_popup($rs['Section'], 'section').
-        n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+        (has_privs('section.edit') ? n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'section',
         array('', 'instructions_section'),
         array('class' => 'txp-form-field section')
@@ -1934,7 +1934,7 @@ function article_partial_categories($rs)
     $out = inputLabel(
         'category-1',
         category_popup('Category1', $rs['Category1'], 'category-1').
-        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+        (has_privs('category') ? n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'category1',
         array('', 'instructions_category1'),
         array('class' => 'txp-form-field category category-1')
