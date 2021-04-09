@@ -1,11 +1,12 @@
 Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
+* Changed: Minimum system requirements increased to MySQL 5.5.
 * Added: Option to define a comprehensive Content Security Policy header for the
-  Textpattern admin panel via config.php.
-* Added: PHPMailer for third-party SMTP delivery. See Admin>Prefs:Mail.
-* Added: Plugins can now be uploaded from URL by dragging to upload textarea.
-* Added: Compiled .txt plugins can now be uploaded via Browse... feature.
+  Textpattern admin-side via config.php.
+* Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Plugins can be uploaded from a URL by dragging to upload textarea.
+* Added: Compiled plugins can be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
 
@@ -29,7 +30,8 @@ Changes in 4.8.5 (29 Mar 2021)
 * Fixed: System temp directory notice on PHP 8.0.
 * Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended.
-* Fixed: Draft/hidden/pending articles output 404 Not Found status as they should.
+* Fixed: Draft/hidden/pending articles output 404 Not Found status as they
+  should.
 * Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
 * Fixed: Form processing on 'pretext_end' callback.
 * Added: Support for WebP image format, on PHP 7.1 or higher.
@@ -52,7 +54,8 @@ Changes in 4.8.5 (29 Mar 2021)
 * Changed: Expose 'secondpass' Advanced pref for testing.
 * Changed: Plugin load warning includes version number.
 * Changed: Comments off by default on new installations.
-* Changed: Diagnostics textarea is rendered fully in English to aid support requests.
+* Changed: Diagnostics textarea is rendered fully in English to aid support
+  requests.
 * Changed: If allowed, <txp:php /> is processed in forms even in article body.
 * Changed: Copy Editors are allowed to use <txp:php /> in articles.
 * Changed: Better i18n handling for 'ago'.
