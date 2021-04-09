@@ -802,14 +802,17 @@ function pluggable_ui($event, $element, $default = '')
 /**
  * Gets a list of form types.
  *
- * The list form types can be extended with a 'form.types > types'
+ * The list of form types can be extended with a 'form.types > types'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$types'. The third parameter contains a reference to an
  * array of 'type => label' pairs.
  *
- * @return  array An array of form types
- * @since   4.6.0
- * @package Template
+ * @return     array An array of form types
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\Form->getTypes()
+ * @todo       Move callback to Textpattern\Skin\Form->getTypes()?
+ * @package    Template
  */
 
 function get_form_types()

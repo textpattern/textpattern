@@ -59,10 +59,10 @@ class Message
     /**
      * The message body.
      *
-     * @var string
+     * @var array
      */
 
-    public $body = '';
+    public $body = array('plain' => '', 'html' => '');
 
     /**
      * An array of reply to addresses.

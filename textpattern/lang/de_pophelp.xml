@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="de">
-    <group id="admin" title="Benutzer-Panel">
+    <group id="admin" title="Benutzer">
         <item id="about_privileges" title="Über Rollen"><![CDATA[
 <h2>Über Rollen</h2>
 <h3>Herausgeber</h3>
@@ -76,12 +76,14 @@
 </ul>        ]]></item>
         <item id="create_author" title="Autor erstellen"><![CDATA[
 <h2>Neuen Autor hinzufügen</h2>
-<p>Passwort, Begrüßungsnachricht und Anweisungen zur Anmeldung werden per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
+<p>Eine Begrüßungsnachricht mit Anweisungen zur Anmeldung und das Passwort wird per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
     </group>
 
-    <group id="article" title="Schreibtafel">
+    <group id="article" title="Artikel">
         <item id="article_image" title="Artikelbild"><![CDATA[]]></item>
-        <item id="body" title="Haupttext"><![CDATA[]]></item>
+        <item id="body" title="Haupttext"><![CDATA[<h2>Haupttext</h2>
+<p>The main content of an article is contained within the article body.</p>
+<p>When composing or preparing articles for publication in Textpattern, an author can switch between three views of the article: plain text, HTML markup (the code with which a web browser renders the article), and a rendered preview.</p>]]></item>
         <item id="description" title="Beschreibung"><![CDATA[]]></item>
         <item id="excerpt" title="Exzerpt"><![CDATA[]]></item>
         <item id="expire_date" title="Ablaufdatum"><![CDATA[]]></item>
@@ -90,7 +92,27 @@
 <p>Keywords müssen einzelne Wörter sein, die durch Kommata getrennt sind.</p>]]></item>
         <item id="override_form" title="Alternativen Baustein verwenden"><![CDATA[]]></item>
         <item id="publish_date" title="Veröffentlichungsdatum"><![CDATA[]]></item>
-        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Definiert den Veröffentlichungs-Sichtbarkeitsstatus dieses Textpattern-Artikels.</p>
+<p>Der Veröffentlichungsstatus ist einer der folgenden:</p>
+<ul>
+    <li>Entwurf</li>
+    <li>Versteckt</li>
+    <li>Ausstehend</li>
+    <li>Live</li>
+    <li>Angeheftet</li>
+</ul>
+<p>Ein <strong>Entwurf</strong>-Artikel gilt als in Arbeit befindlich und ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar (d.h. nicht auf der Textpattern-Front sichtbar und nicht in Feeds syndiziert).</p>
+<p>Ein <strong>versteckter</strong> Artikel ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar.</p>
+<p>Ein <strong>anhängiger</strong> Artikel gilt als zur Veröffentlichung bereit und wartet auf die Freigabe, ist aber außerhalb des Textpattern-Administrationsbereichs nicht sichtbar.</p>
+<p>Ein <strong>live</strong> Artikel ist typischerweise außerhalb des Textpattern-Administrationsbereichs sichtbar (d.h. sichtbar auf der Textpattern-Frontseite, syndiziert in Feeds, wenn es die Präferenz erlaubt). Wenn ein Artikel live ist und ein Ablaufdatum hat, bleibt der Status nach Erreichen dieses Datums als live erhalten, aber der Artikel erscheint nur außerhalb des Administrationsbereichs, wenn abgelaufene Artikel veröffentlicht werden dürfen.</p>
+<p>Ein <strong>angehefteter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als dass er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>Artikel</code>- oder <code>Artikel_custom</code>-Tag enthält ein <code>Status</code>-Attribut mit einem <code>Angeheftet</code>-Wert.</p>
+        
+ 
+Text
+XPath: /resources/help/group[2]/item[9]
+]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Füge einen passenden Titel für den Artikel hinzu.</p>
@@ -102,8 +124,20 @@
         ]]></item>
     </group>
 
-    <group id="category" title="Kategorien-Bereich">
-        <item id="article_category" title="Artikel"><![CDATA[]]></item>
+    <group id="category" title="Kategorien">
+        <item id="article_category" title="Artikel"><![CDATA[
+<h2>Artikel</h2>
+<p>Im Gegensatz zu Abschnitten, die die Navigationsstruktur einer Website definieren, erlauben Artikelkategorien die Organisation von Artikeln nach ihrem Fachgebiet. Sobald Kategorien zugewiesen sind, können Listen von Artikeln bestimmter Kategorien durchsucht werden.</p>
+<p>Zum Beispiel könnten mögliche Artikelkategorien auf einer Seite über Lebensmittel sein:</p>
+<ul>
+    <li>Rohstoffe</li>
+    <li>Einkauf</li>
+    <li>Rezepte</li>
+    <li>Präsentation</li>
+    <li>Restaurants</li>
+    <li>Köche</li>
+</ul>
+        ]]></item>
         <item id="category_description" title="Beschreibung"><![CDATA[]]></item>
         <item id="file_category" title="Dateien"><![CDATA[
 <h2>Dateien</h2>
@@ -113,10 +147,10 @@
         <item id="link_category" title="Links"><![CDATA[]]></item>
     </group>
 
-    <group id="diag" title="Diagnosetafel">
-        <item id="clean_url_data_failed" title="Saubere URL-Daten fehlgeschlagen"><![CDATA[]]></item>
+    <group id="diag" title="Diagnose">
+        <item id="clean_url_data_failed" title="Saubere URL fehlgeschlagen"><![CDATA[]]></item>
         <item id="clean_url_test_failed" title="Der Test für saubere URLs ist fehlgeschlagen"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Private Informationen ausblenden"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Private Informationen verstecken"><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title="Verzeichnis ist nicht beschreibbar"><![CDATA[]]></item>
         <item id="dns_lookup_fails" title="DNS fehlgeschlagen"><![CDATA[]]></item>
@@ -128,39 +162,156 @@
         <item id="index_inaccessible" title=""><![CDATA[]]></item>
         <item id="missing_files" title="Fehlende Dateien"><![CDATA[
 <h2>Fehlende Dateien</h2>
-<p>Mindesten eine der betreffenden Dateien fehlt im Textmuster. Überprüfen Sie, ob sich die aufgelisteten Dateien auf dem Server und an richtiger Stelle befinden.</p>
+<p>Mindestens eine Datei fehlt in der Textpattern Installation. Überprüfen Sie, ob sich die aufgelisteten Dateien auf dem Server und an richtiger Stelle befinden.</p>
         ]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite fehlt"><![CDATA[]]></item>
         <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title="MySQL-Tabellenfehler"><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Kein Temp-Verzeichnis definiert"><![CDATA[]]></item>
         <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[]]></item>
-        <item id="setup_still_exists" title="Setup-Verzeichnis existiert noch"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="PHP-Funktionen […] sind auf Ihrem Server deaktiviert"><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title="Textpattern Pre-Release verfügbar"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Webseitenverzeichnis nicht lesbar"><![CDATA[]]></item>
+        <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[<h2>Minimale Versionsvoraussetzungen</h2>
+<p>Textpattern benötigt bestimmte Funktionen in PHP und einen MySQL Datenbank Server. In der folgenden Tabelle sind die Mindestanforderungen dafür aufgeführt.</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern Version</th>
+                <th scope="col">Minimum PHP Version</th>
+                <th scope="col">Minimum MySQL Version</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Zusätzlich zu den oben aufgeführten Systemvorausetzungen werden folgende Erweiterungen in PHP benötigt:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(öffnet einen Link in einem neuen Fenster)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(öffnet einen Link in einem neuen Fenster)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(öffnet einen Link in einem neuen Fenster)</span></a></li>
+</ul>
+<p>In der <code>php.ini</code> Datei, entweder global oder lokal, wird eine <code>date.timezone</code> Einstellung benötigt.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Setup-Verzeichnis existiert schon"><![CDATA[
+<h2>Das Setup-Verzeichnis existiert schon</h2>
+<p>Wenn Textpattern installiert wurde, werden das Verzeichnis <code>textpattern/setup</code> und dessen Inhalt nicht mehr benötigt und sollten aus Sicherheitsgründen gelöscht werden.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="URL stimmt nicht überein"><![CDATA[
+<h2>Site-URL stimmt nicht überein</h2>
+<p>Die Site-URL, wie sie im Bedienfeld „Einstellungen“ festgelegt ist, stimmt nicht mit der eigentlichen URL überein, die für den Besuch der Site verwendet wird.</p>
+<p>Wenn die Seite über mehrere verschiedene URLs erreichbar ist, und wenn sich die Seite wie erwartet verhält, kann diese Nachricht sicher ignoriert werden.</p>
+<p>Andernfalls überprüfen und ändern Sie bitte die Einstellung 'Website-URL' in den Admin-Einstellungen nach Bedarf. Die korrekte URL wird in der Vorflug-Warnmeldung auf dem Bedienfeld „Diagnose“ angezeigt.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP-Funktionen […] sind auf Ihrem Server deaktiviert"><![CDATA[
+<h2>PHP-Funktionen […] sind auf Ihrem Server deaktiviert</h2>
+<p>Der Site-Host oder Server-Administrator hat eine oder mehrere PHP-Funktionen deaktiviert, einige davon können das Ausführen von Textpattern beeinflussen.</p>
+<p>Bitte konsultieren Sie die <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern Benutzerdokumentation <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> für weitere Informationen.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern Update"><![CDATA[
+<h2>Textpattern Version Update</h2>
+<p>Es ist eine neuere Version von Textpattern verfügbar. Um die Vorteile der neuesten Funktionen und der Sicherheit nutzen zu können, empfehlen wir Ihnen ein Upgrade.</p>
+<p>Bitte beachten Sie, dass, während wir uns bemühen, das Upgrade-Erlebnis so nahtlos und schmerzfrei wie möglich zu machen:</p>
+<ul>
+    <li>Wenn nur die letzte Ziffer von Ihrer aktuellen Version abweicht, ist das Upgrade wahrscheinlich rückwärtskompatibel mit Plugins und Themes.</li>
+    <li>Wenn die letzten beiden Ziffern von Ihrer aktuellen Version abweichen, das Upgrade könnte Aktualisierungen für einige Plugins und/oder Themes erfordern, obwohl es wahrscheinlich ohnehin in einer begrenzten Kapazität weiter funktionieren wird.</li>
+    <li>Wenn die erste Ziffer von Ihrer aktuellen Version abweicht, das Upgrade erfordert wahrscheinlich Aktualisierungen der meisten Plugins und Themes. Wenn Sie sich stark auf ein bestimmtes Plugin oder Theme verlassen, überprüfen Sie bitte den Autor oder die Community Mitglieder, bevor Sie mit dem Upgrade beginnen.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern Pre-Release verfügbar"><![CDATA[<h2>Textpattern Vorabversions-Update verfügbar</h2>
+<p>Es ist eine neuere Vorabversion von Textpattern verfügbar. Wir suchen nach aktiven Freiwilligen, die diese Version testen, damit wir die endgültige Version so solide wie möglich gestalten können. Wir bemühen uns, das Upgrade nahtlos und schmerzfrei zu gestalten, auch für Beta-Code.</p>
+<p>Sollten Sie sich für eine Teilnahme entscheiden, beachten Sie bitte:</p>
+<ul>
+    <li>Benutzen Sie diese Beta-Version nicht auf einer Produktionsseite, es sei denn, Sie haben ein funktionierendes Backup der Dateien und der Datenbank der Seite und wissen, wie man damit umgeht.</li>
+    <li>Bitte melden Sie <a href="https://github.com/textpattern/textpattern/issues">jegliche Probleme</a> unter Angabe der von Ihnen verwendeten Beta-Version. Abhängig von den gemeldeten Problemen können weitere Beta-Versionen vor der stabilen Version erforderlich sein.</li>
+    <li>Stellen Sie sicher, dass Sie, wenn Sie diese Betaversion einsetzen, auch auf die endgültige Version aktualisieren, wenn diese veröffentlicht wird.</li>
+</ul>
+
+Übersetzt mit www.DeepL.com/Translator (kostenlose Version)]]></item>
+        <item id="tmp_plugin_paths_match" title="Temp-Verzeichnis und Plugin-Cache-Verzeichnis sollten nicht übereinstimmen"><![CDATA[
+<h2>Temp-Verzeichnis und Plugin-Cache-Verzeichnis sollten nicht übereinstimmen</h2>
+<p>Plugins sollten ein eigenes Verzeichnis haben und nicht das temporäre Verzeichnis benutzen. Dies ist ein potenzielles Sicherheitsrisiko und kann sich negativ auf Ihre Website auswirken, wenn das temporäre Verzeichnis geleert wird. Bitte stellen Sie sicher, dass der Pfad des temporären Verzeichnisses sich vom Pfad des Plugin-Caches unterscheidet.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Update-Server nicht erreichbar"><![CDATA[
+<h2>Update-Server nicht erreichbar</h2>
+<p>Die Suche nach Updates ist fehlgeschlagen, oft aufgrund von einer Netzwerküberlastung oder einer Zeitüberschreitung der Verbindung. Diese Situation löst sich in der Regel innerhalb von wenigen Stunden. Bitte versuchen Sie es später noch einmal zu besuchen.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Ihrer PHP-Installation fehlt die mail()-Funktion"><![CDATA[
+<h2>Ihrer PHP-Installation fehlt die mail() Funktion</h2>
+<p> <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">Mail <span class="ui-icon ui-icon-extlink">von PHP (öffnet eine externe Verbindung in einem neuen Fenster)</span></a> Funktion ist deaktiviert. Deshalb kann Textpattern keine E-Mails senden und einige Funktionen werden nicht verfügbar sein. Zum Beispiel werden E-Mail-Benachrichtigungen für neue Kommentare nicht versendet und neue Benutzer werden keine willkommene E-Mail erhalten. Benutzer können jedoch trotzdem hinzugefügt werden.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Datei-Bereich">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title="Datei ersetzen"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Veröffentlichungsdatum"><![CDATA[]]></item>
-        <item id="upload" title="Datei hochladen"><![CDATA[]]></item>
+        <item id="file_reassign" title=""><![CDATA[
+<h2>Datei neu zuweisen</h2>
+<p>Wenn Sie eine Datei statt einer Datei mit dem Titel „Fehlend“ hochladen, wird Ihre gewählte Datei auf den Server hochgeladen und mit den Originalinformationen in der Datenbank verknüpft. Dies bedeutet, dass der Dateiname der Originaldatei erhalten bleibt, ebenso wie alle anderen zugehörigen Informationen wie die Anzahl der Downloads und Kategorien. Die Dateigröße wird jedoch aktualisiert, um die neue Datei wiederzugeben.</p>
+        ]]></item>
+        <item id="file_replace" title="Datei ersetzen"><![CDATA[
+<h2>Ersetzen der Datei</h2>
+<p>Das Hochladen einer Datei hier wird den Inhalt der existierenden Datei auf dem Server ersetzen, aber der Dateiname bleibt der gleiche wie zuvor. Die Anzahl der Downloads und andere mit der Datei verknüpfte Informationen bleibt unberührt.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Veröffentlichungsdatum"><![CDATA[
+<h2>Veröffentlichungsdatum</h2>
+<p>Die Zeit, zu der eine Datei veröffentlicht oder überarbeitet wurde. Die Zeit kann auf den Zeitpunkt der Veröffentlichung oder auf eine beliebige Zeit in der Vergangenheit oder in der Zukunft eingestellt werden.</p>
+<p>Die Felder entsprechen den folgenden Inhalten:</p>
+<ul>
+    <li>Jahr / Monat / Tag</li>
+    <li>Stunde (24-Stunden-Format : Minute : Sekunde</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Datei hochladen"><![CDATA[
+<h2>Datei hochladen</h2>
+<p>Dieses Formular verwenden, um Dateien oder Bilder auf Ihren Server hochzuladen.</p>
+<p>Benutzen Sie Textile, um Grafiken innerhalb von Artikeln zu beschriften, bzw. die Textpattern-Tags, um Grafiken auf Ihren Seitenvorlagen zu platzieren, oder HTML-Code, um die Grafiken andernorts zu platzieren.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+        <item id="forms_overview" title=""><![CDATA[<h2>Einführung in Bausteine</h2>
+<p>In Textpattern ist ein Bausteine ein Schnipsel mit Text, HTML- und Textpattern-Tags, das verwendet werden kann, um Inhalte anzuzeigen.</p>
+<p>Hier ist ein Beispiel für einen Baustein, das <code>ordinary_list</code> heißen könnte:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Sie könnten damit eine ungeordnete HTML-Liste mit verwandten Artikeln anzeigen:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Da die Funktion dieses Formulars darin besteht, eine Liste von Titeln auszugeben, könnte es auch innerhalb anderer Tags verwendet werden, z. B. um 20 Artikel aus der aktuellen Sektion anzuzeigen:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title="Vorschaubild erstellen"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Bild ersetzen"><![CDATA[]]></item>
+    <group id="image" title="Bilderverzeichnis">
+        <item id="create_thumbnail" title="Vorschaubild erstellen"><![CDATA[
+<h2>Thumbnail erstellen</h2>
+<p>Erlaubt Ihnen, ein Miniaturbild der angegebenen Größe aus dem Bild in voller Größe (neu) zu erstellen.</p>
+<p>Das Vorschaubild wird nach der gewünschten Größe skaliert, es sei denn, Sie wählen das Kontrollkästchen „Zuschneiden“. In diesem Fall wird das Vorschaubild ohne Skalierung aus der Mitte des Bildes erstellt.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Bild ersetzen"><![CDATA[
+<h2>Bild ersetzen</h2>
+<p>Ein hier hochgeladenes Bild ersetzt das vorhandene Bild in der Datenbank.</p>
+        ]]></item>
         <item id="upload_image" title="Bild hochladen"><![CDATA[]]></item>
         <item id="upload_thumbnail" title="Vorschaubild hochladen"><![CDATA[]]></item>
     </group>
@@ -169,27 +320,41 @@
         <item id="get_textpack" title="Textpack installieren"><![CDATA[]]></item>
     </group>
 
-    <group id="link" title="Links-Bereich">
+    <group id="link" title="Links">
         <item id="link_description" title="Beschreibung"><![CDATA[]]></item>
         <item id="link_sort" title="Sortierkriterium"><![CDATA[]]></item>
         <item id="link_url" title="URL"><![CDATA[]]></item>
         <item id="timestamp_link" title="Veröffentlichungsdatum"><![CDATA[]]></item>
     </group>
 
-    <group id="login" title="Anmeldebreich">
-        <item id="remember_login" title="Mit diesem Browser eingeloggt bleiben"><![CDATA[]]></item>
+    <group id="login" title="Anmeldebereich">
+        <item id="remember_login" title="Mit diesem Browser eingeloggt bleiben"><![CDATA[
+<h2>Mit diesem Browser angemeldet bleiben</h2>
+<p>Wenn aktiviert, bleiben Sie mit dem aktuellen Webbrowser in Ihrem Textpattern-Konto eingeloggt, bis Sie sich ausloggen. Wenn diese Option nicht aktiviert ist, werden Sie nach einer Inaktivitätszeit automatisch abgemeldet.</p>
+<p>Erfordert die Aktivierung von Cookies in Ihrem Browser.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="Plugin-Bereich">
+    <group id="plugin" title="Plugins">
         <item id="install_plugin" title="Plugin installieren"><![CDATA[]]></item>
         <item id="upload_plugin" title="Plugin hochladen"><![CDATA[]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title="Adminplugins verwenden?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Erweiterte Einstellungen"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="PHP in Artikeln erlauben?"><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
+    <group id="prefs" title="Einstellungen">
+        <item id="admin_side_plugins" title="Adminplugins verwenden?"><![CDATA[<h1>Einstellungen: Admin-Plugins verwenden?</h1> <p>Admin-Plugins können die Arbeitsweise des Administrations-Interface verändern. Sie können sich bestehende Funktionen zunutze machen, wie Artikel bearbeiten oder veröffentlichen, oder sie können zusätzliche Tabs für neue oder erweiterte Funktionen hinzufügen.</p> <p>Wenn Sie mehr über Admin-Plugins lernen möchten, besuchen Sie bitte die Seite für <a rel="external" target="_blank" href="http://docs.textpattern.io/development/">Textpattern Plugins Entwicklung</a> (in Englisch) in der <a rel="external" target="_blank" href="http://docs.textpattern.io/">Textpattern Benutzerdokumentation</a>.</p> <p>Plugins aller Art finden Sie auf der Website <a rel="external" target="_blank" href="http://textpattern.org/">Textpattern Resources</a> (in Englisch).</p>]]></item>
+        <item id="advanced_options" title="Erweiterte Einstellungen"><![CDATA[
+<h2>Erweiterte Einstellungen</h2>
+<p>hier können zusätzliche Einstellungen konfiguriert werden. Wie zum Beispiel :</p>
+<ul>
+    <li>PHP-Funktionen aktiviert in <code>txp:evaluate</code>.</li>
+    <li>Benutzerdefinierte Formular-Typen.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="PHP in Artikeln erlauben?"><![CDATA[<h1>Einstellungen: PHP in Artikeln erlauben?</h1> <p>Wenn diese Einstellung aktiviert ist, wird die Verwendung von PHP innerhalb von Artikeln erlaubt. Dazu muss der Autor über die erforderlichen Berechtigungen verfügen (standardmässig haben nur <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">„Herausgeber“</a> und <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">„leitende Redakteure“</a> diese Berechtigung).</p> <p>Die öffnenden und schließenden PHP-Tags müssen im PHP-Code weggelassen werden, stattdessen muss dieser zwischen öffnenden und schließenden <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/php"><code><txp:php></code>-Tags</a> notiert werden.</p>]]></item>
+        <item id="allow_form_override" title=""><![CDATA[
+<h2>Überschreiben des Bausteins erlauben?</h2>
+<p>Diese Einstellung erlaubt es den Autoren des Artikels, ein Baustein zu überschreiben, wenn der Artikel gerendert wird. Wenn aktiviert, wird beim Bearbeiten eines Artikels ein Dropdown-Dropdown zum Überschreiben des Bausteins verfügbar.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="PHP in Seiten erlauben?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Archivdatumsformat"><![CDATA[]]></item>
         <item id="articles_use_excerpts" title="Artikel verwenden Exzerpte?"><![CDATA[]]></item>
@@ -197,18 +362,21 @@
         <item id="auto_dst" title="Sommer-/Winterzeit automatisch umstellen?"><![CDATA[]]></item>
         <item id="comment_means_site_updated" title="Neue Kommentare setzen Seitenstatus auf aktualisiert?"><![CDATA[]]></item>
         <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Kommentare als nummerierte Liste einfügen?"><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Kommentare als nummerierte Liste darstellen?"><![CDATA[]]></item>
         <item id="comments_auto_append" title="Kommentare automatisch an Artikel anhängen?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Datumsformat bei Kommentaren"><![CDATA[
+<h2>Datumsformat bei Kommentaren</h2>
+<p>Wie die Kommentardaten für die Besucher der Website angezeigt werden.</p>
+        ]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Kommentare sind deaktiviert nach dem"><![CDATA[]]></item>
         <item id="comments_disallow_images" title="Kommentarbilder zulassen?"><![CDATA[
 <h2>Kommentarbilder zulassen?</h2>
 <p>Mit dieser Option auf "Nein" werden alle in Kommentaren enthaltenen Bilder entfernt.</p>
         ]]></item>
         <item id="comments_mode" title="Kommentarmodus"><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title="Kommentare moderieren?"><![CDATA[]]></item>
+        <item id="comments_on_default" title="Standardmäßig eingeschaltet"><![CDATA[]]></item>
         <item id="comments_require_email" title="E-Mail des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Name des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
         <item id="comments_sendmail" title=""><![CDATA[]]></item>
@@ -228,17 +396,17 @@
         <item id="gmtoffset" title="Zeitzone"><![CDATA[]]></item>
         <item id="img_dir" title="Bilderverzeichnis"><![CDATA[]]></item>
         <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="is_dst" title="Sommerzeit aktiviert?"><![CDATA[]]></item>
         <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title="Maximale URL-Länge (in Zeichen)"><![CDATA[]]></item>
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
         <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Plugin-Cache Verzeichnispfad"><![CDATA[]]></item>
+        <item id="production_status" title="Status"><![CDATA[]]></item>
         <item id="public_theme_name" title=""><![CDATA[]]></item>
         <item id="publish_expired_articles" title=""><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
@@ -247,15 +415,15 @@
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
         <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="sitename" title="Name der Webseite"><![CDATA[]]></item>
+        <item id="siteurl" title="URL der Seite"><![CDATA[]]></item>
         <item id="skin_dir" title="Verzeichnis für Designs"><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
         <item id="spam_blocklists" title=""><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="theme_name" title="Design der Admin-Oberfläche"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="PHP-Funktionen in txp:evaluate aktiviert"><![CDATA[]]></item>
         <item id="use_comments" title="Kommentare annehmen?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Plugins verwenden?"><![CDATA[]]></item>
@@ -263,7 +431,7 @@
     </group>
 
     <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_category" title="Vorstellung"><![CDATA[]]></item>
         <item id="section_default" title=""><![CDATA[]]></item>
         <item id="section_description" title="Beschreibung"><![CDATA[]]></item>
         <item id="section_on_frontpage" title=""><![CDATA[]]></item>
@@ -280,33 +448,39 @@
         <item id="table_prefix" title=""><![CDATA[]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
+    <group id="skin" title="Design der Webseite">
+        <item id="skin_author" title="Urheber des Designs"><![CDATA[
+<h2>Urheber des Designs</h2>
+<p>der Urheber dieses Designs (optional).</p>
+        ]]></item>
         <item id="skin_author_uri" title="Website des Designs"><![CDATA[
-<h2>Design-Website</h2>
+<h2>Website des Designs</h2>
 <p>URL auf der die vollständigen Informationen und/oder neueste Versionen dieses Designs gefunden werden können (optional).</p>
         ]]></item>
         <item id="skin_delete_entirely" title="Design-Vorlagen auch von der Festplatte löschen"><![CDATA[
 <h2>Design-Vorlagen auch von der Festplatte löschen</h2>
-<p>Wenn aktiviert, werden alle Vorlagen der ausgewählten Designs dauerhaft von der Festplatte gelöscht. Allerdings werden themenbezogene Verzeichnisse und deren Unterverzeichnisse nicht gelöscht, wenn andere Dateien (wie JavaScript, Bilder,...) diese beinhalten.</p>
+<p>Wenn aktiviert, werden alle Vorlagen des ausgewählten Designs dauerhaft von der Festplatte gelöscht. Allerdings werden themenbezogene Verzeichnisse und deren Unterverzeichnisse nicht gelöscht, wenn andere Dateien (wie JavaScript, Bilder,...) diese beinhalten.</p>
         ]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="Beim Importieren nicht benutzte Vorlagen aus der Datenbank löschen."><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="Beim Exportieren nicht benutzte Vorlagen von der Festplatte löschen."><![CDATA[]]></item>
         <item id="skin_description" title="Beschreibung des Designs"><![CDATA[
-<h2>Theme Beschreibung</h2>
-<p>Eine kurze Zusammenfassung des Themes kann hinterlegt werden (optional).</p>
-<p>Die Theme Beschreibung ist auf max. 255 Zeichen limitiert.</p>
+<h2>Beschreibung des Designs</h2>
+<p>Eine kurze Zusammenfassung des Designs kann hinterlegt werden (optional).</p>
+<p>Die Beschreibung ist auf max. 255 Zeichen limitiert.</p>
         ]]></item>
         <item id="skin_import" title="Design importieren"><![CDATA[]]></item>
         <item id="skin_name" title="Name des Designs"><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[
+        <item id="skin_overview" title="Einführung in Designs"><![CDATA[
 <h2>Einführung in Themes</h2>
 <p>A Textpattern theme is a collection of Pages, Forms and Stylesheets. Themes allow you to logically separate your site assets into groups for ease of identification, or sharing with others. The act of creating or importing a Theme, and any assets it contains, does <em>not</em> have any impact on your existing site. You are free to edit or modify any asset that is not associated with a Section of your site, and it will not affect the site itself.</p>
 <p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
         <item id="skin_title" title="Titel des Designs"><![CDATA[]]></item>
-        <item id="skin_version" title="Version des Designs"><![CDATA[]]></item>
+        <item id="skin_version" title="Version des Designs"><![CDATA[
+<h2>Version des Designs</h2>
+<p>Die Versionsnummer des Designs (optional).</p>
+        ]]></item>
     </group>
 </help>
 </resources>
