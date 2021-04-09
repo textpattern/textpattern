@@ -75,7 +75,10 @@
     <li>può gestire pagine, moduli e stile</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Crea Autore"><![CDATA[]]></item>
+        <item id="create_author" title="Crea Autore"><![CDATA[
+<h2>Aggiungi nuovo autore</h2>
+<p>Un messaggio di benvenuto e le istruzioni d'accesso saranno inviate via email al nuovo autore.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Pannello Scrivi">
@@ -298,9 +301,8 @@
 <h2>Nessuna directory temporanea definita</h2>
 <p>Anche se Textpattern verrà eseguito senza una directory temporanea, alcune funzionalità potrebbero non funzionare come previsto se questa preferenza non è impostata. Si prega di visitare le preferenze di amministrazione e impostare il percorso della directory temporanea.</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="Cartella Sezione esiste"><![CDATA[
-<h2>Cartella sezione esiste</h2>
-<p>I file di cartella di sezione esistente saranno in conflitto con lo schema di <code>. htaccess</code>. Se i file segnalati sono segnaposto, si prega di cancellarli.</p>
+        <item id="old_placeholder_exists" title="Sezione denominata come la cartella"><![CDATA[<h2>Sezione denominata come la cartella</h2>
+<p>I nomi della cartella esistente potrebbero esser in conflitto con i nomi della sezione usati nello schema del link permanente dell'articolo. Per evitare problemi, controlla ed elimina i nomi della cartella influenzata se è sicuro farlo, o altera i nomi della sezione, così che non si scontrino.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Directory sito illeggibile"><![CDATA[
 <h2>Directory del sito illeggibile</h2>
@@ -365,11 +367,33 @@
 <p>L’host del sito o l’amministratore del server ha disattivato una o più funzioni PHP, alcune delle quali possono influenzare il funzionamento di Textpattern.</p>
 <p>Per ulteriori informazioni, consultare la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentazione Utente Textpattern <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title="Textpattern pre-rilascio disponibile"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title="Aggiorna server inaccessibile"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Aggiornamento versione Textpattern CMS"><![CDATA[<h2>Aggiornamento versione di Textpattern</h2>
+<p>C'è una nuova versione disponibile di Textpattern. Per trarre vantaggio delle ultime funzioni e la sicurezza, ti consigliamo di aggiornarla.</p>
+<p>Sei pregato di notare che mentre ci sforziamo per rendere il più semplice e indolore l'esperienza di aggiornamento:</p>
+<ul>
+    <li>Se solo l'ultima cifra differisce dalla tua versione corrente, l'aggiornamento potrebbe esser retrocompatibile con i plugin e i temi.</li>
+    <li>Se le ultime due cifre differiscono dalla tua versione corrente, l'aggiornamento potrebbe richiedere aggiornamenti a certi plugin e/o temi, sebbene probabilmente continuerà comunque a funzionare a capacità limitata.</li>
+    <li>Se la prima cifra differisce dalla tua versione corrente, l'aggiornamento potrebbe richiedere aggiornamenti di gran parte dei plugin e temi. Se ti basi pesantemente sulla funzione di un plugin o tema in particolare, sei pregato di verificare con l'autore o i membri della community prima di avviare l'aggiornamento.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern pre-rilascio disponibile"><![CDATA[<h2>Aggiornamento pre-rilascio disponibile di Textpattern</h2>
+<p>C'è una nuova versione pre-rilascio di Textpattern disponibile. Stiamo cercando volontari attivi per testarla così da rendere più solida possibile la versione finale. Ci sforziamo di rendere l'esperienza di download semplice e indolore, anche per il codice in beta.</p>
+<p>Dovessi decidere di partecipare, sei pregato di notare:</p>
+<ul>
+    <li>Non usare questa versione beta su un sito di produzione a meno che non abbiate un backup funzionante dei file del sito e del suo database, e tu sappia come usarli.</li>
+    <li>Sei pregato di <a href="https://github.com/textpattern/textpattern/issues">segnalare ogni problema</a>, dichiarando la versione beta in uso. Ulteriori versioni beta potrebbero esser necessarie prima della versione stabile, in base ai problemi segnalati.</li>
+    <li>Assicurati che in caso di distribuzione della versione in beta, scarichi anche la versione finale quando rilasciata.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="I percorsi delle directory temporanea e di cache dei plug-in non devono essere uguali"><![CDATA[<h2>I percorsi delle cartelle della cache Temporanea e dei Plugin non dovrebbero corrispondere</h2>
+<p>I plugin dovrebbero avere la propria cartella e non condividerne una temporanea. Questo è un rischio di sicurezza potenziale e potrebbe influenzare negativamente il tuo sito se la cartella temporanea è scaricata. Sei pregato di assicurarti che il percorso della cartella temporanea sia differente da quella della cache del plugin.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Aggiorna server inaccessibile"><![CDATA[<h2>Server di aggiornamento inaccessibile</h2>
+<p>Il controllo degli aggiornamenti fallisce spesso a causa di congestione di rete o scadenza della connessione. Questa situazione si risolve solitamente entro una o due ore, quindi prova a rivisitare più tardi questo pannello.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[<h2>La tua installazione PHP è mancante dalla funzione mail()</h2>
+<p>La funzione di PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(apre un collegamento esterno in una nuova finestra)</span></a> è disabilitata. Dunque, Textpattern non può inviare email e alcune funzionalità non saranno disponibili. Ad esempio, le notifiche email per i nuovi commenti non saranno inviate e i nuovi utenti non riceveranno un'email di benvenuto. Tuttavia, gli utenti possono comunque esser aggiunti.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Pannello file">
@@ -381,7 +405,14 @@
 <h2>Sostituisci file</h2>
 <p>Caricando qui un file, si andrà a sostituire il contenuto del file esistente sul server ma si manterrà il nome file come era prima. Il conteggio dei download e altre informazioni associate al file rimarranno inalterati.</p>
         ]]></item>
-        <item id="timestamp_file" title="Data di pubblicazione"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Data di pubblicazione"><![CDATA[<h2>Data di pubblicazione</h2>
+<p>L'orario di pubblicazione o revisione più recente del file. L'orario è impostabile quando l'articolo è pubblicato, o a un orario obbligatorio del passato o futuro.</p>
+<p>Le caselle corrispondono alle informazioni seguenti:</p>
+<ul>
+    <li>Anno / Mese / Giorno</li>
+    <li>Ora (formato di 24 Ore) : Minuti : Secondi</li>
+</ul>
+        ]]></item>
         <item id="upload" title="Carica file"><![CDATA[
 <h2>Carica file</h2>
 <p>Utilizza questo modulo per caricare file o immagini sul tuo server.</p>
@@ -453,7 +484,14 @@
 <h2>URL</h2>
 <p>L’indirizzo del link. Se il link punta ad un altro sito, allora deve essere preceduto da <code>http://</code> o <code>https://</code>.</p>
         ]]></item>
-        <item id="timestamp_link" title="Data di pubblicazione"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Data di pubblicazione"><![CDATA[<h2>Data di pubblicazione</h2>
+<p>L'orario di pubblicazione o revisione più recente del collegamento. L'orario è impostabile quando l'articolo è pubblicato, o a un orario obbligatorio del passato o futuro.</p>
+<p>Le caselle corrispondono alle informazioni seguenti:</p>
+<ul>
+    <li>Anno / Mese / Giorno</li>
+    <li>Ora (formato di 24 Ore) : Minuti : Secondi</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Pannello login">
@@ -470,7 +508,10 @@
 <p>Incolla qui il contenuto del file di testo del plugin, poi usa ‘Carica’ per iniziare l’installazione. Qualsiasi plug-in già caricato con lo stesso nome o uno che hai precedentemente installato sarà sovrascritto dalla nuova versione caricata.</p>
 <p>Il testo del plug-in che incolli qui <strong>non</strong> è in codice PHP ma testo codificato su Base64, di solito preceduto da un header contenente informazioni sul plug-in (come il nome del plugin, versione e descrizione, nome autore, etc).</p>
         ]]></item>
-        <item id="upload_plugin" title="Carica plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Carica plugin"><![CDATA[<h2>Carica plugin</h2>
+<p>Usa questo modulo per caricare un file del plugin (un file PHP o archivio compresso). I plugin caricati (e ogni loro risorsa) sono memorizzati entro la cartella 'plugin'.</p>
+<p>Ogni plugin che carichi con lo stesso nome di uno installato precedentemente sarà sovrascritto con la versione aggiornata.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Pannello preferenze">
@@ -556,7 +597,9 @@
 <h2>Commenti disabilitati dopo</h2>
 <p>Consente di definire la quantità di tempo trascorsa la quale viene disattivata la possibilità di commentare (può essere impostato su ‘Mai’ per consentire di commentare a tempo indeterminato).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="Consentire le immagini di commento nei commenti?"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Consentire le immagini di commento nei commenti?"><![CDATA[<h2>Consentire le immagini di commento nei commenti?</h2>
+<p>Con quest'impostazione impostata su 'No', ogni immagine inclusa nei commenti sarà rimossa.</p>
+        ]]></item>
         <item id="comments_mode" title="Modalità commenti"><![CDATA[
 <h2>Modalità commenti</h2>
 <p>Se è selezionato ‘nopopup’ (modo consigliato) la finestra corrente verrà aggiornata mostrando solo l’articolo corrente, con sotto i commenti.</p>
@@ -736,7 +779,9 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Textpattern utilizza la codifica UTF-8 dove possibile per impostazione predefinita, anche per le email in uscita. Tuttavia, alcuni client di posta elettronica meno recenti (tra cui alcune versioni di Microsoft Outlook) non hanno un corretto supporto UTF-8. Se si riscontrano caratteri illeggibili nelle email, con questa impostazione il testo verrà convertito nella codifica ISO-8859-1prima di inviarli.</p>
 <p><strong>Nota:</strong> Se si utilizza un linguaggio i cui caratteri non possono essere rappresentati in ISO-8859-1, questa impostazione purtroppo non vi aiuterà. Si dovrebbe cercare di trovare un client di posta elettronica compatibile UTF-8 (o Unicode).</p>
         ]]></item>
-        <item id="override_form_types" title="Sovrascrivi i tipi di modulo"><![CDATA[]]></item>
+        <item id="override_form_types" title="Sovrascrivi i tipi di modulo"><![CDATA[<h2>Sovrascrizione tipi di modulo</h2>
+<p>Scegli che tipi di modulo avranno disponibili i propri modelli nel pannello Scrivi come moduli di sovrascrizione.</p>
+        ]]></item>
         <item id="permlink_format" title="Formato URL titolo permalink"><![CDATA[
 <h2>Formato URL titolo permalink</h2>
 <p>Determina il metodo con cui sono costruiti e assegnati gli URL dell’articolo quando si utilizza il modo ‘non-sporchi’.</p>
@@ -805,7 +850,16 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Questo è il numero massimo di articoli attuali da sindacare alla volta, in formati RSS e Atom.</p>
 <p>Si consiglia un valore basso, ad esempio <code>5</code> piuttosto che <code>15</code>.</p>
         ]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="secondpass" title="Numero di cicli dell'analizzatore extra"><![CDATA[<h2>Numero di cicli dell'analizzatore extra</h2>
+<p>L'analizzatore del tag di Textpattern solitamente sostituisce tutti i tuoi tag con contenuti dal database in un ciclo del modello della pagina. In alcuni casi, potrebbe essere insufficiente, ad esempio:</p>
+<ul>
+    <li>Usando plugin d'ordine di carico basso come attributi di tag</li>
+    <li>Sostituzioni di codice nei <code>&lt;txp:php&gt;</code> tag</li>
+    <li>Elementi di salto della pagina prima nella stessa così che possano ricevere contenuti derivati da un tag successivamente elaborato</li>
+</ul>
+<p>Textpattern tradizionalmente esegue un ciclo extra (detto 'secondpass') per motivi d'eredità, per cui il valore predefinito di questa preferenza è <code>1</code>. Più cicli, tuttavia, aumentano le possibilità di tag indefiniti passati ed elaborati. Miglioramenti recenti all'analizzatore dei tag hanno ridotto il bisogno della seconda passata. Quindi, a meno che tu non stia usando il secondo ciclo per un motivo dedicato, sei pregato di ridurre questo valore a <code>0</code>, per rendere più sicuro il sito.</p>
+<p>Se in seguito trovate tag non elaborati in renderizzazione sul tuo sito web (e non ci sono altri errori del tag mostrati nelle modalità di Test/Debug a causa di coppie di tag non abbinate), siete allora pregati di contattarci con il vostro esempio di modello/codice/plugin. Stiamo provando a eradicare il bisogno delle passate extra dell'analizzatore e quest'informazione ci aiuterà a farlo.</p>
+        ]]></item>
         <item id="send_lastmod" title="Inviare testata &quot;Last-Modified&quot;?"><![CDATA[
 <h2>Inviare testata "Last-Modified"?</h2>
 <p>Se impostata, Textpattern confronterà l’intestazione HTTP <code>If-Modified-Since</code> di un visitatore (se presente) con l’ultimo aggiornamento del sito. Se nulla è cambiato dall’ultima volta che il visitatore ha caricato la pagina (ad esempio, se il timestamp che invia il browser è lo stesso dell’ultimo aggiornamento del sito), allora un’intestazione viene re-inviata con l’istruzione per il browser del visitatore di usare la versione della pagina memorizzata nella cache.</p>
@@ -883,7 +937,11 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Gli elementi in un feed Atom richiedono un ID univoco.</p>
 <p>Per generare ID univoci al sito, Textpattern consente di scegliere tra un indirizzo email o il tuo nome di dominio, per includerli in questi ID. L’indirizzo email sarà il primo usato al momento della creazione del sito. A meno che non si preveda di cambiare il proprio nome di dominio in futuro, è probabilmente meglio impostare questa opzione su ‘No’.</p>
         ]]></item>
-        <item id="use_textile" title="Formattazione testo predefinita"><![CDATA[]]></item>
+        <item id="use_textile" title="Formattazione testo predefinita"><![CDATA[<h2>Formattazione predefinita del testo</h2>
+<p>L'impostazione del formato del testo che scegli qui diventa la predefinita per l'estratto e il markup del corpo sul pannello 'Scrivi'. Puoi scegliere di consentire l'elaborazione di Textile completa, per convertire le righe a capo in marcatori di paragrafo HTML o di non convertire per niente i testi.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(apre un collegamento esterno in una nuova finestra)</span></a> è un'utilità pensata per semplificare la conversione del testo semplice in HTML. Quando abilitato, Textile elaborerà il testo del corpo degli articoli, restituendo un HTML strutturalmente sano.</p>
+<p>Textile offre anche una potente ma facile da imparare serie di comandi con cui formattare il testo, definire strutture come liste, intestazioni e virgolette e inserire collegamenti e immagini.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Pannello sezioni">
