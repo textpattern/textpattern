@@ -924,7 +924,7 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thisarticle, $thispage, $trace, $txp_item, $txp_sections;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
-        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => 'GROUP_CONCAT(? SEPARATOR ",")');
+        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => "GROUP_CONCAT(? SEPARATOR ',')");
 
     extract($pretext);
 
@@ -957,19 +957,20 @@ function doArticles($atts, $iscustom, $thing = null)
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
-        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week';
+        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week|quarter';
 
-        foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\:\s*(%[\%\w\s]+))?(?:\s*\))?$/", $field, $matches)) {
-                $field = $matches[2];
+        foreach (do_list_unique($fields) as $field) {
+            if (preg_match("/^(?:($agg_reg)(?:\[(.*)\])?\s*\(\s*)?($reg_fields)(?:\s*\))?$/i", $field, $matches)) {
+                $format = doSlash($matches[2]);
+                $field = strtolower($matches[3]);
                 $column = $column_map[$field];
                 $alias = $matches[1] ? ' AS '.$column : '';
 
                 if (isset($aggregate[$matches[1]])) {
-                    $what[$field] = str_replace('?', $column, $aggregate[$matches[1]]);
+                    $what[$field] = strtr($aggregate[$matches[1]], array('?' => $column, ',' => $format ? $format : ','));
                 } elseif ($matches[1]) {
                     isset($what[$field]) or $what[$field] = "MIN($column)";
-                    $group = empty($matches[3]) ? strtoupper($matches[1]).'('.$column.')' : "DATE_FORMAT($column, '$matches[3]')";
+                    $group = $format ? "DATE_FORMAT($column, '$format')" : strtoupper($matches[1]).'('.$column.')';
                     !is_array($groupby) or $groupby[] = $group;
                     $sortby[] = $group;
                 } else {
