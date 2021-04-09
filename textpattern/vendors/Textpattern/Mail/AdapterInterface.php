@@ -33,7 +33,13 @@ namespace Textpattern\Mail;
 interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
-     * Sets the subject.
+     * Valid body text types.
+     */
+
+    const TYPES = array('plain', 'html');
+
+    /**
+     * Set the subject.
      *
      * <code>
      * Txp::get('\Textpattern\Mail\Compose')->subject('My subject');
@@ -47,21 +53,22 @@ interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
     public function subject($subject);
 
     /**
-     * Sets the message.
+     * Set the message content.
      *
      * <code>
      * Txp::get('\Textpattern\Mail\Compose')->body('Plain-text based message.');
      * </code>
      *
-     * @param  string $body The message
+     * @param  string|array $body The message text or array of plain/html parts
+     * @param  string       $type The message content type (plain, or html) if $body is string
      * @return AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
 
-    public function body($body);
+    public function body($body, $type = 'plain');
 
     /**
-     * Sets an additional header.
+     * Set an additional header.
      *
      * <code>
      * Txp::get('\Textpattern\Mail\Compose')->header('X-Mailer', 'abc_plugin');
@@ -76,7 +83,7 @@ interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
     public function header($name, $value);
 
     /**
-     * Sends an email.
+     * Send an email.
      *
      * <code>
      * Txp::get('\Textpattern\Mail\Compose')

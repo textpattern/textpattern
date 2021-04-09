@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '4.8.5.x-dev',
-    'version' => '4.8.5.9999999-dev',
+    'pretty_version' => '4.8.6.x-dev',
+    'version' => '4.8.6.9999999-dev',
     'aliases' => 
     array (
     ),
-    'reference' => '2dbb1f37dbfd38d84904094775be068c08f0ec2f',
+    'reference' => '382eb819158c6431a6f35f45485418fb67ceb0da',
     'name' => 'textpattern/textpattern',
   ),
   'versions' => 
@@ -22,21 +22,21 @@
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.3.0',
-      'version' => '6.3.0.0',
+      'pretty_version' => 'v6.4.0',
+      'version' => '6.4.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb',
+      'reference' => '050d430203105c27c30efd1dce7aa421ad882d01',
     ),
     'textpattern/textpattern' => 
     array (
-      'pretty_version' => '4.8.5.x-dev',
-      'version' => '4.8.5.9999999-dev',
+      'pretty_version' => '4.8.6.x-dev',
+      'version' => '4.8.6.9999999-dev',
       'aliases' => 
       array (
       ),
-      'reference' => '2dbb1f37dbfd38d84904094775be068c08f0ec2f',
+      'reference' => '382eb819158c6431a6f35f45485418fb67ceb0da',
     ),
   ),
 );
