@@ -38,12 +38,6 @@ if (!in_array('collection', $cols)) {
 safe_update('txp_prefs', "event = 'mail'", "name IN('smtp_from', 'publisher_email', 'override_emailcharset') AND event='admin'");
 
 $smtp_prefs = array(
-    'html_email'   => array(
-        'val'      => '0',
-        'event'    => 'mail',
-        'html'     => 'html_email',
-        'position' => 125,
-    ),
     'enhanced_email' => array(
         'val'        => '0',
         'event'      => 'mail',

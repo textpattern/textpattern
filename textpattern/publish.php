@@ -960,17 +960,16 @@ function doArticles($atts, $iscustom, $thing = null)
         $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week';
 
         foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
+            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\:\s*(%[\%\w\s]+))?(?:\s*\))?$/", $field, $matches)) {
                 $field = $matches[2];
                 $column = $column_map[$field];
                 $alias = $matches[1] ? ' AS '.$column : '';
-                $is_agg = isset($aggregate[$matches[1]]);
 
-                if ($is_agg) {
+                if (isset($aggregate[$matches[1]])) {
                     $what[$field] = str_replace('?', $column, $aggregate[$matches[1]]);
                 } elseif ($matches[1]) {
                     isset($what[$field]) or $what[$field] = "MIN($column)";
-                    $group = strtoupper($matches[1]).'('.$column.')';
+                    $group = empty($matches[3]) ? strtoupper($matches[1]).'('.$column.')' : "DATE_FORMAT($column, '$matches[3]')";
                     !is_array($groupby) or $groupby[] = $group;
                     $sortby[] = $group;
                 } else {
@@ -1103,11 +1102,11 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
-    $articles = parseList($rs, $thisarticle, 'populateArticleData', array('form' => $fname, 'thing' => $thing));
+    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
 //    unset($GLOBALS['thisarticle']);
 
     return !empty($articles) ?
-        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('allowoverride', 'break', 'class')) :
+        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'class')) :
         ($thing ? parse($thing, false) : '');
 }
 

@@ -666,25 +666,6 @@ EOS
 }
 
 /**
- * Renders a HTML &lt;select&gt; list of HTML email options.
- *
- * @param  string $name HTML name and id of the input control
- * @param  string $val  Initial (or current) selected item
- * @return string HTML
- */
-
-function html_email($name, $val)
-{
-    $vals = array(
-        'plain'     => gTxt('email_plain'),
-        'html'      => 'HTML',
-        'plainhtml' => gTxt('email_plain_html'),
-    );
-
-    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
-}
-
-/**
  * Render a multi-select list of Form Types
  *
  * @param  string $name HTML name and id of the input control
