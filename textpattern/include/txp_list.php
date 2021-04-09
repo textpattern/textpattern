@@ -609,6 +609,9 @@ function list_multi_edit()
                 $selected = $allowed;
             }
 
+            // @todo Post-delete callback should match event/step here when hooks are standardised.
+            callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+
             if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
@@ -689,6 +692,9 @@ function list_multi_edit()
     }
 
     $selected = $allowed;
+
+    // @todo Post-edit callback should match event/step here when hooks are standardised.
+    callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
 
     if ($selected) {
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
