@@ -266,8 +266,16 @@ class Method
             }
 
             if ($this->options['can_list']) {
-                $operator = ' in ';
-                $value = '('.join(',', quote_list(do_list($search_term))).')';
+                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
+
+                if ($matches[1] && strpos($search_term, ',') === false) {
+                    $operator = $matches[1];
+                    $value = $matches[2];
+                } else {
+                    $operator = ' in ';
+                    $value = '('.join(',', quote_list(do_list($search_term))).')';
+                }
+
             } elseif ($this->type === 'boolean') {
                 $clause[] = "convert(".$column.", char) = '".$search_term."'";
                 continue;
