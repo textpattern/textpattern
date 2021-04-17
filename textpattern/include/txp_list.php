@@ -200,7 +200,6 @@ function list_list($message = '', $post = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter(array(
             'id'                 => array('can_list' => true),
-            'article_image'      => array('can_list' => true),
             'title_body_excerpt' => array('always_like' => true),
         ));
 
