@@ -288,7 +288,7 @@ class Method
             } elseif ($this->type === 'numeric') {
                 preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
                 $comparator = $matches[1] ? $matches[1] : '=';
-                $clause[] = "convert(".$column.", char) ".$comparator." '".$matches[2]."'";
+                $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
                 continue;
             } else {
                 $operator = ' like ';
