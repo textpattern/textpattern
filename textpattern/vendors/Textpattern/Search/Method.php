@@ -288,6 +288,7 @@ class Method
             } elseif ($this->type === 'numeric') {
                 preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
                 $comparator = $matches[1] ? $matches[1] : '=';
+                // Use coalesce() to guard against nulls when using LEFT JOIN.
                 $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
                 continue;
             } else {
