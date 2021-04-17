@@ -115,6 +115,11 @@ function plugin_list($message = '')
                 'column' => 'txp_plugin.description',
                 'label'  => gTxt('description'),
             ),
+            'version' => array(
+                'column' => 'txp_plugin.version',
+                'label'  => gTxt('version'),
+                'type'   => 'numeric',
+            ),
             'code' => array(
                 'column' => 'txp_plugin.code',
                 'label'  => gTxt('code'),
