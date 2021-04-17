@@ -278,7 +278,9 @@ class Method
                 $clause[] = "find_in_set('".$search_term."', ".$column." )";
                 continue;
             } elseif ($this->type === 'numeric') {
-                $clause[] = "convert(".$column.", char) = '".$search_term."'";
+                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
+                $comparator = $matches[1] ? $matches[1] : '=';
+                $clause[] = "convert(".$column.", char) ".$comparator." '".$matches[2]."'";
                 continue;
             } else {
                 $operator = ' like ';
