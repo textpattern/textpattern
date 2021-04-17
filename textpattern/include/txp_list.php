@@ -181,7 +181,7 @@ function list_list($message = '', $post = '')
             'article_image' => array(
                 'column' => array('textpattern.Image'),
                 'label'  => gTxt('article_image'),
-                'type'   => 'integer',
+                'type'   => 'find_in_set',
             ),
             'posted' => array(
                 'column'  => array('textpattern.Posted'),
