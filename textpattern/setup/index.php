@@ -280,13 +280,13 @@ function step_getDbInfo()
     $dbuser = !empty($cfg['database']['user']) ? $cfg['database']['user'] : '';
     $dbpass = !empty($cfg['database']['password']) ? $cfg['database']['password'] : '';
     $dbname = !empty($cfg['database']['db_name']) ? $cfg['database']['db_name'] : '';
+    $dbmake = !empty($cfg['database']['create']) ? $cfg['database']['create'] : '';
     $dbtpfx = !empty($cfg['database']['table_prefix']) ? $cfg['database']['table_prefix'] : '';
     $dbhost = !empty($cfg['database']['host']) ? $cfg['database']['host'] : 'localhost';
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
         hed(tag('MySQL', 'bdi', array('dir' => 'ltr')), 2).
-        graf(gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',
             fInput('text', 'duser', $dbuser, '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
@@ -310,6 +310,11 @@ function step_getDbInfo()
             'setup_mysql_db',
             fInput('text', 'ddb', $dbname, '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
             'mysql_database', '', array('class' => 'txp-form-field')
+        ).
+        inputLabel(
+            'setup_mysql_db_make',
+            selectInput('dmake', array(gTxt('setup_db_none'), gTxt('setup_db_create')), $dbmake),
+            'mysql_create', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_table_prefix',
@@ -364,6 +369,7 @@ function step_printConfig()
     $cfg['database']['host'] = ps('dhost');
     $cfg['database']['db_name'] = ps('ddb');
     $cfg['database']['table_prefix'] = ps('dprefix');
+    $cfg['database']['create'] = ps('dmake');
 
     if (defined('is_multisite')) {
         $cfg['site']['admin_url'] = ps('adminurl');
@@ -742,7 +748,7 @@ function msg($msg, $class = MSG_OK, $back = false)
         array('class' => $class)
     );
 
-    if (! $back) {
+    if (!$back) {
         return $out;
     }
 
