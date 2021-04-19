@@ -181,7 +181,7 @@ function list_list($message = '', $post = '')
             'article_image' => array(
                 'column' => array('textpattern.Image'),
                 'label'  => gTxt('article_image'),
-                'type'   => 'integer',
+                'type'   => 'find_in_set',
             ),
             'posted' => array(
                 'column'  => array('textpattern.Posted'),
@@ -200,7 +200,6 @@ function list_list($message = '', $post = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter(array(
             'id'                 => array('can_list' => true),
-            'article_image'      => array('can_list' => true),
             'title_body_excerpt' => array('always_like' => true),
         ));
 
