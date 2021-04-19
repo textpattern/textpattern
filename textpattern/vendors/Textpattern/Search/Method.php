@@ -266,8 +266,16 @@ class Method
             }
 
             if ($this->options['can_list']) {
-                $operator = ' in ';
-                $value = '('.join(',', quote_list(do_list($search_term))).')';
+                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
+
+                if ($matches[1] && strpos($search_term, ',') === false) {
+                    $operator = $matches[1];
+                    $value = $matches[2];
+                } else {
+                    $operator = ' in ';
+                    $value = '('.join(',', quote_list(do_list($search_term))).')';
+                }
+
             } elseif ($this->type === 'boolean') {
                 $clause[] = "convert(".$column.", char) = '".$search_term."'";
                 continue;
@@ -278,7 +286,10 @@ class Method
                 $clause[] = "find_in_set('".$search_term."', ".$column." )";
                 continue;
             } elseif ($this->type === 'numeric') {
-                $clause[] = "convert(".$column.", char) = '".$search_term."'";
+                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
+                $comparator = $matches[1] ? $matches[1] : '=';
+                // Use coalesce() to guard against nulls when using LEFT JOIN.
+                $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
                 continue;
             } else {
                 $operator = ' like ';

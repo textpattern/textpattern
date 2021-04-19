@@ -5065,9 +5065,9 @@ function variable($atts, $thing = null)
         'reset'     => null,
         'separator' => null,
         'output'    => null,
-        'break'     => $set,
-        'trim'      => $set,
-        'replace'   => $set
+        'break'     => null,
+        'trim'      => null,
+        'replace'   => null
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5111,7 +5111,7 @@ function variable($atts, $thing = null)
     }
 
     if ($set !== null) {
-        if ($break !== false || $trim !== false || $replace !== false) {
+        if ($break !== null || $trim !== null || $replace !== null) {
             $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
         }
 
