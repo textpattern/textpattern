@@ -289,7 +289,11 @@ class Method
                 preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
                 $comparator = $matches[1] ? $matches[1] : '=';
                 // Use coalesce() to guard against nulls when using LEFT JOIN.
-                $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
+                if (is_numeric($matches[2])) {
+                    $clause[] = "coalesce(".$column.", 0) ".$comparator." '".$matches[2]."'";
+                } else {
+                    $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
+                }
                 continue;
             } else {
                 $operator = ' like ';
