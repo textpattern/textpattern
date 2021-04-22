@@ -352,15 +352,15 @@ function author_list($message = '')
 
         if ($sort === '') {
             $sort = get_pref('admin_sort_column', 'name');
-        } else {
-            if (!in_array($sort, array_keys(array_filter($fields, function($value) {
-                    return !isset($value['sortable']) || !empty($value['sortable']);
-                })))) {
-                $sort = 'name';
-            }
-
-            set_pref('admin_sort_column', $sort, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
+
+        if (!in_array($sort, array_keys(array_filter($fields, function($value) {
+                return !isset($value['sortable']) || !empty($value['sortable']);
+            })))) {
+            $sort = 'name';
+        }
+
+        set_pref('admin_sort_column', $sort, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
         if ($dir === '') {
             $dir = get_pref('admin_sort_dir', 'asc');
