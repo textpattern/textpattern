@@ -49,8 +49,17 @@ if ($event == 'admin') {
         'new_pass_form'       => false,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
-        $step();
+    $plugin_steps = array();
+    callback_event_ref('admin', 'steps', 0, $plugin_steps);
+
+    // Available steps overwrite custom ones to prevent plugins trampling
+    // core routines.
+    if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
+        if (array_key_exists($step, $available_steps)) {
+            $step();
+        } else {
+            callback_event($event, $step, 0);
+        }
     } else {
         author_list();
     }
@@ -285,6 +294,43 @@ function author_list($message = '')
 
     $buttons = author_edit_buttons();
 
+    $fields = array(
+        'user_id' => array(
+            'sortable' => false,
+            'visible'  => false,
+        ),
+        'name' => array(
+            'label' => 'login_name',
+            'class' => 'name',
+        ),
+        'RealName' => array(
+            'label' => 'real_name',
+            'class' => 'name',
+        ),
+        'email' => array(
+        ),
+        'privs' => array(
+            'label' => 'privileges',
+        ),
+        'last_login' => array(
+            'column' => 'UNIX_TIMESTAMP(last_access)',
+            'class'  => 'date',
+        ),
+    );
+
+    $sql_from = 'txp_users';
+
+    callback_event_ref('admin', 'list.fields', 0, $fields);
+    callback_event_ref('admin', 'list.from', 0, $sql_from);
+
+    $fieldlist = array();
+
+    // Build field list: shame that array_filter() can't get keys and
+    // values 'til PHP 5.6. @todo One day.
+    foreach ($fields as $fld => $def) {
+        $fieldlist[] = isset($def['column']) ? $def['column'].' AS '. $fld : $fld;
+    }
+
     // User list.
     if (has_privs('admin.list')) {
         pagetop(gTxt('tab_site_admin'), $message);
@@ -306,13 +352,15 @@ function author_list($message = '')
 
         if ($sort === '') {
             $sort = get_pref('admin_sort_column', 'name');
-        } else {
-            if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) {
-                $sort = 'name';
-            }
-
-            set_pref('admin_sort_column', $sort, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
+
+        if (!in_array($sort, array_keys(array_filter($fields, function($value) {
+                return !isset($value['sortable']) || !empty($value['sortable']);
+            })))) {
+            $sort = 'name';
+        }
+
+        set_pref('admin_sort_column', $sort, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
         if ($dir === '') {
             $dir = get_pref('admin_sort_dir', 'asc');
@@ -353,7 +401,14 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $total = getCount('txp_users', $criteria);
+        $count = safe_query("SELECT SQL_CALC_FOUND_ROWS ".implode(', ', $fieldlist).
+            " FROM ".$sql_from.
+            " WHERE $criteria"
+        );
+
+        if ($count) {
+            $total = getThing('SELECT FOUND_ROWS()');
+        }
 
         $searchBlock =
             n.tag(
@@ -385,10 +440,9 @@ function author_list($message = '')
         } else {
             $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
-            $rs = safe_rows_start(
-                "*, UNIX_TIMESTAMP(last_access) AS last_login",
-                'txp_users',
-                "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+            $rs = safe_query("SELECT ".implode(', ', $fieldlist).
+                " FROM ".$sql_from.
+                " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
             );
 
             if ($rs) {
@@ -406,41 +460,44 @@ function author_list($message = '')
                         'aria-label' => gTxt('list'),
                     )).
                     n.tag_start('table', array('class' => 'txp-list')).
-                    n.tag_start('thead').
-                    tr(
-                        (
-                            ($use_multi_edit)
-                            ? hCell(
-                                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                                    '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                            )
-                            : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"')
-                        ).
-                        column_head(
-                            'login_name', 'name', 'admin', true, $switch_dir, '', '',
-                                (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
-                        ).
-                        column_head(
-                            'real_name', 'RealName', 'admin', true, $switch_dir, '', '',
-                                (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
-                        ).
-                        column_head(
-                            'email', 'email', 'admin', true, $switch_dir, '', '',
-                                (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
-                        ).
-                        column_head(
-                            'privileges', 'privs', 'admin', true, $switch_dir, '', '',
-                                (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
-                        ).
-                        column_head(
-                            'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
-                                (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
+                    n.tag_start('thead');
+
+                    $headings = array();
+                    $headings[] = ($use_multi_edit)
+                        ? hCell(
+                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                                '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                         )
+                        : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"');
+
+                    foreach ($fields as $col => $opts) {
+                        if (isset($opts['visible']) && empty($opts['visible'])) {
+                            continue;
+                        }
+
+                        $lbl = empty($opts['label']) ? $col : $opts['label'];
+                        $cls = empty($opts['class']) ? $col : $opts['class'];
+                        $headings[] = column_head(
+                            $lbl,
+                            $col,
+                            'admin',
+                            true,
+                            $switch_dir,
+                            '',
+                            '',
+                            (($col == $sort) ? "$dir " : '').
+                                'txp-list-col-'.strtolower(str_replace('_', '-', $lbl)).' '.$cls
+                        );
+
+                    }
+
+                    $contentBlock .= tr(
+                        implode(n, $headings)
                     ).
                     n.tag_end('thead').
                     n.tag_start('tbody');
 
-                while ($a = nextRow($rs)) {
+                foreach ($rs as $a) {
                     extract(doSpecial($a));
 
                     $contentBlock .= tr(
@@ -461,7 +518,7 @@ function author_list($message = '')
                         ).
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                        )
+                        ).pluggable_ui('admin', 'list.row', '', $a)
                     );
                 }
 
@@ -506,6 +563,8 @@ function author_edit_buttons()
 
     // Change password button.
     $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
+
+    callback_event_ref('admin', 'form_controls', 0, $buttons);
 
     return $buttons;
 }
