@@ -50,7 +50,7 @@ if ($event == 'admin') {
     );
 
     $plugin_steps = array();
-    callback_event_ref('admin', 'steps', 0, $plugin_steps);
+    callback_event_ref('user', 'steps', 0, $plugin_steps);
 
     // Available steps overwrite custom ones to prevent plugins trampling
     // core routines.
@@ -320,8 +320,8 @@ function author_list($message = '')
 
     $sql_from = 'txp_users';
 
-    callback_event_ref('admin', 'list.fields', 0, $fields);
-    callback_event_ref('admin', 'list.from', 0, $sql_from);
+    callback_event_ref('user', 'list.fields', 0, $fields);
+    callback_event_ref('user', 'list.from', 0, $sql_from);
 
     $fieldlist = array();
 
@@ -518,7 +518,7 @@ function author_list($message = '')
                         ).
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                        ).pluggable_ui('admin', 'list.row', '', $a)
+                        ).pluggable_ui('user', 'list.row', '', $a)
                     );
                 }
 
@@ -564,7 +564,7 @@ function author_edit_buttons()
     // Change password button.
     $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
 
-    callback_event_ref('admin', 'form_controls', 0, $buttons);
+    callback_event_ref('user', 'form_controls', 0, $buttons);
 
     return $buttons;
 }
