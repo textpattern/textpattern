@@ -1245,10 +1245,12 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
+    $version = empty($plugins_ver[$txp_current_plugin]) ? '' : ' ('.$plugins_ver[$txp_current_plugin].')';
+
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s (%s)</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s%s</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
-        $plugins_ver[$txp_current_plugin],
+        $version,
         $error[$errno],
         $errstr,
         $errline
