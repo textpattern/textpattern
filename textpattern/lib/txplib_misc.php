@@ -1150,7 +1150,7 @@ function load_plugin($name, $force = false)
             \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
-        $ok = @include_once($filename);
+        $ok = is_readable($filename) ? include_once($filename) : false;
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1474,7 +1474,7 @@ function load_plugins($type = false, $pre = null)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = @include($filename);
+                $eval_ok = is_readable($filename) ? include($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
