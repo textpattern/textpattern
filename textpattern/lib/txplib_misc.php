@@ -1513,7 +1513,7 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $pre or $pre = (int)$pre;
+    $pre or $pre = 0;
 
     isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
     isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
@@ -1703,7 +1703,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
-    $pre or $pre = (int)$pre;
+    $pre or $pre = 0;
     $step or $step = 0;
 
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
