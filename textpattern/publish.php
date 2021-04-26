@@ -1146,10 +1146,11 @@ function doArticle($atts, $thing = null)
         }
     }
 
+    $article = false;
+
     if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
-        $article = false;
 
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
