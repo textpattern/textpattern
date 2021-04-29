@@ -1762,11 +1762,11 @@ function link_to($atts, $thing = null, $target = 'next')
         }
 
         $thisarticle = $oldarticle;
-
-        return $url;
     }
 
-    return ($showalways) ? parse($thing) : '';
+    unset($thisarticle[$target]);
+
+    return isset($url) ? $url : ($showalways ? parse($thing) : '');
 }
 
 // -------------------------------------------------------------
