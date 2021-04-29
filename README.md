@@ -70,7 +70,7 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 | PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.4 or 8.0) |
 | MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.19) or stable (1.18) |
+| Nginx  | &mdash; | mainline (1.20) or stable (1.19) |
 
 ## Contributing
 

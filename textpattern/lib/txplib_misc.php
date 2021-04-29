@@ -1150,7 +1150,7 @@ function load_plugin($name, $force = false)
             \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
-        $ok = @include_once($filename);
+        $ok = is_readable($filename) ? include_once($filename) : false;
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1245,10 +1245,12 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
+    $version = empty($plugins_ver[$txp_current_plugin]) ? '' : ' ('.$plugins_ver[$txp_current_plugin].')';
+
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s (%s)</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s%s</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
-        $plugins_ver[$txp_current_plugin],
+        $version,
         $error[$errno],
         $errstr,
         $errline
@@ -1474,7 +1476,7 @@ function load_plugins($type = false, $pre = null)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = @include($filename);
+                $eval_ok = is_readable($filename) ? include($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -1511,13 +1513,14 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $pre = (int)$pre;
+    $pre or $pre = 0;
+
     isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
     isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
     isset($plugin_callback[$event][$pre][$step]) or $plugin_callback[$event][$pre][$step] =
         isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array();
 
-    if ($step == '') {
+    if ($step === '') {
         foreach($plugin_callback[$event][$pre] as $key => $val) {
             $plugin_callback[$event][$pre][$key][] = $func;
         }
@@ -1700,7 +1703,9 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
-    $pre = (int)$pre;
+    $pre or $pre = 0;
+    $step or $step = 0;
+
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
         (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : false);
 
