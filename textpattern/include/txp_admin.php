@@ -518,7 +518,8 @@ function author_list($message = '')
                         ).
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                        ).pluggable_ui('user', 'list.row', '', $a)
+                        ).
+                        pluggable_ui('user_ui', 'list.row', '', $a)
                     );
                 }
 
