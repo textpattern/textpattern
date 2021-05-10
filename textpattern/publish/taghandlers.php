@@ -4079,7 +4079,7 @@ function permlink($atts, $thing = null)
             return $url;
         }
 
-        return tag(parse($thing), 'a', array(
+        return tag((string)parse($thing), 'a', array(
             'rel'   => 'bookmark',
             'href'  => $url,
             'title' => $atts['title'],
