@@ -1707,7 +1707,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
     $step or $step = 0;
 
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
-        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : false);
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
 
     if (!$as_string) {
         return $callbacks;
