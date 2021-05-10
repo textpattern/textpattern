@@ -19,8 +19,15 @@ Changes in 4.8.6 (upcoming)
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 * Changed: No Edit options in Write panel without appropriate privileges.
 * Developer: New articles>multi_edit.$method callback on Articles list panel.
-* Developer: Permit step=false to hook into explicit empty step callbacks.
+* Developer: Permit step=false to hook into explicit empty step callbacks and
+  step=null to indicate 'any step'.
 * Developer: Permit $pre to be any text. Opens up arbitrary callback grouping.
+* Developer: User panel callbacks:
+    user>fields and user>from to manipulate the query
+    user>controls to affect the button area
+    user_ui>list.row (pluggable_ui) for adding table data
+    user>steps for plugins to register custom panel-level functionality.
+* Developer: Diagnostics panel callback diag>steps for custom plugin steps.
 
 Changes in 4.8.5 (29 Mar 2021)
 

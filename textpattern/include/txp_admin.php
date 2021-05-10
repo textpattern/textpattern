@@ -320,8 +320,8 @@ function author_list($message = '')
 
     $sql_from = 'txp_users';
 
-    callback_event_ref('user', 'list.fields', 0, $fields);
-    callback_event_ref('user', 'list.from', 0, $sql_from);
+    callback_event_ref('user', 'fields', 'list', $fields);
+    callback_event_ref('user', 'from', 'list', $sql_from);
 
     $fieldlist = array();
 
@@ -518,7 +518,8 @@ function author_list($message = '')
                         ).
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                        ).pluggable_ui('user', 'list.row', '', $a)
+                        ).
+                        pluggable_ui('user_ui', 'list.row', '', $a)
                     );
                 }
 
@@ -564,7 +565,7 @@ function author_edit_buttons()
     // Change password button.
     $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
 
-    callback_event_ref('user', 'form_controls', 0, $buttons);
+    callback_event_ref('user', 'controls', 'panel', $buttons);
 
     return $buttons;
 }
