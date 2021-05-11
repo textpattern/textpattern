@@ -2646,7 +2646,7 @@ function comment_permlink($atts, $thing)
 
     $name = ($anchor ? ' id="c'.$discussid.'"' : '');
 
-    return tag($thing, 'a', ' href="'.$dlink.'"'.$name);
+    return tag((string)$thing, 'a', ' href="'.$dlink.'"'.$name);
 }
 
 // -------------------------------------------------------------
