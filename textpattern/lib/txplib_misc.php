@@ -3344,6 +3344,7 @@ function fetch_form($name, $theme = null)
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
+            $forms[$theme] += array_fill_keys($names, false);
             $nameset = implode(',', quote_list($names));
 
             if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
@@ -3356,9 +3357,8 @@ function fetch_form($name, $theme = null)
         }
 
         foreach ($names as $form) {
-            if (!isset($forms[$theme][$form]) || $forms[$theme][$form] === false) {
+            if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
-                $forms[$theme][$form] = false;
             }
         }
     }
