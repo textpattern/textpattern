@@ -15,6 +15,7 @@ Changes in 4.8.6 (upcoming)
 * Maintenance release with bug fixes.
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
 * Fixed: Undefined $article warning when accessing non-existent articles.
+* Fixed: Error with <txp:output_form /> tag on empty forms (thanks, Adi).
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 * Changed: No Edit options in Write panel without appropriate privileges.
