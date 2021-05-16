@@ -4593,10 +4593,11 @@ function if_different($atts, $thing = null)
 
     extract(lAtts(array(
         'test'    => null,
-        'not'     => ''
+        'not'     => '',
+        'id'      => null
     ), $atts));
 
-    $key = md5($thing);
+    $key = isset($id) ? $id : md5($thing);
     $out = isset($test) ? $test : parse($thing);
 
     if (isset($test)) {
