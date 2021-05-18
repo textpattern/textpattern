@@ -153,7 +153,7 @@ function list_languages($message = '')
         }
 
         $installLink = ($disabled
-            ? span($btnText, array('class' => 'txp-button disabled'))
+            ? ''
             : tag($btnText, 'button', array(
                 'type'      => 'submit',
                 'name'      => 'get_language',
