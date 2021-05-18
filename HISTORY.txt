@@ -19,6 +19,7 @@ Changes in 4.8.6 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 * Changed: No Edit options in Write panel without appropriate privileges.
+* Changed: No disabled update buttons on Languages panel (thanks, phiw13).
 * Developer: New articles>multi_edit.$method callback on Articles list panel.
 * Developer: Permit step=false to hook into explicit empty step callbacks and
   step=null to indicate 'any step'.
