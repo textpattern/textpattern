@@ -159,24 +159,29 @@ function list_languages($message = '')
                 'name'      => 'get_language',
             )));
 
+        $langMeta = graf(
+            ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
+            tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
+            tag($langname, 'code', array('dir' => 'ltr')).
+            ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+        );
+
+        $btnSet = trim((has_privs('lang.edit')
+                ? $installLink
+                : '')
+            .n. $btnRemove);
+
         $grid .= tag(
-            form(
-                graf(
-                    ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
-                    tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
-                    tag($langname, 'code', array('dir' => 'ltr')).
-                    ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
-                ).
-                graf(
-                    (has_privs('lang.edit')
-                        ? $installLink
-                        : '')
-                    .n. $btnRemove
-                ).
-                hInput('lang_code', $langname).
-                eInput('lang').
-                sInput(null)
-            , '', '', 'post'),
+            ($btnSet
+                ? form(
+                    $langMeta.
+                    graf($btnSet).
+                    hInput('lang_code', $langname).
+                    eInput('lang').
+                    sInput(null)
+                , '', '', 'post')
+                : $langMeta
+            ),
             'li',
             array('class' => 'txp-grid-cell txp-grid-cell-2span'.($cellclass ? ' '.$cellclass : ''))
         ).n;
