@@ -3357,24 +3357,12 @@ function search_result_excerpt($atts)
     global $thisarticle, $pretext;
 
     extract(lAtts(array(
-        'break'     => ' &#8230;', // Deprecated in 4.7.0.
         'hilight'   => 'strong',
         'limit'     => 5,
         'separator' => ' &#8230;',
     ), $atts));
 
     assert_article();
-
-    if (isset($atts['break'])) {
-        trigger_error(gTxt('deprecated_attribute_with', array(
-            '{name}' => 'break',
-            '{with}' => 'separator',
-        )), E_USER_NOTICE);
-
-        if (!isset($atts['separator'])) {
-            $separator = $break;
-        }
-    }
 
     $m = $pretext['m'];
     $q = $pretext['q'];
