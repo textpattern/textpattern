@@ -5313,6 +5313,9 @@ function txp_escape($atts, $thing = '')
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
+            case 'db':
+                $thing = safe_escape($thing);
+                break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
