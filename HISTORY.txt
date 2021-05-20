@@ -8,6 +8,8 @@ Changes in 4.8.6 (upcoming)
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 * Changed: No Edit options in Write panel without appropriate privileges.
 * Changed: No disabled update buttons on Languages panel (thanks, phiw13).
+* Changed: Deprecate <txp:search_result_date />. Use <txp:posted /> instead.
+* Changed: Remove deprecated break attribute from search_result_excerpt tag.
 * Developer: New articles>multi_edit.$method callback on Articles list panel.
 * Developer: Permit step=false to hook into explicit empty step callbacks and
   step=null to indicate 'any step'.

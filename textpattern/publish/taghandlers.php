@@ -3411,6 +3411,8 @@ function search_result_url($atts)
 
 function search_result_date($atts)
 {
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
     assert_article();
 
     return posted($atts);
