@@ -4950,8 +4950,8 @@ function in_list($val, $list, $delim = ',')
  *
  * Trims the created values of whitespace.
  *
- * @param  string $list  The string
- * @param  string $delim The boundary
+ * @param  array|string $list  The string
+ * @param  string       $delim The boundary
  * @return array
  * @example
  * print_r(
@@ -4961,6 +4961,10 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
+    if (is_array($list)) {
+        return array_map('trim', $list);
+    }
+
     if (is_array($delim)) {
         list($delim, $range) = $delim + array(null, null);
     }
