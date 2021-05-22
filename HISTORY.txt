@@ -17,6 +17,8 @@ Changes in 4.8.6 (upcoming)
 * Fixed: Undefined $article warning when accessing non-existent articles.
 * Fixed: Error with <txp:output_form /> tag on empty forms (thanks, Adi).
 * Added: Latest text translations. Thank you to all our translators.
+* Added: 'id' attribute to <txp:if_different /> tag.
+* Added: 'db' option to the global 'escape' attribute.
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
 * Changed: No Edit options in Write panel without appropriate privileges.
 * Changed: No disabled update buttons on Languages panel (thanks, phiw13).
