@@ -5154,13 +5154,15 @@ function if_variable($atts, $thing = null)
 
 function if_request($atts, $thing = null)
 {
-    extract($atts = lAtts(array(
+    extract(lAtts(array(
         'name'      => '',
         'type'      => 'request',
         'value'     => null,
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
+
+    $atts = compact('value', 'match', 'separator');
 
     switch ($type = strtoupper($type)) {
         case 'REQUEST':
@@ -5170,13 +5172,12 @@ function if_request($atts, $thing = null)
         case 'SERVER':
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
-            $x = txp_match($atts, $what);
+            $x = $name === '' ? !empty(${'_'.$type}) : txp_match($atts, $what);
             break;
         case 'NAME':
             $x = txp_match($atts, $name);
             break;
         default:
-            $x = false;
             trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'type')), E_USER_NOTICE);
     }
 
