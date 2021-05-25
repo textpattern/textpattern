@@ -4543,7 +4543,7 @@ function page_url($atts, $thing = null)
             } else {
                 $txp_context = array();
             }
-        } elseif (in_array($type, $internals)) {
+        } elseif (!isset($txp_context[$type])) {
             $txp_context[$type] = $default;
         }
     }
