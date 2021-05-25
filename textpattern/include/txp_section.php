@@ -214,6 +214,7 @@ function sec_section_list($message = '', $update = false)
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $step == 'section_select_skin' ? PHP_INT_MAX : $paginator->getLimit();
+    $skin = $step == 'section_select_skin' ? gps('skin') : false;
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -356,7 +357,7 @@ function sec_section_list($message = '', $update = false)
 
                 $contentBlock .= tr(
                     td(
-                        fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
+                        fInput('checkbox', array('name' => 'selected[]', 'checked' => $sec_skin == $skin || $sec_dev_skin == $skin), $sec_name), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
                         href(
@@ -951,7 +952,7 @@ EOJS;
     if ($step == 'section_select_skin') {
         $script .= <<<EOJS
 $(function() {
-    $('#select_all').click();
+//    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();
