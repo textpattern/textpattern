@@ -1707,7 +1707,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
     $step or $step = 0;
 
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
-        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : false);
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
 
     if (!$as_string) {
         return $callbacks;
@@ -3349,6 +3349,7 @@ function fetch_form($name, $theme = null)
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
+            $forms[$theme] += array_fill_keys($names, false);
             $nameset = implode(',', quote_list($names));
 
             if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
@@ -3361,9 +3362,8 @@ function fetch_form($name, $theme = null)
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$theme][$form])) {
+            if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
-                $forms[$theme][$form] = false;
             }
         }
     }
@@ -4973,8 +4973,8 @@ function in_list($val, $list, $delim = ',')
  *
  * Trims the created values of whitespace.
  *
- * @param  string $list  The string
- * @param  string $delim The boundary
+ * @param  array|string $list  The string
+ * @param  string       $delim The boundary
  * @return array
  * @example
  * print_r(
@@ -4984,6 +4984,10 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
+    if (is_array($list)) {
+        return array_map('trim', $list);
+    }
+
     if (is_array($delim)) {
         list($delim, $range) = $delim + array(null, null);
     }
