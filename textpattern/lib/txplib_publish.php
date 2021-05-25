@@ -900,7 +900,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif (($val = gps($match['category'.$i], false)) !== false) {
-                $catquery[] = "$not(Category{$i} IN (".implode(',', quote_list(is_array($val) ? $val : do_list($val)))."))";
+                $catquery[] = "$not(Category{$i} IN (".implode(',', quote_list(do_list($val)))."))";
             }
         } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";
@@ -983,19 +983,24 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $keywords !== true or $keywords = processTags('keywords');
+    $not = $exclude === true || isset($exclude['keywords']) ? '!' : '';
+    $keyparts = array();
 
-    if ($keywords) {
-        $keyparts = array();
-        $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
-        $keys = doSlash(do_list_unique($keywords));
-
-        foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
+    if ($keywords === true) {
+        $keyparts[] = "Keywords != ''";
+    } else {
+        if (!$keywords && isset($match['keywords'])) {
+             $keywords = $match['keywords'] === false && isset($thisarticle['keywords']) ? $thisarticle['keywords'] : gps($match['keywords']);
         }
 
-        !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
+        if ($keywords) {
+            foreach (doSlash(do_list_unique($keywords)) as $key) {
+                $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
+            }
+        }
     }
+
+    $keywords = $keyparts ? " AND $not(".join(' or ', $keyparts).")" : '';
 
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
