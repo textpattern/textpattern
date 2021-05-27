@@ -2092,9 +2092,11 @@ textpattern.Route.add('article', function () {
         }
     ).change();
 
-    var status = 'select[name=Status]', form = $(status).parents('form'), submitButton = form.find('input[type=submit]');
+    var status = 'select[name=Status]', form = $(status).parents('form');
 
     $('#article_form').on('change', status, function () {
+        let submitButton = form.find('input[type=submit]');
+
         if (!form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
@@ -2694,8 +2696,8 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault();
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden');
-        else $(this).find('.txp-search-clear').addClass('ui-helper-hidden');
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('hidden');
+        else $(this).find('.txp-search-clear').addClass('hidden');
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('updateList', '#txp-list-container', function() {
         if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {

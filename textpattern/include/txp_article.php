@@ -834,8 +834,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         n.'</div>'; // End of .txp-layout-4col-3span.
 
     // Sidebar column (only shown if in text editing view).
-    echo n.'<div class="txp-layout-4col-alt">'.
-        n.'<div class="txp-save-zone">';
+    echo n.'<div class="txp-layout-4col-alt">';
 
     // 'Publish/Save' button.
     if (empty($ID)) {
@@ -855,8 +854,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo graf('<span class="txp-save-button">'.fInput('submit', 'save', gTxt('save'), 'publish').'</span>', array('class' => 'txp-save'));
     }
 
-    echo $partials['actions']['html'].
-        n.'</div>';
+    echo $partials['actions']['html'];
 
     echo n.'<div role="region" id="supporting_content">';
 
@@ -1423,15 +1421,38 @@ function article_partial_author($rs)
 
 function article_partial_actions($rs)
 {
-    return graf($rs['ID']
-        ? href('<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_article').'"></span> <span class="screen-large">'.gTxt('create_article').'</span>', 'index.php?event=article', array('class' => 'txp-new'))
-        .article_partial_article_clone($rs)
-        .article_partial_article_view($rs)
-        : null,
-        array(
-            'class' => 'txp-actions',
-            'id'    => 'txp-article-actions',
-        ));
+    global $txp_user;
+
+    // 'Publish/Save' button.
+    $push_button = '';
+
+    if (empty($rs['ID'])) {
+        if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
+            $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
+        } else {
+            $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
+        }
+
+        $push_button = graf($push_button, array('class' => 'txp-save'));
+    } elseif (
+        ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
+        ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+        ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
+        ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
+    ) {
+        $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+    }
+
+    return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
+        $push_button.
+        graf($rs['ID']
+            ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
+            .article_partial_article_clone($rs)
+            .article_partial_article_view($rs)
+            : null,
+            array(
+                'class' => 'txp-actions',
+        )).n.'</div>';
 }
 
 /**
@@ -1913,7 +1934,7 @@ function article_partial_section($rs)
     $out = inputLabel(
         'section',
         section_popup($rs['Section'], 'section').
-        n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+        (has_privs('section.edit') ? n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'section',
         array('', 'instructions_section'),
         array('class' => 'txp-form-field section')
@@ -1937,7 +1958,7 @@ function article_partial_categories($rs)
     $out = inputLabel(
         'category-1',
         category_popup('Category1', $rs['Category1'], 'category-1').
-        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+        (has_privs('category') ? n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'category1',
         array('', 'instructions_category1'),
         array('class' => 'txp-form-field category category-1')

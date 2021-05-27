@@ -79,7 +79,7 @@ assert_system_requirements();
 setup_load_lang(@$cfg['site']['language_code']);
 
 if (!isset($params['force']) && file_exists(txpath.'/config.php')) {
-    msg(gTxt('already_installed'), MSG_ERROR);
+    msg(gTxt('already_installed', array('{configpath}' => txpath)), MSG_ERROR);
 }
 
 setup_connect();

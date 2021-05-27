@@ -330,7 +330,6 @@ function setup_connect()
     }
 
     $dsocket = ini_get("mysqli.default_socket");
-
     $mylink = mysqli_init();
 
     try {
@@ -349,38 +348,34 @@ function setup_connect()
 
     echo msg(gTxt('db_connected'));
 
-    if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
-        msg(gTxt('prefix_bad_characters',
-            array('{dbprefix}' => strong(txpspecialchars($cfg['database']['table_prefix']))), 'raw'),
-            MSG_ERROR, true
-        );
-    }
+    // Check user database GRANT permissions.
+    $result = mysqli_query($mylink, "SELECT PRIVILEGE_TYPE FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE GRANTEE = \"'".mysqli_real_escape_string($mylink, $cfg['database']['user'])."'@'".mysqli_real_escape_string($mylink, $dhost)."'\"");
 
-    try {
-        if (!$mydb = mysqli_select_db($mylink, $cfg['database']['db_name'])) {
-            msg(gTxt('db_doesnt_exist',
-                array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
+    if (mysqli_num_rows($result) > 0) {
+        $grants = array();
+
+        while ($a = mysqli_fetch_assoc($result)) {
+            $grants[] = array_shift($a);
+        }
+
+        mysqli_free_result($result);
+
+        $missing = array_diff(do_list(REQUIRED_SQL_GRANTS), $grants);
+
+        if (!empty($missing)) {
+            msg(gTxt('db_insufficient_grants',
+                array(
+                    '{user}'  => txpspecialchars($cfg['database']['user'].'@'.$dhost),
+                    '{privs}' => txpspecialchars(implode(', ', $missing)),
+                )),
                 MSG_ERROR, true
             );
         }
-    } catch (mysqli_sql_exception $e) {
-        error_log($e->getMessage());
-        msg(gTxt('db_doesnt_exist',
-                array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
-                MSG_ERROR, true
-            );
     }
 
-    try {
-        $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
-    } catch (mysqli_sql_exception $e) {
-        // It's good if the tables don't exist!
-        $tables_exist = false;
-    }
-
-    if ($tables_exist) {
-        msg(gTxt('tables_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
+    if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
+        msg(gTxt('prefix_bad_characters',
+            array('{dbprefix}' => txpspecialchars($cfg['database']['table_prefix']))),
             MSG_ERROR, true
         );
     }
@@ -405,9 +400,39 @@ function setup_connect()
         }
     }
 
+    if (!empty($cfg['database']['create'])) {
+        $result = mysqli_query($mylink, "CREATE DATABASE IF NOT EXISTS `".mysqli_real_escape_string($mylink, $cfg['database']['db_name'])."` CHARACTER SET `".mysqli_real_escape_string($mylink, $cfg['database']['charset'])."`");
+    }
+
+    try {
+        $mydb = mysqli_select_db($mylink, $cfg['database']['db_name']);
+    } catch (mysqli_sql_exception $e) {
+        error_log($e->getMessage());
+        msg(gTxt('db_doesnt_exist',
+            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+            MSG_ERROR, true
+        );
+    }
+
+    try {
+        $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
+    } catch (mysqli_sql_exception $e) {
+        // It's good if the tables don't exist!
+        $tables_exist = false;
+    }
+
+    if ($tables_exist) {
+        msg(gTxt('tables_exist',
+            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+            MSG_ERROR, true
+        );
+    }
+
     mysqli_close($mylink);
     echo msg(gTxt('using_db', array(
-        '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' <bdi dir="ltr">('.$cfg['database']['charset'].')</bdi>');
+        '{dbname}'  => txpspecialchars($cfg['database']['db_name']),
+        '{charset}' => txpspecialchars($cfg['database']['charset']),
+    )));
 
     return true;
 }

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="sk">
+    <group id="admin" title="Panel Uživatelia">
+        <item id="about_privileges" title="Uživatelské oprávnenia"><![CDATA[
+<h2>Uživateľské práva</h2>
+<h3>Vydavateľ</h3>
+<ul>
+    <li>pridává, upravuje a odstraňuje články, odkazy a komentáre</li>
+    <li>môže používať PHP v článkoch, ak je v Nastaveniach voľba ‘Používať PHP v článkoch?’ nastavená na ‘Áno’</li>
+    <li>pridává, upravuje a odstraňuje obrázky a súbory</li>
+    <li>upravuje rubriky a kategórie</li>
+    <li>upravuje stránky, formy a štýly</li>
+    <li>prezerá diagnostické informácie</li>
+    <li>upravuje nastavenia serveru</li>
+    <li>pridává a odstraňuje uživateľov a priraďuje im práva</li>
+    <li>prezerá záznamy o návštěvníkoch webu</li>
+    <li>nahrává a upravuje pluginy</li>
+    <li>môže importovať data</li>
+</ul>
+<h3>Šéfredaktor</h3>
+<ul>
+    <li>pridává, upravuje a odstraňuje články, odkazy a komentáre</li>
+    <li>môže používať PHP v článkoch, ak je v Nastaveniach voľba ‘Používať PHP v článkoch?’ nastavená na ‘Áno’</li>
+    <li>pridává, upravuje a odstraňuje obrázky a súbory</li>
+    <li>upravuje rubriky a kategórie</li>
+    <li>upravuje stránky, formy a štýly</li>
+    <li>prezerá diagnostické informácie</li>
+    <li>upravuje nastavenia serveru</li>
+    <li>môže prezerať údaje užívateľov</li>
+    <li>prezerá záznamy o návštěvníkoch webu</li>
+    <li>nahrává a upravuje pluginy</li>
+    <li>môže importovať data</li>
+</ul>
+<h3>Redaktor</h3>
+<ul>
+    <li>pridává, upravuje a odstraňuje články s týmto obmedzením:
+        <ul>
+            <li>nemôže mazať články ostatních autorov</li>
+        </ul>
+    </li>
+    <li>spravuje komentáre a odkazy</li>
+    <li>spravuje obrázky a soubory</li>
+    <li>upravuje kategórie</li>
+    <li>upravuje stránky a formy</li>
+    <li>môže prezerať údaje užívateľov</li>
+    <li>prezerá záznamy o návštěvníkoch webu</li>
+</ul>
+<h3>Redakčný autor</h3>
+<ul>
+    <li>vytvára, upravuje a odstraňuje vlastné články, může prezerať články ostatných autorov</li>
+    <li>nahrává a upravuje vlastné obrázky a súbory</li>
+</ul>
+<h3>Prispievateľ</h3>
+<ul>
+    <li>pridáva, upravuje a odstraňuje vlastné články s týmto obmedzením:
+        <ul>
+            <li>upravovať článok môže iba do chvíle jeho vydania</li>
+            <li>článok ukladá <em>iba</em> ako  Návrh, Skrytý, alebo Čakajúcí</li>
+        </ul>
+    </li>
+    <li>môže prezerať články ostatných autorov</li>
+</ul>
+<h3>Dizajnér</h3>
+<ul>
+    <li>pridáva, upravuje a odstraňuje vlastné články s týmto obmedzením:
+        <ul>
+            <li>upravovať článok môže iba do chvíle jeho vydania</li>
+            <li>článok ukladá <em>iba</em> ako  Návrh, Skrytý, alebo Čakajúcí</li>
+        </ul>
+    </li>
+    <li>môže si prezerať články ostatných autorov</li>
+    <li>pridává, upravuje a odstraňuje obrázky a sôbory</li>
+    <li>upravuje rubriky</li>
+    <li>upravuje stránky, formy a štýly</li>
+</ul>        ]]></item>
+        <item id="create_author" title="Vytvoriť autora"><![CDATA[]]></item>
+    </group>
+
+    <group id="article" title="Panel obsah">
+        <item id="article_image" title="Obrázok článku"><![CDATA[]]></item>
+        <item id="body" title="Telo článku"><![CDATA[]]></item>
+        <item id="description" title="Popis"><![CDATA[]]></item>
+        <item id="excerpt" title="Anotácia"><![CDATA[]]></item>
+        <item id="expire_date" title="Dátum expirácie"><![CDATA[]]></item>
+        <item id="keywords" title="Kľúčové slová"><![CDATA[]]></item>
+        <item id="override_form" title="Prepísať šablónu"><![CDATA[]]></item>
+        <item id="publish_date" title="Dátum vydania"><![CDATA[]]></item>
+        <item id="status" title="Stav"><![CDATA[]]></item>
+        <item id="title" title="Názov"><![CDATA[]]></item>
+        <item id="url_title" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="Panel kategórií">
+        <item id="article_category" title="Články"><![CDATA[]]></item>
+        <item id="category_description" title="Popis"><![CDATA[]]></item>
+        <item id="file_category" title="Súbory"><![CDATA[]]></item>
+        <item id="image_category" title="Obrázky"><![CDATA[]]></item>
+        <item id="link_category" title="Odkazy"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostický panel">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Test pekných URL adries zlyhal"><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Skryť súkromné informácie"><![CDATA[]]></item>
+        <item id="dev_version_live" title="Vývojová verzia na živom serveri"><![CDATA[]]></item>
+        <item id="dir_not_writable" title="Adresár nie je zapisovateľný"><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Nahrávanie súborov je zakázané"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Chýba súbor .htaccess"><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="Chýbajú súbory"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title="Upravené súbory"><![CDATA[]]></item>
+        <item id="mysql_table_errors" title="Chyby v tabulke MySQL"><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Nebol definovaný dočasný (temp) adresár"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Rubrika s takým istým názvom ako adresár"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Aktualizácia verzie Textpattern"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="Panel Odkazy">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Nahradiť súbor"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Dátum vydania"><![CDATA[]]></item>
+        <item id="upload" title="Nahrať súbor"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="Panel Foriem">
+        <item id="forms_overview" title="Úvod do foriem"><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="Panel Obrázky">
+        <item id="create_thumbnail" title="Vytvoriť náhľad"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Nahradiť obrázok"><![CDATA[]]></item>
+        <item id="upload_image" title="Nahrať obrázok"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Nahrať náhľad"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="Panel Jazyky">
+        <item id="get_textpack" title="Inštalovať jazyk z Textpack-u"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="Panel Odkazy">
+        <item id="link_description" title="Popis"><![CDATA[]]></item>
+        <item id="link_sort" title="Hodnota pre zoradenie"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Dátum vydania"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="Prihlasovací panel">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title=""><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+        <item id="advanced_options" title="Rozšírené nastavenia"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Povoliť PHP kód v článkoch?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Povoliť prepísanie šablóny?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
+        <item id="archive_dateformat" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title=""><![CDATA[]]></item>
+        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_dateformat" title=""><![CDATA[]]></item>
+        <item id="comments_default_invite" title=""><![CDATA[]]></item>
+        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title=""><![CDATA[]]></item>
+        <item id="comments_moderate" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_name" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
+        <item id="custom_form_types" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="dateformat" title=""><![CDATA[]]></item>
+        <item id="default_event" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="doctype" title=""><![CDATA[]]></item>
+        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
+        <item id="enable_short_tags" title=""><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title=""><![CDATA[]]></item>
+        <item id="img_dir" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="is_dst" title=""><![CDATA[]]></item>
+        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="module_pophelp" title=""><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title=""><![CDATA[]]></item>
+        <item id="permlink_mode" title=""><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
+        <item id="production_status" title=""><![CDATA[]]></item>
+        <item id="public_theme_name" title=""><![CDATA[]]></item>
+        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
+        <item id="site_slogan" title=""><![CDATA[]]></item>
+        <item id="sitename" title=""><![CDATA[]]></item>
+        <item id="siteurl" title=""><![CDATA[]]></item>
+        <item id="skin_dir" title=""><![CDATA[]]></item>
+        <item id="smtp_from" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title=""><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="theme_name" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="use_comments" title=""><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
+        <item id="use_plugins" title=""><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_description" title=""><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title=""><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title=""><![CDATA[]]></item>
+        <item id="section_uses_page" title=""><![CDATA[]]></item>
+        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title=""><![CDATA[]]></item>
+        <item id="skin_author_uri" title=""><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
+        <item id="skin_description" title=""><![CDATA[]]></item>
+        <item id="skin_import" title=""><![CDATA[]]></item>
+        <item id="skin_name" title="Meno motívu"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="Názov motívu"><![CDATA[]]></item>
+        <item id="skin_version" title="Verzia motívu"><![CDATA[
+<h2>Verzia motívu</h2>
+<p>Číslo nainštalovanej verze skinu (voliteľné).</p>        ]]></item>
+    </group>
+</help>
+</resources>

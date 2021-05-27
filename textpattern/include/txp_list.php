@@ -181,7 +181,7 @@ function list_list($message = '', $post = '')
             'article_image' => array(
                 'column' => array('textpattern.Image'),
                 'label'  => gTxt('article_image'),
-                'type'   => 'integer',
+                'type'   => 'find_in_set',
             ),
             'posted' => array(
                 'column'  => array('textpattern.Posted'),
@@ -200,7 +200,6 @@ function list_list($message = '', $post = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter(array(
             'id'                 => array('can_list' => true),
-            'article_image'      => array('can_list' => true),
             'title_body_excerpt' => array('always_like' => true),
         ));
 
@@ -607,6 +606,9 @@ function list_multi_edit()
                 $selected = $allowed;
             }
 
+            // @todo Post-delete callback should match event/step here when hooks are standardised.
+            callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+
             if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
@@ -687,6 +689,9 @@ function list_multi_edit()
     }
 
     $selected = $allowed;
+
+    // @todo Post-edit callback should match event/step here when hooks are standardised.
+    callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
 
     if ($selected) {
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));

@@ -710,6 +710,16 @@ define('REQUIRED_PHP_VERSION', '5.6.0');
 define('REQUIRED_OPENSSL_VERSION', '268439567');
 
 /**
+ * Required and recommended SQL permissions.
+ *
+ * @since   4.8.6
+ * @package System
+ */
+
+define('REQUIRED_SQL_GRANTS', 'SELECT, CREATE, ALTER, INSERT, UPDATE, DELETE, DROP, INDEX, LOCK TABLES');
+define('RECOMMENDED_SQL_GRANTS', REQUIRED_SQL_GRANTS.', CREATE TEMPORARY TABLES, CREATE VIEW');
+
+/**
  * File integrity status good.
  *
  * @since   4.6.0

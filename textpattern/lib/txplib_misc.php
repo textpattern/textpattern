@@ -1150,7 +1150,7 @@ function load_plugin($name, $force = false)
             \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
-        $ok = @include_once($filename);
+        $ok = is_readable($filename) ? include_once($filename) : false;
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1245,10 +1245,12 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
+    $version = empty($plugins_ver[$txp_current_plugin]) ? '' : ' ('.$plugins_ver[$txp_current_plugin].')';
+
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s (%s)</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s%s</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
-        $plugins_ver[$txp_current_plugin],
+        $version,
         $error[$errno],
         $errstr,
         $errline
@@ -1474,7 +1476,7 @@ function load_plugins($type = false, $pre = null)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = @include($filename);
+                $eval_ok = is_readable($filename) ? include($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -1511,12 +1513,20 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $plugin_callback[] = array(
-        'function' => $func,
-        'event'    => $event,
-        'step'     => $step,
-        'pre'      => $pre,
-    );
+    $pre or $pre = 0;
+
+    isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
+    isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
+    isset($plugin_callback[$event][$pre][$step]) or $plugin_callback[$event][$pre][$step] =
+        isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array();
+
+    if ($step === '') {
+        foreach($plugin_callback[$event][$pre] as $key => $val) {
+            $plugin_callback[$event][$pre][$key][] = $func;
+        }
+    } else {
+        $plugin_callback[$event][$pre][$step][] = $func;
+    }
 }
 
 /**
@@ -1551,54 +1561,54 @@ function register_callback($func, $event, $step = '', $pre = 0)
 
 function callback_event($event, $step = '', $pre = 0)
 {
-    global $plugin_callback, $production_status, $trace;
+    global $production_status, $trace;
 
-    if (!is_array($plugin_callback)) {
+    list($pre, $renew) = (array)$pre + array(0, null);
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return '';
     }
 
-    list($pre, $renew) = (array)$pre + array(0, null);
     $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                if ($production_status !== 'live') {
-                    $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString()."'".
-                        (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
-                }
-
-                $return_value = call_user_func_array($c['function'], array_merge(array(
-                    $event,
-                    $step
-                ), $argv));
-
-                if (isset($renew)) {
-                    $argv[$renew] = $return_value;
-                }
-
-                if (isset($out) && !isset($renew)) {
-                    if (is_array($return_value) && is_array($out)) {
-                        $out = array_merge($out, $return_value);
-                    } elseif (is_bool($return_value) && is_bool($out)) {
-                        $out = $return_value && $out;
-                    } else {
-                        $out .= $return_value;
-                    }
-                } else {
-                    $out = $return_value;
-                }
-
-                if ($production_status !== 'live') {
-                    $trace->stop();
-                }
-            } elseif ($production_status === 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            if ($production_status !== 'live') {
+                $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c)->toString()."'".
+                    (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
             }
+
+            $return_value = call_user_func_array($c, array_merge(array(
+                $event,
+                $step
+            ), $argv));
+
+            if (isset($renew)) {
+                $argv[$renew] = $return_value;
+            }
+
+            if (isset($out) && !isset($renew)) {
+                if (is_array($return_value) && is_array($out)) {
+                    $out = array_merge($out, $return_value);
+                } elseif (is_bool($return_value) && is_bool($out)) {
+                    $out = $return_value && $out;
+                } else {
+                    $out .= $return_value;
+                }
+            } else {
+                $out = $return_value;
+            }
+
+            if ($production_status !== 'live') {
+                $trace->stop();
+            }
+        } elseif ($production_status === 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1626,25 +1636,25 @@ function callback_event($event, $step = '', $pre = 0)
 
 function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$options = null)
 {
-    global $plugin_callback, $production_status;
+    global $production_status;
 
-    if (!is_array($plugin_callback)) {
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return array();
     }
 
     $return_value = array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                // Cannot call event handler via call_user_func() as this would
-                // dereference all arguments. Side effect: callback handler
-                // *must* be ordinary function, *must not* be class method in
-                // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
-                $return_value[] = $c['function']($event, $step, $data, $options);
-            } elseif ($production_status == 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
-            }
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            // Cannot call event handler via call_user_func() as this would
+            // dereference all arguments. Side effect: callback handler
+            // *must* be ordinary function, *must not* be class method in
+            // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
+            $return_value[] = $c($event, $step, $data, $options);
+        } elseif ($production_status == 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1693,23 +1703,23 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
+    $pre or $pre = 0;
+    $step or $step = 0;
+
+    $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
+
+    if (!$as_string) {
+        return $callbacks;
+    }
+
     $out = array();
 
-    foreach ((array) $plugin_callback as $c) {
-        if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre) {
-            if ($as_string) {
-                $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString();
-            } else {
-                $out[] = $c['function'];
-            }
-        }
+    foreach ($callbacks as $c) {
+        $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c)->toString();
     }
 
-    if ($out) {
-        return $out;
-    }
-
-    return false;
+    return $out;
 }
 
 /**
@@ -2302,6 +2312,11 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
 
     if ($sender) {
         extract($sender);
+        $ret = callback_event('mail', 'format.body', 0, $body);
+
+        if ($ret) {
+            $body = $ret;
+        }
 
         try {
             $message = Txp::get('\Textpattern\Mail\Compose')->getDefaultAdapter();
@@ -2377,12 +2392,14 @@ function stripPHP($in)
  *
  * On a successful run, will trigger a 'form.create > done' callback event.
  *
- * @param   string $name The name
- * @param   string $type The type
- * @param   string $Form The template
- * @return  bool FALSE on error
- * @since   4.6.0
- * @package Template
+ * @param      string $name The name
+ * @param      string $type The type
+ * @param      string $Form The template
+ * @return     bool FALSE on error
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\Skin
+ * @package    Template
  */
 
 function create_form($name, $type, $Form)
@@ -2412,10 +2429,12 @@ function create_form($name, $type, $Form)
 /**
  * Checks if a form template exists.
  *
- * @param   string $name The form
- * @return  bool TRUE if the form exists
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form
+ * @return     bool TRUE if the form exists
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function form_exists($name)
@@ -2426,10 +2445,12 @@ function form_exists($name)
 /**
  * Validates a string as a form template name.
  *
- * @param   string $name The form name
- * @return  bool TRUE if the string validates
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form name
+ * @return     bool TRUE if the string validates
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function is_valid_form($name)
@@ -3328,6 +3349,7 @@ function fetch_form($name, $theme = null)
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
+            $forms[$theme] += array_fill_keys($names, false);
             $nameset = implode(',', quote_list($names));
 
             if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
@@ -3340,9 +3362,8 @@ function fetch_form($name, $theme = null)
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$theme][$form])) {
+            if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
-                $forms[$theme][$form] = false;
             }
         }
     }
@@ -4952,8 +4973,8 @@ function in_list($val, $list, $delim = ',')
  *
  * Trims the created values of whitespace.
  *
- * @param  string $list  The string
- * @param  string $delim The boundary
+ * @param  array|string $list  The string
+ * @param  string       $delim The boundary
  * @return array
  * @example
  * print_r(
@@ -4963,6 +4984,10 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
+    if (is_array($list)) {
+        return array_map('trim', $list);
+    }
+
     if (is_array($delim)) {
         list($delim, $range) = $delim + array(null, null);
     }
@@ -5280,10 +5305,10 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
     $out = array();
 
     foreach ($context as $q => $v) {
-        if (isset($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (isset($v)) {
+        if (isset($v)) {
             $out[$q] = $v;
+        } elseif (isset($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
         } else {
             $out[$q] = gps($q, null);
         }

@@ -924,7 +924,7 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thisarticle, $thispage, $trace, $txp_item, $txp_sections;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
-        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => 'GROUP_CONCAT(? SEPARATOR ",")');
+        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => "GROUP_CONCAT(? SEPARATOR ',')");
 
     extract($pretext);
 
@@ -957,20 +957,20 @@ function doArticles($atts, $iscustom, $thing = null)
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
-        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week';
+        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week|quarter';
 
-        foreach (do_list_unique(strtolower($fields)) as $field) {
-            if (preg_match("/^(?:($agg_reg)\s*\(\s*)?($reg_fields)(?:\s*\))?$/", $field, $matches)) {
-                $field = $matches[2];
+        foreach (do_list_unique($fields) as $field) {
+            if (preg_match("/^(?:($agg_reg)(?:\[(.*)\])?\s*\(\s*)?($reg_fields)(?:\s*\))?$/i", $field, $matches)) {
+                $format = doSlash($matches[2]);
+                $field = strtolower($matches[3]);
                 $column = $column_map[$field];
                 $alias = $matches[1] ? ' AS '.$column : '';
-                $is_agg = isset($aggregate[$matches[1]]);
 
-                if ($is_agg) {
-                    $what[$field] = str_replace('?', $column, $aggregate[$matches[1]]);
+                if (isset($aggregate[$matches[1]])) {
+                    $what[$field] = strtr($aggregate[$matches[1]], array('?' => $column, ',' => $format ? $format : ','));
                 } elseif ($matches[1]) {
                     isset($what[$field]) or $what[$field] = "MIN($column)";
-                    $group = strtoupper($matches[1]).'('.$column.')';
+                    $group = $format ? "DATE_FORMAT($column, '$format')" : strtoupper($matches[1]).'('.$column.')';
                     !is_array($groupby) or $groupby[] = $group;
                     $sortby[] = $group;
                 } else {
@@ -1103,11 +1103,11 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
     );
 
-    $articles = parseList($rs, $thisarticle, 'populateArticleData', array('form' => $fname, 'thing' => $thing));
+    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
 //    unset($GLOBALS['thisarticle']);
 
     return !empty($articles) ?
-        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('allowoverride', 'break', 'class')) :
+        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'class')) :
         ($thing ? parse($thing, false) : '');
 }
 
@@ -1146,10 +1146,11 @@ function doArticle($atts, $thing = null)
         }
     }
 
+    $article = false;
+
     if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
-        $article = false;
 
         if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
