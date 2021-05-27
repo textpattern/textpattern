@@ -1150,7 +1150,7 @@ function load_plugin($name, $force = false)
             \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
-        $ok = @include_once($filename);
+        $ok = is_readable($filename) ? include_once($filename) : false;
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1245,10 +1245,12 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
+    $version = empty($plugins_ver[$txp_current_plugin]) ? '' : ' ('.$plugins_ver[$txp_current_plugin].')';
+
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s (%s)</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s%s</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
-        $plugins_ver[$txp_current_plugin],
+        $version,
         $error[$errno],
         $errstr,
         $errline
@@ -1474,7 +1476,7 @@ function load_plugins($type = false, $pre = null)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = @include($filename);
+                $eval_ok = is_readable($filename) ? include($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -1511,13 +1513,14 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $pre = (int)$pre;
+    $pre or $pre = 0;
+
     isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
     isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
     isset($plugin_callback[$event][$pre][$step]) or $plugin_callback[$event][$pre][$step] =
         isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array();
 
-    if ($step == '') {
+    if ($step === '') {
         foreach($plugin_callback[$event][$pre] as $key => $val) {
             $plugin_callback[$event][$pre][$key][] = $func;
         }
@@ -1700,9 +1703,11 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
-    $pre = (int)$pre;
+    $pre or $pre = 0;
+    $step or $step = 0;
+
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
-        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : false);
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
 
     if (!$as_string) {
         return $callbacks;
@@ -3344,6 +3349,7 @@ function fetch_form($name, $theme = null)
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
+            $forms[$theme] += array_fill_keys($names, false);
             $nameset = implode(',', quote_list($names));
 
             if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
@@ -3356,9 +3362,8 @@ function fetch_form($name, $theme = null)
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$theme][$form])) {
+            if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
-                $forms[$theme][$form] = false;
             }
         }
     }
@@ -5042,8 +5047,8 @@ function in_list($val, $list, $delim = ',')
  *
  * Trims the created values of whitespace.
  *
- * @param  string $list  The string
- * @param  string $delim The boundary
+ * @param  array|string $list  The string
+ * @param  string       $delim The boundary
  * @return array
  * @example
  * print_r(
@@ -5053,6 +5058,10 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
+    if (is_array($list)) {
+        return array_map('trim', $list);
+    }
+
     if (is_array($delim)) {
         list($delim, $range) = $delim + array(null, null);
     }
@@ -5370,10 +5379,10 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
     $out = array();
 
     foreach ($context as $q => $v) {
-        if (isset($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (isset($v)) {
+        if (isset($v)) {
             $out[$q] = $v;
+        } elseif (isset($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
         } else {
             $out[$q] = gps($q, null);
         }

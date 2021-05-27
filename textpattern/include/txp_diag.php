@@ -64,18 +64,30 @@ if ($event == 'diag') {
 
     $step = ($step) ? $step : gps('step');
 
+    $diag_levels = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
+
     $available_steps = array(
         'low'     => true,
         'high'    => true,
         'phpinfo' => true,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
+    $plugin_steps = array();
+    callback_event_ref('diag', 'steps', 0, $plugin_steps);
+
+    // Available steps overwrite custom ones to prevent plugins trampling
+    // core routines.
+    if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
         if ($step === 'phpinfo') {
             phpinfo();
             exit;
-        } else {
+        } elseif (array_key_exists($step, $available_steps)) {
             doDiagnostics();
+        } else {
+            callback_event($event, $step, 0);
         }
     } else {
         doDiagnostics();
@@ -179,7 +191,7 @@ function diag_msg_wrap($msg, $type = 'e')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -554,11 +566,6 @@ function doDiagnostics()
     $fmt_date = '%Y-%m-%d %H:%M:%S';
     $updateTime = ($dbupdatetime) ? gmstrftime($fmt_date, $dbupdatetime).'/' : '';
 
-    $dets = array(
-        'low'  => gTxt('low'),
-        'high' => gTxt('high'),
-    );
-
     $out = array(
         form(
             eInput('diag').
@@ -570,13 +577,18 @@ function doDiagnostics()
                 'rel'    => 'external noopener',
                 'target' => '_blank',
             )).
-            inputLabel(
-                'diag_detail_level',
-                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
-                'detail',
-                '',
-                array('class' => 'txp-form-field diagnostic-details-level'),
-                ''
+            pluggable_ui(
+                'diag_ui',
+                'level',
+                inputLabel(
+                    'diag_detail_level',
+                    selectInput('step', $diag_levels, $step, 0, 1, 'diag_detail_level'),
+                    'detail',
+                    '',
+                    array('class' => 'txp-form-field diagnostic-details-level'),
+                    ''
+                ),
+                $diag_levels
             ).
             inputLabel(
                 'diag_clear_private',

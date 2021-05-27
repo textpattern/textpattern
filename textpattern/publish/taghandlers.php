@@ -1762,11 +1762,11 @@ function link_to($atts, $thing = null, $target = 'next')
         }
 
         $thisarticle = $oldarticle;
-
-        return $url;
     }
 
-    return ($showalways) ? parse($thing) : '';
+    unset($thisarticle[$target]);
+
+    return isset($url) ? $url : ($showalways ? parse($thing) : '');
 }
 
 // -------------------------------------------------------------
@@ -2645,7 +2645,7 @@ function comment_permlink($atts, $thing)
 
     $name = ($anchor ? ' id="c'.$discussid.'"' : '');
 
-    return tag($thing, 'a', ' href="'.$dlink.'"'.$name);
+    return tag((string)$thing, 'a', ' href="'.$dlink.'"'.$name);
 }
 
 // -------------------------------------------------------------
@@ -3356,24 +3356,12 @@ function search_result_excerpt($atts)
     global $thisarticle, $pretext;
 
     extract(lAtts(array(
-        'break'     => ' &#8230;', // Deprecated in 4.7.0.
         'hilight'   => 'strong',
         'limit'     => 5,
         'separator' => ' &#8230;',
     ), $atts));
 
     assert_article();
-
-    if (isset($atts['break'])) {
-        trigger_error(gTxt('deprecated_attribute_with', array(
-            '{name}' => 'break',
-            '{with}' => 'separator',
-        )), E_USER_NOTICE);
-
-        if (!isset($atts['separator'])) {
-            $separator = $break;
-        }
-    }
 
     $m = $pretext['m'];
     $q = $pretext['q'];
@@ -3422,6 +3410,8 @@ function search_result_url($atts)
 
 function search_result_date($atts)
 {
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
     assert_article();
 
     return posted($atts);
@@ -4078,7 +4068,7 @@ function permlink($atts, $thing = null)
             return $url;
         }
 
-        return tag(parse($thing), 'a', array(
+        return tag((string)parse($thing), 'a', array(
             'rel'   => 'bookmark',
             'href'  => $url,
             'title' => $atts['title'],
@@ -4562,7 +4552,7 @@ function page_url($atts, $thing = null)
             } else {
                 $txp_context = array();
             }
-        } elseif (in_array($type, $internals)) {
+        } elseif (!isset($txp_context[$type])) {
             $txp_context[$type] = $default;
         }
     }
@@ -4602,10 +4592,11 @@ function if_different($atts, $thing = null)
 
     extract(lAtts(array(
         'test'    => null,
-        'not'     => ''
+        'not'     => '',
+        'id'      => null
     ), $atts));
 
-    $key = md5($thing);
+    $key = isset($id) ? $id : md5($thing);
     $out = isset($test) ? $test : parse($thing);
 
     if (isset($test)) {
@@ -5075,9 +5066,9 @@ function variable($atts, $thing = null)
         'reset'     => null,
         'separator' => null,
         'output'    => null,
-        'break'     => $set,
-        'trim'      => $set,
-        'replace'   => $set
+        'break'     => null,
+        'trim'      => null,
+        'replace'   => null
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5121,7 +5112,7 @@ function variable($atts, $thing = null)
     }
 
     if ($set !== null) {
-        if ($break !== false || $trim !== false || $replace !== false) {
+        if ($break !== null || $trim !== null || $replace !== null) {
             $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
         }
 
@@ -5172,13 +5163,15 @@ function if_variable($atts, $thing = null)
 
 function if_request($atts, $thing = null)
 {
-    extract($atts = lAtts(array(
+    extract(lAtts(array(
         'name'      => '',
         'type'      => 'request',
         'value'     => null,
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
+
+    $atts = compact('value', 'match', 'separator');
 
     switch ($type = strtoupper($type)) {
         case 'REQUEST':
@@ -5188,13 +5181,12 @@ function if_request($atts, $thing = null)
         case 'SERVER':
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
-            $x = txp_match($atts, $what);
+            $x = $name === '' ? !empty(${'_'.$type}) : txp_match($atts, $what);
             break;
         case 'NAME':
             $x = txp_match($atts, $name);
             break;
         default:
-            $x = false;
             trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'type')), E_USER_NOTICE);
     }
 
@@ -5330,6 +5322,9 @@ function txp_escape($atts, $thing = '')
         switch ($attr) {
             case 'html':
                 $thing = txpspecialchars($thing);
+                break;
+            case 'db':
+                $thing = safe_escape($thing);
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
