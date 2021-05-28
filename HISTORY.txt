@@ -4,24 +4,35 @@ Changes in 4.8.6 (upcoming)
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
 * Fixed: Undefined $article warning when accessing non-existent articles.
 * Fixed: Error with <txp:output_form /> tag on empty forms (thanks, Adi).
+* Fixed: Low-privilege users can save immediately after duplicating articles.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: 'id' attribute to <txp:if_different /> tag.
 * Added: 'db' option to the global 'escape' attribute.
+* Added: Option to create database during setup.
+* Added: Permission (grants) verification during setup.
+* Changed: 'Assign sections' from Themes panel only selects its own sections.
 * Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
+* Changed: <txp:link_to_next/prev> can return URL or container.
+* Changed: <txp:page_url> and <txp:if_request> tags are more flexible.
+* Changed: Boost power of <txp:article(_custom)> grouping by date.
+* Changed: Articles can be filtered by keywords more easily.
 * Changed: No Edit options in Write panel without appropriate privileges.
 * Changed: No disabled update buttons on Languages panel (thanks, phiw13).
 * Changed: Deprecate <txp:search_result_date />. Use <txp:posted /> instead.
 * Changed: Remove deprecated break attribute from search_result_excerpt tag.
-* Developer: New articles>multi_edit.$method callback on Articles list panel.
+* Changed: Back-end search improved when handling numbers. Comparators can
+  also be used for numeric searches.
 * Developer: Permit step=false to hook into explicit empty step callbacks and
   step=null to indicate 'any step'.
 * Developer: Permit $pre to be any text. Opens up arbitrary callback grouping.
+* Developer: New articles>multi_edit.$method callback on Articles list panel.
 * Developer: User panel callbacks:
     user>fields and user>from to manipulate the query
     user>controls to affect the button area
     user_ui>list.row (pluggable_ui) for adding table data
     user>steps for plugins to register custom panel-level functionality.
-* Developer: Diagnostics panel callback diag>steps for custom plugin steps.
+* Developer: Diagnostics panel callbacks diag>steps and diag_ui>level for
+  custom plugin steps.
 
 Changes in 4.8.5 (29 Mar 2021)
 
