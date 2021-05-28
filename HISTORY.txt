@@ -1,4 +1,4 @@
-Changes in 4.8.6 (upcoming)
+Changes in 4.8.6 (28 May 2021)
 
 * Maintenance release with bug fixes.
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
