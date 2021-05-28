@@ -23,7 +23,7 @@
             <strong>
                 <txp:text item="comments" />
             </strong>
-            <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
+            <a href="<txp:permlink />#comments-head" title="<txp:text item="go_comments" />" itemprop="discussionUrl">
                 <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
                     <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
                     <span itemprop="userInteractionCount"><txp:comments_count /></span>
@@ -35,7 +35,7 @@
                 <strong>
                     <txp:text item="comments" />
                 </strong>
-                <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
+                <a href="<txp:permlink />#comments-head" title="<txp:text item="go_comments" />" itemprop="discussionUrl">
                     <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
                         <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
                         <span itemprop="userInteractionCount">0</span>
