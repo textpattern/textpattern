@@ -5284,10 +5284,8 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
     foreach ($context as $q => $v) {
         if (isset($pretext[$q]) && in_array($q, $internals)) {
             $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (isset($v)) {
-            $out[$q] = $v;
         } else {
-            $out[$q] = gps($q, null);
+            $out[$q] = gps($q, $v);
         }
     }
 
