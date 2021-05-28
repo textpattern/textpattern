@@ -561,7 +561,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.6-dev",
+        "val": "4.8.6",
         "type": "2",
         "event": "publish",
         "html": "text_input",
