@@ -837,23 +837,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div class="txp-layout-4col-alt">';
 
     // 'Publish/Save' button.
-    if (empty($ID)) {
-        if (has_privs('article.publish') && has_status_group(get_pref('default_publish_status', STATUS_LIVE), 'published')) {
-            $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
-        } else {
-            $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
-        }
-
-        echo graf('<span class="txp-save-button">'.$push_button.'</span>', array('class' => 'txp-save'));
-    } elseif (
-        (($isPublished = has_status_group($Status, 'published')) && has_privs('article.edit.published')) ||
-        ($isPublished && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
-        (($isUnpublished = has_status_group($Status, 'unpublished')) && has_privs('article.edit')) ||
-        ($isUnpublished && $AuthorID === $txp_user && has_privs('article.edit.own'))
-    ) {
-        echo graf('<span class="txp-save-button">'.fInput('submit', 'save', gTxt('save'), 'publish').'</span>', array('class' => 'txp-save'));
-    }
-
     echo $partials['actions']['html'];
 
     echo n.'<div role="region" id="supporting_content">';
@@ -1427,7 +1410,7 @@ function article_partial_actions($rs)
     $push_button = '';
 
     if (empty($rs['ID'])) {
-        if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
+        if (has_privs('article.publish') && has_status_group(get_pref('default_publish_status', STATUS_LIVE), 'published')) {
             $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
         } else {
             $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
@@ -1435,10 +1418,10 @@ function article_partial_actions($rs)
 
         $push_button = graf($push_button, array('class' => 'txp-save'));
     } elseif (
-        ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-        ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-        ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-        ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
+        (($isPublished = has_status_group($rs['Status'], 'published')) && has_privs('article.edit.published')) ||
+        ($isPublished && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+        (($isUnpublished = has_status_group($rs['Status'], 'unpublished')) && has_privs('article.edit')) ||
+        ($isUnpublished && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
     ) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     }
