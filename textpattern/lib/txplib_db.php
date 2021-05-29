@@ -1302,10 +1302,11 @@ function getThings($query, $debug = false)
 function getCount($table, $where, $debug = false)
 {
     if (is_array($table)) {
+        //$thing is expected to be sanitized by the caller
         list($table, $thing) = $table + array(null, '*');
+    } else {
+        $thing = '*';
     }
-
-    $thing = isset($thing) ? doSlash($thing) : '*';
 
     return getThing("SELECT COUNT($thing) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
 }

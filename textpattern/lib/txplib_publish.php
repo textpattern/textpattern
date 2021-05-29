@@ -990,7 +990,9 @@ function filterAtts($atts = null, $iscustom = null)
         $keyparts[] = "Keywords != ''";
     } else {
         if (!$keywords && isset($match['keywords'])) {
-             $keywords = $match['keywords'] === false && isset($thisarticle['keywords']) ? $thisarticle['keywords'] : gps($match['keywords']);
+            $keywords = $match['keywords'] === false && isset($thisarticle['keywords']) ?
+                $thisarticle['keywords'] :
+                gps($match['keywords'] ? $match['keywords'] : 'keywords');
         }
 
         if ($keywords) {
