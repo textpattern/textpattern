@@ -1,4 +1,4 @@
-Textpattern CMS 4.8.5
+Textpattern CMS 4.8.6
 
 == Install ==
 
