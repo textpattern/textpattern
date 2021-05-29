@@ -318,7 +318,7 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = 'txp_users';
+    $sql_from = safe_pfx('txp_users');
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
@@ -402,7 +402,7 @@ function author_list($message = '')
         $search_render_options = array('placeholder' => 'search_users');
 
         $count = safe_query("SELECT SQL_CALC_FOUND_ROWS ".implode(', ', $fieldlist).
-            " FROM ".safe_pfx($sql_from).
+            " FROM ".$sql_from.
             " WHERE $criteria"
         );
 
@@ -438,10 +438,10 @@ function author_list($message = '')
                     );
             }
         } else {
-            $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count($sql_from, "1 = 1") > 1));
+            $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
             $rs = safe_query("SELECT ".implode(', ', $fieldlist).
-                " FROM ".safe_pfx($sql_from).
+                " FROM ".$sql_from.
                 " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
             );
 
