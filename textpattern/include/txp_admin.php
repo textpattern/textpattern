@@ -318,7 +318,7 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = 'txp_users';
+    $sql_from = safe_pfx('txp_users');
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
