@@ -10,6 +10,13 @@ Changes in 4.9.0 (upcoming)
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
 
+Changes in 4.8.7 (30 May 2021)
+
+* High priority maintenance release to address reported 4.8.6 issues.
+* Fixed: Users panel throws error due to missing DB prefix (thanks, prbt2016).
+* Removed: SQL Grants check during setup, which broke some installations.
+* Changed: Context check priority in tags.
+
 Changes in 4.8.6 (28 May 2021)
 
 * Maintenance release with bug fixes.
