@@ -1,13 +1,16 @@
 Changes in 4.8.7 (upcoming)
 
-* High priority maintenance release to address reported 4.8.6 issues.
+* High priority maintenance release to address functionality and setup issues
+  discovered after 4.8.6 release.
 * Fixed: Users panel throws error due to missing DB prefix (thanks, prbt2016).
-* Removed: SQL Grants check during setup, which broke some installations.
+* Removed: database user GRANT check during initial setup, which broke some
+  installations.
 * Changed: Context check priority in tags.
 
 Changes in 4.8.6 (28 May 2021)
 
-* Maintenance release with bug fixes. **BROKEN: DO NOT USE IN PRODUCTION**
+* DO NOT USE IN PRODUCTION - issues discovered after release, use 4.8.7 instead.
+* Maintenance release with bug fixes.
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
 * Fixed: Undefined $article warning when accessing non-existent articles.
 * Fixed: Error with <txp:output_form /> tag on empty forms (thanks, Adi).
