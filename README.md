@@ -33,8 +33,8 @@ If you want to use the multi-site functionality in Textpattern, get the .tar.gz 
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/111/textpattern-4.8.7.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/110/textpattern-4.8.7.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.tar.gz) |
+| .zip   | [Download](https://textpattern.com/file_download/113/textpattern-4.8.7.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/112/textpattern-4.8.7.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.tar.gz) |
 
 
 ## Install Textpattern
