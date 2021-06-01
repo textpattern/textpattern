@@ -15,7 +15,7 @@ Changes in 4.8.7 (30 May 2021)
 * High priority maintenance release to address functionality and setup issues
   discovered after 4.8.6 release.
 * Fixed: Users panel throws error due to missing DB prefix (thanks, prbt2016).
-* Removed: database user GRANT check during initial setup, which broke some
+* Removed: Database user GRANT check during initial setup, which broke some
   installations.
 * Changed: Context check priority in tags.
 
