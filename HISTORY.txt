@@ -12,7 +12,9 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.8.8 (upcoming)
 
-* 
+* Fixed: More robust numeric searches.
+* Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
+* Internal: Prefer is_readable() and is_file() to file_exists().
 
 Changes in 4.8.7 (30 May 2021)
 
