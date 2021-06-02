@@ -305,7 +305,7 @@ function doDiagnostics()
         $rs = safe_column("name", 'txp_section', "1 = 1");
 
         foreach ($rs as $name) {
-            if ($name && @file_exists($path_to_site.'/'.$name)) {
+            if ($name && file_exists($path_to_site.DS.$name)) {
                 $fail['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site.DS.$name));
             }
         }
