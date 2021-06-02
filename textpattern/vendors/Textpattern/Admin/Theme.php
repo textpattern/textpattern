@@ -365,7 +365,7 @@ abstract class Theme
         }
 
         $custom = empty($this->cssPath) ? $custom_css : $this->cssPath.DS.$custom_css;
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+        if (is_readable(txpath.DS.THEME.$this->name.DS.$custom)) {
             $out .= '<link rel="stylesheet" href="'.$this->url.$custom.'">'.n;
         }
 
@@ -377,7 +377,7 @@ abstract class Theme
         }
 
         $custom = empty($this->jsPath) ? $custom_js : $this->jsPath.DS.$custom_js;
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+        if (is_readable(txpath.DS.THEME.$this->name.DS.$custom)) {
             $out .= '<script src="'.$this->url.$custom.'"></script>'.n;
         }
 
