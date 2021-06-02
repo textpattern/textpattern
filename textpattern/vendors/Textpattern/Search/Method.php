@@ -245,6 +245,7 @@ class Method
     public function getCriteria($search_term, $verbatim)
     {
         $clause = array();
+        $numRE = "/([><!=]*)(([-+]?\d*\.?\d+)(?:[eE]([-+]?\d+))?)/";
 
         foreach ($this->columns as $column) {
             if (isset($this->aliases[$column])) {
@@ -266,9 +267,9 @@ class Method
             }
 
             if ($this->options['can_list']) {
-                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
+                preg_match($numRE, $search_term, $matches);
 
-                if ($matches[1] && strpos($search_term, ',') === false) {
+                if (!empty($matches[1]) && strpos($search_term, ',') === false) {
                     $operator = $matches[1];
                     $value = $matches[2];
                 } else {
@@ -286,14 +287,19 @@ class Method
                 $clause[] = "find_in_set('".$search_term."', ".$column." )";
                 continue;
             } elseif ($this->type === 'numeric') {
-                preg_match("/([><!=]*)([\d\.\,\+e]+)/", $search_term, $matches);
-                $comparator = $matches[1] ? $matches[1] : '=';
+                preg_match($numRE, $search_term, $matches);
+
+                $comparator = !empty($matches[1]) ? $matches[1] : '=';
+
                 // Use coalesce() to guard against nulls when using LEFT JOIN.
-                if (is_numeric($matches[2])) {
-                    $clause[] = "coalesce(".$column.", 0) ".$comparator." '".$matches[2]."'";
-                } else {
-                    $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
+                if (isset($matches[2])) {
+                    if (is_numeric($matches[2])) {
+                        $clause[] = "coalesce(".$column.", 0) ".$comparator." '".$matches[2]."'";
+                    } else {
+                        $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
+                    }
                 }
+
                 continue;
             } else {
                 $operator = ' like ';

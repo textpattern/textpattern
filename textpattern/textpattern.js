@@ -1019,7 +1019,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span class="spinner-sticker" /><span class="spinner ui-icon ui-icon-refresh" />')
+            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
 
         $inputs.prop('disabled', false);// Safari workaround.
@@ -1584,13 +1584,7 @@ $(document).keydown(function (e) {
         if (obj.length)
         {
             e.preventDefault();
-            var target = obj.attr('form');
-
-            if(typeof target !== 'undefined') {
-                $('#' + target).submit();
-            } else {
-                obj.eq(0).closest('form').submit();
-            }
+            obj.eq(0).closest('form').submit();
         }
     }
 });
@@ -2696,8 +2690,8 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault();
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('hidden');
-        else $(this).find('.txp-search-clear').addClass('hidden');
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden');
+        else $(this).find('.txp-search-clear').addClass('ui-helper-hidden');
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
     }).on('updateList', '#txp-list-container', function() {
         if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {

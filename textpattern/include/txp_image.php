@@ -814,8 +814,8 @@ function image_insert()
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
 
-        if (file_exists($file['tmp_name'])) {
-            unlink($file['tmp_name']);
+        if (is_file($file['tmp_name'])) {
+            unlink(realpath($file['tmp_name']));
         }
 
         if (is_array($img_result)) {
@@ -1022,11 +1022,11 @@ function image_delete($ids = array())
                 $ul = false;
 
                 if (is_file(IMPATH.$id.$ext)) {
-                    $ul = unlink(IMPATH.$id.$ext);
+                    $ul = unlink(realpath(IMPATH.$id.$ext));
                 }
 
                 if (is_file(IMPATH.$id.'t'.$ext)) {
-                    $ult = unlink(IMPATH.$id.'t'.$ext);
+                    $ult = unlink(realpath(IMPATH.$id.'t'.$ext));
                 }
 
                 if (!$rsd or !$ul) {
