@@ -318,7 +318,7 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = 'txp_users';
+    $sql_from = safe_pfx('txp_users');
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
@@ -401,14 +401,8 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $count = safe_query("SELECT SQL_CALC_FOUND_ROWS ".implode(', ', $fieldlist).
-            " FROM ".$sql_from.
-            " WHERE $criteria"
-        );
-
-        if ($count) {
-            $total = getThing('SELECT FOUND_ROWS()');
-        }
+        $count = getRow("SELECT COUNT(*) as total FROM ".$sql_from." WHERE $criteria");
+        $total = !empty($count['total']) ? $count['total'] : 0;
 
         $searchBlock =
             n.tag(

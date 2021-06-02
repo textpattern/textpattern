@@ -367,7 +367,7 @@ abstract class Theme
 
         $custom = empty($this->cssPath) ? $custom_css : $this->cssPath.DS.$custom_css;
 
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+        if (is_readable(txpath.DS.THEME.$this->name.DS.$custom)) {
             $out .= \Txp::get('\Textpattern\UI\Style')->setSource($this->url.$custom);
         }
 
@@ -381,9 +381,8 @@ abstract class Theme
 
         $custom = empty($this->jsPath) ? $custom_js : $this->jsPath.DS.$custom_js;
 
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+        if (is_readable(txpath.DS.THEME.$this->name.DS.$custom)) {
             $out .= \Txp::get('\Textpattern\UI\Script')->setSource($this->url.$custom).n;
-
         }
 
         return $out;

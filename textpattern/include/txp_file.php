@@ -368,7 +368,7 @@ function file_list($message = '', $ids = array())
                     'step'        => 'build',
                 );
 
-                $file_exists = file_exists(build_file_path($file_base_path, $filename));
+                $file_exists = is_file(build_file_path($file_base_path, $filename));
                 $can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
                 $validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 
@@ -673,7 +673,7 @@ function file_edit($message = '', $id = '')
             $status = STATUS_PENDING;
         }
 
-        $file_exists = file_exists(build_file_path($file_base_path, $filename));
+        $file_exists = is_file(build_file_path($file_base_path, $filename));
         $existing_files = get_filenames();
 
         if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
@@ -957,8 +957,8 @@ function file_insert()
 
         // Clean up file.
         
-        if (file_exists($tmp_name)) {
-            unlink($tmp_name);
+        if (is_file($tmp_name)) {
+            unlink(realpath($tmp_name));
         }
     }
 
@@ -1045,7 +1045,7 @@ function file_replace()
             rename($newpath.'.tmp', $newpath);
 
             // Remove tmp upload.
-            unlink($file);
+            unlink(realpath($file));
         } else {
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
@@ -1059,7 +1059,7 @@ function file_replace()
 
             // Clean up old.
             if (is_file($newpath.'.tmp')) {
-                unlink($newpath.'.tmp');
+                unlink(realpath($newpath.'.tmp'));
             }
         }
     }
@@ -1117,7 +1117,7 @@ function file_save()
         $old_path = build_file_path($file_base_path, $old_filename);
         $new_path = build_file_path($file_base_path, $filename);
 
-        if (file_exists($old_path) && shift_uploaded_file($old_path, $new_path) === false) {
+        if (is_file($old_path) && shift_uploaded_file($old_path, $new_path) === false) {
             file_list(array(gTxt('file_cannot_rename', array('{name}' => $filename)), E_ERROR));
 
             return;
@@ -1213,7 +1213,7 @@ function file_delete($ids = array())
                 $ul = false;
 
                 if ($rsd && is_file($filepath)) {
-                    $ul = unlink($filepath);
+                    $ul = unlink(realpath($filepath));
                 }
 
                 if (!$rsd or !$ul) {
