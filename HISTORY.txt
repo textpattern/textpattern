@@ -10,8 +10,24 @@ Changes in 4.9.0 (upcoming)
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
 
+Changes in 4.8.8 (upcoming)
+
+* Fixed: More robust numeric searches.
+* Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
+* Internal: Prefer is_readable() and is_file() to file_exists().
+
+Changes in 4.8.7 (30 May 2021)
+
+* High priority maintenance release to address functionality and setup issues
+  discovered after 4.8.6 release.
+* Fixed: Users panel throws error due to missing DB prefix (thanks, prbt2016).
+* Removed: Database user GRANT check during initial setup, which broke some
+  installations.
+* Changed: Context check priority in tags.
+
 Changes in 4.8.6 (28 May 2021)
 
+* DO NOT USE IN PRODUCTION - issues discovered after release, use 4.8.7 instead.
 * Maintenance release with bug fixes.
 * Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
 * Fixed: Undefined $article warning when accessing non-existent articles.

@@ -348,31 +348,6 @@ function setup_connect()
 
     echo msg(gTxt('db_connected'));
 
-    // Check user database GRANT permissions.
-    $result = mysqli_query($mylink, "SELECT PRIVILEGE_TYPE FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE GRANTEE = \"'".mysqli_real_escape_string($mylink, $cfg['database']['user'])."'@'".mysqli_real_escape_string($mylink, $dhost)."'\"");
-
-    if (mysqli_num_rows($result) > 0) {
-        $grants = array();
-
-        while ($a = mysqli_fetch_assoc($result)) {
-            $grants[] = array_shift($a);
-        }
-
-        mysqli_free_result($result);
-
-        $missing = array_diff(do_list(REQUIRED_SQL_GRANTS), $grants);
-
-        if (!empty($missing)) {
-            msg(gTxt('db_insufficient_grants',
-                array(
-                    '{user}'  => txpspecialchars($cfg['database']['user'].'@'.$dhost),
-                    '{privs}' => txpspecialchars(implode(', ', $missing)),
-                )),
-                MSG_ERROR, true
-            );
-        }
-    }
-
     if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
         msg(gTxt('prefix_bad_characters',
             array('{dbprefix}' => txpspecialchars($cfg['database']['table_prefix']))),

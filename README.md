@@ -27,14 +27,14 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.8.6. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
+The current production release is version 4.8.7. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/111/textpattern-4.8.6.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.6/textpattern-4.8.6.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/110/textpattern-4.8.6.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.6/textpattern-4.8.6.tar.gz) |
+| .zip   | [Download](https://textpattern.com/file_download/113/textpattern-4.8.7.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/112/textpattern-4.8.7.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.tar.gz) |
 
 
 ## Install Textpattern
@@ -112,8 +112,8 @@ npm run get-dependencies
 To request a specific tag or branch:
 
 ```ShellSession
-npm run get-default-theme 4.8.6
-npm run get-classic-admin-theme 4.8.6
+npm run get-default-theme 4.8.7
+npm run get-classic-admin-theme 4.8.7
 npm run get-classic-admin-theme 4.8.x
 npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
