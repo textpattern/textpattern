@@ -785,7 +785,7 @@ class BuilderTags
      * @return string HTML
      */
 
-    private function tbFormPop($select_name, $type = '', $value)
+    private function tbFormPop($select_name, $type = '', $value = '')
     {
         $vals = array();
 
