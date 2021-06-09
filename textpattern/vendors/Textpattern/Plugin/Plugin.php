@@ -202,7 +202,7 @@ class Plugin
 
         foreach ((array)$section as $s) {
             $code = '';
-            $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$s.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$s.'\s*\-{3,}\s*$/Ums', $pack, null, PREG_SPLIT_DELIM_CAPTURE);
+            $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$s.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$s.'\s*\-{3,}\s*$/Ums', $pack, -1, PREG_SPLIT_DELIM_CAPTURE);
 
             foreach ($pack as $i => $chunk) {
                 if ($i % 2) {

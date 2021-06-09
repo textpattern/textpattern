@@ -5728,7 +5728,7 @@ function http_accept_format($format)
 
     if (empty($accepts)) {
         // Build cache of accepted formats.
-        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
+        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($accepts as $i => &$a) {
             // Sniff out quality factors if present.
