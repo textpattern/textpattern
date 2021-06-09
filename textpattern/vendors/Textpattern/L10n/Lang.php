@@ -630,7 +630,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
 
             $events = $admin_events;
-        } elseif ($events === null) {
+        } elseif ($events === '') {
             $events = array('public', 'common');
         } else {
             $events = is_array($events) ? $events : do_list_unique($events);
@@ -676,7 +676,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function load($lang_code, $events = null)
+    public function load($lang_code, $events = '')
     {
         $loaded = isset($this->loaded[$lang_code]) ? $this->loaded[$lang_code] : null;
 
