@@ -380,7 +380,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function getPack($lang_code, $group = null, $filter = null)
+    public function getPack($lang_code, $group = null, $filter = '')
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
@@ -614,7 +614,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function extract($lang_code, $events = null, $filter = null)
+    public function extract($lang_code, $events = '', $filter = '')
     {
         $where = array(
             "lang = '".doSlash($lang_code)."'",
