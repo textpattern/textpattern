@@ -4961,7 +4961,9 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
-    if (is_array($list)) {
+    if (!isset($list)) {
+        return array();
+    } elseif (is_array($list)) {
         return array_map('trim', $list);
     }
 
