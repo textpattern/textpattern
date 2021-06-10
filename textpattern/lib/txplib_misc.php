@@ -205,7 +205,7 @@ function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $dou
     //        }
     //    }
     //
-    return htmlspecialchars($string, $flags, $encoding, $double_encode);
+    return htmlspecialchars((string)$string, $flags, $encoding, $double_encode);
 }
 
 /**
@@ -2972,7 +2972,7 @@ function fileDownloadFormatTime($params)
 
 function txp_get_contents($file)
 {
-    return is_readable($file) ? file_get_contents($file) : null;
+    return is_readable($file) ? file_get_contents($file) : '';
 }
 
 /**
@@ -4984,7 +4984,9 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
-    if (is_array($list)) {
+    if (!isset($list)) {
+        return array();
+    } elseif (is_array($list)) {
         return array_map('trim', $list);
     }
 
@@ -5751,7 +5753,7 @@ function http_accept_format($format)
 
     if (empty($accepts)) {
         // Build cache of accepted formats.
-        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
+        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($accepts as $i => &$a) {
             // Sniff out quality factors if present.
