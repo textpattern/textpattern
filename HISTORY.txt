@@ -12,7 +12,9 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.8.8 (upcoming)
 
+* Maintenance release including improvements for PHP 8.1 and bug fixes.
 * Fixed: More robust numeric searches.
+* Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 
