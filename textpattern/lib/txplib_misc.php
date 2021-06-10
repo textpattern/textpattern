@@ -205,7 +205,7 @@ function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $dou
     //        }
     //    }
     //
-    return htmlspecialchars($string, $flags, $encoding, $double_encode);
+    return htmlspecialchars((string)$string, $flags, $encoding, $double_encode);
 }
 
 /**
@@ -2967,7 +2967,7 @@ function fileDownloadFormatTime($params)
 
 function txp_get_contents($file)
 {
-    return is_readable($file) ? file_get_contents($file) : null;
+    return is_readable($file) ? file_get_contents($file) : '';
 }
 
 /**
