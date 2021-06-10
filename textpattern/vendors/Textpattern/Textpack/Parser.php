@@ -103,7 +103,7 @@ class Parser
      * @return array An array of translations
      */
 
-    public function parse($textpack, $group = null)
+    public function parse($textpack, $group = '')
     {
         static $replacements = array(
             "\nnull" => "\n@null",
