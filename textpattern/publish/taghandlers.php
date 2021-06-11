@@ -5417,7 +5417,11 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
+                if (is_numeric($attr)) {
+                    $thing = $mb ? mb_substr($thing, 0, (int)$attr) : substr($thing, 0, (int)$attr);
+                } else {
+                    $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
+                }
         }
     }
 
