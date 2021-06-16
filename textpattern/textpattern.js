@@ -2498,7 +2498,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         });
 
         // Grab the heading, strip out markup, then sanitize.
-        var tabTitle = $("<div>").html($tabHead.html()).text();
+        var tabTitle = $('<div>').html($tabHead.html()).text();
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 
