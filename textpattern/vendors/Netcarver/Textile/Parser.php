@@ -3253,7 +3253,7 @@ class Parser
             '(?P<atts>'.$this->a.$this->cls.$this->a.')\.(?P<ext>\.?)(?::(?P<cite>\S+))? (?P<graf>.*)$/Ss'.
             $this->regex_snippets['mod'];
 
-        $textblocks = preg_split('/(\n{2,})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $textblocks = preg_split('/(\n{2,})/', $text, null, PREG_SPLIT_DELIM_CAPTURE);
 
         if ($textblocks === false) {
             return '';
