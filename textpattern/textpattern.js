@@ -965,7 +965,7 @@ textpattern.Route =
             'step' : textpattern.step
         }, options);
 
-        textpattern.Route.attached = textpattern.Route.attached.filter(function (elt) {return !!elt});
+        textpattern.Route.attached = textpattern.Route.attached.filter(function (elt) {return !!elt;});
         textpattern.Route.attached.forEach(function (data, index) {
             if (!custom && data.page === '' || data.page === options.event || data.page === '.' + options.step || data.page === options.event + '.' + options.step) {
                 data.fn({
@@ -1446,7 +1446,7 @@ textpattern.decodeHTML = function (string) {
     div.innerHTML = string.trim();
 
     return div.content;
-}
+};
 
 /**
  * Translates given substrings.
@@ -2132,7 +2132,7 @@ textpattern.Route.add('article', function () {
         } else {
             $('#body, #excerpt').off('input', txp_article_preview);
         }
-    })
+    });
 
     textpattern.Relay.register('article.preview',
         function (e) {
@@ -2194,8 +2194,8 @@ textpattern.Route.add('article', function () {
 
 
 textpattern.Route.add('article.init', function () {
-    $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange')
-})
+    $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange');
+});
 
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return;
@@ -2498,7 +2498,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         });
 
         // Grab the heading, strip out markup, then sanitize.
-        var tabTitle = $("<div>").html($tabHead.html()).text();
+        var tabTitle = $('<div>').html($tabHead.html()).text();
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 
