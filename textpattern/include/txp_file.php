@@ -137,6 +137,7 @@ function file_list($message = '', $ids = array())
             break;
     }
 
+    $sort_sql .= $sort == 'id' ? '' : ", txp_file.id $dir";
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter($event,
