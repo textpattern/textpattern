@@ -5403,8 +5403,11 @@ function txp_escape($atts, $thing = '')
                 $thing = is_int($thing) ? ($thing ? $thing : '') : $attr($thing);
                 break;
             case 'tidy':
-                $thing = preg_replace('/\s+/', ' ', trim($thing));
                 $tidy = true;
+                $thing = preg_replace('/\s+/', ' ', trim($thing));
+                break;
+            case 'untidy':
+                $tidy = false;
                 break;
             case 'textile':
                 if ($textile === null) {
@@ -5466,7 +5469,7 @@ function txp_wraptag($atts, $thing = '')
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if (trim($thing) !== '') {
-        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', $html_id) : $thing;
         $thing = $label ? doLabel($label, $labeltag).n.$thing : $thing;
     }
 

@@ -5960,6 +5960,41 @@ function txp_break($wraptag)
     }
 }
 
+// -------------------------------------------------------------
+
+function txp_substr($string, $first = 1, $last = null, $tidy = false)
+{
+    $strlen = mb_strlen($string);
+    $first >= 0 or $first = $strlen + $first + 1;
+    $last = !isset($last) ? $first : ($last >= 0 ? $last : $strlen + $last + 1);
+
+    if ($first > $last) {
+        list($first, $last) = array($last, $first);
+        $gnirts = '';
+    }
+
+    if ($first > $strlen || $last < 1) {
+        return '';
+    }
+
+    if ($tidy) {
+        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
+        $string = preg_replace($pattern, '$1', $string);
+    } else {
+        $string = mb_substr($string, --$first, $last - $first);
+    }
+
+    if (isset($gnirts)) {return mb_convert_encoding( strrev( mb_convert_encoding($string, 'UTF-16BE', 'UTF-8') ), 'UTF-8', 'UTF-16LE');
+        while ($strlen-- > 0) {
+            $gnirts .= mb_substr($string, $strlen, 1);
+        }
+    
+        return $gnirts;
+    }
+
+    return $string;
+}
+
 /*** Polyfills ***/
 
 if (!function_exists('array_column')) {
