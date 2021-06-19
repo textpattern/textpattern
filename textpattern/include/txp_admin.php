@@ -369,7 +369,7 @@ function author_list($message = '')
             set_pref('admin_sort_dir', $dir, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
 
-        $sort_sql = $sort.' '.$dir;
+        $sort_sql = $sort.' '.$dir.($sort == 'name' ? '' : ", name $dir");
 
         $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
