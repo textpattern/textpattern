@@ -33,7 +33,9 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css')->setAtt('media', 'screen');
         $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/print.css')->setAtt('media', 'print');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
-        $out[] = '<meta name="color-scheme" content="dark light">';
+        $out[] = '<meta name="color-scheme" content="light dark">';
+        $out[] = '<meta name="theme-color" content="#f7f7f7" media="(prefers-color-scheme: light)">';
+        $out[] = '<meta name="theme-color" content="#343b41" media="(prefers-color-scheme: dark)">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/main.js')->setBool('defer');
 
