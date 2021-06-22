@@ -42,8 +42,7 @@ var langdir = document.documentElement.dir,
  * @return {boolean}
  */
 
-function checkCookies()
-{
+function checkCookies() {
     cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
     if (!cookieEnabled) {
@@ -61,8 +60,7 @@ function checkCookies()
  * @return {boolean} TRUE if user confirmed the action
  */
 
-function verify(msg)
-{
+function verify(msg) {
     return confirm(msg);
 }
 
@@ -77,19 +75,18 @@ function verify(msg)
 
 jQuery.fn.txpMultiEditForm = function (method, opt) {
     var args = {};
-
     var defaults = {
-        'checkbox'     : 'input[name="selected[]"][type=checkbox]',
-        'row'          : 'tbody td',
-        'highlighted'  : 'tr',
+        'checkbox': 'input[name="selected[]"][type=checkbox]',
+        'row': 'tbody td',
+        'highlighted': 'tr',
         'filteredClass': 'filtered',
         'selectedClass': 'selected',
-        'actions'      : 'select[name=edit_method]',
-        'submitButton' : '.multi-edit input[type=submit]',
-        'selectAll'    : 'input[name=select_all][type=checkbox]',
-        'rowClick'     : true,
-        'altClick'     : true,
-        'confirmation' : textpattern.gTxt('are_you_sure')
+        'actions': 'select[name=edit_method]',
+        'submitButton': '.multi-edit input[type=submit]',
+        'selectAll': 'input[name=select_all][type=checkbox]',
+        'rowClick': true,
+        'altClick': true,
+        'confirmation': textpattern.gTxt('are_you_sure')
     };
 
     if ($.type(method) !== 'string') {
@@ -99,8 +96,11 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         args = opt;
     }
 
-    this./*closest('form').*/each(function () {
-        var $this = $(this), form = {}, methods = {}, lib = {};
+    this.each(function() {
+        var $this = $(this),
+            form = {},
+            methods = {},
+            lib = {};
 
         if ($this.data('_txpMultiEdit')) {
             form = $this.data('_txpMultiEdit');
@@ -130,7 +130,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             var settings = $.extend({
                 'label': null,
                 'value': null,
-                'html' : null
+                'html': null
             }, options);
 
             if (!settings.value) {
@@ -140,7 +140,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             var option = form.editMethod.find('option').filter(function () {
                 return $(this).val() === settings.value;
             });
-
             var exists = (option.length > 0);
             form.editMethod.val('');
 
@@ -180,15 +179,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          * @return {object}  methods
          */
 
-        methods.select = function (options) {
+        methods.select = function(options) {
             var settings = $.extend({
-                'index'  : null,
-                'range'  : null,
-                'value'  : null,
+                'index': null,
+                'range': null,
+                'value': null,
                 'checked': true
             }, options);
-
-            var obj = form.boxes;//$this.find(opt.checkbox);
+            var obj = form.boxes; //$this.find(opt.checkbox);
 
             if (settings.value !== null) {
                 obj = obj.filter(function () {
@@ -215,7 +213,8 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
          */
 
         lib.highlight = function () {
-            var checked = form.boxes.filter(':checked'), count = checked.length,
+            var checked = form.boxes.filter(':checked'),
+                count = checked.length,
                 option = form.editMethod.find('[value=""]');
             checked.closest(opt.highlighted).addClass(opt.selectedClass);
             form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
@@ -271,7 +270,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     var end = boxes.index(form.lastCheck);
 
                     methods.select({
-                        'range'  : [Math.min(start, end), Math.max(start, end) + 1],
+                        'range': [Math.min(start, end), Math.max(start, end) + 1],
                         'checked': !checked
                     });
                 } else if (!self) {
@@ -368,7 +367,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
 
                 form.editMethod.find('option[value!=""]').each(function () {
                     var value = $(this).val();
-
                     var option = multiOptions.filter(function () {
                         return $(this).data('multi-option') === value;
                     });
@@ -376,7 +374,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     if (option.length > 0) {
                         methods.addOption({
                             'label': null,
-                            'html' : option.eq(0).contents(),
+                            'html': option.eq(0).contents(),
                             'value': $(this).val()
                         });
                     }
@@ -386,7 +384,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             })();
 
             form.selectAll.on('change', function (e) {
-                if (typeof(e.originalEvent) != 'undefined') {
+                if (typeof (e.originalEvent) != 'undefined') {
                     methods.select({
                         'checked': $(this).prop('checked')
                     });
@@ -414,15 +412,13 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
  * @param {integer} days  Expires in
  */
 
-function setCookie(name, value, days)
-{
+function setCookie(name, value, days) {
     var expires = '';
 
     if (days) {
         var date = new Date();
 
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-
         expires = '; expires=' + date.toGMTString();
     }
 
@@ -436,8 +432,7 @@ function setCookie(name, value, days)
  * @return {string} The cookie
  */
 
-function getCookie(name)
-{
+function getCookie(name) {
     var nameEQ = name + '=';
     var ca = document.cookie.split(';');
 
@@ -462,8 +457,7 @@ function getCookie(name)
  * @param {string} name The cookie
  */
 
-function deleteCookie(name)
-{
+function deleteCookie(name) {
     setCookie(name, '', -1);
 }
 
@@ -475,16 +469,18 @@ function deleteCookie(name)
  * @since  4.7.0
  */
 
-function toggleColumn(sel, $sel, vis)
-{
-//    $sel = $(sel);
+function toggleColumn(sel, $sel, vis) {
+    //$sel = $(sel);
     if ($sel.length) {
         $sel.toggle(!!vis);
 
         // Send state of toggle pane to localStorage.
         var data = new Object;
 
-        data[textpattern.event] = {'columns':{}};
+        data[textpattern.event] = {
+            'columns': {}
+        };
+
         data[textpattern.event]['columns'][sel] = !!vis ? null : false;
         textpattern.storage.update(data);
     }
@@ -499,8 +495,7 @@ function toggleColumn(sel, $sel, vis)
  * @return {boolean} Returns FALSE
  */
 
-function toggleDisplay(id)
-{
+function toggleDisplay(id) {
     var obj = $('#' + id);
 
     if (obj.length) {
@@ -510,7 +505,9 @@ function toggleDisplay(id)
         var pane = $(this).data('txp-pane') || obj.attr('id');
         var data = new Object;
 
-        data[textpattern.event] = {'panes':{}};
+        data[textpattern.event] = {
+            'panes': {}
+        };
         data[textpattern.event]['panes'][pane] = obj.is(':visible') ? true : null;
         textpattern.storage.update(data);
     }
@@ -522,8 +519,7 @@ function toggleDisplay(id)
  * Direct show/hide referred #segment; decorate parent lever.
  */
 
-function toggleDisplayHref()
-{
+function toggleDisplayHref() {
     var $this = $(this);
     var href = $this.attr('href');
     var lever = $this.parent('.txp-summary');
@@ -549,8 +545,7 @@ function toggleDisplayHref()
  * @param {boolean} show      TRUE to display
  */
 
-function setClassDisplay(className, show)
-{
+function setClassDisplay(className, show) {
     $('.' + className).toggle(show);
 }
 
@@ -560,8 +555,7 @@ function setClassDisplay(className, show)
  * @param {string} classname The HTML class
  */
 
-function toggleClassRemember(className)
-{
+function toggleClassRemember(className) {
     var v = getCookie('toggle_' + className);
     v = (v == 1 ? 0 : 1);
 
@@ -577,9 +571,8 @@ function toggleClassRemember(className)
  * @param {string}  force     The value
  */
 
-function setClassRemember(className, force)
-{
-    if (typeof(force) != 'undefined') {
+function setClassRemember(className, force) {
+    if (typeof (force) != 'undefined') {
         setCookie('toggle_' + className, force, 365);
     }
 
@@ -598,8 +591,7 @@ function setClassRemember(className, force)
  * @see    https://api.jquery.com/jQuery.post/
  */
 
-function sendAsyncEvent(data, fn, format)
-{
+function sendAsyncEvent(data, fn, format) {
     var formdata = false;
 
     if ($.type(data) === 'string' && data.length > 0) {
@@ -615,18 +607,15 @@ function sendAsyncEvent(data, fn, format)
     }
 
     format = format || 'xml';
-
-    return formdata ?
-        $.ajax({
-            type: 'POST',
-            url: 'index.php',
-            data: data,
-            success: fn,
-            dataType: format,
-            processData: false,
-            contentType: false
-        }) :
-        $.post('index.php', data, fn, format);
+    return formdata ? $.ajax({
+        type: 'POST',
+        url: 'index.php',
+        data: data,
+        success: fn,
+        dataType: format,
+        processData: false,
+        contentType: false
+    }) : $.post('index.php', data, fn, format);
 }
 
 /**
@@ -635,8 +624,7 @@ function sendAsyncEvent(data, fn, format)
  * @since 4.5.0
  */
 
-textpattern.Relay =
-{
+textpattern.Relay = {
     /**
      * Publishes an event to all registered subscribers.
      *
@@ -655,12 +643,9 @@ textpattern.Relay =
             return $(this).trigger(event, data);
         }
 
-        textpattern.Relay.timeouts[event] = setTimeout(
-            $.proxy(function() {
-                return textpattern.Relay.callback(event, data);
-            }, this),
-            parseInt(timeout, 10)
-        );
+        textpattern.Relay.timeouts[event] = setTimeout($.proxy(function() {
+            return textpattern.Relay.callback(event, data);
+        }, this), parseInt(timeout, 10));
     },
 
     /**
@@ -687,9 +672,10 @@ textpattern.Relay =
 
         return this;
     },
-
     timeouts: {},
-    data: {selected: []}
+    data: {
+        selected: []
+    }
 };
 
 /**
@@ -698,8 +684,7 @@ textpattern.Relay =
  * @since 4.6.0
  */
 
-textpattern.storage =
-{
+textpattern.storage = {
     /**
      * Textpattern localStorage data.
      */
@@ -722,7 +707,6 @@ textpattern.storage =
             window.localStorage.setItem('textpattern.' + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
-
     clean: function (obj) {
         Object.keys(obj).forEach(function (key) {
             if (obj[key] && typeof obj[key] === 'object') {
@@ -740,8 +724,7 @@ textpattern.storage =
  * @since 4.6.0
  */
 
-textpattern.Console =
-{
+textpattern.Console = {
     /**
      * Stores an array of invoked messages.
      */
@@ -753,7 +736,6 @@ textpattern.Console =
      */
 
     messages: {},
-
     queue: {},
 
     /**
@@ -810,24 +792,28 @@ textpattern.Console =
             textpattern.Console.queue[event] = true;
         }
 
-        $(document).ready(function() {
-            var c = 0, message = [], status = 0;
+        $(document).ready(function () {
+            var c = 0,
+                message = [],
+                status = 0;
 
             if (textpattern.Console.messages[event] && textpattern.Console.messages[event].length) {
                 var container = textpattern.prefs.message || '{message}';
-
-                textpattern.Console.messages[event].forEach (function(pair) {
+                textpattern.Console.messages[event].forEach(function (pair) {
                     message.push(textpattern.mustache(container, {
                         status: pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert',
                         message: pair[0]
                     }));
-                    c += 2*(pair[1] == 1) + 1*(pair[1] == 2);
+                    c += 2 * (pair[1] == 1) + 1 * (pair[1] == 2);
                 });
-
-                status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning');
+                status = !c ? 'success' : (c == 2 * textpattern.Console.messages[event].length ? 'error' : 'warning');
             }
 
-            textpattern.Relay.callback('announce', {event: event, message: message, status: status});
+            textpattern.Relay.callback('announce', {
+                event: event,
+                message: message,
+                status: status
+            });
             textpattern.Console.clear(event, true);
         });
 
@@ -846,7 +832,6 @@ textpattern.Console =
     log: function (message) {
         if (textpattern.prefs.production_status === 'debug') {
             textpattern.Console.history.push(message);
-
             textpattern.Relay.callback('txpConsoleLog', {
                 'message': message
             });
@@ -884,12 +869,14 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         handle = function(html) {
             if (html) {
                 var $html = $(html);
+
                 $.each(list.split(','), function(index, value) {
                     $(value).each(function() {
                         var id = this.id;
+
                         if (id) {
-                            $(this).replaceWith($html.find('#'+id)).remove();
-                            $('#'+id).trigger('updateList');
+                            $(this).replaceWith($html.find('#' + id)).remove();
+                            $('#' + id).trigger('updateList');
                         }
                     });
                 });
@@ -911,7 +898,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     }
 }).register('announce', function(event, data) {
     var container = textpattern.prefs.messagePane || '',
-        message = container && data.message.length ? textpattern.mustache(container, {message: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')}) : '';
+        message = container && data.message.length ? textpattern.mustache(container, {
+            message: data.message.join('<br />'),
+            status: data.status,
+            close: textpattern.gTxt('close')
+        }) : '';
 
     if (message) {
         $('#messagepane').html(message);
@@ -924,8 +915,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
  * @since 4.6.0
  */
 
-textpattern.Route =
-{
+textpattern.Route = {
     /**
      * An array of attached listeners.
      */
@@ -943,7 +933,7 @@ textpattern.Route =
         $.each(pages.split(','), function (index, page) {
             textpattern.Route.attached.push({
                 'page': $.trim(page),
-                'fn'  : fn
+                'fn': fn
             });
         });
 
@@ -962,19 +952,19 @@ textpattern.Route =
         var custom = !!options;
         var options = $.extend({
             'event': textpattern.event,
-            'step' : textpattern.step
+            'step': textpattern.step
         }, options);
-
-        textpattern.Route.attached = textpattern.Route.attached.filter(function (elt) {return !!elt;});
+        textpattern.Route.attached = textpattern.Route.attached.filter(function(elt) {
+            return !!elt;
+        });
         textpattern.Route.attached.forEach(function (data, index) {
             if (!custom && data.page === '' || data.page === options.event || data.page === '.' + options.step || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event': options.event,
-                    'step' : options.step,
+                    'step': options.step,
                     'route': data.page
                 });
-
-                delete(textpattern.Route.attached[index]);
+                delete (textpattern.Route.attached[index]);
             }
         });
 
@@ -996,33 +986,33 @@ textpattern.Route =
 jQuery.fn.txpAsyncForm = function (options) {
     options = $.extend({
         dataType: 'script',
-        success : null,
-        error   : null
+        success: null,
+        error: null
     }, options);
 
     // Send form data to application, process response as script.
     this.off('submit.txpAsyncForm').on('submit.txpAsyncForm', function (event, extra) {
         event.preventDefault();
 
-        if (typeof extra === 'undefined') extra = new Object;
+        if (typeof extra === 'undefined') {
+            extra = new Object;
+        }
 
         var $this = $(this);
+        var $inputs = $('input[type="file"]:not([disabled])', $this); // Safari workaround?
 
-        // Safari workaround?
-        var $inputs = $('input[type="file"]:not([disabled])', $this);
-        $inputs.each(function(i, input) {
+        $inputs.each(function (i, input) {
             if (input.files.length > 0) return;
             $(input).prop('disabled', true);
         });
 
-        var form =
-        {
-            data   : typeof extra.form !== 'undefined' ? extra.form : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
-            extra  : new Object,
+        var form = {
+            data: typeof extra.form !== 'undefined' ? extra.form : (typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this)),
+            extra: new Object,
             spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
 
-        $inputs.prop('disabled', false);// Safari workaround.
+        $inputs.prop('disabled', false); // Safari workaround.
 
         if (typeof extra['_txp_submit'] !== 'undefined') {
             form.button = $this.find(extra['_txp_submit']).eq(0);
@@ -1037,57 +1027,55 @@ jQuery.fn.txpAsyncForm = function (options) {
 
         form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
         $.extend(true, form.extra, options.data, extra.data);
+
         // Show feedback while processing.
         form.button.attr('disabled', true).after(form.spinner.val(0));
         $this.addClass('busy');
         $('body').addClass('busy');
 
         if (form.data) {
-            if ( form.data instanceof FormData ) {
+            if (form.data instanceof FormData) {
                 $.each(form.extra, function(key, val) {
                     form.data.append(key, val);
                 });
             } else {
                 $.each(form.extra, function(key, val) {
-                    form.data += '&'+key+'='+val;
+                    form.data += '&' + key + '=' + val;
                 });
             }
         }
 
-        sendAsyncEvent(form.data, function () {}, options.dataType)
-            .done(function (data, textStatus, jqXHR) {
-                if (options.success) {
-                    options.success($this, event, data, textStatus, jqXHR);
-                }
+        sendAsyncEvent(form.data, function () {}, options.dataType).done(function (data, textStatus, jqXHR) {
+            if (options.success) {
+                options.success($this, event, data, textStatus, jqXHR);
+            }
 
-                textpattern.Relay.callback('txpAsyncForm.success', {
-                    'this'      : $this,
-                    'event'     : event,
-                    'data'      : data,
-                    'textStatus': textStatus,
-                    'jqXHR'     : jqXHR
-                });
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                if (options.error) {
-                    options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
-                }
-
-                textpattern.Relay.callback('txpAsyncForm.error', {
-                    'this'        : $this,
-                    'event'       : event,
-                    'jqXHR'       : jqXHR,
-                    'ajaxSettings': $.ajaxSetup(),
-                    'thrownError' : errorThrown
-                });
-            })
-            .always(function () {
-                $this.removeClass('busy');
-                form.button.removeAttr('disabled');
-                form.spinner.remove();
-                $('body').removeClass('busy');
-                textpattern.Console.announce();
+            textpattern.Relay.callback('txpAsyncForm.success', {
+                'this': $this,
+                'event': event,
+                'data': data,
+                'textStatus': textStatus,
+                'jqXHR': jqXHR
             });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            if (options.error) {
+                options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
+            }
+
+            textpattern.Relay.callback('txpAsyncForm.error', {
+                'this': $this,
+                'event': event,
+                'jqXHR': jqXHR,
+                'ajaxSettings': $.ajaxSetup(),
+                'thrownError': errorThrown
+            });
+        }).always(function () {
+            $this.removeClass('busy');
+            form.button.removeAttr('disabled');
+            form.spinner.remove();
+            $('body').removeClass('busy');
+            textpattern.Console.announce();
+        });
     });
 
     return this;
@@ -1107,8 +1095,8 @@ jQuery.fn.txpAsyncForm = function (options) {
 jQuery.fn.txpAsyncHref = function (options, selector) {
     options = $.extend({
         dataType: 'text',
-        success : null,
-        error   : null
+        success: null,
+        error: null
     }, options);
 
     selector = !!selector ? selector : null;
@@ -1116,47 +1104,45 @@ jQuery.fn.txpAsyncHref = function (options, selector) {
     this.on('click.txpAsyncHref', selector, function (event) {
         event.preventDefault();
         var $this = $(this);
-        var url = this.search.replace('?', '') + '&' + $.param({value: $this.text()});
+        var url = this.search.replace('?', '') + '&' + $.param({
+            value: $this.text()
+        });
 
         // Show feedback while processing.
         $this.addClass('busy');
         $('body').addClass('busy');
+        sendAsyncEvent(url, function () {}, options.dataType).done(function (data, textStatus, jqXHR) {
+            if (options.dataType === 'text') {
+                $this.html(data);
+            }
 
-        sendAsyncEvent(url, function () {}, options.dataType)
-            .done(function (data, textStatus, jqXHR) {
-                if (options.dataType === 'text') {
-                    $this.html(data);
-                }
+            if (options.success) {
+                options.success($this, event, data, textStatus, jqXHR);
+            }
 
-                if (options.success) {
-                    options.success($this, event, data, textStatus, jqXHR);
-                }
-
-                textpattern.Relay.callback('txpAsyncHref.success', {
-                    'this'      : $this,
-                    'event'     : event,
-                    'data'      : data,
-                    'textStatus': textStatus,
-                    'jqXHR'     : jqXHR
-                });
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                if (options.error) {
-                    options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
-                }
-
-                textpattern.Relay.callback('txpAsyncHref.error', {
-                    'this'        : $this,
-                    'event'       : event,
-                    'jqXHR'       : jqXHR,
-                    'ajaxSettings': $.ajaxSetup(),
-                    'thrownError' : errorThrown
-                });
-            })
-            .always(function () {
-                $this.removeClass('busy');
-                $('body').removeClass('busy');
+            textpattern.Relay.callback('txpAsyncHref.success', {
+                'this': $this,
+                'event': event,
+                'data': data,
+                'textStatus': textStatus,
+                'jqXHR': jqXHR
             });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            if (options.error) {
+                options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
+            }
+
+            textpattern.Relay.callback('txpAsyncHref.error', {
+                'this': $this,
+                'event': event,
+                'jqXHR': jqXHR,
+                'ajaxSettings': $.ajaxSetup(),
+                'thrownError': errorThrown
+            });
+        }).always(function() {
+            $this.removeClass('busy');
+            $('body').removeClass('busy');
+        });
     });
 
     return this;
@@ -1173,42 +1159,39 @@ jQuery.fn.txpAsyncHref = function (options, selector) {
  * @since  4.6.0
  */
 
-function txpAsyncLink(event, txpEvent)
-{
+function txpAsyncLink(event, txpEvent) {
     event.preventDefault();
     var $this = $(event.target);
+
     if ($this.attr('href') === undefined) {
         $this = $this.parent();
     }
+
     var url = $this.attr('href').replace('?', '');
 
     // Show feedback while processing.
     $this.addClass('busy');
     $('body').addClass('busy');
-
-    sendAsyncEvent(url, function () {}, 'html')
-        .done(function (data, textStatus, jqXHR) {
-            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.success', {
-                'this'      : $this,
-                'event'     : event,
-                'data'      : data,
-                'textStatus': textStatus,
-                'jqXHR'     : jqXHR
-            });
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.error', {
-                'this'        : $this,
-                'event'       : event,
-                'jqXHR'       : jqXHR,
-                'ajaxSettings': $.ajaxSetup(),
-                'thrownError' : errorThrown
-            });
-        })
-        .always(function () {
-            $this.removeClass('busy');
-            $('body').removeClass('busy');
+    sendAsyncEvent(url, function () {}, 'html').done(function (data, textStatus, jqXHR) {
+        textpattern.Relay.callback('txpAsyncLink.' + txpEvent + '.success', {
+            'this': $this,
+            'event': event,
+            'data': data,
+            'textStatus': textStatus,
+            'jqXHR': jqXHR
         });
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        textpattern.Relay.callback('txpAsyncLink.' + txpEvent + '.error', {
+            'this': $this,
+            'event': event,
+            'jqXHR': jqXHR,
+            'ajaxSettings': $.ajaxSetup(),
+            'thrownError': errorThrown
+        });
+    }).always(function () {
+        $this.removeClass('busy');
+        $('body').removeClass('busy');
+    });
 
     return this;
 }
@@ -1283,24 +1266,23 @@ jQuery.fn.txpDatepicker = function (options) {
 jQuery.fn.txpSortable = function (options) {
     options = $.extend({
         dataType: 'script',
-        success : null,
-        error   : null,
-        event   : textpattern.event,
-        step    : 'sortable_save',
-        cancel  : ':input, button',
-        delay   : 0,
+        success: null,
+        error: null,
+        event: textpattern.event,
+        step: 'sortable_save',
+        cancel: ':input, button',
+        delay: 0,
         distance: 15,
-        items   : '[data-txp-sortable-id]'
+        items: '[data-txp-sortable-id]'
     }, options);
-
-    var methods =
-    {
+    var methods = {
         /**
          * Sends updated order to the server.
          */
 
         update: function () {
-            var ids = [], $this = $(this);
+            var ids = [],
+                $this = $(this);
 
             $this.children('[data-txp-sortable-id]').each(function () {
                 ids.push($(this).data('txp-sortable-id'));
@@ -1309,43 +1291,41 @@ jQuery.fn.txpSortable = function (options) {
             if (ids) {
                 sendAsyncEvent({
                     event: options.event,
-                    step : options.step,
+                    step: options.step,
                     order: ids
-                }, function () {}, options.dataType)
-                    .done(function (data, textStatus, jqXHR) {
-                        if (options.success) {
-                            options.success.call($this, data, textStatus, jqXHR);
-                        }
+                }, function () {}, options.dataType).done(function (data, textStatus, jqXHR) {
+                    if (options.success) {
+                        options.success.call($this, data, textStatus, jqXHR);
+                    }
 
-                        textpattern.Relay.callback('txpSortable.success', {
-                            'this'      : $this,
-                            'data'      : data,
-                            'textStatus': textStatus,
-                            'jqXHR'     : jqXHR
-                        });
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        if (options.error) {
-                            options.error.call($this, jqXHR, $.ajaxSetup(), errorThrown);
-                        }
-
-                        textpattern.Relay.callback('txpSortable.error', {
-                            'this'        : $this,
-                            'jqXHR'       : jqXHR,
-                            'ajaxSettings': $.ajaxSetup(),
-                            'thrownError' : errorThrown
-                        });
+                    textpattern.Relay.callback('txpSortable.success', {
+                        'this': $this,
+                        'data': data,
+                        'textStatus': textStatus,
+                        'jqXHR': jqXHR
                     });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    if (options.error) {
+                        options.error.call($this, jqXHR, $.ajaxSetup(), errorThrown);
+                    }
+
+                    textpattern.Relay.callback('txpSortable.error', {
+                        'this': $this,
+                        'jqXHR': jqXHR,
+                        'ajaxSettings': $.ajaxSetup(),
+                        'thrownError': errorThrown
+                    });
+                });
             }
         }
     };
 
     return this.sortable({
-        cancel  : options.cancel,
-        delay   : options.delay,
+        cancel: options.cancel,
+        delay: options.delay,
         distance: options.distance,
-        update  : methods.update,
-        items   : options.items
+        update: methods.update,
+        items: options.items
     });
 };
 
@@ -1392,9 +1372,7 @@ textpattern.changeType = function (elem, type) {
         var regex = /type=(\")?([^\"\s]+)(\")?/;
 
         // If no match, add the type attribute to the end; otherwise, replace it.
-        var tmp = $(html.match(regex) == null ?
-            html.replace('>', ' type="' + type + '">') :
-            html.replace(regex, 'type="' + type + '"'));
+        var tmp = $(html.match(regex) == null ? html.replace('>', ' type="' + type + '">') : html.replace(regex, 'type="' + type + '"'));
 
         // Copy data from old element.
         tmp.data('type', elem.data('type'));
@@ -1459,8 +1437,7 @@ textpattern.decodeHTML = function (string) {
  * textpattern.mustache('{hello} world, and {bye|thanks}!', {hello: 'bye'});
  */
 
-textpattern.mustache = function(string, replacements)
-{
+textpattern.mustache = function (string, replacements) {
     return string.replace(/\{([^\{\|\}]+)(\|[^\{\}]*)?\}/g, function(match, p1, p2) {
         return typeof replacements[p1] != 'undefined' ? replacements[p1] : (typeof p2 == 'undefined' ? match : p2.replace('|', ''));
     });
@@ -1478,7 +1455,10 @@ textpattern.mustache = function(string, replacements)
  */
 
 textpattern.tr = function (string, replacements) {
-    var match, position, output = '', replacement;
+    var match,
+        position,
+        output = '',
+        replacement;
 
     for (position = 0; position < string.length; position++) {
         match = false;
@@ -1556,7 +1536,7 @@ textpattern.gTxt = function (i18n, atts, escape) {
 jQuery.fn.gTxt = function (opts, tags, escape) {
     var options = $.extend({
         'string': opts,
-        'tags'  : tags,
+        'tags': tags,
         'escape': escape
     }, opts);
 
@@ -1572,24 +1552,22 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
  * @since 4.7.0
  */
 
-$(document).keydown(function (e) {
+$(document).keydown (function(e) {
     var key = e.which;
 
     if (key === 27) {
         $('.close').parent().toggle();
-    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
-    {
+    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's')) {
         var obj = $('input.publish');
 
-        if (obj.length)
-        {
+        if (obj.length) {
             e.preventDefault();
             obj.eq(0).closest('form').submit();
         }
     }
 });
 
-jQuery.fn.txpMenu = function(button) {
+jQuery.fn.txpMenu = function (button) {
     var menu = this;
 
     menu.on('click focusin', function (e) {
@@ -1597,18 +1575,18 @@ jQuery.fn.txpMenu = function(button) {
     }).menu({
         select: function(e, ui) {
             menu.menu('focus', null, ui.item);
+
             if (e.originalEvent.type !== 'click') {
                 ui.item.find('input[type="checkbox"]').click();
             }
         }
-    }).find('input[type="checkbox"]').keyup(function(e) {
+    }).find('input[type="checkbox"]').keyup(function (e) {
         e.preventDefault();
     });
-
     !button || button.on('click', function (e) {
         menu.toggle().position({
-            my: dir+' top',
-            at: dir+' bottom',
+            my: dir + ' top',
+            at: dir + ' bottom',
             of: this
         }).focus().menu('focus', null, menu.find('.ui-menu-item:first'));
 
@@ -1619,7 +1597,7 @@ jQuery.fn.txpMenu = function(button) {
         }
 
         return false;
-    }).on('focusin', function(e) {
+    }).on('focusin', function (e) {
         e.stopPropagation();
     });
 
@@ -1632,8 +1610,7 @@ jQuery.fn.txpMenu = function(button) {
  * @since 4.6.0
  */
 
-function txp_search()
-{
+function txp_search() {
     var $ui = $('.txp-search'),
         button = $ui.find('.txp-search-options').button({
             showLabel: false,
@@ -1655,29 +1632,29 @@ function txp_search()
 
     $ui.find('.txp-search-buttons').controlgroup();
 
-    $ui.find('.txp-search-clear').click(function(e) {
+    $ui.find('.txp-search-clear').click(function (e) {
         e.preventDefault();
         crit.val('');
         $ui.submit();
     });
 
     $ui.txpMultiEditForm({
-        'checkbox'   : 'input[name="search_method[]"][type=checkbox]',
-        'row'        : '.txp-dropdown li',
+        'checkbox': 'input[name="search_method[]"][type=checkbox]',
+        'row': '.txp-dropdown li',
         'highlighted': '.txp-dropdown li',
         'confirmation': false
     });
 
-    $ui.submit(function(e) {
+    $ui.submit(function (e) {
         var empty = crit.val() !== '';
 
         if (empty) {
-            menu.find('input[name="search_method[]"]').each(function() {
+            menu.find('input[name="search_method[]"]').each(function () {
                 empty = empty && !$(this).is(':checked');
             });
         }
 
-        if(empty) {
+        if (empty) {
             button.click();
             return false;
         }
@@ -1690,20 +1667,25 @@ function txp_search()
  * @since 4.7.0
  */
 
-var uniqueID = (function() {
+var uniqueID = (function () {
     var id = 0;
     return function() {
         return id++;
     };
 })(); // Invoke the outer function after defining it.
 
-jQuery.fn.txpColumnize = function ()
-{
-    var $table = $(this), items = [], selectAll = true, stored = true,
+
+jQuery.fn.txpColumnize = function () {
+    var $table = $(this),
+        items = [],
+        selectAll = true,
+        stored = true,
         $headers = $table.find('thead tr>th');
 
     $headers.each(function (index) {
-        var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
+        var $this = $(this),
+            $title = $this.text().trim(),
+            $id = $this.data('col');
 
         if (!$title) {
             return;
@@ -1724,9 +1706,7 @@ jQuery.fn.txpColumnize = function ()
             .attr('data-index', index)
             .prop('disabled', disabled);
 
-        $li.html($('<div role="menuitem" />')
-            .append($('<label />').text($title).prepend($box)));
-
+        $li.html($('<div role="menuitem" />').append($('<label />').text($title).prepend($box)));
 
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
@@ -1754,13 +1734,10 @@ jQuery.fn.txpColumnize = function ()
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
         $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
-
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />').attr('checked', selectAll);
 
-    $li.html($('<div role="menuitem" />')
-        .append($('<label />').html(textpattern.gTxt('toggle_all_selected')).prepend($box)));
-
+    $li.html($('<div role="menuitem" />').append($('<label />').html(textpattern.gTxt('toggle_all_selected')).prepend($box)));
     $menu.html($li).append(items);
 
     var $container = $table.closest('.txp-layout-1col');
@@ -1776,11 +1753,10 @@ jQuery.fn.txpColumnize = function ()
 
     $ui.append($button).append($menu);
     $menu.txpMenu($button);
-
     $ui.data('_txpMultiEdit', null).txpMultiEditForm({
-        'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
-        'selectAll'  : 'input[data-name="select_all"][type=checkbox]',
-        'row'        : '.txp-dropdown li',
+        'checkbox': 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
+        'selectAll': 'input[data-name="select_all"][type=checkbox]',
+        'row': '.txp-dropdown li',
         'highlighted': '.txp-dropdown li',
         'confirmation': false
     });
@@ -1804,8 +1780,7 @@ jQuery.fn.txpColumnize = function ()
  * @since  4.6.0
  */
 
-function txp_expand_collapse_all(ev)
-{
+function txp_expand_collapse_all(ev) {
     ev.preventDefault();
 
     var direction = ev.data.direction,
@@ -1833,14 +1808,18 @@ function txp_expand_collapse_all(ev)
  */
 
 jQuery.fn.restorePanes = function () {
-    var $this = $(this), stored = true;
+    var $this = $(this),
+        stored = true;
+
     // Initialize dynamic WAI-ARIA attributes.
     $this.find('.txp-summary a').each(function (i, elm) {
         // Get id of toggled <section> region.
-        var $elm = $(elm), region = this.hash;
+        var $elm = $(elm),
+            region = this.hash;
 
         if (region) {
             var $region = $this.find(region);
+
             region = region.substr(1);
 
             var pane = $elm.data('txp-pane');
@@ -1876,9 +1855,12 @@ jQuery.fn.restorePanes = function () {
  */
 
 jQuery.fn.txpFileupload = function (options) {
-    if (!jQuery.fn.fileupload) return this;
+    if (!jQuery.fn.fileupload) {
+        return this;
+    }
 
-    var form = this, fileInput = this.find('input[type="file"]'),
+    var form = this,
+        fileInput = this.find('input[type="file"]'),
         maxChunkSize = Math.min(parseFloat(textpattern.prefs.max_upload_size || 1000000), Number.MAX_SAFE_INTEGER),
         maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER);
 
@@ -1891,11 +1873,11 @@ jQuery.fn.txpFileupload = function (options) {
         formData: null,
         fileInput: null,
         dropZone: null,
-        replaceFileInput: false,/*
-        add: function (e, data) {
-            form.uploadCount++;
-            data.submit();
-        },*/
+        replaceFileInput: false,
+        //add: function (e, data) {
+        //    form.uploadCount++;
+        //    data.submit();
+        //},
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data);
         },
@@ -1912,7 +1894,7 @@ jQuery.fn.txpFileupload = function (options) {
 
         for (let file of fileInput.prop('files')) {
             if (file.size > maxFileSize) {
-                textpattern.Console.addMessage(['<strong>'+textpattern.encodeHTML(file['name'])+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
+                textpattern.Console.addMessage(['<strong>' + textpattern.encodeHTML(file['name']) + '</strong> - ' + textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd');
             } else {
                 form.uploadCount++;
                 file['order'] = form.uploadCount;
@@ -1927,44 +1909,41 @@ jQuery.fn.txpFileupload = function (options) {
                 files: files
             });
         }
+
         fileInput.val('');
     }).bind('fileuploadsubmit', function (e, data) {
         data.formData = $.merge([{
-            'name' : 'fileInputOrder', 'value' : data.files[0].order+'/'+form.uploadCount
+            'name': 'fileInputOrder',
+            'value': data.files[0].order + '/' + form.uploadCount
         }], options.formData);
+
         $.merge(data.formData, form.serializeArray());
 
         // Reduce maxChunkSize by extra data size (?)
         var res = typeof data.formData.entries !== 'undefined'
-            ? Array.from(data.formData.entries(), function(prop) {
+            ? Array.from(data.formData.entries(), function (prop) {
                 return prop[1].name.length + prop[1].value.length;
-            }).reduce(function(a, b) {return a + b + 2;}, 0)
+            }).reduce(function (a, b) {
+                return a + b + 2;
+            }, 0)
             : 256;
 
         var chunkSize = form.fileupload('option', 'maxChunkSize');
-        form.fileupload('option', 'maxChunkSize', Math.min(maxChunkSize - 8*(res + 255), chunkSize));
+
+        form.fileupload('option', 'maxChunkSize', Math.min(maxChunkSize - 8 * (res + 255), chunkSize));
     });
-/*
-    fileInput.on('change', function(e) {
-        var singleFileUploads = false;
 
-        $(this.files).each(function () {
-            if (this.size > maxChunkSize) {
-                singleFileUploads = true;
-            }
-        });
-
-        form.fileupload('option', 'singleFileUploads', singleFileUploads);
-    })*/
     return this;
 };
 
-jQuery.fn.txpUploadPreview = function(template) {
+jQuery.fn.txpUploadPreview = function (template) {
     if (!(template = template || textpattern.prefs.uploadPreview)) {
         return this;
     }
 
-    var form = $(this), last = form.children(':last-child'), maxSize = textpattern.prefs.max_file_size;
+    var form = $(this),
+        last = form.children(':last-child'),
+        maxSize = textpattern.prefs.max_file_size;
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL;
 
     form.find('input[type="reset"]').on('click', function (e) {
@@ -1973,19 +1952,21 @@ jQuery.fn.txpUploadPreview = function(template) {
 
     form.find('input[type="file"]').on('change', function (e) {
         last.nextAll().remove();
-
         $(this.files).each(function (index) {
-            var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index, status = this.size > maxSize ? 'alert' : '';
+            var preview = '',
+                mime = this.type.split('/'),
+                hash = typeof md5 == 'function' ? md5(this.name) : index,
+                status = this.size > maxSize ? 'alert' : '';
 
             if (createObjectURL) {
                 switch (mime[0]) {
-                case 'image':
-                    preview = '<img src="' + createObjectURL(this) + '" />';
-                    break;
-                // TODO case 'video':?
-                case 'audio':
-                    preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />';
-                    break;
+                    case 'image':
+                        preview = '<img src="' + createObjectURL(this) + '" />';
+                        break;
+                    // TODO case 'video':?
+                    case 'audio':
+                        preview = '<' + mime[0] + ' controls src="' + createObjectURL(this) + '" />';
+                        break;
                 }
             }
 
@@ -1995,13 +1976,13 @@ jQuery.fn.txpUploadPreview = function(template) {
                 status: status,
                 title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
             }));
+
             form.append(preview);
         });
     }).change();
 
     return this;
 };
-
 
 /**
  * Cookie status.
@@ -2012,11 +1993,10 @@ jQuery.fn.txpUploadPreview = function(template) {
 var cookieEnabled = true;
 
 // Setup panel.
-
 textpattern.Route.add('setup', function () {
     textpattern.passwordMask();
-    $('#setup_admin_theme').prop('required',true);
-    $('#setup_public_theme').prop('required',true);
+    $('#setup_admin_theme').prop('required', true);
+    $('#setup_public_theme').prop('required', true);
 
     if ($('textarea[name=config]').length) {
         $('.txp-config-download').on('click', function (e) {
@@ -2030,13 +2010,12 @@ textpattern.Route.add('setup', function () {
 });
 
 // Login panel.
-
 textpattern.Route.add('login', function () {
     // Check cookies.
     cookieEnabled = checkCookies();
 
     // Focus on either username or password when empty.
-    $('#login_form input').filter(function() {
+    $('#login_form input').filter(function () {
         return !this.value;
     }).first().focus();
 
@@ -2044,7 +2023,6 @@ textpattern.Route.add('login', function () {
 });
 
 // Write panel.
-
 textpattern.Route.add('article', function () {
     // Assume users would not change the timestamp if they wanted to
     // 'publish now'/'reset time'.
@@ -2061,32 +2039,29 @@ textpattern.Route.add('article', function () {
         }
     );
 
-    textpattern.Relay.register('article.section_changed',
-        function (event, data) {
-            var $overrideForm = $('#override-form');
-            var override_sel = $overrideForm.val();
+    textpattern.Relay.register('article.section_changed', function (event, data) {
+        var $overrideForm = $('#override-form');
+        var override_sel = $overrideForm.val();
 
-            $overrideForm.empty().append('<option></option>');
+        $overrideForm.empty().append('<option></option>');
 
-            $.each(data.data, function(key, item) {
-                var $option = $('<option />');
-                $option.text(item).attr('dir', 'auto').prop('selected', item == override_sel);
-                $overrideForm.append($option);
+        $.each(data.data, function(key, item) {
+            var $option = $('<option />');
+            $option.text(item).attr('dir', 'auto').prop('selected', item == override_sel);
+            $overrideForm.append($option);
+        });
+    });
+
+    $('#txp-write-sort-group').on('change', '#section', function () {
+        if (typeof allForms !== 'undefined') {
+            textpattern.Relay.callback('article.section_changed', {
+                data: allForms[$(this).find(':selected').data('skin')]
             });
         }
-    );
+    }).change();
 
-    $('#txp-write-sort-group').on('change', '#section',
-        function () {
-            if (typeof allForms !== 'undefined') {
-                textpattern.Relay.callback('article.section_changed', {
-                        data: allForms[$(this).find(':selected').data('skin')]
-                });
-            }
-        }
-    ).change();
-
-    var status = 'select[name=Status]', form = $(status).parents('form');
+    var status = 'select[name=Status]',
+        form = $(status).parents('form');
 
     $('#article_form').on('change', status, function () {
         let submitButton = form.find('input[type=submit]');
@@ -2104,14 +2079,22 @@ textpattern.Route.add('article', function () {
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit', {data: {copy:1, publish:1}});
+        form.trigger('submit', {
+            data: {
+                copy: 1,
+                publish: 1
+            }
+        });
     });
 
     // Switch to Text/HTML/Preview mode.
     var $pane = $('#pane-view').closest('.txp-dialog'),
         $field = '',
         $viewMode = $('#view_modes li.active [data-view-mode]');
-        if (!$viewMode.length) $viewMode = $('#view_modes [data-view-mode]').first();
+
+    if (!$viewMode.length) {
+        $viewMode = $('#view_modes [data-view-mode]').first();
+    }
 
     $pane.dialog({
         dialogClass: 'txp-preview-container',
@@ -2120,13 +2103,13 @@ textpattern.Route.add('article', function () {
         maxWidth: '100%'
     });
 
-    $pane.on( 'dialogopen', function( event, ui ) {
+    $pane.on('dialogopen', function (event, ui) {
         $('#live-preview').trigger('change');
-    }).on( 'dialogclose', function( event, ui ) {
+    }).on('dialogclose', function (event, ui) {
         $('#body, #excerpt').off('input', txp_article_preview);
     });
 
-    $('#live-preview').on('change', function() {
+    $('#live-preview').on('change', function () {
         if ($(this).is(':checked')) {
             $('#body, #excerpt').on('input', txp_article_preview);
         } else {
@@ -2134,35 +2117,43 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    textpattern.Relay.register('article.preview',
-        function (e) {
-            var data = form.serializeArray();
-            data.push({name: 'app_mode', value: 'async'});
-            data.push({name: 'preview', value: $field});
-            data.push({name: 'view', value: $viewMode.data('view-mode')});
-            textpattern.Relay.callback('updateList', {
-                url: 'index.php #pane-view',
-                data: data,
-                list: '#pane-view',
-                callback: function () {
-                    $pane.dialog('open');
-                }
-            });
-        }
-    );
+    textpattern.Relay.register('article.preview', function (e) {
+        var data = form.serializeArray();
 
-    $(document).on('click', '[data-view-mode]', function(e) {
+        data.push({
+            name: 'app_mode',
+            value: 'async'
+        });
+        data.push({
+            name: 'preview',
+            value: $field
+        });
+        data.push({
+            name: 'view',
+            value: $viewMode.data('view-mode')
+        });
+        textpattern.Relay.callback('updateList', {
+            url: 'index.php #pane-view',
+            data: data,
+            list: '#pane-view',
+            callback: function() {
+                $pane.dialog('open');
+            }
+        });
+    });
+
+    $(document).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
-        $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-'+$view).addClass('active');
+        $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
         textpattern.Relay.callback('article.preview');
-    }).on('click', '[data-preview-link]', function(e) {
+    }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
         $pane.dialog('option', 'title', $(this).text());
         $viewMode.click();
-    }).on('updateList', '#pane-view.html', function() {
+    }).on('updateList', '#pane-view.html', function () {
         Prism.highlightAllUnder(this);
     });
 
@@ -2176,7 +2167,6 @@ textpattern.Route.add('article', function () {
 
     $listoptions.on('selectmenuchange', function (e) {
         var me = $('option:selected', this);
-
         var wrapper = me.closest('.txp-textfilter-options');
         var thisHelp = me.data('help');
         var renderHelp = (typeof thisHelp === 'undefined') ? '' : thisHelp;
@@ -2192,22 +2182,20 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
-
 textpattern.Route.add('article.init', function () {
     $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange');
 });
 
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return;
-
-    textpattern.Relay.register('uploadStart', function(event) {
+    textpattern.Relay.register('uploadStart', function (event) {
         textpattern.Relay.data.fileid = [];
-    }).register('uploadEnd', function(event) {
-        var callback = function() {
+    }).register('uploadEnd', function (event) {
+        var callback = function () {
             textpattern.Console.clear().announce(event.type);
         };
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
 
             if (textpattern.Relay.data.fileid.length) {
@@ -2222,13 +2210,15 @@ textpattern.Route.add('file, image', function () {
             }
         });
     });
-
-    $('form.upload-form.async').txpUploadPreview()
-        .txpFileupload({formData: [{name: 'app_mode', value: 'async'}]});
+    $('form.upload-form.async').txpUploadPreview().txpFileupload({
+        formData: [{
+            name: 'app_mode',
+            value: 'async'
+        }]
+    });
 });
 
 // Uncheck reset on timestamp change.
-
 textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
@@ -2236,11 +2226,11 @@ textpattern.Route.add('article, file', function () {
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.
-
 textpattern.Route.add('skin, css, page, form', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
+
         if (target) {
             var $target = $('#' + target);
             $target.append('<input type="hidden" name="copy" value="1" />');
@@ -2250,7 +2240,6 @@ textpattern.Route.add('skin, css, page, form', function () {
 });
 
 // Tagbuilder.
-
 textpattern.Route.add('page, form, file, image', function () {
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.tag.success', function (event, data) {
@@ -2295,21 +2284,21 @@ textpattern.Route.add('page, form, file, image', function () {
 });
 
 // Pophelp.
-
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-        $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data) );
+        $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data));
         $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
-
-    $('body').on('click','.pophelp', function (ev) {
+    $('body').on('click', '.pophelp', function (ev) {
         var $pophelp = $('#pophelp_dialog');
 
         if ($pophelp.length == 0) {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                classes: {'ui-dialog': 'txp-dialog-container'},
+                classes: {
+                    'ui-dialog': 'txp-dialog-container'
+                },
                 autoOpen: false,
                 width: 440,
                 title: textpattern.gTxt('help'),
@@ -2320,38 +2309,40 @@ textpattern.Route.add('', function () {
         }
 
         var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
-        if (typeof item === 'undefined' ) {
+
+        if (typeof item === 'undefined') {
             txpAsyncLink(ev, 'pophelp');
         } else {
             $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
         }
+
         return false;
     });
 });
 
 // Forms panel.
-
 textpattern.Route.add('form', function () {
     $('#allforms_form').txpMultiEditForm({
-        'checkbox'   : 'input[name="selected_forms[]"][type=checkbox]',
-        'row'        : '.switcher-list li, .form-list-name',
+        'checkbox': 'input[name="selected_forms[]"][type=checkbox]',
+        'row': '.switcher-list li, .form-list-name',
         'highlighted': '.switcher-list li'
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function () {
-        $('#allforms_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected});
+        $('#allforms_form').txpMultiEditForm('select', {
+            value: textpattern.Relay.data.selected
+        });
+
         $('#allforms_form_sections').restorePanes();
     });
 });
 
 // Users panel.
-
 textpattern.Route.add('admin', function () {
     textpattern.passwordMask();
 });
 
 // Plugins panel.
-
 textpattern.Route.add('plugin', function () {
     textpattern.Relay.register('txpAsyncHref.success', function (event, data) {
         $(data['this']).closest('tr').toggleClass('active');
@@ -2359,27 +2350,30 @@ textpattern.Route.add('plugin', function () {
 });
 
 // Diagnostics panel.
-
 textpattern.Route.add('diag', function () {
     $('#diag_clear_private').change(function () {
         var diag_data = $('#diagnostics-data').val();
+
         if ($('#diag_clear_private').is(':checked')) {
             var regex = new RegExp($('#diagnostics-data').attr('data-txproot'), 'g');
             diag_data = diag_data.replace(/^===.*\s/gm, '').replace(regex, '__TXP-ROOT');
         } else {
             diag_data = diag_data.replace(/^=== +/gm, '');
         }
+
         $('#diagnostics-detail').val(diag_data);
     });
     $('#diag_clear_private').change();
 });
 
 // Languages panel.
-
 textpattern.Route.add('lang', function () {
     $('.txp-grid-lang').on('click', 'button', function (ev) {
         ev.preventDefault();
-        var $me = $(this), $form = $me.closest('form');
+
+        var $me = $(this),
+            $form = $me.closest('form');
+
         $form.find('input[name=step]').val($me.attr('name'));
         $(ev.delegateTarget).addClass('disabled').find('button').attr('disabled', true);
         $form.submit();
@@ -2387,7 +2381,6 @@ textpattern.Route.add('lang', function () {
 });
 
 // Images edit panel.
-
 textpattern.Route.add('image', function () {
     $('.thumbnail-swap-size').button({
         showLabel: false,
@@ -2397,21 +2390,22 @@ textpattern.Route.add('image', function () {
         var $h = $('#height');
         var width = $w.val();
         var height = $h.val();
+
         $w.val(height);
         $h.val(width);
     });
 });
 
-// Sections panel. Used for edit panel and multiedit change of page+style.
-// This can probably be cleaned up / optimised.
+// Sections panel. Used for edit panel and multi-edit change of page+style.
+// TODO: This can probably be cleaned up/optimized.
 
-textpattern.Route.add('section', function ()
-{
+textpattern.Route.add('section', function () {
     /**
      * Display assets based on the selected theme.
      *
      * @param  string skin The theme name from which to show assets
      */
+
     function section_theme_show(skin) {
         $('#section_page, #section_css, #multiedit_page, #multiedit_css, #multiedit_dev_page, #multiedit_dev_css').empty();
         var $pageSelect = $('[name=section_page], #multiedit_dev_page');
@@ -2420,9 +2414,9 @@ textpattern.Route.add('section', function ()
         if (skin in skin_page) {
             $pageSelect.append('<option></option>');
 
-            $.each(skin_page[skin], function(key, item) {
+            $.each(skin_page[skin], function (key, item) {
                 var isSelected = (item == page_sel) ? ' selected' : '';
-                $pageSelect.append('<option'+isSelected+'>'+item+'</option>');
+                $pageSelect.append('<option' + isSelected + '>' + item + '</option>');
             });
 
             if (page_sel === null) {
@@ -2433,9 +2427,9 @@ textpattern.Route.add('section', function ()
         if (skin in skin_style) {
             $styleSelect.append('<option></option>');
 
-            $.each(skin_style[skin], function(key, item) {
+            $.each(skin_style[skin], function (key, item) {
                 var isSelected = (item == style_sel) ? ' selected' : '';
-                $styleSelect.append('<option'+isSelected+'>'+item+'</option>');
+                $styleSelect.append('<option' + isSelected + '>' + item + '</option>');
             });
 
             if (style_sel === null) {
@@ -2444,9 +2438,9 @@ textpattern.Route.add('section', function ()
         }
     }
 
-    $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function() {
+    $('main').on('change', '#section_skin, #multiedit_skin, #multiedit_dev_skin', function () {
         section_theme_show($(this).val());
-    }).on('change', 'select[name=edit_method]', function() {
+    }).on('change', 'select[name=edit_method]', function () {
         if ($(this).val() === 'changepagestyle') {
             $('#multiedit_skin').change();
         } else if ($(this).val() === 'changepagestyledev') {
@@ -2459,9 +2453,7 @@ textpattern.Route.add('section', function ()
 });
 
 // Plugin help panel.
-
-textpattern.Route.add('plugin.plugin_help', function ()
-{
+textpattern.Route.add('plugin.plugin_help', function () {
     var $helpWrap = $(document.body).children('main');
     var $helpTxt = $helpWrap.children('.txp-layout-textbox');
     var $head = $helpTxt.children(':first');
@@ -2473,8 +2465,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         || $intro.length && !$sectHeads.length
         || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
-        || $helpTxt.find('script, style, [style], [id^="' + sectIdPrefix + '"], [id*=" ' + sectIdPrefix + '"], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
-    ) {
+        || $helpTxt.find('script, style, [style], [id^="' + sectIdPrefix + '"], [id*=" ' + sectIdPrefix + '"], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length) {
         return;
     }
 
@@ -2489,11 +2480,11 @@ textpattern.Route.add('plugin.plugin_help', function ()
         tabs += '<li><a data-txp-pane="intro" href="#' + sectIdPrefix + 'intro">' + textpattern.gTxt('documentation') + '</a></li>';
     }
 
-    $sectHeads.each(function(i, sectHead) {
+    $sectHeads.each(function (i, sectHead) {
         var $sectHead = $(sectHead);
         var $tabHead = $sectHead.clone();
 
-        $tabHead.find('a').each(function(i, anchor) {
+        $tabHead.find('a').each(function (i, anchor) {
             $(anchor).contents().unwrap();
         });
 
@@ -2513,7 +2504,6 @@ textpattern.Route.add('plugin.plugin_help', function ()
 });
 
 // All panels?
-
 textpattern.Route.add('', function () {
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
@@ -2538,11 +2528,13 @@ textpattern.Route.add('', function () {
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[dataItem] = {'tab':me.data('txp-pane')};
+        data[dataItem] = {
+            'tab': me.data('txp-pane')
+        };
         textpattern.storage.update(data);
     });
 
-    hasTabs.find('a:not([data-txp-pane], .pophelp)').click(function() {
+    hasTabs.find('a:not([data-txp-pane], .pophelp)').click(function () {
         $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {
@@ -2568,7 +2560,9 @@ textpattern.Route.add('', function () {
         selectedTab = 0;
     }
 
-    hasTabs.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    hasTabs.tabs({
+        active: selectedTab
+    }).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
     hasTabs.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
     tabs.removeClass('ui-state-default ui-corner-top');
     hasTabs.find('.txp-tabs-vertical-group').removeClass('ui-widget-content ui-corner-bottom');
@@ -2579,8 +2573,11 @@ $(document).ready(function () {
     $('body').restorePanes();
 
     // Collapse/Expand all support.
-    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
-        .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
+    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {
+        direction: 'collapse'
+    }, txp_expand_collapse_all).on('click', '.txp-expand-all', {
+        direction: 'expand'
+    }, txp_expand_collapse_all);
 
     // Confirmation dialogs.
     $(document).on('click.txpVerify', 'a[data-verify]', function (e) {
@@ -2599,7 +2596,7 @@ $(document).ready(function () {
     }
 
     // Enable spellcheck for all elements mentioned in textpattern.prefs.do_spellcheck.
-    $(textpattern.prefs.do_spellcheck).each(function(i, c) {
+    $(textpattern.prefs.do_spellcheck).each(function (i, c) {
         if ('spellcheck' in c) {
             $(c).prop('spellcheck', true);
         }
@@ -2610,7 +2607,9 @@ $(document).ready(function () {
 
     // Establish AJAX timeout from prefs.
     if ($.ajaxSetup().timeout === undefined) {
-        $.ajaxSetup({timeout: textpattern.ajax_timeout});
+        $.ajaxSetup({
+            timeout: textpattern.ajax_timeout
+        });
     }
 
     // Set up asynchronous forms.
@@ -2625,7 +2624,9 @@ $(document).ready(function () {
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    }, $(this).hasClass('script') ? {dataType: 'script'} : {}), 'a.async');
+    }, $(this).hasClass('script') ? {
+        dataType: 'script'
+    } : {}), 'a.async');
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
@@ -2654,13 +2655,14 @@ $(document).ready(function () {
     $('.txp-datepicker').txpDatepicker();
     $('.txp-sortable').txpSortable();
 
-
     // TODO: integrate jQuery UI stuff properly --------------------------------
-
 
     // Selectmenu
     $('.jquery-ui-selectmenu').selectmenu({
-        position: { my: dir+' top', at: dir+' bottom' }
+        position: {
+            my: dir + ' top',
+            at: dir + ' bottom'
+        }
     });
 
     // Button
@@ -2669,32 +2671,54 @@ $(document).ready(function () {
     // Button set
     $('.jquery-ui-controlgroup').controlgroup();
 
-
     // TODO: end integrate jQuery UI stuff properly ----------------------------
 
-
     // Async lists navigation
-    $('#txp-list-container').closest('main').on('submit', 'nav.prev-next form', function(e) {
+    $('#txp-list-container').closest('main').on('submit', 'nav.prev-next form', function (e) {
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
-    }).on('click', '.txp-navigation a', function(e) {
-        if ($(this).hasClass('pophelp')) return;
+        textpattern.Relay.callback('updateList', {
+            data: $(this).serializeArray()
+        });
+    }).on('click', '.txp-navigation a', function (e) {
+        if ($(this).hasClass('pophelp')) {
+            return;
+        }
+
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()});
+        textpattern.Relay.callback('updateList', {
+            url: $(this).attr('href'),
+            data: $('nav.prev-next form').serializeArray()
+        });
+
         scroll(0, 0);
-    }).on('click', '.txp-list thead th a', function(e) {
+    }).on('click', '.txp-list thead th a', function (e) {
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {list: '#txp-list-container', url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()});
-    }).on('submit', 'form[name="longform"]', function(e) {
+        textpattern.Relay.callback('updateList', {
+            list: '#txp-list-container',
+            url: $(this).attr('href'),
+            data: $('nav.prev-next form').serializeArray()
+        });
+    }).on('submit', 'form[name="longform"]', function (e) {
         e.preventDefault();
-        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
-    }).on('submit', 'form.txp-search', function(e) {
+        textpattern.Relay.callback('updateList', {
+            data: $(this).serializeArray()
+        });
+    }).on('submit', 'form.txp-search', function (e) {
         e.preventDefault();
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden');
-        else $(this).find('.txp-search-clear').addClass('ui-helper-hidden');
-        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()});
-    }).on('updateList', '#txp-list-container', function() {
-        if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize().length == 0) {
+
+        if ($(this).find('input[name="crit"]').val()) {
+            $(this).find('.txp-search-clear').removeClass('ui-helper-hidden');
+        } else {
+            $(this).find('.txp-search-clear').addClass('ui-helper-hidden');
+        }
+
+        textpattern.Relay.callback('updateList', {
+            data: $(this).serializeArray()
+        });
+    }).on('updateList', '#txp-list-container', function () {
+        if ($(this).find('.multi_edit_form').txpMultiEditForm('select', {
+            value: textpattern.Relay.data.selected
+        }).find('table.txp-list').txpColumnize().length == 0) {
             $(this).closest('.txp-layout-1col').find('.txp-list-options-button').hide();
         }
     });
@@ -2708,13 +2732,15 @@ $(document).ready(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
-
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang='+textpattern.prefs.language_ui+'&_txp_token='+textpattern._txp_token);
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang=' + textpattern.prefs.language_ui + '&_txp_token=' + textpattern._txp_token);
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
+
     // Trigger post init events.
-    textpattern.Route.init({'step':'init'});
+    textpattern.Route.init({
+        'step': 'init'
+    });
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
