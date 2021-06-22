@@ -4344,8 +4344,8 @@ function php($atts = null, $thing = null, $priv = null)
     $error = null;
 
     if ($priv) {
-        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $is_article_body);
-    } elseif (empty($is_article_body) || !empty($is_form)) {
+        $error = $is_article_body && !$is_form && !has_privs($priv, $is_article_body);
+    } elseif (!$is_article_body || $is_form) {
         if (!get_pref('allow_page_php_scripting')) {
             $error = 'php_code_disabled_page';
         }
@@ -4361,7 +4361,7 @@ function php($atts = null, $thing = null, $priv = null)
         if ($error) {
             trigger_error(gTxt($error));
         } else {
-            empty($atts) or extract($atts);
+            empty($atts) or extract($atts, EXTR_SKIP);
             eval($thing);
         }
 
@@ -5312,7 +5312,8 @@ function txp_escape($atts, $thing = '')
     foreach ($escape as $attr) {
         switch ($attr) {
             case 'html':
-                $thing = txpspecialchars($thing);
+                $thing = !$tidy ? txpspecialchars($thing) :
+                    ($mb ? mb_encode_numericentity($thing, array(0x0080, 0x10FFFF, 0x0, 0xFFFFFF), 'UTF-8') : htmlentities($thing));
                 break;
             case 'db':
                 $thing = safe_escape($thing);
@@ -5421,8 +5422,30 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                if (is_numeric($attr)) {
-                    $thing = $mb ? mb_substr($thing, 0, (int)$attr) : substr($thing, 0, (int)$attr);
+                if (preg_match('/^([+-]?\d*)(?:\.{2}([+-]?\d*))?$/', $attr, $match)) {
+                    list($attr, $first, $last) = $match + array(null, 1, null);
+                    $strlen = $mb ? mb_strlen($thing) : strlen($thing);
+                    $first = !$first ? 1 : ($first > 0 ? $first : $strlen + $first + 1);
+                    $last = !isset($last) ? $first : ($last > 0 ? $last : ($strlen + ($last ? $last + 1 : 0)));
+                
+                    if ($first > $last) {
+                        list($first, $last) = array($last, $first);
+                        $rev = true;
+                    }
+                
+                    if ($first > $strlen || $last < 1) {
+                        $thing = '';
+                    } elseif ($tidy) {
+                        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
+                        $thing = preg_replace($pattern, '$1', $thing);
+                    } else {
+                        $thing = ($mb.'substr')($thing, --$first, $last - $first);
+                    }
+                
+                    if ($thing && !empty($rev)) {
+                        $thing = !$mb ? strrev($thing) :
+                            mb_convert_encoding(strrev(mb_convert_encoding($thing, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
+                    }
                 } else {
                     $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
                 }
