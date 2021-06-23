@@ -4247,9 +4247,10 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
             if ($no !== false) {
                 $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
+                $field = is_numeric($no) ? "custom_{$no}" : $no;
 
                 if ($val === true) {
-                    $out[] = "({$not}custom_{$no} != '')";
+                    $out[] = "({$not}{$field} != '')";
                 } else {
                     $val = doSlash($val);
                     $parts = array();
@@ -4258,11 +4259,11 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                         list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
                         if (!isset($to)) {
-                            $parts[] = "{$not}custom_{$no} LIKE '$from'";
+                            $parts[] = "{$not}{$field} LIKE '$from'";
                         } elseif ($from !== '') {
-                            $parts[] = $to === '' ? "{$not}custom_{$no} >= '$from'" :  "{$not}custom_{$no} BETWEEN '$from' AND '$to'";
+                            $parts[] = $to === '' ? "{$not}{$field} >= '$from'" :  "{$not}{$field} BETWEEN '$from' AND '$to'";
                         } elseif ($to !== '') {
-                            $parts[] = "{$not}custom_{$no} <= '$to'";
+                            $parts[] = "{$not}{$field} <= '$to'";
                         }
                     }
 
