@@ -299,7 +299,9 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff);
  * Plugin storage directory.
  */
 
-define('PLUGINPATH', txpath.DS.'plugins');
+if (!defined('PLUGINPATH')) {
+    define('PLUGINPATH', txpath.DS.'plugins');
+}
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
