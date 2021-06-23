@@ -790,7 +790,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $exclude === true or $exclude = array_fill_keys($exclude, true);
 
-    $customFields = getCustomFields();
+    $customFields = getCustomFields() + array('url_title' => 'url_title');
     $customlAtts = array_null(array_flip($customFields));
 
     $extralAtts = array(

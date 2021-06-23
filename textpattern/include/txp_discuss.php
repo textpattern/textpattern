@@ -175,8 +175,8 @@ function discuss_list($message = '')
             break;
     }
 
-    if ($sort != 'date') {
-        $sort_sql .= ", txp_discuss.posted ASC";
+    if ($sort != 'id') {
+        $sort_sql .= ", txp_discuss.discussid $dir";
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';

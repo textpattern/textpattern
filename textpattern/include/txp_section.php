@@ -112,7 +112,7 @@ function sec_section_list($message = '', $update = false)
     }
 
     if (isset($columns[$sort])) {
-        $sort_sql = "$sort $dir";
+        $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
     } else {
         $sort_sql = "name $dir";
     }

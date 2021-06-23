@@ -30,7 +30,8 @@ class classic_theme extends \Textpattern\Admin\Theme
     function html_head()
     {
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1">';
-        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css');
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css')->setAtt('media', 'screen');
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/print.css')->setAtt('media', 'print');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
 

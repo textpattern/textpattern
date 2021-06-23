@@ -769,7 +769,7 @@ abstract class CommonBase implements CommonInterface
             if ($isAsset) {
                 $this->installed[$row[$thing]][] = $row['name'];
             } else {
-                $this->installed[$row['name']] = $row['title'] . ' ('.$row['version'].')';
+                $this->installed[$row['name']] = $row['title'] .($row['version'] ? ' ('.$row['version'].')' : '');
             }
         }
 

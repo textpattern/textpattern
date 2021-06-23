@@ -94,7 +94,7 @@ function plugin_list($message = '')
         set_pref('plugin_sort_dir', $dir, 'plugin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    $sort_sql = "$sort $dir";
+    $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter($event,
