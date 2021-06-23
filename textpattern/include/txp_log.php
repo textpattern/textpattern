@@ -113,6 +113,7 @@ function log_list($message = '')
             break;
     }
 
+    $sort_sql .= $sort == 'time' ? '' : ", time DESC";
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter(
