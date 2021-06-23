@@ -2143,9 +2143,22 @@ function if_expired($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
+    extract(lAtts(array(
+        'date'  => 'expires',
+        'time'  => null,
+    ), $atts));
 
-    $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
+    switch ($date) {
+        case 'expires':
+        case 'posted':
+        case 'modified':
+            assert_article();
+            $x = !empty($thisarticle[$date]) && ($thisarticle[$date] <= (isset($time) ? strtotime($time) : time()));
+            break;
+        default:
+            $x = strtotime($date) <= (isset($time) ? strtotime($time) : time());
+    }
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
