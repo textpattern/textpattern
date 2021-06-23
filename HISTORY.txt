@@ -15,6 +15,9 @@ Changes in 4.8.8 (upcoming)
 * Maintenance release including improvements for PHP 8.1 and bug fixes.
 * Fixed: More robust numeric searches.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
+* Fixed: Admin-side pagination when sorting by non-unique values.
+* Added: 'url_title' attribute to <txp:article[_custom] />.
+* Added: Substring extraction via 'escape' attribute.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 
