@@ -95,18 +95,11 @@ if (!empty($event) && $event == 'article') {
     require_privs('article');
 
     $save = gps('save');
-
-    if ($save) {
-        $step = 'save';
-    }
-
     $publish = gps('publish');
 
-    if ($publish) {
+    if ($save || $publish) {
         $step = 'save';
-    }
-
-    if (empty($step)) {
+    } elseif (empty($step)) {
         $step = 'edit';
     }
 
@@ -118,14 +111,12 @@ if (!empty($event) && $event == 'article') {
     ));
 
     switch ($step) {
-        case 'create':
-        case 'edit':
-            article_edit();
-            break;
         case 'publish':
         case 'save':
             article_save();
             break;
+        default:
+            article_edit();
     }
 }
 
