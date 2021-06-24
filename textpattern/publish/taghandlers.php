@@ -3291,7 +3291,7 @@ function article_image($atts)
     global $doctype, $thisarticle;
 
     extract(lAtts(array(
-        'items'     => '1',
+        'range'     => '1',
         'escape'    => true,
         'title'     => '',
         'class'     => '',
@@ -3317,8 +3317,8 @@ function article_image($atts)
 
     $out = array();
 
-    foreach ($items === true ? array_keys($images) : do_list($items) as $item) {
-        $item = intval($item) - ($items === true ? 0 : 1);
+    foreach ($range === true ? array_keys($images) : do_list($range) as $item) {
+        $item = intval($item) - ($range === true ? 0 : 1);
 
         if (isset($images[$item])) {
             $image = $images[$item];
@@ -3616,7 +3616,7 @@ function images($atts, $thing = null)
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
                         if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                            return article_image(compact('class', 'html_id', 'wraptag', 'break') + array('items' => true));
+                            return article_image(compact('class', 'html_id', 'wraptag', 'break', 'thumbnail') + array('range' => true));
                         }
 
                         $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
