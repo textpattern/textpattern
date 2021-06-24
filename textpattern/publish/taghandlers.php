@@ -3291,6 +3291,7 @@ function article_image($atts)
     global $doctype, $thisarticle;
 
     extract(lAtts(array(
+        'items'     => '1',
         'escape'    => true,
         'title'     => '',
         'class'     => '',
@@ -3300,60 +3301,75 @@ function article_image($atts)
         'height'    => '',
         'thumbnail' => 0,
         'wraptag'   => '',
+        'break'     => '',
         'loading'   => null,
     ), $atts));
 
     assert_article();
 
     if ($thisarticle['article_image']) {
-        $image = $thisarticle['article_image'];
-    } else {
+        $images = do_list_unique($thisarticle['article_image'], array(',', '-'));
+    }
+
+    if (empty($images)) {
         return '';
     }
 
-    if (intval($image)) {
-        $rs = safe_row("*", 'txp_image', "id = ".intval($image));
+    $out = array();
 
-        if (empty($rs)) {
-            trigger_error(gTxt('unknown_image'));
+    foreach ($items === true ? array_keys($images) : do_list($items) as $item) {
+        $item = intval($item) - ($items === true ? 0 : 1);
 
-            return '';
+        if (isset($images[$item])) {
+            $image = $images[$item];
+        } else continue;
+
+        if (is_numeric($image)) {
+            $rs = safe_row("*", 'txp_image', "id = ".intval($image));
+
+            if (empty($rs)) {
+                trigger_error(gTxt('unknown_image'));
+
+                continue;
+            }
+
+            if ($thumbnail && empty($rs['thumbnail'])) {
+                continue;
+            }
+
+            $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
+            $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
+
+            extract($rs);
+
+            if ($title === true) {
+                $title = $caption;
+            }
+
+            $img = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
+                '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
+                ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
+        } else {
+            $img = '<img src="'.txpspecialchars($image).'" alt=""'.
+                ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
         }
 
-        if ($thumbnail && empty($rs['thumbnail'])) {
-            return '';
+        if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
+            $img .= ' loading="'.$loading.'"';
         }
 
-        $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
-        $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
+        $img .=
+            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+            ($style ? ' style="'.txpspecialchars($style).'"' : '').
+            ($width ? ' width="'.(int) $width.'"' : '').
+            ($height ? ' height="'.(int) $height.'"' : '').
+            ' />';
 
-        extract($rs);
-
-        if ($title === true) {
-            $title = $caption;
-        }
-
-        $out = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
-            '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
-            ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
-    } else {
-        $out = '<img src="'.txpspecialchars($image).'" alt=""'.
-            ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
+            $out[] = $img;
     }
 
-    if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
-        $out .= ' loading="'.$loading.'"';
-    }
-
-    $out .=
-        (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-        (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-        ($style ? ' style="'.txpspecialchars($style).'"' : '').
-        ($width ? ' width="'.(int) $width.'"' : '').
-        ($height ? ' height="'.(int) $height.'"' : '').
-        ' />';
-
-    return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
+    return $wraptag ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : implode($break, $out);
 }
 
 // -------------------------------------------------------------
@@ -3600,7 +3616,7 @@ function images($atts, $thing = null)
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
                         if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                            return article_image(compact('class', 'html_id', 'wraptag'));
+                            return article_image(compact('class', 'html_id', 'wraptag', 'break') + array('items' => true));
                         }
 
                         $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
