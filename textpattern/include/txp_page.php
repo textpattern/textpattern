@@ -137,11 +137,11 @@ function page_edit($message = '', $refresh_partials = false)
     $thisSkin = Txp::get('Textpattern\Skin\Skin');
     $skin = $thisSkin->setName($skin)->setEditing();
 
-    if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
+    if ($step == 'page_delete' || $name === '' && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
-    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
+    } elseif ((($copy || $savenew) && $newname !== '') && !$save_error) {
         $name = $newname;
-    } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
+    } elseif ((($newname !== '' && $newname !== $name) || $step === 'page_new') && !$save_error) {
         $name = $newname;
         $class = '';
     } elseif ($savenew && $save_error) {
@@ -156,7 +156,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     $actionsExtras = '';
 
-    if ($name) {
+    if ($name !== '') {
         $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_page'), 'txp-new')
         .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#',
             array(
@@ -372,7 +372,7 @@ function page_save()
     $save_error = false;
     $message = '';
 
-    if (!$newname) {
+    if ($newname === '') {
         $message = array(gTxt('page_name_invalid'), E_ERROR);
         $save_error = true;
     } else {
@@ -398,7 +398,7 @@ function page_save()
             $save_error = true;
         } else {
             if ($savenew or $copy) {
-                if ($newname) {
+                if ($newname !== '') {
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
