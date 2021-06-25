@@ -786,13 +786,13 @@ textpattern.Console = {
     announce: function (event, options) {
         event = event || textpattern.event;
 
-        if (!!textpattern.Console.queue[event]) {
+        if (textpattern.Console.queue[event]) {
             return this;
         } else {
             textpattern.Console.queue[event] = true;
         }
 
-        $(document).ready(function () {
+        $(function () {
             var c = 0,
                 message = [],
                 status = 0;
@@ -950,7 +950,7 @@ textpattern.Route = {
 
     init: function (options) {
         var custom = !!options;
-        var options = $.extend({
+        options = $.extend({
             'event': textpattern.event,
             'step': textpattern.step
         }, options);
@@ -2001,7 +2001,7 @@ textpattern.Route.add('setup', function () {
     if ($('textarea[name=config]').length) {
         $('.txp-config-download').on('click', function (e) {
             var text = $('textarea[name=config]').val();
-            var text = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+            text = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
             var el = e.currentTarget;
             el.href = text;
             el.download = 'config.php';
@@ -2195,7 +2195,7 @@ textpattern.Route.add('file, image', function () {
             textpattern.Console.clear().announce(event.type);
         };
 
-        $(document).ready(function () {
+        $(function () {
             $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
 
             if (textpattern.Relay.data.fileid.length) {
@@ -2569,7 +2569,7 @@ textpattern.Route.add('', function () {
 });
 
 // Initialize JavaScript.
-$(document).ready(function () {
+$(function () {
     $('body').restorePanes();
 
     // Collapse/Expand all support.
