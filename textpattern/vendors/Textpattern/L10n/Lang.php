@@ -209,15 +209,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $meta = array();
 
         if (is_file($file) && is_readable($file)) {
-            $numMetaRows = 4;
-            $separator = '=>';
             extract(pathinfo($file));
             $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
             $ini = strtolower($extension) == 'ini';
+            $numMetaRows = 4;
 
             $meta['filename'] = $filename;
 
-            if ($fp = @fopen($file, 'r')) {
+            if ($fp = fopen($file, 'r')) {
                 for ($idx = 0; $idx < $numMetaRows; $idx++) {
                     $rows[] = fgets($fp, 1024);
                 }
@@ -231,6 +230,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                     $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
                     $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
                 } else {
+                    $separator = '=>';
                     $langName = do_list($rows[1], $separator);
                     $langCode = do_list($rows[2], $separator);
                     $langDirection = do_list($rows[3], $separator);
@@ -380,7 +380,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function getPack($lang_code, $group = null, $filter = '')
+    public function getPack($lang_code, $group = '', $filter = '')
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
