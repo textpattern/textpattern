@@ -118,8 +118,8 @@ class Parser
 
         if ($group && !is_array($group)) {
             $group = do_list($group);
-        } else {
-            $group = (array)$group;
+        } elseif (!$group) {
+            $group = array();
         }
 
         $out = array();

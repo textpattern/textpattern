@@ -5902,9 +5902,23 @@ function txp_match($atts, $what)
 
     if ($value !== null) {
         switch ($match) {
+            case '<':
+            case 'less':
+                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
+                break;
+            case '<=':
+                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
+                break;
+            case '>':
+            case 'greater':
+                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
+                break;
+            case '>=':
+                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
+                break;
             case '':
             case 'exact':
-                $cond = (is_array($what) ? implode('', $what) == $value : $what == $value);
+                $cond = (is_array($what) ? $what == do_list($value, $separator ? $separator : ',') : $what == $value);
                 break;
             case 'any':
                 $values = do_list_unique($value);

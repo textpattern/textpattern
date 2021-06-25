@@ -380,7 +380,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function getPack($lang_code, $group = null, $filter = '')
+    public function getPack($lang_code, $group = '', $filter = '')
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
