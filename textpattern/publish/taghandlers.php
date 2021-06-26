@@ -3316,13 +3316,27 @@ function article_image($atts)
     }
 
     $out = array();
+    
+    if ($range === true) {
+        $items = array_keys($images);
+    } else {
+        $n = count($images);
+        $items = array();
 
-    foreach ($range === true ? array_keys($images) : do_list($range) as $item) {
-        $item = intval($item) - ($range === true ? 0 : 1);
+        foreach (do_list($range) as $item) {
+            if (is_numeric($item)) {
+                $items[] = $item > 0 ? $item - 1 : $n + $item;
+            } elseif (preg_match('/^([-+]?\d+)\s*\-\s*([-+]?\d+)$/', $item, $match)) {
+                list($item, $start, $stop) = $match;
+                $start = $start > 0 ? $start - 1 : $n + $start;
+                $stop = $stop > 0 ? $stop - 1 : $n + $stop;
+                $items = array_merge($items, range($start, $stop));
+            }
+        }
+    }
 
-        if (isset($images[$item])) {
-            $image = $images[$item];
-        } else continue;
+    foreach ($items as $item) if (isset($images[$item])) {
+        $image = $images[$item];
 
         if (is_numeric($image)) {
             $rs = safe_row("*", 'txp_image', "id = ".intval($image));
@@ -3616,7 +3630,9 @@ function images($atts, $thing = null)
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
                         if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                            return article_image(compact('class', 'html_id', 'wraptag', 'break', 'thumbnail') + array('range' => true));
+                            return article_image(
+                                compact('class', 'html_id', 'wraptag', 'break', 'thumbnail')+ array('range' => ($offset + 1).'-'.($offset + $limit))
+                            );
                         }
 
                         $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
