@@ -3326,7 +3326,7 @@ function article_image($atts)
         foreach (do_list($range) as $item) {
             if (is_numeric($item)) {
                 $items[] = $item > 0 ? $item - 1 : $n + $item;
-            } elseif (preg_match('/^([-+]?\d+)\s*\-\s*([-+]?\d+)$/', $item, $match)) {
+            } elseif (preg_match('/^([-+]?\d+)\s*(?:\-|\.{2})\s*([-+]?\d+)$/', $item, $match)) {
                 list($item, $start, $stop) = $match;
                 $start = $start > 0 ? $start - 1 : $n + $start;
                 $stop = $stop > 0 ? $stop - 1 : $n + $stop;
