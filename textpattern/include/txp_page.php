@@ -139,9 +139,9 @@ function page_edit($message = '', $refresh_partials = false)
 
     if ($step == 'page_delete' || $name === '' && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
-    } elseif ((($copy || $savenew) && $newname !== '') && !$save_error) {
+    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
-    } elseif ((($newname !== '' && $newname !== $name) || $step === 'page_new') && !$save_error) {
+    } elseif ((($newname && $newname !== $name) || $step === 'page_new') && !$save_error) {
         $name = $newname;
         $class = '';
     } elseif ($savenew && $save_error) {
@@ -372,7 +372,7 @@ function page_save()
     $save_error = false;
     $message = '';
 
-    if ($newname === '') {
+    if (empty($newname)) {
         $message = array(gTxt('page_name_invalid'), E_ERROR);
         $save_error = true;
     } else {
@@ -398,7 +398,7 @@ function page_save()
             $save_error = true;
         } else {
             if ($savenew or $copy) {
-                if ($newname !== '') {
+                if ($newname) {
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
@@ -531,7 +531,7 @@ function page_partial_name($rs)
 {
     $name = $rs['name'];
     $skin = $rs['skin'];
-    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $nameRegex = '^(?=[^0.\s]|0.)[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     $titleblock = inputLabel(
         'new_page',
