@@ -11,6 +11,7 @@ Changes in 4.8.8 (upcoming)
 * Added: Expanded conditional 'match' attribute with comparison operators.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
+* PrismJS 1.24.0.
 
 Changes in 4.8.7 (30 May 2021)
 
