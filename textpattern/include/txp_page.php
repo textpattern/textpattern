@@ -151,9 +151,10 @@ function page_edit($message = '', $refresh_partials = false)
     if (!$save_error) {
         $html = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
     } else {
-        $html = gps('html');
+        $html = gps('html', false);
     }
 
+    $html !== false or $name = ''; 
     $actionsExtras = '';
 
     if ($name !== '') {
