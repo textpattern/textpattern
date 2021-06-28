@@ -638,13 +638,14 @@ function get_safe_image_types($type = null)
 {
     $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
         (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+
     if (has_privs('image.create.trusted')) {
         $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
     }
 
     callback_event_ref('txp.image', 'types', 0, $extensions);
 
-    if (func_num_args() > 0) {
+    if (isset($type)) {
         return !empty($extensions[$type]) ? $extensions[$type] : false;
     }
 
