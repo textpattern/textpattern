@@ -19,6 +19,8 @@ Changes in 4.8.8 (upcoming)
 * Added: 'url_title' attribute to <txp:article[_custom] />.
 * Added: Substring extraction via 'escape' attribute.
 * Added: 'date' and 'time' attributes to <txp:if_expired />.
+* Added: 'range' attribute to <txp:article_image />.
+* Added: Expanded conditional 'match' attribute with comparison operators.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 
