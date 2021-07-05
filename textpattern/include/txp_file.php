@@ -412,14 +412,6 @@ function file_list($message = '', $ids = array())
                     $multi_edit = '';
                 }
 
-                if ($file_exists) {
-                    $id_column .= span(
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.make_download_link($id, gTxt('download'), $filename),
-                        array('class' => 'txp-option-link')
-                    );
-                }
-
                 if (isset($file_statuses[$status])) {
                     $status = $file_statuses[$status];
                 } else {
