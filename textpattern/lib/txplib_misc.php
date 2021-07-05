@@ -3364,7 +3364,7 @@ function fetch_form($name, $theme = null)
 
         foreach ($names as $form) {
             if ($forms[$theme][$form] === false) {
-                trigger_error(gTxt('form_not_found').' '.$theme.'.'.$form);
+                trigger_error(gTxt('form_not_found', array('{list}' => $theme.'.'.$form)));
             }
         }
     }
