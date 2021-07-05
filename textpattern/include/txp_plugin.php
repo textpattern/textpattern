@@ -332,7 +332,10 @@ function plugin_list($message = '')
                     )), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
-                    ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external')) : $author), '', 'txp-list-col-author'
+                    ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
+                        'rel'    => 'external noopener',
+                        'target' => '_blank',
+                    )) : $author), '', 'txp-list-col-author'
                 ).
                 td(
                     $version, '', 'txp-list-col-version'
