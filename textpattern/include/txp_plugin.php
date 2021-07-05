@@ -313,7 +313,10 @@ function plugin_list($message = '')
                 '_txp_token'    => form_token(),
             );
 
-            $statusLink = status_link($status, $name, yes_no($status));
+            $statusLink = status_link($status, $name, yes_no($status), array(
+                'title'      => gTxt('toggle_yes_no'),
+                'aria-label' => gTxt('toggle_yes_no'),
+            ));
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
                 : $statusLink;
@@ -323,7 +326,10 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($name, $edit_url), '', ' class="txp-list-col-name" scope="row"'
+                    href($name, $edit_url, array(
+                        'title'      => gTxt('edit'),
+                        'aria-label' => gTxt('edit'),
+                    )), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
                     ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external')) : $author), '', 'txp-list-col-author'
@@ -492,22 +498,24 @@ function plugin_save()
 /**
  * Renders a status link.
  *
- * @param  string $status   The new status
- * @param  string $name     The plugin
- * @param  string $linktext The label
+ * @param  string $status     The new status
+ * @param  string $name       The plugin
+ * @param  string $linktext   The label
+ * @param  string|array $atts The element's HTML attributes
  * @return string HTML
  * @access private
  * @see    asyncHref()
  */
 
-function status_link($status, $name, $linktext)
+function status_link($status, $name, $linktext, $atts = '')
 {
     return asyncHref(
         $linktext,
         array(
             'step'  => 'switch_status',
             'thing' => $name,
-        )
+        ),
+        $atts
     );
 }
 

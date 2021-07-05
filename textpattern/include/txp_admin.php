@@ -499,7 +499,7 @@ function author_list($message = '')
                             ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
                         ).
                         hCell(
-                            ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
+                            ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name, '', '', gTxt('edit')) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
                         ).
                         td(
                             $RealName, '', 'txp-list-col-real-name name'

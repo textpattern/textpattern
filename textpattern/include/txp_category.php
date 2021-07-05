@@ -467,9 +467,9 @@ function cat_event_category_list($event)
             )) : '(0)';
 
             if (empty($title)) {
-                $edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';
+                $edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled'), '', '', gTxt('edit')).'</em>';
             } else {
-                $edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title);
+                $edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title, '', '', gTxt('edit'));
             }
 
             $items[] = graf(
