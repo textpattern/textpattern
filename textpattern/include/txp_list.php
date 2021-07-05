@@ -346,9 +346,9 @@ function list_list($message = '', $post = '')
                 extract($a);
 
                 if ($Title === '') {
-                    $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
+                    $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled'), '' , '', gTxt('edit')).'</em>';
                 } else {
-                    $Title = eLink('article', 'edit', 'ID', $ID, $Title);
+                    $Title = eLink('article', 'edit', 'ID', $ID, $Title, '', '', gTxt('edit'));
                 }
 
                 // Valid section and categories?
@@ -423,7 +423,7 @@ function list_list($message = '', $post = '')
                         ), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        eLink('article', 'edit', 'ID', $ID, $ID),
+                        eLink('article', 'edit', 'ID', $ID, $ID, '', '', gTxt('edit')),
                         '',
                         array(
                             'class' => '',
