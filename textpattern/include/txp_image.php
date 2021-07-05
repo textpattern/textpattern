@@ -404,7 +404,10 @@ function image_list($message = '')
                         gTime($uDate), '', 'txp-list-col-created date'
                     ).
                     td(
-                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
+                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                     ).
                     (has_privs('tag')
                         ? td(
