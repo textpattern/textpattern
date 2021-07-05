@@ -274,7 +274,7 @@ class Filter
             (
                 span(
                     href(gTxt('search_clear'), array('event' => $event)),
-                    array('class' => 'txp-search-clear'.($this->crit ? '' : ' hidden'))
+                    array('class' => 'txp-search-clear'.($this->crit ? '' : ' ui-helper-hidden'))
                 )
             ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
