@@ -3332,26 +3332,32 @@ function article_image($atts)
                 $items = array_merge($items, range($start, $stop));
             }
         }
+
+        $images = array_intersect_key($images, array_flip($items));
     }
+
+    $dbimages = array_map('intval', array_filter($images, 'is_numeric'));
+    $dbimages = empty($dbimages) ? array() :
+        array_column(safe_rows('*', 'txp_image', 'id IN('.implode(',', $dbimages).')'), null, 'id');
 
     foreach ($items as $item) if (isset($images[$item])) {
         $image = $images[$item];
 
         if (is_numeric($image)) {
-            $rs = safe_row("*", 'txp_image', "id = ".intval($image));
-
-            if (empty($rs)) {
+            if (!isset($dbimages[$image])) {
                 trigger_error(gTxt('unknown_image'));
 
                 continue;
             }
 
+            $rs = $dbimages[$image];
+
             if ($thumbnail && empty($rs['thumbnail'])) {
                 continue;
             }
 
-            $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
-            $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
+            $width or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
+            $height or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
 
             extract($rs);
 

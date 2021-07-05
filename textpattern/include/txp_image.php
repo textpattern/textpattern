@@ -374,7 +374,10 @@ function image_list($message = '')
                 $vc = $validator->validate() ? '' : ' error';
 
                 if ($category) {
-                    $category = span(txpspecialchars($category_title), array('title' => $category));
+                    $category = span(txpspecialchars($category_title), array(
+                        'title'      => $category,
+                        'aria-label' => $category,
+                    ));
                 }
 
                 $can_view = has_privs('image.edit.own');
@@ -385,7 +388,10 @@ function image_list($message = '')
                         $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ($can_view ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id)
+                        ($can_view ? href($id, $edit_url, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )) : $id)
                         , '', array(
                             'class' => 'txp-list-col-id',
                             'scope' => 'row',
@@ -398,7 +404,10 @@ function image_list($message = '')
                         gTime($uDate), '', 'txp-list-col-created date'
                     ).
                     td(
-                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
+                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                     ).
                     (has_privs('tag')
                         ? td(
@@ -411,7 +420,10 @@ function image_list($message = '')
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($realname), array(
+                            'title'      => $author,
+                            'aria-label' => $author,
+                        )), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
@@ -436,8 +448,8 @@ function image_list($message = '')
         'div', array(
             'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
-            'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
+            'aria-label' => gTxt('tagbuilder'),
         ));
 }
 
