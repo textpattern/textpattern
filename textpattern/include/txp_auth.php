@@ -200,7 +200,8 @@ function doLoginForm($message)
             ).
             graf(
                 href(htmlspecialchars(get_pref('sitename')), hu, array(
-                    'title'  => gTxt('tab_view_site'),
+                    'title'      => gTxt('tab_view_site'),
+                    'aria-label' => gTxt('tab_view_site'),
                 )), array('class' => 'login-view-site')
             );
 

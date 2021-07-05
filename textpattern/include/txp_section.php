@@ -310,7 +310,8 @@ function sec_section_list($message = '', $update = false)
                             'search_method' => 'section',
                             'crit'          => '"'.$sec_name.'"',
                         ), array(
-                            'title' => gTxt('article_count', array('{num}' => $sec_article_count)),
+                            'title'      => gTxt('article_count', array('{num}' => $sec_article_count)),
+                            'aria-label' => gTxt('article_count', array('{num}' => $sec_article_count)),
                         ));
                     } else {
                         $articles = 0;
@@ -338,7 +339,10 @@ function sec_section_list($message = '', $update = false)
                         'event' => $item,
                         'name'  => $sec_item,
                         'skin'  => $sec_skin,
-                    ), array('title' => gTxt('edit'))
+                    ), array(
+                        'title'      => gTxt('edit'),
+                        'aria-label' => gTxt('edit'),
+                    )
                     ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
                     ($replaced ?
                         n.'<hr class="secondary" />'.n.
@@ -346,7 +350,10 @@ function sec_section_list($message = '', $update = false)
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'))).
+                        ), array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )).
                         ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
                     : '');
                 }
@@ -361,7 +368,10 @@ function sec_section_list($message = '', $update = false)
                     ).
                     hCell(
                         href(
-                            txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
+                            txpspecialchars($sec_name), $edit_url, array(
+                                'title'      => gTxt('edit'),
+                                'aria-label' => gTxt('edit'),
+                            )
                         ).
                         span(
                             sp.span('&#124;', array('role' => 'separator')).
