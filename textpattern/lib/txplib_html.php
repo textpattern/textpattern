@@ -218,8 +218,9 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
-        'class' => $class,
-        'title' => $title,
+        'class'      => $class,
+        'title'      => $title,
+        'aria-label' => $title,
     ));
 }
 
