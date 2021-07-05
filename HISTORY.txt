@@ -9,6 +9,7 @@ Changes in 4.8.8 (upcoming)
 * Added: 'date' and 'time' attributes to <txp:if_expired />.
 * Added: 'range' attribute to <txp:article_image />.
 * Added: Expanded conditional 'match' attribute with comparison operators.
+* Accessibility: Additional 'aria-label' attributes for various internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 * PrismJS 1.24.1.
