@@ -36,9 +36,17 @@ The general steps for Pull Requests:
 * Visit your repository's page on GitHub and click the 'Pull Request' button.
 * Label the pull request with a clear title and description.
 
+### Make it testable
+
+This is the most important part. It makes the development team's job easier if the code is deemed supportable and maintainable - after all, we're the ones who will receive the bug reports and cries for help. The more you can do to help test your code, the better: examples of input and expected output, a test plan, notes on what you have and haven't tested.
+
+If you have a big patch, consider splitting it into smaller, related chunks. Git branches are ideal for this as you can commit to each branch and hop between them, then submit each as a separate pull request. Also, please ensure your patch has the latest branch from our repo merged into it immediately prior to submission. If you have written the patch against the `dev` branch, for example, do `git merge dev` when on your branch to pull forward any recent changes to dev from other developers, then prepare your pull request. This step makes it easier for us to pull the patch down and test it in our development environments.
+
+Scripted unit tests are becoming increasingly important in the Textpattern release process. You can make your code more testable by using a [functional design](https://en.wikipedia.org/wiki/Functional_design) with minimal coupling. A function that can be run in isolation, and returns a value based on its arguments, is easy to test. A function that prints output based on global variables, database records and configuration values is much harder to test (conveniently, Textpattern tag handler functions are usually easy to test).
+
 ### Coding standard
 
-The project follows the [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide-meta.md) standards with PHP 5.3 style namespacing. You can use [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) to make sure your additions follow them, too:
+The project follows the [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/) standards with PHP 5.3 style namespacing. You can use [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) to make sure your additions follow them, too:
 
 ~~~ ShellSession
 $ ./vendor/bin/phpcs --standard=phpcs.xml *.php textpattern
@@ -65,14 +73,6 @@ Don't reinvent the wheel. Is there already a function in PHP or Textpattern that
 Don't try to solve a problem unless you've tested it. This is particularly important for performance enhancements: measure the speed before and after - is the improvement really significant? If not, the simplest solution might be to leave it alone.
 
 Similarly, don't write a bunch of functions or tag attributes on the assumption that they might be useful in the future. Unless you have a use case, leave it out.
-
-### Make it testable
-
-This is the most important part. It makes the development team's job easier if the code is deemed supportable and maintainable - after all, we're the ones who will receive the bug reports and cries for help. The more you can do to help test your code, the better: examples of input and expected output, a test plan, notes on what you have and haven't tested.
-
-If you have a big patch, consider splitting it into smaller, related chunks. Git branches are ideal for this as you can commit to each branch and hop between them, then submit each as a separate pull request. Also, please ensure your patch has the latest branch from our repo merged into it immediately prior to submission. If you have written the patch against the `dev` branch, for example, do `git merge dev` when on your branch to pull forward any recent changes to dev from other developers, then prepare your pull request. This step makes it easier for us to pull the patch down and test it in our development environments.
-
-Scripted unit tests are becoming increasingly important in the Textpattern release process. You can make your code more testable by using a [functional design](https://en.wikipedia.org/wiki/Functional_design) with minimal coupling. A function that can be run in isolation, and returns a value based on its arguments, is easy to test. A function that prints output based on global variables, database records and configuration values is much harder to test (conveniently, Textpattern tag handler functions are usually easy to test).
 
 Sure, we break our own rules sometimes. But, as a rule, we err on the side of simplicity.
 

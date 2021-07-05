@@ -440,8 +440,8 @@ function form_edit($message = '', $refresh_partials = false)
         'div', array(
             'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
-            'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
+            'aria-label' => gTxt('tagbuilder'),
         ));
 
     echo n.'</div>'; // End of .txp-layout.
