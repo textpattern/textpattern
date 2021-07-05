@@ -461,7 +461,10 @@ function cat_event_category_list($event)
                     break;
             }
 
-            $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url) : '(0)';
+            $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url, array(
+                'title'      => gTxt('category_count', array('{num}' => $total_count[$name])),
+                'aria-label' => gTxt('category_count', array('{num}' => $total_count[$name])),
+            )) : '(0)';
 
             if (empty($title)) {
                 $edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';

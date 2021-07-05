@@ -290,18 +290,27 @@ function sec_section_list($message = '', $update = false)
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'on_frontpage',
+                    ), array(
+                        'title'      => gTxt('toggle_yes_no'),
+                        'aria-label' => gTxt('toggle_yes_no'),
                     ));
 
                     $sec_in_rss = asyncHref(yes_no($sec_in_rss), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'in_rss',
+                    ), array(
+                        'title'      => gTxt('toggle_yes_no'),
+                        'aria-label' => gTxt('toggle_yes_no'),
                     ));
 
                     $sec_searchable = asyncHref(yes_no($sec_searchable), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'searchable',
+                    ), array(
+                        'title'      => gTxt('toggle_yes_no'),
+                        'aria-label' => gTxt('toggle_yes_no'),
                     ));
 
                     if ($sec_article_count > 0) {
