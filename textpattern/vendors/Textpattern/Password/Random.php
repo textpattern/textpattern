@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -79,7 +79,7 @@ class Random extends \Textpattern\Password\Generator
             $random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
         }
 
-        if (!$random && IS_WIN === false && file_exists('/dev/urandom') && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
+        if (!$random && IS_WIN === false && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
             if (function_exists('stream_set_read_buffer')) {
                 stream_set_read_buffer($fp, 0);
             }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -205,7 +205,7 @@ function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $dou
     //        }
     //    }
     //
-    return htmlspecialchars($string, $flags, $encoding, $double_encode);
+    return htmlspecialchars((string)$string, $flags, $encoding, $double_encode);
 }
 
 /**
@@ -517,7 +517,7 @@ function plug_privs($pluggable = null, $user = null)
         if (is_array($pane)) {
             if (isset($pane[0])) {
                 if (!in_list($level, $pane[0])) {
-                    return;
+                    break;
                 }
 
                 unset($pane[0]);
@@ -526,13 +526,12 @@ function plug_privs($pluggable = null, $user = null)
             $pane = array('prefs.'.$pref => $pane);
         }
 
-        array_walk($pane, function (&$item) use ($level) {
-            if ($item === true) {
-                $item = $level;
-            }
-        });
-
         if (get_pref($pref)) {
+            array_walk($pane, function (&$item) use ($level) {
+                if ($item === true) {
+                    $item = $level;
+                }
+            });
             add_privs($pane);
         } else {
             add_privs(array_fill_keys(array_keys($pane), null));
@@ -562,7 +561,7 @@ function add_privs($res, $perm = '1')
 
     foreach ($res as $priv => $group) {
         if ($group === null) {
-            unset($txp_permissions[$priv]);
+            $txp_permissions[$priv] = null;
         } else {
             $group .= (empty($txp_permissions[$priv]) ? '' : ','.$txp_permissions[$priv]);
             $group = join(',', do_list_unique($group));
@@ -617,6 +616,42 @@ function the_privileged($res, $real = false)
 
     return $out;
 }
+
+/**
+ * Lists image types that can be safely uploaded.
+ *
+ * Returns different results based on the logged in user's privileges.
+ *
+ * @param   int         $type If set, validates the given value
+ * @return  mixed
+ * @package Image
+ * @since   4.6.0
+ * @example
+ * list($width, $height, $extension) = getimagesize('image');
+ * if ($type = get_safe_image_types($extension))
+ * {
+ *     echo "Valid image of {$type}.";
+ * }
+ */
+
+function get_safe_image_types($type = null)
+{
+    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+
+    if (has_privs('image.create.trusted')) {
+        $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
+    }
+
+    callback_event_ref('txp.image', 'types', 0, $extensions);
+
+    if (isset($type)) {
+        return !empty($extensions[$type]) ? $extensions[$type] : false;
+    }
+
+    return $extensions;
+}
+
 
 /**
  * Gets the dimensions of an image for a HTML &lt;img&gt; tag.
@@ -709,9 +744,17 @@ function imageFetchInfo($id = "", $name = "")
 
 function image_format_info($image)
 {
+    static $mimetypes;
+
     if (($unix_ts = @strtotime($image['date'])) > 0) {
         $image['date'] = $unix_ts;
     }
+
+    if (!isset($mimetypes)) {
+        $mimetypes = get_safe_image_types();
+    }
+
+    $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? image_type_to_mime_type($mime) : '';
 
     return $image;
 }
@@ -975,6 +1018,35 @@ function cs($thing)
 }
 
 /**
+ * Sets a HTTP cookie (polyfill).
+ *
+ * @param   string $name The cookie name
+ * @param   string $value The cookie value
+ * @param   array  $options The cookie options
+ * @package Network
+ */
+
+function set_cookie($name, $value = '', $options = array())
+{
+    $options += array (
+        'expires' => time() - 3600,
+        'path' => '',
+        'domain' => '',
+        'secure' => false,
+        'httponly' => false,
+        'samesite' => 'Lax' // None || Lax  || Strict
+    );
+
+    if (version_compare(phpversion(), '7.3.0') >= 0) {
+        return setcookie($name, $value, $options);
+    }
+
+    extract($options);
+
+    return setcookie($name, $value, $expires, $path.'; samesite='.$samesite, $domain, $secure, $httponly);
+}
+
+/**
  * Converts a boolean to a localised "Yes" or "No" string.
  *
  * @param   bool $status The boolean. Ignores type and as such can also take a string or an integer
@@ -1079,7 +1151,7 @@ function load_plugin($name, $force = false)
             \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($txp_current_plugin, $code);
         }
 
-        $ok = @include_once($filename);
+        $ok = is_readable($filename) ? include_once($filename) : false;
         $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
         restore_error_handler();
 
@@ -1144,7 +1216,7 @@ function include_plugin($name)
 
 function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 {
-    global $production_status, $txp_current_plugin;
+    global $production_status, $txp_current_plugin, $plugins_ver;
 
     $error = array();
 
@@ -1174,9 +1246,12 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
+    $version = empty($plugins_ver[$txp_current_plugin]) ? '' : ' ('.$plugins_ver[$txp_current_plugin].')';
+
     printf(
-        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s%s</b> -> <b>%s: %s on line %s</b></pre>',
         $txp_current_plugin,
+        $version,
         $error[$errno],
         $errstr,
         $errline
@@ -1402,7 +1477,7 @@ function load_plugins($type = false, $pre = null)
                     \Txp::get('\Textpattern\Plugin\Plugin')->updateFile($a['name'], $code);
                 }
 
-                $eval_ok = @include($filename);
+                $eval_ok = is_readable($filename) ? include($filename) : false;
                 $trace->stop();
 
                 if ($eval_ok === false) {
@@ -1439,12 +1514,20 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $plugin_callback[] = array(
-        'function' => $func,
-        'event'    => $event,
-        'step'     => $step,
-        'pre'      => $pre,
-    );
+    $pre or $pre = 0;
+
+    isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
+    isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
+    isset($plugin_callback[$event][$pre][$step]) or $plugin_callback[$event][$pre][$step] =
+        isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array();
+
+    if ($step === '') {
+        foreach($plugin_callback[$event][$pre] as $key => $val) {
+            $plugin_callback[$event][$pre][$key][] = $func;
+        }
+    } else {
+        $plugin_callback[$event][$pre][$step][] = $func;
+    }
 }
 
 /**
@@ -1479,54 +1562,54 @@ function register_callback($func, $event, $step = '', $pre = 0)
 
 function callback_event($event, $step = '', $pre = 0)
 {
-    global $plugin_callback, $production_status, $trace;
+    global $production_status, $trace;
 
-    if (!is_array($plugin_callback)) {
+    list($pre, $renew) = (array)$pre + array(0, null);
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return '';
     }
 
-    list($pre, $renew) = (array)$pre + array(0, null);
     $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                if ($production_status !== 'live') {
-                    $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString()."'".
-                        (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
-                }
-
-                $return_value = call_user_func_array($c['function'], array(
-                    'event' => $event,
-                    'step'  => $step,
-                ) + $argv);
-
-                if (isset($renew)) {
-                    $argv[$renew] = $return_value;
-                }
-
-                if (isset($out) && !isset($renew)) {
-                    if (is_array($return_value) && is_array($out)) {
-                        $out = array_merge($out, $return_value);
-                    } elseif (is_bool($return_value) && is_bool($out)) {
-                        $out = $return_value && $out;
-                    } else {
-                        $out .= $return_value;
-                    }
-                } else {
-                    $out = $return_value;
-                }
-
-                if ($production_status !== 'live') {
-                    $trace->stop();
-                }
-            } elseif ($production_status === 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            if ($production_status !== 'live') {
+                $trace->start("\t[Call function: '".Txp::get('\Textpattern\Type\TypeCallable', $c)->toString()."'".
+                    (empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
             }
+
+            $return_value = call_user_func_array($c, array_merge(array(
+                $event,
+                $step
+            ), $argv));
+
+            if (isset($renew)) {
+                $argv[$renew] = $return_value;
+            }
+
+            if (isset($out) && !isset($renew)) {
+                if (is_array($return_value) && is_array($out)) {
+                    $out = array_merge($out, $return_value);
+                } elseif (is_bool($return_value) && is_bool($out)) {
+                    $out = $return_value && $out;
+                } else {
+                    $out .= $return_value;
+                }
+            } else {
+                $out = $return_value;
+            }
+
+            if ($production_status !== 'live') {
+                $trace->stop();
+            }
+        } elseif ($production_status === 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1554,25 +1637,25 @@ function callback_event($event, $step = '', $pre = 0)
 
 function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$options = null)
 {
-    global $plugin_callback, $production_status;
+    global $production_status;
 
-    if (!is_array($plugin_callback)) {
+    $callbacks = callback_handlers($event, $step, $pre, false);
+
+    if (empty($callbacks)) {
         return array();
     }
 
     $return_value = array();
 
-    foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
-            if (is_callable($c['function'])) {
-                // Cannot call event handler via call_user_func() as this would
-                // dereference all arguments. Side effect: callback handler
-                // *must* be ordinary function, *must not* be class method in
-                // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
-                $return_value[] = $c['function']($event, $step, $data, $options);
-            } elseif ($production_status == 'debug') {
-                trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString())), E_USER_WARNING);
-            }
+    foreach ($callbacks as $c) {
+        if (is_callable($c)) {
+            // Cannot call event handler via call_user_func() as this would
+            // dereference all arguments. Side effect: callback handler
+            // *must* be ordinary function, *must not* be class method in
+            // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
+            $return_value[] = $c($event, $step, $data, $options);
+        } elseif ($production_status == 'debug') {
+            trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
     }
 
@@ -1621,23 +1704,23 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
+    $pre or $pre = 0;
+    $step or $step = 0;
+
+    $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
+        (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
+
+    if (!$as_string) {
+        return $callbacks;
+    }
+
     $out = array();
 
-    foreach ((array) $plugin_callback as $c) {
-        if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre) {
-            if ($as_string) {
-                $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c['function'])->toString();
-            } else {
-                $out[] = $c['function'];
-            }
-        }
+    foreach ($callbacks as $c) {
+        $out[] = Txp::get('\Textpattern\Type\TypeCallable', $c)->toString();
     }
 
-    if ($out) {
-        return $out;
-    }
-
-    return false;
+    return $out;
 }
 
 /**
@@ -1971,20 +2054,20 @@ function noWidow($str)
  * Checks if an IP is on a spam blocklist.
  *
  * @param   string       $ip     The IP address
- * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
+ * @param   string|array $checks The checked lists. Defaults to 'spam_blocklists' preferences string
  * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
- * if (is_blacklisted('192.0.2.1'))
+ * if (is_blocklisted('192.0.2.1'))
  * {
  *     echo "'192.0.2.1' is on the blocklist.";
  * }
  */
 
-function is_blacklisted($ip, $checks = '')
+function is_blocklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list_unique(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blocklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));
@@ -2063,7 +2146,7 @@ function updateSitePath($here)
 /**
  * Converts Textpattern tag's attribute list to an array.
  *
- * @param   string $text The attribute list, e.g. foobar="1" barfoo="0"
+ * @param   array|string $text The attribute list, e.g. foobar="1" barfoo="0"
  * @return  array Array of attributes
  * @access  private
  * @package TagParser
@@ -2076,6 +2159,11 @@ function splat($text)
 
     if ($globals === null) {
         $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    }
+
+    if (is_array($text)) {
+        $txp_atts = array_intersect_key($text, $globals);
+        return $text;
     }
 
     $sha = sha1($text);
@@ -2192,8 +2280,8 @@ function is_valid_email($address)
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
- * @param   string $reply_to The reply to address
- * @return  bool   Returns FALSE when sending failed
+ * @param   string $reply_to   The reply to address
+ * @return  bool   FALSE when sending failed
  * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
@@ -2225,10 +2313,15 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
 
     if ($sender) {
         extract($sender);
+        $ret = callback_event('mail', 'format.body', 0, $body);
+
+        if ($ret) {
+            $body = $ret;
+        }
 
         try {
-            $message = Txp::get('\Textpattern\Mail\Compose')
-                ->from($email, $RealName)
+            $message = Txp::get('\Textpattern\Mail\Compose')->getDefaultAdapter();
+            $message->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
                 ->body($body);
@@ -2300,12 +2393,14 @@ function stripPHP($in)
  *
  * On a successful run, will trigger a 'form.create > done' callback event.
  *
- * @param   string $name The name
- * @param   string $type The type
- * @param   string $Form The template
- * @return  bool FALSE on error
- * @since   4.6.0
- * @package Template
+ * @param      string $name The name
+ * @param      string $type The type
+ * @param      string $Form The template
+ * @return     bool FALSE on error
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\Skin
+ * @package    Template
  */
 
 function create_form($name, $type, $Form)
@@ -2335,10 +2430,12 @@ function create_form($name, $type, $Form)
 /**
  * Checks if a form template exists.
  *
- * @param   string $name The form
- * @return  bool TRUE if the form exists
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form
+ * @return     bool TRUE if the form exists
+ * @since      4.6.0
+ * @deprecated 4.8.6 (not skin-aware)
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function form_exists($name)
@@ -2349,10 +2446,12 @@ function form_exists($name)
 /**
  * Validates a string as a form template name.
  *
- * @param   string $name The form name
- * @return  bool TRUE if the string validates
- * @since   4.6.0
- * @package Template
+ * @param      string $name The form name
+ * @return     bool TRUE if the string validates
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\CommonBase
+ * @package    Template
  */
 
 function is_valid_form($name)
@@ -2364,6 +2463,39 @@ function is_valid_form($name)
     }
 
     return $name && !preg_match('/^\s|[<>&"\']|\s$/u', $name) && $length <= 64;
+}
+
+/**
+ * Validates a string as a date% query.
+ *
+ * @param   string $date The partial date
+ * @return  bool|string FALSE if the string does not validate
+ * @since   4.8.5
+ * @package Template
+ */
+
+function is_date($month)
+{
+    if (!preg_match('/^\d{1,4}(?:\-\d{1,2}){0,2}$/', $month)) {
+        return false;
+    }
+
+    $month = explode('-', $month, 3);
+    $result = true;
+
+    switch (count($month)) {
+        case 3:
+            $result = checkdate($month[1], $month[2], $month[0]) and
+            $month[2] = str_pad($month[2], 2, '0', STR_PAD_LEFT);
+        case 2:
+            $result = $result && $month[1] > 0 && $month[1] < 13;
+            !$result or $month[1] = str_pad($month[1], 2, '0', STR_PAD_LEFT);
+        case 1:
+            $result = $result && $month[0] > 0;
+            !$result or $month[0] = str_pad($month[0], 4, '0', STR_PAD_LEFT);
+    }
+
+    return $result ? implode('-', $month) : false;
 }
 
 /**
@@ -2379,17 +2511,37 @@ function since($stamp)
     $diff = (time() - $stamp);
 
     if ($diff <= 3600) {
-        $mins = round($diff / 60);
-        $since = ($mins <= 1) ? ($mins == 1) ? '1 '.gTxt('minute') : gTxt('a_few_seconds') : "$mins ".gTxt('minutes');
+        $qty = round($diff / 60);
+
+        if ($qty < 1) {
+            $qty = '';
+            $period = gTxt('a_few_seconds');
+        } elseif ($qty == 1) {
+            $period = gTxt('minute');
+        } else {
+            $period = gTxt('minutes');
+        }
     } elseif (($diff <= 86400) && ($diff > 3600)) {
-        $hours = round($diff / 3600);
-        $since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
+        $qty = round($diff / 3600);
+
+        if ($qty <= 1) {
+            $qty = 1;
+            $period = gTxt('hour');
+        } else {
+            $period = gTxt('hours');
+        }
     } elseif ($diff >= 86400) {
-        $days = round($diff / 86400);
-        $since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
+        $qty = round($diff / 86400);
+
+        if ($qty <= 1) {
+            $qty = 1;
+            $period = gTxt('day');
+        } else {
+            $period = gTxt('days');
+        }
     }
 
-    return gTxt('ago', array('{since}' => $since));
+    return gTxt('ago', array('{qty}' => $qty, '{period}' => $period));
 }
 
 /**
@@ -2815,6 +2967,16 @@ function fileDownloadFormatTime($params)
 }
 
 /**
+ * file_get_contents wrapper.
+ *
+ */
+
+function txp_get_contents($file)
+{
+    return is_readable($file) ? file_get_contents($file) : '';
+}
+
+/**
  * Returns the contents of the found files as an array.
  *
  */
@@ -2822,9 +2984,12 @@ function fileDownloadFormatTime($params)
 function get_files_content($dir, $ext)
 {
     $result = array();
-    foreach ((array)@scandir($dir) as $file) {
-        if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
-            $result[$match[1]] = file_get_contents("$dir/$file");
+
+    if (is_readable($dir)) {
+        foreach ((array)scandir($dir) as $file) {
+            if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
+                $result[$match[1]] = file_get_contents("$dir/$file");
+            }
         }
     }
 
@@ -2958,8 +3123,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-    $t = '@^</?('.TXP_PATTERN.'):(\w+)(.*)/?\>$@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
@@ -2982,6 +3147,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     $tags    = array($inside);
     $tag     = array();
     $outside = array();
+    $order = array(array());
     $else    = array(-1);
     $count   = array(-1);
     $level   = 0;
@@ -2995,7 +3161,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
             $else[$level] = $count[$level];
         } elseif ($tag[$level][1] === 'txp:') {
             // Handle <txp::shortcode />.
-            $tag[$level][3] .= ' form="'.$tag[$level][2].'"';
+            $tag[$level][4] .= ' form="'.$tag[$level][2].'"';
             $tag[$level][2] = 'output_form';
         } elseif ($short_tags && $tag[$level][1] !== 'txp') {
             // Handle <short::tags />.
@@ -3008,16 +3174,19 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
             }
 
-            $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
+            $tags[$level][] = array($chunk, $tag[$level][2], trim(rtrim($tag[$level][4], '/')), null, null);
             $inside[$level] .= $chunk;
+            empty($tag[$level][3]) or $order[$level][count($tags[$level])/2] = $tag[$level][3];
         } elseif ($chunk[1] !== '/') {
             // Opening tag.
             $inside[$level] .= $chunk;
+            empty($tag[$level][3]) or $order[$level][(count($tags[$level])+1)/2] = $tag[$level][3];
             $level++;
             $outside[$level] = $chunk;
             $inside[$level] = '';
             $else[$level] = $count[$level] = -1;
             $tags[$level] = array();
+            $order[$level] = array();
         } else {
             // Closing tag.
             if ($level < 1) {
@@ -3035,10 +3204,10 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                 }
 
                 $sha = sha1($inside[$level]);
-                $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
-                $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
+                txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
+
                 $level--;
-                $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], $chunk);
+                $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][4]), $inside[$level+1], $chunk);
                 $inside[$level] .= $inside[$level+1].$chunk;
             }
         }
@@ -3048,9 +3217,34 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $inside[$level] .= $chunk;
     }
 
-    $txp_parsed[$hash] = $tags[0];
-    $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+    txp_fill_parsed($hash, $tags[0], $order[0], $count[0] + 2, $else[0]);
 }
+
+/** Auxiliary **/
+
+function txp_fill_parsed($sha, $tags, $order, $count, $else) {
+    global $txp_parsed, $txp_else;
+
+    $txp_parsed[$sha] = $count > 2 ? $tags : false;
+    $txp_else[$sha] = array($else > 0 ? $else : $count, $count - 2);
+
+    if (!empty($order)) {
+        $pre = array_filter($order, function ($v) {return $v > 0;});
+        $post = array_filter($order, function ($v) {return $v < 0;});
+
+        if  ($pre) {
+            asort($pre);
+        }
+
+        if  ($post) {
+            asort($post);
+        }
+
+        $txp_else[$sha]['test'] = $post ? array_merge(array_keys($pre), array(0), array_keys($post)) : ($pre ? array_keys($pre) : null);
+        //rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
+    }
+}
+
 
 /**
  * Extracts a statement from a if/else condition.
@@ -3124,7 +3318,7 @@ function EvalElse($thing, $condition)
         $txp_atts = null;
     }
 
-    return getIfElse($thing, $condition);
+    return (string)getIfElse($thing, $condition);
 }
 
 /**
@@ -3139,49 +3333,44 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name)
+function fetch_form($name, $theme = null)
 {
-    global $production_status, $trace;
-
+    global $skin;
     static $forms = array();
-    global $pretext;
 
-    $skin = $pretext['skin'];
+    isset($theme) or $theme = $skin;
+    isset($forms[$theme]) or $forms[$theme] = array();
     $fetch = is_array($name);
 
-    if ($fetch || !isset($forms[$name])) {
-        $names = $fetch ? array_diff($name, array_keys($forms)) : array($name);
+    if ($fetch || !isset($forms[$theme][$name])) {
+        $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : array($name);
 
         if (has_handler('form.fetch')) {
             foreach ($names as $name) {
-                $forms[$name] = callback_event('form.fetch', '', false, compact('name', 'skin'));
+                $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
         } elseif ($fetch) {
+            $forms[$theme] += array_fill_keys($names, false);
             $nameset = implode(',', quote_list($names));
 
-            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($skin)."'")) {
+            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
                 while ($row = nextRow($rs)) {
-                    $forms[$row['name']] = $row['Form'];
+                    $forms[$theme][$row['name']] = $row['Form'];
                 }
             }
         } else {
-            $forms[$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($skin)."'");
+            $forms[$theme][$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
         }
 
         foreach ($names as $form) {
-            if (empty($forms[$form])) {
-                trigger_error(gTxt('form_not_found').' '.$form);
-                $forms[$form] = false;
+            if ($forms[$theme][$form] === false) {
+                trigger_error(gTxt('form_not_found', array('{list}' => $theme.'.'.$form)));
             }
         }
     }
 
     if (!$fetch) {
-        if ($production_status === 'debug') {
-            $trace->log("[Form: '$skin.$name']");
-        }
-
-        return $forms[$name];
+        return $forms[$theme][$name];
     }
 }
 
@@ -3193,42 +3382,45 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $theme = null)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $skin, $txp_current_form, $trace;
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
         $depth = get_pref('form_circular_depth', 15);
     }
 
-    $out = '';
+    isset($theme) or $theme = $skin;
     $name = (string) $name;
-    $f = fetch_form($name);
+    $f = fetch_form($name, $theme);
 
-    if ($f !== false) {
-        if (!isset($stack[$name])) {
-            $stack[$name] = 1;
-        } elseif ($stack[$name] >= $depth) {
-            trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
-
-            return '';
-        } else {
-            $stack[$name]++;
-        }
-
-        $old_form = $txp_current_form;
-        $txp_current_form = $name;
-
-        if ($production_status === 'debug') {
-            $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
-        }
-
-        $out = parse($f);
-
-        $txp_current_form = $old_form;
-        $stack[$name]--;
+    if ($f === false) {
+        return false;
     }
+
+    if (!isset($stack[$name])) {
+        $stack[$name] = 1;
+    } elseif ($stack[$name] >= $depth) {
+        trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
+
+        return '';
+    } else {
+        $stack[$name]++;
+    }
+
+    $old_form = $txp_current_form;
+    $txp_current_form = $name;
+
+    if ($production_status === 'debug') {
+        $trace->log("[Form: '$theme.$name']");
+        $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
+    }
+
+    $out = parse($f);
+
+    $txp_current_form = $old_form;
+    $stack[$name]--;
 
     return $out;
 }
@@ -3291,18 +3483,19 @@ function fetch_page($name, $theme)
 
 function parse_page($name, $theme, $page = '')
 {
-    global $pretext, $trace;
+    global $pretext, $trace, $is_form;
 
     if (!$page) {
         $page = fetch_page($name, $theme);
     }
 
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+        while ($pretext['secondpass'] <= (int)get_pref('secondpass', 1) && preg_match('@<(?:'.TXP_PATTERN.'):@', $page)) {
+            $is_form = 1;
             $page = parse($page);
             // the function so nice, he ran it twice
             $pretext['secondpass']++;
-            $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
+            $trace->log('[ ~~~ end of pass '.$pretext['secondpass'].' ~~~ ]');
         }
     }
 
@@ -3532,7 +3725,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
         if ((string)$header === '') {
             !$rewrite or header_remove($name && $name != 1 ? $name : null);
         } elseif ($header === true) {
-            if ($name == 1) {
+            if ($name == '' || $name == 1) {
                 $out = array_merge($out, $headers_low);
             } elseif (isset($headers_low[$name_low])) {
                 $out[$name_low] = $headers_low[$name_low];
@@ -3643,13 +3836,13 @@ function get_prefs($user = '')
 /**
  * Creates or updates a preference.
  *
- * @param   string $name       The name
- * @param   string $val        The value
- * @param   string $event      The section the preference appears in
- * @param   int    $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string $html       The HTML control type the field uses. Can take a custom function name
- * @param   int    $position   Used to sort the field on the Preferences panel
- * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, collection) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   bool         $is_private If PREF_PRIVATE, is created as a user pref
  * @return  bool FALSE on error
  * @package Pref
  * @example
@@ -3662,6 +3855,7 @@ function get_prefs($user = '')
 function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 {
     global $prefs;
+
     $prefs[$name] = $val;
     $user_name = null;
 
@@ -3822,13 +4016,13 @@ function pref_exists($name, $user_name = null)
  *
  * When a string is created, will trigger a 'preference.create > done' callback event.
  *
- * @param   string      $name       The name
- * @param   string      $val        The value
- * @param   string      $event      The section the preference appears in
- * @param   int         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int         $position   Used to sort the field on the Preferences panel
- * @param   string|bool $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
+ * @param   string       $name       The name
+ * @param   string       $val        The value
+ * @param   string|array $event      The section or array(section, collection) the preference appears in
+ * @param   int          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool  $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
  * @return  bool TRUE if the string exists, FALSE on error
  * @since   4.6.0
  * @package Pref
@@ -3857,12 +4051,20 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
 
     $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
+    if (is_array($event)) {
+        $collection = $event[1];
+        $collectionSet = ", collection = '".doSlash($collection)."'";
+        $event = $event[0];
+    } else {
+        $collection = $collectionSet = '';
+    }
+
     if (
         safe_insert(
             'txp_prefs',
             "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
-            event = '".doSlash($event)."',
+            event = '".doSlash($event)."'".$collectionSet.",
             html = '".doSlash($html)."',
             type = ".intval($type).",
             position = ".intval($position).",
@@ -3872,7 +4074,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return false;
     }
 
-    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+    callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'collection', 'type', 'html', 'position', 'user_name'));
 
     return true;
 }
@@ -3886,14 +4088,14 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
  *
  * When a string is updated, will trigger a 'preference.update > done' callback event.
  *
- * @param   string           $name       The update preference string's name
- * @param   string|null      $val        The value
- * @param   string|null      $event      The section the preference appears in
- * @param   int|null         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
- * @param   string|null      $html       The HTML control type the field uses. Can take a custom function name
- * @param   int|null         $position   Used to sort the field on the Preferences panel
- * @param   string|bool|null $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
- * @return  bool             FALSE on error
+ * @param   string            $name       The update preference string's name
+ * @param   string|null       $val        The value
+ * @param   string|array|null $event      The section or array(section, collection) the preference appears in
+ * @param   int|null          $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string|null       $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int|null          $position   Used to sort the field on the Preferences panel
+ * @param   string|bool|null  $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -3926,14 +4128,24 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
-    foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
+    $cols = array('val', 'event', 'type', 'html', 'position');
+
+    if (is_array($event)) {
+        $collection = $event[1];
+        $event = $event[0];
+        $cols[] = 'collection';
+    } else {
+        $collection = null;
+    }
+
+    foreach ($cols as $field) {
         if ($$field !== null) {
             $set[] = $field." = '".doSlash($$field)."'";
         }
     }
 
     if ($set && safe_update('txp_prefs', join(', ', $set), join(" AND ", $where))) {
-        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+        callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'collection', 'type', 'html', 'position', 'user_name'));
 
         return true;
     }
@@ -4011,6 +4223,8 @@ function getCustomFields()
                 $out[$match[1]] = strtolower($prefs[$name]);
             }
         }
+
+        ksort($out, SORT_NUMERIC);
     }
 
     return $out;
@@ -4034,9 +4248,10 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
             if ($no !== false) {
                 $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
+                $field = is_numeric($no) ? "custom_{$no}" : $no;
 
                 if ($val === true) {
-                    $out[] = "({$not}custom_{$no} != '')";
+                    $out[] = "({$not}{$field} != '')";
                 } else {
                     $val = doSlash($val);
                     $parts = array();
@@ -4045,11 +4260,11 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                         list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
                         if (!isset($to)) {
-                            $parts[] = "{$not}custom_{$no} LIKE '$from'";
+                            $parts[] = "{$not}{$field} LIKE '$from'";
                         } elseif ($from !== '') {
-                            $parts[] = $to === '' ? "{$not}custom_{$no} >= '$from'" :  "{$not}custom_{$no} BETWEEN '$from' AND '$to'";
+                            $parts[] = $to === '' ? "{$not}{$field} >= '$from'" :  "{$not}{$field} BETWEEN '$from' AND '$to'";
                         } elseif ($to !== '') {
-                            $parts[] = "{$not}custom_{$no} <= '$to'";
+                            $parts[] = "{$not}{$field} <= '$to'";
                         }
                     }
 
@@ -4393,8 +4608,9 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
+    $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
     $keys = $parts;
-    empty($inherit) or $keys += $inherit;
+    !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
     unset($keys['id']);
 
@@ -4433,26 +4649,19 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        if (!empty($keys['context'])) {
-            $keys['context'] = gTxt($keys['context'].'_context');
-        }
-
-        return hu.'index.php'.join_qs($keys);
+        $url = $hu.'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = hu;
+        $url = $hu;
 
         if (!empty($keys['rss'])) {
-            $url = hu.'rss/';
+            $url = $hu.'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
-            $url = hu.'atom/';
+            $url = $hu.'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
-            $url = hu.urlencode($keys['s']).'/';
+            $url = $hu.urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
                 $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4460,29 +4669,33 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
                     array($keys['c']);
                 $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
                 unset($keys['c']);
+            } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title' && is_date($keys['month'])) {
+                $url .= implode('/', explode('-', urlencode($keys['month']))).'/';
+                unset($keys['month']);
             }
-        } elseif (!empty($keys['month']) && $url_mode == 'year_month_day_title') {
-            if (!empty($keys['context'])) {
-                $keys['context'] = gTxt($keys['context'].'_context');
-            }
-            $url = hu.implode('/', explode('-', urlencode($keys['month']))).'/';
-            unset($keys['month']);
-        } elseif (!empty($keys['author'])) {
+        } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = $hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
-        } elseif (!empty($keys['c'])) {
+        } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = $hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
+        } elseif (!empty($keys['month']) && is_date($keys['month'])) {
+            $url = $hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            unset($keys['month']);
         }
-
-        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
+
+    if (!empty($keys['context'])) {
+        $keys['context'] = gTxt($keys['context'].'_context');
+    }
+
+    return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
@@ -4513,7 +4726,7 @@ function permlinkurl_id($id)
         return permlinkurl($thisarticle);
     }
 
-    $rs = safe_row(
+    $rs = empty($id) ? array() : safe_row(
         "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
@@ -4539,10 +4752,23 @@ function permlinkurl_id($id)
  * ));
  */
 
-function permlinkurl($article_array, $hu = hu)
+function permlinkurl($article_array, $hu = null)
 {
-    global $permlink_mode, $prefs, $permlinks, $production_status, $txp_sections;
-    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null;
+    global $permlink_mode, $prefs, $permlinks, $txp_sections;
+    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
+        $fields = array(
+            'thisid'    => null,
+            'id'        => null,
+            'title'     => null,
+            'url_title' => null,
+            'section'   => null,
+            'category1' => null,
+            'category2' => null,
+            'posted'    => null,
+            'uposted'   => null,
+            'expires'   => null,
+            'uexpires'  => null,
+        );
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
@@ -4550,19 +4776,12 @@ function permlinkurl($article_array, $hu = hu)
         return $url;
     }
 
-    extract(lAtts(array(
-        'thisid'    => null,
-        'id'        => null,
-        'title'     => null,
-        'url_title' => null,
-        'section'   => null,
-        'category1' => null,
-        'category2' => null,
-        'posted'    => null,
-        'uposted'   => null,
-        'expires'   => null,
-        'uexpires'  => null,
-    ), array_change_key_case($article_array, CASE_LOWER), false));
+    if (empty($article_array)) {
+        return false;
+    }
+
+    extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
+    isset($hu) or $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
@@ -4588,7 +4807,7 @@ function permlinkurl($article_array, $hu = hu)
 
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
-        $production_status != 'live' &&
+        $prefs['production_status'] != 'live' &&
         txpinterface == 'public' &&
         (is_numeric($expires) ? $expires < time()
             : (isset($uexpires) ? $uexpires < time()
@@ -4756,8 +4975,8 @@ function in_list($val, $list, $delim = ',')
  *
  * Trims the created values of whitespace.
  *
- * @param  string $list  The string
- * @param  string $delim The boundary
+ * @param  array|string $list  The string
+ * @param  string       $delim The boundary
  * @return array
  * @example
  * print_r(
@@ -4767,27 +4986,35 @@ function in_list($val, $list, $delim = ',')
 
 function do_list($list, $delim = ',')
 {
+    if (!isset($list)) {
+        return array();
+    } elseif (is_array($list)) {
+        return array_map('trim', $list);
+    }
+
     if (is_array($delim)) {
         list($delim, $range) = $delim + array(null, null);
     }
 
-    $list = explode($delim, $list);
+    $array = explode($delim, $list);
 
-    if (isset($range)) {
+    if (isset($range) && strpos($list, $range) !== false) {
         $pattern = '/^\s*(\w|[-+]?\d+)\s*'.preg_quote($range, '/').'\s*(\w|[-+]?\d+)\s*$/';
         $out = array();
 
-        foreach ($list as $item) {
+        foreach ($array as $item) {
             if (!preg_match($pattern, $item, $match)) {
                 $out[] = trim($item);
             } else {
                 list($m, $start, $end) = $match;
-                $out = array_merge($out, range($start, $end));
+                foreach(range($start, $end) as $v) {
+                    $out[] = $v;
+                }
             }
         }
     }
 
-    return isset($out) ? $out : array_map('trim', $list);
+    return isset($out) ? $out : array_map('trim', $array);
 }
 
 /**
@@ -4838,23 +5065,24 @@ function doQuote($val)
  * Escapes special characters for use in an SQL statement and wraps the value
  * in quote.
  *
- * Useful for creating an array of values for use in an SQL statement.
+ * Useful for creating an array/string of values for use in an SQL statement.
  *
  * @param   string|array $in The input value
+ * @param   string|null  $separator The separator
  * @return  mixed
  * @package DB
  * @example
- * if ($r = safe_row('name', 'myTable', 'type in(' . join(',', quote_list(array('value1', 'value2'))) . ')')
+ * if ($r = safe_row('name', 'myTable', 'type in(' . quote_list(array('value1', 'value2'), ',') . ')')
  * {
  *     echo "Found '{$r['name']}'.";
  * }
  */
 
-function quote_list($in)
+function quote_list($in, $separator = null)
 {
-    $out = doSlash($in);
+    $out = doArray(doSlash($in), 'doQuote');
 
-    return doArray($out, 'doQuote');
+    return isset($separator) ? implode($separator, $out) : $out;
 }
 
 /**
@@ -5081,12 +5309,12 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
     $out = array();
 
     foreach ($context as $q => $v) {
-        if (isset($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
-        } elseif (isset($v)) {
+        if (isset($v)) {
             $out[$q] = $v;
+        } elseif (isset($pretext[$q]) && in_array($q, $internals)) {
+            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
         } else {
-            $out[$q] = gps($q, null);
+            $out[$q] = gps($q, $v);
         }
     }
 
@@ -5094,98 +5322,85 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
 }
 
 /**
- * Assert article context error.
+ * Assert context error.
  */
 
-function assert_article()
+function assert_context($type = 'article', $throw = true)
 {
-    global $thisarticle;
+    global ${'this'.$type};
 
-    if (empty($thisarticle)) {
-        trigger_error(gTxt('error_article_context'));
-
-        return false;
+    if (empty(${'this'.$type})) {
+        if ($throw) {
+            throw new \Exception(gTxt("error_{$type}_context"));
+        } else {
+            return false;
+        }
     }
 
     return true;
 }
 
 /**
+ * Assert article context error.
+ */
+
+function assert_article($throw = true)
+{
+    return assert_context('article', $throw);
+}
+
+/**
  * Assert comment context error.
  */
 
-function assert_comment()
+function assert_comment($throw = true)
 {
-    global $thiscomment;
-
-    if (empty($thiscomment)) {
-        trigger_error(gTxt('error_comment_context'));
-    }
+    return assert_context('comment', $throw);
 }
 
 /**
  * Assert file context error.
  */
 
-function assert_file()
+function assert_file($throw = true)
 {
-    global $thisfile;
-
-    if (empty($thisfile)) {
-        trigger_error(gTxt('error_file_context'));
-    }
+    return assert_context('file', $throw);
 }
 
 /**
  * Assert image context error.
  */
 
-function assert_image()
+function assert_image($throw = true)
 {
-    global $thisimage;
-
-    if (empty($thisimage)) {
-        trigger_error(gTxt('error_image_context'));
-    }
+    return assert_context('image', $throw);
 }
 
 /**
  * Assert link context error.
  */
 
-function assert_link()
+function assert_link($throw = true)
 {
-    global $thislink;
-
-    if (empty($thislink)) {
-        trigger_error(gTxt('error_link_context'));
-    }
+    return assert_context('link', $throw);
 }
 
 /**
  * Assert section context error.
  */
 
-function assert_section()
+function assert_section($throw = true)
 {
-    global $thissection;
-
-    if (empty($thissection)) {
-        trigger_error(gTxt('error_section_context'));
-    }
+    return assert_context('section', $throw);
 }
 
 /**
  * Assert category context error.
  */
 
-function assert_category()
+function assert_category($throw = true)
 {
-    global $thiscategory;
-
-    if (empty($thiscategory)) {
-        trigger_error(gTxt('error_category_context'));
-    }
+    return assert_context('category', $throw);
 }
 
 /**
@@ -5540,7 +5755,7 @@ function http_accept_format($format)
 
     if (empty($accepts)) {
         // Build cache of accepted formats.
-        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
+        $accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($accepts as $i => &$a) {
             // Sniff out quality factors if present.
@@ -5688,9 +5903,23 @@ function txp_match($atts, $what)
 
     if ($value !== null) {
         switch ($match) {
+            case '<':
+            case 'less':
+                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
+                break;
+            case '<=':
+                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
+                break;
+            case '>':
+            case 'greater':
+                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
+                break;
+            case '>=':
+                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
+                break;
             case '':
             case 'exact':
-                $cond = (is_array($what) ? implode('', $what) == $value : $what == $value);
+                $cond = (is_array($what) ? $what == do_list($value, $separator ? $separator : ',') : $what == $value);
                 break;
             case 'any':
                 $values = do_list_unique($value);
@@ -5745,6 +5974,59 @@ function txp_match($atts, $what)
     }
 
     return !empty($cond);
+}
+
+// -------------------------------------
+
+function get_mediatypes(&$textarray)
+{
+    global $lang_ui;
+
+    $mimeTypes = array();
+
+    if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
+        foreach ($custom_types as $type => $langpack) {
+            if (!empty($langpack['mediatype'])) {
+                $mimeTypes[$type] = $langpack['mediatype'];
+            }
+
+            if ($textarray !== null) {
+                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                    $langpack[$lang_ui] :
+                    (isset($langpack['title']) ?
+                        $langpack['title'] :
+                        (isset($mimeTypes[$type]) ?
+                            strtoupper($type)." (".$mimeTypes[$type].")"
+                            : $type
+                        )
+                    );
+            }
+        }
+    }
+
+    return $mimeTypes;
+}
+
+// -------------------------------------------------------------
+
+function txp_break($wraptag)
+{
+    switch (strtolower($wraptag)) {
+        case 'ul':
+        case 'ol':
+            return 'li';
+        case 'p':
+            return 'br';
+        case 'table':
+        case 'tbody':
+        case 'thead':
+        case 'tfoot':
+            return 'tr';
+        case 'tr':
+            return 'td';
+        default:
+            return ',';
+    }
 }
 
 /*** Polyfills ***/

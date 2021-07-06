@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -46,7 +46,7 @@ $txp_permissions = array(
     'article.edit.own.published' => '1,2,3,4',
     'article.preview'            => '1,2,3,4',
     'article.publish'            => '1,2,3,4',
-    'article.php'                => '1,2',
+    'article.php'                => '1,2,3',
     'article.set_markup'         => '1,2,3,    6',
     'article'                    => '1,2,3,4,5,6',
     'list'                       => '1,2,3,4,5,6', // Likely the same as for article.
@@ -85,6 +85,7 @@ $txp_permissions = array(
     'prefs.site'                 => '1,2',
     'prefs.admin'                => '1,2',
     'prefs.publish'              => '1,2',
+    'prefs.mail'                 => '1,2',
     'prefs.feeds'                => '1,2',
     'prefs.custom'               => '1,2',
 //    'prefs.comments'             => '1,2',

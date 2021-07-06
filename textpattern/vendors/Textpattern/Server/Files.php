@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -107,7 +107,7 @@ class Files
 
             if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
-                @unlink($tmp_name);
+                unlink($tmp_name);
 
                 // Stop here if the file is not completely loaded
                 if ($end + 1 < $filesize) {
@@ -120,7 +120,7 @@ class Files
                 shift_uploaded_file($tmp_name, $tmpfile);
                 exit;
             } else { // Chunk error, clean up
-                @unlink($tmpfile);
+                unlink($tmpfile);
                 $file['size'] = 0;
             }
 

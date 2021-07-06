@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -180,7 +180,11 @@ class Filter
 
             foreach ($this->search_method as $selected_method) {
                 if (array_key_exists($selected_method, $this->methods)) {
-                    $search_criteria[] = join(' or ', $this->methods[$selected_method]->getCriteria($this->crit_escaped, $this->verbatim));
+                    $srch = $this->methods[$selected_method]->getCriteria($this->crit_escaped, $this->verbatim);
+
+                    if ($srch) {
+                        $search_criteria[] = join(' or ', $srch);
+                    }
                 }
             }
 

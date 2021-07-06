@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,14 +34,6 @@ namespace Textpattern\UI;
 
 class Disclosure extends Tag implements UICollectionInterface
 {
-    /**
-     * The key (id) used for the disclosure wrapper.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
     /**
      * The pane (id) to store open/closed state for the disclosure.
      *
@@ -101,7 +93,7 @@ class Disclosure extends Tag implements UICollectionInterface
     {
         parent::__construct('section');
         $class = 'txp-details';
-        $this->key = $key;
+        $this->setKey($key);
         $this->label_id = $key.'-label';
 
         if ($pane !== null) {
@@ -113,7 +105,7 @@ class Disclosure extends Tag implements UICollectionInterface
         $this->tags = new \Textpattern\UI\TagCollection();
         $this->setAtts(array(
                 'class' => $class,
-                'id'    => $this->key,
+                'id'    => $key,
             ));
     }
 
@@ -127,8 +119,8 @@ class Disclosure extends Tag implements UICollectionInterface
     public function add($item, $key = null)
     {
         if ($item instanceof \Textpattern\UI\TagCollection) {
-            foreach ($item as $key => $element) {
-                $this->tags->add($element, $key);
+            foreach ($item as $ref => $element) {
+                $this->tags->add($element, $ref);
             }
 
             // Original object is not needed any more as it's been merged in this object.
@@ -265,7 +257,7 @@ class Disclosure extends Tag implements UICollectionInterface
             $pane_token = md5($this->pane_id.$event.form_token().get_pref('blog_uid'));
             $heading_class = 'txp-summary'.($state ? ' expanded' : '');
             $display_state = array(
-                'class' => $state ? 'toggle' : 'toggle ui-helper-hidden',
+                'class' => $state ? 'toggle' : 'toggle hidden',
                 'id'    => $this->lever_id,
                 'role'  => 'group',
             );

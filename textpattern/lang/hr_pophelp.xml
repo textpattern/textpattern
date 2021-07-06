@@ -165,6 +165,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title="Nikad ne prikazuj email adrese?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Upotrijebi ISO-8859-1 encoding kod poslanih emailova (default je UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Putanja direktorija do Plugin cache"><![CDATA[]]></item>
@@ -173,6 +174,7 @@
         <item id="publish_expired_articles" title=""><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
         <item id="rss_how_many" title="Koliko unosa bi trebalo biti uključeno u feedove?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Prikaži broj komentara kod feed-ova?"><![CDATA[]]></item>
         <item id="site_slogan" title="Slogan site-a"><![CDATA[]]></item>
@@ -180,7 +182,7 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Sindiciraj samo sažetak unosa?"><![CDATA[]]></item>
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -72,7 +72,7 @@ class AdminDelete extends AdminAnchor implements UIInterface
 
         parent::__construct($event, $step, $out, $type);
 
-        $this->setProperty('verify', 'confirm_delete_popup');
-        $this->setProperty('token', true);
+        $this->setProperty('verify', 'confirm_delete_popup')
+            ->setProperty('token', true);
     }
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,7 +22,7 @@
  */
 
 /**
- * Tests against a list of values.
+ * Tests one or more values against a list of valid options.
  *
  * @since   4.6.0
  * @package Validator
@@ -57,7 +57,15 @@ class ChoiceConstraint extends Constraint
 
     public function validate()
     {
-        return ($this->options['allow_blank'] && ('' === $this->value)) ||
-        in_array($this->value, $this->options['choices']);
+        $values = !is_array($this->value) ? (array) $this->value : $this->value;
+
+        $out = true;
+
+        foreach ($values as $val) {
+            $out = $out && (($this->options['allow_blank'] && ($val === '')) ||
+                in_array($val, $this->options['choices']));
+        }
+
+        return $out;
     }
 }

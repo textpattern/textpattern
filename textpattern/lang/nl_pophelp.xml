@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="nl">
-    <group id="admin" title="Gebruikers paneel">
+    <group id="admin" title="Gebruikerspaneel">
         <item id="about_privileges" title="Over privileges"><![CDATA[]]></item>
         <item id="create_author" title="Auteur aanmaken"><![CDATA[
-<h2>Nieuwe auteur toevoegen</h2>
-<p>Een wachtwoord, welkomstbericht en aanmeldinstructies worden per e-mail verstuurd naar de nieuwe auteur.</p>
+<h2>Nieuwe medewerker toevoegen</h2>
+<p>Een wachtwoord, welkomstbericht en aanmeldinstructies worden per e-mail verstuurd naar de nieuwe medewerker.</p>
         ]]></item>
     </group>
 
     <group id="article" title="Schrijf paneel">
-        <item id="article_image" title="Artikelafbeelding"><![CDATA[]]></item>
+        <item id="article_image" title="Artikelafbeelding"><![CDATA[
+<h2>Artikelafbeelding</h2>
+<p>Om een enkele afbeelding aan dit artikel te koppelen, plaats hier een van de volgende voorbeelden:</p>
+<ol>
+    <li>een Textpattern image ID (bijv. . <code>12</code>)</li>
+    <li>een relatieve URL naar de afbeelding (bijv. <code>/images/my_pic.jpg</code>)</li>
+    <li>een volledig gekwalificeerde URL (bijv. <code>https://example.com/path/to/images/my_pic. pg</code>)</li>
+</ol>
+<p>De afbeelding kan worden weergegeven door het plaatsen van een <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> binnen een artikel formulier. Het geeft een volledige HTML <code>&lt;img&gt;</code> tag naar de gekozen afbeelding.</p>
+        ]]></item>
         <item id="body" title="Artikelinhoud"><![CDATA[
 <h2>Artikelinhoud</h2>
 <p>De hoofdinhoud van een artikel staat in de inhoud van het artikel.<p>
@@ -27,12 +36,24 @@
 <p>Artikel samenvatting zijn optioneel. Deze kunnen worden gebruikt als een korte samenvatting van het artikel dat wordt weergegeven als onderdeel van een inhoudsopgave, gebruikt in plaats van de volledige inhoud van het artikel in de RSS/Atom feeds van de site, of een aantal andere toepassingen.</p>
         ]]></item>
         <item id="expire_date" title="Vervaldatum"><![CDATA[]]></item>
-        <item id="keywords" title="Trefwoorden"><![CDATA[]]></item>
+        <item id="keywords" title="Trefwoorden"><![CDATA[
+<h2>Trefwoorden</h2>
+<p>Trefwoorden zijn nuttig om de verbanden tussen artikelen buiten de categorieën te verfijnen.</p>
+<p>Trefwoorden moeten individuele woorden zijn, gescheiden door komma's.</p>
+        ]]></item>
         <item id="override_form" title="Gebruik andere module"><![CDATA[]]></item>
         <item id="publish_date" title="Publicatiedatum"><![CDATA[]]></item>
         <item id="status" title="Status"><![CDATA[]]></item>
-        <item id="title" title="Titel"><![CDATA[]]></item>
-        <item id="url_title" title="Eigen titel voor URL"><![CDATA[]]></item>
+        <item id="title" title="Titel"><![CDATA[
+<h2>Titel</h2>
+<p>Voeg een passende titel toe voor dit artikel.</p>
+<p>Een artikeltitel is beperkt tot maximaal 255 tekens.</p>
+        ]]></item>
+        <item id="url_title" title="Eigen titel voor URL"><![CDATA[
+<h2>URL-only URL-titel</h2>
+<p>Om een specifieke titel te gebruiken voor de permalink URL voor een artikel, vul het hier in. Als u deze leeg laat, wordt de URL-titel automatisch gegenereerd op basis van de artikeltitel.</p>
+<p>Dit is bijzonder handig als de titel van het artikel niet-ASCII-tekens gebruikt.</p>
+        ]]></item>
     </group>
 
     <group id="category" title="Categorieën paneel">
@@ -58,7 +79,10 @@
         <item id="modified_files" title="Gewijzigde bestanden"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="MySQL tabel fouten"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Er is gen tijdelijke map aangegeven"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Deze sectie heeft de naam van een al bestaande map"><![CDATA[
+<h2>Deze sectie heeft de naam van een al bestaande map</h2>
+<p>Namen van al bestaande mappen kunnen problemen opleveren met sectienamen bij de permanente links van artikelen. Om problemen te voorkomen, controleer en verander je de naam van de betrokken map, als dit veilig kan, of wijzig je de sectienaam, zodat ze niet botsen.</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
         <item id="php_version_required" title="Minimale versie vereisten"><![CDATA[]]></item>
         <item id="setup_still_exists" title="Setup map bestaat nog steeds"><![CDATA[]]></item>
@@ -161,20 +185,24 @@
         <item id="admin_side_plugins" title="Admin plugins toestaan?"><![CDATA[]]></item>
         <item id="advanced_options" title="Meer opties"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="PHP in artikelen toestaan?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[
+<h2>Mogen medewerker andere modules kiezen?</h2>
+<p>Met deze instelling kunnen medewerkers aan een artikel
+zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toegestaan zal er een 'Pas module aan' uitklapmenu zichtbaar zijn bij het bewerken van het artikel.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="PHP in pagina’s toestaan?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Datumweergave archief"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Samenvattingen gebruiken?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Titels aan permalinks verbinden?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Zomer- en wintertijd automatisch bijstellen?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Reacties als updates beschouwen?"><![CDATA[]]></item>
         <item id="comment_nofollow" title="Gebruik rel=&quot;nofollow&quot; bij reacties?"><![CDATA[]]></item>
         <item id="comments_are_ol" title="Reacties als genummerde lijst weergeven?"><![CDATA[]]></item>
         <item id="comments_auto_append" title="Reacties automatisch toevoegen onder artikelen?"><![CDATA[]]></item>
         <item id="comments_dateformat" title="Datumweergave reacties"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Standaard uitnodiging voor reacties"><![CDATA[]]></item>
         <item id="comments_disabled_after" title="Inactief na"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Afbeeldingen in reacties verbieden"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
         <item id="comments_mode" title="Reactietype"><![CDATA[]]></item>
         <item id="comments_moderate" title="Reacties controleren?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Standaard aan?"><![CDATA[]]></item>
@@ -203,6 +231,10 @@
         <item id="module_pophelp" title="Hulplinks aan de administratiekant tonen"><![CDATA[]]></item>
         <item id="never_display_email" title="Emailadressen altijd verbergen?"><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Moduletype aanpassen"><![CDATA[
+<h2>Pas het moduletype aan</h2>
+<p>Kies welke modules beschikbaar moeten zijn onder de Schrijf tab als speciale modules.</p>
+        ]]></item>
         <item id="permlink_format" title="URL van de permanente link naar de titel"><![CDATA[]]></item>
         <item id="permlink_mode" title="URL-vorm voor het artikel"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Pad naar de plugincache"><![CDATA[]]></item>
@@ -211,6 +243,7 @@
         <item id="publish_expired_articles" title="Verlopen artikelen tonen?"><![CDATA[]]></item>
         <item id="publisher_email" title="Verstuur logingegevens vanuit dit emailadres"><![CDATA[]]></item>
         <item id="rss_how_many" title="Hoe veel artikelen in RSS?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Aantal reacties in feeds tonen?"><![CDATA[]]></item>
         <item id="site_slogan" title=""><![CDATA[]]></item>
@@ -218,15 +251,20 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Spam blocklists (komma gescheiden)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="tempdir" title="Tijdelijke bestanden map"><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="PHP functies geactiveerd in txp:evaluate"><![CDATA[]]></item>
         <item id="use_comments" title="Reacties accepteren?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Plugins toestaan?"><![CDATA[]]></item>
-        <item id="use_textile" title="Textile gebruiken?"><![CDATA[]]></item>
+        <item id="use_textile" title="Standaard tekstopmaak"><![CDATA[
+<h2>Standaard tekstopmaak</h2>
+<p>De door u gekozen tekst vormgeving wordt standaard gebruikt voor de samenvatting en body tekstopmaak op de 'Schrijven' tab. Je kunt ervoor kiezen om volledige Textile vormgevingstags toe te staan, alleen lijnen om te zetten in HTML alinea-markeringen of  de tekst helemaal niet aan te passen.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een hulpmiddel om de omzetting van platte tekst naar HTML te vereenvoudigen. Indien ingeschakeld, zal Textile de tekst van artikelen verwerken en naar correcte HTML omzetten.</p>
+<p>Textile biedt ook een krachtige maar eenvoudig te leren set code's waarmee tekst kan worden opgemaakt. Je kunt er structuren zoals lijsten, kop- en blokalinea's mee maken en links en afbeeldingen invoegen.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="">

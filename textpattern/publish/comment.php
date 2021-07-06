@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -102,11 +102,11 @@ function setCookies($name, $email, $web)
 {
     $cookietime = time() + (365 * 24 * 3600);
     ob_start();
-    setcookie("txp_name", $name, $cookietime, "/");
-    setcookie("txp_email", $email, $cookietime, "/");
-    setcookie("txp_web", $web, $cookietime, "/");
-    setcookie("txp_last", date("H:i d/m/Y"), $cookietime, "/");
-    setcookie("txp_remember", '1', $cookietime, "/");
+    set_cookie("txp_name", $name, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_email", $email, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_web", $web, array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_last", date("H:i d/m/Y"), array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_remember", '1', array('expires' => $cookietime, 'path' => '/'));
 }
 
 /**
@@ -117,11 +117,11 @@ function destroyCookies()
 {
     $cookietime = time() - 3600;
     ob_start();
-    setcookie("txp_name", '', $cookietime, "/");
-    setcookie("txp_email", '', $cookietime, "/");
-    setcookie("txp_web", '', $cookietime, "/");
-    setcookie("txp_last", '', $cookietime, "/");
-    setcookie("txp_remember", '', $cookietime, "/");
+    set_cookie("txp_name", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_email", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_web", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_last", '', array('expires' => $cookietime, 'path' => '/'));
+    set_cookie("txp_remember", '', array('expires' => $cookietime, 'path' => '/'));
 }
 
 /**
@@ -184,7 +184,7 @@ function getComment($obfuscated = false)
 
 function saveComment()
 {
-    global $siteurl, $comments_moderate, $comments_sendmail, $comments_disallow_images, $prefs;
+    global $comments_moderate, $comments_sendmail, $comments_disallow_images, $prefs;
 
     $ref = serverset('HTTP_REFERRER');
     $comment = getComment(true);
@@ -197,10 +197,10 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-    $blocklist = is_blacklisted($ip);
+    $blocklist = is_blocklisted($ip);
 
     if ($blocklist) {
-        txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blocklist), '403');
+        txp_die(gTxt('your_ip_is_blocklisted_by'.' '.$blocklist), '403');
     }
 
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {

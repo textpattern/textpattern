@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -103,7 +103,9 @@ function list_languages($message = '')
     }
 
     foreach ($langUse as $key => $row) {
-        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')', 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
+        $langUse[$key] = tag(eLink(
+            'admin', 'author_list', 'search_method', 'login', '('.count($row).')', 'crit', join(',', doSlash($row)), gTxt('language_count_user', array('{num}' => count($row)))
+        ), 'span', array('class' => 'txp-lang-user-count'));
     }
 
     // Create the widget components.
@@ -153,30 +155,35 @@ function list_languages($message = '')
         }
 
         $installLink = ($disabled
-            ? span($btnText, array('class' => 'txp-button disabled'))
+            ? ''
             : tag($btnText, 'button', array(
                 'type'      => 'submit',
                 'name'      => 'get_language',
             )));
 
+        $langMeta = graf(
+            ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
+            tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
+            tag($langname, 'code', array('dir' => 'ltr')).
+            ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+        );
+
+        $btnSet = trim((has_privs('lang.edit')
+                ? $installLink
+                : '')
+            .n. $btnRemove);
+
         $grid .= tag(
-            form(
-                graf(
-                    ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
-                    tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
-                    tag($langname, 'code', array('dir' => 'ltr')).
-                    ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
-                ).
-                graf(
-                    (has_privs('lang.edit')
-                        ? $installLink
-                        : '')
-                    .n. $btnRemove
-                ).
-                hInput('lang_code', $langname).
-                eInput('lang').
-                sInput(null)
-            , '', '', 'post'),
+            ($btnSet
+                ? form(
+                    $langMeta.
+                    graf($btnSet).
+                    hInput('lang_code', $langname).
+                    eInput('lang').
+                    sInput(null)
+                , '', '', 'post')
+                : $langMeta
+            ),
             'li',
             array('class' => 'txp-grid-cell txp-grid-cell-2span'.($cellclass ? ' '.$cellclass : ''))
         ).n;

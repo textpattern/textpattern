@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -461,12 +461,15 @@ function cat_event_category_list($event)
                     break;
             }
 
-            $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url) : '(0)';
+            $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url, array(
+                'title'      => gTxt('category_count', array('{num}' => $total_count[$name])),
+                'aria-label' => gTxt('category_count', array('{num}' => $total_count[$name])),
+            )) : '(0)';
 
             if (empty($title)) {
-                $edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';
+                $edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled'), '', '', gTxt('edit')).'</em>';
             } else {
-                $edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title);
+                $edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title, '', '', gTxt('edit'));
             }
 
             $items[] = graf(

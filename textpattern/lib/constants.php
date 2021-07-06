@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -299,7 +299,9 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff);
  * Plugin storage directory.
  */
 
-define('PLUGINPATH', txpath.DS.'plugins');
+if (!defined('PLUGINPATH')) {
+    define('PLUGINPATH', txpath.DS.'plugins');
+}
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
@@ -699,6 +701,17 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
 define('REQUIRED_PHP_VERSION', '5.6.0');
 
 /**
+ * Required OPENSSL version.
+ *
+ * Used when fetching resources via file_get_contents() or cURL.
+ *
+ * @since   4.8.5
+ * @package System
+ */
+
+define('REQUIRED_OPENSSL_VERSION', '268439567');
+
+/**
  * File integrity status good.
  *
  * @since   4.6.0
@@ -927,6 +940,18 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
  */
 
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+/**
+ * Define the default theme directories
+ *
+ * @since   4.9.0
+ */
+
+ const TXP_THEME_TREE = array(
+     'forms'  => 'forms',
+     'pages'  => 'pages',
+     'styles' => 'styles'
+ );
 
 /**
  * A tab character.

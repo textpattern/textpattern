@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -50,8 +50,8 @@ class RadioSet extends TagCollection implements UICollectionInterface
             $id = $radio->getKey();
             $label = new \Textpattern\UI\Label($label, $id);
 
-            $this->add($radio, 'radio-'.$id);
-            $this->add($label, 'label-'.$id);
+            $this->add($radio, 'radio-'.$id)
+                ->add($label, 'label-'.$id);
         }
     }
 }

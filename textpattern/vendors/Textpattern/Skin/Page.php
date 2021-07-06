@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,8 +34,9 @@ namespace Textpattern\Skin;
 
 class Page extends AssetBase implements PageInterface
 {
-    protected static $dir = 'pages';
+    protected static $dir = TXP_THEME_TREE['pages'];
     protected static $fileContentsField = 'user_html';
+    protected static $mimeTypes = array();
     protected static $essential = array(
         array(
             'name'      => 'default',

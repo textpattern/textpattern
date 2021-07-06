@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -209,15 +209,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $meta = array();
 
         if (is_file($file) && is_readable($file)) {
-            $numMetaRows = 4;
-            $separator = '=>';
             extract(pathinfo($file));
             $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
             $ini = strtolower($extension) == 'ini';
+            $numMetaRows = 4;
 
             $meta['filename'] = $filename;
 
-            if ($fp = @fopen($file, 'r')) {
+            if ($fp = fopen($file, 'r')) {
                 for ($idx = 0; $idx < $numMetaRows; $idx++) {
                     $rows[] = fgets($fp, 1024);
                 }
@@ -231,6 +230,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                     $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
                     $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
                 } else {
+                    $separator = '=>';
                     $langName = do_list($rows[1], $separator);
                     $langCode = do_list($rows[2], $separator);
                     $langDirection = do_list($rows[3], $separator);
@@ -357,8 +357,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function setPack(array $strings, $merge = false)
     {
-        if ((bool)$merge) {
-            $this->strings = is_array($this->strings) ? array_merge($this->strings, (array)$strings) : (array)$strings;
+        if ((bool)$merge && is_array($this->strings)) {
+            foreach ((array)$strings as $k => $v) {
+                $this->strings[$k] = $v;
+            }
         } else {
             $this->strings = (array)$strings;
         }
@@ -378,7 +380,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function getPack($lang_code, $group = null, $filter = null)
+    public function getPack($lang_code, $group = '', $filter = '')
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
@@ -391,7 +393,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $entries = array();
         $textpack = '';
 
-        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
+        if ($lang_file && ($textpack = txp_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
@@ -465,7 +467,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // Load the fallback strings so we're not left with untranslated strings.
             // Note that the language is overridden to match the to-be-installed lang.
             $fallpack = $this->getPack(array(TEXTPATTERN_DEFAULT_LANG, $lang_code));
-            $langpack = array_merge($fallpack, $langpack);
+            $langpack += $fallpack;
         }
 
         return ($this->upsertPack($langpack, $owner) === false) ? false : true;
@@ -612,7 +614,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function extract($lang_code, $events = null, $filter = null)
+    public function extract($lang_code, $events = '', $filter = '')
     {
         $where = array(
             "lang = '".doSlash($lang_code)."'",
@@ -628,7 +630,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
 
             $events = $admin_events;
-        } elseif ($events === null) {
+        } elseif ($events === '') {
             $events = array('public', 'common');
         } else {
             $events = is_array($events) ? $events : do_list_unique($events);
@@ -674,7 +676,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function load($lang_code, $events = null)
+    public function load($lang_code, $events = '')
     {
         $loaded = isset($this->loaded[$lang_code]) ? $this->loaded[$lang_code] : null;
 

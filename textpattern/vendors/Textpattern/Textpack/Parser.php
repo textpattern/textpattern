@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -103,7 +103,7 @@ class Parser
      * @return array An array of translations
      */
 
-    public function parse($textpack, $group = null)
+    public function parse($textpack, $group = '')
     {
         static $replacements = array(
             "\nnull" => "\n@null",
@@ -118,8 +118,8 @@ class Parser
 
         if ($group && !is_array($group)) {
             $group = do_list($group);
-        } else {
-            $group = (array)$group;
+        } elseif (!$group) {
+            $group = array();
         }
 
         $out = array();

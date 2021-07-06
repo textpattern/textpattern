@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -243,8 +243,9 @@ class UploadForm extends Form
         $class[] = 'upload-form';
         $class[] = $this->getAtt('class');
         $className = implode(' ', $class);
-
-        $this->setAtt('id', $this->getAtt('id', $this->event.'-upload'));
+        $key = $this->getAtt('id', $this->event.'-upload');
+        $this->setKey($key)
+            ->setAtt('id', $key);
 
         if (empty($this->wrapTags[0]) && empty($this->wrapTags[1])) {
             $wraptagClass = 'inline-file-uploader';
@@ -262,7 +263,7 @@ class UploadForm extends Form
         $progressBar = new \Textpattern\UI\Tag('progress');
         $progressBar
             ->setContent('')
-            ->setAtts(array('class' => 'txp-upload-progress ui-helper-hidden'));
+            ->setAtts(array('class' => 'txp-upload-progress hidden'));
 
         // Build the form content.
         $input = new \Textpattern\UI\Input($name, 'file');
@@ -299,7 +300,8 @@ class UploadForm extends Form
         }
 
         $arguments = array(
-            'name'          => $this->key,
+            'name'          => $name,
+            'id'            => $this->getKey(),
             'input'         => $this->tags,
             'postinput'     => $this->postInput,
             'label'         => $this->label,

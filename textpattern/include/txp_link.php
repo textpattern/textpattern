@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -246,7 +246,11 @@ function link_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(
@@ -308,7 +312,10 @@ function link_list($message = '')
                 $vc = $validator->validate() ? '' : ' error';
 
                 if ($link_category) {
-                    $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
+                    $link_category = span(txpspecialchars($link_category_title), array(
+                        'title'      => $link_category,
+                        'aria-label' => $link_category,
+                    ));
                 }
 
                 $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
@@ -334,11 +341,17 @@ function link_list($message = '')
                         $link_category, '', 'txp-list-col-category category'.$vc
                     ).
                     td(
-                        href($view_url, $view_url, ' rel="external noopener" target="_blank"'), '', 'txp-list-col-url txp-contain'
+                        href($view_url.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $view_url, array(
+                            'rel'    => 'external noopener',
+                            'target' => '_blank',
+                        )), '', 'txp-list-col-url txp-contain'
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($link_realname), array(
+                            'title'      => $link_author,
+                            'aria-label' => $link_author,
+                        )), '', 'txp-list-col-author name')
                         : ''
                     )
                 );

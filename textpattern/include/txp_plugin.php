@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -94,7 +94,7 @@ function plugin_list($message = '')
         set_pref('plugin_sort_dir', $dir, 'plugin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    $sort_sql = "$sort $dir";
+    $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter($event,
@@ -114,6 +114,11 @@ function plugin_list($message = '')
             'description' => array(
                 'column' => 'txp_plugin.description',
                 'label'  => gTxt('description'),
+            ),
+            'version' => array(
+                'column' => 'txp_plugin.version',
+                'label'  => gTxt('version'),
+                'type'   => 'numeric',
             ),
             'code' => array(
                 'column' => 'txp_plugin.code',
@@ -201,7 +206,11 @@ function plugin_list($message = '')
                 'method' => 'post',
                 'action' => 'index.php',
             )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('div', array(
+                'class'      => 'txp-listtables',
+                'tabindex'   => 0,
+                'aria-label' => gTxt('list'),
+            )).
             n.tag_start('table', array('class' => 'txp-list')).
             n.tag_start('thead').
             tr(
@@ -304,7 +313,10 @@ function plugin_list($message = '')
                 '_txp_token'    => form_token(),
             );
 
-            $statusLink = status_link($status, $name, yes_no($status));
+            $statusLink = status_link($status, $name, yes_no($status), array(
+                'title'      => gTxt('toggle_yes_no'),
+                'aria-label' => gTxt('toggle_yes_no'),
+            ));
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
                 : $statusLink;
@@ -314,10 +326,16 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($name, $edit_url), '', ' class="txp-list-col-name" scope="row"'
+                    href($name, $edit_url, array(
+                        'title'      => gTxt('edit'),
+                        'aria-label' => gTxt('edit'),
+                    )), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
-                    ($author_uri ? href($author, $a['author_uri'], array('rel' => 'external')) : $author), '', 'txp-list-col-author'
+                    ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
+                        'rel'    => 'external noopener',
+                        'target' => '_blank',
+                    )) : $author), '', 'txp-list-col-author'
                 ).
                 td(
                     $version, '', 'txp-list-col-version'
@@ -483,22 +501,24 @@ function plugin_save()
 /**
  * Renders a status link.
  *
- * @param  string $status   The new status
- * @param  string $name     The plugin
- * @param  string $linktext The label
+ * @param  string $status     The new status
+ * @param  string $name       The plugin
+ * @param  string $linktext   The label
+ * @param  string|array $atts The element's HTML attributes
  * @return string HTML
  * @access private
  * @see    asyncHref()
  */
 
-function status_link($status, $name, $linktext)
+function status_link($status, $name, $linktext, $atts = '')
 {
     return asyncHref(
         $linktext,
         array(
             'step'  => 'switch_status',
             'thing' => $name,
-        )
+        ),
+        $atts
     );
 }
 

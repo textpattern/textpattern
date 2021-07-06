@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -413,7 +413,7 @@ class Skin extends CommonBase implements SkinInterface
             $contracted = array();
 
             foreach ($this->uploaded as $name => $infos) {
-                $contracted[$name] = $infos['title'];
+                $contracted[$name] = $infos['title'] . ' ('.$infos['version'].')';
             }
 
             return $contracted;
@@ -1229,7 +1229,7 @@ class Skin extends CommonBase implements SkinInterface
             return n
                 .graf(
                     span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                    gTxt('path_not_writable', array('list' => $this->getDirPath())),
+                    gTxt('path_not_writable', array('{list}' => $this->getDirPath())),
                     array('class' => 'alert-block warning')
                 );
         }
@@ -1317,10 +1317,14 @@ class Skin extends CommonBase implements SkinInterface
                         'name'   => 'longform',
                         'method' => 'post',
                         'action' => 'index.php',
-                    ))
-                    .n.tag_start('div', array('class' => 'txp-listtables'))
-                    .n.tag_start('table', array('class' => 'txp-list'))
-                    .n.tag_start('thead');
+                    )).
+                    n.tag_start('div', array(
+                        'class'      => 'txp-listtables',
+                        'tabindex'   => 0,
+                        'aria-label' => gTxt('list'),
+                    )).
+                    n.tag_start('table', array('class' => 'txp-list')).
+                    n.tag_start('thead');
 
             $ths = hCell(
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -1366,11 +1370,17 @@ class Skin extends CommonBase implements SkinInterface
                 );
 
                 $tdAuthor = txpspecialchars($skin_author);
-                empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri, array('rel' => 'external'));
+                empty($skin_author_uri) or $tdAuthor = href($tdAuthor.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $skin_author_uri, array(
+                    'rel'    => 'external noopener',
+                    'target' => '_blank',
+                ));
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
-                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
+                        href(txpspecialchars($skin_name), $editUrl, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )).
                         ($numThemes > 1 ? ' | '.href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
                         (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) :
                             (${$event.'_dev_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill warning')) : '')
@@ -1405,10 +1415,8 @@ class Skin extends CommonBase implements SkinInterface
                             ${$event.'_'.$name.'_count'},
                             $linkParams,
                             array(
-                                'title' => gTxt(
-                                    $event.'_count_'.$name,
-                                    array('{num}' => ${$event.'_'.$name.'_count'})
-                                )
+                                'title'      => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
+                                'aria-label' => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
                             )
                         );
                     } else {

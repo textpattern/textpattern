@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,7 +38,7 @@ if (!defined('txpinterface')) {
 global $extensions;
 $extensions = get_safe_image_types();
 
-include txpath.'/lib/class.thumb.php';
+include_once txpath.'/lib/class.thumb.php';
 
 if ($event == 'image') {
     require_privs('image');
@@ -205,6 +205,7 @@ function image_list($message = '')
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
+        $imagetypes = get_safe_image_types();
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
@@ -216,7 +217,7 @@ function image_list($message = '')
                             array('class' => 'inline-file-uploader-actions'))
                         : ''
                     )),
-                    'image/*'
+                    implode(',', $imagetypes)
                 ),
                 'div', array('class' => 'txp-control-panel')
             );
@@ -269,7 +270,11 @@ function image_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(
@@ -369,7 +374,10 @@ function image_list($message = '')
                 $vc = $validator->validate() ? '' : ' error';
 
                 if ($category) {
-                    $category = span(txpspecialchars($category_title), array('title' => $category));
+                    $category = span(txpspecialchars($category_title), array(
+                        'title'      => $category,
+                        'aria-label' => $category,
+                    ));
                 }
 
                 $can_view = has_privs('image.edit.own');
@@ -380,7 +388,10 @@ function image_list($message = '')
                         $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ($can_view ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id)
+                        ($can_view ? href($id, $edit_url, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )) : $id)
                         , '', array(
                             'class' => 'txp-list-col-id',
                             'scope' => 'row',
@@ -393,7 +404,10 @@ function image_list($message = '')
                         gTime($uDate), '', 'txp-list-col-created date'
                     ).
                     td(
-                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
+                        pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                     ).
                     (has_privs('tag')
                         ? td(
@@ -406,7 +420,10 @@ function image_list($message = '')
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($realname), array(
+                            'title'      => $author,
+                            'aria-label' => $author,
+                        )), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
@@ -431,8 +448,8 @@ function image_list($message = '')
         'div', array(
             'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
-            'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
+            'aria-label' => gTxt('tagbuilder'),
         ));
 }
 
@@ -620,12 +637,13 @@ function image_edit($message = '', $id = '')
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
         $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
+        $imagetypes = get_safe_image_types();
 
         $imageBlock[] = ($can_upload
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' ,'image/*'),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
                 $rs)
             : ''
         );
@@ -646,7 +664,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
-            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' ,'image/*'),
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '' , $ext == '.jpg' ? '.jpg,.jpeg' : $ext),
             $rs)
             : ''
         );
@@ -807,7 +825,10 @@ function image_insert()
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         $img_result = image_data($file, $meta, 0, !$chunked);
-        @unlink($file['tmp_name']);
+
+        if (is_file($file['tmp_name'])) {
+            unlink(realpath($file['tmp_name']));
+        }
 
         if (is_array($img_result)) {
             list($message, $id) = $img_result;
@@ -898,6 +919,7 @@ function thumbnail_insert()
     $file = $_FILES['thefile']['tmp_name'];
     $name = $_FILES['thefile']['name'];
     $file = get_uploaded_file($file);
+    $extension = 0;
 
     if (empty($file)) {
         image_edit(array(upload_get_errormsg(UPLOAD_ERR_NO_FILE), E_ERROR), $id);
@@ -905,9 +927,11 @@ function thumbnail_insert()
         return;
     }
 
-    list($w, $h, $extension) = getimagesize($file);
+    if ($imagesize = getimagesize($file)) {
+        list($w, $h, $extension) = $imagesize;
+    }
 
-    if (($file !== false) && @$extensions[$extension]) {
+    if (($file !== false) && !empty($extensions[$extension])) {
         $ext = $extensions[$extension];
         $newpath = IMPATH.$id.'t'.$ext;
 
@@ -926,7 +950,7 @@ function thumbnail_insert()
         if ($file === false) {
             image_edit(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR), $id);
         } else {
-            image_edit(array(gTxt('only_graphic_files_allowed'), E_ERROR), $id);
+            image_edit(array(gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $extensions))), E_ERROR), $id);
         }
     }
 }
@@ -1010,11 +1034,11 @@ function image_delete($ids = array())
                 $ul = false;
 
                 if (is_file(IMPATH.$id.$ext)) {
-                    $ul = unlink(IMPATH.$id.$ext);
+                    $ul = unlink(realpath(IMPATH.$id.$ext));
                 }
 
                 if (is_file(IMPATH.$id.'t'.$ext)) {
-                    $ult = unlink(IMPATH.$id.'t'.$ext);
+                    $ult = unlink(realpath(IMPATH.$id.'t'.$ext));
                 }
 
                 if (!$rsd or !$ul) {

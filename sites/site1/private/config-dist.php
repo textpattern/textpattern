@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -160,7 +160,7 @@ $txpcfg['client_flags'] = 0;
 /**
  * Multi-Site setup:
  * Set txpath for shared txp and vendor directories
- * see https://github.com/textpattern/textpattern/blob/master/sites/README.txt
+ * see https://github.com/textpattern/textpattern/blob/main/sites/README.txt
  */
 
 // if (!defined('txpath')) {

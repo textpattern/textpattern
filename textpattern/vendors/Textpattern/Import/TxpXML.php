@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -97,7 +97,9 @@ class TxpXML
     {
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
-        $oldLoader = libxml_disable_entity_loader(true);
+        if (\PHP_VERSION_ID < 80000) {
+            $oldLoader = libxml_disable_entity_loader(true);
+        }
 
         if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
             $articles = array();
@@ -125,7 +127,9 @@ class TxpXML
             // error XML
         }
 
-        libxml_disable_entity_loader($oldLoader);
+        if (\PHP_VERSION_ID < 80000) {
+            libxml_disable_entity_loader($oldLoader);
+        }
     }
 
     /**
@@ -152,11 +156,11 @@ class TxpXML
 
             $article['Title']     = trim($a->title);
             $article['url_title'] = stripSpace($article['Title'], 1);
-            $article['section']   = @$a->section;
-            $article['Category1'] = @$a->category[0];
-            $article['Category2'] = @$a->category[1];
+            $article['section']   = (isset($a->section) ? (string)$a->section : '');
+            $article['Category1'] = (isset($a->category[0]) ? (string)$a->category[0] : '');
+            $article['Category2'] = (isset($a->category[1]) ? (string)$a->category[1] : '');
 
-            $article['Body'] = @trim($this->replaceUrls($a->body));
+            $article['Body'] = trim($this->replaceUrls(isset($a->body) ? $a->body : ''));
             $format = $a->body->attributes()->format;
             if ($format == 'textile') {
                 $article['Body_html']       = $textile->parse($article['Body']);
@@ -166,7 +170,7 @@ class TxpXML
                 $article['textile_body']    = 0;
             }
 
-            $article['Excerpt'] = @trim($this->replaceUrls($a->excerpt));
+            $article['Excerpt'] = trim($this->replaceUrls(isset($a->excerpt) ? $a->excerpt : ''));
             $format = $a->excerpt->attributes()->format;
             if ($format == 'textile') {
                 $article['Excerpt_html']    = $textile->parse($article['Excerpt']);

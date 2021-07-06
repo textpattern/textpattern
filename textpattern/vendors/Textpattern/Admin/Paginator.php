@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -131,6 +131,7 @@ class Paginator
             ), array(
                 'class'        => $class,
                 'title'        => gTxt('view_per_page', array('{page}' => $qty)),
+                'aria-label'   => gTxt('view_per_page', array('{page}' => $qty)),
                 'aria-pressed' => $aria_pressed,
                 'role'         => 'button',
             ));

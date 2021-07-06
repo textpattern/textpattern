@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,6 +28,7 @@ if (!defined('txpath')) {
 define("txpinterface", "admin");
 
 $thisversion = '4.9.0-dev';
+
 // $txp_using_svn deprecated in 4.7.0.
 $txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
@@ -150,7 +151,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     doAuth();
 
     // Add private preferences.
-    $prefs = array_merge(get_prefs($txp_user), $prefs);
+    $prefs += get_prefs($txp_user);
     plug_privs();
     extract($prefs);
 
@@ -193,7 +194,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         exit;
     }
 
-    $txp_sections = safe_column(array('name'), 'txp_section');
+    $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
 
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;

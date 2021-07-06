@@ -74,11 +74,10 @@
     <li>sekmeleri yönetebilir</li>
     <li>sayfaları, formları ve stilleri yönetebilir</li>
 </ul>
-        
+
         ]]></item>
-        <item id="create_author" title="Yazar oluştur"><![CDATA[
-<h2>Yeni yazar ekle</h2>
-<p>Şifre, hoşgeldin mesajı ve giriş talimatları yeni yazara email üzerinden gönderilecek</p>        ]]></item>
+        <item id="create_author" title="Yazar oluştur"><![CDATA[<h2>Yeni yazar ekle</h2>
+<p>Hoş geldin mesajı ve giriş talimatları yeni yazara mail olarak ulaştırılacaktır.</p>]]></item>
     </group>
 
     <group id="article" title="Panel yaz">
@@ -246,6 +245,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title="Yorum yazanların e mail adresi gizlensin mi?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="E-posta gönderirken ISO-8859-1 kodlama kullanılsın mı (varsayılan UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
@@ -254,6 +254,7 @@
         <item id="publish_expired_articles" title="Süresi dolmuş makaleler yayınlansın mı?"><![CDATA[]]></item>
         <item id="publisher_email" title="Bu e-posta adresinden giriş bilgilerini gönder"><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
         <item id="site_slogan" title="Site Sloganı"><![CDATA[]]></item>
@@ -261,7 +262,7 @@
         <item id="siteurl" title="Site URL'si"><![CDATA[]]></item>
         <item id="skin_dir" title="Tema klasörü"><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title=""><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
@@ -272,7 +273,7 @@
 <p>Bu Textpattern'in yorum yapma işlevinin etkin olmalı mı ya da olmamalı mı ayarını düzenler.</p>
         ]]></item>
         <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title="Eklentiler kullanılsın mı?"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Bölümler paneli">

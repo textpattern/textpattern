@@ -127,7 +127,10 @@
         <item id="admin_side_plugins" title=""><![CDATA[]]></item>
         <item id="advanced_options" title=""><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
+        <item id="allow_form_override" title=""><![CDATA[
+<h2>Να επιτρέπεται η αντικατάσταση της φόρμας?</h2>
+<p>Αυτή η ρύθμιση επιτρέπει στους συντάκτες των άρθρων να παρακάμψουν τη φόρμα για χρήση όταν το άρθρο τους αποδίδεται. Αν ενεργοποιηθεί, ένα αναπτυσσόμενο μενού 'Παράκαμψη φόρμας' θα είναι διαθέσιμο κατά την επεξεργασία των άρθρων.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
         <item id="archive_dateformat" title=""><![CDATA[]]></item>
         <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
@@ -140,7 +143,8 @@
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Επιτρέπονται εικόνες στα σχόλια;"><![CDATA[<h2>Επιτρέπονται εικόνες στα σχόλια;</h2>
+<p>Αν επιλέξετε "Όχι",  θα αφαιρεθούν όλες οι εικόνες που περιλαμβάνονται στα σχόλια.</p>]]></item>
         <item id="comments_mode" title=""><![CDATA[]]></item>
         <item id="comments_moderate" title=""><![CDATA[]]></item>
         <item id="comments_on_default" title=""><![CDATA[]]></item>
@@ -169,6 +173,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
@@ -177,6 +182,7 @@
         <item id="publish_expired_articles" title=""><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
         <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
         <item id="site_slogan" title=""><![CDATA[]]></item>
@@ -184,7 +190,7 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title=""><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
         <item id="tempdir" title=""><![CDATA[]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>

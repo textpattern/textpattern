@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -440,38 +440,6 @@ function updateVolatilePartials($partials)
 }
 
 /**
- * Lists image types that can be safely uploaded.
- *
- * Returns different results based on the logged in user's privileges.
- *
- * @param   int         $type If set, validates the given value
- * @return  mixed
- * @package Image
- * @since   4.6.0
- * @example
- * list($width, $height, $extension) = getimagesize('image');
- * if ($type = get_safe_image_types($extension))
- * {
- *     echo "Valid image of {$type}.";
- * }
- */
-
-function get_safe_image_types($type = null)
-{
-    if (!has_privs('image.create.trusted')) {
-        $extensions = array(0, '.gif', '.jpg', '.png');
-    } else {
-        $extensions = array(0, '.gif', '.jpg', '.png', '.swf', 0, 0, 0, 0, 0, 0, 0, 0, '.swf');
-    }
-
-    if (func_num_args() > 0) {
-        return !empty($extensions[$type]) ? $extensions[$type] : false;
-    }
-
-    return $extensions;
-}
-
-/**
  * Checks if GD supports the given image type.
  *
  * @param   string $image_type Either '.gif', '.jpg', '.png'
@@ -492,10 +460,14 @@ function check_gd($image_type)
             return ($gd_info['GIF Create Support'] == true);
             break;
         case '.jpg':
+        case '.jpeg':
             return ($gd_info['JPEG Support'] == true);
             break;
         case '.png':
             return ($gd_info['PNG Support'] == true);
+            break;
+        case '.webp':
+            return ($gd_info['WebP Support'] == true);
             break;
     }
 
@@ -555,10 +527,11 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     }
 
     list($w, $h, $extension) = getimagesize($file);
-    $ext = get_safe_image_types($extension);
+    $exts = get_safe_image_types();
+    $ext = !empty($exts[$extension]) ? $exts[$extension] : false;
 
     if (!$ext) {
-        return gTxt('only_graphic_files_allowed');
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $exts)));
     }
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;
@@ -812,15 +785,15 @@ function register_tab($area, $panel, $title)
 function pluggable_ui($event, $element, $default = '')
 {
     $argv = func_get_args();
-    $argv = array_slice($argv, 2);
+    $argv = array_merge(array(
+        $event,
+        $element,
+       (string) $default === '' ? 0 : array(0, 0)
+    ), array_slice($argv, 2));
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array(
-        'event' => $event,
-        'step'  => $element,
-        'pre'   => (string) $default === '' ? 0 : array(0, 0),
-    ) + $argv);
+    $ui = call_user_func_array('callback_event', $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -829,14 +802,17 @@ function pluggable_ui($event, $element, $default = '')
 /**
  * Gets a list of form types.
  *
- * The list form types can be extended with a 'form.types > types'
+ * The list of form types can be extended with a 'form.types > types'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$types'. The third parameter contains a reference to an
  * array of 'type => label' pairs.
  *
- * @return  array An array of form types
- * @since   4.6.0
- * @package Template
+ * @return     array An array of form types
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\Form->getTypes()
+ * @todo       Move callback to Textpattern\Skin\Form->getTypes()?
+ * @package    Template
  */
 
 function get_form_types()
@@ -915,6 +891,31 @@ function permlinkmodes($name, $val, $blank = false)
 }
 
 /**
+ * Gets the name of the default publishing section.
+ *
+ * @return string The section
+ */
+
+function getDefaultSection()
+{
+    global $txp_sections;
+
+    $name = get_pref('default_section');
+
+    if (!isset($txp_sections[$name])) {
+        foreach ($txp_sections as $name => $section) {
+            if ($name != 'default') {
+                break;
+            }
+        }
+
+        set_pref('default_section', $name, 'section', PREF_HIDDEN);
+    }
+
+    return $name;
+}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
@@ -966,11 +967,8 @@ function event_multi_edit($table, $id_key)
 }
 
 /**
- * Verifies temporary directory.
+ * Verifies temporary directory existence and that it's writeable.
  *
- * Verifies that the temporary directory is writeable.
- *
- * @param   string $dir The directory to check
  * @return  bool|null NULL on error, TRUE on success
  * @package Debug
  */
@@ -997,23 +995,25 @@ function find_temp_dir()
     } else {
         $guess = array(
             txpath.DS.'tmp',
-            '',
+            sys_get_temp_dir(),
             DS.'tmp',
             $path_to_site.DS.$img_dir,
         );
     }
 
     foreach ($guess as $dir) {
-        $tf = @tempnam($dir, 'txp_');
+        if (is_writable($dir)) {
+            $tf = tempnam($dir, 'txp_');
 
-        if ($tf) {
-            $tf = realpath($tf);
-        }
+            if ($tf) {
+                $tf = realpath($tf);
+            }
 
-        if ($tf and file_exists($tf)) {
-            unlink($tf);
+            if ($tf and file_exists($tf)) {
+                unlink($tf);
 
-            return dirname($tf);
+                return dirname($tf);
+            }
         }
     }
 
@@ -1807,7 +1807,9 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     static $files = null, $files_md5 = array(), $checksum_table = array();
 
     if ($files === null) {
-        if ($cs = @file(txpath.'/checksums.txt')) {
+        $checksums = txpath.'/checksums.txt';
+
+        if (is_readable($checksums) && ($cs = file($checksums))) {
             $files = array();
 
             foreach ($cs as $c) {
@@ -1909,7 +1911,7 @@ function assert_system_requirements()
 
 function get_prefs_theme()
 {
-    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    $out = json_decode(txp_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
     }

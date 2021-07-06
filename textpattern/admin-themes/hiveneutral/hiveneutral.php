@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,13 +30,17 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
     function html_head()
     {
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/textpattern.css')->setAtt('media', 'screen');
+        $out[] = Txp::get('\Textpattern\UI\Style')->setSource($this->url.'assets/css/print.css')->setAtt('media', 'print');
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
+        $out[] = '<meta name="color-scheme" content="light dark">';
+        $out[] = '<meta name="theme-color" content="#f7f7f7" media="(prefers-color-scheme: light)">';
+        $out[] = '<meta name="theme-color" content="#343b41" media="(prefers-color-scheme: dark)">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script defer src="'.$this->url.'assets/js/main.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/main.js')->setBool('defer');
 
         if (!defined('no_autosize')) {
-            $out[] = '<script defer src="'.$this->url.'assets/js/autosize.js"></script>'.n;
+            $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/autosize.js')->setBool('defer');
         }
 
         return join(n, $out);
@@ -44,7 +48,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 
     function header()
     {
-        $out[] = '<script src="'.$this->url.'assets/js/darkmode.js"></script>'.n;
+        $out[] = Txp::get('\Textpattern\UI\Script')->setSource($this->url.'assets/js/darkmode.js');
 
         global $txp_user;
 
@@ -113,9 +117,12 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
                     'id'         => 'lightswitch',
                     'title'      => gTxt('lightswitch'),
                     'aria-label' => gTxt('lightswitch'),
-                )), array('class' => 'txp-lightswitch'));
+                ))
+            , array('class' => 'txp-lightswitch'));
+
             $out[] = graf(
-                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
+                href(gTxt('logout'), 'index.php?logout=1', array('id' => 'txp-logout-button'))
+            , array('class' => 'txp-logout'));
         }
 
         return join(n, $out);
@@ -123,14 +130,18 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 
     function footer()
     {
+        global $txp_user;
+
         $out[] = graf(
             href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
                 'rel'    => 'external noopener',
                 'target' => '_blank',
             )).
-            ' (v'.txp_version.')', array('class' => 'mothership'));
-
-        $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
+            ' (v'.txp_version.')'.
+            n.span('|', array('role' => 'separator')).
+            n.gTxt('logged_in_as').
+            n.span(txpspecialchars($txp_user), array('class' => 'txp-username'))
+        , array('class' => 'mothership'));
 
         return join(n, $out);
     }

@@ -44,23 +44,30 @@
     "smtp_from": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "110"
     },
     "publisher_email": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "115"
     },
     "override_emailcharset": {
         "val": "0",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "yesnoradio",
         "position": "120"
+    },
+    "enhanced_email": {
+        "val": "0",
+        "type": "0",
+        "event": "mail",
+        "html": "enhanced_email",
+        "position": "150"
     },
     "enable_xmlrpc_server": {
         "val": "0",
@@ -217,7 +224,7 @@
         "html": "yesnoradio",
         "position": "320"
     },
-    "spam_blacklists": {
+    "spam_blocklists": {
         "val": "",
         "type": "0",
         "event": "comments",
@@ -342,6 +349,13 @@
         "event": "publish",
         "html": "yesnoradio",
         "position": "60"
+    },
+    "override_form_types": {
+        "val": "article",
+        "type": "0",
+        "event": "publish",
+        "html": "overrideTypes",
+        "position": "70"
     },
     "attach_titles_to_permalinks": {
         "val": "1",
@@ -554,7 +568,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.2",
+        "val": "4.9.0-dev",
         "type": "2",
         "event": "publish",
         "html": "text_input",
@@ -659,7 +673,7 @@
         "position": "230"
     },
     "use_comments": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "site",
         "html": "yesnoradio",
@@ -694,5 +708,12 @@
         "event": "advanced_options",
         "html": "longtext_input",
         "position": "200"
+    },
+    "secondpass": {
+        "val": "1",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "text_input",
+        "position": "300"
     }
 }

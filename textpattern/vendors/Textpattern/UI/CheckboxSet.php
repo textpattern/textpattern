@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -57,8 +57,8 @@ class CheckboxSet extends TagCollection implements UICollectionInterface
             $id = $box->getKey();
             $label = new \Textpattern\UI\Label($label, $id);
 
-            $this->add($box, 'checkbox-'.$id);
-            $this->add($label, 'label-'.$id);
+            $this->add($box, 'checkbox-'.$id)
+                ->add($label, 'label-'.$id);
         }
     }
 }

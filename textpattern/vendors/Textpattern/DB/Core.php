@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2021 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,14 +59,14 @@ class Core
      * @param table name or empty
      */
 
-    public function getStructure($table='')
+    public function getStructure($table = '')
     {
         if (empty($this->tables_structure)) {
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
         }
 
         if (!empty($table)) {
-            return @$this->tables_structure[$table];
+            return isset($this->tables_structure[$table]) ? $this->tables_structure[$table] : '';
         }
 
         return $this->tables_structure;
@@ -78,7 +78,7 @@ class Core
 
     public function createAllTables()
     {
-        foreach ($this->getStructure() as $key=>$data) {
+        foreach ($this->getStructure() as $key => $data) {
             safe_create($key, $data);
         }
     }
@@ -104,7 +104,7 @@ class Core
     {
         $import = new \Textpattern\Import\TxpXML();
 
-        foreach (get_files_content($this->data_dir, 'xml') as $key=>$data) {
+        foreach (get_files_content($this->data_dir, 'xml') as $key => $data) {
             $import->importXml($data);
         }
     }
@@ -117,7 +117,7 @@ class Core
     {
         foreach ($this->getPrefsDefault() as $name => $p) {
             if (empty($p['private'])) {
-                @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
             }
         }
     }
@@ -143,7 +143,7 @@ class Core
     {
         global $permlink_mode, $siteurl, $theme_name, $pref, $language;
 
-        $out = @json_decode(file_get_contents($this->data_dir.DS.'core.prefs'), true);
+        $out = json_decode(txp_get_contents($this->data_dir.DS.'core.prefs'), true);
 
         if (empty($out)) {
             return array();
@@ -208,7 +208,7 @@ class Core
         global $prefs, $txp_user;
 
         // Rename previous Global/Private prefs.
-        $renamed = @json_decode(file_get_contents($this->data_dir.DS.'renamed.prefs'), true);
+        $renamed = json_decode(txp_get_contents($this->data_dir.DS.'renamed.prefs'), true);
 
         if (!empty($renamed['global'])) {
             foreach ($renamed['global'] as $oldKey => $newKey) {
@@ -223,7 +223,7 @@ class Core
         }
 
         // Delete old Global/Private prefs.
-        $deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true);
+        $deleted = json_decode(txp_get_contents($this->data_dir.DS.'deleted.prefs'), true);
 
         if (!empty($deleted['global'])) {
             safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['global']))."') AND user_name = ''");
@@ -242,13 +242,20 @@ class Core
             while ($row = nextRow($rs)) {
                 $name = array_shift($row);
 
-                if ($def = @$prefs_check[$name]) {
+                if (!empty($prefs_check[$name])) {
+                    $def = $prefs_check[$name];
+
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
 
-
                     if ($def['event'] != 'custom' && $def != $row) {
-                        @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
+                        $evt = $def['event'];
+
+                        if (!empty($def['collection'])) {
+                            $evt = array($def['event'], $def['collection']);
+                        }
+
+                        set_pref($name, null, $evt, $def['type'], $def['html'], $def['position'], $private);
                     }
 
                     unset($prefs_check[$name]);
@@ -259,7 +266,7 @@ class Core
         // Create missing prefs.
         foreach ($prefs_check as $name => $p) {
             $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
-            @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+            create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
         }
 
         $prefs = get_prefs();
