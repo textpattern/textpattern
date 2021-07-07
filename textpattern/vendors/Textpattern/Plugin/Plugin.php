@@ -79,7 +79,7 @@ class Plugin
             ));
 
             $name = sanitizeForFile($name);
-            $exists = fetch('name', 'txp_plugin', 'name', $name);
+            $exists = safe_row('name, version', 'txp_plugin', "name='".doSlash($name)."'");
             isset($md5) or $md5 = md5($code);
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
@@ -132,6 +132,17 @@ class Plugin
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
                     set_error_handler("pluginErrorHandler");
+
+                    if ($exists) {
+                        $previous = $exists['version'];
+
+                        if (version_compare($previous, $version, "<")) {
+                            callback_event("plugin_lifecycle.$name", 'upgraded', '0', compact('previous', 'version'));
+                        } elseif (version_compare($previous, $version, ">")) {
+                            callback_event("plugin_lifecycle.$name", 'downgraded', '0', compact('previous', 'version'));
+                        }
+                    }
+
                     $message = callback_event("plugin_lifecycle.$name", 'installed');
                     restore_error_handler();
                 }

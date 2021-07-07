@@ -12,6 +12,7 @@ Changes in 4.8.8 (upcoming)
 * Accessibility: Additional 'aria-label' attributes for various internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
+* Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
 * PrismJS 1.24.1.
 
 Changes in 4.8.7 (30 May 2021)
