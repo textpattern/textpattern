@@ -448,16 +448,20 @@ function cat_event_category_list($event)
             // Format count.
             switch ($event) {
                 case 'article':
-                    $url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
+                    $url = array(
+                            'event'         => 'list',
+                            'search_method' => 'categories',
+                            'crit'          => '"'.$name.'"',
+                        );
                     break;
                 case 'link':
-                    $url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
-                    break;
                 case 'image':
-                    $url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
-                    break;
                 case 'file':
-                    $url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
+                    $url = array(
+                            'event'         => $event,
+                            'search_method' => 'category',
+                            'crit'          => '"'.$name.'"',
+                        );
                     break;
             }
 
