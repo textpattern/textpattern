@@ -1280,7 +1280,11 @@ function popTag($var, $text, $atts = array())
         'tag_name' => $var,
     ) + $atts;
 
-    return href($text, $opts, array('class' => 'txp-tagbuilder-link'));
+    return href($text, $opts, array(
+        'class'      => 'txp-tagbuilder-link',
+        'title'      => gTxt('tagbuilder'),
+        'aria-label' => gTxt('tagbuilder'),
+    ));
 }
 
 /**
