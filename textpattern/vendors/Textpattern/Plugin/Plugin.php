@@ -245,18 +245,6 @@ class Plugin
 
         if (is_array($name)) {
             list($name, $target_path) = $name + array(null, null);
-
-            if (!($pack = txp_get_contents($target_path))) {
-                return false;
-            }
-
-            list($pack, $code, $help_raw) = $this->extractSection($pack, array('CODE', 'HELP'));
-            $plugin = array_filter(compact('code', 'help_raw'));
-
-            if (!empty($code)) {
-                file_put_contents($target_path, $pack);
-                include $target_path;
-            }
         } else {
             $name = sanitizeForFile($name);
             $dir = PLUGINPATH.DS.$name;
@@ -269,8 +257,18 @@ class Plugin
             $target_path = $dir.$name.'.php';
         }
 
-        if (empty($plugin['code']) && $code = txp_get_contents($target_path)) {
-            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $code);
+        if (!($pack = txp_get_contents($target_path))) {
+            return false;
+        }
+
+        list($pack, $code, $help_raw) = $this->extractSection($pack, array('CODE', 'HELP'));
+        $plugin = array_filter(compact('code', 'help_raw'));
+
+        if (!empty($code)) {
+            file_put_contents($target_path, $pack);
+            include $target_path;
+        } else {
+            $code = preg_replace('/^\s*<\?(?:php)?\s*|\s*\?>\s*$/i', '', $pack);
             $plugin['code'] = $code;
         }
 
