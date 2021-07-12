@@ -1000,6 +1000,8 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Give control to search, if necessary.
+    $search = $score = '';
+
     if ($q && !$issticky) {
         $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
         $q = trim($q);
@@ -1008,14 +1010,15 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list_unique(get_pref('searchable_article_fields'));
+        $cols = do_list_unique(get_pref('searchable_article_fields')) or $cols = array('Title', 'Body');
 
-        if (empty($cols) or $cols[0] == '') {
-            $cols = array('Title', 'Body');
+        if ($m == 'natural' || !$sort || strpos($sort, 'score') !== false) {
+            $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ".($m == 'natural' ? "('$q' IN NATURAL LANGUAGE MODE)" : "('$q')");
+            $score = ', '.(empty($groupby) ? $match : "MAX($match)").' AS score';
+            $sort or $sort = 'score DESC';
         }
 
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
-        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
 
         if ($quoted || empty($m) || $m === 'exact') {
             for ($i = 0; $i < count($cols); $i++) {
@@ -1034,14 +1037,9 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         $cols = join(" OR ", $cols);
-        $search = " AND ($cols) $s_filter";
+        $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $match > 0" : '');
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
-
-        if (!$sort) {
-            $sort = 'score DESC';
-        }
     } else {
-        $search = $score = '';
         $fname = (!empty($listform) ? $listform : $form);
 
         if (!$sort) {
@@ -1094,7 +1092,6 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($fields && !empty($groupby)) {
         $where .= " GROUP BY $groupby";
         $fields .= ', COUNT(*) AS count';
-        $score = '';
     }
 
     $rs = safe_rows_start(
