@@ -1025,7 +1025,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 $cols[$i] = "`$cols[$i]` LIKE '%$search_terms%'";
             }
         } else {
-            $colJoin = ($m === 'any') ? "OR" : "AND";
+            $colJoin = ($m === 'all') ? "AND" : "OR";
             $search_terms = explode(' ', $search_terms);
             for ($i = 0; $i < count($cols); $i++) {
                 $like = array();
