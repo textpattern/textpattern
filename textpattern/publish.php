@@ -1012,8 +1012,12 @@ function doArticles($atts, $iscustom, $thing = null)
         // textpattern table and a matching fulltext index must exist.
         $cols = do_list_unique(get_pref('searchable_article_fields')) or $cols = array('Title', 'Body');
 
-        if ($m == 'natural' || !$sort || strpos($sort, 'score') !== false) {
-            $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ".($m == 'natural' ? "('$q' IN NATURAL LANGUAGE MODE)" : "('$q')");
+        if ($m == 'natural') {
+            $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q' IN NATURAL LANGUAGE MODE)";
+        }
+
+        if (!$sort || strpos($sort, 'score') !== false) {
+            !empty($match) or $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q')";
             $score = ', '.(empty($groupby) ? $match : "MAX($match)").' AS score';
             $sort or $sort = 'score DESC';
         }
@@ -1037,7 +1041,7 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         $cols = join(" OR ", $cols);
-        $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $match > 0" : '');
+        $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $match" : '');
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
     } else {
         $fname = (!empty($listform) ? $listform : $form);
