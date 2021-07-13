@@ -1000,7 +1000,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Give control to search, if necessary.
-    $search = $score = '';
+    $search = $score = $match = '';
 
     if ($q && !$issticky) {
         $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
