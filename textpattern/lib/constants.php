@@ -712,6 +712,15 @@ define('REQUIRED_PHP_VERSION', '5.6.0');
 define('REQUIRED_OPENSSL_VERSION', '268439567');
 
 /**
+ * PHP ImageMagick extension version.
+ *
+ * @since   4.9.0
+ * @package Image
+ */
+
+define('TEXTPATTERN_IMAGICK_VERSION', extension_loaded('imagick') ? phpversion('imagick') : null);
+
+/**
  * File integrity status good.
  *
  * @since   4.6.0

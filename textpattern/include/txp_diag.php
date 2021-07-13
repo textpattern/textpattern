@@ -637,6 +637,8 @@ function doDiagnostics()
 
         gTxt('diag_gd_library').cs.$gd.n,
 
+        (TEXTPATTERN_IMAGICK_VERSION) ? gTxt('diag_imagick_library').cs.TEXTPATTERN_IMAGICK_VERSION.n : '',
+
         gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
 
         gTxt('diag_server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
