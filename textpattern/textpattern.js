@@ -2382,6 +2382,61 @@ textpattern.Route.add('lang', function () {
 
 // Images edit panel.
 textpattern.Route.add('image', function () {
+    function image_transform(ev) {
+        // Show feedback while processing.
+        var $this = $(this);
+        var payload =
+        {
+            data   : new FormData(),
+            spinner: $('<span class="spinner-sticker" /><span class="spinner ui-icon ui-icon-refresh" />')
+        };
+
+        $this.attr('disabled', true).after(payload.spinner.val(0));
+        $this.addClass('busy');
+        $('body').addClass('busy');
+
+        payload.data.append('transform', $this.attr('name'));
+        payload.data.append('val', $this.val());
+
+        let $details = $('#image_details_form');
+        let $fullimg = $('.fullsize-image img');
+
+        payload.data.append('id', $details.find('input[name=id]').val());
+        payload.data.append('ext', $details.find('input[name=ext]').val());
+        payload.data.append('name', $fullimg.attr('src'));
+        payload.data.append('event', $details.find('input[name=event]').val());
+        payload.data.append('step', 'transform');
+
+        sendAsyncEvent(payload.data, function () {}, 'json')
+            .done(function (data, textStatus, jqXHR) {
+                $fullimg.attr('src', data.src);
+                textpattern.Relay.callback('txpAsyncForm.success', {
+                    'this': $this,
+                    'event': event,
+                    'data': data,
+                    'textStatus': textStatus,
+                    'jqXHR': jqXHR
+                });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+
+                textpattern.Relay.callback('txpAsyncForm.error', {
+                    'this': $this,
+                    'event': event,
+                    'jqXHR': jqXHR,
+                    'ajaxSettings': $.ajaxSetup(),
+                    'thrownError': errorThrown
+                });
+            })
+            .always(function () {
+                $this.removeClass('busy')
+                    .removeAttr('disabled');
+                payload.spinner.remove();
+                $('body').removeClass('busy');
+                textpattern.Console.announce();
+            });
+    }
+
     $('.thumbnail-swap-size').button({
         showLabel: false,
         icon: 'ui-icon-transfer-e-w'
@@ -2394,6 +2449,20 @@ textpattern.Route.add('image', function () {
         $w.val(height);
         $h.val(width);
     });
+    $('.slider')
+        .on('change', image_transform)
+        .on('input', function(ev) {
+            let $this = $(this);
+            $('.linkedspinner[name='+$this.attr('name')+']').val($this.val());
+        });
+    $('.linkedspinner')
+        .on('change', image_transform)
+        .on('input', function(ev) {
+            let $this = $(this);
+            $('.slider[name='+$this.attr('name')+']').val($this.val());
+        });
+    $('.image_transforms button').on('click', image_transform);
+    $('[name=filt]').on('change', image_transform);
 });
 
 // Sections panel. Used for edit panel and multi-edit change of page+style.
