@@ -3,7 +3,9 @@
 <help lang="fi">
     <group id="admin" title="Käyttäjät-paneeli">
         <item id="about_privileges" title="Tietoa rooleista"><![CDATA[]]></item>
-        <item id="create_author" title="Luo uusi tekijä"><![CDATA[]]></item>
+        <item id="create_author" title="Luo uusi tekijä"><![CDATA[<h2>Lisää uusi tekijä</h2>
+<p>Tervetuloviesti ja kirjautumisohjeet tullaan sähköpostittamaan uudelle tekijälle.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Kirjoita-paneeli">
