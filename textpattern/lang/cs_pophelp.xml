@@ -750,7 +750,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Kolik článků má být zahrnuto do pramenů?</h2>
 <p>Zde se nastavuje nejvyšší počet posledních článků, jež se budou převádět do formátu pro šíření prostřednictvím pramenů RSS a Atom.</p>
 <p>Doporučeno je nízké číslo v rozmení od <code>5</code>do <code>15</code>.</p>        ]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="secondpass" title="Počet dodatečných cyklů analyzátoru"><![CDATA[]]></item>
         <item id="send_lastmod" title="Odesílat hlavičku poslední úpravy?"><![CDATA[
 <h2>Odesílat hlavičku poslední úpravy?</h2>
 <p>Je-li tato volba zapnuta, Textpattern bude číst HTTP hlavičku <code>If-Modified-Since</code> čtenářova prohlížeče a porovná ji s časem poslední změny článku či stránky. Pokud se od poslední návštěvy nic nezměnilo, odešle se zpět hlavička, jež prohlížeči doporučí, aby použil místní kopii z vyrovnávací paměti.</p>

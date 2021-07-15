@@ -379,25 +379,25 @@ XPath: /resources/help/group[2]/item[9]
         <item id="comments_on_default" title="Standardmäßig eingeschaltet"><![CDATA[]]></item>
         <item id="comments_require_email" title="E-Mail des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Name des Benutzers für Kommentare erforderlich?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Kommentare an Autor senden"><![CDATA[]]></item>
         <item id="comments_use_fat_textile" title="Zusätzliches Textile-Markup zulassen?"><![CDATA[]]></item>
         <item id="custom_form_types" title=""><![CDATA[]]></item>
         <item id="custom_overview" title="Benutzerdefinierte Felder"><![CDATA[]]></item>
         <item id="dateformat" title="Datumsformat"><![CDATA[]]></item>
         <item id="default_event" title="Standard-Menü"><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title="Status von neuen Artikeln"><![CDATA[]]></item>
         <item id="doctype" title="Doctype"><![CDATA[]]></item>
         <item id="enable_dev_preview" title="Vorschau des in Entwicklung befindlichen Designs aktivieren?"><![CDATA[]]></item>
         <item id="enable_short_tags" title="Verwendung von Kurz-Tags aktivieren?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="XML-RPC-Server aktivieren?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
+        <item id="expire_logs_after" title="Protokolle nach wievielen Tagen löschen?"><![CDATA[]]></item>
         <item id="file_base_path" title="Datei-Upload-Pfad"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Maximale Upload-Dateigröße (in Bytes)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Zeitzone"><![CDATA[]]></item>
         <item id="img_dir" title="Bilderverzeichnis"><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
+        <item id="include_email_atom" title="E-Mail in Atom-Feeds publizieren?"><![CDATA[]]></item>
         <item id="is_dst" title="Sommerzeit aktiviert?"><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
+        <item id="logging" title="Protokollierung"><![CDATA[]]></item>
         <item id="max_url_len" title="Maximale URL-Länge (in Zeichen)"><![CDATA[]]></item>
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
@@ -410,7 +410,9 @@ XPath: /resources/help/group[2]/item[9]
         <item id="public_theme_name" title=""><![CDATA[]]></item>
         <item id="publish_expired_articles" title=""><![CDATA[]]></item>
         <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
+        <item id="rss_how_many" title="Wieviele Artikel sollen im RSS-Feed angezeigt werden?"><![CDATA[<h2>Wieviele Artikel sollen im RSS-Feed angezeigt werden?</h2>
+<p>Hier wird die maximal Anzahl der Artikel im RSS- oder Atom-Feed angeben.</p>
+<p>Empfolen sind Werte zwischen<code>5<code> und <2>15</code>.</p>]]></item>
         <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title=""><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>

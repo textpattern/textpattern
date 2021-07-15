@@ -75,7 +75,10 @@
     <li>puede gestionar páginas, bloques y estilo</li>
 </ul>
         ]]></item>
-        <item id="create_author" title="Crear autor"><![CDATA[]]></item>
+        <item id="create_author" title="Crear autor"><![CDATA[
+<h2>Añadir nuevo autor</h2>
+<p>Se enviarán contraseña, mensaje de bienvenida e instrucciones de inicio de sesión por correo electrónico al nuevo autor.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Panel de escritura">
@@ -268,9 +271,9 @@
         <item id="no_temp_dir" title="No hay un directorio temporal definido"><![CDATA[
 <h2> No hay directorio temporal definido </h2>
  <p> Si bien Textpattern se ejecutará sin un directorio temporal, es posible que algunas funciones no funcionen como se esperaba si no se establece esta preferencia. Visite Preferencias de administrador y configure la "Ruta de directorio temporal". </p>        ]]></item>
-        <item id="old_placeholder_exists" title="El directorio de secciones existe"><![CDATA[
-<h2> El directorio de sección existe </h2>
- <p> Los archivos de directorio de sección existentes entrarán en conflicto con el esquema <code>.htaccess </code>. Si los archivos informados son marcadores de posición, elimínelos. </p>        ]]></item>
+        <item id="old_placeholder_exists" title="Sección con el mismo nombre que un directorio"><![CDATA[<h2>La sección tiene el mismo nombre que un directorio</h2>
+<p>Los nombres de directorio que ya existen pueden entrar en conflicto con nombres de sección usados en el esquema de enlaces permanentes de artículo. Para evitarlo, comprueba y borra el nombre del directorio afectado si es seguro hacerlo, o cambia el nombra para que no entren en conflicto. </p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title="Directorio del sitio inaccesible"><![CDATA[
 <h2> Directorio del sitio inaccesible </h2>
  <p> El directorio que contiene el archivo raíz <code> index.php </code> especificado como el índice del sitio no puede ser leído por el servidor. Por favor revise los permisos. </p>        ]]></item>
@@ -602,7 +605,20 @@
 </ul>
 <p><strong>Nota:</strong> Por razones de seguridad, el HTML bruto se transforma en texto normal.</p>
         ]]></item>
-        <item id="custom_form_types" title="Tipos de plantilla para campos personalizados"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Tipos de plantilla para bloques personalizados"><![CDATA[
+<h2>Tipos de plantillas de bloque a medida</h2>
+<p>Adicionalmente a los tipos estándar de plantillas de bloque (artículos, archivo, miscelánea, etc), los editores pueden definir tipos a medida. El propósito de las plantillas de bloque a media es doble: simplificar la clasificación de plantillas de bloque y poder hacer definiciones a medida de assets.</p>
+<p>El formato de la preferencia es <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(abre un enlace externo en ventana nueva)</span></a>, con cada sección correspondiente a un tipo de plantilla de bloque.</p>
+<p>Para definir una plantilla de bloque a medida (ej. <code>js</code>) debe añadirse (en una línea a parte) una sección <code>[js]</code>. Puede establecerse un título por defecto a través de una entrada <code>title="Javascript"</code> en la sección correspondiente. Si se desea, también puede añadirse títulos adaptados a diferentes idiomas (ej. <code>ru="Скрипт"</code>).</p>
+<p>Adicionalmente, puede especificarse un <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">tipo de medio <span class="ui-icon ui-icon-extlink">(abre un enlace externo en ventana nueva)</span></a> (formalmente conocido como MIME type) para una plantilla de bloque, ej. <code>mediatype="application/javascript"</code>. Esto convierte las plantillas de bloque de este tipo en assets a medida que pueden ser servidos con el tipo de medio definido, tanto desde la base de datos como desde disco (archivos planos) a través de una etiqueta. Por ejemplo, una plantilla de bloque llamada <code>myscript.js</code> de tipo <code>[js]</code> con un tipo de medio definido como <code>application/javascript</code> puede incluirse en tu código de esta manera:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Esto generará la siguiente <code>&lt;script&gt;</code> HTML:</p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Sólo las plantillas de bloque con el nombre de extensión correspondiente a su tipo (ej. <code>my script.js</code>) pueden servirse como archivos planos. En este caso no serán procesados de ninguna manera por Textpattern y pueden ser accesibles a través de su URL.</p>
+<p>Si una plantilla de bloque necesita procesamiento (si contiene etiquetas de Textpattern) debe ser servida desde la base de datos. En este caso no debe añadirse extensión al nombre de bloque - nómbralo simplemente <code>myscript</code> (sin <code>.js </code>) para que sea inaccesible a través de una URL estándar - e inclúyelo de esta manera:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
         <item id="custom_overview" title="Campos personalizados"><![CDATA[]]></item>
         <item id="dateformat" title="Formato de fecha"><![CDATA[
 <h2>Formato de fecha</h2>
