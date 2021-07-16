@@ -259,7 +259,7 @@ function log_list($message = '')
 
                 if ($log_refer) {
                     $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)).sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), txpspecialchars($log_refer), array(
-                        'rel'    => 'external noopener',
+                        'rel'    => 'external',
                         'target' => '_blank',
                     ));
                 }
@@ -267,9 +267,11 @@ function log_list($message = '')
                 if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-                    $log_page = href('/'.txpspecialchars($log_anchor).sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), rtrim(hu, '/').txpspecialchars($log_page), array(
-                        'rel'    => 'external noopener',
-                        'target' => '_blank',
+                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), array(
+                        'rel'        => 'external',
+                        'target'     => '_blank',
+                        'title'      => gTxt('view'),
+                        'aria-label' => gTxt('view'),
                     ));
 
                     if ($log_method == 'POST') {

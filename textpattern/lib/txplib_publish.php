@@ -46,7 +46,7 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
         return $filterFrontPage[$key];
     }
 
-    $filterFrontPage[$key] = false;
+    $filterFrontPage[$key] = ' AND 0';
     $field = doSlash($field);
     $rs = array();
 
@@ -55,7 +55,7 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
     }
 
     if ($rs) {
-        $filterFrontPage[$key] = " AND $field IN(".join(',', quote_list(array_keys($rs))).")";
+        $filterFrontPage[$key] = count($rs) == count($txp_sections) ? '' : " AND $field IN(".quote_list(array_keys($rs), ',').")";
     }
 
     return $filterFrontPage[$key];
