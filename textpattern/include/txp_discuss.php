@@ -175,8 +175,8 @@ function discuss_list($message = '')
             break;
     }
 
-    if ($sort != 'date') {
-        $sort_sql .= ", txp_discuss.posted ASC";
+    if ($sort != 'id') {
+        $sort_sql .= ", txp_discuss.discussid $dir";
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
@@ -404,7 +404,11 @@ function discuss_list($message = '')
                     $parent = href(
                         span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
                         '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                        href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
+                        href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid, array(
+                            'title'      => gTxt('edit'),
+                            'aria-label' => gTxt('edit'),
+                        )
+                    );
 
                     $view = $comment_status;
 

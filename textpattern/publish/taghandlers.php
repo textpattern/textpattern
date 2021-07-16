@@ -2142,9 +2142,22 @@ function if_expired($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
+    extract(lAtts(array(
+        'date'  => 'expires',
+        'time'  => null,
+    ), $atts));
 
-    $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
+    switch ($date) {
+        case 'expires':
+        case 'posted':
+        case 'modified':
+            assert_article();
+            $x = !empty($thisarticle[$date]) && ($thisarticle[$date] <= (isset($time) ? strtotime($time) : time()));
+            break;
+        default:
+            $x = strtotime($date) <= (isset($time) ? strtotime($time) : time());
+    }
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -3277,6 +3290,7 @@ function article_image($atts)
     global $doctype, $thisarticle;
 
     extract(lAtts(array(
+        'range'     => '1',
         'escape'    => true,
         'title'     => '',
         'class'     => '',
@@ -3286,60 +3300,95 @@ function article_image($atts)
         'height'    => '',
         'thumbnail' => 0,
         'wraptag'   => '',
+        'break'     => '',
         'loading'   => null,
     ), $atts));
 
     assert_article();
 
     if ($thisarticle['article_image']) {
-        $image = $thisarticle['article_image'];
-    } else {
+        $images = do_list_unique($thisarticle['article_image'], array(',', '-'));
+    }
+
+    if (empty($images)) {
         return '';
     }
 
-    if (intval($image)) {
-        $rs = safe_row("*", 'txp_image', "id = ".intval($image));
-
-        if (empty($rs)) {
-            trigger_error(gTxt('unknown_image'));
-
-            return '';
-        }
-
-        if ($thumbnail && empty($rs['thumbnail'])) {
-            return '';
-        }
-
-        $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
-        $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
-
-        extract($rs);
-
-        if ($title === true) {
-            $title = $caption;
-        }
-
-        $out = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
-            '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
-            ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
+    $out = array();
+    
+    if ($range === true) {
+        $items = array_keys($images);
     } else {
-        $out = '<img src="'.txpspecialchars($image).'" alt=""'.
-            ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
+        $n = count($images);
+        $items = array();
+
+        foreach (do_list($range) as $item) {
+            if (is_numeric($item)) {
+                $items[] = $item > 0 ? $item - 1 : $n + $item;
+            } elseif (preg_match('/^([-+]?\d+)\s*(?:\-|\.{2})\s*([-+]?\d+)$/', $item, $match)) {
+                list($item, $start, $stop) = $match;
+                $start = $start > 0 ? $start - 1 : $n + $start;
+                $stop = $stop > 0 ? $stop - 1 : $n + $stop;
+                $items = array_merge($items, range($start, $stop));
+            }
+        }
+
+        $images = array_intersect_key($images, array_flip($items));
     }
 
-    if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
-        $out .= ' loading="'.$loading.'"';
+    $dbimages = array_map('intval', array_filter($images, 'is_numeric'));
+    $dbimages = empty($dbimages) ? array() :
+        array_column(safe_rows('*', 'txp_image', 'id IN('.implode(',', $dbimages).')'), null, 'id');
+
+    foreach ($items as $item) if (isset($images[$item])) {
+        $image = $images[$item];
+
+        if (is_numeric($image)) {
+            if (!isset($dbimages[$image])) {
+                trigger_error(gTxt('unknown_image'));
+
+                continue;
+            }
+
+            $rs = $dbimages[$image];
+
+            if ($thumbnail && empty($rs['thumbnail'])) {
+                continue;
+            }
+
+            $width or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
+            $height or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+
+            extract($rs);
+
+            if ($title === true) {
+                $title = $caption;
+            }
+
+            $img = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
+                '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
+                ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
+        } else {
+            $img = '<img src="'.txpspecialchars($image).'" alt=""'.
+                ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
+        }
+
+        if ($loading && $doctype == 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
+            $img .= ' loading="'.$loading.'"';
+        }
+
+        $img .=
+            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+            ($style ? ' style="'.txpspecialchars($style).'"' : '').
+            ($width ? ' width="'.(int) $width.'"' : '').
+            ($height ? ' height="'.(int) $height.'"' : '').
+            ' />';
+
+            $out[] = $img;
     }
 
-    $out .=
-        (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-        (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-        ($style ? ' style="'.txpspecialchars($style).'"' : '').
-        ($width ? ' width="'.(int) $width.'"' : '').
-        ($height ? ' height="'.(int) $height.'"' : '').
-        ' />';
-
-    return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
+    return $wraptag ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : implode($break, $out);
 }
 
 // -------------------------------------------------------------
@@ -3586,7 +3635,9 @@ function images($atts, $thing = null)
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
                         if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                            return article_image(compact('class', 'html_id', 'wraptag'));
+                            return article_image(
+                                compact('class', 'html_id', 'wraptag', 'break', 'thumbnail')+ array('range' => ($offset + 1).'-'.($offset + $limit))
+                            );
                         }
 
                         $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
@@ -4343,8 +4394,8 @@ function php($atts = null, $thing = null, $priv = null)
     $error = null;
 
     if ($priv) {
-        $error = !empty($is_article_body) && empty($is_form) && !has_privs($priv, $is_article_body);
-    } elseif (empty($is_article_body) || !empty($is_form)) {
+        $error = $is_article_body && !$is_form && !has_privs($priv, $is_article_body);
+    } elseif (!$is_article_body || $is_form) {
         if (!get_pref('allow_page_php_scripting')) {
             $error = 'php_code_disabled_page';
         }
@@ -4360,7 +4411,7 @@ function php($atts = null, $thing = null, $priv = null)
         if ($error) {
             trigger_error(gTxt($error));
         } else {
-            empty($atts) or extract($atts);
+            empty($atts) or extract($atts, EXTR_SKIP);
             eval($thing);
         }
 
@@ -5321,7 +5372,8 @@ function txp_escape($atts, $thing = '')
     foreach ($escape as $attr) {
         switch ($attr) {
             case 'html':
-                $thing = txpspecialchars($thing);
+                $thing = !$tidy ? txpspecialchars($thing) :
+                    ($mb ? mb_encode_numericentity($thing, array(0x0080, 0x10FFFF, 0x0, 0xFFFFFF), 'UTF-8') : htmlentities($thing));
                 break;
             case 'db':
                 $thing = safe_escape($thing);
@@ -5412,8 +5464,11 @@ function txp_escape($atts, $thing = '')
                 $thing = is_int($thing) ? ($thing ? $thing : '') : $attr($thing);
                 break;
             case 'tidy':
-                $thing = preg_replace('/\s+/', ' ', trim($thing));
                 $tidy = true;
+                $thing = preg_replace('/\s+/', ' ', trim($thing));
+                break;
+            case 'untidy':
+                $tidy = false;
                 break;
             case 'textile':
                 if ($textile === null) {
@@ -5427,7 +5482,33 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
+                if (preg_match('/^([+-]?\d*)(?:\.{2}([+-]?\d*))?$/', $attr, $match)) {
+                    list($attr, $first, $last) = $match + array(null, 1, null);
+                    $strlen = $mb ? mb_strlen($thing) : strlen($thing);
+                    $first = !$first ? 1 : ($first > 0 ? $first : $strlen + $first + 1);
+                    $last = !isset($last) ? $first : ($last > 0 ? $last : ($strlen + ($last ? $last + 1 : 0)));
+                
+                    if ($first > $last) {
+                        list($first, $last) = array($last, $first);
+                        $rev = true;
+                    }
+                
+                    if ($first > $strlen || $last < 1) {
+                        $thing = '';
+                    } elseif ($tidy) {
+                        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
+                        $thing = preg_replace($pattern, '$1', $thing);
+                    } else {
+                        $thing = ($mb.'substr')($thing, --$first, $last - $first);
+                    }
+                
+                    if ($thing && !empty($rev)) {
+                        $thing = !$mb ? strrev($thing) :
+                            mb_convert_encoding(strrev(mb_convert_encoding($thing, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
+                    }
+                } else {
+                    $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
+                }
         }
     }
 
@@ -5471,7 +5552,7 @@ function txp_wraptag($atts, $thing = '')
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if (trim($thing) !== '') {
-        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
+        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', $html_id) : $thing;
         $thing = $label ? doLabel($label, $labeltag).n.$thing : $thing;
     }
 

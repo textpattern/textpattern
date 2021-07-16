@@ -137,11 +137,11 @@ function page_edit($message = '', $refresh_partials = false)
     $thisSkin = Txp::get('Textpattern\Skin\Skin');
     $skin = $thisSkin->setName($skin)->setEditing();
 
-    if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
+    if ($step == 'page_delete' || $name === '' && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
     } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
-    } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
+    } elseif ((($newname && $newname !== $name) || $step === 'page_new') && !$save_error) {
         $name = $newname;
         $class = '';
     } elseif ($savenew && $save_error) {
@@ -151,9 +151,10 @@ function page_edit($message = '', $refresh_partials = false)
     if (!$save_error) {
         $html = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
     } else {
-        $html = gps('html');
+        $html = gps('html', false);
     }
 
+    $html !== false or $name = ''; 
     $actionsExtras = '';
 
     if ($name) {
@@ -254,8 +255,8 @@ function page_edit($message = '', $refresh_partials = false)
         'div', array(
             'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
-            'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
+            'aria-label' => gTxt('tagbuilder'),
         ));
 
     echo n.'</div>'; // End of .txp-layout.
@@ -377,7 +378,7 @@ function page_save()
     $save_error = false;
     $message = '';
 
-    if (!$newname) {
+    if (empty($newname)) {
         $message = array(gTxt('page_name_invalid'), E_ERROR);
         $save_error = true;
     } else {
@@ -536,7 +537,7 @@ function page_partial_name($rs)
 {
     $name = $rs['name'];
     $skin = $rs['skin'];
-    $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $nameRegex = '^(?=[^0.\s]|0.)[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
 
     $titleblock = inputLabel(
         'new_page',

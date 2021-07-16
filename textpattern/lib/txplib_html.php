@@ -218,8 +218,9 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
-        'class' => $class,
-        'title' => $title,
+        'class'      => $class,
+        'title'      => $title,
+        'aria-label' => $title,
     ));
 }
 
@@ -1277,7 +1278,11 @@ function popTag($var, $text, $atts = array())
         'tag_name' => $var,
     ) + $atts;
 
-    return href($text, $opts, array('class' => 'txp-tagbuilder-link'));
+    return href($text, $opts, array(
+        'class'      => 'txp-tagbuilder-link',
+        'title'      => gTxt('tagbuilder'),
+        'aria-label' => gTxt('tagbuilder'),
+    ));
 }
 
 /**

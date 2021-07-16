@@ -574,7 +574,7 @@ function doDiagnostics()
                 'step'       => 'phpinfo',
                 '_txp_token' => form_token(),
             ), array(
-                'rel'    => 'external noopener',
+                'rel'    => 'external',
                 'target' => '_blank',
             )).
             pluggable_ui(
