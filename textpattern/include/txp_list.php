@@ -456,7 +456,7 @@ function list_list($message = '', $post = '')
                     ).
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
-                            'rel'        => 'noopener',
+                            'rel'        => 'external',
                             'target'     => '_blank',
                             'title'      => gTxt('view'),
                             'aria-label' => gTxt('view'),

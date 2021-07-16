@@ -333,7 +333,7 @@ function plugin_list($message = '')
                 ).
                 td(
                     ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
-                        'rel'    => 'external noopener',
+                        'rel'    => 'external',
                         'target' => '_blank',
                     )) : $author), '', 'txp-list-col-author'
                 ).

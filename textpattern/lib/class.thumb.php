@@ -473,7 +473,7 @@ class wet_thumb
 
         if ($aslink === true) {
             return '<a href="'.((empty($this->linkurl)) ? $this->_SRC['file'] : $this->linkurl).'" '.
-                (($aspopup === true) ? ' rel="noopener" target="_blank"' : '').'>'.$imgtag.'</a>';
+                (($aspopup === true) ? ' target="_blank"' : '').'>'.$imgtag.'</a>';
         }
 
         return $imgtag;

@@ -97,7 +97,6 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             if (get_pref('sitename')) {
                 $out[] = graf(
                     span(href(htmlspecialchars(get_pref('sitename')), hu, array(
-                        'rel'        => 'noopener',
                         'target'     => '_blank',
                         'title'      => gTxt('tab_view_site'),
                         'aria-label' => gTxt('tab_view_site'),
@@ -105,10 +104,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
                 , array('class' => 'txp-view-site'));
             } else {
                 $out[] = graf(
-                    span(href(gTxt('tab_view_site'), hu, array(
-                        'rel'        => 'noopener',
-                        'target'     => '_blank',
-                    )), array('class' => 'txp-view-site-name'))
+                    span(href(gTxt('tab_view_site'), hu, array('target' => '_blank')), array('class' => 'txp-view-site-name'))
                 , array('class' => 'txp-view-site'));
             }
 
@@ -134,7 +130,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 
         $out[] = graf(
             href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
-                'rel'    => 'external noopener',
+                'rel'    => 'external',
                 'target' => '_blank',
             )).
             ' (v'.txp_version.')'.
