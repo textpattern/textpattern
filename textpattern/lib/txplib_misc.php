@@ -2290,25 +2290,34 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
 {
     global $txp_user;
 
-    // Send the email as the currently logged in user.
-    if ($txp_user) {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "name = '".doSlash($txp_user)."'"
-        );
-
-        if ($sender && is_valid_email(get_pref('publisher_email'))) {
-            $sender['email'] = get_pref('publisher_email');
-        }
+    $smtp_from = get_pref('smtp_from'); 
+    $site_name = get_pref('sitename');
+    
+    if($smtp_from) {
+	$sender = array ("RealName" => $site_name,
+			"email" => $smtp_from);
     }
-    // If not logged in, the receiver is the sender.
     else {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "email = '".doSlash($to_address)."'"
-        );
+        // Send the email as the currently logged in user.
+        if ($txp_user) {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "name = '".doSlash($txp_user)."'"
+            );
+
+            if ($sender && is_valid_email(get_pref('publisher_email'))) {
+                $sender['email'] = get_pref('publisher_email');
+            }
+        }
+        // If not logged in, the receiver is the sender.
+        else {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "email = '".doSlash($to_address)."'"
+            );
+        }
     }
 
     if ($sender) {
