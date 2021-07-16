@@ -2,6 +2,8 @@ Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
 * Changed: Minimum system requirements increased to MySQL 5.5.
+* Changed: Removed noopener from target="_blank" links (now default behaviour
+  in all supported browsers) (thanks, phiw13).
 * Added: Option to define a comprehensive Content Security Policy header for the
   Textpattern admin-side via config.php.
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
@@ -24,6 +26,7 @@ Changes in 4.8.8 (upcoming)
 * Accessibility: Additional 'aria-label' attributes for various internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
+* Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
 * PrismJS 1.24.1.
 
 Changes in 4.8.7 (30 May 2021)

@@ -4269,7 +4269,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
                     }
 
                     if ($parts) {
-                        $out[] = '('.join(' OR ', $parts).')';
+                        $out[] = '('.join($not ? ' AND ' : ' OR ', $parts).')';
                     }
                 }
             }

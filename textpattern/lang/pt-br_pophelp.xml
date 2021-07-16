@@ -199,7 +199,7 @@
     </group>
 
     <group id="diag" title="Painel de diagnósticos">
-        <item id="clean_url_data_failed" title=""><![CDATA[
+        <item id="clean_url_data_failed" title="Teste de URLs limpos falharam"><![CDATA[
 <h2>Dados de URLs limpos falharam</h2>
 <p>Parece que os URLs do site (exemplo: <code>https://example.com/section/article</code>) não estão funcionando no momento ou o servidor da web não oferece suporte ao procedimento de teste para determinar se os URLs limpos funcionam ou não; se URLs limpos no site funcionarem conforme o esperado, essa mensagem pode ser ignorada com segurança.</p>
 <p>Se URLs limpos <em>não</em> estão funcionando, pode significar que:</p>
@@ -211,7 +211,7 @@
 <p>O teste de URL limpo tenta buscar uma página do endereço da web especificado na preferência "URL do site" para verificar se todos os parâmetros de URL limpo estão funcionando corretamente. Se esse URL for de um site diferente ou tiver sido substituído por uma página estática ou semelhante, o teste falhará. Até que o problema seja resolvido, URLs confusos (exemplo: <code>https://example.com?s=section&amp;id=4</code>) serão usados. Certifique-se de que o 'modo de link permanente' em Preferências está definido de acordo.</p>
 <p>Observe que usar um plug-in para colocar um site em "modo de manutenção" pode acionar esse aviso.</p>
         ]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[
+        <item id="clean_url_test_failed" title="Teste de URLs limpos falharam"><![CDATA[
 <h2>Teste de URLs limpos falharam</h2>
 <p>Parece que os URLs do site (exemplo: <code>https://example.com/section/article</code>) não estão funcionando no momento ou o servidor da web não oferece suporte ao procedimento de teste para determinar se os URLs limpos funcionam ou não; se URLs limpos no site funcionarem conforme o esperado, essa mensagem pode ser ignorada com segurança.</p>
 <p>Se URLs limpos <em>não</em> estão funcionando, pode significar que:</p>
@@ -243,21 +243,128 @@
         <item id="file_uploads_disabled" title="O envio de arquivos está desabilitado"><![CDATA[<h2>Uploads de arquivos estâo desabilitados</h2>
 <p>A configuraç~~ao do servidor atual indica que uploads de arquivos estão desabilitados. Por favor altere <code>file_uploads</code> configurações em <code>php.ini</code> ou consulte o host do site pra assistencia.</p>
         ]]></item>
-        <item id="htaccess_missing" title="O arquivo .htaccess está em falta"><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title="Arquivos em falta"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title="Arquivos modificados"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="Erros na tabela MySQL"><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Diretório de seção existe"><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title="Diretório do site ilegível"><![CDATA[]]></item>
-        <item id="php_version_required" title="Requisitos mínimos da versão"><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title="O arquivo .htaccess está em falta"><![CDATA[
+<h2>Arquivo .htaccess ausente</h2>
+<p>Um modo de link permanente que requer um arquivo <code>.htaccess</code> está sendo usado e o arquivo não pode ser encontrado. O arquivo está incluído com com o Textpattern e reside na raiz Textpattern, junto com <code>index.php</code> e o diretório <code>textpattern</code>. As directivas recomendadas são:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        
+]]></item>
+        <item id="index_inaccessible" title="Índice do site inacessível"><![CDATA[<h2>Índice do site inacessível</h2>
+<p>O arquivo raiz <code>index.php</code> especificado como índice para o site não pode ser lido pelo servidor. Verifique sua existência e permissões.</p>
+        ]]></item>
+        <item id="missing_files" title="Arquivos em falta"><![CDATA[<h2>Arquivos ausentes</h2>
+<p>Um ou mais arquivos essenciais estão faltando no Textpattern. Certifique-se de que todos os arquivos listados estejam presentes no servidor e nos locais corretos.</p>]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite ausente"><![CDATA[<h2>Apache mod_rewrite ausente</h2>
+<p>O módulo <code>mod_rewrite</code> do Apache não está instalado ou desabilitado. Isso é recomendado para que o Textpattern funcione corretamente. Certifique-se de sua existência e estado de ativação ou entre em contato com o host do site para obter ajuda.</p>]]></item>
+        <item id="modified_files" title="Arquivos modificados"><![CDATA[<h2>Arquivos modificados</h2>
+<p>Os arquivos são determinados a serem modificados se sua respectiva soma de verificação for diferente da lista de soma de verificação em boas condições fornecida com o Textpattern. Se algum arquivo na instalação do Textpattern for diferente do esperado, os arquivos serão destacados aqui.</p>]]></item>
+        <item id="mysql_table_errors" title="Erros na tabela MySQL"><![CDATA[<h2>Erros de tabela MySQL</h2>
+<p>Pode haver alguma corrupção ou dano no banco de dados MySQL do Textpattern. Tente reparar as tabelas afetadas com uma ferramenta de acesso MySQL, como <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> ou <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nenhum diretório temporário definido"><![CDATA[<h2>Nenhum diretório temporário definido</h2>
+<p>Embora o Textpattern seja executado sem um diretório temporário, algumas funcionalidades podem não funcionar como esperado se essa preferência não for definida. Visite Preferências de administrador e configure o ‘caminho de diretório temporário’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Seção com o mesmo nome do diretório"><![CDATA[<h2>Seção com o mesmo nome do diretório</h2>
+<p>Os nomes de diretório existentes podem entrar em conflito com os nomes de seção usados no esquema de permlink do artigo. Para evitar problemas, verifique e exclua os nomes dos diretórios afetados, se for seguro fazer isso, ou altere os nomes das seções para que não entrem em conflito.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Diretório do site ilegível"><![CDATA[<h2>Diretório do site ilegível</h2>
+<p>O diretório que contém o arquivo raiz <code>index.php</code> especificado como o índice do site não pode ser lido pelo servidor. Verifique as permissões.</p>
+        ]]></item>
+        <item id="php_version_required" title="Requisitos mínimos da versão"><![CDATA[<h2>Requisitos mínimos da versão</h2>
+<p>Textpattern requer certas funcionalidades presentes na linguagem de programação PHP e no servidor de banco de dados MySQL. Consulte a tabela a seguir para determinar os requisitos mínimos do sistema:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Versão do Textpattern</th>
+                <th scope="col">Versão mínima do PHP</th>
+                <th scope="col">Versão mínima do MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Além dos requisitos de sistema acima, as seguintes extensões PHP são necessárias:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a></li>
+</ul>
+<p>O arquivo <code>php.ini</code> do site, seja global ou local, deve conter uma configuração <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="O diretório de instalação (setup) ainda existe"><![CDATA[<h2>O diretório de instalação (setup) ainda existe</h2>
+<p>Quando o Textpattern é instalado, o diretório <code>textpattern/setup</code> e seu conteúdo não são mais necessários e devem ser excluídos por questões de segurança.</p>
+        ]]></item>
         <item id="site_url_mismatch" title="Incompatibilidade de URL do site"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Funções PHP … estão desabilitadas em seu servidor"><![CDATA[<h2>Funções PHP … estão desabilitadas em seu servidor</h2>
+<p>O host do site ou administrador do servidor desabilitou uma ou mais funções PHP, algumas das quais podem afetar a execução do Textpattern.</p>
+<p>Consulte a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentação do usuário do padrão de texto <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> para obter mais informações.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Atualização do Textpattern"><![CDATA[<h2>Atualização do Textpattern</h2>
+<p>Existe uma versão mais recente do Textpattern disponível. Para aproveitar as vantagens dos recursos e da segurança mais recentes, é recomendável fazer a atualização.</p>
+<p>Observe que, embora nos esforcemos para tornar a experiência de atualização o mais simples e fácil possível:</p>
+<ul>
+    <li>Se apenas o último dígito for diferente da sua versão atual, a atualização provavelmente será compatível com versões anteriores de plug-ins e temas.</li>
+    <li>Se os dois últimos dígitos forem diferentes da versão atual, a atualização pode exigir atualizações para alguns plug-ins e/ou temas, embora provavelmente continue a funcionar de qualquer maneira em uma capacidade limitada.</li>
+    <li>Se o primeiro dígito for diferente da sua versão atual, a atualização provavelmente exigirá atualizações para a maioria dos plug-ins e temas. Se você depende muito de um plugin ou recurso de tema específico, verifique com o autor ou com os membros da comunidade antes de iniciar a atualização.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Pré-lançamento do Textpattern disponível"><![CDATA[<h2>Atualização de pré-lançamento do Textpattern disponível</h2>
+<p>Há uma versão de pré-lançamento mais recente do Textpattern disponível. Estamos procurando voluntários ativos para testar esta versão para que possamos tornar a versão final o mais sólida possível. Nós nos esforçamos para tornar a experiência de atualização contínua e sem complicações, mesmo para o código beta.</p>
+<p>Se você decidir participar, observe:</p>
+<ul>
+    <li>Não use esta versão beta em um site de produção, a menos que você tenha um backup de trabalho dos arquivos do site e de seu banco de dados e saiba como usá-lo.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Relate quaisquer problemas</a>, informando a versão beta que você está usando. Outras versões beta podem ser necessárias antes da versão estável, dependendo dos problemas relatados.</li>
+    <li>Certifique-se de que, se implantar esta versão beta, você também atualize para a versão final quando for lançada.</li>
+</ul>
+        ]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
         <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
@@ -404,9 +511,19 @@
         <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
         <item id="skin_description" title="Descrição do tema"><![CDATA[]]></item>
         <item id="skin_import" title="Importação de tema"><![CDATA[]]></item>
-        <item id="skin_name" title="Nome do tema"><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title="Titulo do tema"><![CDATA[]]></item>
+        <item id="skin_name" title="Nome do tema"><![CDATA[<h2>Nome do tema</h2>
+<p>O nome de um tema é usado para o nome do diretório do tema e outros fins técnicos (obrigatório).</p>
+<p>O nome não deve conter caracteres especiais ou espaços.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introdução aos temas"><![CDATA[<h2>Introdução aos temas</h2>
+<p>Um tema Textpattern é uma coleção de páginas, formulários e folhas de estilo. Os temas permitem que você separe logicamente os ativos do seu site em grupos para facilitar a identificação ou o compartilhamento com outras pessoas. O ato de criar ou importar um Tema, e quaisquer ativos que ele contenha, <em>não</em> tem qualquer impacto em seu site existente. Você é livre para editar ou modificar qualquer ativo que não esteja associado a uma seção do seu site, e isso não afetará o site em si.</p>
+<p>Para editar ativos em um tema, visite o painel Páginas, Formulários ou Estilos e use o seletor suspenso para escolher o tema com o qual deseja trabalhar. O tema em que você está trabalhando é lembrado em toda a área de administração, permitindo que você alterne entre os tipos de ativos de forma rápida e fácil. É referido como o seu <em>tema de trabalho</em>.</p>
+<p>Por favor, consulte a <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Documentação do usuário do Textpattern<span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span> </a> para obter mais informações.</p>
+        ]]></item>
+        <item id="skin_title" title="Titulo do tema"><![CDATA[<h2>Título do tema</h2>
+<p>O título descritivo de um tema, usado para identificar o tema nos painéis do Textpattern.</p>
+<p>O título pode conter caracteres especiais e espaços.</p>
+        ]]></item>
         <item id="skin_version" title="Versão do tema"><![CDATA[
 <h2>Versão do tema</h2>
 <p>O número da versão instalada deste tema (opcional).</p>

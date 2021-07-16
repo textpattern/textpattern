@@ -1671,7 +1671,6 @@ function article_partial_article_view($rs)
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
-        'rel'    => 'noopener',
         'target' => '_blank',
     ));
 }

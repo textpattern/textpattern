@@ -79,10 +79,7 @@ class classic_theme extends \Textpattern\Admin\Theme
                 }
 
                 $out[] = '<li class="txp-view-site">'.
-                    href(gTxt('tab_view_site'), hu, array(
-                        'rel'    => 'noopener',
-                        'target' => '_blank'
-                    )).
+                    href(gTxt('tab_view_site'), hu, array('target' => '_blank')).
                     '</li>';
 
                 $out[] = '</ul>';
@@ -101,7 +98,7 @@ class classic_theme extends \Textpattern\Admin\Theme
 
         $out[] = href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com', array(
                 'class'  => 'mothership',
-                'rel'    => 'external noopener',
+                'rel'    => 'external',
                 'target' => '_blank',
             )).
             n.'('.txp_version.')'.

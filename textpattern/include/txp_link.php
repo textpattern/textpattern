@@ -342,7 +342,7 @@ function link_list($message = '')
                     ).
                     td(
                         href($view_url.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $view_url, array(
-                            'rel'    => 'external noopener',
+                            'rel'    => 'external',
                             'target' => '_blank',
                         )), '', 'txp-list-col-url txp-contain'
                     ).
