@@ -1,8 +1,9 @@
 # Textpattern CMS
 
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
 
-[![Textpattern Logo](https://textpattern.com/assets/img/branding/carver/carver-64px.svg)](https://textpattern.com/)
+<img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
 
 **A flexible, elegant, fast and easy-to-use content management system written in PHP.** Textpattern is [free and open source](#legal) software.
 
@@ -26,14 +27,14 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.8.2. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
+The current production release is version 4.8.7. It can be downloaded from the Textpattern website or GitHub in .zip and .tar.gz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/103/textpattern-4.8.2.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.2/textpattern-4.8.2.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/102/textpattern-4.8.2.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.2/textpattern-4.8.2.tar.gz) |
+| .zip   | [Download](https://textpattern.com/file_download/113/textpattern-4.8.7.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/112/textpattern-4.8.7.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.8.7/textpattern-4.8.7.tar.gz) |
 
 
 ## Install Textpattern
@@ -66,10 +67,10 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.3 or 7.4) |
-| MySQL  | &mdash; | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(typically 5.6, 5.7 or 8.0) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.4 or 8.0) |
+| MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(5.7 or 8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.19) or stable (1.18) |
+| Nginx  | &mdash; | mainline (1.21) or stable (1.20) |
 
 ## Contributing
 
@@ -111,8 +112,8 @@ npm run get-dependencies
 To request a specific tag or branch:
 
 ```ShellSession
-npm run get-default-theme 4.8.2
-npm run get-classic-admin-theme 4.8.2
+npm run get-default-theme 4.8.7
+npm run get-classic-admin-theme 4.8.7
 npm run get-classic-admin-theme 4.8.x
 npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
@@ -140,9 +141,16 @@ npm run txp-index
 npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
+
 ## Thank You
 
+Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
+
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
+
+This project is supported by:
+
+<a href="https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern"><img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px"></a>
 
 ## Legal
 
