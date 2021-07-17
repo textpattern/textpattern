@@ -5490,7 +5490,8 @@ function txp_escape($atts, $thing = '')
                         $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
                         $thing = preg_replace($pattern, '$1', $thing);
                     } else {
-                        $thing = ($mb.'substr')($thing, --$first, $last - $first);
+                        $function = $mb.'substr';
+                        $thing = $function($thing, --$first, $last - $first);
                     }
                 
                     if ($thing && !empty($rev)) {
