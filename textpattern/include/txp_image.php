@@ -969,7 +969,7 @@ class ImagePanel
                     'div', array('class' => 'txp-layout-4col-alt')
                 ).
                 n.tag(
-                    tag(implode(n, $createBlock), 'form').
+                    tag(implode(n, $createBlock), 'div').
                     n.implode(n, $imageBlock).
                     n.'<hr />'.
                     n.tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
