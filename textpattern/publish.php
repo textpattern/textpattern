@@ -1247,7 +1247,7 @@ function parseList($rs, &$object, $populate, $atts = array())
             }
 
             if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
-                if ($breakform) {
+                if ($groupby && $breakform) {
                     $tmpobject = $object;
                     $object = $oldobject;
                     $newform = parse_form($breakform);
@@ -1280,7 +1280,7 @@ function parseList($rs, &$object, $populate, $atts = array())
         }
 
         if ($groupby) {
-            unset($txp_atts['breakby']);
+            unset($txp_atts['breakby'], $txp_atts['breakform']);
         }
 
         $txp_item = $old_item;

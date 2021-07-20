@@ -1750,9 +1750,9 @@ function asyncHref($item, $parms, $atts = '')
 
 function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
-    global $txp_atts;
+    global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'wrapform', 'trim', 'replace');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'wrapform', 'trim', 'replace');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
@@ -1809,7 +1809,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
-    if ($break && !empty($breakby)) { // array_merge to reindex
+    if (($break || $breakform) && !empty($breakby)) { // array_merge to reindex
         $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
 
         switch ($count = count($breakby)) {
@@ -1831,6 +1831,16 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         }
 
         empty($newlist) or $list = array_map('implode', $newlist);
+    }
+
+    $old_item = $txp_item;
+
+    if ($breakform) {
+        array_walk($list, function (&$item, $key) use ($breakform) {
+            global $txp_item;
+            $txp_item['count'] = $key + 1;
+            $item = str_replace('<+>', $item, parse_form($breakform));
+        });
     }
 
     if ($break === true) {
@@ -1858,6 +1868,8 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     if (!empty($wrapform)) {
         $content = str_replace('<+>', $content, parse_form($wrapform));
     }
+
+    $txp_item = $old_item;
 
     return empty($wraptag) ? $content : tag($content, $wraptag, $atts);
 }
