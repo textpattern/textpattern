@@ -2036,7 +2036,7 @@ function text($atts)
 {
     extract(lAtts(array(
         'item'   => '',
-        'escape' => 'html',
+        'escape' => null,
     ), $atts, false));
 
     if (!$item) {
@@ -2054,7 +2054,7 @@ function text($atts)
         $tags['{'.$name.'}'] = $value;
     }
 
-    return gTxt($item, $tags, $escape);
+    return gTxt($item, $tags, isset($escape) ? '' : 'html');
 }
 
 // -------------------------------------------------------------
