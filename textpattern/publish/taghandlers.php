@@ -30,8 +30,8 @@
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
-    ->register('thumbnail', array('image', array('thumbnail' => false)))
-    ->register('thumbnail')
+    ->register('image', array('thumbnail', array('thumbnail' => null)))
+    ->register('image')
     ->register('output_form')
     ->register('txp_yield', 'yield')
     ->register('txp_if_yield', 'if_yield')
@@ -381,6 +381,13 @@ function component($atts)
 
 function thumbnail($atts)
 {
+    return image($atts + array('thumbnail' => null));
+}
+
+// -------------------------------------------------------------
+
+function image($atts)
+{
     global $doctype;
 
     extract(lAtts(array(
@@ -398,7 +405,7 @@ function thumbnail($atts)
         'style'     => '',
         'wraptag'   => '',
         'width'     => '',
-        'thumbnail' => null,
+        'thumbnail' => false,
     ), $atts));
 
     if (isset($atts['poplink'])) {
