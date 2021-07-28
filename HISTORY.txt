@@ -4,8 +4,8 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5.
 * Changed: Removed noopener from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
-* Added: Option to define a comprehensive Content Security Policy header for the
-  Textpattern admin-side via config.php.
+* Added: Option to define a Content Security Policy header for the Textpattern
+  admin-side via config.php.
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
