@@ -1,6 +1,7 @@
 Changes in 4.8.8 (upcoming)
 
-* Maintenance release including improvements for PHP 8.1 and bug fixes.
+* Maintenance release providing initial support for PHP 8.1, plus improvements
+  and bug fixes.
 * Fixed: More robust numeric searches.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
