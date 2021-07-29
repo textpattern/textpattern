@@ -345,8 +345,8 @@ function parse($thing, $condition = true, $in_tag = true)
         $short_tags = get_pref('enable_short_tags', false);
     }
 
-    if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+    if (!isset($thing) || !$short_tags && false === strpos($thing, '<txp:') ||
+        $short_tags && strlen($thing) < 48 && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         $hash = $thing === null ? '1' : (empty($txp_atts['not']) ? false : txp_hash($thing));
         $notags = true;
     } else {
