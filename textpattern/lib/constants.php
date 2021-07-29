@@ -948,7 +948,7 @@ define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
  */
 
 if (!defined('TEXTPATTERN_HASH_ALGO')) {
-    define('TEXTPATTERN_HASH_ALGO', 'tiger192,3');
+    define('TEXTPATTERN_HASH_ALGO', in_array('xxh128', hash_algos()) ? 'xxh128' : 'tiger192,3');
 }
 
 /**
