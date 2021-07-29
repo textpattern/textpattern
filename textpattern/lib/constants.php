@@ -942,6 +942,26 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 /**
+ * Define the default parser hash algo
+ *
+ * @since   4.8.8
+ */
+
+if (!defined('TEXTPATTERN_HASH_ALGO')) {
+    define('TEXTPATTERN_HASH_ALGO', 'tiger192,3');
+}
+
+/**
+ * Define the default parser hash length
+ *
+ * @since   4.8.8
+ */
+
+if (!defined('TEXTPATTERN_HASH_LENGTH')) {
+    define('TEXTPATTERN_HASH_LENGTH', strlen(hash(TEXTPATTERN_HASH_ALGO, '')));
+}
+
+/**
  * A tab character.
  *
  * @var string

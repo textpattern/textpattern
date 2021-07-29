@@ -5979,7 +5979,7 @@ function txp_break($wraptag)
 
 function txp_hash($thing)
 {
-    return strlen($thing) < 48 ? $thing : hash('tiger192,3', $thing);
+    return strlen($thing) < TEXTPATTERN_HASH_LENGTH ? $thing : hash(TEXTPATTERN_HASH_ALGO, $thing);
 }
 
 /*** Polyfills ***/
