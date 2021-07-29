@@ -341,8 +341,21 @@ function parse($thing, $condition = true, $in_tag = true)
     global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag, $txp_current_tag;
     static $short_tags = null;
 
-    if ($in_tag) {
-        empty($txp_atts['not']) or $condition = empty($condition);
+    if (!isset($short_tags)) {
+        $short_tags = get_pref('enable_short_tags', false);
+    }
+
+    if (!$short_tags && false === strpos($thing, '<txp:') ||
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+        $hash = $thing === null ? '1' : (empty($txp_atts['not']) ? false : txp_hash($thing));
+        $notags = true;
+    } else {
+        $hash = txp_hash($thing);
+    }
+
+    if (!empty($txp_atts['not']) && $in_tag && (string)$txp_atts['not'] === $hash) {
+        $condition = empty($condition);
+        $not = true;
     }
 
     $txp_tag = !empty($condition);
@@ -352,16 +365,9 @@ function parse($thing, $condition = true, $in_tag = true)
         $trace->log('['.($condition ? 'true' : 'false').']');
     }
 
-    if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags', false);
-    }
-
-    if (!$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+    if (isset($notags)) {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
-
-    $hash = sha1($thing);
 
     if (!isset($txp_parsed[$hash])) {
         txp_tokenize($thing, $hash);
@@ -384,7 +390,7 @@ function parse($thing, $condition = true, $in_tag = true)
         return '';
     }
 
-    $old_tag = $txp_current_tag;
+    $this_tag = $txp_current_tag;
     $isempty = false;
     $dotest = !empty($txp_atts['evaluate']) && $in_tag;
     $evaluate = !$dotest ? null :
@@ -430,7 +436,7 @@ function parse($thing, $condition = true, $in_tag = true)
         }
 
         foreach ($test as $k => $t) {
-            if (!$k && $pre && $dotest && $isempty == empty($txp_atts['not'])) {
+            if (!$k && $pre && $dotest && $isempty == empty($not)) {
                 $out = false;    
                 break;
             }
@@ -449,13 +455,15 @@ function parse($thing, $condition = true, $in_tag = true)
         }
     }
 
-    if ($dotest && $isempty == empty($txp_atts['not'])) {
+    if ($dotest && $isempty == empty($not)) {
         $out = false;
-        $condition = false;
+    } elseif (isset($txp_atts['$query'])) {
+        $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
     }
 
+    $out !== false or $condition = false;
     $txp_tag = !empty($condition);
-    $txp_current_tag = $old_tag;
+    $txp_current_tag = $this_tag;
 
     return $out;
 }
@@ -536,11 +544,23 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     if ($atts) {
         $split = splat($atts);
+
+        if (isset($txp_atts['evaluate'])) {
+            if (strpos($txp_atts['evaluate'], '<+>') !== false) {
+                $txp_atts['$query'] = $txp_atts['evaluate'];
+                unset($txp_atts['evaluate']);
+            }
+        }
+
+        if (!empty($txp_atts['not']) && isset($thing)) {
+            $txp_atts['not'] = txp_hash($thing);
+        }
     } else {
         $txp_atts = null;
         $split = array();
     }
 
+    $txp_tag = null;
     $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
@@ -553,11 +573,13 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         }
     }
 
-    if ($thing === null && !empty($txp_atts['not'])) {
+    if ($txp_tag === null && !empty($txp_atts['not'])) {
         $out = $out ? '' : '1';
+    } elseif (isset($txp_atts['$query']) && $txp_tag !== false) {
+        $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
     }
 
-    unset($txp_atts['not'], $txp_atts['evaluate']);
+    unset($txp_atts['not'], $txp_atts['evaluate'], $txp_atts['$query']);
 
     if ($txp_atts && $txp_tag !== false) {
         $pretext['_txp_atts'] = true;

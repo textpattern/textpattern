@@ -2166,7 +2166,7 @@ function splat($text)
         return $text;
     }
 
-    $sha = sha1($text);
+    $sha = txp_hash($text);
 
     if (!isset($stack[$sha])) {
         $stack[$sha] = $parse[$sha] = array();
@@ -3135,7 +3135,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     if ($hash === false) {
         return $parsed;
     } elseif (!is_string($hash)) {
-        $hash = sha1($thing);
+        $hash = txp_hash($thing);
     }
 
     $inside  = array($parsed[0]);
@@ -3198,7 +3198,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                     )), E_USER_WARNING);
                 }
 
-                $sha = sha1($inside[$level]);
+                $sha = txp_hash($inside[$level]);
                 txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
     
                 $level--;
@@ -3262,7 +3262,7 @@ function getIfElse($thing, $condition = true)
         return $condition ? $thing : null;
     }
 
-    $hash = sha1($thing);
+    $hash = txp_hash($thing);
 
     if (!isset($txp_parsed[$hash])) {
         txp_tokenize($thing, $hash);
@@ -5973,6 +5973,13 @@ function txp_break($wraptag)
         default:
             return ',';
     }
+}
+
+// -------------------------------------------------------------
+
+function txp_hash($thing)
+{
+    return strlen($thing) < 48 ? $thing : hash('tiger192,3', $thing);
 }
 
 /*** Polyfills ***/

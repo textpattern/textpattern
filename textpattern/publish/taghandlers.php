@@ -5320,29 +5320,30 @@ function txp_eval($atts, $thing = null)
     if (!isset($thing)) {
         return $test === true ? !empty($x) : $x;
     } elseif (empty($x)) {
-        return parse($thing, false);
+        return isset($test) ? parse($thing, false) : false;
     }
 
     $txp_atts['evaluate'] = $test;
-    $x = parse($thing);
+    $txp_tag = null;
+    $x = isset($test) ? parse($thing) : $thing;
     unset($txp_atts['evaluate']);
 
-    if ($txp_tag) {
+    if ($txp_tag !== false) {
         if ($staged) {
             $quoted = txp_escape(array('escape' => 'quote'), $x);
             $query = str_replace('<+>', $quoted, $query);
             $query = $xpath->evaluate($query);
             $query = $query instanceof DOMNodeList ? $query->length : $query;
 
-            if (empty($query)) {
-                return parse($thing, false);
+            if ($query === false) {
+                return isset($test) ? parse($thing, false) : false;
             } else {
-                return $test === true ? $x : $query;
+                return $query === true ? $x : $query;
             }
         }
     } else {
         $txp_atts = null;
-        $x = parse($thing, false);
+        $x = isset($test) ? parse($thing, false) : false;
     }
 
     return $test === null && $query !== true ? !empty($x) : $x;
