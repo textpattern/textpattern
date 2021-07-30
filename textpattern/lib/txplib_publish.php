@@ -346,7 +346,7 @@ function parse($thing, $condition = true, $in_tag = true)
     }
 
     if (!isset($thing) || !$short_tags && false === strpos($thing, '<txp:') ||
-        $short_tags && strlen($thing) >= TEXTPATTERN_HASH_LENGTH && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+        $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         $hash = $thing === null ? '1' : (empty($txp_atts['not']) ? false : txp_hash($thing));
         $notags = true;
     } else {
@@ -365,20 +365,11 @@ function parse($thing, $condition = true, $in_tag = true)
         $trace->log('['.($condition ? 'true' : 'false').']');
     }
 
-    if (isset($notags)) {
+    if (isset($notags) || !isset($txp_parsed[$hash]) && !txp_tokenize($thing, $hash)) {
         return $condition ? ($thing === null ? '1' : $thing) : '';
     }
 
-    if (!isset($txp_parsed[$hash])) {
-        txp_tokenize($thing, $hash);
-    }
-
     $tag = $txp_parsed[$hash];
-
-    if (empty($tag)) {
-        return $condition ? $thing : '';
-    }
-
     list($first, $last) = $txp_else[$hash];
 
     if ($condition) {

@@ -3134,6 +3134,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     if ($hash === false) {
         return $parsed;
+    } elseif ($last === 1) {
+        return false;
     } elseif (!is_string($hash)) {
         $hash = txp_hash($thing);
     }
@@ -3198,8 +3200,10 @@ function txp_tokenize($thing, $hash = null, $transform = null)
                     )), E_USER_WARNING);
                 }
 
-                $sha = txp_hash($inside[$level]);
-                txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
+                if ($count[$level] > 2) {
+                    $sha = txp_hash($inside[$level]);
+                    txp_fill_parsed($sha, $tags[$level], $order[$level], $count[$level], $else[$level]);
+                }
     
                 $level--;
                 $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][4]), $inside[$level+1], $chunk);
@@ -3213,6 +3217,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     }
 
     txp_fill_parsed($hash, $tags[0], $order[0], $count[0] + 2, $else[0]);
+
+    return true;
 }
 
 /** Auxiliary **/
@@ -3236,7 +3242,6 @@ function txp_fill_parsed($sha, $tags, $order, $count, $else) {
         }
 
         $txp_else[$sha]['test'] = $post ? array_merge(array_keys($pre), array(0), array_keys($post)) : ($pre ? array_keys($pre) : null);
-        //rtrim(trim(implode(',', array_keys($pre)).',0,'.implode(',', array_keys($post)), ','), '0');
     }
 }
 
@@ -3264,8 +3269,8 @@ function getIfElse($thing, $condition = true)
 
     $hash = txp_hash($thing);
 
-    if (!isset($txp_parsed[$hash])) {
-        txp_tokenize($thing, $hash);
+    if (!isset($txp_parsed[$hash]) && !txp_tokenize($thing, $hash)) {
+        return $condition ? $thing : null;
     }
 
     $tag = $txp_parsed[$hash];
