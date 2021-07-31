@@ -367,7 +367,7 @@ function parse($thing, $condition = true, $in_tag = true)
     if (!isset($hash) || !isset($txp_parsed[$hash]) && !txp_tokenize($thing, $hash)) {
         $thing = $condition ? ($thing === null ? '1' : $thing) : '';
 
-        if (isset($txp_atts['$query'])) {
+        if (isset($txp_atts['$query']) && $in_tag) {
             $thing = txp_eval(array('query' => $txp_atts['$query'], 'test' => $thing));
         }
 
@@ -453,7 +453,7 @@ function parse($thing, $condition = true, $in_tag = true)
 
     if ($dotest && $isempty == empty($not)) {
         $out = false;
-    } elseif (isset($txp_atts['$query'])) {
+    } elseif (isset($txp_atts['$query']) && $in_tag) {
         $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
     }
 
