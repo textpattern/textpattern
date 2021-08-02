@@ -4644,7 +4644,7 @@ function if_different($atts, $thing = null)
         'id'      => null
     ), $atts));
 
-    $key = isset($id) ? $id : md5($thing);
+    $key = isset($id) ? $id : txp_hash($thing);
     $out = isset($test) ? $test : parse($thing);
 
     if (isset($test)) {
