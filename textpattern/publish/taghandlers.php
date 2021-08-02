@@ -30,8 +30,8 @@
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
-    ->register('thumbnail', array('image', array('thumbnail' => false)))
-    ->register('thumbnail')
+    ->register('image', array('thumbnail', array('thumbnail' => null)))
+    ->register('image')
     ->register('output_form')
     ->register('txp_yield', 'yield')
     ->register('txp_if_yield', 'if_yield')
@@ -381,6 +381,13 @@ function component($atts)
 
 function thumbnail($atts)
 {
+    return image($atts + array('thumbnail' => null));
+}
+
+// -------------------------------------------------------------
+
+function image($atts)
+{
     global $doctype;
 
     extract(lAtts(array(
@@ -398,7 +405,7 @@ function thumbnail($atts)
         'style'     => '',
         'wraptag'   => '',
         'width'     => '',
-        'thumbnail' => null,
+        'thumbnail' => false,
     ), $atts));
 
     if (isset($atts['poplink'])) {
@@ -5312,29 +5319,30 @@ function txp_eval($atts, $thing = null)
     if (!isset($thing)) {
         return $test === true ? !empty($x) : $x;
     } elseif (empty($x)) {
-        return parse($thing, false);
+        return isset($test) ? parse($thing, false) : false;
     }
 
     $txp_atts['evaluate'] = $test;
-    $x = parse($thing);
+    $txp_tag = null;
+    $x = isset($test) ? parse($thing) : $thing;
     unset($txp_atts['evaluate']);
 
-    if ($txp_tag) {
+    if ($txp_tag !== false) {
         if ($staged) {
             $quoted = txp_escape(array('escape' => 'quote'), $x);
             $query = str_replace('<+>', $quoted, $query);
             $query = $xpath->evaluate($query);
             $query = $query instanceof DOMNodeList ? $query->length : $query;
 
-            if (empty($query)) {
-                return parse($thing, false);
+            if ($query === false) {
+                return isset($test) ? parse($thing, false) : false;
             } else {
-                return $test === true ? $x : $query;
+                return $query === true ? $x : $query;
             }
         }
     } else {
         $txp_atts = null;
-        $x = parse($thing, false);
+        $x = isset($test) ? parse($thing, false) : false;
     }
 
     return $test === null && $query !== true ? !empty($x) : $x;
