@@ -1421,34 +1421,31 @@ function load_plugins($type = false, $pre = null)
     global $prefs, $plugins, $plugins_ver, $app_mode, $trace;
     static $rs = null;
 
-    if (!is_array($plugins)) {
-        $plugins = array();
-    }
-
     $trace->start('[Loading plugins]');
-
-    if (!empty($prefs['plugin_cache_dir'])) {
-        $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
-
-        // In case it's a relative path.
-        if (!is_dir($dir)) {
-            $dir = rtrim(realpath(txpath.'/'.$dir), '/').'/';
-        }
-
-        $files = glob($dir.'*.php');
-
-        if ($files) {
-            natsort($files);
-
-            foreach ($files as $f) {
-                $trace->start("[Loading plugin from cache dir: '$f']");
-                load_plugin(basename($f, '.php'));
-                $trace->stop();
-            }
-        }
-    }
+    is_array($plugins) or $plugins = array();
 
     if (!isset($rs)) {
+        if (!empty($prefs['plugin_cache_dir'])) {
+            $dir = rtrim($prefs['plugin_cache_dir'], DS).DS;
+
+            // In case it's a relative path.
+            if (!is_dir($dir)) {
+                $dir = rtrim(realpath(txpath.DS.$dir), DS).DS;
+            }
+
+            $files = glob($dir.'*.php');
+
+            if ($files) {
+                natsort($files);
+
+                foreach ($files as $f) {
+                    $trace->start("[Loading plugin from cache dir: '$f']");
+                    load_plugin(basename($f, '.php'));
+                    $trace->stop();
+                }
+            }
+        }
+
         $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
         $where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')'.
             ($plugins ? ' AND name NOT IN ('.join(',', quote_list($plugins)).')' : '');
@@ -3226,7 +3223,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 function txp_fill_parsed($sha, $tags, $order, $count, $else) {
     global $txp_parsed, $txp_else;
 
-    $txp_parsed[$sha] = $count > 2 ? $tags : false;
+    $txp_parsed[$sha] = $tags;
     $txp_else[$sha] = array($else > 0 ? $else : $count, $count - 2);
 
     if (!empty($order)) {
@@ -5020,12 +5017,8 @@ function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_ST
 
     if ($flags & TEXTPATTERN_STRIP_EMPTY) {
         $out = array_filter($out);
-    }
-
-    if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
-        $out = array_filter($out, function ($v) {
-            return ($v=='') ? false : true;
-        });
+    } elseif ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
+        $out = array_filter($out, function ($v) {return $v !== '';});
     }
 
     return $out;
