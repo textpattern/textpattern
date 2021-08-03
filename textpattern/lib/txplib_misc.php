@@ -317,11 +317,12 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-        $lang = txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG;
+        $lang = txpinterface == 'admin' ? get_pref('language_ui', gps('lang', LANG)) : LANG;
         $loaded = $txpLang->load($lang, true);
+        $evt = trim($event);
 
-        if (empty($loaded) || !in_array($event, $loaded)) {
-            load_lang($lang, $event);
+        if (empty($loaded) || !in_array($evt, $loaded)) {
+            load_lang($lang, $evt);
         }
     }
 

@@ -141,7 +141,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Will remove in future.
     $textarray = array();
 
-    load_lang(LANG, 'admin');
+    //load_lang(LANG, 'admin');
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
