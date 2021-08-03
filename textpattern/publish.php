@@ -439,7 +439,7 @@ function preText($store, $prefs = null)
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
                             $title = $thisarticle['url_title'];
-                            $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
+                            $month = explode('-', date('Y-m-d', $thisarticle['posted']));
                         }
                     }
 

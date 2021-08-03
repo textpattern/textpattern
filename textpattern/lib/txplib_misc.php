@@ -319,7 +319,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
         $lang = txpinterface == 'admin' ? get_pref('language_ui', gps('lang', LANG)) : LANG;
         $loaded = $txpLang->load($lang, true);
-        $evt = trim($event);
+        $evt = isset($event) ? trim($event) : '';
 
         if (empty($loaded) || !in_array($evt, $loaded)) {
             load_lang($lang, $evt);
@@ -2609,7 +2609,23 @@ function tz_offset($timestamp = null)
 
 function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    static $charsets = array(), $txpLocale = null;
+    static $charsets = array(), $txpLocale = null, $formats = array(
+        '%Y' => 'Y',
+        '%y' => 'y',
+        '%m' => 'm',
+        '%B' => 'F',
+        '%b' => 'M',
+        '%d' => 'd',
+        '%A' => 'l',
+        '%a' => 'D',
+        '%e' => 'j',
+        '%Oe' => 'jS',
+        '%H' => 'H',
+        '%I' => 'h',
+        '%M' => 'i',
+        '%S' => 's',
+        '%p' => 'A',
+    );
 
     if (!$time) {
         $time = time();
@@ -3666,7 +3682,7 @@ function markup_comment($msg)
 function update_lastmod($trigger = '', $rs = array())
 {
     $whenStamp = time();
-    $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
+    $whenDate = date('Y-m-d H:i:s', $whenStamp);
 
     safe_upsert('txp_prefs', "val = '$whenDate'", "name = 'lastmod'");
     callback_event('site.update', $trigger, 0, $rs, compact('whenStamp', 'whenDate'));
@@ -4782,7 +4798,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     if (!isset($now)) {
-        $now = strftime('%F %T');
+        $now = date('Y-m-d H:i:s');
     }
 
     if (empty($prefs['publish_expired_articles']) &&

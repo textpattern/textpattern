@@ -1599,7 +1599,7 @@ function txp_hash_password($password)
 function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 {
     $ref = assert_int($ref);
-    $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
+    $expiry = date('Y-m-d H:i:s', $expiryTimestamp);
 
     // The selector becomes an indirect reference to the user row id,
     // and thus does not leak information when publicly displayed.
@@ -1991,17 +1991,17 @@ function txp_dateformats()
 {
     $dayname = '%A';
     $dayshort = '%a';
-    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
+    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';//'j'
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;//'jS'
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
     $year = '%Y';
     $yearshort = '%y';
     $time24 = '%H:%M';
-    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
-    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;//'A'
+    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';//?
 
     return array(
         "$monthshort $daynumord, $time12",

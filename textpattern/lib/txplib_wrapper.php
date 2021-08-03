@@ -785,7 +785,7 @@ class TXP_Wrapper
                     $sql[] = "feed_time = CURDATE()";
                 } else {
                     $when = strtotime($incoming['Posted']) - tz_offset();
-                    $when = strftime("%Y-%m-%d", $when);
+                    $when = date('Y-m-d', $when);
                     $sql[] = "feed_time = '".doSlash($when)."'";
                 }
             }

@@ -639,7 +639,7 @@ function doDiagnostics()
 
         gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
 
-        gTxt('diag_server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
+        gTxt('diag_server_time').cs.date('Y-m-d H:i:s').n,
 
         strip_tags(gTxt('diag_is_dst')).cs.$is_dst.n,
 
@@ -694,7 +694,7 @@ function doDiagnostics()
             $relbeta = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
             $msgmain = empty($lastCheck['msg']) ? '' : strip_tags(gTxt($lastCheck['msg'], $relmain));
             $msgbeta = empty($lastCheck['msg2']) ? '' : strip_tags(gTxt($lastCheck['msg2'], $relbeta));
-            $out[] = n.gTxt('diag_last_update_check').cs.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.$msgmain.' '.$msgbeta.n;
+            $out[] = n.gTxt('diag_last_update_check').cs.date('Y-m-d H:i:s', $lastCheck['when']).', '.$msgmain.' '.$msgbeta.n;
         }
 
         $out[] = n.gTxt('diag_db_charset').cs.$DB->default_charset.'/'.$DB->charset.n;
