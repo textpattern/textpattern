@@ -2625,6 +2625,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
         '%M' => 'i',
         '%S' => 's',
         '%p' => 'A',
+        '%s' => 'U',
     );
 
     if (!$time) {
@@ -2672,12 +2673,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     $charset = $charsets[$override_locale];
 
     if ($charset != 'UTF-8' && $format != 'since') {
-        $new = '';
-        if (is_callable('iconv')) {
-            $new = @iconv($charset, 'UTF-8', $str);
-        }
-
-        if ($new) {
+        if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
             $str = $new;
         } elseif (is_callable('utf8_encode')) {
             $str = utf8_encode($str);
@@ -4303,12 +4299,17 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $timeq = "$safe_field > ".now($field);
         }
 
-        $timeq .= ($month ? " AND $safe_field LIKE '".doSlash($month)."%'" : '');
+        if ($month) {
+            $offset = date('P', strtotime($month));
+            $dateClause = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash($month)."%'";
+            $timeq .= " AND $dateClause";
+        }
     } elseif (strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
-        $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
+        $offset = date('P', $start);
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(strftime($time, $start))."%'";
     } else {
-        $start = $month ? safe_strtotime($month) : false;
+        $start = $month ? strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);

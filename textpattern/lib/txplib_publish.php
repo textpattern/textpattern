@@ -760,9 +760,14 @@ function lookupByID($id, $debug = false)
 
 function lookupByDateTitle($when, $title, $debug = false)
 {
-    $offset = date('P', strtotime($when));
+    if ($when) {
+        $offset = date('P', strtotime($when));
+        $dateClause = ($offset ? "CONVERT_TZ(posted, @@session.time_zone, '$offset')" : 'posted')." LIKE '".doSlash($when)."%'";
+    } else {
+        $dateClause = '1';
+    }
 
-    return safe_row("ID, Section", 'textpattern', "CONVERT_TZ(posted, @@session.time_zone, '$offset') LIKE '".doSlash($when)."%' AND url_title LIKE '".doSlash($title)."' AND Status >= 4 LIMIT 1");
+    return safe_row("ID, Section", 'textpattern', "url_title LIKE '".doSlash($title)."' AND Status >= 4 AND $dateClause LIMIT 1");
 }
 
 /**
