@@ -607,6 +607,7 @@ function preText($store, $prefs = null)
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
+            $is_404 or populateArticleData($rs);
         }
 
         if (!empty($out['s']) && $out['s'] !== 'default') {
