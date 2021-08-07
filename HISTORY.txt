@@ -1,7 +1,6 @@
 Changes in 4.8.8 (upcoming)
 
-* Maintenance release providing initial support for PHP 8.1, plus improvements
-  and bug fixes.
+* Maintenance release with support for PHP 8.1, improvements and bug fixes.
 * Fixed: More robust numeric searches.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
@@ -11,7 +10,7 @@ Changes in 4.8.8 (upcoming)
 * Added: 'range' attribute to <txp:article_image />.
 * Added: Expanded conditional 'match' attribute with comparison operators.
 * Added: 'UTC' is now a permitted time zone.
-* Accessibility: Additional 'aria-label' attributes for various internal links.
+* Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 * Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
