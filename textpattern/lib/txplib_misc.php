@@ -2604,46 +2604,165 @@ function tz_offset($timestamp = null)
  * @return  string Formatted date
  * @package DateTime
  * @example
- * echo safe_strftime('w3cdtf');
+ * echo intl_strftime('w3cdtf');
  */
 
-function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
+function intl_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    static $charsets = array(), $txpLocale = null, $formats = array(
-        '%Y' => 'Y',
-        '%y' => 'y',
-        '%m' => 'm',
-        '%B' => 'F',
-        '%b' => 'M',
-        '%d' => 'd',
-        '%A' => 'l',
-        '%a' => 'D',
-        '%e' => 'j',
-        '%Oe' => 'jS',
-        '%H' => 'H',
-        '%I' => 'h',
-        '%M' => 'i',
-        '%S' => 's',
-        '%p' => 'A',
-        '%s' => 'U',
+    static $DateTime = null, $IntlDateFormatter = array(), $default = array(), $formats = array(
+        '%a' => 'eee',
+        '%A' => 'eeee',
+        '%d' => 'dd',
+        '%e' => 'd',
+        '%Oe' => 'd',
+        '%j' => 'D',
+        '%u' => 'c',
+        '%w' => 'e',
+        '%U' => 'w',
+        '%V' => 'ww',
+        '%W' => 'ww',
+        '%b' => 'MMM',
+        '%B' => 'MMMM',
+        '%h' => 'MMM',
+        '%m' => 'MM',
+        '%g' => 'yy',
+        '%G' => 'Y',
+        '%Y' => 'y',
+        '%y' => 'yy',
+        '%H' => 'HH',
+        '%k' => 'H',
+        '%I' => 'hh',
+        '%l' => 'h',
+        '%M' => 'mm',
+        '%S' => 'ss',
+        '%p' => 'a',
+        '%P' => 'a',
+        '%r' => 'h:mm:ss a',
+        '%R' => 'hh:mm',
+        '%T' => 'hh:mm:ss',
+        '%z' => 'Z',
+        '%Z' => 'z',
+        '%D' => 'MM/dd/yy',
+        '%F' => 'yy-MM-dd',
+        '%n' => n,
+        '%t' => t,
+        '%%' => '%',
     );
 
     if (!$time) {
         $time = time();
     }
 
-    if ($txpLocale === null) {
-        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+    if ($DateTime === null) {
+        $DateTime = new DateTime();
+    }
+
+    $override_locale or $override_locale = '';
+
+    if (!isset($IntlDateFormatter[$override_locale])) {
+        $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
+            $override_locale ? $override_locale : null,
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::SHORT
+        );
+        $pattern = $IntlDateFormatter[$override_locale]->getPattern();
+        $xt = trim(preg_replace('/[^aHhms:\s]/', '', $pattern));
+        $xd = trim(str_replace($xt, '', $pattern), ' ,');
+        $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
+    }
+
+    $DateTime->setTimestamp($time);
+
+    $formats['%s'] = $time;
+    $format = strtr($format, $formats + $default[$override_locale]);
+    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone('GMT+0');
+    $IntlDateFormatter[$override_locale]->setPattern($format);
+    $str = $IntlDateFormatter[$override_locale]->format($DateTime);
+
+    return $str;
+}
+
+/**
+ * Formats a time.
+ *
+ * Respects the locale and local timezone, and makes sure the
+ * output string is encoded in UTF-8.
+ *
+ * @param   string $format          The date format
+ * @param   int    $time            UNIX timestamp. Defaults to time()
+ * @param   bool   $gmt             Return GMT time
+ * @param   string $override_locale Override the locale
+ * @return  string Formatted date
+ * @package DateTime
+ * @example
+ * echo safe_strftime('w3cdtf');
+ */
+
+function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
+{
+    static $charsets = array(), $txpLocale = null, $intl = null, $formats = array(
+        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822, //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822'
+    ), $translate = array(
+        '%a' => 'D',
+        '%A' => 'l',
+        '%d' => 'd',
+        '%e' => 'j',
+        '%Oe' => 'jS',
+        '%j' => 'z',
+        '%u' => 'N',
+        '%w' => 'w',
+        '%U' => 'W',
+        '%V' => 'W',
+        '%W' => 'W',
+        '%b' => 'M',
+        '%B' => 'F',
+        '%h' => 'M',
+        '%m' => 'm',
+        '%g' => 'y',
+        '%G' => 'o',
+        '%Y' => 'Y',
+        '%y' => 'y',
+        '%H' => 'H',
+        '%k' => 'G',
+        '%I' => 'h',
+        '%l' => 'g',
+        '%M' => 'i',
+        '%S' => 's',
+        '%p' => 'A',
+        '%P' => 'a',
+        '%r' => 'g:i:s A',
+        '%R' => 'H:i',
+        '%T' => 'H:i:s',
+        '%z' => 'O',
+        '%Z' => 'T',
+        '%D' => 'm/d/y',
+        '%F' => 'Y-m-d',
+        '%s' => 'U',
+        '%n' => n,
+        '%t' => t,
+        '%%' => '%',
+    );
+
+    if (!$time) {
+        $time = time();
     }
 
     // We could add some other formats here.
-    if ($format == 'iso8601' || $format == 'w3cdtf') {
-        $format = '%Y-%m-%dT%H:%M:%SZ';
-        $gmt = true;
-    } elseif ($format == 'rfc822') {
-        $format = '%a, %d %b %Y %H:%M:%S GMT';
-        $gmt = true;
-        $override_locale = 'C';
+    if ($format == 'since') {
+        return since($time);
+    } elseif (isset($formats[$format])) {
+        return gmdate($formats[$format], $time);
+    } elseif (!preg_match('/\%(?:[aAbBchOxX])/', $format)) {
+        return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
+    }
+
+    if ($txpLocale === null) {
+        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+        $intl = class_exists('IntlDateFormatter');
+    }
+
+    if ($intl) {
+        return intl_strftime($format, $time, $gmt, $override_locale);
     }
 
     if ($override_locale) {
@@ -2656,9 +2775,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
         }
     }
 
-    if ($format == 'since') {
-        $str = since($time);
-    } elseif ($gmt) {
+    if ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
         $tztime = $time + tz_offset($time);
@@ -2672,7 +2789,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     $charset = $charsets[$override_locale];
 
-    if ($charset != 'UTF-8' && $format != 'since') {
+    if ($charset != 'UTF-8') {
         if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
             $str = $new;
         } elseif (is_callable('utf8_encode')) {
@@ -4307,7 +4424,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
     } elseif (strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
         $offset = date('P', $start);
-        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(strftime($time, $start))."%'";
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
     } else {
         $start = $month ? strtotime($month) : false;
 
