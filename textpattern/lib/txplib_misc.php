@@ -2607,7 +2607,7 @@ function tz_offset($timestamp = null)
  * echo intl_strftime('w3cdtf');
  */
 
-function intl_strftime($format, $time = '', $gmt = false, $override_locale = '')
+function intl_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
     static $DateTime = null, $IntlDateFormatter = array(), $default = array(), $formats = array(
         '%a' => 'eee',
@@ -2649,10 +2649,6 @@ function intl_strftime($format, $time = '', $gmt = false, $override_locale = '')
         '%%' => '%',
     );
 
-    if (!$time) {
-        $time = time();
-    }
-
     if ($DateTime === null) {
         $DateTime = new DateTime();
     }
@@ -2678,6 +2674,7 @@ function intl_strftime($format, $time = '', $gmt = false, $override_locale = '')
     !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone('GMT+0');
     $IntlDateFormatter[$override_locale]->setPattern($format);
     $str = $IntlDateFormatter[$override_locale]->format($DateTime);
+    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone(null);
 
     return $str;
 }
@@ -2743,16 +2740,14 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         '%%' => '%',
     );
 
-    if (!$time) {
-        $time = time();
-    }
+    $time = isset($time) ? (int)$time : time();
 
     // We could add some other formats here.
     if ($format == 'since') {
         return since($time);
     } elseif (isset($formats[$format])) {
         return gmdate($formats[$format], $time);
-    } elseif (!preg_match('/\%(?:[aAbBchOxX])/', $format)) {
+    } elseif (!preg_match('/\%[aAbBchOxX]/', $format)) {
         return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
     }
 
