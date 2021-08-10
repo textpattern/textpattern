@@ -2659,7 +2659,7 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
             locale_canonicalize($override_locale),
-            IntlDateFormatter::SHORT,
+            IntlDateFormatter::MEDIUM,
             IntlDateFormatter::SHORT,
             null,
             /*strpos($override_locale, 'calendar') === false ? null :*/ IntlDateFormatter::TRADITIONAL
