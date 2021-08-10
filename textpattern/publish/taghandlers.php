@@ -2108,28 +2108,35 @@ function posted($atts, $thing = null, $time = 'posted')
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
 
     extract(lAtts(array(
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
+        'calendar' => '',
+        'format'   => '',
+        'gmt'      => '',
+        'lang'     => '',
     ), $atts));
 
-    assert_article();
+    if (!is_int($time)) {
+        assert_article();
 
-    if (empty($thisarticle[$time])) {
-        return '';
+        if (empty($thisarticle[$time])) {
+            return '';
+        }
+
+        $time = (int)$thisarticle[$time];
+    }
+
+    if ($calendar) {
+        $lang = ($lang ? $lang : LANG)."@calendar=$calendar";
     }
 
     if ($format) {
-        $out = safe_strftime($format, $thisarticle[$time], $gmt, $lang);
+        return safe_strftime($format, $time, $gmt, $lang);
     } else {
         if ($id || $c || $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle[$time], $gmt, $lang);
+            return safe_strftime($archive_dateformat, $time, $gmt, $lang);
         } else {
-            $out = safe_strftime($dateformat, $thisarticle[$time], $gmt, $lang);
+            return safe_strftime($dateformat, $time, $gmt, $lang);
         }
     }
-
-    return $out;
 }
 
 // -------------------------------------------------------------

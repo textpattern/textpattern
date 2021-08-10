@@ -2660,7 +2660,9 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
             locale_canonicalize($override_locale),
             IntlDateFormatter::SHORT,
-            IntlDateFormatter::SHORT
+            IntlDateFormatter::SHORT,
+            null,
+            /*strpos($override_locale, 'calendar') === false ? null :*/ IntlDateFormatter::TRADITIONAL
         );
         $pattern = $IntlDateFormatter[$override_locale]->getPattern();
         $xt = trim(preg_replace('/[^aHhms:\s]/', '', $pattern));
@@ -2748,7 +2750,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         return since($time);
     } elseif (isset($formats[$format])) {
         return gmdate($formats[$format], $time);
-    } elseif (!preg_match('/\%[aAbBchOxX]/', $format)) {
+    } elseif (!preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
         return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
     }
 
