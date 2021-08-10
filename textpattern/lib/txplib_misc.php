@@ -2658,15 +2658,17 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
 
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
-            locale_canonicalize($override_locale),
-            IntlDateFormatter::MEDIUM,
+            $override_locale,
+            IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT,
             null,
             /*strpos($override_locale, 'calendar') === false ? null :*/ IntlDateFormatter::TRADITIONAL
         );
         $pattern = $IntlDateFormatter[$override_locale]->getPattern();
-        $xt = trim(preg_replace('/[^aHhms:\s]/', '', $pattern));
-        $xd = trim(str_replace($xt, '', $pattern), ' ,');
+        $xt = datefmt_create($override_locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT,
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(preg_replace('/[^aHhms:\s]/', '', $pattern));
+        $xd = datefmt_create($override_locale, IntlDateFormatter::SHORT, IntlDateFormatter::NONE,
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(str_replace($xt, '', $pattern), ' ,');
         $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
     }
 
