@@ -2609,6 +2609,7 @@ function tz_offset($timestamp = null)
 
 function intl_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
+    global $lang_ui;
     static $DateTime = null, $IntlDateFormatter = array(), $default = array(), $formats = array(
         '%a' => 'eee',
         '%A' => 'eeee',
@@ -2653,11 +2654,11 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $DateTime = new DateTime();
     }
 
-    $override_locale or $override_locale = '';
+    $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
 
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
-            $override_locale ? $override_locale : null,
+            locale_canonicalize($override_locale),
             IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT
         );
