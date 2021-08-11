@@ -2747,17 +2747,19 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
 
     $time = isset($time) ? (int)$time : time();
 
+    if ($intl === null) {
+        $intl = class_exists('IntlDateFormatter');
+    }
+
     // We could add some other formats here.
     if ($format == 'since') {
         return since($time);
     } elseif (isset($formats[$format])) {
         return gmdate($formats[$format], $time);
-    } elseif (strpos($format, '%') !== false && !preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
+    } elseif (strpos($format, '%') === false) {
+        return $intl ? intl_strftime($format, $time, $gmt, $override_locale) : ($gmt ? gmdate($format, $time) : date($format, $time));
+    } elseif (!preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
         return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
-    }
-
-    if ($intl === null) {
-        $intl = class_exists('IntlDateFormatter');
     }
 
     if ($intl) {
