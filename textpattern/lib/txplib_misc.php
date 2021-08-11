@@ -2659,15 +2659,15 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
             $override_locale,
-            IntlDateFormatter::SHORT,
+            IntlDateFormatter::LONG,
             IntlDateFormatter::SHORT,
             null,
             /*strpos($override_locale, 'calendar') === false ? null :*/ IntlDateFormatter::TRADITIONAL
         );
         $pattern = $IntlDateFormatter[$override_locale]->getPattern();
         $xt = datefmt_create($override_locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT,
-        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(preg_replace('/[^aHhms:\s]/', '', $pattern));
-        $xd = datefmt_create($override_locale, IntlDateFormatter::SHORT, IntlDateFormatter::NONE,
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(preg_replace('/[^aHhmps:\s]/', '', $pattern));
+        $xd = datefmt_create($override_locale, IntlDateFormatter::LONG, IntlDateFormatter::NONE,
         null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(str_replace($xt, '', $pattern), ' ,');
         $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
     }
@@ -2752,17 +2752,20 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         return since($time);
     } elseif (isset($formats[$format])) {
         return gmdate($formats[$format], $time);
-    } elseif (!preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
+    } elseif (strpos($format, '%') !== false && !preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
         return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
     }
 
-    if ($txpLocale === null) {
-        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+    if ($intl === null) {
         $intl = class_exists('IntlDateFormatter');
     }
 
     if ($intl) {
         return intl_strftime($format, $time, $gmt, $override_locale);
+    }
+
+    if ($txpLocale === null) {
+        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
     }
 
     if ($override_locale) {
