@@ -1991,7 +1991,8 @@ function txp_dateformats()
 {
     global $production_status;
 
-    $production_status !== 'debug' or set_error_level('testing');
+    $old_status = $production_status;
+    $production_status !== 'debug' or $production_status = 'testing';
 
     $dayname = '%A';
     $dayshort = '%a';
@@ -2007,7 +2008,7 @@ function txp_dateformats()
     $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
     $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
 
-    $production_status !== 'debug' or set_error_level($production_status);
+    $production_status = $old_status;
 
     return array(
         "$monthshort $daynumord, $time12",
