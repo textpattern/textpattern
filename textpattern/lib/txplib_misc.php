@@ -2778,6 +2778,10 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         }
     }
 
+    global $production_status;
+
+    $production_status !== 'debug' or set_error_level('testing');
+
     if ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
@@ -2785,6 +2789,8 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         $format = str_replace('%s', $tztime, $format);
         $str = strftime($format, $tztime);
     }
+
+    $production_status !== 'debug' or set_error_level($production_status);
 
     if (!isset($charsets[$override_locale])) {
         $charsets[$override_locale] = $txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');

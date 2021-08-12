@@ -563,8 +563,8 @@ function doDiagnostics()
     echo n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
-    $fmt_date = '%Y-%m-%d %H:%M:%S';
-    $updateTime = ($dbupdatetime) ? gmstrftime($fmt_date, $dbupdatetime).'/' : '';
+    $fmt_date = 'Y-m-d H:i:s';
+    $updateTime = ($dbupdatetime) ? gmdate($fmt_date, $dbupdatetime).'/' : '';
 
     $out = array(
         form(
@@ -607,7 +607,7 @@ function doDiagnostics()
 
         gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-        gTxt('diag_last_update').cs.$updateTime.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
         priv.gTxt('diag_web_domain').cs.$siteurl.n,
 

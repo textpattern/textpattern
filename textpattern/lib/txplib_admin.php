@@ -1989,6 +1989,10 @@ function get_prefs_theme()
 
 function txp_dateformats()
 {
+    global $production_status;
+
+    $production_status !== 'debug' or set_error_level('testing');
+
     $dayname = '%A';
     $dayshort = '%a';
     $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
@@ -2002,6 +2006,8 @@ function txp_dateformats()
     $time24 = '%H:%M';
     $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
     $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+
+    $production_status !== 'debug' or set_error_level($production_status);
 
     return array(
         "$monthshort $daynumord, $time12",
