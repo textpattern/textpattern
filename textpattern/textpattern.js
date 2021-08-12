@@ -2505,7 +2505,7 @@ textpattern.Route.add('plugin.plugin_help', function () {
 
 // Prefs panel.
 textpattern.Route.add('prefs', function () {
-    $('#dateformat, #archive_dateformat').on('change', function() {
+    $('#dateformat, #archive_dateformat, #comments_dateformat').on('change', function() {
         $(this).next('input').val($(this).val());
     });
 });
