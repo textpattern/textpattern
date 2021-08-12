@@ -2503,6 +2503,13 @@ textpattern.Route.add('plugin.plugin_help', function () {
     $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
 });
 
+// Prefs panel.
+textpattern.Route.add('prefs', function () {
+    $('#dateformat, #archive_dateformat').on('change', function() {
+        $(this).next('input').val($(this).val());
+    });
+});
+
 // All panels?
 textpattern.Route.add('', function () {
     // Pane states

@@ -2760,9 +2760,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         return $intl ? intl_strftime($format, $time, $gmt, $override_locale) : ($gmt ? gmdate($format, $time) : date($format, $time));
     } elseif (!preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
         return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
-    }
-
-    if ($intl) {
+    } elseif ($intl) {
         return intl_strftime($format, $time, $gmt, $override_locale);
     }
 

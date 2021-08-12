@@ -618,6 +618,7 @@ function weeks($name, $val)
 function dateformats($name, $val)
 {
     $formats = txp_dateformats();
+    $formats[] = get_pref($name);
     $ts = time();
     $vals = array();
 
@@ -628,8 +629,9 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
+    $input = selectInput(false, array_unique($vals), $val, '', '', $name).n.fInput('text', $name, $val);
 
-    return pluggable_ui('prefs_ui', 'dateformats', selectInput($name, array_unique($vals), $val, '', '', $name), compact('vals', 'name', 'val', 'ts'));
+    return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
 
 /**
