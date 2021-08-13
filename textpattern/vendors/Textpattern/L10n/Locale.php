@@ -317,7 +317,7 @@ class Locale
      */
 
     public function getCharset($category = LC_ALL, $default = false)
-    {dmp($this->getLocale($category));
+    {
         if (!($locale = $this->getLocale($category))) {
             $charset = false;
         } elseif (is_callable('nl_langinfo')) {
