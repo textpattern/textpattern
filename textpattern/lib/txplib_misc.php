@@ -2929,7 +2929,7 @@ function set_error_level($level)
         error_reporting(E_ALL | E_STRICT);
     } elseif ($level == 'live') {
         // Don't show errors on screen.
-        $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
+        $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
         error_reporting(E_ALL ^ $suppress);
         @ini_set("display_errors", "1");
     } else {
