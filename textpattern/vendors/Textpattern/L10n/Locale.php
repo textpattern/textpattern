@@ -105,6 +105,20 @@ class Locale
     );
 
     /**
+     * An array of codepages.
+     *
+     * @var array
+     */
+
+    protected $codepages = array(
+        65001    => 'UTF-8',
+        932    => 'SHIFT-JIS',
+        949    => 'ks_c_5601-1987',
+        936 => 'gb2312',
+        950 => 'big5',
+    );
+
+    /**
      * Used in function validLocale()
      *
      * @var array
@@ -303,7 +317,7 @@ class Locale
      */
 
     public function getCharset($category = LC_ALL, $default = false)
-    {
+    {dmp($this->getLocale($category));
         if (!($locale = $this->getLocale($category))) {
             $charset = false;
         } elseif (is_callable('nl_langinfo')) {
@@ -315,7 +329,7 @@ class Locale
             list($language, $charset) = explode('.', $locale);
 
             if (IS_WIN && is_numeric($charset)) {
-                $charset = 'Windows-'.$charset;
+                $charset = isset($this->codepages[$charset]) ? $this->codepages[$charset] : 'Windows-'.$charset;
             }
         }
 
