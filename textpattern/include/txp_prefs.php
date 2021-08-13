@@ -629,7 +629,7 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
-    $input = selectInput(false, array_unique($vals), $val, '', '', $name).n.fInput('text', $name, $val);
+    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val);
 
     return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
