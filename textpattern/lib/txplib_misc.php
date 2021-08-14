@@ -2702,8 +2702,8 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
 
 function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
-    static $charsets = array(), $txpLocale = null, $intl = null, $formats = array(
-        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822, //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822'
+    static $charsets = array(), $txpLocale = null, $intl = null, $formats = array( //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822' ?
+        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822,
     ), $translate = array(
         '%a' => 'D',
         '%A' => 'l',
@@ -2778,10 +2778,8 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         }
     }
 
-    global $production_status;
-
-    $old_status = $production_status;
-    $production_status !== 'debug' or $production_status = 'testing';
+    $old_reporting = error_reporting();
+    error_reporting($old_reporting ^ E_DEPRECATED);
 
     if ($gmt) {
         $str = gmstrftime($format, $time);
@@ -2791,15 +2789,15 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         $str = strftime($format, $tztime);
     }
 
-    $production_status = $old_status;
+    error_reporting($old_reporting);
 
     if (!isset($charsets[$override_locale])) {
-        $charsets[$override_locale] = $txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $charsets[$override_locale] = strtoupper($txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1'));
     }
 
     $charset = $charsets[$override_locale];
 
-    if ($charset != 'UTF-8') {
+    if ($charset != 'UTF-8' && $charset != 'UTF8') {
         if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
             $str = $new;
         } elseif (is_callable('utf8_encode')) {
