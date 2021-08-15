@@ -2751,10 +2751,10 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         $intl = class_exists('IntlDateFormatter');
     }
 
-    // We could add some other formats here.
     if ($format == 'since') {
         return since($time);
     } elseif (isset($formats[$format])) {
+        // We could add some other formats here.
         return gmdate($formats[$format], $time);
     } elseif (strpos($format, '%') === false) {
         return $intl ? intl_strftime($format, $time, $gmt, $override_locale) : ($gmt ? gmdate($format, $time) : date($format, $time));
@@ -2778,9 +2778,6 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         }
     }
 
-    $old_reporting = error_reporting();
-    error_reporting($old_reporting ^ E_DEPRECATED);
-
     if ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
@@ -2788,8 +2785,6 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
         $format = str_replace('%s', $tztime, $format);
         $str = strftime($format, $tztime);
     }
-
-    error_reporting($old_reporting);
 
     if (!isset($charsets[$override_locale])) {
         $charsets[$override_locale] = strtoupper($txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1'));

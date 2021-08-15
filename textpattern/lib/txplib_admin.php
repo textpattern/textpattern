@@ -1990,7 +1990,7 @@ function get_prefs_theme()
 function txp_dateformats()
 {
     $old_reporting = error_reporting();
-    error_reporting($old_reporting ^ E_DEPRECATED);
+    error_reporting(0);
 
     $dayname = '%A';
     $dayshort = '%a';
