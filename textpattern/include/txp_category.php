@@ -301,13 +301,13 @@ function cat_category_multiedit()
             if ($rs) {
                 foreach ($rs as $cat) {
                     $catid[] = $cat['id'];
-                    $names[] = doSlash($cat['name']);
+                    $names[] = $cat['name'];
                 }
 
                 if (safe_delete('txp_category', "id IN (".join(',', $catid).")")) {
                     if ($method == 'deleteforce') {
                         // Clear the deleted category names from assets.
-                        $affected = join("','", $names);
+                        $affected = quote_list($names, ',');
 
                         if ($type === 'article') {
                             safe_update('textpattern', "category1 = ''", "category1 IN ('$affected')");
@@ -524,10 +524,11 @@ function cat_event_category_create($event)
     $parent_exists = safe_field("name", 'txp_category', "name = '".doSlash($parent)."' AND type = '".doSlash($event)."'");
     $parent = ($parent_exists !== false) ? $parent_exists : 'root';
 
-    $q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
+    $q = insertNode(compact('name', 'title', 'parent'), $event);
+    //safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
 
     if ($q) {
-        rebuild_tree_full($event);
+        //rebuild_tree_full($event);
 
         $message = gTxt($event.'_category_created', array('{name}' => $name));
 

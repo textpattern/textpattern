@@ -1551,6 +1551,29 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 }
 
 /**
+ * Inserts a category.
+ *
+ * This function is used by categories.
+ *
+ * @param  array $data   The category data
+ * @param  string $type  The category type
+ * @param  string $tbl   The table
+ * @return int The next left ID
+ */
+
+function insertNode($data, $type = 'article', $tbl = 'txp_category')
+{
+    extract(doSlash($data) + array('parent' => 'root'));
+    $type = doSlash($type);
+
+    extract(safe_row("lft, rgt, name = '$parent' AS first", $tbl, "type = '$type' AND ((parent = '$parent' AND name < '$name') OR name = '$parent') ORDER BY lft DESC"));
+
+    !$first or $rgt = $lft;
+    safe_update($tbl, "lft = lft+2*(lft>$rgt), rgt = rgt+2", "type = '$type' AND rgt > $rgt");
+    return safe_upsert($tbl, "title = '$title', lft = $rgt+1, rgt = $rgt+2", compact('type', 'name', 'parent'));
+}
+
+/**
  * Returns an error page.
  *
  * This function is used to return a bailout page when resolving database
