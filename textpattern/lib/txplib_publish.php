@@ -357,6 +357,7 @@ function parse($thing, $condition = true, $in_tag = true)
         $not = true;
     }
 
+    $old_tag = $txp_tag;
     $txp_tag = !empty($condition);
     $log = $production_status === 'debug';
 
@@ -458,7 +459,7 @@ function parse($thing, $condition = true, $in_tag = true)
     }
 
     $out !== false or $condition = false;
-    $txp_tag = !empty($condition);
+    $txp_tag = $old_tag || !empty($condition);
     $txp_current_tag = $this_tag;
 
     return $out;
