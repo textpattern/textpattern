@@ -603,11 +603,11 @@ function cat_event_category_edit($evname, $message = '')
 
 function cat_event_category_save($event, $table_name)
 {
-    extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'description', 'old_name', 'parent', 'title')))));
+    $data = array_map('assert_string', psa(array('id', 'name', 'description', 'old_name', 'parent', 'title')));
+    $rawname = $data['name'];
+    $data['name'] = sanitizeForUrl($rawname);
+    extract(doSlash($data));
     $id = assert_int($id);
-
-    $rawname = $name;
-    $name = sanitizeForUrl($rawname);
 
     // Make sure the name is valid.
     if (!$name) {
@@ -617,33 +617,32 @@ function cat_event_category_save($event, $table_name)
     }
 
     // Don't allow rename to clobber an existing category.
-    $existing_id = safe_field("id", 'txp_category', "name = '$name' AND type = '$event'");
+    $existing_id = safe_count('txp_category', "name = '$name' AND type = '$event' AND id != $id");
 
-    if ($existing_id and $existing_id != $id) {
+    if ($existing_id) {
         $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
         return cat_event_category_edit($event, $message);
     }
 
-    $parent = ($parent) ? $parent : 'root';
+    $parent or $parent = 'root';
 
-    $message = array(gTxt('category_save_failed'), E_ERROR);
+    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'")) {
+//        rebuild_tree_full($event);
+        $res = insertNode($data, $event);
 
-    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'") &&
-        safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {
-        rebuild_tree_full($event);
-
-        if ($event == 'article') {
-            if (safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'") &&
-                safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'")) {
-                $message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
-            }
-        } else {
-            if (safe_update($table_name, "category = '$name'", "category = '$old_name'")) {
-                $message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
+        if ($old_name != $name && safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {
+            if ($event == 'article') {
+                $res = safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'") &&
+                    safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'");
+            } else {
+                $res = safe_update($table_name, "category = '$name'", "category = '$old_name'");
             }
         }
+
+        $message = empty($res) ? array(gTxt('category_save_failed'), E_ERROR) : gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
     }
+
     cat_category_list($message);
 }
 

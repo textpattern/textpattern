@@ -1563,14 +1563,44 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 
 function insertNode($data, $type = 'article', $tbl = 'txp_category')
 {
-    extract(doSlash($data) + array('parent' => 'root'));
+    extract(doSlash($data));
+    !empty($parent) or $parent = 'root';
     $type = doSlash($type);
+    $res = safe_row("lft AS newlft, rgt AS newrgt, name = '$parent' AS first", $tbl, "type = '$type' AND ((parent = '$parent' AND name < '$name') OR name = '$parent') ORDER BY lft DESC");
 
-    extract(safe_row("lft, rgt, name = '$parent' AS first", $tbl, "type = '$type' AND ((parent = '$parent' AND name < '$name') OR name = '$parent') ORDER BY lft DESC"));
+    if (!$res) {
+        return false;
+    }
 
-    !$first or $rgt = $lft;
-    safe_update($tbl, "lft = lft+2*(lft>$rgt), rgt = rgt+2", "type = '$type' AND rgt > $rgt");
-    return safe_upsert($tbl, "title = '$title', lft = $rgt+1, rgt = $rgt+2", compact('type', 'name', 'parent'));
+    extract($res);
+    $newlft = ($first ? $newlft : $newrgt) + 1;
+
+    if (isset($id) && $id = intval($id) && $existing = safe_row('lft, rgt', 'txp_category', "id = $id")) {// existing node
+        extract($existing);
+        $width = $rgt - $lft + 1;
+
+        if ($newlft < $lft) {
+            $offset = $newlft - $lft;
+            $res = safe_update($tbl,
+                "lft = lft + $width*(lft<$lft AND lft>=$newlft) + $offset*(lft BETWEEN $lft AND $rgt),
+                rgt = rgt + $width*(rgt<$lft AND rgt>=$newlft) + $offset*(rgt BETWEEN $lft AND $rgt)",
+                "type = '$type' AND rgt >= $newlft AND lft <= $rgt"
+            );
+        } elseif ($newlft > $rgt) {
+            $offset = $newlft - $rgt - 1;
+            $res = safe_update($tbl,
+                "lft = lft - $width*(lft>$rgt AND lft<$newlft) + $offset*(lft BETWEEN $lft AND $rgt),
+                rgt = rgt - $width*(rgt>$rgt AND rgt<$newlft) + $offset*(rgt BETWEEN $lft AND $rgt)",
+                "type = '$type' AND rgt >= $lft AND lft < $newlft"
+            );
+        }
+
+    } else {// new node
+        safe_update($tbl, "lft = lft+2*(lft>=$newlft), rgt = rgt+2", "type = '$type' AND rgt >= $newlft");
+        $res = safe_insert($tbl, "title = '$title', lft = $newlft, rgt = $newlft+1, type = '$type', name = '$name', parent = '$parent'");
+    }
+
+    return $res;//safe_upsert($tbl, "title = '$title', lft = $rgt+1, rgt = $rgt+2", compact('type', 'name', 'parent'));
 }
 
 /**
