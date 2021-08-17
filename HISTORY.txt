@@ -2,6 +2,7 @@ Changes in 4.8.8 (upcoming)
 
 * Maintenance release with support for PHP 8.1, improvements and bug fixes.
 * Fixed: More robust numeric searches.
+* Fixed: Improved query efficiency of category creation.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
 * Added: 'url_title' attribute to <txp:article[_custom] />.
