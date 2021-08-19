@@ -503,9 +503,13 @@ function output_form($atts, $thing = null)
         trigger_error(gTxt('form_not_specified'));
 
         return '';
+    } elseif (strpos($atts['form'], '|') === false) {
+        $form = $atts['form'];
+    } else {
+        $form = do_list($atts['form'], '|');
+        $form = $form[rand(0, count($form) - 1)];
     }
 
-    $form = $atts['form'];
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
