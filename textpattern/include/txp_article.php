@@ -1663,7 +1663,6 @@ function article_partial_article_view($rs)
 
         $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
     } else {
-        include_once txpath.'/publish/taghandlers.php';
         $url = permlinkurl_id($ID);
     }
 

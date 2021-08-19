@@ -343,6 +343,11 @@ function prefs_list($message = '')
 
     echo n.'</div>'. // End of .txp-layout.
         n.'</form>';
+
+    if (!empty($prefs['max_url_len']) &&
+        (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))) {
+        echo announce(gTxt('max_url_len').' < '.$min_len, E_WARNING);
+    }
 }
 
 /**

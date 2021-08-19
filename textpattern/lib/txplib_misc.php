@@ -4766,19 +4766,19 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        $url = $hu.'index.php';
+        $url = 'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = $hu;
+        $url = '';
 
         if (!empty($keys['rss'])) {
-            $url = $hu.'rss/';
+            $url = 'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
-            $url = $hu.'atom/';
+            $url = 'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            $url = $hu.urlencode($keys['s']).'/';
+            $url = urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
                 $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4792,18 +4792,18 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             }
         } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = $hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = $hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
         } elseif (!empty($keys['month']) && is_date($keys['month'])) {
-            $url = $hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            $url = implode('/', explode('-', urlencode($keys['month']))).'/';
             unset($keys['month']);
         }
     }
@@ -4812,7 +4812,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         $keys['context'] = gTxt($keys['context'].'_context');
     }
 
-    return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
+    return $hu.(empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
@@ -5833,7 +5833,7 @@ function bombShelter()
     global $prefs;
     $in = serverSet('REQUEST_URI');
 
-    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len'] + (!empty($_GET['txpcleantest']) ? 48 : 0)) {
         txp_status_header('503 Service Unavailable');
         exit('Nice try.');
     }
