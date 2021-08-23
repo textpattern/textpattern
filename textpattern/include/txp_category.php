@@ -296,7 +296,7 @@ function cat_category_multiedit()
                 $used = "name NOT IN (SELECT category FROM ".safe_pfx('txp_'.$type).")";
             }
 
-            $rs = safe_rows("id, name", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'".(($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
+            $rs = safe_rows("id, name", 'txp_category', "id IN (".join(',', $things).")".(($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
 
             if ($rs) {
                 foreach ($rs as $cat) {
@@ -304,23 +304,24 @@ function cat_category_multiedit()
                     $names[] = $cat['name'];
                 }
 
-                if (safe_delete('txp_category', "id IN (".join(',', $catid).")")) {
+                if (/*safe_delete('txp_category', "id IN (".join(',', $catid).")")*/
+                    delete_nodes($catid, $type)) {
                     if ($method == 'deleteforce') {
                         // Clear the deleted category names from assets.
                         $affected = quote_list($names, ',');
 
                         if ($type === 'article') {
-                            safe_update('textpattern', "category1 = ''", "category1 IN ('$affected')");
-                            safe_update('textpattern', "category2 = ''", "category2 IN ('$affected')");
+                            safe_update('textpattern', "category1 = ''", "category1 IN ($affected)");
+                            safe_update('textpattern', "category2 = ''", "category2 IN ($affected)");
                         } else {
-                            safe_update('txp_'.$type, "category = ''", "category IN ('$affected')");
+                            safe_update('txp_'.$type, "category = ''", "category IN ($affected)");
                         }
 
                         // Promote subcategories of deleted categories to root.
-                        safe_update('txp_category', "parent = 'root'", "parent IN ('$affected')");
+//                        safe_update('txp_category', "parent = 'root'", "parent IN ($affected)");
                     }
 
-                    rebuild_tree_full($type);
+//                    rebuild_tree_full($type);
                     callback_event('categories_deleted', $type, 0, $catid);
 
                     $message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
@@ -329,28 +330,28 @@ function cat_category_multiedit()
                 }
             }
         } elseif ($method == 'changeparent') {
-            $new_parent = ps('new_parent') or $new_parent = 'root';
+            $new_parent = doSlash(ps('new_parent')) or $new_parent = 'root';
+            $exists = safe_row("name, title, lft, rgt", 'txp_category', "name = '$new_parent' AND type = '$type'");
 
-            $exists = safe_row("name, title, lft, rgt", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
-            $rs = $exists ? safe_rows("id, name, title, lft, rgt", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'") : false;
-
-            if ($rs) {
-                $parent = $exists['name'];
-                $title = $exists['title'];
+            if ($exists) {
+                extract($exists);
                 $to_change = $affected = array();
 
+                // Cannot assign parent to a child.
+                $rs = safe_rows("id, title", 'txp_category',
+                    "id IN (".join(',', $things).") AND type = '".$type."' AND parent != '$new_parent' AND (lft > $lft OR rgt < $rgt)"
+                );
+
                 foreach ($rs as $cat) {
-                    // Cannot assign parent to a child.
-                    if ($cat['lft']>$exists['lft'] || $cat['rgt']<$exists['rgt']) {
-                        $to_change[] = doSlash($cat['name']);
-                        $affected[] = $cat['title'];
-                    }
+                    $to_change[] = $cat['id'];
+                    $affected[] = $cat['title'];
                 }
 
-                $ret = safe_update('txp_category', "parent = '".doSlash($parent)."'", "name IN ('".join("','", $to_change)."') AND type = '".$type."'");
+                $ret = $to_change && safe_update('txp_category', "parent = '$new_parent'", "id IN (".join(",", $to_change).")");
 
                 if ($ret) {
-                    rebuild_tree_full($type);
+//                    rebuild_tree_full($type);
+                    insert_nodes($to_change, array('parent' => $name, 'at' => $rgt), $type);
 
                     $message = !empty($affected)
                         ? gTxt('categories_set_parent', array(
@@ -521,10 +522,8 @@ function cat_event_category_create($event)
     }
 
     $parent = strtolower(sanitizeForUrl(ps('parent_cat')));
-    $parent_exists = safe_field("name", 'txp_category', "name = '".doSlash($parent)."' AND type = '".doSlash($event)."'");
-    $parent = ($parent_exists !== false) ? $parent_exists : 'root';
 
-    $q = insertNode(compact('name', 'title', 'parent'), $event);
+    $q = insert_nodes(null, compact('name', 'title', 'parent'), $event);
     //safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
 
     if ($q) {
@@ -603,33 +602,32 @@ function cat_event_category_edit($evname, $message = '')
 
 function cat_event_category_save($event, $table_name)
 {
-    $data = array_map('assert_string', psa(array('id', 'name', 'description', 'old_name', 'parent', 'title')));
+    $data = array_map('assert_string', psa(array('name', 'description', 'parent', 'title')));
     $rawname = $data['name'];
     $data['name'] = sanitizeForUrl($rawname);
-    extract(doSlash($data));
-    $id = assert_int($id);
+    $id = assert_int(ps('id'));
 
     // Make sure the name is valid.
-    if (!$name) {
+    if (!$data['name'] || !($cat = safe_row('name AS old_name, parent AS old_parent', 'txp_category', "id = $id"))) {
         $message = array(gTxt($event.'_category_invalid', array('{name}' => $rawname)), E_ERROR);
 
         return cat_event_category_edit($event, $message);
     }
 
-    // Don't allow rename to clobber an existing category.
-    $existing_id = safe_count('txp_category', "name = '$name' AND type = '$event' AND id != $id");
+    extract(doSlash($data + $cat));
 
-    if ($existing_id) {
-        $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
+    // Don't allow rename to clobber an existing category.
+    if (safe_count('txp_category', "name = '$name' AND type = '$event' AND id != $id")) {
+        $message = array(gTxt($event.'_category_already_exists', array('{name}' => $data['name'])), E_ERROR);
 
         return cat_event_category_edit($event, $message);
     }
 
     $parent or $parent = 'root';
 
-    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'")) {
+    if ($parent == $old_parent || insert_nodes($id, $data, $event)) {
 //        rebuild_tree_full($event);
-        $res = insertNode($data, $event);
+        $res = safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'");
 
         if ($old_name != $name && safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {
             if ($event == 'article') {
@@ -640,7 +638,7 @@ function cat_event_category_save($event, $table_name)
             }
         }
 
-        $message = empty($res) ? array(gTxt('category_save_failed'), E_ERROR) : gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
+        $message = empty($res) ? array(gTxt('category_save_failed'), E_ERROR) : gTxt($event.'_category_updated', array('{name}' => $data['name']));
     }
 
     cat_category_list($message);

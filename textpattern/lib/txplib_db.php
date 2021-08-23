@@ -1539,7 +1539,7 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 {
     $stype = doSlash($type);
     // Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
-    safe_update($tbl, "parent = ''", "type = '".$stype."' AND name = 'root'");
+    safe_upsert($tbl, "parent = ''", array('type' => $stype, 'name' => 'root'));
     safe_update($tbl, "lft = 0, rgt = 0", "type = '".$stype."'");
     rebuild_tree('root', 1, $type, $tbl);
 
@@ -1551,56 +1551,145 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 }
 
 /**
- * Inserts a category.
+ * Inserts categories.
  *
  * This function is used by categories.
  *
  * @param  array $data   The category data
  * @param  string $type  The category type
  * @param  string $tbl   The table
- * @return int The next left ID
+ * @return bool
  */
 
-function insertNode($data, $type = 'article', $tbl = 'txp_category')
+function insert_nodes($id = null, $data = array(), $type = 'article', $tbl = 'txp_category')
 {
     extract(doSlash($data));
     !empty($parent) or $parent = 'root';
     $type = doSlash($type);
-    $res = safe_row("lft AS newlft, rgt AS newrgt, name = '$parent' AS first", $tbl, "type = '$type' AND ((parent = '$parent' AND name < '$name') OR name = '$parent') ORDER BY lft DESC");
+    //$res = safe_row("lft AS newlft, rgt AS newrgt, name = '$parent' AS first", $tbl, "type = '$type' AND ((parent = '$parent' AND name < '$name') OR name = '$parent') ORDER BY lft DESC");
 
-    if (!$res) {
+    if (empty($at) && !($at = safe_field("rgt", $tbl, "type = '$type' AND name = '$parent'"))) {
         return false;
     }
 
-    extract($res);
-    $newlft = ($first ? $newlft : $newrgt) + 1;
+//    extract($res);
+//    $at = ($first ? $newlft : $newrgt) + 1;
 
-    if (isset($id) && $id = intval($id) && $existing = safe_row('lft, rgt', 'txp_category', "id = $id")) {// existing node
-        extract($existing);
-        $width = $rgt - $lft + 1;
+    if (isset($id)) {// existing node
+        $ids = array_filter(array_map('intval', do_list($id)));
+        $res = !empty($ids);
+//        $ids and safe_update('txp_category', "parent = '$parent'", "id IN (".implode(',', $ids).") AND type = '$type'");
+        foreach($ids as $id) {
+            if ($row = safe_row('id, lft, rgt', $tbl, "id = $id")) {
+                extract($row);
+                $width = $rgt - $lft + 1;
 
-        if ($newlft < $lft) {
-            $offset = $newlft - $lft;
-            $res = safe_update($tbl,
-                "lft = lft + $width*(lft<$lft AND lft>=$newlft) + $offset*(lft BETWEEN $lft AND $rgt),
-                rgt = rgt + $width*(rgt<$lft AND rgt>=$newlft) + $offset*(rgt BETWEEN $lft AND $rgt)",
-                "type = '$type' AND rgt >= $newlft AND lft <= $rgt"
-            );
-        } elseif ($newlft > $rgt) {
-            $offset = $newlft - $rgt - 1;
-            $res = safe_update($tbl,
-                "lft = lft - $width*(lft>$rgt AND lft<$newlft) + $offset*(lft BETWEEN $lft AND $rgt),
-                rgt = rgt - $width*(rgt>$rgt AND rgt<$newlft) + $offset*(rgt BETWEEN $lft AND $rgt)",
-                "type = '$type' AND rgt >= $lft AND lft < $newlft"
-            );
+                if ($at < $lft) {
+                    $offset = $at - $lft;
+                    safe_update($tbl,
+                        "lft = lft + $width*(lft<$lft AND lft>=$at) + $offset*(lft BETWEEN $lft AND $rgt),
+                        rgt = rgt + $width*(rgt<$lft AND rgt>=$at) + $offset*(rgt BETWEEN $lft AND $rgt)",
+                        "type = '$type' AND rgt >= $at AND lft <= $rgt"
+                    );
+                    $at += $width;
+                } elseif ($at > $rgt) {
+                    $offset = $at - $rgt - 1;
+                    safe_update($tbl,
+                        "lft = lft - $width*(lft>$rgt AND lft<$at) + $offset*(lft BETWEEN $lft AND $rgt),
+                        rgt = rgt - $width*(rgt>$rgt AND rgt<$at) + $offset*(rgt BETWEEN $lft AND $rgt)",
+                        "type = '$type' AND rgt >= $lft AND lft < $at"
+                    );
+                }
+            }
         }
-
     } else {// new node
-        safe_update($tbl, "lft = lft+2*(lft>=$newlft), rgt = rgt+2", "type = '$type' AND rgt >= $newlft");
-        $res = safe_insert($tbl, "title = '$title', lft = $newlft, rgt = $newlft+1, type = '$type', name = '$name', parent = '$parent'");
+        safe_update($tbl, "lft = lft+2*(lft>=$at), rgt = rgt+2", "type = '$type' AND rgt >= $at");
+        $res = safe_insert($tbl, "title = '$title', lft = $at, rgt = $at+1, type = '$type', name = '$name', parent = '$parent'");
     }
 
-    return $res;//safe_upsert($tbl, "title = '$title', lft = $rgt+1, rgt = $rgt+2", compact('type', 'name', 'parent'));
+    return !empty($res);
+}
+
+/**
+ * Deletes categories.
+ *
+ * This function is used by categories.
+ *
+ * @param  array $ids    The IDs
+ * @param  string $type  The type
+ * @param  string $tbl   The table
+ * @return array The deleted IDs
+ */
+/*
+function deleteNodes($ids, $type = 'article', $tbl = 'txp_category')
+{
+    $type = doSlash($type);
+    $ids = implode(',', array_filter(array_map('intval', do_list($ids))));
+    $deleted = array();
+    $rows = safe_rows('id, name, parent, lft, rgt', $tbl, "id IN ($ids) ORDER BY lft DESC");
+
+    if ($n = count($rows) && safe_delete($tbl, "id IN ($ids)")) {
+        for ($i = 0; $i < $n; $i++) {
+            extract(doSlash($rows[$i]));
+            $deleted[] = $id;
+
+            safe_update($tbl,
+                "parent = IF(parent = '$name', '$parent', parent),
+                lft = lft - (lft > $lft) - (lft > $rgt),
+                rgt = rgt - 1 - (rgt > $rgt)",
+                "type = '$type' AND rgt > $lft"
+            );
+
+            for ($j = $i+1; $j < $n ; $j++) {
+                if ($rows[$j]['rgt'] > $rgt) {
+                    $rows[$j]['rgt'] -= 2;
+                }
+            }
+        }
+    }
+
+    return $deleted;
+}
+*/
+function delete_nodes($ids, $type = 'article', $tbl = 'txp_category')
+{
+    $deleted = array();
+    $type = doSlash($type);
+    $ids = implode(',', array_filter(array_map('intval', do_list($ids))));
+    $rows = safe_rows('id, name, parent, lft, rgt', $tbl, "id IN ($ids) ORDER BY lft");// parent first
+
+    if ($rows && safe_delete($tbl, "id IN ($ids)")) {
+        $parents = array_column($rows, 'parent', 'name');
+
+        foreach ($rows as $row) {
+            extract($row);
+            $deleted[$name] = $id;
+
+            if ($rgt - $lft > 1) {
+                isset($parents[$parent]) and $parents[$name] = $parents[$parent];
+            } else {
+                unset($parents[$name]);
+            }
+        }
+
+        if ($parents) {
+            $names = quote_list(array_keys($parents), ',');
+            $parents = quote_list($parents, ',');
+        }
+
+        $intervals = array_merge(array_column($rows, 'lft'), array_column($rows, 'rgt'));
+        sort($intervals);
+        $min = $intervals[0];
+        $intervals = implode(',', $intervals);
+
+        safe_update($tbl,
+            ($parents ? "parent = ELT(1+FIELD(parent, $names), parent, $parents), " : '').
+            "lft = lft - INTERVAL(lft, $intervals), rgt = rgt - INTERVAL(rgt, $intervals)",
+            "type = '$type' AND rgt > $min"
+        );
+    }
+
+    return $deleted;
 }
 
 /**
