@@ -1331,8 +1331,11 @@ function get_tree($atts = array(), $tbl = 'txp_category')
 
     extract(array_intersect_key($atts, $lAtts) + $lAtts);
 
+    if ($categories && !($categories = do_list_unique($categories))) {
+        return array();
+    }
+
     $level++;
-    $categories = do_list_unique($categories);
     $catonly = $categories && !$parent;
     $roots = do_list_unique($parent) or $roots = $categories or $roots = array('root');
     $rooted = in_array('root', $roots);
