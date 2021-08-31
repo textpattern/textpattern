@@ -1311,6 +1311,147 @@ function getCount($table, $where, $debug = false)
     return getThing("SELECT COUNT($thing) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
 }
 
+// -------------------------------------------------------------
+
+// Output a nested array of categories.
+function get_tree($atts = array(), $tbl = 'txp_category')
+{
+    static $cache = array(), $level = 0, $lAtts = array(
+        'categories'   => '',
+        'exclude'      => '',
+        'parent'       => '',
+        'children'     => true,
+        'sort'         => 'name ASC',
+        'type'         => 'article',
+        'where'        => '1',
+        'limit'        => '',
+        'offset'       => '',
+        'flatten'      => true,
+    );
+
+    extract(array_intersect_key($atts, $lAtts) + $lAtts);
+
+    $level++;
+    $categories = do_list_unique($categories);
+    $catonly = $categories && !$parent;
+    $roots = do_list_unique($parent) or $roots = $categories or $roots = array('root');
+    $rooted = in_array('root', $roots);
+    $multiple = count($roots) > 1;
+    sort($roots);
+    $root = implode(',', $roots);
+    $children = $children === true ? PHP_INT_MAX : intval(is_numeric($children) ? $children : !empty($children));
+    $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
+
+    $sql_query = "$where AND type = '".doSlash($type)."'".($sort ? ' order by '.sanitizeForSort($sort) : ($categories ? " order by FIELD(name, ".quote_list($categories, ',').")": ''));
+    $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
+    $sql_exclude = $exclude && $sql_limit ? " and name not in(".quote_list($exclude, ',').")" : '';
+
+    $nocache = !$children || $sql_limit || $children == $level;
+    $hash = md5($nocache ? uniqid() : $sql_query);
+
+    if (!isset($cache[$hash])) {
+        $cache[$hash] = array('' => array());
+    }
+
+    !$rooted or $cache[$hash]['']['root'] = false;
+
+    if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
+        $cache[$hash][$root] = array();
+
+        if (!$children || !$rooted) {
+            $cats = safe_rows('id, name, parent, title, description, lft, rgt', $tbl, "name IN (".quote_list($roots, ',').") and $sql_query") or $cats = array();
+
+            if (!$catonly) {
+                $retrieved = true;
+                $between = array();
+
+                foreach ($cats as $cat) {
+                    extract($cat);
+                    unset($cat['lft'], $cat['rgt']);
+                    $name = doSlash($name);
+                    $between[] = $children ? "lft>=$lft and rgt<=$rgt" : "name='$name' OR parent='$name'";
+
+                    if ($rgt - $lft > 1) {
+                        $retrieved = false;
+                    }
+                }
+
+                $retrieved or $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude and (".implode(' or ', $between).") and $sql_query $sql_limit");
+            }
+        } else {
+            $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude and $sql_query $sql_limit");
+        }
+
+        foreach ($cats as $cat) {
+            extract($cat);
+            $node = $children == $level ? $root : $name;
+
+            if (!isset($cache[$hash][$node])) {
+                $cache[$hash][$node] = array();
+            }
+
+            $cache[$hash][$node][$name] = $cat;
+
+            if ($children != $level) {
+                if ($multiple && in_array($name, $roots)) {
+                    $cache[$hash][$root][$name] = $cat;
+                }
+
+                if (!isset($cache[$hash][$parent])) {
+                    $cache[$hash][$parent] = array();
+                }
+
+                $cache[$hash][''][$name] = false;
+                $cache[$hash][$parent][$name] = $cat;
+                isset($cache[$hash][''][$parent]) or $cache[$hash][''][$parent] = true;
+
+                if ($multiple && in_array($parent, $roots)) {
+                    $cache[$hash][$root][$name] = $cat;
+                }
+            }
+        }
+
+        $cache[$hash][''] = array_filter($cache[$hash]['']);
+    }
+
+    $out = array();
+
+    foreach ($cache[$hash][$root] as $name => $cat) {
+        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories))
+            && ($level > 1 || $children <= $level || $rooted || in_array($name, $roots) || in_array($cat['parent'], $exclude))
+        ) {
+            $out[$name] = $cat;
+            $out[$name]['level'] = $level - 1;
+
+            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 &&
+                $nodes = get_tree(array(
+                    'parent'  => $name,
+                    'exclude' => array_merge($exclude, array($name))
+                ) + $atts, $tbl))
+            {
+                if ($flatten) {
+                    $out[$name]['children'] = count($nodes);
+                    $out += $nodes;
+                } else {
+                    $out[$name]['children'] = $nodes;
+                }
+            }
+        }
+    }
+
+    $level--;
+
+    if ($nocache) {
+        unset($cache[$hash]);
+    } elseif ($level <= 0) {
+        foreach ($cache[$hash][''] as $parent => $delete) {
+            unset($cache[$hash][$parent]);
+        }
+    }
+
+    return $out;
+}
+
 /**
  * Gets a tree structure.
  *
@@ -1323,68 +1464,27 @@ function getCount($table, $where, $debug = false)
  * @return array
  */
 
-function getTree($root, $type = 'article', $where = "1 = 1", $tbl = 'txp_category', $depth = true)
+function getTree($root = 'root', $type = 'article', $where = "1", $tbl = 'txp_category', $depth = true)
 {
-    if (is_array($root)) {
-        $names = true;
+    if (!$depth) {
+        $roots = array('categories' => $root);
     } else {
-        $root = do_list_unique($root);
+        $roots = array('parent' => $root);
+        $depth === true or $levels = array_map('intval', do_list($depth, array(',', '-')));
     }
 
-    if (empty($root)) {
-        return array();
-    }
+    $names = is_array($root);
+    $rows = get_tree($roots + compact('type', 'where') + array('children' => !empty($depth)), $tbl);
+    $out = array();
 
-    if ($depth && $depth !== true) {
-        $levels = array_map('intval', do_list($depth, array(',', '-')));
-    }
-
-    $type = doSlash($type);
-    $out = $border = array();
-
-    $rows = safe_rows(
-        "lft AS l, rgt AS r",
-        $tbl,
-        "name IN ('".implode("','", doSlash($root))."') AND type = '$type'"
-    );
-
-    foreach ($rows as $rs) {
-        extract($rs);
-        $border[] = $depth ? "lft BETWEEN $l AND $r" : "lft=$l AND rgt=$r";
-    }
-
-    $border = implode(' OR ', $border);
-    $right = array();
-
-    $rs = $border ? safe_rows_start(
-        isset($names) ? "id, name, lft, rgt" : "id, name, lft, rgt, parent, title",
-        $tbl,
-        "($border) AND type = '$type' AND name != 'root' AND $where ORDER BY lft ASC"
-    ) : null;
-
-    while ($rs and $row = nextRow($rs)) {
-        extract($row);
-
-        while (($level = count($right)) > 0 && $right[count($right) - 1] < $rgt) {
-            array_pop($right);
-        }
-
-        if (!isset($levels) || in_array($level, $levels)) {
-            if (isset($names)) {
-                $out[$id] = $name;
+    foreach ($rows as $name => $row) {
+        if (!isset($levels) || in_array($row['level'], $levels)) {
+            if ($names) {
+                $out[$row['id']] = $name;
             } else {
-                $out[] = array(
-                    'id'       => $id,
-                    'name'     => $name,
-                    'title'    => $title,
-                    'level'    => $level,
-                    'children' => ($rgt - $lft - 1) / 2,
-                    'parent'   => $parent,
-                );
+                $out[] = $row;
             }
         }
-
-        $right[] = $rgt;
     }
 
     return $out;
