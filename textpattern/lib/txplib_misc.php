@@ -1033,7 +1033,7 @@ function set_cookie($name, $value = '', $options = array())
         'expires' => time() - 3600,
         'path' => '',
         'domain' => '',
-        'secure' => false,
+        'secure' => strtolower(PROTOCOL) == 'https://',
         'httponly' => false,
         'samesite' => 'Lax' // None || Lax  || Strict
     );
