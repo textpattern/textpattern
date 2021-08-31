@@ -1421,7 +1421,9 @@ function category_list($atts, $thing = null, $cats = null)
 
     $thiscategory = $oldcategory;
 
-    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : '';
+    return $out ?
+        ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) :
+        ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------
