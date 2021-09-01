@@ -357,6 +357,7 @@ function parse($thing, $condition = true, $in_tag = true)
         $not = true;
     }
 
+    $old_tag = $txp_tag;
     $txp_tag = !empty($condition);
     $log = $production_status === 'debug';
 
@@ -458,7 +459,7 @@ function parse($thing, $condition = true, $in_tag = true)
     }
 
     $out !== false or $condition = false;
-    $txp_tag = !empty($condition);
+    $txp_tag = $old_tag || !empty($condition);
     $txp_current_tag = $this_tag;
 
     return $out;
@@ -669,7 +670,11 @@ function ckCat($type, $val, $debug = false)
 
 function ckExID($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug);
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -692,7 +697,11 @@ function ckExID($val, $debug = false)
 
 function lookupByTitle($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Status >= 4 LIMIT 1", $debug);
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "url_title = '".doSlash($val)."' AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -716,7 +725,11 @@ function lookupByTitle($val, $debug = false)
 
 function lookupByTitleSection($val, $section, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -731,7 +744,11 @@ function lookupByTitleSection($val, $section, $debug = false)
 
 function lookupByIDSection($id, $section, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "ID = ".intval($id)." AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -745,7 +762,11 @@ function lookupByIDSection($id, $section, $debug = false)
 
 function lookupByID($id, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Status >= 4 LIMIT 1", $debug);
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "ID = ".intval($id)." AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -760,7 +781,18 @@ function lookupByID($id, $debug = false)
 
 function lookupByDateTitle($when, $title, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "posted LIKE '".doSlash($when)."%' AND url_title LIKE '".doSlash($title)."' AND Status >= 4 LIMIT 1");
+    if ($when) {
+        $offset = date('P', strtotime($when));
+        $dateClause = ($offset ? "CONVERT_TZ(posted, @@session.time_zone, '$offset')" : 'posted')." LIKE '".doSlash($when)."%'";
+    } else {
+        $dateClause = '1';
+    }
+
+    return safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        'textpattern',
+        "url_title LIKE '".doSlash($title)."' AND Status >= 4 AND $dateClause LIMIT 1"
+    );
 }
 
 /**

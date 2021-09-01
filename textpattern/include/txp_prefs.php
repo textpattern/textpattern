@@ -343,6 +343,11 @@ function prefs_list($message = '')
 
     echo n.'</div>'. // End of .txp-layout.
         n.'</form>';
+
+    if (!empty($prefs['max_url_len']) &&
+        (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))) {
+        echo announce(gTxt('max_url_len').' < '.$min_len, E_WARNING);
+    }
 }
 
 /**
@@ -776,6 +781,7 @@ function weeks($name, $val)
 function dateformats($name, $val)
 {
     $formats = txp_dateformats();
+    $formats[] = get_pref($name);
     $ts = time();
     $vals = array();
 
@@ -786,6 +792,7 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
+    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val);
 
     return pluggable_ui('prefs_ui', 'dateformats', Txp::get('\Textpattern\UI\Select', $name, array_unique($vals), $val)->setAtt('id', $name), compact('vals', 'name', 'val', 'ts'));
 }

@@ -1127,7 +1127,9 @@ function section_popup($Section, $id)
 
 function category_popup($name, $val, $id)
 {
-    $rs = getTree('root', 'article');
+    static $rs = null;
+
+    isset($rs) or $rs = getTree('root', 'article');
 
     if ($rs) {
         return treeSelectInput($name, $rs, $val, $id, 35);
@@ -1669,7 +1671,6 @@ function article_partial_article_view($rs)
 
         $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
     } else {
-        include_once txpath.'/publish/taghandlers.php';
         $url = permlinkurl_id($ID);
     }
 

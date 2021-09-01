@@ -616,10 +616,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function extract($lang_code, $events = '', $filter = '')
     {
-        $where = array(
-            "lang = '".doSlash($lang_code)."'",
-            "name != ''",
-        );
+        // For the time being, load any non-core (plugin) strings on every
+        // page too. Core strings have no owner. Plugins installed since 4.6+
+        // will have either the 'site' owner or their own plugin name.
+        // Longer term, when all plugins have caught up with the event
+        // naming convention, the owner clause can be removed.
+        $ownClause = $this->hasOwnerSupport() ? " OR owner != ''" : '';
 
         if (txpinterface === 'admin') {
             $admin_events = array('admin-side', 'common');
@@ -632,18 +634,15 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = $admin_events;
         } elseif ($events === '') {
             $events = array('public', 'common');
+            $ownClause = '';
         } else {
             $events = is_array($events) ? $events : do_list_unique($events);
         }
 
-        if ($events) {
-            // For the time being, load any non-core (plugin) strings on every
-            // page too. Core strings have no owner. Plugins installed since 4.6+
-            // will have either the 'site' owner or their own plugin name.
-            // Longer term, when all plugins have caught up with the event
-            // naming convention, the owner clause can be removed.
-            $where[] = "(event IN (".join(',', quote_list((array) $events)).")".($this->hasOwnerSupport() ? " OR owner != '')" : ')');
-        }
+        $where = array(
+            "lang = '".doSlash($lang_code)."'",
+            $events ? "(event IN (".quote_list((array) $events, ',').")$ownClause)" : "1"
+        );
 
         $out = array();
 
@@ -688,7 +687,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if (!empty($DB)) {
             $this->strings = $this->extract($lang_code, $events);
-            $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));
+            $this->loaded = array($lang_code => isset($events) ? do_list($events) : array(null));
         }
 
         return $this->strings;
