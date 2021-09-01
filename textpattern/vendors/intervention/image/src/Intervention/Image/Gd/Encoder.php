@@ -66,9 +66,6 @@ class Encoder extends \Intervention\Image\AbstractEncoder
         }
 
         ob_start();
-        imagepalettetotruecolor($this->image->getCore());
-        imagealphablending($this->image->getCore(), true);
-        imagesavealpha($this->image->getCore(), true);
         imagewebp($this->image->getCore(), null, $this->quality);
         $this->image->mime = defined('IMAGETYPE_WEBP') ? image_type_to_mime_type(IMAGETYPE_WEBP) : 'image/webp';
         $buffer = ob_get_contents();
@@ -96,19 +93,9 @@ class Encoder extends \Intervention\Image\AbstractEncoder
      */
     protected function processBmp()
     {
-        if ( ! function_exists('imagebmp')) {
-            throw new NotSupportedException(
-                "BMP format is not supported by PHP installation."
-            );
-        }
-
-        ob_start();
-        imagebmp($this->image->getCore());
-        $this->image->mime = defined('IMAGETYPE_BMP') ? image_type_to_mime_type(IMAGETYPE_BMP) : 'image/bmp';
-        $buffer = ob_get_contents();
-        ob_end_clean();
-        
-        return $buffer;
+        throw new NotSupportedException(
+            "BMP format is not supported by Gd Driver."
+        );
     }
 
     /**
@@ -132,18 +119,6 @@ class Encoder extends \Intervention\Image\AbstractEncoder
     {
         throw new NotSupportedException(
             "PSD format is not supported by Gd Driver."
-        );
-    }
-
-    /**
-     * Processes and returns encoded image as AVIF string
-     *
-     * @return string
-     */
-    protected function processAvif()
-    {
-        throw new NotSupportedException(
-            "AVIF format is not supported by Gd Driver."
         );
     }
 }

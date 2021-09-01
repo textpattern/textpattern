@@ -37,7 +37,6 @@ class Font extends AbstractFont
 
         $draw->setFontSize($this->size);
         $draw->setFillColor($color->getPixel());
-        $draw->setTextKerning($this->kerning);
 
         // align horizontal
         switch (strtolower($this->align)) {
@@ -71,7 +70,7 @@ class Font extends AbstractFont
                 case 'top':
                 // calculate box size
                 $dimensions = $image->getCore()->queryFontMetrics($draw, $this->text, false);
-                $posy = $posy + $dimensions['characterHeight'];
+                $posy = $posy + $dimensions['textHeight'] * 0.65;
                 break;
             }
         }

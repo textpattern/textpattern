@@ -104,12 +104,8 @@ abstract class AbstractDriver
      */
     private function getCommandClassName($name)
     {
-        if (extension_loaded('mbstring')) {
-            $name = mb_strtoupper(mb_substr($name, 0, 1)) . mb_substr($name, 1);
-        } else {
-            $name = strtoupper(substr($name, 0, 1)) . substr($name, 1);
-        }
-
+        $name = mb_convert_case($name[0], MB_CASE_UPPER, 'utf-8') . mb_substr($name, 1, mb_strlen($name));
+        
         $drivername = $this->getDriverName();
         $classnameLocal = sprintf('\Intervention\Image\%s\Commands\%sCommand', $drivername, ucfirst($name));
         $classnameGlobal = sprintf('\Intervention\Image\Commands\%sCommand', ucfirst($name));

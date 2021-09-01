@@ -47,8 +47,6 @@ class Encoder extends AbstractEncoder
         $imagick->setCompression($compression);
         $imagick->setImageCompression($compression);
 
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_PNG);
-
         return $imagick->getImagesBlob();
     }
 
@@ -67,8 +65,6 @@ class Encoder extends AbstractEncoder
         $imagick->setImageFormat($format);
         $imagick->setCompression($compression);
         $imagick->setImageCompression($compression);
-
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_GIF);
 
         return $imagick->getImagesBlob();
     }
@@ -115,8 +111,6 @@ class Encoder extends AbstractEncoder
         $imagick->setCompressionQuality($this->quality);
         $imagick->setImageCompressionQuality($this->quality);
 
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_TIFF_II);
-
         return $imagick->getImagesBlob();
     }
 
@@ -135,8 +129,6 @@ class Encoder extends AbstractEncoder
         $imagick->setImageFormat($format);
         $imagick->setCompression($compression);
         $imagick->setImageCompression($compression);
-
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_BMP);
 
         return $imagick->getImagesBlob();
     }
@@ -157,8 +149,6 @@ class Encoder extends AbstractEncoder
         $imagick->setCompression($compression);
         $imagick->setImageCompression($compression);
 
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_ICO);
-
         return $imagick->getImagesBlob();
     }
 
@@ -177,30 +167,6 @@ class Encoder extends AbstractEncoder
         $imagick->setImageFormat($format);
         $imagick->setCompression($compression);
         $imagick->setImageCompression($compression);
-
-        $this->image->mime = image_type_to_mime_type(IMAGETYPE_PSD);
-
-        return $imagick->getImagesBlob();
-    }
-
-    protected function processAvif()
-    {
-        if ( ! \Imagick::queryFormats('AVIF')) {
-            throw new NotSupportedException(
-                "AVIF format is not supported by Imagick installation."
-            );
-        }
-
-        $format = 'avif';
-        $compression = \Imagick::COMPRESSION_UNDEFINED;
-
-        $imagick = $this->image->getCore();
-        $imagick->setFormat($format);
-        $imagick->setImageFormat($format);
-        $imagick->setCompression($compression);
-        $imagick->setImageCompression($compression);
-        $imagick->setCompressionQuality($this->quality);
-        $imagick->setImageCompressionQuality($this->quality);
 
         return $imagick->getImagesBlob();
     }
