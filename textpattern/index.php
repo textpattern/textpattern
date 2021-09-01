@@ -148,7 +148,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Will remove in future.
     $textarray = array();
 
-    load_lang(LANG, 'admin');
+    //load_lang(LANG, 'admin');
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
@@ -201,6 +201,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     }
 
     $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
+    $timezone_key = get_pref('timezone_key', date_default_timezone_get());
+    date_default_timezone_set($timezone_key);
 
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;

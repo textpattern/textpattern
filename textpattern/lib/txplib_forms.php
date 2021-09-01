@@ -266,7 +266,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 {
     if ($details = Txp::get('\Textpattern\Date\Timezone')->getTimeZones()) {
-        $thiscontinent = '';
+        $thiscontinent = false;
         $selected = false;
 
         foreach ($details as $timezone_id => $tz) {
@@ -277,19 +277,20 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
             }
 
             if ($continent !== $thiscontinent) {
-                if ($thiscontinent !== '') {
+                if ($thiscontinent !== false) {
                     $out[] = n.'</optgroup>';
                 }
 
-                $out[] = n.'<optgroup label="'.gTxt($continent).'">';
+                $out[] = n.'<optgroup label="'.gTxt($continent ? $continent : 'Universal').'">';
                 $thiscontinent = $continent;
             }
 
             $where = gTxt(str_replace('_', ' ', $city))
-                .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
-                /*."($abbr)"*/;
+                .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '')
+                /*."($abbr)"*/
+                or $where = $timezone_id;
 
-            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.'</option>';
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.t.'</option>';
         }
 
         $out[] = n.'</optgroup>';
