@@ -1317,7 +1317,7 @@ function getCount($table, $where, $debug = false)
 function get_tree($atts = array(), $tbl = 'txp_category')
 {
     static $cache = array(), $level = 0, $lAtts = array(
-        'categories'   => '',
+        'categories'   => null,
         'exclude'      => '',
         'parent'       => '',
         'children'     => true,
@@ -1331,8 +1331,10 @@ function get_tree($atts = array(), $tbl = 'txp_category')
 
     extract(array_intersect_key($atts, $lAtts) + $lAtts);
 
-    if ($categories && !($categories = do_list_unique($categories))) {
+    if (isset($categories) && !($categories = do_list_unique($categories))) {
         return array();
+    } elseif (!$categories) {
+        $categories = array();
     }
 
     $level++;
@@ -1361,29 +1363,38 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
         $cache[$hash][$root] = array();
 
-        if (!$children || !$rooted) {
-            $cats = safe_rows('id, name, parent, title, description, lft, rgt', $tbl, "name IN (".quote_list($roots, ',').") and $sql_query") or $cats = array();
+        if (!$children || !$rooted || $categories) {
+            $names = array_unique(array_merge($roots, $categories));
 
-            if (!$catonly) {
-                $retrieved = true;
-                $between = array();
+            if ($catonly) {
+                $cats = safe_rows('id, name, parent, title, description', $tbl, "name IN (".quote_list($names, ',').") AND $sql_query");
+            } elseif ($cats = safe_rows('id, name, parent, title, description, lft, rgt', $tbl, "name IN (".quote_list($names, ',').") AND $sql_query")) {
+                $retrieved = empty($categories);
+                $between = $beyond = array();
 
                 foreach ($cats as $cat) {
                     extract($cat);
                     unset($cat['lft'], $cat['rgt']);
-                    $name = doSlash($name);
-                    $between[] = $children ? "lft>=$lft and rgt<=$rgt" : "name='$name' OR parent='$name'";
+                    $sname = doSlash($name);
 
-                    if ($rgt - $lft > 1) {
-                        $retrieved = false;
+                    if (in_array($name, $roots)) {
+                        $between[] = $children ? "lft>=$lft AND rgt<=$rgt" : "name='$sname' OR parent='$sname'";
+                        $retrieved = $retrieved && $rgt - $lft == 1;
+                    }
+ 
+                    if (in_array($name, $categories)) {
+                        $beyond[] = $children ? "lft<=$lft AND rgt>=$rgt" : "name='$sname'";
                     }
                 }
 
-                $retrieved or $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude and (".implode(' or ', $between).") and $sql_query $sql_limit");
+                $bounds = ($between ? '('.implode(' OR ', $between).')' : '1').' AND '.($beyond ? '('.implode(' OR ', $beyond).')' : '1');
+                $retrieved or $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude AND $bounds AND $sql_query $sql_limit");
             }
         } else {
-            $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude and $sql_query $sql_limit");
+            $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude AND $sql_query $sql_limit");
         }
+
+        $cats or $cats = array();
 
         foreach ($cats as $cat) {
             extract($cat);
@@ -1420,7 +1431,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $out = array();
 
     foreach ($cache[$hash][$root] as $name => $cat) {
-        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories))
+        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories) || !$catonly && $level < $children)
             && ($level > 1 || $children <= $level || $rooted || in_array($name, $roots) || in_array($cat['parent'], $exclude))
         ) {
             $out[$name] = $cat;
