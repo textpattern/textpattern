@@ -1727,7 +1727,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'wrapform', 'trim', 'replace');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'html_id', 'wrapform', 'trim', 'replace');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;

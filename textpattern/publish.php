@@ -71,6 +71,8 @@ $txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
+$timezone_key = get_pref('timezone_key', date_default_timezone_get());
+date_default_timezone_set($timezone_key);
 
 isset($pretext) or $pretext = array();
 
@@ -439,7 +441,7 @@ function preText($store, $prefs = null)
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
                             $title = $thisarticle['url_title'];
-                            $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
+                            $month = explode('-', date('Y-m-d', $thisarticle['posted']));
                         }
                     }
 
@@ -605,6 +607,7 @@ function preText($store, $prefs = null)
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
             $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
+            $is_404 or populateArticleData($rs);
         }
 
         if (!empty($out['s']) && $out['s'] !== 'default') {

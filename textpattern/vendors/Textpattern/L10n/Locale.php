@@ -314,8 +314,19 @@ class Locale
         } elseif (strpos($locale, '.')) {
             list($language, $charset) = explode('.', $locale);
 
-            if (IS_WIN && is_numeric($charset)) {
-                $charset = 'Windows-'.$charset;
+            if (is_numeric($charset)) {
+                $charset = $charset == 65001 ? 'UTF-8' : 'CP'.$charset;
+            }
+        } elseif ($locale = $this->getLocaleLanguage($locale) and isset($this->locales[$locale])) {
+            foreach ($this->locales[$locale] as $lang) {
+                list($lang, $charset) = explode('.', $lang) + array(null, null);
+
+                if (is_numeric($charset)) {
+                    $charset = $charset == 65001 ? 'UTF-8' : 'CP'.$charset;
+                    break;
+                } else {
+                    $charset = null;
+                }
             }
         }
 

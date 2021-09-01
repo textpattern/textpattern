@@ -182,12 +182,14 @@ function atom()
         );
 
         if ($rs) {
+            $fields = array_fill_keys(array('thisid', 'authorid', 'title', 'body', 'excerpt', 'category1', 'category2', 'posted', 'modified', 'comments_count'), null);
+
             while ($a = nextRow($rs)) {
                 // In case $GLOBALS['thisarticle'] is unset
                 global $thisarticle;
-                extract($a);
                 populateArticleData($a);
                 $cb = callback_event('atom_entry');
+                extract(array_intersect_key($thisarticle, $fields));
                 $e = array();
 
                 if ($show_comment_count_in_feed) {
@@ -196,47 +198,47 @@ function atom()
                     $count = '';
                 }
 
-                $thisauthor = get_author_name($AuthorID);
+                $thisauthor = get_author_name($authorid);
 
                 $e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor), 'name').n.t.t, 'author');
 
-                $e['issued'] = tag(safe_strftime('w3cdtf', $uPosted), 'published');
-                $e['modified'] = tag(safe_strftime('w3cdtf', $uLastMod), 'updated');
+                $e['issued'] = tag(safe_strftime('w3cdtf', $posted), 'published');
+                $e['modified'] = tag(safe_strftime('w3cdtf', $modified), 'updated');
 
-                $escaped_title = htmlspecialchars($thisarticle['title']);
+                $escaped_title = htmlspecialchars($title);
                 $e['title'] = tag($escaped_title.$count, 'title', t_html);
 
                 $permlink = permlinkurl($thisarticle);
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
-                $e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'id');
+                $e['id'] = tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'id');
 
-                $e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
-                $e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
+                $e['category1'] = (trim($category1) ? '<category term="'.htmlspecialchars($category1).'" />' : '');
+                $e['category2'] = (trim($category2) ? '<category term="'.htmlspecialchars($category2).'" />' : '');
 
-                $summary = trim(replace_relative_urls(parse($Excerpt_html), $permlink));
-                $content = trim(replace_relative_urls(parse($Body_html), $permlink));
+                $summary = trim(replace_relative_urls(parse($excerpt), $permlink));
+                $content = '';
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
-                    if (!trim($summary)) {
-                        $summary = $content;
+                    if ($summary === '') {
+                        $summary = trim(replace_relative_urls(parse($body), $permlink));
                     }
-
-                    $content = '';
+                } else {
+                    $content = trim(replace_relative_urls(parse($body), $permlink));
                 }
 
-                if (trim($content)) {
+                if ($content !== '') {
                     $e['content'] = tag(escape_cdata($content), 'content', t_html);
                 }
 
-                if (trim($summary)) {
+                if ($summary !== '') {
                     $e['summary'] = tag(escape_cdata($summary), 'summary', t_html);
                 }
 
-                $articles[$ID] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
+                $articles[$thisid] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
 
-                $dates[$ID] = $uLastMod;
+                $dates[$thisid] = $modified;
             }
         }
     } elseif ($area == 'link') {
