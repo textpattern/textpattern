@@ -1927,11 +1927,14 @@ function get_prefs_theme()
 
 function txp_dateformats()
 {
+    $old_reporting = error_reporting();
+    error_reporting(0);
+
     $dayname = '%A';
     $dayshort = '%a';
     $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;//'jS'
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
@@ -1940,6 +1943,8 @@ function txp_dateformats()
     $time24 = '%H:%M';
     $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
     $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+
+    error_reporting($old_reporting);
 
     return array(
         "$monthshort $daynumord, $time12",
@@ -1953,8 +1958,8 @@ function txp_dateformats()
         "$daynumord $monthnum $year - $time24",
         "$daynumord $monthname $year",
         "$daynumord $monthname $year, $time24",
-        "$daynumord. $monthname $year",
-        "$daynumord. $monthname $year, $time24",
+//        "$daynumord. $monthname $year",
+//        "$daynumord. $monthname $year, $time24",
         "$year-$monthnum-$daynumlead",
         "$year-$daynumlead-$monthnum",
         "$date $time12",

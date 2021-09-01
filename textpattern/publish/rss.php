@@ -130,13 +130,15 @@ function rss()
         );
 
         if ($rs) {
+            $fields = array_fill_keys(array('thisid', 'authorid', 'title', 'body', 'excerpt', 'posted', 'modified', 'comments_count'), null);
+
             while ($a = nextRow($rs)) {
                 // In case $GLOBALS['thisarticle'] is unset
                 global $thisarticle;
-                extract($a);
                 populateArticleData($a);
 
                 $cb = callback_event('rss_entry');
+                extract(array_intersect_key($thisarticle, $fields));
 
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
@@ -145,18 +147,18 @@ function rss()
                 }
 
                 $permlink = permlinkurl($thisarticle);
-                $thisauthor = get_author_name($AuthorID);
-                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($thisarticle['title']), ENT_QUOTES, 'UTF-8'))).$count;
-                $summary = trim(parse($Excerpt_html));
+                $thisauthor = get_author_name($authorid);
+                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($title), ENT_QUOTES, 'UTF-8'))).$count;
+                $summary = trim(parse($excerpt));
                 $content = '';
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
                     if ($summary === '') {
-                        $summary = trim(parse($Body_html));
+                        $summary = trim(parse($body));
                     }
                 } else {
-                    $content = trim(parse($Body_html));
+                    $content = trim(parse($body));
                 }
 
                 $item =
@@ -164,14 +166,14 @@ function rss()
                     ($summary !== '' ? n.t.t.tag(escape_cdata($summary), 'description') : '').
                     ($content !== '' ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
                     n.t.t.tag($permlink, 'link').
-                    n.t.t.tag(safe_strftime('rfc822', $uPosted), 'pubDate').
+                    n.t.t.tag(safe_strftime('rfc822', $posted), 'pubDate').
                     n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
-                    n.t.t.tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'guid', ' isPermaLink="false"').n.
+                    n.t.t.tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'guid', ' isPermaLink="false"').n.
                     $cb;
 
-                $articles[$ID] = tag(replace_relative_urls($item, $permlink).t, 'item');
+                $articles[$thisid] = tag(replace_relative_urls($item, $permlink).t, 'item');
 
-                $dates[$ID] = $uLastMod;
+                $dates[$thisid] = $modified;
             }
         }
     } elseif ($area == 'link') {

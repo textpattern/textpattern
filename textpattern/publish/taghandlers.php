@@ -194,8 +194,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_preview')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
-    ->registerAttr(false, 'class, html_id, labeltag')
-    ->registerAttr(true, 'not, breakby, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr(false, 'labeltag')
+    ->registerAttr(true, 'class, html_id, not, breakby, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
 
@@ -502,9 +502,13 @@ function output_form($atts, $thing = null)
         trigger_error(gTxt('form_not_specified'));
 
         return '';
+    } elseif (strpos($atts['form'], '|') === false) {
+        $form = $atts['form'];
+    } else {
+        $form = do_list($atts['form'], '|');
+        $form = $form[rand(0, count($form) - 1)];
     }
 
-    $form = $atts['form'];
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
@@ -1346,10 +1350,9 @@ function popup($atts)
 // -------------------------------------------------------------
 
 // Output href list of site categories.
-function category_list($atts, $thing = null)
+function category_list($atts, $thing = null, $cats = null)
 {
     global $s, $c, $thiscategory;
-    static $cache = array(), $level = 0;
 
     extract(lAtts(array(
         'active_class' => '',
@@ -1363,7 +1366,7 @@ function category_list($atts, $thing = null)
         'labeltag'     => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => 1,
+        'children'     => !empty($atts['parent']) || empty($atts['categories']) ? 1 : 0,
         'sort'         => empty($atts['categories']) ? 'name ASC' : '',
         'this_section' => 0,
         'type'         => 'article',
@@ -1372,134 +1375,54 @@ function category_list($atts, $thing = null)
         'offset'       => '',
     ), $atts));
 
-    $categories = $categories === true ?
-        array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) :
-        do_list_unique($categories);
-
-    if (isset($atts['categories']) && empty($categories)) {
-        return '';
-    }
-
-    $roots = ($parent === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($parent)) or $roots = $categories or $roots = array('root');
-    $level++;
+    $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
+    $parent !== true or $parent = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
+    isset($cats) or $cats = get_tree(compact('categories', 'parent', 'children', 'sort') + array('flatten' => false) + $atts);
     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-    $multiple = count($roots) > 1;
-    $root = implode(',', $roots);
-    $children = $children === true ? PHP_INT_MAX : intval(is_numeric($children) ? $children : !empty($children));
-    $sql_query = "type = '".doSlash($type)."'".($sort ? ' order by '.sanitizeForSort($sort) : ($categories ? " order by FIELD(name, ".implode(',', quote_list($categories)).")": ''));
-    $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
-    $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
-    $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
-    $nocache = !$children || $sql_limit || $children == $level;
-    $hash = md5($nocache ? uniqid() : $sql_query);
-
-    if (!isset($cache[$hash])) {
-        $cache[$hash] = array();
-    }
-
-    if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
-        $cache[$hash][$root] = array();
-
-        if (!$children || !in_array('root', $roots)) {
-            $cats = safe_rows('name, parent, title, description, lft, rgt', 'txp_category', "name IN (".implode(',', quote_list($roots)).") and $sql_query") or $cats = array();
-            $retrieve = false;
-            $between = array();
-
-            foreach ($cats as $cat) {
-                extract($cat);
-                $name = doSlash($name);
-                $between[] = $children ? "lft>=$lft and rgt<=$rgt" : "name='$name' or parent='$name'";
-
-                if ($rgt - $lft > 1) {
-                    $retrieve = true;
-                }
-            }
-
-            $cats = $retrieve ? safe_rows('name, parent, title, description', 'txp_category', "name!='root' $sql_exclude and (".implode(' or ', $between).") and $sql_query $sql_limit") : $cats;
-        } else {
-            $cats = safe_rows('name, parent, title, description', 'txp_category', "name !='root' $sql_exclude and $sql_query $sql_limit");
-        }
-
-        foreach ($cats as $cat) {
-            extract($cat);
-            $node = $children == $level ? $root : $name;
-
-            if (!isset($cache[$hash][$node])) {
-                $cache[$hash][$node] = array();
-            }
-
-            $cache[$hash][$node][$name] = $cat;
-
-            if ($children != $level) {
-                if ($multiple && in_array($name, $roots)) {
-                    $cache[$hash][$root][$name] = $cat;
-                }
-
-                if (!isset($cache[$hash][$parent])) {
-                    $cache[$hash][$parent] = array();
-                }
-
-                $cache[$hash][$parent][$name] = $cat;
-
-                if ($multiple && in_array($parent, $roots)) {
-                    $cache[$hash][$root][$name] = $cat;
-                }
-            }
-        }
-    }
-
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
     $out = array();
     $count = 0;
-    $last = count($cache[$hash][$root]);
+    $last = count($cats);
 
-    foreach ($cache[$hash][$root] as $name => $thiscategory) {
-        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories))) {
-            $count++;
+    foreach ($cats as $name => $thiscategory) {
+        $count++;
+        $nodes = empty($thiscategory['children']) ? '' :
+            category_list(array(
+                'label'   => '',
+                'html_id' => '',
+            ) + $atts, $thing, $thiscategory['children']);
 
-            if (!isset($thing) && !$form) {
-                extract($thiscategory);
-                $out[] = tag(txpspecialchars($title), 'a',
-                    (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
-                    ' href="'.pagelinkurl(array(
-                        's'       => $section,
-                        'c'       => $name,
-                        'context' => $type,
-                    )).'"'
-                ).(
-                    isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
-                    ? category_list(array(
-                        'parent'  => $name,
-                        'exclude' => ($exclude ? implode(',', $exclude).',' : '').$name,
-                        'label'   => '',
-                        'html_id' => '',
-                    ) + $atts)
-                    : ''
-                );
-            } else {
-                $thiscategory['type'] = $type;
-                $thiscategory['is_first'] = ($count == 1);
-                $thiscategory['is_last'] = ($count == $last);
+        unset($thiscategory['level'], $thiscategory['children']);
 
-                if (isset($atts['section'])) {
-                    $thiscategory['section'] = $section;
-                }
-
-                $out[] = $form ? parse_form($form) : parse($thing);
-            }
+        if (!isset($thing) && !$form) {
+            $cat = tag(txpspecialchars($thiscategory['title']), 'a',
+                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+                ' href="'.pagelinkurl(array(
+                    's'       => $section,
+                    'c'       => $name,
+                    'context' => $type,
+                )).'"'
+            );
         } else {
-            $last--;
+            $thiscategory['type'] = $type;
+            $thiscategory['is_first'] = ($count == 1);
+            $thiscategory['is_last'] = ($count == $last);
+
+            if (isset($atts['section'])) {
+                $thiscategory['section'] = $section;
+            }
+
+            $cat = $form ? parse_form($form) : parse($thing);
         }
+
+        $out[] = $cat.$nodes;
     }
 
     $thiscategory = $oldcategory;
-    $level--;
 
-    if ($nocache || $level <= 0) {
-        unset($cache[$hash]);
-    }
-
-    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : '';
+    return $out ?
+        ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) :
+        ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------
@@ -2107,28 +2030,35 @@ function posted($atts, $thing = null, $time = 'posted')
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
 
     extract(lAtts(array(
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
+        'calendar' => '',
+        'format'   => '',
+        'gmt'      => '',
+        'lang'     => '',
     ), $atts));
 
-    assert_article();
+    if (!is_int($time)) {
+        assert_article();
 
-    if (empty($thisarticle[$time])) {
-        return '';
+        if (empty($thisarticle[$time])) {
+            return '';
+        }
+
+        $time = (int)$thisarticle[$time];
+    }
+
+    if ($calendar) {
+        $lang = ($lang ? $lang : LANG)."@calendar=$calendar";
     }
 
     if ($format) {
-        $out = safe_strftime($format, $thisarticle[$time], $gmt, $lang);
+        return safe_strftime($format, $time, $gmt, $lang);
     } else {
         if ($id || $c || $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle[$time], $gmt, $lang);
+            return safe_strftime($archive_dateformat, $time, $gmt, $lang);
         } else {
-            $out = safe_strftime($dateformat, $thisarticle[$time], $gmt, $lang);
+            return safe_strftime($dateformat, $time, $gmt, $lang);
         }
     }
-
-    return $out;
 }
 
 // -------------------------------------------------------------

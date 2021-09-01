@@ -105,7 +105,7 @@ function doLoginForm($message)
 
     $lang = in_array($lang, $installed) ? $lang : LANG;
     $langList = $txpLang->languageList();
-    $txpLang->swapStrings($lang, 'admin');
+//    $txpLang->swapStrings($lang, 'admin');
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');
@@ -266,12 +266,6 @@ function doTxpValidate()
         $c_hash   = '';
         $c_userid = '';
     }
-
-    // Override language strings if indicated.
-    $txpLang = Txp::get('\Textpattern\L10n\Lang');
-    $installed = $txpLang->installed();
-    $lang = in_array($lang, $installed) ? $lang : LANG;
-    $txpLang->swapStrings($lang, 'admin, common');
 
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
