@@ -317,11 +317,12 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-        $lang = txpinterface == 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : LANG;
+        $lang = txpinterface == 'admin' ? get_pref('language_ui', gps('lang', LANG)) : LANG;
         $loaded = $txpLang->load($lang, true);
+        $evt = isset($event) ? trim($event) : '';
 
-        if (empty($loaded) || !in_array($event, $loaded)) {
-            load_lang($lang, $event);
+        if (empty($loaded) || !in_array($evt, $loaded)) {
+            load_lang($lang, $evt);
         }
     }
 
@@ -1032,7 +1033,7 @@ function set_cookie($name, $value = '', $options = array())
         'expires' => time() - 3600,
         'path' => '',
         'domain' => '',
-        'secure' => false,
+        'secure' => strtolower(PROTOCOL) == 'https://',
         'httponly' => false,
         'samesite' => 'Lax' // None || Lax  || Strict
     );
@@ -1421,34 +1422,31 @@ function load_plugins($type = false, $pre = null)
     global $prefs, $plugins, $plugins_ver, $app_mode, $trace;
     static $rs = null;
 
-    if (!is_array($plugins)) {
-        $plugins = array();
-    }
-
     $trace->start('[Loading plugins]');
-
-    if (!empty($prefs['plugin_cache_dir'])) {
-        $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
-
-        // In case it's a relative path.
-        if (!is_dir($dir)) {
-            $dir = rtrim(realpath(txpath.'/'.$dir), '/').'/';
-        }
-
-        $files = glob($dir.'*.php');
-
-        if ($files) {
-            natsort($files);
-
-            foreach ($files as $f) {
-                $trace->start("[Loading plugin from cache dir: '$f']");
-                load_plugin(basename($f, '.php'));
-                $trace->stop();
-            }
-        }
-    }
+    is_array($plugins) or $plugins = array();
 
     if (!isset($rs)) {
+        if (!empty($prefs['plugin_cache_dir'])) {
+            $dir = rtrim($prefs['plugin_cache_dir'], DS).DS;
+
+            // In case it's a relative path.
+            if (!is_dir($dir)) {
+                $dir = rtrim(realpath(txpath.DS.$dir), DS).DS;
+            }
+
+            $files = glob($dir.'*.php');
+
+            if ($files) {
+                natsort($files);
+
+                foreach ($files as $f) {
+                    $trace->start("[Loading plugin from cache dir: '$f']");
+                    load_plugin(basename($f, '.php'));
+                    $trace->stop();
+                }
+            }
+        }
+
         $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
         $where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')'.
             ($plugins ? ' AND name NOT IN ('.join(',', quote_list($plugins)).')' : '');
@@ -2611,29 +2609,168 @@ function tz_offset($timestamp = null)
  * @return  string Formatted date
  * @package DateTime
  * @example
+ * echo intl_strftime('w3cdtf');
+ */
+
+function intl_strftime($format, $time = null, $gmt = false, $override_locale = '')
+{
+    global $lang_ui;
+    static $DateTime = null, $IntlDateFormatter = array(), $default = array(), $formats = array(
+        '%a' => 'eee',
+        '%A' => 'eeee',
+        '%d' => 'dd',
+        '%e' => 'd',
+        '%Oe' => 'd',
+        '%j' => 'D',
+        '%u' => 'c',
+        '%w' => 'e',
+        '%U' => 'w',
+        '%V' => 'ww',
+        '%W' => 'ww',
+        '%b' => 'MMM',
+        '%B' => 'MMMM',
+        '%h' => 'MMM',
+        '%m' => 'MM',
+        '%g' => 'yy',
+        '%G' => 'Y',
+        '%Y' => 'y',
+        '%y' => 'yy',
+        '%H' => 'HH',
+        '%k' => 'H',
+        '%I' => 'hh',
+        '%l' => 'h',
+        '%M' => 'mm',
+        '%S' => 'ss',
+        '%p' => 'a',
+        '%P' => 'a',
+        '%r' => 'h:mm:ss a',
+        '%R' => 'HH:mm',
+        '%T' => 'HH:mm:ss',
+        '%z' => 'Z',
+        '%Z' => 'z',
+        '%D' => 'MM/dd/yy',
+        '%F' => 'yy-MM-dd',
+        '%n' => n,
+        '%t' => t,
+        '%%' => '%',
+    );
+
+    if ($DateTime === null) {
+        $DateTime = new DateTime();
+    }
+
+    $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
+
+    if (!isset($IntlDateFormatter[$override_locale])) {
+        $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
+            $override_locale,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::SHORT,
+            null,
+            /*strpos($override_locale, 'calendar') === false ? null :*/ IntlDateFormatter::TRADITIONAL
+        );
+        $pattern = $IntlDateFormatter[$override_locale]->getPattern();
+        $xt = datefmt_create($override_locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT,
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(preg_replace('/[^aHhmps:\s]/', '', $pattern));
+        $xd = datefmt_create($override_locale, IntlDateFormatter::LONG, IntlDateFormatter::NONE,
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(str_replace($xt, '', $pattern), ' ,');
+        $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
+    }
+
+    $DateTime->setTimestamp($time);
+
+    $formats['%s'] = $time;
+    $format = strtr($format, $formats + $default[$override_locale]);
+    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone('GMT+0');
+    $IntlDateFormatter[$override_locale]->setPattern($format);
+    $str = $IntlDateFormatter[$override_locale]->format($DateTime);
+    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone(null);
+
+    return $str;
+}
+
+/**
+ * Formats a time.
+ *
+ * Respects the locale and local timezone, and makes sure the
+ * output string is encoded in UTF-8.
+ *
+ * @param   string $format          The date format
+ * @param   int    $time            UNIX timestamp. Defaults to time()
+ * @param   bool   $gmt             Return GMT time
+ * @param   string $override_locale Override the locale
+ * @return  string Formatted date
+ * @package DateTime
+ * @example
  * echo safe_strftime('w3cdtf');
  */
 
-function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
+function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
-    static $charsets = array(), $txpLocale = null;
+    static $charsets = array(), $txpLocale = null, $intl = null, $formats = array( //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822' ?
+        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822,
+    ), $translate = array(
+        '%a' => 'D',
+        '%A' => 'l',
+        '%d' => 'd',
+        '%e' => 'j',
+        '%Oe' => 'jS',
+        '%j' => 'z',
+        '%u' => 'N',
+        '%w' => 'w',
+        '%U' => 'W',
+        '%V' => 'W',
+        '%W' => 'W',
+        '%b' => 'M',
+        '%B' => 'F',
+        '%h' => 'M',
+        '%m' => 'm',
+        '%g' => 'y',
+        '%G' => 'o',
+        '%Y' => 'Y',
+        '%y' => 'y',
+        '%H' => 'H',
+        '%k' => 'G',
+        '%I' => 'h',
+        '%l' => 'g',
+        '%M' => 'i',
+        '%S' => 's',
+        '%p' => 'A',
+        '%P' => 'a',
+        '%r' => 'g:i:s A',
+        '%R' => 'H:i',
+        '%T' => 'H:i:s',
+        '%z' => 'O',
+        '%Z' => 'T',
+        '%D' => 'm/d/y',
+        '%F' => 'Y-m-d',
+        '%s' => 'U',
+        '%n' => n,
+        '%t' => t,
+        '%%' => '%',
+    );
 
-    if (!$time) {
-        $time = time();
+    $time = isset($time) ? (int)$time : time();
+
+    if ($intl === null) {
+        $intl = class_exists('IntlDateFormatter');
+    }
+
+    if ($format == 'since') {
+        return since($time);
+    } elseif (isset($formats[$format])) {
+        // We could add some other formats here.
+        return gmdate($formats[$format], $time);
+    } elseif (strpos($format, '%') === false) {
+        return $intl ? intl_strftime($format, $time, $gmt, $override_locale) : ($gmt ? gmdate($format, $time) : date($format, $time));
+    } elseif (!preg_match('/\%[aAbBchOxX]/', $format) && strpos($override_locale, 'calendar') === false) {
+        return $gmt ? gmdate(strtr($format, $translate), $time) : date(strtr($format, $translate), $time);
+    } elseif ($intl) {
+        return intl_strftime($format, $time, $gmt, $override_locale);
     }
 
     if ($txpLocale === null) {
         $txpLocale = Txp::get('\Textpattern\L10n\Locale');
-    }
-
-    // We could add some other formats here.
-    if ($format == 'iso8601' || $format == 'w3cdtf') {
-        $format = '%Y-%m-%dT%H:%M:%SZ';
-        $gmt = true;
-    } elseif ($format == 'rfc822') {
-        $format = '%a, %d %b %Y %H:%M:%S GMT';
-        $gmt = true;
-        $override_locale = 'C';
     }
 
     if ($override_locale) {
@@ -2646,9 +2783,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
         }
     }
 
-    if ($format == 'since') {
-        $str = since($time);
-    } elseif ($gmt) {
+    if ($gmt) {
         $str = gmstrftime($format, $time);
     } else {
         $tztime = $time + tz_offset($time);
@@ -2657,18 +2792,13 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if (!isset($charsets[$override_locale])) {
-        $charsets[$override_locale] = $txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $charsets[$override_locale] = strtoupper($txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1'));
     }
 
     $charset = $charsets[$override_locale];
 
-    if ($charset != 'UTF-8' && $format != 'since') {
-        $new = '';
-        if (is_callable('iconv')) {
-            $new = @iconv($charset, 'UTF-8', $str);
-        }
-
-        if ($new) {
+    if ($charset != 'UTF-8' && $charset != 'UTF8') {
+        if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
             $str = $new;
         } elseif (is_callable('utf8_encode')) {
             $str = utf8_encode($str);
@@ -2797,7 +2927,7 @@ function set_error_level($level)
         error_reporting(E_ALL | E_STRICT);
     } elseif ($level == 'live') {
         // Don't show errors on screen.
-        $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
+        $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
         error_reporting(E_ALL ^ $suppress);
         @ini_set("display_errors", "1");
     } else {
@@ -3231,7 +3361,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 function txp_fill_parsed($sha, $tags, $order, $count, $else) {
     global $txp_parsed, $txp_else;
 
-    $txp_parsed[$sha] = $count > 2 ? $tags : false;
+    $txp_parsed[$sha] = $tags;
     $txp_else[$sha] = array($else > 0 ? $else : $count, $count - 2);
 
     if (!empty($order)) {
@@ -3673,7 +3803,7 @@ function markup_comment($msg)
 function update_lastmod($trigger = '', $rs = array())
 {
     $whenStamp = time();
-    $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
+    $whenDate = date('Y-m-d H:i:s', $whenStamp);
 
     safe_upsert('txp_prefs', "val = '$whenDate'", "name = 'lastmod'");
     callback_event('site.update', $trigger, 0, $rs, compact('whenStamp', 'whenDate'));
@@ -4312,12 +4442,17 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $timeq = "$safe_field > ".now($field);
         }
 
-        $timeq .= ($month ? " AND $safe_field LIKE '".doSlash($month)."%'" : '');
+        if ($month) {
+            $offset = date('P', strtotime($month));
+            $dateClause = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash($month)."%'";
+            $timeq .= " AND $dateClause";
+        }
     } elseif (strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
-        $timeq = "$safe_field LIKE '".doSlash(strftime($time, $start))."%'";
+        $offset = date('P', $start);
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
     } else {
-        $start = $month ? safe_strtotime($month) : false;
+        $start = $month ? strtotime($month) : false;
 
         if ($start === false) {
             $from = $month ? "'".doSlash($month)."'" : now($field);
@@ -4654,19 +4789,19 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if ($url_mode == 'messy') {
-        $url = $hu.'index.php';
+        $url = 'index.php';
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = $hu;
+        $url = '';
 
         if (!empty($keys['rss'])) {
-            $url = $hu.'rss/';
+            $url = 'rss/';
             unset($keys['rss']);
         } elseif (!empty($keys['atom'])) {
-            $url = $hu.'atom/';
+            $url = 'atom/';
             unset($keys['atom']);
         } elseif (!empty($keys['s'])) {
-            $url = $hu.urlencode($keys['s']).'/';
+            $url = urlencode($keys['s']).'/';
             unset($keys['s']);
             if (!empty($keys['c']) && ($url_mode == 'section_category_title' || $url_mode == 'breadcrumb_title')) {
                 $catpath = $url_mode == 'breadcrumb_title' ?
@@ -4680,18 +4815,18 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             }
         } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = $hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = $hu.strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = strtolower(urlencode(gTxt('category'))).'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
             $url .= implode('/', array_map('urlencode', array_reverse($catpath))).'/';
             unset($keys['c'], $keys['context']);
         } elseif (!empty($keys['month']) && is_date($keys['month'])) {
-            $url = $hu.implode('/', explode('-', urlencode($keys['month']))).'/';
+            $url = implode('/', explode('-', urlencode($keys['month']))).'/';
             unset($keys['month']);
         }
     }
@@ -4700,7 +4835,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         $keys['context'] = gTxt($keys['context'].'_context');
     }
 
-    return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
+    return $hu.(empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
@@ -4807,7 +4942,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     if (!isset($now)) {
-        $now = strftime('%F %T');
+        $now = date('Y-m-d H:i:s');
     }
 
     if (empty($prefs['publish_expired_articles']) &&
@@ -5043,12 +5178,8 @@ function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_ST
 
     if ($flags & TEXTPATTERN_STRIP_EMPTY) {
         $out = array_filter($out);
-    }
-
-    if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
-        $out = array_filter($out, function ($v) {
-            return ($v=='') ? false : true;
-        });
+    } elseif ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
+        $out = array_filter($out, function ($v) {return $v !== '';});
     }
 
     return $out;
@@ -5725,7 +5856,7 @@ function bombShelter()
     global $prefs;
     $in = serverSet('REQUEST_URI');
 
-    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len'] + (!empty($_GET['txpcleantest']) ? 48 : 0)) {
         txp_status_header('503 Service Unavailable');
         exit('Nice try.');
     }

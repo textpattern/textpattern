@@ -373,7 +373,7 @@ function install_lang_key(&$value, $key)
         "name = '".doSlash($value['name'])."',
         event = '".doSlash($value['event'])."',
         data = '".doSlash($value['data'])."',
-        lastmod = '".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
+        lastmod = '".doSlash(date('YmdHis', $value['uLastmod']))."'";
 
     if ($exists !== false) {
         $value['ok'] = safe_update(
