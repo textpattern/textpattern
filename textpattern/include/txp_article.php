@@ -1270,6 +1270,9 @@ function textile_main_fields($incoming)
     }
 
     $textile = new \Textpattern\Textile\Parser();
+    $options = has_privs('article.publish', $incoming['LastModID']) ?
+        array('lite' => false) :
+        array('lite' => false, 'restricted' => true);
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used
@@ -1278,13 +1281,13 @@ function textile_main_fields($incoming)
     $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_body'],
         $incoming['Body'],
-        array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
+        array('field' => 'Body', 'options' => $options, 'data' => $incoming)
     );
 
     $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_excerpt'],
         $incoming['Excerpt'],
-        array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
+        array('field' => 'Excerpt', 'options' => $options, 'data' => $incoming)
     );
 
     return $incoming;
