@@ -1431,7 +1431,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $out = array();
 
     foreach ($cache[$hash][$root] as $name => $cat) {
-        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories) || !$catonly && $level < $children)
+        if (!in_array($name, $exclude) && (!$categories || !$catonly || in_array($name, $categories))
             && ($level > 1 || $children <= $level || $rooted || in_array($name, $roots) || in_array($cat['parent'], $exclude))
         ) {
             $out[$name] = $cat;
