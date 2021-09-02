@@ -1367,7 +1367,7 @@ function category_list($atts, $thing = null, $cats = null)
         'parent'       => '',
         'section'      => '',
         'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
-        'sort'         => !isset($atts['categories']) ? 'name ASC' : '',
+        'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
