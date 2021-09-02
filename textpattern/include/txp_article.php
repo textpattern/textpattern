@@ -792,11 +792,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo hInput('ID', $ID).
         eInput('article').
-        sInput($step).
-        hInput('sPosted', $sPosted).
-        hInput('sLastMod', $sLastMod).
-        hInput('AuthorID', $AuthorID).
-        hInput('LastModID', $LastModID);
+        sInput($step);
 
         echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
@@ -1418,6 +1414,10 @@ function article_partial_actions($rs)
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
+        hInput('sPosted', $rs['sPosted']).
+        hInput('sLastMod', $rs['sLastMod']).
+        hInput('AuthorID', $rs['AuthorID']).
+        hInput('LastModID', $rs['LastModID']).n.
         $push_button.
         graf($rs['ID']
             ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
