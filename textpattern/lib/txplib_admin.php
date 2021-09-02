@@ -1989,8 +1989,7 @@ function get_prefs_theme()
 
 function txp_dateformats()
 {
-    $old_reporting = error_reporting();
-    error_reporting(0);
+    $old_reporting = error_reporting(0);
 
     $dayname = '%A';
     $dayshort = '%a';
@@ -2009,26 +2008,26 @@ function txp_dateformats()
     error_reporting($old_reporting);
 
     return array(
+        "since",
+        "$monthshort $daynumord",
         "$monthshort $daynumord, $time12",
         "$daynum.$monthnum.$yearshort",
         "$daynumord $monthname, $time12",
         "$yearshort.$monthnum.$daynumlead, $time12",
         "$dayshort $monthshort $daynumord, $time12",
         "$dayname $monthname $daynumord, $year",
-        "$monthshort $daynumord",
-        "$daynumord $monthname $yearshort",
-        "$daynumord $monthnum $year - $time24",
+//        "$daynumord $monthname $yearshort",
+//        "$daynumord $monthnum $year - $time24",
         "$daynumord $monthname $year",
         "$daynumord $monthname $year, $time24",
 //        "$daynumord. $monthname $year",
 //        "$daynumord. $monthname $year, $time24",
         "$year-$monthnum-$daynumlead",
-        "$year-$daynumlead-$monthnum",
+        "$year-$monthnum-$daynumlead $time24",
+//        "$year-$daynumlead-$monthnum",
         "$date $time12",
         "$date",
-        "$time24",
-        "$time12",
-        "$year-$monthnum-$daynumlead $time24",
-        "since"
+//        "$time24",
+//        "$time12",
     );
 }
