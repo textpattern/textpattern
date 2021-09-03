@@ -1266,9 +1266,7 @@ function textile_main_fields($incoming)
     }
 
     $textile = new \Textpattern\Textile\Parser();
-    $options = has_privs('article.publish', $incoming['LastModID']) ?
-        array('lite' => false) :
-        array('lite' => false, 'restricted' => true);
+    $options = array('lite' => false);
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used
