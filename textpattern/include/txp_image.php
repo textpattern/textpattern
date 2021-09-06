@@ -725,8 +725,11 @@ class ImagePanel
                     'class' => 'ui-icon ui-extra-icon-flip-vertical',
                     'val'   => 'v',
                 ),
-                'reset' => array(
+                'undo' => array(
                     'class' => 'ui-icon ui-icon-arrowrefresh-1-w',
+                ),
+                'redo' => array(
+                    'class' => 'ui-icon ui-icon-arrowrefresh-1-e',
                 ),
             );
 
@@ -1163,6 +1166,23 @@ class ImagePanel
             caption  = '$caption'",
             "id = '$id'"
         )) {
+
+        $transform_buffer = json_decode(get_pref('img_transforms'), true);
+
+        if ($transform === 'undo') {
+            // Trash this ID's pref history and its transformed temp files.
+            unset($transform_buffer[$id]);
+            set_pref('img_transforms', json_encode($transform_buffer), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
+            array_map('unlink', glob($temp_path.DS.$id.'-*'));
+
+            send_json_response(array(
+                'src'     => $name,
+            ));
+
+            return;
+        }
+
+
             $message = gTxt('image_updated', array('{name}' => doStrip($name)));
             update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
         } else {
@@ -1356,25 +1376,25 @@ class ImagePanel
 
         // Performs transform - if none given it just returns current image as-is.
         // If transform takes place and succeeds:
-        // -> purge old temp files and transform prefs older than N minutes, where N is a pref (delete just per-user or all?)
-        // -> write new image to images/tempdir as {imageid}_{transform}_{random}
+        // -> (todo) purge old temp files and transform prefs older than N minutes, where N is a pref (delete just per-user or all?)
+        // -> write new image to images/tempdir as {imageid}-{random}
         // -> append image name to hidden per-user pref as image_transform_{image-id} (provides history: fallback dropdown)
         // -> return new temp image URL path
-        $defaultimgPath = get_pref('path_to_site').DS.'public'.DS.'images';
-
         // Note: The order of these is important. This is the order the transforms are played back.
         // Flip *must* come after rotate or things get mighty confusing when it flips in the original
         // orientation then rotates!
         $availableTransforms = array(
-            'brightness' => array('default' => 0, 'type' => 'replace', 'order' => 10),
-            'contrast'   => array('default' => 0, 'type' => 'replace', 'order' => 20),
-            'gamma'      => array('default' => 1, 'type' => 'replace', 'order' => 30),
-            'filt'       => array('default' => '', 'type' => 'replace', 'order' => 40),
-            'crop'       => array('default' => 0, 'type' => 'replace', 'order' => 50),
-            'resize'     => array('default' => 0, 'type' => 'replace', 'order' => 60),
-            'rotate'     => array('default' => 0, 'type' => 'sum', 'order' => 70),
-            'flip_h'     => array('default' => '', 'type' => 'swap', 'order' => 80),
-            'flip_v'     => array('default' => '', 'type' => 'swap', 'order' => 90),
+            'brightness' => array('default' => 0, 'order' => 10),
+            'contrast'   => array('default' => 0, 'order' => 20),
+            'gamma'      => array('default' => 1, 'order' => 30),
+            'filt'       => array('default' => '', 'order' => 40),
+            'crop'       => array('default' => 0, 'order' => 50),
+            'resize'     => array('default' => 0, 'order' => 60),
+            'rotate'     => array('default' => 0, 'order' => 70),
+            'flip_h'     => array('default' => '', 'order' => 80),
+            'flip_v'     => array('default' => '', 'order' => 90),
+            'undo'       => array('default' => '', 'order' => 500),
+            'redo'       => array('default' => '', 'order' => 520),
         );
 
         callback_event_ref('image', 'process', 1, $availableTransforms);
@@ -1382,112 +1402,128 @@ class ImagePanel
 
         $transform = ps('transform');
         $param = ps('val');
-        $name = ps('name');
         $id = ps('id');
         $ext = ps('ext');
+        $pos = 0;
+        $create = false;
+        $name = imagesrcurl($id, $ext);
 
         // Filters need to be applied in sequence from the base image, essentially
         // 'recreating' the new image from the original each time by replaying filters.
         // Passing the old image in would mean image degradation occurs over time.
         if (array_key_exists($transform, $availableTransforms)) {
-            $transform_history = json_decode(get_pref('img_transforms'), true);
+            $transform_buffer = json_decode(get_pref('img_transforms'), true);
 
-            if (empty($transform_history[$id])) {
-                $transform_history[$id] = array_combine(array_keys($availableTransforms), array_column($availableTransforms, 'default'));
+            if (empty($transform_buffer[$id])) {
+                $transform_buffer[$id] = array(
+                    'history' => array(0 => array(
+                        'transform' => 'base',
+                        'value'     => '',
+                        'file'      => '',
+                    )),
+                    'current' => 0,
+                );
             }
 
-            // Overwrite the previous value of the current transform with the incoming val.
-            $transforms = $transform_history[$id];
+            $current = $transform_buffer[$id]['current'];
+            $max = count($transform_buffer[$id]['history']) - 1;
 
-            if (isset($transforms[$transform]) && $availableTransforms[$transform]['type'] === 'sum') {
-                $transforms[$transform] += $param;
-            } elseif (isset($transforms[$transform]) && $availableTransforms[$transform]['type'] === 'swap') {
-                $transforms[$transform] = $transforms[$transform] ? $availableTransforms[$transform]['default'] : $param;
+            if ($transform === 'undo') {
+                $current > 0 ? $current-- : 0;
+            } elseif ($transform === 'redo') {
+                $current < $max ? $current++ : $max;
             } else {
-                $transforms[$transform] = $param;
+                $newentry = array(
+                    'transform' => $transform,
+                    'value'     => $param,
+                    'file'      => '',
+                );
+
+                if ($current < $max) {
+                    $transform_buffer[$id]['history'][$current] = $newentry;
+                } else {
+                    $transform_buffer[$id]['history'][] = $newentry;
+                    $current = $max + 1;
+                }
+
+                $create = true;
             }
 
-            $transform_history[$id] = $transforms;
+            $transform_buffer[$id]['current'] = $current;
+            $base_path = get_pref('path_to_site').DS.$imgdir;
+            $temp_path = $base_path.DS.'_tmp';
 
-            set_pref('img_transforms', json_encode($transform_history), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
-        } else {
-            $transforms = array($transform => $param);
-        }
+            if (!file_exists($temp_path)) {
+                mkdir($temp_path);
+            }
 
-        $name = imagesrcurl($id, $ext);
-        $base_path = get_pref('path_to_site').DS.$imgdir;
-        $temp_path = $base_path.DS.'_tmp';
+            if ($create) {
+                $out = $temp_path.DS.uniqid($id.'-').$ext;
 
-        if (!file_exists($temp_path)) {
-            mkdir($temp_path);
-        }
+                $imgobj = $this->manager->make($name);
 
-        $out = $temp_path.DS.uniqid($id.'-').$ext;
+                foreach ($transform_buffer[$id]['history'] as $idx => $block) {
+                    if ($idx > $current) {
+                        break;
+                    }
 
-        if ($transform === 'reset') {
-            // Trash this ID's pref history and its transformed temp files.
-            $transform_history = json_decode(get_pref('img_transforms'), true);
-            unset($transform_history[$id]);
-            set_pref('img_transforms', json_encode($transform_history), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
-            array_map('unlink', glob($temp_path.DS.$id.'-*'));
+                    $xform = $block['transform'];
+                    $val = $block['value'];
+
+                    switch ($xform) {
+                        case 'crop':
+                            // Might be tricky. If you crop then crop again there's no way of
+                            // knowing where you cropped from the second time. Could store
+                            // and replay all crop actions by keeping wxh+x+y for each? Is that
+                            // possible on a smaller (non 1:1 size) image?
+                            break;
+                        case 'resize':
+                            break;
+                        case 'flip_h':
+                        case 'flip_v':
+                            if ($val) {
+                                $imgobj->flip($val);
+                            }
+                            break;
+                        case 'rotate':
+                            // @todo can this move to the brightness/contrast/gamma group?
+                            $imgobj->$xform($val % 360);
+                            break;
+                        case 'filt':
+                            switch ($val) {
+                                case 'greyscale':
+                                    $imgobj->greyscale();
+                                    break;
+                                case 'sepia':
+                                    $imgobj->greyscale();
+                                    $imgobj->colorize(13, 7, 4);
+                                    break;
+                            }
+                            break;
+                        case 'brightness':
+                        case 'contrast':
+                        case 'gamma':
+                            $imgobj->$xform($val);
+                            break;
+                        default:
+                            $imgobj = callback_event('image', 'process', 0, $imgobj, compact('xform', 'val'));
+                            break;
+                    }
+                }
+
+                $imgobj->save($out);
+                $transform_buffer[$id]['history'][$current]['file'] = basename($out);
+            } else {
+                $out = $temp_path.DS.$transform_buffer[$id]['history'][$current]['file'];
+            }
+
+            set_pref('img_transforms', json_encode($transform_buffer), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
 
             send_json_response(array(
-                'src'     => $name,
+                'src' => ($current > 0 ? ihu.$imgdir.'/_tmp/'.basename($out) : $name),
+                'current' => $current,
             ));
-
-            return;
         }
-
-        $imgobj = $this->manager->make($name);
-
-        foreach ($transforms as $xform => $val) {
-            switch ($xform) {
-                case 'crop':
-                    // Might be tricky. If you crop then crop again there's no way of
-                    // knowing where you cropped from the second time. Could store
-                    // and replay all crop actions by keeping wxh+x+y for each?
-                    break;
-                case 'resize':
-                    break;
-                case 'flip_h':
-                case 'flip_v':
-                    if ($val) {
-                        $imgobj->flip($val);
-                    }
-                    break;
-                case 'rotate':
-                    $imgobj->$xform($val % 360);
-                    break;
-                case 'filt':
-                    switch ($val) {
-                        case 'greyscale':
-                            $imgobj->greyscale();
-                            break;
-                        case 'sepia':
-                            $imgobj->greyscale();
-                            $imgobj->colorize(13, 7, 4);
-                            break;
-                    }
-                    break;
-                case 'brightness':
-                case 'contrast':
-                case 'gamma':
-                    $imgobj->$xform($val);
-                    break;
-                default:
-                    $imgobj = callback_event('image', 'process', 0, $imgobj, compact('xform', 'val'));
-                    break;
-            }
-        }
-
-        $imgobj->save($out);
-
-        send_json_response(array(
-            'src'     => ihu.$imgdir.'/_tmp/'.basename($out),
-            'mime'    => $imgobj->mime,
-            'name'    => $name,
-            'history' => array(),
-        ));
 
         return;
     }
