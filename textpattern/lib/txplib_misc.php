@@ -4981,8 +4981,12 @@ function permlinkurl($article_array, $hu = null)
             }
             break;
         case 'year_month_day_title':
-            list($y, $m, $d) = explode("-", date("Y-m-d", isset($uposted) ? $uposted : $posted));
-            $out =  "$y/$m/$d/$url_title";
+            if ($date = date("Y-m-d", isset($uposted) ? $uposted : $posted)) {
+                list($y, $m, $d) = explode("-", $date);
+                $out =  "$y/$m/$d/$url_title";
+            } else {
+                $out =  "$section/$url_title";
+            }
             break;
         case 'id_title':
             if ($url_title && $prefs['attach_titles_to_permalinks']) {
