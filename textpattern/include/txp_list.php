@@ -716,10 +716,11 @@ function list_multi_edit()
 
         if ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
-            $created = array();
+            $created = $selected = array();
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
+                    $pid = $a['ID'];
                     $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
@@ -738,6 +739,7 @@ function list_multi_edit()
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         $url_title = stripSpace($title." ($id)", 1);
                         $created[$id] = $url_title;
+                        $selected[$id] = $pid;
                     }
                 }
 
@@ -763,7 +765,7 @@ function list_multi_edit()
         update_lastmod('articles_updated', compact('selected', 'field', 'value'));
         now('posted', true);
         now('expires', true);
-        callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value') + (isset($created) ? compact('created') : array()));
+        callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 
         return list_list($message);
     }
