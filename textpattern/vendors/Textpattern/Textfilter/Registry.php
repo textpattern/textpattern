@@ -150,7 +150,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
-    public function offsetSet($key, $filter): void
+    public function offsetSet($key, $filter)
     {
         if ($key === null) {
             $key = $filter->getKey();
@@ -196,7 +196,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
-    public function offsetUnset($key): void
+    public function offsetUnset($key)
     {
         unset($this->filters[$key]);
     }
