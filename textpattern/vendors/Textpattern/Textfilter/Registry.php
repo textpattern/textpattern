@@ -32,8 +32,6 @@ namespace Textpattern\Textfilter;
 
 class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Container\ReusableInterface
 {
-    #[\ReturnTypeWillChange]
-
     /**
      * An array of filters.
      *
@@ -152,6 +150,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $filter)
     {
         if ($key === null) {
@@ -169,6 +168,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         if ($this->offsetExists($key)) {
@@ -186,6 +186,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return isset($this->filters[$key]);
@@ -198,6 +199,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->filters[$key]);
@@ -210,6 +212,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    IteratorAggregate
      */
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->filters);
