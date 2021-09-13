@@ -792,11 +792,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo hInput('ID', $ID).
         eInput('article').
-        sInput($step).
-        hInput('sPosted', $sPosted).
-        hInput('sLastMod', $sLastMod).
-        hInput('AuthorID', $AuthorID).
-        hInput('LastModID', $LastModID);
+        sInput($step);
 
         echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
@@ -1270,6 +1266,7 @@ function textile_main_fields($incoming)
     }
 
     $textile = new \Textpattern\Textile\Parser();
+    $options = array('lite' => false);
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used
@@ -1278,13 +1275,13 @@ function textile_main_fields($incoming)
     $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_body'],
         $incoming['Body'],
-        array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
+        array('field' => 'Body', 'options' => $options, 'data' => $incoming)
     );
 
     $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_excerpt'],
         $incoming['Excerpt'],
-        array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
+        array('field' => 'Excerpt', 'options' => $options, 'data' => $incoming)
     );
 
     return $incoming;
@@ -1415,6 +1412,10 @@ function article_partial_actions($rs)
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
+        hInput('sPosted', $rs['sPosted']).
+        hInput('sLastMod', $rs['sLastMod']).
+        hInput('AuthorID', $rs['AuthorID']).
+        hInput('LastModID', $rs['LastModID']).n.
         $push_button.
         graf($rs['ID']
             ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))

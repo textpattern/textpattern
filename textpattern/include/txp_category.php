@@ -287,6 +287,7 @@ function cat_category_multiedit()
         // Fetch selected items and remove bogus (false) entries to prevent SQL syntax errors.
         $things = array_map('assert_int', $things);
         $things = array_filter($things);
+        $message = false;
 
         if ($method == 'delete' || $method == 'deleteforce') {
             if ($type === 'article') {
@@ -325,9 +326,9 @@ function cat_category_multiedit()
                     callback_event('categories_deleted', $type, 0, $catid);
 
                     $message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
-
-                    return cat_category_list($message);
                 }
+            } else {
+                $message = array(gTxt($type.'_categories_deleted', array('{list}' => 0)), E_WARNING);
             }
         } elseif ($method == 'changeparent') {
             $new_parent = doSlash(ps('new_parent')) or $new_parent = 'root';
@@ -360,11 +361,11 @@ function cat_category_multiedit()
                             '{list}'   => join(', ', $affected),
                         ))
                         : array(gTxt('category_save_failed'), E_ERROR);
-
-                    return cat_category_list($message);
                 }
             }
         }
+
+        return cat_category_list($message ? $message : array(gTxt('category_save_failed'), E_ERROR));
     }
 
     return cat_category_list();

@@ -288,7 +288,7 @@ function discuss_list($message = '')
                 txp_discuss.web,
                 txp_discuss.message,
                 txp_discuss.visible,
-                UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
+                UNIX_TIMESTAMP(txp_discuss.posted) AS posted,
                 textpattern.ID AS thisid,
                 textpattern.Section AS section,
                 textpattern.url_title,
@@ -296,7 +296,7 @@ function discuss_list($message = '')
                 textpattern.Category1 AS category1,
                 textpattern.Category2 AS category2,
                 textpattern.Status,
-                UNIX_TIMESTAMP(textpattern.Posted) AS posted
+                UNIX_TIMESTAMP(textpattern.Posted) AS uPosted
             FROM ".safe_pfx_j('txp_discuss')."
                 LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
             WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
@@ -404,7 +404,7 @@ function discuss_list($message = '')
                     $parent = href(
                         span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
                         '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                        href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid, array(
+                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array(
                             'title'      => gTxt('edit'),
                             'aria-label' => gTxt('edit'),
                         )
@@ -431,7 +431,7 @@ function discuss_list($message = '')
                         short_preview($dmessage), '', 'txp-list-col-message'
                     ).
                     td(
-                        gTime($uPosted), '', 'txp-list-col-created date'
+                        gTime($posted), '', 'txp-list-col-created date'
                     ).
                     td(
                         txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'

@@ -716,9 +716,11 @@ function list_multi_edit()
 
         if ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
+            $created = $selected = array();
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
+                    $pid = $a['ID'];
                     $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
@@ -736,15 +738,22 @@ function list_multi_edit()
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         $url_title = stripSpace($title." ($id)", 1);
-                        safe_update(
-                            'textpattern',
-                            "Title     = CONCAT(Title, ' (', ID, ')'),
-                             url_title = '$url_title',
-                             LastMod   = NOW(),
-                             feed_time = NOW()",
-                            "ID = $id"
-                        );
+                        $created[$id] = $url_title;
+                        $selected[$id] = $pid;
                     }
+                }
+
+                if ($created) {
+                    $ids = implode(',', array_keys($created));
+                    $titles = quote_list($created, ',');
+                    safe_update(
+                        'textpattern',
+                        "Title     = CONCAT(Title, ' (', ID, ')'),
+                         url_title = ELT(FIELD(ID, $ids), $titles),
+                         LastMod   = NOW(),
+                         feed_time = NOW()",
+                        "ID IN ($ids)"
+                    );
                 }
             }
 
