@@ -150,7 +150,8 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
-    public function offsetSet($key, $filter): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($key, $filter)
     {
         if ($key === null) {
             $key = $filter->getKey();
@@ -167,7 +168,8 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
-    public function offsetGet($key): mixed
+    #[\ReturnTypeWillChange]
+    public function offsetGet($key)
     {
         if ($this->offsetExists($key)) {
             return $this->filters[$key];
@@ -184,7 +186,8 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
-    public function offsetExists($key): bool
+    #[\ReturnTypeWillChange]
+    public function offsetExists($key)
     {
         return isset($this->filters[$key]);
     }
@@ -196,7 +199,8 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
-    public function offsetUnset($key): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($key)
     {
         unset($this->filters[$key]);
     }
@@ -208,7 +212,8 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    IteratorAggregate
      */
 
-    public function getIterator(): \Traversable
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new \ArrayIterator($this->filters);
     }

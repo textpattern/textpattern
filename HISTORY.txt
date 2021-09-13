@@ -16,19 +16,25 @@ Changes in 4.8.8 (upcoming)
 
 * Maintenance release with support for PHP 8.1, improvements and bug fixes.
 * Fixed: More robust numeric searches.
-* Fixed: Improved query efficiency of category creation.
+* Fixed: Improved query efficiency of category operations.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
 * Added: 'url_title' attribute to <txp:article[_custom] />.
 * Added: Substring extraction via 'escape' attribute.
 * Added: 'date' and 'time' attributes to <txp:if_expired />.
 * Added: 'range' attribute to <txp:article_image />.
+* Added: Natural search mode.
 * Added: Expanded conditional 'match' attribute with comparison operators.
 * Added: 'UTC' is now a permitted time zone.
+* Added: Custom date formats.
+* Added: 'calendar' attribute to <txp:posted /> and similar tags.
+* Added: Random form selection.
+* Changed: <txp:category_list /> with 'children' > 1 attribute behaviour.
 * Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
 * Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
+* Developer: Export new article IDs on duplicate.
 * PrismJS 1.24.1.
 
 Changes in 4.8.7 (30 May 2021)
