@@ -325,7 +325,9 @@ function cat_category_multiedit()
 //                    rebuild_tree_full($type);
                     callback_event('categories_deleted', $type, 0, $catid);
 
-                    $message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
+                    $message = count($things) == count($catid) ?
+                        gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid))) :
+                        array(gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid))), E_WARNING);
                 }
             } else {
                 $message = array(gTxt($type.'_categories_deleted', array('{list}' => 0)), E_ERROR);
