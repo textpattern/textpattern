@@ -434,7 +434,7 @@ function author_list($message = '')
             $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
             $rs = safe_query("SELECT ".implode(', ', $fieldlist).
-                " FROM ".$sql_from.
+                " FROM $sql_from AS txp_users".
                 " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
             );
 
