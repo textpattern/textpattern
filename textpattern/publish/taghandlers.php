@@ -44,7 +44,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('link_url')
     ->register('link_author')
     ->register('link_description')
-    ->register('link_date')
+    ->register('posted', 'link_date', array('type' => 'link', 'time' => 'date'))
     ->register('link_category')
     ->register('link_id')
     ->register('if_first', 'if_first_link', 'link')
@@ -74,8 +74,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_url_title')
     ->register('if_article_id')
     ->register('posted')
-    ->register('posted', 'modified', 'modified')
-    ->register('posted', 'expires', 'expires')
+    ->register('posted', 'modified', array('time' => 'modified'))
+    ->register('posted', 'expires', array('time' => 'expires'))
     ->register('if_expires')
     ->register('if_expired')
     ->register('comments_count')
@@ -91,7 +91,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_name')
     ->register('comment_email')
     ->register('comment_web')
-    ->register('comment_time')
+    ->register('posted', 'comment_time', array('type' => 'comment', 'time' => 'time'))
     ->register('comment_message')
     ->register('comment_anchor')
     ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
@@ -167,8 +167,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('file_download')
     ->register('file_download_link')
     ->register('file_download_size')
-    ->register('file_download_time', 'file_download_created')
-    ->register('file_download_time', 'file_download_modified', 'modified')
+    ->register('posted', 'file_download_created', array('type' => 'file', 'time' => 'created'))
+    ->register('posted', 'file_download_modified', array('type' => 'file', 'time' => 'modified'))
     ->register('file_download_id')
     ->register('file_download_name')
     ->register('file_download_category')
@@ -977,23 +977,6 @@ function link_description($atts)
 
 // -------------------------------------------------------------
 
-function link_date($atts)
-{
-    global $thislink, $dateformat;
-
-    extract(lAtts(array(
-        'format' => $dateformat,
-        'gmt'    => '',
-        'lang'   => '',
-    ), $atts));
-
-    assert_link();
-
-    return safe_strftime($format, $thislink['date'], $gmt, $lang);
-}
-
-// -------------------------------------------------------------
-
 function link_category($atts)
 {
     global $thislink;
@@ -1357,7 +1340,7 @@ function category_list($atts, $thing = null, $cats = null)
     extract(lAtts(array(
         'active_class' => '',
         'break'        => br,
-        'categories'   => '',
+        'categories'   => null,
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
@@ -1366,8 +1349,8 @@ function category_list($atts, $thing = null, $cats = null)
         'labeltag'     => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => !empty($atts['parent']) || empty($atts['categories']) ? 1 : 0,
-        'sort'         => empty($atts['categories']) ? 'name ASC' : '',
+        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
+        'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -2025,40 +2008,49 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts, $thing = null, $time = 'posted')
+function posted($atts, $thing = null, $options = array())
 {
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+    global $id, $c, $pg, $dateformat, $archive_dateformat, $comments_dateformat;
+    static $defaults = array('time' => 'posted', 'type' => 'article');
 
     extract(lAtts(array(
         'calendar' => '',
         'format'   => '',
         'gmt'      => '',
         'lang'     => '',
-    ), $atts));
+    ), $atts) + $options + $defaults);
 
     if (!is_int($time)) {
-        assert_article();
+        global ${'this'.$type};
+        assert_context($type);
 
-        if (empty($thisarticle[$time])) {
+        if (empty(${'this'.$type}[$time])) {
             return '';
         }
 
-        $time = (int)$thisarticle[$time];
+        $time = (int)${'this'.$type}[$time];
     }
 
     if ($calendar) {
         $lang = ($lang ? $lang : LANG)."@calendar=$calendar";
     }
 
-    if ($format) {
-        return safe_strftime($format, $time, $gmt, $lang);
-    } else {
-        if ($id || $c || $pg) {
-            return safe_strftime($archive_dateformat, $time, $gmt, $lang);
-        } else {
-            return safe_strftime($dateformat, $time, $gmt, $lang);
+    if (empty($format)) {
+        switch ($type) {
+            case 'article':
+                $format = $id || $c || $pg ? $archive_dateformat : $dateformat;
+                break;
+            case 'file':
+                $format = $archive_dateformat;
+                break;
+            case 'comment':
+                $format = $comments_dateformat;
+                break;
+            default: $format = $dateformat;
         }
     }
+
+    return safe_strftime($format, $time, $gmt, $lang);
 }
 
 // -------------------------------------------------------------
@@ -2671,23 +2663,6 @@ function comment_web()
     }
 
     return '';
-}
-
-// -------------------------------------------------------------
-
-function comment_time($atts)
-{
-    global $thiscomment, $comments_dateformat;
-
-    extract(lAtts(array(
-        'format' => $comments_dateformat,
-        'gmt'    => '',
-        'lang'   => '',
-    ), $atts));
-
-    assert_comment();
-
-    return safe_strftime($format, $thiscomment['time'], $gmt, $lang);
 }
 
 // -------------------------------------------------------------
@@ -4876,24 +4851,6 @@ function file_download_size($atts)
         return format_filesize($thisfile['size'], $decimals, $format_unit);
     } else {
         return '';
-    }
-}
-
-// -------------------------------------------------------------
-
-function file_download_time($atts, $thing = null, $time = 'created')
-{
-    global $thisfile;
-
-    extract(lAtts(array('format' => ''), $atts));
-
-    assert_file();
-
-    if (!empty($thisfile[$time])) {
-        return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile[$time],
-            'format' => $format,
-        ));
     }
 }
 
