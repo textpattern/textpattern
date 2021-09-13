@@ -946,7 +946,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif (($val = gps($match['category'.$i], false)) !== false) {
-                $catquery[] = "$not(Category{$i} IN (".implode(',', quote_list(do_list($val)))."))";
+                $catquery[] = "$not(Category{$i} IN (".quote_list(do_list($val), ',')."))";
             }
         } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";

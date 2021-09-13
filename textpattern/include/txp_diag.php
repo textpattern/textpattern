@@ -191,7 +191,7 @@ function diag_msg_wrap($msg, $type = 'e')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels, $txp_sections;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -302,10 +302,8 @@ function doDiagnostics()
     }
 
     if ($permlink_mode != 'messy') {
-        $rs = safe_column("name", 'txp_section', "1 = 1");
-
-        foreach ($rs as $name) {
-            if ($name && file_exists($path_to_site.DS.$name)) {
+        foreach (array_keys($txp_sections) as $name) {
+            if ($name != 'default' && file_exists($path_to_site.DS.$name)) {
                 $fail['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site.DS.$name));
             }
         }
@@ -465,6 +463,9 @@ function doDiagnostics()
     } else {
         $gd = gTxt('diag_unavailable');
     }
+
+    $intl = extension_loaded('intl') ? phpversion('intl') : gTxt('diag_unavailable');
+    $mbstring = extension_loaded('mbstring') ? phpversion('mbstring') : gTxt('diag_unavailable');
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
         $fail['e'][] = array('tmp_plugin_paths_match');
@@ -636,6 +637,10 @@ function doDiagnostics()
         gTxt('diag_php_version').cs.phpversion().n,
 
         gTxt('diag_gd_library').cs.$gd.n,
+
+        gTxt('diag_intl_extension').cs.$intl.n,
+
+        gTxt('diag_mbstring_extension').cs.$mbstring.n,
 
         gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
 
