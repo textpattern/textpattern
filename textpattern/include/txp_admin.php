@@ -401,8 +401,7 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $count = getRow("SELECT COUNT(*) as total FROM ".$sql_from." WHERE $criteria");
-        $total = !empty($count['total']) ? $count['total'] : 0;
+        $total = (int)safe_count('txp_users', $criteria);
 
         $searchBlock =
             n.tag(
