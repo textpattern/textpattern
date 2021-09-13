@@ -328,7 +328,7 @@ function cat_category_multiedit()
                     $message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
                 }
             } else {
-                $message = array(gTxt($type.'_categories_deleted', array('{list}' => 0)), E_WARNING);
+                $message = array(gTxt($type.'_categories_deleted', array('{list}' => 0)), E_ERROR);
             }
         } elseif ($method == 'changeparent') {
             $new_parent = doSlash(ps('new_parent')) or $new_parent = 'root';
