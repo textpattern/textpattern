@@ -401,7 +401,7 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $total = (int)getThing("SELECT COUNT(*) as total FROM ".$sql_from." WHERE $criteria");
+        $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
         $searchBlock =
             n.tag(
