@@ -1085,3 +1085,95 @@ function postpone_process($pass = null)
         trigger_error(gTxt('secondpass').' < '.$pass, E_USER_WARNING);
     }
 }
+
+// -------------------------------------------------------------
+
+function parseList($rs, &$object, $populate, $atts = array())
+{
+    global $txp_atts, $txp_item, $txp_sections;
+
+    $articles = array();
+
+    if ($rs && $last = numRows($rs)) {
+        extract($atts + array(
+                'form' => '',
+                'thing' => null,
+                'breakby' => isset($txp_atts['breakby']) ? $txp_atts['breakby'] : '',
+                'breakform' => isset($txp_atts['breakform']) ? $txp_atts['breakform'] : '',
+                'allowoverride' => false
+            )
+        );
+
+        $store = $object;
+        $count = 0;
+        $chunk = false;
+        $old_item = $txp_item;
+        $txp_item['total'] = $last;
+        unset($txp_item['breakby']);
+        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
+            false :
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? (int)php(null, null, 'form') : 2);
+
+        while ($count++ <= $last) {
+            if ($a = nextRow($rs)) {
+                $res = call_user_func($populate, $a);
+
+                if (is_array($res)) {
+                    $object = $res;
+                }
+ 
+                $object['is_first'] = ($count == 1);
+                $object['is_last'] = ($count == $last);
+                $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
+
+                $newbreak = !$groupby ? $count : ($groupby === 1 ?
+                    parse($breakby, true, false) :
+                    parse_form($breakby)
+                );
+            } else {
+                $newbreak = null;
+            }
+
+            if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
+                if ($groupby && $breakform) {
+                    $tmpobject = $object;
+                    $object = $oldobject;
+                    $newform = parse_form($breakform);
+                    $chunk = str_replace('<+>', $chunk, $newform);
+                    $object = $tmpobject;
+                }
+
+                $chunk === false or $articles[] = $chunk;
+                $chunk = false;
+            }
+
+            if ($count <= $last) {
+                $item = false;
+
+                if ($allowoverride && !empty($a['override_form'])) {
+                    $item = parse_form($a['override_form'], $txp_sections[$a['Section']]['skin']);
+                } elseif ($form) {
+                    $item = parse_form($form);
+                }
+
+                if ($item === false && isset($thing)) {
+                    $item = parse($thing);
+                }
+
+                $item === false or $chunk .= $item;
+            }
+
+            $oldobject = $object;
+            $txp_item['breakby'] = $newbreak;
+        }
+
+        if ($groupby) {
+            unset($txp_atts['breakby'], $txp_atts['breakform']);
+        }
+
+        $txp_item = $old_item;
+        $object = $store;
+    }
+
+    return $articles;
+}
