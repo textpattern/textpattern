@@ -10,11 +10,19 @@
 <nav id="navigation" class="site-navigation" aria-label="<txp:text item="site_nav" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
     <div>
         <txp:section_list default_title='<txp:text item="home" />' include_default wraptag="ul" break="">
-            <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
-                <a itemprop="url" href="<txp:section url />">
-                    <txp:section title />
-                </a>
-            </li>
+            <if_status>
+                <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
+                    <a itemprop="url" href="<txp:section url />"<txp:if_section name='<txp:section />'> aria-current="page"</txp:if_section>>
+                        <txp:section title />
+                    </a>
+                </li>
+            <txp:else />
+                <li>
+                    <a itemprop="url" href="<txp:section url />">
+                        <txp:section title />
+                    </a>
+                </li>
+            </if_status>
         </txp:section_list>
 
         <!-- links by default to form: 'search_input.txp' unless you specify a different form -->
