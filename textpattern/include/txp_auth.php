@@ -105,7 +105,7 @@ function doLoginForm($message)
 
     $lang = in_array($lang, $installed) ? $lang : LANG;
     $langList = $txpLang->languageList();
-//    $txpLang->swapStrings($lang, 'admin');
+    $txpLang->swapStrings($lang, 'admin');
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');
