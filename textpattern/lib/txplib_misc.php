@@ -638,7 +638,8 @@ function the_privileged($res, $real = false)
 function get_safe_image_types($type = null)
 {
     $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
-        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array()) +
+        (defined('IMAGETYPE_AVIF') ? array(IMAGETYPE_AVIF => '.avif') : array());
 
     if (has_privs('image.create.trusted')) {
         $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
