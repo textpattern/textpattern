@@ -195,9 +195,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
-    ->registerAttr(true, 'class, html_id, not, breakby, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
 
@@ -5407,6 +5407,7 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     global $txp_atts;
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
         'label'    => '',
@@ -5415,24 +5416,32 @@ function txp_wraptag($atts, $thing = '')
         'class'    => '',
         'html_id'  => '',
         'break'    => null,
+        'breakby'  => null,
         'trim'     => null,
         'replace'  => null,
+        'limit'    => null,
+        'offset'   => null,
+        'sort'     => null,
         'default'  => null,
     ), $atts, false));
 
-    if (isset($break) || isset($trim) || isset($replace)) {
-        if (isset($break) || $replace === true) {
+    if (isset($break) || isset($breakby) || isset($trim) || isset($replace) || isset($limit) || isset($offset) || isset($sort)) {
+        if ($break === true) {
+            $break = txp_break($wraptag);
+        }
+
+        if (isset($breakby)) {
+            $thing = strlen($breakby) > 2 && preg_match($regex, $breakby) ?
+                preg_split($breakby, $thing, -1, PREG_SPLIT_NO_EMPTY) :
+                explode($breakby === true ? $break : $breakby, $thing);
+        } elseif (isset($break) || $replace === true) {
             $thing = $trim === true ?
                 explode(',', $thing) :
                 preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        if ($break === true) {
-            $break = txp_break($wraptag);
-        }
-
-        $txp_atts['trim'] = $trim;
-        $txp_atts['replace'] = $replace;
+        is_array($txp_atts) or $txp_atts = array();
+        $txp_atts += compact('trim', 'replace', 'limit', 'offset', 'sort');
         $thing = doWrap($thing, null, isset($break) ? $break : ',');
     }
 
