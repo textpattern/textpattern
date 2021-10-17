@@ -1727,7 +1727,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'html_id', 'wrapform', 'trim', 'replace');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
@@ -1772,20 +1772,31 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         return '';
     }
 
-    if ($html_id) {
-        $atts .= ' id="'.txpspecialchars($html_id).'"';
+    if ($sort === 'rand') {
+        shuffle($list);
+    } elseif ($sort) {
+        strtolower($sort) == 'desc' ? rsort($list) : sort($list);
     }
 
-    if ($class) {
-        $atts .= ' class="'.txpspecialchars($class).'"';
-    }
+    if($limit || $offset) {
+        if (strpos($offset, ',') === false) {
+            $list = array_slice($list, (int)$offset, isset($limit) ? (int)$limit : null);
+        } else {
+            $count = count($list);
+            $newlist = array();
 
-    if ($breakclass) {
-        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
+            foreach (array_map('intval', do_list($offset)) as $ind) {
+                $ind = $ind >= 0 ? $ind - 1 : $count + $ind;
+                !isset($list[$ind]) or $newlist[] = $list[$ind];
+            }
+
+            $list = $limit ? array_slice($newlist, 0, (int)$limit) : $newlist;
+        }
     }
 
     if (($break || $breakform) && !empty($breakby)) { // array_merge to reindex
         $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
+        $newlist = array();
 
         switch ($count = count($breakby)) {
             case 0:
@@ -1797,8 +1808,6 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
                 }
                 // no break
             default:
-                $newlist = array();
-
                 for ($i = 0; count($list); $i = ($i + 1)%$count) {
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
@@ -1814,8 +1823,22 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         array_walk($list, function (&$item, $key) use ($breakform) {
             global $txp_item;
             $txp_item['count'] = $key + 1;
+            $txp_item[true] = $item;
             $item = str_replace('<+>', $item, parse_form($breakform));
+            unset($txp_item);
         });
+    }
+
+    if ($html_id) {
+        $atts .= ' id="'.txpspecialchars($html_id).'"';
+    }
+
+    if ($class) {
+        $atts .= ' class="'.txpspecialchars($class).'"';
+    }
+
+    if ($breakclass) {
+        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
     if ($break === true) {

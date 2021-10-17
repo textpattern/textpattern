@@ -304,6 +304,8 @@ class wet_thumb
             $this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
         } elseif ($this->_SRC['type'] == 18) {
             $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 19) {
+            $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
         }
 
         // Crop image.
@@ -431,32 +433,34 @@ class wet_thumb
             echo "... saving image ...";
         }
 
+        $result = false;
+
         if ($this->_DST['type'] == 1) {
             imagetruecolortopalette($this->_DST['image'], false, 256);
-            if (function_exists('imagegif')) {
-                imagegif($this->_DST['image'], $this->_DST['file']);
-            } else {
-                imagedestroy($this->_DST['image']);
-                imagedestroy($this->_SRC['image']);
-
-                return false;
-            }
+            $imagefn = 'imagegif';
         } elseif ($this->_DST['type'] == 2) {
-            imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
+//            imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
+            $imagefn = 'imagejpeg';
         } elseif ($this->_DST['type'] == 3) {
-            imagepng($this->_DST['image'], $this->_DST['file']);
+            $imagefn = 'imagepng';
         } elseif ($this->_DST['type'] == 18) {
-            imagewebp($this->_DST['image'], $this->_DST['file']);
+            $imagefn = 'imagewebp';
+        } elseif ($this->_DST['type'] == 19) {
+            $imagefn = 'imageavif';
         }
 
-        if ($verbose) {
-            echo "... image successfully saved ...";
+        if (isset($imagefn) && function_exists($imagefn)) {
+            $result = $imagefn($this->_DST['image'], $this->_DST['file']);
         }
 
         imagedestroy($this->_DST['image']);
         imagedestroy($this->_SRC['image']);
 
-        return true;
+        if ($verbose) {
+            echo $result ? "... image successfully saved ..." : "... failed to save image ...";
+        }
+
+        return $result;
     }
 
     /**
