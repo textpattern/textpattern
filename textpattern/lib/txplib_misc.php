@@ -6157,6 +6157,8 @@ function txp_break($wraptag)
             return 'li';
         case 'p':
             return 'br';
+        case 'pre':
+            return n;
         case 'table':
         case 'tbody':
         case 'thead':
