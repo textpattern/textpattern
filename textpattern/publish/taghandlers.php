@@ -3153,17 +3153,9 @@ function keywords($atts)
 {
     global $thisarticle;
 
-    extract(lAtts(array(
-        'class'   => '',
-        'break'   => ',',
-        'wraptag' => '',
-    ), $atts));
-
     assert_article();
 
-    $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
-
-    return doWrap($out, $wraptag, $break, $class);
+    return txpspecialchars($thisarticle['keywords']);
 }
 
 // -------------------------------------------------------------
@@ -5039,7 +5031,7 @@ function variable($atts, $thing = null)
         $var = $default;
     }
 
-    if (isset($add)) {
+    if (isset($add) && $add !== '') {
         if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
             $var += $add;
         } else {
@@ -5425,24 +5417,20 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    if (isset($break) || isset($breakby) || isset($trim) || isset($replace) || isset($limit) || isset($offset) || isset($sort)) {
-        if ($break === true) {
-            $break = txp_break($wraptag);
-        }
+    if ($break === true) {
+        $break = txp_break($wraptag);
+    }
 
-        if (isset($breakby)) {
-            $thing = strlen($breakby) > 2 && preg_match($regex, $breakby) ?
-                preg_split($breakby, $thing, -1, PREG_SPLIT_NO_EMPTY) :
-                explode($breakby === true ? $break : $breakby, $thing);
-        } elseif (isset($break) || $replace === true) {
-            $thing = $trim === true ?
-                explode(',', $thing) :
-                preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
-        }
+    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = ',')) {
+        $thing = strlen($breakby) > 2 && preg_match($regex, $breakby) ?
+            preg_split($breakby, $thing, -1, PREG_SPLIT_NO_EMPTY) :
+            ($breakby === true ? do_list($thing) : explode($breakby, $thing));
+    }
 
+    if (isset($trim) || isset($replace) || is_array($thing)) {
         is_array($txp_atts) or $txp_atts = array();
         $txp_atts += compact('trim', 'replace', 'limit', 'offset', 'sort');
-        $thing = doWrap($thing, null, isset($break) ? $break : ',');
+        $thing = doWrap($thing, null, $break);
     }
 
     !isset($default) or trim($thing) !== '' or $thing = $default;

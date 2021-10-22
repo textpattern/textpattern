@@ -1797,10 +1797,32 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         return '';
     }
 
-    if ($sort === 'rand') {
-        shuffle($list);
-    } elseif ($sort) {
-        strtolower($sort) == 'desc' ? rsort($list) : sort($list);
+    if (($sort = strtolower($sort)) || $offset == '?') {
+        $rand = strpos($sort, 'rand') !== false;
+
+        if ($rand && !isset($offset)) {
+            $offset = '?';
+        }
+
+        if ($offset === '?') {
+            if ($limit == 1) {
+                $list = array($list[array_rand($list)]);
+            } elseif ($limit && $limit = min((int)$limit, count($list))) {
+                $newlist = array();
+                $keys = array_rand($list, $limit);
+
+                foreach ($keys as $key) {
+                    $newlist[] = $list[$key];
+                }
+
+                $list = $newlist;
+            }
+
+            $limit = $offset = null;
+        }
+
+        $flag = (strpos($sort, 'nat') === false ? SORT_STRING : SORT_NATURAL)|(strpos($sort, 'case') === false ? SORT_FLAG_CASE : 0);
+        $rand ? shuffle($list) : (strpos($sort, 'desc') !== false ? rsort($list, $flag) : ($sort ? sort($list, $flag) : null));
     }
 
     if($limit || $offset) {
@@ -1810,7 +1832,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $count = count($list);
             $newlist = array();
 
-            foreach (array_map('intval', do_list($offset)) as $ind) {
+            foreach (array_map('intval', do_list($offset, array(',', '-'))) as $ind) {
                 $ind = $ind >= 0 ? $ind - 1 : $count + $ind;
                 !isset($list[$ind]) or $newlist[] = $list[$ind];
             }
