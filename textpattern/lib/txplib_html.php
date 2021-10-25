@@ -1832,8 +1832,8 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $count = count($list);
             $newlist = array();
 
-            foreach (array_map('intval', do_list($offset, array(',', '-'))) as $ind) {
-                $ind = $ind >= 0 ? $ind - 1 : $count + $ind;
+            foreach (do_list($offset, array(',', '-')) as $ind) {
+                $ind = $ind === '?' ? array_rand($list) : ($ind >= 0 ? (int)$ind - 1 : $count + (int)$ind);
                 !isset($list[$ind]) or $newlist[] = $list[$ind];
             }
 
