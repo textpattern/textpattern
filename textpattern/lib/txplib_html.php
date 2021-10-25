@@ -1805,9 +1805,9 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         }
 
         if ($offset === '?') {
-            if ($limit == 1) {
+            if (!isset($limit) || $limit == 1) {
                 $list = array($list[array_rand($list)]);
-            } elseif ($limit && $limit = min((int)$limit, count($list))) {
+            } elseif ($limit && $limit < count($list)) {
                 $newlist = array();
                 $keys = array_rand($list, $limit);
 
