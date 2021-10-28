@@ -5360,34 +5360,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                if (preg_match('/^([+-]?\d*)(?:\.{2}([+-]?\d*))?$/', $attr, $match)) {
-                    list($attr, $first, $last) = $match + array(null, 1, null);
-                    $strlen = $mb ? mb_strlen($thing) : strlen($thing);
-                    $first = !$first ? 1 : ($first > 0 ? $first : $strlen + $first + 1);
-                    $last = !isset($last) ? $first : ($last > 0 ? $last : ($strlen + ($last ? $last + 1 : 0)));
-                
-                    if ($first > $last) {
-                        list($first, $last) = array($last, $first);
-                        $rev = true;
-                    }
-                
-                    if ($first > $strlen || $last < 1) {
-                        $thing = '';
-                    } elseif ($tidy) {
-                        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
-                        $thing = preg_replace($pattern, '$1', $thing);
-                    } else {
-                        $function = $mb.'substr';
-                        $thing = $function($thing, --$first, $last - $first);
-                    }
-                
-                    if ($thing && !empty($rev)) {
-                        $thing = !$mb ? strrev($thing) :
-                            mb_convert_encoding(strrev(mb_convert_encoding($thing, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
-                    }
-                } else {
-                    $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
-                }
+                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
         }
     }
 
@@ -5422,9 +5395,13 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = ',')) {
-        $thing = strlen($breakby) > 2 && preg_match($regex, $breakby) ?
-            preg_split($breakby, $thing, -1, PREG_SPLIT_NO_EMPTY) :
-            ($breakby === true ? do_list($thing) : explode($breakby, $thing));
+        if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
+            $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
+            $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } else {
+            $thing = ($breakby === true ? do_list($thing) : explode($breakby, $thing));
+        }
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {

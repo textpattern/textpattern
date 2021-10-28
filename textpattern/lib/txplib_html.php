@@ -1797,21 +1797,16 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         return '';
     }
 
-    if (($sort = strtolower($sort)) || $offset == '?') {
+    if (($sort = strtolower($sort)) || $offset == '?' && $limit > 0) {
         $rand = strpos($sort, 'rand') !== false;
 
-        if ($rand && !isset($offset)) {
-            $offset = '?';
-        }
-
-        if ($offset === '?') {
-            if (!isset($limit) || $limit == 1) {
+        if ($rand || $offset == '?') {
+            if ($limit == 1) {
                 $list = array($list[array_rand($list)]);
             } elseif ($limit && $limit < count($list)) {
                 $newlist = array();
-                $keys = array_rand($list, $limit);
 
-                foreach ($keys as $key) {
+                foreach (array_rand($list, (int)$limit) as $key) {
                     $newlist[] = $list[$key];
                 }
 
@@ -1821,12 +1816,12 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $limit = $offset = null;
         }
 
-        $flag = (strpos($sort, 'nat') === false ? SORT_STRING : SORT_NATURAL)|(strpos($sort, 'case') === false ? SORT_FLAG_CASE : 0);
+        $flag = (strpos($sort, 'nat') === false ? SORT_STRING : SORT_NATURAL) | (strpos($sort, 'case') === false ? SORT_FLAG_CASE : 0);
         $rand ? shuffle($list) : (strpos($sort, 'desc') !== false ? rsort($list, $flag) : ($sort ? sort($list, $flag) : null));
     }
 
     if($limit || $offset) {
-        if (strpos($offset, ',') === false) {
+        if (!$offset || is_numeric($offset)) {
             $list = array_slice($list, (int)$offset, isset($limit) ? (int)$limit : null);
         } else {
             $count = count($list);
