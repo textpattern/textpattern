@@ -1839,6 +1839,10 @@ function bouncer($step, $steps)
         return true;
     }
 
+    if (is_array($steps[$step]) && gpsa(array_keys($steps[$step])) != $steps[$step]) {
+        return true;
+    }
+
     // Validate token.
     if (gps('_txp_token') === form_token()) {
         return true;
