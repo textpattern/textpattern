@@ -1752,7 +1752,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
@@ -1860,6 +1860,12 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
 
     $old_item = $txp_item;
+
+    if ($escape) {
+        foreach ($list as &$item) {
+            $item = txp_escape($escape, $item);
+        }
+    }
 
     if ($breakform) {
         array_walk($list, function (&$item, $key) use ($breakform) {
