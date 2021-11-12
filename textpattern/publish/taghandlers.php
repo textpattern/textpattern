@@ -5243,7 +5243,7 @@ function txp_escape($escape, $thing = '')
     }
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
-    $filter = $tidy = false;
+    $filter = $tidy = $quoted = false;
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
@@ -5255,6 +5255,7 @@ function txp_escape($escape, $thing = '')
                 break;
             case 'db':
                 $thing = safe_escape($thing);
+                $quoted = true;
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
@@ -5357,7 +5358,7 @@ function txp_escape($escape, $thing = '')
                 !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':
-                $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
                 $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
