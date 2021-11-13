@@ -87,7 +87,7 @@ function rss()
         'limit'    => $limit,
     )).'" rel="self" type="application/rss+xml" />';
     $out[] = tag(doSpecial($site_slogan), 'description');
-    $out[] = tag(safe_strftime('rfc822', strtotime($lastmod)), 'pubDate');
+    $out[] = tag(safe_strftime('rss', strtotime($lastmod)), 'pubDate');
     $out[] = callback_event('rss_head');
 
     // Feed items.
@@ -166,7 +166,7 @@ function rss()
                     ($summary !== '' ? n.t.t.tag(escape_cdata($summary), 'description') : '').
                     ($content !== '' ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
                     n.t.t.tag($permlink, 'link').
-                    n.t.t.tag(safe_strftime('rfc822', $posted), 'pubDate').
+                    n.t.t.tag(safe_strftime('rss', $posted), 'pubDate').
                     n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
                     n.t.t.tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'guid', ' isPermaLink="false"').n.
                     $cb;
@@ -188,7 +188,7 @@ function rss()
                     n.t.t.tag(doSpecial($linkname), 'title').
                     (trim($description) ? n.t.t.tag(doSpecial($description), 'description') : '').
                     n.t.t.tag(doSpecial($url), 'link').
-                    n.t.t.tag(safe_strftime('rfc822', $uDate), 'pubDate').n;
+                    n.t.t.tag(safe_strftime('rss', $uDate), 'pubDate').n;
                 $articles[$id] = tag($item.t, 'item');
 
                 $dates[$id] = $uDate;
