@@ -446,8 +446,12 @@ function doDiagnostics()
             $gd_support[] = 'PNG';
         }
 
-        if (isset($gd_info['WebP Support']) && $gd_info['WebP Support']) {
+        if (!empty($gd_info['WebP Support'])) {
             $gd_support[] = 'WebP';
+        }
+
+        if (!empty($gd_info['AVIF Support'])) {
+            $gd_support[] = 'AVIF';
         }
 
         if ($gd_support) {

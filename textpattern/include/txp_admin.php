@@ -318,7 +318,7 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = safe_pfx('txp_users');
+    $sql_from = safe_pfx_j('txp_users');
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
@@ -401,7 +401,7 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $total = (int)safe_count('txp_users', $criteria);
+        $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
         $searchBlock =
             n.tag(
@@ -434,7 +434,7 @@ function author_list($message = '')
             $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
             $rs = safe_query("SELECT ".implode(', ', $fieldlist).
-                " FROM $sql_from AS txp_users".
+                " FROM $sql_from".
                 " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
             );
 

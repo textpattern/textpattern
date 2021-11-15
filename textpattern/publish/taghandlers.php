@@ -195,9 +195,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
-    ->registerAttr(true, 'class, html_id, not, breakby, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
 
@@ -3152,17 +3152,9 @@ function keywords($atts)
 {
     global $thisarticle;
 
-    extract(lAtts(array(
-        'class'   => '',
-        'break'   => ',',
-        'wraptag' => '',
-    ), $atts));
-
     assert_article();
 
-    $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
-
-    return doWrap($out, $wraptag, $break, $class);
+    return txpspecialchars($thisarticle['keywords']);
 }
 
 // -------------------------------------------------------------
@@ -5048,7 +5040,7 @@ function variable($atts, $thing = null)
         $var = $default;
     }
 
-    if (isset($add)) {
+    if (isset($add) && $add !== '') {
         if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
             $var += $add;
         } else {
@@ -5377,34 +5369,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                if (preg_match('/^([+-]?\d*)(?:\.{2}([+-]?\d*))?$/', $attr, $match)) {
-                    list($attr, $first, $last) = $match + array(null, 1, null);
-                    $strlen = $mb ? mb_strlen($thing) : strlen($thing);
-                    $first = !$first ? 1 : ($first > 0 ? $first : $strlen + $first + 1);
-                    $last = !isset($last) ? $first : ($last > 0 ? $last : ($strlen + ($last ? $last + 1 : 0)));
-                
-                    if ($first > $last) {
-                        list($first, $last) = array($last, $first);
-                        $rev = true;
-                    }
-                
-                    if ($first > $strlen || $last < 1) {
-                        $thing = '';
-                    } elseif ($tidy) {
-                        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
-                        $thing = preg_replace($pattern, '$1', $thing);
-                    } else {
-                        $function = $mb.'substr';
-                        $thing = $function($thing, --$first, $last - $first);
-                    }
-                
-                    if ($thing && !empty($rev)) {
-                        $thing = !$mb ? strrev($thing) :
-                            mb_convert_encoding(strrev(mb_convert_encoding($thing, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
-                    }
-                } else {
-                    $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
-                }
+                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
         }
     }
 
@@ -5416,6 +5381,7 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     global $txp_atts;
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
         'label'    => '',
@@ -5424,25 +5390,33 @@ function txp_wraptag($atts, $thing = '')
         'class'    => '',
         'html_id'  => '',
         'break'    => null,
+        'breakby'  => null,
         'trim'     => null,
         'replace'  => null,
+        'limit'    => null,
+        'offset'   => null,
+        'sort'     => null,
         'default'  => null,
     ), $atts, false));
 
-    if (isset($break) || isset($trim) || isset($replace)) {
-        if (isset($break) || $replace === true) {
-            $thing = $trim === true ?
-                explode(',', $thing) :
-                preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
-        }
+    if ($break === true) {
+        $break = txp_break($wraptag);
+    }
 
-        if ($break === true) {
-            $break = txp_break($wraptag);
+    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = ',')) {
+        if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
+            $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
+            $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } else {
+            $thing = ($breakby === true ? do_list($thing) : explode($breakby, $thing));
         }
+    }
 
-        $txp_atts['trim'] = $trim;
-        $txp_atts['replace'] = $replace;
-        $thing = doWrap($thing, null, isset($break) ? $break : ',');
+    if (isset($trim) || isset($replace) || is_array($thing)) {
+        is_array($txp_atts) or $txp_atts = array();
+        $txp_atts += compact('trim', 'replace', 'limit', 'offset', 'sort');
+        $thing = doWrap($thing, null, $break);
     }
 
     !isset($default) or trim($thing) !== '' or $thing = $default;

@@ -467,7 +467,10 @@ function check_gd($image_type)
             return ($gd_info['PNG Support'] == true);
             break;
         case '.webp':
-            return ($gd_info['WebP Support'] == true);
+            return (!empty($gd_info['WebP Support']));
+            break;
+        case '.avif':
+            return (!empty($gd_info['AVIF Support']));
             break;
     }
 
@@ -1933,7 +1936,7 @@ function txp_dateformats()
     $dayshort = '%a';
     $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;//'jS'
+    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
