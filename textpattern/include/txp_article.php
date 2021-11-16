@@ -106,7 +106,7 @@ if (!empty($event) && $event == 'article') {
     bouncer($step, array(
         'create'         => false,
         'publish'        => true,
-        'edit'           => false,
+        'edit'           => array('view' => 'preview'),
         'save'           => true,
     ));
 
@@ -374,8 +374,8 @@ function article_preview($field = false)
     global $prefs, $vars, $app_mode;
 
     // Assume they came from post.
-    $view = gps('view', 'preview');
-    $rs = textile_main_fields(gpsa($vars));
+    $view = ps('view', 'preview');
+    $rs = textile_main_fields(psa($vars));
 
     // Preview pane
     $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
@@ -442,9 +442,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $view = gps('view', 'text');
 
     if ($view != 'text') {
-        echo article_preview(gps('preview'));
-
-        return;
+        exit(article_preview(gps('preview')));
     }
 
     extract($prefs);
@@ -675,7 +673,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
     } else {
         // Assume they came from post.
-        $store_out = array('ID' => $ID) + gpsa($vars);
+        $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
             $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");

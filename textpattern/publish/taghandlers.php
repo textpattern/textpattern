@@ -196,8 +196,8 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
     ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
-    ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
+//    ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_wraptag', 'escape, wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
 
@@ -426,7 +426,7 @@ function image($atts)
         extract($imageData);
 
         if ($escape) {
-            $alt = txp_escape(array('escape' => $escape), $alt);
+            $alt = txp_escape($escape, $alt);
         }
 
         if ($title === true) {
@@ -872,7 +872,7 @@ function tpt_link($atts)
     }
 
     return tag(
-        $escape ? txp_escape(array('escape' => $escape), $rs['linkname']) : $rs['linkname'], 'a',
+        $escape ? txp_escape($escape, $rs['linkname']) : $rs['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.txpspecialchars($rs['url']).'"'
     );
@@ -893,7 +893,7 @@ function linkdesctitle($atts)
         : '';
 
     return tag(
-        $escape ? txp_escape(array('escape' => $escape), $thislink['linkname']) : $thislink['linkname'], 'a',
+        $escape ? txp_escape($escape, $thislink['linkname']) : $thislink['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.doSpecial($thislink['url']).'"'.$description
     );
@@ -1882,7 +1882,7 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     if ($title !== '') {
         $title_att = ' title="'.($escape == 'html' ? escape_title($title) :
-            ($escape ? txp_escape(array('escape' => $escape), $title) : $title)
+            ($escape ? txp_escape($escape, $title) : $title)
         ).'"';
     } else {
         $title_att = '';
@@ -2732,7 +2732,7 @@ function author($atts)
     if ($escape === 'html') {
         $display_name =  txpspecialchars($display_name);
     } elseif ($escape) {
-        $display_name = txp_escape(array('escape' => $escape), $display_name);
+        $display_name = txp_escape($escape, $display_name);
     }
 
     if (!$link && $format !== 'url') {
@@ -2772,7 +2772,7 @@ function author_email($atts)
     if ($escape == 'html') {
         $display_email = txpspecialchars($email);
     } else {
-        $display_email = $escape ? txp_escape(array('escape' => $escape), $email) : $email;
+        $display_email = $escape ? txp_escape($escape, $email) : $email;
     }
 
     if ($link) {
@@ -3005,7 +3005,7 @@ function article_category($atts, $thing = null)
             );
         } else {
             if ($escape) {
-                $label = txp_escape(array('escape' => $escape), $label);
+                $label = txp_escape($escape, $label);
             }
 
             if ($link) {
@@ -3671,7 +3671,6 @@ function image_info($atts)
     $type = do_list($type);
 
     $out = array();
-    empty($escape) or $escape = compact('escape');
 
     if ($imageData = imageFetchInfo($id, $name)) {
         $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
@@ -3679,8 +3678,7 @@ function image_info($atts)
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
                 if (isset($imageData[$item])) {
-                    $out[] = $escape ?
-                        txp_escape($escape, $imageData[$item]) : $imageData[$item];
+                    $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                 }
             } else {
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
@@ -5208,7 +5206,7 @@ function txp_eval($atts, $thing = null)
 
     if ($txp_tag !== false) {
         if ($staged) {
-            $quoted = txp_escape(array('escape' => 'quote'), $x);
+            $quoted = txp_escape('quote', $x);
             $query = str_replace('<+>', $quoted, $query);
             $query = $xpath->evaluate($query);
             $query = $query instanceof DOMNodeList ? $query->length : $query;
@@ -5229,20 +5227,22 @@ function txp_eval($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_escape($atts, $thing = '')
+function txp_escape($escape, $thing = '')
 {
     global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
         $mb = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
-    if (empty($atts['escape'])) {
+    if (is_array($escape)) {
+        extract(lAtts(array('escape' => true), $escape, false));
+    }
+
+    if (empty($escape)) {
         return $thing;
     }
 
-    extract(lAtts(array('escape' => true), $atts, false));
-
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
-    $filter = $tidy = false;
+    $filter = $tidy = $quoted = false;
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
@@ -5254,6 +5254,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'db':
                 $thing = safe_escape($thing);
+                $quoted = true;
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
@@ -5356,7 +5357,7 @@ function txp_escape($atts, $thing = '')
                 !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':
-                $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
                 $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
@@ -5374,6 +5375,7 @@ function txp_wraptag($atts, $thing = '')
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
+        'escape'   => null,
         'label'    => '',
         'labeltag' => '',
         'wraptag'  => '',
@@ -5393,7 +5395,7 @@ function txp_wraptag($atts, $thing = '')
         $break = txp_break($wraptag);
     }
 
-    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = ',')) {
+    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
@@ -5405,8 +5407,10 @@ function txp_wraptag($atts, $thing = '')
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
         is_array($txp_atts) or $txp_atts = array();
-        $txp_atts += compact('trim', 'replace', 'limit', 'offset', 'sort');
+        $txp_atts += compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort');
         $thing = doWrap($thing, null, $break);
+    } elseif ($escape) {
+        $thing = txp_escape($escape, $thing);
     }
 
     !isset($default) or trim($thing) !== '' or $thing = $default;
