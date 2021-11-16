@@ -616,6 +616,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function extract($lang_code, $events = '', $filter = '')
     {
+        global $txp_user;
+
         // For the time being, load any non-core (plugin) strings on every
         // page too. Core strings have no owner. Plugins installed since 4.6+
         // will have either the 'site' owner or their own plugin name.
@@ -624,7 +626,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $ownClause = $this->hasOwnerSupport() ? " OR owner != ''" : '';
 
         if (txpinterface === 'admin') {
-            $admin_events = array('admin-side', 'common');
+            $admin_events = $txp_user ? array('admin-side', 'common') : array('admin', 'common');
 
             if ($events) {
                 $list = (is_array($events) ? $events : do_list_unique($events));
