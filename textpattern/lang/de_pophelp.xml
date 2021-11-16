@@ -73,10 +73,12 @@
     <li>kann Bilder verwalten</li>
     <li>kann Sektionen verwalten</li>
     <li>kann Seiten, Formulare und Stile verwalten</li>
-</ul>        ]]></item>
+</ul>
+        ]]></item>
         <item id="create_author" title="Autor erstellen"><![CDATA[
 <h2>Neuen Autor hinzufügen</h2>
-<p>Eine Begrüßungsnachricht mit Anweisungen zur Anmeldung und das Passwort wird per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
+<p>Eine Begrüßungsnachricht mit Anweisungen zur Anmeldung und das Passwort wird per E-Mail an den neuen Autor gesendet.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Artikel">
@@ -108,15 +110,12 @@
 <p>Ein <strong>anhängiger</strong> Artikel gilt als zur Veröffentlichung bereit und wartet auf die Freigabe, ist aber außerhalb des Textpattern-Administrationsbereichs nicht sichtbar.</p>
 <p>Ein <strong>live</strong> Artikel ist typischerweise außerhalb des Textpattern-Administrationsbereichs sichtbar (d.h. sichtbar auf der Textpattern-Frontseite, syndiziert in Feeds, wenn es die Präferenz erlaubt). Wenn ein Artikel live ist und ein Ablaufdatum hat, bleibt der Status nach Erreichen dieses Datums als live erhalten, aber der Artikel erscheint nur außerhalb des Administrationsbereichs, wenn abgelaufene Artikel veröffentlicht werden dürfen.</p>
 <p>Ein <strong>angehefteter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als dass er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>Artikel</code>- oder <code>Artikel_custom</code>-Tag enthält ein <code>Status</code>-Attribut mit einem <code>Angeheftet</code>-Wert.</p>
-        
- 
-Text
-XPath: /resources/help/group[2]/item[9]
 ]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Füge einen passenden Titel für den Artikel hinzu.</p>
-<p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>        ]]></item>
+<p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>
+        ]]></item>
         <item id="url_title" title="Nur URL-Titel"><![CDATA[
 <h2>Nur URL-Titel</h2>
 <p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel generiert.</p>
@@ -361,7 +360,7 @@ XPath: /resources/help/group[2]/item[9]
         <item id="attach_titles_to_permalinks" title="Titel zu Permalinks anfügen?"><![CDATA[]]></item>
         <item id="auto_dst" title="Sommer-/Winterzeit automatisch umstellen?"><![CDATA[]]></item>
         <item id="comment_means_site_updated" title="Neue Kommentare setzen Seitenstatus auf aktualisiert?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comment_nofollow" title="rel=&quot;nofollow&quot; auf Kommentare anwenden?"><![CDATA[]]></item>
         <item id="comments_are_ol" title="Kommentare als nummerierte Liste darstellen?"><![CDATA[]]></item>
         <item id="comments_auto_append" title="Kommentare automatisch an Artikel anhängen?"><![CDATA[]]></item>
         <item id="comments_dateformat" title="Datumsformat bei Kommentaren"><![CDATA[
@@ -409,7 +408,7 @@ XPath: /resources/help/group[2]/item[9]
         <item id="production_status" title="Status"><![CDATA[]]></item>
         <item id="public_theme_name" title=""><![CDATA[]]></item>
         <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
+        <item id="publisher_email" title="Login-Daten von dieser E-Mail-Adresse senden"><![CDATA[]]></item>
         <item id="rss_how_many" title="Wieviele Artikel sollen im RSS-Feed angezeigt werden?"><![CDATA[<h2>Wieviele Artikel sollen im RSS-Feed angezeigt werden?</h2>
 <p>Hier wird die maximal Anzahl der Artikel im RSS- oder Atom-Feed angeben.</p>
 <p>Empfolen sind Werte zwischen<code>5<code> und <2>15</code>.</p>]]></item>
@@ -434,20 +433,20 @@ XPath: /resources/help/group[2]/item[9]
 
     <group id="section" title="">
         <item id="section_category" title="Vorstellung"><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
+        <item id="section_default" title="Standard-Sektion"><![CDATA[]]></item>
         <item id="section_description" title="Beschreibung"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="Auf der Startseite anzeigen?"><![CDATA[]]></item>
+        <item id="section_searchable" title="Diese Sektion in die Suche einbeziehen?"><![CDATA[]]></item>
+        <item id="section_syndicate" title="In Newsfeeds aufnehmen?"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Verwendet CSS"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Verwendet Seitenvorlage"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="Verwendet das Design"><![CDATA[]]></item>
     </group>
 
     <group id="setup" title="Setup-Bereich">
         <item id="setup_user_login" title="Benutzeranmeldung"><![CDATA[]]></item>
         <item id="setup_user_pass" title="Benutzerpasswort"><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title="Tabellenpräfix"><![CDATA[]]></item>
     </group>
 
     <group id="skin" title="Design der Webseite">

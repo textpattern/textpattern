@@ -117,7 +117,8 @@ class Core
     {
         foreach ($this->getPrefsDefault() as $name => $p) {
             if (empty($p['private'])) {
-                create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                $evt = empty($p['collection']) ? $p['event'] : array($p['event'], $p['collection']);
+                create_pref($name, $p['val'], $evt, $p['type'], $p['html'], $p['position']);
             }
         }
     }
