@@ -2119,12 +2119,13 @@ textpattern.Route.add('article', function () {
         data.push({
             name: 'app_mode',
             value: 'async'
-        });
-        data.push({
+        },{
+            name: '_txp_token',
+            value: textpattern._txp_token
+        },{
             name: 'preview',
             value: $field
-        });
-        data.push({
+        },{
             name: 'view',
             value: $viewMode.data('view-mode')
         });
