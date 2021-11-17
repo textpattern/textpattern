@@ -29,7 +29,9 @@ Changes in 4.8.8 (upcoming)
 * Added: Custom date formats.
 * Added: 'calendar' attribute to <txp:posted /> and similar tags.
 * Added: Random form selection.
+* Added: Global 'limit', 'offset' and 'sort' attributes.
 * Changed: <txp:category_list /> with 'children' > 1 attribute behaviour.
+* Changed: Global 'escape' attribute operates at the items level in lists.
 * Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
