@@ -106,6 +106,10 @@ class Token implements \Textpattern\Container\ReusableInterface
             return true;
         }
 
+        if (is_array($steps[$step]) && gpsa(array_keys($steps[$step])) != $steps[$step]) {
+            return true;
+        }
+
         // Validate token.
         if (gps('_txp_token') === $this->csrf()) {
             return true;
