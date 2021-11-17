@@ -196,7 +196,6 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
     ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
-//    ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'escape, wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
@@ -4983,7 +4982,6 @@ function variable($atts, $thing = null)
     $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? false : null;
 
     extract(lAtts(array(
-        'escape'    => $set,
         'name'      => '',
         'value'     => null,
         'default'   => false,
@@ -4991,9 +4989,6 @@ function variable($atts, $thing = null)
         'reset'     => null,
         'separator' => null,
         'output'    => null,
-        'break'     => null,
-        'trim'      => null,
-        'replace'   => null
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5037,11 +5032,11 @@ function variable($atts, $thing = null)
     }
 
     if ($set !== null) {
-        if ($break !== null || $trim !== null || $replace !== null) {
-            $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
-        }
+        global $txp_atts;
 
-        $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
+        if ($txp_atts) {
+            $var = txp_wraptag($txp_atts, $var);
+        }
 
         if (isset($reset)) {
             $variable[$name] = $reset === true ? null : $reset;
@@ -5371,7 +5366,6 @@ function txp_escape($escape, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    global $txp_atts;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
@@ -5406,9 +5400,7 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
-        is_array($txp_atts) or $txp_atts = array();
-        $txp_atts += compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort');
-        $thing = doWrap($thing, null, $break);
+        $thing = doWrap($thing, null, compact('break', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort'));
     } elseif ($escape) {
         $thing = txp_escape($escape, $thing);
     }
