@@ -399,7 +399,7 @@ function parse($thing, $condition = true, $in_tag = true)
 
     if ($evaluate) {
         $test = is_array($evaluate) ? array_fill_keys($evaluate, array()) : false;
-        $isempty = $last >= $first || $test !== false;
+        $isempty = $last >= $first;
     }
 
     if (empty($test)) {
@@ -423,8 +423,10 @@ function parse($thing, $condition = true, $in_tag = true)
 
             if (isset($test[($n+1)/2])) {
                 $test[($n+1)/2][] = $n;
+                $isempty = true;
             } elseif (isset($test[$txp_tag[1]])) {
                 $test[$txp_tag[1]][] = $n;
+                $isempty = true;
             } else {
                 $test[0][] = $n;
             }
