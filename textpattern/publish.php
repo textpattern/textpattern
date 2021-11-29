@@ -935,7 +935,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $pg or $pg = 1;
     $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
-    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
         $offset = $offset === true ? 0 : intval($offset);
@@ -1095,7 +1095,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $rs = safe_rows_start((
         $fields ? $fields : $columns).$score,
         $tables,
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
 
     $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
