@@ -1797,7 +1797,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         return '';
     }
 
-    if (($sort = strtolower($sort)) || $offset == '?' && $limit > 0) {
+    if (($sort = isset($sort) ? strtolower($sort) : '') || $offset == '?' && $limit > 0) {
         $rand = strpos($sort, 'rand') !== false;
 
         if ($rand || $offset == '?') {
