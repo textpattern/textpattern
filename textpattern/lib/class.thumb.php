@@ -439,7 +439,6 @@ class wet_thumb
             imagetruecolortopalette($this->_DST['image'], false, 256);
             $imagefn = 'imagegif';
         } elseif ($this->_DST['type'] == 2) {
-//            imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
             $imagefn = 'imagejpeg';
         } elseif ($this->_DST['type'] == 3) {
             $imagefn = 'imagepng';
@@ -450,7 +449,9 @@ class wet_thumb
         }
 
         if (isset($imagefn) && function_exists($imagefn)) {
-            $result = $imagefn($this->_DST['image'], $this->_DST['file']);
+            $result = $imagefn == 'imagejpeg' ?
+                imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality) :
+                $imagefn($this->_DST['image'], $this->_DST['file']);
         }
 
         imagedestroy($this->_DST['image']);
