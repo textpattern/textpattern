@@ -36,7 +36,7 @@
 
 function deNull($in)
 {
-    return is_array($in) ? doArray($in, 'deNull') : strtr($in, array("\0" => ''));
+    return is_array($in) ? doArray($in, 'deNull') : strtr((string)$in, array("\0" => ''));
 }
 
 /**
@@ -48,7 +48,7 @@ function deNull($in)
 
 function deCRLF($in)
 {
-    return is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array(
+    return is_array($in) ? doArray($in, 'deCRLF') : strtr((string)$in, array(
         "\n" => '',
         "\r" => '',
     ));
