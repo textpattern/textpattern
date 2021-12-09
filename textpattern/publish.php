@@ -71,7 +71,7 @@ $txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
-$timezone_key = get_pref('timezone_key', date_default_timezone_get());
+$timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
 date_default_timezone_set($timezone_key);
 
 isset($pretext) or $pretext = array();
