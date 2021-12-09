@@ -227,6 +227,41 @@ class wet_thumb
         $this->_SRC['filename']   = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
 
+        // Make sure we have enough memory if the image is large.
+        if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
+            $shorthand = array('K', 'M', 'G');
+            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
+
+            // Do not *decrease* memory_limit.
+            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
+            if ($ml < $extra) {
+                ini_set('memory_limit', EXTRA_MEMORY);
+            }
+        }
+
+        // Read source image.
+        if ($this->_SRC['type'] == 1) {
+            $this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 2) {
+            $this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 3) {
+            $this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 18) {
+            $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 19) {
+            $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
+        }
+
+        // Ensure non-zero height/width.
+        if (!$this->_SRC['height']) {
+            $this->_SRC['height'] = imagesy($this->_SRC['image']) or $this->_SRC['height'] = 100;
+        }
+
+        if (!$this->_SRC['width']) {
+            $this->_SRC['width'] = imagesx($this->_SRC['image']) or $this->_SRC['width'] = 100;
+        }
+
         // Check image orientation.
         if ($this->_SRC['width'] >= $this->_SRC['height']) {
             $this->_SRC['format'] = 'landscape';
@@ -282,32 +317,6 @@ class wet_thumb
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
 
-        // Make sure we have enough memory if the image is large.
-        if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
-            $shorthand = array('K', 'M', 'G');
-            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
-
-            // Do not *decrease* memory_limit.
-            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
-
-            if ($ml < $extra) {
-                ini_set('memory_limit', EXTRA_MEMORY);
-            }
-        }
-
-        // Read source image.
-        if ($this->_SRC['type'] == 1) {
-            $this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
-        } elseif ($this->_SRC['type'] == 2) {
-            $this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
-        } elseif ($this->_SRC['type'] == 3) {
-            $this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
-        } elseif ($this->_SRC['type'] == 18) {
-            $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
-        } elseif ($this->_SRC['type'] == 19) {
-            $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
-        }
-
         // Crop image.
         $off_w = 0;
         $off_h = 0;
@@ -350,15 +359,6 @@ class wet_thumb
             }
         }
 
-        // Ensure non-zero height/width.
-        if (!$this->_DST['height']) {
-            $this->_DST['height'] = 1;
-        }
-
-        if (!$this->_DST['width']) {
-            $this->_DST['width'] = 1;
-        }
-
         // Create DST.
         $this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
 
@@ -378,7 +378,7 @@ class wet_thumb
                 );
                 imagefill($this->_DST['image'], 0, 0, $trans_idx);
                 imagecolortransparent($this->_DST['image'], $trans_idx);
-            } elseif ($this->_DST['type'] == 3 || $this->_DST['type'] == 18) {
+            } elseif ($this->_DST['type'] == 3 || $this->_DST['type'] == 18 || $this->_DST['type'] == 19) {
                 imagealphablending($this->_DST['image'], false);
                 $transparent = imagecolorallocatealpha($this->_DST['image'], 0, 0, 0, 127);
                 imagefill($this->_DST['image'], 0, 0, $transparent);
@@ -398,6 +398,11 @@ class wet_thumb
             $this->_SRC['width'],
             $this->_SRC['height']
         );
+
+        // avif weirdness
+        if ($this->_DST['type'] == 19) {
+            imageflip($this->_DST['image'], IMG_FLIP_HORIZONTAL);
+        }
 
         if ($this->sharpen === true) {
             $this->_DST['image'] = UnsharpMask($this->_DST['image'], 80, .5, 3);
@@ -613,7 +618,7 @@ class txp_thumb extends wet_thumb
             $amount = 500;
         }
 
-        $amount = $amount * 0.016;
+        $amount = (int)($amount * 0.016);
 
         if ($radius > 50) {
             $radius = 50;
@@ -648,12 +653,12 @@ class txp_thumb extends wet_thumb
         for ($i = 0; $i < $radius; $i++) {
             imagecopy($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
             imagecopymerge($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
-            imagecopymerge($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33.33333); // down left
+            imagecopymerge($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33); // down left
             imagecopymerge($imgBlur, $imgCanvas, 1, 0, 0, 1, $w, $h - 1, 25); // up right
-            imagecopymerge($imgBlur, $imgCanvas, 0, 0, 1, 0, $w - 1, $h, 33.33333); // left
+            imagecopymerge($imgBlur, $imgCanvas, 0, 0, 1, 0, $w - 1, $h, 33); // left
             imagecopymerge($imgBlur, $imgCanvas, 1, 0, 0, 0, $w, $h, 25); // right
             imagecopymerge($imgBlur, $imgCanvas, 0, 0, 0, 1, $w, $h - 1, 20); // up
-            imagecopymerge($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 16.666667); // down
+            imagecopymerge($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 17); // down
             imagecopymerge($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h, 50); // center
         }
 
