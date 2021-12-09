@@ -217,16 +217,19 @@ class wet_thumb
         }
 
         // Get source image info.
-        $temp = getimagesize($infile);
+        if (!($temp = txpimagesize($infile, true))) {
+            return false;
+        }
 
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG.
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF.
         $this->_SRC['string']     = $temp[3];
+        $this->_SRC['image']      = $temp['image'];
         $this->_SRC['filename']   = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
-
+/*
         // Make sure we have enough memory if the image is large.
         if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
             $shorthand = array('K', 'M', 'G');
@@ -252,14 +255,14 @@ class wet_thumb
         } elseif ($this->_SRC['type'] == 19) {
             $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
         }
-
+*/
         // Ensure non-zero height/width.
         if (!$this->_SRC['height']) {
-            $this->_SRC['height'] = imagesy($this->_SRC['image']) or $this->_SRC['height'] = 100;
+            $this->_SRC['height'] = 100;
         }
 
         if (!$this->_SRC['width']) {
-            $this->_SRC['width'] = imagesx($this->_SRC['image']) or $this->_SRC['width'] = 100;
+            $this->_SRC['width'] = 100;
         }
 
         // Check image orientation.

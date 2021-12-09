@@ -470,6 +470,52 @@ function check_gd($image_type)
 }
 
 /**
+ * Returns the given image file data.
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpimagesize($file, $create = false)
+{
+    if ($data = getimagesize($file)) {
+        list($w, $h, $ext) = $data;
+        $exts = get_safe_image_types();
+        $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
+    }
+
+    if (empty($ext)) {
+        return false;
+    }
+
+    $imgf = 'imagecreatefrom'.($ext == '.jpg' ? 'jpeg' : ltrim($ext, '.'));
+    $data['ext'] = $ext;
+
+    if (($create || empty($w) || empty($h)) && function_exists($imgf)) {
+        // Make sure we have enough memory if the image is large.
+        if (filesize($file) > 256*1024) {
+            $shorthand = array('K', 'M', 'G');
+            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
+
+            // Do not *decrease* memory_limit.
+            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
+            if ($ml < $extra) {
+                ini_set('memory_limit', EXTRA_MEMORY);
+            }
+        }
+
+        $data['image'] = $imgf($file);
+        $data[0] or $data[0] = imagesx($data['image']);
+        $data[1] or $data[1] = imagesy($data['image']);
+        $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
+    }
+
+    return $data;
+}
+
+/**
  * Uploads an image.
  *
  * Can be used to upload a new image or replace an existing one.
@@ -521,13 +567,12 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
     }
 
-    list($w, $h, $extension) = getimagesize($file);
-    $exts = get_safe_image_types();
-    $ext = !empty($exts[$extension]) ? $exts[$extension] : false;
-
-    if (!$ext) {
-        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $exts)));
+    if (!($data = txpimagesize($file))) {
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', get_safe_image_types())));
     }
+
+    list($w, $h) = $data;
+    $ext = $data['ext'];
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;
     $safename = doSlash($name);
