@@ -384,7 +384,7 @@ function safe_escape($in = '')
 {
     global $DB;
 
-    return mysqli_real_escape_string($DB->link, $in);
+    return isset($in) ? mysqli_real_escape_string($DB->link, $in) : '';
 }
 
 /**
