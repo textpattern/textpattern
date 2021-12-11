@@ -68,7 +68,8 @@ Table of Contents
   confirm the Textpattern version and note any warnings or errors.
   Note: refer to the resources at the end of this file for further details.
 * Verify all preference settings (Admin -> Preferences).
-
+* Optionally set website Production status (Admin -> Preferences) to
+  "Testing" and check for any warning or error messages on the front-side.
 
 == Resources ==
 
