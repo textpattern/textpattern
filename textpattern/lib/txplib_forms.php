@@ -334,6 +334,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'type'         => $type,
         'size'         => (int) $size,
         'title'        => $title,
+        'aria-label'   => $title,
         'onclick'      => $onClick,
         'tabindex'     => (int) $tab,
         'disabled'     => (bool) $disabled,
