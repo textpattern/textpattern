@@ -65,6 +65,7 @@ namespace Textpattern\Iterator {
          * Get Children and pass the filter to them.
          */
 
+        #[\ReturnTypeWillChange]
         public function getChildren()
         {
             return new self($this->getInnerIterator()->getChildren(), $this->getFilter());
@@ -74,6 +75,7 @@ namespace Textpattern\Iterator {
          * {@inheritdoc}
          */
 
+        #[\ReturnTypeWillChange]
         public function accept()
         {
             return $this->isDir() ||

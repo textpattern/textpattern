@@ -1401,7 +1401,7 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
     }
 
     printf(
-        "<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">General error <b>%s: %s on line %s</b></pre>',
         $error[$errno],
         $errstr,
         $errline
