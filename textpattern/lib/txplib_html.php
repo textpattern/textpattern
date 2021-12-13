@@ -1751,7 +1751,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $list = array_filter($list, function ($v) {return $v !== '';});
         } elseif (isset($trim)) {
             $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
-                preg_replace($trim, $replacement, $list) :
+                preg_replace($trim, (string)$replacement, $list) :
                 (isset($replacement) ?
                     str_replace($trim, $replacement, $list) :
                     array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)

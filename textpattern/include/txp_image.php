@@ -927,7 +927,7 @@ function thumbnail_insert()
         return;
     }
 
-    if ($imagesize = getimagesize($file)) {
+    if ($imagesize = txpimagesize($file)) {
         list($w, $h, $extension) = $imagesize;
     }
 
