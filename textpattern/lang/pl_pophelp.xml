@@ -72,7 +72,7 @@
         <item id="modified_files" title="Zmodyfikowane pliki"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="Błędy w tabeli MySQL"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Nie zdefiniowano katalogu tymczasowego"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Katalog sekcji istnieje"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="Katalog witryny nieczytelny"><![CDATA[]]></item>
         <item id="php_version_required" title="Minimalne wymogi dotyczące wersji"><![CDATA[]]></item>
         <item id="setup_still_exists" title="Katalog instalacji nadal istnieje"><![CDATA[]]></item>

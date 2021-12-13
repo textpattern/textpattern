@@ -73,12 +73,10 @@
     <li>kann Bilder verwalten</li>
     <li>kann Sektionen verwalten</li>
     <li>kann Seiten, Formulare und Stile verwalten</li>
-</ul>
-        ]]></item>
+</ul>        ]]></item>
         <item id="create_author" title="Autor erstellen"><![CDATA[
 <h2>Neuen Autor hinzufügen</h2>
-<p>Eine Begrüßungsnachricht mit Anweisungen zur Anmeldung und das Passwort wird per E-Mail an den neuen Autor gesendet.</p>
-        ]]></item>
+<p>Eine Begrüßungsnachricht mit Anweisungen zur Anmeldung und das Passwort wird per E-Mail an den neuen Autor gesendet.</p>        ]]></item>
     </group>
 
     <group id="article" title="Artikel">
@@ -109,13 +107,11 @@
 <p>Ein <strong>versteckter</strong> Artikel ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar.</p>
 <p>Ein <strong>anhängiger</strong> Artikel gilt als zur Veröffentlichung bereit und wartet auf die Freigabe, ist aber außerhalb des Textpattern-Administrationsbereichs nicht sichtbar.</p>
 <p>Ein <strong>live</strong> Artikel ist typischerweise außerhalb des Textpattern-Administrationsbereichs sichtbar (d.h. sichtbar auf der Textpattern-Frontseite, syndiziert in Feeds, wenn es die Präferenz erlaubt). Wenn ein Artikel live ist und ein Ablaufdatum hat, bleibt der Status nach Erreichen dieses Datums als live erhalten, aber der Artikel erscheint nur außerhalb des Administrationsbereichs, wenn abgelaufene Artikel veröffentlicht werden dürfen.</p>
-<p>Ein <strong>angehefteter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als dass er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>Artikel</code>- oder <code>Artikel_custom</code>-Tag enthält ein <code>Status</code>-Attribut mit einem <code>Angeheftet</code>-Wert.</p>
-]]></item>
+<p>Ein <strong>angehefteter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als dass er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>Artikel</code>- oder <code>Artikel_custom</code>-Tag enthält ein <code>Status</code>-Attribut mit einem <code>Angeheftet</code>-Wert.</p>]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Füge einen passenden Titel für den Artikel hinzu.</p>
-<p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>
-        ]]></item>
+<p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>        ]]></item>
         <item id="url_title" title="Nur URL-Titel"><![CDATA[
 <h2>Nur URL-Titel</h2>
 <p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel generiert.</p>
@@ -158,13 +154,13 @@
 <p>Die aktuelle Server-Konfiguration zeigt an, dass Datei-Uploads deaktiviert sind. Bitte überprüfen Sie dies indem Sie die <code>Datei-Uploads</code> Einstellung in <code>php.ini</code> oder kontaktieren Sie den Site-Host um Hilfe zu erhalten.</p>
         ]]></item>
         <item id="htaccess_missing" title=".htaccess Datei fehlt"><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title="Kein Zugriff auf die Datei index.php "><![CDATA[]]></item>
         <item id="missing_files" title="Fehlende Dateien"><![CDATA[
 <h2>Fehlende Dateien</h2>
 <p>Mindestens eine Datei fehlt in der Textpattern Installation. Überprüfen Sie, ob sich die aufgelisteten Dateien auf dem Server und an richtiger Stelle befinden.</p>
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite fehlt"><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="modified_files" title="Dateien geändert"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="MySQL-Tabellenfehler"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Kein Temp-Verzeichnis definiert"><![CDATA[]]></item>
         <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
@@ -262,7 +258,7 @@
     </group>
 
     <group id="file" title="Datei-Bereich">
-        <item id="file_reassign" title=""><![CDATA[
+        <item id="file_reassign" title="Datei neu zuweisen"><![CDATA[
 <h2>Datei neu zuweisen</h2>
 <p>Wenn Sie eine Datei statt einer Datei mit dem Titel „Fehlend“ hochladen, wird Ihre gewählte Datei auf den Server hochgeladen und mit den Originalinformationen in der Datenbank verknüpft. Dies bedeutet, dass der Dateiname der Originaldatei erhalten bleibt, ebenso wie alle anderen zugehörigen Informationen wie die Anzahl der Downloads und Kategorien. Die Dateigröße wird jedoch aktualisiert, um die neue Datei wiederzugeben.</p>
         ]]></item>
@@ -276,7 +272,7 @@
 <p>Die Felder entsprechen den folgenden Inhalten:</p>
 <ul>
     <li>Jahr / Monat / Tag</li>
-    <li>Stunde (24-Stunden-Format : Minute : Sekunde</li>
+    <li>Stunde (24-Stunden-Format) : Minute : Sekunde</li>
 </ul>
         ]]></item>
         <item id="upload" title="Datei hochladen"><![CDATA[
@@ -390,14 +386,14 @@
         <item id="enable_short_tags" title="Verwendung von Kurz-Tags aktivieren?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="XML-RPC-Server aktivieren?"><![CDATA[]]></item>
         <item id="expire_logs_after" title="Protokolle nach wievielen Tagen löschen?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Datei-Upload-Pfad"><![CDATA[]]></item>
+        <item id="file_base_path" title="Upload-Verzeichnis"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Maximale Upload-Dateigröße (in Bytes)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Zeitzone"><![CDATA[]]></item>
         <item id="img_dir" title="Bilderverzeichnis"><![CDATA[]]></item>
         <item id="include_email_atom" title="E-Mail in Atom-Feeds publizieren?"><![CDATA[]]></item>
         <item id="is_dst" title="Sommerzeit aktiviert?"><![CDATA[]]></item>
         <item id="logging" title="Protokollierung"><![CDATA[]]></item>
-        <item id="max_url_len" title="Maximale URL-Länge (in Zeichen)"><![CDATA[]]></item>
+        <item id="max_url_len" title="Maximale Länge der URL (in Zeichen)"><![CDATA[]]></item>
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
@@ -425,7 +421,7 @@
         <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[]]></item>
         <item id="theme_name" title="Design der Admin-Oberfläche"><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title="PHP-Funktionen in txp:evaluate aktiviert"><![CDATA[]]></item>
-        <item id="use_comments" title="Kommentare annehmen?"><![CDATA[]]></item>
+        <item id="use_comments" title="Kommentare akzepieren?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
         <item id="use_plugins" title="Plugins verwenden?"><![CDATA[]]></item>
         <item id="use_textile" title=""><![CDATA[]]></item>
@@ -477,7 +473,11 @@
 <p>To edit assets in a theme, visit the Pages, Forms or Styles panel and use the dropdown selector to choose the theme upon which you wish to work. The theme you are working on is remembered throughout the administration area, allowing you to jump between asset types quickly and easily. It is referred to as your <em>working theme</em>.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
-        <item id="skin_title" title="Titel des Designs"><![CDATA[]]></item>
+        <item id="skin_title" title="Titel des Designs"><![CDATA[
+<h2>Titel des Designs</h2>
+<p>Der Titel eines Designs wird verwendet, um das Design in den Textpattern-Panels zu identifizieren.</p>
+<p>Der Titel kann Sonderzeichen und Leerzeichen enthalten.</p>
+        ]]></item>
         <item id="skin_version" title="Version des Designs"><![CDATA[
 <h2>Version des Designs</h2>
 <p>Die Versionsnummer des Designs (optional).</p>
