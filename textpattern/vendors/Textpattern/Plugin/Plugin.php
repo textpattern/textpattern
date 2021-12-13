@@ -201,7 +201,9 @@ class Plugin
             $plugin = @gzinflate(substr($plugin, 10));
         }
 
-        $plugin = @unserialize($plugin);
+        set_error_handler(function () {}, E_WARNING|E_NOTICE);
+        $plugin = unserialize($plugin, array());
+        restore_error_handler();
 
         if (empty($plugin['name'])) {
             return false;
