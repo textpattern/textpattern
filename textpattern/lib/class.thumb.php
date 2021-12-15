@@ -217,7 +217,7 @@ class wet_thumb
         }
 
         // Get source image info.
-        if (!($temp = txpimagesize($infile, true))) {
+        if (!($temp = txpimagesize($infile, true)) || empty($temp['image'])) {
             return false;
         }
 
