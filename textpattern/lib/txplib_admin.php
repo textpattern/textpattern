@@ -514,11 +514,15 @@ function txpimagesize($file, $create = false)
             }
         }
 
+        $errlevel = error_reporting(0);
+
         if ($data['image'] = $imgf($file)) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
             $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
         }
+
+        error_reporting($errlevel);
     }
 
     return $data;
