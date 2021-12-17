@@ -116,6 +116,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('search_result_url')
     ->register('search_result_date')
     ->register('search_result_count')
+    ->register('search_result_count', 'items_count')
     ->register('image_index')
     ->register('image_display')
     ->register('images')
@@ -1132,7 +1133,7 @@ function recent_comments($atts, $thing = null)
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
         WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
         ORDER BY ".sanitizeForSort($sort)."
-        LIMIT ".intval($offset).", ".intval($limit));
+        LIMIT ".intval($offset).", ".($limit ? intval($limit) : PHP_INT_MAX));
 
     if ($rs) {
         $out = array();
@@ -3373,6 +3374,7 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
+//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);// Deprecate in 4.9
     global $thispage;
 
     if (empty($thispage)) {
@@ -3385,7 +3387,7 @@ function search_result_count($atts)
     ), $atts));
 
     $by = (int)$pageby or $by = 1;
-    $t = ceil(@$thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+    $t = ceil($thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
 
     if (!isset($text)) {
         $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
@@ -5194,10 +5196,15 @@ function txp_eval($atts, $thing = null)
         return isset($test) ? parse($thing, false) : false;
     }
 
-    $txp_atts['evaluate'] = $test;
     $txp_tag = null;
-    $x = isset($test) ? parse($thing) : $thing;
-    unset($txp_atts['evaluate']);
+
+    if (isset($test) && $query !== true) {
+        $txp_atts['evaluate'] = $test;
+        $x = parse($thing);
+        unset($txp_atts['evaluate']);
+    } else {
+        $x = $thing;
+    }
 
     if ($txp_tag !== false) {
         if ($staged) {
@@ -5211,6 +5218,8 @@ function txp_eval($atts, $thing = null)
             } else {
                 return $query === true ? $x : $query;
             }
+        } elseif ($query === true) {
+            $x = parse($thing, !isset($test) || !empty($test));
         }
     } else {
         $txp_atts = null;
