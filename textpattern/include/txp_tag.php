@@ -454,7 +454,7 @@ class BuilderTags
 
     private function tdb($thing)
     {
-        return graf(text_area(
+        return graf('<label for="txp-tagbuilder-output">'.gTxt('code').'</label>'.n.text_area(
             'txp-tagbuilder-output',
             '',
             '',
