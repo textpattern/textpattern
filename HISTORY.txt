@@ -23,6 +23,7 @@ Changes in 4.8.8 (upcoming)
 * Added: Substring extraction via 'escape' attribute.
 * Added: 'date' and 'time' attributes to <txp:if_expired />.
 * Added: 'range' attribute to <txp:article_image />.
+* Added: <txp:items_count /> tag.
 * Added: Natural search mode.
 * Added: Expanded conditional 'match' attribute with comparison operators.
 * Added: 'UTC' is now a permitted time zone.
