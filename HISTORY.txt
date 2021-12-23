@@ -16,7 +16,7 @@ Changes in 4.8.8 (upcoming)
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
-* Fixed: to be advised (many thanks, Paul Ritchie at Pentest Limited).
+* Security: to be advised (many thanks, Paul Ritchie at Pentest Limited).
 * Fixed: More robust numeric searches.
 * Fixed: Improved query efficiency of category operations.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
