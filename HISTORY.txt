@@ -14,25 +14,26 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.8.8 (upcoming)
 
-* Maintenance release with support for PHP 8.1, improvements and bug fixes.
+* Maintenance release with support for PHP 8.1, security enhancements, general
+  improvements and bug fixes.
 * Fixed: More robust numeric searches.
 * Fixed: Improved query efficiency of category operations.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
-* Added: Support for AVIF image format, on PHP 8.1 or higher.
-* Added: 'url_title' attribute to <txp:article[_custom] />.
-* Added: Substring extraction via 'escape' attribute.
-* Added: 'date' and 'time' attributes to <txp:if_expired />.
-* Added: 'range' attribute to <txp:article_image />.
-* Added: <txp:items_count /> tag.
 * Added: Natural search mode.
+* Added: Random form selection.
+* Added: Support for AVIF image format, on PHP 8.1 or higher.
+* Added: Global 'limit', 'offset' and 'sort' attributes.
+* Added: 'url_title' attribute to <txp:article[_custom] />.
+* Added: 'range' attribute to <txp:article_image />.
+* Added: 'date' and 'time' attributes to <txp:if_expired />.
+* Added: 'calendar' attribute to <txp:posted /> and similar tags.
+* Added: Substring extraction via 'escape' attribute.
+* Added: <txp:items_count /> tag.
 * Added: Expanded conditional 'match' attribute with comparison operators.
 * Added: 'UTC' is now a permitted time zone.
 * Added: Custom date formats.
-* Added: 'calendar' attribute to <txp:posted /> and similar tags.
-* Added: Random form selection.
-* Added: Global 'limit', 'offset' and 'sort' attributes.
-* Changed: <txp:category_list /> with 'children' > 1 attribute behaviour.
+* Changed: <txp:category_list /> with 'children' >1 attribute behaviour.
 * Changed: Global 'escape' attribute operates at the items level in lists.
 * Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
