@@ -26,8 +26,8 @@
     AddEncoding gzip       svgz
 </IfModule>
 
-# For additional Apache-compatible web server configuration settings to enhance
-# site performance and security, we recommend:
+# For additional web server configuration settings in .htaccess to enhance
+# site performance and security, please refer to:
 # https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess
 
 # END Textpattern
