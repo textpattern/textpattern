@@ -5,7 +5,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Enable the `FollowSymLinks` option below if it isn't already.
     #Options +FollowSymlinks
 
     #RewriteBase /relative/web/path/
