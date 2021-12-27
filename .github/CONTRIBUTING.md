@@ -31,7 +31,7 @@ The general steps for Pull Requests:
 * Switch to the correct branch (`git checkout branch-name`), where `branch-name` is either `x.y.z` to patch or bug fix the existing stable product, or `dev` for a feature/fix to go in the next major version.
 * Pick an [existing issue](https://github.com/textpattern/textpattern/issues) you intend to work on, or [create a new issue](https://github.com/textpattern/textpattern/issues/new) if no existing issue matches your topic.
 * Make a new branch for your work.
-* Hack along.
+* Commit changes to your fork.
 * Push your changes to your fork on GitHub.
 * Visit your repository's page on GitHub and click the 'Pull Request' button.
 * Label the pull request with a clear title and description.
