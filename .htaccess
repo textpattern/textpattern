@@ -5,7 +5,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Enable the `FollowSymLinks` option below if it isn't already.
     #Options +FollowSymlinks
 
     #RewriteBase /relative/web/path/
@@ -26,8 +25,7 @@
     AddEncoding gzip       svgz
 </IfModule>
 
-# For additional Apache-compatible web server configuration settings to enhance
-# site performance and security, we recommend:
-# https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess
+# For additional .htaccess configuration settings, please refer to:
+# https://github.com/h5bp/server-configs-apache/blob/main/dist/.htaccess
 
 # END Textpattern
