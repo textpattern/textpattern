@@ -41,7 +41,7 @@ class Css extends AssetBase implements CssInterface
     protected static $essential = array(
         array(
             'name' => 'default',
-            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
+            'css' => '/* Contents of the \'default\' style goes here. Refer to https://docs.textpattern.com/ for further information. */'
         ),
     );
 
