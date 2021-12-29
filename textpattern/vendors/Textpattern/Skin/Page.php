@@ -40,11 +40,11 @@ class Page extends AssetBase implements PageInterface
     protected static $essential = array(
         array(
             'name'      => 'default',
-            'user_html' => '<!-- Contents of the default (home) page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'default\' (home) page template goes here. -->',
         ),
         array(
             'name'      => 'error_default',
-            'user_html' => '<!-- Contents of the standard error page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'error_default\' page template goes here. -->',
         ),
     );
 
