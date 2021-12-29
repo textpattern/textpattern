@@ -38,7 +38,7 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
      * {@inheritdoc}
      */
 
-    protected static $dir = 'forms';
+    protected static $dir = TXP_THEME_TREE['forms'];
 
     /**
      * {@inheritdoc}
@@ -77,32 +77,32 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
         array(
             'name' => 'comments',
             'type' => 'comment',
-            'Form' => '<!-- Default contents of the comments tag goes here. See https://docs.textpattern.com/tags/comments. -->',
+            'Form' => '<!-- Contents of the \'comments\' comment form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'comments_display',
             'type' => 'comment',
-            'Form' => '<!-- Default contents of the popup_comments tag goes here. See https://docs.textpattern.com/tags/popup_comments. -->',
+            'Form' => '<!-- Contents of the \'comments_display\' comment form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'comment_form',
             'type' => 'comment',
-            'Form' => '<!-- Default contents of the comments_form tag goes here. See https://docs.textpattern.com/tags/comments_form. -->',
+            'Form' => '<!-- Contents of the \'comments_form\' comment form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'default',
             'type' => 'article',
-            'Form' => '<!-- Default contents of the article tag goes here. See https://docs.textpattern.com/tags/article. -->',
+            'Form' => '<!-- Contents of the \'default\' article form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'plainlinks',
             'type' => 'link',
-            'Form' => '<!-- Default contents of the linklist tag goes here. See https://docs.textpattern.com/tags/linklist. -->',
+            'Form' => '<!-- Contents of the \'plainlinks\' link form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'files',
             'type' => 'file',
-            'Form' => '<!-- Default contents of the file_download tag goes here. See https://docs.textpattern.com/tags/file_download. -->',
+            'Form' => '<!-- Contents of the \'files\' file form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
     );
 
@@ -112,26 +112,10 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
 
     public function getInstance()
     {
-        global $lang_ui;
-
         $textarray = array();
 
         if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
-            foreach ($custom_types as $type => $langpack) {
-                if (!empty($langpack['mediatype'])) {
-                    static::$mimeTypes[$type] = $langpack['mediatype'];
-                }
-
-                $textarray[$type] = isset($langpack[$lang_ui]) ?
-                    $langpack[$lang_ui] :
-                    (isset($langpack['title']) ?
-                        $langpack['title'] :
-                        (isset(static::$mimeTypes[$type]) ?
-                            strtoupper($type)." (".static::$mimeTypes[$type].")"
-                            : $type
-                        )
-                    );
-            }
+            static::$mimeTypes = get_mediatypes($textarray);
         } else {
             $custom_types = array();
         }
