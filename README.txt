@@ -1,4 +1,4 @@
-Textpattern CMS 4.8.8 (upcoming)
+Textpattern CMS 4.8.8-beta.1
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
