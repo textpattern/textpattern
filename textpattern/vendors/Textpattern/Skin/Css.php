@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -41,7 +41,7 @@ class Css extends AssetBase implements CssInterface
     protected static $essential = array(
         array(
             'name' => 'default',
-            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
+            'css' => '/* Contents of the \'default\' style goes here. Refer to https://docs.textpattern.com/ for further information. */'
         ),
     );
 
