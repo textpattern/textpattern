@@ -53,6 +53,6 @@ class Plain extends Base implements TextfilterInterface
     {
         parent::filter($thing, $options);
 
-        return trim($thing);
+        return trim((string)$thing);
     }
 }

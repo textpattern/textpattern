@@ -54,6 +54,6 @@ class Nl2Br extends Base implements TextfilterInterface
     {
         parent::filter($thing, $options);
 
-        return nl2br(trim($thing));
+        return nl2br(trim((string)$thing));
     }
 }
