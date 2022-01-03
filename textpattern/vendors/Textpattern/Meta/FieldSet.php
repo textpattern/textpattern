@@ -280,6 +280,7 @@ class FieldSet implements \IteratorAggregate, \Textpattern\Container\ReusableInt
      * @see    IteratorAggregate
      */
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->filterCollection);

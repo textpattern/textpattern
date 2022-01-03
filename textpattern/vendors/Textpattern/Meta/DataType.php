@@ -210,6 +210,7 @@ class DataType implements \IteratorAggregate
      * @see    IteratorAggregate
      */
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->dataTypeMap);
