@@ -211,6 +211,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
      * @see    IteratorAggregate
      */
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
