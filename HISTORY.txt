@@ -1,7 +1,5 @@
 Changes in 4.8.8 (upcoming)
 
-Changes in 4.8.8 beta (1 Jan 2022)
-
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
 * Security: to be advised (many thanks, Paul Ritchie at Pentest Limited).
