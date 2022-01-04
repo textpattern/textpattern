@@ -41,6 +41,7 @@ class SectionConstraint extends ChoiceConstraint
 
     public function __construct($value, $options = array())
     {
+        global $txp_sections;
         static $choices = null;
 
         if (null === $choices) {
@@ -48,7 +49,7 @@ class SectionConstraint extends ChoiceConstraint
         }
 
         $options['choices'] = $choices;
-        $options['message'] = 'unknown_section';
+        $options['message'] = count($txp_sections) > 1 ? 'unknown_section' : 'no_sections_available';
         parent::__construct($value, $options);
     }
 }
