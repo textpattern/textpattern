@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -54,7 +54,7 @@ function pagetop($pagetitle = '', $message = '')
         $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
     }
 
-    header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', $csp_nonce, CONTENT_SECURITY_POLICY));
+    header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, CONTENT_SECURITY_POLICY));
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
     if ($app_mode == 'async') {

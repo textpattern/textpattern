@@ -123,7 +123,7 @@
 
     <group id="diag" title="">
         <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="La prova d’URL neta ha fallat"><![CDATA[]]></item>
         <item id="diag_clear_private" title="Amagar la informació privada"><![CDATA[]]></item>
         <item id="dev_version_live" title=""><![CDATA[]]></item>
         <item id="dir_not_writable" title=""><![CDATA[]]></item>
@@ -131,7 +131,7 @@
         <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
         <item id="htaccess_missing" title=""><![CDATA[]]></item>
         <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="Fitxers perduts"><![CDATA[]]></item>
         <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
         <item id="modified_files" title=""><![CDATA[]]></item>
         <item id="mysql_table_errors" title=""><![CDATA[]]></item>
@@ -226,13 +226,13 @@
         ]]></item>
         <item id="comments_mode" title="Mode de comentaris"><![CDATA[]]></item>
         <item id="comments_moderate" title="Moderar comentaris"><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
+        <item id="comments_on_default" title="Actiu per defecte?"><![CDATA[]]></item>
         <item id="comments_require_email" title="Cal l’adreça de correu de l’usuari per comentar?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Cal el nom de l’usuari per comentar?"><![CDATA[]]></item>
         <item id="comments_sendmail" title="Envia comentaris a l’autor?"><![CDATA[]]></item>
         <item id="comments_use_fat_textile" title="Permetre utilizar Textile als comentaris?"><![CDATA[]]></item>
         <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="custom_overview" title="Personalitzat"><![CDATA[]]></item>
         <item id="dateformat" title="Format de data"><![CDATA[]]></item>
         <item id="default_event" title="Panell predeterminat"><![CDATA[]]></item>
         <item id="default_publish_status" title="Estat de publicació predeterminat"><![CDATA[]]></item>
@@ -281,7 +281,7 @@
     </group>
 
     <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_category" title="Introducció"><![CDATA[]]></item>
         <item id="section_default" title="Secció predeterminada per a publicar"><![CDATA[]]></item>
         <item id="section_description" title="Descripció"><![CDATA[]]></item>
         <item id="section_on_frontpage" title=""><![CDATA[]]></item>

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2123,12 +2123,13 @@ textpattern.Route.add('article', function () {
         data.push({
             name: 'app_mode',
             value: 'async'
-        });
-        data.push({
+        },{
+            name: '_txp_token',
+            value: textpattern._txp_token
+        },{
             name: 'preview',
             value: $field
-        });
-        data.push({
+        },{
             name: 'view',
             value: $viewMode.data('view-mode')
         });

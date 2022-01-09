@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -334,6 +334,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'type'         => $type,
         'size'         => (int) $size,
         'title'        => $title,
+        'aria-label'   => $title,
         'onclick'      => $onClick,
         'tabindex'     => (int) $tab,
         'disabled'     => (bool) $disabled,

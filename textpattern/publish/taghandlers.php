@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -44,7 +44,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('link_url')
     ->register('link_author')
     ->register('link_description')
-    ->register('link_date')
+    ->register('posted', 'link_date', array('type' => 'link', 'time' => 'date'))
     ->register('link_category')
     ->register('link_id')
     ->register('if_first', 'if_first_link', 'link')
@@ -74,8 +74,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_url_title')
     ->register('if_article_id')
     ->register('posted')
-    ->register('posted', 'modified', 'modified')
-    ->register('posted', 'expires', 'expires')
+    ->register('posted', 'modified', array('time' => 'modified'))
+    ->register('posted', 'expires', array('time' => 'expires'))
     ->register('if_expires')
     ->register('if_expired')
     ->register('comments_count')
@@ -91,7 +91,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_name')
     ->register('comment_email')
     ->register('comment_web')
-    ->register('comment_time')
+    ->register('posted', 'comment_time', array('type' => 'comment', 'time' => 'time'))
     ->register('comment_message')
     ->register('comment_anchor')
     ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
@@ -116,6 +116,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('search_result_url')
     ->register('search_result_date')
     ->register('search_result_count')
+    ->register('search_result_count', 'items_count')
     ->register('image_index')
     ->register('image_display')
     ->register('images')
@@ -167,8 +168,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('file_download')
     ->register('file_download_link')
     ->register('file_download_size')
-    ->register('file_download_time', 'file_download_created')
-    ->register('file_download_time', 'file_download_modified', 'modified')
+    ->register('posted', 'file_download_created', array('type' => 'file', 'time' => 'created'))
+    ->register('posted', 'file_download_modified', array('type' => 'file', 'time' => 'modified'))
     ->register('file_download_id')
     ->register('file_download_name')
     ->register('file_download_category')
@@ -195,9 +196,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_submit')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
-    ->registerAttr(true, 'class, html_id, not, breakby, breakclass, breakform, wrapform, evaluate')
-    ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, label, trim, replace, default');
+    ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr('txp_wraptag', 'escape, wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
 
@@ -426,7 +426,7 @@ function image($atts)
         extract($imageData);
 
         if ($escape) {
-            $alt = txp_escape(array('escape' => $escape), $alt);
+            $alt = txp_escape($escape, $alt);
         }
 
         if ($title === true) {
@@ -872,7 +872,7 @@ function tpt_link($atts)
     }
 
     return tag(
-        $escape ? txp_escape(array('escape' => $escape), $rs['linkname']) : $rs['linkname'], 'a',
+        $escape ? txp_escape($escape, $rs['linkname']) : $rs['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.txpspecialchars($rs['url']).'"'
     );
@@ -893,7 +893,7 @@ function linkdesctitle($atts)
         : '';
 
     return tag(
-        $escape ? txp_escape(array('escape' => $escape), $thislink['linkname']) : $thislink['linkname'], 'a',
+        $escape ? txp_escape($escape, $thislink['linkname']) : $thislink['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.doSpecial($thislink['url']).'"'.$description
     );
@@ -973,23 +973,6 @@ function link_description($atts)
             txpspecialchars($thislink['description']) :
             $thislink['description'];
     }
-}
-
-// -------------------------------------------------------------
-
-function link_date($atts)
-{
-    global $thislink, $dateformat;
-
-    extract(lAtts(array(
-        'format' => $dateformat,
-        'gmt'    => '',
-        'lang'   => '',
-    ), $atts));
-
-    assert_link();
-
-    return safe_strftime($format, $thislink['date'], $gmt, $lang);
 }
 
 // -------------------------------------------------------------
@@ -1150,7 +1133,7 @@ function recent_comments($atts, $thing = null)
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
         WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
         ORDER BY ".sanitizeForSort($sort)."
-        LIMIT ".intval($offset).", ".intval($limit));
+        LIMIT ".intval($offset).", ".($limit ? intval($limit) : PHP_INT_MAX));
 
     if ($rs) {
         $out = array();
@@ -1357,7 +1340,7 @@ function category_list($atts, $thing = null, $cats = null)
     extract(lAtts(array(
         'active_class' => '',
         'break'        => br,
-        'categories'   => '',
+        'categories'   => null,
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
@@ -1366,8 +1349,8 @@ function category_list($atts, $thing = null, $cats = null)
         'labeltag'     => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => !empty($atts['parent']) || empty($atts['categories']) ? 1 : 0,
-        'sort'         => empty($atts['categories']) ? 'name ASC' : '',
+        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
+        'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -1899,7 +1882,7 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     if ($title !== '') {
         $title_att = ' title="'.($escape == 'html' ? escape_title($title) :
-            ($escape ? txp_escape(array('escape' => $escape), $title) : $title)
+            ($escape ? txp_escape($escape, $title) : $title)
         ).'"';
     } else {
         $title_att = '';
@@ -2025,40 +2008,49 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts, $thing = null, $time = 'posted')
+function posted($atts, $thing = null, $options = array())
 {
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+    global $id, $c, $pg, $dateformat, $archive_dateformat, $comments_dateformat;
+    static $defaults = array('time' => 'posted', 'type' => 'article');
 
     extract(lAtts(array(
         'calendar' => '',
         'format'   => '',
         'gmt'      => '',
         'lang'     => '',
-    ), $atts));
+    ), $atts) + $options + $defaults);
 
     if (!is_int($time)) {
-        assert_article();
+        global ${'this'.$type};
+        assert_context($type);
 
-        if (empty($thisarticle[$time])) {
+        if (empty(${'this'.$type}[$time])) {
             return '';
         }
 
-        $time = (int)$thisarticle[$time];
+        $time = (int)${'this'.$type}[$time];
     }
 
     if ($calendar) {
         $lang = ($lang ? $lang : LANG)."@calendar=$calendar";
     }
 
-    if ($format) {
-        return safe_strftime($format, $time, $gmt, $lang);
-    } else {
-        if ($id || $c || $pg) {
-            return safe_strftime($archive_dateformat, $time, $gmt, $lang);
-        } else {
-            return safe_strftime($dateformat, $time, $gmt, $lang);
+    if (empty($format)) {
+        switch ($type) {
+            case 'article':
+                $format = $id || $c || $pg ? $archive_dateformat : $dateformat;
+                break;
+            case 'file':
+                $format = $archive_dateformat;
+                break;
+            case 'comment':
+                $format = $comments_dateformat;
+                break;
+            default: $format = $dateformat;
         }
     }
+
+    return safe_strftime($format, $time, $gmt, $lang);
 }
 
 // -------------------------------------------------------------
@@ -2675,23 +2667,6 @@ function comment_web()
 
 // -------------------------------------------------------------
 
-function comment_time($atts)
-{
-    global $thiscomment, $comments_dateformat;
-
-    extract(lAtts(array(
-        'format' => $comments_dateformat,
-        'gmt'    => '',
-        'lang'   => '',
-    ), $atts));
-
-    assert_comment();
-
-    return safe_strftime($format, $thiscomment['time'], $gmt, $lang);
-}
-
-// -------------------------------------------------------------
-
 function comment_message()
 {
     global $thiscomment;
@@ -2757,7 +2732,7 @@ function author($atts)
     if ($escape === 'html') {
         $display_name =  txpspecialchars($display_name);
     } elseif ($escape) {
-        $display_name = txp_escape(array('escape' => $escape), $display_name);
+        $display_name = txp_escape($escape, $display_name);
     }
 
     if (!$link && $format !== 'url') {
@@ -2797,7 +2772,7 @@ function author_email($atts)
     if ($escape == 'html') {
         $display_email = txpspecialchars($email);
     } else {
-        $display_email = $escape ? txp_escape(array('escape' => $escape), $email) : $email;
+        $display_email = $escape ? txp_escape($escape, $email) : $email;
     }
 
     if ($link) {
@@ -3030,7 +3005,7 @@ function article_category($atts, $thing = null)
             );
         } else {
             if ($escape) {
-                $label = txp_escape(array('escape' => $escape), $label);
+                $label = txp_escape($escape, $label);
             }
 
             if ($link) {
@@ -3177,17 +3152,9 @@ function keywords($atts)
 {
     global $thisarticle;
 
-    extract(lAtts(array(
-        'class'   => '',
-        'break'   => ',',
-        'wraptag' => '',
-    ), $atts));
-
     assert_article();
 
-    $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
-
-    return doWrap($out, $wraptag, $break, $class);
+    return txpspecialchars($thisarticle['keywords']);
 }
 
 // -------------------------------------------------------------
@@ -3407,6 +3374,7 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
+//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);// Deprecate in 4.9
     global $thispage;
 
     if (empty($thispage)) {
@@ -3419,7 +3387,7 @@ function search_result_count($atts)
     ), $atts));
 
     $by = (int)$pageby or $by = 1;
-    $t = ceil(@$thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+    $t = ceil($thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
 
     if (!isset($text)) {
         $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
@@ -3704,7 +3672,6 @@ function image_info($atts)
     $type = do_list($type);
 
     $out = array();
-    empty($escape) or $escape = compact('escape');
 
     if ($imageData = imageFetchInfo($id, $name)) {
         $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
@@ -3712,8 +3679,7 @@ function image_info($atts)
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
                 if (isset($imageData[$item])) {
-                    $out[] = $escape ?
-                        txp_escape($escape, $imageData[$item]) : $imageData[$item];
+                    $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                 }
             } else {
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
@@ -4871,24 +4837,6 @@ function file_download_size($atts)
 
 // -------------------------------------------------------------
 
-function file_download_time($atts, $thing = null, $time = 'created')
-{
-    global $thisfile;
-
-    extract(lAtts(array('format' => ''), $atts));
-
-    assert_file();
-
-    if (!empty($thisfile[$time])) {
-        return fileDownloadFormatTime(array(
-            'ftime'  => $thisfile[$time],
-            'format' => $format,
-        ));
-    }
-}
-
-// -------------------------------------------------------------
-
 function file_download_id()
 {
     global $thisfile;
@@ -5036,7 +4984,6 @@ function variable($atts, $thing = null)
     $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? false : null;
 
     extract(lAtts(array(
-        'escape'    => $set,
         'name'      => '',
         'value'     => null,
         'default'   => false,
@@ -5044,9 +4991,6 @@ function variable($atts, $thing = null)
         'reset'     => null,
         'separator' => null,
         'output'    => null,
-        'break'     => null,
-        'trim'      => null,
-        'replace'   => null
     ), $atts));
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
@@ -5081,7 +5025,7 @@ function variable($atts, $thing = null)
         $var = $default;
     }
 
-    if (isset($add)) {
+    if (isset($add) && $add !== '') {
         if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
             $var += $add;
         } else {
@@ -5090,11 +5034,11 @@ function variable($atts, $thing = null)
     }
 
     if ($set !== null) {
-        if ($break !== null || $trim !== null || $replace !== null) {
-            $var = txp_wraptag(compact('break', 'trim', 'replace'), $var);
-        }
+        global $txp_atts;
 
-        $var = $escape ? txp_escape(array('escape' => $escape), $var) : $var;
+        if ($txp_atts) {
+            $var = txp_wraptag($txp_atts, $var);
+        }
 
         if (isset($reset)) {
             $variable[$name] = $reset === true ? null : $reset;
@@ -5252,14 +5196,19 @@ function txp_eval($atts, $thing = null)
         return isset($test) ? parse($thing, false) : false;
     }
 
-    $txp_atts['evaluate'] = $test;
     $txp_tag = null;
-    $x = isset($test) ? parse($thing) : $thing;
-    unset($txp_atts['evaluate']);
+
+    if (isset($test) && $query !== true) {
+        $txp_atts['evaluate'] = $test;
+        $x = parse($thing);
+        unset($txp_atts['evaluate']);
+    } else {
+        $x = $thing;
+    }
 
     if ($txp_tag !== false) {
         if ($staged) {
-            $quoted = txp_escape(array('escape' => 'quote'), $x);
+            $quoted = txp_escape('quote', $x);
             $query = str_replace('<+>', $quoted, $query);
             $query = $xpath->evaluate($query);
             $query = $query instanceof DOMNodeList ? $query->length : $query;
@@ -5269,6 +5218,8 @@ function txp_eval($atts, $thing = null)
             } else {
                 return $query === true ? $x : $query;
             }
+        } elseif ($query === true) {
+            $x = parse($thing, !isset($test) || !empty($test));
         }
     } else {
         $txp_atts = null;
@@ -5280,20 +5231,22 @@ function txp_eval($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_escape($atts, $thing = '')
+function txp_escape($escape, $thing = '')
 {
     global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
         $mb = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
 
-    if (empty($atts['escape'])) {
+    if (is_array($escape)) {
+        extract(lAtts(array('escape' => true), $escape, false));
+    }
+
+    if (empty($escape)) {
         return $thing;
     }
 
-    extract(lAtts(array('escape' => true), $atts, false));
-
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
-    $filter = $tidy = false;
+    $filter = $tidy = $quoted = false;
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
@@ -5305,6 +5258,7 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'db':
                 $thing = safe_escape($thing);
+                $quoted = true;
                 break;
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
@@ -5407,37 +5361,10 @@ function txp_escape($atts, $thing = '')
                 !$tidy or $thing = ltrim($thing);
                 break;
             case 'quote':
-                $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
             default:
-                if (preg_match('/^([+-]?\d*)(?:\.{2}([+-]?\d*))?$/', $attr, $match)) {
-                    list($attr, $first, $last) = $match + array(null, 1, null);
-                    $strlen = $mb ? mb_strlen($thing) : strlen($thing);
-                    $first = !$first ? 1 : ($first > 0 ? $first : $strlen + $first + 1);
-                    $last = !isset($last) ? $first : ($last > 0 ? $last : ($strlen + ($last ? $last + 1 : 0)));
-                
-                    if ($first > $last) {
-                        list($first, $last) = array($last, $first);
-                        $rev = true;
-                    }
-                
-                    if ($first > $strlen || $last < 1) {
-                        $thing = '';
-                    } elseif ($tidy) {
-                        $pattern = '/^'.($first > 0 ? '(?U:.{'.(--$first).',})\b' : '').'(.*)'.($last <= $strlen ? '\b.{'.($strlen - $last).',}' : '').'$/su';
-                        $thing = preg_replace($pattern, '$1', $thing);
-                    } else {
-                        $function = $mb.'substr';
-                        $thing = $function($thing, --$first, $last - $first);
-                    }
-                
-                    if ($thing && !empty($rev)) {
-                        $thing = !$mb ? strrev($thing) :
-                            mb_convert_encoding(strrev(mb_convert_encoding($thing, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
-                    }
-                } else {
-                    $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
-                }
+                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
         }
     }
 
@@ -5448,34 +5375,43 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    global $txp_atts;
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
+        'escape'   => null,
         'label'    => '',
         'labeltag' => '',
         'wraptag'  => '',
         'class'    => '',
         'html_id'  => '',
         'break'    => null,
+        'breakby'  => null,
         'trim'     => null,
         'replace'  => null,
+        'limit'    => null,
+        'offset'   => null,
+        'sort'     => null,
         'default'  => null,
     ), $atts, false));
 
-    if (isset($break) || isset($trim) || isset($replace)) {
-        if (isset($break) || $replace === true) {
-            $thing = $trim === true ?
-                explode(',', $thing) :
-                preg_split('/(?<!\s),(?!\s)/', $thing, -1, PREG_SPLIT_NO_EMPTY);
-        }
+    if ($break === true) {
+        $break = txp_break($wraptag);
+    }
 
-        if ($break === true) {
-            $break = txp_break($wraptag);
+    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
+        if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
+            $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
+            $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } else {
+            $thing = ($breakby === true ? do_list($thing) : explode($breakby, $thing));
         }
+    }
 
-        $txp_atts['trim'] = $trim;
-        $txp_atts['replace'] = $replace;
-        $thing = doWrap($thing, null, isset($break) ? $break : ',');
+    if (isset($trim) || isset($replace) || is_array($thing)) {
+        $thing = doWrap($thing, null, compact('break', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort'));
+    } elseif ($escape) {
+        $thing = txp_escape($escape, $thing);
     }
 
     !isset($default) or trim($thing) !== '' or $thing = $default;

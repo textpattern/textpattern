@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -287,6 +287,7 @@ function cat_category_multiedit()
         // Fetch selected items and remove bogus (false) entries to prevent SQL syntax errors.
         $things = array_map('assert_int', $things);
         $things = array_filter($things);
+        $message = false;
 
         if ($method == 'delete' || $method == 'deleteforce') {
             if ($type === 'article') {
@@ -304,8 +305,7 @@ function cat_category_multiedit()
                     $names[] = $cat['name'];
                 }
 
-                if (/*safe_delete('txp_category', "id IN (".join(',', $catid).")")*/
-                    delete_nodes($catid, $type)) {
+                if (delete_nodes($catid, $type)) {
                     if ($method == 'deleteforce') {
                         // Clear the deleted category names from assets.
                         $affected = quote_list($names, ',');
@@ -316,18 +316,16 @@ function cat_category_multiedit()
                         } else {
                             safe_update('txp_'.$type, "category = ''", "category IN ($affected)");
                         }
-
-                        // Promote subcategories of deleted categories to root.
-//                        safe_update('txp_category', "parent = 'root'", "parent IN ($affected)");
                     }
 
-//                    rebuild_tree_full($type);
                     callback_event('categories_deleted', $type, 0, $catid);
 
-                    $message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
-
-                    return cat_category_list($message);
+                    $message = count($things) == count($catid) ?
+                        gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid))) :
+                        array(gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid))), E_WARNING);
                 }
+            } else {
+                $message = array(gTxt($type.'_categories_deleted', array('{list}' => 0)), E_ERROR);
             }
         } elseif ($method == 'changeparent') {
             $new_parent = doSlash(ps('new_parent')) or $new_parent = 'root';
@@ -350,7 +348,6 @@ function cat_category_multiedit()
                 $ret = $to_change && safe_update('txp_category', "parent = '$new_parent'", "id IN (".join(",", $to_change).")");
 
                 if ($ret) {
-//                    rebuild_tree_full($type);
                     insert_nodes($to_change, array('parent' => $name, 'at' => $rgt), $type);
 
                     $message = !empty($affected)
@@ -360,11 +357,11 @@ function cat_category_multiedit()
                             '{list}'   => join(', ', $affected),
                         ))
                         : array(gTxt('category_save_failed'), E_ERROR);
-
-                    return cat_category_list($message);
                 }
             }
         }
+
+        return cat_category_list($message ? $message : array(gTxt('category_save_failed'), E_ERROR));
     }
 
     return cat_category_list();
@@ -523,12 +520,7 @@ function cat_event_category_create($event)
 
     $parent = strtolower(sanitizeForUrl(ps('parent_cat')));
 
-    $q = insert_nodes(null, compact('name', 'title', 'parent'), $event);
-    //safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
-
-    if ($q) {
-        //rebuild_tree_full($event);
-
+    if (insert_nodes(null, compact('name', 'title', 'parent'), $event)) {
         $message = gTxt($event.'_category_created', array('{name}' => $name));
 
         cat_category_list($message);
@@ -626,7 +618,6 @@ function cat_event_category_save($event, $table_name)
     $parent or $parent = 'root';
 
     if ($parent == $old_parent || insert_nodes($id, $data, $event)) {
-//        rebuild_tree_full($event);
         $res = safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'");
 
         if ($old_name != $name && safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {

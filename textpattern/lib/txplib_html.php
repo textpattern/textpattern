@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1727,7 +1727,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'html_id', 'wrapform', 'trim', 'replace');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
@@ -1751,7 +1751,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $list = array_filter($list, function ($v) {return $v !== '';});
         } elseif (isset($trim)) {
             $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
-                preg_replace($trim, $replacement, $list) :
+                preg_replace($trim, (string)$replacement, $list) :
                 (isset($replacement) ?
                     str_replace($trim, $replacement, $list) :
                     array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
@@ -1772,20 +1772,48 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         return '';
     }
 
-    if ($html_id) {
-        $atts .= ' id="'.txpspecialchars($html_id).'"';
+    if (($sort = isset($sort) ? strtolower($sort) : '') || $offset == '?' && $limit > 0) {
+        $rand = strpos($sort, 'rand') !== false;
+
+        if ($rand || $offset == '?') {
+            if ($limit == 1) {
+                $list = array($list[array_rand($list)]);
+            } elseif ($limit && $limit < count($list)) {
+                $newlist = array();
+
+                foreach (array_rand($list, (int)$limit) as $key) {
+                    $newlist[] = $list[$key];
+                }
+
+                $list = $newlist;
+            }
+
+            $limit = $offset = null;
+        }
+
+        $flag = (strpos($sort, 'nat') === false ? SORT_STRING : SORT_NATURAL) | (strpos($sort, 'case') === false ? SORT_FLAG_CASE : 0);
+        $rand ? shuffle($list) : (strpos($sort, 'desc') !== false ? rsort($list, $flag) : ($sort ? sort($list, $flag) : null));
     }
 
-    if ($class) {
-        $atts .= ' class="'.txpspecialchars($class).'"';
-    }
+    if($limit || $offset) {
+        if (!$offset || is_numeric($offset)) {
+            $list = array_slice($list, (int)$offset, isset($limit) ? (int)$limit : null);
+        } else {
+            $count = count($list);
+            $newlist = array();
 
-    if ($breakclass) {
-        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
+            foreach (do_list($offset, array(',', '-')) as $ind) {
+                $ind = $ind === '?' ? array_rand($list) : ($ind >= 0 ? (int)$ind - 1 : $count + (int)$ind);
+                !isset($list[$ind]) or $newlist[] = $list[$ind];
+            }
+
+            $list = $limit ? array_slice($newlist, 0, (int)$limit) : $newlist;
+        }
     }
 
     if (($break || $breakform) && !empty($breakby)) { // array_merge to reindex
         $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
+        $newlist = array();
 
         switch ($count = count($breakby)) {
             case 0:
@@ -1797,8 +1825,6 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
                 }
                 // no break
             default:
-                $newlist = array();
-
                 for ($i = 0; count($list); $i = ($i + 1)%$count) {
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
@@ -1810,12 +1836,32 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 
     $old_item = $txp_item;
 
+    if ($escape) {
+        foreach ($list as &$item) {
+            $item = txp_escape($escape, $item);
+        }
+    }
+
     if ($breakform) {
         array_walk($list, function (&$item, $key) use ($breakform) {
             global $txp_item;
             $txp_item['count'] = $key + 1;
+            $txp_item[true] = $item;
             $item = str_replace('<+>', $item, parse_form($breakform));
+            unset($txp_item);
         });
+    }
+
+    if ($html_id) {
+        $atts .= ' id="'.txpspecialchars($html_id).'"';
+    }
+
+    if ($class) {
+        $atts .= ' class="'.txpspecialchars($class).'"';
+    }
+
+    if ($breakclass) {
+        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
     if ($break === true) {

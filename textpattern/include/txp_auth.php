@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -105,7 +105,7 @@ function doLoginForm($message)
 
     $lang = in_array($lang, $installed) ? $lang : LANG;
     $langList = $txpLang->languageList();
-//    $txpLang->swapStrings($lang, 'admin');
+    $txpLang->swapStrings($lang, 'admin');
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');

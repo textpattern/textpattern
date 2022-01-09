@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -36,7 +36,7 @@
 
 function deNull($in)
 {
-    return is_array($in) ? doArray($in, 'deNull') : strtr($in, array("\0" => ''));
+    return is_array($in) ? doArray($in, 'deNull') : strtr((string)$in, array("\0" => ''));
 }
 
 /**
@@ -48,7 +48,7 @@ function deNull($in)
 
 function deCRLF($in)
 {
-    return is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array(
+    return is_array($in) ? doArray($in, 'deCRLF') : strtr((string)$in, array(
         "\n" => '',
         "\r" => '',
     ));
@@ -282,7 +282,7 @@ function escape_title($title)
 
 function escape_js($js)
 {
-    $js = preg_replace('/[\x{2028}\x{2029}]/u', '', $js);
+    $js = isset($js) ? preg_replace('/[\x{2028}\x{2029}]/u', '', $js) : '';
 
     return addcslashes($js, "\\\'\"\n\r");
 }
@@ -638,7 +638,8 @@ function the_privileged($res, $real = false)
 function get_safe_image_types($type = null)
 {
     $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
-        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array());
+        (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array()) +
+        (defined('IMAGETYPE_AVIF') ? array(IMAGETYPE_AVIF => '.avif') : array());
 
     if (has_privs('image.create.trusted')) {
         $extensions += array(IMAGETYPE_SWF => '.swf', IMAGETYPE_SWC => '.swf');
@@ -1400,7 +1401,7 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
     }
 
     printf(
-        "<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+        '<pre dir="auto">General error <b>%s: %s on line %s</b></pre>',
         $error[$errno],
         $errstr,
         $errline
@@ -2671,9 +2672,9 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         );
         $pattern = $IntlDateFormatter[$override_locale]->getPattern();
         $xt = datefmt_create($override_locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT,
-        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(preg_replace('/[^aHhmps:\s]/', '', $pattern));
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();
         $xd = datefmt_create($override_locale, IntlDateFormatter::LONG, IntlDateFormatter::NONE,
-        null, IntlDateFormatter::TRADITIONAL)->getPattern();//trim(str_replace($xt, '', $pattern), ' ,');
+        null, IntlDateFormatter::TRADITIONAL)->getPattern();
         $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
     }
 
@@ -4965,12 +4966,15 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title'))) {
-        $url_mode = 'messy';
-    }
-
     $section = urlencode($section);
     $url_title = urlencode($url_title);
+    $posted = isset($uposted) ? $uposted : $posted;
+
+    if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title')) ||
+        $url_mode == 'year_month_day_title' && isset($posted) && !is_numeric($posted)
+    ) {
+        $url_mode = 'messy';
+    }
 
     switch ($url_mode) {
         case 'section_id_title':
@@ -4981,7 +4985,7 @@ function permlinkurl($article_array, $hu = null)
             }
             break;
         case 'year_month_day_title':
-            list($y, $m, $d) = explode("-", date("Y-m-d", isset($uposted) ? $uposted : $posted));
+            list($y, $m, $d) = explode("-", date("Y-m-d", (int)$posted));
             $out =  "$y/$m/$d/$url_title";
             break;
         case 'id_title':
@@ -6153,6 +6157,8 @@ function txp_break($wraptag)
             return 'li';
         case 'p':
             return 'br';
+        case 'pre':
+            return n;
         case 'table':
         case 'tbody':
         case 'thead':

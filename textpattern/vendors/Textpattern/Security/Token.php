@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -103,6 +103,10 @@ class Token implements \Textpattern\Container\ReusableInterface
 
         // Does this step require a token?
         if (!$steps[$step]) {
+            return true;
+        }
+
+        if (is_array($steps[$step]) && gpsa(array_keys($steps[$step])) != $steps[$step]) {
             return true;
         }
 

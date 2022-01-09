@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -467,11 +467,65 @@ function check_gd($image_type)
             return ($gd_info['PNG Support'] == true);
             break;
         case '.webp':
-            return ($gd_info['WebP Support'] == true);
+            return (!empty($gd_info['WebP Support']));
+            break;
+        case '.avif':
+            return (!empty($gd_info['AVIF Support']));
             break;
     }
 
     return false;
+}
+
+/**
+ * Returns the given image file data.
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpimagesize($file, $create = false)
+{
+    if ($data = getimagesize($file)) {
+        list($w, $h, $ext) = $data;
+        $exts = get_safe_image_types();
+        $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
+    }
+
+    if (empty($ext)) {
+        return false;
+    }
+
+    $imgf = 'imagecreatefrom'.($ext == '.jpg' ? 'jpeg' : ltrim($ext, '.'));
+    $data['ext'] = $ext;
+
+    if (($create || empty($w) || empty($h)) && function_exists($imgf)) {
+        // Make sure we have enough memory if the image is large.
+        if (filesize($file) > 256*1024) {
+            $shorthand = array('K', 'M', 'G');
+            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
+
+            // Do not *decrease* memory_limit.
+            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
+            if ($ml < $extra) {
+                ini_set('memory_limit', EXTRA_MEMORY);
+            }
+        }
+
+        $errlevel = error_reporting(0);
+
+        if ($data['image'] = $imgf($file)) {
+            $data[0] or $data[0] = imagesx($data['image']);
+            $data[1] or $data[1] = imagesy($data['image']);
+            $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
+        }
+
+        error_reporting($errlevel);
+    }
+
+    return $data;
 }
 
 /**
@@ -526,13 +580,12 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
     }
 
-    list($w, $h, $extension) = getimagesize($file);
-    $exts = get_safe_image_types();
-    $ext = !empty($exts[$extension]) ? $exts[$extension] : false;
-
-    if (!$ext) {
-        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $exts)));
+    if (!($data = txpimagesize($file))) {
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', get_safe_image_types())));
     }
+
+    list($w, $h) = $data;
+    $ext = $data['ext'];
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;
     $safename = doSlash($name);
@@ -1927,14 +1980,13 @@ function get_prefs_theme()
 
 function txp_dateformats()
 {
-    $old_reporting = error_reporting();
-    error_reporting(0);
+    $old_reporting = error_reporting(0);
 
     $dayname = '%A';
     $dayshort = '%a';
     $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;//'jS'
+    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
@@ -1947,26 +1999,26 @@ function txp_dateformats()
     error_reporting($old_reporting);
 
     return array(
+        "since",
+        "$monthshort $daynumord",
         "$monthshort $daynumord, $time12",
         "$daynum.$monthnum.$yearshort",
         "$daynumord $monthname, $time12",
         "$yearshort.$monthnum.$daynumlead, $time12",
         "$dayshort $monthshort $daynumord, $time12",
         "$dayname $monthname $daynumord, $year",
-        "$monthshort $daynumord",
-        "$daynumord $monthname $yearshort",
-        "$daynumord $monthnum $year - $time24",
+//        "$daynumord $monthname $yearshort",
+//        "$daynumord $monthnum $year - $time24",
         "$daynumord $monthname $year",
         "$daynumord $monthname $year, $time24",
 //        "$daynumord. $monthname $year",
 //        "$daynumord. $monthname $year, $time24",
         "$year-$monthnum-$daynumlead",
-        "$year-$daynumlead-$monthnum",
+        "$year-$monthnum-$daynumlead $time24",
+//        "$year-$daynumlead-$monthnum",
         "$date $time12",
         "$date",
-        "$time24",
-        "$time12",
-        "$year-$monthnum-$daynumlead $time24",
-        "since"
+//        "$time24",
+//        "$time12",
     );
 }

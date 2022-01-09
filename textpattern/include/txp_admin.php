@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -318,7 +318,7 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = safe_pfx('txp_users');
+    $sql_from = safe_pfx_j('txp_users');
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
@@ -401,8 +401,7 @@ function author_list($message = '')
 
         $search_render_options = array('placeholder' => 'search_users');
 
-        $count = getRow("SELECT COUNT(*) as total FROM ".$sql_from." WHERE $criteria");
-        $total = !empty($count['total']) ? $count['total'] : 0;
+        $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
         $searchBlock =
             n.tag(
@@ -435,7 +434,7 @@ function author_list($message = '')
             $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
             $rs = safe_query("SELECT ".implode(', ', $fieldlist).
-                " FROM ".$sql_from.
+                " FROM $sql_from".
                 " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
             );
 

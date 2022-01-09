@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -792,7 +792,7 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
-    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val);
+    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
 
     return pluggable_ui('prefs_ui', 'dateformats', Txp::get('\Textpattern\UI\Select', $name, array_unique($vals), $val)->setAtt('id', $name), compact('vals', 'name', 'val', 'ts'));
 }

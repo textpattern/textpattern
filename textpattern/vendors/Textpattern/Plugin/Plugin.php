@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -201,7 +201,9 @@ class Plugin
             $plugin = @gzinflate(substr($plugin, 10));
         }
 
-        $plugin = @unserialize($plugin);
+        set_error_handler(function () {}, E_WARNING|E_NOTICE);
+        $plugin = unserialize($plugin, array());
+        restore_error_handler();
 
         if (empty($plugin['name'])) {
             return false;

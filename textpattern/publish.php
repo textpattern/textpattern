@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -71,7 +71,7 @@ $txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
-$timezone_key = get_pref('timezone_key', date_default_timezone_get());
+$timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
 date_default_timezone_set($timezone_key);
 
 isset($pretext) or $pretext = array();
@@ -947,7 +947,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $pg or $pg = 1;
     $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
-    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg ? 1 : $limit) : $pageby);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
         $offset = $offset === true ? 0 : intval($offset);
@@ -1104,7 +1104,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $rs = safe_rows_start(
         ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
         'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
 
     $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
@@ -1200,101 +1200,6 @@ function parseArticles($atts, $iscustom = 0, $thing = null)
 
     return $r;
 }
-
-// -------------------------------------------------------------
-
-function parseList($rs, &$object, $populate, $atts = array())
-{
-    global $txp_atts, $txp_item, $txp_sections;
-
-    $articles = array();
-
-    if ($rs && $last = numRows($rs)) {
-        extract($atts + array(
-                'form' => '',
-                'thing' => null,
-                'breakby' => isset($txp_atts['breakby']) ? $txp_atts['breakby'] : '',
-                'breakform' => isset($txp_atts['breakform']) ? $txp_atts['breakform'] : '',
-                'allowoverride' => false
-            )
-        );
-
-        $store = $object;
-        $count = 0;
-        $chunk = false;
-        $old_item = $txp_item;
-        $txp_item['total'] = $last;
-        unset($txp_item['breakby']);
-        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
-            false :
-            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? (int)php(null, null, 'form') : 2);
-
-        while ($count++ <= $last) {
-            if ($a = nextRow($rs)) {
-                $res = call_user_func($populate, $a);
-
-                if (is_array($res)) {
-                    $object = $res;
-                }
- 
-                $object['is_first'] = ($count == 1);
-                $object['is_last'] = ($count == $last);
-                $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
-
-                $newbreak = !$groupby ? $count : ($groupby === 1 ?
-                    parse($breakby, true, false) :
-                    parse_form($breakby)
-                );
-            } else {
-                $newbreak = null;
-            }
-
-            if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
-                if ($groupby && $breakform) {
-                    $tmpobject = $object;
-                    $object = $oldobject;
-                    $newform = parse_form($breakform);
-                    $chunk = str_replace('<+>', $chunk, $newform);
-                    $object = $tmpobject;
-                }
-
-                $chunk === false or $articles[] = $chunk;
-                $chunk = false;
-            }
-
-            if ($count <= $last) {
-                $item = false;
-
-                if ($allowoverride && !empty($a['override_form'])) {
-                    $item = parse_form($a['override_form'], $txp_sections[$a['Section']]['skin']);
-                } elseif ($form) {
-                    $item = parse_form($form);
-                }
-
-                if ($item === false && isset($thing)) {
-                    $item = parse($thing);
-                }
-
-                $item === false or $chunk .= $item;
-            }
-
-            $oldobject = $object;
-            $txp_item['breakby'] = $newbreak;
-        }
-
-        if ($groupby) {
-            unset($txp_atts['breakby'], $txp_atts['breakform']);
-        }
-
-        $txp_item = $old_item;
-        $object = $store;
-    }
-
-    return $articles;
-}
-
-
-
 
 // -------------------------------------------------------------
 

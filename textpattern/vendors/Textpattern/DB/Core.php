@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -117,7 +117,8 @@ class Core
     {
         foreach ($this->getPrefsDefault() as $name => $p) {
             if (empty($p['private'])) {
-                create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                $evt = empty($p['collection']) ? $p['event'] : array($p['event'], $p['collection']);
+                create_pref($name, $p['val'], $evt, $p['type'], $p['html'], $p['position']);
             }
         }
     }

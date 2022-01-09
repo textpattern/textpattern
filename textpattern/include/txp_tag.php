@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -454,7 +454,7 @@ class BuilderTags
 
     private function tdb($thing)
     {
-        return graf(text_area(
+        return graf('<label for="txp-tagbuilder-output">'.gTxt('code').'</label>'.n.text_area(
             'txp-tagbuilder-output',
             '',
             '',
