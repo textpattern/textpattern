@@ -1017,9 +1017,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($customFields) {
         foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField];
-            }
+            $customPairs[$cField] = isset($atts[$cField]) ? $atts[$cField] : null;
 
             if (isset($match[$cField])) {
                 if ($match[$cField] === false && isset($thisarticle[$cField])) {
@@ -1027,8 +1025,6 @@ function filterAtts($atts = null, $iscustom = null)
                 } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
                     $customPairs[$cField] = $val;
                 }
-            } else {
-                $customPairs[$cField] = null;
             }
         }
 
