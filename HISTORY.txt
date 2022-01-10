@@ -41,7 +41,7 @@ Changes in 4.8.8 (upcoming)
 * Internal: Prefer is_readable() and is_file() to file_exists().
 * Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
 * Developer: Export new article IDs on duplicate.
-* PrismJS 1.24.1.
+* PrismJS 1.26.0.
 
 Changes in 4.8.7 (30 May 2021)
 
