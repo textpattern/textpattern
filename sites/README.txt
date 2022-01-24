@@ -1,11 +1,7 @@
-This directory (sites) is optional. If you do not wish to host multiple
-Textpattern sites from a single Textpattern installation, you may remove this
-directory with no ill effects.
+This directory (/sites) is intended for use with Textpattern's multi-site
+functionality to create multiple Textpattern-managed sites using a single
+instance of Textpattern. If you wish to use Textpattern in single-site mode
+only, you may remove this directory with no ill effects.
 
-This directory may be used to create multiple Textpattern-based sites from a
-single installation of Textpattern. With a multi-site setup, you may host
-multiple sites while having only a single copy of the Textpattern core code to
-maintain and update.
-
-Please see https://textpattern.com/textpattern-multi-site-installation for full
-instructions.
+Please see https://textpattern.com/textpattern-multi-site-installation for
+further information and setup instructions.

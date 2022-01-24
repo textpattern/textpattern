@@ -25,3 +25,5 @@ Web server vendor and version: {Please write here}
 Database server vendor and version: {Please write here}
 
 PHP version: {Please write here}
+
+Operating system: {Please write here}
