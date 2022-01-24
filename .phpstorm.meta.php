@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
