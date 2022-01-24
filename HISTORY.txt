@@ -22,6 +22,7 @@ Changes in 4.8.8 (upcoming)
 * Fixed: Improved query efficiency of category operations.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
 * Fixed: Admin-side pagination when sorting by non-unique values.
+* Added: PHP 8.1 support.
 * Added: Natural search mode.
 * Added: Random form selection.
 * Added: Support for AVIF image format, on PHP 8.1 or higher.
