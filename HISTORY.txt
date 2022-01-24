@@ -1,4 +1,4 @@
-Changes in 4.8.8
+Changes in 4.8.8 (upcoming)
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
