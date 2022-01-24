@@ -2,7 +2,8 @@ Changes in 4.8.8
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
-* Security: to be advised (many thanks, Paul Ritchie at Pentest Limited).
+* Security: Fix reported cross-site scripting issue relating to article preview
+  CSRF token (many thanks, Paul Ritchie at Pentest Limited).
 * Fixed: More robust numeric searches.
 * Fixed: Improved query efficiency of category operations.
 * Fixed: Required parameters after optional in tag builder (thanks, phiw13).
