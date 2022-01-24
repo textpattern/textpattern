@@ -638,7 +638,19 @@
 </ul>
 <p><strong>注意：</strong>出于安全原因，原始HTML被转换为常规文本。</p>
         ]]></item>
-        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[]]></item>
+        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[<h2>自定义表单模版类型</h2>
+<p>除了标准表单模板类型（文章、文件、杂项等），发布者还可以定义自定义类型。自定义表单模板类型有两个目的：更简单的表单模板分类和自定义资产定义。</p>
+<p>首选项的格式为<a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI<span class="ui-icon ui-icon-extlink">（在新窗口中打开一个外部链接）</span></a>，每个部分对应一个表单模板类型。</p>
+<p>要定义自定义表单类型（例如，<code>js</code>），必须（在单独的行中）附加一个<code>[js]</code>节。可以通过相应部分中的<code>title=“Javascript”</code>条目设置默认标题。如果需要，也可以附加本地化标题（例如，<code>ru="Скрипт"</code>）。</p>
+<p>此外，可以指定表单模板<a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">媒体类型<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>（以前称为MIME类型），例如<code>mediatype=“application/javascript”</code>。通过<code>&lt;txp:output_form /&gt;</code>标记，将这种类型的表单模板转换为可作为设置媒体类型的自定义资产，这些资产可以来自数据库或来自磁盘(平面文件)。例如，可以在您的代码中包含名为 <code>myscript.js</code> 的 <code>[js]</code> 类型且媒体类型为 <code>application/javascript</code> 的表单模板，像这样：</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>这将生成以下 HTML <code>&lt;script&gt;</code>标记：<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>只有具有与其类型相对应的扩展名的表单模板（例如，<code>myscript.js</code>）才能用作平面文件。在这种情况下，它们根本不会被 Textpattern 处理，并且可以通过它们的 URL 访问。</p>
+如果表单模板需要处理（如果它包含 Textpattern 标记），则必须从数据库中提供它。 在这种情况下，您不应该将扩展名添加到表单名称 - 只需将其称为 <code>myscript</code>（不带 <code>.js</code>）以使其无法通过标准 URL 访问 - 并像这样包含它：</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
         <item id="custom_overview" title="自定义栏"><![CDATA[
 <h2>自定义栏</h2>
 <p>自定义栏用于保存额外的文章数据。您可以在这里给它们命名，最多可以定义十个自定义栏。每个字段将作为一个单独栏出现在写入面板上，允许自定义数据与每篇文章相关联。</p>

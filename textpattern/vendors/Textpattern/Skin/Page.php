@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -40,11 +40,11 @@ class Page extends AssetBase implements PageInterface
     protected static $essential = array(
         array(
             'name'      => 'default',
-            'user_html' => '<!-- Contents of the default (home) page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'default\' (home) page template goes here. -->',
         ),
         array(
             'name'      => 'error_default',
-            'user_html' => '<!-- Contents of the standard error page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'error_default\' page template goes here. -->',
         ),
     );
 
