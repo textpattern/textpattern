@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2021 The Textpattern Development Team
+ * Copyright (C) 2022 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -41,6 +41,7 @@ class SectionConstraint extends ChoiceConstraint
 
     public function __construct($value, $options = array())
     {
+        global $txp_sections;
         static $choices = null;
 
         if (null === $choices) {
@@ -48,7 +49,7 @@ class SectionConstraint extends ChoiceConstraint
         }
 
         $options['choices'] = $choices;
-        $options['message'] = 'unknown_section';
+        $options['message'] = count($txp_sections) > 1 ? 'unknown_section' : 'no_sections_available';
         parent::__construct($value, $options);
     }
 }
