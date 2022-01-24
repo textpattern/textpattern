@@ -1,4 +1,4 @@
-Changes in 4.8.8 (upcoming)
+Changes in 4.8.8
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
@@ -22,6 +22,7 @@ Changes in 4.8.8 (upcoming)
 * Added: Custom date formats.
 * Changed: <txp:category_list /> with 'children' >1 attribute behaviour.
 * Changed: Global 'escape' attribute operates at the items level in lists.
+* Changed: Multi-site plugins directory defaults to site/admin/plugins.
 * Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
