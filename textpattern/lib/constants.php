@@ -295,12 +295,20 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
-/**
- * Plugin storage directory.
- */
-
 if (!defined('PLUGINPATH')) {
-    define('PLUGINPATH', txpath.DS.'plugins');
+    /**
+     * Plugin storage directory.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Files
+     * @example
+     * define('PLUGINPATH', $txpcfg['txpath'] . '/plugins');
+     */
+
+    global $txpcfg;
+    $admin_path = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
+    define('PLUGINPATH', $admin_path.DS.'plugins');
 }
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {
