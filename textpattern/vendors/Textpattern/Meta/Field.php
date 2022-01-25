@@ -850,7 +850,7 @@ class Field
                     $out[] = tag(checkbox($name, $opt['name'], (in_array($opt['name'], $thisContent)), '', $box_id, true) . '<label for="' . $box_id . '">' . gTxt($this->getOptionReference($opt['name'])) . '</label>', 'li');
                 }
 
-                $widget = tag(implode($out, n), 'ul');
+                $widget = tag(implode(n, $out), 'ul');
                 break;
             case 'textArea':
                 $widget = text_area($name, 0, 0, implode('', $thisContent), $id);
@@ -863,7 +863,7 @@ class Field
                 $widget = fInput(strtolower($type), $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
                 break;
             default:
-                $widget = callback_event('meta_ui', 'render', 0, compact($num, $id, $name, $type, $labelRef, $options, $help, $thisContent));
+                $widget = callback_event('meta_ui', 'render', 0, compact('num', 'id', 'name', 'type', 'labelRef', 'options', 'help', 'thisContent'));
                 break;
         }
 

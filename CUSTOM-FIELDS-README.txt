@@ -9,7 +9,7 @@ WARNINGS
 
 * Backup everything first, this is NOT production ready.
 
-* Exising custom field data from the Textpattern table will be migrated
+* Existing custom field data from the Textpattern table will be migrated
   to new tables and old data WILL BE DELETED if possible. The migration
   routine is not fully tested yet and may not work properly.
 
@@ -26,7 +26,7 @@ ROADMAP
 ** Files
 ** Links
 ** Users
-** Catgeories
+** Categories
 ** Sections (requires more table mods as it doesn't have an ID column)
 
 * Refactor public side tags to access new types.
