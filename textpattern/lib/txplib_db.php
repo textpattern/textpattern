@@ -803,6 +803,37 @@ function safe_drop($table, $debug = false)
 }
 
 /**
+ * Check if given table(s) exist in the database.
+ *
+ * @param  string|array $table Table(s) to check
+ * @param  bool         $debug Dump query
+ * @return bool         True if all nominated tables exist
+ * @since 4.9.0
+ * @example
+ * if (safe_exists('myTable, myOtherTable'))
+ * {
+ *     // Create tables here;
+ * }
+ */
+
+function safe_exists($table, $debug = false)
+{
+    $table = is_array($table) ? $table : do_list_unique($table);
+    $table_set = array();
+
+    foreach ($table as $tbl) {
+        $table_set[] = "TABLE_NAME = '". safe_pfx($tbl) . "'";
+    }
+
+    $expected = count($table_set);
+    $table_clause = implode(' OR ', $table_set);
+
+    $ret = getThing("SELECT count(1) as num FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND (".$table_clause.")", $debug);
+
+    return $ret == $expected;
+}
+
+/**
  * Creates a table.
  *
  * Creates a table with the given name. This table will be created with
