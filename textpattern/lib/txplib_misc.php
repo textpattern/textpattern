@@ -2332,6 +2332,10 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
             $message->send();
         } catch (\Textpattern\Mail\Exception $e) {
             return false;
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
+           return false;
+        } catch (\Exception $e) {
+           return false;
         }
 
         return true;

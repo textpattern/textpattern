@@ -139,7 +139,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             if (IS_WIN) {
                 ini_set('sendmail_from', $smtp_from);
             } else {
-                $this->mail->from = $smtp_from;
+                $this->mail->from = (array)$smtp_from;
             }
         }
     }
