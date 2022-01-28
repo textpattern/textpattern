@@ -66,7 +66,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         $this->mailer = new PHPMailer(true);
 
         // Bypass the fact that PHPMailer clashes with <txp:php>.
-        $this->mailer::$validator = 'phpinternal';
+        PHPMailer::$validator = 'phpinternal';
 
         // Use admin-side language if logged in, site language otherwise.
         if (is_logged_in()) {
