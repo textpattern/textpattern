@@ -4952,7 +4952,7 @@ function hide($atts = array(), $thing = null)
     extract(lAtts(array('process' => null), $atts));
 
     if (!$process) {
-        return trim($process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
+        return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
     } elseif (is_numeric($process)) {
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
@@ -5021,7 +5021,7 @@ function variable($atts, $thing = null)
         }
     }
 
-    if ($default !== false && trim($var) === '') {
+    if ($default !== false && trim((string)$var) === '') {
         $var = $default;
     }
 
