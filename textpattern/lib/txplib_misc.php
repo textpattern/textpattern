@@ -2789,11 +2789,11 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
     }
 
     if ($gmt) {
-        $str = gmdate(strtr($format, $translate), $time);
+        $str = gmstrftime($format, $time);
     } else {
         $tztime = $time + tz_offset($time);
         $format = str_replace('%s', $tztime, $format);
-        $str = date(strtr($format, $translate), $tztime);
+        $str = strftime($format, $tztime);
     }
 
     if (!isset($charsets[$override_locale])) {
