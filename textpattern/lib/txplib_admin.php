@@ -1984,17 +1984,17 @@ function txp_dateformats()
 
     $dayname = '%A';
     $dayshort = '%a';
-    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
+    $daynum = '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+    $daynumord = $daynum;
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
     $year = '%Y';
     $yearshort = '%y';
     $time24 = '%H:%M';
-    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
-    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+    $time12 = '%I:%M %p';
+    $date = '%Y-%m-%d';
 
     error_reporting($old_reporting);
 
