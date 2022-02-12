@@ -12,7 +12,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
 
-Changes in 4.8.8 (upcoming)
+Changes in 4.8.8 (24 Jan 2022)
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
