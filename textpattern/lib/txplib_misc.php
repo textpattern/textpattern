@@ -5765,13 +5765,13 @@ function send_xml_response($response = array())
             foreach ($value as $e => $v) {
                 // Character escaping in values;
                 // @see https://www.w3.org/TR/REC-xml/#sec-references.
-                $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_QUOTES, 'UTF-8'));
+                $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_XML1, 'UTF-8'));
                 $out[] = t.t."<$e value='$v' />".n;
             }
 
             $out[] = t."</$element>".n;
         } else {
-            $value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($value, ENT_QUOTES, 'UTF-8'));
+            $value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($value, ENT_XML1, 'UTF-8'));
             $out[] = t."<$element value='$value' />".n;
         }
     }
