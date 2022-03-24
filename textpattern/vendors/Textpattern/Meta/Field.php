@@ -44,7 +44,7 @@ class Field
      *
      * @var array
      */
-    protected $dataType = null;
+    protected $dataType = array();
 
     /**
      * Options.
@@ -255,7 +255,7 @@ class Field
     public function loadOptions($force = false)
     {
         if (!$this->options || $force) {
-            $hasOptions = ($this->dataType['options']) ? true : false;
+            $hasOptions = (!empty($this->dataType['options'])) ? true : false;
 
             if ($hasOptions) {
                 $this->options = safe_rows(
@@ -772,7 +772,7 @@ class Field
 
     public function hasTextfilter()
     {
-        return $this->dataType['textfilter'];
+        return empty($this->dataType['textfilter']) ? false : true;
     }
 
     /**
