@@ -258,7 +258,7 @@ function array_null($in)
 
 function escape_title($title)
 {
-    return strtr($title, array(
+    return strtr((string)$title, array(
         '<' => '&#60;',
         '>' => '&#62;',
         "'" => '&#39;',
@@ -4970,8 +4970,8 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    $section = urlencode($section);
-    $url_title = urlencode($url_title);
+    $section = urlencode((string)$section);
+    $url_title = urlencode((string)$url_title);
     $posted = isset($uposted) ? $uposted : $posted;
 
     if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title')) ||
