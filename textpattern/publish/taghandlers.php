@@ -5263,6 +5263,9 @@ function txp_escape($escape, $thing = '')
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
+            case 'url_title':
+                $thing = stripSpace($thing, 1);
+                break;
             case 'js':
                 $thing = escape_js($thing);
                 break;
