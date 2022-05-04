@@ -11,6 +11,8 @@ Changes in 4.9.0 (upcoming)
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
+* Textile 3.7.7. See https://github.com/textile/php-textile/releases/tag/v3.7.7
+  for full list of changes in this release (thanks, gocom).
 
 Changes in 4.8.8 (24 Jan 2022)
 
