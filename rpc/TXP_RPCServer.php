@@ -30,6 +30,11 @@ if (!defined('txpath')) {
 }
 
 require_once txpath.'/lib/txplib_html.php';
+require_once txpath.'/lib/constants.php';
+require_once txpath.'/lib/txplib_db.php';
+require_once txpath.'/lib/txplib_misc.php';
+
+define('IMPATH', $path_to_site.DS.$img_dir.DS);
 
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
@@ -147,7 +152,12 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a given number of recent posts'
             );
 
-// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct. See https://github.com/textpattern/textpattern/issues/1050
+            $this->addCallback(
+                'metaWeblog.newMediaObject',
+                'this:mt_uploadImage',
+                array('boolean', 'string', 'string', 'string', 'struct'),
+                'uploads a media object'
+            );
 
             // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
@@ -916,16 +926,43 @@ EOD;
         return true;
     }
 
-    // TODO ???
-    // MediaObjects
     /*
-     metaWeblog.newMediaObject
-     Description: Uploads a file to your webserver.
-     Parameters: String blogid, String username, String password, struct file
-     Return value: URL to the uploaded file.
-     Notes: the struct file should contain two keys: base64 bits (the base64-encoded contents of the file)
-     and String name (the name of the file). The type key (media type of the file) is currently ignored.
-     */
+    metaWeblog.newMediaObject
+    Description: Uploads a file to your webserver.
+    Parameters: String blogid, String username, String password, struct file
+    Return value: URL to the uploaded file.
+    Notes: the struct file should contain two keys: base64 bits (the base64-encoded contents of the file)
+    and String name (the name of the file). The type key (media type of the file) is currently ignored.
+    */
+    function mt_uploadImage($params)
+    {
+       list($blogid, $username, $password, $file) = $params;
+       
+       $txp = new TXP_Wrapper($username, $password);
+       if (!$txp->loggedin) {
+           return new IXR_Error(100, gTxt('bad_login'));
+       }
+       
+       //Temp File Upload
+       $tempImageFolder = get_pref('tempdir');
+       file_put_contents($tempImageFolder.$file['name'], $file['bits']);
+       
+       //Convert the file to the standard Textpattern input struct
+       $newfile = array(
+           'name' => $file['name'],
+           'error' => false,
+           'tmp_name' => $tempImageFolder.$file['name']
+       );
+       $id = image_data($newfile, false, 0, false)[1]; //Move the file and input into database
+       $ext = end(explode('.', $file['name'])); //Get the uploaded filetype
+       
+       //Return
+       $returnValue = array(
+          'url' => get_pref('img_dir').DS.$id.'.'.$ext
+       );
+       
+       return $returnValue;
+    }
 
     // Code refactoring for blogger_newPost and blogger_editPost.
     function _getBloggerContents($content)
