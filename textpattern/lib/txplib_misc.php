@@ -6068,7 +6068,7 @@ function txp_match($atts, $what)
             case 'any':
                 $values = do_list_unique($value);
                 $cond = false;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
@@ -6080,7 +6080,7 @@ function txp_match($atts, $what)
             case 'all':
                 $values = do_list_unique($value);
                 $cond = true;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
@@ -6107,7 +6107,7 @@ function txp_match($atts, $what)
                     $dlm = $dlm.$value.$dlm;
                 }
 
-                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
+                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : (string)$what);
                 break;
             default:
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'match')), E_USER_NOTICE);
