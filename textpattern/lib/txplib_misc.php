@@ -2713,7 +2713,14 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
 function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
     static $charsets = array(), $txpLocale = null, $intl = null, $formats = array( //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822' ?
-        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822,
+        'atom'    => DATE_ATOM,
+        'w3cdtf'  => DATE_ATOM,
+        'rss'     => DATE_RSS,
+        'cookie'  => DATE_COOKIE,
+        'w3c'     => DATE_W3C,
+        'iso8601' => DATE_ISO8601,
+        'rfc822'  => DATE_RFC822,
+        'rfc7231' => "D, d M Y H:i:s \G\M\T" // constant available since php 7
     ), $translate = array(
         '%a' => 'D',
         '%A' => 'l',
@@ -3903,7 +3910,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
         // Make sure lastmod isn't in the future.
         $unix_ts = min($unix_ts, time());
 
-        $last = safe_strftime('rfc822', $unix_ts, 1);
+        $last = safe_strftime('rfc7231', $unix_ts, 1);
         header("Last-Modified: $last");
 
         $etag = base_convert($unix_ts, 10, 32);
