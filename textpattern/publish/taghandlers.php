@@ -5397,13 +5397,13 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    if ($break === true) {
-        $break = txp_break($wraptag);
-    }
+    $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
 
     if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
+            $thing = do_list($thing);
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
@@ -5412,7 +5412,7 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
-        $thing = doWrap($thing, null, compact('break', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort'));
+        $thing = doWrap($thing, null, compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort') + $dobreak);
     } elseif ($escape) {
         $thing = txp_escape($escape, $thing);
     }
