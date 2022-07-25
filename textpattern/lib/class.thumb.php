@@ -265,6 +265,35 @@ class wet_thumb
             $this->_SRC['width'] = 100;
         }
 
+        // Check exif orientation of source image.
+        $exif = exif_read_data($this->_SRC['file']);
+        if (!empty($exif['Orientation'])) {
+            // Correct thumbnail orientation based on exif value.
+            switch ($exif['Orientation']) {
+                case 3: // upside-down.
+                case 4: // upside-down (mirrored).
+                    $this->_SRC['image'] = imagerotate($this->_SRC['image'], -180, 0);
+                    break;
+                case 5: // rotate-left (mirrored).
+                case 6: // rotate-left.
+                    $this->_SRC['image'] = imagerotate($this->_SRC['image'], -90, 0);
+                    break;
+                case 7: // rotate-right (mirrored).
+                case 8: // rotate-right.
+                    $this->_SRC['image'] = imagerotate($this->_SRC['image'], 90, 0);
+                    break;
+            }
+            // Swap height and width values if thumbnail is rotated by 90°.
+            if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
+                $this->_SRC['width']    = $temp[1];
+                $this->_SRC['height']   = $temp[0];
+            }
+            // Flip thumbnail if exif orientation is mirrored.
+            if (in_array($exif['Orientation'], [2, 5, 7, 4])) {
+                imageflip($this->_SRC['image'], IMG_FLIP_HORIZONTAL);
+            }
+        }
+
         // Check image orientation.
         if ($this->_SRC['width'] >= $this->_SRC['height']) {
             $this->_SRC['format'] = 'landscape';
