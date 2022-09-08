@@ -3874,7 +3874,7 @@ function meta_keywords($atts)
     global $id_keywords;
 
     extract(lAtts(array(
-        'escape'    => null,
+        'escape'    => true,
         'format'    => 'meta', // or empty for raw value
         'separator' => null,
     ), $atts));
@@ -3882,7 +3882,7 @@ function meta_keywords($atts)
     $out = '';
 
     if ($id_keywords) {
-        $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
+        $content = ($escape === true) ? txpspecialchars($id_keywords) : txp_escape($escape, $id_keywords);
 
         if ($separator !== null) {
             $content = implode($separator, do_list($content));
@@ -3909,7 +3909,7 @@ function meta_keywords($atts)
 function meta_description($atts)
 {
     extract(lAtts(array(
-        'escape' => null,
+        'escape' => true,
         'format' => 'meta', // or empty for raw value
         'type'   => null,
     ), $atts));
@@ -3918,7 +3918,7 @@ function meta_description($atts)
     $content = getMetaDescription($type);
 
     if ($content) {
-        $content = ($escape === null ? txpspecialchars($content) : $content);
+        $content = ($escape === true) ? txpspecialchars($content) : txp_escape($escape, $content);
 
         if ($format === 'meta') {
             $out = '<meta name="description" content="'.$content.'" />';
@@ -3955,7 +3955,7 @@ function meta_author($atts)
     global $id_author;
 
     extract(lAtts(array(
-        'escape' => null,
+        'escape' => true,
         'format' => 'meta', // or empty for raw value
         'title'  => 0,
     ), $atts));
@@ -3964,7 +3964,7 @@ function meta_author($atts)
 
     if ($id_author) {
         $display_name = ($title) ? get_author_name($id_author) : $id_author;
-        $display_name = ($escape === null) ? txpspecialchars($display_name) : $display_name;
+        $display_name = ($escape === true) ? txpspecialchars($display_name) : txp_escape($escape, $display_name);
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
@@ -5273,6 +5273,9 @@ function txp_escape($escape, $thing = '')
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
+            case 'url_title':
+                $thing = stripSpace($thing, 1);
+                break;
             case 'js':
                 $thing = escape_js($thing);
                 break;
@@ -5404,13 +5407,13 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    if ($break === true) {
-        $break = txp_break($wraptag);
-    }
+    $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
 
     if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
+            $thing = do_list($thing);
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
@@ -5419,7 +5422,7 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
-        $thing = doWrap($thing, null, compact('break', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort'));
+        $thing = doWrap($thing, null, compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort') + $dobreak);
     } elseif ($escape) {
         $thing = txp_escape($escape, $thing);
     }

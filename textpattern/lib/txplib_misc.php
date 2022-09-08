@@ -258,7 +258,7 @@ function array_null($in)
 
 function escape_title($title)
 {
-    return strtr($title, array(
+    return strtr((string)$title, array(
         '<' => '&#60;',
         '>' => '&#62;',
         "'" => '&#39;',
@@ -2713,7 +2713,14 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
 function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
     static $charsets = array(), $txpLocale = null, $intl = null, $formats = array( //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822' ?
-        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822,
+        'atom'    => DATE_ATOM,
+        'w3cdtf'  => DATE_ATOM,
+        'rss'     => DATE_RSS,
+        'cookie'  => DATE_COOKIE,
+        'w3c'     => DATE_W3C,
+        'iso8601' => DATE_ISO8601,
+        'rfc822'  => DATE_RFC822,
+        'rfc7231' => "D, d M Y H:i:s \G\M\T" // constant available since php 7
     ), $translate = array(
         '%a' => 'D',
         '%A' => 'l',
@@ -3903,7 +3910,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
         // Make sure lastmod isn't in the future.
         $unix_ts = min($unix_ts, time());
 
-        $last = safe_strftime('rfc822', $unix_ts, 1);
+        $last = safe_strftime('rfc7231', $unix_ts, 1);
         header("Last-Modified: $last");
 
         $etag = base_convert($unix_ts, 10, 32);
@@ -5043,8 +5050,8 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    $section = urlencode($section);
-    $url_title = urlencode($url_title);
+    $section = urlencode((string)$section);
+    $url_title = urlencode((string)$url_title);
     $posted = isset($uposted) ? $uposted : $posted;
 
     if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title')) ||
@@ -6141,7 +6148,7 @@ function txp_match($atts, $what)
             case 'any':
                 $values = do_list_unique($value);
                 $cond = false;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
@@ -6153,7 +6160,7 @@ function txp_match($atts, $what)
             case 'all':
                 $values = do_list_unique($value);
                 $cond = true;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
@@ -6180,7 +6187,7 @@ function txp_match($atts, $what)
                     $dlm = $dlm.$value.$dlm;
                 }
 
-                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
+                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : (string)$what);
                 break;
             default:
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'match')), E_USER_NOTICE);
