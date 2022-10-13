@@ -31,7 +31,7 @@
 /index.php: aee28aaf1b3598f767ffc661a21c2fb0
 /lib/admin_config.php: eb72e4ff61ccce51867f22495d29719c
 /lib/array_column.php: 154ae62342164fe4d727b28813f268b6
-/lib/class.thumb.php: 19f0cc18152bc65afeb9dd3a86bf61db
+/lib/class.thumb.php: 9d1aac2cc9f8aea5788b62ed04be64c8
 /lib/class.trace.php: 055e3bc1f8d3217aec152fa7e6216b1d
 /lib/classTextile.php: f87a8054e245302160fdb3b5b02e06af
 /lib/constants.php: 1e64b72a3f8b8d1b25de425d54b4451e
