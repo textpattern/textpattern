@@ -98,7 +98,6 @@
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-be.php: a34eaaa02c21ea4abfaba2ad9818f1c0
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-bg.php: 9aa86adbd82a847efb273ac6efff2c64
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ca.php: 6a332f400db88a50dd4cd8fa8699b245
-/vendors/phpmailer/phpmailer/language/phpmailer.lang-ch.php: 
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-cs.php: fc4c9b063cda1814edfe6e0ad16c7d3b
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-da.php: 5ac584c76a057c6bf52bfd7147172bf1
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-de.php: de470fc25bbaae789bb886bf539a6bc6
