@@ -4,7 +4,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
-* Fixed: Improved support for images with EXIF orientation (thanks, jools-r).
+* Fixed: Improved support for images with EXIF orientation metadata (thanks, jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
