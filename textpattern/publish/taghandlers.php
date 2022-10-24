@@ -5249,6 +5249,7 @@ function txp_escape($escape, $thing = '')
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
     $filter = $tidy = $quoted = false;
+    isset($thing) or $thing = '';
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
