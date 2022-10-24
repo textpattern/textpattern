@@ -1341,21 +1341,22 @@ function category_list($atts, $thing = null, $cats = null)
         'active_class' => '',
         'break'        => br,
         'categories'   => null,
+        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
         'html_id'      => '',
         'label'        => '',
         'labeltag'     => '',
+        'limit'        => '',
+        'link'         => '1',
+        'offset'       => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
-        'limit'        => '',
-        'offset'       => '',
     ), $atts));
 
     $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
@@ -1366,6 +1367,7 @@ function category_list($atts, $thing = null, $cats = null)
     $out = array();
     $count = 0;
     $last = count($cats);
+    $active_class = txpspecialchars($active_class);
 
     foreach ($cats as $name => $thiscategory) {
         $count++;
@@ -1378,14 +1380,14 @@ function category_list($atts, $thing = null, $cats = null)
         unset($thiscategory['level'], $thiscategory['children']);
 
         if (!isset($thing) && !$form) {
-            $cat = tag(txpspecialchars($thiscategory['title']), 'a',
-                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+            $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
+                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '').
                 ' href="'.pagelinkurl(array(
                     's'       => $section,
                     'c'       => $name,
                     'context' => $type,
                 )).'"'
-            );
+            ) : $name;
         } else {
             $thiscategory['type'] = $type;
             $thiscategory['is_first'] = ($count == 1);
@@ -4997,7 +4999,7 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null && !isset($var)) {
+    } elseif ($set === null && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
