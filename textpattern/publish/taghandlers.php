@@ -3440,7 +3440,7 @@ function image_display($atts)
     global $p;
 
     if ($p) {
-        return thumbnail(array('id' => $p, 'thumbnail' => false));
+        return image(array('id' => $p, 'thumbnail' => false));
     }
 }
 
@@ -3621,35 +3621,14 @@ function images($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
-    if (!$has_content) {
-        global $is_form, $prefs;
-        $old_allow_page_php_scripting = $prefs['allow_page_php_scripting'];
-        $prefs['allow_page_php_scripting'] = true;
-        $is_form++;
 
-        $import = join_atts(compact('thumbnail'), TEXTPATTERN_STRIP_TXP);
-        $thing = '<txp:php'.$import.'>
-global $s, $thisimage;
-$url = pagelinkurl(array(
-    "c"       => $thisimage["category"],
-    "context" => "image",
-    "s"       => $s,
-    "p"       => $thisimage["id"]
-));
-$src = image_url(array("thumbnail" => isset($thumbnail) && ($thumbnail !== true or $thisimage["thumbnail"])));
-echo href(
-    "<img src=\'$src\' alt=\'".txpspecialchars($thisimage["alt"])."\' />",
-    $url
-);
-</txp:php>';
+    if (!$has_content) {
+        $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";
+        $thumb = !isset($thumbnail) ? 0 : ($thumbnail !== true ? 1 : '<txp:image_info type="thumbnail" escape="" />');
+        $thing = '<a href="'.$url.'"><txp:image thumbnail=\''.$thumb.'\' /></a>';
     }
 
     $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
-
-    if (!$has_content) {
-        $prefs['allow_page_php_scripting'] = $old_allow_page_php_scripting;
-        $is_form--;
-    }
 
     return empty($out) ?
         (isset($thing) ? parse($thing, false) : '') :
@@ -3670,16 +3649,18 @@ function image_info($atts)
         'break'      => '',
     ), $atts));
 
-    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
+    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
     $out = array();
 
     if ($imageData = imageFetchInfo($id, $name)) {
-        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
-
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
+                if ($item === 'category_title') {
+                    $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
+                }
+
                 if (isset($imageData[$item])) {
                     $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                 }
