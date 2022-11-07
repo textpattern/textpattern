@@ -1341,21 +1341,22 @@ function category_list($atts, $thing = null, $cats = null)
         'active_class' => '',
         'break'        => br,
         'categories'   => null,
+        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
         'html_id'      => '',
         'label'        => '',
         'labeltag'     => '',
+        'limit'        => '',
+        'link'         => '1',
+        'offset'       => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
-        'limit'        => '',
-        'offset'       => '',
     ), $atts));
 
     $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
@@ -1366,6 +1367,7 @@ function category_list($atts, $thing = null, $cats = null)
     $out = array();
     $count = 0;
     $last = count($cats);
+    $active_class = txpspecialchars($active_class);
 
     foreach ($cats as $name => $thiscategory) {
         $count++;
@@ -1378,14 +1380,14 @@ function category_list($atts, $thing = null, $cats = null)
         unset($thiscategory['level'], $thiscategory['children']);
 
         if (!isset($thing) && !$form) {
-            $cat = tag(txpspecialchars($thiscategory['title']), 'a',
-                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+            $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
+                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '').
                 ' href="'.pagelinkurl(array(
                     's'       => $section,
                     'c'       => $name,
                     'context' => $type,
                 )).'"'
-            );
+            ) : $name;
         } else {
             $thiscategory['type'] = $type;
             $thiscategory['is_first'] = ($count == 1);
@@ -3438,7 +3440,7 @@ function image_display($atts)
     global $p;
 
     if ($p) {
-        return thumbnail(array('id' => $p, 'thumbnail' => false));
+        return image(array('id' => $p, 'thumbnail' => false));
     }
 }
 
@@ -3619,35 +3621,14 @@ function images($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
-    if (!$has_content) {
-        global $is_form, $prefs;
-        $old_allow_page_php_scripting = $prefs['allow_page_php_scripting'];
-        $prefs['allow_page_php_scripting'] = true;
-        $is_form++;
 
-        $import = join_atts(compact('thumbnail'), TEXTPATTERN_STRIP_TXP);
-        $thing = '<txp:php'.$import.'>
-global $s, $thisimage;
-$url = pagelinkurl(array(
-    "c"       => $thisimage["category"],
-    "context" => "image",
-    "s"       => $s,
-    "p"       => $thisimage["id"]
-));
-$src = image_url(array("thumbnail" => isset($thumbnail) && ($thumbnail !== true or $thisimage["thumbnail"])));
-echo href(
-    "<img src=\'$src\' alt=\'".txpspecialchars($thisimage["alt"])."\' />",
-    $url
-);
-</txp:php>';
+    if (!$has_content) {
+        $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";
+        $thumb = !isset($thumbnail) ? 0 : ($thumbnail !== true ? 1 : '<txp:image_info type="thumbnail" escape="" />');
+        $thing = '<a href="'.$url.'"><txp:image thumbnail=\''.$thumb.'\' /></a>';
     }
 
     $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
-
-    if (!$has_content) {
-        $prefs['allow_page_php_scripting'] = $old_allow_page_php_scripting;
-        $is_form--;
-    }
 
     return empty($out) ?
         (isset($thing) ? parse($thing, false) : '') :
@@ -3668,16 +3649,18 @@ function image_info($atts)
         'break'      => '',
     ), $atts));
 
-    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
+    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
     $out = array();
 
     if ($imageData = imageFetchInfo($id, $name)) {
-        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
-
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
+                if ($item === 'category_title') {
+                    $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
+                }
+
                 if (isset($imageData[$item])) {
                     $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                 }
@@ -5007,7 +4990,7 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null && !isset($var)) {
+    } elseif ($set === null && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
@@ -5257,6 +5240,7 @@ function txp_escape($escape, $thing = '')
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
     $filter = $tidy = $quoted = false;
+    isset($thing) or $thing = '';
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
