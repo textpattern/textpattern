@@ -954,7 +954,7 @@ function tag($content, $tag, $atts = '')
 
 function tag_void($tag, $atts = '')
 {
-    return '<'.$tag.join_atts($atts).' />';
+    return '<'.$tag.join_atts($atts).(get_pref('doctype') == 'html5' ? '>' : ' />');
 }
 
 /**
@@ -1877,7 +1877,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
     // Non-enclosing breaks.
     elseif ($break === 'br' || $break === 'hr') {
-        $content = join("<$break $breakatts/>".n, $list);
+        $content = join("<$break $breakatts".(get_pref("doctype") == "html5" ? ">" : " />").n, $list);
     } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {
@@ -1925,7 +1925,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts".(get_pref("doctype") == "html5" ? ">" : " />");
 }
 
 /**
@@ -1947,7 +1947,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
 function doLabel($label = '', $labeltag = '')
 {
     if ($label) {
-        return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
+        return (empty($labeltag) ? $label.'<br'.(get_pref('doctype') == 'html5' ? '>' : ' />') : tag($label, $labeltag));
     }
 
     return '';

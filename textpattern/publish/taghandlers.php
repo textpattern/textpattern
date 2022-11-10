@@ -472,7 +472,7 @@ function image($atts)
             $out .= ' loading="'.$loading.'"';
         }
 
-        $out .= ' />';
+        $out .= (get_pref('doctype') == 'html5' ? '>' : ' />');
 
         if ($link && $thumb_) {
             $attribs = '';
@@ -653,7 +653,7 @@ function feed_link($atts, $thing = null)
     $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
     if ($format == 'link') {
-        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
+        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'"'.(get_pref('doctype') == 'html5' ? '>' : ' />');
     }
 
     $txt = ($thing === null ? $label : parse($thing));
@@ -697,7 +697,7 @@ function link_feed_link($atts)
     $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
     if ($format == 'link') {
-        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
+        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'"'.(get_pref('doctype') == 'html5' ? '>' : ' />');
     }
 
     $out = href($label, $url, array(
@@ -1323,7 +1323,7 @@ function popup($atts)
                 '<div>'.
                 $his.
                 n.$out.
-                n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.
+                n.'<noscript><div><input type="submit" value="'.gTxt('go').'"'.(get_pref('doctype') == 'html5' ? '>' : ' />').'</div></noscript>'.
                 n.'</div>'.
                 n.'</form>';
         }
@@ -1594,7 +1594,7 @@ function search_input($atts, $thing = null)
         return $out;
     }
 
-    $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
+    $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'"'.(get_pref('doctype') == 'html5' ? '>' : ' />') : '';
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
 
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
@@ -3289,7 +3289,7 @@ function article_image($atts)
             ($style ? ' style="'.txpspecialchars($style).'"' : '').
             ($width ? ' width="'.(int) $width.'"' : '').
             ($height ? ' height="'.(int) $height.'"' : '').
-            ' />';
+            (get_pref('doctype') == 'html5' ? '>' : ' />');
 
             $out[] = $img;
     }
@@ -3873,7 +3873,7 @@ function meta_keywords($atts)
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
-            $out = '<meta name="keywords" content="'.$content.'" />';
+            $out = '<meta name="keywords" content="'.$content.'"'.(get_pref('doctype') == 'html5' ? '>' : ' />');
         } else {
             $out = $content;
         }
@@ -3904,7 +3904,7 @@ function meta_description($atts)
         $content = ($escape === true) ? txpspecialchars($content) : txp_escape($escape, $content);
 
         if ($format === 'meta') {
-            $out = '<meta name="description" content="'.$content.'" />';
+            $out = '<meta name="description" content="'.$content.'"'.(get_pref('doctype') == 'html5' ? '>' : ' />');
         } else {
             $out = $content;
         }
@@ -3951,7 +3951,7 @@ function meta_author($atts)
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
-            $out = '<meta name="author" content="'.$display_name.'" />';
+            $out = '<meta name="author" content="'.$display_name.'"'.(get_pref('doctype') == 'html5' ? '>' : ' />');
         } else {
             $out = $display_name;
         }
@@ -4955,7 +4955,7 @@ function rsd()
 
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
-    return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />' : '';
+    return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/"'.(get_pref('doctype') == 'html5' ? '>' : ' />') : '';
 }
 
 // -------------------------------------------------------------
