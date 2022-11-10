@@ -1128,7 +1128,7 @@ function doArticle($atts, $thing = null, $parse = true)
     if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
         $id = assert_int($pretext['id']);
         $thisarticle = null;
-        $where = $atts['?'];
+        $where = gps('txpreview') ? '1' : $atts['?'];
         $tables = $atts['#'];
         $columns = $atts['*'];
 
