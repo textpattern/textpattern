@@ -39,6 +39,8 @@ class Textile extends Base implements TextfilterInterface
      */
 
     protected $textile;
+    protected $textileRestricted;
+    public $version;
 
     /**
      * Constructor.
