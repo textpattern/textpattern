@@ -3262,8 +3262,8 @@ function article_image($atts)
                 continue;
             }
 
-            $width or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
-            $height or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+            $width !== '' or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
+            $height !== '' or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
 
             extract($rs);
 
