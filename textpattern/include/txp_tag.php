@@ -2351,7 +2351,7 @@ class BuilderTags
 
                     $out .= $this->tdb(
                         ($wraptag ? "<$wraptag>" : '').
-                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.(get_pref('doctype') == 'html5' ? '>' : ' />').
+                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.(get_pref('doctype') === 'html5' ? '>' : ' />').
                         ($wraptag ? "</$wraptag>" : '')
                     );
                     break;
