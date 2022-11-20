@@ -442,7 +442,7 @@ function updateVolatilePartials($partials)
 /**
  * Checks if GD supports the given image type.
  *
- * @param   string $image_type Either '.gif', '.jpg', '.png'
+ * @param   string $image_type Either '.gif', '.jpg', '.png', '.svg'
  * @return  bool TRUE if the type is supported
  * @package Image
  */
@@ -466,6 +466,9 @@ function check_gd($image_type)
         case '.png':
             return ($gd_info['PNG Support'] == true);
             break;
+        case '.svg':
+            return true;
+            break;
         case '.webp':
             return (!empty($gd_info['WebP Support']));
             break;
@@ -474,6 +477,46 @@ function check_gd($image_type)
             break;
     }
 
+    return false;
+}
+
+function imagecreatefromsvg($file)
+{
+    return file_get_contents($file);
+}
+
+/**
+ * Private implementation of PHP getimagesize() that includes SVG
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpgetimagesize($file)
+{
+    $content = file_get_contents($file);
+    if (substr($content, 0, 5) != "<?xml")
+        return getimagesize($file);
+
+    $xml = simplexml_load_file($file);
+
+    if ($xml !== false) {
+        $width = $xml['width'];
+        $height = $xml['height'];
+        if ($width == '' || $height == '') {
+            $viewbox = explode(' ', $xml['viewBox']);
+            if ($width == '')
+                $width = $viewbox[2];
+            if ($height == '')
+                $height = $viewbox[3];
+        }
+        $data = array();
+        $data[0] = $width;
+        $data[1] = $height;
+        $data[2] = IMAGETYPE_SVG;
+        return $data;
+    }
     return false;
 }
 
@@ -487,7 +530,7 @@ function check_gd($image_type)
 
 function txpimagesize($file, $create = false)
 {
-    if ($data = getimagesize($file)) {
+    if ($data = txpgetimagesize($file)) {
         list($w, $h, $ext) = $data;
         $exts = get_safe_image_types();
         $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
