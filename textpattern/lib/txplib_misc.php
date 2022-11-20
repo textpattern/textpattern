@@ -618,6 +618,42 @@ function the_privileged($res, $real = false)
     return $out;
 }
 
+/**
+ * Convert SVG size to pixel size
+ *
+ * @param   char        SVG size
+ * @return  int         size in px
+ * @package Image
+ */
+
+function svgtopx($svgsize)
+{
+    preg_match('/([0-9\.]*)([A-Za-z]*)/', $svgsize, $matches);
+    switch (substr($matches[2], 0, 2)) {
+        case '':
+            return($svgsize);
+            break;
+        case 'pt':
+            return($matches[1] * 96 / 72);
+            break;
+        case 'pc':
+            return($matches[1] * 16);
+            break;
+        case 'mm':
+            return($matches[1] * 96 / 25.4);
+            break;
+        case 'cm':
+            return($matches[1] * 96 / 2.54);
+            break;
+        case 'in':
+            return($matches[1] * 96);
+            break;
+        default:
+            return($matches[1]);
+            break;
+    }
+}
+
 const IMAGETYPE_SVG = 99;
 /**
  * Lists image types that can be safely uploaded.
