@@ -502,14 +502,14 @@ function txpgetimagesize($file)
     $xml = simplexml_load_file($file);
 
     if ($xml !== false) {
-        $width = $xml['width'];
-        $height = $xml['height'];
+        $width = svgtopx($xml['width']);
+        $height = svgtopx($xml['height']);
         if ($width == '' || $height == '') {
             $viewbox = explode(' ', $xml['viewBox']);
             if ($width == '')
-                $width = $viewbox[2];
+                $width = svgtopx($viewbox[2]);
             if ($height == '')
-                $height = $viewbox[3];
+                $height = svgtopx($viewbox[3]);
         }
         $data = array();
         $data[0] = $width;
