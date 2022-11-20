@@ -212,7 +212,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
     // Override serve method in order to keep requests logs too while dealing
     // with unknown clients.
-    function serve($data = false)
+    function serve($data = false, $encoding = 'UTF-8')
     {
         if (!$data) {
             global $HTTP_RAW_POST_DATA;
@@ -227,43 +227,22 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
             // First, handle the known UAs in order to serve proper content.
             if (strpos('w.bloggar', $_SERVER['HTTP_USER_AGENT']) !== false) {
-                $encoding = 'iso-8859-1';
+                $encoding = 'ISO-8859-1';
             }
             // Find for supplied encoding before to try other things.
             elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc)) {
-                $encoding = strtolower($xml_enc[1]);
+                $encoding = strtoupper($xml_enc[1]);
             }
             // Try UTF-8 detect.
             elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1) {
-                $encoding = 'utf-8';
+                $encoding = 'UTF-8';
             }
             // Otherwise, use ISO-8859-1.
             else {
-                $encoding = 'iso-8859-1';
+                $encoding = 'ISO-8859-1';
             }
 
-            switch ($encoding) {
-                case 'utf-8':
-                    $data = $HTTP_RAW_POST_DATA;
-                    break;
-
-                case 'iso-8859-1':
-// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
-// see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php & https://github.com/textpattern/textpattern/issues/1051
-                    // This will fail on parser if utf8_encode is unavailiable.
-                    $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))
-                        ? utf8_encode($HTTP_RAW_POST_DATA)
-                        : $HTTP_RAW_POST_DATA;
-                    break;
-
-                default:
-// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding? See https://github.com/textpattern/textpattern/issues/1051
-                    // This will fail on parser if mb_convert_encoding is unavailiable.
-                    $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))
-                        ? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding)
-                        : $HTTP_RAW_POST_DATA;
-                    break;
-            }
+            $data = $encoding == 'UTF-8' ? $HTTP_RAW_POST_DATA : safe_encode($HTTP_RAW_POST_DATA, 'UTF-8', $encoding);
         }
 
         $this->message = new IXR_Message($data);
@@ -305,21 +284,9 @@ EOD;
     }
 
     // Override default UTF-8 output, if needed.
-    function output($xml, $enc = 'utf-8')
+    function output($xml, $enc = 'UTF-8')
     {
-        // Be kind with non-UTF-8 capable clients.
-        if ($enc != 'utf-8') {
-            if ($enc == 'iso-8859-1' && function_exists('utf8_decode') && is_callable('utf8_decode')) {
-                $xml = utf8_decode($xml);
-            } elseif (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding')) {
-                $xml = mb_convert_encoding($xml, $enc, 'utf-8');
-            } else {
-                // TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
-                // If no decoding possible, serve contents as UTF-8. See https://github.com/textpattern/textpattern/issues/1052
-                $enc = 'utf-8';
-            }
-        }
-
+        $xml = $enc == 'UTF-8' ? $xml : safe_encode($xml, $enc, 'UTF-8');
         $xml = '<?xml version="1.0" encoding="'.$enc.'" ?>'.n.$xml;
         $length = strlen($xml);
         header('Connection: close');

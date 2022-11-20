@@ -127,7 +127,7 @@ class SelectTree extends Select implements UIInterface
             $sep = empty($this->properties['separator']) ? '' : str_repeat($this->properties['separator'], $level);
             $html_title = $suffix = '';
 
-            if (($maxlen > self::MIN_LABEL_LENGTH) && (strlen(utf8_decode($label)) > $maxlen)) {
+            if (($maxlen > self::MIN_LABEL_LENGTH) && (Txp::get('\Textpattern\Type\StringType', $label)->getLength() > $maxlen)) {
                 $html_title = txpspecialchars($label);
                 $suffix = empty($this->properties['more']) ? '' : $this->properties['more'];
                 $label = preg_replace('/^(.{0,'.($maxlen).'}).*$/su', '$1', $label);

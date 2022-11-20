@@ -2810,11 +2810,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
     $charset = $charsets[$override_locale];
 
     if ($charset != 'UTF-8' && $charset != 'UTF8') {
-        if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
-            $str = $new;
-        } elseif (is_callable('utf8_encode')) {
-            $str = utf8_encode($str);
-        }
+        $str = safe_encode($str, 'UTF-8', $charset);
     }
 
     // Revert to the old locale.
@@ -2841,6 +2837,42 @@ function safe_strtotime($time_str)
     $tz_offset = tz_offset($ts);
 
     return strtotime($time_str, time() + $tz_offset) - $tz_offset;
+}
+
+/**
+ * Converts a string from one character encoding to another.
+ *
+ * @param   string $str The string to encode
+ * @param   string $to The target encoding
+ * @param   string $from The source encoding
+ * @return  string The converted string
+ * @package String
+ */
+
+function safe_encode($str, $to = 'UTF-8', $from = null)
+{
+    static $mb_ = null, $iconv_ = null, $utf8_ = null, $locenc = null;
+
+    isset($mb_) or $mb_ = is_callable('mb_convert_encoding');
+    isset($iconv_) or $iconv_ = is_callable('iconv');
+    isset($utf8_) or $utf8_ = is_callable('utf8_encode');
+
+    if (!isset($from)) {
+        isset($locenc) or $locenc = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_ALL, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $from = $locenc;
+    }
+
+    if ($mb_) {
+        $str = mb_convert_encoding($str, $to, $from);
+    } elseif ($iconv_ && ($new = iconv($from, $to, $str)) !== false) {
+        $str = $new;
+    } elseif ($utf8_ && strtoupper($to) == 'UTF-8' && strtoupper($from) == 'ISO-8859-1') {
+        $str = utf8_encode($str);
+    } elseif ($utf8_ && strtoupper($to) == 'ISO-8859-1' && strtoupper($from) == 'UTF-8') {
+        $str = utf8_decode($str);
+    }
+
+    return $str;
 }
 
 /**
@@ -5707,7 +5739,7 @@ function soft_wrap($text, $width, $break = '&#8203;')
         $parts = explode(' ', $word);
 
         foreach ($parts as $partnr => $part) {
-            $len = strlen(utf8_decode($part));
+            $len = Txp::get('\Textpattern\Type\StringType', $part)->getLength();
 
             if (!$len) {
                 continue;
