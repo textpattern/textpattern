@@ -166,7 +166,7 @@ class wet_thumb
      * @var array
      */
 
-    public $types = array('', '.gif', '.jpg', '.png');
+    public $types = array('', '.gif', '.jpg', '.png', '.svg');
 
     /**
      * Source.
@@ -224,7 +224,7 @@ class wet_thumb
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF.
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF, 99=SVG.
         $this->_SRC['string']     = $temp[3];
         $this->_SRC['image']      = $temp['image'];
         $this->_SRC['filename']   = basename($infile);
@@ -254,6 +254,8 @@ class wet_thumb
             $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
         } elseif ($this->_SRC['type'] == 19) {
             $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 99) {
+            $this->_SRC['image'] = imagecreatefromsvg($this->_SRC['file']);
         }
 */
         // Ensure non-zero height/width.
@@ -350,6 +352,24 @@ class wet_thumb
 
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
+
+        if ($this->_DST['type'] == 99) {
+            $this->_DST['image'] = $this->_SRC['image'];
+            $xml = simplexml_load_string($this->_DST['image']);
+            if ($xml !== false) {
+                if ($verbose) {
+                    echo "... saving image ...";
+                }
+                $xml['width'] = $this->_DST['width'];
+                $xml['height'] = $this->_DST['height'];
+                $result = file_put_contents($this->_DST['file'], $xml->asXML());
+                if ($verbose) {
+                    echo $result ? "... image successfully saved ..." : "... failed to save image ...";
+                }
+                return $result;
+            }
+            return false;
+        }
 
         // Crop image.
         $off_w = 0;
