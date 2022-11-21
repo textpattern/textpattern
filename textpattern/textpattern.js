@@ -291,16 +291,18 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
 
         lib.checked = function () {
             $this.on('change', opt.checkbox, function (e) {
-                var box = $(this);
+                if ($this.hasClass('multi_edit_form')) {
+                    var box = $(this);
 
-                if (box.prop('checked')) {
-                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
-                        textpattern.Relay.data.selected.push(box.val());
+                    if (box.prop('checked')) {
+                        if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
+                            textpattern.Relay.data.selected.push(box.val());
+                        }
+                    } else {
+                        textpattern.Relay.data.selected = $.grep(textpattern.Relay.data.selected, function(value) {
+                            return value != box.val();
+                        });
                     }
-                } else {
-                    textpattern.Relay.data.selected = $.grep(textpattern.Relay.data.selected, function(value) {
-                        return value != box.val();
-                    });
                 }
 
                 if (typeof(e.originalEvent) != 'undefined') {

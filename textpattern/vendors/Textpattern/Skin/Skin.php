@@ -793,7 +793,7 @@ class Skin extends CommonBase implements SkinInterface
             }
 
             if (!self::isExportable($name)) {
-                $this->mergeResult($event.'_unsafe_name', $name);
+                $this->mergeResult($event.'_name_unsafe', $name);
             } elseif (!$override && is_dir($nameDirPath)) {
                 $this->mergeResult($event.'_already_exists', $nameDirPath);
             } elseif (!is_dir($nameDirPath) && !@mkdir($nameDirPath)) {
