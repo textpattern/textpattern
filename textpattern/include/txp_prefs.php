@@ -792,9 +792,10 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
-    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
+    $input = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name)//selectInput(false, $vals, $val, '', '', $name)
+        .n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
 
-    return pluggable_ui('prefs_ui', 'dateformats', Txp::get('\Textpattern\UI\Select', $name, array_unique($vals), $val)->setAtt('id', $name), compact('vals', 'name', 'val', 'ts'));
+    return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
 
 /**

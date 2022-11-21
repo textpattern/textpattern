@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="sk">
-    <group id="admin" title="Panel Uživatelia">
+    <group id="admin" title="Panel Uživateľa">
         <item id="about_privileges" title="Uživatelské oprávnenia"><![CDATA[
 <h2>Uživateľské práva</h2>
 <h3>Vydavateľ</h3>
@@ -74,7 +74,8 @@
     <li>upravuje rubriky</li>
     <li>upravuje stránky, formy a štýly</li>
 </ul>        ]]></item>
-        <item id="create_author" title="Vytvoriť autora"><![CDATA[]]></item>
+        <item id="create_author" title="Vytvoriť autora"><![CDATA[<h2>Pridať nového autora</h2>
+<p>Novému autorovi bude odoslaná uvítacia správa a pokyny na prihlásenie. </p>]]></item>
     </group>
 
     <group id="article" title="Panel obsah">
@@ -122,13 +123,13 @@
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Aktualizácia verzie Textpattern"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title="Cesty k dočasnému adresáru a adresáru vyrovnávacej pamäte doplnku by sa nemali zhodovať"><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title="Aktualizačný server neprístupný"><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Panel Odkazy">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_reassign" title="Zmeniť priradenie súboru"><![CDATA[]]></item>
         <item id="file_replace" title="Nahradiť súbor"><![CDATA[]]></item>
         <item id="timestamp_file" title="Dátum vydania"><![CDATA[]]></item>
         <item id="upload" title="Nahrať súbor"><![CDATA[]]></item>
@@ -160,25 +161,25 @@
         <item id="remember_login" title=""><![CDATA[]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    <group id="plugin" title="Panel doplnkov">
+        <item id="install_plugin" title="Nainštalovať plugin"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Nahrať plugin"><![CDATA[]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
+    <group id="prefs" title="Panel nastavení">
+        <item id="admin_side_plugins" title="Používať administračné &quot;bočné&quot; pluginy?"><![CDATA[]]></item>
         <item id="advanced_options" title="Rozšírené nastavenia"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="Povoliť PHP kód v článkoch?"><![CDATA[]]></item>
         <item id="allow_form_override" title="Povoliť prepísanie šablóny?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Povoliť PHP kód na stránkach?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Formát dátumu pre archív"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Používajú články anotácie?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Pripojiť titulky k trvalým odkazom?"><![CDATA[]]></item>
+        <item id="auto_dst" title="Automaticky nastavovať letný čas?"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Nový komentár znamená aktualizáciu stránky?"><![CDATA[]]></item>
         <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Vypísať komentáre ako číslovaný zoznam?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Automaticky povoliť komentáre k článkom?"><![CDATA[]]></item>
         <item id="comments_dateformat" title=""><![CDATA[]]></item>
         <item id="comments_default_invite" title=""><![CDATA[]]></item>
         <item id="comments_disabled_after" title=""><![CDATA[]]></item>
@@ -202,14 +203,14 @@
         <item id="expire_logs_after" title=""><![CDATA[]]></item>
         <item id="file_base_path" title=""><![CDATA[]]></item>
         <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
+        <item id="gmtoffset" title="Časové pásmo"><![CDATA[]]></item>
+        <item id="img_dir" title="Priečinok s obrázkami"><![CDATA[]]></item>
         <item id="include_email_atom" title=""><![CDATA[]]></item>
         <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="logging" title="Záznamy"><![CDATA[]]></item>
+        <item id="max_url_len" title="Maximálna dĺžka URL"><![CDATA[]]></item>
+        <item id="module_pophelp" title="Zobraziť odkazy nápovedy"><![CDATA[]]></item>
+        <item id="never_display_email" title="Skrývat emailové adresy komentujúcich?"><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
         <item id="override_form_types" title=""><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>

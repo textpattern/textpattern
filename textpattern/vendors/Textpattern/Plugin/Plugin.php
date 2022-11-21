@@ -202,7 +202,9 @@ class Plugin
         }
 
         set_error_handler(function () {}, E_WARNING|E_NOTICE);
-        $plugin = unserialize($plugin, array());
+        $plugin = version_compare(PHP_VERSION, '7.0.0') >= 0 ?
+            unserialize($plugin, array('allowed_classes' => false)) :
+            unserialize($plugin);
         restore_error_handler();
 
         if (empty($plugin['name'])) {

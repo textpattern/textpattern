@@ -4,15 +4,18 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
+* Fixed: Improved support for images with EXIF orientation metadata (thanks, jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
-  admin-side via config.php.
+  admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step.
 * jQuery 3.6.0.
+* Textile 3.7.7. See https://github.com/textile/php-textile/releases/tag/v3.7.7
+  for full list of changes in this release (thanks, gocom).
 
-Changes in 4.8.8 (upcoming)
+Changes in 4.8.8 (24 Jan 2022)
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.

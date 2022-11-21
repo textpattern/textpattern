@@ -846,7 +846,7 @@ function checkUpdates()
                 $lastCheck['msgval'] = array('{version}' => $release);
             }
 
-            if (version_compare($version, $prerelease) < 0) {
+            if (isset($prerelease) && version_compare($version, $prerelease) < 0) {
                 $lastCheck['msg2'] = 'textpattern_update_available_beta';
                 $lastCheck['msgval2'] = array('{version}' => $prerelease);
             }
