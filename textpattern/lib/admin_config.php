@@ -69,6 +69,7 @@ $txp_permissions = array(
     'image.edit.own'             => '1,2,3,4,5,6',
     'image.delete'               => '1,2',
     'image.delete.own'           => '1,2,3,4,5,6',
+    'image.svg.upload'           => '1,2',
     'lang'                       => '1,2,3,4,5,6',
     'lang.edit'                  => '1,2',
     'link'                       => '1,2,3',
