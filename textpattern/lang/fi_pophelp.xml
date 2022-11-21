@@ -28,7 +28,8 @@
         <item id="file_category" title="Tiedostot"><![CDATA[<h2>Tiedostot</h2>
 <p>Tiedostokategoriat ovat vapaaehtoisia, ja hyödyllisiä tiedostojen ryhmittelemisessä.</p>
         ]]></item>
-        <item id="image_category" title="Kuvat"><![CDATA[]]></item>
+        <item id="image_category" title="Kuvat"><![CDATA[<h2>Kuvat</h2>
+<p>Kuvien kategoriat ovat valinnaisia, ja hyödyllisiä sekä kuvien järjestelemiseen sisäisesti että kuvakokoelmien luomiseen, jotta niitä voidaan näyttää käyttäen tageja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</5</a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</span></a>.</p>]]></item>
         <item id="link_category" title="Linkit"><![CDATA[]]></item>
     </group>
 
