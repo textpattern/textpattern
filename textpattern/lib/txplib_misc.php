@@ -674,7 +674,8 @@ const IMAGETYPE_SVG = 99;
 
 function get_safe_image_types($type = null)
 {
-    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png', IMAGETYPE_SVG => '.svg') +
+    $extensions = array(IMAGETYPE_GIF => '.gif', 0 => '.jpeg', IMAGETYPE_JPEG => '.jpg', IMAGETYPE_PNG => '.png') +
+        (has_privs('image.svg.upload') ? array(IMAGETYPE_SVG => '.svg') : array()) +
         (defined('IMAGETYPE_WEBP') ? array(IMAGETYPE_WEBP => '.webp') : array()) +
         (defined('IMAGETYPE_AVIF') ? array(IMAGETYPE_AVIF => '.avif') : array());
 
