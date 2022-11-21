@@ -226,7 +226,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 
         $sp = str_repeat(sp.sp, $a['level']);
 
-        if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
+        if (($truncate > 3) && (Txp::get('\Textpattern\Type\StringType', $a['title'])->getLength() > $truncate)) {
             $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
             $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
             $hellip = '&#8230;';

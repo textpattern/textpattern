@@ -3262,8 +3262,8 @@ function article_image($atts)
                 continue;
             }
 
-            $width or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
-            $height or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+            $width !== '' or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
+            $height !== '' or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
 
             extract($rs);
 
@@ -5272,7 +5272,7 @@ function txp_escape($escape, $thing = '')
             case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
-                $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
+                $thousands_sep = $LocaleInfo['thousands_sep'];
                 !$thousands_sep or $thing = str_replace($thousands_sep, '', $thing);
                 $dec_point == '.' or $thing = str_replace($dec_point, '.', $thing);
 
