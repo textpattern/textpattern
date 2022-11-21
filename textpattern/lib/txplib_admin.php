@@ -467,8 +467,7 @@ function check_gd($image_type)
             return ($gd_info['PNG Support'] == true);
             break;
         case '.svg':
-            $level = has_privs();
-            if ($level == 1 || $level == 2)
+            if (has_privs('image.svg.upload'))
                 return true;
             break;
         case '.webp':
