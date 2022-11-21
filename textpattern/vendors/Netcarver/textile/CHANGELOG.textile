@@ -1,0 +1,259 @@
+h1. Changelog
+
+Here's a summary of changes in each release. The list doesn't include some small changes or updates to test cases.
+
+h2. "Version 3.7.7 - 2022/05/01":https://github.com/textile/php-textile/releases/tag/v3.7.7
+
+* Fix deprecation errors that appear on PHP >= 8.1 about preg_split limit argument's NULL value.
+
+h2. "Version 3.7.6 - 2020/01/08":https://github.com/textile/php-textile/releases/tag/v3.7.6
+
+* Support consecutive links without whitespace between using bracket syntax (closes "#202":https://github.com/textile/php-textile/issues/202, "#205":https://github.com/textile/php-textile/pull/205 and "#206":https://github.com/textile/php-textile/pull/206).
+
+h2. "Version 3.7.5 - 2019/12/16":https://github.com/textile/php-textile/releases/tag/v3.7.5
+
+* Fix PHP 7.4 compatibility issues (closes "#199":https://github.com/textile/php-textile/issues/199).
+
+h2. "Version 3.7.4 - 2019/12/15":https://github.com/textile/php-textile/releases/tag/v3.7.4
+
+* Fix issue where an inline tag preceding the last character, that is a glyph, is not rendered if the block tags are disabled with @Parser::setBlockTags@ (closes "#198":https://github.com/textile/php-textile/issues/198).
+
+h2. "Version 3.7.3 - 2019/08/30":https://github.com/textile/php-textile/releases/tag/v3.7.3
+
+* Fix issues where divider tags placed on their own line within a paragraph, would disable Textile processing for that paragraph block (closes "#194":https://github.com/textile/php-textile/issues/194).
+
+h2. "Version 3.7.2 - 2019/06/08":https://github.com/textile/php-textile/releases/tag/v3.7.2
+
+* Fix quote and bracket processing around span and other inline tags (closes "#191":https://github.com/textile/php-textile/issues/191 and "#192":https://github.com/textile/php-textile/issues/192).
+
+h2. "Version 3.7.1 - 2019/01/26":https://github.com/textile/php-textile/releases/tag/v3.7.1
+
+* Fix and omit anchor links prefixing (closes "#190":https://github.com/textile/php-textile/issues/190).
+* Alignment attribute can be specified last within a block tag definition (closes "#189":https://github.com/textile/php-textile/issues/190)
+
+h2. "Version 3.7.0 - 2018/12/15":https://github.com/textile/php-textile/releases/tag/v3.7.0
+
+* Fix problems with list parsing; no longer matches inline-syntax, such as strongs, as list item markers (closes "#172":https://github.com/textile/php-textile/issues/172).
+* Add option to disable specific substitution symbols by setting them to FALSE (see "#158":https://github.com/textile/php-textile/issues/158).
+* Add option to apply classes, such as language-identifiers, to the code element within a @bc@ (closes "#96":https://github.com/textile/php-textile/issues/96).
+* Add @Parser::configure()@, the method can be extended to create pre-configured parser classes.
+* Automatic paragraph wrapping now checks the contents and does not wrap paragraphs already wrapped in non-phrasing HTML tags (closes "#22":https://github.com/textile/php-textile/issues/22 and "#63":https://github.com/textile/php-textile/issues/63).
+* Add option to disable Textile formatting for blocks wrapped in non-standard HTML-like tags.
+* Check for starting list depth (closes "#24":https://github.com/textile/php-textile/issues/24).
+* Add @Parser::setImagePrefix()@, @Parser::setLinkPrefix()@, @Parser::getImagePrefix()@ and @Parser::getLinkPrefix()@ (closes "#169":https://github.com/textile/php-textile/issues/169).
+* Add @Parser::setRawBlocks()@ and @Parser::isRawBlocksEnabled()@.
+* Deprecate @Parser::setRelativeImagePrefix()@ and @Parser::$relativeImagePrefix@ in favour of the new decoupled methods.
+
+h2. "Version 3.6.1 - 2018/10/21":https://github.com/textile/php-textile/releases/tag/v3.6.1
+
+* Fix problems with attribute parsing under PHP >= 7.1 (closes "#175":https://github.com/textile/php-textile/issues/175 and "#176":https://github.com/textile/php-textile/issues/176).
+* Fix test suite compatibility issues under PHP >= 7.2 (closes "#184":https://github.com/textile/php-textile/issues/184).
+* Fix missing deprecation notices.
+* Add test fixture for Unicode characters in image title attributes.
+* Tidy entity encoding process (closes "#182":https://github.com/textile/php-textile/issues/182).
+* Drop legacy PHP 5.5 and 5.4 unit test targets due to test suite's depedencies' requirements.
+
+h2. "Version 3.6.0 - 2016/11/17":https://github.com/textile/php-textile/releases/tag/v3.6.0
+
+* Fix empty-like link texts (closes "#141":https://github.com/textile/php-textile/issues/141).
+* Fix empty-like RedCloth definitions (closes "#142":https://github.com/textile/php-textile/issues/142).
+* Fix empty-like table summaries (closes "#143":https://github.com/textile/php-textile/issues/143).
+* Fix image dimension generation on Windows when doc_root can not be resolved (closes "#140":https://github.com/textile/php-textile/issues/140).
+* Fix HTTP protocol restrictions not affecting images (closes "#144":https://github.com/textile/php-textile/issues/144).
+* Add more versatile parsing method, @Parser::parse()@.
+* Add @Parser::setRestricted()@ and @Parser::isRestrictedModeEnabled()@.
+* Add @Parser::setLite()@ and @Parser::isLiteModeEnabled()@.
+* Add @Parser::setDocumentType()@ and @Parser::getDocumentType()@.
+* Add @Parser::setDocumentRootDirectory()@ and @Parser::getDocumentRootDirectory()@.
+* Add @Parser::setImages()@ and @Parser::isImageTagEnabled()@.
+* Add @Parser::setBlockTags()@ and @Parser::isBlockTagEnabled()@ (closes "#138":https://github.com/textile/php-textile/issues/138).
+* Add @Parser::setLinkRelationShip()@ and @Parser::getLinkRelationShip()@.
+* Add @Parser::setLineWrap()@ and @Parser::isLineWrapEnabled()@ (closes "#139":https://github.com/textile/php-textile/issues/139).
+* Deprecate @Parser::textileThis()@, @Parser::textileRestricted()@ and @Parser::textileCommon()@ in favour of the more versatile @Parser::parse()@.
+* Fix: @Parser::relURL()@ now supports unicode characters (closes "#146":https://github.com/textile/php-textile/issues/146).
+* Fix: Undefined variable warning.
+* Feature/Fix: Allow link text that contains newline characters (closes "#154":https://github.com/textile/php-textile/issues/154, "#155":https://github.com/textile/php-textile/issues/155 & "#167":https://github.com/textile/php-textile/issues/167).
+* Fix: Stop encoding '+' characters in tel: links (closes "#156":https://github.com/textile/php-textile/issues/156).
+* Make dimension glyph replacements a little stricter.
+* Fix: Prevent hyphenated class on td cells adding incorrect style (closes "#164":https://github.com/textile/php-textile/issues/164).
+* Jail read of image dimensions to images within the document root path (closes "#145":https://github.com/textile/php-textile/issues/145).
+* Various code cleanups, typo corrections and refactoring.
+* Documentation fixes and extensions.
+
+h2. "Version 3.5.5 - 2014/01/02":https://github.com/textile/php-textile/releases/tag/v3.5.5
+
+* Fix rendering of left and right image alignment in non-lite restricted mode (closes "#132":https://github.com/textile/php-textile/issues/132).
+* Fix wrong triggered error type when using the deprecated @$encode@ option of @Parser::textileThis()@.
+* Fix attribute regular expression to stop it matching multiple times (closes "#131":https://github.com/textile/php-textile/issues/131).
+* Fix rendering of lists in table cells with span attributes set (closes "#135":https://github.com/textile/php-textile/issues/135).
+* Throws an exception if @Parser::__construct()@ is given invalid document type, instead of eating it silently and returning document using the default content-type you weren't wishing for. Prevents issues where you want HTML5, but silently got XHTML due to typo or an issue in application design.
+* Clean user-supplied styles prior to sorting and re-formatting.
+* Remove dead code and duplicated procedures as outlined by code coverage reports.
+* Remove unused internal method @Parser::fSpecial()@.
+* Test code coverage, coding style and run unit tests against "HHVM":http://hhvm.com.
+* Footnote reference numbers support unicode characters.
+* Use named sub-patterns in regular expressions (closes "#121":https://github.com/textile/php-textile/issues/121).
+* Refactored link detection code.
+
+h2. "Version 3.5.4 - 2013/11/06":https://github.com/textile/php-textile/releases/tag/v3.5.4
+
+* Fix broken image alignment in HTML5 mode (closes "#123":https://github.com/textile/php-textile/issues/123).
+* Fix duplicate HTML IDs that occur when a footnote isn't referenced in the content (closes "#125":https://github.com/textile/php-textile/issues/125).
+* Don't include image alignment to the URL in restricted mode.
+* Detect and process quoted quote symbols.
+* New link parser (closes "#86":https://github.com/textile/php-textile/issues/86, "#87":https://github.com/textile/php-textile/issues/87 and "#128":https://github.com/textile/php-textile/issues/128).
+
+h2. "Version 3.5.3 - 2013/10/30":https://github.com/textile/php-textile/releases/tag/v3.5.3
+
+* Fix double image URL encoding (closes "#102":https://github.com/textile/php-textile/issues/102).
+* Fix URL reference token spoofing.
+* Fix broken parser output when $strict argument was set to TRUE (closes "#119":https://github.com/textile/php-textile/issues/119).
+* Fix memory leaking tag cache. Tag cache is never reset between @textileThis()@ and @textileRestricted()@ calls referencing the same instance.
+* Fix rare instances where a link displays a wrong URL mentioned elsewhere in the document.
+* Fix invalid markup generated when Redcloth-style definition list is used inside a table cell.
+* Link aliases follow same allowed URL schemes as normal links.
+* Update @hasRawText()@ and @fPBr()@ to detect a wider range of raw HTML and XHTML.
+* Unify attribute order with Redcloth.
+* Reduce list and blockquote indentation level to match paragraphs and other block tags.
+* Restrict how spans are parsed (closes "#106":https://github.com/textile/php-textile/issues/106).
+* Fix citations on spans (closes "#120":https://github.com/textile/php-textile/issues/120).
+* Refactor @parseAttribsToArray()@ slightly.
+
+h2. "Version 3.5.2 - 2013/10/25":https://github.com/textile/php-textile/releases/tag/v3.5.2
+
+* Improved support for Redcloth-style definition lists.
+*# Allow multiple terms
+*# Allow linebreaks in terms
+* Fix incorrectly rendered @rel@ attributes (closes "#103":https://github.com/textile/php-textile/issues/103).
+* Fix @getSymbol()@ so it actually returns the named symbol (closes "#104":https://github.com/textile/php-textile/issues/104).
+* Fix unicode link aliases that were broken on some PCRE_UTF8 supporting systems.
+* Fix collapsing whitespace and preserve newlines. Preserves whitespace inside long @bc@, @notextile@ and @pre@ blocks, rather than collapsing two or more empty lines down to one. Renders whitespace as it was defined, rather than using hard-coded single LF to separate lines (closes "#109":https://github.com/textile/php-textile/issues/109 and "#111":https://github.com/textile/php-textile/pull/111).
+* Fix the number of code tags rendered inside long code blocks (closes "#116":https://github.com/textile/php-textile/issues/116).
+* Fix token spoofing from the document body by randomizing token references (closes "#115":https://github.com/textile/php-textile/issues/115).
+* Add image dimensions to images even when Textile is run on command line. On CLI, images are looked from the current working directory.
+* Define internal class properties as protected rather than at all, causing them to be created as public.
+* Move internal property definitions from the constructor to class definition.
+* Added runnable PHPUnit tests, integration with "Travis CI":https://travis-ci.org/.
+* Removed error suppression, the code doesn't intentionally produce notices.
+* Add @br@ tags to headings instead of leaving linebreaks untouched.
+
+h2. "Version 3.5.1 - 2013/01/01":https://github.com/textile/php-textile/releases/tag/v3.5.1
+
+* Remove horizontal alignment from inline elements (closes "#66":https://github.com/textile/php-textile/issues/66).
+* Reinstate automatic generation of image width and height generation for relative images (closes "#101":https://github.com/textile/php-textile/issues/101).
+* Add @setDimensionlessImages()@ and @getDimensionlessImages()@ to suppress width and height generation for relative images and better support content for responsive layouts (closes "#100":https://github.com/textile/php-textile/issues/101).
+* Allow "." in class attributes (closes "#97":https://github.com/textile/php-textile/issues/97).
+
+h2. "Version 3.5.0 - 2012/12/12":https://github.com/textile/php-textile/releases/tag/v3.5.0
+
+* Add composer.json to allow installation via the "Composer PHP package manager":https://getcomposer.org/.
+* Regular expression improvements (issues "#78":https://github.com/textile/php-textile/issues/78, "#81":https://github.com/textile/php-textile/issues/81 and "#83":https://github.com/textile/php-textile/issues/83).
+* Allow pre-encoded @>@ and @<@ as alignments.
+* Self-referencing links can now be combined with link aliases. eg. @"$":alias1@ is now possible.
+* Fix memory leak and performance degradation when calling same Textile object multiple times.
+* Do not double-encode @+@ or @%@ in urls.
+* Remove legacy SVN lines and old Textpattern integration methods.
+* Refactored code, removing deprecated methods.
+* Fix undefined variable in Redcloth-style definition lists.
+* Improvements to image handling (closes "#69":https://github.com/textile/php-textile/issues/69).
+* Extend recognition of dimension sign to more complex cases. Eg...
+*# @-0.5 x -.1 x +100@ => %-0.5 × -.1 × +100%
+*# @10 x -€ 110,00@ => %10 × -€ 110,00% (this replacement is available only if unicode support is included in your PCRE implementation and any character that is a currency symbol should work)
+* Change parse tokens to further prevent glyphs from matching them internally.
+* Improve handling of textile within table cells without leading or trailing spaces (eg. @|"$":https://github.com"|_Here we are_|==code==|@ etc).
+* Improve handling of lists within table cells. (closes "#79":https://github.com/textile/php-textile/issues/79)
+* Allow mixed nested lists (Already supported in Redcloth).
+* Improve detection of open quotes in situations like @["(Berk). Hilton"]@ (where the open quote was previously was incorrectly detected encoded).
+* Fix a problem with links followed by ':', ';' or '?' like @Do you like "cheese":/cheese?@ where the '?' becomes part of the href rather than a '?' at the end of the sentence. This happens on platforms where PCRE has unicode support.
+* Removal of leading \t from generated paragraphs & better indentation of generated lists in the HTML (closes "#90":https://github.com/textile/php-textile/issues/90).
+* New method @textileEncode()@. This is preferred to calling @textileThis()@ with the $encode flag.
+* "PSR-0, PSR-1 & PSR-2":https://github.com/php-fig/fig-standards/tree/master/accepted conformity added.
+*# Split class Textile into classes @Parser@, @DataBag@ & @Tag@ and moved them into @src/textile/php-textile@ directory for PSR-0.
+*# Unified method names & coding styles according to PSR-1 & PSR-2.
+*# Switched from using defines to explicit set methods; @setSymbol()@ & @setRelativeImagePrefix()@.
+*# Added visibility controls to all properties and methods.
+* Dropped textile's PHP4 heritage and moved over to using a @__construct()@ method.
+
+h2. "Version 2.4.1 - 2012/08/23":https://github.com/textile/php-textile/releases/tag/v2.4.1
+
+* Add @sftp@, @callto@, @tel@ and @file@ schemes to the URI whitelist in unrestricted mode.
+* Support international format @tel@ URIs via linkrefs (link aliases).
+* Extend linkrefs to all available URI schemes in unrestricted mode.
+* Reverted looser matching of list-like structures as it introduced problems in block-level elements that
+  can legitimately have literals or other non-lists in them that are similar to textile's lists.
+  See issue "#65"::https://github.com/textile/php-textile/issues/65 for some examples.
+* Fixed "#61"::https://github.com/textile/php-textile/issues/61 which caused strong numeric strings at the start of a line to be turned into lists.
+* Reverted auto-breaking in table cells as it introduced "#71"::https://github.com/textile/php-textile/issues/71 (breaking lists within table cells).
+* Fixed "#67"::https://github.com/textile/php-textile/issues/67 which ran textile within table cells through the glyph routine twice.
+
+h2. "Version 2.4.0 - 2012/05/07":https://github.com/textile/php-textile/releases/tag/v2.4.0
+
+* Conditionally use utf8 in span regex pattern. Closes "#53"::https://github.com/textile/php-textile/issues/53.
+* Small code cleanups
+* Convert \n to @<br/>@ inside table rows.
+* Added HTML comment block handling.
+* Added ability to control the start attribute and continuation of ordered lists.
+* Adds basic Redcloth-style definition list support.
+* Add ability to customise footnote refs and anchors.
+* Add https protocol to linkrefs.
+* Add unicode support for linkref urls.
+* Added redcloth style list continuation.
+* Loosen recognition of notedefs and notelists.
+* Better recognition of lists adjoined to previous text. (This was reverted in 2.4.1 as it caused issues inside block elements like bc. or bq).
+* Bugfix: allow apostrophe between ) and a word character.
+* Allow notelist refs to be customised.
+
+h2. "Version 2.3.2 - 2012/03/20":https://github.com/textile/php-textile/releases/tag/v2.3.2
+
+* Allow multiple classes in block attributes.
+* Improve handling of (classA classB#Bad id) blocks.
+* Add span $tail fix & support for trailing [ in spans.
+* Add doctype to textile constructor & use abbr instead of acronym for html5 doctypes.
+* HTML5 doctype extends class rather than use invalid align attribute.
+* Allow auto-assigned classes to be output in restricted mode.
+* Add support for encoding Unicode characters in links.
+* Notelists: fix order of @sup@ and @a@. Fixes issue "#20"::https://github.com/textile/php-textile/issues/20
+* Add simple set of symbols ¤§µ¶†‡•∗∴◊♠♣♥♦ to notelist regex. Requested in "#38"::https://github.com/textile/php-textile/issues/38
+* Remove attributes from embedded code tag output by bc.
+* Simplify en-dash glyph rule -- should fix "#50"::https://github.com/textile/php-textile/issues/50.
+* Simplify self-hyperlinked text, remove the scheme for http, https, ftp and mailto link text.
+
+h2. "Version 2.3.0 - 2012/01/10":https://github.com/textile/php-textile/releases/tag/v2.3
+
+* Fix potential DoS in @cleanba()@.
+* Fix the issue where class would eat the note label.
+* Sanitise image URLs.
+* Allow inline span tags to be applied within non-English quotation marks.
+* Allow non-English quotation marks inside inline span tags.
+* Allow pipe closure of captions.
+* Allow missing closing pipe in colgroups.
+* Note-style links can use index 0.
+* Encode quotes in restricted mode, rather than improperly leaving them as is.
+* Improve lang, style, id and class handling.
+* Add rel attributes to linked images.
+* Center aligned cells aren't treated as captions.
+* Removed use of deprecated @split()@ function.
+* Disallow unsafe block attributes in restricted mode.
+
+h2. "Version 2.2.0 - 2010/09/22":https://github.com/textile/php-textile/releases/tag/v2.2public
+
+This is our first release forked from "revision 3359":https://code.google.com/p/textpattern/source/detail?r=3359 of "Textpattern CMS":http://textpattern.com. Here are the changes since Textile v2.0.0:
+
+* Allow duplicate notelists with different backref characters.
+* Properly render empty table cells.
+* Add support for glyphs such as fractions, plus-minus and degrees.
+* Optimize glyph encoding setup.
+* Optimize style attribute processing.
+* Less restrictive paragraph breaking.
+* Output cleaner inline styles.
+* More restrictive apostrophe encoding and matching.
+* Remove horizontal and vertical alignment attributes from list elements.
+* Lists can use dot terminator.
+* Improved table generation: allow linebreaks in table cells, colgroups, thead, tbody and tfoot elements.
+* Add auto-numbered notelists.
+* Add Textile comment tag. Comments aren't displayed in the generated markup.
+* Add self-links where the URL can be used with the link text (@"$":http://example.com@).
+* Allow glyph parsing across tag boundaries.
+* Add definition lists.
+* Fix duplicate IDs in footnotes.
+* Caps span isn't added to acronyms.

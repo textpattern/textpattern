@@ -1876,11 +1876,9 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         });
     }
     // Non-enclosing breaks.
-    elseif ($break === 'br' || $break === 'hr' || !preg_match('/^\w+$/', $break)) {
-        if ($break === 'br' || $break === 'hr') {
-            $break = "<$break $breakatts/>".n;
-        }
-
+    elseif ($break === 'br' || $break === 'hr') {
+        $content = join("<$break $breakatts/>".n, $list);
+    } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";

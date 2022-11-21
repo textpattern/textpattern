@@ -258,7 +258,7 @@ function array_null($in)
 
 function escape_title($title)
 {
-    return strtr($title, array(
+    return strtr((string)$title, array(
         '<' => '&#60;',
         '>' => '&#62;',
         "'" => '&#39;',
@@ -2713,7 +2713,14 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
 function safe_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
     static $charsets = array(), $txpLocale = null, $intl = null, $formats = array( //'rfc850', 'rfc1036', 'rfc1123', 'rfc2822' ?
-        'atom' => DATE_ATOM, 'w3cdtf' => DATE_ATOM, 'rss' => DATE_RSS, 'cookie' => DATE_COOKIE, 'w3c' => DATE_W3C, 'iso8601' => DATE_ISO8601, 'rfc822' => DATE_RFC822,
+        'atom'    => DATE_ATOM,
+        'w3cdtf'  => DATE_ATOM,
+        'rss'     => DATE_RSS,
+        'cookie'  => DATE_COOKIE,
+        'w3c'     => DATE_W3C,
+        'iso8601' => DATE_ISO8601,
+        'rfc822'  => DATE_RFC822,
+        'rfc7231' => "D, d M Y H:i:s \G\M\T" // constant available since php 7
     ), $translate = array(
         '%a' => 'D',
         '%A' => 'l',
@@ -2803,11 +2810,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
     $charset = $charsets[$override_locale];
 
     if ($charset != 'UTF-8' && $charset != 'UTF8') {
-        if (is_callable('iconv') && $new = iconv($charset, 'UTF-8', $str)) {
-            $str = $new;
-        } elseif (is_callable('utf8_encode')) {
-            $str = utf8_encode($str);
-        }
+        $str = safe_encode($str, 'UTF-8', $charset);
     }
 
     // Revert to the old locale.
@@ -2834,6 +2837,42 @@ function safe_strtotime($time_str)
     $tz_offset = tz_offset($ts);
 
     return strtotime($time_str, time() + $tz_offset) - $tz_offset;
+}
+
+/**
+ * Converts a string from one character encoding to another.
+ *
+ * @param   string $str The string to encode
+ * @param   string $to The target encoding
+ * @param   string $from The source encoding
+ * @return  string The converted string
+ * @package String
+ */
+
+function safe_encode($str, $to = 'UTF-8', $from = null)
+{
+    static $mb_ = null, $iconv_ = null, $utf8_ = null, $locenc = null;
+
+    isset($mb_) or $mb_ = is_callable('mb_convert_encoding');
+    isset($iconv_) or $iconv_ = is_callable('iconv');
+    isset($utf8_) or $utf8_ = is_callable('utf8_encode');
+
+    if (!isset($from)) {
+        isset($locenc) or $locenc = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_ALL, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $from = $locenc;
+    }
+
+    if ($mb_) {
+        $str = mb_convert_encoding($str, $to, $from);
+    } elseif ($iconv_ && ($new = iconv($from, $to, $str)) !== false) {
+        $str = $new;
+    } elseif ($utf8_ && strtoupper($to) == 'UTF-8' && strtoupper($from) == 'ISO-8859-1') {
+        $str = utf8_encode($str);
+    } elseif ($utf8_ && strtoupper($to) == 'ISO-8859-1' && strtoupper($from) == 'UTF-8') {
+        $str = utf8_decode($str);
+    }
+
+    return $str;
 }
 
 /**
@@ -3903,7 +3942,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
         // Make sure lastmod isn't in the future.
         $unix_ts = min($unix_ts, time());
 
-        $last = safe_strftime('rfc822', $unix_ts, 1);
+        $last = safe_strftime('rfc7231', $unix_ts, 1);
         header("Last-Modified: $last");
 
         $etag = base_convert($unix_ts, 10, 32);
@@ -4970,8 +5009,8 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    $section = urlencode($section);
-    $url_title = urlencode($url_title);
+    $section = urlencode((string)$section);
+    $url_title = urlencode((string)$url_title);
     $posted = isset($uposted) ? $uposted : $posted;
 
     if (empty($url_title) && !in_array($url_mode, array('section_id_title', 'id_title')) ||
@@ -5700,7 +5739,7 @@ function soft_wrap($text, $width, $break = '&#8203;')
         $parts = explode(' ', $word);
 
         foreach ($parts as $partnr => $part) {
-            $len = strlen(utf8_decode($part));
+            $len = Txp::get('\Textpattern\Type\StringType', $part)->getLength();
 
             if (!$len) {
                 continue;
@@ -5765,13 +5804,13 @@ function send_xml_response($response = array())
             foreach ($value as $e => $v) {
                 // Character escaping in values;
                 // @see https://www.w3.org/TR/REC-xml/#sec-references.
-                $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_QUOTES, 'UTF-8'));
+                $v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_XML1, 'UTF-8'));
                 $out[] = t.t."<$e value='$v' />".n;
             }
 
             $out[] = t."</$element>".n;
         } else {
-            $value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($value, ENT_QUOTES, 'UTF-8'));
+            $value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($value, ENT_XML1, 'UTF-8'));
             $out[] = t."<$element value='$value' />".n;
         }
     }
@@ -6140,7 +6179,7 @@ function txp_match($atts, $what)
             case 'any':
                 $values = do_list_unique($value);
                 $cond = false;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? in_array($term, $cf_contents) : strpos($cf_contents, $term) !== false) {
@@ -6152,7 +6191,7 @@ function txp_match($atts, $what)
             case 'all':
                 $values = do_list_unique($value);
                 $cond = true;
-                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : $what;
+                $cf_contents = $separator && !is_array($what) ? do_list_unique($what, $separator) : (string)$what;
 
                 foreach ($values as $term) {
                     if (is_array($cf_contents) ? !in_array($term, $cf_contents) : strpos($cf_contents, $term) === false) {
@@ -6179,7 +6218,7 @@ function txp_match($atts, $what)
                     $dlm = $dlm.$value.$dlm;
                 }
 
-                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : $what);
+                $cond = preg_match($dlm, is_array($what) ? implode('', $what) : (string)$what);
                 break;
             default:
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'match')), E_USER_NOTICE);

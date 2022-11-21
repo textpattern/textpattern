@@ -515,7 +515,7 @@ if (!defined('AJAX_TIMEOUT')) {
      * define('AJAX_TIMEOUT', 10);
      */
 
-    define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+    define('AJAX_TIMEOUT', 1000 * max(30, (int)ini_get('max_execution_time')));
 }
 
 /**

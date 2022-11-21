@@ -1341,21 +1341,22 @@ function category_list($atts, $thing = null, $cats = null)
         'active_class' => '',
         'break'        => br,
         'categories'   => null,
+        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
         'html_id'      => '',
         'label'        => '',
         'labeltag'     => '',
+        'limit'        => '',
+        'link'         => '1',
+        'offset'       => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
-        'limit'        => '',
-        'offset'       => '',
     ), $atts));
 
     $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
@@ -1366,6 +1367,7 @@ function category_list($atts, $thing = null, $cats = null)
     $out = array();
     $count = 0;
     $last = count($cats);
+    $active_class = txpspecialchars($active_class);
 
     foreach ($cats as $name => $thiscategory) {
         $count++;
@@ -1378,14 +1380,14 @@ function category_list($atts, $thing = null, $cats = null)
         unset($thiscategory['level'], $thiscategory['children']);
 
         if (!isset($thing) && !$form) {
-            $cat = tag(txpspecialchars($thiscategory['title']), 'a',
-                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+            $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
+                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '').
                 ' href="'.pagelinkurl(array(
                     's'       => $section,
                     'c'       => $name,
                     'context' => $type,
                 )).'"'
-            );
+            ) : $name;
         } else {
             $thiscategory['type'] = $type;
             $thiscategory['is_first'] = ($count == 1);
@@ -3260,8 +3262,8 @@ function article_image($atts)
                 continue;
             }
 
-            $width or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
-            $height or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+            $width !== '' or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
+            $height !== '' or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
 
             extract($rs);
 
@@ -3438,7 +3440,7 @@ function image_display($atts)
     global $p;
 
     if ($p) {
-        return thumbnail(array('id' => $p, 'thumbnail' => false));
+        return image(array('id' => $p, 'thumbnail' => false));
     }
 }
 
@@ -3619,35 +3621,14 @@ function images($atts, $thing = null)
     );
 
     $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
-    if (!$has_content) {
-        global $is_form, $prefs;
-        $old_allow_page_php_scripting = $prefs['allow_page_php_scripting'];
-        $prefs['allow_page_php_scripting'] = true;
-        $is_form++;
 
-        $import = join_atts(compact('thumbnail'), TEXTPATTERN_STRIP_TXP);
-        $thing = '<txp:php'.$import.'>
-global $s, $thisimage;
-$url = pagelinkurl(array(
-    "c"       => $thisimage["category"],
-    "context" => "image",
-    "s"       => $s,
-    "p"       => $thisimage["id"]
-));
-$src = image_url(array("thumbnail" => isset($thumbnail) && ($thumbnail !== true or $thisimage["thumbnail"])));
-echo href(
-    "<img src=\'$src\' alt=\'".txpspecialchars($thisimage["alt"])."\' />",
-    $url
-);
-</txp:php>';
+    if (!$has_content) {
+        $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";
+        $thumb = !isset($thumbnail) ? 0 : ($thumbnail !== true ? 1 : '<txp:image_info type="thumbnail" escape="" />');
+        $thing = '<a href="'.$url.'"><txp:image thumbnail=\''.$thumb.'\' /></a>';
     }
 
     $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
-
-    if (!$has_content) {
-        $prefs['allow_page_php_scripting'] = $old_allow_page_php_scripting;
-        $is_form--;
-    }
 
     return empty($out) ?
         (isset($thing) ? parse($thing, false) : '') :
@@ -3668,16 +3649,18 @@ function image_info($atts)
         'break'      => '',
     ), $atts));
 
-    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
+    $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
     $out = array();
 
     if ($imageData = imageFetchInfo($id, $name)) {
-        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
-
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
+                if ($item === 'category_title') {
+                    $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
+                }
+
                 if (isset($imageData[$item])) {
                     $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                 }
@@ -3874,7 +3857,7 @@ function meta_keywords($atts)
     global $id_keywords;
 
     extract(lAtts(array(
-        'escape'    => null,
+        'escape'    => true,
         'format'    => 'meta', // or empty for raw value
         'separator' => null,
     ), $atts));
@@ -3882,7 +3865,7 @@ function meta_keywords($atts)
     $out = '';
 
     if ($id_keywords) {
-        $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
+        $content = ($escape === true) ? txpspecialchars($id_keywords) : txp_escape($escape, $id_keywords);
 
         if ($separator !== null) {
             $content = implode($separator, do_list($content));
@@ -3909,7 +3892,7 @@ function meta_keywords($atts)
 function meta_description($atts)
 {
     extract(lAtts(array(
-        'escape' => null,
+        'escape' => true,
         'format' => 'meta', // or empty for raw value
         'type'   => null,
     ), $atts));
@@ -3918,7 +3901,7 @@ function meta_description($atts)
     $content = getMetaDescription($type);
 
     if ($content) {
-        $content = ($escape === null ? txpspecialchars($content) : $content);
+        $content = ($escape === true) ? txpspecialchars($content) : txp_escape($escape, $content);
 
         if ($format === 'meta') {
             $out = '<meta name="description" content="'.$content.'" />';
@@ -3955,7 +3938,7 @@ function meta_author($atts)
     global $id_author;
 
     extract(lAtts(array(
-        'escape' => null,
+        'escape' => true,
         'format' => 'meta', // or empty for raw value
         'title'  => 0,
     ), $atts));
@@ -3964,7 +3947,7 @@ function meta_author($atts)
 
     if ($id_author) {
         $display_name = ($title) ? get_author_name($id_author) : $id_author;
-        $display_name = ($escape === null) ? txpspecialchars($display_name) : $display_name;
+        $display_name = ($escape === true) ? txpspecialchars($display_name) : txp_escape($escape, $display_name);
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
@@ -4952,7 +4935,7 @@ function hide($atts = array(), $thing = null)
     extract(lAtts(array('process' => null), $atts));
 
     if (!$process) {
-        return trim($process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
+        return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
     } elseif (is_numeric($process)) {
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
@@ -4997,7 +4980,7 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null && !isset($var)) {
+    } elseif ($set === null && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
@@ -5021,7 +5004,7 @@ function variable($atts, $thing = null)
         }
     }
 
-    if ($default !== false && trim($var) === '') {
+    if ($default !== false && trim((string)$var) === '') {
         $var = $default;
     }
 
@@ -5247,6 +5230,7 @@ function txp_escape($escape, $thing = '')
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
     $filter = $tidy = $quoted = false;
+    isset($thing) or $thing = '';
 
     isset($mb) or $mb = extension_loaded('mbstring') ? 'mb_' : '';
 
@@ -5263,6 +5247,9 @@ function txp_escape($escape, $thing = '')
             case 'url':
                 $thing = $tidy ? rawurlencode($thing) : urlencode($thing);
                 break;
+            case 'url_title':
+                $thing = stripSpace($thing, 1);
+                break;
             case 'js':
                 $thing = escape_js($thing);
                 break;
@@ -5275,7 +5262,7 @@ function txp_escape($escape, $thing = '')
             case 'number': case 'float': case 'spell': case 'ordinal':
                 isset($LocaleInfo) or $LocaleInfo = localeconv();
                 $dec_point = $LocaleInfo['decimal_point'];
-                $thousands_sep = utf8_encode($LocaleInfo['thousands_sep']);
+                $thousands_sep = $LocaleInfo['thousands_sep'];
                 !$thousands_sep or $thing = str_replace($thousands_sep, '', $thing);
                 $dec_point == '.' or $thing = str_replace($dec_point, '.', $thing);
 
@@ -5394,13 +5381,13 @@ function txp_wraptag($atts, $thing = '')
         'default'  => null,
     ), $atts, false));
 
-    if ($break === true) {
-        $break = txp_break($wraptag);
-    }
+    $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
 
     if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
+            $thing = do_list($thing);
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
@@ -5409,7 +5396,7 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
-        $thing = doWrap($thing, null, compact('break', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort'));
+        $thing = doWrap($thing, null, compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort') + $dobreak);
     } elseif ($escape) {
         $thing = txp_escape($escape, $thing);
     }
