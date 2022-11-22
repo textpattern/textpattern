@@ -499,8 +499,12 @@ function txpgetimagesize($file)
     $content = file_get_contents($file);
     if (substr($content, 0, 5) != "<?xml")
         return getimagesize($file);
+    
+    if (strpos($content, "<svg") === false || strpos($content, "<script") > 0)
+        return false;
 
-    $xml = simplexml_load_file($file);
+    libxml_use_internal_errors(true);
+    $xml = simplexml_load_string($content);
 
     if ($xml !== false) {
         $width = svgtopx($xml['width']);
