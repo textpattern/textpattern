@@ -5143,15 +5143,12 @@ function txp_eval($atts, $thing = null)
             } else {
                 $functions = false;
             }
-
-            $prefs['_txp_evaluate_functions'] = $_functions;
         }
 
         if ($functions) {
             $query = preg_replace_callback('/\b('.$functions.')\s*\(\s*(\)?)/',
-                function ($match) {
-                    global $prefs;
-                    $function = empty($prefs['_txp_evaluate_functions'][$match[1]]) ? $match[1] : $prefs['_txp_evaluate_functions'][$match[1]];
+                function ($match) use ($_functions) {
+                    $function = empty($_functions[$match[1]]) ? $match[1] : $_functions[$match[1]];
 
                     return "php:function('$function'".($match[2] ? ')' : ',');
                 },
