@@ -531,10 +531,11 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  * @param  string $id                 The HTML id
  * @param  string $role               ARIA role name
  * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
+ * @param  string $aria_label         ARIA label attribute
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true, $aria_label = '')
 {
     $action = 'index.php';
     $autocomplete = '';
@@ -560,6 +561,7 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         'role'         => $role,
         'autocomplete' => $autocomplete,
         'style'        => $style,
+        'aria-label'   => $aria_label,
     ));
 }
 
