@@ -48,7 +48,7 @@ Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/REA
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Twitter](https://textpattern.com/@textpattern).
+The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Mastodon](https://textpattern.com/mastodon) and [Twitter](https://textpattern.com/twitter).
 
 ## Development
 
