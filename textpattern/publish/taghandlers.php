@@ -5362,7 +5362,7 @@ function txp_wraptag($atts, $thing = '')
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
 
     extract(lAtts(array(
-        'escape'   => null,
+        'escape'   => '',
         'label'    => '',
         'labeltag' => '',
         'wraptag'  => '',
