@@ -481,9 +481,49 @@ function check_gd($image_type)
     return false;
 }
 
-function imagecreatefromsvg($file)
+/**
+ * Find SVG element in XML tree
+ *
+ * @param   SimpleXMLElement  $node  start tree
+ * @param   SimpleXMLElement  &$svg  return SVG tree, if any
+ * @package Image
+ */
+
+function findSVG($node, &$svg) {
+    if ($node->getName() == 'svg') {
+        $svg = $node;
+        return;
+    }
+    foreach ($node->children() as $child) {
+        findSVG($child, $svg);
+    }
+}
+
+/**
+ * Provide GD equivalent function to create image from SVG
+ *
+ * @param   string  $file             Filename
+ * @param   bool    $makestandalone   Remove non-svg elements from tree
+ * @package Image
+ */
+
+function imagecreatefromsvg($file, $makestandalone = true)
 {
-    return file_get_contents($file);
+    $xml = file_get_contents($file);
+    if ($makestandalone) {
+        $xmlend = strpos($xml, '?>') + 2;
+        $xmltree = simplexml_load_string($xml);
+        $svg = null;
+        findSVG($xmltree, $svg);
+        if ($svg == null)
+            return false;
+        $newxml = $svg->asXML();
+        if (substr($newxml, 0, 5) != "<?xml")
+            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
+        else
+            return $newxml . PHP_EOL;
+    } else
+      return $xml;
 }
 
 /**
@@ -500,29 +540,31 @@ function txpgetimagesize($file)
     if (substr($content, 0, 5) != "<?xml")
         return getimagesize($file);
     
-    if (strpos($content, "<svg") === false || strpos($content, "<script") > 0)
+    if (strpos($content, "<svg") === false)
         return false;
 
-    libxml_use_internal_errors(true);
-    $xml = simplexml_load_string($content);
+    if (($xml = simplexml_load_string($content)) === false)
+        return false;
 
-    if ($xml !== false) {
-        $width = svgtopx($xml['width']);
-        $height = svgtopx($xml['height']);
-        if ($width == '' || $height == '') {
-            $viewbox = explode(' ', $xml['viewBox']);
-            if ($width == '')
-                $width = svgtopx($viewbox[2]);
-            if ($height == '')
-                $height = svgtopx($viewbox[3]);
-        }
-        $data = array();
-        $data[0] = $width;
-        $data[1] = $height;
-        $data[2] = IMAGETYPE_SVG;
-        return $data;
+    $svg = null;
+    findSVG($xml, $svg);
+    if ($svg == null)
+        return false;
+ 
+    $width = svgtopx($svg['width']);
+    $height = svgtopx($svg['height']);
+    if ($width == '' || $height == '') {
+        $viewbox = explode(' ', $svg['viewBox']);
+        if ($width == '')
+            $width = $viewbox[2];
+        if ($height == '')
+            $height = $viewbox[3];
     }
-    return false;
+    $data = array();
+    $data[0] = $width;
+    $data[1] = $height;
+    $data[2] = IMAGETYPE_SVG;
+    return $data;
 }
 
 /**
@@ -564,7 +606,7 @@ function txpimagesize($file, $create = false)
 
         $errlevel = error_reporting(0);
 
-        if ($data['image'] = $imgf($file)) {
+        if ($data['image'] = $imgf($file, false)) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
             $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
@@ -671,7 +713,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     $newpath = IMPATH.$id.$ext;
 
-    if (shift_uploaded_file($file, $newpath) == false) {
+    if (shift_uploaded_file($file, $newpath, $ext == '.svg') == false) {
         if (!empty($rs)) {
             safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
@@ -1217,12 +1259,21 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
+ * @param   bool $issvg  Image type is SVG
  * @return  bool TRUE on success, or FALSE on error
  * @package File
  */
 
-function shift_uploaded_file($f, $dest)
+function shift_uploaded_file($f, $dest, $issvg)
 {
+    if ($issvg) {
+        if (($svg = imagecreatefromsvg($f)) !== false) {
+            unlink($f);
+            if (file_put_contents($dest, $svg) !== false)
+                return true;
+        }
+    }
+
     if (@rename($f, $dest)) {
         return true;
     }
