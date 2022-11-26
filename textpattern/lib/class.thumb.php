@@ -360,8 +360,8 @@ class wet_thumb
                 if ($verbose) {
                     echo "... saving image ...";
                 }
-                $xml['width'] = $this->_DST['width'];
-                $xml['height'] = $this->_DST['height'];
+                $xml['width'] = $this->width;
+                $xml['height'] = $this->height;
                 $result = file_put_contents($this->_DST['file'], $xml->asXML());
                 if ($verbose) {
                     echo $result ? "... image successfully saved ..." : "... failed to save image ...";
