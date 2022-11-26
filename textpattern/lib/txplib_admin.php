@@ -606,7 +606,11 @@ function txpimagesize($file, $create = false)
 
         $errlevel = error_reporting(0);
 
-        if ($data['image'] = $imgf($file, false)) {
+        if ($ext == '.svg')
+            $data['image'] = $imgf($file, false);
+        else
+            $data['image'] = $imgf($file);
+        if ($data['image']) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
             $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
