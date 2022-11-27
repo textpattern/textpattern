@@ -139,7 +139,7 @@ function list_languages($message = '')
             $removeText = '<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove'));
 
             $btnRemove = (
-                array_key_exists($langname, $active_lang)
+                (array_key_exists($langname, $active_lang) || array_key_exists($langname, $langUse))
                     ? ''
                     : (has_privs('lang.edit')
                         ? tag($removeText, 'button', array(
@@ -165,7 +165,7 @@ function list_languages($message = '')
             ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
             tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
             tag($langname, 'code', array('dir' => 'ltr')).
-            ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+            (array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
         );
 
         $btnSet = trim((has_privs('lang.edit')
