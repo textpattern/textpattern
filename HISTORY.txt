@@ -7,6 +7,8 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Improved support for images with EXIF orientation metadata (thanks, jools-r).
 * Fixed: Compiled plugins upload on PHP 5.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of <txp:image />.
+* Fixed: Self-closing tag output for html5 doctype to silence validator
+ (thanks, jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
