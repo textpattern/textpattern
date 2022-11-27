@@ -629,7 +629,7 @@ function author_edit($message = '', $fullEdit = false)
     if (count($langList) > 1) {
         $langField = inputLabel(
             'language',
-            selectInput('language', $langList, $authorLang, true, false, 'language'),
+            selectInput('language', $langList, $authorLang, false, false, 'language'),
             'active_language_ui', '', array('class' => 'txp-form-field edit-admin-language')
         );
     } else {
