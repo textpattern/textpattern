@@ -10,9 +10,11 @@ Changes in 4.9.0 (upcoming)
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: Can no longer delete in-use languages.
 * Developer: Introduce UI class library for building interface components.
 * jQuery 3.6.0.
 * Textile 3.7.7. See https://github.com/textile/php-textile/releases/tag/v3.7.7

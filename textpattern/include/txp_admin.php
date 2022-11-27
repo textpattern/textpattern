@@ -730,11 +730,17 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $privileges = privs();
     $users = safe_column("name", 'txp_users', "1 = 1");
+    $langObj = Txp::get('\Textpattern\L10n\Lang');
+    $langs = $langObj->languageList();
 
     $methods = array(
         'changeprivilege'  => array(
             'label' => gTxt('changeprivilege'),
             'html'  => $privileges,
+        ),
+        'changelanguage'  => array(
+            'label' => gTxt('changelanguage'),
+            'html'  => selectInput('lang', $langs, '', false, false, 'lang'),
         ),
         'resetpassword'    => gTxt('resetpassword'),
         'resendactivation' => gTxt('resend_activation'),
@@ -746,6 +752,10 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')).
                 selectInput('assign_assets', $users, '', true, '', 'assign_assets'),
         );
+    }
+
+    if (count($langObj->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED)) == 1) {
+        unset($methods['changelanguage']);
     }
 
     return multi_edit($methods, 'admin', 'admin_multi_edit', $page, $sort, $dir, $crit, $search_method);
@@ -808,6 +818,17 @@ function admin_multi_edit()
 
         case 'changeprivilege':
             if (change_user_group($names, ps('privs'))) {
+                $changed = $names;
+                $msg = 'author_updated';
+            }
+
+            break;
+
+        case 'changelanguage':
+            $nameSet = join(',', quote_list((array) $names));
+            $ret = safe_update('txp_prefs', "val = '".doSlash(ps('lang'))."'", "name='language_ui' AND user_name IN ($nameSet)");
+
+            if ($ret) {
                 $changed = $names;
                 $msg = 'author_updated';
             }
