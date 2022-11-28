@@ -59,7 +59,7 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
-    global $txp_user, $prefs;
+    global $prefs;
 
     $allTypes = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE;
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available($allTypes, $allTypes);
@@ -94,7 +94,7 @@ function list_languages($message = '')
 
     $grid = '';
     $done = array();
-    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in ('".join("','", doSlash(array_keys($represented_lang)))."') AND user_name != '".doSlash($txp_user)."'");
+    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in ('".join("','", doSlash(array_keys($represented_lang)))."')");
 
     $langUse = array();
 
@@ -139,7 +139,7 @@ function list_languages($message = '')
             $removeText = '<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove'));
 
             $btnRemove = (
-                array_key_exists($langname, $active_lang)
+                (array_key_exists($langname, $active_lang) || array_key_exists($langname, $langUse))
                     ? ''
                     : (has_privs('lang.edit')
                         ? tag($removeText, 'button', array(
@@ -165,7 +165,7 @@ function list_languages($message = '')
             ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
             tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
             tag($langname, 'code', array('dir' => 'ltr')).
-            ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+            (array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
         );
 
         $btnSet = trim((has_privs('lang.edit')

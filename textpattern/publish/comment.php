@@ -695,7 +695,7 @@ function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '
         ($class) ? ' class="'.$class.'"'  : '',
         ($tab)   ? ' tabindex="'.$tab.'"' : '',
         ($chkd)  ? ' checked="checked"'   : '',
-        ' />'.n,
+        (get_pref('doctype') === 'html5' ? '>' : ' />').n,
     );
 
     return join('', $o);

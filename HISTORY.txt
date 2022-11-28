@@ -7,12 +7,17 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Improved support for images with EXIF orientation metadata (thanks, jools-r).
 * Fixed: Compiled plugins upload on PHP 5.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of <txp:image />.
+* Fixed: Self-closing tag output for html5 doctype to silence validator
+ (thanks, jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
-* Changed: Plugins of all types trigger verify step.
+* Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: Can no longer delete in-use languages.
+* Developer: Introduce UI class library for building interface components.
 * jQuery 3.6.0.
 * Textile 3.7.7. See https://github.com/textile/php-textile/releases/tag/v3.7.7
   for full list of changes in this release (thanks, gocom).
