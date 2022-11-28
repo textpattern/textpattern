@@ -4475,6 +4475,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
             if (isset($custom['by_name'][$k])) {
                 $no = $custom['by_name'][$k];
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
+                $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                 $filter = array();
 
@@ -4485,6 +4486,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                         $where[] = $unique ? "$not $k" : "$k IS NOT NULL";
                         $filter[] = "$not value != ''";
                     } else {
+                        (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
                         $val = doSlash($val);
                         $parts = array();
 
@@ -4514,7 +4516,6 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 if ($unique) {
                     $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
                 } else {
-                    $dlm = $custom['by_delimiter'][$no];
                     $columns[] = "(SELECT GROUP_CONCAT(value SEPARATOR '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
                 }
             }
