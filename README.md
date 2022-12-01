@@ -120,18 +120,6 @@ npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
 ```
 
-You can verify PHP code via a PHP linter from the CLI, like so:
-
-```ShellSession
-npm run phplint
-```
-
-You can verify JavaScript code via a JavaScript linter from the CLI, like so:
-
-```ShellSession
-npm run eslint
-```
-
 Release tools:
 
 Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
