@@ -4480,11 +4480,11 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 $filter = array();
 
                 if (isset($pairs[$k])) {
-                    $not = ($exclude === true || isset($exclude[$k])) ? 'NOT' : '';
+                    $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
                     // TBC
                     if ($val === true) {
-                        $where[] = $unique ? "$not $k" : "$k IS NOT NULL";
-                        $filter[] = "$not value != ''";
+                        $where[] = $unique ? "{$not}$k != ''" : "$k IS NOT NULL";
+                        $filter[] = "{$not}value != ''";
                     } else {
                         (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
                         $val = doSlash($val);
@@ -4494,29 +4494,30 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                             list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
                             if (!isset($to)) {
-                                $parts[] = $unique ? "$not $k LIKE '$v'" : "$k IS NOT NULL";
-                                $filter[] = "$not value LIKE '$v'";
+                                !$unique or $parts[] = "{$not}$k LIKE '$v'";
+                                $filter[] = "{$not}value LIKE '$v'";
                             } elseif ($from !== '') {
-                                $parts[] = $unique ? ($to === '' ? "$not $k>='$from'" :  "$not $k BETWEEN '$from' and '$to'") : "$k IS NOT NULL";
-                                $filter[] = $to === '' ? "$not value>='$from'" :  "$not value BETWEEN '$from' and '$to'";
+                                !$unique or $parts[] = ($to === '' ? "{$not}$k >= '$from'" :  "{$not}$k BETWEEN '$from' AND '$to'");
+                                $filter[] = $to === '' ? "{$not}value >= '$from'" :  "{$not}value BETWEEN '$from' AND '$to'";
                             } elseif ($to !== '') {
-                                $parts[] = $unique ? "$not $k<='$to'" : "$k IS NOT NULL";
-                                $filter[] = "$not value<='$to'";
+                                !$unique or $parts[] = "{$not}$k <= '$to'";
+                                $filter[] = "{$not}value <= '$to'";
                             }
                         }
 
-                        if ($parts) {
-                            $where[] = '('.join($not ? ' AND ' : ' OR ', $parts).')';
+                        if ($filter) {
+                            $where[] = $unique ? '('.join($not ? ' AND ' : ' OR ', $parts).')' : "$k IS NOT NULL";
                         }
                     }
                 }
 
-                $filter = $filter ? 'AND ('.join(' OR ', $filter).')' : '';
-
                 if ($unique) {
                     $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
                 } else {
-                    $columns[] = "(SELECT GROUP_CONCAT(value SEPARATOR '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID $filter GROUP BY content_id) AS $k";
+                    $dlm = doSlash($dlm);
+                    !$filter or $filter = join(' OR ', $filter);
+                    $filter = $filter ? "IF(SUM($filter) > 0, GROUP_CONCAT(value SEPARATOR '$dlm'), NULL)" : "GROUP_CONCAT(value SEPARATOR '$dlm')";
+                    $columns[] = "(SELECT $filter FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID GROUP BY content_id) AS $k";
                 }
             }
         }
