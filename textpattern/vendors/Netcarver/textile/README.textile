@@ -77,3 +77,7 @@ $parser
 h2. Getting in contact
 
 The PHP-Textile project welcomes constructive input and bug reports from users. Please "open an issue":https://github.com/textile/php-textile/issues on the repository for a comment, feature request or bug.
+
+h2. Development
+
+See "CONTRIBUTING.textile":https://github.com/textile/php-textile/blob/master/.github/CONTRIBUTING.textile.

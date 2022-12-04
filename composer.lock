@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7970c60fe00e75cdc8406d92508f9807",
+    "content-hash": "11ada693fc71d08d157dd5355246dcba",
     "packages": [
         {
             "name": "netcarver/textile",
-            "version": "v3.7.7",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/textile/php-textile.git",
-                "reference": "e5c32b4485741e656cfd94932da8ba7dd4a19da5"
+                "reference": "79b7d5102816ff017a940d8695a35d7f8db1e60a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/textile/php-textile/zipball/e5c32b4485741e656cfd94932da8ba7dd4a19da5",
-                "reference": "e5c32b4485741e656cfd94932da8ba7dd4a19da5",
+                "url": "https://api.github.com/repos/textile/php-textile/zipball/79b7d5102816ff017a940d8695a35d7f8db1e60a",
+                "reference": "79b7d5102816ff017a940d8695a35d7f8db1e60a",
                 "shasum": ""
             },
             "require": {
@@ -26,13 +26,14 @@
             "require-dev": {
                 "phpstan/phpstan": "1.6.3",
                 "phpunit/phpunit": "^9.5.20",
+                "psy/psysh": "^0.11.2",
                 "squizlabs/php_codesniffer": "3.*",
                 "symfony/yaml": "^4.4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.7-dev"
+                    "dev-master": "4.0-dev"
                 }
             },
             "autoload": {
@@ -58,12 +59,11 @@
                 "textile"
             ],
             "support": {
-                "irc": "irc://irc.freenode.net/textile",
                 "issues": "https://github.com/textile/php-textile/issues",
                 "source": "https://github.com/textile/php-textile",
                 "wiki": "https://github.com/textile/php-textile/wiki"
             },
-            "time": "2022-05-01T17:05:16+00:00"
+            "time": "2022-12-03T18:45:20+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
