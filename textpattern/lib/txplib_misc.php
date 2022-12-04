@@ -4445,7 +4445,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs = null, $exclude = array())
+function buildCustomSql($custom, $pairs = null, $exclude = array(), $flat = true)
 {
     static $delimited = null;
 
@@ -4468,6 +4468,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
         $pairs = array_fill_keys($customFields, null);
     }
 
+    $table = safe_pfx('textpattern');
     $columns = $where = array();
 
     if ($pairs && isset($custom['by_name'])) {
@@ -4477,55 +4478,62 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
-                $filter = array();
 
                 if (isset($pairs[$k])) {
+                    $parts = array();
                     $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
                     // TBC
                     if ($val === true) {
-                        $where[] = $unique ? "{$not}$k != ''" : "$k IS NOT NULL";
-                        $filter[] = "{$not}value != ''";
+                        $parts[] = "{$not}value != ''";
                     } else {
                         (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
                         $val = doSlash($val);
-                        $parts = array();
 
                         foreach ((array)$val as $v) {
                             list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
                             if (!isset($to)) {
-                                !$unique or $parts[] = "{$not}$k LIKE '$v'";
-                                $filter[] = "{$not}value LIKE '$v'";
+                                $parts[] = "{$not}value LIKE '$v'";
                             } elseif ($from !== '') {
-                                !$unique or $parts[] = ($to === '' ? "{$not}$k >= '$from'" :  "{$not}$k BETWEEN '$from' AND '$to'");
-                                $filter[] = $to === '' ? "{$not}value >= '$from'" :  "{$not}value BETWEEN '$from' AND '$to'";
+                                $parts[] = $to === '' ? "{$not}value >= '$from'" :  "{$not}value BETWEEN '$from' AND '$to'";
                             } elseif ($to !== '') {
-                                !$unique or $parts[] = "{$not}$k <= '$to'";
-                                $filter[] = "{$not}value <= '$to'";
+                                $parts[] = "{$not}value <= '$to'";
                             }
                         }
+                    }
 
-                        if ($filter) {
-                            $where[] = $unique ? '('.join($not ? ' AND ' : ' OR ', $parts).')' : "$k IS NOT NULL";
-                        }
+                    if ($parts) {
+                        $parts = join($not ? ' AND ' : ' OR ', $parts);
+                        $where[$k] = $unique ?
+                            "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))" :
+                            "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
+//                            "(SELECT COUNT(*) FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) > 0";
                     }
                 }
 
                 if ($unique) {
-                    $columns[] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID LIMIT 1) AS $k";
+                    $columns[$k] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID LIMIT 1)";
                 } else {
                     $dlm = doSlash($dlm);
-                    !$filter or $filter = join(' OR ', $filter);
-                    $filter = $filter ? "IF(SUM($filter) > 0, GROUP_CONCAT(value SEPARATOR '$dlm'), NULL)" : "GROUP_CONCAT(value SEPARATOR '$dlm')";
-                    $columns[] = "(SELECT $filter FROM $tableName WHERE meta_id = '$no' AND content_id = textpattern.ID GROUP BY content_id) AS $k";
+                    $columns[$k] = "(SELECT GROUP_CONCAT(value SEPARATOR '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
                 }
             }
         }
     }
 
     if (!empty($columns)) {
-       $ret['columns'] = ', '. join(', ', $columns).' ';
-       $ret['where'] = join(' AND ', $where);
+       if ($flat) {
+            $ret['columns'] = '';
+
+            foreach ($columns as $k => $column) {
+                $ret['columns'] .= ", $column AS $k";
+            }
+
+//            $ret['columns'] = ', '. join(', ', $columns).' ';
+            $ret['where'] = join(' AND ', $where);
+       } else {
+            $ret = compact('columns', 'where');
+       }
 
        return $ret;
     }
