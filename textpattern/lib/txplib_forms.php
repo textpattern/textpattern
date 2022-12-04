@@ -329,17 +329,16 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = null)
 {
     $atts = (is_array($name) ? $name : array('name' => $name)) + array(
-        'class'        => $class,
-        'id'           => $id,
-        'type'         => $type,
-        'size'         => (int) $size,
-        'title'        => $title,
-        'aria-label'   => $title,
-        'onclick'      => $onClick,
-        'tabindex'     => (int) $tab,
-        'disabled'     => (bool) $disabled,
-        'required'     => (bool) $required,
-        'placeholder'  => $placeholder,
+        'class'       => $class,
+        'id'          => $id,
+        'type'        => $type,
+        'size'        => (int) $size,
+        'title'       => $title,
+        'onclick'     => $onClick,
+        'tabindex'    => (int) $tab,
+        'disabled'    => (bool) $disabled,
+        'required'    => (bool) $required,
+        'placeholder' => $placeholder,
     );
 
     if ($atts['required'] && !isset($atts['placeholder'])
@@ -791,7 +790,6 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'size'        => (int) $size,
         'maxlength'   => $size,
         'title'       => gTxt($title),
-        'aria-label'  => gTxt($title),
         'placeholder' => $placeholder,
         'tabindex'    => (int) $tab,
         'value'       => $value,

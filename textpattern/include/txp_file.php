@@ -387,25 +387,18 @@ function file_list($message = '', $ids = array())
 
                 if ($category) {
                     $category = span(txpspecialchars($category_title), array(
-                        'title'      => $category,
-                        'aria-label' => $category,
+                        'title' => $category,
                     ));
                 }
 
                 if ($can_edit) {
-                    $name = href(txpspecialchars($filename), $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
                 } else {
                     $name = txpspecialchars($filename);
                 }
 
                 if ($can_edit) {
-                    $id_column = href($id, $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
                     $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
                 } else {
                     $id_column = $id;
@@ -464,10 +457,7 @@ function file_list($message = '', $ids = array())
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($realname), array(
-                            'title'      => $author,
-                            'aria-label' => $author,
-                        )), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
@@ -491,10 +481,9 @@ function file_list($message = '', $ids = array())
         n.tag(
         null,
         'div', array(
-            'class'      => 'txp-tagbuilder-content',
-            'id'         => 'tagbuild_links',
-            'title'      => gTxt('tagbuilder'),
-            'aria-label' => gTxt('tagbuilder'),
+            'class' => 'txp-tagbuilder-content',
+            'id'    => 'tagbuild_links',
+            'title' => gTxt('tagbuilder'),
         ));
 }
 
@@ -952,10 +941,8 @@ function file_insert()
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $messages[] = array(gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ))), false), 0);
+                    $messages[] = array(gTxt('file_uploaded',
+                        array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false), 0);
                 }
             }
         } else {

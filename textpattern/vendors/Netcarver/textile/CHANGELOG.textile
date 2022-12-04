@@ -2,6 +2,15 @@ h1. Changelog
 
 Here's a summary of changes in each release. The list doesn't include some small changes or updates to test cases.
 
+h2. "Version 4.0.0 - 2022/12/03":https://github.com/textile/php-textile/releases/tag/v4.0.0
+
+* HTML void tags render a self-closing slash based on the given document type. If @Parser::setDocumentType()@ is given @Parser::DOCTYPE_XHTML@, self-closing tags are used, otherwise not.
+
+h2. "Version 3.8.0 - 2022/12/03":https://github.com/textile/php-textile/releases/tag/v3.8.0
+
+* Added @Parser::setAlignClasses()@ and @Parser::isAlignClassesEnabled()@. This can be used to enable img alignment classes in XHTML output document mode, instead of the default align attribute.
+* Added @Parser::DOCTYPE_HTML5@ and @Parser::DOCTYPE_XHTML@ constants. These can be used with @Parser::setDocumentType()@ to specify the output document type.
+
 h2. "Version 3.7.7 - 2022/05/01":https://github.com/textile/php-textile/releases/tag/v3.7.7
 
 * Fix deprecation errors that appear on PHP >= 8.1 about preg_split limit argument's NULL value.

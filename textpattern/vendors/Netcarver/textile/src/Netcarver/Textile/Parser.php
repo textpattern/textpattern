@@ -366,11 +366,25 @@ namespace Netcarver\Textile;
 class Parser
 {
     /**
+     * HTML5 document type.
+     *
+     * @since 3.8.0
+     */
+    const DOCTYPE_HTML5 = 'html5';
+
+    /**
+     * XHTML document type.
+     *
+     * @since 3.8.0
+     */
+    const DOCTYPE_XHTML = 'xhtml';
+
+    /**
      * Version number.
      *
      * @var string
      */
-    protected $ver = '3.7.7';
+    protected $ver = '4.0.0';
 
     /**
      * Regular expression snippets.
@@ -624,6 +638,13 @@ class Parser
     protected $lineWrapEnabled = true;
 
     /**
+     * Whether aligning with class selectors is enabled.
+     *
+     * @var bool|null
+     */
+    protected $isAlignClassesEnabled = null;
+
+    /**
      * Pattern for punctation.
      *
      * @var string
@@ -843,8 +864,8 @@ class Parser
      * @since 3.6.0
      */
     protected $doctypes = array(
-        'xhtml',
-        'html5',
+        self::DOCTYPE_XHTML,
+        self::DOCTYPE_HTML5,
     );
 
     /**
@@ -1031,7 +1052,8 @@ class Parser
      * a whole, such as the output doctype. To instruct the parser to return
      * HTML5 markup instead of XHTML, set $doctype argument to 'html5'.
      *
-     * bc. $parser = new \Netcarver\Textile\Parser('html5');
+     * bc. use Netcarver\Textile\Parser;
+     * $parser = new Parser(Parser::DOCTYPE_HTML5);
      * echo $parser->parse('HTML(HyperText Markup Language)");
      *
      * @param string $doctype The output document type, either 'xhtml' or 'html5'
@@ -1039,6 +1061,8 @@ class Parser
      * @see Parser::configure()
      * @see Parser::parse()
      * @see Parser::setDocumentType()
+     * @see Parser::DOCTYPE_HTML5
+     * @see Parser::DOCTYPE_XHTML
      * @api
      */
     public function __construct($doctype = 'xhtml')
@@ -1137,15 +1161,18 @@ class Parser
     /**
      * Sets the output document type.
      *
-     * bc. $parser = new \Netcarver\Textile\Parser();
+     * bc. use Netcarver\Textile\Parser;
+     * $parser = new Parser();
      * echo $parser
-     *     ->setDocumentType('html5')
+     *     ->setDocumentType(Parser::DOCTYPE_HTML5)
      *     ->parse('HTML(HyperText Markup Language)");
      *
      * @param string $doctype Either 'xhtml' or 'html5'
      * @return Parser This instance
      * @since 3.6.0
      * @see Parser::getDocumentType()
+     * @see Parser::DOCTYPE_HTML5
+     * @see Parser::DOCTYPE_XHTML
      * @api
      */
     public function setDocumentType($doctype)
@@ -1475,6 +1502,59 @@ class Parser
     public function isRawBlocksEnabled()
     {
         return (bool) $this->rawBlocksEnabled;
+    }
+
+    /**
+     * Sets class alignment mode independent of the document type.
+     *
+     * In HTML5 document type, img elements are generated with align-left,
+     * align-center and align-right class selectors rather than align
+     * attribute being added to the image.
+     *
+     * With this option you can enable that functionality in XHTML document type mode too.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * $parser
+     *     ->setAlignClasses(true)
+     *     ->parse(!<image.png!);
+     *
+     * Generates:
+     *
+     * bc. <p><img alt="" class="align-left" src="image.png" /></p>
+     *
+     * @param bool $enabled TRUE to enable, FALSE to disable
+     * @return Parser This instance
+     * @since 3.8.0
+     * @api
+     */
+    public function setAlignClasses($enabled)
+    {
+        $this->isAlignClassesEnabled = (bool) $enabled;
+        return $this;
+    }
+
+    /**
+     * Whether class alignment mode is enabled.
+     *
+     * bc. $parser = new \Netcarver\Textile\Parser();
+     * if ($parser->isAlignClassesEnabled() === true) {
+     *     echo 'Images are aligned with class instead of align attribute';
+     * }
+     *
+     * @return bool TRUE if enabled, FALSE otherwise
+     * @since 3.8.0
+     * @see Parser::setAlignClasses()
+     * @api
+     */
+    public function isAlignClassesEnabled()
+    {
+        if ($this->isAlignClassesEnabled === null
+            && $this->getDocumentType() === self::DOCTYPE_HTML5
+        ) {
+            return true;
+        }
+
+        return (bool) $this->isAlignClassesEnabled;
     }
 
     /**
@@ -1901,7 +1981,7 @@ class Parser
         $text = $this->retrieveTags($text);
         $text = $this->retrieveURLs($text);
 
-        $text = str_replace("<br />", "<br />\n", $text);
+        $text = str_replace($this->getLineBreak(), $this->getLineBreak()."\n", $text);
 
         return $text;
     }
@@ -1910,12 +1990,12 @@ class Parser
      * Parses the given Textile input in un-restricted mode.
      *
      * This method is deprecated, use Parser::parse() method instead.
-     * This method is equilavent of:
+     * This method is equivalent of:
      *
      * bc. $parser = new \Netcarver\Textile\Parser();
      * echo $parser->parse('h1. Hello World!');
      *
-     * Additinal arguments can be passed with setter methods:
+     * Additional arguments can be passed with setter methods:
      *
      * bc. $parser = new \Netcarver\Textile\Parser();
      * echo $parser
@@ -2023,6 +2103,18 @@ class Parser
     {
         trigger_error('Parser::textileCommon() is deprecated.', E_USER_DEPRECATED);
         return $this->setLite($lite)->parse($text);
+    }
+
+    /**
+     * Output line break according to document type.
+     *
+     * @return string The break tag
+     * @since  4.0.0
+     * @see    Parser::getDocumentType()
+     */
+    protected function getLineBreak()
+    {
+        return ($this->getDocumentType() === self::DOCTYPE_HTML5) ? '<br>' : '<br />';
     }
 
     /**
@@ -2300,7 +2392,7 @@ class Parser
      * Cleans a HTML attribute value.
      *
      * This method checks for presence of URL encoding in the value.
-     * If the number encoded characters exceeds the thereshold,
+     * If the number encoded characters exceeds the threshold,
      * the input is discarded. Otherwise the encoded
      * instances are decoded.
      *
@@ -2344,12 +2436,12 @@ class Parser
      *
      * @param string $name The HTML element name
      * @param array<string, int|string> $atts HTML attributes applied to the tag
-     * @param bool $selfclosing Determines if the tag should be selfclosing
+     * @param bool $selfclosing Determines if the tag should be self-closing
      * @return Tag
      */
     protected function newTag($name, $atts, $selfclosing = true)
     {
-        return new Tag($name, $atts, $selfclosing);
+        return new Tag($name, $atts, $selfclosing && $this->getDocumentType() !== self::DOCTYPE_HTML5);
     }
 
     /**
@@ -2420,10 +2512,10 @@ class Parser
             }
         }
 
-        if ($element == 'td' or $element == 'tr') {
-            if (preg_match("/^($this->vlgn)/", $matched, $vert)) {
-                $style[] = "vertical-align:" . $this->vAlign($vert[1]);
-            }
+        if (($element === 'td' || $element === 'tr')
+            && preg_match("/^($this->vlgn)/", $matched, $vert)
+        ) {
+            $style[] = "vertical-align:" . $this->vAlign($vert[1]);
         }
 
         if (preg_match("/\{([^}]*)\}/", $matched, $sty)) {
@@ -2434,25 +2526,15 @@ class Parser
             $matched = str_replace($sty[0], '', $matched);
         }
 
-        if (preg_match("/\[([^]]+)\]/U", $matched, $lng)) {
-            // Consume entire lang block -- valid or invalid.
-            $matched = str_replace($lng[0], '', $matched);
-            if ($element === 'code' && preg_match("/\[([a-zA-Z0-9_-]+)\]/U", $lng[0], $lng1)) {
-                $lang = $lng1[1];
-            } elseif (preg_match("/\[([a-zA-Z]{2}(?:[\-\_][a-zA-Z]{2})?)\]/U", $lng[0], $lng2)) {
-                $lang = $lng2[1];
-            }
-        }
-
         if (preg_match("/\(([^()]+)\)/U", $matched, $cls)) {
-            $class_regex = "/^([-a-zA-Z 0-9_\.]*)$/";
+            $class_regex = "/^([-a-zA-Z 0-9_\.\/\[\]]*)$/";
 
             // Consume entire class block -- valid or invalid.
             $matched = str_replace($cls[0], '', $matched);
 
             // Only allow a restricted subset of the CSS standard characters for classes/ids.
             // No encoding markers allowed.
-            if (preg_match("/\(([-a-zA-Z 0-9_\.\:\#]+)\)/U", $cls[0], $cls)) {
+            if (preg_match("/\(([-a-zA-Z 0-9_\/\[\]\.\:\#]+)\)/U", $cls[0], $cls)) {
                 $hashpos = strpos($cls[1], '#');
                 // If a textile class block attribute was found with a '#' in it
                 // split it into the css class and css id...
@@ -2472,12 +2554,22 @@ class Parser
             }
         }
 
-        if (preg_match("/([(]+)/", $matched, $pl)) {
+        if (preg_match("/\[([^]]+)\]/U", $matched, $lng)) {
+            // Consume entire lang block -- valid or invalid.
+            $matched = str_replace($lng[0], '', $matched);
+            if ($element === 'code' && preg_match("/\[([a-zA-Z0-9_-]+)\]/U", $lng[0], $lng1)) {
+                $lang = $lng1[1];
+            } elseif (preg_match("/\[([a-zA-Z]{2}(?:[\-\_][a-zA-Z]{2})?)\]/U", $lng[0], $lng2)) {
+                $lang = $lng2[1];
+            }
+        }
+
+        if (preg_match("/(\(+)/", $matched, $pl)) {
             $style[] = "padding-left:" . strlen($pl[1]) . "em";
             $matched = str_replace($pl[0], '', $matched);
         }
 
-        if (preg_match("/([)]+)/", $matched, $pr)) {
+        if (preg_match("/(\)+)/", $matched, $pr)) {
             $style[] = "padding-right:" . strlen($pr[1]) . "em";
             $matched = str_replace($pr[0], '', $matched);
         }
@@ -2486,11 +2578,11 @@ class Parser
             $style[] = "text-align:" . $this->hAlign($horiz[1]);
         }
 
-        if ($element == 'col') {
-            if (preg_match("/(?:\\\\([0-9]+))?{$this->regex_snippets['space']}*([0-9]+)?/", $matched, $csp)) {
-                $span = isset($csp[1]) ? $csp[1] : '';
-                $width = isset($csp[2]) ? $csp[2] : '';
-            }
+        if ($element == 'col'
+            && preg_match("/(?:\\\\([0-9]+))?{$this->regex_snippets['space']}*([0-9]+)?/", $matched, $csp)
+        ) {
+            $span = isset($csp[1]) ? $csp[1] : '';
+            $width = isset($csp[2]) ? $csp[2] : '';
         }
 
         if ($this->isRestrictedModeEnabled()) {
@@ -2814,7 +2906,7 @@ class Parser
         $out = array();
 
         /** @var array<int, string> $text */
-        $text = preg_split('/\n(?=[-])/m', $in);
+        $text = preg_split('/\n(?=-)/m', $in);
 
         foreach ($text as $line) {
             $m = array();
@@ -2850,7 +2942,7 @@ class Parser
                     $def = trim($def);
 
                     if ($this->isLineWrapEnabled()) {
-                        $def = str_replace("\n", "<br />", $def);
+                        $def = str_replace("\n", $this->getLineBreak(), $def);
                     }
 
                     if ($pos === 0) {
@@ -2858,7 +2950,7 @@ class Parser
                     }
 
                     if ($this->isLineWrapEnabled()) {
-                        $term = str_replace("\n", "<br />", $term);
+                        $term = str_replace("\n", $this->getLineBreak(), $term);
                     }
 
                     $term = $this->graf($term);
@@ -3102,7 +3194,7 @@ class Parser
         // Replaces those LFs that aren't followed by white-space, or at end, with <br /> or a space.
         $m['content'] = preg_replace(
             "/\n(?![\s|])/",
-            $this->isLineWrapEnabled() ? '<br />' : ' ',
+            $this->isLineWrapEnabled() ? $this->getLineBreak() : ' ',
             (string) $m['content']
         );
 
@@ -3119,7 +3211,7 @@ class Parser
     {
         $content = preg_replace(
             "@(.+)(?<!<br>|<br />|</li>|</dd>|</dt>)\n(?![\s|])@",
-            $this->isLineWrapEnabled() ? '$1<br />' : '$1 ',
+            $this->isLineWrapEnabled() ? '$1'.$this->getLineBreak() : '$1 ',
             $m['content']
         );
 
@@ -3222,8 +3314,10 @@ class Parser
                 }
             }
 
-            $block = $this->doPBr((string) $block);
-            $block = $whitespace. str_replace('<br>', '<br />', $block);
+            $block = $whitespace . $this->doPBr((string) $block);
+            if ($this->getDocumentType() === self::DOCTYPE_XHTML) {
+                $block = str_replace('<br>', '<br />', $block);
+            }
 
             // @phpstan-ignore-next-line
             if ($ext && $anonymous_block) {
@@ -4139,7 +4233,7 @@ class Parser
         $in = $m[0];
         $pre = $m['pre'];
         if ($this->isLineWrapEnabled()) {
-            $inner = str_replace("\n", '<br />', $m['inner']);
+            $inner = str_replace("\n", $this->getLineBreak(), $m['inner']);
         } else {
             $inner = str_replace("\n", ' ', $m['inner']);
         }
@@ -4185,12 +4279,12 @@ class Parser
         // eg. "text":url][otherstuff... will have "[otherstuff" popped back out.
         //     "text":url?q[]=x][123]    will have "[123]" popped off the back, the remaining closing square brackets
         //                               will later be tested for balance
-        if ($counts[']']) {
-            if (1 === preg_match('@(?P<url>^.*\])(?P<tight>\[.*?)$@' . $this->regex_snippets['mod'], $url, $m)) {
-                $url = $m['url'];
-                $tight = $m['tight'];
-                $m = array();
-            }
+        if ($counts[']']
+            && 1 === preg_match('@(?P<url>^.*\])(?P<tight>\[.*?)$@' . $this->regex_snippets['mod'], $url, $m)
+        ) {
+            $url = $m['url'];
+            $tight = $m['tight'];
+            $m = array();
         }
 
         // Split off any trailing text that isn't part of an array assignment.
@@ -4198,12 +4292,12 @@ class Parser
         // "text":...?q[]=value1]following  ... would have "following"
         // popped back out and the remaining square bracket
         // will later be tested for balance
-        if ($counts[']']) {
-            if (1 === preg_match('@(?P<url>^.*\])(?!=)(?P<end>.*?)$@' . $this->regex_snippets['mod'], $url, $m)) {
-                $url = $m['url'];
-                $tight = $m['end'] . $tight;
-                $m = array();
-            }
+        if ($counts[']']
+            && 1 === preg_match('@(?P<url>^.*\])(?!=)(?P<end>.*?)$@' . $this->regex_snippets['mod'], $url, $m)
+        ) {
+            $url = $m['url'];
+            $tight = $m['end'] . $tight;
+            $m = array();
         }
 
         // Does this need to be mb_ enabled? We are only searching for text in the ASCII charset anyway
@@ -4623,7 +4717,7 @@ class Parser
         );
 
         if (isset($alignments[$align])) {
-            if ($this->getDocumentType() === 'html5') {
+            if ($this->isAlignClassesEnabled()) {
                 $extras = 'align-'.$alignments[$align];
                 $align = '';
             } else {

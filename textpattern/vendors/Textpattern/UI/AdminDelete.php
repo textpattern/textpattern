@@ -55,10 +55,9 @@ class AdminDelete extends AdminAnchor implements UIInterface
                 $out
                     ->setContent($linktext)
                     ->setAtts(array(
-                        'class'      => 'destroy',
-                        'type'       => 'submit',
-                        'title'      => gTxt('delete'),
-                        'aria-label' => gTxt('delete'),
+                        'class' => 'destroy',
+                        'type'  => 'submit',
+                        'title' => gTxt('delete'),
                     ));
                 break;
             case 'get':
