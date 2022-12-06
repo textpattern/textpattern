@@ -11,20 +11,12 @@ class ComposerStaticInit8a4b1345f960d10a91be70c543a39efa
         array (
             'PHPMailer\\PHPMailer\\' => 20,
         ),
-        'N' => 
-        array (
-            'Netcarver\\Textile\\' => 18,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
-        'Netcarver\\Textile\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/netcarver/textile/src/Netcarver/Textile',
         ),
     );
 
