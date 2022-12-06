@@ -4445,7 +4445,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs = null, $exclude = array(), $flat = true)
+function buildCustomSql($custom, $pairs = null, $exclude = array())
 {
     static $delimited = null;
 
@@ -4459,7 +4459,9 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $flat = true
         }
     }
 
-    if (!is_array($custom)) {
+    $flat = !is_array($custom);
+
+    if ($flat) {
         $custom = getCustomFields($custom, null, null);
     }
 

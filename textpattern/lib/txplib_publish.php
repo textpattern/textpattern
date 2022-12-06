@@ -855,8 +855,8 @@ function filterAtts($atts = null, $iscustom = null)
 
     $exclude === true or $exclude = array_fill_keys($exclude, true);
 
-    $customFields = getCustomFields() + array('url_title' => 'url_title');
-    $customlAtts = array_null(array_flip($customFields));
+    $customFields = getCustomFields('array', null, null);
+    $customlAtts = array_null(array_flip($customFields['by_id'])) + array('url_title' => null);
 
     $extralAtts = array(
         'form'          => 'default',
@@ -1095,17 +1095,13 @@ function filterAtts($atts = null, $iscustom = null)
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
     } else {
         $fname = (!empty($listform) ? $listform : $form);
-
-        if (!$sort) {
-            $sort = "Posted DESC";
-        }
     }
 
     $customColumns = '';
     $customPairs = array();
 
     if ($customFields) {
-        foreach ($customFields as $cField) {
+        foreach ($customFields['by_id'] as $cField) {
             $customPairs[$cField] = isset($atts[$cField]) ? $atts[$cField] : null;
 
             if (isset($match[$cField])) {
@@ -1118,7 +1114,7 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    if (isset($fields)) {
+    if (isset($fields) && $fields !== true) {
         $what = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map));
@@ -1126,7 +1122,7 @@ function filterAtts($atts = null, $iscustom = null)
 
         preg_match_all("/^(?:($agg_reg)(?:\[(.*)\])?\s*\(\s*)?($reg_fields)(?:\s*\))?$/im", strtolower(implode(n, do_list_unique($fields))), $matches, PREG_SET_ORDER);
         $customData = array_fill_keys(array_column($matches, 3), null);
-        $customData = buildCustomSql('article', array_intersect_key($customPairs, $customData) + $customData, $exclude, false);
+        $customData = buildCustomSql($customFields, $customPairs + $customData, $exclude);
 
         foreach ($matches as $match) {
             $format = doSlash($match[2]);
@@ -1164,13 +1160,19 @@ function filterAtts($atts = null, $iscustom = null)
         if ($groupby && !$sort) {
             $sort = implode(', ', $sortby);
         }
-    } elseif ($customData = buildCustomSql('article', $customPairs, $exclude, false)) {
+    } elseif ($customData = buildCustomSql($customFields, $customPairs, $exclude)) {
         foreach ($customData['columns'] as $k => $column) {
             $customColumns .= ", $column AS $k";
         }
     }
 
-    if ($fields) {
+    if (!$sort) {
+        $sort = "Posted DESC";
+    }
+
+    if ($fields === true) {
+        $fields = '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$score;
+    } elseif ($fields) {
         $fields .= ($groupby ? ', COUNT(*) AS count' : '').$score;
     } else {
         $fields = '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns.$score;
