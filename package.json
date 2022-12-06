@@ -63,7 +63,7 @@
     "copy:jquery-ui": "rimraf textpattern/vendors/jquery/jquery-ui/jquery-ui.js && cp node_modules/jquery-ui-dist/jquery-ui.min.js textpattern/vendors/jquery/jquery-ui/jquery-ui.js",
     "copy:prismjs": "uglifyjs -c -m -o textpattern/vendors/PrismJS/prism/prism.js node_modules/prismjs/prism.js node_modules/prismjs/components/prism-markup-templating.js node_modules/prismjs/components/prism-bash.js node_modules/prismjs/components/prism-json.js node_modules/prismjs/components/prism-markdown.js node_modules/prismjs/components/prism-php.js node_modules/prismjs/components/prism-textile.js",
     "copy:textile": "sh .github/copy-textile.sh",
-    "get-dependencies": "npm run copy:blueimp-file-upload && npm run copy:jquery && npm run copy:jquery-ui && npm run copy:prismjs && npm run copy:textile v3.7.7",
+    "get-dependencies": "npm run copy:blueimp-file-upload && npm run copy:jquery && npm run copy:jquery-ui && npm run copy:prismjs && npm run copy:textile v4.0.0",
     "get-pophelp": "sh .github/get-pophelp.sh",
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",

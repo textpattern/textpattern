@@ -3,22 +3,13 @@
         'name' => 'textpattern/textpattern',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd7c96c946d9095163ff170603302c1965f911952',
+        'reference' => '696d9e73c11bcacdde1f67633ab3755d0616ba9d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'netcarver/textile' => array(
-            'pretty_version' => 'v4.0.0',
-            'version' => '4.0.0.0',
-            'reference' => '79b7d5102816ff017a940d8695a35d7f8db1e60a',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../netcarver/textile',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'phpmailer/phpmailer' => array(
             'pretty_version' => 'v6.7',
             'version' => '6.7.0.0',
@@ -31,7 +22,7 @@
         'textpattern/textpattern' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd7c96c946d9095163ff170603302c1965f911952',
+            'reference' => '696d9e73c11bcacdde1f67633ab3755d0616ba9d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),

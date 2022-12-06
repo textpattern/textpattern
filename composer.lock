@@ -4,67 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6c0eaeeba7cdb4ad44b361c4d1d8bc8",
+    "content-hash": "20bfbb59f569d85e65c8f0ad70637279",
     "packages": [
-        {
-            "name": "netcarver/textile",
-            "version": "v4.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/textile/php-textile.git",
-                "reference": "79b7d5102816ff017a940d8695a35d7f8db1e60a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/textile/php-textile/zipball/79b7d5102816ff017a940d8695a35d7f8db1e60a",
-                "reference": "79b7d5102816ff017a940d8695a35d7f8db1e60a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "1.6.3",
-                "phpunit/phpunit": "^9.5.20",
-                "psy/psysh": "^0.11.2",
-                "squizlabs/php_codesniffer": "3.*",
-                "symfony/yaml": "^4.4.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Netcarver\\Textile\\": "src/Netcarver/Textile/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Textile markup language parser",
-            "homepage": "https://github.com/textile/php-textile",
-            "keywords": [
-                "document",
-                "format",
-                "html",
-                "language",
-                "markup",
-                "parser",
-                "php-textile",
-                "plaintext",
-                "textile"
-            ],
-            "support": {
-                "issues": "https://github.com/textile/php-textile/issues",
-                "source": "https://github.com/textile/php-textile",
-                "wiki": "https://github.com/textile/php-textile/wiki"
-            },
-            "time": "2022-12-03T18:45:20+00:00"
-        },
         {
             "name": "phpmailer/phpmailer",
             "version": "v6.7",
