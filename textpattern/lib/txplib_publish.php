@@ -855,8 +855,8 @@ function filterAtts($atts = null, $iscustom = null)
 
     $exclude === true or $exclude = array_fill_keys($exclude, true);
 
-    $customFields = getCustomFields('array', null, null);
-    $customlAtts = array_null(array_flip($customFields['by_id'])) + array('url_title' => null);
+    $customFields = getCustomFields('article', null, null);
+    $customlAtts = $customFields ? array_null(array_flip($customFields['by_id'])) : array();
 
     $extralAtts = array(
         'form'          => 'default',
@@ -903,6 +903,7 @@ function filterAtts($atts = null, $iscustom = null)
         'sort'          => '',
         'keywords'      => '',
         'time'          => null,
+        'url_title'     => '',
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
         'frontpage'     => !$iscustom,
         'match'         => 'Category',
@@ -1097,22 +1098,32 @@ function filterAtts($atts = null, $iscustom = null)
         $fname = (!empty($listform) ? $listform : $form);
     }
 
+    // Title
+    if ($url_title && $url_title !== true) {
+        $atts['url_title'] = do_list_unique($url_title);
+    }
+
+    // Custom fields
     $customColumns = '';
     $customPairs = array();
+    $filterFields = ($customFields ? $customFields['by_id'] : array()) + ($url_title ? array('url_title' => 'url_title') : array());
 
-    if ($customFields) {
-        foreach ($customFields['by_id'] as $cField) {
-            $customPairs[$cField] = isset($atts[$cField]) ? $atts[$cField] : null;
+    foreach ($filterFields as $cField) {
+        $customPairs[$cField] = isset($atts[$cField]) ? $atts[$cField] : null;
 
-            if (isset($match[$cField])) {
-                if ($match[$cField] === false && isset($thisarticle[$cField])) {
-                    $customPairs[$cField] = $thisarticle[$cField];
-                } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
-                    $customPairs[$cField] = $val;
-                }
+        if (isset($match[$cField])) {
+            if ($match[$cField] === false && isset($thisarticle[$cField])) {
+                $customPairs[$cField] = $thisarticle[$cField];
+            } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
+                $customPairs[$cField] = $val;
             }
         }
     }
+
+    $url_title = isset($customPairs['url_title']) ?
+        ' AND '.buildWhereSql($customPairs['url_title'], 'url_title', $exclude === true || isset($exclude['url_title'])) :
+        '';
+    unset($customPairs['url_title']);
 
     if (isset($fields) && $fields !== true) {
         $what = $groupby = $sortby = array();
@@ -1185,7 +1196,7 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['form'] = $fname;
     $theAtts['groupby'] = empty($distinct) ? null : $distinct;
     $theAtts['sort'] = sanitizeForSort($sort);
-    $theAtts['#'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$search;
+    $theAtts['#'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$url_title.$search;
     $theAtts['?'] = $theAtts['#'].$custom;
     $theAtts['*'] = $fields;
 

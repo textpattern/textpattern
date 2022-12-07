@@ -4427,13 +4427,49 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
         ksort($out, SORT_NUMERIC);
     }
 
-    $return = 'by_'.$by;
+    $by = 'by_'.$by;
 
-    if (isset($out[$when][$return])) {
-        return $out[$when][$return];
+    if (isset($out[$when][$by])) {
+        return $out[$when][$by];
     }
 
     return $out[$when];
+}
+
+/**
+ * Build a SQL WHERE clause.
+ *
+ * @param   array|bool|string $val An array of filter criteria
+ * @param   string $field A field to filter by
+ * @param   bool $not NOT?
+ * @return  bool|string An SQL qualifier for a query's 'WHERE' part
+ * @package CustomField
+ */
+
+function buildWhereSql($val, $field = 'value', $not = false)
+{
+    $parts = array();
+    $not = $not ? 'NOT ' : '';
+
+    if ($val === true) {
+        $parts[] = "{$not}{$field} != ''";
+    } elseif (isset($val)) {
+        $val = doSlash($val);
+
+        foreach ((array)$val as $v) {
+            list($from, $to) = explode('%%', $v, 2) + array(null, null);
+
+            if (!isset($to)) {
+                $parts[] = "{$not}{$field} LIKE '$v'";
+            } elseif ($from !== '') {
+                $parts[] = $to === '' ? "{$not}{$field} >= '$from'" :  "{$not}{$field} BETWEEN '$from' AND '$to'";
+            } elseif ($to !== '') {
+                $parts[] = "{$not}{$field} <= '$to'";
+            }
+        }
+    }
+
+    return $parts ? join($not ? ' AND ' : ' OR ', $parts) : '1';
 }
 
 /**
@@ -4441,7 +4477,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  *
  * @param   array $custom An array of 'custom_field_name' => field_number tuples
  * @param   array $pairs  Filter criteria: An array of 'name' => value tuples
- * @return  bool|string An SQL qualifier for a query's 'WHERE' part
+ * @return  array|bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
 
@@ -4482,30 +4518,10 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
 
                 if (isset($pairs[$k])) {
-                    $parts = array();
-                    $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
-                    // TBC
-                    if ($val === true) {
-                        $parts[] = "{$not}value != ''";
-                    } else {
-                        (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
-                        $val = doSlash($val);
-
-                        foreach ((array)$val as $v) {
-                            list($from, $to) = explode('%%', $v, 2) + array(null, null);
-
-                            if (!isset($to)) {
-                                $parts[] = "{$not}value LIKE '$v'";
-                            } elseif ($from !== '') {
-                                $parts[] = $to === '' ? "{$not}value >= '$from'" :  "{$not}value BETWEEN '$from' AND '$to'";
-                            } elseif ($to !== '') {
-                                $parts[] = "{$not}value <= '$to'";
-                            }
-                        }
-                    }
+                    $val === true or (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
+                    $parts = buildWhereSql($val, 'value', $exclude === true || isset($exclude[$k]));
 
                     if ($parts) {
-                        $parts = join($not ? ' AND ' : ' OR ', $parts);
                         $where[$k] = $unique ?
                             "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))" :
                             "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
@@ -4531,7 +4547,6 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 $ret['columns'] .= ", $column AS $k";
             }
 
-//            $ret['columns'] = ', '. join(', ', $columns).' ';
             $ret['where'] = join(' AND ', $where);
        } else {
             $ret = compact('columns', 'where');
