@@ -1121,7 +1121,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $url_title = isset($customPairs['url_title']) ?
-        ' AND '.buildWhereSql($customPairs['url_title'], 'url_title', $exclude === true || isset($exclude['url_title'])) :
+        ' AND ('.buildWhereSql($customPairs['url_title'], 'url_title', $exclude === true || isset($exclude['url_title'])).')' :
         '';
     unset($customPairs['url_title']);
 
