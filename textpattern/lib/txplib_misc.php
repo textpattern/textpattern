@@ -1742,6 +1742,7 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
+    // A shortcut for name='<txp:yield name="alias" />'
     if (isset($atts['yield']) && !isset($pairs['yield'])) {
         isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
 
@@ -4446,13 +4447,12 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
  * @package CustomField
  */
 
-function buildWhereSql($val, $field = 'value', $not = false)
+function buildWhereSql($val, $field = 'value')
 {
     $parts = array();
-    $not = $not ? 'NOT ' : '';
 
     if ($val === true) {
-        $parts[] = "{$not}{$field} != ''";
+        $parts[] = "$field != ''";
     } elseif (isset($val)) {
         $val = doSlash($val);
 
@@ -4460,16 +4460,16 @@ function buildWhereSql($val, $field = 'value', $not = false)
             list($from, $to) = explode('%%', $v, 2) + array(null, null);
 
             if (!isset($to)) {
-                $parts[] = "{$not}{$field} LIKE '$v'";
+                $parts[] = "$field LIKE '$v'";
             } elseif ($from !== '') {
-                $parts[] = $to === '' ? "{$not}{$field} >= '$from'" :  "{$not}{$field} BETWEEN '$from' AND '$to'";
+                $parts[] = $to === '' ? "$field >= '$from'" :  "$field BETWEEN '$from' AND '$to'";
             } elseif ($to !== '') {
-                $parts[] = "{$not}{$field} <= '$to'";
+                $parts[] = "$field <= '$to'";
             }
         }
     }
 
-    return $parts ? join($not ? ' AND ' : ' OR ', $parts) : '1';
+    return $parts ? join(' OR ', $parts) : '1';
 }
 
 /**
@@ -4481,9 +4481,14 @@ function buildWhereSql($val, $field = 'value', $not = false)
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs = null, $exclude = array())
+function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = array())
 {
-    static $delimited = null;
+    static $delimited = null, $aggregate = array(
+        'avg' => 'AVG(value)',
+        'sum' => 'SUM(value)',
+        'max' => 'MAX(value)',
+        'min' => 'MIN(value)',
+    );
 
     if ($delimited === null) {
         $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
@@ -4518,22 +4523,33 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
 
                 if (isset($pairs[$k])) {
-                    $val === true or (string)$dlm === '' or is_array($val) or $val = do_list($val, $dlm);
-                    $parts = buildWhereSql($val, 'value', $exclude === true || isset($exclude[$k]));
+                    $not = $exclude === true || isset($exclude[$k]) ? 'NOT' : '';
+                    $val === true or (string)$dlm === '' or $val = do_list_unique($val, $dlm, TEXTPATTERN_STRIP_NONE);
+                    $parts = buildWhereSql($val, 'value');
 
                     if ($parts) {
-                        $where[$k] = $unique ?
-                            "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))" :
-                            "EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
-//                            "(SELECT COUNT(*) FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) > 0";
+                        $mode = empty($modes[$k]) ? 'any' : $modes[$k];
+
+                        if ($unique || $val === true || $mode == 'any') {
+                            $where[$k] = "$not EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
+                        } else {
+                            $cmp = $mode == 'exact' ? '=' : '>=';
+                            $where[$k] = "$not (SELECT COUNT(*) FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) $cmp ".count($val);
+                        }
                     }
                 }
 
                 if ($unique) {
                     $columns[$k] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID LIMIT 1)";
                 } else {
-                    $dlm = doSlash($dlm);
-                    $columns[$k] = "(SELECT GROUP_CONCAT(value SEPARATOR '$dlm') FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
+                    if (!empty($custom['by_aggregate'][$k]) && isset($aggregate[$custom['by_aggregate'][$k]])) {
+                        $column = $aggregate[$custom['by_aggregate'][$k]];
+                    } else {
+                        $dlm = doSlash($dlm);
+                        $column = "GROUP_CONCAT(value SEPARATOR '$dlm')";
+                    }
+
+                    $columns[$k] = "(SELECT $column FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
                 }
             }
         }
@@ -4544,7 +4560,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array())
             $ret['columns'] = '';
 
             foreach ($columns as $k => $column) {
-                $ret['columns'] .= ", $column AS $k";
+                $ret['columns'] .= ", $column AS `$k`";
             }
 
             $ret['where'] = join(' AND ', $where);
@@ -4762,14 +4778,20 @@ eod;
  * @package TagParser
  */
 
-function parse_qs($match, $sep='=')
+function parse_qs($match, $sep='=', &$modes = null)
 {
     $pairs = array();
 
     foreach (do_list_unique($match) as $chunk) {
-        $name = strtok($chunk, $sep);
+        $name = strtolower(strtok($chunk, $sep));
         $alias = strtok($sep);
-        $pairs[strtolower($name)] = $alias;
+
+        if (isset($modes) && preg_match('/^(\w+)\s*\[\s*(\w+)\s*\]$/', $name, $matches)) {
+            $name = $matches[1];
+            $modes[$name] = $matches[2];
+        }
+
+        $pairs[$name] = $alias;
     };
 
     return $pairs;
