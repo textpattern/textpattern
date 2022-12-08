@@ -1160,7 +1160,7 @@ function filterAtts($atts = null, $iscustom = null)
             } elseif (isset($aggregate[$match[1]])) {
                 $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ? $format : ','));
             } elseif ($match[1]) {
-                isset($what[$field]) or $what[$field] = "MIN($custom)";
+                $what[$field] = "MIN($custom)";
                 $group = $format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')';
                 $groupby[$group] = $custom;
                 $sortby[] = $group;
