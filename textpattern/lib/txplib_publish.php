@@ -1137,14 +1137,14 @@ function filterAtts($atts = null, $iscustom = null)
         $regexp = $agg_reg.'|date|day|month|year|week|quarter';
 
         preg_match_all("/^(?:($regexp) *(?:\[([^\]]*)\] *)?\( *(?:($agg_reg) *\( *)?)?($reg_fields)[\) ]*$/im", strtolower(implode(n, do_list_unique($fields))), $matches, PREG_SET_ORDER);
-        $aggrFields = array_column($matches, 3, 4);
-        $customFields['by_aggregate'] = array_filter($aggrFields) + array_filter(array_column($matches, 1, 4));
+        $aggFields = array_column($matches, 3, 4);
+        $customFields['by_aggregate'] = array_filter($aggFields) + array_filter(array_column($matches, 1, 4));
 
         if (strpos($fields, '*') !== false) {
             $addFields = array_diff_key($column_map, array_column($matches, 4, 4));
         }
 
-        $groupby = isset($aggrFields['thisid']) || isset($addFields['thisid']) ? false : array();
+        $groupby = isset($aggFields['thisid']) || isset($addFields['thisid']) ? false : array();
         $customData = buildCustomSql($customFields, $customPairs, $exclude, $modes);
 
         foreach ($matches as $match) {
@@ -1160,11 +1160,12 @@ function filterAtts($atts = null, $iscustom = null)
             } elseif (isset($aggregate[$match[1]])) {
                 $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ? $format : ','));
             } elseif ($match[1]) {
-                isset($what[$field]) or $what[$field] = $groupby === false ? $custom : "MIN($custom)";
+                isset($what[$field]) or $what[$field] = "MIN($custom)";
                 $group = $format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')';
                 $groupby[$group] = $custom;
                 $sortby[] = $group;
             } else {
+                $what[$field] = $custom;
                 $groupby[$column] = $custom;
                 $sortby[] = $column;
             }
