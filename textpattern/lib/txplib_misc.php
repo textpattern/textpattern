@@ -2017,7 +2017,7 @@ function dumbDown($str, $lang = null)
         }
     }
 
-    return strtr($str, $array[$lang]);
+    return strtr((string)$str, $array[$lang]);
 }
 
 /**
