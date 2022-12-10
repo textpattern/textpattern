@@ -942,15 +942,14 @@ function doArticles($atts, $iscustom, $thing = null)
         $groupby = trim($pgonly);
     }
 
-    $where = $theAtts['?'];
-    $count = $theAtts['#'];
+    $where = $theAtts['$'];
     $columns = $theAtts['*'];
-    $tables = 'textpattern';
+    $tables = $theAtts['#'];
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $count);
+            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -971,7 +970,7 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $count);
+        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;
@@ -982,9 +981,10 @@ function doArticles($atts, $iscustom, $thing = null)
         $sort = "FIELD(ID, ".$id."), ".$sort;
     }
 
-    $rs = safe_rows_start($columns,
-        $tables,
-        "$where ORDER BY $sort LIMIT ".intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
+    $where = $theAtts['?'];
+
+    $rs = safe_query("SELECT $columns FROM $tables
+        WHERE $where ORDER BY $sort LIMIT ".intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
 
     $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing', 'form'));
