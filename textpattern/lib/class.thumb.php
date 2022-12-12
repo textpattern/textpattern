@@ -197,7 +197,7 @@ class wet_thumb
         $this->addgreytohint = true;
         $this->quality = 80;
         $this->html = ' alt="" title="" ';
-        $this->link = true;
+//        $this->link = true;
     }
 
     /**
