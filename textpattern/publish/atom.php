@@ -176,7 +176,7 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {
