@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		- '#Parameter \#2 \$callback of function preg_replace_callback#'
-		- "#Cannot access offset '[a-zA-Z0-9\\_]+' on non-empty-array#"
-		- '#Cannot access offset [0-9]+ on array#'
-		- "#Offset '[a-zA-Z0-9\\_]+' does not exist on array#"

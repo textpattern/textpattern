@@ -78,12 +78,12 @@ abstract class Providable implements ProvidableInterface
         if (!$this->adapter) {
             $this->adapter = $this->getDefaultAdapter();
         }
-
+/*
         if ($this->firstRun) {
             $this->firstRun = false;
             $this->adapter->providable = $this;
         }
-
+*/
         return $this->adapter;
     }
 

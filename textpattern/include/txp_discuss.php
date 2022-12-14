@@ -404,10 +404,7 @@ function discuss_list($message = '')
                     $parent = href(
                         span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
                         '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array(
-                            'title'      => gTxt('edit'),
-                            'aria-label' => gTxt('edit'),
-                        )
+                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array('title' => gTxt('edit'))
                     );
 
                     $view = $comment_status;
