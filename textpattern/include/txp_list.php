@@ -361,14 +361,8 @@ function list_list($message = '', $post = '')
                 $validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
                 $vc[2] = $validator->validate() ? '' : ' error';
 
-                $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array(
-                    'title'      => $Category1,
-                    'aria-label' => $Category1,
-                )) : '';
-                $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array(
-                    'title'      => $Category2,
-                    'aria-label' => $Category2,
-                )) : '';
+                $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
+                $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
                 if (has_status_group($Status, 'unpublished')) {
                     $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
@@ -388,10 +382,7 @@ function list_list($message = '', $post = '')
                         'step'          => 'discuss_list',
                         'search_method' => 'parent',
                         'crit'          => $ID,
-                    ), array(
-                        'title'      => gTxt('manage'),
-                        'aria-label' => gTxt('manage'),
-                    ));
+                    ), array('title' => gTxt('manage')));
                 }
 
                 $comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
@@ -441,10 +432,7 @@ function list_list($message = '', $post = '')
                         ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
                     ).
                     td(
-                        span(txpspecialchars($section_title), array(
-                            'title'      => $Section,
-                            'aria-label' => $Section,
-                        )), '', 'txp-list-col-section'.$vs
+                        span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
                     ).
                     td(
                         $Category1, '', 'txp-list-col-category1 category'.$vc[1]
@@ -454,18 +442,14 @@ function list_list($message = '', $post = '')
                     ).
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
-                            'rel'        => 'external',
-                            'target'     => '_blank',
-                            'title'      => gTxt('view'),
-                            'aria-label' => gTxt('view'),
+                            'rel'    => 'external',
+                            'target' => '_blank',
+                            'title'  => gTxt('view'),
                         ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($RealName), array(
-                            'title'      => $AuthorID,
-                            'aria-label' => $AuthorID,
-                        )), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name')
                         : ''
                     ).
                     (

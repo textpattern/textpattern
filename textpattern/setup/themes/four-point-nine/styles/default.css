@@ -53,7 +53,6 @@ nav ol::after,
     -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
   }
-
   /**
    * 1. Set `body` to `relative` to allow positioning of absolute elements.
    * 2. Remove default margin.
@@ -65,7 +64,6 @@ nav ol::after,
     margin: 0;
     background: #f7f7f7;
   }
-
   /**
    * Outer wrapper for main layouts.
    *
@@ -82,7 +80,6 @@ nav ol::after,
     border-bottom: 1px solid #cccccc;
     background: #ffffff;
   }
-
   /**
    * Wrapper for layouts, and for site header/footer.
    *
@@ -95,13 +92,12 @@ nav ol::after,
    * </div>
    */
   .site-header,
-.site-footer,
-.container {
+  .site-footer,
+  .container {
     width: 88%;
     max-width: 54em;
     margin: 0 auto;
   }
-
   /**
    * Additional styling for child content within site header.
    */
@@ -119,14 +115,12 @@ nav ol::after,
     font-weight: normal;
     line-height: 1.4;
   }
-
   /**
    * Additional styling for child content within site footer.
    */
   .site-footer {
     padding: 0.5em 0;
   }
-
   /**
    * Styling for articles.
    *
@@ -137,7 +131,6 @@ nav ol::after,
     /* 1 */
     word-wrap: break-word;
   }
-
   /**
    * Styling for complementary content.
    *
@@ -153,7 +146,6 @@ nav ol::after,
     /* 1 */
     word-wrap: break-word;
   }
-
   /**
    * Hide text but still allow screen reader access.
    *
@@ -172,7 +164,6 @@ nav ol::after,
     border: 0;
     white-space: nowrap;
   }
-
   /* Navigation
      ========================================================================== */
   /**
@@ -240,7 +231,6 @@ nav ol::after,
     color: #1a1a1a;
     text-decoration: none;
   }
-
   /**
    * Search field in navigation.
    */
@@ -257,7 +247,6 @@ nav ol::after,
     background: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Cg fill=%27%23333%27%3E%3Cpath d=%27M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z%27/%3E%3Cpath d=%27M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z%27/%3E%3C/g%3E%3C/svg%3E") no-repeat left center;
     background-size: 2em 2em;
   }
-
   /* Links
      ========================================================================== */
   /**
@@ -286,7 +275,6 @@ nav ol::after,
   a:focus {
     outline: 1px solid #0066ff;
   }
-
   /**
    * Additional styling for `h1`-`h3` heading links.
    *
@@ -294,30 +282,28 @@ nav ol::after,
    *    browsers, older browsers ignore this addition.
    */
   h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
+  h2 a,
+  h3 a,
+  h4 a,
+  h5 a,
+  h6 a {
     color: #000000;
   }
   h1 a:hover, h1 a:active,
-h2 a:hover,
-h2 a:active,
-h3 a:hover,
-h3 a:active,
-h4 a:hover,
-h4 a:active,
-h5 a:hover,
-h5 a:active,
-h6 a:hover,
-h6 a:active {
+  h2 a:hover,
+  h2 a:active,
+  h3 a:hover,
+  h3 a:active,
+  h4 a:hover,
+  h4 a:active,
+  h5 a:hover,
+  h5 a:active,
+  h6 a:hover,
+  h6 a:active {
     color: #000000;
     /* 1 */
-    -webkit-text-decoration-color: rgba(51, 51, 51, 0.5);
-            text-decoration-color: rgba(51, 51, 51, 0.5);
+    text-decoration-color: rgba(51, 51, 51, 0.5);
   }
-
   /**
    * Paginator (prev/next) navigation links on articles/article lists.
    *
@@ -331,7 +317,6 @@ h6 a:active {
     display: flex;
     justify-content: space-between;
   }
-
   /**
    * Visually hide unfocussed/inactive ‘skip links’.
    *
@@ -354,7 +339,6 @@ h6 a:active {
   .skip-link:focus, .skip-link:active {
     transform: translateY(0);
   }
-
   /* Typography
      ========================================================================== */
   /**
@@ -364,7 +348,6 @@ h6 a:active {
     font-size: 16px;
     line-height: 1.5;
   }
-
   /**
    * Global font and text colour.
    */
@@ -372,7 +355,6 @@ h6 a:active {
     color: #333333;
     font-family: "PT Serif", Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
-
   /**
    * Sans-serif font for main navigation menu.
    */
@@ -380,75 +362,65 @@ h6 a:active {
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-weight: bold;
   }
-
   /**
    * Harmonize size, style and vertical margin of headings.
    */
   h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     clear: both;
     color: #000000;
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
-
   h1 {
     margin: 0.6315789em 0;
     font-size: 2.375rem;
     letter-spacing: -0.25px;
     line-height: 1.1842105;
   }
-
   h2 {
     margin: 0.75em 0;
     font-size: 2rem;
     letter-spacing: -0.25px;
     line-height: 1.25;
   }
-
   h3 {
     margin: 1em 0;
     font-size: 1.5rem;
     letter-spacing: -0.25px;
     line-height: 1.3333333;
   }
-
   h4 {
     margin: 1em 0;
     font-size: 1.25rem;
     line-height: 1.4;
   }
-
   h5 {
     margin: 1em 0;
     font-size: 1.125rem;
     line-height: 1.4444444;
   }
-
   h6 {
     margin: 1em 0;
     font-size: 1rem;
     line-height: 1.5;
   }
-
   /**
    * Add the correct font weight in Chrome, Edge, and Safari.
    */
   b,
-strong {
+  strong {
     font-weight: bolder;
   }
-
   /**
    * Add vertical margin to addresses.
    */
   address {
     margin: 1em 0;
   }
-
   /**
    * Additional styling for blockquotes.
    */
@@ -459,7 +431,6 @@ strong {
     line-height: 1.4;
     text-align: center;
   }
-
   /**
    * 1. Remove the bottom border in Chrome 57+.
    * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
@@ -471,25 +442,23 @@ strong {
     -webkit-text-decoration: underline dotted;
             text-decoration: underline dotted;
   }
-
   /**
    * Consistent styling for `mark` and `var` tags.
    */
   mark,
-var {
+  var {
     padding: 0 0.25em;
     border-radius: 0.25em;
     background: #fff9e1;
     color: #333333;
   }
-
   /**
    * Harmonize size and style of computer text.
    */
   pre,
-code,
-kbd,
-samp {
+  code,
+  kbd,
+  samp {
     border: 1px solid #e3e3e3;
     border-radius: 0.2857143em;
     background-color: #f7f7f7;
@@ -498,13 +467,11 @@ samp {
     font-size: 0.875rem;
     line-height: 1.5;
   }
-
   code,
-kbd,
-samp {
+  kbd,
+  samp {
     padding: 1px 0.21429em;
   }
-
   /**
    * Additional stylng for preformatted text/code.
    *
@@ -519,9 +486,8 @@ samp {
     /* 2 */
     word-wrap: normal;
     /* 3 */
-    -moz-tab-size: 4;
-      -o-tab-size: 4;
-         tab-size: 4;
+    -o-tab-size: 4;
+       tab-size: 4;
   }
   pre code {
     padding: 0;
@@ -538,50 +504,43 @@ samp {
     word-spacing: normal;
     white-space: pre;
   }
-
   /**
    * Prevent `sub` and `sup` elements from affecting the line height in all
    * browsers.
    */
   sub,
-sup.footnote,
-sup {
+  sup.footnote,
+  sup {
     position: relative;
     font-size: 0.75em;
     line-height: 0;
     vertical-align: baseline;
   }
-
   sup {
     top: -0.5em;
   }
-
   sub {
     bottom: -0.25em;
   }
-
   /**
    * Harmonize size and style of small text.
    */
   small,
-figcaption,
-tfoot,
-.footnote {
+  figcaption,
+  tfoot,
+  .footnote {
     font-size: 0.8125rem;
     line-height: 1.5;
   }
-
   figcaption,
-tfoot,
-.footnote {
+  tfoot,
+  .footnote {
     color: #585858;
   }
-
   figcaption {
     margin-top: 0.5em;
     font-style: italic;
   }
-
   /**
    * 1. Add the correct box sizing in Firefox.
    * 2. Show the overflow in Edge and IE.
@@ -597,7 +556,6 @@ tfoot,
     background: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 240 24%27%3E%3Cpath fill=%27%23333%27 d=%27M0,0c1.742,13.61,54.74,20.912,119.995,15.279C184.922,9.679,238.594,13.024,240,24c-1.744-13.613-54.742-20.913-120.005-15.284C55.078,14.32,1.405,10.973,0,0z%27/%3E%3C/svg%3E") 50% 50% no-repeat;
     background-size: 240px 24px;
   }
-
   /* Support for non-latin languages (can be removed if not required)
      ========================================================================== */
   /**
@@ -605,16 +563,13 @@ tfoot,
    * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
    */
   [dir=ltr],
-[dir=rtl] {
-    unicode-bidi: -webkit-isolate;
+  [dir=rtl] {
     unicode-bidi: isolate;
   }
-
   bdo[dir=ltr],
-bdo[dir=rtl] {
+  bdo[dir=rtl] {
     unicode-bidi: isolate-override;
   }
-
   /**
    * Preferred font for Japanese language.
    */
@@ -622,44 +577,38 @@ bdo[dir=rtl] {
     font-family: "Hiragino Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
     font-weight: 300;
   }
-
   /**
    * Preferred font for Korean language.
    */
   :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
-
   /**
    * Preferred font for simplified Chinese (PRC) language.
    */
   :lang(zh-cn) {
     font-family: "PingFang SC", SimHei, sans-serif;
   }
-
   /**
    * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
    */
   :lang(zh-tw) {
     font-family: "PingFang TC", PMingLiU, sans-serif;
   }
-
   /**
    * Suppress `text-decoration` in some RTL languages for better legibility.
    */
   [lang|=ar] a:hover,
-[lang|=fa] a:hover,
-[lang|=ur] a:hover {
+  [lang|=fa] a:hover,
+  [lang|=ur] a:hover {
     text-decoration: none;
   }
-
   /**
    * Computer code should be LTR.
    */
   [dir=rtl] code {
     direction: ltr;
   }
-
   /**
    * Swap image alignment right/left positions in RTL languages.
    */
@@ -671,55 +620,48 @@ bdo[dir=rtl] {
     margin: 1em 1em 1em 0;
     float: left;
   }
-
   /**
    * Swap table caption alignment in RTL languages.
    */
   [dir=rtl] caption {
     text-align: right;
   }
-
   /**
    * Swap table cell text alignments in RTL languages.
    */
   [dir=rtl] th,
-[dir=rtl] td {
+  [dir=rtl] td {
     text-align: right;
   }
-
   /**
    * Swap menu/list padding positions in RTL languages.
    */
   [dir=rtl] menu,
-[dir=rtl] ol,
-[dir=rtl] ul {
+  [dir=rtl] ol,
+  [dir=rtl] ul {
     padding: 0 2em 0 0;
   }
-
   [dir=rtl] .site-navigation ul,
-[dir=rtl] .article-list {
+  [dir=rtl] .article-list {
     padding: 0;
   }
-
   /**
    * Swap definition description margin positions in RTL languages.
    */
   [dir=rtl] dd {
     margin: 0 2em 0 0;
   }
-
   /**
    * Swap checkbox/radio margin positions in RTL languages.
    */
   [dir=rtl] input[type=checkbox] + label,
-[dir=rtl] input[type=radio] + label {
+  [dir=rtl] input[type=radio] + label {
     margin: 0 0 0 0.5em;
   }
   [dir=rtl] input[type=checkbox] + label:last-of-type,
-[dir=rtl] input[type=radio] + label:last-of-type {
+  [dir=rtl] input[type=radio] + label:last-of-type {
     margin: 0;
   }
-
   /**
    * Swap `select` icon position in RTL languages.
    */
@@ -728,7 +670,6 @@ bdo[dir=rtl] {
     padding-left: 1.5em;
     background-position: 0.5em center;
   }
-
   /**
    * Swap ‘skip links’ position in RTL languages.
    */
@@ -736,14 +677,12 @@ bdo[dir=rtl] {
     right: 1px;
     left: auto;
   }
-
   /**
    * Swap anchor float position on comments.
    */
   [dir=rtl] .comments h4 .comment-anchor {
     float: left;
   }
-
   /* Embedded content
      ========================================================================== */
   /**
@@ -752,16 +691,14 @@ bdo[dir=rtl] {
   video {
     display: inline-block;
   }
-
   /**
    * Make embedded elements responsive.
    */
   img,
-video {
+  video {
     max-width: 100%;
     height: auto;
   }
-
   /**
    * Images.
    *
@@ -791,14 +728,12 @@ video {
     display: block;
     margin: 1em auto;
   }
-
   /**
    * Consistent margins on `figure`.
    */
   figure {
     margin: 1em 0;
   }
-
   /* Tables
      ========================================================================== */
   /**
@@ -810,7 +745,6 @@ video {
     border-spacing: 0;
     border-collapse: collapse;
   }
-
   /**
    * Styling of table captions.
    */
@@ -819,18 +753,16 @@ video {
     font-style: italic;
     text-align: left;
   }
-
   /**
    * Make table cells align top and left by default.
    */
   th,
-td {
+  td {
     padding: 0.5em;
     border: 1px solid #d4d4d4;
     vertical-align: top;
     text-align: left;
   }
-
   /**
    * Emphasize table header.
    */
@@ -838,65 +770,57 @@ td {
     background-color: #eeeeee;
   }
   thead th,
-thead td {
+  thead td {
     border: 1px solid #cccccc;
   }
-
   /**
    * 'Zebra striping' of `tbody` rows.
    */
   tbody tr:nth-child(even) {
     background-color: #f7f7f7;
   }
-
   /**
    * Adjust padding of table footer due to smaller font size.
    */
   tfoot th,
-tfoot td {
+  tfoot td {
     padding: 0.6666667em;
   }
-
   /**
    * Multi-row span vertical cell alignments.
    */
   [rowspan] {
     vertical-align: middle;
   }
-
   /* Lists
      ========================================================================== */
   /**
    * Address paddings set differently.
    */
   menu,
-ol,
-ul {
+  ol,
+  ul {
     padding: 0 0 0 2em;
   }
-
   /**
    * Remove margins from nested lists.
    */
   li > ul,
-li > ol {
+  li > ol {
     margin: 0;
   }
-
   /**
    * CSS Lists and Counters Module Level 3 list marker styling.
    */
   li::marker {
     color: color-text-heading;
   }
-
   /**
    * Address margins set differently.
    */
   dd {
     margin: 0 0 0 2em;
   }
-
   /**
    * Additional styling for article lists.
    *
@@ -914,7 +838,6 @@ li > ol {
     margin-bottom: 0;
     border-bottom: 1px solid #cccccc;
   }
-
   /* Forms
      ========================================================================== */
   /**
@@ -929,7 +852,6 @@ li > ol {
     padding: 1px 1em;
     border: 1px solid #cccccc;
   }
-
   /**
    * Normalize styling of `legend`.
    *
@@ -951,29 +873,27 @@ li > ol {
     /* 1 */
     white-space: normal;
   }
-
   /**
    * 1. Show the overflow in Edge.
    * 2. Remove tap delay in modern browsers.
    */
   button,
-input {
+  input {
     /* 1 */
     overflow: visible;
     /* 2 */
     touch-action: manipulation;
   }
-
   /**
    * 1. Prevent elements from spilling out of their parent.
    * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
    * 3. Correct font properties not being inherited.
    */
   button,
-input,
-optgroup,
-select,
-textarea {
+  input,
+  optgroup,
+  select,
+  textarea {
     box-sizing: border-box;
     /* 1 */
     max-width: 100%;
@@ -986,28 +906,27 @@ textarea {
     line-height: 1.375;
     vertical-align: baseline;
   }
-
   /**
    * Styling of form input fields.
    *
    * 1. Remove browser-specific default styling.
    */
   [type=color],
-[type=date],
-[type=datetime],
-[type=datetime-local],
-[type=email],
-[type=month],
-[type=number],
-[type=password],
-[type=search],
-[type=tel],
-[type=text],
-[type=time],
-[type=url],
-[type=week],
-select,
-textarea {
+  [type=date],
+  [type=datetime],
+  [type=datetime-local],
+  [type=email],
+  [type=month],
+  [type=number],
+  [type=password],
+  [type=search],
+  [type=tel],
+  [type=text],
+  [type=time],
+  [type=url],
+  [type=week],
+  select,
+  textarea {
     height: 2em;
     padding: 0.25em 0.1875em;
     border: 1px solid #cccccc;
@@ -1015,57 +934,53 @@ textarea {
     background: #ffffff;
     /* 1 */
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
   }
   [type=color]:focus,
-[type=date]:focus,
-[type=datetime]:focus,
-[type=datetime-local]:focus,
-[type=email]:focus,
-[type=month]:focus,
-[type=number]:focus,
-[type=password]:focus,
-[type=search]:focus,
-[type=tel]:focus,
-[type=text]:focus,
-[type=time]:focus,
-[type=url]:focus,
-[type=week]:focus,
-select:focus,
-textarea:focus {
+  [type=date]:focus,
+  [type=datetime]:focus,
+  [type=datetime-local]:focus,
+  [type=email]:focus,
+  [type=month]:focus,
+  [type=number]:focus,
+  [type=password]:focus,
+  [type=search]:focus,
+  [type=tel]:focus,
+  [type=text]:focus,
+  [type=time]:focus,
+  [type=url]:focus,
+  [type=week]:focus,
+  select:focus,
+  textarea:focus {
     border-color: #0066ff;
     outline: 1px solid transparent;
   }
-
   /**
    * 1. Remove any excess padding.
    * 2. Correct margins for inline checkbox/radio labels.
    */
   [type=checkbox],
-[type=radio] {
+  [type=radio] {
     /* 1 */
     padding: 0;
   }
   [type=checkbox] + label,
-[type=radio] + label {
+  [type=radio] + label {
     /* 2 */
     margin: 0 0.5em 0 0;
   }
   [type=checkbox] + label:last-of-type,
-[type=radio] + label:last-of-type {
+  [type=radio] + label:last-of-type {
     /* 2 */
     margin: 0;
   }
-
   /**
    * Correct the cursor style of increment and decrement buttons in Safari.
    */
   [type=number]::-webkit-inner-spin-button,
-[type=number]::-webkit-outer-spin-button {
+  [type=number]::-webkit-outer-spin-button {
     height: auto;
   }
-
   /**
    * Remove the inner padding in Chrome and Safari on macOS.
    */
@@ -1073,7 +988,6 @@ textarea:focus {
     /* autoprefixer: off */
     appearance: none;
   }
-
   /**
    * Use indicator icon to signify the drop-down ability of `select`.
    */
@@ -1083,32 +997,28 @@ textarea:focus {
     background-size: 1.0625em 0.3125em;
     text-transform: none;
   }
-
   /**
    * Remove browser-specific `select` UI in IE 11.
    */
   select::-ms-expand {
     opacity: 0;
   }
-
   /**
    * Override height and background set in a previous rule and allow auto height.
    */
   select[size],
-select[multiple] {
+  select[multiple] {
     height: auto;
     padding-right: 0.5em;
     background-image: none;
   }
-
   /**
    * Override height set in rule above and restrict to one line field.
    */
   select[size="0"],
-select[size="1"] {
+  select[size="1"] {
     height: 2em;
   }
-
   /**
    * Normalize styling of `optgroup`.
    */
@@ -1116,7 +1026,6 @@ select[size="1"] {
     font-style: normal;
     font-weight: bold;
   }
-
   /**
    * 1. Remove default vertical scrollbar in IE 11.
    * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
@@ -1133,7 +1042,6 @@ select[size="1"] {
     /* 3 */
     resize: vertical;
   }
-
   /**
    * Make sure disabled elements really are disabled and styled appropriately.
    *
@@ -1141,9 +1049,9 @@ select[size="1"] {
    * 2. Re-set default cursor for disabled elements.
    */
   [disabled],
-[disabled] option,
-[disabled] optgroup,
-span.disabled {
+  [disabled] option,
+  [disabled] optgroup,
+  span.disabled {
     border-color: #d4d4d4 !important;
     /* 1 */
     opacity: 1;
@@ -1154,7 +1062,6 @@ span.disabled {
     /* 2 */
     cursor: default !important;
   }
-
   /**
    * Width display options for `input` fields. Height display options
    * for textareas.
@@ -1171,7 +1078,6 @@ span.disabled {
   .small textarea {
     height: 5.5em;
   }
-
   .large input {
     width: 50%;
     min-width: 302px;
@@ -1179,27 +1085,24 @@ span.disabled {
   .large textarea {
     height: 9.75em;
   }
-
   /**
    * Styling for form field validation.
    */
   input:focus:invalid,
-select:focus:invalid,
-textarea:focus:invalid {
+  select:focus:invalid,
+  textarea:focus:invalid {
     border-color: #9d261d;
     box-shadow: none;
   }
-
   /**
    * Styling for Firefox-specfic form field validation.
    */
   input:-moz-ui-invalid,
-select:-moz-ui-invalid,
-textarea:-moz-ui-invalid {
+  select:-moz-ui-invalid,
+  textarea:-moz-ui-invalid {
     border-color: #9d261d;
     box-shadow: none;
   }
-
   /**
    * Normalize form placeholder style across browsers.
    *
@@ -1217,7 +1120,6 @@ textarea:-moz-ui-invalid {
     /* 1 */
     font: inherit;
   }
-
   /**
    * Styling for required field indicators.
    *
@@ -1229,7 +1131,6 @@ textarea:-moz-ui-invalid {
     border: 0;
     color: #9d261d;
   }
-
   /* Buttons
      ========================================================================== */
   /**
@@ -1242,27 +1143,25 @@ textarea:-moz-ui-invalid {
     /* 2 */
     text-transform: none;
   }
-
   /**
    * Remove the inner border and padding in Firefox.
    */
   button::-moz-focus-inner,
-[type=button]::-moz-focus-inner,
-[type=reset]::-moz-focus-inner,
-[type=submit]::-moz-focus-inner {
+  [type=button]::-moz-focus-inner,
+  [type=reset]::-moz-focus-inner,
+  [type=submit]::-moz-focus-inner {
     padding: 0;
     border-style: none;
   }
-
   /**
    * 1. Remove browser-specific default styling.
    * 2. Improve usability and consistency of cursor style between image-type
    *    `input` and others.
    */
   button,
-[type=button],
-[type=reset],
-[type=submit] {
+  [type=button],
+  [type=reset],
+  [type=submit] {
     background-color: #dfdfdf;
     background-image: linear-gradient(#eeeeee, #dfdfdf);
     display: inline-block;
@@ -1279,15 +1178,14 @@ textarea:-moz-ui-invalid {
     text-align: center;
     /* 1 */
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
     /* 2 */
     cursor: pointer;
   }
   button:hover,
-[type=button]:hover,
-[type=reset]:hover,
-[type=submit]:hover {
+  [type=button]:hover,
+  [type=reset]:hover,
+  [type=submit]:hover {
     background-color: #e9e9e9;
     background-image: linear-gradient(#f8f8f8, #e9e9e9);
     border-color: #bebebe;
@@ -1295,9 +1193,9 @@ textarea:-moz-ui-invalid {
     text-decoration: none;
   }
   button:active,
-[type=button]:active,
-[type=reset]:active,
-[type=submit]:active {
+  [type=button]:active,
+  [type=reset]:active,
+  [type=submit]:active {
     top: 2px;
     border-color: #bebebe;
     box-shadow: none;
@@ -1305,23 +1203,21 @@ textarea:-moz-ui-invalid {
     text-decoration: none;
   }
   button:focus,
-[type=button]:focus,
-[type=reset]:focus,
-[type=submit]:focus {
+  [type=button]:focus,
+  [type=reset]:focus,
+  [type=submit]:focus {
     border-color: #0066ff;
     outline: 1px solid transparent;
   }
-
   /**
    * Disbaled button additional styling.
    */
   button[disabled],
-[type=button][disabled],
-[type=reset][disabled],
-[type=submit][disabled] {
+  [type=button][disabled],
+  [type=reset][disabled],
+  [type=submit][disabled] {
     top: 2px !important;
   }
-
   /* Comments
      ========================================================================== */
   /**
@@ -1345,7 +1241,6 @@ textarea:-moz-ui-invalid {
     float: right;
     font-weight: normal;
   }
-
   /**
    * Additional styling for article author's comments.
    *
@@ -1356,7 +1251,6 @@ textarea:-moz-ui-invalid {
   .comments-author {
     background: #efefef;
   }
-
   /**
    * Styling for user comments preview.
    */
@@ -1366,21 +1260,18 @@ textarea:-moz-ui-invalid {
     border-radius: 0.5em;
     background-color: #fff9e1;
   }
-
   /**
    * Highlight text colour for comment errors.
    */
   .error_message li {
     color: #9d261d;
   }
-
   /**
    * Highlighting for comment form errors.
    */
   .comments_error {
     border-color: #9d261d;
   }
-
   /* Popup comments (can be removed if you don't use popups)
      ========================================================================== */
   /**
@@ -1435,7 +1326,6 @@ textarea:-moz-ui-invalid {
   .site-navigation a {
     padding: 0.5em 1em;
   }
-
   .search {
     margin-top: 0.2em;
     padding: 0;
@@ -1485,14 +1375,13 @@ textarea:-moz-ui-invalid {
    * Remove unnecessary global styling from printed media.
    */
   *,
-*::before,
-*::after {
+  *::before,
+  *::after {
     background: transparent !important;
     box-shadow: none !important;
     color: #000000 !important;
     text-shadow: none !important;
   }
-
   /**
    * Use a print-friendly font size.
    */
@@ -1500,7 +1389,6 @@ textarea:-moz-ui-invalid {
     font-size: 8pt;
     line-height: 1.5;
   }
-
   /**
    * Use a print-friendly font family.
    */
@@ -1509,21 +1397,18 @@ textarea:-moz-ui-invalid {
     padding: 2em 5em;
     font-family: "Helvetica Neue", sans-serif;
   }
-
   /**
    * Make sure links are not underlined.
    */
   a {
     text-decoration: none;
   }
-
   /**
    * Visually separate header from body.
    */
   .site-header {
     border-bottom: 1pt solid #000000;
   }
-
   /**
    * Visually separate footer from body.
    */
@@ -1531,29 +1416,26 @@ textarea:-moz-ui-invalid {
     margin-top: 12pt;
     border-top: 1pt solid #000000;
   }
-
   /**
    * Hide unnecessary content from print.
    */
   nav,
-audio,
-video,
-form,
-#comments-form,
-.comments h4 a:last-child,
-.complementary-content,
-.paginator,
-.skip-link {
+  audio,
+  video,
+  form,
+  #comments-form,
+  .comments h4 a:last-child,
+  .complementary-content,
+  .paginator,
+  .skip-link {
     display: none;
   }
-
   /**
    * Show long-form for abbreviations in print.
    */
   abbr[title]::after {
     content: " (" attr(title) ")";
   }
-
   /**
    * Harmonize size, style and vertical margin of headings.
    */
@@ -1563,7 +1445,6 @@ form,
     font-weight: normal;
     line-height: 36pt;
   }
-
   h2 {
     margin: 14pt 0;
     font-size: 24pt;
@@ -1572,7 +1453,6 @@ form,
     widows: 2;
     page-break-after: avoid;
   }
-
   h3 {
     margin: 12pt 0;
     font-size: 18pt;
@@ -1581,7 +1461,6 @@ form,
     widows: 2;
     page-break-after: avoid;
   }
-
   h4 {
     margin: 11pt 0;
     font-size: 14pt;
@@ -1590,7 +1469,6 @@ form,
     widows: 2;
     page-break-after: avoid;
   }
-
   h5 {
     margin: 10pt 0;
     font-size: 12pt;
@@ -1599,7 +1477,6 @@ form,
     widows: 2;
     page-break-after: avoid;
   }
-
   h6 {
     margin: 9pt 0;
     font-size: 10pt;
@@ -1608,7 +1485,6 @@ form,
     widows: 2;
     page-break-after: avoid;
   }
-
   /**
    * Prevent widows (single final paragraph line on next page) and orphans (single
    * first paragraph line on previous page).
@@ -1617,18 +1493,16 @@ form,
     orphans: 2;
     widows: 2;
   }
-
   /**
    * Harmonize size and style of small text.
    */
   footer,
-figcaption,
-tfoot,
-small,
-.footnote {
+  figcaption,
+  tfoot,
+  small,
+  .footnote {
     font-size: 6pt;
   }
-
   /**
    * Simple blockquote styling.
    *
@@ -1641,13 +1515,11 @@ small,
     /* 1 */
     page-break-inside: avoid;
   }
-
   [dir=rtl] blockquote {
     padding: 0 8pt 0 0;
     border-right: 3pt solid #000000;
     border-left: 0;
   }
-
   /**
    * Simple preformatted text styling.
    *
@@ -1660,18 +1532,16 @@ small,
     /* 1 */
     white-space: pre-wrap !important;
   }
-
   /**
    * Use a print-friendly monospaced font and size.
    */
   pre,
-code,
-kbd,
-samp,
-var {
+  code,
+  kbd,
+  samp,
+  var {
     font-family: "Courier New", Courier, monospace;
   }
-
   /**
    * Images.
    *
@@ -1701,7 +1571,6 @@ var {
     display: block;
     margin: 1em auto;
   }
-
   /**
    * Swap image alignment right/left positions in RTL languages.
    */
@@ -1713,21 +1582,18 @@ var {
     margin: 1em 1em 1em 0;
     float: left;
   }
-
   /**
    * Ensure margin below `figure`.
    */
   figure {
     margin-bottom: 8pt;
   }
-
   /**
    * Ensure margin above `figcaption`.
    */
   figcaption {
     margin-top: 4pt;
   }
-
   /**
    * Simple bullet styling for `ul` unordered lists.
    */
@@ -1735,11 +1601,9 @@ var {
     padding: 0 0 8pt 1.8em;
     list-style: square;
   }
-
   [dir=rtl] ul {
     padding: 0 1.8em 8pt 0;
   }
-
   /**
    * Simple numerical styling for `ol` ordered lists.
    */
@@ -1747,22 +1611,18 @@ var {
     padding: 0 0 8pt 1.8em;
     list-style: decimal;
   }
-
   [dir=rtl] ol {
     padding: 0 1.8em 8pt 0;
   }
-
   /**
    * Normalize margins on `dl` definition lists.
    */
   dl {
     padding: 0 0 8pt 1.8em;
   }
-
   [dir=rtl] dl {
     padding: 0 1.8em 8pt 0;
   }
-
   /**
    * 1. Make `table` span entire page width.
    * 2. Ensure margin below `table`.
@@ -1773,7 +1633,6 @@ var {
     /* 2 */
     margin-bottom: 8pt;
   }
-
   /**
    * Harmonize styling for `caption`.
    */
@@ -1781,23 +1640,20 @@ var {
     margin-bottom: 4pt;
     font-weight: bold;
   }
-
   /**
    * Avoid table rows breaking across multiple pages.
    */
   tr {
     page-break-inside: avoid;
   }
-
   /**
    * Simple styling for table cells.
    */
   th,
-td {
+  td {
     padding: 4pt 8pt;
     border-bottom: 1pt solid #000000;
   }
-
   /**
    * Display table head across multi-page tables.
    */
@@ -1807,7 +1663,6 @@ td {
   thead th {
     border-top: 1pt solid #000000;
   }
-
   /**
    * Avoid user comments breaking across multiple pages.
    */

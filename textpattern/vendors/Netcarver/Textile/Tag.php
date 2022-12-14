@@ -111,7 +111,7 @@ class Tag extends DataBag
         }
 
         if ($this->tag) {
-            return '<' . $this->tag . $attributes . (($this->selfclose) ? " />" : '>');
+            return '<' . $this->tag . $attributes . (($this->selfclose) ? ' />' : '>');
         }
 
         return $attributes;

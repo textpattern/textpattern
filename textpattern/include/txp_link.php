@@ -312,10 +312,7 @@ function link_list($message = '')
                 $vc = $validator->validate() ? '' : ' error';
 
                 if ($link_category) {
-                    $link_category = span(txpspecialchars($link_category_title), array(
-                        'title'      => $link_category,
-                        'aria-label' => $link_category,
-                    ));
+                    $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
                 }
 
                 $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
@@ -348,10 +345,7 @@ function link_list($message = '')
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($link_realname), array(
-                            'title'      => $link_author,
-                            'aria-label' => $link_author,
-                        )), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
