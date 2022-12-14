@@ -218,9 +218,8 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
-        'class'      => $class,
-        'title'      => $title,
-        'aria-label' => $title,
+        'class' => $class,
+        'title' => $title,
     ));
 }
 
@@ -317,10 +316,9 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
             span(gTxt('delete'), array('class' => 'ui-icon ui-icon-close')),
             'button',
             array(
-                'class'      => 'destroy',
-                'type'       => 'submit',
-                'title'      => gTxt('delete'),
-                'aria-label' => gTxt('delete'),
+                'class' => 'destroy',
+                'type'  => 'submit',
+                'title' => gTxt('delete'),
             )
         ),
         eInput($event).
@@ -417,9 +415,8 @@ function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit
             'search_method' => $search_method,
         ),
         array(
-            'rel'        => $type,
-            'title'      => $label,
-            'aria-label' => $label,
+            'rel'   => $type,
+            'title' => $label,
         )
     );
 }
@@ -954,7 +951,7 @@ function tag($content, $tag, $atts = '')
 
 function tag_void($tag, $atts = '')
 {
-    return '<'.$tag.join_atts($atts).' />';
+    return '<'.$tag.join_atts($atts).(get_pref('doctype') === 'html5' ? '>' : ' />');
 }
 
 /**
@@ -1279,9 +1276,8 @@ function popTag($var, $text, $atts = array())
     ) + $atts;
 
     return href($text, $opts, array(
-        'class'      => 'txp-tagbuilder-link',
-        'title'      => gTxt('tagbuilder'),
-        'aria-label' => gTxt('tagbuilder'),
+        'class' => 'txp-tagbuilder-link',
+        'title' => gTxt('tagbuilder'),
     ));
 }
 
@@ -1877,7 +1873,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
     // Non-enclosing breaks.
     elseif ($break === 'br' || $break === 'hr') {
-        $content = join("<$break $breakatts/>".n, $list);
+        $content = join("<$break $breakatts".(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
     } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {
@@ -1925,7 +1921,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts".(get_pref('doctype') === 'html5' ? ">" : " />");
 }
 
 /**
@@ -1947,7 +1943,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
 function doLabel($label = '', $labeltag = '')
 {
     if ($label) {
-        return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
+        return (empty($labeltag) ? $label.'<br'.(get_pref('doctype') === 'html5' ? '>' : ' />') : tag($label, $labeltag));
     }
 
     return '';

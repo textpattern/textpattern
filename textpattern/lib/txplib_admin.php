@@ -720,7 +720,7 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
         $msg = gTxt('internal_error');
     }
 
-    if ($production_status == 'debug' && has_privs('debug.backtrace')) {
+    if ($production_status == 'debug' /*&& has_privs('debug.backtrace')*/) {
         $msg .= n."in $errfile at line $errline";
         $backtrace = join(n, get_caller(10, 1));
     }

@@ -464,8 +464,7 @@ function cat_event_category_list($event)
             }
 
             $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url, array(
-                'title'      => gTxt('category_count', array('{num}' => $total_count[$name])),
-                'aria-label' => gTxt('category_count', array('{num}' => $total_count[$name])),
+                'title' => gTxt('category_count', array('{num}' => $total_count[$name])),
             )) : '(0)';
 
             if (empty($title)) {
