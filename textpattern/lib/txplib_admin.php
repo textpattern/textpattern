@@ -537,7 +537,7 @@ function imagecreatefromsvg($file, $makestandalone = true)
 function txpgetimagesize($file)
 {
     $content = file_get_contents($file);
-    if (substr($content, 0, 5) != "<?xml")
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ")
         return getimagesize($file);
     
     if (strpos($content, "<svg") === false)
@@ -556,9 +556,9 @@ function txpgetimagesize($file)
     if ($width == '' || $height == '') {
         $viewbox = explode(' ', $svg['viewBox']);
         if ($width == '')
-            $width = $viewbox[2];
+            $width = $viewbox[2] - $viewbox[0];
         if ($height == '')
-            $height = $viewbox[3];
+            $height = $viewbox[3] - $viewbox[1];
     }
     $data = array();
     $data[0] = $width;
