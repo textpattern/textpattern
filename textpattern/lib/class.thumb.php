@@ -352,6 +352,8 @@ class wet_thumb
 
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
+        $src_width = $this->_SRC['width'];
+        $src_height = $this->_SRC['height'];
 
         // Crop image.
         $off_w = 0;
@@ -402,9 +404,20 @@ class wet_thumb
                 if ($verbose) {
                     echo "... saving image ...";
                 }
+                if (empty($xml['width'])) {
+                    $xml->addChild('width');
+                    $xml['width'] = $src_width;
+                }
+                if (empty($xml['height'])) {
+                    $xml->addChild('height');
+                    $xml['height'] = $src_height;
+                }
                 if (empty($xml['viewBox'])) {
                     $xml->addChild('viewBox');
                     $xml['viewBox'] = '0 0 ' . $xml['width'] . ' ' . $xml['height'];
+                }
+                if ($this->crop != false) {
+                    $xml['viewBox'] = $off_w . ' ' .  $off_h . ' ' . $this->_SRC['width'] . ' ' . $this->_SRC['height'];
                 }
                 $this->width = $xml['width'] = $this->_DST['width'];
                 $this->height = $xml['height'] = $this->_DST['height'];
