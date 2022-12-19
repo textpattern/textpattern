@@ -353,24 +353,6 @@ class wet_thumb
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
 
-        if ($this->_DST['type'] == 99) {
-            $this->_DST['image'] = $this->_SRC['image'];
-            $xml = simplexml_load_string($this->_DST['image']);
-            if ($xml !== false) {
-                if ($verbose) {
-                    echo "... saving image ...";
-                }
-                $xml['width'] = $this->width;
-                $xml['height'] = $this->height;
-                $result = file_put_contents($this->_DST['file'], $xml->asXML());
-                if ($verbose) {
-                    echo $result ? "... image successfully saved ..." : "... failed to save image ...";
-                }
-                return $result;
-            }
-            return false;
-        }
-
         // Crop image.
         $off_w = 0;
         $off_h = 0;
@@ -411,6 +393,28 @@ class wet_thumb
                     $this->_SRC['height'] = $cpyHeight;
                 }
             }
+        }
+
+        if ($this->_DST['type'] == 99) {
+            $this->_DST['image'] = $this->_SRC['image'];
+            $xml = simplexml_load_string($this->_DST['image']);
+            if ($xml !== false) {
+                if ($verbose) {
+                    echo "... saving image ...";
+                }
+                if (empty($xml['viewBox'])) {
+                    $xml->addChild('viewBox');
+                    $xml['viewBox'] = '0 0 ' . $xml['width'] . ' ' . $xml['height'];
+                }
+                $this->width = $xml['width'] = $this->_DST['width'];
+                $this->height = $xml['height'] = $this->_DST['height'];
+                $result = file_put_contents($this->_DST['file'], $xml->asXML());
+                if ($verbose) {
+                    echo $result ? "... image successfully saved ..." : "... failed to save image ...";
+                }
+                return $result;
+            }
+            return false;
         }
 
         // Create DST.
