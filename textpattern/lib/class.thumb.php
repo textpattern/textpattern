@@ -414,7 +414,7 @@ class wet_thumb
                 }
                 if (empty($xml['viewBox'])) {
                     $xml->addChild('viewBox');
-                    $xml['viewBox'] = '0 0 ' . $xml['width'] . ' ' . $xml['height'];
+                    $xml['viewBox'] = '0 0 ' . svgtopx($xml['width']) . ' ' . svgtopx($xml['height']);
                 }
                 if ($this->crop != false) {
                     $xml['viewBox'] = $off_w . ' ' .  $off_h . ' ' . $this->_SRC['width'] . ' ' . $this->_SRC['height'];
