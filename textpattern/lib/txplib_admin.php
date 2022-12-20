@@ -553,14 +553,14 @@ function txpgetimagesize($file)
  
     $width = svgtopx($svg['width']);
     $height = svgtopx($svg['height']);
-    if ($width == '' || $height == '') {
+    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
         if (empty($svg['viewBox']))
             return false;
         $viewbox = explode(' ', $svg['viewBox']);
-        if ($width == '')
-            $width = $viewbox[2] - $viewbox[0];
-        if ($height == '')
-            $height = $viewbox[3] - $viewbox[1];
+        $width = $viewbox[2] - $viewbox[0];
+        $height = $viewbox[3] - $viewbox[1];
+        if ($width <= 0 || $height <= 0)
+            return false;
     }
     $data = array();
     $data[0] = $width;
