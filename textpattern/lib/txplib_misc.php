@@ -628,6 +628,9 @@ function the_privileged($res, $real = false)
 
 function svgtopx($svgsize)
 {
+    if (empty($svgsize))
+        return($svgsize);
+
     preg_match('/([0-9\.]*)([A-Za-z]*)/', $svgsize, $matches);
     switch (substr($matches[2], 0, 2)) {
         case '':
