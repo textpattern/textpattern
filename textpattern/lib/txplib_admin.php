@@ -554,6 +554,8 @@ function txpgetimagesize($file)
     $width = svgtopx($svg['width']);
     $height = svgtopx($svg['height']);
     if ($width == '' || $height == '') {
+        if (empty($svg['viewBox']))
+            return false;
         $viewbox = explode(' ', $svg['viewBox']);
         if ($width == '')
             $width = $viewbox[2] - $viewbox[0];
