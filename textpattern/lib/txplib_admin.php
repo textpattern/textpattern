@@ -467,8 +467,9 @@ function check_gd($image_type)
             return ($gd_info['PNG Support'] == true);
             break;
         case '.svg':
-            if (has_privs('image.create.trusted'))
+            if (has_privs('image.create.trusted')) {
                 return true;
+            }
             break;
         case '.webp':
             return (!empty($gd_info['WebP Support']));
@@ -515,15 +516,18 @@ function imagecreatefromsvg($file, $makestandalone = true)
         $xmltree = simplexml_load_string($xml);
         $svg = null;
         findSVG($xmltree, $svg);
-        if ($svg == null)
+        if ($svg == null) {
             return false;
+        }
         $newxml = $svg->asXML();
-        if (substr($newxml, 0, 5) != "<?xml")
+        if (substr($newxml, 0, 5) != "<?xml") {
             return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
-        else
+        } else {
             return $newxml . PHP_EOL;
-    } else
+        }
+    } else {
       return $xml;
+    }
 }
 
 /**
@@ -537,30 +541,36 @@ function imagecreatefromsvg($file, $makestandalone = true)
 function txpgetimagesize($file)
 {
     $content = file_get_contents($file);
-    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ")
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
         return getimagesize($file);
+    }
     
-    if (strpos($content, "<svg") === false)
+    if (strpos($content, "<svg") === false) {
         return false;
+    }
 
-    if (($xml = simplexml_load_string($content)) === false)
+    if (($xml = simplexml_load_string($content)) === false) {
         return false;
+    }
 
     $svg = null;
     findSVG($xml, $svg);
-    if ($svg == null)
+    if ($svg == null) {
         return false;
+    }
  
     $width = svgtopx($svg['width']);
     $height = svgtopx($svg['height']);
     if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
-        if (empty($svg['viewBox']))
+        if (empty($svg['viewBox'])) {
             return false;
+        }
         $viewbox = explode(' ', $svg['viewBox']);
         $width = $viewbox[2] - $viewbox[0];
         $height = $viewbox[3] - $viewbox[1];
-        if ($width <= 0 || $height <= 0)
+        if ($width <= 0 || $height <= 0) {
             return false;
+        }
     }
     $data = array();
     $data[0] = $width;
@@ -608,10 +618,11 @@ function txpimagesize($file, $create = false)
 
         $errlevel = error_reporting(0);
 
-        if ($ext == '.svg')
+        if ($ext == '.svg') {
             $data['image'] = $imgf($file, false);
-        else
+        } else {
             $data['image'] = $imgf($file);
+        }
         if ($data['image']) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
