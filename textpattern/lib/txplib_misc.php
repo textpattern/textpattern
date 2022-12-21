@@ -628,8 +628,9 @@ function the_privileged($res, $real = false)
 
 function svgtopx($svgsize)
 {
-    if (empty($svgsize))
+    if (empty($svgsize)) {
         return($svgsize);
+    }
 
     preg_match('/([0-9\.]*)([A-Za-z]*)/', $svgsize, $matches);
     switch (substr($matches[2], 0, 2)) {
@@ -782,8 +783,9 @@ function imageFetchInfo($id = "", $name = "")
 
 function txp_image_type_to_mime_type($image_type)
 {
-  if ($image_type == IMAGETYPE_SVG)
+  if ($image_type == IMAGETYPE_SVG) {
     return 'image/svg+xml';
+  }
   return image_type_to_mime_type($image_type);
 }
 
