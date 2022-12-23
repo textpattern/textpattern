@@ -21,7 +21,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: Can no longer delete in-use languages.
 * Developer: Introduce UI class library for building interface components.
-* jQuery 3.6.2.
+* jQuery 3.6.3.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.

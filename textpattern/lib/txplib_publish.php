@@ -711,7 +711,7 @@ function lookupByTitle($val, $debug = false)
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
         'textpattern',
-        "url_title = '".doSlash($val)."' AND Status >= 4 LIMIT 1", $debug
+        "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
 }
 
@@ -742,7 +742,7 @@ function lookupByTitleSection($val, $section, $debug = false)
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
         'textpattern',
-        "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug
+        "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
 }
 
@@ -764,7 +764,7 @@ function lookupByIDSection($id, $section, $debug = false)
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
         'textpattern',
-        "ID = ".intval($id)." AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug
+        "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
 }
 
@@ -785,7 +785,7 @@ function lookupByID($id, $debug = false)
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
         'textpattern',
-        "ID = ".intval($id)." AND Status >= 4 LIMIT 1", $debug
+        "ID = ".intval($id)." LIMIT 1", $debug
     );
 }
 
@@ -814,7 +814,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
         'textpattern',
-        "url_title LIKE '".doSlash($title)."' AND Status >= 4 AND $dateClause LIMIT 1"
+        "url_title LIKE '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
 }
 
