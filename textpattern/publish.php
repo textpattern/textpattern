@@ -437,7 +437,7 @@ function preText($store, $prefs = null)
 
                     if (empty($custom_modes)) {
                         $permlink_guess = $permlink_mode;
-                    } elseif (!empty($un) && ($n > 1 || in_array('title_only', $permlink_modes))) {// ID or url_title
+                    } elseif (!empty($un) && ($n > 1 || in_array('title_only', $permlink_modes) || in_array('id_title', $permlink_modes))) {// ID or url_title
                         $safe_un = doSlash($un);
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
