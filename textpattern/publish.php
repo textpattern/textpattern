@@ -322,6 +322,11 @@ function preText($store, $prefs = null)
         }
     }
 
+    // Return clean URL test results for diagnostics.
+    if (gps('txpcleantest')) {
+        exit(show_clean_test($out));
+    }
+
     if (is_array($store)) {
         $out = $store + $out;
     }
@@ -338,19 +343,42 @@ function preText($store, $prefs = null)
 
     $is_404 = ($out['status'] == '404');
     $title = null;
+    $status = gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")";
+
+    // Handle article preview.
+    if (!$status) {
+        header('Cache-Control: no-cache, no-store, max-age=0');
+        doAuth();
+
+        if (!has_privs('article.preview')) {
+            txp_status_header('401 Unauthorized');
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+        } else {
+            global $nolog;
+    
+            $nolog = true;
+            $out['id'] = intval(gps('txpreview'));
+        }
+    }
+
+    // These are deprecated as of Textpattern v1.0 - leaving them here for
+    // plugin compatibility.
+    $out['path_from_root'] = rhu;
+    $out['pfr']            = rhu;
+
+    $out['path_to_site']   = $path_to_site;
+    $out['permlink_mode']  = $permlink_mode;
+    $out['sitename']       = $sitename;
+
+    // First we sniff out some of the preset URL schemes.
+    extract($url);
 
     // If messy vars exist, bypass URL parsing.
-    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
-        // Return clean URL test results for diagnostics.
-        if (gps('txpcleantest')) {
-            exit(show_clean_test($out));
-        }
-
-        // First we sniff out some of the preset URL schemes.
-        extract($url);
-
-        if (strlen($u1)) {
-            $n = $out[0];
+    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
+        if ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
+            $is_404 = true;
+        } else {
+            $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
             switch ($u1) {
@@ -409,34 +437,35 @@ function preText($store, $prefs = null)
 
                     if (empty($custom_modes)) {
                         $permlink_guess = $permlink_mode;
-                    } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
+                    } elseif (!empty($un) && ($n > 1 || in_array('title_only', $permlink_modes))) {// ID or url_title
                         $safe_un = doSlash($un);
+                        $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
                             '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
                             'textpattern',
-                            "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
+                            "(url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')').$status
                         );
 
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if ('/'.$a['url_title'] === $u0 || '/'.$a['Section'].'/'.$a['url_title'] === $u0) {
+                            if ('/'.$a['Section'].'/'.$a['url_title'].$slash === $u0) {
                                 $permlink_guess = 'section_title';
                                 break;
                             }
 
                             $thisurl = permlinkurl($thisarticle, '/');
 
-                            if ($thisurl === $u0 || '/'.$a['Section'].$thisurl === $u0) {
+                            if ($thisurl === $u0) {
                                 $permlink_guess = $permlink_modes[$a['Section']];
                                 break;
                             }
                         }
 
-                        if (!isset($permlink_guess) || !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
+                        if (!isset($permlink_guess)) {
                             unset($thisarticle);
-                            $is_404 = true;
+                            $trailing_slash != 0 or $is_404 = true;
                         } else {
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
@@ -446,15 +475,19 @@ function preText($store, $prefs = null)
                     }
 
                     if (!$is_404 && empty($out['id'])) {
-                        if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
-                            // Could be a year.
-                            $permlink_guess = 'year_month_day_title';
-                        } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
-                            $permlink_guess = $permlink_modes[$u1];
+                        if (!isset($permlink_guess)) {
+                            if (isset($permlink_modes[$u1])) {
+                                $permlink_guess = $permlink_modes[$u1];
+                            } elseif (is_numeric($u1) && strlen($u1) === 4 && in_array('year_month_day_title', $custom_modes)) {
+                                // Could be a year.
+                                $permlink_guess = 'year_month_day_title';
+                            } else {
+                                $permlink_guess = $permlink_mode;
+                            }
                         }
 
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
+                        switch ($permlink_guess) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -507,7 +540,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2)) {
+                                if (isset($u2) || $trailing_slash < 0) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
@@ -516,8 +549,6 @@ function preText($store, $prefs = null)
                         }
                     }
             }
-        } else {
-            $out['s'] = 'default';
         }
     }
 
@@ -530,7 +561,7 @@ function preText($store, $prefs = null)
         } elseif (strpos($month, $out['month']) === 0) {
             $out['month'] = $month;
         } else {
-            $out['month'] = $month = '';
+            $month = '';
             $is_404 = true;
         }
     } elseif (!empty($month)) {
@@ -538,23 +569,30 @@ function preText($store, $prefs = null)
     }
 
     // Resolve AuthorID from Authorname.
-    if ($out['author']) {
-        $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
-
-        if ($name) {
-            $out['realname'] = $out['author'];
-            $out['author'] = $name;
-        } else {
-            $out['author'] = $out['realname'] = '';
-            $is_404 = true;
-        }
+    if (!$is_404 && $out['author'] && $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'")) {
+        $out['realname'] = $out['author'];
+        $out['author'] = $name;
     } else {
-        $out['realname'] = '';
+        $is_404 = $is_404 || !empty($out['author']);
+        $out['author'] = $out['realname'] = '';
+    }
+
+    // Existing category in messy or clean URL?
+    if (!$is_404 && !empty($out['c'])) {
+        global $thiscategory;
+
+        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
+            $is_404 = true;
+            $out['c'] = '';
+            $thiscategory = null;
+        } else {
+            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
+        }
     }
 
     // Prevent to get the id for file_downloads.
     if ($out['s'] == 'file_download') {
-        if (is_numeric($out['id'])) {
+        if (!$is_404 && is_numeric($out['id'])) {
             global $thisfile;
 
             // Undo the double-encoding workaround for .gz files;
@@ -571,30 +609,11 @@ function preText($store, $prefs = null)
 
         $is_404 = $is_404 || empty($rs);
         $out = array_merge($out, $is_404 ? array('id' => '', 'file_error' => 404, 'status' => 404) : $rs);
-    }
-
-    // Allow article preview.
-    elseif (gps('txpreview')) {
-        doAuth();
-
-        if (!has_privs('article.preview')) {
-            txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-        }
-
-        global $nolog;
-
-        $nolog = true;
-        header('Cache-Control: no-cache, no-store, max-age=0');
-        $rs = safe_row("ID AS id, Section AS s", 'textpattern', "ID = ".intval(gps('txpreview'))." LIMIT 1");
-
-        if ($rs) {
-            $is_404 = false;
-            $out = array_merge($out, $rs);
-        }
-    } elseif ($out['context'] == 'article') {
-        if (!$is_404 && empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
-            if (empty($out['s']) || $out['s'] === 'default') {
+    } elseif (!$is_404 && $out['context'] == 'article') {
+        if ($out['s'] && !isset($txp_sections[$out['s']])) {
+            $is_404 = true;
+        } elseif (empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
+            if ($out['s'] === '') {
                 $rs = !empty($out['id']) ?
                     lookupByID($out['id']) :
                     lookupByDateTitle(isset($month) ? $month : '', $title);
@@ -606,61 +625,8 @@ function preText($store, $prefs = null)
 
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
+            $is_404 = $is_404 || empty($out['id']) || $out['s'] == '';
             $is_404 or populateArticleData($rs);
-        }
-
-        if (!empty($out['s']) && $out['s'] !== 'default') {
-            if (!isset($txp_sections[$out['s']])) {
-                $out['s'] = '';
-                $is_404 = true;
-            }
-        }
-    }
-
-    // Existing category in messy or clean URL?
-    if (!empty($out['c'])) {
-        global $thiscategory;
-
-        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
-            $is_404 = true;
-            $out['c'] = '';
-            $thiscategory = null;
-        } else {
-            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
-        }
-    }
-
-    // Stats: found or not.
-    $out['status'] = ($is_404 ? '404' : '200');
-    $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
-    $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-    $id = $out['id'];
-
-    if (!$is_404) {
-        $out['s'] = empty($out['s']) ? 'default' : $out['s'];
-    }
-
-    // Hackish.
-    global $is_article_list;
-
-    if (empty($id)) {
-        $is_article_list = true;
-    }
-
-    if (!$is_404 && $id && $out['s'] !== 'file_download') {
-        if (empty($thisarticle)) {
-            $a = safe_row(
-                "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-                'textpattern',
-                "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
-            );
-
-            if ($a) {
-                populateArticleData($a);
-            }
-        } elseif (!gps('txpreview') && !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
-            unset($thisarticle);
         }
 
         if (!empty($thisarticle)) {
@@ -669,12 +635,23 @@ function preText($store, $prefs = null)
             $out['id_keywords'] = $thisarticle['keywords'];
             $out['id_author']   = $thisarticle['authorid'];
 
-            if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
-                $out['status'] = '410';
+            if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
+                $is_404 = '410';
             }
-        } else {
-            $is_404 = true;
         }
+    }
+
+    // Stats: found or not.
+    $out['status'] = is_numeric($is_404) ? $is_404 : ($is_404 ? '404' : '200');
+    $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
+    $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
+    $id = $out['id'];
+
+    // Hackish.
+    global $is_article_list;
+
+    if (empty($id)) {
+        $is_article_list = true;
     }
 
     // By this point we should know the section, so grab its page and CSS.
@@ -692,22 +669,13 @@ function preText($store, $prefs = null)
             unset($rs);
         }
 
-        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
+        $s = $out['s'] = $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
         $rs = $txp_sections[$s];
 
         $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
-
-    // These are deprecated as of Textpattern v1.0 - leaving them here for
-    // plugin compatibility.
-    $out['path_from_root'] = rhu;
-    $out['pfr']            = rhu;
-
-    $out['path_to_site']   = $path_to_site;
-    $out['permlink_mode']  = $permlink_mode;
-    $out['sitename']       = $sitename;
 
     return $out;
 }

@@ -4879,7 +4879,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         $keys['context'] = gTxt($keys['context'].'_context');
     }
 
-    return $hu.(empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
+    return $hu.($prefs['trailing_slash'] >= 0 ? $url : rtrim($url, '/')).join_qs($keys);
 }
 
 /**
@@ -5009,6 +5009,10 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
+    if ($url_mode == 'title_only' && isset($txp_sections[$url_title])) {
+        $url_mode = 'id_title';
+    }
+
     $section = urlencode((string)$section);
     $url_title = urlencode((string)$url_title);
     $posted = isset($uposted) ? $uposted : $posted;
@@ -5082,7 +5086,12 @@ function permlinkurl($article_array, $hu = null)
             break;
     }
 
-    $permlinks[$thisid] = $url_mode == 'messy' ? true : $out;
+    if ($url_mode == 'messy') {
+        $permlinks[$thisid] = true;
+    } else {
+        $prefs['trailing_slash'] <= 0 or $out .= '/';
+        $permlinks[$thisid] = $out;
+    }
 
     return $hu.$out.join_qs($keys);
 }
