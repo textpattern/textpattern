@@ -1742,6 +1742,7 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
+    // A shortcut for name='<txp:yield name="alias" />'
     if (isset($atts['yield']) && !isset($pairs['yield'])) {
         isset($partial) or $partial = Txp::get('\Textpattern\Tag\Registry')->getTag('yield');
 
@@ -2016,7 +2017,7 @@ function dumbDown($str, $lang = null)
         }
     }
 
-    return strtr($str, $array[$lang]);
+    return strtr((string)$str, $array[$lang]);
 }
 
 /**
@@ -2170,7 +2171,7 @@ function splat($text)
     if (!isset($stack[$sha])) {
         $stack[$sha] = $parse[$sha] = array();
 
-        if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@(\$?[\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -3297,7 +3298,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+\$?[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
     $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -4423,7 +4424,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 {
     if ($pairs) {
         foreach ($pairs as $k => $val) {
-            $no = array_search($k, $custom);
+            $no = isset($custom) ? array_search($k, $custom) : $k;
 
             if ($no !== false) {
                 $not = ($exclude === true || isset($exclude[$k])) ? 'NOT ' : '';
@@ -4431,7 +4432,7 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
                 if ($val === true) {
                     $out[] = "({$not}{$field} != '')";
-                } else {
+                } elseif(isset($val)) {
                     $val = doSlash($val);
                     $parts = array();
 

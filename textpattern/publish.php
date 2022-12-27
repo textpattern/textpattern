@@ -894,16 +894,9 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thisarticle, $thispage, $trace, $txp_item, $txp_sections;
-    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires'),
-        $aggregate = array('avg' => 'AVG(?)', 'max' => 'MAX(?)', 'min' => 'MIN(?)', 'sum' => 'SUM(?)', 'list' => "GROUP_CONCAT(? SEPARATOR ',')");
+    global $pretext, $thisarticle, $thispage, $trace;
 
     extract($pretext);
-
-    if ($iscustom) {
-        // Custom articles must not render search results.
-        $q = '';
-    }
 
     // Getting attributes.
     if (isset($thing) && !isset($atts['form'])) {
@@ -925,111 +918,18 @@ function doArticles($atts, $iscustom, $thing = null)
         $pgoffset = $offset = intval($offset);
     }
 
-    if (isset($fields)) {
-        $what = $groupby = $sortby = array();
-        $column_map = $date_fields + article_column_map();
-        $reg_fields = implode('|', array_keys($column_map));
-        $agg_reg = implode('|', array_keys($aggregate)).'|date|day|month|year|week|quarter';
-
-        foreach (do_list_unique($fields) as $field) {
-            if (preg_match("/^(?:($agg_reg)(?:\[(.*)\])?\s*\(\s*)?($reg_fields)(?:\s*\))?$/i", $field, $matches)) {
-                $format = doSlash($matches[2]);
-                $field = strtolower($matches[3]);
-                $column = $column_map[$field];
-                $alias = $matches[1] ? ' AS '.$column : '';
-
-                if (isset($aggregate[$matches[1]])) {
-                    $what[$field] = strtr($aggregate[$matches[1]], array('?' => $column, ',' => $format ? $format : ','));
-                } elseif ($matches[1]) {
-                    isset($what[$field]) or $what[$field] = "MIN($column)";
-                    $group = $format ? "DATE_FORMAT($column, '$format')" : strtoupper($matches[1]).'('.$column.')';
-                    !is_array($groupby) or $groupby[] = $group;
-                    $sortby[] = $group;
-                } else {
-                    $what[$field] = $column;
-                    !is_array($groupby) or $groupby[] = $column;
-                    $sortby[] = $column;
-                }
-
-                if (isset($date_fields[$field])) {
-                    $what[$field] .= $alias.', UNIX_TIMESTAMP('.$what[$field].') AS u'.$column;
-                } elseif ($alias) {
-                    $what[$field] .= $alias;
-                } elseif ($field === 'thisid') {
-                    $groupby = false;
-                }
-            }
-        }
-
-        $fields = implode(', ', $what);
-        $groupby = $groupby ? implode(', ', $groupby) : '';
-
-        if ($groupby && !$sort) {
-            $sort = implode(', ', $sortby);
-        }
-    } elseif ($custom_pg) {
+    if ($custom_pg) {
         $groupby = trim($pgonly);
     }
 
-    // Give control to search, if necessary.
-    $search = $score = $match = '';
-
-    if ($q && !$issticky) {
-        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
-        $q = trim($q);
-        $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
-        $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
-
-        // Searchable article fields are limited to the columns of the
-        // textpattern table and a matching fulltext index must exist.
-        $cols = do_list_unique(get_pref('searchable_article_fields')) or $cols = array('Title', 'Body');
-
-        if ($m == 'natural') {
-            $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q' IN NATURAL LANGUAGE MODE)";
-        }
-
-        if (!$sort || strpos($sort, 'score') !== false) {
-            !empty($match) or $match = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q')";
-            $score = ', '.(empty($groupby) ? $match : "MAX($match)").' AS score';
-            $sort or $sort = 'score DESC';
-        }
-
-        $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
-
-        if ($quoted || empty($m) || $m === 'exact') {
-            for ($i = 0; $i < count($cols); $i++) {
-                $cols[$i] = "`$cols[$i]` LIKE '%$search_terms%'";
-            }
-        } else {
-            $colJoin = ($m === 'all') ? "AND" : "OR";
-            $search_terms = explode(' ', $search_terms);
-            for ($i = 0; $i < count($cols); $i++) {
-                $like = array();
-                foreach ($search_terms as $search_term) {
-                    $like[] = "`$cols[$i]` LIKE '%$search_term%'";
-                }
-                $cols[$i] = "(".join(" $colJoin ", $like).")";
-            }
-        }
-
-        $cols = join(" OR ", $cols);
-        $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $match" : '');
-        $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
-    } else {
-        $fname = (!empty($listform) ? $listform : $form);
-
-        if (!$sort) {
-            $sort = "Posted DESC";
-        }
-    }
-
-    $where = $theAtts['*'].$search;
-    !empty($fields) or $fields = '*';
+    $where = $theAtts['$'];
+    $columns = $theAtts['*'];
+    $tables = $theAtts['#'];//dmp($columns, $tables, $where, $sort);
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -1050,33 +950,24 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = getCount(array('textpattern', !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
+    $where = $theAtts['?'];
+
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort']) && empty($groupby)) {
-        $safe_sort = "FIELD(ID, ".$id."), ".$sort;
-    } else {
-        $safe_sort = $sort;
+    if (!empty($id) && empty($atts['sort'])) {
+        $sort = "FIELD(ID, ".$id."), ".$sort;
     }
 
-    $fields !== '*' or $fields = null;
-
-    if ($fields && !empty($groupby)) {
-        $where .= " GROUP BY $groupby";
-        $fields .= ', COUNT(*) AS count';
-    }
-
-    $rs = safe_rows_start(
-        ($fields ? $fields : "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod").$score,
-        'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
+    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT ".
+        intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
 
-    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing') + array('form' => $fname));
+    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing', 'form'));
 //    unset($GLOBALS['thisarticle']);
 
     return !empty($articles) ?
@@ -1096,39 +987,37 @@ function doArticle($atts, $thing = null)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
-    extract($atts);
 
     // No output required, only setting atts.
-    if ($pgonly) {
+    if ($atts['pgonly']) {
         return '';
     }
 
     if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
         $id = assert_int($pretext['id']);
         $thisarticle = null;
-        $where = $atts['*'];
+        $where = gps('txpreview') ? '1' : $atts['?'];
+        $tables = 'textpattern';
+        $columns = $atts['*'];
 
-        $rs = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-            'textpattern',
-            "ID = $id AND $where LIMIT 1"
-        );
+        $rs = safe_rows_start($columns, $tables, "WHERE ID = $id AND $where");
 
-        if ($rs) {
-            populateArticleData($rs);
+        if ($rs && $a = nextRow($rs)) {
+            populateArticleData($a);
+            $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
         }
     }
 
     $article = false;
 
-    if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
+    if (!empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
-        if ($allowoverride && $override_form) {
+        if ($atts['allowoverride'] && $override_form) {
             $article = parse_form($override_form);
-        } elseif ($form) {
-            $article = parse_form($form);
+        } elseif ($atts['form']) {
+            $article = parse_form($atts['form']);
         }
 
         if (isset($thing) && $article === false) {

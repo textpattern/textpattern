@@ -36,7 +36,7 @@
 
 function filterFrontPage($field = 'Section', $column = 'on_frontpage')
 {
-    static $filterFrontPage = array();
+    static $num_sections = null, $filterFrontPage = array();
     global $txp_sections;
 
     is_array($column) or $column = do_list_unique($column);
@@ -46,6 +46,7 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
         return $filterFrontPage[$key];
     }
 
+    isset($num_sections) or $num_sections = count($txp_sections);
     $filterFrontPage[$key] = ' AND 0';
     $field = doSlash($field);
     $rs = array();
@@ -54,8 +55,11 @@ function filterFrontPage($field = 'Section', $column = 'on_frontpage')
         $rs += array_filter(array_column($txp_sections, $col, 'name'));
     }
 
-    if ($rs) {
-        $filterFrontPage[$key] = count($rs) == count($txp_sections) ? '' : " AND $field IN(".quote_list(array_keys($rs), ',').")";
+    if ($count = count($rs)) {
+        $filterFrontPage[$key] = $count == $num_sections ? '' : (2*$count < $num_sections ?
+            " AND $field IN(".quote_list(array_keys($rs), ',').")" :
+            " AND $field NOT IN(".quote_list(array_keys(array_diff_key($txp_sections, $rs)), ',').")"
+        );
     }
 
     return $filterFrontPage[$key];
@@ -212,9 +216,12 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $threshold = "'".doSlash($threshold)."'";
     }
 
-    $where = isset($atts['*']) ? $atts['*'] : '1';
+    $where = isset($atts['?']) ? $atts['?'] : '1';
+    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
+    $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
+
     $q = array(
-        "SELECT *, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod FROM ".safe_pfx('textpattern')."
+        "SELECT $columns FROM $tables
             WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
         "AND $where",
         "ORDER BY $sortby",
@@ -811,6 +818,20 @@ function lookupByDateTitle($when, $title, $debug = false)
 function filterAtts($atts = null, $iscustom = null)
 {
     global $pretext, $trace, $thisarticle;
+    static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
+    static $aggregate = array(
+        'avg' => 'AVG(?)',
+        'max' => 'MAX(?)',
+        'min' => 'MIN(?)',
+        'sum' => 'SUM(?)',
+        'list' => "GROUP_CONCAT(? SEPARATOR ',')",
+        'concat' => "GROUP_CONCAT(? SEPARATOR ',')"
+    ), $windowed = array(
+        'count' => 'COUNT(*)',
+        'dense' => 'DENSE_RANK()',
+        'rank' => 'RANK()',
+        'row' => 'ROW_NUMBER()'
+    );
     static $out = array();
 
     if ($atts === false) {
@@ -820,7 +841,7 @@ function filterAtts($atts = null, $iscustom = null)
         $trace->log('[filterAtts ignored]');
 
         return $out;
-    } elseif (isset($atts['*'])) {
+    } elseif (isset($atts['?'])) {
         return $out = $atts;
     }
 
@@ -840,6 +861,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $customFields = getCustomFields() + array('url_title' => 'url_title');
     $customlAtts = array_null(array_flip($customFields));
+    $postWhere = array();
 
     $extralAtts = array(
         'form'          => 'default',
@@ -880,6 +902,19 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
+    $coreColumns = array(
+        'posted'   => 'UNIX_TIMESTAMP(Posted) AS uPosted',
+        'expires'  => 'UNIX_TIMESTAMP(Expires) AS uExpires',
+        'modified' => 'UNIX_TIMESTAMP(LastMod) AS uLastMod',
+        ) + article_column_map();
+
+    foreach ($date_fields + $coreColumns as $field => $val) {
+        if (isset($atts['$'.$field])) {
+            $postWhere['$'.$field] = $atts['$'.$field];
+            unset($atts['$'.$field]);
+        }
+    }
+
     // Getting attributes.
     $theAtts = lAtts(array(
         'fields'        => null,
@@ -899,8 +934,8 @@ function filterAtts($atts = null, $iscustom = null)
     extract($pretext);
 
     if (!$iscustom) {
-        $theAtts['category'] = ($c) ? $c : '';
-        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
+        $theAtts['category'] = !empty($c) ? $c : '';
+        $theAtts['section'] = (!empty($s) && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
         $theAtts['expired'] = get_pref('publish_expired_articles');
@@ -1008,28 +1043,6 @@ function filterAtts($atts = null, $iscustom = null)
         $statusq = " AND Status IN (".implode(',', $status).")";
     }
 
-    $custom = '';
-
-    if ($customFields) {
-        foreach ($customFields as $cField) {
-            if (isset($atts[$cField])) {
-                $customPairs[$cField] = $atts[$cField];
-            }
-
-            if (isset($match[$cField])) {
-                if ($match[$cField] === false && isset($thisarticle[$cField])) {
-                    $customPairs[$cField] = $thisarticle[$cField];
-                } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
-                    $customPairs[$cField] = $val;
-                }
-            }
-        }
-
-        if (!empty($customPairs)) {
-            $custom = buildCustomSql($customFields, $customPairs, $exclude);
-        }
-    }
-
     // Allow keywords for no-custom articles. That tagging mode, you know.
     $not = $exclude === true || isset($exclude['keywords']) ? '!' : '';
     $keyparts = array();
@@ -1052,10 +1065,203 @@ function filterAtts($atts = null, $iscustom = null)
 
     $keywords = $keyparts ? " AND $not(".join(' or ', $keyparts).")" : '';
 
+    // Give control to search, if necessary.
+    $search = $score = $smatch = '';
+
+    if ($q && !$issticky) {
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
+        $q = trim($q);
+        $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
+        $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
+
+        // Searchable article fields are limited to the columns of the
+        // textpattern table and a matching fulltext index must exist.
+        $cols = do_list_unique(get_pref('searchable_article_fields')) or $cols = array('Title', 'Body');
+
+        if ($m == 'natural') {
+            $smatch = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q' IN NATURAL LANGUAGE MODE)";
+        }
+
+        if (!$sort || strpos($sort, 'score') !== false) {
+            !empty($smatch) or $smatch = "MATCH (`".join("`, `", $cols)."`) AGAINST ('$q')";
+            $score = ', '.(empty($groupby) ? $smatch : "MAX($smatch)").' AS score';
+            $sort or $sort = 'score DESC';
+        }
+
+        $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
+
+        if ($quoted || empty($m) || $m === 'exact') {
+            for ($i = 0; $i < count($cols); $i++) {
+                $cols[$i] = "`$cols[$i]` LIKE '%$search_terms%'";
+            }
+        } else {
+            $colJoin = ($m === 'all') ? "AND" : "OR";
+            $search_terms = explode(' ', $search_terms);
+
+            for ($i = 0; $i < count($cols); $i++) {
+                $like = array();
+                foreach ($search_terms as $search_term) {
+                    $like[] = "`$cols[$i]` LIKE '%$search_term%'";
+                }
+                $cols[$i] = "(".join(" $colJoin ", $like).")";
+            }
+        }
+
+        $cols = join(" OR ", $cols);
+        $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $smatch" : '');
+        $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
+    } else {
+        $fname = (!empty($listform) ? $listform : $form);
+    }
+
+    // Title
+    if ($url_title && $url_title !== true) {
+        $atts['url_title'] = do_list_unique($url_title);
+    }
+
+    // Custom fields
+    $customPairs = array();
+
+    foreach ($customFields as $cField) {
+        if (isset($atts[$cField])) {
+            $customPairs[$cField] = $atts[$cField];
+        }
+
+        if (isset($match[$cField])) {
+            if ($match[$cField] === false && isset($thisarticle[$cField])) {
+                $customPairs[$cField] = $thisarticle[$cField];
+            } elseif (($val = gps($match[$cField] === false ? $cField : $match[$cField], false)) !== false) {
+                $customPairs[$cField] = $val;
+            }
+        }
+    }
+
+    // Fields
+    $sort = $sort ? sanitizeForSort($sort) : '';
+    $partition = array();
+
+    if (!empty($fields) && $fields !== true) {
+        $what = $alias = $groupby = $sortby = array();
+        $column_map = $date_fields + article_column_map();
+        $reg_fields = implode('|', array_keys($column_map)).'|\*';
+        $agg_reg = implode('|', array_keys($aggregate));
+        $regexp = $agg_reg.'|'.implode('|', array_keys($windowed)).'|date|day|month|year|week|quarter';
+
+        preg_match_all("/(?<=,|^)\s*(?:($regexp)(?:\[([^\]]*)\])?\((?:\s*($agg_reg)\(\s*)?)?($reg_fields)(\s+asc|\s+desc)?\s*\){0,2}\s*(?:,|$)/", strtolower($fields), $matches, PREG_SET_ORDER);
+        $aggFields = array_column($matches, 1, 4);
+        $groupped = true;
+        $psort = $sort;
+
+        $customData = buildCustomSql($customFields, $customPairs, $exclude);
+
+        foreach ($matches as $match) {
+            $format = doSlash($match[2]);
+            $field = $match[4];
+            $dir = isset($match[5]) ? $match[5] : '';
+            $column = isset($column_map[$field]) ? $column_map[$field] : 'ID';
+
+            if (isset($windowed[$match[1]])) {
+                if ($format === '*') {
+                    $parby = implode(', ', $groupby);
+                    $groupped = false;
+                } else {
+                    $parby = $format ? $format : '%';
+                }
+
+                if ($match[1] == 'count') {
+                    $pattern = "(? OVER (PARTITION BY $parby))";
+                } else {
+                    $orderby = $field === '*' ? $psort : "`$column`$dir";
+                    $pattern = "(? OVER (PARTITION BY $parby ORDER BY $orderby))";
+                    $field !== '*' or $sort = '';
+                }
+
+                $column = '$'.$field;
+                $what[$column] = $windowed[$match[1]];
+                $alias[$column] = " AS `$column`";
+                $sortby[$column] = '';
+                $partition[$column] = $pattern;
+            } elseif (!$match[1] && $field === '*') {
+                $addFields = true;
+                $groupped = false;
+            } else {
+                $is_custom = isset($customData['columns'][$field]);
+                $custom = $is_custom ? $customData['columns'][$field] : "`$column`";
+                $alias[$field] = $is_custom || $match[1] ? " AS `$column`" : '';
+                $sortby[$column] = $dir;
+
+                if (!$match[1]) {
+                    $field != 'thisid' or $groupped = false;
+                    $what[$field] = $custom;
+                    $groupby[$column] = $custom;
+                } elseif (isset($aggregate[$match[1]])) {
+                    $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ? $format : ','));
+                    $parby = implode(', ', $groupby);
+                    !$format or $match[1] == 'list' or $partition[$field] = $format == '*' ?  "(? OVER (PARTITION BY $parby))" : "(? OVER (PARTITION BY $format))";
+                } else {
+                    $what[$field] = "MIN($custom)";
+                    $groupby[$format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')'] = $custom;
+                }
+
+                if (isset($date_fields[$field])) {
+                    $what['u'.$field] = 'UNIX_TIMESTAMP('.$what[$field].')';
+                    $alias['u'.$field] = " AS `u{$column}`";
+                }
+            }
+        }
+
+        $parby = implode(', ', $groupby);
+
+        foreach ($what as $field => $custom) {
+            if (isset($partition[$field])) {
+                $what[$field] = strtr($partition[$field], array('?' => $what[$field], '%' => $parby));
+            }
+
+            $what[$field] .= $alias[$field];
+        }
+
+        if (!empty($addFields)) {
+            foreach (array_diff_key($column_map, $what) as $field => $column) {
+                $what[$field] = isset($customData[$field]) ? $customData[$field]." AS `$column`" : $coreColumns[$field];
+            }
+        }
+
+        $fields = implode(', ', $what);
+        $groupped or $groupby = false;
+        $custom = '';
+        $postWhere = array_intersect_key($postWhere, $what);
+
+        if (!$sort) {
+            foreach ($sortby as $key => $val) {
+                $sort .= ($sort ? ', ' : '').$key.$val;
+            }
+        }
+    } else {
+        $custom = buildCustomSql($customFields, $customPairs, $exclude);
+    }
+
+    if ($fields) {
+        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$score.$fields;
+    } else {
+        $fields = $score.implode(', ', $coreColumns);
+    }
+
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
-    $theAtts['sort'] = sanitizeForSort($sort);
-    $theAtts['*'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$custom;
+    $theAtts['form'] = $fname;
+    $theAtts['groupby'] = empty($groupby) ? null : implode(', ', $groupby);
+    $theAtts['sort'] = $sort ? $sort : 'Posted DESC';
+    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
+    $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
+    $theAtts['#'] = safe_pfx('textpattern');
+    $theAtts['*'] = $fields;
+
+    if (!empty($postWhere)) {
+        $theAtts['groupby'] = null;
+        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.$theAtts['#'].' WHERE '.$theAtts['?'].') textpattern';
+        $theAtts['*'] = '*';
+        $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
+    }
 
     if (!$iscustom) {
         $out = array_diff_key($theAtts, $extralAtts);
