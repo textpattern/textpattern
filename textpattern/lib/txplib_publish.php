@@ -1178,7 +1178,12 @@ function filterAtts($atts = null, $iscustom = null)
             $column = isset($column_map[$field]) ? $column_map[$field] : 'ID';
 
             if (isset($windowed[$match[1]])) {
-                $parby = $format === '*' ? implode(', ', $groupby) : ($format ? $format : '%');
+                if ($format === '*') {
+                    $parby = implode(', ', $groupby);
+                    $groupped = false;
+                } else {
+                    $parby = $format ? $format : '%';
+                }
 
                 if ($match[1] == 'count') {
                     $pattern = "(? OVER (PARTITION BY $parby))";
