@@ -2171,7 +2171,7 @@ function splat($text)
     if (!isset($stack[$sha])) {
         $stack[$sha] = $parse[$sha] = array();
 
-        if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@(\$?[\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -3298,7 +3298,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+\$?[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
     $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);

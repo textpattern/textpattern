@@ -140,7 +140,7 @@ function article_format_info($rs)
 function article_column_map($full = true)
 {
     static $column_map = array();
-    $full = !empty($full);
+    $full = (int)!empty($full);
 
     if (empty($column_map[$full])) {
         $column_map[$full] = array(
@@ -220,7 +220,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     }
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
-    $tables = safe_pfx('textpattern');
+    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
     $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
 
     $q = array(
@@ -839,8 +839,10 @@ function filterAtts($atts = null, $iscustom = null)
         'min' => 'MIN(?)',
         'sum' => 'SUM(?)',
         'list' => "GROUP_CONCAT(? SEPARATOR ',')",
-        'count' => 'COUNT(*)'
+        'concat' => "GROUP_CONCAT(? SEPARATOR ',')"
     ), $windowed = array(
+        'count' => 'COUNT(*)',
+        'dense' => 'DENSE_RANK()',
         'rank' => 'RANK()',
         'row' => 'ROW_NUMBER()'
     );
@@ -872,6 +874,14 @@ function filterAtts($atts = null, $iscustom = null)
 
     $customFields = getCustomFields('article', null, null);
     $customlAtts = $customFields ? array_null(array_flip($customFields['by_id'])) : array();
+    $postWhere = array();
+
+    foreach ($date_fields + $customFields as $field => $val) {
+        if (isset($atts['$'.$field])) {
+            $postWhere['$'.$field] = $atts['$'.$field];
+            unset($atts['$'.$field]);
+        }
+    }
 
     $extralAtts = array(
         'form'          => 'default',
@@ -924,7 +934,7 @@ function filterAtts($atts = null, $iscustom = null)
         'match'         => 'Category',
         'depth'         => 0,
         'id'            => '',
-        'excerpted'     => ''
+        'excerpted'     => '',
     ) + $extralAtts + $customlAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
@@ -1142,25 +1152,21 @@ function filterAtts($atts = null, $iscustom = null)
         ' AND $not('.buildWhereSql($customPairs['url_title'], 'url_title').')' :
         '';
     unset($customPairs['url_title']);
-    $partition = false;
 
-    if (isset($fields) && $fields !== true && $fields = preg_replace('/\s+/', '', $fields)) {
-        $what = $alias = $sortby = array();
+    // Fields
+    $partition = array();
+
+    if (!empty($fields) && $fields !== true) {
+        $what = $alias = $groupby = $sortby = array();
         $column_map = $date_fields + article_column_map();
-        $reg_fields = implode('|', array_keys($column_map)).'|\*|\%';
+        $reg_fields = implode('|', array_keys($column_map)).'|\*';
         $agg_reg = implode('|', array_keys($aggregate));
         $regexp = $agg_reg.'|'.implode('|', array_keys($windowed)).'|date|day|month|year|week|quarter';
 
-        preg_match_all("/^(?:($regexp)(?:\[([^\]]*)\])?\((?:($agg_reg)\()?)?($reg_fields)\)*$/im", strtolower(implode(n, do_list_unique($fields))), $matches, PREG_SET_ORDER);
+        preg_match_all("/(?<=,|^)\s*(?:($regexp)(?:\[([^\]]*)\])?\((?:\s*($agg_reg)\(\s*)?)?($reg_fields)(\s+asc|\s+desc)?\s*\){0,2}\s*(?:,|$)/", strtolower($fields), $matches, PREG_SET_ORDER);
         $aggFields = array_column($matches, 1, 4);
-
-        if (strpos($fields, '*') !== false) {
-            $addFields = array_diff_key($column_map, $aggFields);
-        }
-        
-        $groupped = !(isset($addFields['thisid']) || isset($aggFields['thisid']) && empty($aggFields['thisid'])) ||
-            array_intersect_key($windowed, array_column($matches, 1, 1));
-        $groupby = $groupped ? array() : false;
+        $groupped = true;
+        $psort = $sort ? sanitizeForSort($sort) : 'Posted DESC';
 
         $customFields['by_aggregate'] = array_filter(array_column($matches, 3, 4)) + array_filter($aggFields);
         $customData = buildCustomSql($customFields, $customPairs, $exclude, $modes);
@@ -1168,34 +1174,45 @@ function filterAtts($atts = null, $iscustom = null)
         foreach ($matches as $match) {
             $format = doSlash($match[2]);
             $field = $match[4];
-            $column = isset($column_map[$field]) ? $column_map[$field] : '$'.$match[1];
+            $dir = isset($match[5]) ? $match[5] : '';
+            $column = isset($column_map[$field]) ? $column_map[$field] : 'ID';
 
             if (isset($windowed[$match[1]])) {
-                $pattern = !$format ? "(? OVER ())" : ($field == '*' || $field == '%' ? "(? OVER (PARTITION BY % ORDER BY #))" : "(? OVER (PARTITION BY `$column` ORDER BY #))");
-                $column = '$'.$match[1];
+                $parby = $format === '*' ? implode(', ', $groupby) : ($format ? $format : '%');
+
+                if ($match[1] == 'count') {
+                    $pattern = "(? OVER (PARTITION BY $parby))";
+                } else {
+                    $orderby = $field === '*' ? $psort : "`$column`$dir";
+                    $pattern = "(? OVER (PARTITION BY $parby ORDER BY $orderby))";
+                    $field !== '*' or $sort = '';
+                }
+
+                $column = '$'.$field;
                 $what[$column] = $windowed[$match[1]];
                 $alias[$column] = " AS `$column`";
-                $partition = $format ? array($column => implode(',', do_list($format, array(',', '-')))) : true;
-                $sortby[] = $column;
-
-                if (!isset($parby)) {
-                    $parby = implode(', ', array_keys($groupby));
-                    $groupby = false;
-                }
-            } elseif ($field != '*') {
+                $sortby[$column] = '';
+                $partition[$column] = $pattern;
+            } elseif (!$match[1] && $field === '*') {
+                $addFields = true;
+                $groupped = false;
+            } else {
                 $is_custom = isset($customData['columns'][$field]);
                 $custom = $is_custom ? $customData['columns'][$field] : "`$column`";
                 $alias[$field] = $is_custom || $match[1] ? " AS `$column`" : '';
-                $groupby === false or $sortby[] = $column;
+                $sortby[$column] = $dir;
 
-                if (!$groupped || !$match[1]) {
+                if (!$match[1]) {
+                    $field != 'thisid' or $groupped = false;
                     $what[$field] = $custom;
-                    $groupby === false or $groupby[$column] = $custom;
+                    $groupby[$column] = $custom;
                 } elseif (isset($aggregate[$match[1]])) {
                     $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ? $format : ','));
+                    $parby = implode(', ', $groupby);
+                    !$format or $match[1] == 'list' or $partition[$field] = $format == '*' ?  "(? OVER (PARTITION BY $parby))" : "(? OVER (PARTITION BY $format))";
                 } else {
                     $what[$field] = "MIN($custom)";
-                    $groupby === false or $groupby[$format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')'] = $custom;
+                    $groupby[$format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')'] = $custom;
                 }
 
                 if (isset($date_fields[$field])) {
@@ -1205,25 +1222,28 @@ function filterAtts($atts = null, $iscustom = null)
             }
         }
 
-        $psort = $sort or $psort = 'Posted DESC';
-
-        if (is_array($partition) || $groupby && !$sort) {
-            $sort = implode(', ', $sortby);
-        }
+        $parby = implode(', ', $groupby);
 
         foreach ($what as $field => $custom) {
-            if ($partition && (isset($aggFields[$field]) && isset($aggregate[$aggFields[$field]]) || isset($windowed[ltrim($field, '$')]))) {
-                $what[$field] = strtr($pattern, array('?' => $what[$field], '%' => $parby, '#' => $psort));
+            if (isset($partition[$field])) {
+                $what[$field] = strtr($partition[$field], array('?' => $what[$field], '%' => $parby));
             }
 
             $what[$field] .= $alias[$field];
         }
 
-        $fields = implode(', ', $what);
-
         if (!empty($addFields)) {
-            foreach ($addFields as $field => $column) {
-                $fields .= ', '.(isset($customData['columns'][$field]) ? $customData['columns'][$field]." AS `$column`" : $coreColumns[$field]);
+            foreach (array_diff_key($column_map, $what) as $field => $column) {
+                $what[$field] = isset($customData['columns'][$field]) ? $customData['columns'][$field]." AS `$column`" : $coreColumns[$field];
+            }
+        }
+
+        $fields = implode(', ', $what);
+        $groupped or $groupby = false;
+
+        if (!$sort) {
+            foreach ($sortby as $key => $val) {
+                $sort .= ($sort ? ', ' : '').$key.$val;
             }
         }
     } elseif ($customData = buildCustomSql($customFields, $customPairs, $exclude, $modes)) {
@@ -1239,7 +1259,7 @@ function filterAtts($atts = null, $iscustom = null)
     if ($fields === true) {
         $fields = implode(', ', $coreColumns).$score;
     } elseif ($fields) {
-        $fields .= ($groupby ? ', COUNT(*) AS count' : '').$score;
+        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$score.$fields;
     } else {
         $fields = implode(', ', $coreColumns).$score.$customColumns;
     }
@@ -1251,16 +1271,16 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['form'] = $fname;
     $theAtts['groupby'] = empty($groupby) ? null : implode(', ', $groupby);
     $theAtts['sort'] = sanitizeForSort($sort);
-    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$excerpted.$author.$statusq.$frontpage.$keywords.$url_title.$search;
+    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search;
     $theAtts['?'] = $theAtts['$'].$custom;
     $theAtts['#'] = safe_pfx('textpattern');
     $theAtts['*'] = $fields;
 
-    if (is_array($partition)) {
+    if (!empty($postWhere)) {
         $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.$theAtts['#'].' WHERE '.$theAtts['?'].') textpattern';
         $theAtts['*'] = '*';
         $where = array();
-        foreach($partition as $field => $in) $where[] = "`$field` IN ($in)";
+        foreach($postWhere as $field => $val) $where[] = buildWhereSql($val, $field);
         $theAtts['?'] = implode(' AND ', $where);
     }
 
