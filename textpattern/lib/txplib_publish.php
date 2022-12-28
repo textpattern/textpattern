@@ -1207,7 +1207,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $field !== '*' or $sort = '';
                 }
 
-                $column = '$'.$field;
+                $column = $field === '*' ? '$'.$match[1] : '$'.$field;
                 $what[$column] = $windowed[$match[1]];
                 $alias[$column] = " AS `$column`";
                 $sortby[$column] = '';
@@ -1275,9 +1275,9 @@ function filterAtts($atts = null, $iscustom = null)
     if ($fields === true) {
         $fields = implode(', ', $coreColumns).$score;
     } elseif ($fields) {
-        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$score.$fields;
+        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
     } else {
-        $fields = implode(', ', $coreColumns).$score.$customColumns;
+        $fields = implode(', ', $coreColumns).$customColumns.$score;
     }
 
     $custom = !empty($customData['where']) ? ' AND '.implode(' AND ', $customData['where']) : '';
