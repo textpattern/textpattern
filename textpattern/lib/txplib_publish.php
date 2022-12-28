@@ -1249,18 +1249,18 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
     $theAtts['form'] = $fname;
-    $theAtts['groupby'] = empty($groupby) ? null : implode(', ', $groupby);
     $theAtts['sort'] = $sort ? $sort : 'Posted DESC';
+    $theAtts['%'] = empty($groupby) ? null : implode(', ', $groupby);
     $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
     $theAtts['#'] = 'textpattern';
     $theAtts['*'] = $fields;
 
     if (!empty($postWhere)) {
-        $theAtts['groupby'] = null;
-        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.safe_pfx($theAtts['#']).' WHERE '.$theAtts['?'].') textpattern';
+        $theAtts['%'] = null;
+        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.safe_pfx($theAtts['#']).' WHERE '.$theAtts['?'].') AS textpattern';
         $theAtts['*'] = '*';
-        $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
+        $theAtts['$'] = $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
     }
 
     if (!$iscustom) {

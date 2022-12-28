@@ -920,16 +920,20 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if ($custom_pg) {
         $groupby = trim($pgonly);
+    } elseif (isset($theAtts['%'])) {
+        $groupby = $theAtts['%'];
     }
 
-    $where = $theAtts['$'];
     $columns = $theAtts['*'];
-    $tables = $theAtts['#'];
+    $where = $theAtts['$'];
+    $tables = $columns === '*' ? $theAtts['#'] : safe_pfx($theAtts['#']);
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+//            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+            $what = !empty($groupby) ? "DISTINCT $groupby" : '*';
+            $grand_total = getThing("SELECT COUNT($what) FROM $tables WHERE $where");
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
             $trace->log("[Found: $total articles, $numPages pages]");
@@ -957,7 +961,6 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['?'];
-    $columns === '*' or $tables =  safe_pfx($tables);
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($id) && empty($atts['sort'])) {
