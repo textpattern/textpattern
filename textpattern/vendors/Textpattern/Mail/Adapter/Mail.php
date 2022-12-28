@@ -286,7 +286,7 @@ EOMIME;
         }
 
         $headers = join($this->separator, $headers).$this->separator;
-        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : null);
+        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : '');
 
         if (mail($this->encoded->to, $this->encoded->subject, $bodyField, $headers, $additional_headers) === false) {
             throw new Exception(gTxt('sending_failed'));
