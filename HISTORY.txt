@@ -12,12 +12,14 @@ Changes in 4.9.0 (upcoming)
   <txp:image />.
 * Fixed: Self-closing tag output for html5 doctype to silence validator
  (thanks, jools-r).
+* Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
 * Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
+* Added: Support for aggregate window functions in compatible MySQL versions.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: Can no longer delete in-use languages.
 * Developer: Introduce UI class library for building interface components.
