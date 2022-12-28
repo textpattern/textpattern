@@ -4100,7 +4100,7 @@ function if_excerpt($atts, $thing = null)
 
     assert_article();
 
-    $x = trim($thisarticle['excerpt']) !== '';
+    $x = trim((string)$thisarticle['excerpt']) !== '';
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
