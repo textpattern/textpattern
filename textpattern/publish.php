@@ -924,7 +924,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['$'];
     $columns = $theAtts['*'];
-    $tables = $theAtts['#'];//dmp($columns, $tables, $where, $sort);
+    $tables = $theAtts['#'];
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
@@ -957,6 +957,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['?'];
+    $tables = strpos($tables, '(') === false ? safe_pfx($tables) : $tables;
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($id) && empty($atts['sort'])) {

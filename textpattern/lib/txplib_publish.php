@@ -217,7 +217,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     }
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
-    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
+    $tables = safe_pfx(isset($atts['#']) ? $atts['#'] : 'textpattern');
     $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
 
     $q = array(
@@ -1253,12 +1253,12 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['sort'] = $sort ? $sort : 'Posted DESC';
     $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
-    $theAtts['#'] = safe_pfx('textpattern');
+    $theAtts['#'] = 'textpattern';
     $theAtts['*'] = $fields;
 
     if (!empty($postWhere)) {
         $theAtts['groupby'] = null;
-        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.$theAtts['#'].' WHERE '.$theAtts['?'].') textpattern';
+        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.safe_pfx($theAtts['#']).' WHERE '.$theAtts['?'].') textpattern';
         $theAtts['*'] = '*';
         $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
     }
