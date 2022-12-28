@@ -1167,6 +1167,7 @@ function filterAtts($atts = null, $iscustom = null)
     unset($customPairs['url_title']);
 
     // Fields
+    $sort = $sort ? sanitizeForSort($sort) : '';
     $partition = array();
 
     if (!empty($fields) && $fields !== true) {
@@ -1179,7 +1180,7 @@ function filterAtts($atts = null, $iscustom = null)
         preg_match_all("/(?<=,|^)\s*(?:($regexp)(?:\[([^\]]*)\])?\((?:\s*($agg_reg)\(\s*)?)?($reg_fields)(\s+asc|\s+desc)?\s*\){0,2}\s*(?:,|$)/", strtolower($fields), $matches, PREG_SET_ORDER);
         $aggFields = array_column($matches, 1, 4);
         $groupped = true;
-        $psort = $sort ? sanitizeForSort($sort) : 'Posted DESC';
+        $psort = $sort ? $sort : 'Posted DESC';
 
         $customFields['by_aggregate'] = array_filter(array_column($matches, 3, 4)) + array_filter($aggFields);
         $customData = buildCustomSql($customFields, $customPairs, $exclude, $modes);
@@ -1271,10 +1272,6 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    if (!$sort) {
-        $sort = "Posted DESC";
-    }
-
     if ($fields === true) {
         $fields = implode(', ', $coreColumns).$score;
     } elseif ($fields) {
@@ -1284,14 +1281,13 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $custom = !empty($customData['where']) ? ' AND '.implode(' AND ', $customData['where']) : '';
-    $custom .= (empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
     $theAtts['status'] = implode(',', $status);
     $theAtts['id'] = implode(',', $ids);
     $theAtts['form'] = $fname;
     $theAtts['groupby'] = empty($groupby) ? null : implode(', ', $groupby);
-    $theAtts['sort'] = sanitizeForSort($sort);
-    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search;
-    $theAtts['?'] = $theAtts['$'].$custom;
+    $theAtts['sort'] = $sort ? $sort : 'Posted DESC';
+    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
+    $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
     $theAtts['#'] = safe_pfx('textpattern');
     $theAtts['*'] = $fields;
 
