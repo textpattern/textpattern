@@ -217,17 +217,13 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     }
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
-    $tables = safe_pfx(isset($atts['#']) ? $atts['#'] : 'textpattern');
+    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
     $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
 
     $q = array(
-        "SELECT $columns FROM $tables
-            WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
-        "AND $where",
-        "ORDER BY $sortby",
-        ($type == '<') ? 'DESC' : 'ASC',
-        ', ID '.($type == '<' ? 'DESC' : 'ASC'),
-        "LIMIT 1",
+        "SELECT $columns FROM $tables",
+        "WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").") AND $where",
+        "ORDER BY $sortby ".($type == '<' ? 'DESC' : 'ASC').', ID '.($type == '<' ? 'DESC' : 'ASC').' LIMIT 1'
     );
 
     $cache[$key] = getRow(join(' ', $q));
@@ -1253,12 +1249,12 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['%'] = empty($groupby) ? null : implode(', ', $groupby);
     $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
-    $theAtts['#'] = 'textpattern';
+    $theAtts['#'] = safe_pfx('textpattern');
     $theAtts['*'] = $fields;
 
     if (!empty($postWhere)) {
         $theAtts['%'] = null;
-        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.safe_pfx($theAtts['#']).' WHERE '.$theAtts['?'].') AS textpattern';
+        $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.$theAtts['#'].' WHERE '.$theAtts['?'].') AS textpattern';
         $theAtts['*'] = '*';
         $theAtts['$'] = $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
     }

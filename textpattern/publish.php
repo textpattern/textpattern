@@ -926,12 +926,11 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $columns = $theAtts['*'];
     $where = $theAtts['$'];
-    $tables = $columns === '*' ? $theAtts['#'] : safe_pfx($theAtts['#']);
+    $tables = $theAtts['#'];
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-//            $grand_total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
             $what = !empty($groupby) ? "DISTINCT $groupby" : '*';
             $grand_total = getThing("SELECT COUNT($what) FROM $tables WHERE $where");
             $total = $grand_total - $offset;
