@@ -1176,7 +1176,7 @@ function filterAtts($atts = null, $iscustom = null)
                     $field !== '*' or $sort = '';
                 }
 
-                $column = '$'.$field;
+                $column = $field === '*' ? '$'.$match[1] : '$'.$field;
                 $what[$column] = $windowed[$match[1]];
                 $alias[$column] = " AS `$column`";
                 $sortby[$column] = '';
@@ -1241,9 +1241,9 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     if ($fields) {
-        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$score.$fields;
+        $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
     } else {
-        $fields = $score.implode(', ', $coreColumns);
+        $fields = implode(', ', $coreColumns).$score;
     }
 
     $theAtts['status'] = implode(',', $status);
