@@ -974,6 +974,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = $theAtts['?'];
+    $columns === '*' or $tables =  safe_pfx($tables);
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($id) && empty($atts['sort'])) {
