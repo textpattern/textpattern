@@ -442,7 +442,7 @@ function updateVolatilePartials($partials)
 /**
  * Checks if GD supports the given image type.
  *
- * @param   string $image_type Either '.gif', '.jpg', '.png'
+ * @param   string $image_type Either '.gif', '.jpg', '.png', '.svg'
  * @return  bool TRUE if the type is supported
  * @package Image
  */
@@ -466,6 +466,11 @@ function check_gd($image_type)
         case '.png':
             return ($gd_info['PNG Support'] == true);
             break;
+        case '.svg':
+            if (has_privs('image.create.trusted')) {
+                return true;
+            }
+            break;
         case '.webp':
             return (!empty($gd_info['WebP Support']));
             break;
@@ -478,6 +483,103 @@ function check_gd($image_type)
 }
 
 /**
+ * Find SVG element in XML tree
+ *
+ * @param   SimpleXMLElement  $node  start tree
+ * @param   SimpleXMLElement  &$svg  return SVG tree, if any
+ * @package Image
+ */
+
+function findSVG($node, &$svg) {
+    if ($node->getName() == 'svg') {
+        $svg = $node;
+        return;
+    }
+    foreach ($node->children() as $child) {
+        findSVG($child, $svg);
+    }
+}
+
+/**
+ * Provide GD equivalent function to create image from SVG
+ *
+ * @param   string  $file             Filename
+ * @param   bool    $makestandalone   Remove non-svg elements from tree
+ * @package Image
+ */
+
+function imagecreatefromsvg($file, $makestandalone = true)
+{
+    $xml = file_get_contents($file);
+    if ($makestandalone) {
+        $xmlend = strpos($xml, '?>') + 2;
+        $xmltree = simplexml_load_string($xml);
+        $svg = null;
+        findSVG($xmltree, $svg);
+        if ($svg == null) {
+            return false;
+        }
+        $newxml = $svg->asXML();
+        if (substr($newxml, 0, 5) != "<?xml") {
+            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
+        } else {
+            return $newxml . PHP_EOL;
+        }
+    } else {
+      return $xml;
+    }
+}
+
+/**
+ * Private implementation of PHP getimagesize() that includes SVG
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpgetimagesize($file)
+{
+    $content = file_get_contents($file);
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
+        return getimagesize($file);
+    }
+    
+    if (strpos($content, "<svg") === false) {
+        return false;
+    }
+
+    if (($xml = simplexml_load_string($content)) === false) {
+        return false;
+    }
+
+    $svg = null;
+    findSVG($xml, $svg);
+    if ($svg == null) {
+        return false;
+    }
+ 
+    $width = svgtopx($svg['width']);
+    $height = svgtopx($svg['height']);
+    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
+        if (empty($svg['viewBox'])) {
+            return false;
+        }
+        $viewbox = explode(' ', $svg['viewBox']);
+        $width = $viewbox[2] - $viewbox[0];
+        $height = $viewbox[3] - $viewbox[1];
+        if ($width <= 0 || $height <= 0) {
+            return false;
+        }
+    }
+    $data = array();
+    $data[0] = $width;
+    $data[1] = $height;
+    $data[2] = IMAGETYPE_SVG;
+    return $data;
+}
+
+/**
  * Returns the given image file data.
  *
  * @param   array      $file     HTTP file upload variables
@@ -487,7 +589,7 @@ function check_gd($image_type)
 
 function txpimagesize($file, $create = false)
 {
-    if ($data = getimagesize($file)) {
+    if ($data = txpgetimagesize($file)) {
         list($w, $h, $ext) = $data;
         $exts = get_safe_image_types();
         $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
@@ -516,7 +618,12 @@ function txpimagesize($file, $create = false)
 
         $errlevel = error_reporting(0);
 
-        if ($data['image'] = $imgf($file)) {
+        if ($ext == '.svg') {
+            $data['image'] = $imgf($file, false);
+        } else {
+            $data['image'] = $imgf($file);
+        }
+        if ($data['image']) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
             $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
@@ -623,7 +730,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     $newpath = IMPATH.$id.$ext;
 
-    if (shift_uploaded_file($file, $newpath) == false) {
+    if (shift_uploaded_file($file, $newpath, $ext == '.svg') == false) {
         if (!empty($rs)) {
             safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
@@ -1169,12 +1276,21 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
+ * @param   bool $issvg  Image type is SVG
  * @return  bool TRUE on success, or FALSE on error
  * @package File
  */
 
-function shift_uploaded_file($f, $dest)
+function shift_uploaded_file($f, $dest, $issvg)
 {
+    if ($issvg) {
+        if (($svg = imagecreatefromsvg($f)) !== false) {
+            unlink($f);
+            if (file_put_contents($dest, $svg) !== false)
+                return true;
+        }
+    }
+
     if (@rename($f, $dest)) {
         return true;
     }
