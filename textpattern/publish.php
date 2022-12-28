@@ -973,6 +973,8 @@ function doArticles($atts, $iscustom, $thing = null)
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
+    $where = $theAtts['?'];
+
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($id) && empty($atts['sort'])) {
         $sort = "FIELD(ID, ".$id."), ".$sort;

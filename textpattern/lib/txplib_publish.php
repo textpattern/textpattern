@@ -922,6 +922,19 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
+    $coreColumns = array(
+        'posted'   => 'UNIX_TIMESTAMP(Posted) AS uPosted',
+        'expires'  => 'UNIX_TIMESTAMP(Expires) AS uExpires',
+        'modified' => 'UNIX_TIMESTAMP(LastMod) AS uLastMod',
+        ) + article_column_map();
+
+    foreach ($date_fields + $coreColumns as $field => $val) {
+        if (isset($atts['$'.$field])) {
+            $postWhere['$'.$field] = $atts['$'.$field];
+            unset($atts['$'.$field]);
+        }
+    }
+
     // Getting attributes.
     $theAtts = lAtts(array(
         'fields'        => null,
@@ -1245,6 +1258,7 @@ function filterAtts($atts = null, $iscustom = null)
 
         $fields = implode(', ', $what);
         $groupped or $groupby = false;
+        $postWhere = array_intersect_key($postWhere, $what);
 
         if (!$sort) {
             foreach ($sortby as $key => $val) {
