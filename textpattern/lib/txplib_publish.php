@@ -908,7 +908,7 @@ function filterAtts($atts = null, $iscustom = null)
         'modified' => 'UNIX_TIMESTAMP(LastMod) AS uLastMod',
         ) + article_column_map();
 
-    foreach ($date_fields + $coreColumns as $field => $val) {
+    foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
             $postWhere['$'.$field] = $atts['$'.$field];
             unset($atts['$'.$field]);
