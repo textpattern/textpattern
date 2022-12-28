@@ -1554,7 +1554,7 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
  * @since 4.7.0
  */
 
-$(document).keydown (function(e) {
+$(document).on('keydown', function(e) {
     var key = e.which;
 
     if (key === 27) {
@@ -1564,7 +1564,9 @@ $(document).keydown (function(e) {
 
         if (obj.length) {
             e.preventDefault();
-            obj.eq(0).closest('form').submit();
+            let form = $('#'+obj.eq(0).attr('form'));
+            form.length > 0 || (form = obj.eq(0).closest('form'));
+            form.trigger('submit');
         }
     }
 });
