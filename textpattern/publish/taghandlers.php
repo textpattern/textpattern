@@ -388,10 +388,10 @@ function thumbnail($atts)
 
 function image($atts)
 {
-    global $doctype;
-
-    extract(lAtts(array(
+    global $doctype, $txp_atts;
+    static $tagAtts = array(
         'escape'    => true,
+        'alt'       => null,
         'title'     => '',
         'class'     => '',
         'html_id'   => '',
@@ -402,11 +402,15 @@ function image($atts)
         'loading'   => null,
         'name'      => '',
         'poplink'   => 0, // Deprecated, 4.7
-        'style'     => '',
         'wraptag'   => '',
         'width'     => '',
         'thumbnail' => false,
-    ), $atts));
+    );
+
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
+    $atts = array_intersect_key($atts, $tagAtts);
+
+    extract(lAtts($tagAtts, $atts));
 
     if (isset($atts['poplink'])) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
@@ -421,6 +425,12 @@ function image($atts)
             if (!isset($thumbnail)) {
                 return;
             }
+        }
+
+        if ($alt === true) {
+            $imageData['alt'] !== '' or $imageData['alt'] = $imageData['name'];
+        } elseif (isset($alt)) {
+            $imageData['alt'] = $alt;
         }
 
         extract($imageData);
@@ -456,10 +466,6 @@ function image($atts)
             $out .= ' class="'.txpspecialchars($class).'"';
         }
 
-        if ($style) {
-            $out .= ' style="'.txpspecialchars($style).'"';
-        }
-
         if ($width) {
             $out .= ' width="'.(int) $width.'"';
         }
@@ -472,7 +478,7 @@ function image($atts)
             $out .= ' loading="'.$loading.'"';
         }
 
-        $out .= (get_pref('doctype') === 'html5' ? '>' : ' />');
+        $out .= $extAtts.(get_pref('doctype') === 'html5' ? '>' : ' />');
 
         if ($link && $thumb_) {
             $attribs = '';
@@ -3207,7 +3213,7 @@ function article_image($atts)
         'loading'   => null,
     );
 
-    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())));
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
     $atts = array_intersect_key($atts, $tagAtts);
 
     extract(lAtts($tagAtts, $atts));
