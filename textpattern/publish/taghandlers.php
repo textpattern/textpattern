@@ -3199,7 +3199,6 @@ function article_image($atts)
         'title'     => '',
         'class'     => '',
         'html_id'   => '',
-        'style'     => '',
         'width'     => '',
         'height'    => '',
         'thumbnail' => 0,
@@ -3289,7 +3288,6 @@ function article_image($atts)
         $img .=
             (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
             (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
             ($width ? ' width="'.(int) $width.'"' : '').
             ($height ? ' height="'.(int) $height.'"' : '').
             $extAtts.
