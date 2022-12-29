@@ -3193,11 +3193,9 @@ function if_article_image($atts, $thing = null)
 
 function article_image($atts)
 {
-    global $doctype, $thisarticle;
-
-    extract(lAtts(array(
+    global $doctype, $thisarticle, $txp_atts;
+    static $tagAtts = array(
         'range'     => '1',
-        'escape'    => true,
         'title'     => '',
         'class'     => '',
         'html_id'   => '',
@@ -3208,7 +3206,12 @@ function article_image($atts)
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
-    ), $atts));
+    );
+
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())));
+    $atts = array_intersect_key($atts, $tagAtts);
+
+    extract(lAtts($tagAtts, $atts));
 
     assert_article();
 
@@ -3289,6 +3292,7 @@ function article_image($atts)
             ($style ? ' style="'.txpspecialchars($style).'"' : '').
             ($width ? ' width="'.(int) $width.'"' : '').
             ($height ? ' height="'.(int) $height.'"' : '').
+            $extAtts.
             (get_pref('doctype') === 'html5' ? '>' : ' />');
 
             $out[] = $img;
