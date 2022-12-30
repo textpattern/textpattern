@@ -692,6 +692,13 @@
         "html": "permlinkmodes",
         "position": "180"
     },
+    "trailing_slash": {
+        "val": "0",
+        "type": "0",
+        "event": "site",
+        "html": "trailing_slash",
+        "position": "185"
+    },
     "doctype": {
         "val": "html5",
         "type": "0",

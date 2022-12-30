@@ -76,7 +76,16 @@ $smtp_prefs = array(
     ),
 );
 
-foreach ($smtp_prefs as $prefname => $block) {
+$url_prefs = array(
+    'trailing_slash' => array(
+        'val'        => '0',
+        'event'      => 'site',
+        'html'       => 'trailing_slash',
+        'position'   => 185,
+    ),
+);
+
+foreach ($smtp_prefs + $url_prefs as $prefname => $block) {
     if (get_pref($prefname, null) === null) {
         create_pref($prefname, $block['val'], $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
     } else {
