@@ -2192,7 +2192,14 @@ textpattern.Route.add('article.init', function () {
 });
 
 textpattern.Route.add('file, image', function () {
-    if (!$('#txp-list-container').length) return;
+    if (!$('#txp-list-container').length) {
+        $('form.upload-form').on('submit', function() {
+            $(this).find('input[type="submit"]').attr('disabled', true);
+            $(this).find('progress.txp-upload-progress').removeClass('hidden');
+        });
+        return;
+    }
+
     textpattern.Relay.register('uploadStart', function (event) {
         textpattern.Relay.data.fileid = [];
     }).register('uploadEnd', function (event) {
