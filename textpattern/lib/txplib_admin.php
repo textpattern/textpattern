@@ -1281,7 +1281,7 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
  * @package File
  */
 
-function shift_uploaded_file($f, $dest, $issvg)
+function shift_uploaded_file($f, $dest, $issvg = false)
 {
     if ($issvg) {
         if (($svg = imagecreatefromsvg($f)) !== false) {
