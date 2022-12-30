@@ -156,10 +156,8 @@ function atom()
 
         $query = array($sfilter, $cfilter);
 
-        $rs = array_filter(array_column($txp_sections, 'in_rss', 'name'));
-
-        if ($rs) {
-            $query[] = 'AND Section IN('.join(',', quote_list(array_keys($rs))).')';
+        if ($rs = filterFrontPage('Section', 'in_rss')) {
+            $query[] = $rs;
         }
 
         if ($atts = callback_event('feed_filter')) {
@@ -169,7 +167,7 @@ function atom()
         }
 
         $atts = filterAtts($atts, true);
-        $where = $atts['*'].' '.join(' ', $query);
+        $where = $atts['?'].' '.join(' ', $query);
 
         $rs = safe_rows_start(
             "*,
@@ -178,7 +176,7 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {

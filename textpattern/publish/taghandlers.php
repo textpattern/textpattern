@@ -326,7 +326,7 @@ function component($atts)
         foreach (do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
-                $url[] = hu.$skin_dir.'/'.$theme.'/'.TXP_THEME_TREE['forms'].'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
+                $url[] = hu.$skin_dir.'/'.$pretext['skin'].'/'.TXP_THEME_TREE['forms'].'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
             } else {
                 $url[] = pagelinkurl(array('f' => $n) + $qs);
             }
@@ -388,10 +388,10 @@ function thumbnail($atts)
 
 function image($atts)
 {
-    global $doctype;
-
-    extract(lAtts(array(
+    global $doctype, $txp_atts;
+    static $tagAtts = array(
         'escape'    => true,
+        'alt'       => null,
         'title'     => '',
         'class'     => '',
         'html_id'   => '',
@@ -402,11 +402,15 @@ function image($atts)
         'loading'   => null,
         'name'      => '',
         'poplink'   => 0, // Deprecated, 4.7
-        'style'     => '',
         'wraptag'   => '',
         'width'     => '',
         'thumbnail' => false,
-    ), $atts));
+    );
+
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
+    $atts = array_intersect_key($atts, $tagAtts);
+
+    extract(lAtts($tagAtts, $atts));
 
     if (isset($atts['poplink'])) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
@@ -421,6 +425,12 @@ function image($atts)
             if (!isset($thumbnail)) {
                 return;
             }
+        }
+
+        if ($alt === true) {
+            $imageData['alt'] !== '' or $imageData['alt'] = $imageData['name'];
+        } elseif (isset($alt)) {
+            $imageData['alt'] = $alt;
         }
 
         extract($imageData);
@@ -456,10 +466,6 @@ function image($atts)
             $out .= ' class="'.txpspecialchars($class).'"';
         }
 
-        if ($style) {
-            $out .= ' style="'.txpspecialchars($style).'"';
-        }
-
         if ($width) {
             $out .= ' width="'.(int) $width.'"';
         }
@@ -472,7 +478,7 @@ function image($atts)
             $out .= ' loading="'.$loading.'"';
         }
 
-        $out .= (get_pref('doctype') === 'html5' ? '>' : ' />');
+        $out .= $extAtts.(get_pref('doctype') === 'html5' ? '>' : ' />');
 
         if ($link && $thumb_) {
             $attribs = '';
@@ -3193,22 +3199,24 @@ function if_article_image($atts, $thing = null)
 
 function article_image($atts)
 {
-    global $doctype, $thisarticle;
-
-    extract(lAtts(array(
+    global $doctype, $thisarticle, $txp_atts;
+    static $tagAtts = array(
         'range'     => '1',
-        'escape'    => true,
         'title'     => '',
         'class'     => '',
         'html_id'   => '',
-        'style'     => '',
         'width'     => '',
         'height'    => '',
         'thumbnail' => 0,
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
-    ), $atts));
+    );
+
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
+    $atts = array_intersect_key($atts, $tagAtts);
+
+    extract(lAtts($tagAtts, $atts));
 
     assert_article();
 
@@ -3286,9 +3294,9 @@ function article_image($atts)
         $img .=
             (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
             (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
             ($width ? ' width="'.(int) $width.'"' : '').
             ($height ? ' height="'.(int) $height.'"' : '').
+            $extAtts.
             (get_pref('doctype') === 'html5' ? '>' : ' />');
 
             $out[] = $img;
@@ -4100,7 +4108,7 @@ function if_excerpt($atts, $thing = null)
 
     assert_article();
 
-    $x = trim($thisarticle['excerpt']) !== '';
+    $x = trim((string)$thisarticle['excerpt']) !== '';
     return isset($thing) ? parse($thing, $x) : $x;
 }
 

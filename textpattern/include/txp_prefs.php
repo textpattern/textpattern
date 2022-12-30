@@ -671,6 +671,25 @@ EOS
 }
 
 /**
+ * Renders a yes/no radio button with toggle for the other SMTP settings.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function trailing_slash($name, $val)
+{
+    $vals = array(
+        '-1' => gTxt('no'),
+        '0'  => gTxt('list'),
+        '1'  => gTxt('yes'),
+    );
+
+    return Txp::get('\Textpattern\UI\RadioSet', $name, $vals, $val);
+}
+
+/**
  * Render a multi-select list of Form Types
  *
  * @param  string $name HTML name and id of the input control
