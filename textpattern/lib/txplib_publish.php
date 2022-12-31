@@ -34,35 +34,35 @@
  * @return string An SQL qualifier for a query's 'WHERE' part
  */
 
-function filterFrontPage($field = 'Section', $column = 'on_frontpage')
+function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $not = false)
 {
-    static $num_sections = null, $filterFrontPage = array();
+    static $filterFrontPage = array();
     global $txp_sections;
 
     is_array($column) or $column = do_list_unique($column);
     $key = $field.'.'.implode('.', $column);
+    $not = $not ? 'NOT ' : '';
 
-    if (isset($filterFrontPage[$key])) {
-        return $filterFrontPage[$key];
+    if (!isset($filterFrontPage[$key])) {
+        $num_sections = count($txp_sections);
+        $field = doSlash($field);
+        $rs = array();
+
+        foreach ($column as $col) {
+            $rs += array_filter(array_column($txp_sections, $col, 'name'));
+        }
+
+        if ($count = count($rs)) {
+            $filterFrontPage[$key] = $count == $num_sections ? '1' : (2*$count < $num_sections ?
+                "$field IN(".quote_list(array_keys($rs), ',').")" :
+                "NOT $field IN(".quote_list(array_keys(array_diff_key($txp_sections, $rs)), ',').")"
+            );
+        } else {
+            $filterFrontPage[$key] = '0';
+        }
     }
 
-    isset($num_sections) or $num_sections = count($txp_sections);
-    $filterFrontPage[$key] = ' AND 0';
-    $field = doSlash($field);
-    $rs = array();
-
-    foreach ($column as $col) {
-        $rs += array_filter(array_column($txp_sections, $col, 'name'));
-    }
-
-    if ($count = count($rs)) {
-        $filterFrontPage[$key] = $count == $num_sections ? '' : (2*$count < $num_sections ?
-            " AND $field IN(".quote_list(array_keys($rs), ',').")" :
-            " AND $field NOT IN(".quote_list(array_keys(array_diff_key($txp_sections, $rs)), ',').")"
-        );
-    }
-
-    return $filterFrontPage[$key];
+    return ' AND '.preg_replace('/^NOT NOT /', '',  $not.$filterFrontPage[$key]);
 }
 
 /**
@@ -1016,7 +1016,7 @@ function filterAtts($atts = null, $iscustom = null)
     $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
-    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
+    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage('Section', 'on_frontpage', (int)$frontpage < 0) : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
