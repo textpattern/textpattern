@@ -670,7 +670,7 @@ function preText($store, $prefs = null)
         }
 
         $out['s'] = $s = ($is_404 || empty($out['s']) ? 'default' : $out['s']);
-        $rs = isset($txp_sections[$s]) ? $txp_sections[$s] : null;
+        $rs = isset($txp_sections[$s]) ? $txp_sections[$s] : $txp_sections['default'];
 
         $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
