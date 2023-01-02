@@ -669,8 +669,8 @@ function preText($store, $prefs = null)
             unset($rs);
         }
 
-        $out['s'] = $is_404 ? 'default' : $out['s'];
-        $rs = $txp_sections[$s];
+        $out['s'] = $s = ($is_404 || empty($out['s']) ? 'default' : $out['s']);
+        $rs = isset($txp_sections[$s]) ? $txp_sections[$s] : null;
 
         $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
