@@ -600,7 +600,7 @@ function image_edit($message = '', $id = '')
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
             $img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
-            $img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
         } else {
             $img = $aspect = '';
         }
@@ -630,7 +630,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', 'async image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
                 $rs)
             : ''
         );
@@ -688,7 +688,7 @@ function image_edit($message = '', $id = '')
         $thumbBlock[] = pluggable_ui(
             'image_ui',
             'thumbnail_image',
-            '<div class="thumbnail-image">'.
+            '<div id="thumbnail-image" class="thumbnail-image">'.
             (($thumbnail)
                 ? $thumb.n.($can_upload
                     ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
@@ -854,9 +854,14 @@ function image_insert()
 
 function image_replace()
 {
-    global $txp_user;
+    global $app_mode, $txp_user;
 
     $id = assert_int(gps('id'));
+
+    if (!isset($_FILES['thefile'])) {
+        return image_edit('', $id);
+    }
+
     $rs = safe_row("*", 'txp_image', "id = '$id'");
 
     if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
@@ -875,10 +880,31 @@ function image_replace()
         $meta = '';
     }
 
-    $img_result = image_data($_FILES['thefile'], $meta, $id);
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
+    $files = $fileshandler->refactor($_FILES['thefile']);
+
+    foreach ($files as $i => $file) {
+        $chunked = $fileshandler->dechunk($file);
+        $img_result = image_data($file, $meta, $id, !$chunked);
+
+        if (is_file($file['tmp_name'])) {
+            unlink(realpath($file['tmp_name']));
+        }
+    }
+
+//    $img_result = image_data($_FILES['thefile'], $meta, $id);
 
     if (is_array($img_result)) {
         list($message, $id) = $img_result;
+
+        if ($app_mode == 'async') {    
+            $response = 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
+    
+            send_script_response($response);
+    
+            // Bail out.
+            return;
+        }
 
         return image_edit($message, $id);
     } else {
