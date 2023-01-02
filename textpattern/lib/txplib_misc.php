@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -5286,9 +5286,9 @@ function permlinkurl($article_array, $hu = null)
 
 function filedownloadurl($id, $filename = '')
 {
-    global $permlink_mode;
+    global $prefs;
 
-    if ($permlink_mode == 'messy') {
+    if ($prefs['permlink_mode'] == 'messy') {
         return hu.'index.php'.join_qs(array(
             's'  => 'file_download',
             'id' => (int) $id,
@@ -5305,7 +5305,9 @@ function filedownloadurl($id, $filename = '')
         }
     }
 
-    return hu.'file_download/'.intval($id).$filename;
+    $slash = empty($prefs['trailing_slash']) || $prefs['trailing_slash'] < 0 ? '' : '/';
+
+    return hu.'file_download/'.intval($id).$filename.$slash;
 }
 
 /**

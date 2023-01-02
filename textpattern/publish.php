@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -686,8 +686,8 @@ function preText($store, $prefs = null)
             unset($rs);
         }
 
-        $s = $out['s'] = $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
-        $rs = $txp_sections[$s];
+        $out['s'] = $s = ($is_404 || empty($out['s']) ? 'default' : $out['s']);
+        $rs = isset($txp_sections[$s]) ? $txp_sections[$s] : $txp_sections['default'];
 
         $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
