@@ -859,9 +859,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadProgress', function (event, data) {
     $('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).show();
+    $(data.target).find('progress.txp-upload-progress').val(0).show();
 }).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').hide();
+    $(data.target).find('progress.txp-upload-progress').val(1).hide();
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -874,7 +874,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
                 $.each(list.split(','), function(index, value) {
                     $(value).each(function() {
-                        var id = this.id;
+                        var id = this.getAttribute('id');
 
                         if (id) {
                             $(this).replaceWith($html.find('#' + id)).remove();
@@ -889,9 +889,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             callback(data.event);
         };
 
-    $(list).addClass('disabled');
-
     if (typeof data.html == 'undefined') {
+        $(list).addClass('disabled');
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this);
         });
@@ -1869,6 +1868,7 @@ jQuery.fn.txpFileupload = function (options) {
         maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER);
 
     form.fileupload($.extend({
+        url: this.attr('action'),
         paramName: fileInput.attr('name'),
         dataType: 'script',
         maxFileSize: maxFileSize,
@@ -1886,10 +1886,10 @@ jQuery.fn.txpFileupload = function (options) {
             textpattern.Relay.callback('uploadProgress', data);
         },
         start: function (e) {
-            textpattern.Relay.callback('uploadStart', e);
+            textpattern.Relay.callback('uploadStart', e, this.formData);
         },
         stop: function (e) {
-            textpattern.Relay.callback('uploadEnd', e);
+            textpattern.Relay.callback('uploadEnd', e, this.formData);
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault();
@@ -2193,35 +2193,41 @@ textpattern.Route.add('article.init', function () {
 
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) {
-        $('form.upload-form').on('submit', function() {
-            $(this).find('input[type="submit"]').attr('disabled', true);
-            $(this).find('progress.txp-upload-progress').removeClass('hidden');
+            textpattern.Relay.register('uploadEnd', function (event, data) {
+                $(function () {
+                    let options = {
+                        data: $(data.target).serializeArray(),
+                        list: textpattern.event == 'image' ? '#fullsize-image, #image_name, #thumbnail-image, #thumbnail-upload' : '#file_details',
+                        event: event.type
+                    };
+                    textpattern.Relay.callback('updateList', options);
+                });
+            });
+    } else {
+        textpattern.Relay.register('uploadStart', function (event) {
+            textpattern.Relay.data.fileid = [];
+        }).register('uploadEnd', function (event) {
+            var callback = function () {
+                textpattern.Console.clear().announce(event.type);
+            };
+
+            $(function () {
+                $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
+
+                if (textpattern.Relay.data.fileid.length) {
+                    textpattern.Relay.callback('updateList', {
+                        data: $('nav.prev-next form').serializeArray(),
+                        list: '#txp-list-container',
+                        event: event.type,
+                        callback: callback
+                    });
+                } else {
+                    callback();
+                }
+            });
         });
-        return;
     }
 
-    textpattern.Relay.register('uploadStart', function (event) {
-        textpattern.Relay.data.fileid = [];
-    }).register('uploadEnd', function (event) {
-        var callback = function () {
-            textpattern.Console.clear().announce(event.type);
-        };
-
-        $(function () {
-            $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
-
-            if (textpattern.Relay.data.fileid.length) {
-                textpattern.Relay.callback('updateList', {
-                    data: $('nav.prev-next form').serializeArray(),
-                    list: '#txp-list-container',
-                    event: event.type,
-                    callback: callback
-                });
-            } else {
-                callback();
-            }
-        });
-    });
     $('form.upload-form.async').txpUploadPreview().txpFileupload({
         formData: [{
             name: 'app_mode',
