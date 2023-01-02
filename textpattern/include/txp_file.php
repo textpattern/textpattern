@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * Copyright (C) 2004 Michael Manfre
