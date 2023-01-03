@@ -1033,11 +1033,10 @@ function doArticle($atts, $thing = null, $parse = true)
     $article = false;
 
     if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
-        extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
-        if ($atts['allowoverride'] && $override_form) {
-            $article = parse_form($override_form);
+        if ($atts['allowoverride'] && $thisarticle['override_form']) {
+            $article = parse_form($thisarticle['override_form']);
         } elseif ($atts['form']) {
             $article = parse_form($atts['form']);
         }

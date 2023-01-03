@@ -2125,15 +2125,11 @@ function comments_invite($atts)
 
     assert_article();
 
-    extract($thisarticle);
-
-    if (!$comments_invite) {
-        $comments_invite = get_pref('comments_default_invite');
-    }
-
+    $comments_invite = empty($thisarticle['comments_invite']) ? get_pref('comments_default_invite') : $thisarticle['comments_invite'];
+    $comments_count = intval($thisarticle['comments_count']);
     $invite_return = '';
 
-    if (($annotate || $comments_count) && ($showalways || $is_article_list)) {
+    if (($thisarticle['annotate'] || $comments_count) && ($showalways || $is_article_list)) {
         $comments_invite = txpspecialchars($comments_invite);
         $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 
@@ -2144,6 +2140,7 @@ function comments_invite($atts)
             if (!$comments_mode) {
                 $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" ').$ccount;
             } else {
+                $thisid = $thisarticle['thisid'];
                 $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
             }
         }
@@ -2217,13 +2214,11 @@ function comments_form($atts, $thing = null)
 
     assert_article();
 
-    extract($thisarticle);
-
     $out = '';
     $ip = serverSet('REMOTE_ADDR');
     $blocklisted = is_blocklisted($ip);
 
-    if (!checkCommentsAllowed($thisid)) {
+    if (!checkCommentsAllowed($thisarticle['thisid'])) {
         $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
     } elseif ($blocklisted) {
         $out = graf(gTxt('your_ip_is_blocklisted_by'.' '.$blocklisted), ' id="comments_blocklisted"');
@@ -2260,7 +2255,7 @@ function comments_form($atts, $thing = null)
         $out .= '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
             n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
             ($thing === null ? parse_form($form) : parse($thing)).
-            n.hInput('parentid', ($parentid ? $parentid : $thisid)).
+            n.hInput('parentid', ($parentid ? $parentid : $thisarticle['thisid'])).
             n.hInput('backpage', (ps('preview') ? $backpage : $url)).
             n.'</div>'.
             n.'</form>';
@@ -2491,14 +2486,12 @@ function comments($atts, $thing = null)
 
     assert_article();
 
-    extract($thisarticle);
-
-    if (!$comments_count) {
+    if (!$thisarticle['comments_count']) {
         return '';
     }
 
     $qparts = array(
-        "parentid = ".intval($thisid)." AND visible = ".VISIBLE,
+        "parentid = ".intval($thisarticle['thisid'])." AND visible = ".VISIBLE,
         "ORDER BY ".sanitizeForSort($sort),
         ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
