@@ -33,6 +33,8 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
+include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
+
 if ($event == 'prefs') {
     require_privs('prefs');
 
@@ -170,11 +172,9 @@ function prefs_list($message = '')
 {
     global $prefs, $txp_user, $txp_options;
 
-    extract($prefs);
-
     pagetop(gTxt('tab_preferences'), $message);
 
-    $locale = setlocale(LC_ALL, $locale);
+    $locale = setlocale(LC_ALL, $prefs['locale']);
 
     echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
@@ -919,7 +919,19 @@ function commentsendmail($name, $val)
 
 function custom_set($name, $val)
 {
-    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, INPUT_REGULAR), $name, $val);
+    static $reserved = null;
+    
+    if (!isset($reserved)) {
+        $reserved = article_column_map() + array('is_first' => null, 'is_last' => null);
+//            + array_filter(filterAtts(array(), true), function($key) {return preg_match('/^[\w\-]+$/', $key);}, ARRAY_FILTER_USE_KEY);
+    }
+
+    $pattern = $reserved;
+    unset($pattern[$val]);
+    $pattern = implode('|', array_keys($pattern)).'|custom_\d+';
+    $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$)\S*$");
+
+    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, $constraints), $name, $val);
 }
 
 /**

@@ -310,8 +310,9 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         }
     }
 
-    $out['next'] = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
-    $out['prev'] = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
+    ksort($atts);
+    $out['>'] = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
+    $out['<'] = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
 
     return $out;
 }
@@ -841,23 +842,32 @@ function filterAtts($atts = null, $iscustom = null)
         return $out = $atts;
     }
 
-    $exclude = isset($atts['exclude']) ? $atts['exclude'] : '';
-    unset($atts['exclude']);
+    $excluded = isset($atts['exclude']) ? $atts['exclude'] : '';
 
-    if ($exclude && $exclude !== true) {
-        $exclude = array_map('strtolower', do_list_unique($exclude));
-        $excluded = array_filter($exclude, 'is_numeric');
-        empty($excluded) or $exclude = array_diff($exclude, $excluded);
+    if ($excluded && $excluded !== true) {
+        $excluded = array_map('strtolower', do_list_unique($excluded));
+        $excludid = array_filter($excluded, 'is_numeric');
+        empty($excludid) or $excluded = array_diff($excluded, $excludid);
     } else {
-        $exclude or $exclude = array();
-        $excluded = array();
+        $excluded or $excluded = array();
+        $excludid = array();
     }
 
-    $exclude === true or $exclude = array_fill_keys($exclude, true);
+    $excluded === true or $excluded = array_fill_keys($excluded, true);
 
     $customFields = getCustomFields() + array('url_title' => 'url_title');
-    $customlAtts = array_null(array_flip($customFields));
-    $postWhere = array();
+    $postWhere = $customPairs = $customlAtts = array();
+
+    foreach ($customFields as $num => $field) {
+        $customlAtts[$field] = null;
+
+        if (isset($atts['custom_'.$num])) {
+            $customPairs[$field] = $atts['custom_'.$num];
+            $customlAtts['custom_'.$num] = null;
+        } elseif (isset($excluded[$field])) {
+            $customPairs[$field] = true;
+        }
+    }
 
     $extralAtts = array(
         'form'          => 'default',
@@ -874,28 +884,34 @@ function filterAtts($atts = null, $iscustom = null)
         'searchall'     => !$iscustom && !empty($pretext['q']),
     );
 
+    $sortAtts = array(
+        'fields'        => null,
+        'sort'          => '',
+        'keywords'      => '',
+        'time'          => null,
+        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
+        'frontpage'     => !$iscustom,
+        'match'         => 'Category',
+        'depth'         => 0,
+        'id'            => '',
+        'excerpted'     => '',
+        'exclude'       => ''
+    );
+
     if ($iscustom) {
-        $customlAtts = array(
-            'category'  => '',
-            'section'   => '',
-            'author'    => '',
-            'month'     => '',
-            'expired'   => get_pref('publish_expired_articles'),
-        ) + $customlAtts;
+        $sortAtts += array(
+            'category'  => isset($excluded['category']) ? true : '',
+            'section'   => isset($excluded['section']) ? true : '',
+            'author'    => isset($excluded['author']) ? true : '',
+            'month'     => isset($excluded['month']) ? true : '',
+            'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
+        );
     } else {
         $extralAtts += array(
             'listform'     => '',
             'searchform'   => '',
             'searchsticky' => 0,
         );
-    }
-
-    if ($exclude && is_array($exclude)) {
-        foreach ($exclude as $cField => $val) {
-            if (array_key_exists($cField, $customlAtts) && !isset($atts[$cField])) {
-                $atts[$cField] = $val;
-            }
-        }
     }
 
     $coreColumns = array(
@@ -912,35 +928,23 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Getting attributes.
-    $theAtts = lAtts(array(
-        'fields'        => null,
-        'sort'          => '',
-        'keywords'      => '',
-        'time'          => null,
-        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
-        'frontpage'     => !$iscustom,
-        'match'         => 'Category',
-        'depth'         => 0,
-        'id'            => '',
-        'excerpted'     => ''
-    ) + $extralAtts + $customlAtts, $atts);
+    $theAtts = lAtts($sortAtts + $extralAtts + $customlAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
-    extract($pretext);
-
     if (!$iscustom) {
-        $theAtts['category'] = !empty($c) ? $c : '';
-        $theAtts['section'] = (!empty($s) && $s != 'default') ? $s : '';
-        $theAtts['author'] = (!empty($author) ? $author : '');
-        $theAtts['month'] = (!empty($month) ? $month : '');
+        $theAtts['category'] = !empty($pretext['c']) ? $pretext['c'] : '';
+        $theAtts['section'] = (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '';
+        $theAtts['author'] = (!empty($pretext['author']) ? $pretext['author'] : '');
+        $theAtts['month'] = (!empty($pretext['month']) ? $pretext['month'] : '');
         $theAtts['expired'] = get_pref('publish_expired_articles');
         $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
+        $q = $pretext['q'];
     } else {
         $q = '';
     }
 
-    extract($theAtts);
+    extract($theAtts, EXTR_SKIP);
 
     // Treat sticky articles differently wrt search filtering, etc.
     $issticky = in_array(strtolower($status), array('sticky', STATUS_STICKY));
@@ -969,7 +973,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     for ($i = 1; $i <= 2; $i++) {
-        $not = isset($exclude["category{$i}"]) ? '!' : '';
+        $not = isset($excluded["category{$i}"]) ? '!' : '';
 
         if (isset($match['category'.$i])) {
             if ($match['category'.$i] === false) {
@@ -986,15 +990,14 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    $not = $iscustom && ($exclude === true || isset($exclude['category'])) ? '!' : '';
+    $not = $iscustom && ($excluded === true || isset($excluded['category'])) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
     $category  = !$catquery  ? '' : " AND $not($catquery)";
 
     // ID
-    $not = $exclude === true || isset($exclude['id']) ? 'NOT' : '';
-    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id, array(',', '-')))) : array();
-    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
-        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
+    $not = $excluded === true || isset($excluded['id']) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? article_id() : join(',', array_map('intval', do_list_unique($id, array(',', '-'))))) : false;
+    $id = ($ids? " AND ID $not IN ($ids)" : '').(!$excludid ? '' : " AND ID NOT IN (".join(',', $excludid).")");
     $getid = $ids && !$not;
 
     // Section
@@ -1004,15 +1007,14 @@ function filterAtts($atts = null, $iscustom = null)
         $section = '';
     }
 
-    $not = $iscustom && ($exclude === true || isset($exclude['section'])) ? 'NOT' : '';
+    $not = $iscustom && ($excluded === true || isset($excluded['section'])) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
-    $getid = $getid || $section && !$not;
     $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
-        ($getid || $searchall? '' : filterFrontPage('Section', 'page'));
+        ($getid || $section && !$not || $searchall? '' : filterFrontPage('Section', 'page'));
 
 
     // Author
-    $not = $iscustom && ($exclude === true || isset($exclude['author'])) ? 'NOT' : '';
+    $not = $iscustom && ($excluded === true || isset($excluded['author'])) ? 'NOT' : '';
     $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
@@ -1020,7 +1022,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = $iscustom && ($month || $time !== null) && ($exclude === true || isset($exclude['month']));
+        $not = $iscustom && ($month || $time !== null) && ($excluded === true || isset($excluded['month']));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {
@@ -1040,7 +1042,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
-    $not = $exclude === true || isset($exclude['keywords']) ? '!' : '';
+    $not = $excluded === true || isset($excluded['keywords']) ? '!' : '';
     $keyparts = array();
 
     if ($keywords === true) {
@@ -1116,10 +1118,8 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Custom fields
-    $customPairs = array();
-
     foreach ($customFields as $cField) {
-        if (isset($atts[$cField])) {
+        if (isset($atts[$cField]) && !isset($extralAtts[$cField]) && !isset($sortAtts[$cField])) {
             $customPairs[$cField] = $atts[$cField];
         }
 
@@ -1148,8 +1148,6 @@ function filterAtts($atts = null, $iscustom = null)
         $groupped = true;
         $psort = $sort;
 
-        $customData = buildCustomSql($customFields, $customPairs, $exclude);
-
         foreach ($matches as $match) {
             $format = doSlash($match[2]);
             $field = $match[4];
@@ -1177,13 +1175,13 @@ function filterAtts($atts = null, $iscustom = null)
                 $alias[$column] = " AS `$column`";
                 $sortby[$column] = '';
                 $partition[$column] = $pattern;
+                unset($customPairs[$field]);
             } elseif (!$match[1] && $field === '*') {
                 $addFields = true;
                 $groupped = false;
             } else {
-                $is_custom = isset($customData['columns'][$field]);
-                $custom = $is_custom ? $customData['columns'][$field] : "`$column`";
-                $alias[$field] = $is_custom || $match[1] ? " AS `$column`" : '';
+                $custom = "`$column`";
+                $alias[$field] = $match[1] ? " AS `$column`" : '';
                 $sortby[$column] = $dir;
 
                 if (!$match[1]) {
@@ -1218,13 +1216,12 @@ function filterAtts($atts = null, $iscustom = null)
 
         if (!empty($addFields)) {
             foreach (array_diff_key($column_map, $what) as $field => $column) {
-                $what[$field] = isset($customData[$field]) ? $customData[$field]." AS `$column`" : $coreColumns[$field];
+                $what[$field] = $coreColumns[$field];
             }
         }
 
         $fields = implode(', ', $what);
         $groupped or $groupby = false;
-        $custom = '';
         $postWhere = array_intersect_key($postWhere, $what);
 
         if (!$sort) {
@@ -1232,9 +1229,10 @@ function filterAtts($atts = null, $iscustom = null)
                 $sort .= ($sort ? ', ' : '').$key.$val;
             }
         }
-    } else {
-        $custom = buildCustomSql($customFields, $customPairs, $exclude);
     }
+
+    $custom = buildCustomSql($customFields, $customPairs, $excluded);
+    $postWhere = empty($what) ? false : array_intersect_key($postWhere, $what);
 
     if ($fields) {
         $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
@@ -1243,9 +1241,9 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $theAtts['status'] = implode(',', $status);
-    $theAtts['id'] = implode(',', $ids);
+    $theAtts['id'] = $ids;
     $theAtts['form'] = $fname;
-    $theAtts['sort'] = $sort ? $sort : 'Posted DESC';
+    $theAtts['sort'] = $sort ? $sort : ($getid ? "FIELD(ID, $ids)" : 'Posted DESC');
     $theAtts['%'] = empty($groupby) ? null : implode(', ', $groupby);
     $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
@@ -1256,7 +1254,7 @@ function filterAtts($atts = null, $iscustom = null)
         $theAtts['%'] = null;
         $theAtts['#'] = '(SELECT '.$theAtts['*'].' FROM '.$theAtts['#'].' WHERE '.$theAtts['?'].') AS textpattern';
         $theAtts['*'] = '*';
-        $theAtts['$'] = $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $exclude);
+        $theAtts['$'] = $theAtts['?'] = '1'.buildCustomSql(null, $postWhere, $excluded);
     }
 
     if (!$iscustom) {
