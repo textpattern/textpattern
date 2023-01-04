@@ -1071,6 +1071,7 @@ function filterAtts($atts = null, $iscustom = null)
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
+        $m = $pretext['m'];
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
