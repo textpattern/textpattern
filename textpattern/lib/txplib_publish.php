@@ -869,7 +869,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excluded === true or $excluded = array_fill_keys($excluded, true);
 
     $customFields = getCustomFields('article', null, null);
-    $filterFields = ($customFields ? $customFields['by_id'] : array());
+    $filterFields = ($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title');
     $postWhere = $customPairs = $customlAtts = array();
 
     foreach ($filterFields as $num => $field) {
@@ -1091,6 +1091,7 @@ function filterAtts($atts = null, $iscustom = null)
         $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
+        $m = $pretext['m'];
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
@@ -1139,7 +1140,6 @@ function filterAtts($atts = null, $iscustom = null)
 
     // Custom fields
     $customColumns = '';
-    $filterFields  += ($url_title ? array('url_title' => 'url_title') : array());
 
     foreach ($filterFields as $cField) {
         if (isset($atts[$cField]) && !isset($extralAtts[$cField]) && !isset($sortAtts[$cField])) {
