@@ -1156,7 +1156,7 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    $not = $exclude === true || isset($exclude['url_title']) ? 'NOT' : '';
+    $not = $excluded === true || isset($excluded['url_title']) ? 'NOT' : '';
     $url_title = isset($customPairs['url_title']) ?
         ' AND $not('.buildWhereSql($customPairs['url_title'], 'url_title').')' :
         '';
@@ -1179,7 +1179,7 @@ function filterAtts($atts = null, $iscustom = null)
         $psort = $sort ? $sort : 'Posted DESC';
 
         $customFields['by_aggregate'] = array_filter(array_column($matches, 3, 4)) + array_filter($aggFields);
-        $customData = buildCustomSql($customFields, $customPairs, $exclude, $modes);
+        $customData = buildCustomSql($customFields, $customPairs, $excluded, $modes);
 
         foreach ($matches as $match) {
             $format = doSlash($match[2]);
@@ -1261,7 +1261,7 @@ function filterAtts($atts = null, $iscustom = null)
                 $sort .= ($sort ? ', ' : '').$key.$val;
             }
         }
-    } elseif ($customData = buildCustomSql($customFields, $customPairs, $exclude, $modes)) {
+    } elseif ($customData = buildCustomSql($customFields, $customPairs, $excluded, $modes)) {
         foreach ($customData['columns'] as $k => $column) {
             $customColumns .= ", $column AS `$k`";
         }
