@@ -957,7 +957,7 @@ function filterAtts($atts = null, $iscustom = null)
         $theAtts['month'] = (!empty($pretext['month']) ? $pretext['month'] : '');
         $theAtts['expired'] = get_pref('publish_expired_articles');
         $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
-        $q = $pretext['q'];
+        $q = trim($pretext['q']);
     } else {
         // Custom articles must not render search results.
         $q = '';
@@ -1088,7 +1088,6 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($q && !$issticky) {
         $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
-        $q = trim($q);
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
         $m = $pretext['m'];
