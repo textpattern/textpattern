@@ -935,7 +935,7 @@ function custom_set($name, $val)
     }
 
     $pattern = $reserved;
-    unset($pattern[$val]);
+    unset($pattern[strtolower($val)]);
     $pattern = implode('|', $pattern).'|[cC][uU][sS][tT][oO][mM]_\d+';
     $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$).*$");
 
