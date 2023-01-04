@@ -919,17 +919,25 @@ function commentsendmail($name, $val)
 
 function custom_set($name, $val)
 {
-    static $reserved = null;
+    static $reserved = array();
     
-    if (!isset($reserved)) {
-        $reserved = article_column_map() + array('is_first' => null, 'is_last' => null);
+    if (empty($reserved)) {
+        foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
 //            + array_filter(filterAtts(array(), true), function($key) {return preg_match('/^[\w\-]+$/', $key);}, ARRAY_FILTER_USE_KEY);
+            $str = '';
+
+            foreach (str_split($field) as $char) {
+                $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
+            }
+
+            $reserved[$field] = $str;
+        }
     }
 
     $pattern = $reserved;
     unset($pattern[$val]);
-    $pattern = implode('|', array_keys($pattern)).'|custom_\d+';
-    $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$)\S*$");
+    $pattern = implode('|', $pattern).'|[cC][uU][sS][tT][oO][mM]_\d+';
+    $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$).*$");
 
     return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, $constraints), $name, $val);
 }
