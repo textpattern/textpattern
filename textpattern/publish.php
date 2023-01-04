@@ -978,13 +978,6 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['?'];
 
-    // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort'])) {
-        $sort = "FIELD(ID, ".$id."), ".$sort;
-    }
-
-    $where = $theAtts['?'];
-
     $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT ".
         intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );

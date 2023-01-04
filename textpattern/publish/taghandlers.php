@@ -1658,14 +1658,15 @@ function link_to($atts, $thing = null, $target = 'next')
     }
 
     assert_article();
+    $dir = $target == 'next' ? '>' : '<';
 
-    if (!isset($thisarticle[$target])) {
-        $thisarticle = $thisarticle + getNextPrev();
+    if (!isset($thisarticle[$dir])) {
+        $thisarticle += getNextPrev();
     }
 
-    if ($thisarticle[$target] !== false) {
+    if ($thisarticle[$dir] !== false) {
         $oldarticle = $thisarticle;
-        $thisarticle = $thisarticle[$target];
+        $thisarticle = $thisarticle[$dir];
         $url = permlink(array_diff_key($atts, $lAtts));
 
         if ($form || $thing !== null) {
@@ -1685,7 +1686,7 @@ function link_to($atts, $thing = null, $target = 'next')
         $thisarticle = $oldarticle;
     }
 
-    unset($thisarticle[$target]);
+    unset($thisarticle[$dir]);
 
     return isset($url) ? $url : ($showalways ? parse($thing) : '');
 }
@@ -1700,12 +1701,12 @@ function next_title()
         return $is_article_list ? '' : null;
     }
 
-    if (!isset($thisarticle['next'])) {
+    if (!isset($thisarticle['>'])) {
         $thisarticle = $thisarticle + getNextPrev();
     }
 
-    if ($thisarticle['next'] !== false) {
-        return escape_title($thisarticle['next']['Title']);
+    if ($thisarticle['>'] !== false) {
+        return escape_title($thisarticle['>']['Title']);
     } else {
         return '';
     }
@@ -1721,12 +1722,12 @@ function prev_title()
         return $is_article_list ? '' : null;
     }
 
-    if (!isset($thisarticle['prev'])) {
+    if (!isset($thisarticle['<'])) {
         $thisarticle = $thisarticle + getNextPrev();
     }
 
-    if ($thisarticle['prev'] !== false) {
-        return escape_title($thisarticle['prev']['Title']);
+    if ($thisarticle['<'] !== false) {
+        return escape_title($thisarticle['<']['Title']);
     } else {
         return '';
     }
@@ -2472,7 +2473,7 @@ function if_comments_error($atts, $thing = null)
 function comments($atts, $thing = null)
 {
     global $thisarticle, $prefs;
-    extract($prefs);
+    $comments_are_ol = !empty($prefs['comments_are_ol']);
 
     extract(lAtts(array(
         'form'    => 'comments',
@@ -2614,20 +2615,19 @@ function comment_name($atts)
     assert_comment();
     isset($encoder) or $encoder = Txp::get('\Textpattern\Mail\Encode');
 
-    extract($prefs);
     extract($thiscomment);
 
     $name = txpspecialchars($name);
 
     if ($link) {
         $web = comment_web();
-        $nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
+        $nofollow = empty($prefs['comment_nofollow']) ? '' : ' rel="nofollow"';
 
         if (!empty($web)) {
             return href($name, $web, $nofollow);
         }
 
-        if ($email && !$never_display_email) {
+        if ($email && empty($prefs['never_display_email'])) {
             return href($name, $encoder->entityObfuscateAddress('mailto:'.$email), $nofollow);
         }
     }
