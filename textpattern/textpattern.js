@@ -29,6 +29,9 @@
 
 textpattern.version = '4.9.0-dev';
 
+textpattern.prefs.uploadPreview = '<div style="float:left;height:128px;width:128px;margin:5px;padding:5px;border:1px solid grey;overflow:hidden">'+
+'<progress id="{hash}" class="txp-upload-progress hidden" style="width:128px;position:absolute" ></progress>{name}{preview}</div>';
+
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
  */
@@ -857,11 +860,16 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('uploadProgress', function (event, data) {
-    $('progress.txp-upload-progress').val(data.loaded / data.total);
+//    console.log(data)
+    let hash = data.files[0].hash;
+    $('#'+hash).val(data.loaded / data.total);
+}).register('uploadProgressAll', function (event, data) {
+    $(data.target).children('progress.txp-upload-progress').val(data.loaded / data.total);
 }).register('uploadStart', function (event, data) {
     $(data.target).find('progress.txp-upload-progress').val(0).show();
 }).register('uploadEnd', function (event, data) {
     $(data.target).find('progress.txp-upload-progress').val(1).hide();
+    $(data.target).find('div.txp-upload-preview').empty();
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -1882,8 +1890,13 @@ jQuery.fn.txpFileupload = function (options) {
         //    form.uploadCount++;
         //    data.submit();
         //},
-        progressall: function (e, data) {
+        progress: function (e, data) {
+            data.target = this;
             textpattern.Relay.callback('uploadProgress', data);
+        },
+        progressall: function (e, data) {
+            data.target = this;
+            textpattern.Relay.callback('uploadProgressAll', data);
         },
         start: function (e) {
             textpattern.Relay.callback('uploadStart', e, this.formData);
@@ -1946,30 +1959,34 @@ jQuery.fn.txpUploadPreview = function (template) {
     }
 
     var form = $(this),
-        last = form.children(':last-child'),
+        uploadPreview = form.find('div.txp-upload-preview'),
         maxSize = textpattern.prefs.max_file_size;
-    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL;
+    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL,
+        revokeObjectURL = (window.URL || window.webkitURL || {}).revokeObjectURL;
 
     form.find('input[type="reset"]').on('click', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
     });
 
     form.find('input[type="file"]').on('change', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
         $(this.files).each(function (index) {
-            var preview = '',
+            let src = null,
+                preview = '',
                 mime = this.type.split('/'),
                 hash = typeof md5 == 'function' ? md5(this.name) : index,
-                status = this.size > maxSize ? 'alert' : '';
+                status = this.size > maxSize ? 'alert' : null;
 
             if (createObjectURL) {
                 switch (mime[0]) {
                     case 'image':
-                        preview = '<img src="' + createObjectURL(this) + '" />';
+                        src = createObjectURL(this);
+                        preview = '<img src="' + src + '" />';
                         break;
                     // TODO case 'video':?
                     case 'audio':
-                        preview = '<' + mime[0] + ' controls src="' + createObjectURL(this) + '" />';
+                        src = createObjectURL(this);
+                        preview = '<' + mime[0] + ' controls src="' + src + '" />';
                         break;
                 }
             }
@@ -1978,12 +1995,14 @@ jQuery.fn.txpUploadPreview = function (template) {
                 hash: hash,
                 preview: preview,
                 status: status,
-                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
+                title: textpattern.encodeHTML(this.name)
             }));
 
-            form.append(preview);
+            uploadPreview.append(preview);
+
+            if (src) revokeObjectURL(src);
         });
-    }).change();
+    }).trigger('change');
 
     return this;
 };
@@ -2228,7 +2247,7 @@ textpattern.Route.add('file, image', function () {
         });
     }
 
-    $('form.upload-form.async').txpUploadPreview().txpFileupload({
+    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
         formData: [{
             name: 'app_mode',
             value: 'async'

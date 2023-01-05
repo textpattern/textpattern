@@ -240,7 +240,7 @@ class UploadForm extends Form
         global $event;
 
         $name = 'thefile'.($this->multiple ? '[]' : '');
-        $class[] = 'upload-form';
+        $class[] = 'txp-upload-form';
         $class[] = $this->getAtt('class');
         $className = implode(' ', $class);
         $key = $this->getAtt('id', $this->event.'-upload');
