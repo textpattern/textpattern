@@ -1449,10 +1449,11 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 $wraptag_class,
                 $wraptag_val
             ).
-            tag(null, 'progress', array('class' => 'txp-upload-progress hidden')),
+            n.tag(null, 'progress', array('class' => 'txp-upload-progress hidden')).
+            n.'<div class="txp-upload-preview"></div>',
             'form',
             array(
-                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
+                'class'   => 'txp-upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",

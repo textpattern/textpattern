@@ -2211,7 +2211,7 @@ textpattern.Route.add('file, image', function () {
             }
         });
     });
-    $('form.upload-form.async').txpUploadPreview().txpFileupload({
+    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
         formData: [{
             name: 'app_mode',
             value: 'async'
