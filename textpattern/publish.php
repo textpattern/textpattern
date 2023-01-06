@@ -806,7 +806,7 @@ function output_file_download($filename)
     callback_event('file_download');
 
     if (!isset($file_error)) {
-        parse_form('file_download_header');
+        parse(get_pref('file_download_header'));
         $filename = sanitizeForFile($filename);
         $fullpath = build_file_path($file_base_path, $filename);
 
