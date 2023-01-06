@@ -29,9 +29,6 @@
 
 textpattern.version = '4.9.0-dev';
 
-textpattern.prefs.uploadPreview = '<div style="float:left;height:128px;width:128px;margin:5px;padding:5px;border:1px solid grey;overflow:hidden">'+
-'<progress id="{hash}" class="txp-upload-progress hidden" style="width:128px;position:absolute" ></progress>{name}{preview}</div>';
-
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
  */
@@ -859,17 +856,6 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     if ($.type(console) === 'object' && $.type(console.log) === 'function') {
         console.log(data.message);
     }
-}).register('uploadProgress', function (event, data) {
-//    console.log(data)
-    let hash = data.files[0].hash;
-    $('#'+hash).val(data.loaded / data.total);
-}).register('uploadProgressAll', function (event, data) {
-    $(data.target).children('progress.txp-upload-progress').val(data.loaded / data.total);
-}).register('uploadStart', function (event, data) {
-    $(data.target).find('progress.txp-upload-progress').val(0).show();
-}).register('uploadEnd', function (event, data) {
-    $(data.target).find('progress.txp-upload-progress').val(1).hide();
-    $(data.target).find('div.txp-upload-preview').empty();
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -917,6 +903,17 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         $('#messagepane').html(message);
     }
 });
+
+if (!textpattern.prefs.uploadPreview) {
+    textpattern.Relay.register('uploadProgressAll', function (event, data) {
+        $(data.target).children('.txp-upload-progress').val(data.loaded / data.total);
+    }).register('uploadStart', function (event, data) {
+        $(data.target).children('.txp-upload-progress').val(0).show();
+    }).register('uploadEnd', function (event, data) {
+        $(data.target).find('div.txp-upload-preview').empty();
+        $(data.target).children('.txp-upload-progress').hide();
+    });
+}
 
 /**
  * Script routing.
