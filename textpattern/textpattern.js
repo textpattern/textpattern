@@ -904,17 +904,6 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     }
 });
 
-if (!textpattern.prefs.uploadPreview) {
-    textpattern.Relay.register('uploadProgressAll', function (event, data) {
-        $(data.target).children('.txp-upload-progress').val(data.loaded / data.total);
-    }).register('uploadStart', function (event, data) {
-        $(data.target).children('.txp-upload-progress').val(0).show();
-    }).register('uploadEnd', function (event, data) {
-        $(data.target).find('div.txp-upload-preview').empty();
-        $(data.target).children('.txp-upload-progress').hide();
-    });
-}
-
 /**
  * Script routing.
  *
@@ -2782,6 +2771,18 @@ $(function () {
     textpattern.Route.init({
         'step': 'init'
     });
+
+    // Set default upload progress bars
+    if (typeof textpattern.prefs.uploadPreview == 'undefined') {
+        textpattern.Relay.register('uploadProgressAll', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(data.loaded / data.total);
+        }).register('uploadStart', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(0).show();
+        }).register('uploadEnd', function (event, data) {
+            $(data.target).find('div.txp-upload-preview').empty();
+            $(data.target).children('.txp-upload-progress').hide();
+        });
+    }
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
