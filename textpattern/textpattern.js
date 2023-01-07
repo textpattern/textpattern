@@ -1885,10 +1885,10 @@ jQuery.fn.txpFileupload = function (options) {
             textpattern.Relay.callback('uploadProgressAll', data);
         },
         start: function (e) {
-            textpattern.Relay.callback('uploadStart', e, this.formData);
+            textpattern.Relay.callback('uploadStart', e);
         },
         stop: function (e) {
-            textpattern.Relay.callback('uploadEnd', e, this.formData);
+            textpattern.Relay.callback('uploadEnd', e);
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault();
@@ -1946,6 +1946,7 @@ jQuery.fn.txpUploadPreview = function (template) {
 
     var form = $(this),
         uploadPreview = form.find('div.txp-upload-preview'),
+        previewable = textpattern.prefs.previewable || /^(image\/)/i,
         maxSize = textpattern.prefs.max_file_size;
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL,
         revokeObjectURL = (window.URL || window.webkitURL || {}).revokeObjectURL;
@@ -1959,20 +1960,21 @@ jQuery.fn.txpUploadPreview = function (template) {
         $(this.files).each(function (index) {
             let src = null,
                 preview = '',
-                mime = this.type.split('/'),
+                mime = this.type.toLowerCase().split('/'),
                 hash = typeof md5 == 'function' ? md5(this.name) : index,
                 status = this.size > maxSize ? 'alert' : null;
 
-            if (createObjectURL) {
+            if (createObjectURL && previewable.test(this.type) && (src = createObjectURL(this))) {
                 switch (mime[0]) {
                     case 'image':
-                        src = createObjectURL(this);
                         preview = '<img src="' + src + '" />';
                         break;
-                    // TODO case 'video':?
+                    case 'video':
                     case 'audio':
-                        src = createObjectURL(this);
-                        preview = '<' + mime[0] + ' controls src="' + src + '" />';
+                        preview = '<' + mime[0] + ' controls src="' + src + '" type="' + this.type + '" />';
+                        break;
+                    default:
+                        preview = '<embed type="' + this.type + '" src="' + src + '" />';
                         break;
                 }
             }
@@ -1986,7 +1988,7 @@ jQuery.fn.txpUploadPreview = function (template) {
 
             uploadPreview.append(preview);
 
-            if (src) revokeObjectURL(src);
+            if (src && mime[0] != 'audio' && mime[0] != 'video') revokeObjectURL(src);
         });
     }).trigger('change');
 
