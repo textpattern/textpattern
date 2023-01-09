@@ -1959,7 +1959,7 @@ jQuery.fn.txpUploadPreview = function (template) {
         uploadPreview.empty();
         $(this.files).each(function (index) {
             let src = null,
-                preview = null,
+                preview = '',
                 mime = this.type.toLowerCase().split('/'),
                 hash = typeof md5 == 'function' ? md5(this.name) : index,
                 status = this.size > maxSize ? 'alert' : null;
@@ -1981,8 +1981,10 @@ jQuery.fn.txpUploadPreview = function (template) {
 
             preview = textpattern.mustache(template, $.extend(this, {
                 hash: hash,
+                preview: preview,
+                status: status,
                 title: textpattern.encodeHTML(this.name)
-            }, preview ? {preview: preview} : {}, status ? {status: status} : {}));
+            }));
 
             uploadPreview.append(preview);
 
