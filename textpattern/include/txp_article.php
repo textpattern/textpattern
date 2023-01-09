@@ -1407,6 +1407,16 @@ function article_partial_actions($rs)
         ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
     ) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+    } else {
+        script_js(<<<EOS
+$("#article_form").find("input, textarea").prop("readonly", true);
+$("#article_form").find("option:not(:selected)").prop("disabled", true);
+$("#article_form").find("input[type=checkbox], input[type=radio]").on("input", function(e){
+    this.checked=!this.checked;
+    $(this).siblings("input[checked=checked]").prop("checked", "checked");
+});
+EOS
+        , false);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
