@@ -381,7 +381,7 @@ function preText($store, $prefs = null)
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
-            switch ($u1) {
+            switch (strtolower($u1)) {
                 case 'atom':
                     $out['feed'] = 'atom';
                     break;
@@ -1104,7 +1104,7 @@ function chopUrl($req, $min = 4)
 {
     $req = strtok($req, '?');
     $req = preg_replace('/index\.php$/i', '', $req);
-    $r = array_map('urldecode', explode('/', strtolower($req)));
+    $r = array_map('urldecode', explode('/', $req));
     $n = isset($min) ? max($min, count($r)) : count($r);
     $o = array('u0' => $req);
 

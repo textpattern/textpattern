@@ -654,7 +654,9 @@ function ckEx($table, $val, $debug = false)
 
 function ckCat($type, $val, $debug = false)
 {
-    return safe_row("name, title, description, type", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
+    $res = safe_row("name, title, description, type", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
+
+    return ($res && $res['name'] == $val) ? $res : false;
 }
 
 /**
@@ -703,11 +705,13 @@ function ckExID($val, $debug = false)
 
 function lookupByTitle($val, $debug = false)
 {
-    return safe_row(
+    $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
+
+    return ($res && $res['url_title'] == $val) ? $res : false;
 }
 
 /**
@@ -731,11 +735,13 @@ function lookupByTitle($val, $debug = false)
 
 function lookupByTitleSection($val, $section, $debug = false)
 {
-    return safe_row(
+    $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
+
+    return ($res && $res['url_title'] == $val && $res['Section'] == $section) ? $res : false;
 }
 
 /**
@@ -750,11 +756,13 @@ function lookupByTitleSection($val, $section, $debug = false)
 
 function lookupByIDSection($id, $section, $debug = false)
 {
-    return safe_row(
+    $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
+
+    return ($res && $res['Section'] == $section) ? $res : false;
 }
 
 /**
@@ -794,11 +802,13 @@ function lookupByDateTitle($when, $title, $debug = false)
         $dateClause = '1';
     }
 
-    return safe_row(
+    $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
         'textpattern',
-        "url_title LIKE '".doSlash($title)."' AND $dateClause LIMIT 1"
+        "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
+
+    return ($res && $res['url_title'] == $title) ? $res : false;
 }
 
 /**
@@ -968,8 +978,9 @@ function filterAtts($atts = null, $iscustom = null)
     $categories = $category === true ? false : do_list_unique($category);
     $catquery = array();
 
-    if ($categories && (!$depth || $categories = getTree($categories, 'article', '1', 'txp_category', $depth))) {
-        $categories  = join("','", doSlash($categories));
+    if ($categories) {
+        !$depth or $categories = getTree($categories, 'article', '1', 'txp_category', $depth) or $categories = array('/');
+        $categories = quote_list($categories, ',');
     }
 
     for ($i = 1; $i <= 2; $i++) {
@@ -978,12 +989,13 @@ function filterAtts($atts = null, $iscustom = null)
         if (isset($match['category'.$i])) {
             if ($match['category'.$i] === false) {
                 if ($categories) {
-                    $catquery[] = "$not(Category{$i} IN ('$categories'))";
+                    $catquery[] = "$not(Category{$i} IN ($categories))";
                 } elseif ($category === true || $not) {
                     $catquery[] = "$not(Category{$i} != '')";
                 }
             } elseif (($val = gps($match['category'.$i], false)) !== false) {
-                $catquery[] = "$not(Category{$i} IN (".quote_list(do_list($val), ',')."))";
+                $categories = $depth ? getTree(do_list($val), 'article', '1', 'txp_category', $depth) : do_list($val);
+                $catquery[] = $categories ? "$not(Category{$i} IN (".quote_list($categories, ',')."))" : "$not 0";
             }
         } elseif ($not) {
             $catquery[] = "(Category{$i} = '')";
