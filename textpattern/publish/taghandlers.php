@@ -4499,7 +4499,8 @@ function page_url($atts, $thing = null)
     } elseif ($type == 'pg' && $pretext['pg'] == '') {
         $out = '1';
     } elseif (isset($pretext[$type]) && is_bool($default)) {
-        $out = $escape === null ? txpspecialchars($pretext[$type]) : $pretext[$type];
+        $out = $type == 's' && $pretext['s'] == 'default' ? '' : $pretext[$type];
+        $escape === null or $out = txpspecialchars($out);
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
