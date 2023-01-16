@@ -43,13 +43,15 @@ var langdir = document.documentElement.dir,
  */
 
 function checkCookies() {
-    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
+    let cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1]);
     } else {
         document.cookie = 'txp_test_cookie=; Max-Age=0; SameSite=Lax';
     }
+
+    return cookieEnabled;
 }
 
 /**
@@ -1959,7 +1961,7 @@ jQuery.fn.txpUploadPreview = function (template) {
         uploadPreview.empty();
         $(this.files).each(function (index) {
             let src = null,
-                preview = '',
+                preview = null,
                 mime = this.type.toLowerCase().split('/'),
                 hash = typeof md5 == 'function' ? md5(this.name) : index,
                 status = this.size > maxSize ? 'alert' : null;
@@ -1981,10 +1983,8 @@ jQuery.fn.txpUploadPreview = function (template) {
 
             preview = textpattern.mustache(template, $.extend(this, {
                 hash: hash,
-                preview: preview,
-                status: status,
                 title: textpattern.encodeHTML(this.name)
-            }));
+            }, preview ? {preview: preview} : {}, status ? {status: status} : {}));
 
             uploadPreview.append(preview);
 
@@ -1994,14 +1994,6 @@ jQuery.fn.txpUploadPreview = function (template) {
 
     return this;
 };
-
-/**
- * Cookie status.
- *
- * @deprecated in 4.6.0
- */
-
-var cookieEnabled = true;
 
 // Setup panel.
 textpattern.Route.add('setup', function () {
@@ -2023,12 +2015,17 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 textpattern.Route.add('login', function () {
     // Check cookies.
-    cookieEnabled = checkCookies();
+    if (!checkCookies()) {
+        $('#login_form').on('submit', function() {
+            alert(textpattern.gTxt('cookies_must_be_enabled'));
+            return false;
+        });
+    }
 
     // Focus on either username or password when empty.
     $('#login_form input').filter(function () {
         return !this.value;
-    }).first().focus();
+    }).first().trigger('focus');
 
     textpattern.passwordMask();
 });

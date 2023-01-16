@@ -992,9 +992,13 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     $statuses = status_list();
-    $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
 
-    return Txp::get('\Textpattern\UI\Select', $name, $statusa, $val)->setAtt('id', $name);
+    if (!has_privs('article.publish')) {
+        unset($statuses[STATUS_LIVE], $statuses[STATUS_STICKY]);
+        $val = min($val, STATUS_PENDING);
+    }
+
+    return Txp::get('\Textpattern\UI\Select', $name, $statuses, $val)->setAtt('id', $name);
 }
 
 /**

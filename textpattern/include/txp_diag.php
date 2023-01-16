@@ -281,16 +281,10 @@ function doDiagnostics()
         $fail['i'][] = array('file_uploads_disabled');
     }
 
-    if (isset($txpcfg['multisite_root_path'])) {
-        $basePath = $txpcfg['multisite_root_path'].DS.'admin';
+    $basePath = isset($txpcfg['multisite_root_path']) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
 
-        if (@is_dir($basePath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup'))) {
-            $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath.DS.'setup'.DS));
-        }
-    } else {
-        if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-            $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => txpath.DS.'setup'.DS));
-        }
+    if (!$txp_is_dev && is_dir($basePath.DS.'setup') && !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup')) {
+        $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath.DS.'setup'.DS));
     }
 
     if (empty($tempdir)) {
