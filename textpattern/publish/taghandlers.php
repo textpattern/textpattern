@@ -1421,14 +1421,15 @@ function category_list($atts, $thing = null, $cats = null)
 // Output href list of site sections.
 function section_list($atts, $thing = null)
 {
-    global $sitename, $s, $thissection;
+    global $s, $thissection, $txp_sections;
 
     extract(lAtts(array(
         'active_class'    => '',
         'break'           => br,
         'class'           => __FUNCTION__,
-        'default_title'   => $sitename,
+        'default_title'   => get_pref('sitename'),
         'exclude'         => '',
+        'filter'          => false,
         'form'            => '',
         'html_id'         => '',
         'include_default' => '',
@@ -1448,26 +1449,32 @@ function section_list($atts, $thing = null)
     }
 
     if ($sections === true) {
-        $sql[] = '1';
+        $sql['page'] = '1';
     } elseif ($sections) {
         if ($include_default) {
             $sections .= ', default';
         }
 
-        $sections = join(',', quote_list(do_list_unique($sections)));
+        $sections = quote_list(do_list_unique($sections), ',');
         $sql[] = "name IN ($sections)";
 
         if (!$sql_sort) {
             $sql_sort = "FIELD(name, $sections)";
         }
     } else {
-        $sql[] = '1'.filterFrontPage('name', 'page');
+        $sql['page'] = '1'.filterFrontPage('', 'page');
+    }
+
+    if ($filter) {
+        foreach(do_list($filter) as $f) {
+            $sql[$f] = '1'.filterFrontPage('', $f);
+        }
     }
 
     if ($exclude === true) {
-        $sql[] = "searchable";
+        $sql['searchable'] = "searchable";
     } elseif ($exclude) {
-        $exclude = join(',', quote_list(do_list_unique($exclude)));
+        $exclude = quote_list(do_list_unique($exclude), ',');
         $sql[] = "name NOT IN ($exclude)";
     }
 
@@ -4235,22 +4242,32 @@ function if_article_category($atts, $thing = null)
 
 function if_section($atts, $thing = null)
 {
-    global $s, $thissection;
+    global $s, $thissection, $txp_sections;
 
-    extract(lAtts(array('name' => false, 'section' => false), $atts));
+    extract(lAtts(array('filter' => false, 'name' => false, 'section' => false), $atts));
 
-    switch ($section) {
-        case true: $section = isset($thissection) ? $thissection['name'] : $s; break;
-        case false: $section = $s; break;
+    if ($section === true) {
+        $section = isset($thissection) ? $thissection['name'] : $s;
+    } elseif ($section === false) {
+        $section = $s;
     }
 
     $section !== 'default' or $section = '';
     $name === false or $name = do_list($name);
 
     if ($section) {
-        $x = $name === false || in_array($section, $name);
+        $x = $name === true ? !empty($txp_sections[$section]['page']) : $name === false || in_array($section, $name);
     } else {
         $x = $name !== false && (in_array('', $name) || in_array('default', $name));
+    }
+
+    if ($x && $filter && $section) {dmp($txp_sections[$section]);
+        foreach(do_list($filter) as $f) {
+            if (empty($txp_sections[$section][$f])) {
+                $x = false;
+                break;
+            }
+        }
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4262,13 +4279,23 @@ function if_article_section($atts, $thing = null)
 {
     global $thisarticle, $txp_sections;
 
-    extract(lAtts(array('name' => ''), $atts));
+    extract(lAtts(array('filter' => false, 'name' => ''), $atts));
 
     assert_article();
 
     $section = $thisarticle['section'];
 
     $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
+
+    if ($x && $filter) {
+        foreach(do_list($filter) as $f) {
+            if (empty($txp_sections[$section][$f])) {
+                $x = false;
+                break;
+            }
+        }
+    }
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
