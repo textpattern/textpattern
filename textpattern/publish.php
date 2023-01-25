@@ -247,7 +247,7 @@ extract($pretext);
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+if ($status == '200' && !empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
 
