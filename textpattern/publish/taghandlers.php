@@ -1449,37 +1449,37 @@ function section_list($atts, $thing = null)
     }
 
     if ($sections === true) {
-        $sql['page'] = '1';
+        $sql['page'] = '';
     } elseif ($sections) {
         if ($include_default) {
             $sections .= ', default';
         }
 
         $sections = quote_list(do_list_unique($sections), ',');
-        $sql[] = "name IN ($sections)";
+        $sql[] = " AND name IN ($sections)";
 
         if (!$sql_sort) {
             $sql_sort = "FIELD(name, $sections)";
         }
     } else {
-        $sql['page'] = '1'.filterFrontPage('', 'page');
+        $sql['page'] = filterFrontPage('', 'page');
     }
 
     if ($filter) {
         foreach(do_list($filter) as $f) {
-            $sql[$f] = '1'.filterFrontPage('', $f);
+            $sql[$f] = filterFrontPage('', $f);
         }
     }
 
     if ($exclude === true) {
-        $sql['searchable'] = "searchable";
+        $sql['searchable'] = " AND searchable";
     } elseif ($exclude) {
         $exclude = quote_list(do_list_unique($exclude), ',');
-        $sql[] = "name NOT IN ($exclude)";
+        $sql[] = " AND name NOT IN ($exclude)";
     }
 
     if (!$include_default) {
-        $sql[] = "name != 'default'";
+        $sql[] = " AND name != 'default'";
     }
 
     if (!$sql_sort) {
@@ -1493,7 +1493,7 @@ function section_list($atts, $thing = null)
     $rs = safe_rows_start(
         "name, title, description",
         'txp_section',
-        join(" AND ", $sql)." ORDER BY ".$sql_sort.$sql_limit
+        '1'.join('', $sql)." ORDER BY ".$sql_sort.$sql_limit
     );
 
     if ($rs && $last = numRows($rs)) {
