@@ -4253,17 +4253,17 @@ function if_section($atts, $thing = null)
     }
 
     $section !== 'default' or $section = '';
-    $name === false or $name = do_list($name);
+    is_bool($name) or $name = do_list($name);
 
     if ($section) {
-        $x = $name === true ? !empty($txp_sections[$section]['page']) : $name === false || in_array($section, $name);
+        $x = $name === true ? !empty($txp_sections[$section]['page']) : ($name === false || in_array($section, $name));
     } else {
-        $x = $name !== false && (in_array('', $name) || in_array('default', $name));
+        $x = $filter || is_array($name) && (in_array('', $name) || in_array('default', $name));
     }
 
-    if ($x && $filter && $section) {dmp($txp_sections[$section]);
+    if ($x && $filter) {
         foreach(do_list($filter) as $f) {
-            if (empty($txp_sections[$section][$f])) {
+            if (empty($section ? $txp_sections[$section][$f] : array_filter(array_column($txp_sections, $f, 'name')))) {
                 $x = false;
                 break;
             }
