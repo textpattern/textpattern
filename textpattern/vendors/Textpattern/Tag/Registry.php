@@ -59,8 +59,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
-            if ($tag === null && is_string($callback)) {
-                $tag = $callback;
+            if ($tag === null) {
+                $tag = is_string($callback) ? $callback : $callback[1];
             } elseif (is_array($tag)) {
                 list($tag, $atts) = $tag + array(null, null);
             }

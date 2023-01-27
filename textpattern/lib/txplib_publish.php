@@ -40,25 +40,35 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
     global $txp_sections;
 
     is_array($column) or $column = do_list_unique($column);
+    $column = array_intersect($column, array_keys($txp_sections['default']));
+    sort($column);
     $key = $field.'.'.implode('.', $column);
     $not = $not ? 'NOT ' : '';
 
     if (!isset($filterFrontPage[$key])) {
-        $num_sections = count($txp_sections);
-        $field = doSlash($field);
+        $filterFrontPage[$key] = '0';
         $rs = array();
 
-        foreach ($column as $col) {
-            $rs += array_filter(array_column($txp_sections, $col, 'name'));
-        }
+        if ($field) {
+            $num_sections = count($txp_sections);
+            $field = doSlash($field);
 
-        if ($count = count($rs)) {
-            $filterFrontPage[$key] = $count == $num_sections ? '1' : (2*$count < $num_sections ?
-                "$field IN(".quote_list(array_keys($rs), ',').")" :
-                "NOT $field IN(".quote_list(array_keys(array_diff_key($txp_sections, $rs)), ',').")"
-            );
-        } else {
-            $filterFrontPage[$key] = '0';
+            foreach ($column as $col) {
+                $rs += array_filter(array_column($txp_sections, $col, 'name'));
+            }
+
+            if ($count = count($rs)) {
+                $filterFrontPage[$key] = $count == $num_sections ? '1' : (2*$count < $num_sections ?
+                    "$field IN(".quote_list(array_keys($rs), ',').")" :
+                    "NOT $field IN(".quote_list(array_keys(array_diff_key($txp_sections, $rs)), ',').")"
+                );
+            }
+        } elseif($column) {
+            foreach ($column as $col) {
+                $rs[] = is_numeric($txp_sections['default'][$col]) ? $col : "$col > ''";
+            }
+
+            $filterFrontPage[$key] = implode(' AND ', $rs);
         }
     }
 
