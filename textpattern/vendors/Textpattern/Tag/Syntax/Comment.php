@@ -102,50 +102,6 @@ class Comment
     
     // -------------------------------------------------------------
     
-    public static function comments_invite($atts)
-    {
-        global $thisarticle, $is_article_list;
-    
-        extract(lAtts(array(
-            'class'      => __FUNCTION__,
-            'showcount'  => true,
-            'textonly'   => false,
-            'showalways' => false,  // FIXME in crockery. This is only for BC.
-            'wraptag'    => '',
-        ), $atts));
-    
-        assert_article();
-    
-        $comments_invite = empty($thisarticle['comments_invite']) ? get_pref('comments_default_invite') : $thisarticle['comments_invite'];
-        $comments_count = intval($thisarticle['comments_count']);
-        $invite_return = '';
-    
-        if (($thisarticle['annotate'] || $comments_count) && ($showalways || $is_article_list)) {
-            $comments_invite = txpspecialchars($comments_invite);
-            $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
-    
-            if ($textonly) {
-                $invite_return = $comments_invite.$ccount;
-            } else {
-                global $comments_mode;
-                if (!$comments_mode) {
-                    $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" ').$ccount;
-                } else {
-                    $thisid = $thisarticle['thisid'];
-                    $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
-                }
-            }
-    
-            if ($wraptag) {
-                $invite_return = doTag($invite_return, $wraptag, $class);
-            }
-        }
-    
-        return $invite_return;
-    }
-    
-    // -------------------------------------------------------------
-    
     public static function popup_comments($atts, $thing = null)
     {
         extract(lAtts(array('form' => 'comments_display'), $atts));
