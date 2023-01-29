@@ -29,9 +29,8 @@
 
 Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
+    ->register('page_url')
     ->register('css')
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'))
     ->register('output_form')
     ->register('txp_yield', 'yield')
     ->register('txp_if_yield', 'if_yield')
@@ -50,7 +49,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_first', 'if_first_link', 'link')
     ->register('if_last', 'if_last_link', 'link')
     ->register('email')
-    ->register('password_protect')
     ->register('recent_articles')
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'recent_comments'))
     ->register('related_articles')
@@ -117,12 +115,13 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_description')
     ->register('if_article_image')
     ->register('article_image')
-    ->register('search_result_title')
-    ->register('search_result_excerpt')
-    ->register('search_result_url')
-    ->register('search_result_date')
-    ->register('search_result_count')
-    ->register('search_result_count', 'items_count')
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
+    ->register('items_count')
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_index'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_display'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'images'))
@@ -131,6 +130,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_author'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_date'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'if_thumbnail'))
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
     ->register('if_first', 'if_first_image', 'image')
     ->register('if_last', 'if_last_image', 'image')
     ->register('if_comments')
@@ -157,8 +157,10 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_article_section')
     ->register('if_first', 'if_first_section', 'section')
     ->register('if_last', 'if_last_section', 'section')
-    ->register('if_logged_in')
+    ->register(array('\Textpattern\Tag\Syntax\Privacy', 'if_logged_in'))
+    ->register(array('\Textpattern\Tag\Syntax\Privacy', 'password_protect'))
     ->register('if_request')
+    ->register('hide')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
@@ -167,7 +169,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('error_message')
     ->register('error_status')
     ->register('if_status')
-    ->register('page_url')
     ->register('if_different')
     ->register('if_first', 'if_first_article')
     ->register('if_last', 'if_last_article')
@@ -186,7 +187,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('posted', 'file_download_modified', array('type' => 'file', 'time' => 'modified'))
     ->register('if_first', 'if_first_file', 'file')
     ->register('if_last', 'if_last_file', 'file')
-    ->register('hide')
     ->register('rsd')
     ->register('variable')
     ->register('if_variable')
@@ -621,49 +621,6 @@ function email($atts, $thing = null)
     }
 
     return '';
-}
-
-// -------------------------------------------------------------
-
-function password_protect($atts, $thing = null)
-{
-    ob_start();
-
-    extract(lAtts(array(
-        'login' => null,
-        'pass'  => null,
-        'privs' => null,
-    ), $atts));
-
-    if ($pass === null) {
-        $access = ($user = is_logged_in($login)) !== false && ($privs === null || in_list($user['privs'], $privs));
-    } else {
-        $au = serverSet('PHP_AUTH_USER');
-        $ap = serverSet('PHP_AUTH_PW');
-
-        // For PHP as (f)cgi, two rules in htaccess often allow this workaround.
-        $ru = serverSet('REDIRECT_REMOTE_USER');
-
-        if (!$au && !$ap && strpos($ru, 'Basic') === 0) {
-            list($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
-        }
-
-        $access = $au === $login && $ap === $pass;
-    }
-
-    if ($access === false && $pass !== null) {
-        header('WWW-Authenticate: Basic realm="Private"');
-    }
-
-    if ($thing === null) {
-        if ($access === false) {
-            txp_die(gTxt('auth_required'), '401');
-        }
-
-        return '';
-    }
-
-    return parse($thing, $access);
 }
 
 // -------------------------------------------------------------
@@ -1810,45 +1767,6 @@ function if_article_author($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_logged_in($atts, $thing = null)
-{
-    global $txp_groups;
-    static $cache = array();
-
-    extract(lAtts(array(
-        'group' => '',
-        'name'  => '',
-    ), $atts));
-
-    $user = isset($cache[$name]) ? $cache[$name] : ($cache[$name] = is_logged_in($name));
-    $x = false;
-
-    if ($user && $group !== '') {
-        $privs = do_list($group);
-        $groups = array_flip($txp_groups);
-
-        foreach ($privs as &$priv) {
-            if (!is_numeric($priv) && isset($groups[$priv])) {
-                $priv = $groups[$priv];
-            } else {
-                $priv = intval($priv);
-            }
-        }
-
-        $privs = array_unique($privs);
-
-        if (in_array($user['privs'], $privs)) {
-            $x = true;
-        }
-    } else {
-        $x = (bool) $user;
-    }
-
-    return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
 function txp_sandbox($atts = array(), $thing = null)
 {
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
@@ -2282,84 +2200,8 @@ function article_image($atts)
 
 // -------------------------------------------------------------
 
-function search_result_title($atts)
+function items_count($atts)
 {
-    return permlink($atts, '<txp:title />');
-}
-
-// -------------------------------------------------------------
-
-function search_result_excerpt($atts)
-{
-    global $thisarticle, $pretext;
-
-    extract(lAtts(array(
-        'hilight'   => 'strong',
-        'limit'     => 5,
-        'separator' => ' &#8230;',
-    ), $atts));
-
-    assert_article();
-
-    $m = $pretext['m'];
-    $q = $pretext['q'];
-
-    $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
-    $q = $quoted ? trim(trim($q, '"')) : trim($q);
-
-    $result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
-
-    if ($quoted || empty($m) || $m === 'exact') {
-        $regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q, '/').'.{0,50}(?:\s|$)/iu';
-        $regex_hilite = '/('.preg_quote($q, '/').')/i';
-    } else {
-        $regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q, '/')).').{0,50}(?:\s|$)/iu';
-        $regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q, '/')).')/i';
-    }
-
-    preg_match_all($regex_search, $result, $concat);
-    $concat = $concat[0];
-
-    for ($i = 0, $r = array(); $i < min($limit, count($concat)); $i++) {
-        $r[] = trim($concat[$i]);
-    }
-
-    $concat = join($separator.n, $r);
-    $concat = preg_replace('/^[^>]+>/U', '', $concat);
-    $concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
-
-    return ($concat) ? trim($separator.$concat.$separator) : '';
-}
-
-// -------------------------------------------------------------
-
-function search_result_url($atts)
-{
-    global $thisarticle;
-
-    assert_article();
-
-    $l = permlinkurl($thisarticle);
-
-    return permlink($atts, $l);
-}
-
-// -------------------------------------------------------------
-
-function search_result_date($atts)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    assert_article();
-
-    return posted($atts);
-}
-
-// -------------------------------------------------------------
-
-function search_result_count($atts)
-{
-//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);// Deprecate in 4.9
     global $thispage;
 
     if (empty($thispage)) {
@@ -2929,6 +2771,31 @@ function if_article_section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
+function hide($atts = array(), $thing = null)
+{
+    if (!isset($atts['process'])) {
+        return '';
+    }
+
+    global $pretext;
+
+    extract(lAtts(array('process' => null), $atts));
+
+    if (!$process) {
+        return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
+    } elseif (is_numeric($process)) {
+        return abs($process) > $pretext['secondpass'] + 1 ?
+            postpone_process($process) :
+            ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
+    } elseif ($process) {
+        parse($thing);
+    }
+
+    return '';
+}
+
+// -------------------------------------------------------------
+
 function php($atts = null, $thing = null, $priv = null)
 {
     global $is_article_body, $is_form;
@@ -3234,31 +3101,6 @@ function if_plugin($atts, $thing = null)
     $x = empty($name) ? version_compare(get_pref('version'), $version) >= 0 :
         $plugins && in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function hide($atts = array(), $thing = null)
-{
-    if (!isset($atts['process'])) {
-        return '';
-    }
-
-    global $pretext;
-
-    extract(lAtts(array('process' => null), $atts));
-
-    if (!$process) {
-        return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
-    } elseif (is_numeric($process)) {
-        return abs($process) > $pretext['secondpass'] + 1 ?
-            postpone_process($process) :
-            ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
-    } elseif ($process) {
-        parse($thing);
-    }
-
-    return '';
 }
 
 // -------------------------------------------------------------
