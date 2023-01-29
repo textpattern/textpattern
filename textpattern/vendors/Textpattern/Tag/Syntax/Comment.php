@@ -541,14 +541,14 @@ class Comment
         extract(lAtts(array('link' => 1), $atts));
     
         assert_comment();
-        isset($encoder) or $encoder = Txp::get('\Textpattern\Mail\Encode');
+        isset($encoder) or $encoder = \Txp::get('\Textpattern\Mail\Encode');
     
         extract($thiscomment);
     
         $name = txpspecialchars($name);
     
         if ($link) {
-            $web = comment_web();
+            $web = self::comment_web();
             $nofollow = empty($prefs['comment_nofollow']) ? '' : ' rel="nofollow"';
     
             if (!empty($web)) {

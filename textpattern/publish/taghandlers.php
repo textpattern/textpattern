@@ -140,9 +140,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_comments_disallowed')
     ->register('if_individual_article')
     ->register('if_article_list')
-    ->register(array('\Textpattern\Tag\Syntax\Meta', 'renderKeywords'), 'meta_keywords')
-    ->register(array('\Textpattern\Tag\Syntax\Meta', 'renderDescription'), 'meta_description')
-    ->register(array('\Textpattern\Tag\Syntax\Meta', 'renderAuthor'), 'meta_author')
+    ->register('meta_keywords')
+    ->register('meta_description')
+    ->register('meta_author')
     ->register('permlink')
     ->register('lang')
     ->register('breadcrumb')
@@ -2493,6 +2493,107 @@ function if_description($atts, $thing = null)
     $x = !empty($content);
 
     return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+/**
+ * Returns article, section or category meta description info.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
+
+function meta_description($atts)
+{
+    extract(lAtts(array(
+        'escape' => true,
+        'format' => 'meta', // or empty for raw value
+        'type'   => null,
+    ), $atts));
+
+    $out = '';
+    $content = getMetaDescription($type);
+
+    if ($content) {
+        $content = ($escape === true) ? txpspecialchars($content) : txp_escape($escape, $content);
+
+        if ($format === 'meta') {
+            $out = '<meta name="description" content="'.$content.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
+}
+
+// -------------------------------------------------------------
+
+/**
+ * Returns article keywords.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
+
+function meta_keywords($atts)
+{
+    global $id_keywords;
+
+    extract(lAtts(array(
+        'escape'    => true,
+        'format'    => 'meta', // or empty for raw value
+        'separator' => null,
+    ), $atts));
+
+    $out = '';
+
+    if ($id_keywords) {
+        $content = ($escape === true) ? txpspecialchars($id_keywords) : txp_escape($escape, $id_keywords);
+
+        if ($separator !== null) {
+            $content = implode($separator, do_list($content));
+        }
+
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="keywords" content="'.$content.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
+}
+
+// -------------------------------------------------------------
+
+function meta_author($atts)
+{
+    global $id_author;
+
+    extract(lAtts(array(
+        'escape' => true,
+        'format' => 'meta', // or empty for raw value
+        'title'  => 0,
+    ), $atts));
+
+    $out = '';
+
+    if ($id_author) {
+        $display_name = ($title) ? get_author_name($id_author) : $id_author;
+        $display_name = ($escape === true) ? txpspecialchars($display_name) : txp_escape($escape, $display_name);
+
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="author" content="'.$display_name.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+        } else {
+            $out = $display_name;
+        }
+    }
+
+    return $out;
 }
 
 // -------------------------------------------------------------
