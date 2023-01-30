@@ -110,8 +110,6 @@ class Search
     {
         trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
     
-        assert_article();
-    
         return items_count($atts);
     }    
 }
