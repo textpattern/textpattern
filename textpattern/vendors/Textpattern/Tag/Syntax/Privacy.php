@@ -22,7 +22,7 @@
  */
 
 /**
- * Generates comment tags.
+ * Privacy-related tags.
  *
  * @since  4.9.0
  */

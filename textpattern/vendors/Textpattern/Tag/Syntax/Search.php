@@ -22,7 +22,7 @@
  */
 
 /**
- * Generates comment tags.
+ * Search result tags.
  *
  * @since  4.9.0
  */
