@@ -45,7 +45,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_description'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_category'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_id'))
-    ->register('posted', 'link_date', array('type' => 'link', 'time' => 'date'))
+    ->register('posted', array('link_date', array('type' => 'link', 'time' => 'date')))
     ->register('if_first', 'if_first_link', 'link')
     ->register('if_last', 'if_last_link', 'link')
     ->register('email')
@@ -72,8 +72,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_url_title')
     ->register('if_article_id')
     ->register('posted')
-    ->register('posted', 'modified', array('time' => 'modified'))
-    ->register('posted', 'expires', array('time' => 'expires'))
+    ->register('posted', array('modified', array('time' => 'modified')))
+    ->register('posted', array('expires', array('time' => 'expires')))
     ->register('if_expires')
     ->register('if_expired')
     ->register('comments_invite')
@@ -97,7 +97,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_web'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_message'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_anchor'))
-    ->register('posted', 'comment_time', array('type' => 'comment', 'time' => 'time'))
+    ->register('posted', array('comment_time', array('type' => 'comment', 'time' => 'time')))
     ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
     ->register('author')
     ->register('author_email')
@@ -183,8 +183,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_author'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_downloads'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_description'))
-    ->register('posted', 'file_download_created', array('type' => 'file', 'time' => 'created'))
-    ->register('posted', 'file_download_modified', array('type' => 'file', 'time' => 'modified'))
+    ->register('posted', array('file_download_created', array('type' => 'file', 'time' => 'created')))
+    ->register('posted', array('file_download_modified', array('type' => 'file', 'time' => 'modified')))
     ->register('if_first', 'if_first_file', 'file')
     ->register('if_last', 'if_last_file', 'file')
     ->register('rsd')
@@ -207,7 +207,7 @@ function page_title($atts)
 
     extract(lAtts(array('separator' => ' | '), $atts));
 
-    $appending = txpspecialchars($separator.$sitename);
+    $appending = $separator === '' ? txpspecialchars($separator.$sitename) : '';
     $parent_id = (int) $parentid;
     $pageStr = ($pg ? $separator.gTxt('page').' '.$pg : '');
 
@@ -1492,27 +1492,30 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts, $thing = null, $options = array())
+function posted($atts, $thing = null)
 {
     global $id, $c, $pg, $dateformat, $archive_dateformat, $comments_dateformat;
-    static $defaults = array('time' => 'posted', 'type' => 'article');
 
     extract(lAtts(array(
         'calendar' => '',
         'format'   => '',
         'gmt'      => '',
         'lang'     => '',
-    ), $atts) + $options + $defaults);
+        'time'     => 'posted',
+        'type' => 'article',
+    ), $atts));
 
-    if (!is_int($time)) {
-        global ${'this'.$type};
-        assert_context($type);
+    assert_context($type);
+    global ${'this'.$type};
 
-        if (empty(${'this'.$type}[$time])) {
-            return '';
-        }
+    if ($time === true) {
+        $time = time();
+    } elseif (isset(${'this'.$type}[$time])) {
+        $time = ${'this'.$type}[$time];
+    }
 
-        $time = (int)${'this'.$type}[$time];
+    if (!is_numeric($time) && ($time = strtotime($time)) === false) {
+        return '';
     }
 
     if ($calendar) {
