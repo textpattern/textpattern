@@ -5,6 +5,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
 * Fixed: Compiled plugins upload on PHP 5.
@@ -21,9 +22,16 @@ Changes in 4.9.0 (upcoming)
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: Trailing slash URL preference.
+* Added: File download header preference.
+* Added: <txp:(article_)image /> accepts extra attributes (see #1738).
+* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: Can no longer delete in-use languages.
+* Changed: Less collision-prone custom fields name processing.
+* Changed: Do not generate empty syndication feeds for feedless sections.
 * Developer: Introduce UI class library for building interface components.
+* Developer: Some of the lesser-used tags are loaded on demand from their class
+  to save memory. Plugins must call them via processTags() function.
 * jQuery 3.6.3.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
