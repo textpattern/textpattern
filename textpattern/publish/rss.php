@@ -56,7 +56,7 @@ function rss()
         $in_rss = array_intersect_key($in_rss, array_fill_keys($section, null));
     }
 
-    if ((!$area || $area == 'article') && empty($in_rss)) {
+    if ($rss_how_many == 0 || (!$area || $area == 'article') && empty($in_rss)) {
         txp_die(gTxt('404_not_found'), 404);
     }
 
@@ -99,7 +99,7 @@ function rss()
     $limit = ($limit) ? $limit : $rss_how_many;
     $limit = intval(min($limit, max(100, $rss_how_many)));
 
-    if (!$area or $area == 'article') {
+    if (!$area || $area == 'article') {
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
 
