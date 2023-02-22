@@ -1912,6 +1912,30 @@ function install_textpack($textpack, $add_new_langs = false)
 }
 
 /**
+ * Checks a version string sits between a pair of min/max versions
+ *
+ * @param      string $minVer   Minimum version string (>=)
+ * @param      string $maxVer   Maximum version string (<=)
+ * @param      string compareTo The value to compare to. Defaults to txp_version
+ * @return     bool
+ * @package    Plugin
+ */
+
+function check_compatibility($minVer, $maxVer, $compareTo = txp_version)
+{
+    // Need to compare on an even playing field for $maxVer.
+    $max = explode('.', $maxVer);
+    $maxParts = count($max);
+    $thisVer = explode('.', $compareTo, ($maxParts === 2 ? -1 : 0));
+    $compareMax = implode('.', $thisVer);
+
+    $mn = $minVer ? version_compare($compareTo, $minVer, '>=') : true;
+    $mx = $maxVer ? version_compare($compareMax, $maxVer, '<=') : true;
+
+    return $mn && $mx;
+}
+
+/**
  * Generate a ciphered token.
  *
  * The token is reproducible, unique among sites and users, expires later.

@@ -311,6 +311,21 @@ if (!defined('PLUGINPATH')) {
     define('PLUGINPATH', $admin_path.DS.'plugins');
 }
 
+if (!defined('PLUGIN_REPO_URL')) {
+    /**
+     * Remote plugin repository. Must have a trailing slash.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Plugin
+     * @since   4.9.0
+     * @example
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins/');
+     */
+
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com/plugins/');
+}
+
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
      * Sets accepted protocols for HTTP referrer header.

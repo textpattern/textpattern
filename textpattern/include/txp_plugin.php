@@ -77,6 +77,13 @@ function plugin_list($message = '')
             'search_method',
     )));
 
+    $now = time();
+    $lastCheck = json_decode(get_pref('last_plugin_update_check', ''), true);
+
+    if (empty($lastCheck) || $now > ($lastCheck['when'] + (60 * 60))) {
+        $lastCheck = checkPluginUpdates();
+    }
+
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
     } else {
@@ -282,8 +289,7 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
+                    href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
@@ -300,7 +306,11 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join($manage) : '-';
+            if (!empty($lastCheck['plugins'][$name])) {
+                $manage[] = href(gTxt('plugin_upgrade', array('version' => $lastCheck['plugins'][$name]['version'], 'type' => $lastCheck['plugins'][$name]['type'])), $lastCheck['plugins'][$name]['endpoint']);
+            }
+
+            $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
             $edit_url = array(
                 'event'         => 'plugin',
                 'step'          => 'plugin_edit',
@@ -332,7 +342,11 @@ function plugin_list($message = '')
                     )) : $author), '', 'txp-list-col-author'
                 ).
                 td(
-                    $version, '', 'txp-list-col-version'
+                    (!empty($lastCheck['plugins'][$name])
+                        ? href($version.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.$name, array(
+                        'rel'    => 'external',
+                        'target' => '_blank',))
+                        : $version), '', 'txp-list-col-version'
                 ).
                 td(
                     ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified'
@@ -726,6 +740,7 @@ function plugin_install()
     }
 
     Txp::get('\Textpattern\Security\Token')->remove('plugin_verify', $txpPlugin->computeRef($name), '2 HOUR');
+    checkPluginUpdates();
 
     plugin_list($message);
 }
@@ -951,4 +966,87 @@ function plugin_multi_edit()
     $message = gTxt('plugin_'.($method == 'delete' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
 
     plugin_list($message);
+}
+
+/**
+ * Checks for Textpattern plugin updates.
+ *
+ * @return  array|null When updates are found, an array of metadata about each installed plugin
+ */
+
+function checkPluginUpdates()
+{
+    static $plugins;
+
+    $endpoint = PLUGIN_REPO_URL.'json';
+
+    // Can't use the globals, since plugins aren't loaded on the Plugins panel.
+    if (empty($plugins)) {
+        $rs = safe_rows('name, version', 'txp_plugin', '1');
+
+        foreach ($rs as $a) {
+            $n = array_shift($a);
+            $plugins[$n] = $a['version'];
+        }
+    }
+
+    $lastCheck = array(
+        'when'     => time(),
+        'msg'      => '',
+        'plugins'  => array(),
+        'response' => true,
+    );
+
+    if (OPENSSL_VERSION_NUMBER < REQUIRED_OPENSSL_VERSION) {
+        $lastCheck['msg'] = 'problem_connecting_plugin_server';
+        $lastCheck['response'] = false;
+    } else {
+        if (function_exists('curl_version')) {
+            $ch = curl_init($endpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $contents = curl_exec($ch);
+        } else {
+            $contents = file_get_contents($endpoint);
+        }
+
+        $allPlugins = json_decode($contents, true);
+
+        if (is_array($allPlugins)) {
+            foreach ($allPlugins as $pluginSet) {
+                foreach ($pluginSet as $plugin) {
+                    if ($plugins && array_key_exists($plugin['name'], $plugins)) {
+                        // Check version dependencies.
+                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'stable'));
+                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'beta'));
+                        // @todo: grab supersededBy so it can be flagged in the UI.
+                    }
+                }
+            }
+        }
+    }
+
+    set_pref('last_plugin_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+
+    return $lastCheck;
+}
+
+function pluginDependency($plugins, $plugin, $type = 'stable')
+{
+    $out = array();
+
+    if (!empty($plugin[$type])) {
+        $txpVersion = get_pref('version');
+        $thisPluginVersion = !empty($plugin[$type]['version']) ? $plugin[$type]['version'] : 0;
+        $minTxpVersion = !empty($plugin[$type]['verifiedMinTxpCompatibility']) ? $plugin[$type]['verifiedMinTxpCompatibility'] : 0;
+        $maxTxpVersion = !empty($plugin[$type]['verifiedMaxTxpCompatibility']) ? $plugin[$type]['verifiedMaxTxpCompatibility'] : 0;
+
+        if ((version_compare($plugins[$plugin['name']], $thisPluginVersion) < 0)
+                && (check_compatibility($minTxpVersion, $maxTxpVersion))) {
+            $out[$plugin['name']]['endpoint'] = $plugin[$type]['endpointUrl'];
+            $out[$plugin['name']]['version'] = $plugin[$type]['version'];
+            $out[$plugin['name']]['type'] = $type;
+        }
+    }
+
+    return $out;
 }
