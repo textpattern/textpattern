@@ -307,7 +307,9 @@ function plugin_list($message = '')
             }
 
             if (!empty($lastCheck['plugins'][$name])) {
-                $manage[] = href(gTxt('plugin_upgrade', array('version' => $lastCheck['plugins'][$name]['version'], 'type' => $lastCheck['plugins'][$name]['type'])), $lastCheck['plugins'][$name]['endpoint']);
+                foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
+                    $manage[] = href(gTxt('plugin_upgrade', array('version' => $pluginMeta['version'], 'type' => $pluginType)), $pluginMeta['endpoint']);
+                }
             }
 
             $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
@@ -1016,8 +1018,12 @@ function checkPluginUpdates()
                 foreach ($pluginSet as $plugin) {
                     if ($plugins && array_key_exists($plugin['name'], $plugins)) {
                         // Check version dependencies.
-                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'stable'));
-                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'beta'));
+                        if ($ret = pluginDependency($plugins, $plugin, 'stable')) {
+                            $lastCheck['plugins'][$plugin['name']]['stable'] = $ret;
+                        }
+                        if ($ret = pluginDependency($plugins, $plugin, 'beta')) {
+                            $lastCheck['plugins'][$plugin['name']]['beta'] = $ret;
+                        }
                         // @todo: grab supersededBy so it can be flagged in the UI.
                     }
                 }
@@ -1042,9 +1048,8 @@ function pluginDependency($plugins, $plugin, $type = 'stable')
 
         if ((version_compare($plugins[$plugin['name']], $thisPluginVersion) < 0)
                 && (check_compatibility($minTxpVersion, $maxTxpVersion))) {
-            $out[$plugin['name']]['endpoint'] = $plugin[$type]['endpointUrl'];
-            $out[$plugin['name']]['version'] = $plugin[$type]['version'];
-            $out[$plugin['name']]['type'] = $type;
+            $out['endpoint'] = $plugin[$type]['endpointUrl'];
+            $out['version'] = $plugin[$type]['version'];
         }
     }
 
