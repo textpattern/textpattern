@@ -313,17 +313,17 @@ if (!defined('PLUGINPATH')) {
 
 if (!defined('PLUGIN_REPO_URL')) {
     /**
-     * Remote plugin repository. Must have a trailing slash.
+     * Remote plugin repository.
      *
      * This constant can be overridden from the config.php.
      *
      * @package Plugin
      * @since   4.9.0
      * @example
-     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins/');
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins');
      */
 
-    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com/plugins/');
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com');
 }
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {

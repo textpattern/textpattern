@@ -343,7 +343,7 @@ function plugin_list($message = '')
                 ).
                 td(
                     (!empty($lastCheck['plugins'][$name])
-                        ? href($version.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.$name, array(
+                        ? href($version.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
                         'rel'    => 'external',
                         'target' => '_blank',))
                         : $version), '', 'txp-list-col-version'
@@ -978,7 +978,7 @@ function checkPluginUpdates()
 {
     static $plugins;
 
-    $endpoint = PLUGIN_REPO_URL.'json';
+    $endpoint = PLUGIN_REPO_URL.'/all';
 
     // Can't use the globals, since plugins aren't loaded on the Plugins panel.
     if (empty($plugins)) {
