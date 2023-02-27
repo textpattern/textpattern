@@ -241,14 +241,14 @@ class DB
         }
 
         // Suppress screen output from mysqli_real_connect().
-        $error_reporting = error_reporting();
-        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
-
-        if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
+        try {
+            $error_reporting = error_reporting();
+            error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+            mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags);
+            error_reporting($error_reporting);
+        } catch (Exception $e) {
             die(db_down());
         }
-
-        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
