@@ -810,7 +810,7 @@ function safe_drop($table, $debug = false)
  * @return bool         True if all nominated tables exist
  * @since 4.9.0
  * @example
- * if (safe_exists('myTable, myOtherTable'))
+ * if (!safe_exists('myTable, myOtherTable'))
  * {
  *     // Create tables here;
  * }

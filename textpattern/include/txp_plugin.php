@@ -87,7 +87,7 @@ function plugin_list($message = '')
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
+        if (!in_array($sort, array('name', 'status', 'author', 'version', 'load_order'))) {
             $sort = 'name';
         }
 
@@ -230,23 +230,19 @@ function plugin_list($message = '')
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'author', 'author', 'plugin', true, $switch_dir, '', '',
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
-                ).
-                column_head(
                     'version', 'version', 'plugin', true, $switch_dir, '', '',
                         (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
-                    'modified', 'modified', 'plugin', true, $switch_dir, '', '',
-                        (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
+                    'active', 'status', 'plugin', true, $switch_dir, '', '',
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                ).
+                column_head(
+                    'author', 'author', 'plugin', true, $switch_dir, '', '',
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 hCell(gTxt(
                     'description'), '', ' class="txp-list-col-description" scope="col"'
-                ).
-                column_head(
-                    'active', 'status', 'plugin', true, $switch_dir, '', '',
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
                     'order', 'load_order', 'plugin', true, $switch_dir, '', '',
@@ -307,7 +303,9 @@ function plugin_list($message = '')
             }
 
             if (!empty($lastCheck['plugins'][$name])) {
-                $manage[] = href(gTxt('plugin_upgrade', array('version' => $lastCheck['plugins'][$name]['version'], 'type' => $lastCheck['plugins'][$name]['type'])), $lastCheck['plugins'][$name]['endpoint']);
+                foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
+                    $manage[] = href(gTxt('plugin_upgrade', array('version' => $pluginMeta['version'], 'type' => $pluginType)), $pluginMeta['endpoint']);
+                }
             }
 
             $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
@@ -336,26 +334,23 @@ function plugin_list($message = '')
                     href($name, $edit_url, array('title' => gTxt('edit'))), '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
+                    (!empty($lastCheck['plugins'][$name])
+                        ? href($version.($modified ? sp.span(gTxt('modified'), array('class' => 'warning')) : '').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
+                        'rel'    => 'external',
+                        'target' => '_blank',))
+                        : $version), '', 'txp-list-col-version'
+                ).
+                td(
+                    $statusDisplay, '', 'txp-list-col-status'
+                ).
+                td(
                     ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )) : $author), '', 'txp-list-col-author'
                 ).
                 td(
-                    (!empty($lastCheck['plugins'][$name])
-                        ? href($version.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.$name, array(
-                        'rel'    => 'external',
-                        'target' => '_blank',))
-                        : $version), '', 'txp-list-col-version'
-                ).
-                td(
-                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified'
-                ).
-                td(
                     $description, '', 'txp-list-col-description'
-                ).
-                td(
-                    $statusDisplay, '', 'txp-list-col-status'
                 ).
                 td(
                     $load_order, '', 'txp-list-col-load-order'
@@ -978,7 +973,7 @@ function checkPluginUpdates()
 {
     static $plugins;
 
-    $endpoint = PLUGIN_REPO_URL.'json';
+    $endpoint = PLUGIN_REPO_URL.'/all';
 
     // Can't use the globals, since plugins aren't loaded on the Plugins panel.
     if (empty($plugins)) {
@@ -1016,8 +1011,12 @@ function checkPluginUpdates()
                 foreach ($pluginSet as $plugin) {
                     if ($plugins && array_key_exists($plugin['name'], $plugins)) {
                         // Check version dependencies.
-                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'stable'));
-                        $lastCheck['plugins'] = array_merge($lastCheck['plugins'], pluginDependency($plugins, $plugin, 'beta'));
+                        if ($ret = pluginDependency($plugins, $plugin, 'stable')) {
+                            $lastCheck['plugins'][$plugin['name']]['stable'] = $ret;
+                        }
+                        if ($ret = pluginDependency($plugins, $plugin, 'beta')) {
+                            $lastCheck['plugins'][$plugin['name']]['beta'] = $ret;
+                        }
                         // @todo: grab supersededBy so it can be flagged in the UI.
                     }
                 }
@@ -1042,9 +1041,8 @@ function pluginDependency($plugins, $plugin, $type = 'stable')
 
         if ((version_compare($plugins[$plugin['name']], $thisPluginVersion) < 0)
                 && (check_compatibility($minTxpVersion, $maxTxpVersion))) {
-            $out[$plugin['name']]['endpoint'] = $plugin[$type]['endpointUrl'];
-            $out[$plugin['name']]['version'] = $plugin[$type]['version'];
-            $out[$plugin['name']]['type'] = $type;
+            $out['endpoint'] = $plugin[$type]['endpointUrl'];
+            $out['version'] = $plugin[$type]['version'];
         }
     }
 
