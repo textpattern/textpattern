@@ -20,6 +20,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
+* Added: Compatible plugin upgrades directly from the Plugins panel.
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
