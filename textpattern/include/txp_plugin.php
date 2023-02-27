@@ -285,7 +285,8 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
-                    href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
@@ -304,11 +305,12 @@ function plugin_list($message = '')
 
             if (!empty($lastCheck['plugins'][$name])) {
                 foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
-                    $manage[] = href(gTxt('plugin_upgrade', array('version' => $pluginMeta['version'], 'type' => $pluginType)), $pluginMeta['endpoint']);
+                    $manage[] = sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('plugin_upgrade', array('version' => $pluginMeta['version'], 'type' => $pluginType)), $pluginMeta['endpoint']);
                 }
             }
 
-            $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
+            $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = array(
                 'event'         => 'plugin',
                 'step'          => 'plugin_edit',
