@@ -632,16 +632,10 @@ function recent_articles($atts, $thing = null)
 
     $atts += array(
         'break'    => 'br',
-        'category' => '',
         'class'    => __FUNCTION__,
         'form'     => '',
         'label'    => gTxt('recent_articles'),
         'labeltag' => '',
-        'limit'    => 10,
-        'offset'   => 0,
-        'section'  => '',
-        'sort'     => 'Posted DESC',
-        'wraptag'  => '',
         'no_widow' => '',
     );
 
@@ -658,22 +652,24 @@ function recent_articles($atts, $thing = null)
 
 function related_articles($atts, $thing = null)
 {
-    global $thisarticle, $prefs;
+    global $thisarticle, $prefs, $txp_atts;
 
     assert_article();
 
-    $atts += array(
+    $globals = array(
         'break'    => br,
         'class'    => __FUNCTION__,
+        'label'    => gTxt('related_articles'),
+        'labeltag' => '',
+    );
+
+    $atts += $globals + array(
         'form'     => '',
-        'limit'    => 10,
-        'offset'   => 0,
         'match'    => 'Category',
         'no_widow' => '',
-        'section'  => '',
-        'sort'     => 'Posted DESC',
-        'wraptag'  => '',
     );
+
+    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globals;
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
@@ -828,7 +824,7 @@ function category_list($atts, $thing = null, $cats = null)
         'offset'       => '',
         'parent'       => '',
         'section'      => '',
-        'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
+        'sort'         => isset($atts['categories']) ? '' : (!empty($atts['parent']) ? 'lft' : 'name'),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -3548,8 +3544,10 @@ function txp_wraptag($atts, $thing = '')
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
-            $thing = ($breakby === true ? do_list($thing) : explode($breakby, $thing));
+            $thing = $breakby === true ? do_list($thing) : explode($breakby, $thing);
         }
+
+        isset($trim) or !empty($escape) or $trim = true;
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {

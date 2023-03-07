@@ -536,26 +536,26 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
     if ($out === false) {
         trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
         $out = '';
-    }
-
-    if ($txp_tag === null && !empty($txp_atts['not'])) {
-        $out = $out ? '' : '1';
-    } elseif (isset($txp_atts['$query']) && $txp_tag !== false) {
-        $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
-    }
-
-    unset($txp_atts['not'], $txp_atts['evaluate'], $txp_atts['$query']);
-
-    if ($txp_atts && $txp_tag !== false) {
-        $pretext['_txp_atts'] = true;
-
-        foreach ($txp_atts as $attr => &$val) {
-            if (isset($val) && isset($globals[$attr])) {
-                $out = $registry->processAttr($attr, $split, $out);
-            }
+    } else {
+        if ($txp_tag === null && !empty($txp_atts['not'])) {
+            $out = $out ? '' : '1';
+        } elseif (isset($txp_atts['$query']) && $txp_tag !== false) {
+            $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
         }
 
-        $pretext['_txp_atts'] = false;
+        unset($txp_atts['not'], $txp_atts['evaluate'], $txp_atts['$query']);
+
+        if ($txp_atts && $txp_tag !== false) {
+            $pretext['_txp_atts'] = true;
+
+            foreach ($txp_atts as $attr => &$val) {
+                if (isset($val) && isset($globals[$attr])) {
+                    $out = $registry->processAttr($attr, $txp_atts, $out);
+                }
+            }
+
+            $pretext['_txp_atts'] = false;
+        }
     }
 
     $txp_atts = $old_atts;
