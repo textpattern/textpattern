@@ -5861,7 +5861,7 @@ function send_xml_response($response = array())
     $default_response = array('http-status' => '200 OK');
 
     // Backfill default response properties.
-    $response = $response + $default_response;
+    $response += $default_response;
 
     txp_status_header($response['http-status']);
     $out[] = '<textpattern>';

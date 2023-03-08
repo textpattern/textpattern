@@ -1174,7 +1174,7 @@ function next_title()
     }
 
     if (!isset($thisarticle['>'])) {
-        $thisarticle = $thisarticle + getNextPrev();
+        $thisarticle += getNextPrev();
     }
 
     if ($thisarticle['>'] !== false) {
@@ -1195,7 +1195,7 @@ function prev_title()
     }
 
     if (!isset($thisarticle['<'])) {
-        $thisarticle = $thisarticle + getNextPrev();
+        $thisarticle += getNextPrev();
     }
 
     if ($thisarticle['<'] !== false) {

@@ -371,7 +371,7 @@ function gTxtScript($var, $atts = array(), $route = array())
         }
 
         $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
-        $textarray_script = $textarray_script + array_combine((array) $var, $data);
+        $textarray_script += array_combine((array) $var, $data);
     }
 }
 
