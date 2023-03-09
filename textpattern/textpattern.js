@@ -647,9 +647,9 @@ textpattern.Relay = {
             return $(this).trigger(event, data);
         }
 
-        textpattern.Relay.timeouts[event] = setTimeout($.proxy(function() {
+        textpattern.Relay.timeouts[event] = setTimeout(function() {
             return textpattern.Relay.callback(event, data);
-        }, this), parseInt(timeout, 10));
+        }.bind(this), parseInt(timeout, 10));
     },
 
     /**
