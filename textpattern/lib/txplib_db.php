@@ -1458,7 +1458,12 @@ function get_tree($atts = array(), $tbl = 'txp_category')
 
         $cache[$hash][''] = array_filter($cache[$hash]['']);
     }
-
+/*
+    if (isset($atts['limit']) && is_numeric($atts['limit'])) {
+        $count = count($cache[$hash]['']);
+        $atts['limit'] = $limit = $limit - $count;
+    }
+*/
     $out = array();
 
     foreach ($cache[$hash][$root] as $name => $cat) {
@@ -1468,7 +1473,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
             $out[$name] = $cat;
             $out[$name]['level'] = $level - 1;
 
-            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 &&
+            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 && //(int)$limit > 0 &&
                 $nodes = get_tree(array(
                     'parent'  => $name,
                     'exclude' => array_merge($exclude, array($name))
@@ -1494,7 +1499,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
         }
     }
 
-    return $out;
+    return $out;//array_slice($out, 0, (int)$limit);
 }
 
 /**

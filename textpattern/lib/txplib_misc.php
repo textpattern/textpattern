@@ -5932,11 +5932,15 @@ function send_json_response($out = '')
         $headers_sent = true;
     }
 
-    if (!is_string($out)) {
-        $out = json_encode($out, TEXTPATTERN_JSON);
+    if ($out instanceof mysqli_result) {
+        $rs = array();
+
+        while ($a = nextRow($out))  {
+          $rs[]=$a;
+        }
     }
 
-    echo $out;
+    echo json_encode(isset($rs) ? $rs : $out, TEXTPATTERN_JSON);
 }
 
 /**
