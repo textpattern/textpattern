@@ -2163,10 +2163,10 @@ function article_image($atts)
                 continue;
             }
 
-            $width !== '' or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
-            $height !== '' or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+            $w = $width !== '' ? $width : $rs[$thumbnail ? 'thumb_w' :'w'];
+            $h = $height !== '' ? $height : $rs[$thumbnail ? 'thumb_h' :'h'];
 
-            extract($rs);
+            extract($rs, EXTR_SKIP);
 
             if ($title === true) {
                 $title = $caption;
@@ -2176,6 +2176,8 @@ function article_image($atts)
                 '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
                 ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
         } else {
+            $w = $width !== '' ? $width : 0;
+            $h = $height !== '' ? $height : 0;
             $img = '<img src="'.txpspecialchars($image).'" alt=""'.
                 ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
         }
@@ -2187,8 +2189,8 @@ function article_image($atts)
         $img .=
             (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
             (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($width ? ' width="'.(int) $width.'"' : '').
-            ($height ? ' height="'.(int) $height.'"' : '').
+            ($w ? ' width="'.(int) $w.'"' : '').
+            ($h ? ' height="'.(int) $h.'"' : '').
             $extAtts.
             (get_pref('doctype') === 'html5' ? '>' : ' />');
 
