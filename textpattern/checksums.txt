@@ -32,7 +32,6 @@
 /lib/admin_config.php: 0d9f9e8d61eb0dcf297d325decd0faef
 /lib/class.thumb.php: 86dd117ccde53057fb2145ded4dd555d
 /lib/class.trace.php: 055e3bc1f8d3217aec152fa7e6216b1d
-/lib/classTextile.php: bc46f6df89cd387cc70bd112ff640b04
 /lib/constants.php: 643af654ba98b9566ffb667cbccfef98
 /lib/IXRClass.php: a1b525b4a9ed12dcb5677d5232a3d92e
 /lib/PasswordHash.php: 66a8aa4b2d6e0527877a797907efc035
