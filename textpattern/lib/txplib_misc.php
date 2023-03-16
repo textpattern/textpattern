@@ -6293,9 +6293,3 @@ function txp_hash($thing)
 {
     return strlen($thing) < TEXTPATTERN_HASH_LENGTH ? $thing : hash(TEXTPATTERN_HASH_ALGO, $thing);
 }
-
-/*** Polyfills ***/
-
-if (!function_exists('array_column')) {
-    include txpath.'/lib/array_column.php';
-}
