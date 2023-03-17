@@ -85,6 +85,9 @@ function prefs_save()
 
     $post = stripPost();
 
+    // Let plugins alter their prefs
+    callback_event_ref('prefs', 'save', 0, $post);
+
     if (isset($post['tempdir']) && empty($post['tempdir'])) {
         $post['tempdir'] = find_temp_dir();
     }

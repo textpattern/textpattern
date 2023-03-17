@@ -1709,7 +1709,7 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
             // dereference all arguments. Side effect: callback handler
             // *must* be ordinary function, *must not* be class method in
             // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
-            $return_value[] = $c($event, $step, $data, $options);
+            $return_value[] = $c($event, $step, $data, $options); // call_user_func_array($c, array($event, $step, &$data, &$options))?
         } elseif ($production_status == 'debug') {
             trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
