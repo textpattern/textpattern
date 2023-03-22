@@ -451,6 +451,17 @@ class Plugin
     }
 
     /**
+     * Revert a plugin to its initial (last installed) state.
+     *
+     * @param string $name  Plugin name
+     */
+
+    public function revert($name)
+    {
+        safe_update('txp_plugin', "code = code_restore", "name = '".doSlash($name)."'");
+    }
+
+    /**
      * Install/update a plugin Textpack.
      *
      * The process may be intercepted (for example, to fetch data from the
@@ -702,7 +713,7 @@ class Plugin
      *
      * @param  string $hash The passed hash to compare, from which the selector is extracted
      * @param  string $src  Path to a plugin or string plugin text
-     * @return true|string  Error message if something was in valid, otherwise true
+     * @return true|string  Error message if something was invalid, otherwise true
      */
 
     public function verifyToken($hash, $src = null)

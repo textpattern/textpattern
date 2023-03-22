@@ -913,6 +913,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => $orders,
         ),
         'update'       => gTxt('update_from_disk'),
+        'coderevert'   => gTxt('revert_to_last_installed'),
         'delete'       => array(
             'label' => gTxt('delete'),
             'html' => checkbox2('sync', gps('sync'), 0, 'sync').n.
@@ -957,6 +958,11 @@ function plugin_multi_edit()
         case 'update':
             foreach ($selected as $name) {
                 $plugin->install($plugin->read($name));
+            }
+            break;
+        case 'coderevert':
+            foreach ($selected as $name) {
+                $plugin->revert($name);
             }
             break;
     }
