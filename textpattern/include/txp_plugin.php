@@ -327,6 +327,7 @@ function plugin_list($message = '')
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
                 : $statusLink;
+            $showModified = ($modified ? sp.span(gTxt('modified'), array('class' => 'warning')) : '');
 
             $contentBlock .= tr(
                 td(
@@ -337,10 +338,10 @@ function plugin_list($message = '')
                 ).
                 td(
                     (!empty($lastCheck['plugins'][$name])
-                        ? href($version.($modified ? sp.span(gTxt('modified'), array('class' => 'warning')) : '').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
+                        ? href($version.$showModified.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
                         'rel'    => 'external',
                         'target' => '_blank',))
-                        : $version), '', 'txp-list-col-version'
+                        : $version.$showModified), '', 'txp-list-col-version'
                 ).
                 td(
                     $statusDisplay, '', 'txp-list-col-status'
