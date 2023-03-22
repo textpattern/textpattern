@@ -754,8 +754,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
         }
 
-        if (!empty($GLOBALS['ID'])) {
-            $response[] = "if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=article&ID=$ID')}";
+        if (!empty($GLOBALS['ID']) && $GLOBALS['ID'] != gps('ID')) {
+            $token = form_token();
+            $response[] = "if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=article&ID=$ID&_txp_token=$token')}";
         }
 
         $response = array_merge($response, updateVolatilePartials($partials));
