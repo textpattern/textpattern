@@ -448,10 +448,14 @@ class Plugin
     {
         $order = min(max(intval($order), 1), 9);
         safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
+
+        $plugin = $this->read($name);
+        $plugin['order'] = $order;
+        $this->updateFile($name, $plugin);
     }
 
     /**
-     * Revert a plugin to its initial (last installed) state.
+     * Revert a plugin's code to its initial (last installed) state.
      *
      * @param string $name  Plugin name
      */
@@ -459,6 +463,10 @@ class Plugin
     public function revert($name)
     {
         safe_update('txp_plugin', "code = code_restore", "name = '".doSlash($name)."'");
+        $code = fetch('code_restore', 'txp_plugin', 'name', $name);
+        $plugin = $this->read($name);
+        $plugin['code'] = $code;
+        $this->updateFile($name, $plugin);
     }
 
     /**
@@ -622,6 +630,41 @@ class Plugin
         }
 
         return file_put_contents($dir.DS.$filename.'.php', '<?php'.n.$code, LOCK_EX);
+    }
+
+    /**
+     * Rename a plugin.
+     *
+     * The $to name must not already exist in the filesystem and/or DB.
+     *
+     * @param  string $from The original plugin name
+     * @param  string $to The new plugin name
+     * @return bool | null if no change
+     */
+
+    public function rename($from, $to)
+    {
+        $ret = null;
+
+        if ($from !== $to) {
+            $src = PLUGINPATH.DS.$from;
+            $dest = PLUGINPATH.DS.$to;
+
+            if (!file_exists($dest) && is_writable(dirname($dest))) {
+                $res = rename($src, $dest);
+
+                if ($res) {
+                    $res = rename($dest.DS.$from.'.php', $dest.DS.$to.'.php');
+                    $ret = (bool) safe_update('txp_plugin', "name='".doSlash($to)."'", "name='".doSlash($from)."'");
+                } else {
+                    $ret = false;
+                }
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
     }
 
     /**

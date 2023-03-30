@@ -466,13 +466,84 @@ function plugin_help()
 function plugin_edit_form($name = '')
 {
     assert_string($name);
-    $code = ($name) ? fetch('code', 'txp_plugin', 'name', $name) : '';
-    $thing = ($code) ? $code : '';
+
+    $vars = array(
+        'version',
+        'type',
+        'order',
+        'author',
+        'author_uri',
+        'description',
+        'flags',
+        'code',
+        'help_raw',
+        'textpack',
+    );
+
+    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+
+    foreach ($vars as $key) {
+        if (empty($plugin[$key])) {
+            $plugin[$key] = '';
+        }
+    }
+
+    $flagset = array();
+
+    if ((int)$plugin['flags'] & PLUGIN_HAS_PREFS) {
+        $flagset[] = PLUGIN_HAS_PREFS;
+    }
+
+    if ((int)$plugin['flags'] & PLUGIN_LIFECYCLE_NOTIFY) {
+        $flagset[] = PLUGIN_LIFECYCLE_NOTIFY;
+    }
 
     return
         form(
             hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-            '<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>'.
+            Txp::get('\Textpattern\UI\InputLabel', 'newname', Txp::get('\Textpattern\UI\Input', 'newname', 'text', $plugin['name']), gTxt('name')).
+            Txp::get('\Textpattern\UI\InputLabel', 'version', Txp::get('\Textpattern\UI\Input', 'version', 'text', $plugin['version']), gTxt('version')).
+            Txp::get('\Textpattern\UI\InputLabel', 'type',
+                Txp::get('\Textpattern\UI\Select', 'type', array(
+                    0 => gTxt('public'),
+                    1 => gTxt('public_admin'),
+                    2 => gTxt('library'),
+                    3 => gTxt('admin'),
+                    4 => gTxt('admin_async'),
+                    5 => gTxt('public_admin_async'),
+                ), $plugin['type']),
+                gTxt('type')
+            ).
+            Txp::get('\Textpattern\UI\InputLabel', 'order', Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order']), gTxt('load_order')).
+            Txp::get('\Textpattern\UI\InputLabel', 'author', Txp::get('\Textpattern\UI\Input', 'author', 'text', $plugin['author']), gTxt('author')).
+            Txp::get('\Textpattern\UI\InputLabel', 'author_uri', Txp::get('\Textpattern\UI\Input', 'author_uri', 'text', $plugin['author_uri'])->setAtt('size', INPUT_LARGE), gTxt('author_uri')).
+            Txp::get('\Textpattern\UI\InputLabel', 'description', Txp::get('\Textpattern\UI\Input', 'description', 'text', $plugin['description'])->setAtt('size', INPUT_XLARGE), gTxt('description')).
+            Txp::get('\Textpattern\UI\InputLabel', 'flags',
+                Txp::get('\Textpattern\UI\CheckboxSet', 'flags', array(
+                    1 => gTxt('plugin_has_prefs'),
+                    2 => gTxt('plugin_lifecycle_notify'),
+                ), $flagset),
+                gTxt('flags')
+            ).
+            Txp::get('\Textpattern\UI\InputLabel', 'code', Txp::get('\Textpattern\UI\Textarea', 'code', $plugin['code'])->setAtts(array(
+                'class' => 'code',
+                'id'    => 'plugin_code',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), gTxt('code')).
+            Txp::get('\Textpattern\UI\InputLabel', 'help_raw', Txp::get('\Textpattern\UI\Textarea', 'help_raw', $plugin['help_raw'])->setAtts(array(
+                'class' => 'help',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), gTxt('help')).
+            Txp::get('\Textpattern\UI\InputLabel', 'textpack', Txp::get('\Textpattern\UI\Textarea', 'textpack', $plugin['textpack'])->setAtts(array(
+                'class' => 'textpack',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), gTxt('textpack')).
             graf(
                 sLink('plugin', '', gTxt('cancel'), 'txp-button').
                 fInput('submit', '', gTxt('save'), 'publish'),
@@ -481,25 +552,70 @@ function plugin_edit_form($name = '')
             eInput('plugin').
             sInput('plugin_save').
             hInput('name', $name).
+            hInput('help_hash', md5($plugin['help_raw'])).
             hInput('sort', gps('sort')).
             hInput('dir', gps('dir')).
             hInput('page', gps('page')).
             hInput('search_method', gps('search_method')).
             hInput('crit', gps('crit')).
-            hInput('name', $name), '', '', 'post', 'edit-plugin-code', '', 'plugin_details');
+            hInput('name', $name), '', '', 'post', 'edit-plugin-code txp-layout-4col-3span', '', 'plugin_details');
 }
 
 /**
- * Saves edited plugin code.
+ * Saves edited plugin information.
  */
 
 function plugin_save()
 {
-    extract(array_map('assert_string', gpsa(array('name', 'code'))));
+    $vars = array(
+        'version'     => 'version',
+        'type'        => 'type',
+        'load_order'  => 'order',
+        'author'      => 'author',
+        'author_uri'  => 'author_uri',
+        'description' => 'description',
+        'code'        => 'code',
+        'textpack'    => 'textpack',
+    );
 
-    safe_update('txp_plugin', "code = '".doSlash($code)."'", "name = '".doSlash($name)."'");
-    Txp::get('\Textpattern\Plugin\Plugin')->updateFile($name, $code);
-    $message = gTxt('plugin_saved', array('{name}' => $name));
+    $plugObj = Txp::get('\Textpattern\Plugin\Plugin');
+
+    extract(array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash')))));
+    $flags = (array)gps('flags');
+
+    if ($name !== $newname) {
+        $ret = $plugObj->rename($name, $newname);
+
+        if ($ret === false) {
+            // @todo issue a warning and stay on page?
+            pagetop(gTxt('edit_plugins'));
+            echo plugin_edit_form($name);
+
+            return;
+        }
+    }
+
+    if ($help_hash !== md5($help_raw)) {
+        // Help has changed, so recompile it.
+        $help = Txp::get('\Netcarver\Textile\Parser', 'html5')->parse($help_raw);
+    } else {
+        $help = $help_raw;
+    }
+
+    $vars['help'] = 'help';
+    $vars['flags'] = 'flags';
+    $clause = array();
+    $flags = array_sum($flags);
+
+    foreach ($vars as $key => $var) {
+        $clause[] = "$key = '".doSlash($$var)."'";
+    }
+
+    $vars['help_raw'] = 'help_raw';
+
+    safe_update('txp_plugin', implode(',', $clause), "name = '".doSlash($newname)."'");
+    $plugObj->updateFile($newname, compact($vars));
+    $message = gTxt('plugin_saved', array('{name}' => $newname));
 
     plugin_list($message);
 }
@@ -650,10 +766,6 @@ function plugin_verify($payload = array(), $txpPlugin = null)
  * Installs a plugin.
  *
  * Also handles cancellation of plugin installation by tidying up temp files.
- *
- * @todo During upload, stash an sha1 digest of the code to the token table with
- *       an hour's expiry. Then verify this on installation to check the file/code
- *       has not been tampered with.
  */
 
 function plugin_install()
