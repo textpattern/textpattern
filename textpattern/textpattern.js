@@ -1496,7 +1496,7 @@ textpattern.gTxt = function (i18n, atts, escape) {
     var string = i18n;
     var name = string.toLowerCase();
 
-    if ($.type(textpattern.textarray[name]) !== 'undefined') {
+    if (typeof textpattern.textarray[name] !== 'undefined') {
         string = textpattern.textarray[name];
     }
 
