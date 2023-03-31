@@ -477,11 +477,11 @@ function doDiagnostics()
         'zlib',
     );
 
-    $exts_required_missing = array_diff($exts_required, $extns);
-    $exts_recommended_missing = array_diff($exts_recommended, $extns);
+    $exts_missing_required = array_diff($exts_required, $extns);
+    $exts_missing_recommended = array_diff($exts_recommended, $extns);
 
-    if ($exts_required_missing) {
-        $fail['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_required_missing))));
+    if ($exts_missing_required) {
+        $fail['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_missing_required))));
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
@@ -780,8 +780,8 @@ function doDiagnostics()
             $out[] = n.gTxt('diag_extensions_installed').cs.implode(', ', $extv).n;
         }
 
-        if ($exts_recommended_missing) {
-            $out[] = n.gTxt('diag_extensions_recommended').cs.implode(', ', array_filter($exts_recommended_missing)).n;
+        if ($exts_missing_recommended) {
+            $out[] = n.gTxt('diag_extensions_recommended').cs.implode(', ', array_filter($exts_missing_recommended)).n;
         }
 
         if (is_callable('apache_get_modules')) {
