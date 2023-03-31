@@ -501,7 +501,7 @@ function plugin_edit_form($name = '')
     $buttons = graf(
         sLink('plugin', '', gTxt('cancel'), 'txp-button').n.
         fInput('submit', '', gTxt('save'), 'publish'),
-        array('class' => 'txp-save')
+        array('class' => 'txp-edit-actions')
     );
 
     // Plugin code column.
@@ -561,7 +561,7 @@ function plugin_edit_form($name = '')
                         Txp::get('\Textpattern\UI\CheckboxSet', 'flags', array(
                             1 => gTxt('plugin_has_prefs'),
                             2 => gTxt('plugin_lifecycle_notify'),
-                        ), $flagset)->setBreak('<br>'),
+                        ), $flagset),
                         gTxt('flags')
                     ).
                     eInput('plugin').
