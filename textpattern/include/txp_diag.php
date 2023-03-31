@@ -103,7 +103,7 @@ if ($event == 'diag') {
 
 function apache_module($m)
 {
-    $modules = @apache_get_modules();
+    $modules = apache_get_modules();
 
     if (is_array($modules)) {
         return in_array($m, $modules);
@@ -233,11 +233,11 @@ function doDiagnostics()
         $fail['e'][] = array('php_version_required', null, array('{version}' => REQUIRED_PHP_VERSION));
     }
 
-    if (@gethostbyname($mydomain) === $mydomain) {
+    if (gethostbyname($mydomain) === $mydomain) {
         $fail['w'][] = array('dns_lookup_fails', null, array('{domain}' => $mydomain));
     }
 
-    if (!@is_dir($path_to_site)) {
+    if (!is_dir($path_to_site)) {
         $fail['e'][] = array('path_to_site_inaccessible', 'path_inaccessible', array('{path}' => $path_to_site));
     }
 
@@ -245,31 +245,31 @@ function doDiagnostics()
         $fail['w'][] = array('site_trailing_slash', null, array('{path}' => $path_to_site));
     }
 
-    if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
+    if (!is_file($path_to_index) || !is_readable($path_to_index)) {
         $fail['e'][] = array('index_inaccessible', 'path_inaccessible', array('{path}' => $path_to_index));
     }
 
-    if (!@is_writable($path_to_site.DS.$img_dir)) {
+    if (!is_writable($path_to_site.DS.$img_dir)) {
         $notReadable[] = array('{dirtype}' => 'img_dir', '{path}' => $path_to_site.DS.$img_dir);
     }
 
-    if (!@is_writable($file_base_path)) {
+    if (!is_writable($file_base_path)) {
         $notReadable[] = array('{dirtype}' => 'file_base_path', '{path}' => $file_base_path);
     }
 
-    if (!@is_writable($path_to_site.DS.$skin_dir)) {
+    if (!is_writable($path_to_site.DS.$skin_dir)) {
         $notReadable[] = array('{dirtype}' => 'skin_dir', '{path}' => $path_to_site.DS.$skin_dir);
     }
 
-    if (!@is_writable($tempdir)) {
+    if (!is_writable($tempdir)) {
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
     }
 
-    if (!@is_writable(PLUGINPATH)) {
+    if (!is_writable(PLUGINPATH)) {
         $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => PLUGINPATH);
     }
 
-    if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {
+    if ($permlink_mode != 'messy' && $is_apache && !is_readable($path_to_site.'/.htaccess')) {
         $fail['e'][] = array('htaccess_missing');
     }
 
@@ -374,7 +374,7 @@ function doDiagnostics()
             $s = md5(uniqid(rand(), true));
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = @file(hu.$s.'/?txpcleantest=1');
+            $pretext_data = file(hu.$s.'/?txpcleantest=1');
 
             if ($pretext_data) {
                 $pretext_req = trim(@$pretext_data[0]);
@@ -606,7 +606,7 @@ function doDiagnostics()
 
         gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, filemtime(txpath.'/update/_update.php')).n,
 
         priv.gTxt('diag_web_domain').cs.$siteurl.n,
 
@@ -666,7 +666,7 @@ function doDiagnostics()
 
         (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
-        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.@apache_get_version().n : '',
+        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.apache_get_version().n : '',
 
         gTxt('diag_php_sapi_mode').cs.PHP_SAPI.n,
 
@@ -829,7 +829,7 @@ function checkUpdates()
             $contents = file_get_contents($endpoint);
         }
 
-        $response = @json_decode($contents, true);
+        $response = json_decode($contents, true);
 
         if (isset($response['textpattern-version'])) {
             $release = $response['textpattern-version']['release'];
