@@ -758,7 +758,11 @@ function doDiagnostics()
         $extv = array();
 
         foreach ($extns as $e) {
-            $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
+            $extv[] = $e.(phpversion($e) ? ' ('.phpversion($e).')' : '');
+        }
+
+        if ($extv) {
+            $out[] = n.gTxt('diag_extensions_installed').cs.implode(', ', $extv).n;
         }
 
         if (is_callable('apache_get_modules')) {
