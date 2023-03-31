@@ -462,8 +462,27 @@ function doDiagnostics()
         $gd = gTxt('diag_unavailable');
     }
 
-    $intl = extension_loaded('intl') ? phpversion('intl') : gTxt('diag_unavailable');
-    $mbstring = extension_loaded('mbstring') ? phpversion('mbstring') : gTxt('diag_unavailable');
+    $extns = get_loaded_extensions();
+    $exts_required = array(
+        'mysqli',
+        'xml',
+        'SimpleXML',
+        'json',
+    );
+
+    $exts_recommended = array(
+        'intl',
+        'mbstring',
+        'zip',
+        'zlib',
+    );
+
+    $exts_required_missing = array_diff($exts_required, $extns);
+    $exts_recommended_missing = array_diff($exts_recommended, $extns);
+
+    if ($exts_required_missing) {
+        $fail['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_required_missing))));
+    }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
         $fail['e'][] = array('tmp_plugin_paths_match');
@@ -636,9 +655,6 @@ function doDiagnostics()
 
         gTxt('diag_gd_library').cs.$gd.n,
 
-        gTxt('diag_intl_extension').cs.$intl.n,
-
-        gTxt('diag_mbstring_extension').cs.$mbstring.n,
 
         gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
 
@@ -754,7 +770,6 @@ function doDiagnostics()
         $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('diag_custom').cs.
                     implode(', ', $cf).sp.'('.count($cf).')'.n;
 
-        $extns = get_loaded_extensions();
         $extv = array();
 
         foreach ($extns as $e) {
@@ -763,6 +778,10 @@ function doDiagnostics()
 
         if ($extv) {
             $out[] = n.gTxt('diag_extensions_installed').cs.implode(', ', $extv).n;
+        }
+
+        if ($exts_recommended_missing) {
+            $out[] = n.gTxt('diag_extensions_recommended').cs.implode(', ', array_filter($exts_recommended_missing)).n;
         }
 
         if (is_callable('apache_get_modules')) {
