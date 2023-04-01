@@ -504,7 +504,6 @@ function plugin_edit_form($name = '')
         array('class' => 'txp-edit-actions')
     );
 
-    // Plugin code column.
     return form(
         tag(
             hed(gTxt('edit_plugin', array('{name}' => $name)), 2, array('class' => 'txp-heading')).
