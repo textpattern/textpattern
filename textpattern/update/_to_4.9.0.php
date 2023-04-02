@@ -98,3 +98,5 @@ foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
         update_pref($prefname, null, $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
     }
 }
+
+safe_create_index('txp_section', 'name', 'primary');

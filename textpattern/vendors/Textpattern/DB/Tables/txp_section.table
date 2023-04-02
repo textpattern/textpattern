@@ -12,5 +12,6 @@ dev_skin      VARCHAR(63)  NOT NULL DEFAULT '',
 dev_page      VARCHAR(255) NOT NULL DEFAULT '',
 dev_css       VARCHAR(255) NOT NULL DEFAULT '',
 
+PRIMARY KEY (name),
 INDEX page_skin (page(50), skin(63)),
 INDEX css_skin (css(50), skin(63))
