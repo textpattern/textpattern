@@ -804,7 +804,7 @@ function popup($atts)
 // -------------------------------------------------------------
 
 // Output href list of site categories.
-function category_list($atts, $thing = null, $cats = null)
+function category_list($atts, $thing = null)
 {
     global $s, $c, $thiscategory;
 
@@ -832,7 +832,7 @@ function category_list($atts, $thing = null, $cats = null)
 
     $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
     $parent !== true or $parent = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
-    isset($cats) or $cats = get_tree(compact('categories', 'parent', 'children', 'sort') + array('flatten' => false) + $atts);
+    $cats = is_array($children) ? $children : get_tree(compact('categories', 'parent', 'children', 'sort') + array('flatten' => false) + $atts);
     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
     $out = array();
@@ -843,12 +843,13 @@ function category_list($atts, $thing = null, $cats = null)
     foreach ($cats as $name => $thiscategory) {
         $count++;
         $nodes = empty($thiscategory['children']) ? '' :
-            category_list(array(
+            processTags(__FUNCTION__, array(
                 'label'   => '',
                 'html_id' => '',
-            ) + $atts, $thing, $thiscategory['children']);
+                'children' => $thiscategory['children']
+            ) + $atts, $thing);
 
-        unset($thiscategory['level'], $thiscategory['children']);
+        unset($thiscategory['children']/*, $thiscategory['level']*/);
 
         if (!isset($thing) && !$form) {
             $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
@@ -871,7 +872,7 @@ function category_list($atts, $thing = null, $cats = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = $cat.$nodes;
+        $out[] = strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
@@ -2628,6 +2629,7 @@ function if_category($atts, $thing = null)
         'type'     => false,
         'name'     => false,
         'parent'   => 0,
+        'level'    => null,
     ), $atts));
 
     if ($category === false) {
@@ -2647,6 +2649,10 @@ function if_category($atts, $thing = null)
     } else {
         $parentname = $parent && is_numeric((string)$parent);
         $x = $name === false ? !empty($category) : $parentname || in_list($category, $name);
+    }
+
+    if ($x && isset($level)) {
+        $x = empty($thiscategory['level']) ? empty($level) : $thiscategory['level'] == $level;
     }
 
     if ($x && $parent && $category) {
