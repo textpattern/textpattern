@@ -99,4 +99,8 @@ foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
     }
 }
 
-safe_create_index('txp_section', 'name(63)', 'primary');
+// Ensure all tables have primary keys.
+$primaries = array('css', 'form', 'page', 'plugin', 'section');
+foreach ($primaries as $table) {
+  safe_create_index('txp_'.$table, 'name(63)', 'primary');
+}
