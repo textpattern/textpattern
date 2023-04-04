@@ -25,6 +25,20 @@
  * Constants.
  */
 
+/**
+ * Textpattern version.
+ */
+
+$thisversion = '4.9.0-dev';
+
+/**
+ * Development environment?
+ *
+ * Set false for releases.
+ */
+
+$txp_is_dev = true;
+
 if (!defined('TXP_DEBUG')) {
     /**
      * If set to "1", dumps debug log to the temp directory.

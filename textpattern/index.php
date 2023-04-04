@@ -27,11 +27,6 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.9.0-dev';
-
-// $txp_using_svn deprecated in 4.7.0.
-$txp_using_svn = $txp_is_dev = true; // Set false for releases.
-
 ob_start(null, 2048);
 
 if (!isset($txpcfg['table_prefix']) && (!is_readable('./config.php') || !include './config.php')) {
