@@ -99,4 +99,4 @@ foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
     }
 }
 
-safe_create_index('txp_section', 'name', 'primary');
+safe_create_index('txp_section', 'name(63)', 'primary');
