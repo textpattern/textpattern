@@ -113,3 +113,6 @@ foreach ($primaries as $table) {
     safe_drop_index('txp_'.$table, 'name');
     safe_create_index('txp_'.$table, 'name(63)', 'primary');
 }
+
+safe_drop_index('txp_prefs', 'prefs_idx');
+safe_create_index('txp_prefs', 'name(185), user_name', 'primary');
