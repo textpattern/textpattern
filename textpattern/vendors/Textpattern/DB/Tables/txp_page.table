@@ -3,5 +3,4 @@ user_html TEXT         NOT NULL,
 skin      VARCHAR(63)  NOT NULL DEFAULT 'default',
 lastmod   DATETIME         NULL DEFAULT NULL,
 
-PRIMARY KEY (name(63)),
-UNIQUE name_skin (name(63), skin(63))
+PRIMARY KEY (name(63), skin(63))

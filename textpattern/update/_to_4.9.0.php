@@ -100,7 +100,16 @@ foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
 }
 
 // Ensure all tables have primary keys.
-$primaries = array('css', 'form', 'page', 'plugin', 'section');
+$primaries = array('css', 'form', 'page');
+
 foreach ($primaries as $table) {
-  safe_create_index('txp_'.$table, 'name(63)', 'primary');
+    safe_drop_index('txp_'.$table, 'name_skin');
+    safe_create_index('txp_'.$table, 'name(63), skin(63)', 'primary');
+}
+
+$primaries = array('plugin', 'section');
+
+foreach ($primaries as $table) {
+    safe_drop_index('txp_'.$table, 'name');
+    safe_create_index('txp_'.$table, 'name(63)', 'primary');
 }
