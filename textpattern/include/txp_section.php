@@ -479,6 +479,8 @@ function section_edit()
     extract($rs, EXTR_PREFIX_ALL, 'sec');
     pagetop(gTxt('tab_sections'));
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_section', 'name, title, description');
+
     $out = array();
 
     $out[] = hed($caption, 2);
@@ -488,12 +490,20 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'name', 'text', $sec_name)->setAtts(array(
+                    'id'             => 'section_name',
+                    'size'           => INPUT_REGULAR,
+                    'data-max-chars' => $fieldSizes['name'],
+                ))->setBool('required'),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
                 'section_title',
-                fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
+                Txp::get('\Textpattern\UI\Input', 'title', 'text', $sec_title)->setAtts(array(
+                    'id'             => 'section_title',
+                    'size'           => INPUT_REGULAR,
+                    'data-max-chars' => $fieldSizes['title'],
+                ))->setBool('required'),
                 'section_longtitle', '', array('class' => 'txp-form-field edit-section-longtitle')
             );
     }
@@ -560,7 +570,7 @@ EOJS
 
     $out[] = inputLabel(
             'section_description',
-            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
+            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" data-max-chars="'.$fieldSizes['description'].'">'.$sec_description.'</textarea>',
             'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
         );
 
