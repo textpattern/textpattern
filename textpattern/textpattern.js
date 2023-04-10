@@ -980,43 +980,9 @@ textpattern.inputCounter = {
         elems.forEach(function(elem) {
             elem.addEventListener('keyup', (e)=>{
                 let max = e.target.getAttribute('data-max-chars');
-                e.target.value = textpattern.inputCounter.byteCount(e.target.value, max);
+                e.target.value = e.target.value.substring(0, max);
             })
         });
-    },
-
-    /**
-     * Returns the byte length of a UTF-8 string.
-     *
-     * @param {string} str The typed/pasted input string
-     */
-
-    byteCount: function (str, max) {
-        let s = 0;
-        let resultStr = '';
-
-        for (let i = 0; i < str.length; i++) {
-            let code = str.charCodeAt(i);
-
-            if (code > 0x7f && code <= 0x7ff) {
-                s++;
-            } else if (code > 0x7ff && code <= 0xffff) {
-                s+=2;
-            }
-
-            if (code >= 0xDC00 && code <= 0xDFFF) {
-                i++;
-            }
-
-            if (s >= max) {
-                break;
-            }
-
-            resultStr += str[i];
-            s++;
-        }
-
-        return resultStr;
     }
 };
 
