@@ -975,11 +975,14 @@ textpattern.Route = {
 
 textpattern.inputCounter = {
     init: function () {
-        let elems = document.querySelectorAll('[data-max-chars]');
+        let elems = document.querySelectorAll('[maxlength]');
 
+        // Truncate any oversize strings (a failsafe, as the browser should
+        // disallow this anyway).
         elems.forEach(function(elem) {
             elem.addEventListener('input', (e)=>{
-                let max = e.target.getAttribute('data-max-chars');
+                let max = e.target.getAttribute('maxlength');
+                let remaining = max - e.target.value.length; // Unused at present.
                 e.target.value = e.target.value.substring(0, max);
             })
         });
