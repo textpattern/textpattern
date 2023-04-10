@@ -978,7 +978,7 @@ textpattern.inputCounter = {
         let elems = document.querySelectorAll('[data-max-chars]');
 
         elems.forEach(function(elem) {
-            elem.addEventListener('keyup', (e)=>{
+            elem.addEventListener('input', (e)=>{
                 let max = e.target.getAttribute('data-max-chars');
                 e.target.value = e.target.value.substring(0, max);
             })
