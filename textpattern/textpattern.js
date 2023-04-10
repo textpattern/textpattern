@@ -970,26 +970,6 @@ textpattern.Route = {
 };
 
 /**
- * Limit textbox/areas to max number of characters.
- */
-
-textpattern.inputCounter = {
-    init: function () {
-        let elems = document.querySelectorAll('[maxlength]');
-
-        // Truncate any oversize strings (a failsafe, as the browser should
-        // disallow this anyway).
-        elems.forEach(function(elem) {
-            elem.addEventListener('input', (e)=>{
-                let max = e.target.getAttribute('maxlength');
-                let remaining = max - e.target.value.length; // Unused at present.
-                e.target.value = e.target.value.substring(0, max);
-            })
-        });
-    }
-};
-
-/**
  * Sends a form using AJAX and processes the response.
  *
  * @param  {object} options          Options
@@ -2782,8 +2762,6 @@ $(function () {
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
     $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang=' + textpattern.prefs.language_ui + '&_txp_token=' + textpattern._txp_token);
-
-    textpattern.inputCounter.init();
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
