@@ -78,6 +78,10 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         'data-col' => $sort,
     );
 
+    if (preg_match('/\b(asc|desc)\b/i', $options['class'], $matches)) {
+        $options += array('aria-sort' => strtolower($matches[1]).'ending');
+    }
+
     $head_items = array(
         'value'   => $value,
         'sort'    => $sort,
