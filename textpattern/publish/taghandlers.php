@@ -2625,7 +2625,7 @@ function if_category($atts, $thing = null)
     global $c, $context, $thiscategory;
 
     extract(lAtts(array(
-        'category' => false,
+        'category' => isset($atts['level']),
         'type'     => false,
         'name'     => false,
         'parent'   => 0,
