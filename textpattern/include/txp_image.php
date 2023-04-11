@@ -75,7 +75,7 @@ if ($event == 'image') {
 
 function image_list($message = '')
 {
-    global $file_max_upload_size, $txp_user, $event;
+    global $app_mode, $file_max_upload_size, $txp_user, $event;
 
     pagetop(gTxt('tab_image'), $message);
 
@@ -232,6 +232,11 @@ function image_list($message = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
+        if ($app_mode == 'json') {
+            send_json_response(array());
+            exit;
+        }
+
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
             gTxt($crit === '' ? 'no_images_recorded' : 'no_results_found'),
@@ -257,6 +262,11 @@ function image_list($message = '')
                 txp_category.Title AS category_title
             FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
+
+        if ($app_mode == 'json') {
+            send_json_response($rs);
+            exit;
+        }
 
         $contentBlock .= pluggable_ui('image_ui', 'extend_controls', '', $rs);
 

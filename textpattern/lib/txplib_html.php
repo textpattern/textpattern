@@ -1746,7 +1746,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $list = array_map('trim', $list);
             !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
             $list = array_filter($list, function ($v) {return $v !== '';});
-        } elseif (isset($trim)) {
+        } elseif (isset($trim) && $trim !== '') {
             $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
                 preg_replace($trim, (string)$replacement, $list) :
                 (isset($replacement) ?

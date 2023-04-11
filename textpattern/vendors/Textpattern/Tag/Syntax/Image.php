@@ -293,16 +293,16 @@ class Image
                     case 'article':
                         // ...the article image field.
                         if ($thisarticle && !empty($thisarticle['article_image'])) {
-                            if (!is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                                return article_image(
-                                    compact('class', 'html_id', 'wraptag', 'break', 'thumbnail')+ array('range' => ($offset + 1).'-'.($offset + $limit))
-                                );
+                            if ($thing === null && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
+                                $range = $limit || $offset ? ($offset + 1).'-'.($offset + $limit) : true;
+
+                                return processTags('article_image', compact('class', 'html_id', 'wraptag', 'break', 'thumbnail', 'range'));
                             }
     
-                            $id = join(",", array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-'))));
+                            $id = join(",", array_filter(array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-')))));
     
                             // Note: This clause will squash duplicate ids.
-                            $where[] = "id IN ($id)";
+                            $where[] = $id ? "id IN ($id)" : '0';
                         }
                         break;
                     case 'category':

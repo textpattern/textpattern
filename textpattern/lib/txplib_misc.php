@@ -1709,7 +1709,7 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
             // dereference all arguments. Side effect: callback handler
             // *must* be ordinary function, *must not* be class method in
             // PHP <5.4. See https://bugs.php.net/bug.php?id=47160.
-            $return_value[] = $c($event, $step, $data, $options);
+            $return_value[] = $c($event, $step, $data, $options); // call_user_func_array($c, array($event, $step, &$data, &$options))?
         } elseif ($production_status == 'debug') {
             trigger_error(gTxt('unknown_callback_function', array('{function}' => Txp::get('\Textpattern\Type\TypeCallable', $c)->toString())), E_USER_WARNING);
         }
@@ -5982,7 +5982,7 @@ function send_xml_response($response = array())
     $default_response = array('http-status' => '200 OK');
 
     // Backfill default response properties.
-    $response = $response + $default_response;
+    $response += $default_response;
 
     txp_status_header($response['http-status']);
     $out[] = '<textpattern>';
@@ -6053,11 +6053,15 @@ function send_json_response($out = '')
         $headers_sent = true;
     }
 
-    if (!is_string($out)) {
-        $out = json_encode($out, TEXTPATTERN_JSON);
+    if ($out instanceof mysqli_result) {
+        $rs = array();
+
+        while ($a = nextRow($out))  {
+          $rs[]=$a;
+        }
     }
 
-    echo $out;
+    echo json_encode(isset($rs) ? $rs : $out, TEXTPATTERN_JSON);
 }
 
 /**
@@ -6409,10 +6413,4 @@ function txp_break($wraptag)
 function txp_hash($thing)
 {
     return strlen($thing) < TEXTPATTERN_HASH_LENGTH ? $thing : hash(TEXTPATTERN_HASH_ALGO, $thing);
-}
-
-/*** Polyfills ***/
-
-if (!function_exists('array_column')) {
-    include txpath.'/lib/array_column.php';
 }

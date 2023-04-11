@@ -25,6 +25,20 @@
  * Constants.
  */
 
+/**
+ * Textpattern version.
+ */
+
+$thisversion = '4.9.0-dev';
+
+/**
+ * Development environment?
+ *
+ * Set false for releases.
+ */
+
+$txp_is_dev = true;
+
 if (!defined('TXP_DEBUG')) {
     /**
      * If set to "1", dumps debug log to the temp directory.
@@ -309,6 +323,21 @@ if (!defined('PLUGINPATH')) {
     global $txpcfg;
     $admin_path = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
     define('PLUGINPATH', $admin_path.DS.'plugins');
+}
+
+if (!defined('PLUGIN_REPO_URL')) {
+    /**
+     * Remote plugin repository.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Plugin
+     * @since   4.9.0
+     * @example
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins');
+     */
+
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com');
 }
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {

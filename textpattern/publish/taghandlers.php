@@ -197,7 +197,8 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'labeltag')
     ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
-    ->registerAttr('txp_wraptag', 'escape, wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
+    ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
 // -------------------------------------------------------------
 
@@ -631,16 +632,10 @@ function recent_articles($atts, $thing = null)
 
     $atts += array(
         'break'    => 'br',
-        'category' => '',
         'class'    => __FUNCTION__,
         'form'     => '',
         'label'    => gTxt('recent_articles'),
         'labeltag' => '',
-        'limit'    => 10,
-        'offset'   => 0,
-        'section'  => '',
-        'sort'     => 'Posted DESC',
-        'wraptag'  => '',
         'no_widow' => '',
     );
 
@@ -657,22 +652,24 @@ function recent_articles($atts, $thing = null)
 
 function related_articles($atts, $thing = null)
 {
-    global $thisarticle, $prefs;
+    global $thisarticle, $prefs, $txp_atts;
 
     assert_article();
 
-    $atts += array(
+    $globals = array(
         'break'    => br,
         'class'    => __FUNCTION__,
+        'label'    => gTxt('related_articles'),
+        'labeltag' => '',
+    );
+
+    $atts += $globals + array(
         'form'     => '',
-        'limit'    => 10,
-        'offset'   => 0,
         'match'    => 'Category',
         'no_widow' => '',
-        'section'  => '',
-        'sort'     => 'Posted DESC',
-        'wraptag'  => '',
     );
+
+    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globals;
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
@@ -807,7 +804,7 @@ function popup($atts)
 // -------------------------------------------------------------
 
 // Output href list of site categories.
-function category_list($atts, $thing = null, $cats = null)
+function category_list($atts, $thing = null)
 {
     global $s, $c, $thiscategory;
 
@@ -827,7 +824,7 @@ function category_list($atts, $thing = null, $cats = null)
         'offset'       => '',
         'parent'       => '',
         'section'      => '',
-        'sort'         => !isset($atts['categories']) ? 'name' : (!empty($atts['parent']) ? 'lft' : ''),
+        'sort'         => isset($atts['categories']) ? '' : (!empty($atts['parent']) ? 'lft' : 'name'),
         'this_section' => 0,
         'type'         => 'article',
         'wraptag'      => '',
@@ -835,7 +832,7 @@ function category_list($atts, $thing = null, $cats = null)
 
     $categories !== true or $categories = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
     $parent !== true or $parent = isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root');
-    isset($cats) or $cats = get_tree(compact('categories', 'parent', 'children', 'sort') + array('flatten' => false) + $atts);
+    $cats = is_array($children) ? $children : get_tree(compact('categories', 'parent', 'children', 'sort') + array('flatten' => false) + $atts);
     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
     $out = array();
@@ -846,12 +843,13 @@ function category_list($atts, $thing = null, $cats = null)
     foreach ($cats as $name => $thiscategory) {
         $count++;
         $nodes = empty($thiscategory['children']) ? '' :
-            category_list(array(
+            processTags(__FUNCTION__, array(
                 'label'   => '',
                 'html_id' => '',
-            ) + $atts, $thing, $thiscategory['children']);
+                'children' => $thiscategory['children']
+            ) + $atts, $thing);
 
-        unset($thiscategory['level'], $thiscategory['children']);
+        unset($thiscategory['children']/*, $thiscategory['level']*/);
 
         if (!isset($thing) && !$form) {
             $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
@@ -874,7 +872,7 @@ function category_list($atts, $thing = null, $cats = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = $cat.$nodes;
+        $out[] = strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
@@ -1177,7 +1175,7 @@ function next_title()
     }
 
     if (!isset($thisarticle['>'])) {
-        $thisarticle = $thisarticle + getNextPrev();
+        $thisarticle += getNextPrev();
     }
 
     if ($thisarticle['>'] !== false) {
@@ -1198,7 +1196,7 @@ function prev_title()
     }
 
     if (!isset($thisarticle['<'])) {
-        $thisarticle = $thisarticle + getNextPrev();
+        $thisarticle += getNextPrev();
     }
 
     if ($thisarticle['<'] !== false) {
@@ -2166,10 +2164,10 @@ function article_image($atts)
                 continue;
             }
 
-            $width !== '' or $width = $rs[$thumbnail ? 'thumb_w' :'w'];
-            $height !== '' or $height = $rs[$thumbnail ? 'thumb_h' :'h'];
+            $w = $width !== '' ? $width : $rs[$thumbnail ? 'thumb_w' :'w'];
+            $h = $height !== '' ? $height : $rs[$thumbnail ? 'thumb_h' :'h'];
 
-            extract($rs);
+            extract($rs, EXTR_SKIP);
 
             if ($title === true) {
                 $title = $caption;
@@ -2179,6 +2177,8 @@ function article_image($atts)
                 '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
                 ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
         } else {
+            $w = $width !== '' ? $width : 0;
+            $h = $height !== '' ? $height : 0;
             $img = '<img src="'.txpspecialchars($image).'" alt=""'.
                 ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
         }
@@ -2190,8 +2190,8 @@ function article_image($atts)
         $img .=
             (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
             (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($width ? ' width="'.(int) $width.'"' : '').
-            ($height ? ' height="'.(int) $height.'"' : '').
+            ($w ? ' width="'.(int) $w.'"' : '').
+            ($h ? ' height="'.(int) $h.'"' : '').
             $extAtts.
             (get_pref('doctype') === 'html5' ? '>' : ' />');
 
@@ -2625,10 +2625,11 @@ function if_category($atts, $thing = null)
     global $c, $context, $thiscategory;
 
     extract(lAtts(array(
-        'category' => false,
+        'category' => isset($atts['level']),
         'type'     => false,
         'name'     => false,
         'parent'   => 0,
+        'level'    => null,
     ), $atts));
 
     if ($category === false) {
@@ -2648,6 +2649,10 @@ function if_category($atts, $thing = null)
     } else {
         $parentname = $parent && is_numeric((string)$parent);
         $x = $name === false ? !empty($category) : $parentname || in_list($category, $name);
+    }
+
+    if ($x && isset($level)) {
+        $x = empty($thiscategory['level']) ? empty($level) : $thiscategory['level'] == $level;
     }
 
     if ($x && $parent && $category) {
@@ -3557,8 +3562,10 @@ function txp_wraptag($atts, $thing = '')
         } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
-            $thing = ($breakby === true ? do_list($thing) : explode($breakby, $thing));
+            $thing = $breakby === true ? do_list($thing) : explode($breakby, $thing);
         }
+
+        isset($trim) or !empty($escape) or $trim = true;
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {

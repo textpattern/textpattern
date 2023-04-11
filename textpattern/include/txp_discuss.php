@@ -62,7 +62,7 @@ if ($event == 'discuss') {
 function discuss_save()
 {
     $varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message')));
-    $varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
+    $varray += array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
     extract(doSlash($varray));
 
     $message = $varray['message'] = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);

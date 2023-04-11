@@ -647,9 +647,9 @@ textpattern.Relay = {
             return $(this).trigger(event, data);
         }
 
-        textpattern.Relay.timeouts[event] = setTimeout($.proxy(function() {
+        textpattern.Relay.timeouts[event] = setTimeout(function() {
             return textpattern.Relay.callback(event, data);
-        }, this), parseInt(timeout, 10));
+        }.bind(this), parseInt(timeout, 10));
     },
 
     /**
@@ -1496,7 +1496,7 @@ textpattern.gTxt = function (i18n, atts, escape) {
     var string = i18n;
     var name = string.toLowerCase();
 
-    if ($.type(textpattern.textarray[name]) !== 'undefined') {
+    if (typeof textpattern.textarray[name] !== 'undefined') {
         string = textpattern.textarray[name];
     }
 

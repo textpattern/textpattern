@@ -269,7 +269,7 @@ function txp_setup_progress_meter($stage = 1)
 
 function step_getDbInfo()
 {
-    global $cfg;
+    global $cfg, $txp_is_dev;
 
     echo preamble();
     echo txp_setup_progress_meter(1),
@@ -289,8 +289,10 @@ function step_getDbInfo()
         echo '<pre>'.gTxt('missing_files', array('{list}' => n.t.implode(', '.n.t, $mangled_files))).'</pre>';
     }
 
-    if ($modified_files = array_keys($changes, INTEGRITY_MODIFIED)) {
-        echo '<pre>'.gTxt('modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files))).'</pre>';
+    if (!$txp_is_dev) {
+        if ($modified_files = array_keys($changes, INTEGRITY_MODIFIED)) {
+            echo '<pre>'.gTxt('modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files))).'</pre>';
+        }
     }
 
     $dbuser = !empty($cfg['database']['user']) ? $cfg['database']['user'] : '';

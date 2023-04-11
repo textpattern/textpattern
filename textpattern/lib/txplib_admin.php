@@ -371,7 +371,7 @@ function gTxtScript($var, $atts = array(), $route = array())
         }
 
         $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
-        $textarray_script = $textarray_script + array_combine((array) $var, $data);
+        $textarray_script += array_combine((array) $var, $data);
     }
 }
 
@@ -1909,6 +1909,30 @@ function load_lang_event($event, $lang = LANG)
 function install_textpack($textpack, $add_new_langs = false)
 {
     return Txp::get('\Textpattern\L10n\Lang')->installTextpack($textpack, $add_new_langs);
+}
+
+/**
+ * Checks a version string sits between a pair of min/max versions
+ *
+ * @param      string $minVer   Minimum version string (>=)
+ * @param      string $maxVer   Maximum version string (<=)
+ * @param      string compareTo The value to compare to. Defaults to txp_version
+ * @return     bool
+ * @package    Plugin
+ */
+
+function check_compatibility($minVer, $maxVer, $compareTo = txp_version)
+{
+    // Need to compare on an even playing field for $maxVer.
+    $max = explode('.', $maxVer);
+    $maxParts = count($max);
+    $thisVer = explode('.', $compareTo, ($maxParts === 2 ? -1 : 0));
+    $compareMax = implode('.', $thisVer);
+
+    $mn = $minVer ? version_compare($compareTo, $minVer, '>=') : true;
+    $mx = $maxVer ? version_compare($compareMax, $maxVer, '<=') : true;
+
+    return $mn && $mx;
 }
 
 /**

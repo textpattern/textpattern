@@ -20,6 +20,8 @@ Changes in 4.9.0 (upcoming)
 * Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
+* Added: Compatible plugin upgrades directly from the Plugins panel.
+* Added: Plugin multi-edit option: revert to last installed code content.
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
@@ -32,7 +34,7 @@ Changes in 4.9.0 (upcoming)
 * Developer: Introduce UI class library for building interface components.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
   to save memory. Plugins must call them via processTags() function.
-* jQuery 3.6.3.
+* jQuery 3.6.4.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
