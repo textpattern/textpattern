@@ -455,10 +455,17 @@ function css_partial_name($rs)
     $name = $rs['name'];
     $skin = $rs['skin'];
     $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_css', 'name');
 
     $titleblock = inputLabel(
         'new_style',
-        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
+        Txp::get('\Textpattern\UI\Input', 'newname', 'text', $name)->setAtts(array(
+            'class'     => 'input-medium',
+            'id'        => 'new_style',
+            'size'      => INPUT_MEDIUM,
+            'pattern'   => $nameRegex,
+            'maxlength' => $fieldSizes['name'],
+        ))->setBool('required'),
         'css_name',
         array('', 'instructions_style_name'),
         array('class' => 'txp-form-field name')
