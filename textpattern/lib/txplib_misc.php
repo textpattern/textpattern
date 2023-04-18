@@ -2333,9 +2333,9 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         } catch (\Textpattern\Mail\Exception $e) {
             return false;
         } catch (\PHPMailer\PHPMailer\Exception $e) {
-           return false;
+            return false;
         } catch (\Exception $e) {
-           return false;
+            return false;
         }
 
         return true;
