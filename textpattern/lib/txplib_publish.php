@@ -1246,22 +1246,22 @@ function filterAtts($atts = null, $iscustom = null)
 /**
  * Postpone tag processing.
  *
- * @param   int $pass
+ * @param   null|int $maxpass
  * @return  null|string
  * @since   4.7.0
  * @package TagParser
  */
 
-function postpone_process($pass = null)
+function postpone_process($maxpass = null)
 {
     global $pretext, $txp_atts, $txp_current_tag;
 
     $txp_atts = null;
-    $pass = max($pretext['secondpass'] + 2, (int)$pass) - 1;
+    $pass = max($pretext['secondpass'] + 2, (int)$maxpass) - 1;
 
     if ($pass <= (int)get_pref('secondpass', 1)) {
         return $txp_current_tag;
-    } else {
+    } elseif (!isset($maxpass)) {
         trigger_error(gTxt('secondpass').' < '.$pass, E_USER_WARNING);
     }
 }

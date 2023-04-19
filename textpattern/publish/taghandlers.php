@@ -195,8 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
 // Global attributes (false just removes unknown attribute warning)
-    ->registerAttr(false, 'labeltag')
-    ->registerAttr(true, 'class, html_id, not, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
@@ -1291,7 +1290,7 @@ function txp_pager($atts, $thing = null, $newer = null)
         if (isset($thispage['numPages'])) {
             $numPages = (int)$thispage['numPages'];
         } else {
-            return $is_article_list ? postpone_process() : '';
+            return $is_article_list ? postpone_process(2) : '';
         }
     }
 
@@ -2601,10 +2600,10 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $pretext, $thispage, $is_article_list;
+    global $thispage, $is_article_list;
 
-    if (empty($pretext['q']) || empty($thispage)) {
-        return $is_article_list ? postpone_process() : '';
+    if (empty($thispage)) {
+        return $is_article_list ? postpone_process(2) : '';
     }
 
     extract(lAtts(array(
@@ -3523,8 +3522,6 @@ function txp_escape($escape, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As';
-
     extract(lAtts(array(
         'escape'   => '',
         'label'    => '',
@@ -3549,7 +3546,7 @@ function txp_wraptag($atts, $thing = '')
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
             $thing = do_list($thing);
-        } elseif (strlen($breakby) > 2 && preg_match($regex, $breakby)) {
+        } elseif (strlen($breakby) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } else {
             $thing = $breakby === true ? do_list($thing) : explode($breakby, $thing);
