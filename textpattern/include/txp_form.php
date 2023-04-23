@@ -735,11 +735,19 @@ function form_partial_name($rs)
     $skin = $rs['skin'];
     $type = $rs['type'];
     $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_form', 'name');
+    $nameInput = Txp::get('\Textpattern\UI\Input', 'newname', 'text', $name)->setAtts(array(
+            'class'     => 'input-medium',
+            'id'        => 'new_form',
+            'size'      => INPUT_MEDIUM,
+            'pattern'   => $nameRegex,
+            'maxlength' => $fieldSizes['name'],
+        ));
 
     if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+        $nameInput->setBool('disabled');
     } else {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $nameInput->setBool('required');
     }
 
     $name_widgets = inputLabel(
