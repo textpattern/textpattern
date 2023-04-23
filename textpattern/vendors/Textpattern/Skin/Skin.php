@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -793,7 +793,7 @@ class Skin extends CommonBase implements SkinInterface
             }
 
             if (!self::isExportable($name)) {
-                $this->mergeResult($event.'_unsafe_name', $name);
+                $this->mergeResult($event.'_name_unsafe', $name);
             } elseif (!$override && is_dir($nameDirPath)) {
                 $this->mergeResult($event.'_already_exists', $nameDirPath);
             } elseif (!is_dir($nameDirPath) && !@mkdir($nameDirPath)) {
@@ -1377,10 +1377,7 @@ class Skin extends CommonBase implements SkinInterface
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
-                        href(txpspecialchars($skin_name), $editUrl, array(
-                            'title'      => gTxt('edit'),
-                            'aria-label' => gTxt('edit'),
-                        )).
+                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
                         ($numThemes > 1 ? ' | '.href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
                         (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) :
                             (${$event.'_dev_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill warning')) : '')
@@ -1414,10 +1411,7 @@ class Skin extends CommonBase implements SkinInterface
                         $tdVal = href(
                             ${$event.'_'.$name.'_count'},
                             $linkParams,
-                            array(
-                                'title'      => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
-                                'aria-label' => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
-                            )
+                            array('title' => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})))
                         );
                     } else {
                         $tdVal = 0;

@@ -4,15 +4,42 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
+* Changed: Removed 'aria-label' attributes where 'title' already exists.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
+* Fixed: Improved support for images with EXIF orientation metadata
+  (thanks, jools-r).
+* Fixed: Compiled plugins upload on PHP 5.
+* Fixed: Restored empty 'height' and 'width' attributes behaviour of
+  <txp:image />.
+* Fixed: Self-closing tag output for html5 doctype to silence validator
+ (thanks, jools-r).
+* Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
-  admin-side via config.php.
+  admin-side via config.php. 
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
-* Changed: Plugins of all types trigger verify step.
-* jQuery 3.6.0.
+* Added: Compatible plugin upgrades directly from the Plugins panel.
+* Added: Plugin multi-edit option: revert to last installed code content.
+* Added: Support for aggregate window functions in compatible MySQL versions.
+* Added: Trailing slash URL preference.
+* Added: File download header preference.
+* Added: <txp:(article_)image /> accepts extra attributes (see #1738).
+* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
+* Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: Can no longer delete in-use languages.
+* Changed: Less collision-prone custom fields name processing.
+* Changed: Do not generate empty syndication feeds for feedless sections.
+* Developer: Introduce UI class library for building interface components.
+* Developer: Some of the lesser-used tags are loaded on demand from their class
+  to save memory. Plugins must call them via processTags() function.
+* jQuery 3.6.4.
+* Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
+  list of changes in this release (thanks, gocom).
+* PrismJS 1.29.0.
 
-Changes in 4.8.8 (upcoming)
+Changes in 4.8.8 (24 Jan 2022)
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -46,7 +46,7 @@
 function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 {
     if ($id) {
-        $id = $id.'-'.$field;
+        $id .= '-'.$field;
     } else {
         $id = $field;
     }
@@ -226,7 +226,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 
         $sp = str_repeat(sp.sp, $a['level']);
 
-        if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
+        if (($truncate > 3) && (Txp::get('\Textpattern\Type\StringType', $a['title'])->getLength() > $truncate)) {
             $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
             $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
             $hellip = '&#8230;';
@@ -329,17 +329,16 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = null)
 {
     $atts = (is_array($name) ? $name : array('name' => $name)) + array(
-        'class'        => $class,
-        'id'           => $id,
-        'type'         => $type,
-        'size'         => (int) $size,
-        'title'        => $title,
-        'aria-label'   => $title,
-        'onclick'      => $onClick,
-        'tabindex'     => (int) $tab,
-        'disabled'     => (bool) $disabled,
-        'required'     => (bool) $required,
-        'placeholder'  => $placeholder,
+        'class'       => $class,
+        'id'          => $id,
+        'type'        => $type,
+        'size'        => (int) $size,
+        'title'       => $title,
+        'onclick'     => $onClick,
+        'tabindex'    => (int) $tab,
+        'disabled'    => (bool) $disabled,
+        'required'    => (bool) $required,
+        'placeholder' => $placeholder,
     );
 
     if ($atts['required'] && !isset($atts['placeholder'])
@@ -531,10 +530,11 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  * @param  string $id                 The HTML id
  * @param  string $role               ARIA role name
  * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
+ * @param  string $aria_label         ARIA label attribute
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true, $aria_label = '')
 {
     $action = 'index.php';
     $autocomplete = '';
@@ -560,6 +560,7 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         'role'         => $role,
         'autocomplete' => $autocomplete,
         'style'        => $style,
+        'aria-label'   => $aria_label,
     ));
 }
 
@@ -789,7 +790,6 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'size'        => (int) $size,
         'maxlength'   => $size,
         'title'       => gTxt($title),
-        'aria-label'  => gTxt($title),
         'placeholder' => $placeholder,
         'tabindex'    => (int) $tab,
         'value'       => $value,

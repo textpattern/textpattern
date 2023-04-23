@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -39,6 +39,14 @@ if (!defined('txpinterface')) {
 class ImagePanel
 {
     /**
+     * Image manipulation driver.
+     *
+     * @var string
+     */
+
+    protected $driver;
+
+    /**
      * Supported image extensions.
      *
      * @var array
@@ -63,9 +71,9 @@ class ImagePanel
     protected $all_image_authors;
 
     /**
-     * List of valid panel actions.
+     * Image management instance.
      *
-     * @var array
+     * @var \Intervention\Image\ImageManager
      */
 
     protected $manager;
@@ -103,10 +111,16 @@ class ImagePanel
         // @todo Remove this include when refactored to use Intervention.
         include_once txpath.'/lib/class.thumb.php';
 
+        $this->driver = (TEXTPATTERN_IMAGICK_VERSION) ? 'imagick' : (extension_loaded('gd') ? 'gd' : false);
         $this->extensions = get_safe_image_types();
         $this->all_image_cats = getTree('root', 'image');
         $this->all_image_authors = the_privileged('image.edit.own', true);
-        $this->manager = new ImageManager(array('driver' => 'imagick'));
+
+        if ($this->driver) {
+            $this->manager = new ImageManager(array('driver' => $this->driver));
+        } else {
+            $this->manager = false;
+        }
 
         if ($step && bouncer($step, $this->availableSteps)) {
             call_user_func(array($this, $step));
@@ -421,10 +435,7 @@ class ImagePanel
                     $vc = $validator->validate() ? '' : ' error';
 
                     if ($category) {
-                        $category = span(txpspecialchars($category_title), array(
-                            'title'      => $category,
-                            'aria-label' => $category,
-                        ));
+                        $category = span(txpspecialchars($category_title), array('title' => $category));
                     }
 
                     $can_view = has_privs('image.edit.own');
@@ -435,10 +446,7 @@ class ImagePanel
                             $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                         ).
                         hCell(
-                            ($can_view ? href($id, $edit_url, array(
-                                'title'      => gTxt('edit'),
-                                'aria-label' => gTxt('edit'),
-                            )) : $id)
+                            ($can_view ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id)
                             , '', array(
                                 'class' => 'txp-list-col-id',
                                 'scope' => 'row',
@@ -451,15 +459,12 @@ class ImagePanel
                             gTime($uDate), '', 'txp-list-col-created date'
                         ).
                         td(
-                            pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url, array(
-                                'title'      => gTxt('edit'),
-                                'aria-label' => gTxt('edit'),
-                            )) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
+                            pluggable_ui('image_ui', 'thumbnail', ($can_edit
+                                ? href($thumbnail, $edit_url, array('title' => gTxt('edit')))
+                                : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                         ).
                         (has_privs('tag')
-                            ? td(
-                                $tagbuilder, '', 'txp-list-col-tag-build'
-                            )
+                            ? td($tagbuilder, '', 'txp-list-col-tag-build')
                             : ''
                         ).
                         td(
@@ -467,10 +472,7 @@ class ImagePanel
                         ).
                         (
                             $show_authors
-                            ? td(span(txpspecialchars($realname), array(
-                                'title'      => $author,
-                                'aria-label' => $author,
-                            )), '', 'txp-list-col-author name')
+                            ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                             : ''
                         )
                     );
@@ -493,10 +495,9 @@ class ImagePanel
             n.tag(
             null,
             'div', array(
-                'class'      => 'txp-tagbuilder-content',
-                'id'         => 'tagbuild_links',
-                'title'      => gTxt('tagbuilder'),
-                'aria-label' => gTxt('tagbuilder'),
+                'class' => 'txp-tagbuilder-content',
+                'id'    => 'tagbuild_links',
+                'title' => gTxt('tagbuilder'),
             ));
     }
 
@@ -656,7 +657,7 @@ class ImagePanel
             )));
 
             $imgpath = get_pref('path_to_site').DS.$img_dir.DS.$id.$ext;
-            $imgobj = $this->manager->make($imgpath);
+            $imgobj = $this->manager ? $this->manager->make($imgpath) : false;
 
             if ($ext != '.swf') {
                 $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
@@ -805,12 +806,12 @@ class ImagePanel
                     $filterBlock[] = Txp::get('\Textpattern\UI\InputLabel', $ctrl, implode(n, $ui), $ctrl);
                 }
 
-                if ($buttonBlock) {
+                if ($this->manager && $buttonBlock) {
                     $createBlock[] = Txp::get('\Textpattern\UI\Para', implode(n, $buttonBlock))
                         ->setAtt('class', 'image_transforms');
                 }
 
-                if ($filterBlock) {
+                if ($this->manager && $filterBlock) {
                     $createBlock[] = Txp::get('\Textpattern\UI\Disclosure', 'txp-img-effects-group', 'txp-img-effects-group-content')
                         ->setLabel('image_effects')
                         ->add(implode(n, $filterBlock));
@@ -900,7 +901,7 @@ class ImagePanel
                             'image-details',
                             inputLabel(
                                 'id',
-                                $id.' ('.$imgobj->filesize().')',
+                                $id.($imgobj ? ' ('.$imgobj->filesize().')' : ''),
                                 'id', '', array('class' => 'txp-form-field edit-image-id')
                             ).
                             inputLabel(
@@ -1047,9 +1048,14 @@ class ImagePanel
 
     public function image_replace()
     {
-        global $txp_user;
+        global $app_mode, $txp_user;
 
         $id = assert_int(gps('id'));
+
+        if (!isset($_FILES['thefile'])) {
+            return $this->image_edit('', $id);
+        }
+
         $rs = safe_row("*", 'txp_image', "id = '$id'");
 
         if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
@@ -1068,10 +1074,29 @@ class ImagePanel
             $meta = '';
         }
 
-        $img_result = image_data($_FILES['thefile'], $meta, $id);
+        $fileshandler = Txp::get('\Textpattern\Server\Files');
+        $files = $fileshandler->refactor($_FILES['thefile']);
+
+        foreach ($files as $i => $file) {
+            $chunked = $fileshandler->dechunk($file);
+            $img_result = image_data($file, $meta, $id, !$chunked);
+
+            if (is_file($file['tmp_name'])) {
+                unlink(realpath($file['tmp_name']));
+            }
+        }
 
         if (is_array($img_result)) {
             list($message, $id) = $img_result;
+
+            if ($app_mode == 'async') {    
+                $response = 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
+        
+                send_script_response($response);
+        
+                // Bail out.
+                return;
+            }
 
             return $this->image_edit($message, $id);
         } else {
@@ -1154,6 +1179,7 @@ class ImagePanel
             return;
         }
 
+        $imgdir = get_pref('img_dir');
         $constraints = array('category' => new Validator\CategoryConstraint(gps('category'), array('type' => 'image')));
         callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
         $validator = new Validator\Validator($constraints);
@@ -1166,22 +1192,21 @@ class ImagePanel
             caption  = '$caption'",
             "id = '$id'"
         )) {
+            $transform_buffer = json_decode(get_pref('img_transforms'), true);
 
-        $transform_buffer = json_decode(get_pref('img_transforms'), true);
+            if (!empty($transform_buffer[$id])) {
+                $base_path = get_pref('path_to_site').DS.$imgdir;
+                $temp_path = $base_path.DS.'_tmp';
+                $current = $transform_buffer[$id]['current'];
+                $xform_file = $temp_path.DS.$transform_buffer[$id]['history'][$current]['file'];
+                $xform_parts = pathinfo($xform_file);
+                rename($xform_file, $base_path.DS.$id.'.'.$xform_parts['extension']);
 
-        if ($transform === 'undo') {
-            // Trash this ID's pref history and its transformed temp files.
-            unset($transform_buffer[$id]);
-            set_pref('img_transforms', json_encode($transform_buffer), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
-            array_map('unlink', glob($temp_path.DS.$id.'-*'));
-
-            send_json_response(array(
-                'src'     => $name,
-            ));
-
-            return;
-        }
-
+                // Trash this ID's pref history and any remaining transformed temp files.
+                unset($transform_buffer[$id]);
+                set_pref('img_transforms', json_encode($transform_buffer), 'image', PREF_HIDDEN,'', 0, PREF_PRIVATE);
+                array_map('unlink', glob($temp_path.DS.$id.'-*'));
+            }
 
             $message = gTxt('image_updated', array('{name}' => doStrip($name)));
             update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
@@ -1389,10 +1414,9 @@ class ImagePanel
             'gamma'      => array('default' => 1, 'order' => 30),
             'filt'       => array('default' => '', 'order' => 40),
             'crop'       => array('default' => 0, 'order' => 50),
-            'resize'     => array('default' => 0, 'order' => 60),
-            'rotate'     => array('default' => 0, 'order' => 70),
-            'flip_h'     => array('default' => '', 'order' => 80),
-            'flip_v'     => array('default' => '', 'order' => 90),
+            'rotate'     => array('default' => 0, 'order' => 60),
+            'flip_h'     => array('default' => '', 'order' => 70),
+            'flip_v'     => array('default' => '', 'order' => 80),
             'undo'       => array('default' => '', 'order' => 500),
             'redo'       => array('default' => '', 'order' => 520),
         );
@@ -1411,7 +1435,7 @@ class ImagePanel
         // Filters need to be applied in sequence from the base image, essentially
         // 'recreating' the new image from the original each time by replaying filters.
         // Passing the old image in would mean image degradation occurs over time.
-        if (array_key_exists($transform, $availableTransforms)) {
+        if ($this->manager && array_key_exists($transform, $availableTransforms)) {
             $transform_buffer = json_decode(get_pref('img_transforms'), true);
 
             if (empty($transform_buffer[$id])) {
@@ -1459,7 +1483,6 @@ class ImagePanel
 
             if ($create) {
                 $out = $temp_path.DS.uniqid($id.'-').$ext;
-
                 $imgobj = $this->manager->make($name);
 
                 foreach ($transform_buffer[$id]['history'] as $idx => $block) {
@@ -1476,8 +1499,6 @@ class ImagePanel
                             // knowing where you cropped from the second time. Could store
                             // and replay all crop actions by keeping wxh+x+y for each? Is that
                             // possible on a smaller (non 1:1 size) image?
-                            break;
-                        case 'resize':
                             break;
                         case 'flip_h':
                         case 'flip_v':
@@ -1506,7 +1527,9 @@ class ImagePanel
                             $imgobj->$xform($val);
                             break;
                         default:
-                            $imgobj = callback_event('image', 'process', 0, $imgobj, compact('xform', 'val'));
+                            if (has_handler('image', 'process', 0)) {
+                                callback_event_ref('image', 'process', 0, $imgobj, compact('xform', 'val'));
+                            }
                             break;
                     }
                 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -241,14 +241,14 @@ class DB
         }
 
         // Suppress screen output from mysqli_real_connect().
-        $error_reporting = error_reporting();
-        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
-
-        if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
+        try {
+            $error_reporting = error_reporting();
+            error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+            mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags);
+            error_reporting($error_reporting);
+        } catch (Exception $e) {
             die(db_down());
         }
-
-        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
@@ -810,7 +810,7 @@ function safe_drop($table, $debug = false)
  * @return bool         True if all nominated tables exist
  * @since 4.9.0
  * @example
- * if (safe_exists('myTable, myOtherTable'))
+ * if (!safe_exists('myTable, myOtherTable'))
  * {
  *     // Create tables here;
  * }
@@ -1458,7 +1458,12 @@ function get_tree($atts = array(), $tbl = 'txp_category')
 
         $cache[$hash][''] = array_filter($cache[$hash]['']);
     }
-
+/*
+    if (isset($atts['limit']) && is_numeric($atts['limit'])) {
+        $count = count($cache[$hash]['']);
+        $atts['limit'] = $limit = $limit - $count;
+    }
+*/
     $out = array();
 
     foreach ($cache[$hash][$root] as $name => $cat) {
@@ -1468,7 +1473,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
             $out[$name] = $cat;
             $out[$name]['level'] = $level - 1;
 
-            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 &&
+            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 && //(int)$limit > 0 &&
                 $nodes = get_tree(array(
                     'parent'  => $name,
                     'exclude' => array_merge($exclude, array($name))
@@ -1494,7 +1499,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
         }
     }
 
-    return $out;
+    return $out;//array_slice($out, 0, (int)$limit);
 }
 
 /**

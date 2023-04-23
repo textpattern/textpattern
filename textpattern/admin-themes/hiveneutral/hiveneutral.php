@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -97,9 +97,8 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             if (get_pref('sitename')) {
                 $out[] = graf(
                     span(href(htmlspecialchars(get_pref('sitename')), hu, array(
-                        'target'     => '_blank',
-                        'title'      => gTxt('tab_view_site'),
-                        'aria-label' => gTxt('tab_view_site'),
+                        'target' => '_blank',
+                        'title'  => gTxt('tab_view_site'),
                     )), array('class' => 'txp-view-site-name'))
                 , array('class' => 'txp-view-site'));
             } else {
@@ -110,9 +109,8 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 
             $out[] = graf(
                 href(span(gTxt('lightswitch'), array('class' => 'ui-icon ui-icon-lightbulb')), '#', array(
-                    'id'         => 'lightswitch',
-                    'title'      => gTxt('lightswitch'),
-                    'aria-label' => gTxt('lightswitch'),
+                    'id'    => 'lightswitch',
+                    'title' => gTxt('lightswitch'),
                 ))
             , array('class' => 'txp-lightswitch'));
 

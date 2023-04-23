@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -240,7 +240,7 @@ class UploadForm extends Form
         global $event;
 
         $name = 'thefile'.($this->multiple ? '[]' : '');
-        $class[] = 'upload-form';
+        $class[] = 'txp-upload-form';
         $class[] = $this->getAtt('class');
         $className = implode(' ', $class);
         $key = $this->getAtt('id', $this->event.'-upload');

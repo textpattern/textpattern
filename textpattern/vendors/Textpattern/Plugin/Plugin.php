@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -202,7 +202,9 @@ class Plugin
         }
 
         set_error_handler(function () {}, E_WARNING|E_NOTICE);
-        $plugin = unserialize($plugin, array());
+        $plugin = version_compare(PHP_VERSION, '7.0.0') >= 0 ?
+            unserialize($plugin, array('allowed_classes' => false)) :
+            unserialize($plugin);
         restore_error_handler();
 
         if (empty($plugin['name'])) {
@@ -446,6 +448,25 @@ class Plugin
     {
         $order = min(max(intval($order), 1), 9);
         safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
+
+        $plugin = $this->read($name);
+        $plugin['order'] = $order;
+        $this->updateFile($name, $plugin);
+    }
+
+    /**
+     * Revert a plugin's code to its initial (last installed) state.
+     *
+     * @param string $name  Plugin name
+     */
+
+    public function revert($name)
+    {
+        safe_update('txp_plugin', "code = code_restore", "name = '".doSlash($name)."'");
+        $code = fetch('code_restore', 'txp_plugin', 'name', $name);
+        $plugin = $this->read($name);
+        $plugin['code'] = $code;
+        $this->updateFile($name, $plugin);
     }
 
     /**
@@ -612,6 +633,41 @@ class Plugin
     }
 
     /**
+     * Rename a plugin.
+     *
+     * The $to name must not already exist in the filesystem and/or DB.
+     *
+     * @param  string $from The original plugin name
+     * @param  string $to The new plugin name
+     * @return bool | null if no change
+     */
+
+    public function rename($from, $to)
+    {
+        $ret = null;
+
+        if ($from !== $to) {
+            $src = PLUGINPATH.DS.$from;
+            $dest = PLUGINPATH.DS.$to;
+
+            if (!file_exists($dest) && is_writable(dirname($dest))) {
+                $res = rename($src, $dest);
+
+                if ($res) {
+                    $res = rename($dest.DS.$from.'.php', $dest.DS.$to.'.php');
+                    $ret = (bool) safe_update('txp_plugin', "name='".doSlash($to)."'", "name='".doSlash($from)."'");
+                } else {
+                    $ret = false;
+                }
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
      * Fetch the plugin's 'data' field.
      *
      * The call can be intercepted (for example, to fetch data from the
@@ -700,7 +756,7 @@ class Plugin
      *
      * @param  string $hash The passed hash to compare, from which the selector is extracted
      * @param  string $src  Path to a plugin or string plugin text
-     * @return true|string  Error message if something was in valid, otherwise true
+     * @return true|string  Error message if something was invalid, otherwise true
      */
 
     public function verifyToken($hash, $src = null)

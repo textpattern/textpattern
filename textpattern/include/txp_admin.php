@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -581,6 +581,7 @@ function author_edit($message = '', $fullEdit = false)
     $vars = array('user_id', 'name', 'RealName', 'email', 'privs');
     $rs = array();
     $out = array();
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_users', 'name, RealName, email');
 
     extract(gpsa($vars));
 
@@ -615,7 +616,11 @@ function author_edit($message = '', $fullEdit = false)
     } elseif (has_privs('admin.edit')) {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+            Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                'id'        => 'login_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['name'],
+            ))->setBool('required'),
             'login_name', 'create_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -629,7 +634,7 @@ function author_edit($message = '', $fullEdit = false)
     if (count($langList) > 1) {
         $langField = inputLabel(
             'language',
-            selectInput('language', $langList, $authorLang, true, false, 'language'),
+            selectInput('language', $langList, $authorLang, false, false, 'language'),
             'active_language_ui', '', array('class' => 'txp-form-field edit-admin-language')
         );
     } else {
@@ -638,12 +643,20 @@ function author_edit($message = '', $fullEdit = false)
 
     $out[] = inputLabel(
             'real_name',
-            fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
+            Txp::get('\Textpattern\UI\Input', 'RealName', 'text', $RealName)->setAtts(array(
+                'id'        => 'real_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['RealName'],
+            )),
             'real_name', '', array('class' => 'txp-form-field edit-admin-name')
         ).
         inputLabel(
             'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email', false, true),
+            Txp::get('\Textpattern\UI\Input', 'email', 'email', $email)->setAtts(array(
+                'id'        => 'login_email',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['email'],
+            ))->setBool('required'),
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 
@@ -730,11 +743,17 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $privileges = privs();
     $users = safe_column("name", 'txp_users', "1 = 1");
+    $langObj = Txp::get('\Textpattern\L10n\Lang');
+    $langs = $langObj->languageList();
 
     $methods = array(
         'changeprivilege'  => array(
             'label' => gTxt('changeprivilege'),
             'html'  => $privileges,
+        ),
+        'changelanguage'  => array(
+            'label' => gTxt('changelanguage'),
+            'html'  => selectInput('lang', $langs, '', false, false, 'lang'),
         ),
         'resetpassword'    => gTxt('resetpassword'),
         'resendactivation' => gTxt('resend_activation'),
@@ -746,6 +765,10 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')).
                 selectInput('assign_assets', $users, '', true, '', 'assign_assets'),
         );
+    }
+
+    if (count($langObj->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED)) == 1) {
+        unset($methods['changelanguage']);
     }
 
     return multi_edit($methods, 'admin', 'admin_multi_edit', $page, $sort, $dir, $crit, $search_method);
@@ -808,6 +831,17 @@ function admin_multi_edit()
 
         case 'changeprivilege':
             if (change_user_group($names, ps('privs'))) {
+                $changed = $names;
+                $msg = 'author_updated';
+            }
+
+            break;
+
+        case 'changelanguage':
+            $nameSet = join(',', quote_list((array) $names));
+            $ret = safe_update('txp_prefs', "val = '".doSlash(ps('lang'))."'", "name='language_ui' AND user_name IN ($nameSet)");
+
+            if ($ret) {
                 $changed = $names;
                 $msg = 'author_updated';
             }

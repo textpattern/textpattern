@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,6 +24,20 @@
 /**
  * Constants.
  */
+
+/**
+ * Textpattern version.
+ */
+
+$thisversion = '4.9.0-dev';
+
+/**
+ * Development environment?
+ *
+ * Set false for releases.
+ */
+
+$txp_is_dev = true;
 
 if (!defined('TXP_DEBUG')) {
     /**
@@ -311,6 +325,21 @@ if (!defined('PLUGINPATH')) {
     define('PLUGINPATH', $admin_path.DS.'plugins');
 }
 
+if (!defined('PLUGIN_REPO_URL')) {
+    /**
+     * Remote plugin repository.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Plugin
+     * @since   4.9.0
+     * @example
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins');
+     */
+
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com');
+}
+
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
      * Sets accepted protocols for HTTP referrer header.
@@ -515,7 +544,7 @@ if (!defined('AJAX_TIMEOUT')) {
      * define('AJAX_TIMEOUT', 10);
      */
 
-    define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+    define('AJAX_TIMEOUT', 1000 * max(30, (int)ini_get('max_execution_time')));
 }
 
 /**

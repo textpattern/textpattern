@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -55,10 +55,9 @@ class AdminDelete extends AdminAnchor implements UIInterface
                 $out
                     ->setContent($linktext)
                     ->setAtts(array(
-                        'class'      => 'destroy',
-                        'type'       => 'submit',
-                        'title'      => gTxt('delete'),
-                        'aria-label' => gTxt('delete'),
+                        'class' => 'destroy',
+                        'type'  => 'submit',
+                        'title' => gTxt('delete'),
                     ));
                 break;
             case 'get':

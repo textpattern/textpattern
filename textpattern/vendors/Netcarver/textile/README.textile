@@ -1,0 +1,83 @@
+h1. PHP-Textile
+
+"Textile reference":https://textile-lang.com/ | "Live editor":https://textile-lang.com/doc
+
+!https://sonarcloud.io/api/project_badges/measure?project=textile_php-textile&metric=coverage!:https://sonarcloud.io/summary/overall?id=textile_php-textile !https://img.shields.io/packagist/v/netcarver/textile.svg!:https://packagist.org/packages/netcarver/textile !https://img.shields.io/packagist/dt/netcarver/textile.svg!:https://packagist.org/packages/netcarver/textile
+
+PHP-Textile is a modern Textile markup language parser for PHP. Textile is a humane web text generator that takes lightweight, readable, plaintext-like markup language and converts it into well formed HTML.
+
+h2. Install
+
+Using "Composer":https://getcomposer.org/:
+
+bc. $ composer require netcarver/textile
+
+h2. Usage
+
+The Textile parser can be accessed through the @Netcarver\Textile\Parser@ class. The class is highly configurable, and actual parsing happens with the @parse@ method:
+
+bc. require './vendor/autoload.php';
+$parser = new \Netcarver\Textile\Parser();
+echo $parser->parse('h1. Hello World!');
+
+h3. Parsing untrusted input
+
+If you are using PHP-Textile to format user-supplied input, blog comments for instance, remember to enable restricted parser mode:
+
+bc. $parser = new \Netcarver\Textile\Parser();
+echo $parser
+    ->setRestricted(true)
+    ->parse('!bad/image/not/allowed.svg!');
+
+In restricted mode PHP-Textile doesn't allow more powerful formatting options such as inline styles, and removes any raw HTML.
+
+h3. Parsing single-line fields
+
+If you are using PHP-Textile as a field-level formatter to parse just inline spans and glyphs, use the @setBlockTags@ method to disable block tags:
+
+bc. $parser = new \Netcarver\Textile\Parser();
+echo $parser
+    ->setBlockTags(false)
+    ->parse('Hello *strong* world!');
+
+The above outputs:
+
+bc. Hello <strong>strong</strong> world!
+
+h3. Doctypes
+
+Currently, PHP-Textile can target either XHTML or HTML5 output with XHTML being the default for backward compatibility. The targeted doctype can be changed via the @setDocumentType@ method:
+
+bc. $parser = new \Netcarver\Textile\Parser();
+echo $parser
+    ->setDocumentType('html5')
+    ->parse('HTML(HyperText Markup Language)');
+
+h3. Setting alternate glyphs
+
+Textile's typographic substitutions can be overridden with the @setSymbol@ method. If you need to setup Textile to do non-standard substitutions, call @setSymbol@ before you parse the input with @parse@.
+
+bc. $parser = new \Netcarver\Textile\Parser();
+$parser
+    ->setSymbol('half', '1&#8260;2')
+    ->parse('Hello [1/2] World!');
+
+The symbol names you can pass to @setSymbol@ can be found "here":https://github.com/textile/php-textile/blob/v3.6.1/src/Netcarver/Textile/Parser.php#L710.
+
+h3. Prefixing relative image and link paths
+
+Setting prefix might be useful if you want to point relative paths to certain consistent location:
+
+bc. $parser = new \Netcarver\Textile\Parser();
+$parser
+    ->setImagePrefix('/user/uploads')
+    ->setLinkPrefix('/')
+    ->parse('!image.jpg! "link":page');
+
+h2. Getting in contact
+
+The PHP-Textile project welcomes constructive input and bug reports from users. Please "open an issue":https://github.com/textile/php-textile/issues on the repository for a comment, feature request or bug.
+
+h2. Development
+
+See "CONTRIBUTING.textile":https://github.com/textile/php-textile/blob/master/.github/CONTRIBUTING.textile.

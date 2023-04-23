@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -32,6 +32,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
+
+include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
 
 if ($event == 'prefs') {
     require_privs('prefs');
@@ -82,6 +84,9 @@ function prefs_save()
     );
 
     $post = stripPost();
+
+    // Let plugins alter their prefs
+    callback_event_ref('prefs', 'save', 0, $post);
 
     if (isset($post['tempdir']) && empty($post['tempdir'])) {
         $post['tempdir'] = find_temp_dir();
@@ -170,11 +175,9 @@ function prefs_list($message = '')
 {
     global $prefs, $txp_user, $txp_options;
 
-    extract($prefs);
-
     pagetop(gTxt('tab_preferences'), $message);
 
-    $locale = setlocale(LC_ALL, $locale);
+    $locale = setlocale(LC_ALL, $prefs['locale']);
 
     echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
@@ -671,6 +674,25 @@ EOS
 }
 
 /**
+ * Renders a yes/no radio button with toggle for the other SMTP settings.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function trailing_slash($name, $val)
+{
+    $vals = array(
+        '-1' => gTxt('no'),
+        '0'  => gTxt('list'),
+        '1'  => gTxt('yes'),
+    );
+
+    return Txp::get('\Textpattern\UI\RadioSet', $name, $vals, $val);
+}
+
+/**
  * Render a multi-select list of Form Types
  *
  * @param  string $name HTML name and id of the input control
@@ -792,9 +814,10 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
-    $input = selectInput(false, $vals, $val, '', '', $name).n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
+    $input = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name)//selectInput(false, $vals, $val, '', '', $name)
+        .n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
 
-    return pluggable_ui('prefs_ui', 'dateformats', Txp::get('\Textpattern\UI\Select', $name, array_unique($vals), $val)->setAtt('id', $name), compact('vals', 'name', 'val', 'ts'));
+    return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
 
 /**
@@ -899,7 +922,27 @@ function commentsendmail($name, $val)
 
 function custom_set($name, $val)
 {
-    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, INPUT_REGULAR), $name, $val);
+    static $reserved = array();
+    
+    if (empty($reserved)) {
+        foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
+//            + array_filter(filterAtts(array(), true), function($key) {return preg_match('/^[\w\-]+$/', $key);}, ARRAY_FILTER_USE_KEY);
+            $str = '';
+
+            foreach (str_split($field) as $char) {
+                $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
+            }
+
+            $reserved[$field] = $str;
+        }
+    }
+
+    $pattern = $reserved;
+    unset($pattern[strtolower($val)]);
+    $pattern = implode('|', $pattern).'|[cC][uU][sS][tT][oO][mM]_\d+';
+    $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$).*$");
+
+    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, $constraints), $name, $val);
 }
 
 /**
@@ -952,9 +995,13 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     $statuses = status_list();
-    $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
 
-    return Txp::get('\Textpattern\UI\Select', $name, $statusa, $val)->setAtt('id', $name);
+    if (!has_privs('article.publish')) {
+        unset($statuses[STATUS_LIVE], $statuses[STATUS_STICKY]);
+        $val = min($val, STATUS_PENDING);
+    }
+
+    return Txp::get('\Textpattern\UI\Select', $name, $statuses, $val)->setAtt('id', $name);
 }
 
 /**

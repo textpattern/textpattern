@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -268,10 +268,9 @@ function log_list($message = '')
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
                     $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), array(
-                        'rel'        => 'external',
-                        'target'     => '_blank',
-                        'title'      => gTxt('view'),
-                        'aria-label' => gTxt('view'),
+                        'rel'    => 'external',
+                        'target' => '_blank',
+                        'title'  => gTxt('view'),
                     ));
 
                     if ($log_method == 'POST') {

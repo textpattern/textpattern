@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -193,16 +193,10 @@ function doLoginForm($message)
                 fInput('submit', '', gTxt('log_in_button'), 'publish')
             ).
             graf(
-                href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array(
-                  'class' => 'login-forgot',
-                  'title' => gTxt('password_forgotten')
-                )
+                href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
             ).
             graf(
-                href(htmlspecialchars(get_pref('sitename')), hu, array(
-                    'title'      => gTxt('tab_view_site'),
-                    'aria-label' => gTxt('tab_view_site'),
-                )), array('class' => 'login-view-site')
+                href(htmlspecialchars(get_pref('sitename')), hu), array('class' => 'login-view-site')
             );
 
         if (gps('event')) {

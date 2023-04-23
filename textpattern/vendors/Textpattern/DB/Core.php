@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -94,6 +94,40 @@ class Core
         if ($data = $this->getStructure($table)) {
             safe_create($table, $data);
         }
+    }
+
+    /**
+     * Grab the varchar sizes from the DB table files.
+     *
+     * @param  string       $table   Table name to query
+     * @param  string|array $columns List/array of column names to extract. Must be VARCHAR types
+     * @return array                 Matching name=>sizes entries
+     **/
+
+    public function columnSizes($table, $columns)
+    {
+        $sizes = array();
+
+        if (!is_array($columns)) {
+            $columns = do_list($columns);
+        }
+
+        if ($data = $this->getStructure($table)) {
+            $separator = "\r\n";
+            $line = strtok($data, $separator);
+
+            while ($line !== false) {
+                $ret = preg_match('/^([a-zA-Z0-9_]+)\s+VARCHAR\((\d+)\).*$/', $line, $matches);
+
+                if ($ret && in_array($matches[1], $columns)) {
+                    $sizes[$matches[1]] = $matches[2];
+                }
+
+                $line = strtok($separator);
+            }
+        }
+
+        return $sizes;
     }
 
     /**

@@ -48,7 +48,7 @@ Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/REA
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Twitter](https://textpattern.com/@textpattern).
+The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Mastodon](https://textpattern.com/mastodon) and [Twitter](https://textpattern.com/twitter).
 
 ## Development
 
@@ -68,10 +68,10 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.4, 8.0 or 8.1) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.0, 8.1 or 8.2) |
 | MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(5.7 and/or 8.0, depends on platform) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.21) or stable (1.20) |
+| Nginx  | &mdash; | mainline (1.23) or stable (1.24) |
 
 ## Contributing
 
@@ -118,18 +118,6 @@ npm run get-classic-admin-theme 4.8.8
 npm run get-classic-admin-theme 4.8.x
 npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
-```
-
-You can verify PHP code via a PHP linter from the CLI, like so:
-
-```ShellSession
-npm run phplint
-```
-
-You can verify JavaScript code via a JavaScript linter from the CLI, like so:
-
-```ShellSession
-npm run eslint
 ```
 
 Release tools:

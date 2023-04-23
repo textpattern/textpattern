@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -62,7 +62,7 @@ if ($event == 'discuss') {
 function discuss_save()
 {
     $varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message')));
-    $varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
+    $varray += array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
     extract(doSlash($varray));
 
     $message = $varray['message'] = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
@@ -404,10 +404,7 @@ function discuss_list($message = '')
                     $parent = href(
                         span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
                         '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array(
-                            'title'      => gTxt('edit'),
-                            'aria-label' => gTxt('edit'),
-                        )
+                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array('title' => gTxt('edit'))
                     );
 
                     $view = $comment_status;

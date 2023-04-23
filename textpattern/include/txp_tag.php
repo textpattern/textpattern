@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2351,7 +2351,7 @@ class BuilderTags
 
                     $out .= $this->tdb(
                         ($wraptag ? "<$wraptag>" : '').
-                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.' />'.
+                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.(get_pref('doctype') === 'html5' ? '>' : ' />').
                         ($wraptag ? "</$wraptag>" : '')
                     );
                     break;

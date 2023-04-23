@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -135,7 +135,7 @@ class Token implements \Textpattern\Container\ReusableInterface
     public function generate($ref, $type, $expiryTimestamp, $pass, $nonce)
     {
         $ref = assert_int($ref);
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
+        $expiry = safe_strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // The selector becomes an indirect reference to the user row id,
         // and thus does not leak information when publicly displayed.

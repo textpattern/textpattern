@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -124,27 +124,40 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     /**
      * Set or get a message field.
      *
-     * @param  string $name The field
-     * @param  array  $args Arguments
+     * @param  string $field The field
+     * @param  array  $args  Arguments
      * @return \Textpattern\Mail\AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
 
-    public function __call($name, array $args = null)
+    public function __call($field, array $args = null)
     {
         if (!$args) {
-            if (property_exists($this->mail, $name) === false) {
-                throw new Exception(gTxt('invalid_argument', array('{name}' => 'name')));
+            if (property_exists($this->mail, $field) === false) {
+                throw new Exception(gTxt('invalid_argument', array('{name}' => 'field')));
             }
 
-            return $this->mail->$name;
+            return $this->mail->$field;
         }
+
+        $addresses = do_list_unique($args[0]);
 
         if (isset($args[1])) {
-            return $this->addAddress($name, $args[0], $args[1]);
+            // Not using _unique here. Multiple John Smiths are fine.
+            $names = do_list($args[1]);
+
+            foreach ($addresses as $idx => $address) {
+                $this->addAddress($field, $address, empty($names[$idx]) ? '' : $names[$idx]);
+            }
+
+            return $this;
         }
 
-        return $this->addAddress($name, $args[0]);
+        foreach ($addresses as $address) {
+            $this->addAddress($field, $address);
+        }
+
+        return $this;
     }
 
     /**
@@ -286,7 +299,7 @@ EOMIME;
         }
 
         $headers = join($this->separator, $headers).$this->separator;
-        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : null);
+        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : '');
 
         if (mail($this->encoded->to, $this->encoded->subject, $bodyField, $headers, $additional_headers) === false) {
             throw new Exception(gTxt('sending_failed'));

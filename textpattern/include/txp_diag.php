@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -103,7 +103,7 @@ if ($event == 'diag') {
 
 function apache_module($m)
 {
-    $modules = @apache_get_modules();
+    $modules = apache_get_modules();
 
     if (is_array($modules)) {
         return in_array($m, $modules);
@@ -233,11 +233,11 @@ function doDiagnostics()
         $fail['e'][] = array('php_version_required', null, array('{version}' => REQUIRED_PHP_VERSION));
     }
 
-    if (@gethostbyname($mydomain) === $mydomain) {
+    if (gethostbyname($mydomain) === $mydomain) {
         $fail['w'][] = array('dns_lookup_fails', null, array('{domain}' => $mydomain));
     }
 
-    if (!@is_dir($path_to_site)) {
+    if (!is_dir($path_to_site)) {
         $fail['e'][] = array('path_to_site_inaccessible', 'path_inaccessible', array('{path}' => $path_to_site));
     }
 
@@ -245,31 +245,31 @@ function doDiagnostics()
         $fail['w'][] = array('site_trailing_slash', null, array('{path}' => $path_to_site));
     }
 
-    if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
+    if (!is_file($path_to_index) || !is_readable($path_to_index)) {
         $fail['e'][] = array('index_inaccessible', 'path_inaccessible', array('{path}' => $path_to_index));
     }
 
-    if (!@is_writable($path_to_site.DS.$img_dir)) {
+    if (!is_writable($path_to_site.DS.$img_dir)) {
         $notReadable[] = array('{dirtype}' => 'img_dir', '{path}' => $path_to_site.DS.$img_dir);
     }
 
-    if (!@is_writable($file_base_path)) {
+    if (!is_writable($file_base_path)) {
         $notReadable[] = array('{dirtype}' => 'file_base_path', '{path}' => $file_base_path);
     }
 
-    if (!@is_writable($path_to_site.DS.$skin_dir)) {
+    if (!is_writable($path_to_site.DS.$skin_dir)) {
         $notReadable[] = array('{dirtype}' => 'skin_dir', '{path}' => $path_to_site.DS.$skin_dir);
     }
 
-    if (!@is_writable($tempdir)) {
+    if (!is_writable($tempdir)) {
         $notReadable[] = array('{dirtype}' => 'tempdir', '{path}' => $tempdir);
     }
 
-    if (!@is_writable(PLUGINPATH)) {
+    if (!is_writable(PLUGINPATH)) {
         $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => PLUGINPATH);
     }
 
-    if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {
+    if ($permlink_mode != 'messy' && $is_apache && !is_readable($path_to_site.'/.htaccess')) {
         $fail['e'][] = array('htaccess_missing');
     }
 
@@ -281,16 +281,10 @@ function doDiagnostics()
         $fail['i'][] = array('file_uploads_disabled');
     }
 
-    if (isset($txpcfg['multisite_root_path'])) {
-        $basePath = $txpcfg['multisite_root_path'].DS.'admin';
+    $basePath = isset($txpcfg['multisite_root_path']) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
 
-        if (@is_dir($basePath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup'))) {
-            $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath.DS.'setup'.DS));
-        }
-    } else {
-        if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-            $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => txpath.DS.'setup'.DS));
-        }
+    if (!$txp_is_dev && is_dir($basePath.DS.'setup') && !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup')) {
+        $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath.DS.'setup'.DS));
     }
 
     if (empty($tempdir)) {
@@ -380,7 +374,7 @@ function doDiagnostics()
             $s = md5(uniqid(rand(), true));
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = @file(hu.$s.'/?txpcleantest=1');
+            $pretext_data = file(hu.$s.'/?txpcleantest=1');
 
             if ($pretext_data) {
                 $pretext_req = trim(@$pretext_data[0]);
@@ -468,8 +462,27 @@ function doDiagnostics()
         $gd = gTxt('diag_unavailable');
     }
 
-    $intl = extension_loaded('intl') ? phpversion('intl') : gTxt('diag_unavailable');
-    $mbstring = extension_loaded('mbstring') ? phpversion('mbstring') : gTxt('diag_unavailable');
+    $extns = get_loaded_extensions();
+    $exts_required = array(
+        'mysqli',
+        'xml',
+        'SimpleXML',
+        'json',
+    );
+
+    $exts_recommended = array(
+        'intl',
+        'mbstring',
+        'zip',
+        'zlib',
+    );
+
+    $exts_missing_required = array_diff($exts_required, $extns);
+    $exts_missing_recommended = array_diff($exts_recommended, $extns);
+
+    if ($exts_missing_required) {
+        $fail['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_missing_required))));
+    }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
         $fail['e'][] = array('tmp_plugin_paths_match');
@@ -612,7 +625,7 @@ function doDiagnostics()
 
         gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, filemtime(txpath.'/update/_update.php')).n,
 
         priv.gTxt('diag_web_domain').cs.$siteurl.n,
 
@@ -644,10 +657,6 @@ function doDiagnostics()
 
         (TEXTPATTERN_IMAGICK_VERSION) ? gTxt('diag_imagick_library').cs.TEXTPATTERN_IMAGICK_VERSION.n : '',
 
-        gTxt('diag_intl_extension').cs.$intl.n,
-
-        gTxt('diag_mbstring_extension').cs.$mbstring.n,
-
         gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
 
         gTxt('diag_server_time').cs.date('Y-m-d H:i:s').n,
@@ -674,7 +683,7 @@ function doDiagnostics()
 
         (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
-        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.@apache_get_version().n : '',
+        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.apache_get_version().n : '',
 
         gTxt('diag_php_sapi_mode').cs.PHP_SAPI.n,
 
@@ -762,11 +771,18 @@ function doDiagnostics()
         $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('diag_custom').cs.
                     implode(', ', $cf).sp.'('.count($cf).')'.n;
 
-        $extns = get_loaded_extensions();
         $extv = array();
 
         foreach ($extns as $e) {
-            $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
+            $extv[] = $e.(phpversion($e) ? ' ('.phpversion($e).')' : '');
+        }
+
+        if ($extv) {
+            $out[] = n.gTxt('diag_extensions_installed').cs.implode(', ', $extv).n;
+        }
+
+        if ($exts_missing_recommended) {
+            $out[] = n.gTxt('diag_extensions_recommended').cs.implode(', ', array_filter($exts_missing_recommended)).n;
         }
 
         if (is_callable('apache_get_modules')) {
@@ -833,7 +849,7 @@ function checkUpdates()
             $contents = file_get_contents($endpoint);
         }
 
-        $response = @json_decode($contents, true);
+        $response = json_decode($contents, true);
 
         if (isset($response['textpattern-version'])) {
             $release = $response['textpattern-version']['release'];
@@ -848,7 +864,7 @@ function checkUpdates()
                 $lastCheck['msgval'] = array('{version}' => $release);
             }
 
-            if (version_compare($version, $prerelease) < 0) {
+            if (isset($prerelease) && version_compare($version, $prerelease) < 0) {
                 $lastCheck['msg2'] = 'textpattern_update_available_beta';
                 $lastCheck['msgval2'] = array('{version}' => $prerelease);
             }

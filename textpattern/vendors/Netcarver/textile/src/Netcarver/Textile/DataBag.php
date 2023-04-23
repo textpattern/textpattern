@@ -50,23 +50,20 @@ namespace Netcarver\Textile;
  *
  * @internal
  */
-
 class DataBag
 {
     /**
      * The data array stored in the bag.
      *
-     * @var array
+     * @var array<string, int|string>
      */
-
     protected $data;
 
     /**
      * Constructor.
      *
-     * @param array|null $data The initial data array stored in the bag
+     * @param array<string, string|int>|null $data The initial data array stored in the bag
      */
-
     public function __construct(array $data = null)
     {
         $this->data = (array) $data;
@@ -82,11 +79,10 @@ class DataBag
      * $plant = new DataBag(array('key' => 'value'));
      * $plant->flower('rose')->color('red')->emptyValue(false, true);
      *
-     * @param   string $name   The name
-     * @param   array  $params Arguments
-     * @return  DataBag
+     * @param string $name The name
+     * @param array<int, int|string> $params Arguments
+     * @return DataBag
      */
-
     public function __call($name, array $params)
     {
         if (!empty($params[1]) || !empty($params[0])) {

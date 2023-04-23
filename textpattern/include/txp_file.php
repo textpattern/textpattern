@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * Copyright (C) 2004 Michael Manfre
@@ -387,25 +387,18 @@ function file_list($message = '', $ids = array())
 
                 if ($category) {
                     $category = span(txpspecialchars($category_title), array(
-                        'title'      => $category,
-                        'aria-label' => $category,
+                        'title' => $category,
                     ));
                 }
 
                 if ($can_edit) {
-                    $name = href(txpspecialchars($filename), $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
                 } else {
                     $name = txpspecialchars($filename);
                 }
 
                 if ($can_edit) {
-                    $id_column = href($id, $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
                     $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
                 } else {
                     $id_column = $id;
@@ -464,10 +457,7 @@ function file_list($message = '', $ids = array())
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($realname), array(
-                            'title'      => $author,
-                            'aria-label' => $author,
-                        )), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
@@ -491,10 +481,9 @@ function file_list($message = '', $ids = array())
         n.tag(
         null,
         'div', array(
-            'class'      => 'txp-tagbuilder-content',
-            'id'         => 'tagbuild_links',
-            'title'      => gTxt('tagbuilder'),
-            'aria-label' => gTxt('tagbuilder'),
+            'class' => 'txp-tagbuilder-content',
+            'id'    => 'tagbuild_links',
+            'title' => gTxt('tagbuilder'),
         ));
 }
 
@@ -684,8 +673,8 @@ function file_edit($message = '', $id = '')
             $replace = '';
         } else {
             $replace = ($file_exists)
-                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
-                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
+                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file')
+                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file');
         }
 
         $condition = span((($file_exists)
@@ -728,11 +717,6 @@ function file_edit($message = '', $id = '')
             hed(gTxt('edit_file'), 2).
             $replace.
             inputLabel(
-                'condition',
-                $condition,
-                '', '', array('class' => 'txp-form-field edit-file-condition')
-            ).
-            inputLabel(
                 'id',
                 $id,
                 'id', '', array('class' => 'txp-form-field edit-file-id')
@@ -748,6 +732,11 @@ function file_edit($message = '', $id = '')
                 '', '', array('class' => 'txp-form-field edit-file-download-count')
             ).
             form(
+                inputLabel(
+                    'condition',
+                    $condition,
+                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                ).
                 (($file_exists)
                 ? inputLabel(
                         'file_status',
@@ -799,7 +788,7 @@ function file_edit($message = '', $id = '')
                 eInput('file').
                 sInput('file_save').
                 hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
-            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details').
             n.tag_end('div');
     }
 }
@@ -952,10 +941,8 @@ function file_insert()
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $messages[] = array(gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ))), false), 0);
+                    $messages[] = array(gTxt('file_uploaded',
+                        array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false), 0);
                 }
             }
         } else {
@@ -1008,9 +995,14 @@ function file_insert()
 
 function file_replace()
 {
-    global $txp_user, $file_base_path;
+    global $app_mode, $txp_user, $file_base_path;
 
     $id = assert_int(gps('id'));
+
+    if (!isset($_FILES['thefile'])) {
+        return file_edit('', $id);
+    }
+
     $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
 
     if (!$rs) {
@@ -1026,8 +1018,17 @@ function file_replace()
         require_privs();
     }
 
-    $file = file_get_uploaded();
-    $name = file_get_uploaded_name();
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
+    $files = $fileshandler->refactor($_FILES['thefile']);
+    
+    foreach ($files as $file) {
+        $fileshandler->dechunk($file);
+    }
+
+    extract($file);
+
+    $file = $tmp_name;//file_get_uploaded();
+//    $name = file_get_uploaded_name();
 
     if ($file === false) {
         // Could not get uploaded file.
@@ -1057,17 +1058,27 @@ function file_replace()
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
             now('created', true);
+            $message = gTxt('file_uploaded', array('{name}' => $name));
 
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', "size = $size, modified = NOW()", "id = '$id'");
             }
 
-            file_edit(gTxt('file_uploaded', array('{name}' => $name)), $id);
-
             // Clean up old.
             if (is_file($newpath.'.tmp')) {
                 unlink(realpath($newpath.'.tmp'));
             }
+
+            if ($app_mode == 'async') {
+                $response = 'textpattern.Console.addMessage('.json_encode((array)$message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
+        
+                send_script_response($response);
+        
+                // Bail out.
+                return;
+            }
+        
+            file_edit($message, $id);
         }
     }
 }

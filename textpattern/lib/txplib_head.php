@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size, $csp_nonce;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $file_max_upload_size, $csp_nonce;
 
     if (strpos(CONTENT_SECURITY_POLICY, '{TEXTPATTERN_CSP_NONCE}') !== false && $csp_nonce === null) {
         $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2023 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -695,7 +695,7 @@ function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '
         ($class) ? ' class="'.$class.'"'  : '',
         ($tab)   ? ' tabindex="'.$tab.'"' : '',
         ($chkd)  ? ' checked="checked"'   : '',
-        ' />'.n,
+        (get_pref('doctype') === 'html5' ? '>' : ' />').n,
     );
 
     return join('', $o);

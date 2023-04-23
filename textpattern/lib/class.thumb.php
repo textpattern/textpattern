@@ -166,7 +166,7 @@ class wet_thumb
      * @var array
      */
 
-    public $types = array('', '.gif', '.jpg', '.png');
+    public $types = array('', '.gif', '.jpg', '.png', '.svg');
 
     /**
      * Source.
@@ -197,7 +197,7 @@ class wet_thumb
         $this->addgreytohint = true;
         $this->quality = 80;
         $this->html = ' alt="" title="" ';
-        $this->link = true;
+//        $this->link = true;
     }
 
     /**
@@ -224,7 +224,7 @@ class wet_thumb
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF.
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF, 99=SVG.
         $this->_SRC['string']     = $temp[3];
         $this->_SRC['image']      = $temp['image'];
         $this->_SRC['filename']   = basename($infile);
@@ -254,6 +254,8 @@ class wet_thumb
             $this->_SRC['image'] = imagecreatefromwebp($this->_SRC['file']);
         } elseif ($this->_SRC['type'] == 19) {
             $this->_SRC['image'] = imagecreatefromavif($this->_SRC['file']);
+        } elseif ($this->_SRC['type'] == 99) {
+            $this->_SRC['image'] = imagecreatefromsvg($this->_SRC['file']);
         }
 */
         // Ensure non-zero height/width.
@@ -263,6 +265,37 @@ class wet_thumb
 
         if (!$this->_SRC['width']) {
             $this->_SRC['width'] = 100;
+        }
+
+        // Check exif orientation of JPEG source image.
+        if ($this->_SRC['type'] == 2) { // JPEG format
+            $exif = exif_read_data($this->_SRC['file']);
+            if (!empty($exif['Orientation'])) {
+                // Correct thumbnail orientation based on exif value.
+                switch ($exif['Orientation']) {
+                    case 3: // upside-down.
+                    case 4: // upside-down (mirrored).
+                        $this->_SRC['image'] = imagerotate($this->_SRC['image'], -180, 0);
+                        break;
+                    case 5: // rotate-left (mirrored).
+                    case 6: // rotate-left.
+                        $this->_SRC['image'] = imagerotate($this->_SRC['image'], -90, 0);
+                        break;
+                    case 7: // rotate-right (mirrored).
+                    case 8: // rotate-right.
+                        $this->_SRC['image'] = imagerotate($this->_SRC['image'], 90, 0);
+                        break;
+                }
+                // Swap height and width values if thumbnail is rotated by 90°.
+                if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
+                    $this->_SRC['width']    = $temp[1];
+                    $this->_SRC['height']   = $temp[0];
+                }
+                // Flip thumbnail if exif orientation is mirrored.
+                if (in_array($exif['Orientation'], [2, 5, 7, 4])) {
+                    imageflip($this->_SRC['image'], IMG_FLIP_HORIZONTAL);
+                }
+            }
         }
 
         // Check image orientation.
@@ -319,6 +352,8 @@ class wet_thumb
 
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
+        $src_width = $this->_SRC['width'];
+        $src_height = $this->_SRC['height'];
 
         // Crop image.
         $off_w = 0;
@@ -360,6 +395,39 @@ class wet_thumb
                     $this->_SRC['height'] = $cpyHeight;
                 }
             }
+        }
+
+        if ($this->_DST['type'] == 99) {
+            $this->_DST['image'] = $this->_SRC['image'];
+            $xml = simplexml_load_string($this->_DST['image']);
+            if ($xml !== false) {
+                if ($verbose) {
+                    echo "... saving image ...";
+                }
+                if (empty($xml['width'])) {
+                    $xml->addChild('width');
+                    $xml['width'] = $src_width;
+                }
+                if (empty($xml['height'])) {
+                    $xml->addChild('height');
+                    $xml['height'] = $src_height;
+                }
+                if (empty($xml['viewBox'])) {
+                    $xml->addChild('viewBox');
+                    $xml['viewBox'] = '0 0 ' . svgtopx($xml['width']) . ' ' . svgtopx($xml['height']);
+                }
+                if ($this->crop != false) {
+                    $xml['viewBox'] = $off_w . ' ' .  $off_h . ' ' . $this->_SRC['width'] . ' ' . $this->_SRC['height'];
+                }
+                $this->width = $xml['width'] = $this->_DST['width'];
+                $this->height = $xml['height'] = $this->_DST['height'];
+                $result = file_put_contents($this->_DST['file'], $xml->asXML());
+                if ($verbose) {
+                    echo $result ? "... image successfully saved ..." : "... failed to save image ...";
+                }
+                return $result;
+            }
+            return false;
         }
 
         // Create DST.
@@ -486,7 +554,7 @@ class wet_thumb
 
         if ($aslink === true) {
             return '<a href="'.((empty($this->linkurl)) ? $this->_SRC['file'] : $this->linkurl).'" '.
-                (($aspopup === true) ? ' target="_blank"' : '').'>'.$imgtag.'</a>';
+                (($aspopup === true) ? ' rel="noopener" target="_blank"' : '').'>'.$imgtag.'</a>';
         }
 
         return $imgtag;
@@ -627,7 +695,7 @@ class txp_thumb extends wet_thumb
             $radius = 50;
         }
 
-        $radius = $radius * 2;
+        $radius *= 2;
 
         if ($threshold > 255) {
             $threshold = 255;
