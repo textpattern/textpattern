@@ -599,6 +599,8 @@ function image_edit($message = '', $id = '')
 
         pagetop(gTxt('edit_image'), $message);
 
+        $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_image', 'name, alt');
+
         extract(gpsa(array(
             'page',
             'sort',
@@ -724,13 +726,11 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_name',
-                            tag_void('input', array(
-                                'id'       => 'image_name',
-                                'name'     => 'name',
-                                'size'     => INPUT_REGULAR,
-                                'value'    => $name,
-                                'type'     => 'text',
-                                'readonly' => !$can_edit,
+                            Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                                'id'        => 'image_name',
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes['name'],
+                                'readonly'  => !$can_edit,
                             )),
                             'image_name', '', array('class' => 'txp-form-field edit-image-name')
                         ).
@@ -745,13 +745,11 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_alt_text',
-                            tag_void('input', array(
-                                'id'       => 'image_alt_text',
-                                'name'     => 'alt',
-                                'size'     => INPUT_REGULAR,
-                                'value'    => $alt,
-                                'type'     => 'text',
-                                'readonly' => !$can_edit,
+                            Txp::get('\Textpattern\UI\Input', 'alt', 'text', $alt)->setAtts(array(
+                                'id'        => 'image_alt_text',
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes['alt'],
+                                'readonly'  => !$can_edit,
                             )),
                             'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
                         ).
