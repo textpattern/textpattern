@@ -1017,9 +1017,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
 function custField($num, $field, $content)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'custom_'.$num);
+
     return inputLabel(
         'custom-'.$num,
-        fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num),
+        Txp::get('\Textpattern\UI\Input', 'custom_'.$num, 'text', $content)->setAtts(array(
+            'id'        => 'custom-'.$num,
+            'size'      => INPUT_REGULAR,
+            'maxlength' => $fieldSizes['custom_'.$num],
+        )),
         txpspecialchars($field),
         array('', 'instructions_custom_'.$num),
         array('class' => 'txp-form-field custom-field custom-'.$num)
@@ -1325,9 +1331,16 @@ function article_partial_html_title($rs)
 
 function article_partial_title($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'Title');
+
     $out = inputLabel(
         'title',
-        fInput('text', 'Title', preg_replace("/&amp;(?![#a-z0-9]+;)/i", "&", $rs['Title']), '', '', '', INPUT_LARGE, '', 'title', false, true),
+        Txp::get('\Textpattern\UI\Input', 'Title', 'text', preg_replace("/&amp;(?![#a-z0-9]+;)/i", "&", $rs['Title']))
+            ->setAtts(array(
+                'id'        => 'title',
+                'size'      => INPUT_LARGE,
+                'maxlength' => $fieldSizes['Title'],
+            ))->setBool('required'),
         'title',
         array('title', 'instructions_title'),
         array('class' => 'txp-form-field title')
@@ -1457,9 +1470,16 @@ function article_partial_custom_field($rs, $key)
 
 function article_partial_url_title($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'url_title');
+
     $out = inputLabel(
         'url-title',
-        fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'),
+        Txp::get('\Textpattern\UI\Input', 'url_title', 'text', article_partial_url_title_value($rs))
+            ->setAtts(array(
+                'id'        => 'url-title',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['url_title'],
+            )),
         'url_title',
         array('url_title', 'instructions_url_title'),
         array('class' => 'txp-form-field url-title')
@@ -1492,9 +1512,16 @@ function article_partial_url_title_value($rs)
 
 function article_partial_description($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'description');
+
     $out = inputLabel(
         'description',
-        '<textarea id="description" name="description" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_description_value($rs)).'</textarea>',
+        Txp::get('\Textpattern\UI\Textarea', 'description', article_partial_description_value($rs))->setAtts(array(
+            'id'        => 'description',
+            'rows'      => TEXTAREA_HEIGHT_SMALL,
+            'cols'      => INPUT_MEDIUM,
+            'maxlength' => $fieldSizes['description'],
+        )),
         'description',
         array('description', 'instructions_description'),
         array('class' => 'txp-form-field txp-form-field-textarea description')
@@ -1527,9 +1554,17 @@ function article_partial_description_value($rs)
 
 function article_partial_keywords($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'Keywords');
+
     $out = inputLabel(
         'keywords',
-        '<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>',
+        Txp::get('\Textpattern\UI\Textarea', 'Keywords', article_partial_keywords_value($rs))
+            ->setAtts(array(
+                'id'        => 'keywords',
+                'rows'      => TEXTAREA_HEIGHT_SMALL,
+                'cols'      => INPUT_MEDIUM,
+                'maxlength' => $fieldSizes['Keywords'],
+            )),
         'keywords',
         array('keywords', 'instructions_keywords'),
         array('class' => 'txp-form-field txp-form-field-textarea keywords')
@@ -1563,9 +1598,15 @@ function article_partial_keywords_value($rs)
 
 function article_partial_image($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'Image');
+
     $default = inputLabel(
         'article-image',
-        fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'),
+        Txp::get('\Textpattern\UI\Input', 'Image', 'text', $rs['Image'])->setAtts(array(
+            'id'        => 'article-image',
+            'size'      => INPUT_REGULAR,
+            'maxlength' => $fieldSizes['Image'],
+        )),
         'article_image',
         array('article_image', 'instructions_article_image'),
         array('class' => 'txp-form-field article-image')
@@ -1973,6 +2014,7 @@ function article_partial_comments($rs)
 
     if ($use_comments == 1) {
         $comments_expired = false;
+        $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'AnnotateInvite');
 
         if (!empty($ID) && $comments_disabled_after) {
             $lifespan = $comments_disabled_after * 86400;
@@ -1992,7 +2034,11 @@ function article_partial_comments($rs)
                 ).
                 inputLabel(
                     'comment-invite',
-                    fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite'),
+                    Txp::get('\Textpattern\UI\Input', 'AnnotateInvite', 'text', $AnnotateInvite)->setAtts(array(
+                        'id'        => 'comment-invite',
+                        'size'      => INPUT_REGULAR,
+                        'maxlength' => $fieldSizes['AnnotateInvite'],
+                    )),
                     'comment_invitation',
                     array('', 'instructions_comment_invitation'),
                     array('class' => 'txp-form-field comment-invite')
