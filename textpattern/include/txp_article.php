@@ -1017,7 +1017,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
 function custField($num, $field, $content)
 {
-
+    // Not using maxlength constraints because it interferes with custom field plugins.
     return inputLabel(
         'custom-'.$num,
         Txp::get('\Textpattern\UI\Input', 'custom_'.$num, 'text', $content)->setAtts(array(
