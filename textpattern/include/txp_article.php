@@ -1017,14 +1017,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
 function custField($num, $field, $content)
 {
-    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('textpattern', 'custom_'.$num);
 
     return inputLabel(
         'custom-'.$num,
         Txp::get('\Textpattern\UI\Input', 'custom_'.$num, 'text', $content)->setAtts(array(
-            'id'        => 'custom-'.$num,
-            'size'      => INPUT_REGULAR,
-            'maxlength' => $fieldSizes['custom_'.$num],
+            'id'   => 'custom-'.$num,
+            'size' => INPUT_REGULAR,
         )),
         txpspecialchars($field),
         array('', 'instructions_custom_'.$num),
