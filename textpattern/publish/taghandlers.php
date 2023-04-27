@@ -3246,6 +3246,7 @@ function if_request($atts, $thing = null)
         case 'GET':
         case 'POST':
         case 'COOKIE':
+        case 'SESSION':
         case 'SERVER':
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
