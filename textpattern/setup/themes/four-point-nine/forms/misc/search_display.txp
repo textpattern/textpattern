@@ -1,12 +1,11 @@
 <h1 itemprop="name"><txp:text item="search_results" /></h1>
-<txp:article[1] pgonly="1" />
 
 <txp:if_search_results>
 
     <!-- if search result count greater than 200 then display excessive results message, otherwise show search result count -->
     <txp:if_search_results max="200">
         <h3>
-            <txp:search_result_count />
+            <txp:items_count />
             <txp:text item="matching_search_request" />
             <q><txp:search_term /></q>
         </h3>
@@ -26,7 +25,7 @@
 </txp:if_search_results>
 
 <!-- display resulting articles (10 per page; default setting) -->
-<txp:article class="article-list" wraptag="ul" />
+<txp:article[1] class="article-list" wraptag="ul" />
 
 <!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">

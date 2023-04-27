@@ -381,8 +381,8 @@ function link_edit($message = '')
 
     extract(array_map('assert_string', gpsa($vars)));
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_link', 'linkname, linksort');
     $is_edit = ($id && $step == 'link_edit');
-
     $rs = array();
 
     if ($is_edit) {
@@ -436,12 +436,21 @@ function link_edit($message = '')
             hed($caption, 2).
             inputLabel(
                 'link_name',
-                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'linkname', 'text', $linkname)->setAtts(array(
+                    'id'        => 'link_name',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['linkname'],
+                ))->setBool('required'),
                 'title', '', array('class' => 'txp-form-field edit-link-name')
             ).
             inputLabel(
                 'link_sort',
-                fInput('text', 'linksort', $linksort, 'input-medium', '', '', INPUT_MEDIUM, '', 'link_sort'),
+                Txp::get('\Textpattern\UI\Input', 'linksort', 'text', $linksort)->setAtts(array(
+                    'id'        => 'link_sort',
+                    'class'     => 'input-medium',
+                    'size'      => INPUT_MEDIUM,
+                    'maxlength' => $fieldSizes['linksort'],
+                )),
                 'sort_value', 'link_sort', array('class' => 'txp-form-field edit-link-sort')
             ).
             // TODO: maybe use type="url" once browsers are less strict.

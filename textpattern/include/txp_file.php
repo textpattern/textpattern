@@ -658,6 +658,8 @@ function file_edit($message = '', $id = '')
 
         pagetop(gTxt('edit_file'), $message);
 
+        $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_file', 'title');
+
         if ($permissions == '') {
             $permissions = '-1';
         }
@@ -746,7 +748,11 @@ function file_edit($message = '', $id = '')
                     $created.
                     inputLabel(
                         'file_title',
-                        fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
+                        Txp::get('\Textpattern\UI\Input', 'title', 'text', $title)->setAtts(array(
+                            'id'        => 'file_title',
+                            'size'      => INPUT_REGULAR,
+                            'maxlength' => $fieldSizes['title'],
+                        )),
                         'title', '', array('class' => 'txp-form-field edit-file-title')
                     ).
                     inputLabel(

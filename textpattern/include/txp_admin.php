@@ -581,6 +581,7 @@ function author_edit($message = '', $fullEdit = false)
     $vars = array('user_id', 'name', 'RealName', 'email', 'privs');
     $rs = array();
     $out = array();
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_users', 'name, RealName, email');
 
     extract(gpsa($vars));
 
@@ -615,7 +616,11 @@ function author_edit($message = '', $fullEdit = false)
     } elseif (has_privs('admin.edit')) {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+            Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                'id'        => 'login_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['name'],
+            ))->setBool('required'),
             'login_name', 'create_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -638,12 +643,20 @@ function author_edit($message = '', $fullEdit = false)
 
     $out[] = inputLabel(
             'real_name',
-            fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
+            Txp::get('\Textpattern\UI\Input', 'RealName', 'text', $RealName)->setAtts(array(
+                'id'        => 'real_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['RealName'],
+            )),
             'real_name', '', array('class' => 'txp-form-field edit-admin-name')
         ).
         inputLabel(
             'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email', false, true),
+            Txp::get('\Textpattern\UI\Input', 'email', 'email', $email)->setAtts(array(
+                'id'        => 'login_email',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['email'],
+            ))->setBool('required'),
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 
