@@ -674,7 +674,7 @@ EOS
 }
 
 /**
- * Renders a yes/no radio button with toggle for the other SMTP settings.
+ * Renders a yes/list/no radio button set to specify whether to apply trailing slashes to URLs.
  *
  * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected option
@@ -923,7 +923,7 @@ function commentsendmail($name, $val)
 function custom_set($name, $val)
 {
     static $reserved = array();
-    
+
     if (empty($reserved)) {
         foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
 //            + array_filter(filterAtts(array(), true), function($key) {return preg_match('/^[\w\-]+$/', $key);}, ARRAY_FILTER_USE_KEY);
