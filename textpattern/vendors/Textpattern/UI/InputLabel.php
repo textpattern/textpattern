@@ -273,8 +273,12 @@ class InputLabel extends Tag implements UICollectionInterface
             $labelContent = gTxt($key).$help;
         } else {
             $labelContent = new \Textpattern\UI\Tag('label');
+
+            if (is_object($this->label)) {
+                $labelContent->setAtts(array('for' => $key));
+            }
+
             $labelContent
-                ->setAtts(array('for' => $key))
                 ->setContent(gTxt($this->label).$help)
                 ->render();
         }

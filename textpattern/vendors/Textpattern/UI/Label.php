@@ -43,7 +43,10 @@ class Label extends Tag implements UIInterface
     {
         parent::__construct('label');
 
-        $this->setContent($value)
-            ->setAtt('for', $name);
+        $this->setContent($value);
+
+        if ($name) {
+            $this->setAtt('for', $name);
+        }
     }
 }
