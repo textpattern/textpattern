@@ -48,7 +48,8 @@ class RadioSet extends TagCollection implements UICollectionInterface
 
             $radio = new \Textpattern\UI\Radio($name, $key, $checked);
             $id = $radio->getKey();
-            $label = new \Textpattern\UI\Label($radio.sp.$label, $id);
+            $label = new \Textpattern\UI\Label($radio.n.$label, $id);
+            $label->setAtt('class', 'txp-form-field-set');
 
             $this->add($label, 'label-'.$id);
         }
