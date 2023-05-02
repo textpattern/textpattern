@@ -515,19 +515,21 @@ function plugin_edit_form($name = '')
                 'cols'  => INPUT_XLARGE,
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
-            )), gTxt('code')).
+            )), array('code', 'plugin_code')).
             Txp::get('\Textpattern\UI\InputLabel', 'help_raw', Txp::get('\Textpattern\UI\Textarea', 'help_raw', $plugin['help_raw'])->setAtts(array(
                 'class' => 'help code',
+                'id'    => 'plugin_help',
                 'cols'  => INPUT_XLARGE,
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
-            )), gTxt('help')).
+            )), array('help', 'plugin_help')).
             Txp::get('\Textpattern\UI\InputLabel', 'textpack', Txp::get('\Textpattern\UI\Textarea', 'textpack', $plugin['textpack'])->setAtts(array(
                 'class' => 'textpack code',
+                'id'    => 'plugin_textpack',
                 'cols'  => INPUT_XLARGE,
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
-            )), gTxt('textpack')),
+            )), array('textpack', 'plugin_textpack')),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -543,14 +545,20 @@ function plugin_edit_form($name = '')
                 tag(
                     Txp::get('\Textpattern\UI\InputLabel', 'newname',
                         Txp::get('\Textpattern\UI\Input', 'newname', 'text', $plugin['name'])
-                            ->setAtt('maxlength', $fieldSizes['name'])
+                            ->setAtts(array(
+                                'id'        => 'newname',
+                                'maxlength' => $fieldSizes['name'],
+                            ))
                             ->setBool('required'),
-                        gTxt('name')
+                        'name'
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'version',
                         Txp::get('\Textpattern\UI\Input', 'version', 'text', $plugin['version'])
-                            ->setAtt('maxlength', $fieldSizes['version']),
-                        gTxt('version')
+                            ->setAtts(array(
+                                'id'        => 'version',
+                                'maxlength' => $fieldSizes['version'],
+                            )),
+                        'version'
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'type',
                         Txp::get('\Textpattern\UI\Select', 'type', array(
@@ -560,30 +568,44 @@ function plugin_edit_form($name = '')
                             3 => gTxt('admin'),
                             4 => gTxt('admin_async'),
                             5 => gTxt('public_admin_async'),
-                        ), $plugin['type']),
-                        gTxt('type')
+                        ), $plugin['type'])->setAtt('id', 'plugin_type'),
+                        array('type', 'plugin_type')
                     ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'order', Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order']), gTxt('load_order')).
+                    Txp::get('\Textpattern\UI\InputLabel', 'order',
+                        Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order'])
+                            ->setAtt('id', 'order'),
+                        'load_order'
+                    ).
                     Txp::get('\Textpattern\UI\InputLabel', 'author',
                         Txp::get('\Textpattern\UI\Input', 'author', 'text', $plugin['author'])
-                            ->setAtt('maxlength', $fieldSizes['author']),
-                        gTxt('author')
+                            ->setAtts(array(
+                                'id'        => 'author',
+                                'maxlength' => $fieldSizes['author'],
+                        )),
+                        'author'
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'author_uri',
                         Txp::get('\Textpattern\UI\Input', 'author_uri', 'text', $plugin['author_uri'])
                             ->setAtts(array(
+                                'id'        => 'author_uri',
                                 'size'      => INPUT_LARGE,
                                 'maxlength' => $fieldSizes['author_uri'],
                             )),
-                        gTxt('author_uri')
+                        'author_uri'
                     ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'description', Txp::get('\Textpattern\UI\Input', 'description', 'text', $plugin['description'])->setAtt('size', INPUT_XLARGE), gTxt('description')).
+                    Txp::get('\Textpattern\UI\InputLabel', 'description',
+                        Txp::get('\Textpattern\UI\Input', 'description', 'text', $plugin['description'])
+                            ->setAtts(array(
+                                'id'   => 'description',
+                                'size' => INPUT_XLARGE,
+                        )),
+                        'description'
+                    ).
                     Txp::get('\Textpattern\UI\InputLabel', 'flags',
                         Txp::get('\Textpattern\UI\CheckboxSet', 'flags', array(
                             1 => gTxt('plugin_has_prefs'),
                             2 => gTxt('plugin_lifecycle_notify'),
-                        ), $flagset),
-                        gTxt('flags')
+                        ), $flagset)
                     ).
                     eInput('plugin').
                     sInput('plugin_save').
