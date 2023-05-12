@@ -614,11 +614,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'cb'       => 'article_partial_custom_fields',
         ),
         // 'Recent articles' values.
-//        'recent_articles' => array(
-//            'mode'     => PARTIAL_VOLATILE,
-//            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
-//            'cb'       => 'article_partial_recent_articles',
-//        ),
+        'recent_articles' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
+            'cb'       => 'article_partial_recent_articles',
+        ),
     );
 
     // Add partials for custom fields (and their values which is redundant by
@@ -1648,9 +1648,10 @@ function article_partial_custom_fields($rs)
 
 function article_partial_recent_articles($rs)
 {
-    $recents = safe_rows_start("Title, ID", 'textpattern', "1 = 1 ORDER BY LastMod DESC LIMIT ".(int) WRITE_RECENT_ARTICLES_COUNT);
+//    $recents = safe_rows_start("Title, ID", 'textpattern', "1 = 1 ORDER BY LastMod DESC LIMIT ".(int) WRITE_RECENT_ARTICLES_COUNT);
     $ra = '';
 
+/*
     if ($recents && numRows($recents)) {
         $ra = '<ol class="recent">';
 
@@ -1666,7 +1667,7 @@ function article_partial_recent_articles($rs)
 
         $ra .= '</ol>';
     }
-
+*/
     return tag(pluggable_ui('article_ui', 'recent_articles', $ra, $rs), 'div', array('class' => 'txp-container'));
 }
 
