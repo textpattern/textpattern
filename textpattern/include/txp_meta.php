@@ -427,7 +427,7 @@ function meta_edit($message = '')
             $options = $cf->get('options');
         }
     } else {
-        $render = 'text_input';
+        $render = 'textInput';
     }
 
     $optionList = array();

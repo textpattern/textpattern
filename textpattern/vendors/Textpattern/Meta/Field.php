@@ -307,7 +307,7 @@ class Field
 
         $created = (empty($created) || $created === '0000-00-00 00:00:00') ? $sqlnow : $created;
         $expires = (empty($expires) || $expires === '0000-00-00 00:00:00') ? "NULL" : "'".$expires."'";
-        $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['text_input'];
+        $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['textInput'];
 
         $has_textfilter = ($textfilter !== '' && $data_type['textfilter']);
         $has_delimiter = ($delimiter !== '' && $data_type['delimited']);
