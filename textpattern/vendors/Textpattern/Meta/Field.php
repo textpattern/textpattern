@@ -822,13 +822,19 @@ class Field
 
         switch ($type) {
             case 'textInput':
-                $widget = fInput('text', $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
+                $widget = \Txp::get('\Textpattern\UI\Input', $name, 'text', implode('', $thisContent))
+                    ->setAtts(array(
+                        'size' => INPUT_REGULAR,
+                        'id'   => $id,
+                    ));
                 break;
             case 'yesNoRadio':
-                $widget = yesnoRadio($name, implode('', $thisContent), 0, $id);
+                $widget = \Txp::get('\Textpattern\UI\YesNoRadioSet', $name, implode('', $thisContent))
+                    ->setAtt('id', $id);
                 break;
             case 'onOffRadio':
-                $widget = onoffRadio($name, implode('', $thisContent), 0, $id);
+                $widget = \Txp::get('\Textpattern\UI\OnOffRadioSet', $name, implode('', $thisContent))
+                    ->setAtt('id', $id);
                 break;
             case 'radioSet':
                 $vals = array();
@@ -837,30 +843,49 @@ class Field
                     $vals[$opt['name']] = gTxt($this->getOptionReference($opt['name']));
                 }
 
-                $widget = radioSet($vals, $name, implode('', $thisContent), 0, $id);
+                $widget = \Txp::get('\Textpattern\UI\RadioSet', $name, $vals, implode('', $thisContent))
+                    ->setAtt('id', $id);
                 break;
             case 'checkbox':
-                // ToDo
+                $widget = \Txp::get('\Textpattern\UI\Checkbox', $name, implode('', $thisContent), (bool)$thisContent)
+                    ->setAtt('id', $id);
                 break;
             case 'checkboxSet':
-                $out = array();
+                $vals = array();
 
                 foreach ($options as $idx => $opt) {
-                    $box_id = $name . '-' . $idx;
-                    $out[] = tag(checkbox($name, $opt['name'], (in_array($opt['name'], $thisContent)), '', $box_id, true) . '<label for="' . $box_id . '">' . gTxt($this->getOptionReference($opt['name'])) . '</label>', 'li');
+                    $vals[$opt['name']] = gTxt($this->getOptionReference($opt['name']));
                 }
 
-                $widget = tag(implode(n, $out), 'ul');
+                // @todo Beef up tags with some form of wraptag? ul/li would be handy here.
+                $widget = \Txp::get('\Textpattern\UI\CheckboxSet', $name, $vals, $thisContent)
+                    ->setAtt('id', $id);
+                break;
+            case 'selectInput':
+            case 'multiSelect':
+                $vals = array();
+
+                foreach ($options as $idx => $opt) {
+                    $vals[$opt['name']] = gTxt($this->getOptionReference($opt['name']));
+                }
+
+                $widget = \Txp::get('\Textpattern\UI\Select', $name, $vals, $thisContent)
+                    ->setAtt('id', $id);
                 break;
             case 'textArea':
-                $widget = text_area($name, 0, 0, implode('', $thisContent), $id);
+                $widget = \Txp::get('\Textpattern\UI\Textarea', $name, implode('', $thisContent))
+                    ->setAtt('id', $id);
                 break;
             case 'date':
             case 'time':
             case 'dateTime':
             case 'number':
             case 'range':
-                $widget = fInput(strtolower($type), $name, implode('', $thisContent), '', '', '', INPUT_REGULAR, '', $id);
+                $widget = \Txp::get('\Textpattern\UI\Input', $name, strtolower($type), implode('', $thisContent))
+                    ->setAtts(array(
+                        'size' => INPUT_REGULAR,
+                        'id'   => $id,
+                    ));
                 break;
             default:
                 $widget = callback_event('meta_ui', 'render', 0, compact('num', 'id', 'name', 'type', 'labelRef', 'options', 'help', 'thisContent'));
