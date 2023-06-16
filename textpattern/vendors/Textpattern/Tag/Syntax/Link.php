@@ -160,8 +160,7 @@ class Link
     }
     
     // -------------------------------------------------------------
-    
-    // NOTE: tpt_ prefix used because link() is a PHP function. See publish.php.
+
     public static function link($atts)
     {
         global $thislink;
