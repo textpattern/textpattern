@@ -239,7 +239,7 @@ class Comment
             $warn = $required && !$val;
         }
     
-        return fInput('text', array(
+        return fInput(($field === 'email' ? 'email' : 'text'), array(
                 'name'         => $field,
                 'aria-label'   => $aria_label,
                 'autocomplete' => $field == 'web' ? 'url' : $field,
