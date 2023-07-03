@@ -562,19 +562,19 @@ function plugin_edit_form($name = '')
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'type',
                         Txp::get('\Textpattern\UI\Select', 'type', array(
-                            0 => gTxt('public'),
-                            1 => gTxt('public_admin'),
-                            2 => gTxt('library'),
-                            3 => gTxt('admin'),
-                            4 => gTxt('admin_async'),
-                            5 => gTxt('public_admin_async'),
+                            0 => gTxt('plugin_type_public'),
+                            1 => gTxt('plugin_type_public_admin'),
+                            2 => gTxt('plugin_type_library'),
+                            3 => gTxt('plugin_type_admin'),
+                            4 => gTxt('plugin_type_admin_async'),
+                            5 => gTxt('plugin_type_public_admin_async'),
                         ), $plugin['type'])->setAtt('id', 'plugin_type'),
                         array('type', 'plugin_type')
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'order',
                         Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order'])
                             ->setAtt('id', 'order'),
-                        'load_order'
+                        'order'
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'author',
                         Txp::get('\Textpattern\UI\Input', 'author', 'text', $plugin['author'])
