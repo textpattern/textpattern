@@ -247,7 +247,7 @@ extract($pretext);
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+if ($status == '200' && !empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
 
@@ -381,7 +381,7 @@ function preText($store, $prefs = null)
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
-            switch ($u1) {
+            switch (strtolower($u1)) {
                 case 'atom':
                     $out['feed'] = 'atom';
                     break;
@@ -806,7 +806,7 @@ function output_file_download($filename)
     callback_event('file_download');
 
     if (!isset($file_error)) {
-        parse_form('file_download_header');
+        parse(get_pref('file_download_header'));
         $filename = sanitizeForFile($filename);
         $fullpath = build_file_path($file_base_path, $filename);
 
@@ -961,11 +961,6 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['?'];
 
-    // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort'])) {
-        $sort = "FIELD(ID, ".$id."), ".$sort;
-    }
-
     $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT ".
         intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
@@ -1014,11 +1009,10 @@ function doArticle($atts, $thing = null)
     $article = false;
 
     if (!empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
-        extract($thisarticle);
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
-        if ($atts['allowoverride'] && $override_form) {
-            $article = parse_form($override_form);
+        if ($atts['allowoverride'] && $thisarticle['override_form']) {
+            $article = parse_form($thisarticle['override_form']);
         } elseif ($atts['form']) {
             $article = parse_form($atts['form']);
         }
@@ -1110,7 +1104,7 @@ function chopUrl($req, $min = 4)
 {
     $req = strtok($req, '?');
     $req = preg_replace('/index\.php$/i', '', $req);
-    $r = array_map('urldecode', explode('/', strtolower($req)));
+    $r = array_map('urldecode', explode('/', $req));
     $n = isset($min) ? max($min, count($r)) : count($r);
     $o = array('u0' => $req);
 

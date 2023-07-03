@@ -78,6 +78,10 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         'data-col' => $sort,
     );
 
+    if (preg_match('/\b(asc|desc)\b/i', $options['class'], $matches)) {
+        $options += array('aria-sort' => strtolower($matches[1]).'ending');
+    }
+
     $head_items = array(
         'value'   => $value,
         'sort'    => $sort,
@@ -1449,10 +1453,11 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 $wraptag_class,
                 $wraptag_val
             ).
-            tag(null, 'progress', array('class' => 'txp-upload-progress hidden')),
+            n.tag(null, 'progress', array('class' => 'txp-upload-progress hidden')).
+            n.'<div class="txp-upload-preview"></div>',
             'form',
             array(
-                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
+                'class'   => 'txp-upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
@@ -1745,7 +1750,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             $list = array_map('trim', $list);
             !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
             $list = array_filter($list, function ($v) {return $v !== '';});
-        } elseif (isset($trim)) {
+        } elseif (isset($trim) && $trim !== '') {
             $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
                 preg_replace($trim, (string)$replacement, $list) :
                 (isset($replacement) ?

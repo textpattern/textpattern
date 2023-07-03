@@ -46,7 +46,7 @@
 function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 {
     if ($id) {
-        $id = $id.'-'.$field;
+        $id .= '-'.$field;
     } else {
         $id = $field;
     }

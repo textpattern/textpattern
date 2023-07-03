@@ -316,9 +316,52 @@ function author_list($message = '')
             'column' => 'UNIX_TIMESTAMP(last_access)',
             'class'  => 'date',
         ),
+        'article_count' => array(
+            'column' => 'articles.total',
+            'label'  => 'articles',
+        ),
+        'image_count' => array(
+            'column' => 'images.total',
+            'label'  => 'images',
+        ),
+        'file_count' => array(
+            'column' => 'files.total',
+            'label'  => 'files',
+        ),
+        'link_count' => array(
+            'column' => 'links.total',
+            'label'  => 'links',
+        ),
     );
 
-    $sql_from = safe_pfx_j('txp_users');
+    $sql_from = safe_pfx_j('txp_users'). ' LEFT JOIN
+            (SELECT
+                AuthorID as author, count(AuthorID) AS total
+                FROM '.PFX.'textpattern
+                GROUP BY AuthorID
+            ) AS articles
+            ON '.PFX.'txp_users.name = articles.author
+        LEFT JOIN
+            (SELECT
+                author, count(author) AS total
+                FROM '.PFX.'txp_image
+                GROUP BY author
+            ) AS images
+            ON '.PFX.'txp_users.name = images.author
+        LEFT JOIN
+            (SELECT
+                author, count(author) AS total
+                FROM '.PFX.'txp_file
+                GROUP BY author
+            ) AS files
+            ON '.PFX.'txp_users.name = files.author
+        LEFT JOIN
+            (SELECT
+                author, count(author) AS total
+                FROM '.PFX.'txp_link
+                GROUP BY author
+            ) AS links
+            ON '.PFX.'txp_users.name = links.author';
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
@@ -391,6 +434,26 @@ function author_list($message = '')
                     'column' => array('txp_users.privs'),
                     'label'  => gTxt('privileges'),
                     'type'   => 'boolean',
+                ),
+                'article_count' => array(
+                    'column' => 'articles.total',
+                    'label'  => gTxt('articles'),
+                    'type'   => 'numeric',
+                ),
+                'image_count' => array(
+                    'column' => 'images.total',
+                    'label'  => gTxt('images'),
+                    'type'   => 'numeric',
+                ),
+                'file_count' => array(
+                    'column' => 'files.total',
+                    'label'  => gTxt('files'),
+                    'type'   => 'numeric',
+                ),
+                'link_count' => array(
+                    'column' => 'links.total',
+                    'label'  => gTxt('links'),
+                    'type'   => 'numeric',
                 ),
             )
         );
@@ -512,6 +575,18 @@ function author_list($message = '')
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
                         ).
+                        td(
+                            $a['article_count'] ? eLink('list', 'list', 'search_method', 'author', $a['article_count'], 'crit', $a['name']) : '0'
+                        ).
+                        td(
+                            $a['image_count'] ? eLink('image', 'image_list', 'search_method', 'author', $a['image_count'], 'crit', $a['name']) : '0'
+                        ).
+                        td(
+                            $a['file_count'] ? eLink('file', 'file_list', 'search_method', 'author', $a['file_count'], 'crit', $a['name']) : '0'
+                        ).
+                        td(
+                            $a['link_count'] ? eLink('link', 'link_list', 'search_method', 'author', $a['link_count'], 'crit', $a['name']) : '0'
+                        ).
                         pluggable_ui('user_ui', 'list.row', '', $a)
                     );
                 }
@@ -581,6 +656,7 @@ function author_edit($message = '', $fullEdit = false)
     $vars = array('user_id', 'name', 'RealName', 'email', 'privs');
     $rs = array();
     $out = array();
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_users', 'name, RealName, email');
 
     extract(gpsa($vars));
 
@@ -615,7 +691,11 @@ function author_edit($message = '', $fullEdit = false)
     } elseif (has_privs('admin.edit')) {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+            Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                'id'        => 'login_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['name'],
+            ))->setBool('required'),
             'login_name', 'create_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -638,12 +718,20 @@ function author_edit($message = '', $fullEdit = false)
 
     $out[] = inputLabel(
             'real_name',
-            fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
+            Txp::get('\Textpattern\UI\Input', 'RealName', 'text', $RealName)->setAtts(array(
+                'id'        => 'real_name',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['RealName'],
+            )),
             'real_name', '', array('class' => 'txp-form-field edit-admin-name')
         ).
         inputLabel(
             'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email', false, true),
+            Txp::get('\Textpattern\UI\Input', 'email', 'email', $email)->setAtts(array(
+                'id'        => 'login_email',
+                'size'      => INPUT_REGULAR,
+                'maxlength' => $fieldSizes['email'],
+            ))->setBool('required'),
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 

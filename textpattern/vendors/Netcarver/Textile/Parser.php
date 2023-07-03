@@ -2698,7 +2698,7 @@ class Parser
      */
     protected function tables($text)
     {
-        $text = $text . "\n\n";
+        $text .= "\n\n";
         return (string)preg_replace_callback(
             "/^(?:table(?P<tatts>_?{$this->s}{$this->a}{$this->cls})\.".
             "(?P<summary>.*)?\n)?^(?P<rows>{$this->a}{$this->cls}\.? ?\|.*\|){$this->regex_snippets['space']}*\n\n/smU",
@@ -5191,7 +5191,7 @@ class Parser
         );
 
         if ($quotes) {
-            $a = $a + array(
+            $a += array(
                 "'" => '&#39;', // Numeric, as in htmlspecialchars
                 '"' => '&quot;',
             );

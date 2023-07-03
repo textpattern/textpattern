@@ -40,7 +40,7 @@ if (!isset($here)) {
 
 // Pull in config unless configuration data has already been provided
 // (multi-headed use).
-if (!isset($txpcfg['table_prefix'])) {
+if (!isset($txpcfg['table_prefix']) && is_readable(txpath.'/config.php')) {
     // Use buffering to ensure bogus whitespace in config.php is ignored.
     ob_start(null, 2048);
     include txpath.'/config.php';
@@ -55,8 +55,15 @@ include txpath.'/lib/txplib_misc.php';
 $trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {
-    txp_status_header('503 Service Unavailable');
-    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>.</p>');
+    $txpdir = basename(txpath);
+
+    if (is_readable(txpath.DS.'setup'.DS.'index.php')) {
+        header('Location: ./'.$txpdir.'/setup');
+        exit;
+    } else {
+        txp_status_header('503 Service Unavailable');
+        exit('<p>config.php is missing or corrupt. To install Textpattern, ensure <a href="./'.$txpdir.'/setup/">'.$txpdir.'/setup/</a> exists.</p>');
+    }
 }
 
 // Custom caches, etc?

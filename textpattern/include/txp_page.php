@@ -537,10 +537,17 @@ function page_partial_name($rs)
     $name = $rs['name'];
     $skin = $rs['skin'];
     $nameRegex = '^(?=[^0.\s]|0.)[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_page', 'name');
 
     $titleblock = inputLabel(
         'new_page',
-        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        Txp::get('\Textpattern\UI\Input', 'newname', 'text', $name)->setAtts(array(
+            'class'     => 'input-medium',
+            'id'        => 'new_page',
+            'size'      => INPUT_MEDIUM,
+            'pattern'   => $nameRegex,
+            'maxlength' => $fieldSizes['name'],
+        ))->setBool('required'),
         'page_name',
         array('', 'instructions_page_name'),
         array('class' => 'txp-form-field name')

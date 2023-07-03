@@ -1547,25 +1547,40 @@ class Skin extends CommonBase implements SkinInterface
         extract($rs, EXTR_PREFIX_ALL, $event);
         pagetop(gTxt('tab_'.$event));
 
+        $fieldSizes = \Txp::get('\Textpattern\DB\Core')->columnSizes('txp_skin', $fields);
         $content = hed($caption, 2);
 
         foreach ($fields as $field) {
             $current = ${$event.'_'.$field};
 
             if ($field === 'description') {
-                $input = text_area($field, 0, 0, $current, $event.'_'.$field);
+                $input = \Txp::get('\Textpattern\UI\Textarea', $field, $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'maxlength' => $fieldSizes[$field],
+                            ));
             } elseif ($field === 'name') {
-                $input = fInput(
-                    'text',
-                    array(
-                        'name'      => $field,
-                        'maxlength' => '63',
-                    ), $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', true
-                );
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'text', $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes[$field],
+                            ))->setBool('required');
             } elseif ($field === 'author_uri') {
-                $input = fInput('url', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', '', 'http(s)://');
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'url', $current)
+                            ->setAtts(array(
+                                'id'          => $event.'_'.$field,
+                                'size'        => INPUT_REGULAR,
+                                'maxlength'   => $fieldSizes[$field],
+                                'placeholder' => 'http(s)://',
+                            ));
             } else {
-                $input = fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'text', $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes[$field],
+                            ));
             }
 
             $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field, $event.'_'.$field);
