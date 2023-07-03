@@ -306,7 +306,7 @@ function plugin_list($message = '')
             if (!empty($lastCheck['plugins'][$name])) {
                 foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
                     $manage[] = sp.span('&#124;', array('role' => 'separator')).
-                        sp.href(gTxt('plugin_upgrade', array('version' => $pluginMeta['version'], 'type' => $pluginType)), $pluginMeta['endpoint']);
+                        sp.href(gTxt('plugin_upgrade', array('{version}' => $pluginMeta['version'], '{type}' => $pluginType)), $pluginMeta['endpoint']);
                 }
             }
 
