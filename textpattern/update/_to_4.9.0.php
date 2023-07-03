@@ -76,19 +76,43 @@ $smtp_prefs = array(
     ),
 );
 
-$url_prefs = array(
+$new_prefs = array(
     'trailing_slash' => array(
         'val'        => '0',
         'event'      => 'site',
         'html'       => 'trailing_slash',
         'position'   => 185,
     ),
+    'file_download_header'=> array(
+        'val'      => '',
+        'event'    => 'advanced_options',
+        'html'     => 'longtext_input',
+        'position' => 250
+    ),
 );
 
-foreach ($smtp_prefs + $url_prefs as $prefname => $block) {
+foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
     if (get_pref($prefname, null) === null) {
         create_pref($prefname, $block['val'], $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
     } else {
         update_pref($prefname, null, $block['event'], PREF_CORE, $block['html'], $block['position'], PREF_GLOBAL);
     }
 }
+
+// Ensure all tables have primary keys.
+$primaries = array('css', 'form', 'page');
+
+foreach ($primaries as $table) {
+    safe_drop_index('txp_'.$table, 'name_skin');
+    safe_create_index('txp_'.$table, 'name(63), skin(63)', 'primary');
+}
+
+$primaries = array('plugin', 'section');
+
+foreach ($primaries as $table) {
+    safe_drop_index('txp_'.$table, 'name');
+    safe_create_index('txp_'.$table, 'name(63)', 'primary');
+}
+
+safe_drop_index('txp_prefs', 'prefs_idx');
+safe_create_index('txp_prefs', 'name(185), user_name', 'primary');

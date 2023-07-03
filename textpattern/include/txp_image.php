@@ -75,7 +75,7 @@ if ($event == 'image') {
 
 function image_list($message = '')
 {
-    global $file_max_upload_size, $txp_user, $event;
+    global $app_mode, $file_max_upload_size, $txp_user, $event;
 
     pagetop(gTxt('tab_image'), $message);
 
@@ -232,6 +232,11 @@ function image_list($message = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
+        if ($app_mode == 'json') {
+            send_json_response(array());
+            exit;
+        }
+
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
             gTxt($crit === '' ? 'no_images_recorded' : 'no_results_found'),
@@ -257,6 +262,11 @@ function image_list($message = '')
                 txp_category.Title AS category_title
             FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
+
+        if ($app_mode == 'json') {
+            send_json_response($rs);
+            exit;
+        }
 
         $contentBlock .= pluggable_ui('image_ui', 'extend_controls', '', $rs);
 
@@ -589,6 +599,8 @@ function image_edit($message = '', $id = '')
 
         pagetop(gTxt('edit_image'), $message);
 
+        $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_image', 'name, alt');
+
         extract(gpsa(array(
             'page',
             'sort',
@@ -600,7 +612,7 @@ function image_edit($message = '', $id = '')
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
             $img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
-            $img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
         } else {
             $img = $aspect = '';
         }
@@ -630,7 +642,7 @@ function image_edit($message = '', $id = '')
             ? pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', 'async image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
                 $rs)
             : ''
         );
@@ -688,7 +700,7 @@ function image_edit($message = '', $id = '')
         $thumbBlock[] = pluggable_ui(
             'image_ui',
             'thumbnail_image',
-            '<div class="thumbnail-image">'.
+            '<div id="thumbnail-image" class="thumbnail-image">'.
             (($thumbnail)
                 ? $thumb.n.($can_upload
                     ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
@@ -714,13 +726,11 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_name',
-                            tag_void('input', array(
-                                'id'       => 'image_name',
-                                'name'     => 'name',
-                                'size'     => INPUT_REGULAR,
-                                'value'    => $name,
-                                'type'     => 'text',
-                                'readonly' => !$can_edit,
+                            Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                                'id'        => 'image_name',
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes['name'],
+                                'readonly'  => !$can_edit,
                             )),
                             'image_name', '', array('class' => 'txp-form-field edit-image-name')
                         ).
@@ -735,13 +745,11 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_alt_text',
-                            tag_void('input', array(
-                                'id'       => 'image_alt_text',
-                                'name'     => 'alt',
-                                'size'     => INPUT_REGULAR,
-                                'value'    => $alt,
-                                'type'     => 'text',
-                                'readonly' => !$can_edit,
+                            Txp::get('\Textpattern\UI\Input', 'alt', 'text', $alt)->setAtts(array(
+                                'id'        => 'image_alt_text',
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes['alt'],
+                                'readonly'  => !$can_edit,
                             )),
                             'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
                         ).
@@ -854,9 +862,14 @@ function image_insert()
 
 function image_replace()
 {
-    global $txp_user;
+    global $app_mode, $txp_user;
 
     $id = assert_int(gps('id'));
+
+    if (!isset($_FILES['thefile'])) {
+        return image_edit('', $id);
+    }
+
     $rs = safe_row("*", 'txp_image', "id = '$id'");
 
     if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
@@ -875,10 +888,31 @@ function image_replace()
         $meta = '';
     }
 
-    $img_result = image_data($_FILES['thefile'], $meta, $id);
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
+    $files = $fileshandler->refactor($_FILES['thefile']);
+
+    foreach ($files as $i => $file) {
+        $chunked = $fileshandler->dechunk($file);
+        $img_result = image_data($file, $meta, $id, !$chunked);
+
+        if (is_file($file['tmp_name'])) {
+            unlink(realpath($file['tmp_name']));
+        }
+    }
+
+//    $img_result = image_data($_FILES['thefile'], $meta, $id);
 
     if (is_array($img_result)) {
         list($message, $id) = $img_result;
+
+        if ($app_mode == 'async') {    
+            $response = 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
+    
+            send_script_response($response);
+    
+            // Bail out.
+            return;
+        }
 
         return image_edit($message, $id);
     } else {

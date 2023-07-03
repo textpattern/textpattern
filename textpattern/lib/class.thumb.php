@@ -695,7 +695,7 @@ class txp_thumb extends wet_thumb
             $radius = 50;
         }
 
-        $radius = $radius * 2;
+        $radius *= 2;
 
         if ($threshold > 255) {
             $threshold = 255;

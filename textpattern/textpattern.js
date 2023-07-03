@@ -43,13 +43,15 @@ var langdir = document.documentElement.dir,
  */
 
 function checkCookies() {
-    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
+    let cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1]);
     } else {
         document.cookie = 'txp_test_cookie=; Max-Age=0; SameSite=Lax';
     }
+
+    return cookieEnabled;
 }
 
 /**
@@ -645,9 +647,9 @@ textpattern.Relay = {
             return $(this).trigger(event, data);
         }
 
-        textpattern.Relay.timeouts[event] = setTimeout($.proxy(function() {
+        textpattern.Relay.timeouts[event] = setTimeout(function() {
             return textpattern.Relay.callback(event, data);
-        }, this), parseInt(timeout, 10));
+        }.bind(this), parseInt(timeout, 10));
     },
 
     /**
@@ -856,12 +858,6 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     if ($.type(console) === 'object' && $.type(console.log) === 'function') {
         console.log(data.message);
     }
-}).register('uploadProgress', function (event, data) {
-    $('progress.txp-upload-progress').val(data.loaded / data.total);
-}).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).show();
-}).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').hide();
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
@@ -874,7 +870,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
                 $.each(list.split(','), function(index, value) {
                     $(value).each(function() {
-                        var id = this.id;
+                        var id = this.getAttribute('id');
 
                         if (id) {
                             $(this).replaceWith($html.find('#' + id)).remove();
@@ -889,9 +885,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             callback(data.event);
         };
 
-    $(list).addClass('disabled');
-
     if (typeof data.html == 'undefined') {
+        $(list).addClass('disabled');
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this);
         });
@@ -1501,7 +1496,7 @@ textpattern.gTxt = function (i18n, atts, escape) {
     var string = i18n;
     var name = string.toLowerCase();
 
-    if ($.type(textpattern.textarray[name]) !== 'undefined') {
+    if (typeof textpattern.textarray[name] !== 'undefined') {
         string = textpattern.textarray[name];
     }
 
@@ -1869,6 +1864,7 @@ jQuery.fn.txpFileupload = function (options) {
         maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER);
 
     form.fileupload($.extend({
+        url: this.attr('action'),
         paramName: fileInput.attr('name'),
         dataType: 'script',
         maxFileSize: maxFileSize,
@@ -1882,8 +1878,13 @@ jQuery.fn.txpFileupload = function (options) {
         //    form.uploadCount++;
         //    data.submit();
         //},
-        progressall: function (e, data) {
+        progress: function (e, data) {
+            data.target = this;
             textpattern.Relay.callback('uploadProgress', data);
+        },
+        progressall: function (e, data) {
+            data.target = this;
+            textpattern.Relay.callback('uploadProgressAll', data);
         },
         start: function (e) {
             textpattern.Relay.callback('uploadStart', e);
@@ -1946,55 +1947,53 @@ jQuery.fn.txpUploadPreview = function (template) {
     }
 
     var form = $(this),
-        last = form.children(':last-child'),
+        uploadPreview = form.find('div.txp-upload-preview'),
+        previewable = textpattern.prefs.previewable || /^(image\/)/i,
         maxSize = textpattern.prefs.max_file_size;
-    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL;
+    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL,
+        revokeObjectURL = (window.URL || window.webkitURL || {}).revokeObjectURL;
 
     form.find('input[type="reset"]').on('click', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
     });
 
     form.find('input[type="file"]').on('change', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
         $(this.files).each(function (index) {
-            var preview = '',
-                mime = this.type.split('/'),
+            let src = null,
+                preview = null,
+                mime = this.type.toLowerCase().split('/'),
                 hash = typeof md5 == 'function' ? md5(this.name) : index,
-                status = this.size > maxSize ? 'alert' : '';
+                status = this.size > maxSize ? 'alert' : null;
 
-            if (createObjectURL) {
+            if (createObjectURL && previewable.test(this.type) && (src = createObjectURL(this))) {
                 switch (mime[0]) {
                     case 'image':
-                        preview = '<img src="' + createObjectURL(this) + '" />';
+                        preview = '<img src="' + src + '" />';
                         break;
-                    // TODO case 'video':?
+                    case 'video':
                     case 'audio':
-                        preview = '<' + mime[0] + ' controls src="' + createObjectURL(this) + '" />';
+                        preview = '<' + mime[0] + ' controls src="' + src + '" type="' + this.type + '" />';
+                        break;
+                    default:
+                        preview = '<embed type="' + this.type + '" src="' + src + '" />';
                         break;
                 }
             }
 
             preview = textpattern.mustache(template, $.extend(this, {
                 hash: hash,
-                preview: preview,
-                status: status,
-                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
-            }));
+                title: textpattern.encodeHTML(this.name)
+            }, preview ? {preview: preview} : {}, status ? {status: status} : {}));
 
-            form.append(preview);
+            uploadPreview.append(preview);
+
+            if (src && mime[0] != 'audio' && mime[0] != 'video') revokeObjectURL(src);
         });
-    }).change();
+    }).trigger('change');
 
     return this;
 };
-
-/**
- * Cookie status.
- *
- * @deprecated in 4.6.0
- */
-
-var cookieEnabled = true;
 
 // Setup panel.
 textpattern.Route.add('setup', function () {
@@ -2016,12 +2015,17 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 textpattern.Route.add('login', function () {
     // Check cookies.
-    cookieEnabled = checkCookies();
+    if (!checkCookies()) {
+        $('#login_form').on('submit', function() {
+            alert(textpattern.gTxt('cookies_must_be_enabled'));
+            return false;
+        });
+    }
 
     // Focus on either username or password when empty.
     $('#login_form input').filter(function () {
         return !this.value;
-    }).first().focus();
+    }).first().trigger('focus');
 
     textpattern.passwordMask();
 });
@@ -2193,36 +2197,42 @@ textpattern.Route.add('article.init', function () {
 
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) {
-        $('form.upload-form').on('submit', function() {
-            $(this).find('input[type="submit"]').attr('disabled', true);
-            $(this).find('progress.txp-upload-progress').removeClass('hidden');
+            textpattern.Relay.register('uploadEnd', function (event, data) {
+                $(function () {
+                    let options = {
+                        data: $(data.target).serializeArray(),
+                        list: textpattern.event == 'image' ? '#fullsize-image, #image_name, #thumbnail-image, #thumbnail-upload' : '#file_details',
+                        event: event.type
+                    };
+                    textpattern.Relay.callback('updateList', options);
+                });
+            });
+    } else {
+        textpattern.Relay.register('uploadStart', function (event) {
+            textpattern.Relay.data.fileid = [];
+        }).register('uploadEnd', function (event) {
+            var callback = function () {
+                textpattern.Console.clear().announce(event.type);
+            };
+
+            $(function () {
+                $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
+
+                if (textpattern.Relay.data.fileid.length) {
+                    textpattern.Relay.callback('updateList', {
+                        data: $('nav.prev-next form').serializeArray(),
+                        list: '#txp-list-container',
+                        event: event.type,
+                        callback: callback
+                    });
+                } else {
+                    callback();
+                }
+            });
         });
-        return;
     }
 
-    textpattern.Relay.register('uploadStart', function (event) {
-        textpattern.Relay.data.fileid = [];
-    }).register('uploadEnd', function (event) {
-        var callback = function () {
-            textpattern.Console.clear().announce(event.type);
-        };
-
-        $(function () {
-            $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
-
-            if (textpattern.Relay.data.fileid.length) {
-                textpattern.Relay.callback('updateList', {
-                    data: $('nav.prev-next form').serializeArray(),
-                    list: '#txp-list-container',
-                    event: event.type,
-                    callback: callback
-                });
-            } else {
-                callback();
-            }
-        });
-    });
-    $('form.upload-form.async').txpUploadPreview().txpFileupload({
+    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
         formData: [{
             name: 'app_mode',
             value: 'async'
@@ -2760,6 +2770,18 @@ $(function () {
     textpattern.Route.init({
         'step': 'init'
     });
+
+    // Set default upload progress bars
+    if (typeof textpattern.prefs.uploadPreview == 'undefined') {
+        textpattern.Relay.register('uploadProgressAll', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(data.loaded / data.total);
+        }).register('uploadStart', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(0).show();
+        }).register('uploadEnd', function (event, data) {
+            $(data.target).find('div.txp-upload-preview').empty();
+            $(data.target).children('.txp-upload-progress').hide();
+        });
+    }
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');

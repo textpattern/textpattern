@@ -757,6 +757,13 @@
         "html": "longtext_input",
         "position": "200"
     },
+    "file_download_header": {
+        "val": "",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "longtext_input",
+        "position": "250"
+    },
     "secondpass": {
         "val": "1",
         "type": "0",

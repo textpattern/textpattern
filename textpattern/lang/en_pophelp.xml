@@ -737,6 +737,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="file_base_path" title="File directory path"><![CDATA[
 <h2>File directory path</h2>
 <p>This sets the <strong>absolute path</strong> to the directory where file uploads will be permanently saved. PHP needs to have write access to this directory.</p>
+<p><strong>Note:</strong> Consider moving this directory outside of your website's publicly accessible docroot, for added security.</p>
         ]]></item>
         <item id="file_max_upload_size" title="Maximum file size of uploads (in bytes)"><![CDATA[
 <h2>Maximum file size of uploads (in bytes)</h2>
@@ -924,7 +925,12 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="tempdir" title="Temporary directory path"><![CDATA[
 <h2>Temporary directory path</h2>
 <p>Sets an <strong>absolute path</strong> to a temporary (sometimes know as ‘tmp’ or ‘temp’) directory. PHP needs to have write access to this directory. This directory is used for temporary files, for example uploads of any kind (plugins, files or images).</p>
-<p><strong>Note:</strong> Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</p>
+<p><strong>Notes:</strong>
+<ul>
+    <li>Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</li>
+    <li>Consider moving this directory outside of your website's publicly accessible docroot, for added security.</li>
+</ul>
+</p>
         ]]></item>
         <item id="theme_name" title="Admin-side theme"><![CDATA[
 <h2>Admin-side theme</h2>
