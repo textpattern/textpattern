@@ -308,7 +308,10 @@
         <item id="skin_name" title="Tema adı"><![CDATA[]]></item>
         <item id="skin_overview" title=""><![CDATA[]]></item>
         <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+        <item id="skin_version" title="Tema sürümü"><![CDATA[
+<h2>Tema sürümü</h2>
+<p>Bu temanın yüklü sürümünün sürüm numarası (isteğe bağlı).</p>
+        ]]></item>
     </group>
 </help>
 </resources>
