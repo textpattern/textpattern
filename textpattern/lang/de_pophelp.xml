@@ -458,15 +458,25 @@
 <h2>Design-Vorlagen auch von der Festplatte löschen</h2>
 <p>Wenn aktiviert, werden alle Vorlagen des ausgewählten Designs dauerhaft von der Festplatte gelöscht. Allerdings werden themenbezogene Verzeichnisse und deren Unterverzeichnisse nicht gelöscht, wenn andere Dateien (wie JavaScript, Bilder,...) diese beinhalten.</p>
         ]]></item>
-        <item id="skin_delete_from_database" title="Beim Importieren nicht benutzte Vorlagen aus der Datenbank löschen."><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title="Beim Exportieren nicht benutzte Vorlagen von der Festplatte löschen."><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="Beim Importieren nicht benutzte Vorlagen aus der Datenbank löschen."><![CDATA[
+<h2>Unbenutzte Vorlagen beim Export löschen</h2>
+<p>Wenn aktiviert, wird jede Template-Datei in dem ausgewählten Theme, ohne entsprechenden Eintrag in der Datenbank, dauerhaft vom dateibasierten Theme gelöscht. Nach Abschluss der Aktion ist das Ergebnis, dass die Dateisystemvorlagen genau das widerspiegeln, was in der Datenbank gespeichert ist.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Beim Exportieren nicht benutzte Vorlagen von der Festplatte löschen."><![CDATA[
+<h2>Unbenutzte Vorlagen beim Export löschen</h2>
+<p>Wenn aktiviert, wird jede Template-Datei in dem ausgewählten Theme, ohne entsprechenden Eintrag in der Datenbank, dauerhaft vom dateibasierten Theme gelöscht. Nach Abschluss der Aktion ist das Ergebnis, dass die Dateisystemvorlagen genau das widerspiegeln, was in der Datenbank gespeichert ist.</p>
+        ]]></item>
         <item id="skin_description" title="Beschreibung des Designs"><![CDATA[
 <h2>Beschreibung des Designs</h2>
 <p>Eine kurze Zusammenfassung des Designs kann hinterlegt werden (optional).</p>
 <p>Die Beschreibung ist auf max. 255 Zeichen limitiert.</p>
         ]]></item>
         <item id="skin_import" title="Design importieren"><![CDATA[]]></item>
-        <item id="skin_name" title="Name des Designs"><![CDATA[]]></item>
+        <item id="skin_name" title="Name des Designs"><![CDATA[
+<h2>Themenname</h2>
+<p>Der Name eines Themes wird für den Verzeichnisnamen des Themes und anderer technischer Zwecke verwendet (erforderlich).</p>
+<p>Der Name sollte keine Sonderzeichen oder Leerzeichen enthalten.</p>
+        ]]></item>
         <item id="skin_overview" title="Einführung in Designs"><![CDATA[
 <h2>Einführung in Themes</h2>
 <p>A Textpattern theme is a collection of Pages, Forms and Stylesheets. Themes allow you to logically separate your site assets into groups for ease of identification, or sharing with others. The act of creating or importing a Theme, and any assets it contains, does <em>not</em> have any impact on your existing site. You are free to edit or modify any asset that is not associated with a Section of your site, and it will not affect the site itself.</p>

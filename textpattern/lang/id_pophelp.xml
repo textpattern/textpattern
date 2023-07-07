@@ -192,13 +192,48 @@
     </group>
 
     <group id="diag" title="Panel Diagnosa">
-        <item id="clean_url_data_failed" title="Uji data tautan (URL) gagal"><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Pengujian tautan (URL) gagal"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Sembunyikan informasi pribadi"><![CDATA[]]></item>
-        <item id="dev_version_live" title="Code pengembangan di peladen langsung"><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Direktori tidak dapat ditulisi"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title="Kegagalan DNS"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Unggah berkas dinonaktifkan"><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Uji data tautan (URL) gagal"><![CDATA[
+<h2>Data URL ramah pengguna gagal</h2>
+<p>Sepertinya saat ini situs URL (contoh <code>https://example.com/section/article</code>) tidak bekerja atau server jaringan tidak mendukung prosedur uji untuk menentukan URL ramah pengguna bekerja atau tidak; jika URL ramah pengguna pada situs ini bekerja sesuai perkiraan, abaikan pesan ini.</p>
+<p>Jika URL ramah pengguna <em>tidak</em> bekerja artinya:</p>
+<ul>
+    <li>pengaturan ‘URL Situs’ salah, atau halaman pada alamat URL tidak dikelola oleh instance Textpattern ini</li>
+    <li>diperlukan beberapa perubahan pada server untuk <code>.htmengakses</code> atau arahan server yang sama agar URL ramah pengguna dapat bekerja</li>
+    <li>server tidak mendukung URL ramah pengguna</li>
+</ul>
+<p>Uji URL ramah pengguna mencoba mengakses halaman situs yang disebutkan dalam preferensi 'URL Situs'  untuk memeriksa jika semua parameter URL ramah pengguna bekerja dengan baik. Jika URL mengarah pada situs yang berbeda, atau telah diganti dengan halaman statis atau lainnya, maka uji URL akan gagal. Hingga masalah ini terselesaikan, gunakan URL tidak ramah pengguna (contoh <code>https://example.com?s=section&amp;id=4</code>). Pastikan 'Mode tautan permanen' pada Preferensi Admin sudah disesuaikan.</p>
+<p>Ingat bahwa penggunaan plugin untuk mengatur situs ke 'mode pemeliharaan' dapat memicu peringatan ini.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Pengujian tautan (URL) gagal"><![CDATA[
+<h2>Uji URL ramah pengguna gagal</h2>
+<p>Sepertinya saat ini situs URL (contoh <code>https://example.com/section/article</code>) tidak bekerja atau server jaringan tidak mendukung prosedur uji untuk menentukan URL ramah pengguna bekerja atau tidak; jika URL ramah pengguna pada situs ini bekerja sesuai perkiraan, abaikan pesan ini.</p>
+<p>Jika URL ramah pengguna <em>tidak</em> bekerja artinya:</p>
+<ul>
+    <li>pengaturan ‘URL Situs’ salah, atau halaman pada alamat URL tidak dikelola oleh instance Textpattern ini</li>
+    <li>diperlukan beberapa perubahan pada server untuk <code>.htmengakses</code> atau arahan server yang sama agar URL ramah pengguna dapat bekerja</li>
+    <li>server tidak mendukung URL ramah pengguna</li>
+</ul>
+<p>Uji URL ramah pengguna mencoba mengakses halaman situs yang disebutkan dalam preferensi 'URL Situs'  untuk memeriksa jika semua parameter URL ramah pengguna bekerja dengan baik. Jika URL mengarah pada situs yang berbeda, atau telah diganti dengan halaman statis atau lainnya, maka uji URL akan gagal. Hingga masalah ini terselesaikan, gunakan URL tidak ramah pengguna (contoh <code>https://example.com?s=section&amp;id=4</code>). Pastikan 'Mode tautan permanen' pada Preferensi Admin sudah disesuaikan.</p>]]></item>
+        <item id="diag_clear_private" title="Sembunyikan informasi pribadi"><![CDATA[
+<h2>Sembunyikan informasi pribadi</h2>
+<p>Sembunyikan informasi pribadi untuk keamanan tambahan. Jika informasi diagnostik disebarkan melalui format yang dapat dibaca publik, misal forum bantuan Textpattern, maka risiko keamanan akan berkurang dengan menghilangkan informasi server yang sensitif.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Code pengembangan di peladen langsung"><![CDATA[
+<h2>Kode pengembangan di server live</h2>
+<p>Tidak disarankan menggunakan Textpattern versi dalam-pengembangan pada situs produksi. Peringatan ini dapat diabaikan jika telah memahami dan menyetujui risikonya.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Direktori tidak dapat ditulisi"><![CDATA[
+<h2>Direktori tidak dapat ditulisi</h2>
+<p>Untuk menggunakan kemampuan mengunggah file dan gambar, direktori harus dapat ditulisi oleh PHP melalui pengguna jaringan server. Gunakan klien (S)FTP, atau menuliskan perintah <code>chmod 755 /path/to/dir</code> pada baris perintah untuk menulisi direktori.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Kegagalan DNS"><![CDATA[
+<h2>Pencarian DNS gagal</h2>
+<p>Sepertinya URL alamat situs tidak dapat dijangkau.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Unggah berkas dinonaktifkan"><![CDATA[
+<h2>Unggah file dinonaktifkan</h2>
+<p>Konfigurasi server saat ini mengindikasikan fungsi unggah file dinonaktifkan. Periksa dan ubah <code>file_uploads</code> pengaturan di <code>php.ini</code> atau minta bantuan host situs.</p>
+        ]]></item>
         <item id="htaccess_missing" title="Berkas .htaccess tidak ditemukan"><![CDATA[]]></item>
         <item id="index_inaccessible" title="Indeks situs tidak dapat diakses"><![CDATA[]]></item>
         <item id="missing_files" title="Berkas-berkas yang hilang"><![CDATA[]]></item>
