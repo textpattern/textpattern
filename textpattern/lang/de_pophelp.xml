@@ -10,7 +10,7 @@
     <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
     <li>kann Bilder und Dateien verwalten</li>
     <li>kann Sektionen und Kategorien verwalten</li>
-    <li>kann Seiten, Formulare und Stile verwalten</li>
+    <li>kann Seiten, Bausteine und Stile verwalten</li>
     <li>kann Diagnoseinformationen anzeigen</li>
     <li>kann Website-Einstellungen verwalten</li>
     <li>kann Benutzer verwalten</li>
@@ -18,13 +18,13 @@
     <li>kann Plugins verwalten</li>
     <li>kann Daten importieren</li>
 </ul>
-<h3>Chefredakteur</h3>
+<h3>Leitender Redakteur</h3>
 <ul>
     <li>kann Artikel, Kommentare und Links verwalten</li>
     <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
     <li>kann Bilder und Dateien verwalten</li>
     <li>kann Sektionen und Kategorien verwalten</li>
-    <li>kann Seiten, Formulare und Stile verwalten </li>
+    <li>kann Seiten, Bausteine und Stile verwalten </li>
     <li>kann Diagnoseinformationen anzeigen</li>
     <li>kann Website-Einstellungen verwalten</li>
     <li>kann Benutzer anzeigen</li>
@@ -36,27 +36,27 @@
 <ul>
     <li>kann Artikel mit einer Einschränkung verwalten:
         <ul>
-            <li>kann nicht gelöscht werden, die anderen Benutzern gehören</li>
+            <li>kann nicht löschen, was anderen Benutzern gehört</li>
         </ul>
     </li>
     <li>kann Kommentare und Links verwalten</li>
     <li>kann Bilder und Dateien verwalten</li>
     <li>kann Kategorien verwalten</li>
-    <li>kann Seiten und Formulare verwalten</li>
+    <li>kann Seiten und Bausteine verwalten</li>
     <li>kann Benutzer anzeigen</li>
     <li>kann Besucherprotokolle verwalten</li>
 </ul>
-<h3>angestellter Journalist</h3>
+<h3>Autor</h3>
 <ul>
     <li>kann eigene Artikel verwalten und die Artikel anderer Nutzer anzeigen.</li>
     <li>kann Bilder und Dateien verwalten</li>
 </ul>
-<h3>Freiberufler</h3>
+<h3>Freier Mitarbeiter</h3>
 <ul>
     <li>kann in begrenztem Umfang eigene Artikel verwalten:
         <ul>
             <li>kann nur Artikel verwalten, bis diese veröffentlicht werden</li>
-            <li>kann den Status von <em>nur</em> Entwurf, Ausgeblendet oder Ausstehend </li> übernehmen
+            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
         </ul>
     </li>
     <li> kann Artikel anderer Nutzer anzeigen</li>
@@ -66,13 +66,13 @@
     <li>kann in begrenztem Umfang eigene Artikel verwalten:
         <ul>
             <li>kann nur Artikel ändern, bis diese veröffentlicht werden</li>
-            <li>kann den Status von <em>nur</em> Entwurf, Ausgeblendet oder Ausstehend </li> übernehmen
+            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
         </ul>
     </li>
     <li>kann die Artikel anderer Nutzer anzeigen</li>
     <li>kann Bilder verwalten</li>
     <li>kann Sektionen verwalten</li>
-    <li>kann Seiten, Formulare und Stile verwalten</li>
+    <li>kann Seiten, Bausteine und Stile verwalten</li>
 </ul>        ]]></item>
         <item id="create_author" title="Autor erstellen"><![CDATA[
 <h2>Neuen Autor hinzufügen</h2>
@@ -80,42 +80,83 @@
     </group>
 
     <group id="article" title="Artikel">
-        <item id="article_image" title="Artikelbild"><![CDATA[]]></item>
-        <item id="body" title="Haupttext"><![CDATA[<h2>Haupttext</h2>
-<p>The main content of an article is contained within the article body.</p>
-<p>When composing or preparing articles for publication in Textpattern, an author can switch between three views of the article: plain text, HTML markup (the code with which a web browser renders the article), and a rendered preview.</p>]]></item>
-        <item id="description" title="Beschreibung"><![CDATA[]]></item>
-        <item id="excerpt" title="Exzerpt"><![CDATA[]]></item>
-        <item id="expire_date" title="Ablaufdatum"><![CDATA[]]></item>
-        <item id="keywords" title="Stichworte"><![CDATA[<h2>Keywords</h2>
-<p>Stichwörter sind nützlich, um die Beziehungen zwischen Artikeln zu verfeinern, die über die von Kategorien bereitgestellten hinausgehen.</p>
-<p>Keywords müssen einzelne Wörter sein, die durch Kommata getrennt sind.</p>]]></item>
-        <item id="override_form" title="Alternativen Baustein verwenden"><![CDATA[]]></item>
-        <item id="publish_date" title="Veröffentlichungsdatum"><![CDATA[]]></item>
+        <item id="article_image" title="Artikelbild"><![CDATA[
+<h2>Artikelbild</h2>
+<p>Um ein einzelnes Bild mit diesem Artikel zu verknüpfen, platzieren Sie hier eins der folgenden Dinge:</p>
+<ol>
+    <li>eine Textpattern Bild-ID (e. . <code>12</code>)</li>
+    <li>eine relative URL zum Bild (z. <code>/images/my_pic.jpg</code>)</li>
+    <li>eine vollumfänglich geeignete URL (z. <code>https://example.com/path/to/images/my_pic. pg</code>)</li>
+</ol>
+<p>Das Bild kann durch Platzieren eines <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> Tags <span class="ui-icon ui-icon-extlink">angezeigt werden (öffnet externen Link in neuem Fenster)</span></a> innerhalb eines Artikel-Baustein. Es wird ein komplettes HTML <code>&lt;img&gt;</code> Tag zum ausgewählten Bild ausgeben.</p>
+        ]]></item>
+        <item id="body" title="Haupttext"><![CDATA[
+<h2>Haupttext</h2>
+<p>Der Haupttext enthält den Hauptinhalt eines Artikels.</p>
+<p>Wenn Sie Artikel für die Veröffentlichung im Textpattern verfassen oder vorbereiten, kann ein Autor zwischen drei Ansichten des Artikels wechseln: Einfacher Text, HTML-Markup (der Code, mit dem ein Webbrowser den Artikel rendert) sowie eine gerenderte Vorschau.</p>
+        ]]></item>
+        <item id="description" title="Beschreibung"><![CDATA[
+<h2>Beschreibung</h2>
+<p>Die Artikelbeschreibung ist eine optionale Komponente, die Suchmaschinen und Website-Crawlern dabei helfen kann, Inhalte besser zu identifizieren und zu sortieren.</p>
+<p>Die Artikelbeschreibung ist auf maximal 255 Zeichen beschränkt. Beachten Sie, dass einige Suchmaschinen die Länge der <code>Meta-Beschreibung</code> einer Seite in den Suchmaschinenergebnisseiten (SERPs) aus Machbarkeitsgründen beschränken. Dies kann weniger sein als Textpatterns 255-Zeichen-Limit.</p>
+<p>Beachten Sie, dass sich die Artikelbeschreibung vom Exzerpt des Artikels unterscheidet, obwohl beide ähnliche Inhalte akzeptieren. Die Artikelbeschreibung sollte in erster Linie für Suchmaschinen und Crawler bestimmt sein, während das Exzerpt des Artikels besser für eine menschenlesbare Artikelzusammenfassung geeignet ist, wenn gewünscht.</p>
+        ]]></item>
+        <item id="excerpt" title="Exzerpt"><![CDATA[
+<h2>Exzerpt</h2>
+<p>Artikelexzerpte sind optional. Exzerpte können als kurze Zusammenfassung des Artikels in einem Inhaltsverzeichnis angezeigt werden, anstelle des gesamten Artikels in den RSS/Atom-Feeds verwendet werden oder einer Reihe anderer Verwendungszwecke dienen.</p>
+        ]]></item>
+        <item id="expire_date" title="Ablaufdatum"><![CDATA[
+<h2>Ablaufdatum</h2>
+<p>Der Zeitpunkt, zu dem ein Artikel als abgelaufen gekennzeichnet wird. Die Uhrzeit ist optional und kann auf eine beliebige Zeit in der Vergangenheit oder in der Zukunft eingestellt werden.</p>
+<p>Die Felder enthalten die folgenden Angaben:</p>
+<ul>
+    <li>Jahr / Monat / Tag</li>
+    <li>Stunde (24-Stunden Format) : Minute : Sekunde</li>
+</ul>
+<p>Der Artikel läuft ab, wenn dieser Zeitpunkt eintritt oder wenn ein Zeitpunkt in der Vergangenheit eingestellt wird.</p>
+<p>Ist die Option „Abgelaufene Artikel veröffentlichen“ in den Einstellungen aktiviert, bleibt der Artikel sichtbar. Wenn diese Option deaktiviert ist, wird Besuchern der Artikel-Seite ein HTTP-410-Fehler anstelle des Artikel-Inhalts ausgegeben.</p>
+        ]]></item>
+        <item id="keywords" title="Stichworte"><![CDATA[<h2>Stichworte</h2>
+<p>Stichworte sind nützlich, um die Verbindungen zwischen Artikeln zu verbessern, die über die durch Kategorien erzeugten hinausgehen.</p>
+<p>Stichworte müssen einzelne Wörter sein, die durch Kommata getrennt sind.</p>]]></item>
+        <item id="override_form" title="Alternativen Baustein verwenden"><![CDATA[
+<h2>Alternativen Baustein verwenden</h2>
+<p>Ein Artikel kann optional einen anderen Baustein verwenden als den standardmäßig zugewiesenen - zum Beispiel um einen Auszug des Artikels mit <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster) anzuzeigen:</span></a> statt dem Haupttext des Artikels mit <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> - Dies kann hier eingestellt werden.</p>
+        ]]></item>
+        <item id="publish_date" title="Veröffentlichungsdatum"><![CDATA[
+<h2>Veröffentlichungsdatum</h2>
+<p>Der Zeitpunkt, zu dem ein Artikel oder eine Datei veröffentlicht oder zuletzt überarbeitet wurde. Die Zeit kann auf den Zeitpunkt der Veröffentlichung des Artikels oder auf einen beliebigen Zeitpunkt in der Vergangenheit oder Zukunft festgelegt werden.</p>
+<p>Die Felder enthalten die folgenden Angaben:</p>
+<ul>
+    <li>Jahr / Monat / Tag</li>
+    <li>Stunde (24-Stunden Format) : Minute : Sekunde</li>
+</ul>
+<p>Ein Artikel mit einem Zeitstempel, der größer als der aktuelle Zeitpunkt ist (d.h. in der Zukunft liegt), erscheint erst dann auf der Homepage und in den RSS/Atom-Feeds, wenn dieser Zeitpunkt erreicht ist.</p>
+        ]]></item>
         <item id="status" title="Status"><![CDATA[
 <h2>Status</h2>
-<p>Definiert den Veröffentlichungs-Sichtbarkeitsstatus dieses Textpattern-Artikels.</p>
+<p>Definiert den Status der Veröffentlichungssichtbarkeit dieses Textpattern-Artikels.</p>
 <p>Der Veröffentlichungsstatus ist einer der folgenden:</p>
 <ul>
     <li>Entwurf</li>
     <li>Versteckt</li>
-    <li>Ausstehend</li>
+    <li>Anstehend</li>
     <li>Live</li>
-    <li>Angeheftet</li>
+    <li>Fixiert</li>
 </ul>
-<p>Ein <strong>Entwurf</strong>-Artikel gilt als in Arbeit befindlich und ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar (d.h. nicht auf der Textpattern-Front sichtbar und nicht in Feeds syndiziert).</p>
+<p>Ein <strong>Entwurf</strong> wird als in Arbeit befindlicher Artikel betrachtet und ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar (d.h. nicht auf der Textpattern-Startseite sichtbar und nicht in Feeds syndiziert).</p>
 <p>Ein <strong>versteckter</strong> Artikel ist außerhalb des Textpattern-Administrationsbereichs nicht einsehbar.</p>
-<p>Ein <strong>anhängiger</strong> Artikel gilt als zur Veröffentlichung bereit und wartet auf die Freigabe, ist aber außerhalb des Textpattern-Administrationsbereichs nicht sichtbar.</p>
-<p>Ein <strong>live</strong> Artikel ist typischerweise außerhalb des Textpattern-Administrationsbereichs sichtbar (d.h. sichtbar auf der Textpattern-Frontseite, syndiziert in Feeds, wenn es die Präferenz erlaubt). Wenn ein Artikel live ist und ein Ablaufdatum hat, bleibt der Status nach Erreichen dieses Datums als live erhalten, aber der Artikel erscheint nur außerhalb des Administrationsbereichs, wenn abgelaufene Artikel veröffentlicht werden dürfen.</p>
-<p>Ein <strong>angehefteter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als dass er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>Artikel</code>- oder <code>Artikel_custom</code>-Tag enthält ein <code>Status</code>-Attribut mit einem <code>Angeheftet</code>-Wert.</p>]]></item>
+<p>Ein <strong>anstehender</strong> Artikel ist bereit zur Veröffentlichung und wartet auf die Freigabe, ist aber außerhalb des Textpattern-Administrationsbereichs nicht sichtbar.</p>
+<p>Ein <strong>live</strong>-Artikel ist in der Regel außerhalb des Textpattern-Administrationsbereichs sichtbar (d.h. auf der Textpattern-Webseite  sichtbar, in Feeds syndiziert, wenn die Einstellung es erlaubt). Wenn ein Artikel live ist und ein Ablaufdatum hat, bleibt der Status nach Erreichen dieses Datums live, aber der Artikel erscheint nur außerhalb des Administrationsbereichs, wenn abgelaufene Artikel veröffentlicht werden dürfen.</p>
+<p>Ein <strong>fixierter</strong>-Artikel ist einem <strong>Live</strong>-Artikel insofern ähnlich, als er außerhalb des Textpattern-Administrationsbereichs angezeigt werden kann, aber <strong>nicht</strong> in Artikellisten erscheint, es sei denn, der entsprechende <code>article</code>- oder <code>article_custom</code>-Tag enthält ein <code>status</code>-Attribut mit dem Wert <code>fixiert</code>.</p>]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Füge einen passenden Titel für den Artikel hinzu.</p>
 <p>Der Titel ist begrenzt auf maximal 255 Zeichen.</p>        ]]></item>
         <item id="url_title" title="Nur URL-Titel"><![CDATA[
-<h2>Nur URL-Titel</h2>
-<p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel generiert.</p>
-<p>Dies ist besonders nützlich, wenn der Titel des Artikels nicht-ASCII-Zeichen verwendet.</p>
+<h2>Benutzerdefinierte URL</h2>
+<p>Um einen bestimmten Titel in der Permalink-URL für einen Artikel zu verwenden, geben Sie ihn hier ein. Wenn Sie dieses Feld leer lassen, wird der URL-Titel automatisch aus dem Artikeltitel erzeugt.</p>
+<p>Dies ist besonders nützlich, wenn der Titel des Artikels nicht-ASCII-Zeichen enthält.</p>
         ]]></item>
     </group>
 
@@ -133,40 +174,106 @@
     <li>Köche</li>
 </ul>
         ]]></item>
-        <item id="category_description" title="Beschreibung"><![CDATA[]]></item>
+        <item id="category_description" title="Beschreibung"><![CDATA[<h2>Kategoriebeschreibung</h2>
+<p>Die Kategoriebeschreibung ist eine optionale Komponente, die Suchmaschinen und Website-Crawlern helfen kann, Inhalte besser zu identifizieren und zu sortieren.</p>
+<p>Die Kategoriebeschreibung ist auf maximal 255 Zeichen begrenzt. Beachten Sie, dass einige Suchmaschinen die Länge der <code>Meta-Beschreibung</code> einer Seite aus praktischen Gründen für die Anzeige in den Suchmaschinen-Ergebnisseiten (SERPs) begrenzen und diese weniger als die 255 Zeichen in Textpattern betragen kann.</p>]]></item>
         <item id="file_category" title="Dateien"><![CDATA[
 <h2>Dateien</h2>
 <p>Dateikategorien sind optional und nützlich, um ausgewählte hochgeladene Dateien zusammenzufassen.</p>
         ]]></item>
-        <item id="image_category" title="Bilder"><![CDATA[]]></item>
-        <item id="link_category" title="Links"><![CDATA[]]></item>
+        <item id="image_category" title="Bilder"><![CDATA[<h2>Bilder</h2>
+<p>Bildkategorien sind optional und nützlich sowohl für die interne Organisation als auch für die Definition von Bildsätzen, die mit den Tags <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> und <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> angezeigt werden können.</p>]]></item>
+        <item id="link_category" title="Links"><![CDATA[<h2>Links</h2>
+<p>Link-Kategorien sind optional und dienen dazu, verschiedene Gruppierungen von Links darzustellen, z.B. ‘Freunde’, ‘Römer’, ‘Landsleute’.</p>
+<p>Selektive Linklisten wie diese werden mit dem <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code>-Tag <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> wie folgt ausgegeben:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>]]></item>
     </group>
 
     <group id="diag" title="Diagnose">
-        <item id="clean_url_data_failed" title="Saubere URL fehlgeschlagen"><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Der Test für saubere URLs ist fehlgeschlagen"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Private Informationen verstecken"><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Verzeichnis ist nicht beschreibbar"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title="DNS fehlgeschlagen"><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Saubere URL fehlgeschlagen"><![CDATA[<h2>Saubere URL fehlgeschlagen</h2>
+<p>Es scheint, dass entweder die URLs der Website (z.B. <code>https://example.com/section/article</code>) derzeit nicht funktionieren oder der Webserver das Testverfahren nicht unterstützt, das feststellt, ob saubere URLs funktionieren; wenn saubere URLs auf der Website erwartungsgemäß funktionieren, kann diese Meldung getrost ignoriert werden.</p>
+<p>Wenn saubere URLs <em>nicht</em> funktionieren, kann das einen der folgenden Gründe haben:</p>
+<ul>
+    <li>Die Einstellung ’Webadresse’ ist falsch, oder die Website unter dieser Adresse wird nicht von dieser Instanz von Textpattern verwaltet</li>
+    <li>Der Server erfordert einige Änderungen in der <code>.htaccess</code> oder einer ähnlichen Server-Direktive, damit saubere URLs funktionieren</li>
+    <li>Der Server unterstützt überhaupt keine sauberen URLs</li>
+</ul>
+<p>Der Test auf saubere URLs versucht, eine Seite von der in der Einstellung ’Webadresse’ angegebenen Adresse abzurufen, um zu prüfen, ob alle Parameter der sauberen URL korrekt funktionieren. Wenn diese URL eine andere Website ist oder durch eine statische Seite oder ähnliches ersetzt wurde, schlägt der Test fehl. Bis das Problem behoben ist, sollten unordentliche URLs (z. B. <code>https://example.com?s=section&amp;id=4</code>) verwendet werden. Stellen Sie sicher, dass der "Permanent-Link-Modus" in den Admin-Präferenzen entsprechend eingestellt ist.</p>
+<p>Beachten Sie, dass die Verwendung eines Plugins, das eine Website in den ’Wartungsmodus’ versetzt, diese Warnung auslösen kann.</p>]]></item>
+        <item id="clean_url_test_failed" title="Der Test für saubere URLs ist fehlgeschlagen"><![CDATA[<h2>Test auf saubere URLs fehlgeschlagen</h2>
+<p>Es scheint, dass entweder die URLs der Website (z.B. <code>https://example.com/section/article</code>) derzeit nicht funktionieren oder der Webserver das Testverfahren nicht unterstützt, das feststellt, ob saubere URLs funktionieren; wenn saubere URLs auf der Website erwartungsgemäß funktionieren, kann diese Meldung getrost ignoriert werden.</p>
+<p>Wenn saubere URLs <em>nicht</em> funktionieren, kann das einen der folgenden Gründe haben:</p>
+<ul>
+    <li>Die Einstellung ’Webadresse’ ist falsch, oder die Website unter dieser Adresse wird nicht von dieser Instanz von Textpattern verwaltet</li>
+    <li>Der Server erfordert einige Änderungen in der <code>.htaccess</code> oder einer ähnlichen Server-Direktive, damit saubere URLs funktionieren</li>
+    <li>Der Server unterstützt überhaupt keine sauberen URLs</li>
+</ul>
+<p>Der Test auf saubere URLs versucht, eine Seite von der in der Einstellung ’Webadresse’ angegebenen Adresse abzurufen, um zu prüfen, ob alle Parameter der sauberen URL korrekt funktionieren. Wenn diese URL eine andere Website ist oder durch eine statische Seite oder ähnliches ersetzt wurde, schlägt der Test fehl. Bis das Problem behoben ist, sollten unordentliche URLs (z. B. <code>https://example.com?s=section&amp;id=4</code>) verwendet werden. Stellen Sie sicher, dass der "Permanent-Link-Modus" in den Admin-Präferenzen entsprechend eingestellt ist.</p>]]></item>
+        <item id="diag_clear_private" title="Vertrauliche Informationen ausblenden"><![CDATA[
+<h2>Vertrauliche Informationen ausblenden</h2>
+<p>Vertrauliche Informationen für zusätzliche Sicherheit ausblenden. Wenn Diagnoseinformationen in einem öffentlich einsehbaren Format weitergegeben werden sollen, z. B. im Textpattern-Supportforum, verringert dies ein Sicherheitsrisiko, indem sensible Serverinformationen weggelassen werden.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Entwicklungs-Code auf einem Live-Server"><![CDATA[<h2>Entwicklungs-Code auf einem Live-Server</h2>
+<p>Versionen von Textpattern, die sich im Entwicklungsstadium befinden, werden nicht für den Einsatz auf Produktionsseiten empfohlen. Diese Warnung kann ignoriert werden, wenn die Risiken bekannt und hinnehmbar sind.</p>]]></item>
+        <item id="dir_not_writable" title="Verzeichnis ist nicht beschreibbar"><![CDATA[<h2>Verzeichnis ist nicht beschreibbar</h2>
+<p>Um die Funktionen zum Hochladen von Dateien und Bildern nutzen zu können, müssen diese Verzeichnisse von PHP über den Webserver-Benutzer beschreibbar sein. Dies kann mit einem (S)FTP-Client oder alternativ über die Kommandozeile mit dem Befehl <code>chmod 755 /pfad/zum/verzeichnis</code> erfolgen.</p>]]></item>
+        <item id="dns_lookup_fails" title="DNS fehlgeschlagen"><![CDATA[<h2>DNS-Suche fehlgeschlagen</h2>
+<p>Die als Adresse der Website angegebene URL scheint nicht erreichbar zu sein.</p>]]></item>
         <item id="file_uploads_disabled" title="Das Hochladen von Dateien ist deaktiviert"><![CDATA[
 <h2>Datei-Uploads sind deaktiviert</h2>
-<p>Die aktuelle Server-Konfiguration zeigt an, dass Datei-Uploads deaktiviert sind. Bitte überprüfen Sie dies indem Sie die <code>Datei-Uploads</code> Einstellung in <code>php.ini</code> oder kontaktieren Sie den Site-Host um Hilfe zu erhalten.</p>
+<p>Die aktuelle Serverkonfiguration zeigt an, dass Datei-Uploads deaktiviert sind. Bitte überprüfen und ändern Sie die <code>file_uploads</code> Einstellung in der <code>php.ini</code> oder wenden Sie sich an den Site-Host, um Hilfe zu erhalten.</p>
         ]]></item>
-        <item id="htaccess_missing" title=".htaccess Datei fehlt"><![CDATA[]]></item>
-        <item id="index_inaccessible" title="Kein Zugriff auf die Datei index.php "><![CDATA[]]></item>
+        <item id="htaccess_missing" title=".htaccess Datei fehlt"><![CDATA[<h2>.htaccess-Datei fehlt</h2>
+<p>Ein Permanent- Link-Modus, der eine <code>.htaccess</code>-Datei erfordert, wird verwendet, diese Datei kann jedoch nicht gefunden werden. Die Datei ist in Textpattern enthalten und befindet sich im Textpattern-Stammverzeichnis, neben <code>index.php</code> und dem <code>textpattern</code>-Verzeichnis. Die empfohlenen Direktiven sind:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>]]></item>
+        <item id="index_inaccessible" title="Kein Zugriff auf die Datei index.php "><![CDATA[<h2>Seitenindex unzugänglich</h2>
+<p>Die Stammdatei <code>index.php</code>, die als Index für die Website angegeben ist, kann vom Server nicht gelesen werden. Bitte überprüfen Sie deren Vorhandensein sowie ihre Datei-Berechtigungen.</p>]]></item>
         <item id="missing_files" title="Fehlende Dateien"><![CDATA[
 <h2>Fehlende Dateien</h2>
 <p>Mindestens eine Datei fehlt in der Textpattern Installation. Überprüfen Sie, ob sich die aufgelisteten Dateien auf dem Server und an richtiger Stelle befinden.</p>
         ]]></item>
-        <item id="mod_rewrite_missing" title="Apache mod_rewrite fehlt"><![CDATA[]]></item>
-        <item id="modified_files" title="Dateien geändert"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="MySQL-Tabellenfehler"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Kein Temp-Verzeichnis definiert"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title="Webseitenverzeichnis nicht lesbar"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite fehlt"><![CDATA[<h2>Apache mod_rewrite fehlt</h2>
+<p>Das <code>mod_rewrite</code> Modul von Apache ist nicht installiert oder deaktiviert. Dies wird jedoch empfohlen, damit Textpattern korrekt funktioniert. Vergewissern Sie sich, dass es vorhanden und aktiviert ist, oder wenden Sie sich an den Hoster der Website, um Hilfe zu erhalten.</p>]]></item>
+        <item id="modified_files" title="Dateien geändert"><![CDATA[<h2>Veränderte Dateien</h2>
+<p>Dateien werden als verändert eingestuft, wenn ihre jeweilige Prüfsumme von der mit Textpattern mitgelieferten Liste der bekannten Prüfsummen abweicht. Wenn sich Dateien in der Textpattern-Installation von den erwarteten unterscheiden, werden sie hier hervorgehoben.</p>]]></item>
+        <item id="mysql_table_errors" title="MySQL-Tabellenfehler"><![CDATA[<h2>MySQL-Tabellenfehler</h2>
+<p>Es kann sein, dass die MySQL-Datenbank von Textpattern nicht lesbar ist oder beschädigt wurde. Versuchen Sie, die betroffene(n) Tabelle(n) mit einem MySQL-Zugriffstool zu reparieren, wie <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> oder <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a>.</p>]]></item>
+        <item id="no_temp_dir" title="Kein Temporäres Verzeichnis definiert"><![CDATA[
+<h2>Kein temporäres Verzeichnis definiert</h2>
+<p>Während Textpattern ohne temporäres Verzeichnis läuft, funktionieren einige Funktionen möglicherweise nicht wie erwartet, wenn diese Einstellung nicht gesetzt ist. Bitte besuchen Sie die Admin-Einstellungen und richten Sie das ’Temporäre Verzeichnis’ ein.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sektion mit dem gleichen Namen wie Verzeichnis"><![CDATA[<h2>Sektion hat den gleichen Namen wie ein Verzeichnis</h2>
+<p>Vorhandene Verzeichnisnamen können mit den Sektionsnamen in Konflikt stehen, die im Permlink-Schema des Artikels verwendet werden. Um Probleme zu vermeiden, überprüfen Sie die betroffenen Verzeichnisnamen und löschen Sie sie, wenn dies gefahrlos möglich ist, oder ändern Sie die Sektionsnamen, damit sie nicht kollidieren.</p>]]></item>
+        <item id="path_to_site_inaccessible" title="Webseitenverzeichnis nicht lesbar"><![CDATA[<h2>Site-Verzeichnis unlesbar</h2>
+<p>Das Verzeichnis, das die Root-Datei <code>index.php</code> enthält, die als Index für die Site angegeben wurde, ist für den Server nicht lesbar. Bitte überprüfen Sie die Berechtigungen.</p>]]></item>
         <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[<h2>Minimale Versionsvoraussetzungen</h2>
-<p>Textpattern benötigt bestimmte Funktionen in PHP und einen MySQL Datenbank Server. In der folgenden Tabelle sind die Mindestanforderungen dafür aufgeführt.</p>
+<p>Textpattern benötigt bestimmte PHP-Funktionen und einen MySQL Datenbank Server. In der folgenden Tabelle sind die Mindestanforderungen dafür aufgeführt.</p>
 <div class="txp-listtables">
     <table class="txp-list">
         <thead>
@@ -200,7 +307,7 @@
         </tbody>
     </table>
 </div>
-<p>Zusätzlich zu den oben aufgeführten Systemvorausetzungen werden folgende Erweiterungen in PHP benötigt:</p>
+<p>Zusätzlich zu den oben aufgeführten Systemvorausetzungen werden folgende PHP-Erweiterungen benötigt:</p>
 <ul>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(öffnet einen Link in einem neuen Fenster)</span></a></li>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(öffnet einen Link in einem neuen Fenster)</span></a></li>
@@ -208,31 +315,29 @@
 </ul>
 <p>In der <code>php.ini</code> Datei, entweder global oder lokal, wird eine <code>date.timezone</code> Einstellung benötigt.</p>
         ]]></item>
-        <item id="setup_still_exists" title="Setup-Verzeichnis existiert schon"><![CDATA[
-<h2>Das Setup-Verzeichnis existiert schon</h2>
+        <item id="setup_still_exists" title="Setup-Verzeichnis existiert noch"><![CDATA[
+<h2>Das Setup-Verzeichnis existiert noch</h2>
 <p>Wenn Textpattern installiert wurde, werden das Verzeichnis <code>textpattern/setup</code> und dessen Inhalt nicht mehr benötigt und sollten aus Sicherheitsgründen gelöscht werden.</p>
         ]]></item>
         <item id="site_url_mismatch" title="URL stimmt nicht überein"><![CDATA[
 <h2>Site-URL stimmt nicht überein</h2>
-<p>Die Site-URL, wie sie im Bedienfeld „Einstellungen“ festgelegt ist, stimmt nicht mit der eigentlichen URL überein, die für den Besuch der Site verwendet wird.</p>
-<p>Wenn die Seite über mehrere verschiedene URLs erreichbar ist, und wenn sich die Seite wie erwartet verhält, kann diese Nachricht sicher ignoriert werden.</p>
-<p>Andernfalls überprüfen und ändern Sie bitte die Einstellung 'Website-URL' in den Admin-Einstellungen nach Bedarf. Die korrekte URL wird in der Vorflug-Warnmeldung auf dem Bedienfeld „Diagnose“ angezeigt.</p>
+<p>Die Site-URL, wie sie im Bedienfeld „Einstellungen“ festgelegt ist, stimmt nicht mit der eigentlichen URL überein, die für den Besuch der Website verwendet wird.</p>
+<p>Wenn die Website über mehrere verschiedene URLs erreichbar ist und sie sich wie erwartet verhält, kann diese Nachricht getrost ignoriert werden.</p>
+<p>Andernfalls überprüfen und ändern Sie bitte die Einstellung „Webadresse“ in den Admin-Einstellungen nach Bedarf. Die korrekte URL wird in der Voruntersuchungsmeldung im Fenster „Diagnose“ angezeigt.</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="PHP-Funktionen […] sind auf Ihrem Server deaktiviert"><![CDATA[
 <h2>PHP-Funktionen […] sind auf Ihrem Server deaktiviert</h2>
 <p>Der Site-Host oder Server-Administrator hat eine oder mehrere PHP-Funktionen deaktiviert, einige davon können das Ausführen von Textpattern beeinflussen.</p>
 <p>Bitte konsultieren Sie die <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern Benutzerdokumentation <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> für weitere Informationen.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Textpattern Update"><![CDATA[
-<h2>Textpattern Version Update</h2>
-<p>Es ist eine neuere Version von Textpattern verfügbar. Um die Vorteile der neuesten Funktionen und der Sicherheit nutzen zu können, empfehlen wir Ihnen ein Upgrade.</p>
-<p>Bitte beachten Sie, dass, während wir uns bemühen, das Upgrade-Erlebnis so nahtlos und schmerzfrei wie möglich zu machen:</p>
+        <item id="textpattern_version_update" title="Textpattern Update"><![CDATA[<h2>Textpattern-Versionsaktualisierung</h2>
+<p>Es ist eine neuere Version von Textpattern verfügbar. Um die Vorteile der neuesten Funktionen und Sicherheitsmerkmale zu nutzen, wird ein Upgrade empfohlen.</p>
+<p>Bitte beachten Sie, dass wir uns bemühen, das Upgrade so reibungslos und unkompliziert wie möglich zu gestalten:</p>
 <ul>
-    <li>Wenn nur die letzte Ziffer von Ihrer aktuellen Version abweicht, ist das Upgrade wahrscheinlich rückwärtskompatibel mit Plugins und Themes.</li>
-    <li>Wenn die letzten beiden Ziffern von Ihrer aktuellen Version abweichen, das Upgrade könnte Aktualisierungen für einige Plugins und/oder Themes erfordern, obwohl es wahrscheinlich ohnehin in einer begrenzten Kapazität weiter funktionieren wird.</li>
-    <li>Wenn die erste Ziffer von Ihrer aktuellen Version abweicht, das Upgrade erfordert wahrscheinlich Aktualisierungen der meisten Plugins und Themes. Wenn Sie sich stark auf ein bestimmtes Plugin oder Theme verlassen, überprüfen Sie bitte den Autor oder die Community Mitglieder, bevor Sie mit dem Upgrade beginnen.</li>
-</ul>
-        ]]></item>
+    <li>Wenn sich nur die letzte Ziffer von Ihrer aktuellen Version unterscheidet, ist das Upgrade wahrscheinlich rückwärtskompatibel mit Plugins und Themes.</li>
+<li>Wenn sich die letzten beiden Ziffern von der aktuellen Version unterscheiden, kann es sein, dass das Upgrade Aktualisierungen für einige Plugins und/oder Themes erforderlich macht, obwohl es wahrscheinlich trotzdem in eingeschränktem Umfang weiter funktioniert.</li>
+<li>Wenn sich die erste Ziffer von Ihrer aktuellen Version unterscheidet, ist es sehr wahrscheinlich, dass für das Upgrade Aktualisierungen für die meisten Plugins und Themes erforderlich sind. Wenn Sie sich in hohem Maße auf eine bestimmte Plugin- oder Theme-Funktion verlassen, fragen Sie bitte den Autor oder Mitglieder der Community, bevor Sie mit dem Upgrade beginnen.</li>
+</ul>]]></item>
         <item id="textpattern_version_update_beta" title="Textpattern Pre-Release verfügbar"><![CDATA[<h2>Textpattern Vorabversions-Update verfügbar</h2>
 <p>Es ist eine neuere Vorabversion von Textpattern verfügbar. Wir suchen nach aktiven Freiwilligen, die diese Version testen, damit wir die endgültige Version so solide wie möglich gestalten können. Wir bemühen uns, das Upgrade nahtlos und schmerzfrei zu gestalten, auch für Beta-Code.</p>
 <p>Sollten Sie sich für eine Teilnahme entscheiden, beachten Sie bitte:</p>
@@ -241,15 +346,14 @@
     <li>Bitte melden Sie <a href="https://github.com/textpattern/textpattern/issues">jegliche Probleme</a> unter Angabe der von Ihnen verwendeten Beta-Version. Abhängig von den gemeldeten Problemen können weitere Beta-Versionen vor der stabilen Version erforderlich sein.</li>
     <li>Stellen Sie sicher, dass Sie, wenn Sie diese Betaversion einsetzen, auch auf die endgültige Version aktualisieren, wenn diese veröffentlicht wird.</li>
 </ul>
-
-Übersetzt mit www.DeepL.com/Translator (kostenlose Version)]]></item>
+]]></item>
         <item id="tmp_plugin_paths_match" title="Temp-Verzeichnis und Plugin-Cache-Verzeichnis sollten nicht übereinstimmen"><![CDATA[
 <h2>Temp-Verzeichnis und Plugin-Cache-Verzeichnis sollten nicht übereinstimmen</h2>
 <p>Plugins sollten ein eigenes Verzeichnis haben und nicht das temporäre Verzeichnis benutzen. Dies ist ein potenzielles Sicherheitsrisiko und kann sich negativ auf Ihre Website auswirken, wenn das temporäre Verzeichnis geleert wird. Bitte stellen Sie sicher, dass der Pfad des temporären Verzeichnisses sich vom Pfad des Plugin-Caches unterscheidet.</p>
         ]]></item>
         <item id="update_server_inaccessible" title="Update-Server nicht erreichbar"><![CDATA[
 <h2>Update-Server nicht erreichbar</h2>
-<p>Die Suche nach Updates ist fehlgeschlagen, oft aufgrund von einer Netzwerküberlastung oder einer Zeitüberschreitung der Verbindung. Diese Situation löst sich in der Regel innerhalb von wenigen Stunden. Bitte versuchen Sie es später noch einmal zu besuchen.</p>
+<p>Die Suche nach Updates ist fehlgeschlagen, das geschieht oft aufgrund einer Netzwerküberlastung oder einer Zeitüberschreitung der Verbindung. Diese Situation löst sich in der Regel innerhalb von wenigen Stunden. Bitte versuchen Sie es später noch einmal.</p>
         ]]></item>
         <item id="warn_mail_unavailable" title="Ihrer PHP-Installation fehlt die mail()-Funktion"><![CDATA[
 <h2>Ihrer PHP-Installation fehlt die mail() Funktion</h2>
@@ -260,11 +364,11 @@
     <group id="file" title="Datei-Bereich">
         <item id="file_reassign" title="Datei neu zuweisen"><![CDATA[
 <h2>Datei neu zuweisen</h2>
-<p>Wenn Sie eine Datei statt einer Datei mit dem Titel „Fehlend“ hochladen, wird Ihre gewählte Datei auf den Server hochgeladen und mit den Originalinformationen in der Datenbank verknüpft. Dies bedeutet, dass der Dateiname der Originaldatei erhalten bleibt, ebenso wie alle anderen zugehörigen Informationen wie die Anzahl der Downloads und Kategorien. Die Dateigröße wird jedoch aktualisiert, um die neue Datei wiederzugeben.</p>
+<p>Wenn Sie als ersatz für eine Datei mit dem Zusatz „Fehlend“ eine neue Datei hochladen, wird Ihre gewählte Datei auf den Server hochgeladen und mit den Originalinformationen in der Datenbank verknüpft. Dies bedeutet, dass der Dateiname der ursprünglichen Datei erhalten bleibt, ebenso wie alle anderen zugehörigen Informationen, bspw. die Anzahl der Downloads und Kategorien. Die Dateigröße wird jedoch aktualisiert, um die der neuen Datei widerzuspiegeln.</p>
         ]]></item>
         <item id="file_replace" title="Datei ersetzen"><![CDATA[
 <h2>Ersetzen der Datei</h2>
-<p>Das Hochladen einer Datei hier wird den Inhalt der existierenden Datei auf dem Server ersetzen, aber der Dateiname bleibt der gleiche wie zuvor. Die Anzahl der Downloads und andere mit der Datei verknüpfte Informationen bleibt unberührt.</p>
+<p>Das Hochladen einer Datei hier wird den Inhalt der existierenden Datei auf dem Server ersetzen, der ursprüngliche Dateiname bleibt dabei jedoch erhalten. Die Anzahl der Downloads und andere mit der Datei verknüpfte Informationen bleibt unberührt.</p>
         ]]></item>
         <item id="timestamp_file" title="Veröffentlichungsdatum"><![CDATA[
 <h2>Veröffentlichungsdatum</h2>
@@ -282,37 +386,47 @@
         ]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[<h2>Einführung in Bausteine</h2>
-<p>In Textpattern ist ein Bausteine ein Schnipsel mit Text, HTML- und Textpattern-Tags, das verwendet werden kann, um Inhalte anzuzeigen.</p>
-<p>Hier ist ein Beispiel für einen Baustein, das <code>ordinary_list</code> heißen könnte:</p>
+    <group id="form" title="Baustein-Bereich">
+        <item id="forms_overview" title="Einführung in Bausteine"><![CDATA[<h2>Einführung in Bausteine</h2>
+<p>In Textpattern ist ein Baustein ein Schnipsel oder ein Haufen Text, HTML und Textpattern-Tags, das wiederverwendet werden kann, um Inhalte darzustellen.</p>
+<p>Hier ein Beispiel für einen Baustein, das <code>normale_liste</code> heißen könnte:</p>
 <pre><code>&lt;li&gt;
     &lt;txp:permlink&gt;
         &lt;txp:title /&gt;
     &lt;/txp:permlink&gt;
 &lt;/li&gt;</code></pre>
-<p>Sie könnten damit eine ungeordnete HTML-Liste mit verwandten Artikeln anzeigen:</p>
+<p>Sie können damit eine ungeordnete HTML-Liste mit verwandten Artikeln anzeigen:</p>
 <pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
-<p>Da die Funktion dieses Formulars darin besteht, eine Liste von Titeln auszugeben, könnte es auch innerhalb anderer Tags verwendet werden, z. B. um 20 Artikel aus der aktuellen Sektion anzuzeigen:</p>
-<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>]]></item>
+<p>Da die Aufgabe dieses Bausteins darin besteht, eine Liste von Titeln auszugeben, könnte es innerhalb anderer Tags verwendet werden, z. B. um 20 Artikel aus dem aktuellen Abschnitt anzuzeigen:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Sie können auch einen Baustein verwenden, um sich wiederholende Inhalte anzuzeigen, z. B. Kopf- und Fußzeilen in Ihren Seitenvorlagen. Das bedeutet, dass der Inhalt nur an einer Stelle vorhanden ist und Sie ihn nur einmal ändern müssen, wenn Sie sich entschließen, dies zu tun. Die Anzeige von Inhalten aus einem Baustein erfolgt normalerweise mit:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Ein Baustein kann bis zu 64KB groß sein. Ein Beispiel für eine Fußzeile könnte Überschriften, Absätze, Links, Conditional Tags und Verweise auf andere Bausteine wie <code>normale_liste</code> enthalten.</p>]]></item>
     </group>
 
-    <group id="image" title="Bilderverzeichnis">
+    <group id="image" title="Bilder">
         <item id="create_thumbnail" title="Vorschaubild erstellen"><![CDATA[
-<h2>Thumbnail erstellen</h2>
-<p>Erlaubt Ihnen, ein Miniaturbild der angegebenen Größe aus dem Bild in voller Größe (neu) zu erstellen.</p>
-<p>Das Vorschaubild wird nach der gewünschten Größe skaliert, es sei denn, Sie wählen das Kontrollkästchen „Zuschneiden“. In diesem Fall wird das Vorschaubild ohne Skalierung aus der Mitte des Bildes erstellt.</p>
+<h2>Vorschaubild erstellen</h2>
+<p>Erlaubt Ihnen, ein Miniaturbild der angegebenen Größe aus dem Ursprungsbild zu erstellen.</p>
+<p>Das Vorschaubild wird in der gewünschten Größe skaliert, es sei denn, Sie wählen das Kontrollkästchen „Zuschneiden“. In diesem Fall wird das Vorschaubild ohne Skalierung von der Mitte des Bildes ausgehend erstellt.</p>
         ]]></item>
         <item id="replace_image_form" title="Bild ersetzen"><![CDATA[
 <h2>Bild ersetzen</h2>
 <p>Ein hier hochgeladenes Bild ersetzt das vorhandene Bild in der Datenbank.</p>
         ]]></item>
-        <item id="upload_image" title="Bild hochladen"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Vorschaubild hochladen"><![CDATA[]]></item>
+        <item id="upload_image" title="Bild hochladen"><![CDATA[<h2>Bild hochladen</h2>
+<p>Laden Sie ein oder mehrere Bilder auf Ihren Server hoch.</p>
+<p>Beim Hochladen in das Verzeichnis <code>images</code> wird der Dateiname Ihres Originalbildes nur intern in der Textpattern-Datenbank gespeichert; die Bilddatei selbst wird in eine fortlaufende Nummer + Dateierweiterung umbenannt.</p>]]></item>
+        <item id="upload_thumbnail" title="Vorschaubild hochladen"><![CDATA[<h2>Miniaturbild hochladen</h2>
+<p>Bilder in voller Größe können mit eigenen Miniaturbildern versehen werden. Diese sind nützlich für die Verlinkung - und Indexierung - von Bildern in voller Größe.</p>
+<p>Ein Verweis auf das Miniaturbild ist genau dasselbe wie der Verweis auf das Bild in voller Größe, wobei ein <code>t</code> an den Dateinamen angehängt wird. Um zum Beispiel auf ein Miniaturbild zu verweisen, das zu einem Bild in voller Größe gehört und unter <code>/images/12.jpg</code> gespeichert ist, würden Sie <code>/images/12t.jpg</code> verwenden.</p>]]></item>
     </group>
 
     <group id="lang" title="Sprachen-Bereich">
-        <item id="get_textpack" title="Textpack installieren"><![CDATA[]]></item>
+        <item id="get_textpack" title="Textpack installieren"><![CDATA[<h2>Textpack installieren</h2>
+<p>Fügen Sie zusätzliche Sprach-Strings für Ihre Website in dieses Feld ein und wählen Sie „Hochladen“, um sie zu installieren.</p>
+<p>Diese Strings werden oft in Form eines herunterladbaren Textpacks geliefert, das zusammen mit einem Plugin verteilt wird, damit die Sprach-Strings des Plugins in der lokalen Sprache in Textpattern verwendet werden können.</p>
+<p>Übersetzer können diese Textpacks dann bei Bedarf übersetzen und den lokalisierten Inhalt an die Nutzer weitergeben.</p>]]></item>
     </group>
 
     <group id="link" title="Links">
@@ -346,7 +460,7 @@
 </ul>
         ]]></item>
         <item id="allow_article_php_scripting" title="PHP in Artikeln erlauben?"><![CDATA[<h1>Einstellungen: PHP in Artikeln erlauben?</h1> <p>Wenn diese Einstellung aktiviert ist, wird die Verwendung von PHP innerhalb von Artikeln erlaubt. Dazu muss der Autor über die erforderlichen Berechtigungen verfügen (standardmässig haben nur <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">„Herausgeber“</a> und <a rel="external" target="_blank" href="http://docs.textpattern.io/administration/user-roles-and-privileges">„leitende Redakteure“</a> diese Berechtigung).</p> <p>Die öffnenden und schließenden PHP-Tags müssen im PHP-Code weggelassen werden, stattdessen muss dieser zwischen öffnenden und schließenden <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/php"><code><txp:php></code>-Tags</a> notiert werden.</p>]]></item>
-        <item id="allow_form_override" title=""><![CDATA[
+        <item id="allow_form_override" title="Zulassen, dass alternative Bausteine verwendet werden?"><![CDATA[
 <h2>Überschreiben des Bausteins erlauben?</h2>
 <p>Diese Einstellung erlaubt es den Autoren des Artikels, ein Baustein zu überschreiben, wenn der Artikel gerendert wird. Wenn aktiviert, wird beim Bearbeiten eines Artikels ein Dropdown-Dropdown zum Überschreiben des Bausteins verfügbar.</p>
         ]]></item>
@@ -397,7 +511,7 @@
         <item id="module_pophelp" title=""><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="override_form_types" title="Alternativen Baustein wählen"><![CDATA[]]></item>
         <item id="permlink_format" title=""><![CDATA[]]></item>
         <item id="permlink_mode" title=""><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Plugin-Cache Verzeichnispfad"><![CDATA[]]></item>
