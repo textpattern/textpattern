@@ -127,7 +127,7 @@
         <item id="comments_mode" title="Kommentointitapa"><![CDATA[]]></item>
         <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="Kommentointi vaatii kommentoijan sähköpostiosoitteen?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Kommentointi vaatii kommentoijan nimen?"><![CDATA[]]></item>
         <item id="comments_sendmail" title="Lähetä kommentit kirjoittajalle?"><![CDATA[]]></item>
         <item id="comments_use_fat_textile" title="Salli lisää Textile-merkintäkieltä kommenteissa?"><![CDATA[]]></item>
@@ -149,7 +149,7 @@
         <item id="include_email_atom" title="Liitä sähköpostiosoite Atom-syötteisiin?"><![CDATA[]]></item>
         <item id="is_dst" title="Kesäaika käytössä?"><![CDATA[]]></item>
         <item id="logging" title="Kirjaaminen"><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title="URLin enimmäispituus (merkkimääränä)"><![CDATA[]]></item>
         <item id="module_pophelp" title="Näytä hallintapaneelissa sisällön seassa ohjelinkkejä"><![CDATA[]]></item>
         <item id="never_display_email" title="Piilota kommentoijan sähköpostiosoite?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Käytä ISO-8859-1 -merkistokoodausta sähköposteissa (oletuksena UTF-8)?"><![CDATA[]]></item>
