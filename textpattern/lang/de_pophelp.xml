@@ -791,10 +791,15 @@ Der Modus <p>„?=unordentlich“ ist am kompatibelsten - er funktioniert mit we
         <item id="section_on_frontpage" title="Auf der Startseite anzeigen?"><![CDATA[<h2>Auf der Startseite anzeigen?</h2>
 <p>Die Artikel einiger Sektionen, z.B. derjenigen, die eher „statischen“ Webseiten ähneln, können im zeitlichen Ablauf der Startseite Ihrer Website fehl am Platz erscheinen.</p>
 <p>Die Einstellung „Nein“ verhindert, dass Artikel, die dieser Sektion zugeordnet sind, auf der Startseite erscheinen.</p>]]></item>
-        <item id="section_searchable" title="Diese Sektion in die Suche einbeziehen?"><![CDATA[]]></item>
-        <item id="section_syndicate" title="In Newsfeeds aufnehmen?"><![CDATA[]]></item>
-        <item id="section_uses_css" title="Verwendet CSS"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Verwendet Seitenvorlage"><![CDATA[]]></item>
+        <item id="section_searchable" title="Diese Sektion in die Suche einbeziehen?"><![CDATA[<h2>In Seitensuche einbeziehen?</h2>
+<p>Dies bestimmt, ob Artikel aus dieser Sektion in den Suchergebnissen erscheinen sollen, wenn Besucher die Textpattern-Suche verwenden.</p>]]></item>
+        <item id="section_syndicate" title="In Newsfeeds aufnehmen?"><![CDATA[<h2>In Newsfeeds aufnehmen?</h2>
+<p>Bestimmt, ob die Artikel in diesem Bereich in den RSS- und Atom-Feeds der Website erscheinen sollen oder nicht.</p>]]></item>
+        <item id="section_uses_css" title="Verwendet Stilvorlage"><![CDATA[<h2>Verwendet Stilvorlage</h2>
+<p>Wenn Sie die Standard-Stilvorlage für einen bestimmten Abschnitt außer Kraft setzen wollen, können Sie dies hier tun.</p>
+<p>Dies ist nur für Stylesheets relevant, die im Textpattern-Panel „Stilvorlagen“ gespeichert sind - wenn Sie Ihr CSS außerhalb von Textpattern ablegen (was sehr zu empfehlen ist), hat diese Option keine Wirkung.</p>]]></item>
+        <item id="section_uses_page" title="Verwendet Seitenvorlage"><![CDATA[<h2>Verwendet Seitenvorlage</h2>
+<p>In Textpattern sind Sektionen mit Seitenvorlagen verbandelt. Irgendwie ist das doch süß...</p>]]></item>
         <item id="section_uses_skin" title="Verwendet das Design"><![CDATA[<h2>Verwendet das Design</h2>
 <p>Wenn Sie das für eine bestimmten Sektion verwendete Design ändern möchten, können Sie es hier aus der Liste der derzeit installierten Designs auswählen.</p>]]></item>
     </group>
@@ -803,8 +808,24 @@ Der Modus <p>„?=unordentlich“ ist am kompatibelsten - er funktioniert mit we
         <item id="setup_user_login" title="Benutzeranmeldung"><![CDATA[<h2>Benutzeranmeldung</h2>
 <p>Der Login-Name des Administratorkontos (Herausgeber-Rolle), das Sie beim Verwalten Ihrer Website verwenden werden.</p>
 <p>Obwohl es keine Einschränkungen für den Namen gibt, ist es ratsam, keine komplizierte Zeichenfolgen zu verwenden sowie schwer zu erratende Benutzernamen (z.B. nicht <code>admin</code>, <code>administrator</code>, usw.)</p>]]></item>
-        <item id="setup_user_pass" title="Benutzerpasswort"><![CDATA[]]></item>
-        <item id="table_prefix" title="Tabellenpräfix"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Benutzerpasswort"><![CDATA[<h2>Nutzerpasswort</h2>
+<p>Da dieses Konto die höchste Berechtigungsebene in Textpattern hat, wählen Sie bitte ein sehr sicheres Passwort oder vorzugsweise eine Passphrase.</p>
+<h3>Tipps</h3>
+<ul>
+    <li>Verwenden Sie eine Mischung aus Groß- und Kleinbuchstaben</li>
+    <li>Verwenden Sie Zahlen</li>
+    <li>Verwenden Sie Symbole</li>
+    <li>Mindestlänge sollte acht Zeichen sein</li>
+    <li><strong>Vermeiden Sie</strong> alle persönlichen Informationen (Geburts- oder andere Daten, Namen, Orte, Familienmitglieder, Haustiere usw.)</li>
+    <li><strong>Vermeiden Sie</strong> alle einzelnen oder wiederholten Wörter aus dem Wörterbuch, unabhängig von der Schreibweise, Sprache oder Groß-/Kleinschreibung</li>
+</ul>]]></item>
+        <item id="table_prefix" title="Tabellenpräfix"><![CDATA[<h2>Tabellenpräfix</h2>
+    <p>Sie müssen nur dann ein Tabellenpräfix verwenden, wenn Sie mehrere Textpattern-Installationen in einer Datenbank benötigen. Jede Textpattern-Installation benötigt ein eigenes Präfix.</p>
+<p>Beachten Sie, dass das Präfix die folgenden Regeln erfüllen muss:</p>
+<ul>
+<li><strong>1. Zeichen:</strong> muss a-z, A-Z oder ein Unterstrich sein</li>
+<li><strong>Nachfolgende Zeichen:</strong> können nur a-z, A-Z, 0-9 oder der Unterstrich sein</li>
+</ul>]]></item>
     </group>
 
     <group id="skin" title="Designs-Fenster">
