@@ -10,26 +10,26 @@
     <li>bisa menggunakan PHP di artikel jika pengaturan admin ‘Izinkan PHP dalam artikel?’ di atur ke ’Yes’</li>
     <li>bisa mengelola gambar dan berkas</li>
     <li>bisa mengelola seksi dan kategori</li>
-    <li>bisa mengelola halaman, form dan style</li>
-    <li>bisa melihat informasi diagnosa</li>
+    <li>bisa mengelola halaman, formulir, dan gaya</li>
+    <li>bisa melihat informasi diagnosis</li>
     <li>bisa mengelola pengaturan situs</li>
     <li>bisa mengelola pengguna</li>
     <li>bisa mengelola log pengunjung</li>
-    <li>bisa mengelola plugins</li>
+    <li>bisa mengelola plugin</li>
     <li>bisa impor data</li>
 </ul>
 <h3>Redaktur Pelaksana</h3>
 <ul>
     <li>bisa mengelola artikel, komentar, dan tautan</li>
-    <li>bisa menggunakan PHP di artikel jika pengaturan admin ‘Izinkan PHP dalam artikel?’ di atur ke ’Yes’</li>
+    <li>bisa menggunakan PHP di artikel jika pengaturan admin ‘Izinkan PHP dalam artikel?’ di atur ke ’Ya’</li>
     <li>bisa mengelola gambar dan berkas</li>
-    <li>bisa mengelola seksi dan kategori</li>
-    <li>bisa mengelola halaman, form dan style</li>
-    <li>bisa melihat informasi diagnosa</li>
+    <li>bisa mengelola bagian dan kategori</li>
+    <li>bisa mengelola halaman, formulir, dan gaya</li>
+    <li>bisa melihat informasi diagnosis</li>
     <li>bisa mengelola pengaturan situs</li>
     <li>bisa melihat pengguna</li>
     <li>bisa mengelola log pengunjung</li>
-    <li>bisa mengelola plugins</li>
+    <li>bisa mengelola plugin</li>
     <li>bisa impor data</li>
 </ul>
 <h3>Pemeriksa Naskah</h3>
@@ -42,37 +42,37 @@
     <li>bisa mengelola komentar dan tautan</li>
     <li>bisa mengelola gambar dan berkas</li>
     <li>bisa mengelola kategori</li>
-    <li>bisa mengelola halaman dan form</li>
+    <li>bisa mengelola halaman dan formulir</li>
     <li>bisa melihat pengguna</li>
     <li>bisa mengelola log pengunjung</li>
 </ul>
-<h3>Staff Penulis</h3>
+<h3>Staf Penulis</h3>
 <ul>
-    <li>bisa mengelola artikel sendiri, lihat artikel pengguna lain</li>
+    <li>bisa mengelola artikel sendiri, melihat artikel pengguna lain</li>
     <li>bisa mengelola gambar dan berkas</li>
 </ul>
 <h3>Penulis Lepas</h3>
 <ul>
-    <li>dapat mengelola artikel sendiri dalam arti terbatas:
+    <li>bisa mengelola artikel sendiri dalam arti terbatas:
         <ul>
-            <li>hanya dapat mengubah artikel sampai diterbitkan</li>
-            <li>dapat <em>hanya</em> menerapkan status Draft, Hidden atau Pending</li>
+            <li>hanya bisa mengubah artikel sampai diterbitkan</li>
+            <li>hanya <em>bisa</em> menerapkan status Draf, Disembunyikan, atau Ditunda</li>
         </ul>
     </li>
     <li>bisa lihat artikel pengguna lain</li>
 </ul>
 <h3>Perancang</h3>
 <ul>
-    <li>dapat mengelola artikel sendiri dalam arti terbatas:
+    <li>bisa mengelola artikel sendiri dalam arti terbatas:
         <ul>
-            <li>hanya dapat mengubah artikel sampai diterbitkan</li>
-            <li>dapat <em>hanya</em> menerapkan status Draft, Hidden atau Pending</li>
+            <li>hanya bisa mengubah artikel sampai diterbitkan</li>
+            <li>hanya <em>bisa</em> menerapkan status Draf, Disembunyikan, atau Ditunda</li>
         </ul>
     </li>
     <li>bisa lihat artikel pengguna lain</li>
     <li>bisa mengelola gambar</li>
-    <li>bisa mengelola seksi</li>
-    <li>bisa mengelola halaman, form dan style</li>
+    <li>bisa mengelola bagian</li>
+    <li>bisa mengelola halaman, formulir, dan gaya</li>
 </ul>]]></item>
         <item id="create_author" title="Buat penulis"><![CDATA[
 <h2>Tambah penulis baru</h2>
@@ -234,9 +234,45 @@
 <h2>Unggah file dinonaktifkan</h2>
 <p>Konfigurasi server saat ini mengindikasikan fungsi unggah file dinonaktifkan. Periksa dan ubah <code>file_uploads</code> pengaturan di <code>php.ini</code> atau minta bantuan host situs.</p>
         ]]></item>
-        <item id="htaccess_missing" title="Berkas .htaccess tidak ditemukan"><![CDATA[]]></item>
-        <item id="index_inaccessible" title="Indeks situs tidak dapat diakses"><![CDATA[]]></item>
-        <item id="missing_files" title="Berkas-berkas yang hilang"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Berkas .htaccess tidak ditemukan"><![CDATA[
+<h2>Berkas .htaccess hilang</h2>
+<p>Mode tautan permanen membutuhkan file <code>.htaccess</code> untuk digunakan, dan berkas tersebut tidak ditemukan. File disertakan dengan Textpattern dan berada di root Textpattern, disamping <code>index.php</code> dan direktori <code>textpattern</code> . Petunjuk yang direkomendasikan adalah:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Indeks situs tidak dapat diakses"><![CDATA[
+<h2>Indeks situs tidak dapat diakses</h2>
+<p>File root <code>index.php</code> yang ditetapkan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa keberadaan dan izinnya.</p>
+        ]]></item>
+        <item id="missing_files" title="Berkas-berkas yang hilang"><![CDATA[
+<h2>Berkas-berkas yang hilang</h2>
+<p>Satu atau lebih berkas penting hilang dari Textpattern. Pastikan semua berkas yang terdaftar ada di server dan berada di lokasi yang benar.</p>
+        ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite tidak ditemukan"><![CDATA[]]></item>
         <item id="modified_files" title="Berkas yang diubah"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[]]></item>
