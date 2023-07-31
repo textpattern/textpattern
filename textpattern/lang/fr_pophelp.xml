@@ -383,7 +383,7 @@
         <item id="tmp_plugin_paths_match" title="Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques"><![CDATA[<h2>Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques</h2>
 <p>Le plugins doivent disposer de leur propre répertoire et ne doivent rien partager avec le répertoire temporaire. A défaut, c’est un risque de sécurité potentiel et peut nuire au bon fonctionnement de votre site si votre répertoire temporaire est vidé. Veuillez vous assurer que ces deux chemins vers des répertoires distincts sont différents.</p>]]></item>
         <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[<h2>Serveur de mise à jour inaccessible</h2>
-<p>La vérification de mises à jour a échouée, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résout souvent d’elle-même au bout dune heure ou deux ; aussi, veuillez retournez sur cette page ultérieurement.</p>]]></item>
+<p>La vérification de mises à jour a échoué, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résout souvent d’elle-même au bout d’une heure ou deux ; aussi, veuillez retourner sur cette page ultérieurement.</p>]]></item>
         <item id="warn_mail_unavailable" title="Votre installation de PHP ne dispose pas de la fonction mail()"><![CDATA[<h2>Votre installation de PHP ne dispose pas de la fonction mail()</h2>
 <p>La fonction <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> de PHP est désactivée. Par conséquent, Textpattern ne peut envoyer de e-mails et certaines de ses fonctionnalités seront inopérantes. Par exemple, les notifications par e-mail des nouveaux commentaires ne seront pas adressées et les nouveaux utilisateurs de sites ne recevront pas de message de bienvenue. Cependant, les utilisateurs pourront être ajoutés, néanmoins.</p>]]></item>
     </group>
@@ -931,9 +931,10 @@ title="HTML"
 <h2>Thème de l’administration</h2>
 <p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
         ]]></item>
-        <item id="txp_evaluate_functions" title="Éviter un mot veuf (seul) dans les titres d’articles ?"><![CDATA[<h2>Éviter un mot veuf (seul) dans les titres d’articles ?</h2>
-<p>Les mots veufs (ou orphelins) correspondent au dernier mot d’une phrase placé sur une nouvelle ligne lorsque la phrase est trop longue pour se contenir sur une même ligne. En typographie, ces mots veufs sont considérés comme inélégants et doivent être évités. Renseigner cette préférence sur «Oui» vous assurera que les longs titres d’articles ne comporteront pas de mots seuls en début de nouvelle ligne.</p>
-<p><strong>Remarque :</strong> ce paramètre peut provoquer des problèmes dans les pages dites «Responsives» dans les petits écrans en raison de l’ajout d’un espace insécable entre les deux derniers mots et pouvant déborder de leur élément parent. Dans ce cas, choisissez pour réglage «Non».</p>
+        <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[<h2>Fonctions PHP associées à txp:evaluate</h2>
+<p>Une liste séparée par des virgules de <code>function</code> ou <code>alias=function</code>, ex. <code>md5</code>, <code>replace=str_replace</code>. Les éléments de cette liste peuvent être utilisés dans l’attribut <code>query</code> de la <code>&lt;txp:evaluate /&gt;</code> balise :</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Les <code>fonctions</code> doivent retourner une valeur scalaire (<strong>et non pas</strong> un array/object).</p>
         ]]></item>
         <item id="use_comments" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
 <h2>Functions PHP associées à txp:evaluate</h2>
