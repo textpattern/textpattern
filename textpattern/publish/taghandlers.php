@@ -207,7 +207,7 @@ function page_title($atts)
 
     extract(lAtts(array('separator' => ' | '), $atts));
 
-    $appending = $separator === '' ? txpspecialchars($separator.$sitename) : '';
+    $appending = $separator !== '' ? txpspecialchars($separator.$sitename) : '';
     $parent_id = (int) $parentid;
     $pageStr = ($pg ? $separator.gTxt('page').' '.$pg : '');
 
