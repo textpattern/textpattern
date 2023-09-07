@@ -34,7 +34,7 @@ Changes in 4.9.0 (upcoming)
 * Developer: Introduce UI class library for building interface components.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
   to save memory. Plugins must call them via processTags() function.
-* jQuery 3.7.0.
+* jQuery 3.7.1.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
