@@ -234,11 +234,11 @@ nav ol::after,
   /**
    * Search field in navigation.
    */
-  .search {
+  search {
     padding: 1em 6% 0.5em;
     background: #ffffff;
   }
-  .search input[type=search] {
+  search input[type=search] {
     width: 16em;
     height: 2.125em;
     padding-right: 0.1875em;
@@ -933,8 +933,7 @@ nav ol::after,
     border-radius: 0;
     background: #ffffff;
     /* 1 */
-    -webkit-appearance: none;
-            appearance: none;
+    appearance: none;
   }
   [type=color]:focus,
   [type=date]:focus,
@@ -1177,8 +1176,7 @@ nav ol::after,
     font-weight: normal;
     text-align: center;
     /* 1 */
-    -webkit-appearance: none;
-            appearance: none;
+    appearance: none;
     /* 2 */
     cursor: pointer;
   }
@@ -1326,22 +1324,22 @@ nav ol::after,
   .site-navigation a {
     padding: 0.5em 1em;
   }
-  .search {
+  search {
     margin-top: 0.2em;
     padding: 0;
     background: transparent;
   }
-  .search input[type=search] {
+  search input[type=search] {
     width: 2.125em;
     padding-right: 0;
     transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
     background-color: #eeeeee;
     cursor: pointer;
   }
-  .search input[type=search]:hover {
+  search input[type=search]:hover {
     background-color: #f8f8f8;
   }
-  .search input[type=search]:focus {
+  search input[type=search]:focus {
     width: 16em;
     padding-right: 0.1875em;
     background-color: white;
@@ -1363,7 +1361,7 @@ nav ol::after,
    Additional accessibility for screen media
    ========================================================================== */
 @media screen and (prefers-reduced-motion: reduce), (update: slow) {
-  .search input[type=search] {
+  search input[type=search] {
     transition-duration: 0;
   }
 }
