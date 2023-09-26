@@ -8,7 +8,8 @@
  * Add the correct display in IE 11 and Firefox.
  */
 details,
-main {
+main,
+search {
   display: block;
 }
 
