@@ -371,6 +371,20 @@ function pref_func($func, $name, $val, $constraints = array())
         $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
+        if (strpos($func, '\\') === 0) {
+            $func = '\Textpattern\UI'.$func;
+
+            if (class_exists($func)) {
+                $out = new $func($name, $val);
+
+                if ($constraints) {
+                    $out->setConstraints($constraints);
+                }
+
+                return $out;
+            }
+        }
+
         if (!is_callable($func)) {
             $func = 'text_input';
         }
