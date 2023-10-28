@@ -728,7 +728,7 @@ function file_edit($message = '', $id = '')
 
         echo tag(
             hed(gTxt('edit_file'), 2, array('class' => 'txp-heading')).
-            ($replace ? tag($replace.n.$delete, 'div', array('class' => 'txp-control-panel')) : '').
+            ($replace ? tag($replace.n.$delete, 'div') : '').
             n.form(
                 inputLabel(
                     'name',
@@ -825,7 +825,7 @@ function file_edit($message = '', $id = '')
 
 
 
-            'div', array('class' => 'txp-layout-1col')
+            'div', array('class' => 'txp-edit')
         );
 
 
