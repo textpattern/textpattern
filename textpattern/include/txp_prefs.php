@@ -371,7 +371,7 @@ function pref_func($func, $name, $val, $constraints = array())
         $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
-        if (strpos($func, '\\') === 0) {
+        if (is_string($func) && strpos($func, '\\') === 0) {
             $func = '\Textpattern\UI'.$func;
 
             if (class_exists($func)) {
