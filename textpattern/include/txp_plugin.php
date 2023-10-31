@@ -44,6 +44,7 @@ if ($event == 'plugin') {
         'plugin_save'       => true,
         'plugin_upload'     => true,
         'plugin_import'     => true,
+        'plugin_export'     => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
@@ -293,6 +294,21 @@ function plugin_list($message = '')
                 $plugin_prefs = '';
             }
 
+            if (class_exists('\ZipArchive')) {
+                $download = span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.href(gTxt('export'), array(
+                        'event'      => 'plugin',
+                        'step'       => 'plugin_export',
+                        'name'       => $name,
+                        '_txp_token' => form_token(),
+                    ),
+                    array('class' => 'plugin-download'))        
+                );
+            } else {
+                $download = '';
+            }
+
             $manage = array();
 
             if ($help) {
@@ -301,6 +317,10 @@ function plugin_list($message = '')
 
             if ($plugin_prefs) {
                 $manage[] = $plugin_prefs;
+            }
+
+            if ($download) {
+                $manage[] = $download;
             }
 
             if (!empty($lastCheck['plugins'][$name])) {
@@ -999,6 +1019,17 @@ function plugin_import()
 
     $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin);
     plugin_list($message);
+}
+
+/**
+ * Exports a plugin as a zip file.
+ */
+
+function plugin_export()
+{
+    if ($name = gps('name')) {
+        echo Txp::get('\Textpattern\Plugin\Plugin')->createZip($name, true);
+    }
 }
 
 /**
