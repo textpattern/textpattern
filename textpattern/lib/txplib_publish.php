@@ -790,7 +790,7 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $pretext, $trace, $thisarticle;
+    global $is_article_list, $pretext, $trace, $thisarticle;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
     static $aggregate = array(
         'avg' => 'AVG(?)',
@@ -1087,7 +1087,7 @@ function filterAtts($atts = null, $iscustom = null)
         $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $smatch" : '');
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
     } else {
-        $fname = (!empty($listform) ? $listform : $form);
+        $fname = $is_article_list && !empty($listform) ? $listform : $form;
     }
 
     // Title
