@@ -673,7 +673,7 @@ class Plugin
      * The call can be intercepted (for example, to fetch data from the
      * filesystem) via the "txp.plugin > data.fetch" callback.
      *
-     * @param  string $name The plugin
+     * @param  string $name The plugin name
      * @return string
      */
 
@@ -686,6 +686,89 @@ class Plugin
         }
 
         return $data;
+    }
+
+    /**
+     * Create a (zip) archive of the given plugin name
+     * 
+     * @param  string $name     The plugin name
+     * @param  bool   $download Whether to immediately serve the zip file or leave it on the file system
+     * @return string|zipped contents Either the created zip filepath, or the file to download
+     */
+
+    public function createZip($name, $download = false)
+    {
+        if (class_exists('\ZipArchive')) {
+            $zipArchive = new \ZipArchive();
+            $filename = $name . '.zip';
+            $dest = rtrim(get_pref('tempdir', sys_get_temp_dir()), DS) . DS . $filename;
+
+            if ($download) {
+                register_shutdown_function('unlink', $dest);
+            }
+
+            if ($zipArchive->open($dest, \ZipArchive::OVERWRITE | \ZipArchive::CREATE)) {
+                $safeName = sanitizeForFile($name);
+                $dir = PLUGINPATH.DS.$safeName.DS;
+                $this->zipDirectory($zipArchive, $dir);
+                $zipArchive->close();
+
+                if ($download && !headers_sent()) {
+                    header('Content-Type: application/zip');
+                    header('Content-Length: ' . filesize($dest));
+                    header('Content-Disposition: attachment; filename="'.$filename.'"');
+                    readfile($dest);
+                } else {
+                    return $dest;
+                }
+            }
+        }
+    }
+
+    /**
+     * Zip the given directory name, recursively.
+     * 
+     * @param  ZipArchive $zipArchive The zip file (previously opened) to write to
+     * @param  $string    $directory  The absolute path to the folder to zip up
+     * @return bool                   Success or failure of the operation
+     */
+    protected function zipDirectory($zipArchive, $directory)
+    {
+        static $basedir;
+
+        if (empty($basedir)) {
+            $basedir = dirname($directory).DS;
+        }
+
+        if (is_dir($directory)) {
+            if ($f = opendir($directory)) {
+                while (($file = readdir($f)) !== false) {
+                    $currFile = $directory . $file;
+
+                    if (is_file($currFile)) {
+                        if ($file != '' && $file != '.' && $file != '..') {
+                            $zipArchive->addFile($currFile, str_replace($basedir, '', $currFile));
+                        }
+                    } else {
+                        if (is_dir($currFile)) {
+                            if ($file != '' && $file != '.' && $file != '..') {
+                                $zipArchive->addEmptyDir(str_replace($basedir, '', $currFile));
+                                $directory = $currFile . '/';
+                                $this->zipDirectory($zipArchive, $directory);
+                            }
+                        }
+                    }
+                }
+
+                closedir($f);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     /**

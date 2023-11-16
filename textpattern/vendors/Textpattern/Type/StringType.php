@@ -202,10 +202,6 @@ class StringType implements TypeInterface
 
         if (strpos($this->string, '->')) {
             $callback = explode('->', $this->string);
-
-            if (class_exists($callback[0])) {
-                $callback[0] = new $callback[0];
-            }
         } elseif (strpos($this->string, '::')) {
             $callback = explode('::', $this->string);
         }

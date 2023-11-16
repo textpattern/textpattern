@@ -340,28 +340,28 @@ function author_list($message = '')
                 FROM '.PFX.'textpattern
                 GROUP BY AuthorID
             ) AS articles
-            ON '.PFX.'txp_users.name = articles.author
+            ON txp_users.name = articles.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
                 FROM '.PFX.'txp_image
                 GROUP BY author
             ) AS images
-            ON '.PFX.'txp_users.name = images.author
+            ON txp_users.name = images.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
                 FROM '.PFX.'txp_file
                 GROUP BY author
             ) AS files
-            ON '.PFX.'txp_users.name = files.author
+            ON txp_users.name = files.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
                 FROM '.PFX.'txp_link
                 GROUP BY author
             ) AS links
-            ON '.PFX.'txp_users.name = links.author';
+            ON txp_users.name = links.author';
 
     callback_event_ref('user', 'fields', 'list', $fields);
     callback_event_ref('user', 'from', 'list', $sql_from);
