@@ -877,6 +877,7 @@ class Field
             case 'dateTime':
             case 'number':
             case 'range':
+                $type = ($type === 'dateTime') ? 'datetime-local' : $type;
                 $widget = \Txp::get('\Textpattern\UI\Input', $name, strtolower($type), implode('', $thisContent))
                     ->setAtts(array(
                         'size' => INPUT_REGULAR,
