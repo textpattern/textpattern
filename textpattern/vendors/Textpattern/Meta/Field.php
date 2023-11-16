@@ -829,12 +829,10 @@ class Field
                     ));
                 break;
             case 'yesNoRadio':
-                $widget = \Txp::get('\Textpattern\UI\YesNoRadioSet', $name, implode('', $thisContent))
-                    ->setAtt('id', $id);
+                $widget = \Txp::get('\Textpattern\UI\YesNoRadioSet', $name, implode('', $thisContent));
                 break;
             case 'onOffRadio':
-                $widget = \Txp::get('\Textpattern\UI\OnOffRadioSet', $name, implode('', $thisContent))
-                    ->setAtt('id', $id);
+                $widget = \Txp::get('\Textpattern\UI\OnOffRadioSet', $name, implode('', $thisContent));
                 break;
             case 'radioSet':
                 $vals = array();
@@ -843,8 +841,7 @@ class Field
                     $vals[$opt['name']] = gTxt($this->getOptionReference($opt['name']));
                 }
 
-                $widget = \Txp::get('\Textpattern\UI\RadioSet', $name, $vals, implode('', $thisContent))
-                    ->setAtt('id', $id);
+                $widget = \Txp::get('\Textpattern\UI\RadioSet', $name, $vals, implode('', $thisContent));
                 break;
             case 'checkbox':
                 $widget = \Txp::get('\Textpattern\UI\Checkbox', $name, implode('', $thisContent), (bool)$thisContent)
@@ -858,8 +855,7 @@ class Field
                 }
 
                 // @todo Beef up tags with some form of wraptag? ul/li would be handy here.
-                $widget = \Txp::get('\Textpattern\UI\CheckboxSet', $name, $vals, $thisContent)
-                    ->setAtt('id', $id);
+                $widget = \Txp::get('\Textpattern\UI\CheckboxSet', $name, $vals, $thisContent);
                 break;
             case 'selectInput':
             case 'multiSelect':
