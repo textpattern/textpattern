@@ -74,7 +74,7 @@ class DataType implements \IteratorAggregate
             'constraints' => array('Min', 'Max'),
         ),
         'dateTime' => array(
-            'type'        => 'datetime',
+            'type'        => 'datetime-local',
             'size'        => null,
             'textfilter'  => false,
             'options'     => false,
