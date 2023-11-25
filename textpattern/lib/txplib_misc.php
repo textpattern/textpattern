@@ -1792,11 +1792,11 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 function lAtts($pairs, $atts, $warn = true)
 {
     global $pretext, $production_status, $txp_atts;
-    static $globals = null, $global_atts, $partial;
+    static $globatts = null, $global_atts, $partial;
 
-    if ($globals === null) {
+    if ($globatts === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
-        $globals = array_filter($global_atts);
+        $globatts = array_filter($global_atts);
     }
 
     // A shortcut for name='<txp:yield name="alias" />'
@@ -1828,7 +1828,7 @@ function lAtts($pairs, $atts, $warn = true)
         }
     } else { // don't import unset globals
         foreach ($atts as $name => $value) {
-            if (array_key_exists($name, $pairs) && (!isset($globals[$name]) || isset($txp_atts[$name]))) {
+            if (array_key_exists($name, $pairs) && (!isset($globatts[$name]) || isset($txp_atts[$name]))) {
                 $pairs[$name] = $value;
                 unset($txp_atts[$name]);
             }
@@ -2211,15 +2211,15 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    static $stack = array(), $parse = array(), $global_atts = array(), $globals = null;
+    static $stack = array(), $parse = array(), $global_atts = array(), $globatts = null;
     global $production_status, $trace, $txp_atts;
 
-    if ($globals === null) {
-        $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    if ($globatts === null) {
+        $globatts = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
     }
 
     if (is_array($text)) {
-        $txp_atts = array_intersect_key($text, $globals);
+        $txp_atts = array_intersect_key($text, $globatts);
         return $text;
     }
 
@@ -2257,7 +2257,7 @@ function splat($text)
             }
         }
 
-        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals) or $global_atts[$sha] = null;
+        $global_atts[$sha] = array_intersect_key($stack[$sha], $globatts) or $global_atts[$sha] = null;
     }
 
     $txp_atts = $global_atts[$sha];

@@ -655,20 +655,20 @@ function related_articles($atts, $thing = null)
 
     assert_article();
 
-    $globals = array(
+    $globatts = array(
         'break'    => br,
         'class'    => __FUNCTION__,
         'label'    => gTxt('related_articles'),
         'labeltag' => '',
     );
 
-    $atts += $globals + array(
+    $atts += $globatts + array(
         'form'     => '',
         'match'    => 'Category',
         'no_widow' => '',
     );
 
-    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globals;
+    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globatts;
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
@@ -3502,11 +3502,10 @@ function txp_escape($escape, $thing = '')
                 break;
             case 'textile':
                 if ($textile === null) {
-                    $textile = Txp::get('\Textpattern\Textile\Parser');
+                    $textile = Txp::get('\Textpattern\Textile\Parser', $prefs['doctype']);
                 }
 
-                $thing = $textile->parse($tidy ? ' '.$thing : $thing);
-                !$tidy or $thing = ltrim($thing);
+                $thing = $textile->setBlockTags(!$tidy)->parse($thing);
                 break;
             case 'quote':
                 $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";

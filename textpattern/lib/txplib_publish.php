@@ -495,7 +495,7 @@ function parse($thing, $condition = true, $in_tag = true)
 function processTags($tag, $atts = '', $thing = null, $log = false)
 {
     global $pretext, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $globals;
+    static $registry = null, $globatts;
 
     if (empty($tag)) {
         return;
@@ -503,7 +503,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
-        $globals = array_filter(
+        $globatts = array_filter(
             $registry->getRegistered(true),
             function ($v) {
                 return !is_bool($v);
@@ -548,8 +548,8 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => &$val) {
-                if (isset($val) && isset($globals[$attr])) {
+            foreach ($txp_atts as $attr => $val) {
+                if (isset($txp_atts[$attr]) && isset($globatts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
                 }
             }
