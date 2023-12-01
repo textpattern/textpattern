@@ -973,9 +973,9 @@ function plugin_upload($url = null)
                 $ready = true;
             }
         } else {
-            $filename = $_FILES["theplugin"]["name"];
+            $fileParts = pathinfo($_FILES["theplugin"]["name"]);
             $source = $_FILES["theplugin"]["tmp_name"];
-            $target = $dest.DS.$filename;
+            $target = $dest.DS.$fileParts['basename'];
 
             if (move_uploaded_file($source, $target)) {
                 $ready = true;
