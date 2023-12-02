@@ -331,6 +331,8 @@ class Plugin
             } else {
                 $keyContent['code'] = $pack;
             }
+        } else {
+            return array();
         }
 
         // Populate the $plugin array with metadata from the filesystem if present.
