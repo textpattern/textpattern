@@ -8,6 +8,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
+* Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
 * Fixed: Compiled plugins upload on PHP 5.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of
   <txp:image />.
