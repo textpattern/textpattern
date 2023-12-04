@@ -2,6 +2,7 @@ Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
 * Changed: Minimum system requirements increased to MySQL 5.5.
+* Compatibiliity with PHP 8.3.1.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
@@ -14,6 +15,8 @@ Changes in 4.9.0 (upcoming)
   <txp:image />.
 * Fixed: Self-closing tag output for html5 doctype to silence validator
  (thanks, jools-r).
+* Fixed: Ignore search in individual article mode.
+* Fixed: Take rfc2616 mail headers setting into account for separator.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
@@ -23,18 +26,33 @@ Changes in 4.9.0 (upcoming)
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Added: Compatible plugin upgrades directly from the Plugins panel.
 * Added: Plugin multi-edit option: revert to last installed code content.
+* Added: All plugin metadata exposed in the Plugin Edit panel.
+* Added: Plugin (zip-only) export feature.
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
+* Added: In-use asset counters to the Users panel.
 * Added: <txp:(article_)image /> accepts extra attributes (see #1738).
 * Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
+* Added: 'level' attribute to <txp:if_category />.
+* Added: Activity indicator for long upload processes.
+* Added: metaWeblog.newMediaObject for image upload over the MovableType API
+  (thanks, Melonking906).
 * Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: File Edit panel now has the ability to rename and delete files,
+  and change the download counter value (thanks, adi).
 * Changed: Can no longer delete in-use languages.
+* Changed: Image tags can take HTML attributes.
 * Changed: Less collision-prone custom fields name processing.
 * Changed: Do not generate empty syndication feeds for feedless sections.
+* Changed: Allow PHP scripting options off by default, and Diagnostics warning.
+* Changed: Introdue primary keys for all tables, replacing some old indexes.
 * Developer: Introduce UI class library for building interface components.
+* Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
   to save memory. Plugins must call them via processTags() function.
+* Developer: Add safe_exists() function to DB layer.
+* Developer: Move $thisversion and $txp_is_dev to constants.php.
 * jQuery 3.7.1.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
