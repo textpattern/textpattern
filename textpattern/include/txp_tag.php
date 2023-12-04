@@ -2089,8 +2089,8 @@ class BuilderTags
         $desc = ' ('.gTxt('descending').')';
 
         $sorts = array(
-            'filename asc'   => gTxt('file_name').$asc,
-            'filename desc'  => gTxt('file_name').$desc,
+            'filename asc'   => gTxt('filename').$asc,
+            'filename desc'  => gTxt('filename').$desc,
             'downloads asc'  => gTxt('downloads').$asc,
             'downloads desc' => gTxt('downloads').$desc,
             'rand()'         => 'Random',
