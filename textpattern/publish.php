@@ -645,13 +645,14 @@ function preText($store, $prefs = null)
     $out['status'] = is_numeric($is_404) ? $is_404 : ($is_404 ? '404' : '200');
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
     $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-    $id = $out['id'];
 
     // Hackish.
     global $is_article_list;
 
-    if (empty($id)) {
+    if (empty($out['id'])) {
         $is_article_list = true;
+    } else {
+        $out['q'] = '';
     }
 
     // By this point we should know the section, so grab its page and CSS.
