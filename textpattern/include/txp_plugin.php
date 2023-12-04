@@ -503,7 +503,7 @@ function plugin_edit_form($name = '')
     $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
 
     if (empty($plugin)) {
-        return gTxt('plugin_not_editable');
+        return graf(gTxt('plugin_not_editable'), array('class' => 'alert-block warning'));
     }
 
     foreach ($vars as $key) {
