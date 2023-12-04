@@ -294,7 +294,7 @@ function doDiagnostics()
         $fail['w'][] = array('no_temp_dir');
     }
 
-    if (is_disabled('mail')) {
+    if ((get_pref('enhanced_email') == 0 || (get_pref('enhanced_email') == 1 && empty(get_pref('smtp_host')))) && is_disabled('mail')) {
         $fail['e'][] = array('warn_mail_unavailable');
     }
 
