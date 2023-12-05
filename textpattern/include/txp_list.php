@@ -336,7 +336,9 @@ function list_list($message = '', $post = '')
                 n.tag_end('thead');
 
             include_once txpath.'/publish/taghandlers.php';
-            $can_preview = has_privs('article.preview');
+            if ($can_preview = has_privs('article.preview')) {
+                $preview_token = urlencode(Txp::get('\Textpattern\Password\Hash')->hash(Txp::get('\Textpattern\Security\Token')->csrf()));
+            };
 
             $contentBlock .= n.tag_start('tbody');
 
@@ -365,7 +367,7 @@ function list_list($message = '', $post = '')
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
                 if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                    $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
+                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.$preview_token : '';
                 } else {
                     $view_url = permlinkurl($a);
                 }

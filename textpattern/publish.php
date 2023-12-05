@@ -343,21 +343,21 @@ function preText($store, $prefs = null)
 
     $is_404 = ($out['status'] == '404');
     $title = null;
-    $status = gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")";
+    $status = strpos($out['id'], '.') === false ? " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")" : '';
 
     // Handle article preview.
     if (!$status) {
         header('Cache-Control: no-cache, no-store, max-age=0');
-        doAuth();
-
-        if (!has_privs('article.preview')) {
+        list($id, $hash) = explode('.', $out['id'], 2);
+//        doAuth();
+        if (!has_privs('article.preview') || !Txp::get('\Textpattern\Password\Hash')->verify(Txp::get('\Textpattern\Security\Token')->csrf(), $hash)) {
             txp_status_header('401 Unauthorized');
             exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
             global $nolog;
     
             $nolog = true;
-            $out['id'] = intval(gps('txpreview'));
+            $out['id'] = intval($out['id']);
         }
     }
 
@@ -986,6 +986,7 @@ function doArticle($atts, $thing = null)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
+    $preview = strpos(gps('id'), '.') !== false;
 
     // No output required, only setting atts.
     if ($atts['pgonly']) {
@@ -995,7 +996,7 @@ function doArticle($atts, $thing = null)
     if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
         $id = assert_int($pretext['id']);
         $thisarticle = null;
-        $where = gps('txpreview') ? '1' : $atts['?'];
+        $where = $preview ? '1' : $atts['?'];
         $tables = 'textpattern';
         $columns = $atts['*'];
 
@@ -1009,7 +1010,7 @@ function doArticle($atts, $thing = null)
 
     $article = false;
 
-    if (!empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
+    if (!empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || $preview)) {
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
         if ($atts['allowoverride'] && $thisarticle['override_form']) {

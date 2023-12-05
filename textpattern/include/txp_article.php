@@ -121,16 +121,7 @@ if (!empty($event) && $event == 'article') {
 }
 
 /**
- * Processes sent forms and saves new articles. Deprecated in 4.7 by article_save().
- */
-
-function article_post()
-{
-    article_save();
-}
-
-/**
- * Processes sent forms and updates existing articles.
+ * Processes sent forms and saves/updates existing articles.
  */
 
 function article_save()
@@ -375,17 +366,16 @@ function article_preview($field = false)
 
     // Assume they came from post.
     $view = ps('view', 'preview');
-    $rs = textile_main_fields(psa($vars));
-
+    $rs = $view ? textile_main_fields(psa($vars)) : null;
     // Preview pane
-    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
+    $preview = '';
 
     if ($view == 'preview') {
         if (!$field || $field == 'body') {
             $preview .= n.'<div class="body">'.
                 n.'<h2>'.gTxt('body').'</h2>'.
                 implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                    return '<code>'.txpspecialchars($tag).'</code>';
                 })).
             '</div>';
         }
@@ -394,7 +384,7 @@ function article_preview($field = false)
             $preview .= n.'<div class="excerpt">'.
                 n.'<h2>'.gTxt('excerpt').'</h2>'.
                 implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
+                    return '<code>'.txpspecialchars($tag).'</code>';
                 })).
                 '</div>';
         }
@@ -422,9 +412,7 @@ function article_preview($field = false)
         }
     }
 
-    $preview .= '</div>';// End of #pane-view.
-
-    return $preview;
+    return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
 }
 
 /**
@@ -808,8 +796,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo n.'<div class="txp-dialog">';
     echo n.$partials['view_modes']['html'];
-    echo article_preview();
-    echo '</div>';// End of .txp-dialog.
+    echo n.'<div id="pane-preview"></div>'.n.
+        '<template id="pane-view"></template>';
+//    echo article_preview();
+    echo n.'<iframe id="txp-frame-preview" name="txp-frame-preview" class="hidden" sandbox></iframe>';
+    echo n.'</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -1254,7 +1245,7 @@ function get_status_message($Status)
  * @return array
  */
 
-function textile_main_fields($incoming)
+function textile_main_fields($incoming, $options = array('lite' => false))
 {
     // Use preferred Textfilter as default and fallback.
     $hasfilter = new \Textpattern\Textfilter\Constraint(null);
@@ -1269,7 +1260,6 @@ function textile_main_fields($incoming)
     }
 
     $textile = new \Textpattern\Textile\Parser();
-    $options = array('lite' => false);
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used
@@ -1699,20 +1689,22 @@ function article_partial_article_view($rs)
 {
     extract($rs);
 
-    if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
+    $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
+
+    if ($live) {
+        $url = permlinkurl_id($rs['ID']);
+    } else {
         if (!has_privs('article.preview')) {
             return;
         }
 
-        $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
-    } else {
-        $url = permlinkurl_id($ID);
+        $url = hu.'?id='.intval($rs['ID']).'.'.urlencode(Txp::get('\Textpattern\Password\Hash')->hash(Txp::get('\Textpattern\Security\Token')->csrf())); // Article ID plus cachebuster.
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
-        'target' => '_blank',
+        'target' => $live ? '_blank' : 'txp-frame-preview',
     ));
 }
 

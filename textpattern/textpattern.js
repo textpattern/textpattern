@@ -866,15 +866,20 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         },
         handle = function(html) {
             if (html) {
-                var $html = $(html);
+                var $html = new DOMParser().parseFromString(html, "text/html").documentElement;
 
                 $.each(list.split(','), function(index, value) {
+                    const host = value.match(/^(?:(.+)>>)?(.+)$/);
+                    const embed = !!host[1];
+                    if (embed) value = host[2];
                     $(value).each(function() {
-                        var id = this.getAttribute('id');
+                        const id = this.getAttribute('id');
+                        const target = this.content || this;
 
                         if (id) {
-                            $(this).replaceWith($html.find('#' + id)).remove();
-                            $('#' + id).trigger('updateList');
+                            const contents = $html.querySelectorAll(embed ? 'head>'+host[1]+',body>'+host[1] : '#' + id);
+                            embed ? $(target).html(contents) : $(target).replaceWith(contents).remove();
+                            $('#' + id).removeClass("disabled").trigger('updateList');
                         }
                     });
                 });
@@ -887,8 +892,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (typeof data.html == 'undefined') {
         $(list).addClass('disabled');
-        $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
-            handle(this);
+        $.post(url, data.data, function(responseText, textStatus, jqXHR) {
+            handle(responseText);
         });
     } else {
         handle(data.html);
@@ -901,9 +906,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             close: textpattern.gTxt('close')
         }) : '';
 
-    if (message) {
-        $('#messagepane').html(message);
-    }
+
+    $('#messagepane').html(message ? message : null);
 });
 
 /**
@@ -2019,7 +2023,7 @@ textpattern.Route.add('login', function () {
         $('#login_form').on('submit', function() {
             alert(textpattern.gTxt('cookies_must_be_enabled'));
             return false;
-        });
+        }).find('input[type=submit]').prop('disabled', 'disabled');
     }
 
     // Focus on either username or password when empty.
@@ -2068,33 +2072,6 @@ textpattern.Route.add('article', function () {
         }
     }).change();
 
-    var status = 'select[name=Status]',
-        form = $(status).parents('form');
-
-    $('#article_form').on('change', status, function () {
-        let submitButton = form.find('input[type=submit]');
-
-        if (!form.hasClass('published')) {
-            if ($(this).val() < 4) {
-                submitButton.val(textpattern.gTxt('save'));
-            } else {
-                submitButton.val(textpattern.gTxt('publish'));
-            }
-        }
-    }).on('submit.txpAsyncForm', function (e) {
-        if ($pane.dialog('isOpen') && !$('#live-preview').is(':checked')) {
-            $viewMode.click();
-        }
-    }).on('click', '.txp-clone', function (e) {
-        e.preventDefault();
-        form.trigger('submit', {
-            data: {
-                copy: 1,
-                publish: 1
-            }
-        });
-    });
-
     // Switch to Text/HTML/Preview mode.
     var $pane = $('#pane-view').closest('.txp-dialog'),
         $field = '',
@@ -2117,6 +2094,26 @@ textpattern.Route.add('article', function () {
         $('#body, #excerpt').off('input', txp_article_preview);
     });
 
+    var status = 'select[name=Status]',
+        form = $(status).parents('form');
+
+    $('#article_form').on('change', status, function () {
+        let submitButton = form.find('input[type=submit]');
+
+        if (!form.hasClass('published')) {
+            if ($(this).val() < 4) {
+                submitButton.val(textpattern.gTxt('save'));
+            } else {
+                submitButton.val(textpattern.gTxt('publish'));
+            }
+        }
+    }).on('submit.txpAsyncForm', function (e) {
+        $pane.dialog('close');
+    }).on('click', '.txp-clone', function (e) {
+        e.preventDefault();
+        form.trigger('submit', {data: {copy:1, publish:1}});
+    });
+
     $('#live-preview').on('change', function () {
         if ($(this).is(':checked')) {
             $('#body, #excerpt').on('input', txp_article_preview);
@@ -2127,6 +2124,7 @@ textpattern.Route.add('article', function () {
 
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
+        const $view = $viewMode.data('view-mode');
 
         data.push({
             name: 'app_mode',
@@ -2139,12 +2137,12 @@ textpattern.Route.add('article', function () {
             value: $field
         },{
             name: 'view',
-            value: $viewMode.data('view-mode')
+            value: $view
         });
         textpattern.Relay.callback('updateList', {
-            url: 'index.php #pane-view',
+            url: 'index.php',
             data: data,
-            list: '#pane-view',
+            list: $view == 'html' ? '#pane-preview' : '*>>#pane-view',
             callback: function() {
                 $pane.dialog('open');
             }
@@ -2156,14 +2154,48 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
+        $('#pane-view').attr('class', $view);
+        $('#txp-frame-preview').addClass('hidden');
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
         $pane.dialog('option', 'title', $(this).text());
         $viewMode.click();
-    }).on('updateList', '#pane-view.html', function () {
+    }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
+        $(this).removeClass('hidden');
+    }).on('updateList', '#pane-view.preview', function () {
+        const pane = document.getElementById('pane-preview');
+
+        if (!pane.shadowRoot) {
+            let sheet = new CSSStyleSheet();
+            sheet.replaceSync("*{max-width:100%!important}");
+            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
+        }
+/*
+        const sanitizer = new Sanitizer(); // When available;
+        var sanitized_tree = sanitizer.sanitize(this.content);
+        this.innerHTML = null;
+        pane.shadowRoot.replaceChildren(sanitized_tree); 
+*/
+        DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+        pane.shadowRoot.replaceChildren(this.content);
+        $(pane).removeClass('hidden');
+
+        if (DOMPurify.removed.length) {
+//            DOMPurify.removed.forEach(item => console.log(item));
+            textpattern.Console.addMessage([textpattern.gTxt('Possibly unsafe ' + $field), 2], "preview");
+        }
+
+        textpattern.Console.clear().announce("preview");
+
+    }).on('click', '#article_partial_article_view', function (e) {
+        $('#live-preview').prop('checked', false).trigger('change');
+        $('#pane-preview, #pane-view').addClass('hidden');
+        $('#txp-frame-preview').removeClass('hidden');
+        $pane.dialog('option', 'title', $(this).text());
+        $pane.dialog('open');
     });
 
     function txp_article_preview() {
@@ -2369,6 +2401,45 @@ textpattern.Route.add('plugin', function () {
     textpattern.Relay.register('txpAsyncHref.success', function (event, data) {
         $(data['this']).closest('tr').toggleClass('active');
     });
+});
+
+// Metastore panel.
+
+textpattern.Route.add('meta', function ()
+{
+    $('#render').change(function (e)
+    {
+        var meVal = $(this).val();
+        var edTxf = $('.edit-meta-textfilter');
+
+        // Don't want Textfilter information to be submitted if there
+        // are no filters available for the selected type.
+        if ($.inArray(meVal, textfilter_map) > -1) {
+            edTxf.show().find('select').removeAttr('disabled');
+        } else {
+            edTxf.hide().find('select').prop('disabled', 'true');
+        }
+
+        if ($.inArray(meVal, option_map) > -1) {
+            $('.edit-meta-options').show();
+        } else {
+            $('.edit-meta-options').hide();
+        }
+
+        if ($.inArray(meVal, delimiter_map) > -1) {
+            $('.edit-meta-delimiter').show();
+        } else {
+            $('.edit-meta-delimiter').hide();
+        }
+    }).change();
+
+    $('#labelStr').change(function (e)
+    {
+        if ($('#name').val() === '') {
+            $('#name').val($(this).val());
+        }
+    });
+
 });
 
 // Diagnostics panel.
