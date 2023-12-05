@@ -163,11 +163,6 @@ $txpOut = "$(function() {
 })";
 // Set but don't display this bit yet.
 Txp::get('\Textpattern\UI\Script')->setContent($txpOut, false);
-$txpOut = '
-    .txp-dialog{padding:0!important}
-    #txp-frame-preview {height:100%;width:100%;position:absolute;top:0;border:0;z-index:10}
-';
-echo Txp::get('\Textpattern\UI\Style')->setContent($txpOut)->setRoute('article').n;
 
 echo $theme->html_head();
 echo $theme->html_head_custom();

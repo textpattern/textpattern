@@ -799,7 +799,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div id="pane-preview"></div>'.n.
         '<template id="pane-view"></template>';
 //    echo article_preview();
-    echo n.'<iframe id="txp-frame-preview" name="txp-frame-preview" class="hidden" sandbox></iframe>';
     echo n.'</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
@@ -1704,7 +1703,7 @@ function article_partial_article_view($rs)
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
-        'target' => $live ? '_blank' : 'txp-frame-preview',
+        'target' => '_blank',
     ));
 }
 

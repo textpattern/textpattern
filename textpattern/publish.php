@@ -357,7 +357,9 @@ function preText($store, $prefs = null)
             global $nolog;
     
             $nolog = true;
+            header('Content-Security-Policy: sandbox');
             $out['id'] = intval($out['id']);
+            $out['_txp_preview'] = $hash;
         }
     }
 
@@ -986,7 +988,7 @@ function doArticle($atts, $thing = null)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
-    $preview = strpos(gps('id'), '.') !== false;
+    $preview = !empty($pretext['_txp_preview']);
 
     // No output required, only setting atts.
     if ($atts['pgonly']) {

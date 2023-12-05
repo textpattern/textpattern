@@ -2155,7 +2155,6 @@ textpattern.Route.add('article', function () {
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
         $('#pane-view').attr('class', $view);
-        $('#txp-frame-preview').addClass('hidden');
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
@@ -2164,7 +2163,6 @@ textpattern.Route.add('article', function () {
         $viewMode.click();
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
-        $(this).removeClass('hidden');
     }).on('updateList', '#pane-view.preview', function () {
         const pane = document.getElementById('pane-preview');
 
@@ -2189,13 +2187,6 @@ textpattern.Route.add('article', function () {
         }
 
         textpattern.Console.clear().announce("preview");
-
-    }).on('click', '#article_partial_article_view', function (e) {
-        $('#live-preview').prop('checked', false).trigger('change');
-        $('#pane-preview, #pane-view').addClass('hidden');
-        $('#txp-frame-preview').removeClass('hidden');
-        $pane.dialog('option', 'title', $(this).text());
-        $pane.dialog('open');
     });
 
     function txp_article_preview() {
