@@ -1814,6 +1814,12 @@ function lAtts($pairs, $atts, $warn = true)
         unset($atts['yield']);
     }
 
+    // Offset by URL parameter
+    if (isset($atts['offset']) && $atts['offset'] !== true && !is_numeric($atts['offset'])) {
+        $pageby = isset($atts['limit']) ? intval($atts['limit']) : (isset($pairs['limit']) ? intval($pairs['limit']) : 10);
+        $atts['offset'] = $pageby ? (intval(gps($atts['offset'], 1)) - 1)*$pageby : intval(gps($atts['offset'], 0));
+    }
+
     if (empty($pretext['_txp_atts'])) {
         foreach ($atts as $name => $value) {
             if (array_key_exists($name, $pairs)) {
