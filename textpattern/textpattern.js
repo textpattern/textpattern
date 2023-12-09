@@ -2122,9 +2122,16 @@ textpattern.Route.add('article', function () {
         }
     });
 
+    $('#clean-preview').on('change', function () {
+        if ($viewMode.data('view-mode') != 'html') {
+            $viewMode.click();
+        }
+    });
+
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
         const $view = $viewMode.data('view-mode');
+        $('#pane-preview').addClass('disabled');
 
         data.push({
             name: 'app_mode',
@@ -2159,33 +2166,32 @@ textpattern.Route.add('article', function () {
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
-        $pane.dialog('option', 'title', $(this).text());
+        $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
+        textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-view.preview', function () {
         const pane = document.getElementById('pane-preview');
 
         if (!pane.shadowRoot) {
             let sheet = new CSSStyleSheet();
-            sheet.replaceSync("*{max-width:100%!important}");
+            sheet.replaceSync("*{max-width:100%}");
             pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
         }
-/*
-        const sanitizer = new Sanitizer(); // When available;
-        var sanitized_tree = sanitizer.sanitize(this.content);
-        this.innerHTML = null;
-        pane.shadowRoot.replaceChildren(sanitized_tree); 
-*/
-        DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
-        pane.shadowRoot.replaceChildren(this.content);
-        $(pane).removeClass('hidden');
 
-        if (DOMPurify.removed.length) {
-//            DOMPurify.removed.forEach(item => console.log(item));
-            textpattern.Console.addMessage([textpattern.gTxt('Possibly unsafe ' + $field), 2], "preview");
+        if ($('#clean-preview').is(':checked')) {
+            const ntags = parseInt(this.content.getElementById('txp-preview-wrapper').dataset.tags);
+            DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+
+            if (ntags || DOMPurify.removed.length) {
+    //            DOMPurify.removed.forEach(item => console.log(item));
+                textpattern.Console.addMessage([`Found ${ntags} txp tags and ${DOMPurify.removed.length} unsafe elements`, 2], "preview");
+            }
         }
 
+        pane.shadowRoot.replaceChildren(this.content);
+        pane.classList.remove('disabled');
         textpattern.Console.clear().announce("preview");
     });
 

@@ -350,7 +350,7 @@ function preText($store, $prefs = null)
         header('Cache-Control: no-cache, no-store, max-age=0');
         list($id, $hash) = explode('.', $out['id'], 2);
 //        doAuth();
-        if (!has_privs('article.preview') || !Txp::get('\Textpattern\Password\Hash')->verify(Txp::get('\Textpattern\Security\Token')->csrf(), $hash)) {
+        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($id) !== $hash) {
             txp_status_header('401 Unauthorized');
             exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {

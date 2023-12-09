@@ -424,7 +424,7 @@ function load_lang($lang, $events = null)
     $textarray = array_merge($textarray, Txp::get('\Textpattern\L10n\Lang')->load($lang, $events));
 
     if (($production_status !== 'live' || $event === 'diag')
-        && @$debug = parse_ini_file(txpath.DS.'mode.ini')
+        && $debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
         $textarray += (array)$debug;
         Txp::get('\Textpattern\L10n\Lang')->setPack($textarray);
@@ -1841,7 +1841,7 @@ function lAtts($pairs, $atts, $warn = true)
         }
     }
 
-    return $pairs ? $pairs : false;
+    return $pairs ? $pairs : array();
 }
 
 /**
@@ -3371,7 +3371,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $transform !== true or $transform = 'txpspecialchars';
 
         for ($i = 1; $i < $last; $i+=2) {
-            $parsed[$i] = $transform === false ? null : call_user_func($transform, $parsed[$i]);
+            $transform === false or $parsed[$i] = call_user_func($transform, $parsed[$i]);
         }
     }
 
