@@ -87,10 +87,13 @@ function pagetop($pagetitle = '', $message = '')
 
     gTxtScript(array(
         'are_you_sure',
+        'body',
         'close',
         'cookies_must_be_enabled',
         'documentation',
+        'excerpt',
         'form_submission_error',
+        'found_unsafe',
         'help',
         'list_options',
         'ok',
@@ -118,7 +121,9 @@ function pagetop($pagetitle = '', $message = '')
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
-    ->setRoute('file, image');
+    ->setRoute('file, image').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
+    ->setRoute('article');
 $txpOut = 'var textpattern = '.json_encode(
     array(
         '_txp_uid' => get_pref('blog_uid'),
@@ -161,9 +166,10 @@ $txpOut = "$(function() {
 })";
 // Set but don't display this bit yet.
 Txp::get('\Textpattern\UI\Script')->setContent($txpOut, false);
+
 echo $theme->html_head();
 echo $theme->html_head_custom();
-    callback_event('admin_side', 'head_end'); ?>
+callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <noscript>Please enable JavaScript in your browser to use this application.</noscript>

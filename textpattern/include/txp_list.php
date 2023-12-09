@@ -364,10 +364,10 @@ function list_list($message = '', $post = '')
                 $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
-                if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                    $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
-                } else {
+                if ($Status == STATUS_LIVE || $Status == STATUS_STICKY) {
                     $view_url = permlinkurl($a);
+                } else {
+                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($ID)) : '';
                 }
 
                 if (isset($statuses[$Status])) {

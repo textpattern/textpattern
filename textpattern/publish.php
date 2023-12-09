@@ -358,21 +358,23 @@ function preText($store, $prefs = null)
 
     $is_404 = ($out['status'] == '404');
     $title = null;
-    $status = gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")";
+    $status = strpos($out['id'], '.') === false ? " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")" : '';
 
     // Handle article preview.
     if (!$status) {
         header('Cache-Control: no-cache, no-store, max-age=0');
-        doAuth();
-
-        if (!has_privs('article.preview')) {
+        list($id, $hash) = explode('.', $out['id'], 2);
+//        doAuth();
+        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($id) !== $hash) {
             txp_status_header('401 Unauthorized');
             exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
             global $nolog;
     
             $nolog = true;
-            $out['id'] = intval(gps('txpreview'));
+            header('Content-Security-Policy: sandbox');
+            $out['id'] = intval($out['id']);
+            $out['_txp_preview'] = $hash;
         }
     }
 
@@ -662,13 +664,14 @@ function preText($store, $prefs = null)
     $out['status'] = is_numeric($is_404) ? $is_404 : ($is_404 ? '404' : '200');
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
     $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-    $id = $out['id'];
 
     // Hackish.
     global $is_article_list;
 
-    if (empty($id)) {
+    if (empty($out['id'])) {
         $is_article_list = true;
+    } else {
+        $out['q'] = '';
     }
 
     // By this point we should know the section, so grab its page and CSS.
@@ -1001,7 +1004,8 @@ function doArticle($atts, $thing = null, $parse = true)
     }
 
     $oldAtts = filterAtts();
-    $atts = filterAtts($atts, !$parse);
+    $atts = filterAtts($atts);
+    $preview = !empty($pretext['_txp_preview']);
 
     // No output required, only setting atts.
     if ($atts['pgonly']) {
@@ -1011,7 +1015,7 @@ function doArticle($atts, $thing = null, $parse = true)
     if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
         $id = assert_int($pretext['id']);
         $thisarticle = null;
-        $where = gps('txpreview') ? '1' : $atts['?'];
+        $where = $preview ? '1' : $atts['?'];
         $tables = 'textpattern';
         $columns = $atts['*'];
 
@@ -1025,7 +1029,7 @@ function doArticle($atts, $thing = null, $parse = true)
 
     $article = false;
 
-    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || gps('txpreview'))) {
+    if ($parse && !empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || $preview)) {
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
         if ($atts['allowoverride'] && $thisarticle['override_form']) {

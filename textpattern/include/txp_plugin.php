@@ -286,8 +286,7 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
+                    href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
@@ -296,14 +295,13 @@ function plugin_list($message = '')
 
             if (class_exists('\ZipArchive')) {
                 $download = span(
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.href(gTxt('export'), array(
+                    href(gTxt('export'), array(
                         'event'      => 'plugin',
                         'step'       => 'plugin_export',
                         'name'       => $name,
                         '_txp_token' => form_token(),
-                    ),
-                    array('class' => 'plugin-download'))        
+                    )),
+                    array('class' => 'plugin-download')
                 );
             } else {
                 $download = '';
@@ -325,12 +323,11 @@ function plugin_list($message = '')
 
             if (!empty($lastCheck['plugins'][$name])) {
                 foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
-                    $manage[] = sp.span('&#124;', array('role' => 'separator')).
-                        sp.href(gTxt('plugin_upgrade', array('{version}' => $pluginMeta['version'], '{type}' => $pluginType)), $pluginMeta['endpoint']);
+                    $manage[] = href(gTxt('plugin_upgrade', array('{version}' => $pluginMeta['version'], '{type}' => $pluginType)), $pluginMeta['endpoint']);
                 }
             }
 
-            $manage_items = ($manage) ? join($manage) : '-';
+            $manage_items = ($manage) ? implode(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
             $edit_url = array(
                 'event'         => 'plugin',
                 'step'          => 'plugin_edit',
@@ -501,6 +498,10 @@ function plugin_edit_form($name = '')
     );
 
     $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+
+    if (empty($plugin)) {
+        return graf(gTxt('plugin_not_editable'), array('class' => 'alert-block warning'));
+    }
 
     foreach ($vars as $key) {
         if (empty($plugin[$key])) {
@@ -973,9 +974,9 @@ function plugin_upload($url = null)
                 $ready = true;
             }
         } else {
-            $filename = $_FILES["theplugin"]["name"];
+            $fileParts = pathinfo($_FILES["theplugin"]["name"]);
             $source = $_FILES["theplugin"]["tmp_name"];
-            $target = $dest.DS.$filename;
+            $target = $dest.DS.$fileParts['basename'];
 
             if (move_uploaded_file($source, $target)) {
                 $ready = true;

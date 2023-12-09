@@ -424,7 +424,7 @@ function load_lang($lang, $events = null)
     $textarray = array_merge($textarray, Txp::get('\Textpattern\L10n\Lang')->load($lang, $events));
 
     if (($production_status !== 'live' || $event === 'diag')
-        && @$debug = parse_ini_file(txpath.DS.'mode.ini')
+        && $debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
         $textarray += (array)$debug;
         Txp::get('\Textpattern\L10n\Lang')->setPack($textarray);
@@ -1092,7 +1092,7 @@ function set_cookie($name, $value = '', $options = array())
         'path' => '',
         'domain' => '',
         'secure' => strtolower(PROTOCOL) == 'https://',
-        'httponly' => false,
+        'httponly' => true,
         'samesite' => 'Lax' // None || Lax  || Strict
     );
 
@@ -1792,11 +1792,11 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 function lAtts($pairs, $atts, $warn = true)
 {
     global $pretext, $production_status, $txp_atts;
-    static $globals = null, $global_atts, $partial;
+    static $globatts = null, $global_atts, $partial;
 
-    if ($globals === null) {
+    if ($globatts === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
-        $globals = array_filter($global_atts);
+        $globatts = array_filter($global_atts);
     }
 
     // A shortcut for name='<txp:yield name="alias" />'
@@ -1814,6 +1814,12 @@ function lAtts($pairs, $atts, $warn = true)
         unset($atts['yield']);
     }
 
+    // Offset by URL parameter
+    if (isset($atts['offset']) && $atts['offset'] !== true && !is_numeric($atts['offset'])) {
+        $pageby = isset($atts['limit']) ? intval($atts['limit']) : (isset($pairs['limit']) ? intval($pairs['limit']) : 10);
+        $atts['offset'] = $pageby ? (intval(gps($atts['offset'], 1)) - 1)*$pageby : intval(gps($atts['offset'], 0));
+    }
+
     if (empty($pretext['_txp_atts'])) {
         foreach ($atts as $name => $value) {
             if (array_key_exists($name, $pairs)) {
@@ -1828,14 +1834,14 @@ function lAtts($pairs, $atts, $warn = true)
         }
     } else { // don't import unset globals
         foreach ($atts as $name => $value) {
-            if (array_key_exists($name, $pairs) && (!isset($globals[$name]) || isset($txp_atts[$name]))) {
+            if (array_key_exists($name, $pairs) && (!isset($globatts[$name]) || isset($txp_atts[$name]))) {
                 $pairs[$name] = $value;
                 unset($txp_atts[$name]);
             }
         }
     }
 
-    return $pairs ? $pairs : false;
+    return $pairs ? $pairs : array();
 }
 
 /**
@@ -2211,15 +2217,15 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    static $stack = array(), $parse = array(), $global_atts = array(), $globals = null;
+    static $stack = array(), $parse = array(), $global_atts = array(), $globatts = null;
     global $production_status, $trace, $txp_atts;
 
-    if ($globals === null) {
-        $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    if ($globatts === null) {
+        $globatts = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
     }
 
     if (is_array($text)) {
-        $txp_atts = array_intersect_key($text, $globals);
+        $txp_atts = array_intersect_key($text, $globatts);
         return $text;
     }
 
@@ -2257,7 +2263,7 @@ function splat($text)
             }
         }
 
-        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals) or $global_atts[$sha] = null;
+        $global_atts[$sha] = array_intersect_key($stack[$sha], $globatts) or $global_atts[$sha] = null;
     }
 
     $txp_atts = $global_atts[$sha];
@@ -3365,7 +3371,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $transform !== true or $transform = 'txpspecialchars';
 
         for ($i = 1; $i < $last; $i+=2) {
-            $parsed[$i] = $transform === false ? null : call_user_func($transform, $parsed[$i]);
+            $transform === false or $parsed[$i] = call_user_func($transform, $parsed[$i]);
         }
     }
 
