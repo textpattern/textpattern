@@ -2186,7 +2186,11 @@ textpattern.Route.add('article', function () {
 
             if (ntags || DOMPurify.removed.length) {
     //            DOMPurify.removed.forEach(item => console.log(item));
-                textpattern.Console.addMessage([`Found ${ntags} txp tags and ${DOMPurify.removed.length} unsafe elements`, 2], "preview");
+                const message = textpattern.gTxt('found_unsafe', {
+                    '{tags}': ntags, '{elements}': DOMPurify.removed.length
+                });
+//                textpattern.Console.addMessage([`Found ${ntags} txp tags and ${DOMPurify.removed.length} unsafe elements`, 2], "preview");
+                textpattern.Console.addMessage([message, 2], "preview");
             }
         }
 

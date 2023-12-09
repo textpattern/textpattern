@@ -738,8 +738,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];
+        } elseif (isset($textarray[$v])) {
+            $out = $textarray[$v];
         } else {
-            $out = isset($textarray[$v]) ? $textarray[$v] : '';
+            $out = $this->strings[$v] = $textarray[$v] = in_array(TEXTPATTERN_DEFAULT_LANG, $this->installed()) ?
+                (string)safe_field("data", 'txp_lang', "name='".doSlash($v)."' AND lang='".doSlash(TEXTPATTERN_DEFAULT_LANG)."'") :
+                '';
         }
 
         if ($atts && $escape == 'html') {

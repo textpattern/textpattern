@@ -93,6 +93,7 @@ function pagetop($pagetitle = '', $message = '')
         'documentation',
         'excerpt',
         'form_submission_error',
+        'found_unsafe',
         'help',
         'list_options',
         'ok',
