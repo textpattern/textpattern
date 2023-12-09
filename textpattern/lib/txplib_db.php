@@ -1383,7 +1383,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".quote_list($exclude, ',').")" : '';
 
     $nocache = !$children || $sql_limit || $children == $level;
-    $hash = md5($nocache ? uniqid() : $sql_query);
+    $hash = txp_hash($nocache ? uniqid() : $sql_query);
 
     if (!isset($cache[$hash])) {
         $cache[$hash] = array('' => array());
