@@ -491,7 +491,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $pack->parse($textpack);
 
         if (!isset($useLang)) {
-            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+            $useLang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         }
 
         $wholePack = $pack->getStrings($useLang);
@@ -738,12 +738,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];
-        } elseif (isset($textarray[$v])) {
-            $out = $textarray[$v];
         } else {
-            $out = $this->strings[$v] = $textarray[$v] = in_array(TEXTPATTERN_DEFAULT_LANG, $this->installed()) ?
-                (string)safe_field("data", 'txp_lang', "name='".doSlash($v)."' AND lang='".doSlash(TEXTPATTERN_DEFAULT_LANG)."'") :
-                '';
+            $out = isset($textarray[$v]) ? $textarray[$v] : '';
         }
 
         if ($atts && $escape == 'html') {
