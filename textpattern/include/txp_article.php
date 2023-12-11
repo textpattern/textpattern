@@ -1721,7 +1721,7 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview',
         'data-preview-link' => 'body',
     ));
@@ -1791,7 +1791,7 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview',
         'data-preview-link' => 'excerpt',
     ));
