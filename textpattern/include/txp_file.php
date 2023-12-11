@@ -681,12 +681,11 @@ function file_edit($message = '', $id = '')
                 : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file');
             $delete = ($can_delete && $file_exists)
                 ? form(
-                    fInput('submit', 'file_delete', gTxt('delete'), 'smallerbox', "", 'return verify(\''.gTxt('confirm_delete_popup').'\')').
                     eInput('file').
                     sInput('file_multi_edit').
                     hInput('edit_method', 'delete').
                     hInput('selected[]', $id)
-                )
+                , '', '', 'post', '', '', 'delete-file')
                 : '';
         }
 
@@ -802,6 +801,14 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-download-count')
                 ).
                 graf(
+                    tag_void('input', array(
+                        'class'   => 'caution',
+                        'name'    => 'file_delete',
+                        'type'    => 'submit',
+                        'form'    => 'delete-file',
+                        'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
+                        'value'   =>  gTxt('delete'),
+                    )).
                     href(gTxt('go_back'), array(
                         'event'         => 'file',
                         'sort'          => $sort,
