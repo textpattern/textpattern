@@ -1688,6 +1688,7 @@ function article_partial_article_clone($rs)
 
 function article_partial_article_view($rs)
 {
+    global $txp_user;
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
@@ -1698,7 +1699,7 @@ function article_partial_article_view($rs)
             return;
         }
 
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($ID)); // Article ID plus token.
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(

@@ -367,7 +367,7 @@ function list_list($message = '', $post = '')
                 if ($Status == STATUS_LIVE || $Status == STATUS_STICKY) {
                     $view_url = permlinkurl($a);
                 } else {
-                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($ID)) : '';
+                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : '';
                 }
 
                 if (isset($statuses[$Status])) {
