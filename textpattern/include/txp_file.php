@@ -731,6 +731,16 @@ function file_edit($message = '', $id = '')
             ($replace ? tag($replace.n.$delete, 'div') : '').
             n.form(
                 inputLabel(
+                    'condition',
+                    $condition,
+                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                ).
+                inputLabel(
+                    'id',
+                    $id,
+                    '', '', array('class' => 'txp-form-field edit-file-id')
+                ).
+                inputLabel(
                     'name',
                     Txp::get('\Textpattern\UI\Input', 'filename', 'text', $filename)->setAtts(array(
                             'id'        => 'filename',
@@ -774,17 +784,11 @@ function file_edit($message = '', $id = '')
                         hInput('filename', $filename)
                 )).
                 pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                inputLabel(
-                    'download_count',
-                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
-                       ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
-                    '', '', array('class' => 'txp-form-field edit-file-download-count')
-                ).
                 $created.
                 inputLabel(
-                    'id',
-                    $id,
-                    '', '', array('class' => 'txp-form-field edit-file-id')
+                    'modified',
+                    gTime($modified),
+                    'modified', '', array('class' => 'txp-form-field edit-file-modified')
                 ).
                 inputLabel(
                     'file_size',
@@ -792,14 +796,10 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-size')
                 ).
                 inputLabel(
-                    'modified',
-                    gTime($modified),
-                    'modified', '', array('class' => 'txp-form-field edit-file-modified')
-                ).
-                inputLabel(
-                    'condition',
-                    $condition,
-                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                    'download_count',
+                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
+                       ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
+                    '', '', array('class' => 'txp-form-field edit-file-download-count')
                 ).
                 graf(
                     href(gTxt('go_back'), array(
