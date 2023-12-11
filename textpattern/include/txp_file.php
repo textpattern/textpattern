@@ -801,14 +801,16 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-download-count')
                 ).
                 graf(
-                    tag_void('input', array(
-                        'class'   => 'caution',
-                        'name'    => 'file_delete',
-                        'type'    => 'submit',
-                        'form'    => 'delete-file',
-                        'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
-                        'value'   =>  gTxt('delete'),
-                    )).
+                    ($can_delete
+                        ? tag_void('input', array(
+                            'class'   => 'caution',
+                            'name'    => 'file_delete',
+                            'type'    => 'submit',
+                            'form'    => 'delete-file',
+                            'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
+                            'value'   =>  gTxt('delete'),
+                        ))
+                        : '').
                     href(gTxt('go_back'), array(
                         'event'         => 'file',
                         'sort'          => $sort,
