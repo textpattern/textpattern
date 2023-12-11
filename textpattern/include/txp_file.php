@@ -776,7 +776,8 @@ function file_edit($message = '', $id = '')
                 pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                 inputLabel(
                     'download_count',
-                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)->setAtt('min', 0, array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
+                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
+                       ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
                     '', '', array('class' => 'txp-form-field edit-file-download-count')
                 ).
                 $created.
@@ -786,7 +787,7 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-id')
                 ).
                 inputLabel(
-                    'size',
+                    'file_size',
                     format_filesize($size),
                     '', '', array('class' => 'txp-form-field edit-file-size')
                 ).
@@ -815,7 +816,7 @@ function file_edit($message = '', $id = '')
                 eInput('file').
                 sInput('file_save').
                 hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
-            '', '', 'post', 'txp-edit file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details'),
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details'),
 //                    inputLabel(
 //                        'perms',
 //                        selectInput('perms', $levels, $permissions),
