@@ -831,12 +831,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     );
 
     echo graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )), array('class' => 'txp-actions')
     );
@@ -1673,8 +1673,8 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
-        'class' => 'txp-clone',
+    return n.tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+        'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
 }

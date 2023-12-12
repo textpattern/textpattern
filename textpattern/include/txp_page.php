@@ -159,9 +159,9 @@ function page_edit($message = '', $refresh_partials = false)
 
     if ($name) {
         $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_page').'"></span> <span class="screen-large">'.gTxt('create_page').'</span>', 'txp-new')
-        .href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#',
+        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button',
             array(
-                'class'     => 'txp-clone',
+                'class'     => 'txp-clone txp-reduced-ui-button',
                 'data-form' => 'page_form',
             )
         );
@@ -482,12 +482,12 @@ function page_new()
 function page_tagbuild()
 {
     $listActions = graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'tagbuild_links',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'tagbuild_links',
         )), array('class' => 'txp-actions')
     );

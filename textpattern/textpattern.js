@@ -1736,7 +1736,7 @@ jQuery.fn.txpColumnize = function () {
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
+        $button = $('<button class="txp-list-options-button txp-reduced-ui-button" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />').attr('checked', selectAll);
 
@@ -1750,7 +1750,7 @@ jQuery.fn.txpColumnize = function () {
     if (!$ui.length) {
         $ui = $('<div class="txp-list-options"></div>');
     } else {
-        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove();
+        $ui.find('.txp-list-options-button, ul.txp-dropdown').remove();
         $panel = false;
     }
 
@@ -2176,7 +2176,10 @@ textpattern.Route.add('article', function () {
 
         if (!pane.shadowRoot) {
             let sheet = new CSSStyleSheet();
-            sheet.replaceSync("*{max-width:100%}");
+            sheet.replaceSync(`img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
+            pre { overflow: auto; }
+            * { -webkit-hyphens: auto; hyphens: auto; }
+            pre > code { -webkit-hyphens: none; hyphens: none; }`);
             pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
         }
 
