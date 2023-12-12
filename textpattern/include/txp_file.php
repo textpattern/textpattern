@@ -810,7 +810,8 @@ function file_edit($message = '', $id = '')
                             'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
                             'value'   =>  gTxt('delete'),
                         ))
-                        : '').
+                        : ''
+                    ).
                     href(gTxt('go_back'), array(
                         'event'         => 'file',
                         'sort'          => $sort,
