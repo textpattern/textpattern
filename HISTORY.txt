@@ -2,7 +2,7 @@ Changes in 4.9.0 (upcoming)
 
 * Changed: Minimum system requirements increased to PHP 5.6.
 * Changed: Minimum system requirements increased to MySQL 5.5.
-* Compatibiliity with PHP 8.3.1.
+* Compatibility with PHP 8.3.1.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
