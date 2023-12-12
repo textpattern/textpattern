@@ -1352,7 +1352,11 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
     }
 
     return n.tag(
-        selectInput('edit_method', $methods, '').
+        tag(gTxt('bulk_edit'), 'label', array(
+            'class' => 'txp-accessibility',
+            'for'   => 'bulk_edit',
+        )).
+        selectInput('edit_method', $methods, '', '', '', 'bulk_edit').
         eInput($event).
         sInput($step).
         hInput('page', $page).
