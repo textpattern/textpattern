@@ -39,8 +39,9 @@ Changes in 4.9.0 (upcoming)
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
 * Changed: Plugins of all types trigger verify step (with improved security).
-* Changed: File Edit panel now has the ability to rename and delete files,
-  and change the download counter value (thanks, adi).
+* Changed: File Edit panel has the ability to rename and delete files, and
+  change the download counter value (thanks, adi).
+* Changed: Image Edit panel has the ability to delete images.
 * Changed: Can no longer delete in-use languages.
 * Changed: Image tags can take HTML attributes.
 * Changed: Less collision-prone custom fields name processing.
