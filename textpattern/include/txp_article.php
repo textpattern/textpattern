@@ -1137,10 +1137,10 @@ function tab($tabevent, $view, $tag = 'li')
         $label = gTxt('view_'.$tabevent.'_short');
     }
 
-    $link = href($label, '#', array(
+    $link = tag($label, 'button', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
         'aria-pressed'   => $pressed,
-        'role'           => 'button',
+        'class'           => 'txp-reduced-ui-button',
     ));
 
     return $tag ? n.tag($link, 'li', array(
@@ -1722,7 +1722,7 @@ function article_partial_article_view($rs)
 function article_partial_body($rs)
 {
     $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
-        'class'             => 'txp-textarea-preview txp-reduced-ui',
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'body',
     ));
 
@@ -1792,7 +1792,7 @@ function article_partial_body($rs)
 function article_partial_excerpt($rs)
 {
     $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
-        'class'             => 'txp-textarea-preview txp-reduced-ui',
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'excerpt',
     ));
 
