@@ -149,7 +149,7 @@ $txpOut = 'var textpattern = '.json_encode(
             'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
             'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
 {message}
-<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
+<button class="close txp-reduced-ui-button" title="{close}"><span class="ui-icon ui-icon-close">{close}</span></button>
 </span>'
         ),
         'textarray' => (object) null,
