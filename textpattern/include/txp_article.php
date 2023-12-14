@@ -362,8 +362,6 @@ function article_save()
 
 function article_preview($field = false)
 {
-    global $prefs, $vars, $app_mode;
-
     // Assume they came from post.
     $view = ps('view');
 
@@ -1694,19 +1692,22 @@ function article_partial_article_view($rs)
 
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
+        $clean = '';
     } else {
         if (!has_privs('article.preview')) {
             return;
         }
 
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $sandbox = $rs['LastModID'] !== $txp_user;
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)).($sandbox ? '.~' : ''); // Article ID plus token.
+        $clean = checkbox2('', $sandbox, 0, 'clean-view').sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-view'));
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
-    ));
+    )).$clean;
 }
 
 /**

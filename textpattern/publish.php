@@ -349,16 +349,16 @@ function preText($store, $prefs = null)
     if (!$status) {
         global $txp_user;
         header('Cache-Control: no-cache, no-store, max-age=0');
-        list($id, $hash) = explode('.', $out['id'], 2);
+        list($id, $hash, $raw) = explode('.', $out['id']) + array(null, null, null);
 //        doAuth();
         if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')).$txp_user.Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
         } else {
             global $nolog;
     
             $nolog = true;
-            header('Content-Security-Policy: sandbox');
+            if ($raw === '~') header('Content-Security-Policy: sandbox');
             $out['id'] = intval($out['id']);
             $out['_txp_preview'] = $hash;
         }

@@ -2156,7 +2156,11 @@ textpattern.Route.add('article', function () {
         });
     });
 
-    $(document).on('click', '[data-view-mode]', function (e) {
+    $(document).on('change', '#clean-view', function () {
+        const link = document.getElementById('article_partial_article_view'),
+            href = link.href.replace(/\.~$/, '');
+        link.href = this.checked ? href + '.~' : href;
+    }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
@@ -2206,6 +2210,8 @@ textpattern.Route.add('article', function () {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }
+
+    $("#clean-view").trigger("change");
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
