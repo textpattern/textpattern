@@ -46,7 +46,7 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL, array('article', 'edit')).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }

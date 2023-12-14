@@ -753,6 +753,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
+    if (!$message && $AuthorID == $txp_user && $LastModID != $txp_user) {
+        $message = array(gTxt('modified_by').' '.txpspecialchars($LastModID), 2);
+    }
+
     $page_title = $ID ? $Title : gTxt('write');
     pagetop($page_title, $message);
 
@@ -1408,6 +1412,8 @@ function article_partial_actions($rs)
         ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
     ) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+    } else {
+        script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
@@ -1698,9 +1704,8 @@ function article_partial_article_view($rs)
             return;
         }
 
-        $sandbox = $rs['LastModID'] !== $txp_user;
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)).($sandbox ? '.~' : ''); // Article ID plus token.
-        $clean = checkbox2('', $sandbox, 0, 'clean-view').sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-view'));
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $clean = checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-view'));
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(

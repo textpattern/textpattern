@@ -17,6 +17,7 @@ Changes in 4.9.0 (upcoming)
  (thanks, jools-r).
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
+* Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
@@ -32,22 +33,23 @@ Changes in 4.9.0 (upcoming)
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
 * Added: In-use asset counters to the Users panel.
-* Added: <txp:(article_)image /> accepts extra attributes (see #1738).
 * Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
 * Added: 'level' attribute to <txp:if_category />.
 * Added: Activity indicator for long upload processes.
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
+* Added: Global 'offset' can be set by URL parameters.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
 * Changed: Image Edit panel has the ability to delete images.
 * Changed: Can no longer delete in-use languages.
-* Changed: Image tags can take HTML attributes.
+* Changed: Image tags can take HTML attributes (see #1738).
 * Changed: Less collision-prone custom fields name processing.
 * Changed: Do not generate empty syndication feeds for feedless sections.
 * Changed: Allow PHP scripting options off by default, and Diagnostics warning.
-* Changed: Introdue primary keys for all tables, replacing some old indexes.
+* Changed: Introduce primary keys for all tables, replacing some old indexes.
+* Changed: <txp:header /> tag requires 'form' privilege.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
@@ -58,6 +60,7 @@ Changes in 4.9.0 (upcoming)
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
+* DOMPurify 3.0.6
 
 Changes in 4.8.8 (24 Jan 2022)
 
