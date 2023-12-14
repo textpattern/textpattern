@@ -1553,7 +1553,7 @@ EOF;
  *
  * @param  string     $js    JavaScript code
  * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
- * @param  array      $route Optional events/steps upon which to add the script
+ * @param  array|bool $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
  * @deprecated in 4.9.0
  * @see  \Textpattern\UI\Script
@@ -1565,7 +1565,9 @@ function script_js($js, $flags = '', $route = array())
 {
     $scriptTag = new \Textpattern\UI\Script;
 
-    if ($route) {
+    if ($route === true) {
+        $js = '$(function() {'.n.t.trim($js).n.'});';
+    } elseif ($route) {
         $events = isset($route[0]) ? $route[0] : null;
         $steps = isset($route[1]) ? $route[1] : null;
         $scriptTag->setRoute($events, $steps);

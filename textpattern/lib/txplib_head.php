@@ -159,13 +159,12 @@ $txpOut = 'var textpattern = '.json_encode(
 
 echo Txp::get('\Textpattern\UI\Script')->setContent($txpOut).
     Txp::get('\Textpattern\UI\Script')->setSource('textpattern.js').n;
-$txpOut = "$(function() {
+$txpOut = "
     if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
         alert('Please force-reload the page or clear your browser caches.')
-    }
-})";
+    }";
 // Set but don't display this bit yet.
-Txp::get('\Textpattern\UI\Script')->setContent($txpOut, false);
+script_js($txpOut, false, true);
 
 echo $theme->html_head();
 echo $theme->html_head_custom();
