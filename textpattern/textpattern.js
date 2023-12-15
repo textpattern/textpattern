@@ -869,16 +869,21 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                 var $html = new DOMParser().parseFromString(html, "text/html").documentElement;
 
                 $.each(list.split(','), function(index, value) {
-                    const host = value.match(/^(?:(.+)>>)?(.+)$/);
-                    const embed = !!host[1];
-                    if (embed) value = host[2];
-                    $(value).each(function() {
+                    const host = value.match(/^(?:(.*)>>)?(.+)$/);
+                    const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
+                    $(host[2]).each(function() {
                         const id = this.getAttribute('id');
-                        const target = this.content || this;
+                        const $target = $(this.content || this);
 
                         if (id) {
-                            const contents = $html.querySelectorAll(embed ? 'head>'+host[1]+',body>'+host[1] : '#' + id);
-                            embed ? $(target).html(contents) : $(target).replaceWith(contents).remove();
+                            const contents = $html.querySelector(embed ? 'body' : '#' + id);
+
+                            if (!embed) {
+                                $target.replaceWith(contents).remove();
+                            } else {
+                                $target.html(embed === true ? contents.childNodes : contents.querySelectorAll(host[1]));
+                            }
+
                             $('#' + id).removeClass("disabled").trigger('updateList');
                         }
                     });
@@ -892,7 +897,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (typeof data.html == 'undefined') {
         $(list).addClass('disabled');
-        $.post(url, data.data, function(responseText, textStatus, jqXHR) {
+        $.post(url, data.data, function(responseText, textStatus, jqXHR) {//console.log(jqXHR.getAllResponseHeaders().trim().split(/[\r\n]+/))
             handle(responseText);
         });
     } else {
@@ -2149,7 +2154,7 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '*>>#pane-view',
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-view',
             callback: function() {
                 $pane.dialog('open');
             }
@@ -2177,7 +2182,6 @@ textpattern.Route.add('article', function () {
         textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-view.preview', function () {
         const pane = document.getElementById('pane-preview');
-
         if (!pane.shadowRoot) {
             let sheet = new CSSStyleSheet();
             sheet.replaceSync(`img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
@@ -2187,8 +2191,17 @@ textpattern.Route.add('article', function () {
             pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
         }
 
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('id', 'txp-preview-wrapper');
+        let dtags = this.content.getElementById('txp-tags-count'), ntags = 0;
+
+        if (dtags) {
+            ntags = parseInt(dtags.value);
+            wrapper.setAttribute('class', dtags.className);
+            dtags.remove();
+        }
+
         if ($('#clean-preview').is(':checked')) {
-            const ntags = parseInt(this.content.getElementById('txp-preview-wrapper').dataset.tags);
             DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
@@ -2196,12 +2209,14 @@ textpattern.Route.add('article', function () {
                 const message = textpattern.gTxt('found_unsafe', {
                     '{tags}': ntags, '{elements}': DOMPurify.removed.length
                 });
-//                textpattern.Console.addMessage([`Found ${ntags} txp tags and ${DOMPurify.removed.length} unsafe elements`, 2], "preview");
                 textpattern.Console.addMessage([message, 2], "preview");
             }
         }
 
-        pane.shadowRoot.replaceChildren(this.content);
+        const fragment = document.createDocumentFragment();
+        fragment.appendChild(this.content);
+        wrapper.replaceChildren(fragment);
+        pane.shadowRoot.replaceChildren(wrapper);
         pane.classList.remove('disabled');
         textpattern.Console.clear().announce("preview");
     });

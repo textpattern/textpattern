@@ -392,9 +392,7 @@ function article_preview($field = false)
 
         unset($chunk);
 
-        $preview = '<div id="txp-preview-wrapper" class="'.$field.'" data-tags="'.$tags.'">'.
-            implode('', $parsed).
-        '</div>';
+        $preview = '<input type="hidden" class="'.$field.'" id="txp-tags-count" value="'.$tags.'" />'.implode('', $parsed);
     } elseif ($view == 'html') {
         $preview = tag(
             tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
@@ -1705,7 +1703,7 @@ function article_partial_article_view($rs)
         }
 
         $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
-        $clean = checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-view'));
+        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
@@ -1870,10 +1868,8 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        checkbox2('', true, 0, 'clean-preview').
-        sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-preview')).
-        checkbox2('', false, 0, 'live-preview').
-        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
+        tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
+        tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.
         n.tag(tab(array('preview'), $view).tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
