@@ -1433,6 +1433,29 @@ textpattern.decodeHTML = function (string) {
 };
 
 /**
+ * Wraps HTML as string.
+ *
+ * @param  {node|string} node The node
+ * @param  {string} tag The tag name
+ * @param  {object} attr The tag attributes
+ * @return {node} Wrapped string
+ * @since  4.9.0
+ */
+
+textpattern.wrapHTML = function (node, tag, attr) {
+    const wrapNode = document.createElement(tag || 'span');
+    wrapNode.append(document.createTextNode(node.outerHTML || node));
+
+    if (typeof attr === 'object') {
+        for (const key of Object.keys(attr)) {
+            wrapNode.setAttribute(key, attr[key]);
+        }
+    }
+
+    return node.parentNode.replaceChild(wrapNode, node);
+}
+
+/**
  * Translates given substrings.
  *
  * @param  {string} string        The mustached string
@@ -2190,15 +2213,15 @@ textpattern.Route.add('article', function () {
             sheet.replaceSync(`img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
             pre { overflow: auto; }
             * { -webkit-hyphens: auto; hyphens: auto; }
-            pre > code { -webkit-hyphens: none; hyphens: none; }`);
+            pre > code { -webkit-hyphens: none; hyphens: none; }
+            code.removed {text-decoration-line: line-through;}`);
             pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
         }
 
         if ($('#clean-preview').is(':checked')) {
-            DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+            DOMPurify.sanitize(this);
 
             if (ntags || DOMPurify.removed.length) {
-    //            DOMPurify.removed.forEach(item => console.log(item));
                 const message = textpattern.gTxt('found_unsafe', {
                     '{tags}': ntags, '{elements}': DOMPurify.removed.length
                 });
@@ -2212,6 +2235,20 @@ textpattern.Route.add('article', function () {
         pane.shadowRoot.replaceChildren(this.content);
         pane.classList.remove('disabled');
         textpattern.Console.clear().announce("preview");
+    });
+
+    DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+
+    DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
+        if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed'});
+        }
+    });
+
+    DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
+        if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed'});
+        }
     });
 
     function txp_article_preview() {
