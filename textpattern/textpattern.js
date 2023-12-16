@@ -864,7 +864,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         callback = data.callback || function(event) {
             textpattern.Console.announce(event);
         },
-        handle = function(html) {
+        handle = function(html, xhr) {
             if (html) {
                 var $html = new DOMParser().parseFromString(html, "text/html").documentElement;
 
@@ -884,7 +884,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                                 $target.html(embed === true ? contents.childNodes : contents.querySelectorAll(host[1]));
                             }
 
-                            $('#' + id).removeClass("disabled").trigger('updateList');
+                            $('#' + id).removeClass("disabled").trigger('updateList', xhr);
                         }
                     });
                 });
@@ -897,8 +897,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (typeof data.html == 'undefined') {
         $(list).addClass('disabled');
-        $.post(url, data.data, function(responseText, textStatus, jqXHR) {//console.log(jqXHR.getAllResponseHeaders().trim().split(/[\r\n]+/))
-            handle(responseText);
+        $.post(url, data.data, function(responseText, textStatus, jqXHR) {
+            handle(responseText, jqXHR);
         });
     } else {
         handle(data.html);
@@ -2078,7 +2078,7 @@ textpattern.Route.add('article', function () {
     }).change();
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog'),
+    var $pane = $('#pane-preview').closest('.txp-dialog'),
         $field = '',
         $viewMode = $('#view_modes li.active [data-view-mode]');
 
@@ -2154,7 +2154,7 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '>>#pane-view',
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
             callback: function() {
                 $pane.dialog('open');
             }
@@ -2170,7 +2170,7 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
-        $('#pane-view').attr('class', $view);
+        $('#pane-preview').attr('class', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
@@ -2180,8 +2180,11 @@ textpattern.Route.add('article', function () {
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
         textpattern.Console.clear().announce("preview");
-    }).on('updateList', '#pane-view.preview', function () {
+    }).on('updateList', '#pane-template', function (e, xhr) {
         const pane = document.getElementById('pane-preview');
+        const data = JSON.parse(xhr.getResponseHeader('x-txp-data'));
+        const ntags = data.tags_count || 0;
+
         if (!pane.shadowRoot) {
             let sheet = new CSSStyleSheet();
             sheet.replaceSync(`img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
@@ -2189,16 +2192,6 @@ textpattern.Route.add('article', function () {
             * { -webkit-hyphens: auto; hyphens: auto; }
             pre > code { -webkit-hyphens: none; hyphens: none; }`);
             pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
-        }
-
-        const wrapper = document.createElement('div');
-        wrapper.setAttribute('id', 'txp-preview-wrapper');
-        let dtags = this.content.getElementById('txp-tags-count'), ntags = 0;
-
-        if (dtags) {
-            ntags = parseInt(dtags.value);
-            wrapper.setAttribute('class', dtags.className);
-            dtags.remove();
         }
 
         if ($('#clean-preview').is(':checked')) {
@@ -2212,11 +2205,11 @@ textpattern.Route.add('article', function () {
                 textpattern.Console.addMessage([message, 2], "preview");
             }
         }
-
+/*
         const fragment = document.createDocumentFragment();
         fragment.appendChild(this.content);
-        wrapper.replaceChildren(fragment);
-        pane.shadowRoot.replaceChildren(wrapper);
+*/
+        pane.shadowRoot.replaceChildren(this.content);
         pane.classList.remove('disabled');
         textpattern.Console.clear().announce("preview");
     });

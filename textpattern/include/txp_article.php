@@ -391,8 +391,9 @@ function article_preview($field = false)
         }
 
         unset($chunk);
+        header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
 
-        $preview = '<input type="hidden" class="'.$field.'" id="txp-tags-count" value="'.$tags.'" />'.implode('', $parsed);
+        $preview = implode('', $parsed);
     } elseif ($view == 'html') {
         $preview = tag(
             tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
@@ -403,7 +404,7 @@ function article_preview($field = false)
         );
     } else {
         $preview = '<div id="pane-preview"></div>'.n.
-            '<template id="pane-view"></template>';
+            '<template id="pane-template"></template>';
     }
 
     return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
