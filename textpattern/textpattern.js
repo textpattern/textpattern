@@ -859,14 +859,14 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('updateList', function (event, data) {
-    var list = data.list || '#messagepane, .txp-async-update',
+    const list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
         callback = data.callback || function(event) {
             textpattern.Console.announce(event);
         },
         handle = function(html, xhr) {
             if (html) {
-                var $html = new DOMParser().parseFromString(html, "text/html").documentElement;
+                let $html = textpattern.decodeHTML(html);
 
                 $.each(list.split(','), function(index, value) {
                     const host = value.match(/^(?:(.*)>>)?(.+)$/);
@@ -876,20 +876,16 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                         const $target = $(this.content || this);
 
                         if (id) {
-                            const contents = $html.querySelector(embed ? 'body' : '#' + id);
-
                             if (!embed) {
-                                $target.replaceWith(contents).remove();
+                                $target.replaceWith($html.getElementById(id)).remove();
                             } else {
-                                $target.html(embed === true ? contents.childNodes : contents.querySelectorAll(host[1]));
+                                $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
                             }
 
-                            $('#' + id).removeClass("disabled").trigger('updateList', xhr);
+                            $('#' + id).removeClass('disabled').trigger('updateList', xhr);
                         }
                     });
                 });
-
-                $html.remove();
             }
 
             callback(data.event);
@@ -1414,7 +1410,7 @@ textpattern.changeType = function (elem, type) {
  */
 
 textpattern.encodeHTML = function (string) {
-    return $('<div/>').text(string).html();
+    return document.createTextNode(string).textContent;
 };
 
 /**
@@ -1426,9 +1422,10 @@ textpattern.encodeHTML = function (string) {
  */
 
 textpattern.decodeHTML = function (string) {
-    let div = document.createElement('template');
-    div.innerHTML = string.trim();
-
+    const div = document.createElement('template');
+    div.remove();
+    div.innerHTML = string;
+    
     return div.content;
 };
 
@@ -1452,7 +1449,7 @@ textpattern.wrapHTML = function (node, tag, attr) {
         }
     }
 
-    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.remove();
+    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
 }
 
 /**
@@ -2637,7 +2634,7 @@ textpattern.Route.add('plugin.plugin_help', function () {
         });
 
         // Grab the heading, strip out markup, then sanitize.
-        var tabTitle = $('<div>').html($tabHead.html()).text();
+        var tabTitle = textpattern.encodeHTML($tabHead.html());
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 
