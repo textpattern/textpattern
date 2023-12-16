@@ -1452,7 +1452,7 @@ textpattern.wrapHTML = function (node, tag, attr) {
         }
     }
 
-    return node.parentNode.replaceChild(wrapNode, node);
+    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.remove();
 }
 
 /**
