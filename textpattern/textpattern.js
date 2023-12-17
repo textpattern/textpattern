@@ -1410,7 +1410,7 @@ textpattern.changeType = function (elem, type) {
  */
 
 textpattern.encodeHTML = function (string) {
-    return document.createTextNode(string).textContent;
+    return $('<textarea>').html(string).text();
 };
 
 /**
@@ -1441,7 +1441,7 @@ textpattern.decodeHTML = function (string) {
 
 textpattern.wrapHTML = function (node, tag, attr) {
     const wrapNode = document.createElement(tag || 'span');
-    wrapNode.append(document.createTextNode(node.outerHTML || node));
+    wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
 
     if (typeof attr === 'object') {
         for (const key of Object.keys(attr)) {
