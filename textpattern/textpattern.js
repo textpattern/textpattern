@@ -1340,65 +1340,10 @@ jQuery.fn.txpSortable = function (options) {
 textpattern.passwordMask = function () {
     $('form').on('click', '#show_password', function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
-        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
-        textpattern.changeType(inputBox, newType);
+        var newType = (inputBox.prop('type') === 'password') ? 'text' : 'password';
+        inputBox.prop('type', newType);
         $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text');
     }).find('#show_password').prop('checked', false);
-};
-
-/**
- * Change the type of an input element.
- *
- * @param  {object} elem The <input/> element
- * @param  {string} type The desired type
- *
- * @see    https://gist.github.com/3559343 for original
- * @since  4.6.0
- */
-
-textpattern.changeType = function (elem, type) {
-    if (elem.prop('type') === type) {
-        // Already the correct type.
-        return elem;
-    }
-
-    try {
-        // May fail if browser prevents it.
-        return elem.prop('type', type);
-    } catch (e) {
-        // Create the element by hand.
-        // Clone it via a div (jQuery has no html() method for an element).
-        var html = $('<div>').append(elem.clone()).html();
-
-        // Match existing attributes of type=text or type="text".
-        var regex = /type=(\")?([^\"\s]+)(\")?/;
-
-        // If no match, add the type attribute to the end; otherwise, replace it.
-        var tmp = $(html.match(regex) == null ? html.replace('>', ' type="' + type + '">') : html.replace(regex, 'type="' + type + '"'));
-
-        // Copy data from old element.
-        tmp.data('type', elem.data('type'));
-        var events = elem.data('events');
-        var cb = function (events) {
-            return function () {
-                // Re-bind all prior events.
-                for (var idx in events) {
-                    var ydx = events[idx];
-
-                    for (var jdx in ydx) {
-                        tmp.bind(idx, ydx[jdx].handler);
-                    }
-                }
-            };
-        }(events);
-
-        elem.replaceWith(tmp);
-
-        // Wait a smidge before firing callback.
-        setTimeout(cb, 10);
-
-        return tmp;
-    }
 };
 
 /**
@@ -1422,11 +1367,11 @@ textpattern.encodeHTML = function (string) {
  */
 
 textpattern.decodeHTML = function (string) {
-    const div = document.createElement('template');
-    div.remove();
-    div.innerHTML = string;
+    const template = document.createElement('template');
+    template.remove();
+    template.innerHTML = string;
     
-    return div.content;
+    return template.content;
 };
 
 /**
@@ -2200,20 +2145,10 @@ textpattern.Route.add('article', function () {
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
         textpattern.Console.clear().announce("preview");
-    }).on('updateList', '#pane-template', function (e, xhr) {
+    }).on('updateList', '#pane-template', function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
-        const data = JSON.parse(xhr.getResponseHeader('x-txp-data'));
+        const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data'));
         const ntags = data.tags_count || 0;
-
-        if (!pane.shadowRoot) {
-            let sheet = new CSSStyleSheet();
-            sheet.replaceSync(`img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
-            pre { overflow: auto; }
-            * { -webkit-hyphens: auto; hyphens: auto; }
-            pre > code { -webkit-hyphens: none; hyphens: none; }
-            code.removed {text-decoration-line: line-through;}`);
-            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
-        }
 
         if ($('#clean-preview').is(':checked')) {
             DOMPurify.sanitize(this);
@@ -2225,26 +2160,35 @@ textpattern.Route.add('article', function () {
                 textpattern.Console.addMessage([message, 2], "preview");
             }
         }
-/*
-        const fragment = document.createDocumentFragment();
-        fragment.appendChild(this.content);
-*/
-        pane.shadowRoot.replaceChildren(this.content);
-        pane.classList.remove('disabled');
-        textpattern.Console.clear().announce("preview");
+
+        const update = async () => {
+            if (!pane.shadowRoot) {
+                const sheet = new CSSStyleSheet();
+                const css = await fetch('preview.css');
+                sheet.replaceSync(await css.text());
+                pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
+
+            }
+
+            pane.shadowRoot.replaceChildren(this.content);
+            pane.classList.remove('disabled');
+            textpattern.Console.clear().announce("preview");
+        };
+
+        update();
     });
 
     DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed'});
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
         }
     });
 
     DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
         if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed'});
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
         }
     });
 

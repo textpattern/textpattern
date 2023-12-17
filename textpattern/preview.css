@@ -1,0 +1,7 @@
+img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
+pre { overflow: auto; }
+* { -webkit-hyphens: auto; hyphens: auto; }
+pre > code { -webkit-hyphens: none; hyphens: none; }
+code.removed { opacity: 0.75; text-decoration-line: line-through; }
+code.-comment::before { content:"<!--"; }
+code.-comment::after { content:"-->"; }
