@@ -2145,7 +2145,7 @@ textpattern.Route.add('article', function () {
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
         textpattern.Console.clear().announce("preview");
-    }).on('updateList', '#pane-template', function (e, jqxhr) {
+    }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data'));
         const ntags = data.tags_count || 0;
@@ -2161,21 +2161,16 @@ textpattern.Route.add('article', function () {
             }
         }
 
-        const update = async () => {
-            if (!pane.shadowRoot) {
-                const sheet = new CSSStyleSheet();
-                const css = await fetch('preview.css');
-                sheet.replaceSync(await css.text());
-                pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
+        if (!pane.shadowRoot) {
+            const sheet = new CSSStyleSheet();
+            const css = await fetch('preview.css');
+            sheet.replaceSync(await css.text());
+            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
+        }
 
-            }
-
-            pane.shadowRoot.replaceChildren(this.content);
-            pane.classList.remove('disabled');
-            textpattern.Console.clear().announce("preview");
-        };
-
-        update();
+        pane.shadowRoot.replaceChildren(this.content);
+        pane.classList.remove('disabled');
+        textpattern.Console.clear().announce("preview");
     });
 
     DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
