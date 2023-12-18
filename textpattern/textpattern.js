@@ -865,7 +865,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             textpattern.Console.announce(event);
         },
         handle = function(html, xhr) {
-            if (html) {
+            if (typeof html === 'string') {
                 let $html = textpattern.decodeHTML(html);
 
                 $.each(list.split(','), function(index, value) {
@@ -2098,6 +2098,10 @@ textpattern.Route.add('article', function () {
         }
     });
 
+    $('#parse-preview').on('change', function () {
+        $viewMode.click();
+    });
+
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
         const $view = $viewMode.data('view-mode');
@@ -2147,7 +2151,7 @@ textpattern.Route.add('article', function () {
         textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
-        const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data'));
+        const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
         if ($('#clean-preview').is(':checked')) {

@@ -641,6 +641,12 @@ function preText($store, $prefs = null)
             if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $is_404 = '410';
             }
+
+            if (!empty($out['_txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+                foreach (array('body', 'excerpt') as $in) if (isset($_POST[$in])) {
+                    $thisarticle[$in] = $_POST[$in];
+                }
+            }
         }
     }
 
@@ -752,19 +758,21 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+    if ($name === '*') {
+        $assets[] = ps('field') == 'body' ? '<txp:body />' : '<txp:excerpt />';
+    } elseif (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
                 $mimetype = $mimetypes[$row['type']];
             }
         }
-
-        set_error_handler('tagErrorHandler');
-        @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo ltrim(parse_page(null, null, implode(n, $assets)));
-        restore_error_handler();
     }
+
+    set_error_handler('tagErrorHandler');
+    @header('Content-Type: '.$mimetype.'; charset=utf-8');
+    echo ltrim(parse_page(null, null, implode(n, $assets)));
+    restore_error_handler();
 }
 
 // -------------------------------------------------------------

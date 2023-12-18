@@ -362,6 +362,8 @@ function article_save()
 
 function article_preview($field = false)
 {
+    global $txp_user;
+
     // Assume they came from post.
     $view = ps('view');
 
@@ -372,6 +374,22 @@ function article_preview($field = false)
     }
 
     // Preview pane
+    if (gps('_txp_parse')) {
+        $id = intval(gps('ID')).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
+        $data = http_build_query (array('id' => $id, 'f' => '*', 'field' => $field, $field => $dbfield));
+        $opts = array(
+          'http'=>array(
+            'method' => "POST",
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n".
+                "Cookie: txp_login_public=".$_COOKIE['txp_login_public'],
+            'content' => $data,
+          )
+        );
+        
+        $context = stream_context_create($opts);
+        $dbfield = file_get_contents(hu, false, $context);
+    }
+
     if ($view == 'preview') {
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
@@ -1404,12 +1422,7 @@ function article_partial_actions($rs)
         }
 
         $push_button = graf($push_button, array('class' => 'txp-save'));
-    } elseif (
-        ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-        ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-        ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-        ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-    ) {
+    } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
         script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
@@ -1869,6 +1882,7 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
+        tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label').
         tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
         tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.

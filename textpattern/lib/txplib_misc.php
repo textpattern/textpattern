@@ -3958,7 +3958,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
     if (($rewrite != 1 || in_array(true, $headers, true)) && $headers_list = headers_list()) {
         foreach ($headers_list as $header) {
             list($name, $value) = explode(':', $header, 2) + array(null, null);
-            $headers_low[strtolower(trim($name))] = $value;
+            $headers_low[strtolower(trim($name))] = isset($value) ? trim($value) : $value;
         }
     }
 
@@ -6158,27 +6158,13 @@ function txp_match($atts, $what)
 
     extract($atts + array(
         'value'     => null,
-        'match'     => 'exact',
+        'match'     => '',
         'separator' => '',
     ));
 
 
     if ($value !== null) {
         switch ($match) {
-            case '<':
-            case 'less':
-                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
-                break;
-            case '<=':
-                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
-                break;
-            case '>':
-            case 'greater':
-                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
-                break;
-            case '>=':
-                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
-                break;
             case '':
             case 'exact':
                 $cond = (is_array($what) ? $what == do_list($value, $separator ? $separator : ',') : $what == $value);
@@ -6206,6 +6192,20 @@ function txp_match($atts, $what)
                         break;
                     }
                 }
+                break;
+            case '<':
+            case 'less':
+                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
+                break;
+            case '<=':
+                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
+                break;
+            case '>':
+            case 'greater':
+                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
+                break;
+            case '>=':
+                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
                 break;
             case 'pattern':
                 // Cannot guarantee that a fixed delimiter won't break preg_match
@@ -6298,4 +6298,14 @@ function txp_break($wraptag)
 function txp_hash($thing)
 {
     return strlen($thing) < TEXTPATTERN_HASH_LENGTH ? $thing : hash(TEXTPATTERN_HASH_ALGO, $thing);
+}
+
+function can_modify($rs, $user = null) {
+    global $txp_user;
+
+    isset($user) or $user = $txp_user;
+    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
+    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
+    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
 }
