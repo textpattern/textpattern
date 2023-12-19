@@ -619,6 +619,28 @@ function the_privileged($res, $real = false)
 }
 
 /**
+ * Check whether a user can modify the article.
+ * 
+ * Probably more suitable for Validator class?
+ *
+ * @param   array  $rs The article data
+ * @param   string $user The user name
+ * @return  bool  
+ * @since   4.9.0
+ * @package User
+ */
+
+function can_modify($rs, $user = null) {
+    global $txp_user;
+
+    isset($user) or $user = $txp_user;
+    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
+    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
+    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
+}
+
+/**
  * Convert SVG size to pixel size
  *
  * @param   char        SVG size
@@ -3209,9 +3231,34 @@ function fileDownloadFormatTime($params)
  *
  */
 
-function txp_get_contents($file)
+function txp_get_contents($file, $opts = null)
 {
-    return is_readable($file) ? file_get_contents($file) : '';
+    // Local file
+    if (!is_array($opts)) {
+        return is_readable($file) ? file_get_contents($file) : '';
+    }
+
+    $opts += array('method' => 'POST', 'content' => '', 'header' => 'Content-type: application/x-www-form-urlencoded');
+
+    if (is_array($opts['content'])) {
+        $opts['content'] = http_build_query($opts['content']);
+    }
+
+    if (!function_exists('curl_init')) {
+        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
+    } else {
+        $ch = curl_init($file);
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, strtoupper($opts['method']) == 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $opts['content']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [$opts['header']]);
+
+        $contents = curl_exec($ch);
+        curl_close($ch);
+    }
+
+    return $contents;
 }
 
 /**
@@ -6298,14 +6345,4 @@ function txp_break($wraptag)
 function txp_hash($thing)
 {
     return strlen($thing) < TEXTPATTERN_HASH_LENGTH ? $thing : hash(TEXTPATTERN_HASH_ALGO, $thing);
-}
-
-function can_modify($rs, $user = null) {
-    global $txp_user;
-
-    isset($user) or $user = $txp_user;
-    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
 }

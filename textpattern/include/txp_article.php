@@ -145,10 +145,7 @@ function article_save()
             UNIX_TIMESTAMP(Expires) AS sExpires",
             'textpattern', "ID = ".(int) $incoming['ID']);
 
-        if (!($oldArticle['Status'] >= STATUS_LIVE && has_privs('article.edit.published')
-            || $oldArticle['Status'] >= STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
-            || $oldArticle['Status'] < STATUS_LIVE && has_privs('article.edit')
-            || $oldArticle['Status'] < STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
+        if (!can_modify($oldArticle)) {
             // Not allowed, you silly rabbit, you shouldn't even be here.
             // Show default editing screen.
             article_edit();
@@ -375,19 +372,17 @@ function article_preview($field = false)
 
     // Preview pane
     if (gps('_txp_parse')) {
-        $id = intval(gps('ID')).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
-        $data = http_build_query (array('id' => $id, 'f' => '*', 'field' => $field, $field => $dbfield));
+        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
+        $id = intval(gps('ID')).'.'.$token;
+        $data = array('id' => $id, 'f' => $token, 'field' => $field, $field => $dbfield);
         $opts = array(
-          'http'=>array(
             'method' => "POST",
             'header' => "Content-type: application/x-www-form-urlencoded\r\n".
-                "Cookie: txp_login_public=".$_COOKIE['txp_login_public'],
+                "Cookie: txp_login_public=".cs('txp_login_public'),
             'content' => $data,
-          )
         );
         
-        $context = stream_context_create($opts);
-        $dbfield = file_get_contents(hu, false, $context);
+        $dbfield = txp_get_contents(hu, $opts);
     }
 
     if ($view == 'preview') {

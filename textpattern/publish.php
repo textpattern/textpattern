@@ -758,8 +758,9 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if ($name === '*') {
-        $assets[] = ps('field') == 'body' ? '<txp:body />' : '<txp:excerpt />';
+    if (isset($pretext['_txp_preview']) && $name === $pretext['_txp_preview']) {
+        $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
+        $mimetype = 'text/html';
     } elseif (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
@@ -770,7 +771,7 @@ function output_component($n = '')
     }
 
     set_error_handler('tagErrorHandler');
-    @header('Content-Type: '.$mimetype.'; charset=utf-8');
+    header('Content-Type: '.$mimetype.'; charset=utf-8');
     echo ltrim(parse_page(null, null, implode(n, $assets)));
     restore_error_handler();
 }
