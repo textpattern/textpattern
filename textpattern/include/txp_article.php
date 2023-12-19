@@ -374,7 +374,7 @@ function article_preview($field = false)
     if (gps('_txp_parse')) {
         $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
         $id = intval(gps('ID')).'.'.$token;
-        $data = array('id' => $id, 'f' => $token, 'field' => $field, $field => $dbfield);
+        $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
         $opts = array(
             'method' => "POST",
             'header' => "Content-type: application/x-www-form-urlencoded\r\n".

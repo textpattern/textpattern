@@ -643,8 +643,8 @@ function preText($store, $prefs = null)
             }
 
             if (!empty($out['_txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
-                foreach (array('body', 'excerpt') as $in) if (isset($_POST[$in])) {
-                    $thisarticle[$in] = $_POST[$in];
+                if (isset($_POST['field']) && isset($_POST['content'])) {
+                    $thisarticle[$_POST['field']] = $_POST['content'];
                 }
             }
         }
@@ -739,14 +739,14 @@ function output_component($n = '')
     global $pretext;
     static $mimetypes = null, $typequery = null;
 
+    if (!$n || !is_scalar($n)) {
+        return;
+    }
+
     if (!isset($mimetypes)) {
         $null = null;
         $mimetypes = get_mediatypes($null);
         $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
-    }
-
-    if (!$n || !is_scalar($n) || empty($mimetypes)) {
-        return;
     }
 
     $t = $pretext['skin'];
@@ -761,7 +761,7 @@ function output_component($n = '')
     if (isset($pretext['_txp_preview']) && $name === $pretext['_txp_preview']) {
         $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
         $mimetype = 'text/html';
-    } elseif (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+    } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
