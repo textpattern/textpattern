@@ -45,18 +45,19 @@ Changes in 4.9.0 (upcoming)
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
 * Changed: Image Edit panel has the ability to delete images.
-* Changed: Can no longer delete in-use languages.
-* Changed: Image tags can take HTML attributes (see #1738).
+* Changed: In-use languages can not be deleted.
+* Changed: Image tags can take HTML attributes.
 * Changed: Less collision-prone custom fields name processing.
 * Changed: Do not generate empty syndication feeds for feedless sections.
 * Changed: Allow PHP scripting options off by default, and Diagnostics warning.
-* Changed: Introduce primary keys for all tables, replacing some old indexes.
+* Changed: Introduce primary keys for all database tables, replacing some old
+  indexes.
 * Changed: <txp:header /> tag requires 'form' privilege.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
   to save memory. Plugins must call them via processTags() function.
-* Developer: Add safe_exists() function to DB layer.
+* Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
 * jQuery 3.7.1.
 * Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
