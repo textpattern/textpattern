@@ -68,7 +68,7 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.1 or 8.2 – 8.3 soon) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.1, 8.2 or 8.3) |
 | MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.0) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | &mdash; | mainline (1.25) or stable (1.24) |
