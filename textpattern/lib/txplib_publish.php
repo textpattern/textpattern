@@ -208,7 +208,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         ),
     );
 
-    $key = md5($threshold.$s.$type.join(n, $atts));
+    $key = txp_hash($threshold.$s.$type.join(n, $atts));
 
     if (isset($cache[$key])) {
         return $cache[$key];

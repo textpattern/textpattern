@@ -956,20 +956,20 @@ var skin_style = {$json_style};
 var page_sel = null;
 var style_sel = null;
 EOJS;
+script_js($script, false);
 
     if ($step == 'section_select_skin') {
         $script .= <<<EOJS
-$(function() {
 //    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();
     skin.val(selected || '').change();
-});
 EOJS;
+        script_js($script, false, true);
     }
-    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method).
-    script_js($script, false);
+
+    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
 /**

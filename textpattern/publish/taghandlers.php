@@ -1253,34 +1253,50 @@ function txp_pager($atts, $thing = null, $newer = null)
 
     $get = isset($atts['total']) && $atts['total'] === true;
     $set = $newer === null && (isset($atts['pg']) || isset($atts['total']) && !$get);
-    $oldPages = $numPages;
-    $oldpg = $pg;
+    $put = $get || !$set || isset($atts['break']);
+    $pairs = array();
 
-    extract(lAtts($set ? array(
-        'pg'         => $pg,
-        'total'      => $numPages,
-        'shift'      => 1,
-        'showalways' => true,
-        'link'       => false,
-        ) : array(
-        'showalways' => false,
-        'title'      => '',
-        'link'       => $linkall,
-        'escape'     => 'html',
-        'rel'        => '',
-        'shift'      => false,
-        'limit'      => 0,
-        'wraptag'    => '',
-        'break'      => '',
-        'class'      => '',
-        'html_id'    => '') +
-        ($get ? array(
-        'total'      => true,
-        ) : array()), $atts));
+    if ($get) {
+        $pairs += array(
+            'total'      => true,
+        );
+    }
+
+    if ($put) {
+        $pairs += array(
+            'shift'      => false,
+            'showalways' => false,
+            'link'       => $linkall,
+            'title'      => '',
+            'escape'     => 'html',
+            'rel'        => '',
+            'limit'      => 0,
+            'wraptag'    => '',
+            'break'      => '',
+            'class'      => '',
+            'html_id'    => ''
+        );
+    }
+
+    if ($set){
+        $store = compact('pg', 'numPages', 'linkall', 'top', 'shown');
+        $pairs += array(
+            'pg'         => $pg,
+            'total'      => $numPages,
+            'shift'      => 1,
+            'showalways' => 2,
+            'link'       => false,
+        );
+    }
+
+    extract(lAtts($pairs, $atts));
 
     if ($set) {
         if (isset($total) && $total !== true) {
-            $numPages = (int)$total;
+            list($total, $pageby) = explode('/', $total.'/0');
+            $pageby = (int)$pageby;
+            $total = (int)$total;
+            $numPages = $pageby ? ceil($total/$pageby) : $total;
         } elseif ($pg === true) {
             $numPages = isset($thispage['numPages']) ? (int)$thispage['numPages'] : null;
         }
@@ -1295,23 +1311,21 @@ function txp_pager($atts, $thing = null, $newer = null)
     }
 
     if ($set) {
-        $oldtop = $top;
-        $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
-        $oldshown = $shown;
-        $oldlink = $linkall;
-        $linkall = $link;
         $shown = array();
+        $linkall = $link;
 
-        if ($thing !== null) {
-            $thing = $numPages >= ($showalways ? (int)$showalways : 2) ? parse($thing) : '';
-            $numPages = $oldPages;
-            $pg = $oldpg;
-            $top = $oldtop;
-            $linkall = $oldlink;
-            $shown = $oldshown;
+        if (!$put) {
+            $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
+
+            if ($thing !== null) {
+                $thing = parse($thing, $numPages >= ($showalways ? (int)$showalways : 2));
+                extract($store);
+            }
+
+            return $thing;
+        } else {
+            $shift !== false or $shift = true;
         }
-
-        return $thing;
     }
 
     $pgc = $pg === true ? 'pg' : $pg;
@@ -1393,14 +1407,12 @@ function txp_pager($atts, $thing = null, $newer = null)
                     $limit--;
                 }
 
-                if (isset($thing)) {
-
-                    $url = $link || $link === false && $nextpg != $thispg ? href(
-                        parse($thing),
-                        $url,
-                        $id_att.$title_att.$rel_att.$class_att
-                    ) : parse($thing);
-                }
+                $item = isset($thing) ? parse($thing) : $nextpg;
+                $url = $link || $link === false && $nextpg != $thispg ? href(
+                    $item,
+                    $url,
+                    $id_att.$title_att.$rel_att.$class_att
+                ) : $item;
             } else {
                 $url = false;
             }
@@ -2810,7 +2822,7 @@ function php($atts = null, $thing = null, $priv = null)
     $error = null;
 
     if ($priv) {
-        $error = $is_article_body && !$is_form && !has_privs($priv, $is_article_body);
+        $error = $is_article_body && !$is_form && !has_privs($priv === true ? 'form' : $priv, $is_article_body);
     } elseif (!$is_article_body || $is_form) {
         if (!get_pref('allow_page_php_scripting')) {
             $error = 'php_code_disabled_page';
@@ -2841,6 +2853,10 @@ function php($atts = null, $thing = null, $priv = null)
 
 function txp_header($atts)
 {
+    if (!php(null, null, true)) {
+        return;
+    }
+
     extract(lAtts(array(
         'name'    => isset($atts['value']) ? '' : 'Content-Type',
         'replace' => 1,
@@ -3235,7 +3251,7 @@ function if_request($atts, $thing = null)
         'name'      => '',
         'type'      => 'request',
         'value'     => null,
-        'match'     => 'exact',
+        'match'     => '',
         'separator' => '',
     ), $atts));
 
@@ -3251,6 +3267,10 @@ function if_request($atts, $thing = null)
             global ${'_'.$type};
             $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
             $x = $name === '' ? !empty(${'_'.$type}) : txp_match($atts, $what);
+            break;
+        case 'HEADER':
+            $what = set_headers(array($name => true));
+            $x = txp_match($atts, isset($what) ? implode('', $what) : null);
             break;
         case 'NAME':
             $x = txp_match($atts, $name);
@@ -3541,7 +3561,7 @@ function txp_wraptag($atts, $thing = '')
 
     $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
 
-    if (isset($breakby) || (isset($break) || isset($limit) || isset($offset) || isset($sort) || $replace === true) && ($breakby = true)) {
+    if (isset($breakby)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {

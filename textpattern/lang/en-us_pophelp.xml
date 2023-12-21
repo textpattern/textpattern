@@ -308,6 +308,11 @@
 <h2>Site directory unreadable</h2>
 <p>The directory containing the root <code>index.php</code> file specified as the index for the site is unreadable by the server. Please check permissions.</p>
         ]]></item>
+        <item id="php_scripting_enabled" title="PHP scripting enabled"><![CDATA[
+<h2>PHP scripting enabled</h2>
+<p>Textpattern permits authors and administrators to embed PHP code inside articles and pages/forms if these features are enabled. Since this is a security concern - any kind of PHP could be executed, including potentially damaging/dangerous code that may lead to destruction of your installation or leaking information to third parties - it is strongly recommended you turn these options off in the <a href="?event=prefs#prefs_group_publish">Preferences panel</a> unless you absolutely require the feature.</p>
+<p>Many enhancements to Textpattern sites that previously required snippets of PHP can now be performed in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">core tags</a>.</p>
+        ]]></item>
         <item id="php_version_required" title="Minimum version requirements"><![CDATA[
 <h2>Minimum version requirements</h2>
 <p>Textpattern requires certain functionality present in the PHP programming language and MySQL database server. Please consult the following table to determine the minimum system requirements:</p>

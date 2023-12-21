@@ -681,12 +681,11 @@ function file_edit($message = '', $id = '')
                 : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file');
             $delete = ($can_delete && $file_exists)
                 ? form(
-                    fInput('submit', 'file_delete', gTxt('delete'), 'smallerbox', "", 'return verify(\''.gTxt('confirm_delete_popup').'\')').
                     eInput('file').
                     sInput('file_multi_edit').
                     hInput('edit_method', 'delete').
                     hInput('selected[]', $id)
-                )
+                , '', '', 'post', '', '', 'delete-file')
                 : '';
         }
 
@@ -731,6 +730,16 @@ function file_edit($message = '', $id = '')
             ($replace ? tag($replace.n.$delete, 'div') : '').
             n.form(
                 inputLabel(
+                    'condition',
+                    $condition,
+                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                ).
+                inputLabel(
+                    'id',
+                    $id,
+                    '', '', array('class' => 'txp-form-field edit-file-id')
+                ).
+                inputLabel(
                     'name',
                     Txp::get('\Textpattern\UI\Input', 'filename', 'text', $filename)->setAtts(array(
                             'id'        => 'filename',
@@ -774,33 +783,35 @@ function file_edit($message = '', $id = '')
                         hInput('filename', $filename)
                 )).
                 pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                inputLabel(
-                    'download_count',
-                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)->setAtt('min', 0, array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
-                    '', '', array('class' => 'txp-form-field edit-file-download-count')
-                ).
                 $created.
-                inputLabel(
-                    'id',
-                    $id,
-                    '', '', array('class' => 'txp-form-field edit-file-id')
-                ).
-                inputLabel(
-                    'size',
-                    format_filesize($size),
-                    '', '', array('class' => 'txp-form-field edit-file-size')
-                ).
                 inputLabel(
                     'modified',
                     gTime($modified),
                     'modified', '', array('class' => 'txp-form-field edit-file-modified')
                 ).
                 inputLabel(
-                    'condition',
-                    $condition,
-                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                    'file_size',
+                    format_filesize($size),
+                    '', '', array('class' => 'txp-form-field edit-file-size')
+                ).
+                inputLabel(
+                    'download_count',
+                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
+                       ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
+                    '', '', array('class' => 'txp-form-field edit-file-download-count')
                 ).
                 graf(
+                    ($can_delete
+                        ? tag_void('input', array(
+                            'class'   => 'caution',
+                            'name'    => 'file_delete',
+                            'type'    => 'submit',
+                            'form'    => 'delete-file',
+                            'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
+                            'value'   =>  gTxt('delete'),
+                        ))
+                        : ''
+                    ).
                     href(gTxt('go_back'), array(
                         'event'         => 'file',
                         'sort'          => $sort,
@@ -815,7 +826,7 @@ function file_edit($message = '', $id = '')
                 eInput('file').
                 sInput('file_save').
                 hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
-            '', '', 'post', 'txp-edit file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details'),
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details'),
 //                    inputLabel(
 //                        'perms',
 //                        selectInput('perms', $levels, $permissions),

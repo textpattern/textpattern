@@ -635,8 +635,17 @@ function image_edit($message = '', $id = '')
         $imageBlock = array();
         $thumbBlock = array();
         $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
+        $can_delete = has_privs('image.delete') || ($author == $txp_user && has_privs('image.delete.own'));
         $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
         $imagetypes = get_safe_image_types();
+        $delete = ($can_delete)
+            ? form(
+                eInput('image').
+                sInput('image_multi_edit').
+                hInput('edit_method', 'delete').
+                hInput('selected[]', $id)
+            , '', '', 'post', '', '', 'delete-image')
+            : '';
 
         $imageBlock[] = ($can_upload
             ? pluggable_ui(
@@ -645,7 +654,7 @@ function image_edit($message = '', $id = '')
                 upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', 'async image-replace', array('div', 'div'), '' , implode(',', $imagetypes)),
                 $rs)
             : ''
-        );
+        ).$delete;
 
         $imageBlock[] = pluggable_ui(
                 'image_ui',
@@ -760,6 +769,17 @@ function image_edit($message = '', $id = '')
                         ).
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
                         graf(
+                            ($can_delete
+                                ? tag_void('input', array(
+                                    'class'   => 'caution',
+                                    'name'    => 'image_delete',
+                                    'type'    => 'submit',
+                                    'form'    => 'delete-image',
+                                    'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
+                                    'value'   =>  gTxt('delete'),
+                                ))
+                                : ''
+                            ).
                             href(gTxt('go_back'), array(
                                 'event'         => 'image',
                                 'sort'          => $sort,

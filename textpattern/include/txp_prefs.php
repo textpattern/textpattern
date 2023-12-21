@@ -547,33 +547,30 @@ function is_dst($name, $val)
 
     $ui = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).
     script_js(<<<EOS
-        $(document).ready(function ()
-        {
-            var radio = $("#prefs-is_dst");
-            var radioInput = radio.find('input');
-            var radioLabel = radio.find('.txp-form-field-label');
-            var dstOn = $("#auto_dst-1");
-            var dstOff = $("#auto_dst-0");
+    var radio = $("#prefs-is_dst");
+    var radioInput = radio.find('input');
+    var radioLabel = radio.find('.txp-form-field-label');
+    var dstOn = $("#auto_dst-1");
+    var dstOff = $("#auto_dst-0");
 
-            if (radio.length) {
-                if (dstOn.prop("checked")) {
-                    radioInput.prop("disabled", "disabled");
-                    radioLabel.addClass('disabled');
-                }
+    if (radio.length) {
+        if (dstOn.prop("checked")) {
+            radioInput.prop("disabled", "disabled");
+            radioLabel.addClass('disabled');
+        }
 
-                dstOff.click(function () {
-                    radioInput.prop("disabled", null);
-                    radioLabel.removeClass('disabled');
-                });
-
-                dstOn.click(function () {
-                    radioInput.prop("disabled", "disabled");
-                    radioLabel.addClass('disabled');
-                });
-            }
+        dstOff.click(function () {
+            radioInput.prop("disabled", null);
+            radioLabel.removeClass('disabled');
         });
+
+        dstOn.click(function () {
+            radioInput.prop("disabled", "disabled");
+            radioLabel.addClass('disabled');
+        });
+    }
 EOS
-    , false);
+    , false, true);
 
     return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 }
@@ -659,30 +656,27 @@ function smtp_handler($name, $val, $constraints = array())
 function enhanced_email($name, $val)
 {
     $js = script_js(<<<EOS
-        $(document).ready(function ()
-        {
-            var block = $(".mail_enhanced");
-            var smtpOn = $("#enhanced_email-1");
-            var smtpOff = $("#enhanced_email-0");
+    var block = $(".mail_enhanced");
+    var smtpOn = $("#enhanced_email-1");
+    var smtpOff = $("#enhanced_email-0");
 
-            if (block.length) {
-                if (smtpOff.prop("checked")) {
-                    block.hide();
-                } else {
-                    block.show();
-                }
+    if (block.length) {
+        if (smtpOff.prop("checked")) {
+            block.hide();
+        } else {
+            block.show();
+        }
 
-                smtpOff.click(function () {
-                    block.hide();
-                });
-
-                smtpOn.click(function () {
-                    block.show();
-                });
-            }
+        smtpOff.click(function () {
+            block.hide();
         });
+
+        smtpOn.click(function () {
+            block.show();
+        });
+    }
 EOS
-    , false);
+    , false, true);
 
     return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).$js;
 }
@@ -726,30 +720,27 @@ function overrideTypes($name, $val)
     }
 
     $js = script_js(<<<EOS
-        $(document).ready(function ()
-        {
-            var block = $("#prefs-override_form_types");
-            var overrideOn = $("#allow_form_override-1");
-            var overrideOff = $("#allow_form_override-0");
+    var block = $("#prefs-override_form_types");
+    var overrideOn = $("#allow_form_override-1");
+    var overrideOff = $("#allow_form_override-0");
 
-            if (block.length) {
-                if (overrideOff.prop("checked")) {
-                    block.hide();
-                } else {
-                    block.show();
-                }
+    if (block.length) {
+        if (overrideOff.prop("checked")) {
+            block.hide();
+        } else {
+            block.show();
+        }
 
-                overrideOff.click(function () {
-                    block.hide();
-                });
-
-                overrideOn.click(function () {
-                    block.show();
-                });
-            }
+        overrideOff.click(function () {
+            block.hide();
         });
+
+        overrideOn.click(function () {
+            block.show();
+        });
+    }
 EOS
-    , false);
+    , false, true);
 
 
     return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name').$js;

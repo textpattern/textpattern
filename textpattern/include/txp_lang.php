@@ -59,7 +59,7 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
-    global $prefs;
+    global $prefs, $txp_is_dev;
 
     $allTypes = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE;
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available($allTypes, $allTypes);
@@ -67,6 +67,7 @@ function list_languages($message = '')
     $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
     $represented_lang = array_merge($active_lang, $installed_lang);
 
+    $def_lastmod = $txp_is_dev && isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['file_lastmod'] : 0;
     $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
     $ui_lang = get_pref('language_ui', $site_lang, true);
     $cpanel = '';
@@ -114,7 +115,7 @@ function list_languages($message = '')
             continue;
         }
 
-        $file_updated = (isset($langdata['db_lastmod']) && $langdata['file_lastmod'] > $langdata['db_lastmod']);
+        $file_updated = (isset($langdata['db_lastmod']) && max($def_lastmod, $langdata['file_lastmod']) > $langdata['db_lastmod']);
 
         if (array_key_exists($langname, $represented_lang)) {
             if ($file_updated) {

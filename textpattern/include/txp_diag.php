@@ -205,6 +205,9 @@ function doDiagnostics()
     $heading = gTxt('tab_diagnostics');
     $isUpdate = defined('TXP_UPDATE_DONE');
 
+    $phpInPages = get_pref('allow_page_php_scripting');
+    $phpInArticles = get_pref('allow_article_php_scripting');
+
     if (!$txp_is_dev) {
         // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
@@ -291,8 +294,12 @@ function doDiagnostics()
         $fail['w'][] = array('no_temp_dir');
     }
 
-    if (is_disabled('mail')) {
+    if ((get_pref('enhanced_email') == 0 || (get_pref('enhanced_email') == 1 && empty(get_pref('smtp_host')))) && is_disabled('mail')) {
         $fail['e'][] = array('warn_mail_unavailable');
+    }
+
+    if ($phpInPages || $phpInArticles) {
+        $fail['w'][] = array('php_scripting_enabled');
     }
 
     if ($permlink_mode != 'messy') {

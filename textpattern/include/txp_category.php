@@ -94,15 +94,12 @@ function cat_category_list($message = "")
         ),
         n.'</div>', // End of .txp-layout.
         script_js(<<<EOS
-            $(document).ready(function ()
-            {
-                $('.category-tree').txpMultiEditForm({
-                    'row' : 'p',
-                    'highlighted' : 'p'
-                });
-            });
+    $('.category-tree').txpMultiEditForm({
+        'row' : 'p',
+        'highlighted' : 'p'
+    });
 EOS
-        , false),
+        , false, true),
     );
     echo join(n, $out);
 }

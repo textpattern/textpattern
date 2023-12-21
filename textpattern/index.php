@@ -181,20 +181,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     janitor();
 
-    // Article or form preview.
-    if (isset($_GET['txpreview'])) {
-        load_lang(LANG, 'public');
-        include txpath.'/publish.php';
-        textpattern();
-        echo $trace->summary();
-
-        if ($production_status === 'debug') {
-            echo $trace->result();
-        }
-
-        exit;
-    }
-
     $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
     $timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
     date_default_timezone_set($timezone_key);

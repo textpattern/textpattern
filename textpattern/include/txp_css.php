@@ -195,8 +195,8 @@ function css_edit($message = '', $refresh_partials = false)
 
     if ($name) {
         $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_css').'"></span> <span class="screen-large">'.gTxt('create_css').'</span>', 'txp-new')
-        .href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
-            'class'     => 'txp-clone',
+        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+            'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'style_form',
         ));
     }
@@ -218,10 +218,10 @@ function css_edit($message = '', $refresh_partials = false)
         '<span class="txp-save-button">'.
         n.tag_void('input', array(
             'class' => 'publish',
-            'name'  =>  'save',
+            'name'  => 'save',
             'type'  => 'submit',
             'form'  => 'style_form',
-            'value' =>  gTxt('save'),
+            'value' => gTxt('save'),
         )).
         '</span>', ' class="txp-save"'
     );

@@ -86,12 +86,12 @@ class BuilderTags
     public function tagbuildDialog($ev)
     {
         $listActions = graf(
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-                'class'         => 'txp-expand-all',
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+                'class'         => 'txp-expand-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
             )).
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-                'class'         => 'txp-collapse-all',
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+                'class'         => 'txp-collapse-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
             )), array('class' => 'txp-actions')
         );
@@ -2089,8 +2089,8 @@ class BuilderTags
         $desc = ' ('.gTxt('descending').')';
 
         $sorts = array(
-            'filename asc'   => gTxt('file_name').$asc,
-            'filename desc'  => gTxt('file_name').$desc,
+            'filename asc'   => gTxt('filename').$asc,
+            'filename desc'  => gTxt('filename').$desc,
             'downloads asc'  => gTxt('downloads').$asc,
             'downloads desc' => gTxt('downloads').$desc,
             'rand()'         => 'Random',
