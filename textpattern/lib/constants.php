@@ -405,7 +405,7 @@ if (!defined('PASSWORD_SYMBOLS')) {
      *
      * @package User
      * @since   4.6.0
-     * @see     generate_password()
+     * @see     Textpattern\Password\Generator
      * @example
      * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */

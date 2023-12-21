@@ -211,78 +211,6 @@ function admin_title($pagetitle)
 }
 
 /**
- * Creates an area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $event
- * @param      string $tarea
- * @param      string $area
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function areatab($label, $event, $tarea, $area)
-{
-    $tc = ($area == $event) ? 'tabup' : 'tabdown';
-    $atts = ' class="'.$tc.'"';
-    $hatts = ' href="?event='.$tarea.'"';
-
-    return tda(tag($label, 'a', $hatts), $atts);
-}
-
-/**
- * Creates a secondary area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $tabevent
- * @param      string $event
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function tabber($label, $tabevent, $event)
-{
-    $tc = ($event == $tabevent) ? 'tabup' : 'tabdown2';
-    $out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
-
-    return $out;
-}
-
-/**
- * Creates a table based navigation bar row.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $area
- * @param      string $event
- * @return     string HTML table columns
- * @deprecated in 4.6.0
- */
-
-function tabsort($area, $event)
-{
-    if ($area) {
-        $areas = areas();
-
-        $out = array();
-
-        foreach ($areas[$area] as $a => $b) {
-            if (has_privs($b)) {
-                $out[] = tabber($a, $b, $event, 2);
-            }
-        }
-
-        return ($out) ? join('', $out) : '';
-    }
-
-    return '';
-}
-
-/**
  * Gets the main menu structure as an array.
  *
  * @return array
@@ -385,17 +313,4 @@ function navPop($inline = '')
             n.'</select>'.
             n.'</form>';
     }
-}
-
-/**
- * Generates a button link.
- *
- * @param      string $label
- * @param      string $link
- * @deprecated in 4.6.0
- */
-
-function button($label, $link)
-{
-    return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 }
