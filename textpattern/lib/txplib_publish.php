@@ -548,8 +548,8 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => $val) {
-                if (isset($txp_atts[$attr]) && isset($globatts[$attr])) {
+            foreach ($txp_atts as $attr => &$val) {
+                if (isset($val) && isset($globatts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
                 }
             }
