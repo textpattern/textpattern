@@ -1,8 +1,9 @@
 Changes in 4.9.0 (upcoming)
 
+* Feature release with support for PHP 8.3.1+, new functionality, security
+  enhancements, general improvements and bug fixes.
 * Changed: Minimum system requirements increased to PHP 5.6.
 * Changed: Minimum system requirements increased to MySQL 5.5.
-* Compatibility with PHP 8.3.1.
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
@@ -18,6 +19,7 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
+* Added: Support for PHP 8.3.1+ and PHP 8.2.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
