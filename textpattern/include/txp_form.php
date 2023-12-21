@@ -333,8 +333,8 @@ function form_edit($message = '', $refresh_partials = false)
 
     if ($name) {
         $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_form').'"></span> <span class="screen-large">'.gTxt('create_form').'</span>', 'txp-new')
-        .href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
-            'class'     => 'txp-clone',
+        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+            'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'form_form',
         ));
     }
@@ -356,21 +356,21 @@ function form_edit($message = '', $refresh_partials = false)
         '<span class="txp-save-button">'.
         n.tag_void('input', array(
             'class' => 'publish',
-            'name'  =>  'save',
+            'name'  => 'save',
             'type'  => 'submit',
             'form'  => 'form_form',
-            'value' =>  gTxt('save'),
+            'value' => gTxt('save'),
         )).
         '</span>', ' class="txp-save"'
     );
 
     $listActions = graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'allforms_form',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'allforms_form',
         )), array('class' => 'txp-actions')
     );

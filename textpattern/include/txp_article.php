@@ -121,16 +121,7 @@ if (!empty($event) && $event == 'article') {
 }
 
 /**
- * Processes sent forms and saves new articles. Deprecated in 4.7 by article_save().
- */
-
-function article_post()
-{
-    article_save();
-}
-
-/**
- * Processes sent forms and updates existing articles.
+ * Processes sent forms and saves/updates existing articles.
  */
 
 function article_save()
@@ -154,10 +145,7 @@ function article_save()
             UNIX_TIMESTAMP(Expires) AS sExpires",
             'textpattern', "ID = ".(int) $incoming['ID']);
 
-        if (!($oldArticle['Status'] >= STATUS_LIVE && has_privs('article.edit.published')
-            || $oldArticle['Status'] >= STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
-            || $oldArticle['Status'] < STATUS_LIVE && has_privs('article.edit')
-            || $oldArticle['Status'] < STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
+        if (!can_modify($oldArticle)) {
             // Not allowed, you silly rabbit, you shouldn't even be here.
             // Show default editing screen.
             article_edit();
@@ -371,60 +359,68 @@ function article_save()
 
 function article_preview($field = false)
 {
-    global $prefs, $vars, $app_mode;
+    global $txp_user;
 
     // Assume they came from post.
-    $view = ps('view', 'preview');
-    $rs = textile_main_fields(psa($vars));
+    $view = ps('view');
 
-    // Preview pane
-    $preview = '<div id="pane-view" class="'.txpspecialchars($view).'">';
-
-    if ($view == 'preview') {
-        if (!$field || $field == 'body') {
-            $preview .= n.'<div class="body">'.
-                n.'<h2>'.gTxt('body').'</h2>'.
-                implode('', txp_tokenize($rs['Body_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-            '</div>';
-        }
-
-        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
-            $preview .= n.'<div class="excerpt">'.
-                n.'<h2>'.gTxt('excerpt').'</h2>'.
-                implode('', txp_tokenize($rs['Excerpt_html'], false, function ($tag) {
-                    return '<span class="disabled">'.txpspecialchars($tag).'</span>';
-                })).
-                '</div>';
-        }
-    } elseif ($view == 'html') {
-        if (!$field || $field == 'body') {
-            $preview .= n.'<h2>'.gTxt('body').'</h2>'.
-            n.tag(
-                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Body_html'])), 'code', array(
-                    'class' => 'language-markup',
-                    'dir'   => 'ltr',
-                )),
-                'pre', array('class' => 'body')
-            );
-        }
-
-        if ($prefs['articles_use_excerpts'] && (!$field || $field == 'excerpt')) {
-            $preview .= n.'<h2>'.gTxt('excerpt').'</h2>'.
-                n.tag(
-                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($rs['Excerpt_html'])), 'code', array(
-                        'class' => 'language-markup',
-                        'dir'   => 'ltr',
-                    )),
-                    'pre', array('class' => 'excerpt')
-                );
-        }
+    if ($view && $field) {
+        $field == 'excerpt' or $field = 'body';
+        $rs = textile_main_fields(psa(array('textile_body', 'textile_excerpt', ucfirst($field))));
+        $dbfield = ($field == 'excerpt' ? $rs['Excerpt_html'] : $rs['Body_html']);
     }
 
-    $preview .= '</div>';// End of #pane-view.
+    // Preview pane
+    if (gps('_txp_parse')) {
+        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
+        $id = intval(gps('ID')).'.'.$token;
+        $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
+        $opts = array(
+            'method' => "POST",
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n".
+                "Cookie: txp_login_public=".cs('txp_login_public'),
+            'content' => $data,
+        );
+        
+        $dbfield = txp_get_contents(hu, $opts);
+    }
 
-    return $preview;
+    if ($view == 'preview') {
+        $parsed = txp_tokenize($dbfield, false, false);
+        $level = 0;
+        $tags = 0;
+
+        foreach($parsed as $i => &$chunk) {
+            if ($i%2) {
+                if ($chunk[1] === '/') {
+                    $level--;
+                } else {
+                    $tags++;
+                    $level += (int)($chunk[strlen($chunk)-2] !== '/');
+                }
+            }
+
+            $chunk = $level > 0 || ($i%2) ? txpspecialchars($chunk) : $chunk;
+        }
+
+        unset($chunk);
+        header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
+
+        $preview = implode('', $parsed);
+    } elseif ($view == 'html') {
+        $preview = tag(
+            tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
+                'class' => 'language-markup',
+                'dir'   => 'ltr',
+            )),
+            'pre', array('class' => $field)
+        );
+    } else {
+        $preview = '<div id="pane-preview"></div>'.n.
+            '<template id="pane-template"></template>';
+    }
+
+    return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
 }
 
 /**
@@ -769,6 +765,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
+    if (!$message && $AuthorID == $txp_user && $LastModID != $txp_user) {
+        $message = array(gTxt('modified_by').' '.txpspecialchars($LastModID), 2);
+    }
+
     $page_title = $ID ? $Title : gTxt('write');
     pagetop($page_title, $message);
 
@@ -809,7 +809,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'<div class="txp-dialog">';
     echo n.$partials['view_modes']['html'];
     echo article_preview();
-    echo '</div>';// End of .txp-dialog.
+    echo n.'</div>';// End of .txp-dialog.
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -845,12 +845,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     );
 
     echo graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )), array('class' => 'txp-actions')
     );
@@ -1151,10 +1151,10 @@ function tab($tabevent, $view, $tag = 'li')
         $label = gTxt('view_'.$tabevent.'_short');
     }
 
-    $link = href($label, '#', array(
+    $link = tag($label, 'button', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
         'aria-pressed'   => $pressed,
-        'role'           => 'button',
+        'class'           => 'txp-reduced-ui-button',
     ));
 
     return $tag ? n.tag($link, 'li', array(
@@ -1254,7 +1254,7 @@ function get_status_message($Status)
  * @return array
  */
 
-function textile_main_fields($incoming)
+function textile_main_fields($incoming, $options = array('lite' => false))
 {
     // Use preferred Textfilter as default and fallback.
     $hasfilter = new \Textpattern\Textfilter\Constraint(null);
@@ -1269,23 +1269,28 @@ function textile_main_fields($incoming)
     }
 
     $textile = new \Textpattern\Textile\Parser();
-    $options = array('lite' => false);
 
-    $incoming['Title_plain'] = trim($incoming['Title']);
-    $incoming['Title_html'] = ''; // not used
-    $incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
+    if (isset($incoming['Title'])) {
+        $incoming['Title_plain'] = trim($incoming['Title']);
+        $incoming['Title_html'] = ''; // not used
+        $incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
+    }
 
-    $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
-        $incoming['textile_body'],
-        $incoming['Body'],
-        array('field' => 'Body', 'options' => $options, 'data' => $incoming)
-    );
+    if (isset($incoming['Body'])) {
+        $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
+            $incoming['textile_body'],
+            $incoming['Body'],
+            array('field' => 'Body', 'options' => $options, 'data' => $incoming)
+        );
+    }
 
-    $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
-        $incoming['textile_excerpt'],
-        $incoming['Excerpt'],
-        array('field' => 'Excerpt', 'options' => $options, 'data' => $incoming)
-    );
+    if (isset($incoming['Excerpt'])) {
+        $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
+            $incoming['textile_excerpt'],
+            $incoming['Excerpt'],
+            array('field' => 'Excerpt', 'options' => $options, 'data' => $incoming)
+        );
+    }
 
     return $incoming;
 }
@@ -1412,13 +1417,10 @@ function article_partial_actions($rs)
         }
 
         $push_button = graf($push_button, array('class' => 'txp-save'));
-    } elseif (
-        ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-        ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-        ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-        ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-    ) {
+    } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+    } else {
+        script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
@@ -1682,8 +1684,8 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
-        'class' => 'txp-clone',
+    return n.tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+        'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
 }
@@ -1697,23 +1699,27 @@ function article_partial_article_clone($rs)
 
 function article_partial_article_view($rs)
 {
-    extract($rs);
+    global $txp_user;
+    $ID = intval($rs['ID']);
+    $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
+    if ($live) {
+        $url = permlinkurl_id($rs['ID']);
+        $clean = '';
+    } else {
         if (!has_privs('article.preview')) {
             return;
         }
 
-        $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
-    } else {
-        $url = permlinkurl_id($ID);
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
-    ));
+    )).$clean;
 }
 
 /**
@@ -1728,8 +1734,8 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
-        'class'             => 'txp-textarea-preview',
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'body',
     ));
 
@@ -1798,8 +1804,8 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
-        'class'             => 'txp-textarea-preview',
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'excerpt',
     ));
 
@@ -1871,8 +1877,9 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        checkbox2('', false, 0, 'live-preview').
-        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
+        tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label').
+        tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
+        tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.
         n.tag(tab(array('preview'), $view).tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
