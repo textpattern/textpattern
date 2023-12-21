@@ -362,17 +362,18 @@ function preText($store, $prefs = null)
 
     // Handle article preview.
     if (!$status) {
+        global $txp_user;
         header('Cache-Control: no-cache, no-store, max-age=0');
-        list($id, $hash) = explode('.', $out['id'], 2);
+        list($id, $hash, $raw) = explode('.', $out['id']) + array(null, null, null);
 //        doAuth();
-        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($id) !== $hash) {
+        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')).$txp_user.Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
         } else {
             global $nolog;
     
             $nolog = true;
-            header('Content-Security-Policy: sandbox');
+            if ($raw === '~') header('Content-Security-Policy: sandbox');
             $out['id'] = intval($out['id']);
             $out['_txp_preview'] = $hash;
         }
@@ -657,6 +658,12 @@ function preText($store, $prefs = null)
             if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $is_404 = '410';
             }
+
+            if (!empty($out['_txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+                if (isset($_POST['field']) && isset($_POST['content'])) {
+                    $thisarticle[$_POST['field']] = $_POST['content'];
+                }
+            }
         }
     }
 
@@ -749,14 +756,14 @@ function output_component($n = '')
     global $pretext;
     static $mimetypes = null, $typequery = null;
 
+    if (!$n || !is_scalar($n)) {
+        return;
+    }
+
     if (!isset($mimetypes)) {
         $null = null;
         $mimetypes = get_mediatypes($null);
         $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
-    }
-
-    if (!$n || !is_scalar($n) || empty($mimetypes)) {
-        return;
     }
 
     $t = $pretext['skin'];
@@ -768,19 +775,22 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+    if (isset($pretext['_txp_preview']) && $name === $pretext['_txp_preview']) {
+        $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
+        $mimetype = 'text/html';
+    } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
                 $mimetype = $mimetypes[$row['type']];
             }
         }
-
-        set_error_handler('tagErrorHandler');
-        @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo ltrim(parse_page(null, null, implode(n, $assets)));
-        restore_error_handler();
     }
+
+    set_error_handler('tagErrorHandler');
+    header('Content-Type: '.$mimetype.'; charset=utf-8');
+    echo ltrim(parse_page(null, null, implode(n, $assets)));
+    restore_error_handler();
 }
 
 // -------------------------------------------------------------

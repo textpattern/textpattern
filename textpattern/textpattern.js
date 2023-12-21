@@ -859,32 +859,33 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('updateList', function (event, data) {
-    var list = data.list || '#messagepane, .txp-async-update',
+    const list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
         callback = data.callback || function(event) {
             textpattern.Console.announce(event);
         },
-        handle = function(html) {
-            if (html) {
-                var $html = new DOMParser().parseFromString(html, "text/html").documentElement;
+        handle = function(html, xhr) {
+            if (typeof html === 'string') {
+                let $html = textpattern.decodeHTML(html);
 
                 $.each(list.split(','), function(index, value) {
-                    const host = value.match(/^(?:(.+)>>)?(.+)$/);
-                    const embed = !!host[1];
-                    if (embed) value = host[2];
-                    $(value).each(function() {
+                    const host = value.match(/^(?:(.*)>>)?(.+)$/);
+                    const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
+                    $(host[2]).each(function() {
                         const id = this.getAttribute('id');
-                        const target = this.content || this;
+                        const $target = $(this.content || this);
 
                         if (id) {
-                            const contents = $html.querySelectorAll(embed ? 'head>'+host[1]+',body>'+host[1] : '#' + id);
-                            embed ? $(target).html(contents) : $(target).replaceWith(contents).remove();
-                            $('#' + id).removeClass("disabled").trigger('updateList');
+                            if (!embed) {
+                                $target.replaceWith($html.getElementById(id)).remove();
+                            } else {
+                                $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                            }
+
+                            $('#' + id).removeClass('disabled').trigger('updateList', xhr);
                         }
                     });
                 });
-
-                $html.remove();
             }
 
             callback(data.event);
@@ -893,7 +894,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     if (typeof data.html == 'undefined') {
         $(list).addClass('disabled');
         $.post(url, data.data, function(responseText, textStatus, jqXHR) {
-            handle(responseText);
+            handle(responseText, jqXHR);
         });
     } else {
         handle(data.html);
@@ -1339,65 +1340,10 @@ jQuery.fn.txpSortable = function (options) {
 textpattern.passwordMask = function () {
     $('form').on('click', '#show_password', function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
-        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
-        textpattern.changeType(inputBox, newType);
+        var newType = (inputBox.prop('type') === 'password') ? 'text' : 'password';
+        inputBox.prop('type', newType);
         $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text');
     }).find('#show_password').prop('checked', false);
-};
-
-/**
- * Change the type of an input element.
- *
- * @param  {object} elem The <input/> element
- * @param  {string} type The desired type
- *
- * @see    https://gist.github.com/3559343 for original
- * @since  4.6.0
- */
-
-textpattern.changeType = function (elem, type) {
-    if (elem.prop('type') === type) {
-        // Already the correct type.
-        return elem;
-    }
-
-    try {
-        // May fail if browser prevents it.
-        return elem.prop('type', type);
-    } catch (e) {
-        // Create the element by hand.
-        // Clone it via a div (jQuery has no html() method for an element).
-        var html = $('<div>').append(elem.clone()).html();
-
-        // Match existing attributes of type=text or type="text".
-        var regex = /type=(\")?([^\"\s]+)(\")?/;
-
-        // If no match, add the type attribute to the end; otherwise, replace it.
-        var tmp = $(html.match(regex) == null ? html.replace('>', ' type="' + type + '">') : html.replace(regex, 'type="' + type + '"'));
-
-        // Copy data from old element.
-        tmp.data('type', elem.data('type'));
-        var events = elem.data('events');
-        var cb = function (events) {
-            return function () {
-                // Re-bind all prior events.
-                for (var idx in events) {
-                    var ydx = events[idx];
-
-                    for (var jdx in ydx) {
-                        tmp.bind(idx, ydx[jdx].handler);
-                    }
-                }
-            };
-        }(events);
-
-        elem.replaceWith(tmp);
-
-        // Wait a smidge before firing callback.
-        setTimeout(cb, 10);
-
-        return tmp;
-    }
 };
 
 /**
@@ -1409,7 +1355,7 @@ textpattern.changeType = function (elem, type) {
  */
 
 textpattern.encodeHTML = function (string) {
-    return $('<div/>').text(string).html();
+    return $('<textarea>').html(string).text();
 };
 
 /**
@@ -1421,11 +1367,35 @@ textpattern.encodeHTML = function (string) {
  */
 
 textpattern.decodeHTML = function (string) {
-    let div = document.createElement('template');
-    div.innerHTML = string.trim();
-
-    return div.content;
+    const template = document.createElement('template');
+    template.remove();
+    template.innerHTML = string;
+    
+    return template.content;
 };
+
+/**
+ * Wraps HTML as string.
+ *
+ * @param  {node|string} node The node
+ * @param  {string} tag The tag name
+ * @param  {object} attr The tag attributes
+ * @return {node} Wrapped string
+ * @since  4.9.0
+ */
+
+textpattern.wrapHTML = function (node, tag, attr) {
+    const wrapNode = document.createElement(tag || 'span');
+    wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
+
+    if (typeof attr === 'object') {
+        for (const key of Object.keys(attr)) {
+            wrapNode.setAttribute(key, attr[key]);
+        }
+    }
+
+    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
+}
 
 /**
  * Translates given substrings.
@@ -1736,7 +1706,7 @@ jQuery.fn.txpColumnize = function () {
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
+        $button = $('<button class="txp-list-options-button txp-reduced-ui-button" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />').attr('checked', selectAll);
 
@@ -1750,7 +1720,7 @@ jQuery.fn.txpColumnize = function () {
     if (!$ui.length) {
         $ui = $('<div class="txp-list-options"></div>');
     } else {
-        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove();
+        $ui.find('.txp-list-options-button, ul.txp-dropdown').remove();
         $panel = false;
     }
 
@@ -2073,7 +2043,7 @@ textpattern.Route.add('article', function () {
     }).change();
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog'),
+    var $pane = $('#pane-preview').closest('.txp-dialog'),
         $field = '',
         $viewMode = $('#view_modes li.active [data-view-mode]');
 
@@ -2128,6 +2098,10 @@ textpattern.Route.add('article', function () {
         }
     });
 
+    $('#parse-preview').on('change', function () {
+        $viewMode.click();
+    });
+
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
         const $view = $viewMode.data('view-mode');
@@ -2149,19 +2123,23 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '*>>#pane-view',
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
             callback: function() {
                 $pane.dialog('open');
             }
         });
     });
 
-    $(document).on('click', '[data-view-mode]', function (e) {
+    $(document).on('change', '#clean-view', function () {
+        const link = document.getElementById('article_partial_article_view'),
+            href = link.href.replace(/\.~$/, '');
+        link.href = this.checked ? href + '.~' : href;
+    }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
-        $('#pane-view').attr('class', $view);
+        $('#pane-preview').attr('class', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
@@ -2171,27 +2149,27 @@ textpattern.Route.add('article', function () {
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
         textpattern.Console.clear().announce("preview");
-    }).on('updateList', '#pane-view.preview', function () {
+    }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
-
-        if (!pane.shadowRoot) {
-            let sheet = new CSSStyleSheet();
-            sheet.replaceSync("*{max-width:100%}");
-            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
-        }
+        const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
+        const ntags = data.tags_count || 0;
 
         if ($('#clean-preview').is(':checked')) {
-            const ntags = parseInt(this.content.getElementById('txp-preview-wrapper').dataset.tags);
-            DOMPurify.sanitize(this, {FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+            DOMPurify.sanitize(this);
 
             if (ntags || DOMPurify.removed.length) {
-    //            DOMPurify.removed.forEach(item => console.log(item));
                 const message = textpattern.gTxt('found_unsafe', {
                     '{tags}': ntags, '{elements}': DOMPurify.removed.length
                 });
-//                textpattern.Console.addMessage([`Found ${ntags} txp tags and ${DOMPurify.removed.length} unsafe elements`, 2], "preview");
                 textpattern.Console.addMessage([message, 2], "preview");
             }
+        }
+
+        if (!pane.shadowRoot) {
+            const sheet = new CSSStyleSheet();
+            const css = await fetch('preview.css');
+            sheet.replaceSync(await css.text());
+            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
         }
 
         pane.shadowRoot.replaceChildren(this.content);
@@ -2199,10 +2177,26 @@ textpattern.Route.add('article', function () {
         textpattern.Console.clear().announce("preview");
     });
 
+    DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+
+    DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
+        if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
+        }
+    });
+
+    DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
+        if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
+        }
+    });
+
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }
+
+    $("#clean-view").trigger("change");
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
@@ -2583,7 +2577,7 @@ textpattern.Route.add('plugin.plugin_help', function () {
         });
 
         // Grab the heading, strip out markup, then sanitize.
-        var tabTitle = $('<div>').html($tabHead.html()).text();
+        var tabTitle = textpattern.encodeHTML($tabHead.html());
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 

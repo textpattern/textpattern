@@ -985,7 +985,8 @@ define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
  */
 
 if (!defined('TEXTPATTERN_HASH_ALGO')) {
-    define('TEXTPATTERN_HASH_ALGO', in_array('xxh128', hash_algos()) ? 'xxh128' : 'tiger192,3');
+    $algos = array_intersect(array('xxh128', 'murmur3f', 'murmur3c'), hash_algos());
+    define('TEXTPATTERN_HASH_ALGO', $algos ? $algos[0] : 'md5');
 }
 
 /**

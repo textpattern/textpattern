@@ -140,10 +140,7 @@ function article_save()
             UNIX_TIMESTAMP(Expires) AS sExpires",
             'textpattern', "ID = ".(int) $incoming['ID']);
 
-        if (!($oldArticle['Status'] >= STATUS_LIVE && has_privs('article.edit.published')
-            || $oldArticle['Status'] >= STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
-            || $oldArticle['Status'] < STATUS_LIVE && has_privs('article.edit')
-            || $oldArticle['Status'] < STATUS_LIVE && $oldArticle['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
+        if (!can_modify($oldArticle)) {
             // Not allowed, you silly rabbit, you shouldn't even be here.
             // Show default editing screen.
             article_edit();
@@ -355,7 +352,7 @@ function article_save()
 
 function article_preview($field = false)
 {
-    global $prefs, $vars, $app_mode;
+    global $txp_user;
 
     // Assume they came from post.
     $view = ps('view');
@@ -367,6 +364,20 @@ function article_preview($field = false)
     }
 
     // Preview pane
+    if (gps('_txp_parse')) {
+        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
+        $id = intval(gps('ID')).'.'.$token;
+        $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
+        $opts = array(
+            'method' => "POST",
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n".
+                "Cookie: txp_login_public=".cs('txp_login_public'),
+            'content' => $data,
+        );
+        
+        $dbfield = txp_get_contents(hu, $opts);
+    }
+
     if ($view == 'preview') {
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
@@ -386,10 +397,9 @@ function article_preview($field = false)
         }
 
         unset($chunk);
+        header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
 
-        $preview = '<div id="txp-preview-wrapper" class="'.$field.'" data-tags="'.$tags.'">'.
-            implode('', $parsed).
-        '</div>';
+        $preview = implode('', $parsed);
     } elseif ($view == 'html') {
         $preview = tag(
             tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
@@ -400,7 +410,7 @@ function article_preview($field = false)
         );
     } else {
         $preview = '<div id="pane-preview"></div>'.n.
-            '<template id="pane-view"></template>';
+            '<template id="pane-template"></template>';
     }
 
     return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
@@ -746,6 +756,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
+    if (!$message && $AuthorID == $txp_user && $LastModID != $txp_user) {
+        $message = array(gTxt('modified_by').' '.txpspecialchars($LastModID), 2);
+    }
+
     $page_title = $ID ? $Title : gTxt('write');
     pagetop($page_title, $message);
 
@@ -824,12 +838,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     );
 
     echo graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )), array('class' => 'txp-actions')
     );
@@ -1106,10 +1120,10 @@ function tab($tabevent, $view, $tag = 'li')
         $label = gTxt('view_'.$tabevent.'_short');
     }
 
-    $link = href($label, '#', array(
+    $link = tag($label, 'button', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
         'aria-pressed'   => $pressed,
-        'role'           => 'button',
+        'class'           => 'txp-reduced-ui-button',
     ));
 
     return $tag ? n.tag($link, 'li', array(
@@ -1372,13 +1386,10 @@ function article_partial_actions($rs)
         }
 
         $push_button = graf($push_button, array('class' => 'txp-save'));
-    } elseif (
-        ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-        ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-        ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-        ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-    ) {
+    } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+    } else {
+        script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
@@ -1657,8 +1668,8 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.href('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', '#', array(
-        'class' => 'txp-clone',
+    return n.tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+        'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
 }
@@ -1672,24 +1683,27 @@ function article_partial_article_clone($rs)
 
 function article_partial_article_view($rs)
 {
+    global $txp_user;
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
+        $clean = '';
     } else {
         if (!has_privs('article.preview')) {
             return;
         }
 
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($ID)); // Article ID plus token.
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     }
 
     return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
-    ));
+    )).$clean;
 }
 
 /**
@@ -1704,8 +1718,8 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
-        'class'             => 'txp-textarea-preview',
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'body',
     ));
 
@@ -1774,8 +1788,8 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = n.href(gTxt('view_preview_short'), '#', array(
-        'class'             => 'txp-textarea-preview',
+    $textarea_options = n.tag(gTxt('view_preview_short'), 'button', array(
+        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'excerpt',
     ));
 
@@ -1847,10 +1861,9 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        checkbox2('', true, 0, 'clean-preview').
-        sp.tag(gTxt('clean_preview'), 'label', array('for' => 'clean-preview')).
-        checkbox2('', false, 0, 'live-preview').
-        sp.tag(gTxt('live_preview'), 'label', array('for' => 'live-preview')).
+        tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label').
+        tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
+        tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.
         n.tag(tab(array('preview'), $view).tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);

@@ -619,6 +619,28 @@ function the_privileged($res, $real = false)
 }
 
 /**
+ * Check whether a user can modify the article.
+ * 
+ * Probably more suitable for Validator class?
+ *
+ * @param   array  $rs The article data
+ * @param   string $user The user name
+ * @return  bool  
+ * @since   4.9.0
+ * @package User
+ */
+
+function can_modify($rs, $user = null) {
+    global $txp_user;
+
+    isset($user) or $user = $txp_user;
+    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
+    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
+    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
+}
+
+/**
  * Convert SVG size to pixel size
  *
  * @param   char        SVG size
@@ -3209,9 +3231,34 @@ function fileDownloadFormatTime($params)
  *
  */
 
-function txp_get_contents($file)
+function txp_get_contents($file, $opts = null)
 {
-    return is_readable($file) ? file_get_contents($file) : '';
+    // Local file
+    if (!is_array($opts)) {
+        return is_readable($file) ? file_get_contents($file) : '';
+    }
+
+    $opts += array('method' => 'POST', 'content' => '', 'header' => 'Content-type: application/x-www-form-urlencoded');
+
+    if (is_array($opts['content'])) {
+        $opts['content'] = http_build_query($opts['content']);
+    }
+
+    if (!function_exists('curl_init')) {
+        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
+    } else {
+        $ch = curl_init($file);
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, strtoupper($opts['method']) == 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $opts['content']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [$opts['header']]);
+
+        $contents = curl_exec($ch);
+        curl_close($ch);
+    }
+
+    return $contents;
 }
 
 /**
@@ -3958,7 +4005,7 @@ function set_headers($headers = array('Content-Type' => 'text/html; charset=utf-
     if (($rewrite != 1 || in_array(true, $headers, true)) && $headers_list = headers_list()) {
         foreach ($headers_list as $header) {
             list($name, $value) = explode(':', $header, 2) + array(null, null);
-            $headers_low[strtolower(trim($name))] = $value;
+            $headers_low[strtolower(trim($name))] = isset($value) ? trim($value) : $value;
         }
     }
 
@@ -6279,27 +6326,13 @@ function txp_match($atts, $what)
 
     extract($atts + array(
         'value'     => null,
-        'match'     => 'exact',
+        'match'     => '',
         'separator' => '',
     ));
 
 
     if ($value !== null) {
         switch ($match) {
-            case '<':
-            case 'less':
-                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
-                break;
-            case '<=':
-                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
-                break;
-            case '>':
-            case 'greater':
-                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
-                break;
-            case '>=':
-                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
-                break;
             case '':
             case 'exact':
                 $cond = (is_array($what) ? $what == do_list($value, $separator ? $separator : ',') : $what == $value);
@@ -6327,6 +6360,20 @@ function txp_match($atts, $what)
                         break;
                     }
                 }
+                break;
+            case '<':
+            case 'less':
+                $cond = (is_array($what) ? $what < do_list($value, $separator ? $separator : ',') : $what < $value);
+                break;
+            case '<=':
+                $cond = (is_array($what) ? $what <= do_list($value, $separator ? $separator : ',') : $what <= $value);
+                break;
+            case '>':
+            case 'greater':
+                $cond = (is_array($what) ? $what > do_list($value, $separator ? $separator : ',') : $what > $value);
+                break;
+            case '>=':
+                $cond = (is_array($what) ? $what >= do_list($value, $separator ? $separator : ',') : $what >= $value);
                 break;
             case 'pattern':
                 // Cannot guarantee that a fixed delimiter won't break preg_match
