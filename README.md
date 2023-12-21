@@ -75,7 +75,7 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 ## Contributing
 
-Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
+Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for full details.
 
 ## GitHub topic tags
 
