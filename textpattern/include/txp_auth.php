@@ -55,7 +55,7 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
-            set_cookie('txp_test_cookie', '1', array('expires' => 0));
+            set_cookie('txp_test_cookie', '1', array('expires' => 0, 'httponly' => false));
             doLoginForm($message);
         }
     }
@@ -337,14 +337,6 @@ function doTxpValidate()
             if ($lang) {
                 set_pref('language_ui', $lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
             }
-
-            script_js(<<<EOS
-$(document).ready(function ()
-{
-    cookieEnabled = checkCookies();
-});
-EOS
-            , false);
 
             return '';
         } else {

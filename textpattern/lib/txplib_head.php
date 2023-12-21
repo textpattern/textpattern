@@ -87,10 +87,13 @@ function pagetop($pagetitle = '', $message = '')
 
     gTxtScript(array(
         'are_you_sure',
+        'body',
         'close',
         'cookies_must_be_enabled',
         'documentation',
+        'excerpt',
         'form_submission_error',
+        'found_unsafe',
         'help',
         'list_options',
         'ok',
@@ -118,7 +121,9 @@ function pagetop($pagetitle = '', $message = '')
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
-    ->setRoute('file, image');
+    ->setRoute('file, image').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
+    ->setRoute('article');
 $txpOut = 'var textpattern = '.json_encode(
     array(
         '_txp_uid' => get_pref('blog_uid'),
@@ -144,7 +149,7 @@ $txpOut = 'var textpattern = '.json_encode(
             'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
             'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
 {message}
-<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
+<button class="close txp-reduced-ui-button" title="{close}"><span class="ui-icon ui-icon-close">{close}</span></button>
 </span>'
         ),
         'textarray' => (object) null,
@@ -154,16 +159,16 @@ $txpOut = 'var textpattern = '.json_encode(
 
 echo Txp::get('\Textpattern\UI\Script')->setContent($txpOut).
     Txp::get('\Textpattern\UI\Script')->setSource('textpattern.js').n;
-$txpOut = "$(function() {
+$txpOut = "
     if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
         alert('Please force-reload the page or clear your browser caches.')
-    }
-})";
+    }";
 // Set but don't display this bit yet.
-Txp::get('\Textpattern\UI\Script')->setContent($txpOut, false);
+script_js($txpOut, false, true);
+
 echo $theme->html_head();
 echo $theme->html_head_custom();
-    callback_event('admin_side', 'head_end'); ?>
+callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <noscript>Please enable JavaScript in your browser to use this application.</noscript>

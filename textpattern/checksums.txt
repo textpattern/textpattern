@@ -22,7 +22,6 @@
 /include/txp_list.php: 6f823303a1909918cf160f45606f145d
 /include/txp_log.php: 401df1214f7a833bff860df22322212c
 /include/txp_page.php: 877ce444d9e61d3c8459ed9c3bf01e96
-/include/txp_pane.php: 03a45d695fedbc32721e3e3b980a22e7
 /include/txp_plugin.php: a9e3ef32167ce379b7a7aabbdebc5c16
 /include/txp_prefs.php: a9fd9086893120c3a128ec0fdc319e2a
 /include/txp_section.php: ecb28525ea6445bc07692c98b4d49467

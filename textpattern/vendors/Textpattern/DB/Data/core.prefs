@@ -455,14 +455,14 @@
         "position": "280"
     },
     "allow_page_php_scripting": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "publish",
         "html": "yesnoradio",
         "position": "300"
     },
     "allow_article_php_scripting": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "publish",
         "html": "yesnoradio",

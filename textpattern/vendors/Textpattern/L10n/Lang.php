@@ -491,7 +491,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $pack->parse($textpack);
 
         if (!isset($useLang)) {
-            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+            $useLang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         }
 
         $wholePack = $pack->getStrings($useLang);

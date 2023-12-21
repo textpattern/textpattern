@@ -208,7 +208,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         ),
     );
 
-    $key = md5($threshold.$s.$type.join(n, $atts));
+    $key = txp_hash($threshold.$s.$type.join(n, $atts));
 
     if (isset($cache[$key])) {
         return $cache[$key];
@@ -495,7 +495,7 @@ function parse($thing, $condition = true, $in_tag = true)
 function processTags($tag, $atts = '', $thing = null, $log = false)
 {
     global $pretext, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $globals;
+    static $registry = null, $globatts;
 
     if (empty($tag)) {
         return;
@@ -503,7 +503,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
-        $globals = array_filter(
+        $globatts = array_filter(
             $registry->getRegistered(true),
             function ($v) {
                 return !is_bool($v);
@@ -548,8 +548,8 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => &$val) {
-                if (isset($val) && isset($globals[$attr])) {
+            foreach ($txp_atts as $attr => $val) {
+                if (isset($txp_atts[$attr]) && isset($globatts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
                 }
             }
@@ -790,7 +790,7 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $pretext, $trace, $thisarticle;
+    global $is_article_list, $pretext, $trace, $thisarticle;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
     static $aggregate = array(
         'avg' => 'AVG(?)',
@@ -1087,7 +1087,7 @@ function filterAtts($atts = null, $iscustom = null)
         $search = " AND ($cols) $s_filter".($m == 'natural' ? " AND $smatch" : '');
         $fname = $searchform ? $searchform : (isset($thing) ? '' : 'search_results');
     } else {
-        $fname = (!empty($listform) ? $listform : $form);
+        $fname = $is_article_list && !empty($listform) ? $listform : $form;
     }
 
     // Title
