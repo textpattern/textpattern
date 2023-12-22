@@ -11,6 +11,7 @@ class Trace
     private $queryTime = 0;
     private $trace = array();
     private $nest = array();
+    private $stats = array('Pages' => array(), 'Forms' => array(), 'Tags' => array());
 
     public function __construct()
     {
@@ -23,13 +24,17 @@ class Trace
         self::$quiet = $quiet;
     }
 
-    private function traceAdd($msg, $query = false)
+    private function traceAdd($msg, $query = false, $stats = null)
     {
         $trace['level'] = sizeof($this->nest);
         $trace['begin'] = microtime(true);
         $trace['query'] = $query;
         $trace['msg']   = $msg;
         array_push($this->trace, $trace);
+
+        if (is_array($stats)) {
+            $this->stats = array_merge_recursive($this->stats, $stats);
+        }
     }
 
     private function isPeak()
@@ -47,7 +52,7 @@ class Trace
         return false;
     }
 
-    public function start($msg, $query = false)
+    public function start($msg, $query = false, $stats = null)
     {
         if (self::$quiet) {
             return;
@@ -59,7 +64,7 @@ class Trace
             $this->memWhere = array($start-1, $start);
         }
 
-        $this->traceAdd($msg, $query);
+        $this->traceAdd($msg, $query, $stats);
         array_push($this->nest, $start);
     }
 
@@ -90,7 +95,7 @@ class Trace
         }
     }
 
-    public function log($msg)
+    public function log($msg, $stats = null)
     {
         if (self::$quiet) {
             return;
@@ -102,7 +107,7 @@ class Trace
             $this->memWhere = array($start-1, $start);
         }
 
-        $this->traceAdd($msg);
+        $this->traceAdd($msg, false, $stats);
     }
 
     private function out($str)
@@ -124,6 +129,18 @@ class Trace
 
         if ($this->memFunc) {
             $summary['Memory (*)'] = ceil(memory_get_peak_usage() / 1024).' kB';
+        }
+
+        foreach ($this->stats as $key => $value) {
+            if ($key == 'Tags') {
+                $count = count($value);
+                $tags = array_count_values($this->stats[$key]);
+                arsort($tags);
+                $tags = array_map(function ($k, $v) {return "$k ($v)";}, array_keys($tags), array_values($tags));
+                $summary["$key ($count)"] = implode(', ', $tags);
+            } else {
+                $summary[$key] = implode(', ', $value);
+            }
         }
 
         $out = "Trace summary:\n";

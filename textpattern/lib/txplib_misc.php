@@ -2314,23 +2314,6 @@ function splat($text)
 }
 
 /**
- * Replaces CR and LF with spaces, and drops NULL bytes.
- *
- * Used for sanitising email headers.
- *
- * @param      string $str The string
- * @return     string
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::escapeHeader()
- */
-
-function strip_rn($str)
-{
-    return Txp::get('\Textpattern\Mail\Encode')->escapeHeader($str);
-}
-
-/**
  * Validates a string as an email address.
  *
  * <code>
@@ -2428,41 +2411,6 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     }
 
     return false;
-}
-
-/**
- * Encodes a string for use in an email header.
- *
- * @param      string $string The string
- * @param      string $type   The type of header, either "text" or "phrase"
- * @return     string
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::header()
- */
-
-function encode_mailheader($string, $type)
-{
-    try {
-        return Txp::get('\Textpattern\Mail\Encode')->header($string, $type);
-    } catch (\Textpattern\Mail\Exception $e) {
-        trigger_error($e->getMessage(), E_USER_WARNING);
-    }
-}
-
-/**
- * Converts an email address into unicode entities.
- *
- * @param      string $txt The email address
- * @return     string Encoded email address
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::entityObfuscateAddress()
- */
-
-function eE($txt)
-{
-    return Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($txt);
 }
 
 /**
@@ -3625,7 +3573,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name, $theme = null)
 {
-    global $skin;
+    global $skin, $production_status, $trace;
     static $forms = array();
 
     isset($theme) or $theme = $skin;
@@ -3655,6 +3603,8 @@ function fetch_form($name, $theme = null)
         foreach ($names as $form) {
             if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
+            } elseif ($production_status !== 'live') {
+                $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
             }
         }
     }
@@ -3753,7 +3703,7 @@ function fetch_page($name, $theme)
         return false;
     }
 
-    $trace->log("[Page: '$theme.$name']");
+    $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
 
     return $page;
 }

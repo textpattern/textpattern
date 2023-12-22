@@ -515,7 +515,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     if ($log) {
         $tag_stop = $txp_tag[4];
-        $trace->start($txp_tag[0]);
+        $trace->start($txp_tag[0], false, array('Tags' => array($txp_tag[1])));
     }
 
     if ($atts) {
