@@ -2787,11 +2787,12 @@ function page_url($atts, $thing = null)
     static $specials = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
         $lAtts = array(
-            'type'    => null,
+            'context' => null,
             'default' => false,
             'escape'  => null,
-            'context' => null,
-            'root'    => hu
+            'lang'    => null,
+            'root'    => null,
+            'type'    => null
         );
 
     isset($specials) or $specials = array(
@@ -2803,7 +2804,8 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
-    $old_base = isset($prefs['url_base']) ? $prefs['url_base'] : null;
+    $old_base = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : null;
+    $old_lang = isset($prefs['$txp_lang']) ? $prefs['$txp_lang'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -2822,7 +2824,14 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
-    $prefs['url_base'] = $root === true ? rhu : $root;
+    if (isset($root)) {
+        $prefs['$txp_root'] = $root === true ? rhu : $root;
+    }
+
+    if (isset($lang)) {
+        $prefs['$txp_lang'] = $lang === true ? LANG : $lang;
+    }
+
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -2837,13 +2846,11 @@ function page_url($atts, $thing = null)
         }
     }
 
-    if (!isset($type)) {
-        $type = 'request_uri';
-    }
+    isset($type) or $type = 'request_uri';
 
     if (isset($thing)) {
         $out = parse($thing);
-    } elseif (isset($context)) {
+    } elseif (isset($context) || isset($lang) || isset($root)) {
         $out = pagelinkurl($txp_context);
         $escape === null or $out = str_replace('&amp;', '&', $out);
     } elseif (isset($specials[$type])) {
@@ -2860,7 +2867,8 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
-    $prefs['url_base'] = $old_base;
+    $prefs['$txp_root'] = $old_base;
+    $prefs['$txp_lang'] = $old_lang;
 
     return $out;
 }

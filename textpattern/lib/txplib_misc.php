@@ -4853,7 +4853,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
-    $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
+    $hu = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : hu;
     $keys = $parts;
     !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
@@ -4884,6 +4884,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         unset($keys['context']);
     }
 
+    $loc = !isset($prefs['$txp_lang']) || strtolower($prefs['$txp_lang']) == LANG;
     $numkeys = array();
 
     foreach ($keys as $key => $v) {
@@ -4920,11 +4921,11 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             }
         } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = ($loc ? strtolower(urlencode(gTxt('author'))) : 'author').'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = ($loc ? strtolower(urlencode(gTxt('category'))) : 'category').'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
@@ -5026,7 +5027,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
-    isset($hu) or $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
+    isset($hu) or $hu = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
