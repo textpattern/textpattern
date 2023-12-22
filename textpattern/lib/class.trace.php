@@ -131,7 +131,7 @@ class Trace
             $summary['Memory (*)'] = ceil(memory_get_peak_usage() / 1024).' kB';
         }
 
-        foreach ($this->stats as $key => $value) {
+        foreach ($this->stats as $key => $value) if ($value) {
             if ($key == 'Tags') {
                 $count = count($value);
                 $tags = array_count_values($this->stats[$key]);
