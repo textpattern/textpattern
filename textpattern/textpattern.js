@@ -600,7 +600,7 @@ function sendAsyncEvent(data, fn, format) {
 
     if ($.type(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
+        data = data + '&' + $.param({app_mode: 'async', _txp_token: textpattern._txp_token});
     } else if (data instanceof FormData) {
         formdata = true;
         data.append('app_mode', 'async');
@@ -1041,9 +1041,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                     form.data.append(key, val);
                 });
             } else {
-                $.each(form.extra, function(key, val) {
-                    form.data += '&' + key + '=' + val;
-                });
+                form.data += '&' + $.param(form.extra);
             }
         }
 
@@ -2504,7 +2502,7 @@ textpattern.Route.add('section', function () {
 
             $.each(skin_page[skin], function (key, item) {
                 var isSelected = (item == page_sel) ? ' selected' : '';
-                $pageSelect.append('<option' + isSelected + '>' + item + '</option>');
+                $pageSelect.append('<option' + isSelected + '>' + textpattern.encodeHTML(item) + '</option>');
             });
 
             if (page_sel === null) {
@@ -2517,7 +2515,7 @@ textpattern.Route.add('section', function () {
 
             $.each(skin_style[skin], function (key, item) {
                 var isSelected = (item == style_sel) ? ' selected' : '';
-                $styleSelect.append('<option' + isSelected + '>' + item + '</option>');
+                $styleSelect.append('<option' + isSelected + '>' + textpattern.encodeHTML(item) + '</option>');
             });
 
             if (style_sel === null) {
@@ -2827,7 +2825,7 @@ $(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang=' + textpattern.prefs.language_ui + '&_txp_token=' + textpattern._txp_token);
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?' + $.param({logout: 1, lang: textpattern.prefs.language_ui, _txp_token: textpattern._txp_token}));
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
