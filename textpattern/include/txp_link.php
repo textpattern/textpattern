@@ -489,19 +489,6 @@ function link_edit($message = '')
     }
 }
 
-/**
- * Legacy link category HTML select field.
- *
- * @param      string $cat
- * @return     string
- * @deprecated in 4.6.0
- */
-
-function linkcategory_popup($cat = '')
-{
-    return event_category_popup('link', $cat, 'link_category');
-}
-
 // -------------------------------------------------------------
 
 function link_save()

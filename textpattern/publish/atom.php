@@ -130,14 +130,14 @@ function atom()
 
     // Atom feeds with mail or domain name.
     $dn = explode('/', $siteurl);
-    $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
+    $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
     $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
 
     $out[] = tag('Textpattern', 'generator', ' uri="https://textpattern.com/" version="'.$version.'"');
     $out[] = tag(safe_strftime("w3cdtf", strtotime($lastmod)), 'updated');
 
     $auth[] = tag($pub['RealName'], 'name');
-    $auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
+    $auth[] = ($include_email_atom) ? tag(Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($pub['email']), 'email') : '';
     $auth[] = tag(hu, 'uri');
 
     $out[] = tag(n.t.t.join(n.t.t, $auth).n.t, 'author');
