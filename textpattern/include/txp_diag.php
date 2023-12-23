@@ -406,7 +406,7 @@ function doDiagnostics()
     }
 
     if ($badCF = filterCustomFields(false)) {
-        $fail['w'][] = array('Potentially problematic cf name(s): <strong>'.implode('</strong>, <strong>', array_keys($badCF)).'</strong>');
+        $fail['w'][] = array(gTxt('problematic_cf_name', array('{list}' => '<code>'.implode('</code>, <code>', $badCF).'</code>'), false));
     }
 
     $active_plugins = array();

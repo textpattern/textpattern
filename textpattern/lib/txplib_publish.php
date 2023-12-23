@@ -1250,11 +1250,11 @@ function filterAtts($atts = null, $iscustom = null)
 }
 
 /**
- * Postpone tag processing.
+ * Check cf names validity.
  *
- * @param   null|int $maxpass
- * @return  null|string
- * @since   4.7.0
+ * @param   bool $valid
+ * @return  array
+ * @since   4.9.0
  * @package TagParser
  */
 
@@ -1262,13 +1262,13 @@ function filterCustomFields($valid = true)
 {
     static $reserved = null;
 
-    isset($reserved) or $reserved = array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
+    isset($reserved) or $reserved = array_keys(array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
         return preg_match('/^[\w\-]+$/', $key);
-    }, ARRAY_FILTER_USE_KEY);
+    }, ARRAY_FILTER_USE_KEY));
 
     return $valid
-        ? array_diff_key(array_flip(getCustomFields()), $reserved)
-        : array_intersect_key(array_flip(getCustomFields()), $reserved);
+        ? array_diff(getCustomFields(), $reserved)
+        : array_intersect(getCustomFields(), $reserved);
 }
 
 /**
