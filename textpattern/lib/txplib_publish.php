@@ -809,7 +809,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($atts === false) {
         return $out = array();
-    } elseif (!is_array($atts)) {
+    } elseif ($atts === null) {
         // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
         $trace->log('[filterAtts ignored]');
 
@@ -830,20 +830,6 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $excluded === true or $excluded = array_fill_keys($excluded, true);
-
-    $customFields = getCustomFields() + array('url_title' => 'url_title');
-    $postWhere = $customPairs = $customlAtts = array();
-
-    foreach ($customFields as $num => $field) {
-        $customlAtts[$field] = null;
-
-        if (isset($atts['custom_'.$num])) {
-            $customPairs[$field] = $atts['custom_'.$num];
-            $customlAtts['custom_'.$num] = null;
-        } elseif (isset($excluded[$field])) {
-            $customPairs[$field] = true;
-        }
-    }
 
     $extralAtts = array(
         'form'          => 'default',
@@ -890,6 +876,26 @@ function filterAtts($atts = null, $iscustom = null)
         );
     }
 
+    $coreAtts = $sortAtts + $extralAtts;
+
+    if ($atts === true) {
+        return $coreAtts;
+    }
+
+    $customFields = getCustomFields() + array('url_title' => 'url_title');
+    $postWhere = $customPairs = $customlAtts = array();
+
+    foreach ($customFields as $num => $field) {
+        $customlAtts[$field] = null;
+
+        if (isset($atts['custom_'.$num])) {
+            $customPairs[$field] = $atts['custom_'.$num];
+            $customlAtts['custom_'.$num] = null;
+        } elseif (isset($excluded[$field])) {
+            $customPairs[$field] = true;
+        }
+    }
+
     $coreColumns = array(
         'posted'   => 'UNIX_TIMESTAMP(Posted) AS uPosted',
         'expires'  => 'UNIX_TIMESTAMP(Expires) AS uExpires',
@@ -904,7 +910,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Getting attributes.
-    $theAtts = lAtts($sortAtts + $extralAtts + $customlAtts, $atts);
+    $theAtts = lAtts($coreAtts + $customlAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -1241,6 +1247,28 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     return $theAtts;
+}
+
+/**
+ * Postpone tag processing.
+ *
+ * @param   null|int $maxpass
+ * @return  null|string
+ * @since   4.7.0
+ * @package TagParser
+ */
+
+function filterCustomFields($valid = true)
+{
+    static $reserved = null;
+
+    isset($reserved) or $reserved = array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
+        return preg_match('/^[\w\-]+$/', $key);
+    }, ARRAY_FILTER_USE_KEY);
+
+    return $valid
+        ? array_diff_key(array_flip(getCustomFields()), $reserved)
+        : array_intersect_key(array_flip(getCustomFields()), $reserved);
 }
 
 /**

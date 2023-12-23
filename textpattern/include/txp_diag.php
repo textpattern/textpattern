@@ -49,6 +49,8 @@ define("ln", str_repeat('-', 24).n);
 
 define("priv", '=== ');
 
+include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
+
 global $files;
 
 $files = check_file_integrity();
@@ -401,6 +403,10 @@ function doDiagnostics()
         if ($table_errors) {
             $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n.t.implode(', '.n.t, $table_errors)));
         }
+    }
+
+    if ($badCF = filterCustomFields(false)) {
+        $fail['w'][] = array('Potentially problematic cf name(s): <strong>'.implode('</strong>, <strong>', array_keys($badCF)).'</strong>');
     }
 
     $active_plugins = array();
