@@ -353,7 +353,7 @@ function prefs_list($message = '')
     }
 
     if ($step == 'prefs_save' && $badCF = filterCustomFields(false)) {
-        echo announce(gTxt('problematic_cf_name', array('{list}' => '<strong>'.implode('</strong>, <strong>', $badCF).'</strong>'), false), E_WARNING);
+        echo announce(gTxt('custom_field_clash', array('{list}' => join(', ', array_keys($badCF))), false), E_WARNING);
     }
 }
 

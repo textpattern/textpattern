@@ -381,7 +381,7 @@ function article_preview($field = false)
                 "Cookie: txp_login_public=".cs('txp_login_public'),
             'content' => $data,
         );
-        
+
         $dbfield = txp_get_contents(hu, $opts);
     }
 
