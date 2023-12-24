@@ -2272,8 +2272,8 @@ textpattern.Route.add('article, file', function () {
     });
 });
 
-// 'Clone' button on Pages, Forms, Styles panels.
-textpattern.Route.add('skin, css, page, form', function () {
+// 'Clone' button on Theme, Pages, Forms, Styles, and Link panels.
+textpattern.Route.add('skin, css, page, form, link', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
