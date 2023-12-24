@@ -1962,14 +1962,16 @@ function article_image($atts)
         $images = array_intersect_key($images, array_flip($items));
     }
 
-    $dbimages = array_map('intval', array_filter($images, 'is_numeric'));
+    $dbimages = array_filter(array_map('intval', $images));
     $dbimages = empty($dbimages) ? array() :
         array_column(safe_rows('*', 'txp_image', 'id IN('.implode(',', $dbimages).')'), null, 'id');
 
     foreach ($items as $item) if (isset($images[$item])) {
         $image = $images[$item];
 
-        if (is_numeric($image)) {
+        if (intval($image)) {
+            $image = intval($image);
+
             if (!isset($dbimages[$image])) {
                 trigger_error(gTxt('unknown_image'));
 
