@@ -406,7 +406,7 @@ function doDiagnostics()
     }
 
     if ($badCF = filterCustomFields(false)) {
-        $fail['w'][] = array('custom_field_clash', null, array('{list}'=> implode(', ', array_keys($badCF))));
+        $fail['w'][] = array('custom_field_clash', null, array('{list}'=> implode(', ', $badCF)));
     }
 
     $active_plugins = array();
