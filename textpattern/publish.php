@@ -359,8 +359,16 @@ function preText($store, $prefs = null)
     
             $nolog = true;
             if ($raw === '~') header('Content-Security-Policy: sandbox');
-            $out['id'] = intval($out['id']);
-            $out['_txp_preview'] = $hash;
+            $out['@txp_preview'] = $hash;
+
+            if (empty($id)) {
+                populateArticleData(array(
+                    'AuthorID' => $txp_user,
+                    'LastModID' => $txp_user
+                ));
+            } else {
+                $out['id'] = intval($id);
+            }
         }
     }
 
@@ -642,7 +650,7 @@ function preText($store, $prefs = null)
                 $is_404 = '410';
             }
 
-            if (!empty($out['_txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+            if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
                 if (isset($_POST['field']) && isset($_POST['content'])) {
                     $thisarticle[$_POST['field']] = $_POST['content'];
                 }
@@ -658,7 +666,7 @@ function preText($store, $prefs = null)
     // Hackish.
     global $is_article_list;
 
-    if (empty($out['id'])) {
+    if (empty($out['@txp_preview']) && empty($out['id'])) {
         $is_article_list = true;
     } else {
         $out['q'] = '';
@@ -758,7 +766,7 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if (isset($pretext['_txp_preview']) && $name === $pretext['_txp_preview']) {
+    if (isset($pretext['@txp_preview']) && $name === $pretext['@txp_preview']) {
         $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
         $mimetype = 'text/html';
     } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
@@ -998,7 +1006,7 @@ function doArticle($atts, $thing = null)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
-    $preview = !empty($pretext['_txp_preview']);
+    $preview = !empty($pretext['@txp_preview']);
 
     // No output required, only setting atts.
     if ($atts['pgonly']) {
