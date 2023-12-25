@@ -778,7 +778,6 @@ function plugin_verify($payload = array(), $txpPlugin = null)
     }
 
     if ($plugin) {
-        $source = '';
         $textpack = '';
         $data = '';
 
@@ -797,7 +796,7 @@ function plugin_verify($payload = array(), $txpPlugin = null)
             $data = txpspecialchars($plugin['data']);
         }
 
-        $source .= txpspecialchars($plugin['code']);
+        $source = isset($plugin['code']) ? txpspecialchars($plugin['code']) : '';
         $sub = graf(
             fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button').
             fInput('submit', 'plugin-go', gTxt('install'), 'publish'),
@@ -866,7 +865,7 @@ function plugin_install()
 
     $srcFile = ps('plugin-filename');
     $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
-    $name = sanitizeForFile(ps('plugin-name'));
+    $name = sanitizeForFile($srcFile);
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
     if (ps('plugin-cancel')) {
@@ -908,7 +907,7 @@ function plugin_install()
 
                         if ($zh === true) {
                             for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
+                                if (strpos($zip->getNameIndex($i), $filename.DS) !== 0) {
                                     $makedir = true;
 
                                     break;

@@ -302,7 +302,7 @@ class Plugin
                 }
 
                 foreach ($keyFiles as $key => $fn) {
-                    $keyFile = $filename.'/'.$fn;
+                    $keyFile = $filename.DS.$fn;
 
                     if (in_array($keyFile, $zipFiles)) {
                         $fp = $zip->getStream($keyFile);
@@ -756,7 +756,7 @@ class Plugin
                         if (is_dir($currFile)) {
                             if ($file != '' && $file != '.' && $file != '..') {
                                 $zipArchive->addEmptyDir(str_replace($basedir, '', $currFile));
-                                $directory = $currFile . '/';
+                                $directory = $currFile . DS;
                                 $this->zipDirectory($zipArchive, $directory);
                             }
                         }
