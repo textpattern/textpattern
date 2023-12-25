@@ -353,7 +353,7 @@ function preText($store, $prefs = null)
 //        doAuth();
         if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')).$txp_user.Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
             global $nolog;
     

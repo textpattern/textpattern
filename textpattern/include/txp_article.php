@@ -371,9 +371,9 @@ function article_preview($field = false)
     }
 
     // Preview pane
-    if (gps('_txp_parse')) {
+    if (ps('_txp_parse')) {
         $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
-        $id = intval(gps('ID')).'.'.$token;
+        $id = intval(ps('ID')).'.'.$token;
         $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
         $opts = array(
             'method' => "POST",
@@ -1420,7 +1420,7 @@ function article_partial_actions($rs)
     } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
-        script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
+        script_js('$("#article_form").find("textarea, :input:not(button)").prop("disabled", true);', false, true);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
