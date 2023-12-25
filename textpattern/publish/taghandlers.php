@@ -2806,8 +2806,8 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
-    $old_base = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : null;
-    $old_lang = isset($prefs['$txp_lang']) ? $prefs['$txp_lang'] : null;
+    $old_base = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : null;
+    $old_lang = isset($prefs['@txp_lang']) ? $prefs['@txp_lang'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -2827,11 +2827,11 @@ function page_url($atts, $thing = null)
     extract($atts, EXTR_SKIP);
 
     if (isset($root)) {
-        $prefs['$txp_root'] = $root === true ? rhu : $root;
+        $prefs['@txp_root'] = $root === true ? rhu : $root;
     }
 
     if (isset($lang)) {
-        $prefs['$txp_lang'] = $lang === true ? LANG : $lang;
+        $prefs['@txp_lang'] = $lang === true ? LANG : $lang;
     }
 
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
@@ -2869,8 +2869,8 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
-    $prefs['$txp_root'] = $old_base;
-    $prefs['$txp_lang'] = $old_lang;
+    $prefs['@txp_root'] = $old_base;
+    $prefs['@txp_lang'] = $old_lang;
 
     return $out;
 }

@@ -4853,7 +4853,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
-    $hu = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : hu;
+    $hu = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : hu;
     $keys = $parts;
     !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
@@ -4884,7 +4884,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         unset($keys['context']);
     }
 
-    $loc = !isset($prefs['$txp_lang']) || strtolower($prefs['$txp_lang']) == LANG;
+    $loc = !isset($prefs['@txp_lang']) || strtolower($prefs['@txp_lang']) == LANG;
     $numkeys = array();
 
     foreach ($keys as $key => $v) {
@@ -5027,7 +5027,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
-    isset($hu) or $hu = isset($prefs['$txp_root']) ? $prefs['$txp_root'] : hu;
+    isset($hu) or $hu = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;
