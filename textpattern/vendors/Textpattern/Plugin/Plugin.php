@@ -483,12 +483,13 @@ class Plugin
 
     public function installTextpack($name, $reset = false)
     {
+        list ($name, $lang) = (array)$name + array(null, null);
         $owner = doSlash($name);
-
+/*
         if ($reset) {
-            safe_delete('txp_lang', "owner = '{$owner}'");
+            safe_delete('txp_lang', "owner = '{$owner}'".($lang ? " AND lang = '".doSlash($lang)."'" : ''));
         }
-
+*/
         if (has_handler('txp.plugin', 'textpack.fetch')) {
             $textpack = callback_event('txp.plugin', 'textpack.fetch', false, compact('name'));
         } else {
@@ -518,7 +519,7 @@ class Plugin
 
         $installed_langs = \Txp::get('\Textpattern\L10n\Lang')->installed();
 
-        foreach ($installed_langs as $lang) {
+        foreach (isset($lang) ? array($lang) : $installed_langs as $lang) {
             if (!isset($allpacks[$lang])) {
                 $langpack = $allpacks[$fallback];
             } else {
@@ -563,12 +564,12 @@ class Plugin
                 $langpack[$idx]['lang'] = $lang;
             }
 
-            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
+            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, array($name, $lang), $reset);
             $langDir = PLUGINPATH.DS.$name.DS.'lang'.DS;
 
             if (is_dir($langDir) && is_readable($langDir)) {
                 $plugLang = new \Textpattern\L10n\Lang($langDir);
-                $plugLang->installFile($lang, $name);
+                $plugLang->installFile($lang, $name, $reset);
             }
         }
     }
@@ -579,11 +580,11 @@ class Plugin
      * Used when a new language is added.
      */
 
-    public function installTextpacks()
+    public function installTextpacks($lang = null, $reset = false)
     {
         if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
             foreach ($plugins as $name) {
-                $this->installTextpack($name);
+                $this->installTextpack(array($name, $lang), $reset);
             }
         }
     }

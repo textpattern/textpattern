@@ -39,6 +39,7 @@ if ($event == 'lang') {
         'get_language'     => true,
         'get_textpack'     => true,
         'remove_language'  => true,
+        'reset_language'   => true,
         'save_language'    => true,
         'save_language_ui' => true,
         'list_languages'   => false,
@@ -122,16 +123,16 @@ function list_languages($message = '')
                 $cellclass = 'warning';
                 $icon = 'ui-icon-alert';
                 $status = gTxt('installed').' <span role="separator">/</span> '.gTxt('update_available');
-                $disabled = (has_privs('lang.edit') ? '' : 'disabled');
             } else {
                 $cellclass = 'success';
                 $icon = 'ui-icon-check';
                 $status = gTxt('installed');
-                $disabled = 'disabled';
             }
 
+            $disabled = (has_privs('lang.edit') ? '' : 'disabled');
+
             if (isset($available_lang[$langname])) {
-                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt('update'));
+                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt($file_updated ? 'update' : 'reset'));
             } else {
                 $btnText = '';
                 $cellclass = 'warning';
@@ -159,7 +160,7 @@ function list_languages($message = '')
             ? ''
             : tag($btnText, 'button', array(
                 'type'      => 'submit',
-                'name'      => 'get_language',
+                'name'      => $file_updated ? 'get_language' : 'reset_language',
             )));
 
         $langMeta = graf(
@@ -325,7 +326,7 @@ function save_language_ui()
  * e.g. 'en-gb', 'fi'.
  */
 
-function get_language()
+function get_language($reset = false)
 {
     $lang_code = ps('lang_code');
     $langName = fetchLangName($lang_code);
@@ -333,16 +334,28 @@ function get_language()
     $installed = $txpLang->installed();
     $installString = in_array($lang_code, $installed) ? 'language_updated' : 'language_installed';
 
-    if ($txpLang->installFile($lang_code)) {
+    if ($txpLang->installFile($lang_code, '', $reset)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
         $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
-        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
+        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks($lang_code, $reset);
 
         return list_languages(gTxt($installString, array('{name}' => $langName)));
     }
 
     return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
+}
+
+/**
+ * Installs a language from a file.
+ *
+ * The HTTP POST parameter 'lang_code' is the installed language,
+ * e.g. 'en-gb', 'fi'.
+ */
+
+function reset_language()
+{
+    return get_language(true);
 }
 
 /**
