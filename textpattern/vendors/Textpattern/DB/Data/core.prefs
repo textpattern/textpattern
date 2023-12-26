@@ -24,7 +24,7 @@
         "val": "2000000",
         "type": "0",
         "event": "admin",
-        "html": "text_input",
+        "html": "number",
         "position": "60"
     },
     "tempdir": {
@@ -353,7 +353,7 @@
         "val": "5",
         "type": "0",
         "event": "feeds",
-        "html": "text_input",
+        "html": "number",
         "position": "40"
     },
     "show_comment_count_in_feed": {
@@ -472,7 +472,7 @@
         "val": "1000",
         "type": "0",
         "event": "publish",
-        "html": "text_input",
+        "html": "number",
         "position": "340"
     },
     "blog_mail_uid": {
@@ -717,7 +717,7 @@
         "val": "7",
         "type": "0",
         "event": "site",
-        "html": "text_input",
+        "html": "number",
         "position": "230"
     },
     "use_comments": {
@@ -768,7 +768,7 @@
         "val": "1",
         "type": "0",
         "event": "advanced_options",
-        "html": "text_input",
+        "html": "number",
         "position": "300"
     }
 }
