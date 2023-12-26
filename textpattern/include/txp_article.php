@@ -1420,7 +1420,7 @@ function article_partial_actions($rs)
     } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
-        script_js('$("#article_form").find("textarea, :input:not(button)").prop("disabled", true);', false, true);
+        script_js('$("#article_form").find("textarea, :input:not(button)").prop("readonly", true);', false, true);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
