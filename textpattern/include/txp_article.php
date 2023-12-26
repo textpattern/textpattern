@@ -1421,7 +1421,7 @@ function article_partial_actions($rs)
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
         script_js('$("#supporting_content").find(":input:not(button)").prop("disabled", true);'.n.
-            '$("#main_content").find(":input, textarea").prop("readonly", true);', false, true);
+            '$("#main_content").find(":input, textarea").prop("readonly", true);', false);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
@@ -1878,7 +1878,7 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label').
+        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label') : '').
         tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
         tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.
