@@ -298,7 +298,9 @@ class Plugin
 
             if ($zh === true) {
                 for ($i = 0; $i < $zip->numFiles; $i++) {
-                    $zipFiles[] = $zip->getNameIndex($i);
+                    $entryName = str_replace('\\', DS, $zip->getNameIndex($i));
+                    $zip->renameIndex($i, $entryName);
+                    $zipFiles[] = $entryName;
                 }
 
                 foreach ($keyFiles as $key => $fn) {
