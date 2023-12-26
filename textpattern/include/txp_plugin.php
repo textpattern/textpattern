@@ -906,15 +906,28 @@ function plugin_install()
                         $zh = $zip->open($target_path);
 
                         if ($zh === true) {
-                            for ($i = 0; $i < $zip->numFiles; $i++) {
-                                $entryName = $zip->getNameIndex($i);
+                            $makedir = PLUGINPATH;
 
-                                if (strpos($entryName, $filename.'/') !== 0 && strpos($entryName, $filename.'\\') !== 0) {
-                                    $makedir = true;
+                            for ($i = 0; $i < $zip->numFiles; $i++) {
+                                if (strpos(str_replace('\\', '/', $zip->getNameIndex($i)), $filename.'/') !== 0) {
+                                    $makedir = PLUGINPATH.DS.$filename;
                                 }
                             }
 
-                            $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
+                            for ($i = 0; $i < $zip->numFiles; $i++) {
+                                $entryName = $zip->getNameIndex($i);
+                                extract(pathinfo(str_replace('\\', '/', $entryName)));
+                                $dirname = $makedir . '/' . $dirname;
+
+                                if (!is_dir($dirname)) {
+                                    mkdir($dirname, 0755, true);
+                                }
+
+                                $zip->renameIndex($i, $basename);
+                                $zip->extractTo($dirname, $basename);
+                            }
+
+//                            $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
                             $zip->close();
 
                             list($plugin, $files) = $txpPlugin->read($target_path);
