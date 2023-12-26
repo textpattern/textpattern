@@ -302,9 +302,7 @@ class Plugin
                 }
 
                 foreach ($keyFiles as $key => $fn) {
-                    $keyFile = $filename.DS.$fn;
-
-                    if (in_array($keyFile, $zipFiles)) {
+                    if (in_array($keyFile = $filename.'/'.$fn, $zipFiles) || in_array($keyFile = $filename.'\\'.$fn, $zipFiles)) {
                         $fp = $zip->getStream($keyFile);
 
                         if ($fp) {
