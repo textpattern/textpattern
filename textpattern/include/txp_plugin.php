@@ -865,7 +865,7 @@ function plugin_install()
 
     $srcFile = ps('plugin-filename');
     $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
-    $name = sanitizeForFile($srcFile);
+    $name = sanitizeForFile(ps('plugin-name'));
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
     if (ps('plugin-cancel')) {
@@ -907,7 +907,7 @@ function plugin_install()
 
                         if ($zh === true) {
                             for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos($zip->getNameIndex($i), $filename.DS) !== 0) {
+                                if (strpos($zip->getNameIndex($i), $filename.'/') !== 0 && strpos($zip->getNameIndex($i), $filename.'\\') !== 0) {
                                     $makedir = true;
 
                                     break;
