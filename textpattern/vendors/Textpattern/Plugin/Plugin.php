@@ -710,7 +710,7 @@ class Plugin
 
             if ($zipArchive->open($dest, \ZipArchive::OVERWRITE | \ZipArchive::CREATE)) {
                 $safeName = sanitizeForFile($name);
-                $dir = PLUGINPATH.DS.$safeName.DS;
+                $dir = PLUGINPATH.'/'.$safeName.'/';
                 $this->zipDirectory($zipArchive, $dir);
                 $zipArchive->close();
 
@@ -738,7 +738,7 @@ class Plugin
         static $basedir;
 
         if (empty($basedir)) {
-            $basedir = dirname($directory).DS;
+            $basedir = dirname($directory).'/';
         }
 
         if (is_dir($directory)) {
@@ -754,7 +754,7 @@ class Plugin
                         if (is_dir($currFile)) {
                             if ($file != '' && $file != '.' && $file != '..') {
                                 $zipArchive->addEmptyDir(str_replace($basedir, '', $currFile));
-                                $directory = $currFile . DS;
+                                $directory = $currFile . '/';
                                 $this->zipDirectory($zipArchive, $directory);
                             }
                         }
