@@ -907,7 +907,7 @@ function plugin_install()
 
                         if ($zh === true) {
                             for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos($zip->getNameIndex($i), $filename.'/') !== 0 && strpos($zip->getNameIndex($i), $filename.'\\') !== 0) {
+                                if (strpos(str_replace('\\', '/', $zip->getNameIndex($i)), $filename.'/') !== 0) {
                                     $makedir = true;
 
                                     break;
