@@ -922,13 +922,15 @@ function plugin_install()
                             }
 
                             if ($badSlash && DS !== '\\') {// Windows zip on Linux
+                                $umask = umask();
+
                                 for ($i = 0; $i < $zip->numFiles; $i++) {
                                     $entryName = $zip->getNameIndex($i);
                                     extract(pathinfo(str_replace('\\', '/', $entryName)));
                                     $dirname = $makedir . '/' . $dirname;
 
                                     if (!is_dir($dirname)) {
-                                        mkdir($dirname, 0755, true);
+                                        mkdir($dirname, $umask, true);
                                     }
 
                                     $tmpname = md5($entryName);
