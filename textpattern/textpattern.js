@@ -91,7 +91,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'confirmation': textpattern.gTxt('are_you_sure')
     };
 
-    if ($.type(method) !== 'string') {
+    if (typeof(method) !== 'string') {
         opt = method;
         method = null;
     } else {
@@ -598,7 +598,7 @@ function setClassRemember(className, force) {
 function sendAsyncEvent(data, fn, format) {
     var formdata = false;
 
-    if ($.type(data) === 'string' && data.length > 0) {
+    if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
         data = data + '&' + $.param({app_mode: 'async', _txp_token: textpattern._txp_token});
     } else if (data instanceof FormData) {
@@ -855,7 +855,7 @@ textpattern.Console = {
  */
 
 textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
-    if ($.type(console) === 'object' && $.type(console.log) === 'function') {
+    if (typeof(console) === 'object' && typeof(console.log) === 'function') {
         console.log(data.message);
     }
 }).register('updateList', function (event, data) {
@@ -934,7 +934,7 @@ textpattern.Route = {
     add: function (pages, fn) {
         $.each(pages.split(','), function (index, page) {
             textpattern.Route.attached.push({
-                'page': $.trim(page),
+                'page': page.trim(),
                 'fn': fn
             });
         });
@@ -1655,7 +1655,7 @@ jQuery.fn.txpColumnize = function () {
 
     $headers.each(function (index) {
         var $this = $(this),
-            $title = $this.text().trim(),
+            $title = this.textContent.trim(),
             $id = $this.data('col');
 
         if (!$title) {
