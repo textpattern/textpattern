@@ -132,7 +132,7 @@ function list_languages($message = '')
             $disabled = (has_privs('lang.edit') ? '' : 'disabled');
 
             if (isset($available_lang[$langname])) {
-                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt($file_updated ? 'update' : 'reset'));
+                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt($file_updated ? 'update' : 'reload'));
             } else {
                 $btnText = '';
                 $cellclass = 'warning';
