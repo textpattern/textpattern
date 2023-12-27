@@ -2596,9 +2596,8 @@ textpattern.Route.add('prefs', function () {
         $(this).next('input').val($(this).val());
     });
     $('#prefs_group_custom input').on('input', function(){
-        const exp = new RegExp(this.pattern);
-        let validity = textpattern.gTxt('custom_field_clash', {'{list}' : this.value});
-        this.setCustomValidity(exp.test(this.value) ? '' : validity);
+        this.setCustomValidity(this.validity.patternMismatch ? textpattern.gTxt('custom_field_clash', {'{list}' : this.value}) : '');
+        this.reportValidity();
     });
 });
 
