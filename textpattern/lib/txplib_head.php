@@ -90,6 +90,7 @@ function pagetop($pagetitle = '', $message = '')
         'body',
         'close',
         'cookies_must_be_enabled',
+        'custom_field_clash',
         'documentation',
         'excerpt',
         'form_submission_error',

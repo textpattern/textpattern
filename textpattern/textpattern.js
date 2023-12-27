@@ -2591,8 +2591,14 @@ textpattern.Route.add('plugin.plugin_help', function () {
 
 // Prefs panel.
 textpattern.Route.add('prefs', function () {
+    textpattern.textarray['custom_field_clash'] = textpattern.textarray['custom_field_clash'].replace(/<\/?\w+>/g, '');
     $('#dateformat, #archive_dateformat, #comments_dateformat').on('change', function() {
         $(this).next('input').val($(this).val());
+    });
+    $('#prefs_group_custom input').on('input', function(){
+        const exp = new RegExp(this.pattern);
+        let validity = textpattern.gTxt('custom_field_clash', {'{list}' : this.value});
+        this.setCustomValidity(exp.test(this.value) ? '' : validity);
     });
 });
 
