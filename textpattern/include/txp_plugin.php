@@ -907,27 +907,39 @@ function plugin_install()
 
                         if ($zh === true) {
                             $makedir = PLUGINPATH;
+                            $badSlash = false;
 
                             for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos(str_replace('\\', '/', $zip->getNameIndex($i)), $filename.'/') !== 0) {
+                                $entryName = $zip->getNameIndex($i);
+
+                                if (strpos($entryName, '\\') !== false) {
+                                    $badSlash = true;
+                                }
+
+                                if (strpos(str_replace('\\', '/', $entryName), $filename.'/') !== 0) {
                                     $makedir = PLUGINPATH.DS.$filename;
                                 }
                             }
 
-                            for ($i = 0; $i < $zip->numFiles; $i++) {
-                                $entryName = $zip->getNameIndex($i);
-                                extract(pathinfo(str_replace('\\', '/', $entryName)));
-                                $dirname = $makedir . '/' . $dirname;
+                            if ($badSlash && DS !== '\\') {// Windows zip on Linux
+                                for ($i = 0; $i < $zip->numFiles; $i++) {
+                                    $entryName = $zip->getNameIndex($i);
+                                    extract(pathinfo(str_replace('\\', '/', $entryName)));
+                                    $dirname = $makedir . '/' . $dirname;
 
-                                if (!is_dir($dirname)) {
-                                    mkdir($dirname, 0755, true);
+                                    if (!is_dir($dirname)) {
+                                        mkdir($dirname, 0755, true);
+                                    }
+
+                                    $tmpname = md5($entryName);
+                                    $zip->renameIndex($i, $tmpname);
+                                    $zip->extractTo($dirname, $tmpname);
+                                    rename($dirname.'/'.$tmpname, $dirname.'/'.$basename);
                                 }
-
-                                $zip->renameIndex($i, $basename);
-                                $zip->extractTo($dirname, $basename);
+                            } else {
+                                $zip->extractTo($makedir);
                             }
 
-//                            $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
                             $zip->close();
 
                             list($plugin, $files) = $txpPlugin->read($target_path);
