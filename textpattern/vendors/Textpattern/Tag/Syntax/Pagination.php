@@ -37,7 +37,7 @@ class Pagination
     public static function pager($atts, $thing = null, $newer = null)
     {
         global $thispage, $is_article_list, $txp_context, $txp_item;
-        static $pg = true, $numPages = null, $linkall = false, $top = 1, $shown = array();
+        static $pg = true, $numPages = null, $linkall = null, $top = 1, $shown = array();
         static $items = array('page' => null, 'total' => null, 'url' => null);
     
         $get = isset($atts['total']) && $atts['total'] === true;
@@ -55,7 +55,7 @@ class Pagination
             $pairs += array(
                 'shift'      => false,
                 'showalways' => false,
-                'link'       => $linkall,
+                'link'       => isset($linkall) ? $linkall : ($newer === null || isset($thing) ? false : ''),
                 'title'      => '',
                 'escape'     => 'html',
                 'rel'        => '',
@@ -196,7 +196,7 @@ class Pagination
                         $limit--;
                     }
     
-                    $item = isset($thing) ? parse($thing) : $nextpg;
+                    $item = isset($thing) ? parse($thing) : ($newer === null ? $nextpg : $url);
                     $url = $link || $link === false && $nextpg != $thispg ? href(
                         $item,
                         $url,
