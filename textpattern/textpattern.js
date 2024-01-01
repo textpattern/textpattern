@@ -2315,18 +2315,6 @@ textpattern.Route.add('page, form, file, image', function () {
         }
     });
 
-    $(document).on('keypress', 'textarea', function(e) {
-        if (e.shiftKey && e.key == ' ') { //Shift+Space pressed
-            e.preventDefault();
-            if (document.execCommand) {
-                document.execCommand("insertText", false, '\t');
-            } else {
-                const textarea = e.target;
-                textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
-            }
-        }
-    });
-
     // Set up delegated asynchronous tagbuilder form submission.
     $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function (ev) {
         $(this).closest('form.asynchtml').txpAsyncForm({
@@ -2348,6 +2336,7 @@ textpattern.Route.add('', function () {
         $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data));
         $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
+
     $('body').on('click', '.pophelp', function (ev) {
         var $pophelp = $('#pophelp_dialog');
 
@@ -2376,6 +2365,18 @@ textpattern.Route.add('', function () {
         }
 
         return false;
+    });
+
+    $(document).on('keypress', 'textarea', function(e) {
+        if (e.shiftKey && e.key == ' ') { //Shift+Space pressed
+            e.preventDefault();
+            if (document.execCommand) {
+                document.execCommand("insertText", false, '\t');
+            } else {
+                const textarea = e.target;
+                textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
+            }
+        }
     });
 });
 
