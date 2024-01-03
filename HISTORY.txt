@@ -60,7 +60,7 @@ Changes in 4.9.0 (upcoming)
 * Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
 * jQuery 3.7.1.
-* Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
+* Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
 * DOMPurify 3.0.6
