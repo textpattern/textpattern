@@ -24,7 +24,7 @@
         "val": "2000000",
         "type": "0",
         "event": "admin",
-        "html": "number",
+        "html": "text_input",
         "position": "60"
     },
     "tempdir": {
