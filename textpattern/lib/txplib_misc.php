@@ -3192,9 +3192,7 @@ function txp_get_contents($file, $opts = null)
         $opts['content'] = http_build_query($opts['content']);
     }
 
-    if (!function_exists('curl_init')) {
-        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
-    } else {
+    if (extension_loaded('curl')) {
         $ch = curl_init($file);
         // Set cURL options
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -3204,6 +3202,8 @@ function txp_get_contents($file, $opts = null)
 
         $contents = curl_exec($ch);
         curl_close($ch);
+    } else {
+        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
     }
 
     return $contents;
