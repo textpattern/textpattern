@@ -115,12 +115,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_description')
     ->register('if_article_image')
     ->register('article_image')
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
-    ->register('items_count')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_index'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_display'))
@@ -133,6 +127,15 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
     ->register('if_first', 'if_first_image', 'image')
     ->register('if_last', 'if_last_image', 'image')
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
+    ->register('items_count')
+    ->register('if_items_count')
+    ->register('if_items_count', 'if_search_results')
+    ->register('if_search')
     ->register('if_comments')
     ->register('if_comments_preview')
     ->register('if_comments_error')
@@ -147,8 +150,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('lang')
     ->register('breadcrumb')
     ->register('if_excerpt')
-    ->register('if_search')
-    ->register('if_search_results')
     ->register('if_category')
     ->register('if_article_category')
     ->register('if_first', 'if_first_category', 'category')
@@ -2036,8 +2037,9 @@ function items_count($atts)
         'pageby' => 1,
     ), $atts));
 
+    $t = $thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
-    $t = ceil($thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+    $by == 1 or $t = ceil($t/$by);
 
     if (!isset($text)) {
         $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
@@ -2419,22 +2421,25 @@ function if_search($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_search_results($atts, $thing = null)
+function if_items_count($atts, $thing = null)
 {
     global $thispage, $is_article_list;
 
     if (empty($thispage)) {
-        return $is_article_list ? postpone_process(2) : '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
-        'min' => 1,
-        'max' => 0,
+        'min'    => 1,
+        'max'    => 0,
+        'pageby' => 1,
     ), $atts));
 
-    $results = (int) $thispage['grand_total'];
-
+    $results = (int)$thispage[$pageby === true ? 'numPages' : 'grand_total'];
+    $by = (int)$pageby or $by = 1;
+    $by == 1 or $results = ceil($results/$by);
     $x = $results >= $min && (!$max || $results <= $max);
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
