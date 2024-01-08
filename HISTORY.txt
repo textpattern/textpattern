@@ -19,7 +19,8 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.3.1+ and PHP 8.2.
+* Fixed: Windows-generated zip plugins installable on Linux.
+* Added: Support for PHP 8.2 and PHP 8.3.1+.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php. 
@@ -41,6 +42,9 @@ Changes in 4.9.0 (upcoming)
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
 * Added: Global 'offset' can be set by URL parameters.
+* Added: 'lang' attribute to <txp:page_url />.
+* Added: <txp:if_items_count /> tag.
+* Added: Reload language packs from disk.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
