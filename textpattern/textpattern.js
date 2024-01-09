@@ -2121,7 +2121,8 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '>>#pane-template'
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
+            callback: function() {}
         });
     });
 
