@@ -2121,10 +2121,7 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
-            callback: function() {
-                $pane.dialog('open');
-            }
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-template'
         });
     });
 
@@ -2146,6 +2143,7 @@ textpattern.Route.add('article', function () {
         $viewMode.click();
     }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
+        $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
@@ -2172,6 +2170,7 @@ textpattern.Route.add('article', function () {
 
         pane.shadowRoot.replaceChildren(this.content);
         pane.classList.remove('disabled');
+        $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
 
