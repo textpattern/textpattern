@@ -2381,6 +2381,12 @@ textpattern.Route.add('', function () {
                 textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
             }
         }
+    }).on('input', '[maxlength]', function() {
+        if (this.maxLength <= this.value.length) {
+            this.setCustomValidity(this.value.length+' / '+this.maxLength);
+            this.reportValidity();
+            this.setCustomValidity('');
+        }
     });
 });
 
