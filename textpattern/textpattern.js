@@ -2163,10 +2163,14 @@ textpattern.Route.add('article', function () {
         }
 
         if (!pane.shadowRoot) {
-            const sheet = new CSSStyleSheet();
-            const css = await fetch('preview.css');
-            sheet.replaceSync(await css.text());
-            pane.attachShadow({mode: 'open'}).adoptedStyleSheets = [sheet];
+            const shadow = pane.attachShadow({mode: 'open'});
+
+            if (shadow.adoptedStyleSheets) {
+                const sheet = new CSSStyleSheet();
+                const css = await fetch('preview.css');
+                sheet.replaceSync(await css.text());
+                shadow.adoptedStyleSheets = [sheet];
+            }
         }
 
         pane.shadowRoot.replaceChildren(this.content);
