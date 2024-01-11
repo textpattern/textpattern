@@ -872,7 +872,7 @@ function category_list($atts, $thing = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
+        $out[] = !$children || strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
