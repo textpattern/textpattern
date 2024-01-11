@@ -872,7 +872,7 @@ function category_list($atts, $thing = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = !$children || strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
+        $out[] = is_numeric($children) && $children <= 1 || strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
@@ -3093,6 +3093,10 @@ function if_request($atts, $thing = null)
         case 'HEADER':
             $what = set_headers(array($name => true));
             $x = txp_match($atts, isset($what) ? implode('', $what) : null);
+            break;
+        case 'SYSTEM':
+            global $prefs;
+            $x = isset($prefs[$name]) && php(null, null, true) && txp_match($atts, $prefs[$name]);
             break;
         case 'NAME':
             $x = txp_match($atts, $name);
