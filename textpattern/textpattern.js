@@ -2382,12 +2382,16 @@ textpattern.Route.add('', function () {
             }
         }
     }).on('input', '[maxlength]', function() {
-        if (this.maxLength <= this.value.length) {
-            this.setCustomValidity(this.value.length+' / '+this.maxLength);
-            this.reportValidity();
-            this.setCustomValidity('');
+        if (this.value.length >= 0.75*this.maxLength) {
+            $(this).tooltip('enable');
+            $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
+            $(this).tooltip('open');
+        } else {
+            $(this).tooltip('disable');
         }
     });
+
+    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right bottom", at: "right top" }});
 });
 
 // Forms panel.
