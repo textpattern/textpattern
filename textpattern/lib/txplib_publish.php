@@ -818,6 +818,7 @@ function filterAtts($atts = null, $iscustom = null)
         return $out = $atts;
     }
 
+    $s = empty($pretext['s']) ? 'default' : $pretext['s'];
     $excluded = isset($atts['exclude']) ? $atts['exclude'] : '';
 
     if ($excluded && $excluded !== true) {
@@ -843,7 +844,7 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-        'searchall'     => !$iscustom && !empty($pretext['q']),
+        'searchall'     => !$iscustom && !empty($pretext['q']) && $s == 'default',
     );
 
     $sortAtts = array(
@@ -985,17 +986,15 @@ function filterAtts($atts = null, $iscustom = null)
     $getid = $ids && !$not;
 
     // Section
-    // searchall=0 can be used to show search results for the current
-    // section only.
+    // searchall="1" can be used to show search results for all searchable sections.
     if ($q && $searchall && !$issticky) {
         $section = '';
     }
 
     $not = $iscustom && ($excluded === true || isset($excluded['section'])) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
-    $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
-        ($getid || $section && !$not || $searchall? '' : filterFrontPage('Section', 'page'));
-
+    $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
+        ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
     $not = $iscustom && ($excluded === true || isset($excluded['author'])) ? 'NOT' : '';
@@ -1051,7 +1050,7 @@ function filterAtts($atts = null, $iscustom = null)
     $search = $score = $smatch = '';
 
     if ($q && !$issticky) {
-        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : ($s == 'default' ? filterFrontPage() : '');
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
         $m = $pretext['m'];
