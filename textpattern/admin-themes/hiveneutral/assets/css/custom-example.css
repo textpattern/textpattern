@@ -41,6 +41,14 @@
     display: none !important;
 } */
 
+/**
+ * Tab character length in code editor.
+ */
+
+/* pre {
+    tab-size: 4;
+} */
+
 /* Content -> Write panel
    ========================================================================== */
 
