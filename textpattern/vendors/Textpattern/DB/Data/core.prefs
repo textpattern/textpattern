@@ -573,20 +573,6 @@
         "html": "text_input",
         "position": "0"
     },
-    "use_categories": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
-    "use_sections": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
     "sql_now_posted": {
         "val": "",
         "type": "2",
