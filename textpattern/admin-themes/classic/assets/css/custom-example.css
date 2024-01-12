@@ -33,8 +33,12 @@
     display: none !important;
 } */
 
-/* pre {
-    tab-size: 4;
+/**
+ * Tab character length in code editor/text areas.
+ */
+
+/* textarea, pre {
+    tab-size: 2;
 } */
 
 /* Content -> Write panel

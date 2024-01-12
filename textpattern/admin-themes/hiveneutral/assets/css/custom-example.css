@@ -42,11 +42,11 @@
 } */
 
 /**
- * Tab character length in code editor.
+ * Tab character length in code editor/text areas.
  */
 
-/* pre {
-    tab-size: 4;
+/* textarea, pre {
+    tab-size: 2;
 } */
 
 /* Content -> Write panel
