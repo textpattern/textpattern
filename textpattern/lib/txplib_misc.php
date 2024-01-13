@@ -938,17 +938,9 @@ function gpsa($array)
  * }
  */
 
-function ps($thing)
+function ps($thing, $default = '')
 {
-    $out = '';
-
-    if (isset($_POST[$thing])) {
-        $out = $_POST[$thing];
-    }
-
-    $out = doArray($out, 'deNull');
-
-    return $out;
+    return isset($_POST[$thing]) ? doArray($_POST[$thing], 'deNull') : $default;
 }
 
 /**
