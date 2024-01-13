@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,11 +59,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
-            if ($tag === null && is_string($callback)) {
-                $tag = $callback;
-            }
-
-            if (is_array($tag)) {
+            if ($tag === null) {
+                $tag = is_string($callback) ? $callback : $callback[1];
+            } elseif (is_array($tag)) {
                 list($tag, $atts) = $tag + array(null, null);
             }
 
@@ -134,9 +132,13 @@ class Registry implements \Textpattern\Container\ReusableInterface
                 $atts += $this->atts[$tag];
             }
 
-            return isset($this->params[$tag]) ?
-                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
-                (string) call_user_func($this->tags[$tag], $atts, $thing);
+            try {
+                return isset($this->params[$tag]) ?
+                    (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
+                    (string) call_user_func($this->tags[$tag], $atts, $thing);
+            } catch (\Exception $e) {
+                trigger_error($e->getMessage());
+            }
         } else {
             return false;
         }

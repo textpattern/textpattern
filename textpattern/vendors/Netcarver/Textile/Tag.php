@@ -50,14 +50,16 @@ namespace Netcarver\Textile;
  * $img = new Tag('img');
  * echo (string) $img->class('big blue')->src('images/elephant.jpg');
  *
- * @method Tag alt(string $text)
+ * @method Tag alt(string $text, bool $allowEmpty = false)
  * @method Tag align(string $alignment)
+ * @method Tag height(string|int $height)
  * @method Tag href(string $url, bool $allowEmpty = false)
  * @method Tag rel(string $relationship)
+ * @method Tag src(string $url, bool $allowEmpty = false)
  * @method Tag title(string $title)
+ * @method Tag width(string|int $width)
  * @internal
  */
-
 class Tag extends DataBag
 {
     /**
@@ -65,7 +67,6 @@ class Tag extends DataBag
      *
      * @var string|null
      */
-
     protected $tag;
 
     /**
@@ -73,17 +74,15 @@ class Tag extends DataBag
      *
      * @var bool
      */
-
     protected $selfclose;
 
     /**
      * Constructor.
      *
-     * @param string|null $name        The tag name
-     * @param array       $attributes  An array of attributes
-     * @param bool        $selfclosing Whether the tag is self-closing
+     * @param string|null $name The tag name
+     * @param array<string, int|string> $attributes  An array of attributes
+     * @param bool  $selfclosing Whether the tag is self-closing
      */
-
     public function __construct($name, array $attributes = null, $selfclosing = true)
     {
         parent::__construct($attributes);
@@ -100,7 +99,6 @@ class Tag extends DataBag
      *
      * @return string A HTML element
      */
-
     public function __toString()
     {
         $attributes = '';
@@ -113,7 +111,7 @@ class Tag extends DataBag
         }
 
         if ($this->tag) {
-            return '<' . $this->tag . $attributes . (($this->selfclose) ? " />" : '>');
+            return '<' . $this->tag . $attributes . (($this->selfclose) ? ' />' : '>');
         }
 
         return $attributes;

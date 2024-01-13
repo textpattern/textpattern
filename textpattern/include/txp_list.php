@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -181,7 +181,7 @@ function list_list($message = '', $post = '')
             'article_image' => array(
                 'column' => array('textpattern.Image'),
                 'label'  => gTxt('article_image'),
-                'type'   => 'integer',
+                'type'   => 'find_in_set',
             ),
             'posted' => array(
                 'column'  => array('textpattern.Posted'),
@@ -200,7 +200,6 @@ function list_list($message = '', $post = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter(array(
             'id'                 => array('can_list' => true),
-            'article_image'      => array('can_list' => true),
             'title_body_excerpt' => array('always_like' => true),
         ));
 
@@ -326,7 +325,11 @@ function list_list($message = '', $post = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr($head_row).
@@ -343,9 +346,9 @@ function list_list($message = '', $post = '')
                 extract($a);
 
                 if ($Title === '') {
-                    $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
+                    $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled'), '' , '', gTxt('edit')).'</em>';
                 } else {
-                    $Title = eLink('article', 'edit', 'ID', $ID, $Title);
+                    $Title = eLink('article', 'edit', 'ID', $ID, $Title, '', '', gTxt('edit'));
                 }
 
                 // Valid section and categories?
@@ -361,17 +364,17 @@ function list_list($message = '', $post = '')
                 $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
-                if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                    $view_url = $can_preview ? '?txpreview='.intval($ID).'.'.time() : '';
-                } else {
+                if ($Status == STATUS_LIVE || $Status == STATUS_STICKY) {
                     $view_url = permlinkurl($a);
+                } else {
+                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)).'.~' : '';
                 }
 
                 if (isset($statuses[$Status])) {
                     $Status = $statuses[$Status];
                 }
 
-                $comments = '('.$total_comments.')';
+                $comments = "($total_comments)";
 
                 if ($total_comments) {
                     $comments = href($comments, array(
@@ -411,7 +414,7 @@ function list_list($message = '', $post = '')
                         ), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        eLink('article', 'edit', 'ID', $ID, $ID),
+                        eLink('article', 'edit', 'ID', $ID, $ID, '', '', gTxt('edit')),
                         '',
                         array(
                             'class' => '',
@@ -441,7 +444,7 @@ function list_list($message = '', $post = '')
                     ).
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
-                            'rel'    => 'noopener',
+                            'rel'    => 'external',
                             'target' => '_blank',
                             'title'  => gTxt('view'),
                         ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'
@@ -605,6 +608,9 @@ function list_multi_edit()
                 $selected = $allowed;
             }
 
+            // @todo Post-delete callback should match event/step here when hooks are standardised.
+            callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+
             if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
@@ -686,14 +692,19 @@ function list_multi_edit()
 
     $selected = $allowed;
 
+    // @todo Post-edit callback should match event/step here when hooks are standardised.
+    callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+
     if ($selected) {
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
         if ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
+            $created = $selected = array();
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
+                    $pid = $a['ID'];
                     $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
@@ -711,15 +722,22 @@ function list_multi_edit()
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         $url_title = stripSpace($title." ($id)", 1);
-                        safe_update(
-                            'textpattern',
-                            "Title     = CONCAT(Title, ' (', ID, ')'),
-                             url_title = '$url_title',
-                             LastMod   = NOW(),
-                             feed_time = NOW()",
-                            "ID = $id"
-                        );
+                        $created[$id] = $url_title;
+                        $selected[$id] = $pid;
                     }
+                }
+
+                if ($created) {
+                    $ids = implode(',', array_keys($created));
+                    $titles = quote_list($created, ',');
+                    safe_update(
+                        'textpattern',
+                        "Title     = CONCAT(Title, ' (', ID, ')'),
+                         url_title = ELT(FIELD(ID, $ids), $titles),
+                         LastMod   = NOW(),
+                         feed_time = NOW()",
+                        "ID IN ($ids)"
+                    );
                 }
             }
 

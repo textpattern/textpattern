@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -88,22 +88,23 @@ function atom()
 
     // Build filter criteria from a comma-separated list of sections
     // and categories.
-    $feed_filter_limit = get_pref('feed_filter_limit', 10);
-    $section = gps('section');
-    $category = gps('category');
+    $in_rss = array_filter(array_column($txp_sections, 'in_rss', 'name'));
+    $section = do_list_unique(gps('section'));
+    $st = array();
 
-    if (!is_scalar($section) || !is_scalar($category)) {
-        txp_die('Not Found', 404);
+    if ($section && $in_rss) {
+        $in_rss = array_intersect_key($in_rss, array_fill_keys($section, null));
     }
 
-    $section = ($section ? array_slice(do_list_unique($section), 0, $feed_filter_limit) : array());
-    $category = ($category ? array_slice(do_list_unique($category), 0, $feed_filter_limit) : array());
-    $st = array();
+    if ($rss_how_many == 0 || (!$area || $area == 'article') && empty($in_rss)) {
+        txp_die(gTxt('404_not_found'), 404);
+    }
 
     foreach ($section as $s) {
         $st[] = fetch_section_title($s);
     }
 
+    $category = do_list_unique(gps('category'));
     $ct = array();
 
     foreach ($category as $c) {
@@ -129,14 +130,14 @@ function atom()
 
     // Atom feeds with mail or domain name.
     $dn = explode('/', $siteurl);
-    $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
+    $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
     $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
 
     $out[] = tag('Textpattern', 'generator', ' uri="https://textpattern.com/" version="'.$version.'"');
     $out[] = tag(safe_strftime("w3cdtf", strtotime($lastmod)), 'updated');
 
     $auth[] = tag($pub['RealName'], 'name');
-    $auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
+    $auth[] = ($include_email_atom) ? tag(Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($pub['email']), 'email') : '';
     $auth[] = tag(hu, 'uri');
 
     $out[] = tag(n.t.t.join(n.t.t, $auth).n.t, 'author');
@@ -150,16 +151,14 @@ function atom()
     $limit = ($limit) ? $limit : $rss_how_many;
     $limit = intval(min($limit, max(100, $rss_how_many)));
 
-    if (!$area or $area == 'article') {
+    if (!$area || $area == 'article') {
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
 
         $query = array($sfilter, $cfilter);
 
-        $rs = array_filter(array_column($txp_sections, 'in_rss', 'name'));
-
-        if ($rs) {
-            $query[] = 'AND Section IN('.join(',', quote_list(array_keys($rs))).')';
+        if ($rs = filterFrontPage('Section', 'in_rss')) {
+            $query[] = $rs;
         }
 
         if ($atts = callback_event('feed_filter')) {
@@ -169,7 +168,7 @@ function atom()
         }
 
         $atts = filterAtts($atts, true);
-        $where = $atts['*'].' '.join(' ', $query);
+        $where = $atts['?'].' '.join(' ', $query);
 
         $rs = safe_rows_start(
             "*,
@@ -178,20 +177,19 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {
+            $fields = array_fill_keys(array('thisid', 'authorid', 'title', 'body', 'excerpt', 'category1', 'category2', 'posted', 'modified', 'comments_count'), null);
+
             while ($a = nextRow($rs)) {
                 // In case $GLOBALS['thisarticle'] is unset
                 global $thisarticle;
-                extract($a);
                 populateArticleData($a);
                 $cb = callback_event('atom_entry');
+                extract(array_intersect_key($thisarticle, $fields));
                 $e = array();
-
-                $a['posted'] = $uPosted;
-                $a['expires'] = $uExpires;
 
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
@@ -199,47 +197,47 @@ function atom()
                     $count = '';
                 }
 
-                $thisauthor = get_author_name($AuthorID);
+                $thisauthor = get_author_name($authorid);
 
                 $e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor), 'name').n.t.t, 'author');
 
-                $e['issued'] = tag(safe_strftime('w3cdtf', $uPosted), 'published');
-                $e['modified'] = tag(safe_strftime('w3cdtf', $uLastMod), 'updated');
+                $e['issued'] = tag(safe_strftime('w3cdtf', $posted), 'published');
+                $e['modified'] = tag(safe_strftime('w3cdtf', $modified), 'updated');
 
-                $escaped_title = htmlspecialchars($thisarticle['title']);
+                $escaped_title = htmlspecialchars($title);
                 $e['title'] = tag($escaped_title.$count, 'title', t_html);
 
-                $permlink = permlinkurl($a);
+                $permlink = permlinkurl($thisarticle);
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
-                $e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'id');
+                $e['id'] = tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'id');
 
-                $e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
-                $e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
+                $e['category1'] = (trim($category1) ? '<category term="'.htmlspecialchars($category1).'" />' : '');
+                $e['category2'] = (trim($category2) ? '<category term="'.htmlspecialchars($category2).'" />' : '');
 
-                $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
-                $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
+                $summary = trim(replace_relative_urls(parse($excerpt), $permlink));
+                $content = '';
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
-                    if (!trim($summary)) {
-                        $summary = $content;
+                    if ($summary === '') {
+                        $summary = trim(replace_relative_urls(parse($body), $permlink));
                     }
-
-                    $content = '';
+                } else {
+                    $content = trim(replace_relative_urls(parse($body), $permlink));
                 }
 
-                if (trim($content)) {
+                if ($content !== '') {
                     $e['content'] = tag(escape_cdata($content), 'content', t_html);
                 }
 
-                if (trim($summary)) {
+                if ($summary !== '') {
                     $e['summary'] = tag(escape_cdata($summary), 'summary', t_html);
                 }
 
-                $articles[$ID] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
+                $articles[$thisid] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
 
-                $dates[$ID] = $uLastMod;
+                $dates[$thisid] = $modified;
             }
         }
     } elseif ($area == 'link') {

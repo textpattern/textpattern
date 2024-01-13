@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ru">
+    <group id="admin" title="Панель пользователей">
+        <item id="about_privileges" title="О ролях"><![CDATA[
+<h2>О привилегиях</h2>
+<h3>Издатель</h3>
+<ul>
+    <li>может управлять статьями, комментариями и ссылками</li>
+    <li>может использовать PHP в статьях, если в настройках администрирования ‘разрешить PHP в статьях?’ установлено как ‘Да’</li>
+    <li>может управлять картинками и файлами</li>
+    <li>может управлять секциями и категориями</li>
+    <li>может управлять страницами, формами и стилями</li>
+    <li>может просматривать диагностическую информацию</li>
+    <li>может управлять настройками сайта</li>
+    <li>может управлять пользователями</li>
+    <li>может администрировать логи посещения</li>
+    <li>может управлять плагинами</li>
+    <li>может импортировать данные</li>
+</ul>
+<h3>Главный редактор</h3>
+<ul>
+    <li>может управлять статьями, комментариями и ссылками</li>
+    <li>может использовать PHP в статьях, если в настройках администрирования ‘разрешить PHP в статьях?’ установлено как ‘Да</li>
+    <li>может управлять картинками и файлами</li>
+    <li>может управлять секциями и категориями</li>
+    <li>может управлять страницами, формами и стилями</li>
+    <li>может просматривать диагностическую информацию</li>
+    <li>может управлять настройками сайта</li>
+    <li>может просматривать информацию о пользователях</li>
+    <li>может администрировать логи посещения</li>
+    <li>может управлять плагинами</li>
+    <li>может импортировать данные</li></ul>
+<h3>Редактор</h3>
+<ul>
+    <li>может управлять статьями за одним исключением:
+        <ul>
+            <li>не может удалять статьи других пользователей</li>
+        </ul>
+    </li>
+    <li>может управлять комментариями и ссылками</li>
+    <li>может управлять картинками и файлами</li>
+    <li>может управлять категориями</li>
+    <li>может управлять страницами и формами</li>
+    <li>может просматривать информацию о пользователях</li>
+    <li>может администрировать логами посещений</li>
+</ul>
+<h3>Штатный писатель</h3>
+<ul>
+    <li>может управлять своими статьями и просматривать чужие статьи</li>
+    <li>может управлять картинками и файлами</li>
+</ul>
+<h3>Внештатник (фрилансер)</h3>
+<ul>
+    <li>может управлять своими статьями со следующими ограничениями:
+        <ul>
+            <li>может изменять статью только до тех пор, пока она не опубликована</li>
+            <li>может присваивать <em>только</em> следующие статусы: Черновик, Скрытая или Отложенная</li>
+        </ul>
+    </li>
+    <li>может просматривать чужие статьи</li>
+</ul>
+<h3>Дизайнер</h3>
+<ul>
+    <li>может управлять своими статьями со следующими ограничениями:
+        <ul>
+            <li>может изменять статью только до тех пор, пока она не опубликована</li>
+            <li>может присваивать <em>только</em> следующие статусы: Черновик, Скрытая или Отложенная</li>
+        </ul>
+    </li>
+    <li>может просматривать чужие статьи</li>
+    <li>может управлять картинками</li>
+    <li>может управлять секциями</li>
+    <li>может управлять страницами, формами и стилями</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Добавить нового автора"><![CDATA[
+<h2>Добавить нового автора</h2>
+<p>Новое сообщение с инструкциями по входу в систему будет отправлено новому автору.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="">
+        <item id="article_image" title="Изображение статьи"><![CDATA[
+<h2>Изображение статьи</h2>
+<p>Чтобы сопоставить статье изображение, поместите сюда на выбор:</p>
+<ol>
+    <li>ID картинки (напр. <code>12</code>)</li>
+    <li>относительный URL картинки (e.g. <code>/images/my_pic.jpg</code>)</li>
+    <li>полный URL (напр. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Картинку можно показать, поместив тэг <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code><span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a> внутри формы статьи. Будет выведен полный HTML тега <code>&lt;img&gt;</code> для выбранного изображения.</p>
+        ]]></item>
+        <item id="body" title=""><![CDATA[
+<h2>Тело</h2>
+<p>Основное содержание статьи заключено в теле статьи.</p>
+<p>В процессе написания статьи или подготовки статьи к публикации в Textpattern, автор может переключаться между тремя вариантами представления статьи: статья в виде обычного текста, статья в виде HTML-разметки (код, с помощью которого веб-браузер отображает статью) и статья в виде визуализированного предварительного просмотра.</p>
+        ]]></item>
+        <item id="description" title="Описание"><![CDATA[
+<h2>Описание</h2>
+<p>Описание статьи это необязательный компонент, который может помочь поисковым системам и роботам лучше идентифицировать и сортировать контент.</p>
+<p>Описание статьи ограничено 255 символами. Обратите внимание, что некоторые поисковые системы накладывают ограничения на длину <code>мета описания</code> для удобства отображения в результатах поисковой системы (SERP) и этот лимит может быть ещё меньше, чем 255 символов в Textpattern.</p>
+<p>Обратите внимание, что описание статьи отличается от выдержки из статьи, хотя они их содержание и аналогично. Описание статьи должно быть в первую очередь предназначено для использования в поисковых системах и роботах, в то время как выдержка статьи, если она необходима, лучше подходит в качестве человекочитаемого резюме.</p>
+        ]]></item>
+        <item id="excerpt" title="Выдержка"><![CDATA[
+<h2>Выдержки</h2>
+<p>Выдержки из статьи являются необязательными. Выдержки могут быть использованы в качестве краткого содержания статьи, в качестве отображения в списке статей, а также замещать полный текст статьи в RSS/Atom-каналах и в других приложениях.</p>
+        ]]></item>
+        <item id="expire_date" title="Дата истекает"><![CDATA[
+<h2>Дата истечения</h2>
+<p>Время, когда статья будет помечена как устаревшая. Время не является обязательным и может быть установлено в произвольное значение как в прошлом так и в будущем.</p>
+<p>Поля соответствуют следующей информации:</p>
+<ul>
+    <li>год / месяц / день</li>
+    <li>час (в 24-часовом формате) : минута : секунда</li>
+</ul>
+<p>Срок действия статьи истекает либо сразу же в момент создания, если использовано время в прошлом, либо в момент наступления выбранных даты и времени, если были выбраны дата и время в будущем.</p>
+<p>Если опция для отображения просроченных статей включена, статья остается видимой. Если опция для отображения просроченных статей отключена, посетителям на странице статьи будет показана ошибка HTTP 410 вместо содержимого статьи.</p>
+        ]]></item>
+        <item id="keywords" title="Ключевые слова"><![CDATA[
+<h2>Ключевые слова</h2>
+<p>Ключевые слова полезны для более точного понимания отношений между статьями, чем это дают категории.</p>
+<p>Ключевые слова должны быть разделены запятыми.</p>
+        ]]></item>
+        <item id="override_form" title="Использовать форму"><![CDATA[
+<h2>Использовать форму</h2>
+<p>Статья может по желанию использовать форму, отличную от назначенной по умолчанию: например, чтобы показать выдержку статьи с <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a> вместо тела статьи с <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a> - это поведение можно установить здесь.</p>
+        ]]></item>
+        <item id="publish_date" title="Дата публикации"><![CDATA[]]></item>
+        <item id="status" title="Статус"><![CDATA[]]></item>
+        <item id="title" title="Заголовок"><![CDATA[]]></item>
+        <item id="url_title" title="Заголовок только для URL"><![CDATA[]]></item>
+    </group>
+
+    <group id="category" title="">
+        <item id="article_category" title="Статьи"><![CDATA[]]></item>
+        <item id="category_description" title="Описание"><![CDATA[]]></item>
+        <item id="file_category" title="Файлы"><![CDATA[]]></item>
+        <item id="image_category" title="Картинки"><![CDATA[]]></item>
+        <item id="link_category" title="Ссылки"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="Панель диагностики">
+        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title="Скрыть приватную информацию"><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title="Ошибка DNS (СДИ)"><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="Отключена возможность загружать файлы"><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Отсутствует файл .htaccess"><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="Недостающие файлы"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title="Не определен каталог временных файлов"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Одноимённая директория уже существует."><![CDATA[
+<h2>Одноимённая директория уже существует</h2>
+<p>Существующие директории могут конфликтовать с именами секций, используемыми в адресе статьи. Чтобы избежать проблем, проверьте и удалите соответствующие директории, если это возможно, или измените название секции, чтобы они не конфликтовали.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="Заменить файл"><![CDATA[]]></item>
+        <item id="timestamp_file" title="Дата публикации"><![CDATA[]]></item>
+        <item id="upload" title="Загрузить файл"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title="Создать уменьшенную картинку"><![CDATA[]]></item>
+        <item id="replace_image_form" title="Заменить картинку"><![CDATA[]]></item>
+        <item id="upload_image" title="Загрузить картинку"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="Загрузить уменьшенную картинку"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title="Описание"><![CDATA[]]></item>
+        <item id="link_sort" title="Значение для сортировки"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="Дата публикации"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title="Установить плагин"><![CDATA[]]></item>
+        <item id="upload_plugin" title="Загрузить плагин"><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title="Использовать плагины, влияющие на панель администратора?"><![CDATA[]]></item>
+        <item id="advanced_options" title="Продвинутые настройки"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Разрешить PHP в статьях?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Разрешить изменять форму вывода статьи?"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Разрешить PHP в страницах?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Формат даты архива"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Статьи используют выдержку?"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="auto_dst" title=""><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="Означает ли новый комментарий обновление сайта?"><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="Нумеровать список комментариев?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Автоматически добавлять комментарии к статье?"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="Формат даты комментариев"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Приглашение по умолчанию"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Отключить после"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Разрешить изображения в комментариях?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Режим комментариев"><![CDATA[]]></item>
+        <item id="comments_moderate" title="Модерировать комментарии?"><![CDATA[]]></item>
+        <item id="comments_on_default" title="Включено по умолчанию?"><![CDATA[]]></item>
+        <item id="comments_require_email" title="Требовать email в комментариях?"><![CDATA[]]></item>
+        <item id="comments_require_name" title="Требовать имя в комментариях?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Отправлять комментарии автору по почте?"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Использовать расширенный Textile?"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Дополнительные типы форм"><![CDATA[]]></item>
+        <item id="custom_overview" title="Поля пользователя"><![CDATA[]]></item>
+        <item id="dateformat" title="Формат даты"><![CDATA[]]></item>
+        <item id="default_event" title="Вкладка по умолчанию"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Статус статьи по умолчанию"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="Включить предпросмотр темы разработчика?"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="Включить поддержку коротких тегов?"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="Включить XML-RPC сервер?"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="Срок хранения записей в журнале (в днях)?"><![CDATA[]]></item>
+        <item id="file_base_path" title="Путь для загрузки файлов"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="Максимально допустимый размер файла (в байтах)"><![CDATA[]]></item>
+        <item id="gmtoffset" title="Часовой пояс"><![CDATA[]]></item>
+        <item id="img_dir" title="Путь к папке изображений"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Включать email в Аtom feeds?"><![CDATA[]]></item>
+        <item id="is_dst" title="Включить переход на зимнее/летнее время?"><![CDATA[]]></item>
+        <item id="logging" title="Логи"><![CDATA[]]></item>
+        <item id="max_url_len" title="Максимальная длина URL (в символах)"><![CDATA[]]></item>
+        <item id="module_pophelp" title="Показывать ссылки вызова Помощи в Панели администратора"><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Использовать кодировку ISO-8859-1 для email? (по умолчанию: UTF-8)"><![CDATA[]]></item>
+        <item id="override_form_types" title="Типы форм для вывода статей"><![CDATA[]]></item>
+        <item id="permlink_format" title="Формат постоянной ссылки"><![CDATA[]]></item>
+        <item id="permlink_mode" title="Шаблон URL-адреса статьи"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Путь к директории кэша плагинов"><![CDATA[]]></item>
+        <item id="production_status" title="Рабочий статус"><![CDATA[]]></item>
+        <item id="public_theme_name" title="Шаблон сайта"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="Публиковать истёкшие статьи?"><![CDATA[]]></item>
+        <item id="publisher_email" title="Отправить данные для входа с этого email"><![CDATA[]]></item>
+        <item id="rss_how_many" title="Сколько статей включать в потоки?"><![CDATA[]]></item>
+        <item id="secondpass" title="Число дополнительных циклов парсера"><![CDATA[]]></item>
+        <item id="send_lastmod" title="Отправить &quot;Последнее изменённое&quot; заголовок?"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="Показывать количество комментариев в потоках?"><![CDATA[]]></item>
+        <item id="site_slogan" title="Подзаголовок (слоган) сайта"><![CDATA[]]></item>
+        <item id="sitename" title="Имя сайта"><![CDATA[]]></item>
+        <item id="siteurl" title="URL сайта"><![CDATA[]]></item>
+        <item id="skin_dir" title="Путь к папке тем"><![CDATA[]]></item>
+        <item id="smtp_from" title="Значение SMTP поля &quot;From:&quot;"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Сервисы, блокирующие спам (через запятую)"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title="Только синдицировать выдержку из статьи?"><![CDATA[]]></item>
+        <item id="tempdir" title="Папка для временных файлов"><![CDATA[]]></item>
+        <item id="theme_name" title="Тема для админки"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="Функции PHP доступные в txp:evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="Принимать комментарии?"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Использовать email в идентификаторах потоков (по умолчанию URL сайта)?"><![CDATA[]]></item>
+        <item id="use_plugins" title="Использовать плагины?"><![CDATA[]]></item>
+        <item id="use_textile" title="Форматирование текста по умолчанию"><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title="Секция по умолчанию"><![CDATA[]]></item>
+        <item id="section_description" title="Описание"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title="На главной странице?"><![CDATA[]]></item>
+        <item id="section_searchable" title="Включить в поиск по сайту?"><![CDATA[]]></item>
+        <item id="section_syndicate" title="Публиковать в RSS?"><![CDATA[]]></item>
+        <item id="section_uses_css" title="Использовать стиль"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Использовать страницу"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="Использовать тему"><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title="Логин пользователя"><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title="Префикс таблиц"><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title="Автор темы"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="Вебсайт темы"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="Удалить темы с диска тоже"><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="Удалить неиспользуемые шаблоны из базы данных"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="Удалить неиспользуемые шаблоны с диска"><![CDATA[]]></item>
+        <item id="skin_description" title="Описание темы"><![CDATA[]]></item>
+        <item id="skin_import" title="Импортировать тему"><![CDATA[]]></item>
+        <item id="skin_name" title="Название темы"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="Заголовок темы"><![CDATA[]]></item>
+        <item id="skin_version" title="Версия темы"><![CDATA[]]></item>
+    </group>
+</help>
+</resources>

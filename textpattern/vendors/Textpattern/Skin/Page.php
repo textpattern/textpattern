@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,16 +34,17 @@ namespace Textpattern\Skin;
 
 class Page extends AssetBase implements PageInterface
 {
-    protected static $dir = 'pages';
+    protected static $dir = TXP_THEME_TREE['pages'];
     protected static $fileContentsField = 'user_html';
+    protected static $mimeTypes = array();
     protected static $essential = array(
         array(
             'name'      => 'default',
-            'user_html' => '<!-- Contents of the default (home) page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'default\' (home) page template goes here. -->',
         ),
         array(
             'name'      => 'error_default',
-            'user_html' => '<!-- Contents of the standard error page template goes here. -->',
+            'user_html' => '<!-- Contents of the \'error_default\' page template goes here. -->',
         ),
     );
 

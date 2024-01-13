@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -46,7 +46,7 @@
 function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 {
     if ($id) {
-        $id = $id.'-'.$field;
+        $id .= '-'.$field;
     } else {
         $id = $field;
     }
@@ -226,7 +226,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 
         $sp = str_repeat(sp.sp, $a['level']);
 
-        if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
+        if (($truncate > 3) && (Txp::get('\Textpattern\Type\StringType', $a['title'])->getLength() > $truncate)) {
             $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
             $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
             $hellip = '&#8230;';
@@ -266,7 +266,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 {
     if ($details = Txp::get('\Textpattern\Date\Timezone')->getTimeZones()) {
-        $thiscontinent = '';
+        $thiscontinent = false;
         $selected = false;
 
         foreach ($details as $timezone_id => $tz) {
@@ -277,19 +277,20 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
             }
 
             if ($continent !== $thiscontinent) {
-                if ($thiscontinent !== '') {
+                if ($thiscontinent !== false) {
                     $out[] = n.'</optgroup>';
                 }
 
-                $out[] = n.'<optgroup label="'.gTxt($continent).'">';
+                $out[] = n.'<optgroup label="'.gTxt($continent ? $continent : 'Universal').'">';
                 $thiscontinent = $continent;
             }
 
             $where = gTxt(str_replace('_', ' ', $city))
-                .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
-                /*."($abbr)"*/;
+                .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '')
+                /*."($abbr)"*/
+                or $where = $timezone_id;
 
-            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.'</option>';
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.t.'</option>';
         }
 
         $out[] = n.'</optgroup>';
@@ -328,16 +329,16 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = null)
 {
     $atts = (is_array($name) ? $name : array('name' => $name)) + array(
-        'class'        => $class,
-        'id'           => $id,
-        'type'         => $type,
-        'size'         => (int) $size,
-        'title'        => $title,
-        'onclick'      => $onClick,
-        'tabindex'     => (int) $tab,
-        'disabled'     => (bool) $disabled,
-        'required'     => (bool) $required,
-        'placeholder'  => $placeholder,
+        'class'       => $class,
+        'id'          => $id,
+        'type'        => $type,
+        'size'        => (int) $size,
+        'title'       => $title,
+        'onclick'     => $onClick,
+        'tabindex'    => (int) $tab,
+        'disabled'    => (bool) $disabled,
+        'required'    => (bool) $required,
+        'placeholder' => $placeholder,
     );
 
     if ($atts['required'] && !isset($atts['placeholder'])
@@ -435,12 +436,13 @@ function tInput()
  * @param  bool   $checked  If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
+ * @param  string $form     The HTML form id to associate
  * @return string HTML input
  * @example
  * echo checkbox('name', 'value', true);
  */
 
-function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
+function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $form = '')
 {
     $class = 'checkbox';
 
@@ -453,6 +455,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
         'id'       => $id,
         'name'     => $name,
         'type'     => 'checkbox',
+        'form'     => $form,
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
     ), TEXTPATTERN_STRIP_EMPTY);
@@ -469,14 +472,15 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
  * @param  bool   $value    If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
+ * @param  string $form     The HTML form id to associate
  * @return string HTML input
  * @access private
  * @see    checkbox()
  */
 
-function checkbox2($name, $value, $tabindex = 0, $id = '')
+function checkbox2($name, $value, $tabindex = 0, $id = '', $form = '')
 {
-    return checkbox($name, 1, $value, $tabindex, $id);
+    return checkbox($name, 1, $value, $tabindex, $id, $form);
 }
 
 /**
@@ -526,10 +530,11 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  * @param  string $id                 The HTML id
  * @param  string $role               ARIA role name
  * @param  bool   $allow_autocomplete If FALSE, the form is set to autocomplete="off"
+ * @param  string $aria_label         ARIA label attribute
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true)
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '', $allow_autocomplete = true, $aria_label = '')
 {
     $action = 'index.php';
     $autocomplete = '';
@@ -555,6 +560,7 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
         'role'         => $role,
         'autocomplete' => $autocomplete,
         'style'        => $style,
+        'aria-label'   => $aria_label,
     ));
 }
 
@@ -784,7 +790,6 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'size'        => (int) $size,
         'maxlength'   => $size,
         'title'       => gTxt($title),
-        'aria-label'  => gTxt($title),
         'placeholder' => $placeholder,
         'tabindex'    => (int) $tab,
         'value'       => $value,

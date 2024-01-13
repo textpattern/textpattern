@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -207,8 +207,8 @@ abstract class CommonBase implements CommonInterface
     /**
      * Sanitizes a string for use in a theme template's name.
      *
-     * Just runs sanitizeForPage() followed by sanitizeForFile(),
-     * then limits the number of characters to 63.
+     * Just runs sanitizeForPage() followed by sanitizeForFile(), then converts
+     * spaces to underscores and limits the number of characters to 63.
      *
      * @param  string $text The string
      * @return string
@@ -218,7 +218,9 @@ abstract class CommonBase implements CommonInterface
     {
         $out = sanitizeForFile(sanitizeForPage($text));
 
-        return \Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
+        return \Txp::get('\Textpattern\Type\StringType', $out)
+            ->replace(array(' ', chr(9), chr(0xA0)), '_')
+            ->substring(0, 63)->getString();
     }
 
     /**
@@ -758,7 +760,7 @@ abstract class CommonBase implements CommonInterface
     {
         $things = 'name';
         $isAsset = property_exists($this, 'skin');
-        $thing = $isAsset ? 'skin' : 'title';
+        $thing = $isAsset ? 'skin' : 'title, version';
         $things .= ', '.$thing;
 
         $rows = $this->getRows($things, '1 ORDER BY name');
@@ -769,7 +771,7 @@ abstract class CommonBase implements CommonInterface
             if ($isAsset) {
                 $this->installed[$row[$thing]][] = $row['name'];
             } else {
-                $this->installed[$row['name']] = $row[$thing];
+                $this->installed[$row['name']] = $row['title'] .($row['version'] ? ' ('.$row['version'].')' : '');
             }
         }
 

@@ -31,9 +31,18 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>https://textpattern.com/@textpattern</url>
-            <linkname>Textpattern on Twitter</linkname>
+            <url>https://textpattern.com/mastodon</url>
+            <linkname>Textpattern on Mastodon</linkname>
             <linksort>40</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://textpattern.com/twitter</url>
+            <linkname>Textpattern on Twitter</linkname>
+            <linksort>50</linksort>
             <description></description>
             <author></author>
         </item>

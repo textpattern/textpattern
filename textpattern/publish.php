@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,7 +59,7 @@ $txp_user = empty($userInfo) ? null : $userInfo['name'];
 
 // Get all prefs as an array.
 $prefs = get_prefs(empty($userInfo['name']) ? '' : array('', $userInfo['name']));
-plug_privs(null, $userInfo);
+empty($userInfo) or plug_privs(null, $userInfo);
 
 // Add prefs to globals.
 extract($prefs);
@@ -71,6 +71,8 @@ $txp_sections = array();
 $txp_current_tag = '';
 $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array();
 $txp_atts = null;
+$timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
+date_default_timezone_set($timezone_key);
 
 isset($pretext) or $pretext = array();
 
@@ -210,6 +212,8 @@ if (txpinterface === 'css') {
     exit;
 }
 
+callback_event('pretext_end', '', 1);
+
 $txp_sections = safe_column(array('name'), 'txp_section');
 
 $trace->start('[PHP includes, stage 3]');
@@ -235,13 +239,15 @@ if ($use_plugins) {
 
 callback_event('pretext');
 $pretext = preText($pretext, $prefs);
+extract($pretext);
 callback_event('pretext_end');
+// Right, twice.
 extract($pretext);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+if ($status == '200' && !empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
 
@@ -305,7 +311,7 @@ function preText($store, $prefs = null)
         $out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui", "$1", hu), "/");
         $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
-        $url = chopUrl($req, 4);
+        $url = chopUrl($req, 5);
 
         for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
 
@@ -314,6 +320,11 @@ function preText($store, $prefs = null)
         } elseif ($url['u1'] == 'atom' || gps('atom')) {
             $out['feed'] = 'atom';
         }
+    }
+
+    // Return clean URL test results for diagnostics.
+    if (gps('txpcleantest')) {
+        exit(show_clean_test($out));
     }
 
     if (is_array($store)) {
@@ -332,22 +343,56 @@ function preText($store, $prefs = null)
 
     $is_404 = ($out['status'] == '404');
     $title = null;
+    $status = strpos($out['id'], '.') === false ? " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")" : '';
+
+    // Handle article preview.
+    if (!$status) {
+        global $txp_user;
+        header('Cache-Control: no-cache, no-store, max-age=0');
+        list($id, $hash, $raw) = explode('.', $out['id']) + array(null, null, null);
+//        doAuth();
+        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
+            txp_status_header('401 Unauthorized');
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+        } else {
+            global $nolog;
+    
+            $nolog = true;
+            if ($raw === '~') header('Content-Security-Policy: sandbox');
+            $out['@txp_preview'] = $hash;
+
+            if (empty($id)) {
+                populateArticleData(array(
+                    'AuthorID' => $txp_user,
+                    'LastModID' => $txp_user
+                ));
+            } else {
+                $out['id'] = intval($id);
+            }
+        }
+    }
+
+    // These are deprecated as of Textpattern v1.0 - leaving them here for
+    // plugin compatibility.
+    $out['path_from_root'] = rhu;
+    $out['pfr']            = rhu;
+
+    $out['path_to_site']   = $path_to_site;
+    $out['permlink_mode']  = $permlink_mode;
+    $out['sitename']       = $sitename;
+
+    // First we sniff out some of the preset URL schemes.
+    extract($url);
 
     // If messy vars exist, bypass URL parsing.
-    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin') {
-        // Return clean URL test results for diagnostics.
-        if (gps('txpcleantest')) {
-            exit(show_clean_test($out));
-        }
-
-        // First we sniff out some of the preset URL schemes.
-        extract($url);
-
-        if (strlen($u1)) {
-            $n = $out[0];
+    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
+        if ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
+            $is_404 = true;
+        } else {
+            $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
-            switch ($u1) {
+            switch (strtolower($u1)) {
                 case 'atom':
                     $out['feed'] = 'atom';
                     break;
@@ -403,19 +448,27 @@ function preText($store, $prefs = null)
 
                     if (empty($custom_modes)) {
                         $permlink_guess = $permlink_mode;
-                    } elseif (!empty($un) && empty($no_trailing_slash)) {// ID or url_title
+                    } elseif (!empty($un) && ($n > 1 || in_array('title_only', $permlink_modes) || in_array('id_title', $permlink_modes))) {// ID or url_title
                         $safe_un = doSlash($un);
+                        $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
                             '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
                             'textpattern',
-                            "url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un'" : '')
+                            "(url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')').$status
                         );
 
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if (permlinkurl($thisarticle, '/') === $u0) {
+                            if ('/'.$a['Section'].'/'.$a['url_title'].$slash === $u0) {
+                                $permlink_guess = 'section_title';
+                                break;
+                            }
+
+                            $thisurl = permlinkurl($thisarticle, '/');
+
+                            if ($thisurl === $u0) {
                                 $permlink_guess = $permlink_modes[$a['Section']];
                                 break;
                             }
@@ -423,25 +476,29 @@ function preText($store, $prefs = null)
 
                         if (!isset($permlink_guess)) {
                             unset($thisarticle);
-                            $is_404 = true;
+                            $trailing_slash != 0 or $is_404 = true;
                         } else {
                             $out['id'] = $thisarticle['thisid'];
                             $out['s'] = $thisarticle['section'];
                             $title = $thisarticle['url_title'];
-                            $month = explode('-', strftime('%Y-%m-%d', $thisarticle['posted']));
+                            $month = explode('-', date('Y-m-d', $thisarticle['posted']));
                         }
                     }
 
-                    if (empty($un) && is_numeric($u1) && strlen($u1) === 4 && !isset($permlink_modes[$u1])) {
-                        // Could be a year.
-                        $permlink_guess = 'year_month_day_title';
-                    } elseif (!isset($permlink_guess) && isset($permlink_modes[$u1]) && ($n > 1 || !empty($no_trailing_slash))) {
-                        $permlink_guess = $permlink_modes[$u1];
-                    }
-
                     if (!$is_404 && empty($out['id'])) {
+                        if (!isset($permlink_guess)) {
+                            if (isset($permlink_modes[$u1])) {
+                                $permlink_guess = $permlink_modes[$u1];
+                            } elseif (is_numeric($u1) && strlen($u1) === 4 && in_array('year_month_day_title', $custom_modes)) {
+                                // Could be a year.
+                                $permlink_guess = 'year_month_day_title';
+                            } else {
+                                $permlink_guess = $permlink_mode;
+                            }
+                        }
+
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch (empty($permlink_guess) ? $permlink_mode : $permlink_guess) {
+                        switch ($permlink_guess) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -462,23 +519,11 @@ function preText($store, $prefs = null)
                                 break;
 
                             case 'year_month_day_title':
-                                if (@checkdate(!empty($u2) ? $u2 : 1, !empty($u3) ? $u3 : 1, $u1)) {
+                                if ($month = is_date(trim($u1.'-'.$u2.'-'.$u3, '-'))) {
                                     $title = empty($u4) ? null : $u4;
-                                    $month = array($u1);
-
-                                    if (!empty($u2)) {
-                                        $month[] = str_pad(ltrim($u2), 2, '0', STR_PAD_LEFT);
-                                        empty($u3) or $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
-                                    }
-                                } elseif (@checkdate(!empty($u3) ? $u3 : 1, !empty($u4) ? $u4 : 1, $u2)) {
+                                } elseif (!empty($u2) && $month = is_date(trim($u2.'-'.$u3.'-'.$u4, '-'))) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
-                                    $month = array($u2);
-
-                                    if (!empty($u3)) {
-                                        $month[] = str_pad(ltrim($u3), 2, '0', STR_PAD_LEFT);
-                                        empty($u4) or $month[] = str_pad(ltrim($u4), 2, '0', STR_PAD_LEFT);
-                                    }
                                 } elseif (empty($u3)) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
@@ -506,7 +551,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2)) {
+                                if (isset($u2) || $trailing_slash < 0) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
@@ -515,47 +560,50 @@ function preText($store, $prefs = null)
                         }
                     }
             }
-        } else {
-            $out['s'] = 'default';
         }
     }
 
     $out['context'] = validContext($out['context']);
 
     // Validate dates
-    if ($out['month']) {
-        $date = empty($month) ? '' : implode('-', $month);
-        $month = explode('-', $out['month'], 3) + (!empty($month) ? $month : array());
-
-        if (!$date || strpos($date, $out['month']) === 0 || strpos($out['month'], $date) === 0) {
-            $month = implode('-', $month);
+    if ($out['month'] && $out['month'] = is_date($out['month'])) {
+        if (empty($month) || strpos($out['month'], $month) === 0) {
+            $month = $out['month'];
+        } elseif (strpos($month, $out['month']) === 0) {
+            $out['month'] = $month;
         } else {
-            $out['month'] = $month = '';
+            $month = '';
             $is_404 = true;
         }
-    } elseif (isset($month)) {
-        $month = implode('-', $month);
+    } elseif (!empty($month)) {
         !empty($title) or $out['month'] = $month;
     }
 
     // Resolve AuthorID from Authorname.
-    if ($out['author']) {
-        $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
-
-        if ($name) {
-            $out['realname'] = $out['author'];
-            $out['author'] = $name;
-        } else {
-            $out['author'] = $out['realname'] = '';
-            $is_404 = true;
-        }
+    if (!$is_404 && $out['author'] && $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'")) {
+        $out['realname'] = $out['author'];
+        $out['author'] = $name;
     } else {
-        $out['realname'] = '';
+        $is_404 = $is_404 || !empty($out['author']);
+        $out['author'] = $out['realname'] = '';
+    }
+
+    // Existing category in messy or clean URL?
+    if (!$is_404 && !empty($out['c'])) {
+        global $thiscategory;
+
+        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
+            $is_404 = true;
+            $out['c'] = '';
+            $thiscategory = null;
+        } else {
+            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
+        }
     }
 
     // Prevent to get the id for file_downloads.
     if ($out['s'] == 'file_download') {
-        if (is_numeric($out['id'])) {
+        if (!$is_404 && is_numeric($out['id'])) {
             global $thisfile;
 
             // Undo the double-encoding workaround for .gz files;
@@ -572,30 +620,11 @@ function preText($store, $prefs = null)
 
         $is_404 = $is_404 || empty($rs);
         $out = array_merge($out, $is_404 ? array('id' => '', 'file_error' => 404, 'status' => 404) : $rs);
-    }
-
-    // Allow article preview.
-    elseif (gps('txpreview')) {
-        doAuth();
-
-        if (!has_privs('article.preview')) {
-            txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-        }
-
-        global $nolog;
-
-        $nolog = true;
-        header('Cache-Control: no-cache, no-store, max-age=0');
-        $rs = safe_row("ID AS id, Section AS s", 'textpattern', "ID = ".intval(gps('txpreview'))." LIMIT 1");
-
-        if ($rs) {
-            $is_404 = false;
-            $out = array_merge($out, $rs);
-        }
-    } elseif ($out['context'] == 'article') {
-        if (!$is_404 && empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
-            if (empty($out['s']) || $out['s'] === 'default') {
+    } elseif (!$is_404 && $out['context'] == 'article') {
+        if ($out['s'] && !isset($txp_sections[$out['s']])) {
+            $is_404 = true;
+        } elseif (empty($thisarticle) && (!empty($out['id']) || !empty($title))) {
+            if ($out['s'] === '') {
                 $rs = !empty($out['id']) ?
                     lookupByID($out['id']) :
                     lookupByDateTitle(isset($month) ? $month : '', $title);
@@ -607,60 +636,8 @@ function preText($store, $prefs = null)
 
             $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
             $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
-        }
-
-        if (!empty($out['s']) && $out['s'] !== 'default') {
-            if (!isset($txp_sections[$out['s']])) {
-                $out['s'] = '';
-                $is_404 = true;
-            }
-        }
-    }
-
-    // Existing category in messy or clean URL?
-    if (!empty($out['c'])) {
-        global $thiscategory;
-
-        if (!($thiscategory = ckCat($out['context'], $out['c']))) {
-            $is_404 = true;
-            $out['c'] = '';
-            $thiscategory = null;
-        } else {
-            $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
-        }
-    }
-
-    // Stats: found or not.
-    $out['status'] = ($is_404 ? '404' : '200');
-    $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
-    $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-    $id = $out['id'];
-
-    if (!$is_404) {
-        $out['s'] = empty($out['s']) ? 'default' : $out['s'];
-    }
-
-    // Hackish.
-    global $is_article_list;
-
-    if (empty($id)) {
-        $is_article_list = true;
-    }
-
-    if (!$is_404 && $id && $out['s'] !== 'file_download') {
-        if (empty($thisarticle)) {
-            $a = safe_row(
-                "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-                'textpattern',
-                "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
-            );
-
-            if ($a) {
-                populateArticleData($a);
-            }
-        } elseif (!gps('txpreview') && !in_array($thisarticle['status'], array(STATUS_LIVE, STATUS_STICKY))) {
-            unset($thisarticle);
+            $is_404 = $is_404 || empty($out['id']) || $out['s'] == '';
+            $is_404 or populateArticleData($rs);
         }
 
         if (!empty($thisarticle)) {
@@ -669,12 +646,30 @@ function preText($store, $prefs = null)
             $out['id_keywords'] = $thisarticle['keywords'];
             $out['id_author']   = $thisarticle['authorid'];
 
-            if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
-                $out['status'] = '410';
+            if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
+                $is_404 = '410';
             }
-        } else {
-            $is_404 = true;
+
+            if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+                if (isset($_POST['field']) && isset($_POST['content'])) {
+                    $thisarticle[$_POST['field']] = $_POST['content'];
+                }
+            }
         }
+    }
+
+    // Stats: found or not.
+    $out['status'] = is_numeric($is_404) ? $is_404 : ($is_404 ? '404' : '200');
+    $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
+    $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
+
+    // Hackish.
+    global $is_article_list;
+
+    if (empty($out['@txp_preview']) && empty($out['id'])) {
+        $is_article_list = true;
+    } else {
+        $out['q'] = '';
     }
 
     // By this point we should know the section, so grab its page and CSS.
@@ -692,22 +687,13 @@ function preText($store, $prefs = null)
             unset($rs);
         }
 
-        $s = empty($out['s']) || $is_404 || !isset($txp_sections[$out['s']]) ? 'default' : $out['s'];
-        $rs = $txp_sections[$s];
+        $out['s'] = $s = ($is_404 || empty($out['s']) ? 'default' : $out['s']);
+        $rs = isset($txp_sections[$s]) ? $txp_sections[$s] : $txp_sections['default'];
 
         $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
-
-    // These are deprecated as of Textpattern v1.0 - leaving them here for
-    // plugin compatibility.
-    $out['path_from_root'] = rhu;
-    $out['pfr']            = rhu;
-
-    $out['path_to_site']   = $path_to_site;
-    $out['permlink_mode']  = $permlink_mode;
-    $out['sitename']       = $sitename;
 
     return $out;
 }
@@ -761,13 +747,14 @@ function output_component($n = '')
     global $pretext;
     static $mimetypes = null, $typequery = null;
 
-    if (!isset($mimetypes)) {
-        $mimetypes = Txp::get('Textpattern\Skin\Form')->getMimeTypes();
-        $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
+    if (!$n || !is_scalar($n)) {
+        return;
     }
 
-    if (!$n || !is_scalar($n) || empty($mimetypes)) {
-        return;
+    if (!isset($mimetypes)) {
+        $null = null;
+        $mimetypes = get_mediatypes($null);
+        $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
     }
 
     $t = $pretext['skin'];
@@ -779,19 +766,22 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if (!empty($name) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+    if (isset($pretext['@txp_preview']) && $name === $pretext['@txp_preview']) {
+        $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
+        $mimetype = 'text/html';
+    } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
                 $mimetype = $mimetypes[$row['type']];
             }
         }
-
-        set_error_handler('tagErrorHandler');
-        @header('Content-Type: '.$mimetype.'; charset=utf-8');
-        echo ltrim(parse_page(null, null, implode(n, $assets)));
-        restore_error_handler();
     }
+
+    set_error_handler('tagErrorHandler');
+    header('Content-Type: '.$mimetype.'; charset=utf-8');
+    echo ltrim(parse_page(null, null, implode(n, $assets)));
+    restore_error_handler();
 }
 
 // -------------------------------------------------------------
@@ -837,6 +827,7 @@ function output_file_download($filename)
     callback_event('file_download');
 
     if (!isset($file_error)) {
+        parse(get_pref('file_download_header'));
         $filename = sanitizeForFile($filename);
         $fullpath = build_file_path($file_base_path, $filename);
 
@@ -924,82 +915,22 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $thispage, $txp_item;
+    global $pretext, $thisarticle, $thispage, $trace;
+
     extract($pretext);
 
-    // Article form preview.
-    if (txpinterface === 'admin' && ps('Form')) {
-        doAuth();
-
-        if (!has_privs('form')) {
-            txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
-        }
-    }
-
-    if ($iscustom) {
-        // Custom articles must not render search results.
-        $q = '';
-    }
-
     // Getting attributes.
+    if (isset($thing) && !isset($atts['form'])) {
+        $atts['form'] = '';
+    }
+
     $theAtts = filterAtts($atts, $iscustom);
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 
-    // Give control to search, if necessary.
-    if ($q && !$issticky) {
-        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
-        $q = trim($q);
-        $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
-        $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
-
-        // Searchable article fields are limited to the columns of the
-        // textpattern table and a matching fulltext index must exist.
-        $cols = do_list_unique(get_pref('searchable_article_fields'));
-
-        if (empty($cols) or $cols[0] == '') {
-            $cols = array('Title', 'Body');
-        }
-
-        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
-        $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
-
-        if ($quoted || empty($m) || $m === 'exact') {
-            for ($i = 0; $i < count($cols); $i++) {
-                $cols[$i] = "`$cols[$i]` LIKE '%$search_terms%'";
-            }
-        } else {
-            $colJoin = ($m === 'any') ? "OR" : "AND";
-            $search_terms = explode(' ', $search_terms);
-            for ($i = 0; $i < count($cols); $i++) {
-                $like = array();
-                foreach ($search_terms as $search_term) {
-                    $like[] = "`$cols[$i]` LIKE '%$search_term%'";
-                }
-                $cols[$i] = "(".join(" $colJoin ", $like).")";
-            }
-        }
-
-        $cols = join(" OR ", $cols);
-        $search = " AND ($cols) $s_filter";
-        $fname = ($searchform ? $searchform : 'search_results');
-
-        if (!$sort) {
-            $sort = "score DESC";
-        }
-    } else {
-        $score = $search = '';
-        $fname = (!empty($listform) ? $listform : $form);
-
-        if (!$sort) {
-            $sort = "Posted DESC";
-        }
-    }
-
-    $where = $theAtts['*'].$search;
     $pg or $pg = 1;
-    $pgby = intval(empty($pageby) || $pageby === true ? $limit : $pageby);
+    $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
+    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
         $offset = $offset === true ? 0 : intval($offset);
@@ -1008,12 +939,24 @@ function doArticles($atts, $iscustom, $thing = null)
         $pgoffset = $offset = intval($offset);
     }
 
+    if ($custom_pg) {
+        $groupby = trim($pgonly);
+    } elseif (isset($theAtts['%'])) {
+        $groupby = $theAtts['%'];
+    }
+
+    $columns = $theAtts['*'];
+    $where = $theAtts['$'];
+    $tables = $theAtts['#'];
+
     // Do not paginate if we are on a custom list.
-    if (!$iscustom && !$issticky) {
+    if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $grand_total = safe_count('textpattern', $where);
+            $what = !empty($groupby) ? "DISTINCT $groupby" : '*';
+            $grand_total = getThing("SELECT COUNT($what) FROM $tables WHERE $where");
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
+            $trace->log("[Found: $total articles, $numPages pages]");
 
             // Send paging info to txp:newer and txp:older.
             $thispage = array(
@@ -1031,96 +974,24 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = safe_count('textpattern', $where) - $offset;
+        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+        $total -= $offset;
+
         return $pgby ? ceil($total / $pgby) : $total;
     }
 
-    // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($id) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(ID, ".$id."), ".$sort;
-    } else {
-        $safe_sort = $sort;
-    }
+    $where = $theAtts['?'];
 
-    $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
-        'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT ".
+        intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
     );
 
-    if ($rs && $last = numRows($rs)) {
-        // If a listform is specified, $thing is for doArticle() - hence ignore here.
-        if (!empty($listform)) {
-            $thing = null;
-        }
+    $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing', 'form'));
+//    unset($GLOBALS['thisarticle']);
 
-        $count = 0;
-        $articles = array();
-        $chunk = false;
-        $oldbreak = isset($txp_item['breakby']) ? $txp_item['breakby'] : null;
-        unset($txp_item['breakby']);
-        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
-            false :
-            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? 1 : 2);
-
-        while ($count++ <= $last) {
-            global $thisarticle;
-
-            if ($a = nextRow($rs)) {
-                populateArticleData($a);
-                $thisarticle['is_first'] = ($count == 1);
-                $thisarticle['is_last'] = ($count == $last);
-
-                $newbreak = !$groupby ? $count :
-                    ($groupby === 1 ?
-                        parse($breakby, true, false) :
-                        parse_form($breakby)
-                    );
-            } else {
-                $newbreak = null;
-            }
-
-            if (isset($txp_item['breakby']) && $newbreak !== $txp_item['breakby']) {
-                if ($breakform) {
-                    $tmparticle = $thisarticle;
-                    $thisarticle = $oldarticle;
-                    $newform = parse_form($breakform);
-                    $chunk = str_replace('<+>', $chunk, $newform);
-                    $thisarticle = $tmparticle;
-                }
-
-                $chunk === false or $articles[] = $chunk;
-                $chunk = false;
-            }
-
-            if ($count <= $last) {
-                // Article form preview.
-                if (txpinterface === 'admin' && ps('Form')) {
-                    $item = txp_sandbox(array(), ps('Form'));
-                } elseif ($allowoverride && $a['override_form']) {
-                    $item = txp_sandbox(array(), parse_form($a['override_form']), false);
-                } else {
-                    $item = $thing ? txp_sandbox(array(), $thing) : txp_sandbox(array(), parse_form($fname), false);
-                }
-
-                $item === false or $chunk .= $item;
-            }
-
-            $oldarticle = $thisarticle;
-            $txp_item['breakby'] = $newbreak;
-            unset($GLOBALS['thisarticle']);
-        }
-
-        if ($groupby) {
-            $breakby = '';
-        }
-
-        $txp_item['breakby'] = $oldbreak;
-
-        return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
-    } else {
-        return $thing ? parse($thing, false) : '';
-    }
+    return !empty($articles) ?
+        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'class')) :
+        ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------
@@ -1129,54 +1000,60 @@ function doArticle($atts, $thing = null)
 {
     global $pretext, $thisarticle;
 
+    if (isset($thing) && !isset($atts['form'])) {
+        $atts['form'] = '';
+    }
+
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
-    extract($atts);
+    $preview = !empty($pretext['@txp_preview']);
 
     // No output required, only setting atts.
-    if ($pgonly) {
+    if ($atts['pgonly']) {
         return '';
     }
 
     if (empty($thisarticle) || $thisarticle['thisid'] != $pretext['id']) {
         $id = assert_int($pretext['id']);
         $thisarticle = null;
-        $where = $atts['*'];
+        $where = $preview ? '1' : $atts['?'];
+        $tables = 'textpattern';
+        $columns = $atts['*'];
 
-        $rs = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
-            'textpattern',
-            "ID = $id AND $where LIMIT 1"
-        );
+        $rs = safe_rows_start($columns, $tables, "WHERE ID = $id AND $where");
 
-        if ($rs) {
-            populateArticleData($rs);
+        if ($rs && $a = nextRow($rs)) {
+            populateArticleData($a);
+            $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
         }
     }
 
-    if (!empty($thisarticle) && (in_list($thisarticle['status'], $status) || gps('txpreview'))) {
-        extract($thisarticle);
+    $article = false;
+
+    if (!empty($thisarticle) && (in_list($thisarticle['status'], $atts['status']) || $preview)) {
         $thisarticle['is_first'] = $thisarticle['is_last'] = 1;
 
-        if ($allowoverride && $override_form) {
-            $article = parse_form($override_form);
-        } else {
-            $article = $thing ? parse($thing) : parse_form($form);
+        if ($atts['allowoverride'] && $thisarticle['override_form']) {
+            $article = parse_form($thisarticle['override_form']);
+        } elseif ($atts['form']) {
+            $article = parse_form($atts['form']);
         }
 
-        if (get_pref('use_comments') && get_pref('comments_auto_append')) {
+        if (isset($thing) && $article === false) {
+            $article = parse($thing);
+        }
+
+        if ($article !== false && get_pref('use_comments') && get_pref('comments_auto_append')) {
             $article .= parse_form('comments_display');
         }
 
         unset($GLOBALS['thisarticle']);
-
-        return $article;
     } else {
         // Restore atts to the previous article filter criteria.
         filterAtts($oldAtts ? $oldAtts : false);
-
-        return $thing ? parse($thing, false) : '';
     }
+
+    return $article !== false ? $article : ($thing ? parse($thing, false) : '');
 }
 
 // -------------------------------------------------------------
@@ -1249,7 +1126,7 @@ function chopUrl($req, $min = 4)
 {
     $req = strtok($req, '?');
     $req = preg_replace('/index\.php$/i', '', $req);
-    $r = array_map('urldecode', explode('/', strtolower($req)));
+    $r = array_map('urldecode', explode('/', $req));
     $n = isset($min) ? max($min, count($r)) : count($r);
     $o = array('u0' => $req);
 

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -68,6 +68,14 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     protected $charset = 'UTF-8';
 
     /**
+     * Multipart boundary delimiter.
+     *
+     * @var string
+     */
+
+    protected $boundary = null;
+
+    /**
      * SMTP envelope sender address.
      *
      * @var string|bool
@@ -92,8 +100,13 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         $this->mail = new Message();
         $this->encoded = new Message();
         $this->encoder = new Encode();
+        $this->boundary = "Multipart_Boundary_x".md5(time())."x";
 
         if (IS_WIN) {
+            $this->separator = "\r\n";
+        } elseif (ini_get('cgi.rfc2616_headers') != 0) {
+            // Guard against non-Windows setups that use different character sets
+            // or control characters. See http://www.faqs.org/rfcs/rfc2616.html
             $this->separator = "\r\n";
         }
 
@@ -113,29 +126,42 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     }
 
     /**
-     * Sets or gets a message field.
+     * Set or get a message field.
      *
-     * @param  string $name The field
-     * @param  array  $args Arguments
+     * @param  string $field The field
+     * @param  array  $args  Arguments
      * @return \Textpattern\Mail\AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
 
-    public function __call($name, array $args = null)
+    public function __call($field, array $args = null)
     {
         if (!$args) {
-            if (property_exists($this->mail, $name) === false) {
-                throw new Exception(gTxt('invalid_argument', array('{name}' => 'name')));
+            if (property_exists($this->mail, $field) === false) {
+                throw new Exception(gTxt('invalid_argument', array('{name}' => 'field')));
             }
 
-            return $this->mail->$name;
+            return $this->mail->$field;
         }
+
+        $addresses = do_list_unique($args[0]);
 
         if (isset($args[1])) {
-            return $this->addAddress($name, $args[0], $args[1]);
+            // Not using _unique here. Multiple John Smiths are fine.
+            $names = do_list($args[1]);
+
+            foreach ($addresses as $idx => $address) {
+                $this->addAddress($field, $address, empty($names[$idx]) ? '' : $names[$idx]);
+            }
+
+            return $this;
         }
 
-        return $this->addAddress($name, $args[0]);
+        foreach ($addresses as $address) {
+            $this->addAddress($field, $address);
+        }
+
+        return $this;
     }
 
     /**
@@ -163,20 +189,64 @@ class Mail implements \Textpattern\Mail\AdapterInterface
      * {@inheritdoc}
      */
 
-    public function body($body)
+    public function body($body, $type = 'plain')
     {
-        $this->mail->body = $body;
+        $type = in_array($type, SELF::TYPES) ? $type : 'plain';
+        $in = is_array($body) ? $body : array($type => $body);
 
-        if ($this->charset != 'UTF-8') {
-            $body = utf8_decode($body);
+        foreach ($in as $key => $block) {
+            $this->mail->body[$key] = $block;
+
+            if ($this->charset !== 'UTF-8') {
+                $block = utf8_decode($block);
+            }
+
+            $block = str_replace("\r\n", "\n", $block);
+            $block = str_replace("\r", "\n", $block);
+            $block = str_replace("\n", $this->separator, $block);
+            $this->encoded->body[$key] = deNull($block);
         }
 
-        $body = str_replace("\r\n", "\n", $body);
-        $body = str_replace("\r", "\n", $body);
-        $body = str_replace("\n", $this->separator, $body);
-        $this->encoded->body = deNull($body);
-
         return $this;
+    }
+
+    /**
+     * Create mime boundaries ready for mailing and set appropriate header.
+     *
+     * @param array $body Body content as plain and html indexes.
+     * @return string Body content appropriate to the type of desired output
+     */
+
+    public function formatBody($body)
+    {
+        $out = '';
+
+        if (empty($body['html'])) {
+            $out = $body['plain'];
+        } else {
+            $this->mail->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary.'"';
+            $this->encoded->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary.'"';
+
+            if (!empty($body['plain'])) {
+                $out .= <<<EOMIME
+--{$this->boundary}
+Content-Type: text/plain; charset="{$this->charset}"
+
+{$body['plain']}
+
+EOMIME;
+            }
+
+            $out .= <<<EOMIME
+--{$this->boundary}
+Content-Type: text/html; charset="{$this->charset}"
+
+{$body['html']}
+--{$this->boundary}--
+EOMIME;
+        }
+
+        return $out;
     }
 
     /**
@@ -209,6 +279,8 @@ class Mail implements \Textpattern\Mail\AdapterInterface
             throw new Exception(gTxt('from_or_to_address_missing'));
         }
 
+        $bodyField = $this->formatBody($this->encoded->body);
+
         $headers = array();
         $headers['From'] = $this->encoded->from;
 
@@ -231,9 +303,9 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         }
 
         $headers = join($this->separator, $headers).$this->separator;
-        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : null);
+        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : '');
 
-        if (mail($this->encoded->to, $this->encoded->subject, $this->encoded->body, $headers, $additional_headers) === false) {
+        if (mail($this->encoded->to, $this->encoded->subject, $bodyField, $headers, $additional_headers) === false) {
             throw new Exception(gTxt('sending_failed'));
         }
 
@@ -241,7 +313,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     }
 
     /**
-     * Adds an address to the specified field.
+     * Add an address to the specified field.
      *
      * @param  string $field   The field
      * @param  string $address The email address

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -95,7 +95,7 @@ class Plugin
             ));
 
             $name = sanitizeForFile($name);
-            $exists = fetch('name', 'txp_plugin', 'name', $name);
+            $exists = safe_row('name, version', 'txp_plugin', "name='".doSlash($name)."'");
             isset($md5) or $md5 = md5($code);
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
@@ -148,6 +148,17 @@ class Plugin
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
                     set_error_handler("pluginErrorHandler");
+
+                    if ($exists) {
+                        $previous = $exists['version'];
+
+                        if (version_compare($previous, $version, "<")) {
+                            callback_event("plugin_lifecycle.$name", 'upgraded', '0', compact('previous', 'version'));
+                        } elseif (version_compare($previous, $version, ">")) {
+                            callback_event("plugin_lifecycle.$name", 'downgraded', '0', compact('previous', 'version'));
+                        }
+                    }
+
                     $message = callback_event("plugin_lifecycle.$name", 'installed');
                     restore_error_handler();
                 }
@@ -190,7 +201,11 @@ class Plugin
             $plugin = @gzinflate(substr($plugin, 10));
         }
 
-        $plugin = @unserialize($plugin);
+        set_error_handler(function () {}, E_WARNING|E_NOTICE);
+        $plugin = version_compare(PHP_VERSION, '7.0.0') >= 0 ?
+            unserialize($plugin, array('allowed_classes' => false)) :
+            unserialize($plugin);
+        restore_error_handler();
 
         if (empty($plugin['name'])) {
             return false;
@@ -221,7 +236,7 @@ class Plugin
 
         foreach ((array)$section as $s) {
             $code = '';
-            $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$s.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$s.'\s*\-{3,}\s*$/Ums', $pack, null, PREG_SPLIT_DELIM_CAPTURE);
+            $pack = preg_split('/^\#\s*\-{3,}\s*BEGIN PLUGIN '.$s.'\s*\-{3,}\s*$(.*)^\#\s*\-{3,}\s*END PLUGIN '.$s.'\s*\-{3,}\s*$/Ums', $pack, -1, PREG_SPLIT_DELIM_CAPTURE);
 
             foreach ($pack as $i => $chunk) {
                 if ($i % 2) {
@@ -287,9 +302,7 @@ class Plugin
                 }
 
                 foreach ($keyFiles as $key => $fn) {
-                    $keyFile = $filename.'/'.$fn;
-
-                    if (in_array($keyFile, $zipFiles)) {
+                    if (in_array($keyFile = $filename.'/'.$fn, $zipFiles) || in_array($keyFile = $filename.'\\'.$fn, $zipFiles)) {
                         $fp = $zip->getStream($keyFile);
 
                         if ($fp) {
@@ -316,6 +329,8 @@ class Plugin
             } else {
                 $keyContent['code'] = $pack;
             }
+        } else {
+            return array();
         }
 
         // Populate the $plugin array with metadata from the filesystem if present.
@@ -328,23 +343,17 @@ class Plugin
                 if ($keyContent[$key]) {
                     $plugin[$key] = $keyContent[$key];
                 } else {
-                    if (is_readable($dirname.DS.$fn)) {
-                        if ($help = file_get_contents($dirname.DS.$fn)) {
-                            $plugin[$key] = $help;
-                        }
+                    if ($help = txp_get_contents($dirname.DS.$fn)) {
+                        $plugin[$key] = $help;
                     }
                 }
             } elseif ($key === 'manifest') {
-                if (is_readable($dirname.DS.$fn)) {
-                    if ($info = file_get_contents($dirname.DS.$fn)) {
-                        $plugin += json_decode($info, true);
-                    }
+                if ($info = txp_get_contents($dirname.DS.$fn)) {
+                    $plugin += json_decode($info, true);
                 }
             } else {
-                if (is_readable($dirname.DS.$fn)) {
-                    if ($content = file_get_contents($dirname.DS.$fn)) {
-                        $plugin[$key] = $content;
-                    }
+                if ($content = txp_get_contents($dirname.DS.$fn)) {
+                    $plugin[$key] = $content;
                 }
             }
         }
@@ -439,6 +448,25 @@ class Plugin
     {
         $order = min(max(intval($order), 1), 9);
         safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
+
+        $plugin = $this->read($name);
+        $plugin['order'] = $order;
+        $this->updateFile($name, $plugin);
+    }
+
+    /**
+     * Revert a plugin's code to its initial (last installed) state.
+     *
+     * @param string $name  Plugin name
+     */
+
+    public function revert($name)
+    {
+        safe_update('txp_plugin', "code = code_restore", "name = '".doSlash($name)."'");
+        $code = fetch('code_restore', 'txp_plugin', 'name', $name);
+        $plugin = $this->read($name);
+        $plugin['code'] = $code;
+        $this->updateFile($name, $plugin);
     }
 
     /**
@@ -453,12 +481,13 @@ class Plugin
 
     public function installTextpack($name, $reset = false)
     {
+        list ($name, $lang) = (array)$name + array(null, null);
         $owner = doSlash($name);
-
+/*
         if ($reset) {
-            safe_delete('txp_lang', "owner = '{$owner}'");
+            safe_delete('txp_lang', "owner = '{$owner}'".($lang ? " AND lang = '".doSlash($lang)."'" : ''));
         }
-
+*/
         if (has_handler('txp.plugin', 'textpack.fetch')) {
             $textpack = callback_event('txp.plugin', 'textpack.fetch', false, compact('name'));
         } else {
@@ -488,7 +517,7 @@ class Plugin
 
         $installed_langs = \Txp::get('\Textpattern\L10n\Lang')->installed();
 
-        foreach ($installed_langs as $lang) {
+        foreach (isset($lang) ? array($lang) : $installed_langs as $lang) {
             if (!isset($allpacks[$lang])) {
                 $langpack = $allpacks[$fallback];
             } else {
@@ -533,12 +562,12 @@ class Plugin
                 $langpack[$idx]['lang'] = $lang;
             }
 
-            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
+            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, array($name, $lang), $reset);
             $langDir = PLUGINPATH.DS.$name.DS.'lang'.DS;
 
             if (is_dir($langDir) && is_readable($langDir)) {
                 $plugLang = new \Textpattern\L10n\Lang($langDir);
-                $plugLang->installFile($lang, $name);
+                $plugLang->installFile($lang, $name, $reset);
             }
         }
     }
@@ -549,11 +578,11 @@ class Plugin
      * Used when a new language is added.
      */
 
-    public function installTextpacks()
+    public function installTextpacks($lang = null, $reset = false)
     {
         if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
             foreach ($plugins as $name) {
-                $this->installTextpack($name);
+                $this->installTextpack(array($name, $lang), $reset);
             }
         }
     }
@@ -605,12 +634,47 @@ class Plugin
     }
 
     /**
+     * Rename a plugin.
+     *
+     * The $to name must not already exist in the filesystem and/or DB.
+     *
+     * @param  string $from The original plugin name
+     * @param  string $to The new plugin name
+     * @return bool | null if no change
+     */
+
+    public function rename($from, $to)
+    {
+        $ret = null;
+
+        if ($from !== $to) {
+            $src = PLUGINPATH.DS.$from;
+            $dest = PLUGINPATH.DS.$to;
+
+            if (!file_exists($dest) && is_writable(dirname($dest))) {
+                $res = rename($src, $dest);
+
+                if ($res) {
+                    $res = rename($dest.DS.$from.'.php', $dest.DS.$to.'.php');
+                    $ret = (bool) safe_update('txp_plugin', "name='".doSlash($to)."'", "name='".doSlash($from)."'");
+                } else {
+                    $ret = false;
+                }
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
      * Fetch the plugin's 'data' field.
      *
      * The call can be intercepted (for example, to fetch data from the
      * filesystem) via the "txp.plugin > data.fetch" callback.
      *
-     * @param  string $name The plugin
+     * @param  string $name The plugin name
      * @return string
      */
 
@@ -623,6 +687,89 @@ class Plugin
         }
 
         return $data;
+    }
+
+    /**
+     * Create a (zip) archive of the given plugin name
+     * 
+     * @param  string $name     The plugin name
+     * @param  bool   $download Whether to immediately serve the zip file or leave it on the file system
+     * @return string|zipped contents Either the created zip filepath, or the file to download
+     */
+
+    public function createZip($name, $download = false)
+    {
+        if (class_exists('\ZipArchive')) {
+            $zipArchive = new \ZipArchive();
+            $filename = $name . '.zip';
+            $dest = rtrim(get_pref('tempdir', sys_get_temp_dir()), DS) . DS . $filename;
+
+            if ($download) {
+                register_shutdown_function('unlink', $dest);
+            }
+
+            if ($zipArchive->open($dest, \ZipArchive::OVERWRITE | \ZipArchive::CREATE)) {
+                $safeName = sanitizeForFile($name);
+                $dir = PLUGINPATH.'/'.$safeName.'/';
+                $this->zipDirectory($zipArchive, $dir);
+                $zipArchive->close();
+
+                if ($download && !headers_sent()) {
+                    header('Content-Type: application/zip');
+                    header('Content-Length: ' . filesize($dest));
+                    header('Content-Disposition: attachment; filename="'.$filename.'"');
+                    readfile($dest);
+                } else {
+                    return $dest;
+                }
+            }
+        }
+    }
+
+    /**
+     * Zip the given directory name, recursively.
+     * 
+     * @param  ZipArchive $zipArchive The zip file (previously opened) to write to
+     * @param  $string    $directory  The absolute path to the folder to zip up
+     * @return bool                   Success or failure of the operation
+     */
+    protected function zipDirectory($zipArchive, $directory)
+    {
+        static $basedir;
+
+        if (empty($basedir)) {
+            $basedir = dirname($directory).'/';
+        }
+
+        if (is_dir($directory)) {
+            if ($f = opendir($directory)) {
+                while (($file = readdir($f)) !== false) {
+                    $currFile = $directory . $file;
+
+                    if (is_file($currFile)) {
+                        if ($file != '' && $file != '.' && $file != '..') {
+                            $zipArchive->addFile($currFile, str_replace($basedir, '', $currFile));
+                        }
+                    } else {
+                        if (is_dir($currFile)) {
+                            if ($file != '' && $file != '.' && $file != '..') {
+                                $zipArchive->addEmptyDir(str_replace($basedir, '', $currFile));
+                                $directory = $currFile . '/';
+                                $this->zipDirectory($zipArchive, $directory);
+                            }
+                        }
+                    }
+                }
+
+                closedir($f);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -693,7 +840,7 @@ class Plugin
      *
      * @param  string $hash The passed hash to compare, from which the selector is extracted
      * @param  string $src  Path to a plugin or string plugin text
-     * @return true|string  Error message if something was in valid, otherwise true
+     * @return true|string  Error message if something was invalid, otherwise true
      */
 
     public function verifyToken($hash, $src = null)

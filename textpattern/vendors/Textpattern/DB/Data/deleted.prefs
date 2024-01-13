@@ -16,7 +16,9 @@
         "show_article_category_count",
         "prefs_id",
         "skin_base_path",
-        "title_no_widow"
+        "title_no_widow",
+        "use_categories",
+        "use_sections"
     ],
     "private": [
         "switch_dev_live"

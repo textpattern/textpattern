@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -35,12 +35,13 @@ namespace Textpattern\Skin;
 class Css extends AssetBase implements CssInterface
 {
     protected static $extension = 'css';
-    protected static $dir = 'styles';
+    protected static $dir = TXP_THEME_TREE['styles'];
     protected static $fileContentsField = 'css';
+    protected static $mimeTypes = array();
     protected static $essential = array(
         array(
             'name' => 'default',
-            'css' => '/* Contents of the css tag goes here. See https://docs.textpattern.com/tags/css */'
+            'css' => '/* Contents of the \'default\' style goes here. Refer to https://docs.textpattern.com/ for further information. */'
         ),
     );
 

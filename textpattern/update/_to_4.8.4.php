@@ -1,9 +1,10 @@
 <?php
+
 /*
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -20,18 +21,10 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * Deprecation warning: This file serves merely as a compatibility layer for \Netcarver\Textile\Parser.
- * Use the respective base classes for new and updated code.
- * TODO: Remove in v4.next.0
- */
+if (!defined('TXP_UPDATE')) {
+    exit("Nothing here. You can't access this file directly.");
+}
 
-/**
- * Textile parser.
- *
- * @deprecated in 4.6.0
- * @see \Textpattern\Textile\Parser
- */
-class Textile extends \Netcarver\Textile\Parser
-{
+if (get_pref('override_form_types', false, true) === false) {
+    set_pref('override_form_types', 'article', 'publish', PREF_CORE, 'overrideTypes', 70, PREF_GLOBAL);
 }

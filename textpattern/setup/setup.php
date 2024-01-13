@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,10 +38,10 @@ EOF
     );
 }
 
-$cfg = @json_decode(file_get_contents($file), true);
+$cfg = json_decode(file_get_contents($file), true);
 
 if (empty($cfg)) {
-    msg("Error json config file", MSG_ERROR);
+    msg("Error in JSON config file", MSG_ERROR);
 }
 
 define("txpinterface", "admin");
@@ -79,7 +79,7 @@ assert_system_requirements();
 setup_load_lang(@$cfg['site']['language_code']);
 
 if (!isset($params['force']) && file_exists(txpath.'/config.php')) {
-    msg(gTxt('already_installed'), MSG_ERROR);
+    msg(gTxt('already_installed', array('{configpath}' => txpath)), MSG_ERROR);
 }
 
 setup_connect();

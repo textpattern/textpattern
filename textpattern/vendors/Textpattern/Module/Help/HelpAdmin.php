@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -72,13 +72,13 @@ class HelpAdmin
         $file = txpath."/lang/{$lang}_pophelp.xml";
         $fallback_file = txpath."/lang/".TEXTPATTERN_DEFAULT_LANG."_pophelp.xml";
 
-        if (file_exists($fallback_file) && $fallback_file !== $file) {
+        if (is_readable($fallback_file) && $fallback_file !== $file) {
             if (empty(self::$fallback_xml)) {
                 self::$fallback_xml = simplexml_load_file($fallback_file, "SimpleXMLElement", LIBXML_NOCDATA);
             }
         }
 
-        if (!file_exists($file)) {
+        if (!is_readable($file)) {
             return false;
         }
 

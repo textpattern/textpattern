@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -54,6 +54,7 @@ if ($event == 'link') {
         'hour',
         'minute',
         'second',
+        'copy',
     );
 
     global $all_link_cats, $all_link_authors;
@@ -246,7 +247,11 @@ function link_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(
@@ -312,7 +317,7 @@ function link_list($message = '')
                 }
 
                 $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
-                $view_url = txpspecialchars($link_url);
+                $view_url = txpspecialchars(preg_match('/^\w+:/', $link_url) ? $link_url : hu.$link_url);
 
                 $contentBlock .= tr(
                     td(
@@ -334,7 +339,10 @@ function link_list($message = '')
                         $link_category, '', 'txp-list-col-category category'.$vc
                     ).
                     td(
-                        href($view_url, $view_url, ' rel="external noopener" target="_blank"'), '', 'txp-list-col-url txp-contain'
+                        href(txpspecialchars($link_url).sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $view_url, array(
+                            'rel'    => 'external',
+                            'target' => '_blank',
+                        )), '', 'txp-list-col-url txp-contain'
                     ).
                     (
                         $show_authors
@@ -374,8 +382,8 @@ function link_edit($message = '')
 
     extract(array_map('assert_string', gpsa($vars)));
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_link', 'linkname, linksort');
     $is_edit = ($id && $step == 'link_edit');
-
     $rs = array();
 
     if ($is_edit) {
@@ -429,12 +437,21 @@ function link_edit($message = '')
             hed($caption, 2).
             inputLabel(
                 'link_name',
-                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'linkname', 'text', $linkname)->setAtts(array(
+                    'id'        => 'link_name',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['linkname'],
+                ))->setBool('required'),
                 'title', '', array('class' => 'txp-form-field edit-link-name')
             ).
             inputLabel(
                 'link_sort',
-                fInput('text', 'linksort', $linksort, 'input-medium', '', '', INPUT_MEDIUM, '', 'link_sort'),
+                Txp::get('\Textpattern\UI\Input', 'linksort', 'text', $linksort)->setAtts(array(
+                    'id'        => 'link_sort',
+                    'class'     => 'input-medium',
+                    'size'      => INPUT_MEDIUM,
+                    'maxlength' => $fieldSizes['linksort'],
+                )),
                 'sort_value', 'link_sort', array('class' => 'txp-form-field edit-link-sort')
             ).
             // TODO: maybe use type="url" once browsers are less strict.
@@ -457,6 +474,12 @@ function link_edit($message = '')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
             graf(
+                tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button',
+                    array(
+                        'class'     => 'txp-clone txp-reduced-ui-button',
+                        'data-form' => 'link_details',
+                    )
+                ).
                 sLink('link', '', gTxt('cancel'), 'txp-button').
                 fInput('submit', '', gTxt('save'), 'publish'),
                 array('class' => 'txp-edit-actions')
@@ -471,19 +494,6 @@ function link_edit($message = '')
             hInput('crit', gps('crit')),
         '', '', 'post', 'txp-edit', '', 'link_details');
     }
-}
-
-/**
- * Legacy link category HTML select field.
- *
- * @param      string $cat
- * @return     string
- * @deprecated in 4.6.0
- */
-
-function linkcategory_popup($cat = '')
-{
-    return event_category_popup('link', $cat, 'link_category');
 }
 
 // -------------------------------------------------------------
@@ -503,6 +513,9 @@ function link_save()
         link_list(array(gTxt('link_empty'), E_ERROR));
 
         return;
+    } elseif ($copy) {
+        $linkname .= '_copy';
+        $id = 0;
     }
 
     $author = fetch('author', 'txp_link', 'id', $id);

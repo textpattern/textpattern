@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -182,167 +182,6 @@ function send_reset_confirmation_request($name)
 }
 
 /**
- * Emails a new user with login details.
- *
- * This function can be only executed when the currently authenticated user
- * trying to send the email was granted 'admin.edit' privileges.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      string $RealName The real name
- * @param      string $name     The login name
- * @param      string $email    The email address
- * @param      string $password The password
- * @return     bool FALSE on error.
- * @deprecated in 4.6.0
- * @see        send_new_password(), send_reset_confirmation_request
- * @example
- * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
- * {
- *     echo "Login details sent.";
- * }
- */
-
-function send_password($RealName, $name, $email, $password)
-{
-    global $sitename;
-
-    require_privs('admin.edit');
-
-    $message = gTxt('salutation', array('{name}' => $RealName)).
-
-        n.n.gTxt('you_have_been_registered').' '.$sitename.
-
-        n.n.gTxt('your_login_is').' '.$name.
-        n.gTxt('your_password_is').' '.$password.
-
-        n.n.gTxt('log_in_at').' '.ahu.'index.php';
-
-    return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
-}
-
-/**
- * Sends a new password to an existing user.
- *
- * If the $name is FALSE, the password is sent to the currently
- * authenticated user.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      string $password The new password
- * @param      string $email    The email address
- * @param      string $name     The login name
- * @return     bool FALSE on error.
- * @deprecated in 4.6.0
- * @see        send_reset_confirmation_request
- * @see        reset_author_pass()
- * @example
- * $pass = generate_password();
- * if (send_new_password($pass, 'example@example.tld', 'user'))
- * {
- *     echo "Password was sent to 'user'.";
- * }
- */
-
-function send_new_password($password, $email, $name)
-{
-    global $txp_user, $sitename;
-
-    if (empty($name)) {
-        $name = $txp_user;
-    }
-
-    $message = gTxt('salutation', array('{name}' => $name)).
-
-        n.n.gTxt('your_password_is').' '.$password.
-
-        n.n.gTxt('log_in_at').' '.ahu.'index.php';
-
-    return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-}
-
-/**
- * Generates a password.
- *
- * Generates a random password of given length using the symbols set in
- * PASSWORD_SYMBOLS constant.
- *
- * Should NEVER be used as it is not cryptographically secure.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      int $length The length of the password
- * @return     string Random plain-text password
- * @deprecated in 4.6.0
- * @see        \Textpattern\Password\Generate
- * @see        \Textpattern\Password\Random
- * @example
- * echo generate_password(128);
- */
-
-function generate_password($length = 10)
-{
-    static $chars;
-
-    if (!$chars) {
-        $chars = str_split(PASSWORD_SYMBOLS);
-    }
-
-    $pool = false;
-    $pass = '';
-
-    for ($i = 0; $i < $length; $i++) {
-        if (!$pool) {
-            $pool = $chars;
-        }
-
-        $index = mt_rand(0, count($pool) - 1);
-        $pass .= $pool[$index];
-        unset($pool[$index]);
-        $pool = array_values($pool);
-    }
-
-    return $pass;
-}
-
-/**
- * Resets the given user's password and emails it.
- *
- * The old password is replaced with a new random-generated one.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param  string $name The login name
- * @return string A localized message string
- * @deprecated in 4.6.0
- * @see    PASSWORD_LENGTH
- * @see    generate_password()
- * @example
- * echo reset_author_pass('username');
- */
-
-function reset_author_pass($name)
-{
-    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
-
-    $new_pass = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
-
-    $rs = change_user_password($name, $new_pass);
-
-    if ($rs) {
-        if (send_new_password($new_pass, $email, $name)) {
-            return gTxt('password_sent_to').' '.$email;
-        } else {
-            return gTxt('could_not_mail').' '.$email;
-        }
-    } else {
-        return gTxt('could_not_update_author').' '.txpspecialchars($name);
-    }
-}
-
-/**
  * Loads client-side localisation scripts.
  *
  * Passes localisation strings from the database to JavaScript.
@@ -371,7 +210,7 @@ function gTxtScript($var, $atts = array(), $route = array())
         }
 
         $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
-        $textarray_script = $textarray_script + array_combine((array) $var, $data);
+        $textarray_script += array_combine((array) $var, $data);
     }
 }
 
@@ -440,41 +279,9 @@ function updateVolatilePartials($partials)
 }
 
 /**
- * Lists image types that can be safely uploaded.
- *
- * Returns different results based on the logged in user's privileges.
- *
- * @param   int         $type If set, validates the given value
- * @return  mixed
- * @package Image
- * @since   4.6.0
- * @example
- * list($width, $height, $extension) = getimagesize('image');
- * if ($type = get_safe_image_types($extension))
- * {
- *     echo "Valid image of {$type}.";
- * }
- */
-
-function get_safe_image_types($type = null)
-{
-    if (!has_privs('image.create.trusted')) {
-        $extensions = array(0, '.gif', '.jpg', '.png');
-    } else {
-        $extensions = array(0, '.gif', '.jpg', '.png', '.swf', 0, 0, 0, 0, 0, 0, 0, 0, '.swf');
-    }
-
-    if (func_num_args() > 0) {
-        return !empty($extensions[$type]) ? $extensions[$type] : false;
-    }
-
-    return $extensions;
-}
-
-/**
  * Checks if GD supports the given image type.
  *
- * @param   string $image_type Either '.gif', '.jpg', '.png'
+ * @param   string $image_type Either '.gif', '.jpg', '.png', '.svg'
  * @return  bool TRUE if the type is supported
  * @package Image
  */
@@ -492,14 +299,179 @@ function check_gd($image_type)
             return ($gd_info['GIF Create Support'] == true);
             break;
         case '.jpg':
+        case '.jpeg':
             return ($gd_info['JPEG Support'] == true);
             break;
         case '.png':
             return ($gd_info['PNG Support'] == true);
             break;
+        case '.svg':
+            if (has_privs('image.create.trusted')) {
+                return true;
+            }
+            break;
+        case '.webp':
+            return (!empty($gd_info['WebP Support']));
+            break;
+        case '.avif':
+            return (!empty($gd_info['AVIF Support']));
+            break;
     }
 
     return false;
+}
+
+/**
+ * Find SVG element in XML tree
+ *
+ * @param   SimpleXMLElement  $node  start tree
+ * @param   SimpleXMLElement  &$svg  return SVG tree, if any
+ * @package Image
+ */
+
+function findSVG($node, &$svg) {
+    if ($node->getName() == 'svg') {
+        $svg = $node;
+        return;
+    }
+    foreach ($node->children() as $child) {
+        findSVG($child, $svg);
+    }
+}
+
+/**
+ * Provide GD equivalent function to create image from SVG
+ *
+ * @param   string  $file             Filename
+ * @param   bool    $makestandalone   Remove non-svg elements from tree
+ * @package Image
+ */
+
+function imagecreatefromsvg($file, $makestandalone = true)
+{
+    $xml = file_get_contents($file);
+    if ($makestandalone) {
+        $xmlend = strpos($xml, '?>') + 2;
+        $xmltree = simplexml_load_string($xml);
+        $svg = null;
+        findSVG($xmltree, $svg);
+        if ($svg == null) {
+            return false;
+        }
+        $newxml = $svg->asXML();
+        if (substr($newxml, 0, 5) != "<?xml") {
+            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
+        } else {
+            return $newxml . PHP_EOL;
+        }
+    } else {
+      return $xml;
+    }
+}
+
+/**
+ * Private implementation of PHP getimagesize() that includes SVG
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpgetimagesize($file)
+{
+    $content = file_get_contents($file);
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
+        return getimagesize($file);
+    }
+    
+    if (strpos($content, "<svg") === false) {
+        return false;
+    }
+
+    if (($xml = simplexml_load_string($content)) === false) {
+        return false;
+    }
+
+    $svg = null;
+    findSVG($xml, $svg);
+    if ($svg == null) {
+        return false;
+    }
+ 
+    $width = svgtopx($svg['width']);
+    $height = svgtopx($svg['height']);
+    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
+        if (empty($svg['viewBox'])) {
+            return false;
+        }
+        $viewbox = explode(' ', $svg['viewBox']);
+        $width = $viewbox[2] - $viewbox[0];
+        $height = $viewbox[3] - $viewbox[1];
+        if ($width <= 0 || $height <= 0) {
+            return false;
+        }
+    }
+    $data = array();
+    $data[0] = $width;
+    $data[1] = $height;
+    $data[2] = IMAGETYPE_SVG;
+    return $data;
+}
+
+/**
+ * Returns the given image file data.
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpimagesize($file, $create = false)
+{
+    if ($data = txpgetimagesize($file)) {
+        list($w, $h, $ext) = $data;
+        $exts = get_safe_image_types();
+        $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
+    }
+
+    if (empty($ext)) {
+        return false;
+    }
+
+    $imgf = 'imagecreatefrom'.($ext == '.jpg' ? 'jpeg' : ltrim($ext, '.'));
+    $data['ext'] = $ext;
+
+    if (($create || empty($w) || empty($h)) && function_exists($imgf)) {
+        // Make sure we have enough memory if the image is large.
+        if (filesize($file) > 256*1024) {
+            $shorthand = array('K', 'M', 'G');
+            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
+
+            // Do not *decrease* memory_limit.
+            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
+            if ($ml < $extra) {
+                ini_set('memory_limit', EXTRA_MEMORY);
+            }
+        }
+
+        $errlevel = error_reporting(0);
+
+        if ($ext == '.svg') {
+            $data['image'] = $imgf($file, false);
+        } else {
+            $data['image'] = $imgf($file);
+        }
+        if ($data['image']) {
+            $data[0] or $data[0] = imagesx($data['image']);
+            $data[1] or $data[1] = imagesy($data['image']);
+            $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
+        }
+
+        error_reporting($errlevel);
+    }
+
+    return $data;
 }
 
 /**
@@ -554,12 +526,12 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
     }
 
-    list($w, $h, $extension) = getimagesize($file);
-    $ext = get_safe_image_types($extension);
-
-    if (!$ext) {
-        return gTxt('only_graphic_files_allowed');
+    if (!($data = txpimagesize($file))) {
+        return gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', get_safe_image_types())));
     }
+
+    list($w, $h) = $data;
+    $ext = $data['ext'];
 
     $name = substr($name, 0, strrpos($name, '.')).$ext;
     $safename = doSlash($name);
@@ -597,7 +569,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     $newpath = IMPATH.$id.$ext;
 
-    if (shift_uploaded_file($file, $newpath) == false) {
+    if (shift_uploaded_file($file, $newpath, $ext == '.svg') == false) {
         if (!empty($rs)) {
             safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
@@ -694,7 +666,7 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
         $msg = gTxt('internal_error');
     }
 
-    if ($production_status == 'debug' && has_privs('debug.backtrace')) {
+    if ($production_status == 'debug' /*&& has_privs('debug.backtrace')*/) {
         $msg .= n."in $errfile at line $errline";
         $backtrace = join(n, get_caller(10, 1));
     }
@@ -812,15 +784,15 @@ function register_tab($area, $panel, $title)
 function pluggable_ui($event, $element, $default = '')
 {
     $argv = func_get_args();
-    $argv = array_slice($argv, 2);
+    $argv = array_merge(array(
+        $event,
+        $element,
+       (string) $default === '' ? 0 : array(0, 0)
+    ), array_slice($argv, 2));
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array(
-        'event' => $event,
-        'step'  => $element,
-        'pre'   => (string) $default === '' ? 0 : array(0, 0),
-    ) + $argv);
+    $ui = call_user_func_array('callback_event', $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -829,14 +801,17 @@ function pluggable_ui($event, $element, $default = '')
 /**
  * Gets a list of form types.
  *
- * The list form types can be extended with a 'form.types > types'
+ * The list of form types can be extended with a 'form.types > types'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$types'. The third parameter contains a reference to an
  * array of 'type => label' pairs.
  *
- * @return  array An array of form types
- * @since   4.6.0
- * @package Template
+ * @return     array An array of form types
+ * @since      4.6.0
+ * @deprecated 4.8.6
+ * @see        Textpattern\Skin\Form->getTypes()
+ * @todo       Move callback to Textpattern\Skin\Form->getTypes()?
+ * @package    Template
  */
 
 function get_form_types()
@@ -915,6 +890,31 @@ function permlinkmodes($name, $val, $blank = false)
 }
 
 /**
+ * Gets the name of the default publishing section.
+ *
+ * @return string The section
+ */
+
+function getDefaultSection()
+{
+    global $txp_sections;
+
+    $name = get_pref('default_section');
+
+    if (!isset($txp_sections[$name])) {
+        foreach ($txp_sections as $name => $section) {
+            if ($name != 'default') {
+                break;
+            }
+        }
+
+        set_pref('default_section', $name, 'section', PREF_HIDDEN);
+    }
+
+    return $name;
+}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
@@ -966,11 +966,8 @@ function event_multi_edit($table, $id_key)
 }
 
 /**
- * Verifies temporary directory.
+ * Verifies temporary directory existence and that it's writeable.
  *
- * Verifies that the temporary directory is writeable.
- *
- * @param   string $dir The directory to check
  * @return  bool|null NULL on error, TRUE on success
  * @package Debug
  */
@@ -997,23 +994,25 @@ function find_temp_dir()
     } else {
         $guess = array(
             txpath.DS.'tmp',
-            '',
+            sys_get_temp_dir(),
             DS.'tmp',
             $path_to_site.DS.$img_dir,
         );
     }
 
     foreach ($guess as $dir) {
-        $tf = @tempnam($dir, 'txp_');
+        if (is_writable($dir)) {
+            $tf = tempnam($dir, 'txp_');
 
-        if ($tf) {
-            $tf = realpath($tf);
-        }
+            if ($tf) {
+                $tf = realpath($tf);
+            }
 
-        if ($tf and file_exists($tf)) {
-            unlink($tf);
+            if ($tf and file_exists($tf)) {
+                unlink($tf);
 
-            return dirname($tf);
+                return dirname($tf);
+            }
         }
     }
 
@@ -1116,12 +1115,21 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
+ * @param   bool $issvg  Image type is SVG
  * @return  bool TRUE on success, or FALSE on error
  * @package File
  */
 
-function shift_uploaded_file($f, $dest)
+function shift_uploaded_file($f, $dest, $issvg = false)
 {
+    if ($issvg) {
+        if (($svg = imagecreatefromsvg($f)) !== false) {
+            unlink($f);
+            if (file_put_contents($dest, $svg) !== false)
+                return true;
+        }
+    }
+
     if (@rename($f, $dest)) {
         return true;
     }
@@ -1661,37 +1669,6 @@ function announce($message, $type = 0, $flags = TEXTPATTERN_ANNOUNCE_ADAPTIVE)
 }
 
 /**
- * Loads date definitions from a localisation file.
- *
- * @param      string $lang The language
- * @package    L10n
- * @deprecated in 4.6.0
- */
-
-function load_lang_dates($lang)
-{
-    $filename = is_file(txpath.'/lang/'.$lang.'_dates.txt') ?
-        txpath.'/lang/'.$lang.'_dates.txt' :
-        txpath.'/lang/en-gb_dates.txt';
-    $file = @file(txpath.'/lang/'.$lang.'_dates.txt', 'r');
-
-    if (is_array($file)) {
-        foreach ($file as $line) {
-            if ($line[0] == '#' || strlen($line) < 2) {
-                continue;
-            }
-
-            list($name, $val) = explode('=>', $line, 2);
-            $out[trim($name)] = trim($val);
-        }
-
-        return $out;
-    }
-
-    return false;
-}
-
-/**
  * Gets language strings for the given event.
  *
  * If no $lang is specified, the strings are loaded from the currently
@@ -1740,6 +1717,30 @@ function load_lang_event($event, $lang = LANG)
 function install_textpack($textpack, $add_new_langs = false)
 {
     return Txp::get('\Textpattern\L10n\Lang')->installTextpack($textpack, $add_new_langs);
+}
+
+/**
+ * Checks a version string sits between a pair of min/max versions
+ *
+ * @param      string $minVer   Minimum version string (>=)
+ * @param      string $maxVer   Maximum version string (<=)
+ * @param      string compareTo The value to compare to. Defaults to txp_version
+ * @return     bool
+ * @package    Plugin
+ */
+
+function check_compatibility($minVer, $maxVer, $compareTo = txp_version)
+{
+    // Need to compare on an even playing field for $maxVer.
+    $max = explode('.', $maxVer);
+    $maxParts = count($max);
+    $thisVer = explode('.', $compareTo, ($maxParts === 2 ? -1 : 0));
+    $compareMax = implode('.', $thisVer);
+
+    $mn = $minVer ? version_compare($compareTo, $minVer, '>=') : true;
+    $mx = $maxVer ? version_compare($compareMax, $maxVer, '<=') : true;
+
+    return $mn && $mx;
 }
 
 /**
@@ -1807,7 +1808,9 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     static $files = null, $files_md5 = array(), $checksum_table = array();
 
     if ($files === null) {
-        if ($cs = @file(txpath.'/checksums.txt')) {
+        $checksums = txpath.'/checksums.txt';
+
+        if (is_readable($checksums) && ($cs = file($checksums))) {
             $files = array();
 
             foreach ($cs as $c) {
@@ -1909,7 +1912,7 @@ function assert_system_requirements()
 
 function get_prefs_theme()
 {
-    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    $out = json_decode(txp_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
     }
@@ -1925,41 +1928,45 @@ function get_prefs_theme()
 
 function txp_dateformats()
 {
+    $old_reporting = error_reporting(0);
+
     $dayname = '%A';
     $dayshort = '%a';
-    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
+    $daynum = '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+    $daynumord = $daynum;
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
     $year = '%Y';
     $yearshort = '%y';
     $time24 = '%H:%M';
-    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
-    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+    $time12 = '%I:%M %p';
+    $date = '%Y-%m-%d';
+
+    error_reporting($old_reporting);
 
     return array(
+        "since",
+        "$monthshort $daynumord",
         "$monthshort $daynumord, $time12",
         "$daynum.$monthnum.$yearshort",
         "$daynumord $monthname, $time12",
         "$yearshort.$monthnum.$daynumlead, $time12",
         "$dayshort $monthshort $daynumord, $time12",
         "$dayname $monthname $daynumord, $year",
-        "$monthshort $daynumord",
-        "$daynumord $monthname $yearshort",
-        "$daynumord $monthnum $year - $time24",
+//        "$daynumord $monthname $yearshort",
+//        "$daynumord $monthnum $year - $time24",
         "$daynumord $monthname $year",
         "$daynumord $monthname $year, $time24",
-        "$daynumord. $monthname $year",
-        "$daynumord. $monthname $year, $time24",
+//        "$daynumord. $monthname $year",
+//        "$daynumord. $monthname $year, $time24",
         "$year-$monthnum-$daynumlead",
-        "$year-$daynumlead-$monthnum",
+        "$year-$monthnum-$daynumlead $time24",
+//        "$year-$daynumlead-$monthnum",
         "$date $time12",
         "$date",
-        "$time24",
-        "$time12",
-        "$year-$monthnum-$daynumlead $time24",
-        "since"
+//        "$time24",
+//        "$time12",
     );
 }

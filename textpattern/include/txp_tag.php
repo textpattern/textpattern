@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -86,12 +86,12 @@ class BuilderTags
     public function tagbuildDialog($ev)
     {
         $listActions = graf(
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-                'class'         => 'txp-expand-all',
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+                'class'         => 'txp-expand-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
             )).
-            href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-                'class'         => 'txp-collapse-all',
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+                'class'         => 'txp-collapse-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
             )), array('class' => 'txp-actions')
         );
@@ -322,13 +322,13 @@ class BuilderTags
                     'https://docs.textpattern.com/tags/'.$this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
-                        'rel'    => 'external noopener',
+                        'rel'    => 'external',
                         'target' => '_blank',
                     )
                 );
 
             $this->endform = graf(
-                fInput('submit', '', gTxt('build'))
+                span(fInput('submit', '', gTxt('build')), array('class' => 'txp-save-button'))
             ).
             eInput('tag').
             sInput('build').
@@ -454,7 +454,7 @@ class BuilderTags
 
     private function tdb($thing)
     {
-        return graf(text_area(
+        return graf('<label for="txp-tagbuilder-output">'.gTxt('code').'</label>'.n.text_area(
             'txp-tagbuilder-output',
             '',
             '',
@@ -498,7 +498,7 @@ class BuilderTags
         $vals = array(
             'past'   => gTxt('time_past'),
             'future' => gTxt('time_future'),
-            'any'    => gTxt('time_any'),
+            'any'    => gTxt('any'),
         );
 
         return ' '.selectInput('time', $vals, $time, true, '', 'time');
@@ -785,7 +785,7 @@ class BuilderTags
      * @return string HTML
      */
 
-    private function tbFormPop($select_name, $type = '', $value)
+    private function tbFormPop($select_name, $type = '', $value = '')
     {
         $vals = array();
 
@@ -2089,8 +2089,8 @@ class BuilderTags
         $desc = ' ('.gTxt('descending').')';
 
         $sorts = array(
-            'filename asc'   => gTxt('file_name').$asc,
-            'filename desc'  => gTxt('file_name').$desc,
+            'filename asc'   => gTxt('filename').$asc,
+            'filename desc'  => gTxt('filename').$desc,
             'downloads asc'  => gTxt('downloads').$asc,
             'downloads desc' => gTxt('downloads').$desc,
             'rand()'         => 'Random',
@@ -2351,7 +2351,7 @@ class BuilderTags
 
                     $out .= $this->tdb(
                         ($wraptag ? "<$wraptag>" : '').
-                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.' />'.
+                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.(get_pref('doctype') === 'html5' ? '>' : ' />').
                         ($wraptag ? "</$wraptag>" : '')
                     );
                     break;

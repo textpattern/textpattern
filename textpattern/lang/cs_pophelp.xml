@@ -76,7 +76,7 @@
 </ul>        ]]></item>
         <item id="create_author" title="Vytvořit autora"><![CDATA[
 <h2>Přidat nového autora</h2>
-<p>Heslo, uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>        ]]></item>
+<p>Uvítací email a instrukce k přihlášení budou novému autorovi zaslány emailem.</p>        ]]></item>
     </group>
 
     <group id="article" title="Panel Psaní">
@@ -261,9 +261,9 @@
         <item id="no_temp_dir" title="Adresář dočasných souborů není určen"><![CDATA[
 <h2>Adresář dočasných souborů není určen</h2>
 <p>Jestliže Textpattern běží bez adresáře dočasných souborů, některé funkce nemusí pracovat podle očekávání. Podívej se do nastavení a zadej cestu k ‘adresáři dočasných souborů’.</p>        ]]></item>
-        <item id="old_placeholder_exists" title="Adresář rubriky již existuje"><![CDATA[
-<h2>Adresář rubriky již existuje</h2>
-<p>Soubory adresářů existujících rubrik budou v konfliktu se schématem v <code>.htaccess</code>. Pokud jsou hlášené soubory zástupci, odstraňte je.</p>
+        <item id="old_placeholder_exists" title="Rubrika se stejným názvem jako adresář"><![CDATA[
+<h2>Rubrika se shodným názvem adresáře</h2>
+<p>Existující názvy adresářů mohou být v konfliktu s názvy rubrik používanými v adresách url článků. Chcete-li se vyhnout problémům, zkontrolujte a smažte názvy dotčených adresářů (pokud je to bezpečné), nebo změňte název rubriky tak, aby se neshodovaly.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Nelze číst z kořenového adresáře"><![CDATA[
 <h2>Nelze číst z kořenového adresáře</h2>
@@ -480,7 +480,7 @@ např.: #@language cs-cz</p>
 <p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na https://docs.textpattern.com/tags/php" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
         <item id="allow_form_override" title="Povolit ruční volbu forem?"><![CDATA[
 <h2>Povolit ruční volbu forem?</h2>
-<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si jinou formu článku, která bude pro tento článek použita namísto výchozí. Políčko s výběrem je na stránce Psaní dostupné, jestliže je tato možnost v ‘Nastavení ‘ povolena.</p>        ]]></item>
+<p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si formu, která bude pro tento článek použita namísto výchozí. Pokud je tato možnost povolena, je při úpravách článku k dispozici rozbalovací nabídka ‘Přebít formu’.  </p>        ]]></item>
         <item id="allow_page_php_scripting" title="Povolit PHP na stránkách?"><![CDATA[
 <h2>Povolit PHP na stránkách?</h2>
 <p>Volba <em>Ano</em> umožňuje používání PHP kódu v šablonách stránek a forem.</p>
@@ -529,9 +529,10 @@ např.: #@language cs-cz</p>
         <item id="comments_disabled_after" title="Kdy vyprší lhůta pro vkládání komentářů"><![CDATA[
 <h2>Kdy vyprší lhůta pro vkládání komentářů</h2>
 <p>Nastavení časového období, po kterém bude možnost přidávat komentáře vypnuta (je zde i volba ‘Nikdy’, která umožní komentovat stále).</p>        ]]></item>
-        <item id="comments_disallow_images" title="Zakázat vkládání obrázků do komentářů?"><![CDATA[
-<h2>Zakázat vkládání obrázků do komentářů?</h2>
-<p>Nastavením ‘Ano’ budou jakékoliv obrázky vložené do komentářů odstraněny.</p        ]]></item>
+        <item id="comments_disallow_images" title="Povolit obrázky v komentářích?"><![CDATA[
+<h2>Povolit obrázky v komentářích?</h2>
+<p>Nastavením „ne“ budou všechny obrázky obsažené v komentářích odstraněny.</p>
+        ]]></item>
         <item id="comments_mode" title="Způsob zobrazení komentářů"><![CDATA[
 <h2>Způsob zobrazení komentářů</h2>
 <p>Vybereš-li ‘do stránky’ (doporučeno), po kliknutí se zobrazí obnovená stránka s článkem, pod nímž jsou zobrazeny všechny komentáře.</p>
@@ -564,7 +565,20 @@ např.: #@language cs-cz</p>
     <li>rozšířená syntaxe blokových prvků (bc.., bq.., atd.)</li>
 </ul>
 <p><strong>Pozn.:</strong> Z bezpečnostních důvodů je HTML převedeno na prostý text.</p>        ]]></item>
-        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Vlastní typy forem"><![CDATA[
+<h2>Vlastní typy šablon forem</h2>
+<p>Kromě standardních typů forem (článek, soubor, ostatní, atd. , mohou vydavatelé definovat vlastní typy. Účel vlastních typů forem je dvojí: snadnější klasifikace a vlastní definice aktiv.</p>
+<p>Formát nastavení je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a>s každým oddílem, který odpovídá typu šablony pro formu.</p>
+<p>Pro definování vlastního typu formy (např. <code>js</code>) musí být připojena (na samostatném řádku) sekce  <code>[js]</code>. Výchozí název lze nastavit pomocí položky <code>title="Javascript"</code> v odpovídající sekci. V případě potřeby mohou být připojeny také lokalizované názvy (např. <code>ru="Скрипт"</code>).</p>
+<p>Navíc lze definovat jako šablonu formy <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml"> typ média <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> (dříve známý jako typ MIME), e. . <code>mediatype="application/javascript"</code>. Toto mění šablony tohoto typu na vlastní položky, které mohou být použity jako nastavený typ médií buď z databáze, nebo z disku (flat files) přes značku <code>&lt;txp:output_form /&gt;</code> . Například šablona formy s názvem <code>myscript. s</code> z <code>[js]</code> s typem média <code>aplikace/javascript</code> může být zahrnuta do kódu:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>To vygeneruje následující HTML <code>&lt;script&gt;</code> tag:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Pouze šablony forem s příponou názvem odpovídající jejich typu (např. <code>myscript.js</code>) lze použít jako flat files. V tomto případě je Textpattern vůbec nezpracuje a je přístupný prostřednictvím jejich URL.</p>
+Pokud šablona formy vyžaduje zpracování (pokud obsahuje tagy Textpattern), musíte ji obsluhovat z databáze. V tomto případě byste k názvu formy  neměli přidat rozšíření a pouze zavolat  <code>myscript</code> (bez <code>. s</code>) - aby byl nedostupný přes standardní URL - a byl zpracován takto:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
         <item id="custom_overview" title="Vlastní pole"><![CDATA[
 <h2>Vlastní pole</h2>
 <p>Vlastní pole se používají k uložení doplňkových dat článků.<br>Můžeš definovat až deset vlastních polí. Každé se objeví jako samostatné pole na panelu Psaní.</p>
@@ -672,6 +686,10 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Použít v emailech znakovou sadu ISO-8859-1 (výchozí je UTF-8)?</h2>
 <p>Textpattern používá kódování UTF-8, kde jen to je možné, a tedy i pro odchozí emaily. Některé starší verze poštovních klientů však toto kódování dobře nezvládají (jako např. některé verze programu Outlook). Pokud dostáváš emaily s nesmyslnými znaky, zkus zde nastavit znakovou sadu ISO-8859-1, do níž budou emaily před odesláním převedeny.</p>
 <p><strong>Pozn.:</strong> Pokud používáš jazyk, který obsahuje znaky, jež nelze v této znakové sadě zobrazit, pak ani tato volba nepomůže. Řešením je poohlédnout se po poštovním klientu s řádnou podporou UTF-8 (nebo obecně Unicode).</p>        ]]></item>
+        <item id="override_form_types" title="Druhy forem pro ruční volbu"><![CDATA[
+<h2>Druhy forem pro ruční volbu</h2>
+<p>Vyberte, které druhy forem budou k dispozici v rozbalovací nabídce "Přebít formu" na panelu Psaní .</p>
+        ]]></item>
         <item id="permlink_format" title="Formát adresy URL"><![CDATA[
 <h2>Formát adresy URL</h2>
 <p>Definuje metodu konstrukce URL adresy článku, když se používá v nastavení <em>Podoba stálých odkazů</em> jiný formát než ‘?=ošklivé’.</p>
@@ -732,6 +750,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Kolik článků má být zahrnuto do pramenů?</h2>
 <p>Zde se nastavuje nejvyšší počet posledních článků, jež se budou převádět do formátu pro šíření prostřednictvím pramenů RSS a Atom.</p>
 <p>Doporučeno je nízké číslo v rozmení od <code>5</code>do <code>15</code>.</p>        ]]></item>
+        <item id="secondpass" title="Počet dodatečných cyklů analyzátoru"><![CDATA[]]></item>
         <item id="send_lastmod" title="Odesílat hlavičku poslední úpravy?"><![CDATA[
 <h2>Odesílat hlavičku poslední úpravy?</h2>
 <p>Je-li tato volba zapnuta, Textpattern bude číst HTTP hlavičku <code>If-Modified-Since</code> čtenářova prohlížeče a porovná ji s časem poslední změny článku či stránky. Pokud se od poslední návštěvy nic nezměnilo, odešle se zpět hlavička, jež prohlížeči doporučí, aby použil místní kopii z vyrovnávací paměti.</p>
@@ -763,7 +782,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
     <li>Na serverech se systémem Windows je zadaná emailová adresa použitá pro nastavení (nebo přepsání) <code>sendmail_from</code> v souboru <code>php.ini</code></li>
 </ul>
 <p>To zajistí, že SMTP adresa odesílatele (která nemusí být nutně stejná jako záhlaví “Od:” v emailech) je nastavena na emailovou adresu, kterou jsi zde zadal, což je na některých webových serverech podmínkou pro odesílání emailů.</p>        ]]></item>
-        <item id="spam_blacklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
+        <item id="spam_blocklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
 <h2>Černé listiny spamu (odděluj čárkou)</h2>
 <p>Po přijetí nového komentáře se Textpattern spojí se zde uvedenými poskytovateli <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">černých listin (spam blocklists)<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a ověří adresu IP autora komentáře. Pokud tuto adresu na některém ze seznamů najde, odmítne komentář přijmout, protože na tuto adresy byly v minulosti zaznamenány stížnosti kvůli spamu.</p>
 <p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p>
@@ -791,13 +810,15 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
         <item id="use_mail_on_feeds_id" title="Povolit komentáře?"><![CDATA[
 <h2>Povolit komentáře?</h2>
 <p>Tato volba určuje, zda se komentářová funkcionalita Textpatternu bude používat, či nikoliv.</p>        ]]></item>
-        <item id="use_plugins" title="Používat emailovou adresu pro ID pramenu?"><![CDATA[
-<h2>Používat emailovou adresu pro ID pramenů?</h2>
-<p>Položky v pramenech Atom vyžadují jednoznačný identifikátor (ID).</p>
-<p>Pro vytváření identifikátorů může Textpattern použít buď tvou emailovou adresu, nebo doménové jméno zahrnuté do ID. Emailová adresa bude při vytváření webu použita přednostně. Pokud není pravděpodobné, že budeš v budoucnu měnit doménové jméno, je bezpečnější zde nastavit ‘Ne’.</p>        ]]></item>
-        <item id="use_textile" title="Používat pluginy?"><![CDATA[
+        <item id="use_plugins" title="Používat pluginy?"><![CDATA[
 <h2>Používat pluginy?</h2>
 <p>Tato volba umožňuje zcela vypnout podporu pluginů.<br>Je to užitečné v případě, že na tvých stránkách dochází k podivným chybám a chceš zjistit, zda jsou na vině pluginy.</p>        ]]></item>
+        <item id="use_textile" title="Výchozí formátování textu"><![CDATA[
+<h2>Výchozí formátování textu</h2>
+<p>Nastavení způsobu formátování textu, který zde vyberete, se stane výchozí pro anotaci a tělo článku v panelu "Psaní". Máte možnost volby "Použít Textile", převést zalomení řádků na HTML značky pro odstavce nebo ponechat text  beze změn.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> je nástroj určený ke zjednodušení konverze prostého textu na HTML. Pokud je povoleno toto formátování, Textile text článků zpracuje a konvertuje ho do struktury HTML.</p>
+<p>Textile rovněž nabízí výkonnou, ale snadno naučitelnou sadu příkazů, pomocí kterých lze formátovat text, definovat struktury, jako jsou seznamy, záhlaví a blockquotes, a vkládat odkazy a obrázky.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Panel Rubriky">
@@ -807,7 +828,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <p>Pro většinu webových stránek je nutné jen opravdu nezbytné minimum rubrik.</p>
 <h3>Pravděpodobný scénář pro web se třemi rubrikami:</h3>
 <ol>
-    <li><strong>Archív:</strong> Jakmile čtenář klikne na trvalý odkaz článku, článek se zobrazí pomocí šablony stránky příslušející této rubrice. Výpis článků spadajících do rubriky Archív pak lze najít na adrese <code>http://mojestranky.com/archiv/</code>.</li>
+    <li><strong>Archív:</strong> Jakmile čtenář klikne na trvalý odkaz článku, článek se zobrazí pomocí šablony stránky příslušející této rubrice. Výpis článků spadajících do rubriky Archív pak lze najít na adrese <code>https://example.com/archiv/</code>.</li>
     <li><strong>O-me:</strong> Stránka ‘O mě’ se může od hlavní strany a rubriky archiv značně lišit tím, že je spíše statická, vypadá zpravidla výrazně jinak a pravděpodobně obsahuje jen jeden článek. Tuto rubriku lze najít na adrese <code>https://example.com/about/</code>.</li>
     <li><strong>Fotogalerie:</strong> Rubrika se zcela jiným rozvržením (a také asi jiným stylem CSS), která slouží k zobrazení fotografií namísto článků, nebo článků s fotogalerií.</li>
 </ol>
@@ -835,7 +856,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
 <h2>Používá styl</h2>
 <p>Tato volba určuje styl CSS načtený z databáze pomocí tagu <code>&lt; txp: css format="" /&gt;</code> pro tuto rubriku.</p>
 <p>Pro větší rychlost odezvy se ale doporučuje načítat css styly ze souboru.
-Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu<br> <code>&lt; link rel="stylesheet" href="http://mojestranky. cz/css/default. css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>        ]]></item>
+Pokud se tedy styly na tvých stránkách načítají ze souboru pomocí zápisu <code>&lt;link rel="stylesheet" href="https://example.com/css/default.css" /&gt;</code>, nemá nastavení této volby žádný význam.</p>        ]]></item>
         <item id="section_uses_page" title="Používá stránku"><![CDATA[
 <h2>Používá stránku</h2>
 <p>Rubriky v Textpattern jsou provázány se šablonami stránek.</p>        ]]></item>

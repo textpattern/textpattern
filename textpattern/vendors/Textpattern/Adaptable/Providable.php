@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -78,12 +78,12 @@ abstract class Providable implements ProvidableInterface
         if (!$this->adapter) {
             $this->adapter = $this->getDefaultAdapter();
         }
-
+/*
         if ($this->firstRun) {
             $this->firstRun = false;
             $this->adapter->providable = $this;
         }
-
+*/
         return $this->adapter;
     }
 

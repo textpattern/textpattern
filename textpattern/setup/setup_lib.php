@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,7 @@ function setup_db($cfg = array())
     include_once txpath.'/lib/txplib_db.php';
     include_once txpath.'/lib/admin_config.php';
 
-    $siteurl = rtrim(@$cfg['site']['public_url'], '/');
+    $siteurl = rtrim($cfg['site']['public_url'], '/');
 
     if (!preg_match('%^https?://%', $siteurl)) {
         $siteurl = 'http://'.$siteurl;
@@ -37,7 +37,7 @@ function setup_db($cfg = array())
     if (empty($cfg['site']['admin_url'])) {
         $adminurl = $siteurl.'/textpattern';
     } else {
-        $adminurl = rtrim(@$cfg['site']['admin_url'], '/');
+        $adminurl = rtrim($cfg['site']['admin_url'], '/');
 
         if (!preg_match('%^https?://%', $adminurl)) {
             $adminurl = 'http://'.$adminurl;
@@ -47,16 +47,20 @@ function setup_db($cfg = array())
     // Determine the mode of permanent links.
     ini_set('default_socket_timeout', 10);
     $s = md5(uniqid(rand(), true));
+    $permlink_mode = 'messy';
+
+    // @todo Find a way to remove the error suppression here. Custom error handler?
     $pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1");
 
-    if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
+    if (!empty($pretext_data[0]) && trim($pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
         $permlink_mode = 'section_title';
-    } else {
-        $permlink_mode = 'messy';
     }
 
     // Variable set.
-    @define('hu', $siteurl.'/');
+    if (!defined('hu')) {
+        define('hu', $siteurl.'/');
+    }
+
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['admin_theme']) ? 'hive' : $cfg['site']['admin_theme'];
@@ -89,9 +93,9 @@ function setup_db($cfg = array())
             txp-data == 'none'  - Nothing to import.
         */
 
-        if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
+        if (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'theme') {
             $datadir = $is_from_setup ? $setup_themes_path.DS.$public_theme : $root_public_themes.DS.$public_theme;
-        } elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
+        } elseif (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'none') {
             $datadir = '';
         } else {
             $datadir = $setup_path;
@@ -106,7 +110,7 @@ function setup_db($cfg = array())
             echo txp_setup_progress_meter(4).n.'<div class="txp-setup">';
         }
 
-        msg(gTxt('tables_exist', array('{dbname}' => @$txpcfg['db'])), MSG_ERROR, true);
+        msg(gTxt('tables_exist', array('{dbname}' => (!empty($txpcfg['db']) ? $txpcfg['db'] : ''))), MSG_ERROR, true);
     }
 
     $setup = new \Textpattern\DB\Core();
@@ -136,12 +140,12 @@ function setup_db($cfg = array())
                                         private - Will be created after user login
         */
         foreach (get_files_content($datadir.'/data', 'prefs') as $key => $data) {
-            if ($out = @json_decode($data, true)) {
+            if (($out = json_decode($data, true)) !== null) {
                 msg("Prefs: 'data/{$key}'");
 
                 foreach ($out as $name => $p) {
                     if (empty($p['private'])) {
-                        @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                        set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
                     }
                 }
             }
@@ -241,7 +245,10 @@ function setup_load_lang($langs)
     $lang_textpack = Txp::get('\Textpattern\L10n\Lang', $lang_path)->getPack($lang, $group);
 
     $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
-    @define('LANG', $language);
+
+    if (!defined('LANG')) {
+        define('LANG', $language);
+    }
 
     $allStrings = array_merge($default_textpack, $lang_textpack);
 
@@ -312,6 +319,8 @@ function setup_connect()
 {
     global $cfg;
 
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
     if (strpos($cfg['database']['host'], ':') === false) {
         $dhost = $cfg['database']['host'];
         $dport = ini_get("mysqli.default_port");
@@ -321,14 +330,19 @@ function setup_connect()
     }
 
     $dsocket = ini_get("mysqli.default_socket");
-
     $mylink = mysqli_init();
 
-    if (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
-        $cfg['database']['client_flags'] = 0;
-    } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
-        $cfg['database']['client_flags'] = 'MYSQLI_CLIENT_SSL';
-    } else {
+    try {
+        // @todo Custom error handler to catch warnings if host is mangled?
+        if (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
+            $cfg['database']['client_flags'] = 0;
+        } elseif (mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
+            $cfg['database']['client_flags'] = 'MYSQLI_CLIENT_SSL';
+        } else {
+            msg(gTxt('db_cant_connect'), MSG_ERROR, true);
+        }
+    } catch (mysqli_sql_exception $e) {
+        error_log($e->getMessage());
         msg(gTxt('db_cant_connect'), MSG_ERROR, true);
     }
 
@@ -336,22 +350,7 @@ function setup_connect()
 
     if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
         msg(gTxt('prefix_bad_characters',
-            array('{dbprefix}' => strong(txpspecialchars($cfg['database']['table_prefix']))), 'raw'),
-            MSG_ERROR, true
-        );
-    }
-
-    if (!$mydb = mysqli_select_db($mylink, $cfg['database']['db_name'])) {
-        msg(gTxt('db_doesnt_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
-            MSG_ERROR, true
-        );
-    }
-
-    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
-    if ($tables_exist) {
-        msg(gTxt('tables_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
+            array('{dbprefix}' => txpspecialchars($cfg['database']['table_prefix']))),
             MSG_ERROR, true
         );
     }
@@ -363,21 +362,52 @@ function setup_connect()
     if (mysqli_get_server_version($mylink) < 50503) {
         $cfg['database']['charset'] = "utf8";
     } else {
-        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+        if (false !== strpos(mysqli_get_client_info(), 'mysqlnd')) {
             // mysqlnd 5.0.9+ required
-            if (mysqli_get_client_version($mylink) < 50009) {
+            if (mysqli_get_client_version() < 50009) {
                 $cfg['database']['charset'] = "utf8";
             }
         } else {
             // libmysqlclient 5.5.3+ required
-            if (mysqli_get_client_version($mylink) < 50503) {
+            if (mysqli_get_client_version() < 50503) {
                 $cfg['database']['charset'] = "utf8";
             }
         }
     }
-    @mysqli_close($mylink);
+
+    if (!empty($cfg['database']['create'])) {
+        $result = mysqli_query($mylink, "CREATE DATABASE IF NOT EXISTS `".mysqli_real_escape_string($mylink, $cfg['database']['db_name'])."` CHARACTER SET `".mysqli_real_escape_string($mylink, $cfg['database']['charset'])."`");
+    }
+
+    try {
+        $mydb = mysqli_select_db($mylink, $cfg['database']['db_name']);
+    } catch (mysqli_sql_exception $e) {
+        error_log($e->getMessage());
+        msg(gTxt('db_doesnt_exist',
+            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+            MSG_ERROR, true
+        );
+    }
+
+    try {
+        $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
+    } catch (mysqli_sql_exception $e) {
+        // It's good if the tables don't exist!
+        $tables_exist = false;
+    }
+
+    if ($tables_exist) {
+        msg(gTxt('tables_exist',
+            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+            MSG_ERROR, true
+        );
+    }
+
+    mysqli_close($mylink);
     echo msg(gTxt('using_db', array(
-        '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' <bdi dir="ltr">('.$cfg['database']['charset'].')</bdi>');
+        '{dbname}'  => txpspecialchars($cfg['database']['db_name']),
+        '{charset}' => txpspecialchars($cfg['database']['charset']),
+    )));
 
     return true;
 }

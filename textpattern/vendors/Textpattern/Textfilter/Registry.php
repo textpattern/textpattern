@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -150,6 +150,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $filter)
     {
         if ($key === null) {
@@ -167,6 +168,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         if ($this->offsetExists($key)) {
@@ -184,6 +186,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return isset($this->filters[$key]);
@@ -196,6 +199,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see   ArrayAccess
      */
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->filters[$key]);
@@ -208,6 +212,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
      * @see    IteratorAggregate
      */
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->filters);

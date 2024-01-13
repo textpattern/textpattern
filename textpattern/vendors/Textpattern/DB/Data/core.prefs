@@ -44,23 +44,71 @@
     "smtp_from": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "110"
     },
     "publisher_email": {
         "val": "",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "text_input",
         "position": "115"
     },
     "override_emailcharset": {
         "val": "0",
         "type": "0",
-        "event": "admin",
+        "event": "mail",
         "html": "yesnoradio",
         "position": "120"
+    },
+    "enhanced_email": {
+        "val": "0",
+        "type": "0",
+        "event": "mail",
+        "html": "enhanced_email",
+        "position": "150"
+    },
+    "smtp_host": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "collection": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "160"
+    },
+    "smtp_port": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "collection": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "170",
+        "constraints": "1,65535"
+    },
+    "smtp_user": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "collection": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "180"
+    },
+    "smtp_pass": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "collection": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "190"
+    },
+    "smtp_sectype": {
+        "val": "",
+        "type": "0",
+        "event": "mail",
+        "collection": "mail_enhanced",
+        "html": "smtp_handler",
+        "position": "200"
     },
     "enable_xmlrpc_server": {
         "val": "0",
@@ -217,7 +265,7 @@
         "html": "yesnoradio",
         "position": "320"
     },
-    "spam_blacklists": {
+    "spam_blocklists": {
         "val": "",
         "type": "0",
         "event": "comments",
@@ -305,7 +353,7 @@
         "val": "5",
         "type": "0",
         "event": "feeds",
-        "html": "text_input",
+        "html": "number",
         "position": "40"
     },
     "show_comment_count_in_feed": {
@@ -342,6 +390,13 @@
         "event": "publish",
         "html": "yesnoradio",
         "position": "60"
+    },
+    "override_form_types": {
+        "val": "article",
+        "type": "0",
+        "event": "publish",
+        "html": "overrideTypes",
+        "position": "70"
     },
     "attach_titles_to_permalinks": {
         "val": "1",
@@ -400,14 +455,14 @@
         "position": "280"
     },
     "allow_page_php_scripting": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "publish",
         "html": "yesnoradio",
         "position": "300"
     },
     "allow_article_php_scripting": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "publish",
         "html": "yesnoradio",
@@ -417,7 +472,7 @@
         "val": "1000",
         "type": "0",
         "event": "publish",
-        "html": "text_input",
+        "html": "number",
         "position": "340"
     },
     "blog_mail_uid": {
@@ -518,20 +573,6 @@
         "html": "text_input",
         "position": "0"
     },
-    "use_categories": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
-    "use_sections": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
     "sql_now_posted": {
         "val": "",
         "type": "2",
@@ -554,7 +595,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.8.2",
+        "val": "4.9.0-dev",
         "type": "2",
         "event": "publish",
         "html": "text_input",
@@ -637,6 +678,13 @@
         "html": "permlinkmodes",
         "position": "180"
     },
+    "trailing_slash": {
+        "val": "0",
+        "type": "0",
+        "event": "site",
+        "html": "trailing_slash",
+        "position": "185"
+    },
     "doctype": {
         "val": "html5",
         "type": "0",
@@ -655,11 +703,11 @@
         "val": "7",
         "type": "0",
         "event": "site",
-        "html": "text_input",
+        "html": "number",
         "position": "230"
     },
     "use_comments": {
-        "val": "1",
+        "val": "0",
         "type": "0",
         "event": "site",
         "html": "yesnoradio",
@@ -694,5 +742,19 @@
         "event": "advanced_options",
         "html": "longtext_input",
         "position": "200"
+    },
+    "file_download_header": {
+        "val": "",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "longtext_input",
+        "position": "250"
+    },
+    "secondpass": {
+        "val": "1",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "number",
+        "position": "300"
     }
 }

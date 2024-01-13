@@ -1,9 +1,228 @@
 Changes in 4.9.0 (upcoming)
 
+* Feature release with support for PHP 8.3.1+, new functionality, security
+  enhancements, general improvements and bug fixes.
 * Changed: Minimum system requirements increased to PHP 5.6.
-* Added: Plugins can now be uploaded from URL by dragging to upload textarea.
-* Added: Compiled .txt plugins can now be uploaded via Browse... feature.
-* Changed: Plugins of all types trigger verify step.
+* Changed: Minimum system requirements increased to MySQL 5.5.
+* Changed: Removed 'noopener' from target="_blank" links (now default behaviour
+  in all supported browsers) (thanks, phiw13).
+* Changed: Removed 'aria-label' attributes where 'title' already exists.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
+* Fixed: Improved support for images with EXIF orientation metadata
+  (thanks, jools-r).
+* Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
+* Fixed: Compiled plugins upload on PHP 5.
+* Fixed: Restored empty 'height' and 'width' attributes behaviour of
+  <txp:image />.
+* Fixed: Self-closing tag output for html5 doctype to silence validator
+ (thanks, jools-r).
+* Fixed: Ignore search in individual article mode.
+* Fixed: Take rfc2616 mail headers setting into account for separator.
+* Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
+* Fixed: Windows-generated zip plugins installable on Linux.
+* Added: Support for PHP 8.2 and PHP 8.3.1+.
+* Added: SVG image support (thanks, osadl and jools-r).
+* Added: Option to define a Content Security Policy header for the Textpattern
+  admin-side via config.php. 
+* Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Multi-edit for changing author language.
+* Added: Plugins can be uploaded from a URL by dragging to upload textarea.
+* Added: Compiled plugins can be uploaded via Browse... feature.
+* Added: Compatible plugin upgrades directly from the Plugins panel.
+* Added: Plugin multi-edit option: revert to last installed code content.
+* Added: All plugin metadata exposed in the Plugin Edit panel.
+* Added: Plugin (zip-only) export feature.
+* Added: Support for aggregate window functions in compatible MySQL versions.
+* Added: Trailing slash URL preference.
+* Added: File download header preference.
+* Added: In-use asset counters to the Users panel.
+* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
+* Added: 'level' attribute to <txp:if_category />.
+* Added: Activity indicator for long upload processes.
+* Added: metaWeblog.newMediaObject for image upload over the MovableType API
+  (thanks, Melonking906).
+* Added: Global 'offset' can be set by URL parameters.
+* Added: 'lang' attribute to <txp:page_url />.
+* Added: <txp:if_items_count /> tag.
+* Added: Reload language packs from disk.
+* Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: File Edit panel has the ability to rename and delete files, and
+  change the download counter value (thanks, adi).
+* Changed: Image Edit panel has the ability to delete images.
+* Changed: In-use languages can not be deleted.
+* Changed: Image tags can take HTML attributes.
+* Changed: Less collision-prone custom fields name processing.
+* Changed: Do not generate empty syndication feeds for feedless sections.
+* Changed: Allow PHP scripting options off by default, and Diagnostics warning.
+* Changed: Introduce primary keys for all database tables, replacing some old
+  indexes.
+* Changed: <txp:header /> tag requires 'form' privilege.
+* Developer: Introduce UI class library for building interface components.
+* Developer: Tag registration is now mandatory.
+* Developer: Some of the lesser-used tags are loaded on demand from their class
+  to save memory. Plugins must call them via processTags() function.
+* Developer: Add safe_exists() function to database layer.
+* Developer: Move $thisversion and $txp_is_dev to constants.php.
+* jQuery 3.7.1.
+* Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
+  list of changes in this release (thanks, gocom).
+* PrismJS 1.29.0.
+* DOMPurify 3.0.6
+
+Changes in 4.8.8 (24 Jan 2022)
+
+* Maintenance release with support for PHP 8.1, security enhancements, general
+  improvements and bug fixes.
+* Security: Fix reported cross-site scripting issue relating to article preview
+  CSRF token (many thanks, Paul Ritchie at Pentest Limited).
+* Fixed: More robust numeric searches.
+* Fixed: Improved query efficiency of category operations.
+* Fixed: Required parameters after optional in tag builder (thanks, phiw13).
+* Fixed: Admin-side pagination when sorting by non-unique values.
+* Added: PHP 8.1 support.
+* Added: Natural search mode.
+* Added: Random form selection.
+* Added: Support for AVIF image format, on PHP 8.1 or higher.
+* Added: Global 'limit', 'offset' and 'sort' attributes.
+* Added: 'url_title' attribute to <txp:article[_custom] />.
+* Added: 'range' attribute to <txp:article_image />.
+* Added: 'date' and 'time' attributes to <txp:if_expired />.
+* Added: 'calendar' attribute to <txp:posted /> and similar tags.
+* Added: Substring extraction via 'escape' attribute.
+* Added: <txp:items_count /> tag.
+* Added: Expanded conditional 'match' attribute with comparison operators.
+* Added: 'UTC' is now a permitted time zone.
+* Added: Custom date formats.
+* Changed: <txp:category_list /> with 'children' >1 attribute behaviour.
+* Changed: Global 'escape' attribute operates at the items level in lists.
+* Changed: Multi-site plugins directory defaults to site/admin/plugins.
+* Accessibility: Additional 'aria-label' attributes for some internal links.
+* Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
+* Internal: Prefer is_readable() and is_file() to file_exists().
+* Developer: Added plugin lifecycle events 'upgraded' and 'downgraded'.
+* Developer: Export new article IDs on duplicate.
+* PrismJS 1.26.0.
+
+Changes in 4.8.7 (30 May 2021)
+
+* High priority maintenance release to address functionality and setup issues
+  discovered after 4.8.6 release.
+* Fixed: Users panel throws error due to missing DB prefix (thanks, prbt2016).
+* Removed: Database user GRANT check during initial setup, which broke some
+  installations.
+* Changed: Context check priority in tags.
+
+Changes in 4.8.6 (28 May 2021)
+
+* DO NOT USE IN PRODUCTION - issues discovered after release, use 4.8.7 instead.
+* Maintenance release with bug fixes.
+* Fixed: Regression in override form usage in lists (thanks, Christian Rapp).
+* Fixed: Undefined $article warning when accessing non-existent articles.
+* Fixed: Error with <txp:output_form /> tag on empty forms (thanks, Adi).
+* Fixed: Low-privilege users can save immediately after duplicating articles.
+* Added: Latest text translations. Thank you to all our translators.
+* Added: 'id' attribute to <txp:if_different /> tag.
+* Added: 'db' option to the global 'escape' attribute.
+* Added: Option to create database during setup.
+* Added: Permission (grants) verification during setup.
+* Changed: 'Assign sections' from Themes panel only selects its own sections.
+* Changed: <txp:variable trim> trims its own output (thanks, cara-tm).
+* Changed: <txp:link_to_next/prev> can return URL or container.
+* Changed: <txp:page_url> and <txp:if_request> tags are more flexible.
+* Changed: Boost power of <txp:article(_custom)> grouping by date.
+* Changed: Articles can be filtered by keywords more easily.
+* Changed: No Edit options in Write panel without appropriate privileges.
+* Changed: No disabled update buttons on Languages panel (thanks, phiw13).
+* Changed: Deprecate <txp:search_result_date />. Use <txp:posted /> instead.
+* Changed: Remove deprecated break attribute from search_result_excerpt tag.
+* Changed: Back-end search improved when handling numbers. Comparators can
+  also be used for numeric searches.
+* Developer: Permit step=false to hook into explicit empty step callbacks and
+  step=null to indicate 'any step'.
+* Developer: Permit $pre to be any text. Opens up arbitrary callback grouping.
+* Developer: New articles>multi_edit.$method callback on Articles list panel.
+* Developer: User panel callbacks:
+    user>fields and user>from to manipulate the query
+    user>controls to affect the button area
+    user_ui>list.row (pluggable_ui) for adding table data
+    user>steps for plugins to register custom panel-level functionality.
+* Developer: Diagnostics panel callbacks diag>steps and diag_ui>level for
+  custom plugin steps.
+
+Changes in 4.8.5 (29 Mar 2021)
+
+* Maintenance release including improvements for PHP 8.0 and bug fixes.
+* Changed: <txp:header /> attributes are unset by default. Ensure any 'name'
+  attributes are set before updating to avoid issues with custom headers.
+* Fixed: Database connection issue for new installations on PHP 8.0.
+* Fixed: libxml_disable_entity_loader() deprecation warning on PHP 8.0.
+* Fixed: Undefined array key/offset warnings on PHP 8.0.
+* Fixed: System temp directory notice on PHP 8.0.
+* Fixed: Custom field ordering on Write panel.
+* Fixed: Diagnostics panel strings no longer have 'Help' appended.
+* Fixed: Draft/hidden/pending articles output 404 Not Found status as they
+  should.
+* Fixed: RSS/Atom feeds display correct titles (thanks, jrmartin).
+* Fixed: Form processing on 'pretext_end' callback.
+* Added: Support for WebP image format, on PHP 7.1 or higher.
+* Added: SSL version verification on Diagnostics panel during update checks.
+* Added: Latest text translations. Thank you to all our translators.
+* Added: More aggregators in <txp:article /> 'fields' attribute.
+* Added: Global 'break', 'replace' and 'trim' attributes.
+* Added: 'breakby' and 'breakform' attributes for all content types.
+* Added: <txp:image_info type="mime" />.
+* Added: Support for Fulah language translation.
+* Added: Locale for en, and improved locale fallbacks.
+* Added: Import attributes in <txp:php /> as PHP variables.
+* Added: 'root' attribute of <txp:page_url /> to create relative URLs.
+* Changed: <txp:article_custom /> can paginate content using 'pageby' attribute.
+* Changed: <txp:images /> outputs full-size images if thumbnails don't exist and
+  <txp:images thumbnail="0" /> displays full-size images as expected.
+* Changed: <txp:images> accepts <txp:else />.
+* Changed: <txp:variable> default attribute can be used during assignment
+  (thanks, cara-tm).
+* Changed: Expose 'secondpass' Advanced pref for testing.
+* Changed: Plugin load warning includes version number.
+* Changed: Comments off by default on new installations.
+* Changed: Diagnostics textarea is rendered fully in English to aid support
+  requests.
+* Changed: If allowed, <txp:php /> is processed in forms even in article body.
+* Changed: Copy Editors are allowed to use <txp:php /> in articles.
+* Changed: Better i18n handling for 'ago'.
+* Developer: New pre-pretext_end callback.
+* Developer: New txp.image>types callback.
+* PrismJS 1.23.0.
+
+Changes in 4.8.4 (29 Nov 2020)
+
+* Maintenance release including support for PHP 8.0 and bug fixes.
+* Fixed: Write panel JS error when override forms were switched off
+  (thanks, GugUser).
+* Fixed: Default publishing section is not updated on section delete/rename.
+* Added: 'fields' attribute to <txp:article />.
+* Added: Tags syntax extension to allow for custom processing order.
+* Added: Additional public-side language strings, primarily for themes.
+* Added: Latest translations. Thank you to all translators for your hard work.
+* Changed: Override forms can be of any type, not just article. See prefs.
+* Changed: Admin-side theme name references are appended with the theme version
+  number.
+* Changed: Improved keyboard focus within responsive tables (to allow scrolling
+  via arrow keys).
+* PrismJS 1.22.0.
+
+Changes in 4.8.3 (13 Sep 2020)
+
+* Fixed: A bug in 4.8.2 that can break some legacy plugins (thanks, Yiannis).
+* Fixed: Correctly label 'Allow commenter images in comments' pref.
+* Fixed: Reload private prefs on preferences save (thanks, phiw13).
+* Fixed: More notifications on list panels if there were no assets recorded.
+* Fixed: Improved upgrade path for Textpattern prior to version 4.5.0.
+* Added: 'loading' attribute for <txp:article_image />, <txp:image /> and
+  <txp:thumbnail /> tags.
+* Added: Instantly refresh admin theme on change.
+* Added: Latest translations. Thank you to all translators for your hard work.
+* Changed: Theme styles are now optional.
+* PrismJS 1.21.0.
 
 Changes in 4.8.2 (29 Jul 2020)
 

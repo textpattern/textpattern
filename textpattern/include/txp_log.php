@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -113,6 +113,7 @@ function log_list($message = '')
             break;
     }
 
+    $sort_sql .= $sort == 'time' ? '' : ", time DESC";
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter(
@@ -186,7 +187,11 @@ function log_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead').
                 tr(
@@ -253,13 +258,20 @@ function log_list($message = '')
                 extract($a, EXTR_PREFIX_ALL, 'log');
 
                 if ($log_refer) {
-                    $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)), txpspecialchars($log_refer), ' rel="external noopener" target="_blank"');
+                    $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)).sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), txpspecialchars($log_refer), array(
+                        'rel'    => 'external',
+                        'target' => '_blank',
+                    ));
                 }
 
                 if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), ' rel="external noopener" target="_blank"');
+                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), array(
+                        'rel'    => 'external',
+                        'target' => '_blank',
+                        'title'  => gTxt('view'),
+                    ));
 
                     if ($log_method == 'POST') {
                         $log_page = strong($log_page);

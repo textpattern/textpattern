@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -21,26 +21,31 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * Deprecation warning: This file serves merely as a compatibility layer for \Textpattern\Admin\Theme.
- * Use the base class for new and updated code.
- * TODO: Remove in v4.next.0
- */
-
 /**
- * Base for admin-side themes.
+ * A numeric &lt;input /&gt; tag with constraints.
  *
- * @package Admin\Theme
+ * @since   4.9.0
+ * @package UI
  */
 
-/**
- * Admin-side theme.
- *
- * @package Admin\Theme
- * @deprecated in 4.6.0
- * @see \Textpattern\Admin\Theme
- */
+namespace Textpattern\UI;
 
-abstract class theme extends \Textpattern\Admin\Theme
+class Number extends Input implements UIInterface
 {
+    /**
+     * Construct a single numeric input field.
+     *
+     * @param string $name  The input key (HTML name attribute)
+     * @param string $value The initial value
+     */
+
+    public function __construct($name, $val)
+    {
+        parent::__construct($name, 'number', $val);
+
+        $this->setAtts(array(
+                'id'    => $this->key,
+                'name'  => $name,
+            ));
+    }
 }

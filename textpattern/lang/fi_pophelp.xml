@@ -3,7 +3,9 @@
 <help lang="fi">
     <group id="admin" title="Käyttäjät-paneeli">
         <item id="about_privileges" title="Tietoa rooleista"><![CDATA[]]></item>
-        <item id="create_author" title="Luo uusi tekijä"><![CDATA[]]></item>
+        <item id="create_author" title="Luo uusi tekijä"><![CDATA[<h2>Lisää uusi tekijä</h2>
+<p>Tervetuloviesti ja kirjautumisohjeet tullaan sähköpostittamaan uudelle tekijälle.</p>
+        ]]></item>
     </group>
 
     <group id="article" title="Kirjoita-paneeli">
@@ -26,7 +28,8 @@
         <item id="file_category" title="Tiedostot"><![CDATA[<h2>Tiedostot</h2>
 <p>Tiedostokategoriat ovat vapaaehtoisia, ja hyödyllisiä tiedostojen ryhmittelemisessä.</p>
         ]]></item>
-        <item id="image_category" title="Kuvat"><![CDATA[]]></item>
+        <item id="image_category" title="Kuvat"><![CDATA[<h2>Kuvat</h2>
+<p>Kuvien kategoriat ovat valinnaisia, ja hyödyllisiä sekä kuvien järjestelemiseen sisäisesti että kuvakokoelmien luomiseen, jotta niitä voidaan näyttää käyttäen tageja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</5</a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</span></a>.</p>]]></item>
         <item id="link_category" title="Linkit"><![CDATA[]]></item>
     </group>
 
@@ -45,7 +48,7 @@
         <item id="modified_files" title="Muokattuja tiedostoja"><![CDATA[]]></item>
         <item id="mysql_table_errors" title="MySQL-taulussa virheitä"><![CDATA[]]></item>
         <item id="no_temp_dir" title="Väliaikaishakemistoa ei ole määritetty"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Osion hakemisto on jo olemassa"><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title="Osio nimetty samaksi kuin hakemisto"><![CDATA[]]></item>
         <item id="path_to_site_inaccessible" title="Sivuston hakemistoon ei ole kirjoitusoikeutta"><![CDATA[
 <h2>Sivuston hakemistoon ei voi kirjoittaa</h2>
 <p>Juuritason <code>index.php</code>-tiedosto, jota käytetään sivuston aloituspaikkana, on sellaisessa hakemistossa, johon palvelimella ei ole kirjoitusoikeuksia. Ole hyvä ja tarkista kirjoitusoikeudet.</p>
@@ -103,7 +106,9 @@
         <item id="admin_side_plugins" title="Käytetäänkö admin-puolen liitännäisiä?"><![CDATA[]]></item>
         <item id="advanced_options" title="Lisävalinnat"><![CDATA[]]></item>
         <item id="allow_article_php_scripting" title="Salli PHP artikkeleissa?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Salli lomakkeen kumoaminen?"><![CDATA[]]></item>
+        <item id="allow_form_override" title="Salli lomakkeen kumoaminen?"><![CDATA[<h2>Salli lomakkeen kumoaminen?</h2>
+<p>Tämä asetus tekee mahdolliseksi kirjoittajien kumota artikkelin näyttämiseen tarkoitetun lomakkeen asetukset. Jos käytössä, 'Kumoa lomake' -pudotusvalikko on käytettävissä kun artikkelia muokataan.</p>
+        ]]></item>
         <item id="allow_page_php_scripting" title="Salli PHP sivuissa?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Arkiston päiväysmuoto"><![CDATA[]]></item>
         <item id="articles_use_excerpts" title="Käytä johdantoa artikkeleissa?"><![CDATA[]]></item>
@@ -116,11 +121,13 @@
         <item id="comments_dateformat" title="Kommenttien päiväysmuoto"><![CDATA[]]></item>
         <item id="comments_default_invite" title="Kommenttien oletuskehoite"><![CDATA[]]></item>
         <item id="comments_disabled_after" title="Kommentointi vanhentuu kun on kulunut"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Poista kommentoijan kuvat kommenteista?"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title="Salli kommentoijan kuvat kommenteissa?"><![CDATA[<h2>Salli kommentoijan kuvat kommenteissa?</h2>
+<p>Kun tämä asetus on 'Ei', kaikki kommentteihin sisältyvät kuvat tullaan poistamaan.</p>
+        ]]></item>
         <item id="comments_mode" title="Kommentointitapa"><![CDATA[]]></item>
         <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="Kommentointi vaatii kommentoijan sähköpostiosoitteen?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Kommentointi vaatii kommentoijan nimen?"><![CDATA[]]></item>
         <item id="comments_sendmail" title="Lähetä kommentit kirjoittajalle?"><![CDATA[]]></item>
         <item id="comments_use_fat_textile" title="Salli lisää Textile-merkintäkieltä kommenteissa?"><![CDATA[]]></item>
@@ -142,10 +149,11 @@
         <item id="include_email_atom" title="Liitä sähköpostiosoite Atom-syötteisiin?"><![CDATA[]]></item>
         <item id="is_dst" title="Kesäaika käytössä?"><![CDATA[]]></item>
         <item id="logging" title="Kirjaaminen"><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title="URLin enimmäispituus (merkkimääränä)"><![CDATA[]]></item>
         <item id="module_pophelp" title="Näytä hallintapaneelissa sisällön seassa ohjelinkkejä"><![CDATA[]]></item>
         <item id="never_display_email" title="Piilota kommentoijan sähköpostiosoite?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Käytä ISO-8859-1 -merkistokoodausta sähköposteissa (oletuksena UTF-8)?"><![CDATA[]]></item>
+        <item id="override_form_types" title="Ohita lomaketyypit"><![CDATA[]]></item>
         <item id="permlink_format" title="Kestolinkin URL-muoto"><![CDATA[]]></item>
         <item id="permlink_mode" title="Artikkelin URL-muoto"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Polku liitännäisten cache-hakemistoon"><![CDATA[]]></item>
@@ -154,6 +162,7 @@
         <item id="publish_expired_articles" title="Julkaise vanhentuneet artikkelit?"><![CDATA[]]></item>
         <item id="publisher_email" title="Lähetä kirjautumistiedot tästä osoitteesta"><![CDATA[]]></item>
         <item id="rss_how_many" title="Kuinka monta artikkelia tulisi näyttää syötteissä?"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
         <item id="send_lastmod" title="Lähetetäänkö &quot;Last-Modified&quot;-otsikkotietue?"><![CDATA[]]></item>
         <item id="show_comment_count_in_feed" title="Näytä kommenttien lukumäärä syötteissä?"><![CDATA[]]></item>
         <item id="site_slogan" title="Sivuston tunnuslause"><![CDATA[]]></item>
@@ -161,7 +170,7 @@
         <item id="siteurl" title="Sivuston URL"><![CDATA[]]></item>
         <item id="skin_dir" title="Teemahakemisto"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP-kirjeen lähettäjän osoite"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndikoi vain artikkelin johdanto?"><![CDATA[]]></item>
         <item id="tempdir" title="Tilapäisten tiedostojen hakemistopolku"><![CDATA[]]></item>
         <item id="theme_name" title="Hallintapaneelin teema"><![CDATA[]]></item>
@@ -169,7 +178,7 @@
         <item id="use_comments" title="Salli kommentointi?"><![CDATA[]]></item>
         <item id="use_mail_on_feeds_id" title="Salli kommentointi?"><![CDATA[]]></item>
         <item id="use_plugins" title="Käytä liitännäisiä?"><![CDATA[]]></item>
-        <item id="use_textile" title="Käytä liitännäisiä?"><![CDATA[]]></item>
+        <item id="use_textile" title="Tekstin oletusmuotoilu"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Osiot-paneeli">

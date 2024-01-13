@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ar">
+    <group id="admin" title="لوحة المستخدمين">
+        <item id="about_privileges" title="حول الأدوار"><![CDATA[
+<h2>حول الأدوار</h2>
+<h3>الناشر</h3>
+<ul>
+    <li>يمكنه  إدارة المقالات والتعليقات والروابط</li>
+    <li>يمكنه استخدام <bdi dir="ltr">PHP</bdi> في المقالات إذا تم تعيين تفضيل المشرف السماح لـ <bdi dir="ltr">PHP</bdi> في المقالات؟ يتم تعيينه على "نعم"</li>
+    <li>يمكنه إدارة الصور والملفات</li>
+    <li>يمكنه إدارة الأقسام والفئات</li>
+    <li>يمكنه إدارة الصفحات والنماذج والأسلوب</li>
+    <li>يمكنه عرض معلومات التشخيص</li>
+    <li>يمكنه إدارة تفضيلات الموقع</li>
+    <li>يمكنه إدارة المستخدمين</li>
+    <li>يمكنه إدارة سجلات الزائرين</li>
+    <li>يمكنه إدارة المكونات الإضافية</li>
+    <li>يمكنه استيراد البيانات</li>
+    </ul>
+<h3>مدير التحرير</h3>
+<ul>
+    <li>يمكنه إدارة المقالات والتعليقات والروابط</li>
+    <li>يمكنه استخدام <bdi dir="ltr">PHP</bdi> في المقالات إذا كان تفضيل المشرف "السماح لـ <bdi dir="ltr">PHP</bdi> في المقالات؟ "مضبوط على" نعم"</li>
+    <li>يمكنه إدارة الصور والملفات</li>
+    <li>يمكنه إدارة الأقسام والفئات</li>
+    <li>يمكنه إدارة الصفحات والنماذج والأسلوب</li>
+    <li>يمكنه عرض معلومات التشخيص</li>
+    <li>يمكنه إدارة تفضيلات الموقع</li>
+    <li>يمكنه عرض المستخدمين</li>
+    <li>يمكنه إدارة سجلات الزائرين</li>
+    <li>يمكنه إدارة المكونات الإضافية</li>
+    <li>يمكنه استيراد البيانات</li>
+</ul>
+<h3>نسخة المحرر</h3>
+<ul>
+    <li>يمكنه إدارة المقالات بقيد واحد:
+        <ul>
+            <li>لا يمكنه حذف تلك التي تنتمي إلى مستخدمين آخرين</li>
+        </ul>
+   </li>
+    <li>يمكنه إدارة التعليقات والروابط</li>
+    <li>يمكنه إدارة الصور والملفات</li>
+    <li>يمكنه إدارة الفئات</li>
+    <li>يمكنه إدارة الصفحات والنماذج</li>
+    <li>يمكنه عرض المستخدمين</li>
+    <li>يمكنه إدارة سجلات الزائرين</li>
+</ul>
+<h3>كاتب عام</h3>
+<ul>
+    <li>يمكنه إدارة المقالات الخاصة به وعرض مقالات المستخدمين الآخرين</li>
+    <li>يمكنه إدارة الصور والملفات</li>
+</ul>
+<h3>مستقل</h3>
+<ul>
+    <li>يمكنه إدارة المقالات الخاصة بمفهوم محدود:
+        <ul>
+            <li>يمكنه فقط تعديل المقالة حتى يتم نشرها</li>
+            <li>يمكنه تطبيق حالة <em>فقط</em> مسودة أو مخفية أو معلقة</li>
+        </ul>
+    </li>
+    <li>يمكنه عرض مقالات المستخدمين الآخرين</li>
+</ul>
+<h3>المصمم</h3>
+<ul>
+    <li>يمكنه إدارة المقالات الخاصة بمفهوم محدود:
+        <ul>
+            <li>يمكنه فقط تعديل المقالة حتى يتم نشرها</li>
+            <li>يمكنه تطبيق حالة <em>فقط</em> مسودة أو مخفية أو معلقة</li>
+        </ul>
+    </li>
+    <li>يمكنه عرض مقالات المستخدمين الآخرين</li>
+    <li>يمكنه إدارة الصور</li>
+    <li>يمكنه إدارة الأقسام</li>
+    <li>يمكنه إدارة الصفحات والنماذج والأسلوب</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="أنشئ محرر"><![CDATA[<h2>إضافة مؤلف جديد</h2>
+<p>سيتم إرسال رسالة ترحيب وإرشادات تسجيل الدخول بالبريد الإلكتروني إلى المؤلف الجديد.</p>]]></item>
+    </group>
+
+    <group id="article" title="لوحة الكتابة">
+        <item id="article_image" title="صورة المقال"><![CDATA[<h2>صورة المقالة</h2>
+<p>لربط صورة واحدة بهذه المقالة ، ضع أحد العناصر التالية هنا:</p>
+<ol>
+     <li>معرف صورة <bdi dir="ltr">Textpattern</bdi> (على سبيل المثال <code>12</code>)</li>
+     <li>عنوان <bdi dir="ltr">URL</bdi> نسبي للصورة (مثل <code>/images/my_pic.jpg</code>)</li>
+     <li>عنوان <bdi dir="ltr">URL</bdi> مؤهل بالكامل (على سبيل المثال <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>يمكن عرض الصورة بوضع علامة <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(يفتح رابط خارجي في نافذة جديدة)</span></a> داخل مقال شكل. سيخرج علامة <bdi dir="ltr">HTML</bdi> <code dir="ltr">&lt;img&gt;</code>كاملة للصورة المختارة.</p>]]></item>
+        <item id="body" title="النص"><![CDATA[<h2>النص</h2>
+<p>المحتوى الرئيسي للمقالة موجود في نص المقالة.</p>
+<p>عند إنشاء مقالات أو إعدادها للنشر في <bdi dir="ltr">Textpattern</bdi> ، يمكن للمؤلف التبديل بين ثلاث طرق عرض للمقالة: نص عادي ، وترميز <bdi dir="ltr">HTML</bdi> (الكود الذي يعرض به مستعرض الويب المقالة)، ومعاينة مقدمة.</p>]]></item>
+        <item id="description" title="وصف"><![CDATA[<h2>الوصف</h2>
+<p>وصف المقالة مكون اختياري يمكن أن يساعد محركات البحث وبرامج زحف مواقع الويب في تحديد المحتوى وفرزه بشكل أفضل.</p>
+<p>وصف المقالة محدد بحد أقصى <code>255</code> حرفًا. لاحظ أن بعض محركات البحث تضع حدودًا لعدد الأحرف المسموح به على طول الوصف التعريفي للصفحة من أجل التطبيق العملي للعرض في صفحات نتائج محرك البحث <bdi dir="ltr">(SERPs)</bdi> وقد يكون هذا أقل من حد <code>255</code> حرفًا في <bdi dir="ltr">Textpattern</bdi>.</p>
+<p>لاحظ أن وصف المقالة يختلف عن مقتطف المقالة ، رغم أنهما يقبلان محتوى مشابهًا. يجب أن يكون وصف المقالة مخصصًا بشكل أساسي للاستخدام مع محركات البحث وبرامج الزحف ، بينما يكون مقتطف المقالة أكثر ملاءمة لملخص مقالة يمكن قراءته بواسطة الإنسان عند الرغبة.</p>]]></item>
+        <item id="excerpt" title="مقتطفات"><![CDATA[<h2>مقتطف</h2>
+<p> مقتطفات المقالة اختيارية. يمكن استخدام المقتطفات كملخص قصير للمقالة التي يتم عرضها كجزء من جدول المحتويات ، وتستخدم بدلاً من نص المقالة الكامل في خلاصات <bdi dir="ltr">RSS/Atom</bdi> بالموقع ، أو في عدد من الاستخدامات الأخرى.</p>]]></item>
+        <item id="expire_date" title="تاريخ انتهاء الصلاحية"><![CDATA[<h2>تاريخ انتهاء الصلاحية</h2>
+<p>الوقت الذي يتم فيه تصنيف المقالة على أنها منتهية الصلاحية. الوقت اختياري ويمكن ضبطه على وقت عشوائي في الماضي أو المستقبل.</p>
+<p>المربعات تتوافق مع المعلومات التالية:</p>
+<ul>
+     <li>سنة / شهر / يوم</li>
+     <li>الساعة (تنسيق 24 ساعة): الدقيقة: ثانية</li>
+</ul>
+<p>عندما يحين الوقت ، أو في حالة تقديم وقت في الماضي ، تنتهي صلاحية المقالة.</p>
+<p>إذا تم تمكين خيار عرض المقالات منتهية الصلاحية ، فستظل المقالة مرئية. إذا تم تعطيل خيار عرض المقالات منتهية الصلاحية ، فسيعرض على زوار صفحة المقالة خطأ <bdi dir="ltr">HTTP 410</bdi>بدلاً من محتوى المقالة.</p>]]></item>
+        <item id="keywords" title="الكلمات الدالة"><![CDATA[<h2>الكلمات الرئيسية</h2>
+<p>الكلمات الرئيسية مفيدة لتحسين العلاقات بين المقالات بخلاف تلك التي توفرها الفئات.</p>
+<p>يجب أن تكون الكلمات الرئيسية كلمات فردية مفصولة بفواصل.</p>]]></item>
+        <item id="override_form" title="تجاوز النموذج"><![CDATA[<h2>تجاوز النموذج</h2>
+<p>يمكن للمقالة استخدام نموذج مختلفًا بشكل اختياري عن ذلك المعين افتراضيًا - على سبيل المثال لإظهار مقتطف من مقالة مع <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(يفتح رابط خارجي في نافذة جديدة)</span></a> بدلاً من نص المقالة بـ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(يفتح رابط خارجي في نافذة جديدة)</a> يمكن تعيين هذا هنا.</p>]]></item>
+        <item id="publish_date" title="تاريخ النشر"><![CDATA[<h2>تاريخ النشر</h2>
+<p>الوقت الذي يتم فيه نشر مقالة أو ملف أو آخر مراجعة. يمكن ضبط الوقت على لحظة نشر العنصر ، أو على وقت عشوائي في الماضي أو المستقبل.</p>
+<p>المربعات تتوافق مع المعلومات التالية:</p>
+<ul>
+     <li>سنة / شهر / يوم</li>
+     <li>الساعة (تنسيق 24 ساعة): الدقيقة: ثانية</li>
+</ul>
+<p>عنصر ذو طابع زمني أكبر من الوقت الحالي (أي في المستقبل) لن يظهر على الجانب الأمامي وخلاصات <bdi dir="ltr">RSS/Atom</bdi>حتى وصول ذلك الوقت.</p>]]></item>
+        <item id="status" title="الحالة"><![CDATA[<h2>الحالة</h2>
+<p>يحدد حالة رؤية النشر لمقالة <bdi dir="ltr">Textpattern</bdi> هذه.</p>
+<p>حالة النشر هي إحدى الحالات التالية:</p>
+<ul>
+    <li>مسودة</li>
+    <li>مخفي</li>
+    <li>معلق</li>
+    <li>مباشر</li>
+    <li>مثبت</li>
+</ul>
+<p>تعتبر مقالة مسودة عملاً قيد التنفيذ ولا يمكن عرضها خارج منطقة إدارة <bdi dir="ltr">Textpattern</bdi> (أي غير مرئية على الجانب الأمامي من <bdi dir="ltr">Textpattern</bdi> وليست مجمعة في الخلاصات).</p>
+<p>مقالة مخفية غير قابلة للعرض خارج منطقة إدارة <bdi dir="ltr">Textpattern</bdi>.</p>
+<p>تعتبر المقالة المعلقة جاهزة للنشر وتنتظر الموافقة ، ولكنها غير قابلة للعرض خارج منطقة إدارة <bdi dir="ltr">Textpattern</bdi>.</p>
+<p>مقالة مباشرة </ 4> قابلة للعرض عادة خارج منطقة إدارة <bdi dir="ltr">Textpattern</bdi> (أي مرئية على الجانب الأمامي <bdi dir="ltr">Textpattern</bdi> ، مجمعة في الخلاصات إذا كان التفضيل يسمح بذلك). إذا كانت المقالة مباشرة ولها تاريخ انتهاء الصلاحية ، فستبقى الحالة على أنها نشطة بعد الوصول إلى هذا التاريخ ، ولكن المقالة تظهر فقط خارج منطقة الإدارة إذا تم السماح بنشر المقالات منتهية الصلاحية.</p>
+<p>ثابتة </ 4> مشابهة لمقالة مباشرة </ 4> بقدر ما يمكن عرضها خارج منطقة إدارة <bdi dir="ltr">Textpattern</bdi> ولكن لا تظهر في المقالة القوائم ما لم تتضمن العلامة <code dir="ltr">مقالة</code> أو <code dir="ltr">مقال_مخصص</code>تتضمن العلامة أ <code dir="ltr">الحالة</code> ذات قيمة <code dir="ltr">ثابتة</code>.</p>]]></item>
+        <item id="title" title="عنوان"><![CDATA[<h2>العنوان</h2>
+<p>أضف عنوانًا مناسبًا لهذه المقالة.</p>
+<p>عنوان المقالة محدد بحد أقصى <code dir="ltr">255</code> حرفًا.</p>]]></item>
+        <item id="url_title" title="عنوان URL فقط"><![CDATA[<h2>عنوان <bdi dir="ltr">URL</bdi> فقط</h2>
+<p>لاستخدام عنوان محدد في عنوان <bdi dir="ltr">URL</bdi> للرابط الثابت لمقالة ، أدخله هنا. إذا تم تركه فارغًا ، فسيتم إنشاء عنوان <bdi dir="ltr">URL</bdi> تلقائيًا من عنوان المقالة </ 1.</p>
+<p>يكون هذا مفيدًا بشكل خاص إذا كان عنوان المقالة يستخدم أحرفًا غير <bdi dir="ltr">ASCII</bdi>.</p>]]></item>
+    </group>
+
+    <group id="category" title="لوحة الفئات">
+        <item id="article_category" title="مقالات"><![CDATA[<h2>مقالات</h2>
+<p>على عكس الأقسام ، التي تحدد بنية التنقل للموقع ، تسمح فئات المقالات بتنظيم المقالات حسب موضوعها. بمجرد تعيين الفئات ، يمكن تصفح قوائم المقالات التي تنتمي إلى فئات معينة.</p>
+<p>على سبيل المثال ، قد تكون فئات المقالات المحتملة على موقع ما عن الطعام هي:</p>
+<ul>
+     <li>المكونات الخام</li>
+     <li>التسوق</li>
+     <li>وصفات</li>
+     <li>عرض</li>
+     <li>مطاعم</li>
+     <li>طهاة </li>
+</ul>]]></item>
+        <item id="category_description" title="وصف"><![CDATA[<h2>وصف الفئة</h2>
+<p>وصف الفئة هو مكون اختياري يمكن أن يساعد محركات البحث وبرامج زحف مواقع الويب في تحديد المحتوى وفرزه بشكل أفضل.</p>
+<p>وصف الفئة محدد بحد أقصى <code dir="ltr">255</code> حرفًا. لاحظ أن بعض محركات البحث تضع حدودًا لعدد الأحرف المسموح به على طول الوصف التعريفي للصفحة من أجل التطبيق العملي للعرض في صفحات نتائج محرك البحث <bdi dir="ltr">(SERPs)</bdi> وقد يكون هذا أقل من حد <code dir="ltr">255</code> حرفًا في <bdi dir="ltr">Textpattern</bdi>.</p>]]></item>
+        <item id="file_category" title="الملفات"><![CDATA[<h2>ملفات</h2>
+<p>تعد فئات الملفات اختيارية ومفيدة لتجميع الملفات المحملة المحددة معًا.</p>]]></item>
+        <item id="image_category" title="الصور"><![CDATA[<h2>صور</h2>
+<p>فئات الصور اختيارية ومفيدة لكل من التنظيم الداخلي ولتعريف مجموعات الصور التي يمكن عرضها باستخدام <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(يفتح رابط خارجي في نافذة جديدة )</span></a> و <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(يفتح رابط خارجي في نافذة جديدة)</span></a> العلامات.</p>]]></item>
+        <item id="link_category" title="الروابط"><![CDATA[]]></item>
+    </group>
+
+    <group id="diag" title="لوحة التشخيص">
+        <item id="clean_url_data_failed" title="فشل إختبار العنوان الرقمي النظيف"><![CDATA[
+<h2>فشل تنظيف بيانات <bdi dir="ltr">URL</bdi></h2>
+<p>يبدو أنه إما عناوين <bdi dir="ltr">URL</bdi> للموقع (على سبيل المثال <code>https://example.com/section/Article</code>) لا يعمل حاليا أو أن خادم الويب لا يدعم إجراء الاختبار لتحديد ما إذا كانت عناوين <bdi dir="ltr">URL</bdi> النظيفة/السليمة تعمل أم لا؛ إذا كانت عناوين <bdi dir="ltr">URL</bdi> سليمة ستعمل على الموقع كما هو متوقع، يمكن تجاهل هذه الرسالة بأمان.</p>
+<p>إذا كانت عناوين <bdi dir="ltr">URL</bdi> غير سليمة <em>ليست</em>  فقد يعني ذلك:</p>
+<ul>
+    <li>إعداد "رابط الموقع" غير صحيح، أو أن الصفحة في ذلك العنوان لا تدار بواسطة هذا المثيل من هذا النمط <bdi dir="ltr">Textpattern</bdi></li>
+    <li>يتطلب الخادم بعض التغييرات إلى <code>. الوصول إلى</code> أو توجيه خادم مماثل لجعل عناوين <bdi dir="ltr">URL</bdi> نظيفة تعمل</li>
+    <li>الخادم لا يدعم عناوين <bdi dir="ltr">URL</bdi> النظيفة على الإطلاق</li>
+</ul>
+<p>اختبار <bdi dir="ltr">URL</bdi> النظيف يحاول جلب صفحة من عنوان الويب المحدد في تفضيل "موقع <bdi dir="ltr">URL</bdi>" للتحقق من أن جميع معلمات <bdi dir="ltr">URL</bdi> النظيف تعمل بشكل صحيح. إذا كان عنوان <bdi dir="ltr">URL</bdi> هذا موقع مختلف، أو تم استبداله بصفحة ثابتة أو مشابهة، فإن الاختبار سوف يفشل. حتى يتم حل المشكلة عناوين <bdi dir="ltr">URL</bdi> الفوضى المتسببة بالخطأ (على سبيل المثال <code>https://example.com?s=section&amp;id=4</code>) يجب استخدامها. تأكد من تعيين "وضع الرابط الدائم" في تفضيلات المدير تبعاً لذلك.</p>
+<p>لاحظ أن استخدام إضافة لوضع موقع في "وضع الصيانة" قد يؤدي إلى هذا التحذير.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
+        <item id="diag_clear_private" title="إخفاء المعلومات الخاصة"><![CDATA[]]></item>
+        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="dir_not_writable" title=""><![CDATA[]]></item>
+        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
+        <item id="file_uploads_disabled" title="تحميل الملفلت في الموزع لا يعمل"><![CDATA[]]></item>
+        <item id="htaccess_missing" title=""><![CDATA[]]></item>
+        <item id="index_inaccessible" title=""><![CDATA[]]></item>
+        <item id="missing_files" title="ملفات ناقصة"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
+        <item id="modified_files" title=""><![CDATA[]]></item>
+        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
+        <item id="no_temp_dir" title=""><![CDATA[]]></item>
+        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
+        <item id="php_version_required" title=""><![CDATA[]]></item>
+        <item id="setup_still_exists" title=""><![CDATA[]]></item>
+        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="file" title="">
+        <item id="file_reassign" title=""><![CDATA[]]></item>
+        <item id="file_replace" title="استبدال ملف"><![CDATA[]]></item>
+        <item id="timestamp_file" title="تاريخ النشر"><![CDATA[]]></item>
+        <item id="upload" title="إرسال ملف"><![CDATA[]]></item>
+    </group>
+
+    <group id="form" title="">
+        <item id="forms_overview" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="image" title="">
+        <item id="create_thumbnail" title="إنشاء مصغرة"><![CDATA[]]></item>
+        <item id="replace_image_form" title="استبدال الصورة"><![CDATA[]]></item>
+        <item id="upload_image" title="تحميل الصور"><![CDATA[]]></item>
+        <item id="upload_thumbnail" title="إرسال مصغرة"><![CDATA[]]></item>
+    </group>
+
+    <group id="lang" title="">
+        <item id="get_textpack" title="تثبيت تكستباك"><![CDATA[]]></item>
+    </group>
+
+    <group id="link" title="">
+        <item id="link_description" title="وصف"><![CDATA[]]></item>
+        <item id="link_sort" title="قيمة الترتيب"><![CDATA[]]></item>
+        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="timestamp_link" title="تاريخ النشر"><![CDATA[]]></item>
+    </group>
+
+    <group id="login" title="">
+        <item id="remember_login" title="إبق متصل دوما"><![CDATA[]]></item>
+    </group>
+
+    <group id="plugin" title="">
+        <item id="install_plugin" title="تنزيل البلوغين"><![CDATA[]]></item>
+        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="prefs" title="">
+        <item id="admin_side_plugins" title="استخدام مجموعة البلوغين الإدارية؟"><![CDATA[]]></item>
+        <item id="advanced_options" title="تشكيل متقدم"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="PHP ترخيص نظام .. في المقالات؟"><![CDATA[]]></item>
+        <item id="allow_form_override" title="(Form) ترخيص استعمال ؟ في المقال الواحد؟"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="PHP ترخيص نظام .. في ؟؟؟"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="حجم تاريخ الأرشيف"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="تستعمل المقالات ملخص؟"><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="ربط العنوان بعناوين المواقع الثابتة؟"><![CDATA[]]></item>
+        <item id="auto_dst" title="ضبط إعدادات التوقيت الصيفي أوتوماتيكياً؟"><![CDATA[]]></item>
+        <item id="comment_means_site_updated" title="تعليقات جديدة تفيد بان الموقع أعيد ضبطه؟"><![CDATA[]]></item>
+        <item id="comment_nofollow" title=""><![CDATA[]]></item>
+        <item id="comments_are_ol" title="استعراض التعليقات في شكل قائمة منتظمة"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="إضافة التعليقات مباشرة بعد المقال"><![CDATA[]]></item>
+        <item id="comments_dateformat" title="حجم تاريخ التعليقات"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="الجملة التي تدعو مباشرة للإرسال"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="إبطال التفعيل بعد"><![CDATA[]]></item>
+        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
+        <item id="comments_mode" title="أسلوب التعليقات"><![CDATA[]]></item>
+        <item id="comments_moderate" title="تعديل التعليثات"><![CDATA[]]></item>
+        <item id="comments_on_default" title="تفيل مباشر؟"><![CDATA[]]></item>
+        <item id="comments_require_email" title="التعليقات تستلزم بريدا غلكترونيا"><![CDATA[]]></item>
+        <item id="comments_require_name" title="التعليقات تستلزم اسم المستخدم"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="إرسال التعليقات للمؤلف عبر البريد الإلكتروني"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="السماح بترقيم النص في التعليقات؟"><![CDATA[]]></item>
+        <item id="custom_form_types" title="أنواع قالب نموذج مخصص"><![CDATA[]]></item>
+        <item id="custom_overview" title="مشخص"><![CDATA[]]></item>
+        <item id="dateformat" title="حجم التاريخ"><![CDATA[]]></item>
+        <item id="default_event" title="اللوحة الإفتراضية"><![CDATA[]]></item>
+        <item id="default_publish_status" title="حالة النشر الإفتراضية"><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[]]></item>
+        <item id="enable_dev_preview" title="تمكين المعاينة موضوع التطوير؟"><![CDATA[]]></item>
+        <item id="enable_short_tags" title="تمكين دعم الإشارة الجزئية"><![CDATA[]]></item>
+        <item id="enable_xmlrpc_server" title="تمكين خادم XML-RPC؟"><![CDATA[]]></item>
+        <item id="expire_logs_after" title="(log) تبطل صلاحية صحيفة النشاط بعد"><![CDATA[]]></item>
+        <item id="file_base_path" title="مصنف الملفات المحمملة"><![CDATA[]]></item>
+        <item id="file_max_upload_size" title="أكبر حجم للملف المرسل في الموزع"><![CDATA[]]></item>
+        <item id="gmtoffset" title="GMT توقيت"><![CDATA[]]></item>
+        <item id="img_dir" title="مصنف الصور"><![CDATA[]]></item>
+        <item id="include_email_atom" title="Atom إدخال عنوان البريد الغلكتروني ضمن تدفق آتوم؟"><![CDATA[]]></item>
+        <item id="is_dst" title="ضبط التوقيت الصيفي المستخدم"><![CDATA[]]></item>
+        <item id="logging" title="التسجيل بصحيقفة النشاطات"><![CDATA[]]></item>
+        <item id="max_url_len" title="الحجم الأكبر لعنوان الموقع"><![CDATA[]]></item>
+        <item id="module_pophelp" title="هل تريد عرض روابط المساعدة المضمنة من جانب المشرف"><![CDATA[]]></item>
+        <item id="never_display_email" title=""><![CDATA[]]></item>
+        <item id="override_emailcharset" title="Latin 1 (ISO-8859-1) تحويل رسا~ل البريد الإلكتروني إلى الغة اللاتينية"><![CDATA[]]></item>
+        <item id="override_form_types" title=""><![CDATA[]]></item>
+        <item id="permlink_format" title="نمط عنوان الرابط الثابط"><![CDATA[]]></item>
+        <item id="permlink_mode" title="حجم عناوين المواقع"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="مسار ذاكرة التخزين المؤقت للمكون الإضافي"><![CDATA[]]></item>
+        <item id="production_status" title="حالة الإنتاج"><![CDATA[]]></item>
+        <item id="public_theme_name" title="مظهر الجانب الأمامي"><![CDATA[]]></item>
+        <item id="publish_expired_articles" title="هل تريد نشر المقالات منتهية الصلاحية؟"><![CDATA[]]></item>
+        <item id="publisher_email" title="إرسال معلومات تسجيل الدخول من هذا البريد الإلكتروني"><![CDATA[]]></item>
+        <item id="rss_how_many" title="RSS كم من المقالات تمر عبر تدفق"><![CDATA[]]></item>
+        <item id="secondpass" title=""><![CDATA[]]></item>
+        <item id="send_lastmod" title=""><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="(XML) عرض عدد التعليقات عبر تدفق"><![CDATA[]]></item>
+        <item id="site_slogan" title="شعار الموقع"><![CDATA[]]></item>
+        <item id="sitename" title="اسم الموقع"><![CDATA[]]></item>
+        <item id="siteurl" title="URL الخاص بالموقع"><![CDATA[]]></item>
+        <item id="skin_dir" title="مسار الموضوع"><![CDATA[]]></item>
+        <item id="smtp_from" title="عنوان مرسل SMTP"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="anti spam القائمة السوداء المضادة لـ {متقطعة بفاصلة}"><![CDATA[]]></item>
+        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
+        <item id="tempdir" title="مصنف مؤقت"><![CDATA[]]></item>
+        <item id="theme_name" title="مظهر الإدارة"><![CDATA[]]></item>
+        <item id="txp_evaluate_functions" title="تم تمكين وظائف PHP في txp:evaluate"><![CDATA[]]></item>
+        <item id="use_comments" title="تقبل التعليقات"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="أستخدام البريد للتعرف على التدفقات"><![CDATA[]]></item>
+        <item id="use_plugins" title="استخدام البلوغين"><![CDATA[]]></item>
+        <item id="use_textile" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="section" title="">
+        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_default" title="قسم النشر الافتراضي"><![CDATA[]]></item>
+        <item id="section_description" title="وصف"><![CDATA[]]></item>
+        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
+        <item id="section_searchable" title="تدرج مع نتائج البحث"><![CDATA[]]></item>
+        <item id="section_syndicate" title=""><![CDATA[]]></item>
+        <item id="section_uses_css" title="style استعمال ال"><![CDATA[]]></item>
+        <item id="section_uses_page" title="استخدامات الصفحة"><![CDATA[]]></item>
+        <item id="section_uses_skin" title="يستخدم الموضوع"><![CDATA[]]></item>
+    </group>
+
+    <group id="setup" title="">
+        <item id="setup_user_login" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="table_prefix" title=""><![CDATA[]]></item>
+    </group>
+
+    <group id="skin" title="">
+        <item id="skin_author" title="صاحب الموضوع"><![CDATA[]]></item>
+        <item id="skin_author_uri" title="موقع الموضوع"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="حذف قوالب السمة من القرص أيضا"><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="حذف القوالب غير المستخدمة من قاعدة البيانات عند الاستيراد"><![CDATA[]]></item>
+        <item id="skin_delete_from_disk" title="حذف القوالب غير المستخدمة من القرص عند التصدير"><![CDATA[]]></item>
+        <item id="skin_description" title="وصف الموضوع"><![CDATA[]]></item>
+        <item id="skin_import" title="استيراد الموضوع"><![CDATA[]]></item>
+        <item id="skin_name" title="اسم الموضوع"><![CDATA[]]></item>
+        <item id="skin_overview" title=""><![CDATA[]]></item>
+        <item id="skin_title" title="عنوان الموضوع"><![CDATA[]]></item>
+        <item id="skin_version" title="موضوع الإصدار"><![CDATA[]]></item>
+    </group>
+</help>
+</resources>

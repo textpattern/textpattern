@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -39,6 +39,7 @@ if ($event == 'lang') {
         'get_language'     => true,
         'get_textpack'     => true,
         'remove_language'  => true,
+        'reset_language'   => true,
         'save_language'    => true,
         'save_language_ui' => true,
         'list_languages'   => false,
@@ -59,7 +60,7 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
-    global $txp_user, $prefs;
+    global $prefs, $txp_is_dev;
 
     $allTypes = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE;
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available($allTypes, $allTypes);
@@ -67,6 +68,7 @@ function list_languages($message = '')
     $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
     $represented_lang = array_merge($active_lang, $installed_lang);
 
+    $def_lastmod = $txp_is_dev && isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['file_lastmod'] : 0;
     $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
     $ui_lang = get_pref('language_ui', $site_lang, true);
     $cpanel = '';
@@ -94,7 +96,7 @@ function list_languages($message = '')
 
     $grid = '';
     $done = array();
-    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in ('".join("','", doSlash(array_keys($represented_lang)))."') AND user_name != '".doSlash($txp_user)."'");
+    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in ('".join("','", doSlash(array_keys($represented_lang)))."')");
 
     $langUse = array();
 
@@ -103,7 +105,9 @@ function list_languages($message = '')
     }
 
     foreach ($langUse as $key => $row) {
-        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')', 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
+        $langUse[$key] = tag(eLink(
+            'admin', 'author_list', 'search_method', 'login', '('.count($row).')', 'crit', join(',', doSlash($row)), gTxt('language_count_user', array('{num}' => count($row)))
+        ), 'span', array('class' => 'txp-lang-user-count'));
     }
 
     // Create the widget components.
@@ -112,23 +116,23 @@ function list_languages($message = '')
             continue;
         }
 
-        $file_updated = (isset($langdata['db_lastmod']) && $langdata['file_lastmod'] > $langdata['db_lastmod']);
+        $file_updated = (isset($langdata['db_lastmod']) && max($def_lastmod, $langdata['file_lastmod']) > $langdata['db_lastmod']);
 
         if (array_key_exists($langname, $represented_lang)) {
             if ($file_updated) {
                 $cellclass = 'warning';
                 $icon = 'ui-icon-alert';
                 $status = gTxt('installed').' <span role="separator">/</span> '.gTxt('update_available');
-                $disabled = (has_privs('lang.edit') ? '' : 'disabled');
             } else {
                 $cellclass = 'success';
                 $icon = 'ui-icon-check';
                 $status = gTxt('installed');
-                $disabled = 'disabled';
             }
 
+            $disabled = (has_privs('lang.edit') ? '' : 'disabled');
+
             if (isset($available_lang[$langname])) {
-                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt('update'));
+                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt($file_updated ? 'update' : 'reload'));
             } else {
                 $btnText = '';
                 $cellclass = 'warning';
@@ -137,7 +141,7 @@ function list_languages($message = '')
             $removeText = '<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove'));
 
             $btnRemove = (
-                array_key_exists($langname, $active_lang)
+                (array_key_exists($langname, $active_lang) || array_key_exists($langname, $langUse))
                     ? ''
                     : (has_privs('lang.edit')
                         ? tag($removeText, 'button', array(
@@ -153,30 +157,35 @@ function list_languages($message = '')
         }
 
         $installLink = ($disabled
-            ? span($btnText, array('class' => 'txp-button disabled'))
+            ? ''
             : tag($btnText, 'button', array(
                 'type'      => 'submit',
-                'name'      => 'get_language',
+                'name'      => $file_updated ? 'get_language' : 'reset_language',
             )));
 
+        $langMeta = graf(
+            ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
+            tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
+            tag($langname, 'code', array('dir' => 'ltr')).
+            (array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
+        );
+
+        $btnSet = trim((has_privs('lang.edit')
+                ? $installLink
+                : '')
+            .n. $btnRemove);
+
         $grid .= tag(
-            form(
-                graf(
-                    ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
-                    tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
-                    tag($langname, 'code', array('dir' => 'ltr')).
-                    ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
-                ).
-                graf(
-                    (has_privs('lang.edit')
-                        ? $installLink
-                        : '')
-                    .n. $btnRemove
-                ).
-                hInput('lang_code', $langname).
-                eInput('lang').
-                sInput(null)
-            , '', '', 'post'),
+            ($btnSet
+                ? form(
+                    $langMeta.
+                    graf($btnSet).
+                    hInput('lang_code', $langname).
+                    eInput('lang').
+                    sInput(null)
+                , '', '', 'post')
+                : $langMeta
+            ),
             'li',
             array('class' => 'txp-grid-cell txp-grid-cell-2span'.($cellclass ? ' '.$cellclass : ''))
         ).n;
@@ -317,7 +326,7 @@ function save_language_ui()
  * e.g. 'en-gb', 'fi'.
  */
 
-function get_language()
+function get_language($reset = false)
 {
     $lang_code = ps('lang_code');
     $langName = fetchLangName($lang_code);
@@ -325,16 +334,28 @@ function get_language()
     $installed = $txpLang->installed();
     $installString = in_array($lang_code, $installed) ? 'language_updated' : 'language_installed';
 
-    if ($txpLang->installFile($lang_code)) {
+    if ($txpLang->installFile($lang_code, '', $reset)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
         $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
-        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
+        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks($lang_code, $reset);
 
         return list_languages(gTxt($installString, array('{name}' => $langName)));
     }
 
     return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
+}
+
+/**
+ * Installs a language from a file.
+ *
+ * The HTTP POST parameter 'lang_code' is the installed language,
+ * e.g. 'en-gb', 'fi'.
+ */
+
+function reset_language()
+{
+    return get_language(true);
 }
 
 /**
@@ -366,7 +387,7 @@ function install_lang_key(&$value, $key)
         "name = '".doSlash($value['name'])."',
         event = '".doSlash($value['event'])."',
         data = '".doSlash($value['data'])."',
-        lastmod = '".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
+        lastmod = '".doSlash(date('YmdHis', $value['uLastmod']))."'";
 
     if ($exists !== false) {
         $value['ok'] = safe_update(

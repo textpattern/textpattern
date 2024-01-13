@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -144,3 +144,27 @@ $txpcfg['client_flags'] = 0;
  */
 
 // define('PROTOCOL', 'https://');
+
+/*
+ * Optional, advanced: define a Content Security Policy header.
+ * see TODO
+ */
+
+//$headerCsp =
+//    "base-uri 'none';".
+//    "block-all-mixed-content;".
+//    "connect-src 'self';".
+//    "default-src 'none';".
+//    "font-src 'self';".
+//    "form-action 'self';".
+//    "frame-ancestors 'self';".
+//    "img-src data: 'self';".
+//    "media-src 'self';".
+//    "script-src 'self' 'unsafe-inline';".
+//    "script-src-attr 'none';".
+//    "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+//    "style-src 'self' 'unsafe-inline';".
+//    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
+//    "style-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+//    "worker-src 'none'";
+//define('CONTENT_SECURITY_POLICY', $headerCsp);

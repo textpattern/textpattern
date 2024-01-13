@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -78,9 +78,9 @@ class SelectTree extends Select implements UIInterface
     public function __construct($name, $options = array(), $default = null, $properties = null)
     {
         parent::__construct('select');
-        $this->key = $name;
 
-        $this->setAtt('name', $name);
+        $this->setKey($name)
+            ->setAtt('name', $name);
 
         if ($default === null) {
             $default = array();
@@ -127,7 +127,7 @@ class SelectTree extends Select implements UIInterface
             $sep = empty($this->properties['separator']) ? '' : str_repeat($this->properties['separator'], $level);
             $html_title = $suffix = '';
 
-            if (($maxlen > self::MIN_LABEL_LENGTH) && (strlen(utf8_decode($label)) > $maxlen)) {
+            if (($maxlen > self::MIN_LABEL_LENGTH) && (Txp::get('\Textpattern\Type\StringType', $label)->getLength() > $maxlen)) {
                 $html_title = txpspecialchars($label);
                 $suffix = empty($this->properties['more']) ? '' : $this->properties['more'];
                 $label = preg_replace('/^(.{0,'.($maxlen).'}).*$/su', '$1', $label);

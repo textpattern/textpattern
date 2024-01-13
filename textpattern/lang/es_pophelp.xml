@@ -77,7 +77,7 @@
         ]]></item>
         <item id="create_author" title="Crear autor"><![CDATA[
 <h2>Añadir nuevo autor</h2>
-<p>Una contraseña, mensaje de bienvenida y instrucciones de inicio de sesión serán enviadas por correo electrónico al nuevo autor.</p>
+<p>Se enviarán contraseña, mensaje de bienvenida e instrucciones de inicio de sesión por correo electrónico al nuevo autor.</p>
         ]]></item>
     </group>
 
@@ -271,9 +271,9 @@
         <item id="no_temp_dir" title="No hay un directorio temporal definido"><![CDATA[
 <h2> No hay directorio temporal definido </h2>
  <p> Si bien Textpattern se ejecutará sin un directorio temporal, es posible que algunas funciones no funcionen como se esperaba si no se establece esta preferencia. Visite Preferencias de administrador y configure la "Ruta de directorio temporal". </p>        ]]></item>
-        <item id="old_placeholder_exists" title="El directorio de secciones existe"><![CDATA[
-<h2> El directorio de sección existe </h2>
- <p> Los archivos de directorio de sección existentes entrarán en conflicto con el esquema <code>.htaccess </code>. Si los archivos informados son marcadores de posición, elimínelos. </p>        ]]></item>
+        <item id="old_placeholder_exists" title="Sección con el mismo nombre que un directorio"><![CDATA[<h2>La sección tiene el mismo nombre que un directorio</h2>
+<p>Los nombres de directorio que ya existen pueden entrar en conflicto con nombres de sección usados en el esquema de enlaces permanentes de artículo. Para evitarlo, comprueba y borra el nombre del directorio afectado si es seguro hacerlo, o cambia el nombra para que no entren en conflicto. </p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title="Directorio del sitio inaccesible"><![CDATA[
 <h2> Directorio del sitio inaccesible </h2>
  <p> El directorio que contiene el archivo raíz <code> index.php </code> especificado como el índice del sitio no puede ser leído por el servidor. Por favor revise los permisos. </p>        ]]></item>
@@ -498,8 +498,8 @@
 <p>El código PHP debe tener omitidas las etiquetas PHP de apertura y cierre, y también encerrarse dentro de <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"> etiquetas <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="¿Permitir sobrescritura de bloques?"><![CDATA[
-<h2>¿Permitir sobreescritura de formularios?</h2>
-<p>Esta opción permite a los autores de artículos anular el formulario para ser usado cuando su artículo es desplegado. Si está activado, un menú desplegable 'Sobreescribir formulario' estará disponible en 'Opciones avanzadas', al editar un artículo.</p>
+<h2>¿Permitir sobrescritura de bloques?</h2>
+<p>Esta opción permite a los autores de artículos sobrescribir el bloque para ser usado cuando su artículo es desplegado. Si está activado, un menú desplegable 'Sobrescribir bloque' estará disponible en 'Opciones avanzadas', al editar un artículo.</p>
         ]]></item>
         <item id="allow_page_php_scripting" title="¿Permitir PHP en las páginas?"><![CDATA[
 <h2>¿Permitir PHP en páginas?</h2>
@@ -562,9 +562,9 @@
 <h2>Comentarios deshabilitados después de</h2>
 <p>Utilice esta opción para establecer el tiempo después del cual los comentarios serán deshabilitados para los artículos (puede configurarse como 'Nunca' para permitir tiempo indefinido para comentar).</p>
         ]]></item>
-        <item id="comments_disallow_images" title="¿Ignorar imágenes del usuario en los comentarios?"><![CDATA[
-<h2>¿Ignorar imágenes del usuario de los comentarios?</h2>
-<p>Si se selecciona  'Sí', las imágenes incluidas en los comentarios serán eliminadas.</p>
+        <item id="comments_disallow_images" title="¿Permitir imágenes de comentaristas en comentarios?"><![CDATA[
+<h2>¿Permitir imágenes de comentaristas en comentarios?</h2>
+<p>Con esta opción puesta en 'No', cualquier imagen incluida en los comentarios será eliminada.</p>
         ]]></item>
         <item id="comments_mode" title="Modo de comentarios"><![CDATA[
 <h2>Modo de comentarios</h2>
@@ -605,9 +605,25 @@
 </ul>
 <p><strong>Nota:</strong> Por razones de seguridad, el HTML bruto se transforma en texto normal.</p>
         ]]></item>
-        <item id="custom_form_types" title="Tipos de plantilla para campos personalizados"><![CDATA[]]></item>
+        <item id="custom_form_types" title="Tipos de plantilla para bloques personalizados"><![CDATA[
+<h2>Tipos de plantillas de bloque a medida</h2>
+<p>Adicionalmente a los tipos estándar de plantillas de bloque (artículos, archivo, miscelánea, etc), los editores pueden definir tipos a medida. El propósito de las plantillas de bloque a media es doble: simplificar la clasificación de plantillas de bloque y poder hacer definiciones a medida de assets.</p>
+<p>El formato de la preferencia es <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(abre un enlace externo en ventana nueva)</span></a>, con cada sección correspondiente a un tipo de plantilla de bloque.</p>
+<p>Para definir una plantilla de bloque a medida (ej. <code>js</code>) debe añadirse (en una línea a parte) una sección <code>[js]</code>. Puede establecerse un título por defecto a través de una entrada <code>title="Javascript"</code> en la sección correspondiente. Si se desea, también puede añadirse títulos adaptados a diferentes idiomas (ej. <code>ru="Скрипт"</code>).</p>
+<p>Adicionalmente, puede especificarse un <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">tipo de medio <span class="ui-icon ui-icon-extlink">(abre un enlace externo en ventana nueva)</span></a> (formalmente conocido como MIME type) para una plantilla de bloque, ej. <code>mediatype="application/javascript"</code>. Esto convierte las plantillas de bloque de este tipo en assets a medida que pueden ser servidos con el tipo de medio definido, tanto desde la base de datos como desde disco (archivos planos) a través de una etiqueta. Por ejemplo, una plantilla de bloque llamada <code>myscript.js</code> de tipo <code>[js]</code> con un tipo de medio definido como <code>application/javascript</code> puede incluirse en tu código de esta manera:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Esto generará la siguiente <code>&lt;script&gt;</code> HTML:</p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Sólo las plantillas de bloque con el nombre de extensión correspondiente a su tipo (ej. <code>my script.js</code>) pueden servirse como archivos planos. En este caso no serán procesados de ninguna manera por Textpattern y pueden ser accesibles a través de su URL.</p>
+<p>Si una plantilla de bloque necesita procesamiento (si contiene etiquetas de Textpattern) debe ser servida desde la base de datos. En este caso no debe añadirse extensión al nombre de bloque - nómbralo simplemente <code>myscript</code> (sin <code>.js </code>) para que sea inaccesible a través de una URL estándar - e inclúyelo de esta manera:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
         <item id="custom_overview" title="Campos personalizados"><![CDATA[]]></item>
-        <item id="dateformat" title="Formato de fecha"><![CDATA[]]></item>
+        <item id="dateformat" title="Formato de fecha"><![CDATA[
+<h2>Formato de fecha</h2>
+<p>Esta opción afectará cómo las fechas del artículo aparecen solo en la página principal de tu sitio.</p>
+        ]]></item>
         <item id="default_event" title="Pestaña de administración por defecto"><![CDATA[
 <h2>Panel predeterminado</h2>
 <p>El panel de la interfaz de administración de Textpattern que aparecerá primero cuando alguien inicie sesión.</p>
@@ -676,10 +692,14 @@
 <p>Si el horario de verano está actualmente habilitado para tu zona horaria.</p>
         ]]></item>
         <item id="logging" title="Registrar visitas"><![CDATA[]]></item>
-        <item id="max_url_len" title="Longitud máxima de las URLs (en caracteres)"><![CDATA[]]></item>
+        <item id="max_url_len" title="Longitud máxima de las URLs (en caracteres)"><![CDATA[
+<h2>Longitud máxima de URL (en caracteres)</h2>
+<p>Esto previene que las URLs que son más largas que la longitud especificada no funcionan. Podría ser útil en la limitación de daños y en la seguridad del sitio.</p>
+        ]]></item>
         <item id="module_pophelp" title="Mostrar enlaces de ayuda emergente"><![CDATA[]]></item>
         <item id="never_display_email" title="¿Ocultar email del autor del comentario?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="¿Codificación ISO-8859-1 en envíos de email? Por defecto UTF-8"><![CDATA[]]></item>
+        <item id="override_form_types" title="Sustituir tipos de formulario"><![CDATA[]]></item>
         <item id="permlink_format" title="Modelo de URL"><![CDATA[]]></item>
         <item id="permlink_mode" title="Esquema del URL del artículo"><![CDATA[]]></item>
         <item id="plugin_cache_dir" title="Ruta del directorio del caché de plugins"><![CDATA[]]></item>
@@ -691,22 +711,36 @@
         <item id="publish_expired_articles" title="¿Mostrar los artículos caducados?"><![CDATA[]]></item>
         <item id="publisher_email" title="Enviar la información de registro desde esta dirección de correo"><![CDATA[]]></item>
         <item id="rss_how_many" title="¿Cuántos artículos se incluirán en los feeds?"><![CDATA[]]></item>
+        <item id="secondpass" title="Número de ciclos extra del analizador"><![CDATA[]]></item>
         <item id="send_lastmod" title="¿Enviar &quot;Última modificación&quot; encabezado?"><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[]]></item>
+        <item id="show_comment_count_in_feed" title="¿Mostrar contador de comentarios en los feeds?"><![CDATA[
+<h2>¿Mostrar número de comentarios en los feeds?</h2>
+<p>Cuando se establece 'Sí', esta opción añadirá el número de comentarios a los títulos de sus artículos en RSS/Atom feeds.</p>
+        ]]></item>
         <item id="site_slogan" title="Eslogan del sitio"><![CDATA[]]></item>
         <item id="sitename" title="Nombre del sitio"><![CDATA[]]></item>
-        <item id="siteurl" title="URL del sitio"><![CDATA[]]></item>
+        <item id="siteurl" title="URL del sitio"><![CDATA[
+<h2>URL del sitio</h2>
+<p>Ésta es la dirección de este sitio de Textpattern, por ejemplo <code>www. xample.com</code>.</p>
+<p><strong>Nota:</strong> No necesita <code>http://</code>, <code>https://</code> o barra final <code>/</code>.</p>
+        ]]></item>
         <item id="skin_dir" title="Directorios de temas"><![CDATA[]]></item>
         <item id="smtp_from" title="Dirección del remitente del envío SMTP"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="¿Sindicar sólo el resumen del artículo?"><![CDATA[]]></item>
         <item id="tempdir" title="Ruta al directorio temporal"><![CDATA[]]></item>
         <item id="theme_name" title="Tema de administración"><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title="Funciones PHP habilitadas en txp:evaluate"><![CDATA[]]></item>
-        <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[]]></item>
+        <item id="use_comments" title="¿Permitir comentarios?"><![CDATA[
+<h2>¿Aceptar comentarios?</h2>
+<p>Esto establece si la funcionalidad de comentarios de Textpattern debe estar habilitada o deshabilitada.</p>
+        ]]></item>
         <item id="use_mail_on_feeds_id" title="¿Usar email para la ID de los feeds? Por defecto la URL del sitio"><![CDATA[]]></item>
-        <item id="use_plugins" title="¿Usar plugins?"><![CDATA[]]></item>
-        <item id="use_textile" title="Emplear Textile?"><![CDATA[]]></item>
+        <item id="use_plugins" title="¿Usar plugins?"><![CDATA[
+<h2>¿Usar plugins?</h2>
+<p>Esto permite desactivar todo el soporte para plugins de Textpattern. Es útil para depurar errores en el sitio y hacer una comprobación si uno o más plugins están involucrados.</p>
+        ]]></item>
+        <item id="use_textile" title="Formato de texto por defecto"><![CDATA[]]></item>
     </group>
 
     <group id="section" title="Panel de secciones">
@@ -714,11 +748,20 @@
         <item id="section_default" title="Sección por defecto para publicar"><![CDATA[]]></item>
         <item id="section_description" title="Descripción"><![CDATA[]]></item>
         <item id="section_on_frontpage" title="¿La sección aparece en la página de inicio?"><![CDATA[]]></item>
-        <item id="section_searchable" title="¿Incluir esta sección en las búsquedas?"><![CDATA[]]></item>
+        <item id="section_searchable" title="¿Incluir esta sección en las búsquedas?"><![CDATA[
+<h2>¿Incluir esta sección en la búsqueda del sitio?</h2>
+<p>Esto rige si los artículos pertenecientes a esta sección deben aparecer como parte de los resultados de búsqueda en todo el sitio.</p>
+        ]]></item>
         <item id="section_syndicate" title="¿Sindicar artículos de esta sección?"><![CDATA[]]></item>
         <item id="section_uses_css" title="Usa estilo"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Usa página"><![CDATA[]]></item>
-        <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[]]></item>
+        <item id="section_uses_page" title="Usa página"><![CDATA[
+<h2>Utiliza la página</h2>
+<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente…</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[
+<h2>Utiliza el tema</h2>
+<p>Si deseas cambiar el tema utilizado para una sección en particular, puede establecerse aquí desde la lista de temas instalados actualmente.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Panel de configuración">
@@ -728,14 +771,24 @@
     </group>
 
     <group id="skin" title="Panel de temas">
-        <item id="skin_author" title="Autor del tema"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="Sitio web del tema"><![CDATA[]]></item>
+        <item id="skin_author" title="Autor del tema"><![CDATA[
+<h2>Tema autor</h2>
+<p>El autor (los autores) de este tema (opcional).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Sitio web del tema"><![CDATA[
+<h2>Tema sitio web</h2>
+<p>La URL donde se puede encontrar información completa y/o las últimas versiones de este tema (opcional).</p>
+        ]]></item>
         <item id="skin_delete_entirely" title="Borrar tema de plantillas desde el disco también"><![CDATA[]]></item>
         <item id="skin_delete_from_database" title="Al importar, borrar las planillas no utilizadas de la base de datos"><![CDATA[]]></item>
         <item id="skin_delete_from_disk" title="Al exportar, borrar las plantillas no utilizadas del disco"><![CDATA[]]></item>
         <item id="skin_description" title="Descripción del tema"><![CDATA[]]></item>
         <item id="skin_import" title="Importar tema"><![CDATA[]]></item>
-        <item id="skin_name" title="Nombre del tema"><![CDATA[]]></item>
+        <item id="skin_name" title="Nombre del tema"><![CDATA[
+<h2>Nombre del tema</h2>
+<p>El nombre de un tema se utiliza para el nombre del directorio del tema y otros propósitos técnicos (requerido).</p>
+<p>El nombre no debe contener ningún carácter especial o espacios.</p>
+        ]]></item>
         <item id="skin_overview" title="Introducción a temas"><![CDATA[
 <h2>Introducción a temas</h2>
 <p>Un tema Textpattern es una colección de páginas, formularios y hojas de estilo. Los temas te permiten separar lógicamente los recursos de su sitio en grupos para facilitar la identificación o compartir con otros. El crear o importar un tema, y cualquier recurso que contenga, <em>no</em> tiene ningún impacto en tu sitio existente. Puedes editar o modificar cualquier recurso que no esté asociado con una sección de tu sitio, y no afectará al propio sitio.</p>

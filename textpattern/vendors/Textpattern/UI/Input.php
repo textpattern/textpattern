@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -33,14 +33,6 @@ namespace Textpattern\UI;
 class Input extends Tag implements UIInterface
 {
     /**
-     * The key (id) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * Construct a single text input field.
      *
      * @param string $name  The text input key (HTML name attribute)
@@ -54,28 +46,17 @@ class Input extends Tag implements UIInterface
             $type = 'text';
         }
 
-        $this->key = $name;
+        $this->setKey($name);
 
         parent::__construct('input');
         $this->setAtts(array(
-                'name' => $this->key,
+                'name' => $name,
                 'type' => $type,
             ));
 
         if ($value !== null) {
-            $this->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
+            $this->setAtt('value', $value, array('strip' => TEXTPATTERN_STRIP_NONE));
         }
-    }
-
-    /**
-     * Fetch the key (id) in use by this text input.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
     }
 
     /**

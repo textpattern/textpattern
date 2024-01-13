@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -49,6 +49,14 @@ class Tag implements UIInterface
     protected $tag = null;
 
     /**
+     * The key (id) used in the tag.
+     *
+     * @var string
+     */
+
+    protected $key = null;
+
+    /**
      * The tag's contained contents.
      *
      * @var string
@@ -84,6 +92,14 @@ class Tag implements UIInterface
     );
 
     /**
+     * A constraint validator.
+     *
+     * @var \Textpattern\Validator\Validator
+     */
+
+    protected $validator = null;
+
+    /**
      * General constructor for the tag.
      *
      * @param  string $tag The tag name
@@ -117,15 +133,45 @@ class Tag implements UIInterface
     }
 
     /**
-     * Set the tag's contained content. Chainable.
+     * Set the tag name (key). Chainable.
      *
-     * @param  array $content Thew content to put between the opening/closing tags
+     * @param  string $key The tag's reference key (name)
      * @return this
      */
 
-    public function setContent($content)
+    public function setKey($key)
     {
-        $this->content = (string)$content;
+        $this->key = (string)$key;
+
+        return $this;
+    }
+
+    /**
+     * Fetch the key (id) in use by this tag.
+     *
+     * @return string
+     */
+
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * Set the tag's contained content. Chainable.
+     *
+     * @param  array $content The content to put between the opening/closing tags
+     * @param  bool  $append  Whether to replace (false) or append (true) content
+     * @return this
+     */
+
+    public function setContent($content, $append = false)
+    {
+        if ($append && $this->content !== null) {
+            $this->content .= (string)$content;
+        } else {
+            $this->content = (string)$content;
+        }
 
         return $this;
     }
@@ -237,7 +283,7 @@ class Tag implements UIInterface
         $props = array('format' => 'bool');
 
         if (self::$flags['boolean'] === 'html5') {
-            $props['flag'] = TEXTPATTERN_STRIP_TXP;
+            $props['strip'] = TEXTPATTERN_STRIP_TXP;
         }
 
         foreach ($keys as $key) {
@@ -250,7 +296,7 @@ class Tag implements UIInterface
     /**
      * Permit multiple values to be sent by the tag. Chainable.
      *
-     * @param string $flavour The type of mulitple to assign: 'all', 'name', or 'attribute'
+     * @param string $flavour The type of multiple to assign: 'all', 'name', or 'attribute'
      */
 
     public function setMultiple($flavour = 'all')
@@ -297,6 +343,31 @@ class Tag implements UIInterface
                 'self-closing' => $scheme,
                 'boolean'      => $scheme,
             ));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set up any tag constraints. Chainable.
+     *
+     * @param \Textpattern\Validator\Constraint|\Textpattern\Validator\Constraint[] $constraints Single or array-of \Textpattern\Validator\Constraint object(s)
+     */
+
+    public function setConstraints($constraints)
+    {
+        if ($this->validator === null) {
+            $this->validator = new \Textpattern\Validator\Validator();
+        }
+
+        $this->validator->setConstraints($constraints);
+
+        foreach ($this->validator->getConstraints() as $c) {
+            $attMap = $c->getAttsMap();
+
+            if ($attMap) {
+                $this->setAtts($attMap, array('strip' => TEXTPATTERN_STRIP_NONE));
+            }
         }
 
         return $this;

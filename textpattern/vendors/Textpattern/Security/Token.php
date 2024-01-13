@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,22 +38,32 @@ class Token implements \Textpattern\Container\ReusableInterface
      * The token is reproducible, unique among sites and users, expires later.
      *
      * @see  form_token()
+     * @param  null|string $salt  A bit of salt
      * @return string CSRF token
      */
 
-    public function csrf()
+    public function csrf($salt = null)
     {
-        static $token = null;
+        static $token = array(), $blog_uid = null;
         global $txp_user;
 
         // Generate a ciphered token from the current user's nonce (thus valid for
         // login time plus 30 days) and a pinch of salt from the blog UID.
-        if ($token === null && $txp_user) {
-            $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
-            $token = md5($nonce.get_pref('blog_uid'));
+
+        if (!isset($blog_uid)) {
+            $blog_uid = get_pref('blog_uid');
         }
 
-        return $token;
+        if (!isset($salt)) {
+            $salt = $blog_uid;
+        }
+
+        if (!isset($token[$salt])) {
+            $nonce = $txp_user ? safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'") : '';
+            $token[$salt] = md5($nonce.$salt);
+        }
+
+        return $token[$salt];
     }
 
     /**
@@ -106,6 +116,10 @@ class Token implements \Textpattern\Container\ReusableInterface
             return true;
         }
 
+        if (is_array($steps[$step]) && gpsa(array_keys($steps[$step])) != $steps[$step]) {
+            return true;
+        }
+
         // Validate token.
         if (gps('_txp_token') === $this->csrf()) {
             return true;
@@ -131,7 +145,7 @@ class Token implements \Textpattern\Container\ReusableInterface
     public function generate($ref, $type, $expiryTimestamp, $pass, $nonce)
     {
         $ref = assert_int($ref);
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
+        $expiry = safe_strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // The selector becomes an indirect reference to the user row id,
         // and thus does not leak information when publicly displayed.

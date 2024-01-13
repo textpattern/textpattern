@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -180,7 +180,11 @@ class Filter
 
             foreach ($this->search_method as $selected_method) {
                 if (array_key_exists($selected_method, $this->methods)) {
-                    $search_criteria[] = join(' or ', $this->methods[$selected_method]->getCriteria($this->crit_escaped, $this->verbatim));
+                    $srch = $this->methods[$selected_method]->getCriteria($this->crit_escaped, $this->verbatim);
+
+                    if ($srch) {
+                        $search_criteria[] = join(' or ', $srch);
+                    }
                 }
             }
 
@@ -221,6 +225,7 @@ class Filter
         $selected = $this->search_method;
 
         extract(lAtts(array(
+            'id'             => '',
             'default_method' => 'all',
             'submit_as'      => 'get', // or 'post'
             'placeholder'    => '',
@@ -277,7 +282,7 @@ class Filter
             eInput($event).
             sInput($step).
             $buttons.
-            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', '', 'search').
+            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', $id, 'search', TRUE, gTxt($placeholder)).
             script_js("textpattern.Route.add('{$event}', txp_search);", false);
     }
 

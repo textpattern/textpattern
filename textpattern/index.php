@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,16 +27,18 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.9.0-dev';
-// $txp_using_svn deprecated in 4.7.0.
-$txp_using_svn = $txp_is_dev = true; // Set false for releases.
-
 ob_start(null, 2048);
 
-if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
+if (!isset($txpcfg['table_prefix']) && (!is_readable('./config.php') || !include './config.php')) {
     ob_end_clean();
-    header('HTTP/1.1 503 Service Unavailable');
-    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.</p>');
+
+    if (is_readable('./setup/index.php')) {
+        header('Location: ./setup');
+        exit;
+    } else {
+        header('HTTP/1.1 503 Service Unavailable');
+        exit('<p>config.php is missing or corrupt. To install Textpattern, ensure <a href="./setup/">setup</a> exists.</p>');
+    }
 } else {
     ob_end_clean();
 }
@@ -141,7 +143,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Will remove in future.
     $textarray = array();
 
-    load_lang(LANG, 'admin');
+    //load_lang(LANG, 'admin');
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
@@ -150,7 +152,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     doAuth();
 
     // Add private preferences.
-    $prefs = array_merge(get_prefs($txp_user), $prefs);
+    $prefs += get_prefs($txp_user);
     plug_privs();
     extract($prefs);
 
@@ -179,21 +181,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     janitor();
 
-    // Article or form preview.
-    if (isset($_GET['txpreview'])) {
-        load_lang(LANG, 'public');
-        include txpath.'/publish.php';
-        textpattern();
-        echo $trace->summary();
-
-        if ($production_status === 'debug') {
-            echo $trace->result();
-        }
-
-        exit;
-    }
-
-    $txp_sections = safe_column(array('name'), 'txp_section');
+    $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
+    $timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
+    date_default_timezone_set($timezone_key);
 
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;

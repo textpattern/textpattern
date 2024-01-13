@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -209,15 +209,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $meta = array();
 
         if (is_file($file) && is_readable($file)) {
-            $numMetaRows = 4;
-            $separator = '=>';
             extract(pathinfo($file));
             $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
             $ini = strtolower($extension) == 'ini';
+            $numMetaRows = 4;
 
             $meta['filename'] = $filename;
 
-            if ($fp = @fopen($file, 'r')) {
+            if ($fp = fopen($file, 'r')) {
                 for ($idx = 0; $idx < $numMetaRows; $idx++) {
                     $rows[] = fgets($fp, 1024);
                 }
@@ -231,6 +230,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                     $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
                     $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
                 } else {
+                    $separator = '=>';
                     $langName = do_list($rows[1], $separator);
                     $langCode = do_list($rows[2], $separator);
                     $langDirection = do_list($rows[3], $separator);
@@ -357,8 +357,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function setPack(array $strings, $merge = false)
     {
-        if ((bool)$merge) {
-            $this->strings = is_array($this->strings) ? array_merge($this->strings, (array)$strings) : (array)$strings;
+        if ((bool)$merge && is_array($this->strings)) {
+            foreach ((array)$strings as $k => $v) {
+                $this->strings[$k] = $v;
+            }
         } else {
             $this->strings = (array)$strings;
         }
@@ -378,7 +380,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function getPack($lang_code, $group = null, $filter = null)
+    public function getPack($lang_code, $group = '', $filter = '')
     {
         if (is_array($lang_code)) {
             $lang_over = $lang_code[1];
@@ -391,7 +393,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $entries = array();
         $textpack = '';
 
-        if ($lang_file && ($textpack = @file_get_contents($lang_file))) {
+        if ($lang_file && ($textpack = txp_get_contents($lang_file))) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
@@ -453,7 +455,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @param string $lang_code The lang identifier to load
      */
 
-    public function installFile($lang_code, $owner = '')
+    public function installFile($lang_code, $owner = '', $reset = false)
     {
         $langpack = $this->getPack($lang_code);
 
@@ -465,10 +467,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // Load the fallback strings so we're not left with untranslated strings.
             // Note that the language is overridden to match the to-be-installed lang.
             $fallpack = $this->getPack(array(TEXTPATTERN_DEFAULT_LANG, $lang_code));
-            $langpack = array_merge($fallpack, $langpack);
+            $langpack += $fallpack;
         }
 
-        return ($this->upsertPack($langpack, $owner) === false) ? false : true;
+        return ($this->upsertPack($langpack, array($owner, $lang_code), $reset) === false) ? false : true;
     }
 
 
@@ -489,7 +491,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $pack->parse($textpack);
 
         if (!isset($useLang)) {
-            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+            $useLang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         }
 
         $wholePack = $pack->getStrings($useLang);
@@ -566,23 +568,31 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return result set
      */
 
-    public function upsertPack($langpack, $owner_ref = '')
+    public function upsertPack($langpack, $owner_ref = '', $reset = false)
     {
         $result = false;
 
         if ($langpack) {
             $values = array();
+            list ($owner_ref, $lang) = (array)$owner_ref + array(null, null);
+            $owner_ref = doSlash($owner_ref);
 
             foreach ($langpack as $key => $translation) {
                 extract(doSlash($translation));
 
-                $owner = empty($owner) ? doSlash($owner_ref) : $owner;
+                $owner = empty($owner) ? $owner_ref : $owner;
                 $lastmod = empty($lastmod) ? 'NOW()' : "'$lastmod'";
                 $values[] = "('$name', '$lang', '$data', '$event', '$owner', $lastmod)";
             }
 
             if ($values) {
                 $value = implode(',', $values);
+
+                if ($reset) {
+                    $names = quote_list(array_column($langpack, 'name'), ',');
+                    safe_delete('txp_lang', ($lang ? "lang = '".doSlash($lang)."' AND " : '')."owner = '$owner_ref' AND name NOT IN($names)");
+                }
+
                 $result = safe_query("INSERT INTO ".PFX."txp_lang
                     (name, lang, data, event, owner, lastmod)
                     VALUES $value
@@ -612,15 +622,19 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function extract($lang_code, $events = null, $filter = null)
+    public function extract($lang_code, $events = '', $filter = '')
     {
-        $where = array(
-            "lang = '".doSlash($lang_code)."'",
-            "name != ''",
-        );
+        global $txp_user;
+
+        // For the time being, load any non-core (plugin) strings on every
+        // page too. Core strings have no owner. Plugins installed since 4.6+
+        // will have either the 'site' owner or their own plugin name.
+        // Longer term, when all plugins have caught up with the event
+        // naming convention, the owner clause can be removed.
+        $ownClause = $this->hasOwnerSupport() ? " OR owner != ''" : '';
 
         if (txpinterface === 'admin') {
-            $admin_events = array('admin-side', 'common');
+            $admin_events = $txp_user ? array('admin-side', 'common') : array('admin', 'common');
 
             if ($events) {
                 $list = (is_array($events) ? $events : do_list_unique($events));
@@ -628,20 +642,17 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
 
             $events = $admin_events;
-        } elseif ($events === null) {
+        } elseif ($events === '') {
             $events = array('public', 'common');
+            $ownClause = '';
         } else {
             $events = is_array($events) ? $events : do_list_unique($events);
         }
 
-        if ($events) {
-            // For the time being, load any non-core (plugin) strings on every
-            // page too. Core strings have no owner. Plugins installed since 4.6+
-            // will have either the 'site' owner or their own plugin name.
-            // Longer term, when all plugins have caught up with the event
-            // naming convention, the owner clause can be removed.
-            $where[] = "(event IN (".join(',', quote_list((array) $events)).")".($this->hasOwnerSupport() ? " OR owner != '')" : ')');
-        }
+        $where = array(
+            "lang = '".doSlash($lang_code)."'",
+            $events ? "(event IN (".quote_list((array) $events, ',').")$ownClause)" : "1"
+        );
 
         $out = array();
 
@@ -674,7 +685,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return array
      */
 
-    public function load($lang_code, $events = null)
+    public function load($lang_code, $events = '')
     {
         $loaded = isset($this->loaded[$lang_code]) ? $this->loaded[$lang_code] : null;
 
@@ -686,7 +697,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         if (!empty($DB)) {
             $this->strings = $this->extract($lang_code, $events);
-            $this->loaded = array($lang_code => isset($events) ? do_list_unique($events) : array(null));
+            $this->loaded = array($lang_code => isset($events) ? do_list($events) : array(null));
         }
 
         return $this->strings;

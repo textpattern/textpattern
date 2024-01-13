@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -245,6 +245,7 @@ class Method
     public function getCriteria($search_term, $verbatim)
     {
         $clause = array();
+        $numRE = "/([><!=]*)(([-+]?\d*\.?\d+)(?:[eE]([-+]?\d+))?)/";
 
         foreach ($this->columns as $column) {
             if (isset($this->aliases[$column])) {
@@ -266,8 +267,16 @@ class Method
             }
 
             if ($this->options['can_list']) {
-                $operator = ' in ';
-                $value = '('.join(',', quote_list(do_list($search_term))).')';
+                preg_match($numRE, $search_term, $matches);
+
+                if (!empty($matches[1]) && strpos($search_term, ',') === false) {
+                    $operator = $matches[1];
+                    $value = $matches[2];
+                } else {
+                    $operator = ' in ';
+                    $value = '('.join(',', quote_list(do_list($search_term))).')';
+                }
+
             } elseif ($this->type === 'boolean') {
                 $clause[] = "convert(".$column.", char) = '".$search_term."'";
                 continue;
@@ -278,7 +287,19 @@ class Method
                 $clause[] = "find_in_set('".$search_term."', ".$column." )";
                 continue;
             } elseif ($this->type === 'numeric') {
-                $clause[] = "convert(".$column.", char) = '".$search_term."'";
+                preg_match($numRE, $search_term, $matches);
+
+                $comparator = !empty($matches[1]) ? $matches[1] : '=';
+
+                // Use coalesce() to guard against nulls when using LEFT JOIN.
+                if (isset($matches[2])) {
+                    if (is_numeric($matches[2])) {
+                        $clause[] = "coalesce(".$column.", 0) ".$comparator." '".$matches[2]."'";
+                    } else {
+                        $clause[] = "coalesce(convert(".$column.", char), 0) ".$comparator." '".$matches[2]."'";
+                    }
+                }
+
                 continue;
             } else {
                 $operator = ' like ';

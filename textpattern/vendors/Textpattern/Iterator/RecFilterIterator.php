@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -65,6 +65,7 @@ namespace Textpattern\Iterator {
          * Get Children and pass the filter to them.
          */
 
+        #[\ReturnTypeWillChange]
         public function getChildren()
         {
             return new self($this->getInnerIterator()->getChildren(), $this->getFilter());
@@ -74,6 +75,7 @@ namespace Textpattern\Iterator {
          * {@inheritdoc}
          */
 
+        #[\ReturnTypeWillChange]
         public function accept()
         {
             return $this->isDir() ||

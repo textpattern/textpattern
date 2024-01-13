@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -55,7 +55,7 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
-            setcookie('txp_test_cookie', '1');
+            set_cookie('txp_test_cookie', '1', array('expires' => 0, 'httponly' => false));
             doLoginForm($message);
         }
     }
@@ -196,9 +196,7 @@ function doLoginForm($message)
                 href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
             ).
             graf(
-                href(htmlspecialchars(get_pref('sitename')), hu, array(
-                    'title'  => gTxt('tab_view_site'),
-                )), array('class' => 'login-view-site')
+                href(htmlspecialchars(get_pref('sitename')), hu), array('class' => 'login-view-site')
             );
 
         if (gps('event')) {
@@ -263,12 +261,6 @@ function doTxpValidate()
         $c_userid = '';
     }
 
-    // Override language strings if indicated.
-    $txpLang = Txp::get('\Textpattern\L10n\Lang');
-    $installed = $txpLang->installed();
-    $lang = in_array($lang, $installed) ? $lang : LANG;
-    $txpLang->swapStrings($lang, 'admin, common');
-
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
@@ -284,8 +276,8 @@ function doTxpValidate()
                 $txp_user = $c_userid;
                 bouncer('logout', array('logout' => true));
                 $txp_user = null;
-                setcookie('txp_login', '', time() - 3600);
-                setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
+                set_cookie('txp_login');
+                set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
                 // Destroy nonce.
                 safe_update(
                     'txp_users',
@@ -300,8 +292,8 @@ function doTxpValidate()
             return $message;
         } else {
             txp_status_header('401 Your session has expired');
-            setcookie('txp_login', $c_userid, time() + 3600 * 24 * 365);
-            setcookie('txp_login_public', '', time() - 3600, $pub_path, $cookie_domain);
+            set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 365));
+            set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
     } elseif ($p_userid && $p_password) {
@@ -318,22 +310,23 @@ function doTxpValidate()
                 "name = '".doSlash($name)."'"
             );
 
-            setcookie(
+            set_cookie(
                 'txp_login',
                 $name.','.$c_hash,
-                ($stay ? time() + 3600 * 24 * 365 : 0),
-                null,
-                null,
-                null,
-                LOGIN_COOKIE_HTTP_ONLY
+                array(
+                    'expires' => $stay ? time() + 3600 * 24 * 365 : 0,
+                    'httponly' => LOGIN_COOKIE_HTTP_ONLY
+                )
             );
 
-            setcookie(
+            set_cookie(
                 'txp_login_public',
                 substr(md5($nonce), -10).$name,
-                ($stay ? time() + 3600 * 24 * 30 : 0),
-                $pub_path,
-                $cookie_domain
+                array(
+                    'expires' => $stay ? time() + 3600 * 24 * 30 : 0,
+                    'path' => $pub_path,
+                    'domain' => $cookie_domain
+                )
             );
 
             // Login is good, create $txp_user.
@@ -344,14 +337,6 @@ function doTxpValidate()
             if ($lang) {
                 set_pref('language_ui', $lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
             }
-
-            script_js(<<<EOS
-$(document).ready(function ()
-{
-    cookieEnabled = checkCookies();
-});
-EOS
-            , false);
 
             return '';
         } else {

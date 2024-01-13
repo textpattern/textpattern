@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,9 +27,13 @@
  * @package Admin\Prefs
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
+
+include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
 
 if ($event == 'prefs') {
     require_privs('prefs');
@@ -56,7 +60,7 @@ if ($event == 'prefs') {
 
 function prefs_save()
 {
-    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user;
+    global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user, $theme;
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
@@ -69,17 +73,20 @@ function prefs_save()
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
-    if (!get_pref('use_comments', 1, 1)) {
+    if (!get_pref('use_comments', 0, 1)) {
         $sql[] = "event != 'comments'";
     }
 
     $prefnames = safe_rows_start(
-        "name, event, user_name, val",
+        "name, event, collection, user_name, val",
         'txp_prefs',
         join(" AND ", $sql)
     );
 
     $post = stripPost();
+
+    // Let plugins alter their prefs
+    callback_event_ref('prefs', 'save', 0, $post);
 
     if (isset($post['tempdir']) && empty($post['tempdir'])) {
         $post['tempdir'] = find_temp_dir();
@@ -116,6 +123,8 @@ function prefs_save()
         $post['siteurl'] = preg_replace('#^https?://#', '', rtrim($post['siteurl'], '/ '));
     }
 
+    $theme_name = get_pref('theme_name');
+
     while ($a = nextRow($prefnames)) {
         extract($a);
 
@@ -131,16 +140,22 @@ function prefs_save()
             safe_truncate('txp_log');
         }
 
-        if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val) {
+        if ($name === 'expire_logs_after' && (int)$post[$name] !== (int) $val) {
             safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
-        update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        if ((string) $post[$name] !== $val) {
+            update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
+        }
     }
 
     update_lastmod('preferences_saved');
-    $prefs = get_prefs();
+    $prefs = get_prefs(array('', $txp_user));
     plug_privs();
+
+    if (!empty($post['theme_name']) && $post['theme_name'] != $theme_name) {
+        $theme = \Textpattern\Admin\Theme::init();
+    }
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -158,18 +173,16 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user, $txp_options;
-
-    extract($prefs);
+    global $prefs, $step, $txp_user, $txp_options;
 
     pagetop(gTxt('tab_preferences'), $message);
 
-    $locale = setlocale(LC_ALL, $locale);
+    $locale = setlocale(LC_ALL, $prefs['locale']);
 
     echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
-    $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
+    $core_events = array('site', 'admin', 'publish', 'feeds', 'mail', 'comments', 'custom');
     $joined_core = join(',', quote_list($core_events));
     $level = has_privs();
 
@@ -186,14 +199,14 @@ function prefs_list($message = '')
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
-    if (!get_pref('use_comments', 1, 1)) {
+    if (!get_pref('use_comments', 0, 1)) {
         $sql[] = "event != 'comments'";
     }
 
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, collection, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -211,7 +224,7 @@ function prefs_list($message = '')
         while ($a = nextRow($rs)) {
             $eventParts = explode('.', $a['event']);
             $mainEvent = $eventParts[0];
-            $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['collection'];
 
             if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
                 continue;
@@ -258,24 +271,22 @@ function prefs_list($message = '')
 
             $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
-            if ($a['html'] == 'text_input') {
-                $size = INPUT_REGULAR;
-            } else {
-                $size = '';
-            }
+            // @todo: Ready for constraints to be read from $a['constraints'].
+            $constraints = array();
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
-                $out[] = hed(gTxt($subEvent), 3);
+                $collectionClass = (!empty($a['collection']) ? $a['collection'] : '');
+                $out[] = hed(gTxt($subEvent), 3, array('class' => $collectionClass));
                 $last_sub_event = $subEvent;
             }
 
             $out[] = inputLabel(
                 $a['name'],
-                pref_func($a['html'], $a['name'], $a['val'], $size),
+                pref_func($a['html'], $a['name'], $a['val'], $constraints),
                 $label,
                 array($help, 'instructions_'.$a['name']),
                 array(
-                    'class' => 'txp-form-field',
+                    'class' => 'txp-form-field'.(!empty($a['collection']) ? ' '.$a['collection'] : ''),
                     'id'    => 'prefs-'.$a['name'],
                 )
             );
@@ -335,19 +346,28 @@ function prefs_list($message = '')
 
     echo n.'</div>'. // End of .txp-layout.
         n.'</form>';
+
+    if (!empty($prefs['max_url_len']) &&
+        (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))) {
+        echo announce(gTxt('max_url_len').' < '.$min_len, E_WARNING);
+    }
+
+    if ($step == 'prefs_save' && $badCF = filterCustomFields(false)) {
+        echo announce(gTxt('custom_field_clash', array('{list}' => join(', ', $badCF)), false), E_WARNING);
+    }
 }
 
 /**
- * Calls a core or custom function to render a preference input widget.
+ * Calls a core or custom function to render a preference input control.
  *
- * @param  string $func Callable in a string presentation
- * @param  string $name HTML name/id of the input control
- * @param  string $val  Initial (or current) value of the input control
- * @param  int    $size Size of the input control (width or depth, dependent on control)
+ * @param  string    $func        Callable in a string presentation
+ * @param  string    $name        HTML name/id of the input control
+ * @param  string    $val         Initial (or current) value of the input control
+ * @param  int|array $constraints Input constraints (width, depth, pattern, size, min, max, etc)
  * @return string HTML
  */
 
-function pref_func($func, $name, $val, $size = '')
+function pref_func($func, $name, $val, $constraints = array())
 {
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
@@ -355,53 +375,133 @@ function pref_func($func, $name, $val, $size = '')
         $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
+        if (is_string($func) && strpos($func, '\\') === 0) {
+            $func = '\Textpattern\UI'.$func;
+
+            if (class_exists($func)) {
+                $out = new $func($name, $val);
+
+                if ($constraints) {
+                    $out->setConstraints($constraints);
+                }
+
+                return $out;
+            }
+        }
+
         if (!is_callable($func)) {
             $func = 'text_input';
         }
     }
 
-    return call_user_func($func, $name, $val, $size);
+    return call_user_func($func, $name, $val, $constraints);
 }
 
 /**
  * Renders a HTML &lt;input&gt; element.
  *
- * @param  string $name HTML name and id of the text box
- * @param  string $val  Initial (or current) content of the text box
- * @param  int    $size Width of the textbox. Options are INPUT_MEDIUM | INPUT_SMALL | INPUT_XSMALL
+ * @param  string    $name        HTML name and id of the text box
+ * @param  string    $val         Initial (or current) content of the text box
+ * @param  int|array $constraints Textbox size constraints or single size int. Array options:
+ *                                -> size (medium, small, xsmall)
+ *                                -> minlength
+ *                                -> maxlength
+ *                                -> pattern
  * @return string HTML
  */
 
-function text_input($name, $val, $size = 0)
+function text_input($name, $val, $constraints = array())
 {
-    $class = '';
-    switch ($size) {
-        case INPUT_MEDIUM:
-            $class = 'input-medium';
-            break;
-        case INPUT_SMALL:
-            $class = 'input-small';
-            break;
-        case INPUT_XSMALL:
-            $class = 'input-xsmall';
-            break;
+    $atts['id'] = $name;
+    $atts['size'] = INPUT_REGULAR;
+
+    $siz = array();
+    $pat = array();
+    $cons = array();
+
+    if (is_numeric($constraints) || is_string($constraints)) {
+        // Backwards compatibility with old text_input signature.
+        $siz['size'] = $constraints;
+    } elseif (!empty($constraints)) {
+        foreach ($constraints as $constraint => $option) {
+            switch ($constraint) {
+                case 'size':
+                case 'min':
+                case 'max':
+                    $siz[$constraint] = $option;
+                    break;
+                case 'pattern':
+                    $pat[$constraint] = $option;
+                    break;
+            }
+        }
     }
 
-    return fInput('text', $name, $val, $class, '', '', $size, '', $name);
+    if ($siz) {
+        $cons[] = Txp::get('Textpattern\Validator\SizeConstraint', null, $siz);
+    }
+
+    if ($pat) {
+        $cons[] = Txp::get('Textpattern\Validator\PatternConstraint', null, $pat);
+    }
+
+    $out = Txp::get('\Textpattern\UI\Input', $name, 'text', $val)->setAtts($atts);
+
+    if (!empty($cons)) {
+        $out->setConstraints($cons);
+    }
+
+    return $out;
+}
+
+/**
+ * Renders a HTML &lt;input&gt; element of number type with min/max/step.
+ *
+ * @param  string $name        HTML name and id of the number box
+ * @param  int    $val         Initial (or current) value of the number box
+ * @param  array  $constraints Number box size constraints (min, max step)
+ * @return string HTML
+ */
+
+function pref_number($name, $val, $constraints = array())
+{
+    $out = Txp::get('\Textpattern\UI\Number', $name, $val);
+
+    if (!empty($constraints)) {
+        $out->setConstraints(Txp::get('\Textpattern\Validator\RangeConstraint', null, $constraints));
+    }
+
+    return $out;
 }
 
 /**
  * Renders a HTML &lt;textarea&gt; element.
  *
- * @param  string $name HTML name of the textarea
- * @param  string $val  Initial (or current) content of the textarea
- * @param  int    $size Number of rows the textarea has
+ * @param  string    $name        HTML name of the textarea
+ * @param  string    $val         Initial (or current) content of the textarea
+ * @param  int|array $constraints Textbox size constraints or single number of rows. Array options:
+ *                                -> rows
+ *                                -> cols
+ *                                -> minlength
+ *                                -> maxlength
  * @return string HTML
  */
 
-function pref_longtext_input($name, $val, $size = '')
+function pref_longtext_input($name, $val, $constraints = array())
 {
-    return text_area($name, '', '', $val, '', $size);
+    if (is_numeric($constraints)) {
+        $atts['rows'] = (int)$constraints;
+    } else {
+        $atts = $constraints;
+    }
+
+    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val);
+
+    if (!empty($atts)) {
+        $out->setConstraints(Txp::get('Textpattern\Validator\SizeConstraint', null, $atts));
+    }
+
+    return $out;
 }
 
 /**
@@ -435,7 +535,7 @@ function gmtoffset_select($name, $val)
  * Can be altered by plugins via the 'prefs_ui > is_dst'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -448,35 +548,33 @@ function is_dst($name, $val)
         $val = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
     }
 
-    $ui = yesnoRadio($name, $val).
+
+    $ui = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).
     script_js(<<<EOS
-        $(document).ready(function ()
-        {
-            var radio = $("#prefs-is_dst");
-            var radioInput = radio.find('input');
-            var radioLabel = radio.find('.txp-form-field-label');
-            var dstOn = $("#auto_dst-1");
-            var dstOff = $("#auto_dst-0");
+    var radio = $("#prefs-is_dst");
+    var radioInput = radio.find('input');
+    var radioLabel = radio.find('.txp-form-field-label');
+    var dstOn = $("#auto_dst-1");
+    var dstOff = $("#auto_dst-0");
 
-            if (radio.length) {
-                if (dstOn.prop("checked")) {
-                    radioInput.prop("disabled", "disabled");
-                    radioLabel.addClass('disabled');
-                }
+    if (radio.length) {
+        if (dstOn.prop("checked")) {
+            radioInput.prop("disabled", "disabled");
+            radioLabel.addClass('disabled');
+        }
 
-                dstOff.click(function () {
-                    radioInput.prop("disabled", null);
-                    radioLabel.removeClass('disabled');
-                });
-
-                dstOn.click(function () {
-                    radioInput.prop("disabled", "disabled");
-                    radioLabel.addClass('disabled');
-                });
-            }
+        dstOff.click(function () {
+            radioInput.prop("disabled", null);
+            radioLabel.removeClass('disabled');
         });
+
+        dstOn.click(function () {
+            radioInput.prop("disabled", "disabled");
+            radioLabel.addClass('disabled');
+        });
+    }
 EOS
-    , false);
+    , false, true);
 
     return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 }
@@ -497,13 +595,165 @@ function logging($name, $val)
         'none'  => gTxt('none'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+}
+
+/**
+ * Renders a HTML input control overridable by constants.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function smtp_handler($name, $val, $constraints = array())
+{
+    $constName = strtoupper($name);
+    $enabled = defined($constName) ? false : true;
+    $ui = '';
+
+    switch ($name) {
+        case 'smtp_host':
+        case 'smtp_user':
+            $ui = text_input($name, $val, $constraints);
+            break;
+        case 'smtp_pass':
+            $ui = Txp::get('\Textpattern\UI\Input', $name, 'password', $val)->setAtt('id', $name);
+            break;
+        case 'smtp_port':
+            // @todo: remove this and read constraints from prefs table.
+            $constraints = array('min' => 1, 'max' => '65535');
+            $ui = pref_number($name, $val, $constraints);
+            break;
+        case 'smtp_sectype':
+            $vals = array(
+                PHPMailer::ENCRYPTION_SMTPS    => 'SSL',
+                PHPMailer::ENCRYPTION_STARTTLS => 'TLS',
+                'none'                         => gTxt('none'),
+            );
+            $ui = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
+    }
+
+    if ($enabled === false) {
+        if ($ui instanceof \Textpattern\UI\TagCollection) {
+            $elems = $ui->keys();
+
+            foreach ($elems as $elem) {
+                $elem->setAtt('disabled', true);
+            }
+        } elseif ($ui instanceof \Textpattern\UI\Tag) {
+            $ui->setAtt('disabled', true);
+        }
+    }
+
+    return $ui;
+}
+
+/**
+ * Renders a yes/no radio button with toggle for the other SMTP settings.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function enhanced_email($name, $val)
+{
+    $js = script_js(<<<EOS
+    var block = $(".mail_enhanced");
+    var smtpOn = $("#enhanced_email-1");
+    var smtpOff = $("#enhanced_email-0");
+
+    if (block.length) {
+        if (smtpOff.prop("checked")) {
+            block.hide();
+        } else {
+            block.show();
+        }
+
+        smtpOff.click(function () {
+            block.hide();
+        });
+
+        smtpOn.click(function () {
+            block.show();
+        });
+    }
+EOS
+    , false, true);
+
+    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).$js;
+}
+
+/**
+ * Renders a yes/list/no radio button set to specify whether to apply trailing slashes to URLs.
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected option
+ * @return string HTML
+ */
+
+function trailing_slash($name, $val)
+{
+    $vals = array(
+        '-1' => gTxt('no'),
+        '0'  => gTxt('list'),
+        '1'  => gTxt('yes'),
+    );
+
+    return Txp::get('\Textpattern\UI\RadioSet', $name, $vals, $val);
+}
+
+/**
+ * Render a multi-select list of Form Types
+ *
+ * @param  string $name HTML name and id of the input control
+ * @param  string $val  Initial (or current) selected item(s)
+ * @return string HTML
+ */
+
+function overrideTypes($name, $val)
+{
+    $instance = Txp::get('Textpattern\Skin\Form');
+    $form_types = array();
+
+    $val = do_list($val);
+
+    foreach ($instance->getTypes() as $type) {
+        $form_types[$type] = gTxt($type);
+    }
+
+    $js = script_js(<<<EOS
+    var block = $("#prefs-override_form_types");
+    var overrideOn = $("#allow_form_override-1");
+    var overrideOff = $("#allow_form_override-0");
+
+    if (block.length) {
+        if (overrideOff.prop("checked")) {
+            block.hide();
+        } else {
+            block.show();
+        }
+
+        overrideOff.click(function () {
+            block.hide();
+        });
+
+        overrideOn.click(function () {
+            block.show();
+        });
+    }
+EOS
+    , false, true);
+
+
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name').$js;
 }
 
 /**
  * Renders a HTML choice of comment popup modes.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -515,7 +765,7 @@ function commentmode($name, $val)
         '1' => gTxt('popup'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -524,7 +774,7 @@ function commentmode($name, $val)
  * Can be altered by plugins via the 'prefs_ui > weeks'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -545,7 +795,7 @@ function weeks($name, $val)
         84  => '12 '.$weeks,
     );
 
-    return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);
+    return pluggable_ui('prefs_ui', 'weeks', Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name), $name, $val);
 }
 
 /**
@@ -554,7 +804,7 @@ function weeks($name, $val)
  * Can be altered by plugins via the 'prefs_ui > dateformats'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -562,6 +812,7 @@ function weeks($name, $val)
 function dateformats($name, $val)
 {
     $formats = txp_dateformats();
+    $formats[] = get_pref($name);
     $ts = time();
     $vals = array();
 
@@ -572,14 +823,16 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
+    $input = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name)//selectInput(false, $vals, $val, '', '', $name)
+        .n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
 
-    return pluggable_ui('prefs_ui', 'dateformats', selectInput($name, array_unique($vals), $val, '', '', $name), compact('vals', 'name', 'val', 'ts'));
+    return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
 
 /**
  * Renders a HTML &lt;select&gt; list of content permlink options.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -591,13 +844,13 @@ function permlink_format($name, $val)
         '1' => gTxt('permlink_hyphenated'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -610,14 +863,14 @@ function prod_levels($name, $val)
         'live'    => gTxt('production_live'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
  * Renders a HTML &lt;select&gt; list of available panels to show immediately
  * after login.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -648,7 +901,7 @@ function default_event($name, $val)
 /**
  * Renders a HTML &lt;select&gt; list of sendmail options.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -661,7 +914,7 @@ function commentsendmail($name, $val)
         '2' => gTxt('ham'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
@@ -670,7 +923,7 @@ function commentsendmail($name, $val)
  * Can be altered by plugins via the 'prefs_ui > custom_set'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name of the widget
+ * @param  string $name HTML name of the input control
  * @param  string $val  Initial (or current) content
  * @return string HTML
  * @todo   deprecate or move this when CFs are migrated to the meta store
@@ -678,7 +931,26 @@ function commentsendmail($name, $val)
 
 function custom_set($name, $val)
 {
-    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, INPUT_REGULAR), $name, $val);
+    static $reserved = array();
+
+    if (empty($reserved)) {
+        foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
+            $str = '';
+
+            foreach (str_split($field) as $char) {
+                $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
+            }
+
+            $reserved[$field] = $str;
+        }
+    }
+
+    $pattern = $reserved;
+    unset($pattern[strtolower($val)]);
+    $pattern = implode('|', $pattern).'|[cC][uU][sS][tT][oO][mM]_\d+';
+    $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$).*$");
+
+    return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, $constraints), $name, $val);
 }
 
 /**
@@ -687,7 +959,7 @@ function custom_set($name, $val)
  * Can be altered by plugins via the 'prefs_ui > theme_name'
  * pluggable UI callback event.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -697,15 +969,14 @@ function themename($name, $val)
     $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
-    return pluggable_ui('prefs_ui', 'theme_name', selectInput($name, $vals, $val, '', '', $name)
-    );
+    return pluggable_ui('prefs_ui', 'theme_name', Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name));
 }
 
 /**
  * Renders a HTML &lt;select&gt; list of available public site markup schemes to
  * adhere to.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -717,14 +988,14 @@ function doctypes($name, $val)
         'html5' => 'HTML5',
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }
 
 /**
  * Renders a HTML &lt;select&gt; list of available publishing
  * status values.
  *
- * @param  string $name HTML name and id of the widget
+ * @param  string $name HTML name and id of the input control
  * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
@@ -732,9 +1003,13 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     $statuses = status_list();
-    $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
 
-    return selectInput($name, $statusa, $val, '', '', $name);
+    if (!has_privs('article.publish')) {
+        unset($statuses[STATUS_LIVE], $statuses[STATUS_STICKY]);
+        $val = min($val, STATUS_PENDING);
+    }
+
+    return Txp::get('\Textpattern\UI\Select', $name, $statuses, $val)->setAtt('id', $name);
 }
 
 /**
@@ -752,5 +1027,5 @@ function module_pophelp($name, $val)
         '1' => gTxt('pophelp'),
     );
 
-    return selectInput($name, $vals, $val, '', '', $name);
+    return Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name);
 }

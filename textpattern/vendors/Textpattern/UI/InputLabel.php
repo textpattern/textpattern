@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -33,20 +33,28 @@ namespace Textpattern\UI;
 class InputLabel extends Tag implements UICollectionInterface
 {
     /**
-     * The key (name) used in the tag.
-     *
-     * @var string
-     */
-
-    protected $key = null;
-
-    /**
      * The label to display.
      *
      * @var string
      */
 
     protected $label = null;
+
+    /**
+     * The label target element's ID.
+     *
+     * @var string
+     */
+
+    protected $for = '';
+
+    /**
+     * Whether the class has been given a label (true) or was auto-assigned (false).
+     *
+     * @var bool
+     */
+
+    protected $hasLabel = false;
 
     /**
      * The help topic associated with this field.
@@ -91,15 +99,21 @@ class InputLabel extends Tag implements UICollectionInterface
     /**
      * Construct a combined input + label.
      *
-     * @param string $name  The text input key (HTML name attribute)
-     * @param string $item  The pre-built UI element or collection
-     * @param string $label The label to assign to the input control
+     * @param string       $name  The text input key (HTML name attribute)
+     * @param string       $item  The pre-built UI element or collection
+     * @param string|array $label The label to assign to the input control, with optional target ID
      */
 
     public function __construct($name, $item = null, $label = '')
     {
-        $this->key = $name;
-        $this->label = ($label) ? $label : $name;
+        $this->setKey($name);
+
+        if ($label) {
+            $this->setLabel($label);
+        } else {
+            $this->label = $name;
+        }
+
         $this->tags = new \Textpattern\UI\TagCollection();
         $this->labelTags = new \Textpattern\UI\TagCollection();
 
@@ -184,12 +198,20 @@ class InputLabel extends Tag implements UICollectionInterface
     /**
      * Set the label for the input control. Chainable.
      *
-     * @param string $label The label to use.
+     * If no ID is specified, assumes it is the same as the key name.
+     *
+     * @param string|array $label The label (and optional target ID) to use.
      */
 
     public function setLabel($label)
     {
-        $this->label = $label;
+        if (!is_array($label)) {
+            $label = do_list($label);
+        }
+
+        $this->label = $label[0];
+        $this->hasLabel = true;
+        $this->for = empty($label[1]) ? $this->getKey() : $label[1];
 
         return $this;
     }
@@ -212,17 +234,6 @@ class InputLabel extends Tag implements UICollectionInterface
     }
 
     /**
-     * Fetch the key (id) in use by this inputLabel.
-     *
-     * @return string
-     */
-
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
      * Remove an element from the tag content set. Chainable.
      *
      * @param  string $key The reference to the object in the collection
@@ -234,6 +245,17 @@ class InputLabel extends Tag implements UICollectionInterface
         $this->tags->remove($key);
 
         return $this;
+    }
+
+    /**
+     * Fetch the ID of the element that the label targets.
+     *
+     * @return string
+     */
+
+    public function getFor()
+    {
+        return $this->for;
     }
 
     /**
@@ -269,8 +291,11 @@ class InputLabel extends Tag implements UICollectionInterface
     {
         global $event;
 
+        $key = $this->getKey();
+        $for = $this->getFor();
+
         $arguments = array(
-            'name'        => $this->key,
+            'name'        => $key,
             'input'       => $this->tags,
             'label'       => $this->label,
             'help'        => array($this->help, $this->inlineHelp),
@@ -278,7 +303,7 @@ class InputLabel extends Tag implements UICollectionInterface
             'wraptag_val' => $this->wrapTags,
         );
 
-        $class = $this->getAtt('class', 'txp-form-field edit-'.str_replace('_', '-', $this->key));
+        $class = $this->getAtt('class', 'txp-form-field edit-'.str_replace('_', '-', $key));
         $help = ($this->help) ? popHelp($this->help) : '';
         $inlineHelp = ($this->inlineHelp) ? fieldHelp($this->inlineHelp) : '';
 
@@ -286,12 +311,11 @@ class InputLabel extends Tag implements UICollectionInterface
             'class' => $class,
         ));
 
-        if (empty($this->label)) {
-            $labelContent = gTxt($this->key).$help;
+        if ($this->hasLabel === false) {
+            $labelContent = gTxt($this->label).$help;
         } else {
             $labelContent = new \Textpattern\UI\Tag('label');
-            $labelContent
-                ->setAtts(array('for' => $this->key))
+            $labelContent->setAtts(array('for' => $for))
                 ->setContent(gTxt($this->label).$help)
                 ->render();
         }
@@ -314,14 +338,13 @@ class InputLabel extends Tag implements UICollectionInterface
             $label = $labelContent;
         } else {
             $label = new \Textpattern\UI\Tag($this->wrapTags[1]);
-            $label
-                ->setAtt('class', 'txp-form-field-label')
+            $label->setAtt('class', 'txp-form-field-label')
                 ->setContent(n.$labelContent)
                 ->render();
         }
 
         $this->setContent(n.$label.$inlineHelp.$input.n);
 
-        return pluggable_ui($event.'_ui', 'inputlabel.'.$this->key, parent::render($flavour), $arguments);
+        return pluggable_ui($event.'_ui', 'inputlabel.'.$key, parent::render($flavour), $arguments);
     }
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -785,7 +785,7 @@ class TXP_Wrapper
                     $sql[] = "feed_time = CURDATE()";
                 } else {
                     $when = strtotime($incoming['Posted']) - tz_offset();
-                    $when = strftime("%Y-%m-%d", $when);
+                    $when = date('Y-m-d', $when);
                     $sql[] = "feed_time = '".doSlash($when)."'";
                 }
             }

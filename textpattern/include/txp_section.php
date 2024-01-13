@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -70,9 +70,13 @@ if ($event == 'section') {
  * @param string|array $message The activity message
  */
 
-function sec_section_list($message = '')
+function sec_section_list($message = '', $update = false)
 {
-    global $event, $step, $all_pages, $all_styles;
+    global $event, $step, $all_pages, $all_styles, $txp_sections;
+
+    if ($update) {
+        $txp_sections = safe_column(array('name'), 'txp_section', '1 ORDER BY title, name');
+    }
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -108,7 +112,7 @@ function sec_section_list($message = '')
     }
 
     if (isset($columns[$sort])) {
-        $sort_sql = "$sort $dir";
+        $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
     } else {
         $sort_sql = "name $dir";
     }
@@ -183,6 +187,8 @@ function sec_section_list($message = '')
             )
         );
 
+
+    getDefaultSection();
     $createBlock = array();
 
     if (has_privs('section.edit')) {
@@ -208,6 +214,7 @@ function sec_section_list($message = '')
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $step == 'section_select_skin' ? PHP_INT_MAX : $paginator->getLimit();
+    $skin = $step == 'section_select_skin' ? gps('skin') : false;
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -239,7 +246,11 @@ function sec_section_list($message = '')
                     'method' => 'post',
                     'action' => 'index.php',
                 )).
-                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('div', array(
+                    'class'      => 'txp-listtables',
+                    'tabindex'   => 0,
+                    'aria-label' => gTxt('list'),
+                )).
                 n.tag_start('table', array('class' => 'txp-list')).
                 n.tag_start('thead');
                 $thead = hCell(
@@ -279,28 +290,26 @@ function sec_section_list($message = '')
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'on_frontpage',
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     $sec_in_rss = asyncHref(yes_no($sec_in_rss), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'in_rss',
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     $sec_searchable = asyncHref(yes_no($sec_searchable), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'searchable',
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     if ($sec_article_count > 0) {
                         $articles = href($sec_article_count, array(
                             'event'         => 'list',
                             'search_method' => 'section',
                             'crit'          => '"'.$sec_name.'"',
-                        ), array(
-                            'title' => gTxt('article_count', array('{num}' => $sec_article_count)),
-                        ));
+                        ), array('title' => gTxt('article_count', array('{num}' => $sec_article_count))));
                     } else {
                         $articles = 0;
                     }
@@ -346,7 +355,7 @@ function sec_section_list($message = '')
 
                 $contentBlock .= tr(
                     td(
-                        fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
+                        fInput('checkbox', array('name' => 'selected[]', 'checked' => $sec_skin == $skin || $sec_dev_skin == $skin), $sec_name), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
                         href(
@@ -470,6 +479,8 @@ function section_edit()
     extract($rs, EXTR_PREFIX_ALL, 'sec');
     pagetop(gTxt('tab_sections'));
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_section', 'name, title, description');
+
     $out = array();
 
     $out[] = hed($caption, 2);
@@ -479,12 +490,20 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'name', 'text', $sec_name)->setAtts(array(
+                    'id'        => 'section_name',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['name'],
+                ))->setBool('required'),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
                 'section_title',
-                fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
+                Txp::get('\Textpattern\UI\Input', 'title', 'text', $sec_title)->setAtts(array(
+                    'id'        => 'section_title',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['title'],
+                ))->setBool('required'),
                 'section_longtitle', '', array('class' => 'txp-form-field edit-section-longtitle')
             );
     }
@@ -515,11 +534,15 @@ function section_edit()
             'uses_style',
             'section_uses_css',
             array('class' => 'txp-form-field edit-section-uses-css')
-        ).inputLabel(
+        ).
+        inputLabel(
             'permlink_mode',
             permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
-            '', 'permlink_mode', array('class' => 'txp-form-field edit-section-permlink-mode')
-        ).script_js(<<<EOJS
+            'permlink_mode',
+            'permlink_mode',
+            array('class' => 'txp-form-field edit-section-permlink-mode')
+        ).
+        script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
 var page_sel = '{$sec_page}';
@@ -547,7 +570,7 @@ EOJS
 
     $out[] = inputLabel(
             'section_description',
-            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
+            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" maxlength="'.$fieldSizes['description'].'">'.$sec_description.'</textarea>',
             'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
         );
 
@@ -609,7 +632,6 @@ function section_save()
             // Invalid input. Halt all further processing (e.g. plugin event
             // handlers).
             $message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-//            modal_halt($message);
             sec_section_list($message);
 
             return;
@@ -660,12 +682,15 @@ function section_save()
     }
 
     if ($ok) {
+        if ($name != $lower_name && $lower_name == get_pref('default_section')) {
+            set_pref('default_section', $name, 'section', PREF_HIDDEN);
+        }
         update_lastmod('section_saved', compact('name', 'title', 'section_page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable', 'permlink_mode'));
         Txp::get('Textpattern\Skin\Skin')->setEditing($safe_skin);
     }
 
     if ($ok) {
-        sec_section_list(gTxt(($safe_old_name ? 'section_updated' : 'section_created'), array('{name}' => $name)));
+        sec_section_list(gTxt(($safe_old_name ? 'section_updated' : 'section_created'), array('{name}' => $name)), true);
     } else {
         sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
     }
@@ -743,14 +768,18 @@ function section_set_default()
 
 function section_select_list()
 {
+    global $txp_sections;
+
     $val = get_pref('default_section');
-    $sections = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title, name");
     $vals = array();
-    foreach ($sections as $row) {
-        $vals[$row['name']] = $row['title'];
+
+    foreach ($txp_sections as $name => $row) {
+        $name == 'default' or $vals[$name] = $row['title'];
     }
 
-    return selectInput('default_section', $vals, $val, false, true, 'default_section');
+    return selectInput(array(
+        'name' => 'default_section', 'class' => 'txp-async-update'
+    ), $vals, $val, false, true, 'default_section');
 }
 
 /**
@@ -759,6 +788,8 @@ function section_select_list()
 
 function section_delete()
 {
+    global $txp_sections;
+
     $selectedList = ps('selected');
     $selected = join(',', quote_list($selectedList));
     $message = '';
@@ -772,6 +803,10 @@ function section_delete()
     $sectionsNotDeleted = array_diff($selectedList, $sections);
 
     if ($sections && safe_delete('txp_section', "name IN (".join(',', quote_list($sections)).")")) {
+        foreach ($sections as $section) {
+            unset($txp_sections[$section]);
+        }
+
         callback_event('sections_deleted', '', 0, $sections);
         $message = gTxt('section_deleted', array('{name}' => join(', ', $sections)));
     }
@@ -812,7 +847,7 @@ function section_set_theme($type = 'dev_skin')
 if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=section')}
 EOS
     , false);
-    sec_section_list($message);
+    sec_section_list($message, true);
 }
 
 /**
@@ -921,20 +956,20 @@ var skin_style = {$json_style};
 var page_sel = null;
 var style_sel = null;
 EOJS;
+script_js($script, false);
 
     if ($step == 'section_select_skin') {
         $script .= <<<EOJS
-$(function() {
-    $('#select_all').click();
+//    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();
     skin.val(selected || '').change();
-});
 EOJS;
+        script_js($script, false, true);
     }
-    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method).
-    script_js($script, false);
+
+    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
 /**
@@ -1082,5 +1117,5 @@ function section_multi_edit()
         $message = array(gTxt('section_save_failed'), E_ERROR);
     }
 
-    sec_section_list($message);
+    sec_section_list($message, $nameVal && $sections);
 }

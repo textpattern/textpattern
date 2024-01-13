@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -122,7 +122,7 @@ class Timezone
             foreach ($timezones as $timezone) {
                 $parts = explode('/', $timezone);
 
-                if (in_array($parts[0], $this->continents, true) && $data = $this->getIdentifier($timezone)) {
+                if ((count($parts) == 1 || in_array($parts[0], $this->continents, true)) && $data = $this->getIdentifier($timezone)) {
                     $this->details[$timezone] = $data;
 
                     if (!isset($this->offsets[$data['offset']])) {

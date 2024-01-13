@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * https://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
@@ -125,7 +125,7 @@ function write_log()
 
     if ($fp) {
         $lnsep = "\n================================\n";
-        fwrite($fp, "\n$lnsep".strftime("%Y-%m-%d %H:%M:%S"));
+        fwrite($fp, "\n$lnsep".date('Y-m-d H:i:s'));
         fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
         fwrite($fp, $lnsep);
         fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);

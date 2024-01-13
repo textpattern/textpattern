@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,6 +24,20 @@
 /**
  * Constants.
  */
+
+/**
+ * Textpattern version.
+ */
+
+$thisversion = '4.9.0-dev';
+
+/**
+ * Development environment?
+ *
+ * Set false for releases.
+ */
+
+$txp_is_dev = true;
 
 if (!defined('TXP_DEBUG')) {
     /**
@@ -295,11 +309,36 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
-/**
- * Plugin storage directory.
- */
+if (!defined('PLUGINPATH')) {
+    /**
+     * Plugin storage directory.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Files
+     * @example
+     * define('PLUGINPATH', $txpcfg['txpath'] . '/plugins');
+     */
 
-define('PLUGINPATH', txpath.DS.'plugins');
+    global $txpcfg;
+    $admin_path = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
+    define('PLUGINPATH', $admin_path.DS.'plugins');
+}
+
+if (!defined('PLUGIN_REPO_URL')) {
+    /**
+     * Remote plugin repository.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Plugin
+     * @since   4.9.0
+     * @example
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins');
+     */
+
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com');
+}
 
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
@@ -366,7 +405,7 @@ if (!defined('PASSWORD_SYMBOLS')) {
      *
      * @package User
      * @since   4.6.0
-     * @see     generate_password()
+     * @see     Textpattern\Password\Generator
      * @example
      * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */
@@ -505,7 +544,7 @@ if (!defined('AJAX_TIMEOUT')) {
      * define('AJAX_TIMEOUT', 10);
      */
 
-    define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+    define('AJAX_TIMEOUT', 1000 * max(30, (int)ini_get('max_execution_time')));
 }
 
 /**
@@ -697,6 +736,17 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  */
 
 define('REQUIRED_PHP_VERSION', '5.6.0');
+
+/**
+ * Required OPENSSL version.
+ *
+ * Used when fetching resources via file_get_contents() or cURL.
+ *
+ * @since   4.8.5
+ * @package System
+ */
+
+define('REQUIRED_OPENSSL_VERSION', '268439567');
 
 /**
  * File integrity status good.
@@ -927,6 +977,39 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
  */
 
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+ /**
+ * Define the default parser hash algo
+ *
+ * @since   4.8.8
+ */
+
+if (!defined('TEXTPATTERN_HASH_ALGO')) {
+    $algos = array_intersect(array('xxh128', 'murmur3f', 'murmur3c'), hash_algos());
+    define('TEXTPATTERN_HASH_ALGO', $algos ? $algos[0] : 'md5');
+}
+
+/**
+ * Define the default parser hash length
+ *
+ * @since   4.8.8
+ */
+
+if (!defined('TEXTPATTERN_HASH_LENGTH')) {
+    define('TEXTPATTERN_HASH_LENGTH', strlen(hash(TEXTPATTERN_HASH_ALGO, '')));
+}
+
+/**
+ * Define the default theme directories
+ *
+ * @since   4.9.0
+ */
+
+ const TXP_THEME_TREE = array(
+     'forms'  => 'forms',
+     'pages'  => 'pages',
+     'styles' => 'styles'
+ );
 
 /**
  * A tab character.

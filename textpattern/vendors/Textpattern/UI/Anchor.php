@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -49,7 +49,7 @@ class Anchor extends Tag implements UIInterface
             $anchor = join_qs($anchor);
         }
 
-        $this->setContent($linktext);
-        $this->setAtt('href', $anchor);
+        $this->setContent($linktext)
+            ->setAtt('href', $anchor);
     }
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -46,7 +46,7 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL, array('article', 'edit')).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
@@ -77,6 +77,10 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         'class'    => $class,
         'data-col' => $sort,
     );
+
+    if (preg_match('/\b(asc|desc)\b/i', $options['class'], $matches)) {
+        $options += array('aria-sort' => strtolower($matches[1]).'ending');
+    }
 
     $head_items = array(
         'value'   => $value,
@@ -316,10 +320,9 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
             span(gTxt('delete'), array('class' => 'ui-icon ui-icon-close')),
             'button',
             array(
-                'class'      => 'destroy',
-                'type'       => 'submit',
-                'title'      => gTxt('delete'),
-                'aria-label' => gTxt('delete'),
+                'class' => 'destroy',
+                'type'  => 'submit',
+                'title' => gTxt('delete'),
             )
         ),
         eInput($event).
@@ -416,9 +419,8 @@ function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit
             'search_method' => $search_method,
         ),
         array(
-            'rel'        => $type,
-            'title'      => $label,
-            'aria-label' => $label,
+            'rel'   => $type,
+            'title' => $label,
         )
     );
 }
@@ -518,7 +520,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
     }
 
     $out[] = n.tag(join($nav).n, 'nav', array(
-        'class'      => ($numPages > 1 ? 'prev-next' : 'prev-next ui-helper-hidden'),
+        'class'      => ($numPages > 1 ? 'prev-next' : 'prev-next hidden'),
         'aria-label' => gTxt('page_nav'),
     ));
 
@@ -547,7 +549,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($anchor_id && $pane) {
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'class' => $visible ? 'toggle' : 'toggle ui-helper-hidden',
+            'class' => $visible ? 'toggle' : 'toggle hidden',
             'id'    => $anchor_id,
             'role'  => 'group',
         );
@@ -953,7 +955,7 @@ function tag($content, $tag, $atts = '')
 
 function tag_void($tag, $atts = '')
 {
-    return '<'.$tag.join_atts($atts).' />';
+    return '<'.$tag.join_atts($atts).(get_pref('doctype') === 'html5' ? '>' : ' />');
 }
 
 /**
@@ -1277,7 +1279,10 @@ function popTag($var, $text, $atts = array())
         'tag_name' => $var,
     ) + $atts;
 
-    return href($text, $opts, array('class' => 'txp-tagbuilder-link'));
+    return href($text, $opts, array(
+        'class' => 'txp-tagbuilder-link',
+        'title' => gTxt('tagbuilder'),
+    ));
 }
 
 /**
@@ -1347,7 +1352,11 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
     }
 
     return n.tag(
-        selectInput('edit_method', $methods, '').
+        tag(gTxt('bulk_edit'), 'label', array(
+            'class' => 'txp-accessibility',
+            'for'   => 'bulk_edit',
+        )).
+        selectInput('edit_method', $methods, '', '', '', 'bulk_edit').
         eInput($event).
         sInput($step).
         hInput('page', $page).
@@ -1448,10 +1457,11 @@ function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size =
                 $wraptag_class,
                 $wraptag_val
             ).
-            tag(null, 'progress', array('class' => 'txp-upload-progress ui-helper-hidden')),
+            n.tag(null, 'progress', array('class' => 'txp-upload-progress hidden')).
+            n.'<div class="txp-upload-preview"></div>',
             'form',
             array(
-                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
+                'class'   => 'txp-upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
@@ -1531,7 +1541,7 @@ function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid 
         });
 EOF;
 
-    return script_js($js, (string) $noscript);
+    return Txp::get('\Textpattern\UI\Script', $js)->setNoscript((string) $noscript);
 }
 
 /**
@@ -1543,77 +1553,51 @@ EOF;
  *
  * @param  string     $js    JavaScript code
  * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
- * @param  array      $route Optional events/steps upon which to add the script
+ * @param  array|bool $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
+ * @deprecated in 4.9.0
+ * @see  \Textpattern\UI\Script
  * @example
  * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
  */
 
 function script_js($js, $flags = '', $route = array())
 {
-    static $store = '';
-    global $event, $step;
+    $scriptTag = new \Textpattern\UI\Script;
 
-    $targetEvent = empty($route[0]) ? null : (is_array($route[0]) ? $route[0] : do_list_unique($route[0]));
-    $targetStep = empty($route[1]) ? null : (is_array($route[1]) ? $route[1] : do_list_unique($route[1]));
-
-    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
-        if (is_array($flags)) {
-            $atts = $flags;
-            unset($atts['flags']);
-            $flags = isset($flags['flags']) ? $flags['flags'] : TEXTPATTERN_SCRIPT_URL;
-        } else {
-            $atts = array();
-        }
-
-        if (is_int($flags)) {
-            if ($flags & TEXTPATTERN_SCRIPT_URL) {
-                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
-                    $ext = pathinfo($js, PATHINFO_EXTENSION);
-
-                    if ($ext) {
-                        $js = substr($js, 0, (strlen($ext) + 1) * -1);
-                        $ext = '.'.$ext;
-                    }
-
-                    $js .= '.v'.txp_version.$ext;
-                }
-
-                return n.tag(null, 'script', array('src' => $js) + $atts);
-            }
-        }
-
-        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
-
-        if (is_bool($flags)) {
-            if (!$flags) {
-                $store .= n.$js;
-
-                return;
-            } else {
-                $js = $store.n.$js;
-                $store = '';
-            }
-        }
-
-        $js = trim($js);
-        $out = $js ? n.tag(n.$js.n, 'script', $atts) : '';
-
-        if ($flags && $flags !== true) {
-            $out .= n.tag(n.trim($flags).n, 'noscript');
-        }
-
-        return $out;
+    if ($route === true) {
+        $js = '$(function() {'.n.t.trim($js).n.'});';
+    } elseif ($route) {
+        $events = isset($route[0]) ? $route[0] : null;
+        $steps = isset($route[1]) ? $route[1] : null;
+        $scriptTag->setRoute($events, $steps);
     }
 
-    return '';
+    if (is_int($flags)) {
+        $addVersion = ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION) ? 'version' : '';
+        $scriptTag->setSource($js, $addVersion);
+    } elseif (is_bool($flags)) {
+        $scriptTag->setContent($js, $flags);
+
+        if (!$flags) {
+            return;
+        }
+    } else {
+        $scriptTag->setContent($js);
+    }
+
+    if ($flags && is_string($flags)) {
+        $scriptTag->setNoscript($flags);
+    }
+
+    return $scriptTag;
 }
 
 /**
  * Renders a checkbox to set/unset a browser cookie.
  *
  * @param  string $classname Label text. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element
+ * @param  bool|string $form Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 
@@ -1629,10 +1613,10 @@ function cookie_box($classname, $form = true)
         $value = 0;
     }
 
-    $newvalue = 1 - $value;
-
-    $out = checkbox($name, 1, (bool) $value, 0, $name).
+    $out = checkbox($name, 1, (bool) $value, 0, $name, $form === true ? '' : $form).
         n.tag(gTxt($classname), 'label', array('for' => $name));
+
+    $target = $form === true ? '$(this).parents("form")' : "$('#$form')";
 
     $js = <<<EOF
         $(function ()
@@ -1644,15 +1628,15 @@ function cookie_box($classname, $form = true)
                     }
                 })
                 .change(function () {
-                    setClassRemember('{$class}', $newvalue);
-                    $(this).parents('form').submit();
+                    toggleClassRemember('{$class}');
+                    $target.submit();
                 });
         });
 EOF;
 
-    $out .= script_js($js);
+    $out .= Txp::get('\Textpattern\UI\Script', $js);
 
-    if ($form) {
+    if ($form === true) {
         if (serverSet('QUERY_STRING')) {
             $action = 'index.php?'.serverSet('QUERY_STRING');
         } else {
@@ -1746,27 +1730,133 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
+function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
-    global $txp_atts;
-    static $import = array('breakby', 'breakclass', 'wrapform');
+    global $txp_atts, $txp_item;
+    static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
 
-    $list = is_array($list) ? array_filter($list, function ($v) {
+    $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
-    }) : null;
-
-    if (!$list) {
-        return '';
-    }
+    });
 
     if (is_array($break)) {
         extract($break + array('break' => ''));
     }
 
     foreach ($import as $global) {
-        if (!isset($$global) && isset($txp_atts[$global])) {
-            $$global = $txp_atts[$global];
+        isset($$global) or $$global = isset($txp_atts[$global]) ? $txp_atts[$global] : null;
+        unset($txp_atts[$global]);
+    }
+
+    if (isset($trim) || isset($replace)) {
+        $replacement = $replace === true ? null : $replace;
+
+        if ($trim === true) {
+            $list = array_map('trim', $list);
+            !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
+            $list = array_filter($list, function ($v) {return $v !== '';});
+        } elseif (isset($trim) && $trim !== '') {
+            $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
+                preg_replace($trim, (string)$replacement, $list) :
+                (isset($replacement) ?
+                    str_replace($trim, $replacement, $list) :
+                    array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
+                );
+            $list = array_filter($list, function ($v) {return $v !== '';});
+        } elseif (isset($replacement)) {
+            $list = strlen($replacement) > 2 && preg_match($regex, $replacement) ?
+                array_filter($list, function ($v) use ($replacement) {return preg_match($replacement, $v);}) :
+                array_filter($list, function ($v) use ($replacement) {return strpos($v, $replacement) !== false;});
         }
+
+        if ($replace === true) {
+            $list = array_unique($list);
+        }
+    }
+
+    if (!$list) {
+        return '';
+    }
+
+    if (($sort = isset($sort) ? strtolower($sort) : '') || $offset == '?' && $limit > 0) {
+        $rand = strpos($sort, 'rand') !== false;
+
+        if ($rand || $offset == '?') {
+            if ($limit == 1) {
+                $list = array($list[array_rand($list)]);
+            } elseif ($limit && $limit < count($list)) {
+                $newlist = array();
+
+                foreach (array_rand($list, (int)$limit) as $key) {
+                    $newlist[] = $list[$key];
+                }
+
+                $list = $newlist;
+            }
+
+            $limit = $offset = null;
+        }
+
+        $flag = (strpos($sort, 'nat') === false ? SORT_STRING : SORT_NATURAL) | (strpos($sort, 'case') === false ? SORT_FLAG_CASE : 0);
+        $rand ? shuffle($list) : (strpos($sort, 'desc') !== false ? rsort($list, $flag) : ($sort ? sort($list, $flag) : null));
+    }
+
+    if($limit || $offset) {
+        if (!$offset || is_numeric($offset)) {
+            $list = array_slice($list, (int)$offset, isset($limit) ? (int)$limit : null);
+        } else {
+            $count = count($list);
+            $newlist = array();
+
+            foreach (do_list($offset, array(',', '-')) as $ind) {
+                $ind = $ind === '?' ? array_rand($list) : ($ind >= 0 ? (int)$ind - 1 : $count + (int)$ind);
+                !isset($list[$ind]) or $newlist[] = $list[$ind];
+            }
+
+            $list = $limit ? array_slice($newlist, 0, (int)$limit) : $newlist;
+        }
+    }
+
+    if (($break || $breakform) && !empty($breakby)) { // array_merge to reindex
+        $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
+        $newlist = array();
+
+        switch ($count = count($breakby)) {
+            case 0:
+                break;
+            case 1:
+                if ($breakby[0] > 0) {
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
+                    break;
+                }
+                // no break
+            default:
+                for ($i = 0; count($list); $i = ($i + 1)%$count) {
+                    $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
+                }
+
+        }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
+    }
+
+    $old_item = $txp_item;
+
+    if ($escape) {
+        foreach ($list as &$item) {
+            $item = txp_escape($escape, $item);
+        }
+    }
+
+    if ($breakform) {
+        array_walk($list, function (&$item, $key) use ($breakform) {
+            global $txp_item;
+            $txp_item['count'] = $key + 1;
+            $txp_item[true] = $item;
+            $item = str_replace('<+>', $item, parse_form($breakform));
+            unset($txp_item);
+        });
     }
 
     if ($html_id) {
@@ -1781,68 +1871,21 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
-    if ($break && !empty($breakby)) { // array_merge to reindex
-        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
-
-        switch ($count = count($breakby)) {
-            case 0:
-                break;
-            case 1:
-                if ($breakby[0] > 0) {
-                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
-                    break;
-                }
-                // no break
-            default:
-                $newlist = array();
-
-                for ($i = 0; count($list); $i = ($i + 1)%$count) {
-                    $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
-                }
-
-        }
-
-        empty($newlist) or $list = array_map('implode', $newlist);
-    }
-
-    if (isset($txp_atts['trim']) && $txp_atts['trim'] === true) {
-        $list = array_map('trim', $list);
-    }
-
     if ($break === true) {
-        switch (strtolower($wraptag)) {
-            case 'ul':
-            case 'ol':
-                $break = 'li';
-            break;
-            case 'p':
-                $break = 'br';
-            break;
-            case 'table':
-            case 'tbody':
-            case 'thead':
-            case 'tfoot':
-                $break = 'tr';
-            break;
-            case 'tr':
-                $break = 'td';
-            break;
-            default:
-                $break = n;
-        }
+        $break = txp_break($wraptag);
     }
 
-    if (strpos($break, '<+>') !== false) {
+    if ((string)$break === '') {
+        $content = join('', $list);
+    } elseif (strpos($break, '<+>') !== false) {
         $content = array_reduce($list, function ($carry, $item) use ($break) {
             return $carry.str_replace('<+>', $item, $break);
         });
     }
     // Non-enclosing breaks.
-    elseif ($break === 'br' || $break === 'hr' || !preg_match('/^\w+$/', $break)) {
-        if ($break === 'br' || $break === 'hr') {
-            $break = "<$break $breakatts/>".n;
-        }
-
+    elseif ($break === 'br' || $break === 'hr') {
+        $content = join("<$break $breakatts".(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
+    } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {
         $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
@@ -1852,11 +1895,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         $content = str_replace('<+>', $content, parse_form($wrapform));
     }
 
-    if (empty($wraptag)) {
-        return $content;
-    } else {
-        return tag($content, $wraptag, $atts);
-    }
+    $txp_item = $old_item;
+
+    return empty($wraptag) ? $content : tag($content, $wraptag, $atts);
 }
 
 /**
@@ -1891,7 +1932,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts />";
+    return (string)$content !== '' ? tag($content, $tag, $atts) : "<$tag $atts".(get_pref('doctype') === 'html5' ? ">" : " />");
 }
 
 /**
@@ -1913,7 +1954,7 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
 function doLabel($label = '', $labeltag = '')
 {
     if ($label) {
-        return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
+        return (empty($labeltag) ? $label.'<br'.(get_pref('doctype') === 'html5' ? '>' : ' />') : tag($label, $labeltag));
     }
 
     return '';

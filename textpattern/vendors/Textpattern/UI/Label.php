@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2020 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -43,7 +43,10 @@ class Label extends Tag implements UIInterface
     {
         parent::__construct('label');
 
-        $this->setContent($value)
-            ->setAtt('for', $name);
+        $this->setContent($value);
+
+        if ($name) {
+            $this->setAtt('for', $name);
+        }
     }
 }
