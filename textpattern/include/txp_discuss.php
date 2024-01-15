@@ -402,7 +402,7 @@ function discuss_list($message = '')
                     $parent = href($parent_title, '?event=article&step=edit&ID='.$parentid, array('title' => gTxt('edit')));
                 }
 
-                $parent .= sp.href("($c)", '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid);
+                $parent .= sp.href("($c)", '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit=%22'.$parentid.'%22');
 
                 $view = $comment_status;
 
