@@ -46,7 +46,7 @@
  */
 
 /* textarea, pre {
-    tab-size: 2;
+    tab-size: 2 !important;
 } */
 
 /* Content -> Write panel
