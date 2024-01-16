@@ -2391,7 +2391,7 @@ textpattern.Route.add('', function () {
         }
     });
 
-    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right bottom", at: "right top" }});
+    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
 });
 
 // Forms panel.
@@ -2822,6 +2822,13 @@ $(function () {
             list: '#txp-list-container',
             url: $(this).attr('href'),
             data: $('nav.prev-next form').serializeArray()
+        });
+    }).on('click', 'a.txp-search-link', function (e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {
+            list: '#txp-list-container, #search_form',
+            url: $(this).attr('href'),
+            callback: txp_search
         });
     }).on('submit', 'form[name="longform"]', function (e) {
         e.preventDefault();
