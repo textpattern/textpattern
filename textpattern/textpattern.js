@@ -2804,18 +2804,13 @@ $(function () {
         textpattern.Relay.callback('updateList', {
             data: $(this).serializeArray()
         });
-    }).on('click', '.txp-navigation a', function (e) {
-        if ($(this).hasClass('pophelp')) {
-            return;
-        }
-
+    }).on('click', '.txp-navigation a:not(.pophelp)', function (e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {
             url: $(this).attr('href'),
-            data: $('nav.prev-next form').serializeArray()
+            data: $('nav.prev-next form').serializeArray(),
+            callback: scroll({top: 0, behavior: 'smooth'})
         });
-
-        scroll(0, 0);
     }).on('click', '.txp-list thead th a', function (e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {
