@@ -2809,7 +2809,7 @@ $(function () {
         textpattern.Relay.callback('updateList', {
             url: $(this).attr('href'),
             data: $('nav.prev-next form').serializeArray(),
-            callback: scroll({top: 0, behavior: 'smooth'})
+            callback: scroll({top: 0, behavior: 'auto'})
         });
     }).on('click', '.txp-list thead th a', function (e) {
         e.preventDefault();
