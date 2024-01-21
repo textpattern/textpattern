@@ -125,7 +125,10 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery
     ->setRoute('file, image').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
     ->setRoute('article');
-$txpOut = 'var textpattern = '.json_encode(
+
+echo Txp::get('\Textpattern\UI\Style')->setContent('.txp-ratio-meter{display: none; position: absolute; border: 0; height: 5px; margin: 1px 1px}');
+
+    $txpOut = 'var textpattern = '.json_encode(
     array(
         '_txp_uid' => get_pref('blog_uid'),
         'event' => $event,
