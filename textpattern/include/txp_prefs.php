@@ -258,6 +258,11 @@ function prefs_list($message = '')
 
             switch ($a['html']) {
                 case 'yesnoradio':
+                case 'onoffradio':
+                case '\CheckboxSet':
+                case '\RadioSet':
+                case '\YesNoRadioSet':
+                case '\OnOffRadioSet':
                 case 'is_dst':
                     $label = '';
                     break;
