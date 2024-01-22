@@ -917,8 +917,6 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thisarticle, $thispage, $trace;
 
-    extract($pretext);
-
     // Getting attributes.
     if (isset($thing) && !isset($atts['form'])) {
         $atts['form'] = '';
@@ -928,7 +926,7 @@ function doArticles($atts, $iscustom, $thing = null)
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 
-    $pg or $pg = 1;
+    $pg = empty($pretext['pg']) ? 1 : (int)$pretext['pg'];
     $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
     $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
@@ -962,8 +960,8 @@ function doArticles($atts, $iscustom, $thing = null)
             $thispage = array(
                 'pg'          => $pg,
                 'numPages'    => $numPages,
-                's'           => $s,
-                'c'           => $c,
+                's'           => empty($pretext['s']) ? 'default' : $pretext['s'],
+                'c'           => empty($pretext['c']) ? '' : $pretext['c'],
                 'context'     => 'article',
                 'grand_total' => $grand_total,
                 'total'       => $total
