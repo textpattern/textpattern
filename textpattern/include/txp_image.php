@@ -775,7 +775,6 @@ function image_edit($message = '', $id = '')
                                     'name'    => 'image_delete',
                                     'type'    => 'submit',
                                     'form'    => 'delete-image',
-                                    'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
                                     'value'   =>  gTxt('delete'),
                                 ))
                                 : ''

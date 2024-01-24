@@ -807,7 +807,6 @@ function file_edit($message = '', $id = '')
                             'name'    => 'file_delete',
                             'type'    => 'submit',
                             'form'    => 'delete-file',
-                            'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
                             'value'   =>  gTxt('delete'),
                         ))
                         : ''

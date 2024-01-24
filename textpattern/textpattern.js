@@ -2267,6 +2267,10 @@ textpattern.Route.add('file, image', function () {
             value: 'async'
         }]
     });
+
+    $('input[type="submit"][form="delete-file"], input[type="submit"][form="delete-image"]').on('click', function() {
+        return verify(textpattern.gTxt('confirm_delete_popup'));
+    })
 });
 
 // Uncheck reset on timestamp change.
@@ -2381,23 +2385,17 @@ textpattern.Route.add('', function () {
                 textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
             }
         }
-    }).on('input', '[maxlength]:not([pattern])', function() {
-        $(this).prev('meter').val(this.value.length/this.maxLength);/*
-        if (this.value.length >= 0.75*this.maxLength) {
+    }).on('input', '[maxlength]:not([title])', function() {
+        if (this.value.length >= 0.8*this.maxLength) {
             $(this).tooltip('enable');
             $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
             $(this).tooltip('open');
         } else {
             $(this).tooltip('disable');
-        }*/
-    }).on('focusin', '[maxlength]:not([pattern])', function() {
-        $(this).trigger('input').prev('meter').css('width', this.clientWidth+'px').show();
-    }).on('focusout', '[maxlength]:not([pattern])', function() {
-        $(this).prev('meter').hide();
+        }
     });
 
-//    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
-    $('[maxlength]:not([pattern])').before('<meter class="txp-ratio-meter" min="0" max="1" low="0.75" high="0.95" optimum="0.5" value="0" />');
+    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
 });
 
 // Forms panel.

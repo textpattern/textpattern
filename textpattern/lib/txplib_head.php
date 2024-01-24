@@ -89,6 +89,7 @@ function pagetop($pagetitle = '', $message = '')
         'are_you_sure',
         'body',
         'close',
+        'confirm_delete_popup',
         'cookies_must_be_enabled',
         'custom_field_clash',
         'documentation',
@@ -125,8 +126,6 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery
     ->setRoute('file, image').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
     ->setRoute('article');
-
-echo Txp::get('\Textpattern\UI\Style')->setContent('.txp-ratio-meter{display: none; position: absolute; border: 0; height: 5px; margin: 1px 1px}');
 
     $txpOut = 'var textpattern = '.json_encode(
     array(
