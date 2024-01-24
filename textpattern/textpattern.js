@@ -2385,17 +2385,22 @@ textpattern.Route.add('', function () {
                 textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
             }
         }
-    }).on('input', '[maxlength]:not([title])', function() {
+    }).on('input', '[maxlength]', function() {
+        if (!$(this).tooltip('instance')) {
+            $(this).tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
+        }
+
         if (this.value.length >= 0.8*this.maxLength) {
-            $(this).tooltip('enable');
             $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
-            $(this).tooltip('open');
+            $(this).tooltip('enable').tooltip('open');
         } else {
             $(this).tooltip('disable');
         }
+    }).on('focusout', '[maxlength]', function() {
+        if ($(this).tooltip('instance')) {
+            $(this).tooltip('destroy');
+        }
     });
-
-    $('[maxlength]:not([title])').tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
 });
 
 // Forms panel.
