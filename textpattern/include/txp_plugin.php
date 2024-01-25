@@ -497,7 +497,12 @@ function plugin_edit_form($name = '')
         'textpack',
     );
 
-    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+    if ($name) {
+        $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+    } else {
+        $userInfo = is_logged_in();
+        $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '');
+    }
 
     if (empty($plugin)) {
         return graf(gTxt('plugin_not_editable'), array('class' => 'alert-block warning'));
@@ -630,7 +635,6 @@ function plugin_edit_form($name = '')
                     ).
                     eInput('plugin').
                     sInput('plugin_save').
-                    hInput('name', $name).
                     hInput('help_hash', md5($plugin['help_raw'])).
                     hInput('sort', gps('sort')).
                     hInput('dir', gps('dir')).
@@ -671,12 +675,17 @@ function plugin_save()
     );
 
     $plugObj = Txp::get('\Textpattern\Plugin\Plugin');
+    $plugin = array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash'))));
 
-    extract(array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash')))));
-    $flags = (array)gps('flags');
+    extract($plugin);
+    $flags = (array)gps('flags', 0);
+
+    if (empty($name)) {
+        $plugin['name'] = $plugin['newname'];
+    }
 
     if ($name !== $newname) {
-        $ret = $plugObj->rename($name, $newname);
+        $ret = $name ? $plugObj->rename($name, $newname) : $plugObj->install($plugin);
 
         if ($ret === false) {
             // @todo issue a warning and stay on page?
@@ -1070,7 +1079,12 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return tag(
+    return href(gTxt('edit'), array(
+        'event'      => 'plugin',
+        'step'       => 'plugin_edit',
+        '_txp_token' => form_token(),
+    )).br.
+    tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
             'type'     => 'file',
