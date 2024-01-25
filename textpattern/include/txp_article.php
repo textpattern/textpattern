@@ -723,16 +723,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    if ($ID && !empty($sPosted)) {
-        // Previous record?
-        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
-
-        // Next record?
-        $rs['next_id'] = checkIfNeighbour('next', $sPosted, $ID);
-    } else {
-        $rs['prev_id'] = $rs['next_id'] = 0;
-    }
-
     // Let plugins chime in on partials meta data.
     callback_event_ref('article_ui', 'partials_meta', 0, $rs, $partials);
     $rs['partials_meta'] = &$partials;
@@ -988,8 +978,44 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
     }
 
-    // Custom menu entries.
-    echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+    if (has_handler('article_ui', 'extend_col_1')) {
+        if ($ID) {
+            try {
+                $sort = get_pref('article_sort_column', 'posted');
+
+                switch ($sort) {
+                    case 'id':
+                        $sort_sql = "ID";
+                        break;
+                    case 'author':
+                        $sort_sql = "user.RealName, ID DESC";
+                        break;
+                    case 'comments':
+                        $sort_sql = "total_comments, ID DESC";
+                        break;
+                    case 'lastmod':
+                        $sort_sql = "LastMod, ID DESC";
+                        break;
+                    default:
+                        $sort_sql = ucfirst($sort).", ID DESC";
+                        break;
+                }
+            
+                $rs += getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM ".safe_pfx('textpattern')." WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=".$ID);
+            } catch(Exception $e) {
+                // Previous record?
+                $rs['prev_id'] = empty($sPosted) ? 0 : checkIfNeighbour('prev', $sPosted, $ID);
+    
+                // Next record?
+                $rs['next_id'] = empty($sPosted) ? 0 : checkIfNeighbour('next', $sPosted, $ID);
+            }
+        } else {
+            $rs['prev_id'] = $rs['next_id'] = 0;
+        }
+
+        // Custom menu entries.
+        echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+    }
 
     // 'Recent articles' collapsible section.
 //    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
