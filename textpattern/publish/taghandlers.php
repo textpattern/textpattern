@@ -1301,9 +1301,7 @@ function if_article_id($atts, $thing = null)
 
     extract(lAtts(array('id' => $pretext['id']), $atts));
 
-    assert_article();
-
-    $x = $id && in_list($thisarticle['thisid'], $id);
+    $x = $id && isset($thisarticle['thisid']) && in_list($thisarticle['thisid'], $id);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -1577,9 +1575,7 @@ function if_article_author($atts, $thing = null)
 
     extract(lAtts(array('name' => ''), $atts));
 
-    assert_article();
-
-    $author = $thisarticle['authorid'];
+    $author = isset($thisarticle['authorid']) ? $thisarticle['authorid'] : '';
 
     $x = $name ? in_list($author, $name) : (string) $author !== '';
     return isset($thing) ? parse($thing, $x) : $x;
@@ -1901,8 +1897,6 @@ function if_keywords($atts, $thing = null)
 function if_article_image($atts, $thing = null)
 {
     global $thisarticle;
-
-    assert_article();
 
     $x = !empty($thisarticle['article_image']);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -2512,8 +2506,6 @@ function if_article_category($atts, $thing = null)
         'number' => '',
     ), $atts));
 
-    assert_article();
-
     $cats = array();
 
     if ($number) {
@@ -2584,11 +2576,9 @@ function if_article_section($atts, $thing = null)
 
     extract(lAtts(array('filter' => false, 'name' => ''), $atts));
 
-    assert_article();
+    $section = isset($thisarticle['section']) ? $thisarticle['section'] : '';
 
-    $section = $thisarticle['section'];
-
-    $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
+    $x = $section !== '' && ($name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name));
 
     if ($x && $filter) {
         foreach(do_list($filter) as $f) {
