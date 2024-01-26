@@ -179,7 +179,7 @@ function plugin_list($message = '')
     $contentBlock = '';
     $existing_files = get_filenames(PLUGINPATH.DS, GLOB_ONLYDIR) or $existing_files = array();
 
-    foreach (safe_column_num('name', 'txp_plugin', 1) as $name) {
+    foreach ($installed = safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
     }
 
@@ -401,7 +401,7 @@ function plugin_list($message = '')
                 array('class' => 'alert-block warning')
             ).n;
     } else {
-        $createBlock = tag(plugin_form($existing_files), 'div', array('class' => 'txp-control-panel'));
+        $createBlock = wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : '');
     }
 
     $pageBlock = $paginator->render().
@@ -1079,7 +1079,7 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return wrapRegion('txp-plugins-group', href(gTxt('edit'), array(
+    return href(gTxt('edit'), array(
         'event'      => 'plugin',
         'step'       => 'plugin_edit',
         '_txp_token' => form_token(),
@@ -1118,7 +1118,7 @@ function plugin_form($existing_files = array())
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
-    ), 'txp-plugins-group-content', 'install_plugin', 'plugin_install');
+    );
 }
 
 /**
