@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -938,17 +938,9 @@ function gpsa($array)
  * }
  */
 
-function ps($thing)
+function ps($thing, $default = '')
 {
-    $out = '';
-
-    if (isset($_POST[$thing])) {
-        $out = $_POST[$thing];
-    }
-
-    $out = doArray($out, 'deNull');
-
-    return $out;
+    return isset($_POST[$thing]) ? doArray($_POST[$thing], 'deNull') : $default;
 }
 
 /**
@@ -2314,23 +2306,6 @@ function splat($text)
 }
 
 /**
- * Replaces CR and LF with spaces, and drops NULL bytes.
- *
- * Used for sanitising email headers.
- *
- * @param      string $str The string
- * @return     string
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::escapeHeader()
- */
-
-function strip_rn($str)
-{
-    return Txp::get('\Textpattern\Mail\Encode')->escapeHeader($str);
-}
-
-/**
  * Validates a string as an email address.
  *
  * <code>
@@ -2428,41 +2403,6 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     }
 
     return false;
-}
-
-/**
- * Encodes a string for use in an email header.
- *
- * @param      string $string The string
- * @param      string $type   The type of header, either "text" or "phrase"
- * @return     string
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::header()
- */
-
-function encode_mailheader($string, $type)
-{
-    try {
-        return Txp::get('\Textpattern\Mail\Encode')->header($string, $type);
-    } catch (\Textpattern\Mail\Exception $e) {
-        trigger_error($e->getMessage(), E_USER_WARNING);
-    }
-}
-
-/**
- * Converts an email address into unicode entities.
- *
- * @param      string $txt The email address
- * @return     string Encoded email address
- * @package    Mail
- * @deprecated in 4.6.0
- * @see        \Textpattern\Mail\Encode::entityObfuscateAddress()
- */
-
-function eE($txt)
-{
-    return Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($txt);
 }
 
 /**
@@ -3244,9 +3184,7 @@ function txp_get_contents($file, $opts = null)
         $opts['content'] = http_build_query($opts['content']);
     }
 
-    if (!function_exists('curl_init')) {
-        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
-    } else {
+    if (extension_loaded('curl')) {
         $ch = curl_init($file);
         // Set cURL options
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -3256,6 +3194,8 @@ function txp_get_contents($file, $opts = null)
 
         $contents = curl_exec($ch);
         curl_close($ch);
+    } else {
+        $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
     }
 
     return $contents;
@@ -3625,7 +3565,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name, $theme = null)
 {
-    global $skin;
+    global $skin, $production_status, $trace;
     static $forms = array();
 
     isset($theme) or $theme = $skin;
@@ -3655,6 +3595,8 @@ function fetch_form($name, $theme = null)
         foreach ($names as $form) {
             if ($forms[$theme][$form] === false) {
                 trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
+            } elseif ($production_status !== 'live') {
+                $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
             }
         }
     }
@@ -3753,7 +3695,7 @@ function fetch_page($name, $theme)
         return false;
     }
 
-    $trace->log("[Page: '$theme.$name']");
+    $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
 
     return $page;
 }
@@ -5024,7 +4966,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         return permlinkurl_id($parts['id']);
     }
 
-    $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
+    $hu = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : hu;
     $keys = $parts;
     !is_array($inherit) or $keys += $inherit;
     empty($txp_context) or $keys += $txp_context;
@@ -5055,6 +4997,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
         unset($keys['context']);
     }
 
+    $loc = !isset($prefs['@txp_lang']) || strtolower($prefs['@txp_lang']) == LANG;
     $numkeys = array();
 
     foreach ($keys as $key => $v) {
@@ -5091,11 +5034,11 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
             }
         } elseif (!empty($keys['author']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+            $url = ($loc ? strtolower(urlencode(gTxt('author'))) : 'author').'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
         } elseif (!empty($keys['c']) && $url_mode != 'year_month_day_title') {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
-            $url = strtolower(urlencode(gTxt('category'))).'/'.$ct;
+            $url = ($loc ? strtolower(urlencode(gTxt('category'))) : 'category').'/'.$ct;
             $catpath = $url_mode == 'breadcrumb_title' ?
                 array_column(getRootPath($keys['c'], empty($keys['context']) ? 'article' : $keys['context']), 'name') :
                 array($keys['c']);
@@ -5197,7 +5140,7 @@ function permlinkurl($article_array, $hu = null)
     }
 
     extract(array_intersect_key(array_change_key_case($article_array, CASE_LOWER), $fields) + $fields);
-    isset($hu) or $hu = isset($prefs['url_base']) ? $prefs['url_base'] : hu;
+    isset($hu) or $hu = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : hu;
 
     if (empty($thisid)) {
         $thisid = $id;

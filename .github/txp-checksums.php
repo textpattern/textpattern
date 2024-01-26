@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * Textpattern is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -74,7 +74,7 @@ function rss()
     $sitename .= ($section) ? ' - '.join(' - ', $st) : '';
     $sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
     $dn = explode('/', $siteurl);
-    $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
+    $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
 
     // Feed header.
     $out[] = tag('https://textpattern.com/?v='.$version, 'generator');

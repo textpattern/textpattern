@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,6 +48,8 @@ define("ln", str_repeat('-', 24).n);
  */
 
 define("priv", '=== ');
+
+include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
 
 global $files;
 
@@ -401,6 +403,10 @@ function doDiagnostics()
         if ($table_errors) {
             $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n.t.implode(', '.n.t, $table_errors)));
         }
+    }
+
+    if ($badCF = filterCustomFields(false)) {
+        $fail['w'][] = array('custom_field_clash', null, array('{list}'=> implode(', ', $badCF)));
     }
 
     $active_plugins = array();

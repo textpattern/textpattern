@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * Copyright (C) 2004 Michael Manfre
@@ -807,7 +807,6 @@ function file_edit($message = '', $id = '')
                             'name'    => 'file_delete',
                             'type'    => 'submit',
                             'form'    => 'delete-file',
-                            'onclick' => 'return verify(\''.gTxt('confirm_delete_popup').'\')',
                             'value'   =>  gTxt('delete'),
                         ))
                         : ''

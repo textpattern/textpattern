@@ -283,7 +283,7 @@
         "val": "5",
         "type": "0",
         "event": "feeds",
-        "html": "text_input",
+        "html": "number",
         "position": "40"
     },
     "show_comment_count_in_feed": {
@@ -402,7 +402,7 @@
         "val": "1000",
         "type": "0",
         "event": "publish",
-        "html": "text_input",
+        "html": "number",
         "position": "340"
     },
     "blog_mail_uid": {
@@ -497,20 +497,6 @@
         "position": "0"
     },
     "url_mode": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
-    "use_categories": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
-    "use_sections": {
         "val": "1",
         "type": "2",
         "event": "publish",
@@ -647,7 +633,7 @@
         "val": "7",
         "type": "0",
         "event": "site",
-        "html": "text_input",
+        "html": "number",
         "position": "230"
     },
     "use_comments": {
@@ -698,7 +684,7 @@
         "val": "1",
         "type": "0",
         "event": "advanced_options",
-        "html": "text_input",
+        "html": "number",
         "position": "300"
     }
 }

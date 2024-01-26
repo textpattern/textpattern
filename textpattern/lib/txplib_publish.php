@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -518,7 +518,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     if ($log) {
         $tag_stop = $txp_tag[4];
-        $trace->start($txp_tag[0]);
+        $trace->start($txp_tag[0], false, array('Tags' => array($txp_tag[1])));
     }
 
     if ($atts) {
@@ -551,8 +551,8 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         if ($txp_atts && $txp_tag !== false) {
             $pretext['_txp_atts'] = true;
 
-            foreach ($txp_atts as $attr => $val) {
-                if (isset($txp_atts[$attr]) && isset($globatts[$attr])) {
+            foreach ($txp_atts as $attr => &$val) {
+                if (isset($val) && isset($globatts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
                 }
             }
@@ -823,7 +823,8 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($atts === false) {
         return $out = array();
-    } elseif (!is_array($atts)) {
+    } elseif ($atts === null) {
+        // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
         $trace->log('[filterAtts ignored]');
 
         return $out;
@@ -831,6 +832,7 @@ function filterAtts($atts = null, $iscustom = null)
         return $out = $atts;
     }
 
+    $s = empty($pretext['s']) ? 'default' : $pretext['s'];
     $excluded = isset($atts['exclude']) ? $atts['exclude'] : '';
 
     if ($excluded && $excluded !== true) {
@@ -878,7 +880,7 @@ function filterAtts($atts = null, $iscustom = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-        'searchall'     => !$iscustom && !empty($pretext['q']),
+        'searchall'     => !$iscustom && !empty($pretext['q']) && $s == 'default',
     );
 
     $sortAtts = array(
@@ -912,6 +914,26 @@ function filterAtts($atts = null, $iscustom = null)
         );
     }
 
+    $coreAtts = $sortAtts + $extralAtts;
+
+    if ($atts === true) {
+        return $coreAtts;
+    }
+
+    $customFields = getCustomFields() + array('url_title' => 'url_title');
+    $postWhere = $customPairs = $customlAtts = array();
+
+    foreach ($customFields as $num => $field) {
+        $customlAtts[$field] = null;
+
+        if (isset($atts['custom_'.$num])) {
+            $customPairs[$field] = $atts['custom_'.$num];
+            $customlAtts['custom_'.$num] = null;
+        } elseif (isset($excluded[$field])) {
+            $customPairs[$field] = true;
+        }
+    }
+
     $coreColumns = article_column_map(false);
 
     foreach ($windowed + $coreColumns as $field => $val) {
@@ -922,7 +944,7 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     // Getting attributes.
-    $theAtts = lAtts($sortAtts + $extralAtts + $customlAtts, $atts);
+    $theAtts = lAtts($coreAtts + $customlAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -999,17 +1021,15 @@ function filterAtts($atts = null, $iscustom = null)
     $getid = $ids && !$not;
 
     // Section
-    // searchall=0 can be used to show search results for the current
-    // section only.
+    // searchall="1" can be used to show search results for all searchable sections.
     if ($q && $searchall && !$issticky) {
         $section = '';
     }
 
     $not = $iscustom && ($excluded === true || isset($excluded['section'])) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
-    $section   = (!$section   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')").
-        ($getid || $section && !$not || $searchall? '' : filterFrontPage('Section', 'page'));
-
+    $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
+        ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
     $not = $iscustom && ($excluded === true || isset($excluded['author'])) ? 'NOT' : '';
@@ -1065,7 +1085,7 @@ function filterAtts($atts = null, $iscustom = null)
     $search = $score = $smatch = '';
 
     if ($q && !$issticky) {
-        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : (empty($s) || $s == 'default' ? filterFrontPage() : '');
+        $s_filter = $searchall ? filterFrontPage('Section', 'searchable') : ($s == 'default' ? filterFrontPage() : '');
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
         $m = $pretext['m'];
@@ -1285,6 +1305,28 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     return $theAtts;
+}
+
+/**
+ * Check cf names validity.
+ *
+ * @param   bool $valid
+ * @return  array
+ * @since   4.9.0
+ * @package TagParser
+ */
+
+function filterCustomFields($valid = true)
+{
+    static $reserved = null;
+
+    isset($reserved) or $reserved = array_keys(array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
+        return preg_match('/^[\w\-]+$/', $key);
+    }, ARRAY_FILTER_USE_KEY));
+
+    return $valid
+        ? array_diff(getCustomFields(), $reserved)
+        : array_intersect(getCustomFields(), $reserved);
 }
 
 /**

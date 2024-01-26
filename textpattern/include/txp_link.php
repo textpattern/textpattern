@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -54,6 +54,7 @@ if ($event == 'link') {
         'hour',
         'minute',
         'second',
+        'copy',
     );
 
     global $all_link_cats, $all_link_authors;
@@ -473,6 +474,12 @@ function link_edit($message = '')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
             graf(
+                tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button',
+                    array(
+                        'class'     => 'txp-clone txp-reduced-ui-button',
+                        'data-form' => 'link_details',
+                    )
+                ).
                 sLink('link', '', gTxt('cancel'), 'txp-button').
                 fInput('submit', '', gTxt('save'), 'publish'),
                 array('class' => 'txp-edit-actions')
@@ -487,19 +494,6 @@ function link_edit($message = '')
             hInput('crit', gps('crit')),
         '', '', 'post', 'txp-edit', '', 'link_details');
     }
-}
-
-/**
- * Legacy link category HTML select field.
- *
- * @param      string $cat
- * @return     string
- * @deprecated in 4.6.0
- */
-
-function linkcategory_popup($cat = '')
-{
-    return event_category_popup('link', $cat, 'link_category');
 }
 
 // -------------------------------------------------------------
@@ -519,6 +513,9 @@ function link_save()
         link_list(array(gTxt('link_empty'), E_ERROR));
 
         return;
+    } elseif ($copy) {
+        $linkname .= '_copy';
+        $id = 0;
     }
 
     $author = fetch('author', 'txp_link', 'id', $id);

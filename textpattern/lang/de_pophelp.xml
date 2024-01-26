@@ -6,73 +6,73 @@
 <h2>Über Rollen</h2>
 <h3>Herausgeber</h3>
 <ul>
-    <li>kann Artikel, Kommentare und Links verwalten</li>
-    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
-    <li>kann Bilder und Dateien verwalten</li>
-    <li>kann Sektionen und Kategorien verwalten</li>
-    <li>kann Seiten, Bausteine und Stile verwalten</li>
-    <li>kann Diagnoseinformationen anzeigen</li>
-    <li>kann Website-Einstellungen verwalten</li>
-    <li>kann Benutzer verwalten</li>
-    <li>kann Besucherprotokolle verwalten</li>
-    <li>kann Plugins verwalten</li>
-    <li>kann Daten importieren</li>
+    <li>kann Artikel, Kommentare und Links verwalten</li>
+    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Sektionen und Kategorien verwalten</li>
+    <li>kann Seiten, Bausteine und Stile verwalten</li>
+    <li>kann Diagnoseinformationen anzeigen</li>
+    <li>kann Website-Einstellungen verwalten</li>
+    <li>kann Benutzer verwalten</li>
+    <li>kann Besucherprotokolle verwalten</li>
+    <li>kann Plugins verwalten</li>
+    <li>kann Daten importieren</li>
 </ul>
 <h3>Leitender Redakteur</h3>
 <ul>
-    <li>kann Artikel, Kommentare und Links verwalten</li>
-    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
-    <li>kann Bilder und Dateien verwalten</li>
-    <li>kann Sektionen und Kategorien verwalten</li>
-    <li>kann Seiten, Bausteine und Stile verwalten </li>
-    <li>kann Diagnoseinformationen anzeigen</li>
-    <li>kann Website-Einstellungen verwalten</li>
-    <li>kann Benutzer anzeigen</li>
-    <li>kann Besucherprotokolle verwalten</li>
-    <li>kann Plugins verwalten</li>
-    <li>kann Daten importieren</li>
+    <li>kann Artikel, Kommentare und Links verwalten</li>
+    <li>kann PHP in Artikeln verwenden, wenn die Administratoreinstellung "PHP in Artikeln zulassen" auf "Ja" gesetzt ist.</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Sektionen und Kategorien verwalten</li>
+    <li>kann Seiten, Bausteine und Stile verwalten </li>
+    <li>kann Diagnoseinformationen anzeigen</li>
+    <li>kann Website-Einstellungen verwalten</li>
+    <li>kann Benutzer anzeigen</li>
+    <li>kann Besucherprotokolle verwalten</li>
+    <li>kann Plugins verwalten</li>
+    <li>kann Daten importieren</li>
 </ul>
 <h3>Redakteur</h3>
 <ul>
-    <li>kann Artikel mit einer Einschränkung verwalten:
-        <ul>
-            <li>kann nicht löschen, was anderen Benutzern gehört</li>
-        </ul>
-    </li>
-    <li>kann Kommentare und Links verwalten</li>
-    <li>kann Bilder und Dateien verwalten</li>
-    <li>kann Kategorien verwalten</li>
-    <li>kann Seiten und Bausteine verwalten</li>
-    <li>kann Benutzer anzeigen</li>
-    <li>kann Besucherprotokolle verwalten</li>
+    <li>kann Artikel mit einer Einschränkung verwalten:
+        <ul>
+            <li>kann nicht löschen, was anderen Benutzern gehört</li>
+        </ul>
+    </li>
+    <li>kann Kommentare und Links verwalten</li>
+    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann Kategorien verwalten</li>
+    <li>kann Seiten und Bausteine verwalten</li>
+    <li>kann Benutzer anzeigen</li>
+    <li>kann Besucherprotokolle verwalten</li>
 </ul>
 <h3>Autor</h3>
 <ul>
-    <li>kann eigene Artikel verwalten und die Artikel anderer Nutzer anzeigen.</li>
-    <li>kann Bilder und Dateien verwalten</li>
+    <li>kann eigene Artikel verwalten und die Artikel anderer Nutzer anzeigen.</li>
+    <li>kann Bilder und Dateien verwalten</li>
 </ul>
 <h3>Freier Mitarbeiter</h3>
 <ul>
-    <li>kann in begrenztem Umfang eigene Artikel verwalten:
-        <ul>
-            <li>kann nur Artikel verwalten, bis diese veröffentlicht werden</li>
-            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
-        </ul>
-    </li>
-    <li> kann Artikel anderer Nutzer anzeigen</li>
+    <li>kann in begrenztem Umfang eigene Artikel verwalten:
+        <ul>
+            <li>kann nur Artikel verwalten, bis diese veröffentlicht werden</li>
+            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
+        </ul>
+    </li>
+    <li> kann Artikel anderer Nutzer anzeigen</li>
 </ul>
 <h3>Designer</h3>
 <ul>
-    <li>kann in begrenztem Umfang eigene Artikel verwalten:
-        <ul>
-            <li>kann nur Artikel ändern, bis diese veröffentlicht werden</li>
-            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
-        </ul>
-    </li>
-    <li>kann die Artikel anderer Nutzer anzeigen</li>
-    <li>kann Bilder verwalten</li>
-    <li>kann Sektionen verwalten</li>
-    <li>kann Seiten, Bausteine und Stile verwalten</li>
+    <li>kann in begrenztem Umfang eigene Artikel verwalten:
+        <ul>
+            <li>kann nur Artikel ändern, bis diese veröffentlicht werden</li>
+            <li>kann <em>nur</em> den Status Entwurf, Versteckt oder Anstehend </li> anwenden
+        </ul>
+    </li>
+    <li>kann die Artikel anderer Nutzer anzeigen</li>
+    <li>kann Bilder verwalten</li>
+    <li>kann Sektionen verwalten</li>
+    <li>kann Seiten, Bausteine und Stile verwalten</li>
 </ul>        ]]></item>
         <item id="create_author" title="Autor erstellen"><![CDATA[
 <h2>Neuen Autor hinzufügen</h2>
@@ -272,6 +272,11 @@
 <p>Vorhandene Verzeichnisnamen können mit den Sektionsnamen in Konflikt stehen, die im Permlink-Schema des Artikels verwendet werden. Um Probleme zu vermeiden, überprüfen Sie die betroffenen Verzeichnisnamen und löschen Sie sie, wenn dies gefahrlos möglich ist, oder ändern Sie die Sektionsnamen, damit sie nicht kollidieren.</p>]]></item>
         <item id="path_to_site_inaccessible" title="Webseitenverzeichnis nicht lesbar"><![CDATA[<h2>Site-Verzeichnis unlesbar</h2>
 <p>Das Verzeichnis, das die Root-Datei <code>index.php</code> enthält, die als Index für die Site angegeben wurde, ist für den Server nicht lesbar. Bitte überprüfen Sie die Berechtigungen.</p>]]></item>
+        <item id="php_scripting_enabled" title="PHP-Scripting aktiviert"><![CDATA[
+<h2>PHP-Scripting aktiviert</h2>
+<p>Textpattern erlaubt Autoren und Administratoren, PHP-Code in Artikel und Seiten/Formulare einzubetten, wenn diese Funktionen aktiviert sind. Da dies ein Sicherheitsrisiko darstellt - jede Art von PHP könnte ausgeführt werden, einschließlich potenziell schädlichen/gefährlichen Codes, der zur Zerstörung Ihrer Installation oder zur Weitergabe von Informationen an Dritte führen könnte - wird dringend empfohlen, diese Optionen in den <a href="?event=prefs#prefs_group_publish">Einstellungen</a> zu deaktivieren, sofern Sie die Funktion nicht unbedingt benötigen.</p>
+<p>Viele Verbesserungen an Textpattern-Websites, für die zuvor PHP-Schnipsel erforderlich waren, können nun in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">Core-Tags</a> durchgeführt werden.</p>
+        ]]></item>
         <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[<h2>Minimale Versionsvoraussetzungen</h2>
 <p>Textpattern benötigt bestimmte PHP-Funktionen und einen MySQL Datenbank Server. In der folgenden Tabelle sind die Mindestanforderungen dafür aufgeführt.</p>
 <div class="txp-listtables">

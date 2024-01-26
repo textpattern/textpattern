@@ -20,7 +20,7 @@
  * Additions and fixes Copyright (c) 2010-17 Netcarver         https://github.com/netcarver
  * Additions and fixes Copyright (c) 2011    Jeff Soo          http://ipsedixit.net/
  * Additions and fixes Copyright (c) 2012    Robert Wetzlmayr  http://wetzlmayr.com/
- * Additions and fixes Copyright (c) 2012-19 Jukka Svahn       http://rahforum.biz/
+ * Additions and fixes Copyright (c) 2012-24 Jukka Svahn       https://rahforum.biz/
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.0.0';
+    protected $ver = '4.1.0';
 
     /**
      * Regular expression snippets.
@@ -1981,6 +1981,9 @@ class Parser
         $text = $this->retrieveTags($text);
         $text = $this->retrieveURLs($text);
 
+        // Replace shelved instances that were inside tag and link attributes.
+        $text = $this->retrieve($text);
+
         $text = str_replace($this->getLineBreak(), $this->getLineBreak()."\n", $text);
 
         return $text;
@@ -2527,14 +2530,14 @@ class Parser
         }
 
         if (preg_match("/\(([^()]+)\)/U", $matched, $cls)) {
-            $class_regex = "/^([-a-zA-Z 0-9_\.\/\[\]]*)$/";
+            $class_regex = "/^([-a-zA-Z 0-9_\.\/\[\]:!]*)$/";
 
             // Consume entire class block -- valid or invalid.
             $matched = str_replace($cls[0], '', $matched);
 
             // Only allow a restricted subset of the CSS standard characters for classes/ids.
             // No encoding markers allowed.
-            if (preg_match("/\(([-a-zA-Z 0-9_\/\[\]\.\:\#]+)\)/U", $cls[0], $cls)) {
+            if (preg_match("/\(([-a-zA-Z 0-9_\/\[\].:!#]+)\)/U", $cls[0], $cls)) {
                 $hashpos = strpos($cls[1], '#');
                 // If a textile class block attribute was found with a '#' in it
                 // split it into the css class and css id...
@@ -2698,7 +2701,7 @@ class Parser
      */
     protected function tables($text)
     {
-        $text .= "\n\n";
+        $text = $text . "\n\n";
         return (string)preg_replace_callback(
             "/^(?:table(?P<tatts>_?{$this->s}{$this->a}{$this->cls})\.".
             "(?P<summary>.*)?\n)?^(?P<rows>{$this->a}{$this->cls}\.? ?\|.*\|){$this->regex_snippets['space']}*\n\n/smU",
@@ -5191,7 +5194,7 @@ class Parser
         );
 
         if ($quotes) {
-            $a += array(
+            $a = $a + array(
                 "'" => '&#39;', // Numeric, as in htmlspecialchars
                 '"' => '&quot;',
             );

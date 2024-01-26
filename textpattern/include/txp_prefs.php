@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -173,7 +173,7 @@ function prefs_save()
 
 function prefs_list($message = '')
 {
-    global $prefs, $txp_user, $txp_options;
+    global $prefs, $step, $txp_user, $txp_options;
 
     pagetop(gTxt('tab_preferences'), $message);
 
@@ -258,6 +258,11 @@ function prefs_list($message = '')
 
             switch ($a['html']) {
                 case 'yesnoradio':
+                case 'onoffradio':
+                case '\CheckboxSet':
+                case '\RadioSet':
+                case '\YesNoRadioSet':
+                case '\OnOffRadioSet':
                 case 'is_dst':
                     $label = '';
                     break;
@@ -350,6 +355,10 @@ function prefs_list($message = '')
     if (!empty($prefs['max_url_len']) &&
         (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))) {
         echo announce(gTxt('max_url_len').' < '.$min_len, E_WARNING);
+    }
+
+    if ($step == 'prefs_save' && $badCF = filterCustomFields(false)) {
+        echo announce(gTxt('custom_field_clash', array('{list}' => join(', ', $badCF)), false), E_WARNING);
     }
 }
 
@@ -931,7 +940,6 @@ function custom_set($name, $val)
 
     if (empty($reserved)) {
         foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
-//            + array_filter(filterAtts(array(), true), function($key) {return preg_match('/^[\w\-]+$/', $key);}, ARRAY_FILTER_USE_KEY);
             $str = '';
 
             foreach (str_split($field) as $char) {

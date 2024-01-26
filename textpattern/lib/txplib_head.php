@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -89,7 +89,9 @@ function pagetop($pagetitle = '', $message = '')
         'are_you_sure',
         'body',
         'close',
+        'confirm_delete_popup',
         'cookies_must_be_enabled',
+        'custom_field_clash',
         'documentation',
         'excerpt',
         'form_submission_error',
@@ -124,7 +126,8 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery
     ->setRoute('file, image').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
     ->setRoute('article');
-$txpOut = 'var textpattern = '.json_encode(
+
+    $txpOut = 'var textpattern = '.json_encode(
     array(
         '_txp_uid' => get_pref('blog_uid'),
         'event' => $event,
@@ -208,78 +211,6 @@ function admin_title($pagetitle)
     $title = escape_title($title).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
 
     return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
-}
-
-/**
- * Creates an area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $event
- * @param      string $tarea
- * @param      string $area
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function areatab($label, $event, $tarea, $area)
-{
-    $tc = ($area == $event) ? 'tabup' : 'tabdown';
-    $atts = ' class="'.$tc.'"';
-    $hatts = ' href="?event='.$tarea.'"';
-
-    return tda(tag($label, 'a', $hatts), $atts);
-}
-
-/**
- * Creates a secondary area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $tabevent
- * @param      string $event
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function tabber($label, $tabevent, $event)
-{
-    $tc = ($event == $tabevent) ? 'tabup' : 'tabdown2';
-    $out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
-
-    return $out;
-}
-
-/**
- * Creates a table based navigation bar row.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $area
- * @param      string $event
- * @return     string HTML table columns
- * @deprecated in 4.6.0
- */
-
-function tabsort($area, $event)
-{
-    if ($area) {
-        $areas = areas();
-
-        $out = array();
-
-        foreach ($areas[$area] as $a => $b) {
-            if (has_privs($b)) {
-                $out[] = tabber($a, $b, $event, 2);
-            }
-        }
-
-        return ($out) ? join('', $out) : '';
-    }
-
-    return '';
 }
 
 /**
@@ -386,17 +317,4 @@ function navPop($inline = '')
             n.'</select>'.
             n.'</form>';
     }
-}
-
-/**
- * Generates a button link.
- *
- * @param      string $label
- * @param      string $link
- * @deprecated in 4.6.0
- */
-
-function button($label, $link)
-{
-    return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 }

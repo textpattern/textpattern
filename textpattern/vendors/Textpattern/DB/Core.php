@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -251,7 +251,7 @@ class Core
             }
         }
 
-        if (!empty($deleted['private'])) {
+        if (!empty($renamed['private'])) {
             foreach ($renamed['private'] as $oldKey => $newKey) {
                 safe_update('txp_prefs', "name = '".doSlash($newKey)."'", "name='".doSlash($oldKey)."' AND user_name != ''");
             }

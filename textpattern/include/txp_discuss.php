@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -228,11 +228,7 @@ function discuss_list($message = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array('placeholder' => 'search_comments');
-
-    $sql_from =
-        safe_pfx_j('txp_discuss')."
-        left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID";
+    $search_render_options = array('id' => 'search_form', 'placeholder' => 'search_comments');
 
     $counts = getRows(
         "SELECT txp_discuss.visible, COUNT(*) AS c
@@ -274,9 +270,12 @@ function discuss_list($message = '')
             array('class' => 'alert-block information')
         );
     } else {
-        if (!cs('toggle_show_spam')) {
+        if (ps('cb_show_spam', cs('toggle_show_spam'))) {
+            $spamcrit = '1';
+        } else {
             $total = $count[MODERATE] + $count[VISIBLE];
-            $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
+            $spamcrit = 'visible != '.intval(SPAM);
+            $criteria = $spamcrit.' AND '.$criteria;
         }
 
         $rs = safe_query(
@@ -296,7 +295,8 @@ function discuss_list($message = '')
                 textpattern.Category1 AS category1,
                 textpattern.Category2 AS category2,
                 textpattern.Status,
-                UNIX_TIMESTAMP(textpattern.Posted) AS uPosted
+                UNIX_TIMESTAMP(textpattern.Posted) AS uPosted,
+                (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." AS count WHERE $spamcrit AND txp_discuss.parentid = count.parentid) AS c
             FROM ".safe_pfx_j('txp_discuss')."
                 LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
             WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
@@ -396,22 +396,18 @@ function discuss_list($message = '')
                 }
 
                 if (empty($thisid)) {
-                    $parent = gTxt('article_deleted').' ('.$parentid.')';
-                    $view = '';
+                    $parent = gTxt('article_deleted');
                 } else {
                     $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
+                    $parent = href($parent_title, '?event=article&step=edit&ID='.$parentid, array('title' => gTxt('edit')));
+                }
 
-                    $parent = href(
-                        span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
-                        '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                        href($parent_title, '?event=article&step=edit&ID='.$parentid, array('title' => gTxt('edit'))
-                    );
+                $parent .= sp.href("($c)", '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit=%22'.$parentid.'%22', 'class="txp-search-link"');
 
-                    $view = $comment_status;
+                $view = $comment_status;
 
-                    if ($visible == VISIBLE and in_array($Status, array(4, 5))) {
-                        $view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
-                    }
+                if (!empty($thisid) && $visible == VISIBLE && in_array($Status, array(4, 5))) {
+                    $view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
                 }
 
                 $contentBlock .= tr(
@@ -459,7 +455,7 @@ function discuss_list($message = '')
     }
 
     $createBlock = tag(
-        cookie_box('show_spam'),
+        cookie_box('show_spam', 'search_form'),
         'div', array('class' => 'txp-list-options'));
     $pageBlock = $paginator->render().
         nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);

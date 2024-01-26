@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -405,7 +405,7 @@ if (!defined('PASSWORD_SYMBOLS')) {
      *
      * @package User
      * @since   4.6.0
-     * @see     generate_password()
+     * @see     Textpattern\Password\Generator
      * @example
      * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */

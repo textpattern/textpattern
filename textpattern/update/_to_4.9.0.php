@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -116,3 +116,8 @@ foreach ($primaries as $table) {
 
 safe_drop_index('txp_prefs', 'prefs_idx');
 safe_create_index('txp_prefs', 'name(185), user_name', 'primary');
+
+// Increase section and category description fields.
+safe_alter('txp_section', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
+safe_alter('txp_category', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
+

@@ -932,7 +932,7 @@ title="HTML"
 <p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
         ]]></item>
         <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[<h2>Fonctions PHP associées à txp:evaluate</h2>
-<p>Une liste séparée par des virgules de <code>function</code> ou <code>alias=function</code>, ex. <code>md5</code>, <code>replace=str_replace</code>. Les éléments de cette liste peuvent être utilisés dans l’attribut <code>query</code> de la <code>&lt;txp:evaluate /&gt;</code> balise :</p>
+<p>Une liste séparée par des virgules de <code>function</code> ou de <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments de cette liste peuvent être utilisés avec l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
 <p>Les <code>fonctions</code> doivent retourner une valeur scalaire (<strong>et non pas</strong> un array/object).</p>
         ]]></item>

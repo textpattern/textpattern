@@ -12,6 +12,7 @@ Changes in 4.9.0 (upcoming)
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
 * Fixed: Compiled plugins upload on PHP 5.
+* Fixed: Windows-generated zip plugins installable on Linux.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of
   <txp:image />.
 * Fixed: Self-closing tag output for html5 doctype to silence validator
@@ -19,10 +20,10 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.3.1+ and PHP 8.2.
+* Added: Support for PHP 8.2 and PHP 8.3.1+.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
-  admin-side via config.php. 
+  admin-side via config.php.
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
 * Added: Multi-edit for changing author language.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
@@ -41,6 +42,9 @@ Changes in 4.9.0 (upcoming)
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
 * Added: Global 'offset' can be set by URL parameters.
+* Added: 'lang' attribute to <txp:page_url />.
+* Added: <txp:if_items_count /> tag.
+* Added: Reload language packs from disk.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
@@ -52,6 +56,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Allow PHP scripting options off by default, and Diagnostics warning.
 * Changed: Introduce primary keys for all database tables, replacing some old
   indexes.
+* Changed: Category & section description field sizes increased to 1023.
 * Changed: <txp:header /> tag requires 'form' privilege.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
@@ -60,10 +65,11 @@ Changes in 4.9.0 (upcoming)
 * Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
 * jQuery 3.7.1.
-* Textile 4.0.0. See https://github.com/textile/php-textile/releases/ for full
+* Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
 * DOMPurify 3.0.6
+* PHPMailer 6.9.1
 
 Changes in 4.8.8 (24 Jan 2022)
 

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -455,7 +455,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @param string $lang_code The lang identifier to load
      */
 
-    public function installFile($lang_code, $owner = '')
+    public function installFile($lang_code, $owner = '', $reset = false)
     {
         $langpack = $this->getPack($lang_code);
 
@@ -470,7 +470,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack += $fallpack;
         }
 
-        return ($this->upsertPack($langpack, $owner) === false) ? false : true;
+        return ($this->upsertPack($langpack, array($owner, $lang_code), $reset) === false) ? false : true;
     }
 
 
@@ -568,23 +568,31 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return result set
      */
 
-    public function upsertPack($langpack, $owner_ref = '')
+    public function upsertPack($langpack, $owner_ref = '', $reset = false)
     {
         $result = false;
 
         if ($langpack) {
             $values = array();
+            list ($owner_ref, $lang) = (array)$owner_ref + array(null, null);
+            $owner_ref = doSlash($owner_ref);
 
             foreach ($langpack as $key => $translation) {
                 extract(doSlash($translation));
 
-                $owner = empty($owner) ? doSlash($owner_ref) : $owner;
+                $owner = empty($owner) ? $owner_ref : $owner;
                 $lastmod = empty($lastmod) ? 'NOW()' : "'$lastmod'";
                 $values[] = "('$name', '$lang', '$data', '$event', '$owner', $lastmod)";
             }
 
             if ($values) {
                 $value = implode(',', $values);
+
+                if ($reset) {
+                    $names = quote_list(array_column($langpack, 'name'), ',');
+                    safe_delete('txp_lang', ($lang ? "lang = '".doSlash($lang)."' AND " : '')."owner = '$owner_ref' AND name NOT IN($names)");
+                }
+
                 $result = safe_query("INSERT INTO ".PFX."txp_lang
                     (name, lang, data, event, owner, lastmod)
                     VALUES $value

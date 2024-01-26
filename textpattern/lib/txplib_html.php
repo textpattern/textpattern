@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1597,7 +1597,7 @@ function script_js($js, $flags = '', $route = array())
  * Renders a checkbox to set/unset a browser cookie.
  *
  * @param  string $classname Label text. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element
+ * @param  bool|string $form Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 
@@ -1613,10 +1613,10 @@ function cookie_box($classname, $form = true)
         $value = 0;
     }
 
-    $newvalue = 1 - $value;
-
-    $out = checkbox($name, 1, (bool) $value, 0, $name).
+    $out = checkbox($name, 1, (bool) $value, 0, $name, $form === true ? '' : $form).
         n.tag(gTxt($classname), 'label', array('for' => $name));
+
+    $target = $form === true ? '$(this).parents("form")' : "$('#$form')";
 
     $js = <<<EOF
         $(function ()
@@ -1628,15 +1628,15 @@ function cookie_box($classname, $form = true)
                     }
                 })
                 .change(function () {
-                    setClassRemember('{$class}', $newvalue);
-                    $(this).parents('form').submit();
+                    toggleClassRemember('{$class}');
+                    $target.submit();
                 });
         });
 EOF;
 
     $out .= Txp::get('\Textpattern\UI\Script', $js);
 
-    if ($form) {
+    if ($form === true) {
         if (serverSet('QUERY_STRING')) {
             $action = 'index.php?'.serverSet('QUERY_STRING');
         } else {

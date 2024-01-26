@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -368,14 +368,22 @@ function preText($store, $prefs = null)
 //        doAuth();
         if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')).$txp_user.Txp::get('\Textpattern\Security\Token')->csrf($txp_user));
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
             global $nolog;
     
             $nolog = true;
             if ($raw === '~') header('Content-Security-Policy: sandbox');
-            $out['id'] = intval($out['id']);
-            $out['_txp_preview'] = $hash;
+            $out['@txp_preview'] = $hash;
+
+            if (empty($id)) {
+                populateArticleData(array(
+                    'AuthorID' => $txp_user,
+                    'LastModID' => $txp_user
+                ));
+            } else {
+                $out['id'] = intval($id);
+            }
         }
     }
 
@@ -659,7 +667,7 @@ function preText($store, $prefs = null)
                 $is_404 = '410';
             }
 
-            if (!empty($out['_txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+            if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
                 if (isset($_POST['field']) && isset($_POST['content'])) {
                     $thisarticle[$_POST['field']] = $_POST['content'];
                 }
@@ -675,7 +683,7 @@ function preText($store, $prefs = null)
     // Hackish.
     global $is_article_list;
 
-    if (empty($out['id'])) {
+    if (empty($out['@txp_preview']) && empty($out['id'])) {
         $is_article_list = true;
     } else {
         $out['q'] = '';
@@ -775,7 +783,7 @@ function output_component($n = '')
     $mimetype = null;
     $assets = array();
 
-    if (isset($pretext['_txp_preview']) && $name === $pretext['_txp_preview']) {
+    if (isset($pretext['@txp_preview']) && $name === $pretext['@txp_preview']) {
         $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
         $mimetype = 'text/html';
     } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
@@ -926,8 +934,6 @@ function doArticles($atts, $iscustom, $thing = null)
 {
     global $pretext, $thisarticle, $thispage, $trace;
 
-    extract($pretext);
-
     // Getting attributes.
     if (isset($thing) && !isset($atts['form'])) {
         $atts['form'] = '';
@@ -937,7 +943,7 @@ function doArticles($atts, $iscustom, $thing = null)
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 
-    $pg or $pg = 1;
+    $pg = empty($pretext['pg']) ? 1 : (int)$pretext['pg'];
     $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
     $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
@@ -971,8 +977,8 @@ function doArticles($atts, $iscustom, $thing = null)
             $thispage = array(
                 'pg'          => $pg,
                 'numPages'    => $numPages,
-                's'           => $s,
-                'c'           => $c,
+                's'           => empty($pretext['s']) ? 'default' : $pretext['s'],
+                'c'           => empty($pretext['c']) ? '' : $pretext['c'],
                 'context'     => 'article',
                 'grand_total' => $grand_total,
                 'total'       => $total
@@ -1015,7 +1021,7 @@ function doArticle($atts, $thing = null, $parse = true)
 
     $oldAtts = filterAtts();
     $atts = filterAtts($atts);
-    $preview = !empty($pretext['_txp_preview']);
+    $preview = !empty($pretext['@txp_preview']);
 
     // No output required, only setting atts.
     if ($atts['pgonly']) {

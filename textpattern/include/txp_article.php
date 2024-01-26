@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -364,9 +364,9 @@ function article_preview($field = false)
     }
 
     // Preview pane
-    if (gps('_txp_parse')) {
+    if (ps('_txp_parse')) {
         $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
-        $id = intval(gps('ID')).'.'.$token;
+        $id = intval(ps('ID')).'.'.$token;
         $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
         $opts = array(
             'method' => "POST",
@@ -374,7 +374,7 @@ function article_preview($field = false)
                 "Cookie: txp_login_public=".cs('txp_login_public'),
             'content' => $data,
         );
-        
+
         $dbfield = txp_get_contents(hu, $opts);
     }
 
@@ -699,16 +699,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     extract($rs);
 
-    if ($ID && !empty($sPosted)) {
-        // Previous record?
-        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
-
-        // Next record?
-        $rs['next_id'] = checkIfNeighbour('next', $sPosted, $ID);
-    } else {
-        $rs['prev_id'] = $rs['next_id'] = 0;
-    }
-
     $when = ($sPosted) ? $sPosted : $txpnow;
 
     // Add partials for custom fields (and their values which is redundant by design, for plugins).
@@ -829,14 +819,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $rs)
         : '';
 
-    // 'Sort and display' section.
-    echo pluggable_ui(
-        'article_ui',
-        'sort_display',
-        wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, '', gTxt('sort_display')),
-        $rs
-    );
-
     echo graf(
         tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
             'class'         => 'txp-expand-all txp-reduced-ui-button',
@@ -846,6 +828,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
         )), array('class' => 'txp-actions')
+    );
+
+    // 'Sort and display' section.
+    echo pluggable_ui(
+        'article_ui',
+        'sort_display',
+        wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, 'txp-sort-group-content', gTxt('sort_display'), $ID ? 'article_sort' : ''),
+        $rs
     );
 
     // 'Date and time' collapsible section.
@@ -981,8 +971,44 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
     }
 
-    // Custom menu entries.
-    echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+    if (has_handler('article_ui', 'extend_col_1')) {
+        if ($ID) {
+            try {
+                $sort = get_pref('article_sort_column', 'posted');
+
+                switch ($sort) {
+                    case 'id':
+                        $sort_sql = "ID";
+                        break;
+                    case 'author':
+                        $sort_sql = "user.RealName, ID DESC";
+                        break;
+                    case 'comments':
+                        $sort_sql = "total_comments, ID DESC";
+                        break;
+                    case 'lastmod':
+                        $sort_sql = "LastMod, ID DESC";
+                        break;
+                    default:
+                        $sort_sql = ucfirst($sort).", ID DESC";
+                        break;
+                }
+            
+                $rs += getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM ".safe_pfx('textpattern')." WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=".$ID);
+            } catch(Exception $e) {
+                // Previous record?
+                $rs['prev_id'] = empty($sPosted) ? 0 : checkIfNeighbour('prev', $sPosted, $ID);
+    
+                // Next record?
+                $rs['next_id'] = empty($sPosted) ? 0 : checkIfNeighbour('next', $sPosted, $ID);
+            }
+        } else {
+            $rs['prev_id'] = $rs['next_id'] = 0;
+        }
+
+        // Custom menu entries.
+        echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+    }
 
     // 'Recent articles' collapsible section.
 //    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
@@ -1389,7 +1415,8 @@ function article_partial_actions($rs)
     } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
-        script_js('$("#article_form .txp-details :input").prop("disabled", true);', false, true);
+        script_js('$("#supporting_content").find(":input:not(button)").prop("disabled", true);'.n.
+            '$("#main_content").find(":input, textarea").prop("readonly", true);', false);
     }
 
     return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
@@ -1861,7 +1888,7 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label').
+        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label') : '').
         tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
         tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
         n.'</div>'.

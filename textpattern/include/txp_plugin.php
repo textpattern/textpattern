@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -497,7 +497,12 @@ function plugin_edit_form($name = '')
         'textpack',
     );
 
-    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+    if ($name) {
+        $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+    } else {
+        $userInfo = is_logged_in();
+        $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '');
+    }
 
     if (empty($plugin)) {
         return graf(gTxt('plugin_not_editable'), array('class' => 'alert-block warning'));
@@ -630,7 +635,6 @@ function plugin_edit_form($name = '')
                     ).
                     eInput('plugin').
                     sInput('plugin_save').
-                    hInput('name', $name).
                     hInput('help_hash', md5($plugin['help_raw'])).
                     hInput('sort', gps('sort')).
                     hInput('dir', gps('dir')).
@@ -671,12 +675,17 @@ function plugin_save()
     );
 
     $plugObj = Txp::get('\Textpattern\Plugin\Plugin');
+    $plugin = array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash'))));
 
-    extract(array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash')))));
-    $flags = (array)gps('flags');
+    extract($plugin);
+    $flags = (array)gps('flags', 0);
+
+    if (empty($name)) {
+        $plugin['name'] = $plugin['newname'];
+    }
 
     if ($name !== $newname) {
-        $ret = $plugObj->rename($name, $newname);
+        $ret = $name ? $plugObj->rename($name, $newname) : $plugObj->install($plugin);
 
         if ($ret === false) {
             // @todo issue a warning and stay on page?
@@ -778,7 +787,6 @@ function plugin_verify($payload = array(), $txpPlugin = null)
     }
 
     if ($plugin) {
-        $source = '';
         $textpack = '';
         $data = '';
 
@@ -797,7 +805,7 @@ function plugin_verify($payload = array(), $txpPlugin = null)
             $data = txpspecialchars($plugin['data']);
         }
 
-        $source .= txpspecialchars($plugin['code']);
+        $source = isset($plugin['code']) ? txpspecialchars($plugin['code']) : '';
         $sub = graf(
             fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button').
             fInput('submit', 'plugin-go', gTxt('install'), 'publish'),
@@ -907,15 +915,42 @@ function plugin_install()
                         $zh = $zip->open($target_path);
 
                         if ($zh === true) {
-                            for ($i = 0; $i < $zip->numFiles; $i++) {
-                                if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
-                                    $makedir = true;
+                            $makedir = PLUGINPATH;
+                            $badSlash = false;
 
-                                    break;
+                            for ($i = 0; $i < $zip->numFiles; $i++) {
+                                $entryName = $zip->getNameIndex($i);
+
+                                if (strpos($entryName, '\\') !== false) {
+                                    $badSlash = true;
+                                }
+
+                                if (strpos(str_replace('\\', '/', $entryName), $filename.'/') !== 0) {
+                                    $makedir = PLUGINPATH.DS.$filename;
                                 }
                             }
 
-                            $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
+                            if ($badSlash && DS !== '\\') {// Windows zip on Linux
+                                $umask = umask();
+
+                                for ($i = 0; $i < $zip->numFiles; $i++) {
+                                    $entryName = $zip->getNameIndex($i);
+                                    extract(pathinfo(str_replace('\\', '/', $entryName)));
+                                    $dirname = $makedir . '/' . $dirname;
+
+                                    if (!is_dir($dirname)) {
+                                        mkdir($dirname, $umask, true);
+                                    }
+
+                                    $tmpname = md5($entryName);
+                                    $zip->renameIndex($i, $tmpname);
+                                    $zip->extractTo($dirname, $tmpname);
+                                    rename($dirname.'/'.$tmpname, $dirname.'/'.$basename);
+                                }
+                            } else {
+                                $zip->extractTo($makedir);
+                            }
+
                             $zip->close();
 
                             list($plugin, $files) = $txpPlugin->read($target_path);
@@ -1044,7 +1079,12 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return tag(
+    return href(gTxt('edit'), array(
+        'event'      => 'plugin',
+        'step'       => 'plugin_edit',
+        '_txp_token' => form_token(),
+    )).br.
+    tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
             'type'     => 'file',

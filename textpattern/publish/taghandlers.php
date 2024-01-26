@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -64,9 +64,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('site_name')
     ->register('site_slogan')
     ->register('link_to_home')
-    ->register('txp_pager', 'newer', true)
-    ->register('txp_pager', 'older', false)
-    ->register('txp_pager', 'pages')
+    ->register(array('\Textpattern\Tag\Syntax\Pagination', 'pager'), 'newer', true)
+    ->register(array('\Textpattern\Tag\Syntax\Pagination', 'pager'), 'older', false)
+    ->register(array('\Textpattern\Tag\Syntax\Pagination', 'pager'), 'pages')
     ->register('text')
     ->register('article_id')
     ->register('article_url_title')
@@ -115,12 +115,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_description')
     ->register('if_article_image')
     ->register('article_image')
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
-    ->register('items_count')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_index'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_display'))
@@ -133,6 +127,15 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
     ->register('if_first', 'if_first_image', 'image')
     ->register('if_last', 'if_last_image', 'image')
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
+    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
+    ->register('items_count')
+    ->register('if_items_count')
+    ->register('if_items_count', 'if_search_results')
+    ->register('if_search')
     ->register('if_comments')
     ->register('if_comments_preview')
     ->register('if_comments_error')
@@ -147,8 +150,6 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('lang')
     ->register('breadcrumb')
     ->register('if_excerpt')
-    ->register('if_search')
-    ->register('if_search_results')
     ->register('if_category')
     ->register('if_article_category')
     ->register('if_first', 'if_first_category', 'category')
@@ -871,7 +872,7 @@ function category_list($atts, $thing = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
+        $out[] = is_numeric($children) && $children <= 1 || strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
@@ -1245,199 +1246,6 @@ function link_to_home($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_pager($atts, $thing = null, $newer = null)
-{
-    global $thispage, $is_article_list, $txp_context, $txp_item;
-    static $pg = true, $numPages = null, $linkall = false, $top = 1, $shown = array();
-    static $items = array('page' => null, 'total' => null, 'url' => null);
-
-    $get = isset($atts['total']) && $atts['total'] === true;
-    $set = $newer === null && (isset($atts['pg']) || isset($atts['total']) && !$get);
-    $put = $get || !$set || isset($atts['break']);
-    $pairs = array();
-
-    if ($get) {
-        $pairs += array(
-            'total'      => true,
-        );
-    }
-
-    if ($put) {
-        $pairs += array(
-            'shift'      => false,
-            'showalways' => false,
-            'link'       => $linkall,
-            'title'      => '',
-            'escape'     => 'html',
-            'rel'        => '',
-            'limit'      => 0,
-            'wraptag'    => '',
-            'break'      => '',
-            'class'      => '',
-            'html_id'    => ''
-        );
-    }
-
-    if ($set){
-        $store = compact('pg', 'numPages', 'linkall', 'top', 'shown');
-        $pairs += array(
-            'pg'         => $pg,
-            'total'      => $numPages,
-            'shift'      => 1,
-            'showalways' => 2,
-            'link'       => false,
-        );
-    }
-
-    extract(lAtts($pairs, $atts));
-
-    if ($set) {
-        if (isset($total) && $total !== true) {
-            list($total, $pageby) = explode('/', $total.'/0');
-            $pageby = (int)$pageby;
-            $total = (int)$total;
-            $numPages = $pageby ? ceil($total/$pageby) : $total;
-        } elseif ($pg === true) {
-            $numPages = isset($thispage['numPages']) ? (int)$thispage['numPages'] : null;
-        }
-    }
-
-    if (!isset($numPages)) {
-        if (isset($thispage['numPages'])) {
-            $numPages = (int)$thispage['numPages'];
-        } else {
-            return $is_article_list ? postpone_process(2) : '';
-        }
-    }
-
-    if ($set) {
-        $shown = array();
-        $linkall = $link;
-
-        if (!$put) {
-            $top = $shift === true ? 0 : ((int)$shift < 0 ? $numPages + $shift + 1 : $shift);
-
-            if ($thing !== null) {
-                $thing = parse($thing, $numPages >= ($showalways ? (int)$showalways : 2));
-                extract($store);
-            }
-
-            return $thing;
-        } else {
-            $shift !== false or $shift = true;
-        }
-    }
-
-    $pgc = $pg === true ? 'pg' : $pg;
-    $thispg = $pg === true && isset($thispage['pg']) ? $thispage['pg'] : intval(gps($pgc, $top));
-    $thepg = max(1, min($thispg, $numPages));
-
-    if ($get) {
-        if ($thing === null && $shift === false) {
-            return $newer === null ? $numPages : ($newer ? $thepg - 1 : $numPages - $thepg);
-        } elseif ($shift === true || $shift === false) {
-            if ($newer !== null) {
-                $range = $newer ? $thepg - 1 : $numPages - $thepg;
-            }
-        } else {
-            $range = (int)$shift;
-        }
-    }
-
-    if (isset($range)) {
-        if (!$range) {
-            $pages = array();
-        } elseif ($range > 0) {
-            $pages = $newer === null ? range(-max($range, 2*$range + $thepg - $numPages), max($range, 2*$range - $thepg + 1)) :
-                range($newer ? max($range, 2*$range + $thepg - $numPages) : 1, $newer ? 1 : max($range, 2*$range - $thepg + 1));
-        } else {
-            $pages = $newer !== null ? ($newer ? range(-1, -max(-$range, -2*$range + $thepg - $numPages)) : range(-max(-$range, -2*$range - $thepg + 1), -1)) :
-                range(min(max(1 - $range - $thepg, 1 - 2*$range - $numPages), 0), max(0, min($numPages + $range - $thepg, $numPages + 2*$range - 1)));
-        }
-    } elseif (is_bool($shift)) {
-        $pages = $newer === null ? ($shift ? range(1 - $thepg, $numPages - $thepg) : array(0)) : array($shift ? true : 1);
-        $range = !$shift;
-    } else {
-        $pages = array_map('intval', do_list($shift, array(',', '-')));
-        $range = false;
-    }
-
-    foreach ($items as $item => $val) {
-        $items[$item] = isset($txp_item[$item]) ? $txp_item[$item] : null;
-    }
-
-    $txp_item['total'] = $numPages;
-    $limit = $limit ? (int)$limit : -1;
-    $old_context = $txp_context;
-    $txp_context += get_context();
-    $out = array();
-    $rel_att = $rel === '' ? '' : ' rel="'.txpspecialchars($rel).'"';
-    $class_att = $wraptag === '' && $class !== '' ? ' class="'.txpspecialchars($class).'"' : '';
-    $id_att = $wraptag === '' && $html_id !== '' ? ' id="'.txpspecialchars($html_id).'"' : '';
-
-    if ($title !== '') {
-        $title_att = ' title="'.($escape == 'html' ? escape_title($title) :
-            ($escape ? txp_escape($escape, $title) : $title)
-        ).'"';
-    } else {
-        $title_att = '';
-    }
-
-    foreach ($pages as $page) {
-        if ($newer === null) {
-            $nextpg = $thepg + $page;
-        } elseif ($newer) {
-            $nextpg = $page === true ? 1 : ((int)$page < 0 ? -$page : $thepg - $page);
-        } else {
-            $nextpg = $page === true ? $numPages : ((int)$page < 0 ? $numPages + $page + 1 : $thepg + $page);
-        }
-
-        if (
-            $nextpg >= ($newer === false && $range !== false ? $thepg + 1 : 1) &&
-            $nextpg <= ($newer === true && $range !== false ? $thepg - 1 : $numPages)
-        ) {
-            if (empty($shown[$nextpg]) || $showalways) {
-                $txp_context[$pgc] = $nextpg == $top ? null : $nextpg;
-                $url = pagelinkurl($txp_context);
-                $txp_item['page'] = $nextpg;
-                $txp_item['url'] = $url;
-
-                if ($shift !== false || $newer === null || !is_bool($range)) {
-                    $shown[$nextpg] = true;
-                    $limit--;
-                }
-
-                $item = isset($thing) ? parse($thing) : $nextpg;
-                $url = $link || $link === false && $nextpg != $thispg ? href(
-                    $item,
-                    $url,
-                    $id_att.$title_att.$rel_att.$class_att
-                ) : $item;
-            } else {
-                $url = false;
-            }
-        } else {
-            $url = isset($thing) ? parse($thing, false) : false;
-        }
-
-        empty($url) or $out[] = $url;
-
-        if (!$limit) {
-            break;
-        }
-    }
-
-    foreach ($items as $item => $val) {
-        $txp_item[$item] = $val;
-    }
-
-    $txp_context = $old_context;
-
-    return $wraptag !== '' ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : doWrap($out, '', $break);
-}
-
-// -------------------------------------------------------------
-
 function text($atts)
 {
     extract(lAtts(array(
@@ -1493,9 +1301,7 @@ function if_article_id($atts, $thing = null)
 
     extract(lAtts(array('id' => $pretext['id']), $atts));
 
-    assert_article();
-
-    $x = $id && in_list($thisarticle['thisid'], $id);
+    $x = $id && isset($thisarticle['thisid']) && in_list($thisarticle['thisid'], $id);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -1769,9 +1575,7 @@ function if_article_author($atts, $thing = null)
 
     extract(lAtts(array('name' => ''), $atts));
 
-    assert_article();
-
-    $author = $thisarticle['authorid'];
+    $author = isset($thisarticle['authorid']) ? $thisarticle['authorid'] : '';
 
     $x = $name ? in_list($author, $name) : (string) $author !== '';
     return isset($thing) ? parse($thing, $x) : $x;
@@ -2094,8 +1898,6 @@ function if_article_image($atts, $thing = null)
 {
     global $thisarticle;
 
-    assert_article();
-
     $x = !empty($thisarticle['article_image']);
     return isset($thing) ? parse($thing, $x) : $x;
 }
@@ -2155,14 +1957,16 @@ function article_image($atts)
         $images = array_intersect_key($images, array_flip($items));
     }
 
-    $dbimages = array_map('intval', array_filter($images, 'is_numeric'));
+    $dbimages = array_filter(array_map('intval', $images));
     $dbimages = empty($dbimages) ? array() :
         array_column(safe_rows('*', 'txp_image', 'id IN('.implode(',', $dbimages).')'), null, 'id');
 
     foreach ($items as $item) if (isset($images[$item])) {
         $image = $images[$item];
 
-        if (is_numeric($image)) {
+        if (intval($image)) {
+            $image = intval($image);
+
             if (!isset($dbimages[$image])) {
                 trigger_error(gTxt('unknown_image'));
 
@@ -2227,8 +2031,9 @@ function items_count($atts)
         'pageby' => 1,
     ), $atts));
 
+    $t = $thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
-    $t = ceil($thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+    $by == 1 or $t = ceil($t/$by);
 
     if (!isset($text)) {
         $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
@@ -2610,22 +2415,25 @@ function if_search($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_search_results($atts, $thing = null)
+function if_items_count($atts, $thing = null)
 {
     global $thispage, $is_article_list;
 
     if (empty($thispage)) {
-        return $is_article_list ? postpone_process(2) : '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
-        'min' => 1,
-        'max' => 0,
+        'min'    => 1,
+        'max'    => 0,
+        'pageby' => 1,
     ), $atts));
 
-    $results = (int) $thispage['grand_total'];
-
+    $results = (int)$thispage[$pageby === true ? 'numPages' : 'grand_total'];
+    $by = (int)$pageby or $by = 1;
+    $by == 1 or $results = ceil($results/$by);
     $x = $results >= $min && (!$max || $results <= $max);
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -2698,8 +2506,6 @@ function if_article_category($atts, $thing = null)
         'number' => '',
     ), $atts));
 
-    assert_article();
-
     $cats = array();
 
     if ($number) {
@@ -2770,11 +2576,9 @@ function if_article_section($atts, $thing = null)
 
     extract(lAtts(array('filter' => false, 'name' => ''), $atts));
 
-    assert_article();
+    $section = isset($thisarticle['section']) ? $thisarticle['section'] : '';
 
-    $section = $thisarticle['section'];
-
-    $x = $name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name);
+    $x = $section !== '' && ($name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name));
 
     if ($x && $filter) {
         foreach(do_list($filter) as $f) {
@@ -2990,11 +2794,12 @@ function page_url($atts, $thing = null)
     static $specials = null,
         $internals = array('id', 's', 'c', 'context', 'q', 'm', 'p', 'month', 'author', 'f'),
         $lAtts = array(
-            'type'    => null,
+            'context' => null,
             'default' => false,
             'escape'  => null,
-            'context' => null,
-            'root'    => hu
+            'lang'    => null,
+            'root'    => null,
+            'type'    => null
         );
 
     isset($specials) or $specials = array(
@@ -3006,7 +2811,8 @@ function page_url($atts, $thing = null)
     );
 
     $old_context = $txp_context;
-    $old_base = isset($prefs['url_base']) ? $prefs['url_base'] : null;
+    $old_base = isset($prefs['@txp_root']) ? $prefs['@txp_root'] : null;
+    $old_lang = isset($prefs['@txp_lang']) ? $prefs['@txp_lang'] : null;
 
     if (!isset($atts['context'])) {
         if (empty($txp_context)) {
@@ -3025,7 +2831,14 @@ function page_url($atts, $thing = null)
 
     extract($atts, EXTR_SKIP);
 
-    $prefs['url_base'] = $root === true ? rhu : $root;
+    if (isset($root)) {
+        $prefs['@txp_root'] = $root === true ? rhu : $root;
+    }
+
+    if (isset($lang)) {
+        $prefs['@txp_lang'] = $lang === true ? LANG : $lang;
+    }
+
     $txp_context = get_context(isset($extralAtts) ? $extralAtts : $context, $internals);
 
     if ($default !== false) {
@@ -3040,13 +2853,11 @@ function page_url($atts, $thing = null)
         }
     }
 
-    if (!isset($type)) {
-        $type = 'request_uri';
-    }
+    isset($type) or $type = 'request_uri';
 
     if (isset($thing)) {
         $out = parse($thing);
-    } elseif (isset($context)) {
+    } elseif (isset($context) || isset($lang) || isset($root)) {
         $out = pagelinkurl($txp_context);
         $escape === null or $out = str_replace('&amp;', '&', $out);
     } elseif (isset($specials[$type])) {
@@ -3063,7 +2874,8 @@ function page_url($atts, $thing = null)
     }
 
     $txp_context = $old_context;
-    $prefs['url_base'] = $old_base;
+    $prefs['@txp_root'] = $old_base;
+    $prefs['@txp_lang'] = $old_lang;
 
     return $out;
 }
@@ -3281,6 +3093,10 @@ function if_request($atts, $thing = null)
         case 'HEADER':
             $what = set_headers(array($name => true));
             $x = txp_match($atts, isset($what) ? implode('', $what) : null);
+            break;
+        case 'SYSTEM':
+            global $prefs;
+            $x = isset($prefs[$name]) && php(null, null, true) && txp_match($atts, $prefs[$name]);
             break;
         case 'NAME':
             $x = txp_match($atts, $name);

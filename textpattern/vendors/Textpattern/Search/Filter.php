@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2023 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -225,6 +225,7 @@ class Filter
         $selected = $this->search_method;
 
         extract(lAtts(array(
+            'id'             => '',
             'default_method' => 'all',
             'submit_as'      => 'get', // or 'post'
             'placeholder'    => '',
@@ -281,7 +282,7 @@ class Filter
             eInput($event).
             sInput($step).
             $buttons.
-            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', '', 'search', TRUE, gTxt($placeholder)).
+            n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', $id, 'search', TRUE, gTxt($placeholder)).
             script_js("textpattern.Route.add('{$event}', txp_search);", false);
     }
 
