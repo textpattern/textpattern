@@ -501,7 +501,7 @@ function plugin_edit_form($name = '')
         $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
     } else {
         $userInfo = is_logged_in();
-        $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '');
+        $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '', 'author_uri' => hu);
     }
 
     if (empty($plugin)) {
@@ -1079,11 +1079,11 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return href(gTxt('edit'), array(
+    return wrapRegion('txp-plugins-group', href(gTxt('edit'), array(
         'event'      => 'plugin',
         'step'       => 'plugin_edit',
         '_txp_token' => form_token(),
-    )).br.
+    ), 'class="navlink"').br.
     tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
@@ -1118,7 +1118,7 @@ function plugin_form($existing_files = array())
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
-    );
+    ), 'txp-plugins-group-content', 'install_plugin', 'plugin_install');
 }
 
 /**
