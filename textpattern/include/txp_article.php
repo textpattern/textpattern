@@ -988,16 +988,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                         $sort_sql = "ID";
                         break;
                     case 'author':
-                        $sort_sql = "user.RealName, ID DESC";
+                        $sort_sql = "user.RealName, ID";
                         break;
                     case 'comments':
-                        $sort_sql = "total_comments, ID DESC";
+                        $sort_sql = "total_comments, ID";
                         break;
                     case 'lastmod':
-                        $sort_sql = "LastMod, ID DESC";
+                        $sort_sql = "LastMod, ID";
                         break;
                     default:
-                        $sort_sql = ucfirst($sort).", ID DESC";
+                        $sort_sql = ucfirst($sort).", ID";
                         break;
                 }
             
