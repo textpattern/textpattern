@@ -895,6 +895,7 @@ function filterAtts($atts = null, $iscustom = null)
         'id'            => '',
         'excerpted'     => '',
         'exclude'       => '',
+        'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         'url_title'     => ''
     );
 
@@ -904,7 +905,6 @@ function filterAtts($atts = null, $iscustom = null)
             'section'   => isset($excluded['section']) ? true : '',
             'author'    => isset($excluded['author']) ? true : '',
             'month'     => isset($excluded['month']) ? true : '',
-            'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         );
     } else {
         $extralAtts += array(

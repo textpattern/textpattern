@@ -4583,16 +4583,16 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $mode = empty($modes[$k]) ? 'any' : $modes[$k];
 
                         if ($unique || $val === true || $mode == 'any') {
-                            $where[$k] = "$not EXISTS(SELECT * FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
+                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
                         } else {
                             $cmp = $mode == 'exact' ? '=' : '>=';
-                            $where[$k] = "$not (SELECT COUNT(*) FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) $cmp ".count($val);
+                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) $cmp ".count($val);
                         }
                     }
                 }
 
                 if ($unique) {
-                    $columns[$k] = "(SELECT value FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID LIMIT 1)";
+                    $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID LIMIT 1)";
                 } else {
                     if (!empty($custom['by_aggregate'][$k]) && isset($aggregate[$custom['by_aggregate'][$k]])) {
                         $column = $aggregate[$custom['by_aggregate'][$k]];
@@ -4601,7 +4601,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $column = "GROUP_CONCAT(value SEPARATOR '$dlm')";
                     }
 
-                    $columns[$k] = "(SELECT $column FROM $tableName WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
+                    $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
                 }
             }
         }
