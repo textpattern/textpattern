@@ -1083,7 +1083,7 @@ function plugin_form($existing_files = array())
         'event'      => 'plugin',
         'step'       => 'plugin_edit',
         '_txp_token' => form_token(),
-    ), 'class="navlink"').br.
+    ), 'class="txp-button"').br.
     tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
