@@ -401,7 +401,11 @@ function plugin_list($message = '')
                 array('class' => 'alert-block warning')
             ).n;
     } else {
-        $createBlock = wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : '');
+        $createBlock = tag(
+            wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : ''),
+            'div',
+            array('class' => 'txp-control-panel')
+        );
     }
 
     $pageBlock = $paginator->render().
@@ -1079,11 +1083,11 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return href(gTxt('edit'), array(
+    return tag(href(gTxt('edit'), array(
         'event'      => 'plugin',
         'step'       => 'plugin_edit',
         '_txp_token' => form_token(),
-    ), 'class="txp-button"').br.
+    ), 'class="txp-button"'), 'p').
     tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
@@ -1103,7 +1107,7 @@ function plugin_form($existing_files = array())
             'action'       => 'index.php',
             'enctype'      => 'multipart/form-data'
         )
-    ).br.
+    ).
     ($existing_files ? form(
         eInput('plugin').
         sInput('plugin_import').
