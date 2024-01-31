@@ -394,7 +394,7 @@ function article_preview($field = false)
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
-                } else {
+                } elseif (strpos($chunk, '<txp:else ') !== 0) {
                     $tags++;
                     $level += (int)($chunk[strlen($chunk)-2] !== '/');
                 }
