@@ -679,7 +679,7 @@ function file_edit($message = '', $id = '')
             $replace = ($file_exists)
                 ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file')
                 : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file');
-            $delete = ($can_delete && $file_exists)
+            $delete = $can_delete
                 ? form(
                     eInput('file').
                     sInput('file_multi_edit').
@@ -777,10 +777,9 @@ function file_edit($message = '', $id = '')
                     )
                 : (empty($existing_files)
                     ? ''
-                    : gTxt('existing_file').selectInput('filename', $existing_files, '', 1).
+                    : gTxt('existing_file').selectInput('newfile', $existing_files, '', 1).
                         hInput('perms', ($permissions == '-1') ? '' : $permissions).
-                        hInput(compact('category', 'title', 'description', 'status')).
-                        hInput('filename', $filename)
+                        hInput(compact('category', 'title', 'description', 'status'))
                 )).
                 pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                 $created.
@@ -1155,7 +1154,7 @@ function file_save()
     )));
 
     extract(doSlash($varray));
-    $filename = $varray['filename'] = sanitizeForFile(gps('filename'));
+    $filename = sanitizeForFile(gps('filename')) or $filename = sanitizeForFile(gps('newfile'));
 
     if ($filename == '') {
         file_list(array(gTxt('file_not_updated', array('{name}' => $filename)), E_ERROR));
@@ -1163,6 +1162,7 @@ function file_save()
         return;
     }
 
+    $varray['filename'] = $filename;
     $id = $varray['id'] = assert_int($id);
     $permissions = gps('perms');
 
@@ -1180,9 +1180,14 @@ function file_save()
     }
 
     $old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
+    $old_path = build_file_path($file_base_path, $old_filename);
+
+    if (!file_exists($old_path) && $newfile = sanitizeForFile(gps('newfile'))) {
+        $old_path = build_file_path($file_base_path, $newfile);
+        $old_filename = $newfile;
+    }
 
     if ($old_filename != false && strcmp($old_filename, $filename) != 0) {
-        $old_path = build_file_path($file_base_path, $old_filename);
         $new_path = build_file_path($file_base_path, $filename);
 
         if (file_exists($new_path) || (is_file($old_path) && shift_uploaded_file($old_path, $new_path) === false)) {
@@ -1279,9 +1284,9 @@ function file_delete($ids = array())
                 callback_event('file_deleted', '', false, $id, $filepath);
 
                 $rsd = safe_delete('txp_file', "id = '$id'");
-                $ul = false;
+                $ul = !is_file($filepath);
 
-                if ($rsd && is_file($filepath)) {
+                if ($rsd && !$ul) {
                     $ul = unlink(realpath($filepath));
                 }
 
@@ -1327,7 +1332,7 @@ function file_get_uploaded()
 
 function file_set_perm($file)
 {
-    return @chmod($file, 0644);
+    return chmod($file, 0644);
 }
 
 /**
