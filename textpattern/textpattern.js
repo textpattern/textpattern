@@ -1880,6 +1880,7 @@ jQuery.fn.txpFileupload = function (options) {
         }
 
         if (!files.length) {
+            form.trigger('fileuploadsubmit', e, {});
             textpattern.Console.announce('uploadEnd');
         } else {
             form.fileupload('add', {
@@ -1888,11 +1889,11 @@ jQuery.fn.txpFileupload = function (options) {
         }
 
         fileInput.val('');
-    }).bind('fileuploadsubmit', function (e, data) {
-        data.formData = $.merge([{
+    }).on('fileuploadsubmit', function (e, data) {
+        data.formData = $.merge(data.files ? [{
             'name': 'fileInputOrder',
             'value': data.files[0].order + '/' + form.uploadCount
-        }], options.formData);
+        }] : [], options.formData);
 
         $.merge(data.formData, form.serializeArray());
 
@@ -2224,18 +2225,25 @@ textpattern.Route.add('article.init', function () {
     $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange');
 });
 
+// Uncheck reset on timestamp change.
+textpattern.Route.add('article, file', function () {
+    $(document).on('change', '.posted input', function (e) {
+        $('#publish_now, #reset_time').prop('checked', false);
+    });
+});
+
 textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) {
-            textpattern.Relay.register('uploadEnd', function (event, data) {
-                $(function () {
-                    let options = {
-                        data: $(data.target).serializeArray(),
-                        list: textpattern.event == 'image' ? '#fullsize-image, #image_name, #thumbnail-image, #thumbnail-upload' : '#file_details',
-                        event: event.type
-                    };
-                    textpattern.Relay.callback('updateList', options);
-                });
+        textpattern.Relay.register('uploadEnd', function (event, data) {
+            $(function () {
+                let options = {
+                    data: $(data.target).serializeArray(),
+                    list: textpattern.event == 'image' ? '#fullsize-image, #image_name, #thumbnail-image, #thumbnail-upload' : '#file_details, #existing_container',
+                    event: event.type
+                };
+                textpattern.Relay.callback('updateList', options);
             });
+        });
     } else {
         textpattern.Relay.register('uploadStart', function (event) {
             textpattern.Relay.data.fileid = [];
@@ -2268,15 +2276,37 @@ textpattern.Route.add('file, image', function () {
         }]
     });
 
-    $('input[type="submit"][form="delete-file"], input[type="submit"][form="delete-image"]').on('click', function() {
+    $(document).on('submit', '#delete-file, #delete-image', function() {
         return verify(textpattern.gTxt('confirm_delete_popup'));
     })
 });
 
-// Uncheck reset on timestamp change.
-textpattern.Route.add('article, file', function () {
-    $(document).on('change', '.posted input', function (e) {
-        $('#publish_now, #reset_time').prop('checked', false);
+// Check file extensions match.
+textpattern.Route.add('file.file_edit', function () {
+    const checkExtMatch = function(oldname, newname) {
+        const oldarray = oldname.split('.'),
+            newarray = newname.split('.'),
+            oldext = oldarray.length <= 1 ? '' : oldarray.pop().toLowerCase(),
+            newext = newarray.length <= 1 ? '' : newarray.pop().toLowerCase();
+
+            return newext == oldext || confirm(newname + ' => ' + oldname + "\n\n" + textpattern.gTxt('are_you_sure'));
+    }
+
+    $(document).on('fileuploadsubmit', 'form.txp-upload-form.async', function (e, data) {
+        const oldname = document.getElementById('filename').value;
+        const fileinput = document.getElementById('file_replace') || document.getElementById('file_reassign');
+        const files = fileinput.files;
+        const newname = files.length ? files[0].name : (document.getElementById('existing_file').value || '');
+        const match = checkExtMatch(oldname, newname);
+        if (newname && match && !data.files) {
+            sendAsyncEvent(data.formData, textpattern.Relay.callback('uploadEnd', e, data), 'script');
+            $(fileinput).prop('required', true);
+        }
+        return match;
+    }).on('change', '#existing_file', function () {
+        $('#file_replace, #file_reassign').val('').prop('required', this.value == '');
+    }).on('change', '#file_replace, #file_reassign', function () {
+        $('#existing_file').val('');
     });
 });
 

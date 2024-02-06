@@ -670,6 +670,12 @@ function file_edit($message = '', $id = '')
 
         $file_exists = is_file(build_file_path($file_base_path, $filename));
         $existing_files = get_filenames();
+        $existing_files = empty($existing_files)
+            ? ''
+            : tag(tag(gTxt('existing_file'), 'label', 'for="existing_file"').
+                selectInput('newfile', $existing_files, '', 1, '', 'existing_file').
+                hInput('perms', ($permissions == '-1') ? '' : $permissions), 'div', 'id="existing_container"'
+            );
         $can_delete = has_privs('file.delete') || ($author == $txp_user && has_privs('file.delete.own'));
 
         if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
@@ -677,8 +683,8 @@ function file_edit($message = '', $id = '')
             $delete = '';
         } else {
             $replace = ($file_exists)
-                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file')
-                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file');
+                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file', array('div', 'div'), array('postinput' => $existing_files))
+                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file', array('div', 'div'), array('postinput' => $existing_files));
             $delete = $can_delete
                 ? form(
                     eInput('file').
@@ -745,42 +751,33 @@ function file_edit($message = '', $id = '')
                             'id'        => 'filename',
                             'size'      => INPUT_REGULAR,
                             'maxlength' => $fieldSizes['filename'],
-                        )).
-                    Txp::get('\Textpattern\UI\Input', 'old_filename', 'hidden', $filename),
+                        )),
                     '', '', array('class' => 'txp-form-field edit-file-name')
-                ).
-                (($file_exists)
-                ? inputLabel(
+                ).inputLabel(
                         'file_status',
                         selectInput('status', $file_statuses, $status, false, '', 'file_status'),
                         'file_status', '', array('class' => 'txp-form-field edit-file-status')
-                    ).
-                    inputLabel(
-                        'file_category',
-                        event_category_popup('file', $category, 'file_category').
-                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                        'category', '', array('class' => 'txp-form-field edit-file-category')
-                    ).
-                    inputLabel(
-                        'file_title',
-                        Txp::get('\Textpattern\UI\Input', 'title', 'text', $title)->setAtts(array(
-                            'id'        => 'file_title',
-                            'size'      => INPUT_REGULAR,
-                            'maxlength' => $fieldSizes['title'],
-                        )),
-                        'title', '', array('class' => 'txp-form-field edit-file-title')
-                    ).
-                    inputLabel(
-                        'file_description',
-                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
-                        'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
-                    )
-                : (empty($existing_files)
-                    ? ''
-                    : gTxt('existing_file').selectInput('newfile', $existing_files, '', 1).
-                        hInput('perms', ($permissions == '-1') ? '' : $permissions).
-                        hInput(compact('category', 'title', 'description', 'status'))
-                )).
+                ).
+                inputLabel(
+                    'file_category',
+                    event_category_popup('file', $category, 'file_category').
+                    n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                    'category', '', array('class' => 'txp-form-field edit-file-category')
+                ).
+                inputLabel(
+                    'file_title',
+                    Txp::get('\Textpattern\UI\Input', 'title', 'text', $title)->setAtts(array(
+                        'id'        => 'file_title',
+                        'size'      => INPUT_REGULAR,
+                        'maxlength' => $fieldSizes['title'],
+                    )),
+                    'title', '', array('class' => 'txp-form-field edit-file-title')
+                ).
+                inputLabel(
+                    'file_description',
+                    '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
+                    'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
+                ).
                 pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                 $created.
                 inputLabel(
@@ -830,10 +827,6 @@ function file_edit($message = '', $id = '')
 //                        selectInput('perms', $levels, $permissions),
 //                        'permissions'
 //                    ).
-
-
-
-
             'div', array('class' => 'txp-edit')
         );
 
@@ -1047,7 +1040,9 @@ function file_replace()
 
     $id = assert_int(gps('id'));
 
-    if (!isset($_FILES['thefile'])) {
+    $newfile = sanitizeForFile(gps('newfile')) and $new_path = build_file_path($file_base_path, $newfile) and is_file($new_path) or $new_path = false;
+
+    if (empty($new_path) && !isset($_FILES['thefile'])) {
         return file_edit('', $id);
     }
 
@@ -1066,28 +1061,35 @@ function file_replace()
         require_privs();
     }
 
-    $fileshandler = Txp::get('\Textpattern\Server\Files');
-    $files = $fileshandler->refactor($_FILES['thefile']);
-    
-    foreach ($files as $file) {
-        $fileshandler->dechunk($file);
+    if (isset($_FILES['thefile'])) {
+        $fileshandler = Txp::get('\Textpattern\Server\Files');
+        $files = $fileshandler->refactor($_FILES['thefile']);
+        
+        foreach ($files as $file) {
+            $fileshandler->dechunk($file);
+        }
+
+        if (!empty($file)) {
+            extract($file);
+            $file = $tmp_name;
+
+            if ($file === false) {
+                // Could not get uploaded file.
+                file_list(array(gTxt('file_upload_failed', array('{list}' => $name)).n.upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
+
+                return;
+            }
+        }
     }
 
-    extract($file);
-
-    $file = $tmp_name;//file_get_uploaded();
-//    $name = file_get_uploaded_name();
-
-    if ($file === false) {
-        // Could not get uploaded file.
-        file_list(array(gTxt('file_upload_failed', array('{list}' => $name)).n.upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
-
-        return;
+    if (empty($file)) {
+        $file = $new_path;
+        $name = $newfile;
     }
 
     if (!$filename) {
         file_list(array(gTxt('invalid_filename'), E_ERROR));
-    } else {
+    } elseif ($file) {
         $newpath = build_file_path($file_base_path, $filename);
 
         if (is_file($newpath)) {
@@ -1098,7 +1100,9 @@ function file_replace()
             file_list(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR));
 
             // Rename tmp back.
-            rename($newpath.'.tmp', $newpath);
+            if (is_file($newpath.'.tmp')) {
+                rename($newpath.'.tmp', $newpath);
+            }
 
             // Remove tmp upload.
             unlink(realpath($file));
@@ -1154,7 +1158,7 @@ function file_save()
     )));
 
     extract(doSlash($varray));
-    $filename = sanitizeForFile(gps('filename')) or $filename = sanitizeForFile(gps('newfile'));
+    $filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
     if ($filename == '') {
         file_list(array(gTxt('file_not_updated', array('{name}' => $filename)), E_ERROR));
@@ -1162,7 +1166,6 @@ function file_save()
         return;
     }
 
-    $varray['filename'] = $filename;
     $id = $varray['id'] = assert_int($id);
     $permissions = gps('perms');
 
@@ -1173,7 +1176,7 @@ function file_save()
 
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
-    $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
+    $rs = safe_row("filename, author, size", 'txp_file', "id = '$id'");
 
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
@@ -1181,15 +1184,9 @@ function file_save()
 
     $old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
     $old_path = build_file_path($file_base_path, $old_filename);
-
-    if (!file_exists($old_path) && $newfile = sanitizeForFile(gps('newfile'))) {
-        $old_path = build_file_path($file_base_path, $newfile);
-        $old_filename = $newfile;
-    }
+    $new_path = build_file_path($file_base_path, $filename);
 
     if ($old_filename != false && strcmp($old_filename, $filename) != 0) {
-        $new_path = build_file_path($file_base_path, $filename);
-
         if (file_exists($new_path) || (is_file($old_path) && shift_uploaded_file($old_path, $new_path) === false)) {
             file_list(array(gTxt('file_cannot_rename', array('{name}' => $filename)), E_ERROR));
 
@@ -1199,7 +1196,7 @@ function file_save()
         }
     }
 
-    $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+    $created_ts = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 
     if ($publish_now) {
         $created = "NOW()";
@@ -1209,7 +1206,7 @@ function file_save()
         $created = '';
     }
 
-    $size = filesize(build_file_path($file_base_path, $filename));
+    $size = file_exists($new_path) ? filesize($new_path) : $rs['size'];
 
     $constraints = array(
         'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
