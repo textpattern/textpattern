@@ -677,11 +677,9 @@ function file_edit($message = '', $id = '')
                 hInput('perms', ($permissions == '-1') ? '' : $permissions), 'div', 'id="existing_container"'
             );
         $can_delete = has_privs('file.delete') || ($author == $txp_user && has_privs('file.delete.own'));
+        $is_writable = is_dir($file_base_path) && is_writeable($file_base_path);
 
-        if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-            $replace = '';
-            $delete = '';
-        } else {
+        if ($is_writable) {
             $replace = ($file_exists)
                 ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file', array('div', 'div'), array('postinput' => $existing_files))
                 : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file', array('div', 'div'), array('postinput' => $existing_files));
@@ -693,6 +691,8 @@ function file_edit($message = '', $id = '')
                     hInput('selected[]', $id)
                 , '', '', 'post', '', '', 'delete-file')
                 : '';
+        } else {
+            $replace = $delete = '';
         }
 
         $condition = span((($file_exists)
@@ -799,11 +799,12 @@ function file_edit($message = '', $id = '')
                 graf(
                     ($can_delete
                         ? tag_void('input', array(
-                            'class'   => 'caution',
-                            'name'    => 'file_delete',
-                            'type'    => 'submit',
-                            'form'    => 'delete-file',
-                            'value'   =>  gTxt('delete'),
+                            'class'    => 'caution',
+                            'name'     => 'file_delete',
+                            'type'     => 'submit',
+                            'form'     => 'delete-file',
+                            'value'    =>  gTxt('delete'),
+                            'disabled' => !$is_writable,
                         ))
                         : ''
                     ).
