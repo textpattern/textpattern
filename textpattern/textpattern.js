@@ -1879,7 +1879,10 @@ jQuery.fn.txpFileupload = function (options) {
             }
         }
 
-        if (!files.length) {
+        if (!files.length) {/*
+            form.fileupload('add', {
+                files: [{order: 0}]
+            });*/
             form.trigger('fileuploadsubmit', e, {});
             textpattern.Console.announce('uploadEnd');
         } else {
@@ -2294,13 +2297,12 @@ textpattern.Route.add('file.file_edit', function () {
 
     $(document).on('fileuploadsubmit', 'form.txp-upload-form.async', function (e, data) {
         const oldname = document.getElementById('filename').value;
-        const fileinput = document.getElementById('file_replace') || document.getElementById('file_reassign');
-        const files = fileinput.files;
-        const newname = files.length ? files[0].name : (document.getElementById('existing_file').value || '');
+        const files = data.files;
+        const newname = !!files ? files[0].name : (document.getElementById('existing_file').value || '');
         const match = checkExtMatch(oldname, newname);
-        if (newname && match && !data.files) {
+        if (newname && match && !files) {
+            $('#existing_file').val('').trigger('change');
             sendAsyncEvent(data.formData, textpattern.Relay.callback('uploadEnd', e, data), 'script');
-            $(fileinput).prop('required', true);
         }
         return match;
     }).on('change', '#existing_file', function () {
