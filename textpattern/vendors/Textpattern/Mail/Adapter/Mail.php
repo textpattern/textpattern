@@ -296,6 +296,8 @@ EOMIME;
             $headers['Reply-to'] = $this->encoded->replyTo;
         }
 
+        // Concatenation preserves existing array entries so primary headers aren't
+        // overwritten by custom ones.
         $headers += $this->encoded->headers;
 
         foreach ($headers as $name => &$value) {

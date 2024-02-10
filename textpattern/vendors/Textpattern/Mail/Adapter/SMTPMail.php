@@ -255,6 +255,11 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             throw new Exception(gTxt('from_or_to_address_missing'));
         }
 
+        // Custom headers come first so important ones (like From) get overwritten by sane values.
+        foreach ($this->mail->headers as $hkey => $hval) {
+            $this->mailer->addCustomHeader($hkey, $hval);
+        }
+
         // If there's a body set, assume HTML content...
         $this->mailer->isHTML(!empty($this->mailer->Body));
 
