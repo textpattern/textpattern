@@ -257,7 +257,10 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
 
         // Custom headers come first so important ones (like From) get overwritten by sane values.
         foreach ($this->mail->headers as $hkey => $hval) {
-            $this->mailer->addCustomHeader($hkey, $hval);
+            // Skip a few that PHPMailer handles automatically.
+            if (!in_array($hkey, array('Content-Transfer-Encoding', 'Content-Type'))) {
+                $this->mailer->addCustomHeader($hkey, $hval);
+            }
         }
 
         // If there's a body set, assume HTML content...
