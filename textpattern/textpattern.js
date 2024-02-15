@@ -2305,10 +2305,9 @@ textpattern.Route.add('file.file_edit', function () {
             sendAsyncEvent(data.formData, textpattern.Relay.callback('uploadEnd', e, data), 'script');
         }
         return match;
-    }).on('change', '#existing_file', function () {
-        $('#file_replace, #file_reassign').val('').prop('required', this.value == '');
-    }).on('change', '#file_replace, #file_reassign', function () {
-        $('#existing_file').val('');
+    }).on('change', '#existing_file, #file_replace, #file_reassign', function () {
+        $(this).prop('required', true);
+        $('#existing_file, #file_replace, #file_reassign').not(this).val('').prop('required', false);
     });
 });
 
