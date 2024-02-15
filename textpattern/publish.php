@@ -634,10 +634,15 @@ function preText($store, $prefs = null)
                     lookupByTitleSection($title, $out['s']);
             }
 
-            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = $is_404 || empty($out['id']) || $out['s'] == '';
-            $is_404 or populateArticleData($rs);
+            $is_404 = $is_404 || empty($rs['ID']) || $status && !in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
+
+            if ($is_404) {
+                $out['id'] = $out['s'] = '';
+            } else {
+                $out['id'] = $rs['ID'];
+                $out['s'] = $rs['Section'];
+                populateArticleData($rs);
+            }
         }
 
         if (!empty($thisarticle)) {
