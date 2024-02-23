@@ -174,11 +174,15 @@
         <item id="setup_still_exists" title=""><![CDATA[]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
+        <item id="textpattern_version_update" title="Обновление версии Textpattern"><![CDATA[]]></item>
+        <item id="textpattern_version_update_beta" title="Доступно предрелизное обновление Textpattern"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
+        <item id="update_server_inaccessible" title="Сервер обносления недоступен"><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="php_scripting_enabled" title="PHP скрипты включены"><![CDATA[<h2>Включено выполнение PHP</h2>
+<p>Textpattern позволяет авторам и администраторам вставлять PHP-код внутри статей и страниц/форм, если эти функции включены. Поскольку это представляет угрозу безопасности - любой вид PHP-кода может быть выполнен, включая потенциально разрушительный/опасный код, который может привести к уничтожению вашего сайта или утечке информации третьим лицам - настоятельно рекомендуется отключить эти опции в панели <a href="?event=prefs#prefs_group_publish">Настроек</a>, если вы можете без них обойтись.</p>
+<p>Многие задачи для сайтов Textpattern, которые ранее требовали PHP, теперь могут быть выполнены с использованием <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">тегов</a>.</p>
+]]></item>
     </group>
 
     <group id="file" title="">
@@ -200,7 +204,7 @@
     </group>
 
     <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+        <item id="get_textpack" title="Установить текстовый пакет"><![CDATA[]]></item>
     </group>
 
     <group id="link" title="">
@@ -226,12 +230,15 @@
     <group id="prefs" title="">
         <item id="admin_side_plugins" title="Использовать плагины, влияющие на панель администратора?"><![CDATA[]]></item>
         <item id="advanced_options" title="Продвинутые настройки"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Разрешить PHP в статьях?"><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title="Разрешить PHP в статьях?"><![CDATA[<h2>Разрешить использование PHP в статьях?</h2>
+<p>При включении этой опции будет разрешено использование PHP внутри статей. Автор должен иметь достаточные привилегии для этого (по умолчанию только <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Издатели’ <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Управляющие редакторы’ <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a> и <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Редакторы по копии’ <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a> могут это делать).</p>
+<p>PHP-код должен быть без открывающих и закрывающих тегов PHP и также должен находиться внутри тегов <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a>.</p>
+]]></item>
         <item id="allow_form_override" title="Разрешить изменять форму вывода статьи?"><![CDATA[]]></item>
         <item id="allow_page_php_scripting" title="Разрешить PHP в страницах?"><![CDATA[]]></item>
         <item id="archive_dateformat" title="Формат даты архива"><![CDATA[]]></item>
         <item id="articles_use_excerpts" title="Статьи используют выдержку?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
+        <item id="attach_titles_to_permalinks" title="Добавлять &quot;заголовок для URL&quot; статьи к ссылкам?"><![CDATA[]]></item>
         <item id="auto_dst" title=""><![CDATA[]]></item>
         <item id="comment_means_site_updated" title="Означает ли новый комментарий обновление сайта?"><![CDATA[]]></item>
         <item id="comment_nofollow" title=""><![CDATA[]]></item>
@@ -246,7 +253,9 @@
         <item id="comments_on_default" title="Включено по умолчанию?"><![CDATA[]]></item>
         <item id="comments_require_email" title="Требовать email в комментариях?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Требовать имя в комментариях?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Отправлять комментарии автору по почте?"><![CDATA[]]></item>
+        <item id="comments_sendmail" title="Отправлять комментарии автору по почте?"><![CDATA[<h2>Отправлять комментарии по электронной почте автору?</h2>
+<p>Если установлено значение «Да», то при получении нового комментария к статье копия будет отправлена по электронной почте автору этой статьи.</p>
+]]></item>
         <item id="comments_use_fat_textile" title="Использовать расширенный Textile?"><![CDATA[]]></item>
         <item id="custom_form_types" title="Дополнительные типы форм"><![CDATA[]]></item>
         <item id="custom_overview" title="Поля пользователя"><![CDATA[]]></item>
@@ -258,7 +267,10 @@
         <item id="enable_short_tags" title="Включить поддержку коротких тегов?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="Включить XML-RPC сервер?"><![CDATA[]]></item>
         <item id="expire_logs_after" title="Срок хранения записей в журнале (в днях)?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Путь для загрузки файлов"><![CDATA[]]></item>
+        <item id="file_base_path" title="Путь для загрузки файлов"><![CDATA[<h2>Путь к директории файлов</h2>
+<p>Это устанавливает <strong>абсолютный путь</strong> к директории, где будут сохраняться постоянно загруженные файлы. PHP должен иметь права на запись в эту директорию.</p>
+<p><strong>Примечание:</strong> Рассмотрите возможность перемещения этой директории за пределы общедоступного корневого каталога вашего веб-сайта для повышения безопасности.</p>
+]]></item>
         <item id="file_max_upload_size" title="Максимально допустимый размер файла (в байтах)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Часовой пояс"><![CDATA[]]></item>
         <item id="img_dir" title="Путь к папке изображений"><![CDATA[]]></item>
@@ -272,10 +284,18 @@
         <item id="module_pophelp" title="Показывать ссылки вызова Помощи в Панели администратора"><![CDATA[]]></item>
         <item id="never_display_email" title=""><![CDATA[]]></item>
         <item id="override_emailcharset" title="Использовать кодировку ISO-8859-1 для email? (по умолчанию: UTF-8)"><![CDATA[]]></item>
-        <item id="override_form_types" title="Типы форм для вывода статей"><![CDATA[]]></item>
+        <item id="override_form_types" title="Типы форм для вывода статей"><![CDATA[
+<h2>Типы переопределяющих форм</h2>
+<p>Выберите типы форм, которые будут доступны в панели Написать в качестве переопределяющих форм.</p>
+        ]]></item>
         <item id="permlink_format" title="Формат постоянной ссылки"><![CDATA[]]></item>
         <item id="permlink_mode" title="Шаблон URL-адреса статьи"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Путь к директории кэша плагинов"><![CDATA[]]></item>
+        <item id="plugin_cache_dir" title="Путь к директории кэша плагинов"><![CDATA[
+<h2>Директория кэша плагинов</h2>
+<p>Используется главным образом для разработки плагинов. Вы можете поместить исходный (не скомпилированный) файл плагина в этот каталог, и Textpattern загрузит его автоматически, так что вы можете легко редактировать плагин и сразу же видеть его эффект без необходимости установки/активации. <strong>Внимание</strong>, при использовании этого метода, сломанный плагин (который не компилируется) может также нарушить работу Textpattern!</p>
+<p> На рабочем сайте рекомендуется загружать плагины через стандартную панель плагинов, вместо использования кэша.</p>
+<p><strong>Примечание:</strong> Не указывайте один и тот же каталог как для временных файлов, так и для кэша плагинов, так как это вызовет проблемы (Textpattern будет пытаться запустить содержимое временных файлов).</p>
+        ]]></item>
         <item id="production_status" title="Рабочий статус"><![CDATA[]]></item>
         <item id="public_theme_name" title="Шаблон сайта"><![CDATA[]]></item>
         <item id="publish_expired_articles" title="Публиковать истёкшие статьи?"><![CDATA[
@@ -303,7 +323,9 @@
         <item id="smtp_from" title="Значение SMTP поля &quot;From:&quot;"><![CDATA[]]></item>
         <item id="spam_blocklists" title="Сервисы, блокирующие спам (через запятую)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Только синдицировать выдержку из статьи?"><![CDATA[]]></item>
-        <item id="tempdir" title="Папка для временных файлов"><![CDATA[]]></item>
+        <item id="tempdir" title="Папка для временных файлов"><![CDATA[<h2>Директория временных файлов</h2>
+<p>Устанавливает <strong>абсолютный путь</strong> к временному каталогу (иногда называемому «tmp» или «temp»). PHP должен иметь право записи в этот каталог. Этот каталог используется для временных файлов, например загрузок любого типа (плагинов, файлов или изображений).</p>
+<p><strong>Примечание.</strong> Не указывайте этот же каталог для «кэша плагинов», так как это вызовет проблемы (Textpattern попытается запустить содержимое временных файлов). </p>]]></item>
         <item id="theme_name" title="Тема для админки"><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title="Функции PHP доступные в txp:evaluate"><![CDATA[]]></item>
         <item id="use_comments" title="Принимать комментарии?"><![CDATA[]]></item>
@@ -313,7 +335,7 @@
     </group>
 
     <group id="section" title="Панель секций">
-        <item id="section_category" title=""><![CDATA[]]></item>
+        <item id="section_category" title="Введение"><![CDATA[]]></item>
         <item id="section_default" title="Секция по умолчанию"><![CDATA[]]></item>
         <item id="section_description" title="Описание"><![CDATA[]]></item>
         <item id="section_on_frontpage" title="На главной странице?"><![CDATA[]]></item>
@@ -324,9 +346,9 @@
         <item id="section_uses_skin" title="Использовать тему"><![CDATA[]]></item>
     </group>
 
-    <group id="setup" title="">
+    <group id="setup" title="Панель настроек">
         <item id="setup_user_login" title="Логин пользователя"><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Пароль пользователя"><![CDATA[]]></item>
         <item id="table_prefix" title="Префикс таблиц"><![CDATA[]]></item>
     </group>
 
@@ -336,11 +358,23 @@
 <p>Автор(ы) этой темы (необязательно).</p>
         ]]></item>
         <item id="skin_author_uri" title="Вебсайт темы"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title="Удалить темы с диска тоже"><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title="Удалить неиспользуемые шаблоны из базы данных"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="Удалить темы с диска тоже"><![CDATA[
+<h2>Удалить шаблоны тем с диска тоже</h2>
+<p>При отметке, все файлы выбранной темы будут удалены с диска. Тем не менее, если директории темы содержат другие файлы (такие, как JavaScript, изображения, ...), они не будут удалены.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Удалить неиспользуемые шаблоны из базы данных"><![CDATA[
+<h2>Удалить неиспользуемые шаблоны из базы данных при импорте</h2>
+<p>Если отмечено, каждый шаблон в выбранной теме, не имеющий соответствующего файла на диске, будет навсегда удален из базы данных. В результате, после завершения действия шаблоны базы данных будут соответствовать диску насколько это возможно.</p>
+<p>Обратите внимание, что если вы удалили файлы шаблонов, необходимые для работы Textpattern, в базе данных будет создана их пустая версия.</p>
+        ]]></item>
         <item id="skin_delete_from_disk" title="Удалить неиспользуемые шаблоны с диска"><![CDATA[]]></item>
         <item id="skin_description" title="Описание темы"><![CDATA[]]></item>
-        <item id="skin_import" title="Импортировать тему"><![CDATA[]]></item>
+        <item id="skin_import" title="Импортировать тему"><![CDATA[<h2>Импорт темы с диска</h2>
+<p>Эта форма позволяет вам импортировать тему в базу данных Textpattern из вашей директории тем.</p>
+<p>Для возможности импорта тема должна состоять из читаемой родительской папки с именем темы в качестве названия папки, а внутри папки должен быть читаемый файл <code>manifest.json</code> в ожидаемом формате. Папка темы также должна содержать страницы, формы и стили в соответствующих директориях.</p>
+<p>В то время как страницы и формы должны использовать расширение <code>.txp</code>, таблицы стилей ожидаются в файлах с расширением <code>.css</code>. Формы также должны быть сгруппированы по типу в отдельные каталоги. Textpattern создаст любые отсутствующие обязательные шаблоны при импорте.</p>
+<p>Дополнительную информацию о создании, установке и использовании тем в Textpattern CMS можно найти в <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">документации по темам <span class="ui-icon ui-icon-extlink">(открывает внешнюю ссылку в новом окне)</span></a>.</p>
+]]></item>
         <item id="skin_name" title="Название темы"><![CDATA[]]></item>
         <item id="skin_overview" title=""><![CDATA[]]></item>
         <item id="skin_title" title="Заголовок темы"><![CDATA[]]></item>

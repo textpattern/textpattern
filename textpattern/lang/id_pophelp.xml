@@ -273,14 +273,72 @@
 <h2>Berkas-berkas yang hilang</h2>
 <p>Satu atau lebih berkas penting hilang dari Textpattern. Pastikan semua berkas yang terdaftar ada di server dan berada di lokasi yang benar.</p>
         ]]></item>
-        <item id="mod_rewrite_missing" title="Apache mod_rewrite tidak ditemukan"><![CDATA[]]></item>
-        <item id="modified_files" title="Berkas yang diubah"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Direktori &quot;sementara&quot; tidak ditentukan"><![CDATA[]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite tidak ditemukan"><![CDATA[
+<h2>Apache mod_rewrite hilang</h2>
+<p>Modul Apache <code>mod_rewrite</code> tidak diinstal atau dinonaktifkan. Ini disarankan agar Textpattern berfungsi dengan benar. Pastikan keberadaan dan status aktifnya, atau hubungi Admin situs untuk mendapatkan bantuan.</p>
+        ]]></item>
+        <item id="modified_files" title="Berkas yang diubah"><![CDATA[
+<h2>Perubahan berkas</h2>
+<p>Berkas ditetapkan menjadi termodifikasi jika masing-masing checksum berbeda dari daftar checksum yang dikenal yang tersedia di Textpattern. Jika ada berkas dalam instalasi Textpattern yang berbeda dari yang diharapkan, berkas tersebut akan disorot di sini.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[
+<h2>Kesalahan tabel MySQL</h2>
+<p>Mungkin terdapat beberapa korup atau kerusakan pada database MySQL Textpattern. Coba perbaiki tabel yang terpengaruh dengan alat akses MySQL, seperti <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> atau <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Direktori sementara tidak ditentukan"><![CDATA[
+<h2>Direktori sementara tidak ditentukan</h2>
+<p>Meskipun Textpattern akan berjalan tanpa direktori sementara, beberapa fungsionalitas mungkin tidak berfungsi seperti yang diharapkan jika preferensi ini tidak disetel. Silakan kunjungi Preferensi Admin dan siapkan 'Jalur direktori sementara'.</p>
+        ]]></item>
         <item id="old_placeholder_exists" title="Bagian dinamai sama seperti direktori"><![CDATA[<h2>Bagian dinamai sama seperti direktori</h2>
 <p>Nama direktori yang telah ada mungkin akan bermasalah dengan nama bagian yang digunakan dalam skema permlink di artikel. Untuk menghindari masalah, periksa dan hapus nama direktori yang bersangkutan jika langkah ini aman untuk dilakukan, atau ubah nama bagian agar tidak bermasalah. </p>        ]]></item>
-        <item id="path_to_site_inaccessible" title="Direktori situs tidak terbaca"><![CDATA[]]></item>
-        <item id="php_version_required" title="Keperluan versi minimum"><![CDATA[]]></item>
+        <item id="path_to_site_inaccessible" title="Direktori situs tidak terbaca"><![CDATA[
+<h2>Direktori situs tidak terbaca</h2>
+<p>Direktori yang berisi file root <code>index.php</code> yang ditentukan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa izin akses.</p>
+        ]]></item>
+        <item id="php_version_required" title="Keperluan versi minimum"><![CDATA[
+<h2>Keperluan versi minimum</h2>
+<p>Textpattern membutuhkan fungsionalitas tertentu yang ada dalam bahasa pemrograman PHP dan server database MySQL. Silakan lihat tabel berikut untuk menentukan persyaratan sistem minimum:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Versi Textpattern</th>
+                <th scope="col">Versi minimum PHP</th>
+                <th scope="col">Versi minimum MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Selain persyaratan sistem di atas, diperlukan ekstensi PHP berikut:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
+</ul>
+<p>Berkas <code>php.ini</code>, baik global maupun lokal, harus berisi pengaturan <code>date.timezone</code>.</p>
+        ]]></item>
         <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
         <item id="site_url_mismatch" title="Ketidakcocokan URL situs"><![CDATA[]]></item>
         <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP […] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
@@ -289,6 +347,7 @@
         <item id="tmp_plugin_paths_match" title="Jalur direktori &quot;Sementara&quot; dan Kes Plugin tidak boleh sama"><![CDATA[]]></item>
         <item id="update_server_inaccessible" title="Pembaruan peladen tidak dapat diakses"><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title="Fungsi mail() pada instalasi PHP tidak ditemukan"><![CDATA[]]></item>
+        <item id="php_scripting_enabled" title="Skrip PHP dihidupkan"><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Panel berkas">
@@ -362,7 +421,10 @@
         <item id="comments_use_fat_textile" title="Ijinkan markup Textile lebih banyak di komentar?"><![CDATA[]]></item>
         <item id="custom_form_types" title="Formulir ubahsuai jenis acuan"><![CDATA[]]></item>
         <item id="custom_overview" title="Kolom ubahsuai"><![CDATA[]]></item>
-        <item id="dateformat" title="Format tanggal"><![CDATA[]]></item>
+        <item id="dateformat" title="Format tanggal"><![CDATA[
+<h2>Format tanggal</h2>
+<p>Opsi ini akan memengaruhi bagaimana tanggal artikel tampil di halaman depan dari situs Anda saja.</p>
+        ]]></item>
         <item id="default_event" title="Panel bawaan"><![CDATA[]]></item>
         <item id="default_publish_status" title="Status bawaan publikasi"><![CDATA[]]></item>
         <item id="doctype" title="Doctype"><![CDATA[]]></item>
@@ -370,10 +432,7 @@
         <item id="enable_short_tags" title="Aktifkan dukungan tag singkat?"><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title="Aktifkan peladen XML-RPC?"><![CDATA[]]></item>
         <item id="expire_logs_after" title="Catatan kadaluwarsa setelah berapa hari?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Jalur unggah berkas"><![CDATA[
-<h2>Jalur/alamat (path) unggah berkas</h2>
-<p>Ini menyetel <strong>jalur absolut</strong> ke direktori tempat unggahan berkas akan disimpan secara permanen. PHP harus memiliki akses tulis ke direktori ini.</p>
-        ]]></item>
+        <item id="file_base_path" title="Jalur unggah berkas"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Ukuran maksimal unggah berkas (dalam bita/byte)"><![CDATA[]]></item>
         <item id="gmtoffset" title="Zona waktu"><![CDATA[
 <h2>Zona waktu</h2>
@@ -460,7 +519,11 @@
 <h2>Hapus acuan tema dari diska juga</h2>
 <p>Jika dicentang, semua berkas acuan dalam tema yang dipilih akan dihapus secara permanen dari diska. Namun, direktori terkait tema dan sub-direktorinya tidak akan dihapus jika ada file lain (seperti JavaScript, gambar, ...) di dalamnya.</p>
         ]]></item>
-        <item id="skin_delete_from_database" title="Hapus acuan tidak terpakai dari pangkalan-data hasil impor-an"><![CDATA[]]></item>
+        <item id="skin_delete_from_database" title="Hapus acuan tidak terpakai dari pangkalan-data hasil impor-an"><![CDATA[
+<h2>Hapus acuan tidak terpakai dari pangkalan-data hasil impor-an</h2>
+<p>Jika dicentang, setiap template dalam tema yang dipilih yang tidak memiliki berkas terkait di penyimpanan akan dihapus secara permanen dari database. Hasil setelah tindakan selesai adalah bahwa acuan basis data Anda akan mencerminkan apa yang ada di penyimpanan sejauh mungkin.</p>
+<p>Perhatikan bahwa jika Anda telah menghapus berkas acuan yang dibutuhkan Textpattern, versi kosong akan dibuat untuk Anda di basis data.</p>
+        ]]></item>
         <item id="skin_delete_from_disk" title="Hapus acuan tidak terpakai dari diska hasil ekspor-an"><![CDATA[
 <h2>Hapus acuan tidak terpakai dari diska hasil ekspor-an</h2>
 <p>Jika dicentang, setiap berkas acuan dalam tema yang dipilih yang tidak memiliki item terkait di pangkalan-data akan dihapus secara permanen dari tema di diska. Hasil setelah tindakan selesai adalah acuan di berkas sistem Anda akan mencerminkan dengan tepat apa yang ada di pangkalan-data.</p>

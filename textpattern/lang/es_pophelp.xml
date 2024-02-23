@@ -362,6 +362,7 @@
         <item id="warn_mail_unavailable" title="Su instalación de PHP no tiene la función mail()"><![CDATA[
 <h2> Su instalación de PHP no tiene la función mail()</h2>
 <p>La función PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> está desactivada. Por lo tanto, Textpattern no puede enviar correos electrónicos y algunas funciones no estarán disponibles. Por ejemplo, no se enviarán notificaciones por correo electrónico para nuevos comentarios, y los nuevos usuarios no recibirán un correo electrónico de bienvenida. Sin embargo, se pueden agregar usuarios.</p>        ]]></item>
+        <item id="php_scripting_enabled" title="Código PHP habilitado"><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Panel de archivos">
@@ -492,11 +493,7 @@
     <li>Tipos de plantilla de formulario personalizadas.</li>
 </ul>
         ]]></item>
-        <item id="allow_article_php_scripting" title="¿Permitir PHP en los artículos?"><![CDATA[
-<h2>¿Permitir PHP en artículos?</h2>
-<p>Cuando está activada, esta opción permitirá el uso de PHP dentro de los artículos. El autor debe tener suficientes privilegios para hacerlo (por defecto, sólo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">'Editores' <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> y <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Editores Administrativos' <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> puede).</p>
-<p>El código PHP debe tener omitidas las etiquetas PHP de apertura y cierre, y también encerrarse dentro de <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"> etiquetas <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a>.</p>
-        ]]></item>
+        <item id="allow_article_php_scripting" title="¿Permitir PHP en los artículos?"><![CDATA[]]></item>
         <item id="allow_form_override" title="¿Permitir sobrescritura de bloques?"><![CDATA[
 <h2>¿Permitir sobrescritura de bloques?</h2>
 <p>Esta opción permite a los autores de artículos sobrescribir el bloque para ser usado cuando su artículo es desplegado. Si está activado, un menú desplegable 'Sobrescribir bloque' estará disponible en 'Opciones avanzadas', al editar un artículo.</p>
@@ -665,10 +662,7 @@
 <p>Cuando el registro de Textpattern está activado, puedes especificar cuánto tiempo (en días) deben ser guardados los registros. “7” mantendrá los registros disponibles durante siete días. </p>
 <p><strong>Nota:</strong> Los registros solo se recortan cuando ves el panel de 'Registros de visitantes', y de lo contrario seguirán creciendo en tamaño. </p>
         ]]></item>
-        <item id="file_base_path" title="Ruta para subir archivos"><![CDATA[
-<h2>Ruta del directorio de archivos</h2>
-<p>Esto establece la <strong>ruta absoluta</strong> al directorio donde se guardarán permanentemente las subidas de archivos. PHP necesita tener acceso de escritura a este directorio.</p>
-        ]]></item>
+        <item id="file_base_path" title="Ruta para subir archivos"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Tamaño máximo de archivos para subir (en bytes)"><![CDATA[
 <h2>Tamaño máximo de archivos para subir (en bytes)</h2>
 <p>Puedes restringir el tamaño máximo (en bytes) para subir archivos. Ten en cuenta que este valor también está limitado por la configuración de PHP. Si Textpattern detecta que tu configuración PHP limita el tamaño de subida a un valor más pequeño, se corregirá automáticamente hacia abajo. Si quieres permitir la subida de archivos más grandes a través del navegador, ponte en contacto con tu host (los valores relevantes en <code>php. ni</code> son <code>post_max_size</code>, <code>upload_max_filesize</code> y <code>memory_limit</code>).</p>

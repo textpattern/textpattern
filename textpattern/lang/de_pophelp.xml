@@ -272,11 +272,6 @@
 <p>Vorhandene Verzeichnisnamen können mit den Sektionsnamen in Konflikt stehen, die im Permlink-Schema des Artikels verwendet werden. Um Probleme zu vermeiden, überprüfen Sie die betroffenen Verzeichnisnamen und löschen Sie sie, wenn dies gefahrlos möglich ist, oder ändern Sie die Sektionsnamen, damit sie nicht kollidieren.</p>]]></item>
         <item id="path_to_site_inaccessible" title="Webseitenverzeichnis nicht lesbar"><![CDATA[<h2>Site-Verzeichnis unlesbar</h2>
 <p>Das Verzeichnis, das die Root-Datei <code>index.php</code> enthält, die als Index für die Site angegeben wurde, ist für den Server nicht lesbar. Bitte überprüfen Sie die Berechtigungen.</p>]]></item>
-        <item id="php_scripting_enabled" title="PHP-Scripting aktiviert"><![CDATA[
-<h2>PHP-Scripting aktiviert</h2>
-<p>Textpattern erlaubt Autoren und Administratoren, PHP-Code in Artikel und Seiten/Formulare einzubetten, wenn diese Funktionen aktiviert sind. Da dies ein Sicherheitsrisiko darstellt - jede Art von PHP könnte ausgeführt werden, einschließlich potenziell schädlichen/gefährlichen Codes, der zur Zerstörung Ihrer Installation oder zur Weitergabe von Informationen an Dritte führen könnte - wird dringend empfohlen, diese Optionen in den <a href="?event=prefs#prefs_group_publish">Einstellungen</a> zu deaktivieren, sofern Sie die Funktion nicht unbedingt benötigen.</p>
-<p>Viele Verbesserungen an Textpattern-Websites, für die zuvor PHP-Schnipsel erforderlich waren, können nun in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">Core-Tags</a> durchgeführt werden.</p>
-        ]]></item>
         <item id="php_version_required" title="Minimale Versionsvoraussetzungen"><![CDATA[<h2>Minimale Versionsvoraussetzungen</h2>
 <p>Textpattern benötigt bestimmte PHP-Funktionen und einen MySQL Datenbank Server. In der folgenden Tabelle sind die Mindestanforderungen dafür aufgeführt.</p>
 <div class="txp-listtables">
@@ -363,6 +358,11 @@
         <item id="warn_mail_unavailable" title="Ihrer PHP-Installation fehlt die mail()-Funktion"><![CDATA[
 <h2>Ihrer PHP-Installation fehlt die mail() Funktion</h2>
 <p> <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">Mail <span class="ui-icon ui-icon-extlink">von PHP (öffnet eine externe Verbindung in einem neuen Fenster)</span></a> Funktion ist deaktiviert. Deshalb kann Textpattern keine E-Mails senden und einige Funktionen werden nicht verfügbar sein. Zum Beispiel werden E-Mail-Benachrichtigungen für neue Kommentare nicht versendet und neue Benutzer werden keine willkommene E-Mail erhalten. Benutzer können jedoch trotzdem hinzugefügt werden.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP-Scripting aktiviert"><![CDATA[
+<h2>PHP-Scripting aktiviert</h2>
+<p>Textpattern erlaubt Autoren und Administratoren, PHP-Code in Artikel und Seiten/Formulare einzubetten, wenn diese Funktionen aktiviert sind. Da dies ein Sicherheitsrisiko darstellt - jede Art von PHP könnte ausgeführt werden, einschließlich potenziell schädlichen/gefährlichen Codes, der zur Zerstörung Ihrer Installation oder zur Weitergabe von Informationen an Dritte führen könnte - wird dringend empfohlen, diese Optionen in den <a href="?event=prefs#prefs_group_publish">Einstellungen</a> zu deaktivieren, sofern Sie die Funktion nicht unbedingt benötigen.</p>
+<p>Viele Verbesserungen an Textpattern-Websites, für die zuvor PHP-Schnipsel erforderlich waren, können nun in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">Core-Tags</a> durchgeführt werden.</p>
         ]]></item>
     </group>
 
@@ -620,8 +620,9 @@ Wenn eine Bausteinvorlage verarbeitet werden muss (wenn sie Textpattern-Tags ent
         <item id="expire_logs_after" title="Protokolle nach wievielen Tagen löschen?"><![CDATA[<h2>Protokolle laufen nach wie vielen Tagen ab?</h2>
 <p>Wenn die Textpattern-Protokollierung aktiviert ist, können Sie angeben, wie lange (in Tagen) die Protokolle aufbewahrt werden sollen. Mit der Angabe „7“ bleiben die Protokolle sieben Tage lang verfügbar.</p>
 <p><strong>Hinweis:</strong>Die Protokolle werden nur gekürzt, wenn Sie das Fenster „Protokolle“ öffnen, ansonsten wachsen sie weiter an.</p>]]></item>
-        <item id="file_base_path" title="Upload-Verzeichnis"><![CDATA[<h2>Datei-Upload-Pfad</h2>
-<p>Hier wird der <strong>absolute Pfad</strong> zu dem Verzeichnis angegeben, in dem die hochgeladenen Dateien gespeichert werden sollen. PHP muss Schreibzugriff auf dieses Verzeichnis haben.</p>]]></item>
+        <item id="file_base_path" title="Upload-Verzeichnis"><![CDATA[<h2>Verzeichnis für Dateien</h2>
+<p>Dies setzt den <strong>absoluten Pfad</strong> zu dem Verzeichnis, in dem Datei-Uploads dauerhaft gespeichert werden. PHP muss Schreibzugriff auf dieses Verzeichnis haben.</p>
+<p><strong>Hinweis:</strong> Ziehen Sie in Erwägung, dieses Verzeichnis aus dem öffentlich zugänglichen docroot Ihrer Website zu verschieben, um die Sicherheit zu erhöhen.</p>]]></item>
         <item id="file_max_upload_size" title="Maximale Upload-Dateigröße (in Bytes)"><![CDATA[<h2>Maximale Dateigröße für Uploads (in Bytes)</h2>
 <p>Sie können die maximale Größe (in Bytes) für Datei-Uploads begrenzen. Beachten Sie, dass dieser Wert auch durch die Konfiguration von PHP begrenzt wird. Wenn Textpattern feststellt, dass Ihre PHP-Konfiguration die Upload-Größe auf einen kleineren Wert begrenzt, korrigiert es automatisch nach unten. Wenn Sie größere Datei-Uploads über den Browser erlauben wollen, wenden Sie sich an Ihren Hoster. (Die relevanten Werte in der <code>php.ini</code> sind <code>post_max_size</code>, <code>upload_max_filesize</code> und <code>memory_limit</code>).</p>]]></item>
         <item id="gmtoffset" title="Zeitzone"><![CDATA[
@@ -753,9 +754,7 @@ Der Modus <p>„?=unordentlich“ ist am kompatibelsten - er funktioniert mit we
         <item id="syndicate_body_or_excerpt" title="Nur Exzerpte syndizieren?"><![CDATA[<h2><strong>Nur</strong> Exzerpte syndizieren</h2>
 <p>Wenn dies auf „Nein“ gesetzt wird, enthalten die Feeds den kompletten Haupttext des Artikels.</p>
 <p>Wenn dies auf „Ja“ gesetzt wird, enthalten die Feeds das Exzerpt des Artikels anstelle des Haupttextes, sofern dieses verfügbar ist.</p>]]></item>
-        <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[<h2>Temporäres Verzeichnis</h2>
-<p>Setzt einen <strong>absoluten Pfad</strong> zu einem temporären Verzeichnis (manchmal auch als „tmp“ oder „temp“ bekannt). PHP muss Schreibzugriff auf dieses Verzeichnis haben. Dieses Verzeichnis wird für temporäre Dateien verwendet, zum Beispiel für Uploads jeglicher Art (Plugins, Dateien oder Bilder).</p>
-<p><strong>Anmerkung:</strong> Geben Sie nicht dasselbe Verzeichnis für „Temporäres Verzeichnis“ und „Plugin-Cache Verzeichnispfad“ an, da dies zu Problemen führen würde (Textpattern würde versuchen, den Inhalt der temporären Protokolldateien als Plugins auszuführen).</p>]]></item>
+        <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[]]></item>
         <item id="theme_name" title="Design der Admin-Oberfläche"><![CDATA[<h2>Admin-Design</h2>
 <p>Das Standard-Admin-Design, das verwendet wird, wenn man sich in Textpattern anmeldet. Einige vorinstallierte Admin-Designs sind bereits in Textpattern enthalten. Sie können auch eigene Design-Pakete im Verzeichnis <code>textpattern/admin-themes</code> ablegen, um sie für die Verwendung bereitzustellen.</p>]]></item>
         <item id="txp_evaluate_functions" title="In txp:evaluate aktivierte PHP-Funktionen"><![CDATA[<h2>PHP-Funktionen, die in txp:evaluate aktiviert sind</h2>
