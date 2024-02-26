@@ -1711,7 +1711,7 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+    return n.tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
         'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
@@ -1742,7 +1742,7 @@ function article_partial_article_view($rs)
         $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     }
 
-    return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
+    return n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'target' => '_blank',

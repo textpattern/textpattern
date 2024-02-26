@@ -332,8 +332,8 @@ function form_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_form').'"></span> <span class="screen-large">'.gTxt('create_form').'</span>', 'txp-new')
-        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_form').'"></span>'.sp.gTxt('create_form'), 'txp-new')
+        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
             'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'form_form',
         ));
