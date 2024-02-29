@@ -133,13 +133,14 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             $this->mailer->CharSet = 'UTF-8';
         }
 
-        $smtp_from = get_pref('smtp_from');
+        $encoder = new Encode();
+        $smtp_from = $encoder->fromRfcEmail(get_pref('smtp_from'));
 
-        if (filter_var($smtp_from, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($smtp_from['email'], FILTER_VALIDATE_EMAIL)) {
             if (IS_WIN) {
-                ini_set('sendmail_from', $smtp_from);
+                ini_set('sendmail_from', $smtp_from['email']);
             } else {
-                $this->mail->from = (array)$smtp_from;
+                $this->mail->from = (array)$smtp_from['email'];
             }
         }
     }

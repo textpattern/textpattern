@@ -116,13 +116,13 @@ class Mail implements \Textpattern\Mail\AdapterInterface
             $this->encoded->headers['Content-Type'] = 'text/plain; charset="ISO-8859-1"';
         }
 
-        $smtp_from = get_pref('smtp_from');
+        $smtp_from = $this->encoder->fromRfcEmail(get_pref('smtp_from'));
 
-        if (filter_var($smtp_from, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($smtp_from['email'], FILTER_VALIDATE_EMAIL)) {
             if (IS_WIN) {
-                ini_set('sendmail_from', $smtp_from);
+                ini_set('sendmail_from', $smtp_from['email']);
             } else {
-                $this->smtpFrom = $smtp_from;
+                $this->smtpFrom = $smtp_from['email'];
             }
         }
     }
