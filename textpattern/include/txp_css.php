@@ -194,8 +194,8 @@ function css_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_css').'"></span> <span class="screen-large">'.gTxt('create_css').'</span>', 'txp-new')
-        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_css').'"></span>'.sp.gTxt('create_css'), 'txp-new')
+        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
             'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'style_form',
         ));

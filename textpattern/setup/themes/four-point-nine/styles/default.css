@@ -318,6 +318,9 @@ nav ol::after,
     display: flex;
     justify-content: space-between;
   }
+  .paginator [rel=next] {
+    margin-inline-start: auto;
+  }
   /**
    * Visually hide unfocussed/inactive ‘skip links’.
    *
@@ -487,8 +490,7 @@ nav ol::after,
     /* 2 */
     word-wrap: normal;
     /* 3 */
-    -o-tab-size: 4;
-       tab-size: 4;
+    tab-size: 4;
   }
   pre code {
     padding: 0;
@@ -934,7 +936,8 @@ nav ol::after,
     border-radius: 0;
     background: #ffffff;
     /* 1 */
-    appearance: none;
+    -webkit-appearance: none;
+            appearance: none;
   }
   [type=color]:focus,
   [type=date]:focus,
@@ -1177,7 +1180,8 @@ nav ol::after,
     font-weight: normal;
     text-align: center;
     /* 1 */
-    appearance: none;
+    -webkit-appearance: none;
+            appearance: none;
     /* 2 */
     cursor: pointer;
   }

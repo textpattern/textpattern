@@ -158,8 +158,8 @@ function page_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-icon-medium ui-extra-icon-new-document screen-small" title="'.gTxt('create_page').'"></span> <span class="screen-large">'.gTxt('create_page').'</span>', 'txp-new')
-        .tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button',
+        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_page').'"></span>'.sp.gTxt('create_page'), 'txp-new')
+        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button',
             array(
                 'class'     => 'txp-clone txp-reduced-ui-button',
                 'data-form' => 'page_form',

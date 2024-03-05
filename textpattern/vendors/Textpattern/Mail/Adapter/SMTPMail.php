@@ -133,13 +133,14 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             $this->mailer->CharSet = 'UTF-8';
         }
 
-        $smtp_from = get_pref('smtp_from');
+        $encoder = new Encode();
+        $smtp_from = $encoder->fromRfcEmail(get_pref('smtp_from'));
 
-        if (filter_var($smtp_from, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($smtp_from['email'], FILTER_VALIDATE_EMAIL)) {
             if (IS_WIN) {
-                ini_set('sendmail_from', $smtp_from);
+                ini_set('sendmail_from', $smtp_from['email']);
             } else {
-                $this->mail->from = (array)$smtp_from;
+                $this->mail->from = (array)$smtp_from['email'];
             }
         }
     }
@@ -253,6 +254,14 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
     {
         if (!$this->mail->from || !$this->mail->to) {
             throw new Exception(gTxt('from_or_to_address_missing'));
+        }
+
+        // Custom headers come first so important ones (like From) get overwritten by sane values.
+        foreach ($this->mail->headers as $hkey => $hval) {
+            // Skip a few that PHPMailer handles automatically.
+            if (!in_array($hkey, array('Content-Transfer-Encoding', 'Content-Type'))) {
+                $this->mailer->addCustomHeader($hkey, $hval);
+            }
         }
 
         // If there's a body set, assume HTML content...

@@ -198,7 +198,7 @@ if ($use_plugins) {
 
 // Request URI rewrite, anyone?
 callback_event('pretext', '', 1);
-$pretext = preText($pretext, null) + array('secondpass' => 0, '_txp_atts' => false);
+$pretext = preText($pretext, null) + array('secondpass' => 0, '@txp_atts' => false);
 
 // Send 304 Not Modified if appropriate.
 
@@ -515,7 +515,7 @@ function preText($store, $prefs = null)
                         }
 
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch ($permlink_guess) {
+                        switch ($permlink_guess ? $permlink_guess : $permlink_mode) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -651,10 +651,15 @@ function preText($store, $prefs = null)
                     lookupByTitleSection($title, $out['s']);
             }
 
-            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = $is_404 || empty($out['id']) || $out['s'] == '';
-            $is_404 or populateArticleData($rs);
+            $is_404 = $is_404 || empty($rs['ID']) || $status && !in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
+
+            if ($is_404) {
+                $out['id'] = $out['s'] = '';
+            } else {
+                $out['id'] = $rs['ID'];
+                $out['s'] = $rs['Section'];
+                populateArticleData($rs);
+            }
         }
 
         if (!empty($thisarticle)) {

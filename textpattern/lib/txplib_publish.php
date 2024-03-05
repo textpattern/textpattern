@@ -549,7 +549,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         unset($txp_atts['not'], $txp_atts['evaluate'], $txp_atts['$query']);
 
         if ($txp_atts && $txp_tag !== false) {
-            $pretext['_txp_atts'] = true;
+            $pretext['@txp_atts'] = true;
 
             foreach ($txp_atts as $attr => &$val) {
                 if (isset($val) && isset($globatts[$attr])) {
@@ -557,7 +557,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
                 }
             }
 
-            $pretext['_txp_atts'] = false;
+            $pretext['@txp_atts'] = false;
         }
     }
 

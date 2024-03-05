@@ -386,6 +386,8 @@
 <p>La vérification de mises à jour a échoué, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résout souvent d’elle-même au bout d’une heure ou deux ; aussi, veuillez retourner sur cette page ultérieurement.</p>]]></item>
         <item id="warn_mail_unavailable" title="Votre installation de PHP ne dispose pas de la fonction mail()"><![CDATA[<h2>Votre installation de PHP ne dispose pas de la fonction mail()</h2>
 <p>La fonction <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> de PHP est désactivée. Par conséquent, Textpattern ne peut envoyer de e-mails et certaines de ses fonctionnalités seront inopérantes. Par exemple, les notifications par e-mail des nouveaux commentaires ne seront pas adressées et les nouveaux utilisateurs de sites ne recevront pas de message de bienvenue. Cependant, les utilisateurs pourront être ajoutés, néanmoins.</p>]]></item>
+        <item id="php_scripting_enabled" title="Scripts PHP activés"><![CDATA[<h2>Scripts PHP activés<p></h2>
+<p>Textpattern permet aux auteurs et aux administrateurs d’intégrer du code PHP dans les articles et les pages/modules si cette fonctionnalité est activée. Puisqu’il s'agit d'un problème potentiel de sécurité (tout type de PHP peut être exécuté, y compris du code potentiellement dommageable/dangereux pouvant entraîner la destruction de votre installation ou la fuite d'informations à des tiers), il est fortement recommandé de désactiver ces options depuis la page du <a href="?event=prefs#prefs_group_publish">Panneau Préférences</a> sauf si vous avez absolument besoin de cette fonctionnalité.</p>]]></item>
     </group>
 
     <group id="file" title="Fichiers">
@@ -520,11 +522,9 @@
 <li>Modèles types de modules personnalisés</li>
 </ul>
         ]]></item>
-        <item id="allow_article_php_scripting" title="Autoriser l’usage de PHP dans les articles ?"><![CDATA[
-<h2>Autoriser l’usage de PHP dans les articles ?</h2>
-<p>Lorsque activé, ce paramètre permettra l’utilisation du code PHP dans les articles. L’auteur•e doit néanmoins disposer de privilèges suffisants (par défaut, seul•le•s les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédact•eur•rice•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> et les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédact•eur•rice•s en chef•fe•s<span class="ui-icon ui-icon-extlink">(ouvrir le lien dans une fenêtre externe)</span></a> y sont autorisé•e•s).</p>
-<p>Le code PHP ne doit pas comporter de balises d’ouverture et de fermeture propres à PHP, mais doit être encapsulé entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a>.</p>
-        ]]></item>
+        <item id="allow_article_php_scripting" title="Autoriser l’usage de PHP dans les articles ?"><![CDATA[<h2>Autoriser PHP dans les articles ?</h2>
+<p>Si activé, ce paramètre autorisera l’usage de PHP dans les articles. Les auteurs néanmoins doivent disposer de droits suffisants pour cela (par défaut, seuls les <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédacteurs<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Rédacteurs en chef<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> et <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges"><span class="ui-icon ui-icon-extlink">Assistants (ouvre le lien externe dans une nouvelle fenêtre)</span></a> y sont autorisés. </p>
+<p>Le code PHP doit être dépourvu des balises d'ouverture et de fermeture PHP, mais doit être inclus entre des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code><6<</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a></p>]]></item>
         <item id="allow_form_override" title="Autoriser l’usage du module de remplacement par article ?"><![CDATA[<h2>Autoriser l’usage du module de remplacement par article ?</h2>
 <p>Ce paramètre permet aux auteur•e•s de remplacer le module utilisé pour présenter leurs articles. Si activé, une liste déroulante «Module de remplacement» sera disponible sous les options avancées «Affectation et affichage de l’article», lors de l’édition d’un article.</p>]]></item>
         <item id="allow_page_php_scripting" title="Autoriser l’usage de PHP dans les gabarits ?"><![CDATA[
@@ -739,10 +739,9 @@ title="HTML"
 <p>Lorsque la journalisation des visites de Textpattern est activée, vous pouvez choisir le délai (en jours) de conservation des traces des accès. Le chiffre «7» signifie que les logs seront disponibles pendant une semaine.</p>
 <p><strong>Remarque :</strong> les logs sont réduits lorsque vous consultez la page «Activité». Sinon, leur taille continuera de croître.</p>
         ]]></item>
-        <item id="file_base_path" title="Chemin du répertoire des fichiers téléversés"><![CDATA[
-<h2>Chemin du répertoire des fichiers téléversés</h2>
-<p>Renseigne le <strong>chemin absolu</strong> au répertoire de conservation des fichiers téléversés. PHP réclame un accès en écriture à ce dossier.</p>
-        ]]></item>
+        <item id="file_base_path" title="Chemin du répertoire des fichiers téléversés"><![CDATA[<h2>Chemin du répertoire des fichiers</h2>
+<p>Ceci définit le <strong>chemin absolu</strong> du répertoire où sont téléversés les fichiers afin d’être disponibles en permanence. PHP réclame des droits d’accès en écriture dans ce dossier.</p>
+<p><strong>Note :</strong> Envisagez de déplacer ce dossier en dehors de votre racine publique dans le but d'accroître la sécurité.</p>]]></item>
         <item id="file_max_upload_size" title="Taille maximale d’un fichier envoyé sur le serveur (octets)"><![CDATA[
 <h2>Taille maximale d’un fichier téléversé (en octets)</h2>
 <p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s’y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>  ]]></item>
@@ -922,11 +921,14 @@ title="HTML"
 <p>Si renseigné sur «Non», les flux contiendront les corps des articles complets.</p>
 <p>Si renseigné sur «Oui», les flux contiendront les résumés à la place des corps d’articles chaque fois que possible.</p>
         ]]></item>
-        <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[
-<h2>Chemin du répertoire temporaire</h2>
-<p>Renseignez un <strong>chemin absolu</strong> pour le répertoire temporaire (parfois dénommé tmp ou temp). PHP réclame de disposer de droits d’écriture sur ce dossier. Il sera utilisé pour les fichiers temporaires, par exemple les téléversements de toutes sortes (plugins, fichiers ou images).</p>
-<p><strong>Remarque :</strong> ne renseignez pas le même répertoire que celui du «cache des plugins» au risque de causer des problèmes de dysfonctionnement (Textpattern chercherait à exécuter les fichiers d’activités comme des plugins).</p>
-        ]]></item>
+        <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[<h2>Chemin du répertoire temporaire</h2>
+<p>Renseignez un <strong>chemin absolu</strong> vers le répertoire temporaire (parfois désigné "tmp" ou "temp"). PHP nécessite des droits d’accès en écriture sur ce dossier. Ce répertoire est utilisé pour stocker temporairement des fichiers de toute nature (par ex. des plugins, des fichiers, des images)</p>
+<p><strong>Note :</strong>
+<ul>
+<li>Ne renseignez pas le même dossier pour celui temporaire et celui du cache des plugins. Cela occasionnerait des problèmes de fonctionnement (Textpattern essaierait d’exécuter le contenu des fichiers journaux temporaires en tant que plugins). </li>
+<li>Envisagez de déplacer ce dossier hors de votre répertoire racine public de votre site afin d’accroître la sécurité.</li>
+</ul>
+</p>]]></item>
         <item id="theme_name" title="Thème de l’administration"><![CDATA[
 <h2>Thème de l’administration</h2>
 <p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>

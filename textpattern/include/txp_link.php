@@ -474,7 +474,7 @@ function link_edit($message = '')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
             graf(
-                tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button',
+                tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button',
                     array(
                         'class'     => 'txp-clone txp-reduced-ui-button',
                         'data-form' => 'link_details',

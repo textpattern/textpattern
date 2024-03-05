@@ -1834,7 +1834,7 @@ function lAtts($pairs, $atts, $warn = true)
         $atts['offset'] = $pageby ? (intval(gps($atts['offset'], 1)) - 1)*$pageby : intval(gps($atts['offset'], 0));
     }
 
-    if (empty($pretext['_txp_atts'])) {
+    if (empty($pretext['@txp_atts'])) {
         foreach ($atts as $name => $value) {
             if (array_key_exists($name, $pairs)) {
                 if ($pairs[$name] !== null) {
@@ -4959,7 +4959,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 
 function pagelinkurl($parts, $inherit = array(), $url_mode = null)
 {
-    global $permlink_mode, $prefs, $txp_context, $txp_sections;
+    global $prefs, $txp_context, $txp_sections;
 
     // Link to an article.
     if (!empty($parts['id'])) {
@@ -4989,7 +4989,7 @@ function pagelinkurl($parts, $inherit = array(), $url_mode = null)
     }
 
     if (empty($url_mode)) {
-        $url_mode = $permlink_mode;
+        $url_mode = $prefs['permlink_mode'];
     }
 
     // 'article' context is implicit, no need to add it to the page URL.

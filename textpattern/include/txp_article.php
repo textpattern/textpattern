@@ -387,7 +387,7 @@ function article_preview($field = false)
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
-                } else {
+                } elseif (strpos($chunk, '<txp:else ') !== 0) {
                     $tags++;
                     $level += (int)($chunk[strlen($chunk)-2] !== '/');
                 }
@@ -981,16 +981,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                         $sort_sql = "ID";
                         break;
                     case 'author':
-                        $sort_sql = "user.RealName, ID DESC";
+                        $sort_sql = "user.RealName, ID";
                         break;
                     case 'comments':
-                        $sort_sql = "total_comments, ID DESC";
+                        $sort_sql = "total_comments, ID";
                         break;
                     case 'lastmod':
-                        $sort_sql = "LastMod, ID DESC";
+                        $sort_sql = "LastMod, ID";
                         break;
                     default:
-                        $sort_sql = ucfirst($sort).", ID DESC";
+                        $sort_sql = ucfirst($sort).", ID";
                         break;
                 }
             
@@ -1695,7 +1695,7 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.tag('<span class="ui-icon ui-icon-medium ui-icon-copy screen-small" title="'.gTxt('duplicate').'"></span> <span class="screen-large">'.gTxt('duplicate').'</span>', 'button', array(
+    return n.tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
         'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
@@ -1726,7 +1726,7 @@ function article_partial_article_view($rs)
         $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     }
 
-    return n.href('<span class="ui-icon ui-icon-medium ui-icon-notice screen-small" title="'.gTxt('view').'"></span> <span class="screen-large">'.gTxt('view').'</span>', $url, array(
+    return n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
         'class'  => 'txp-article-view',
         'id'     => 'article_partial_article_view',
         'target' => '_blank',

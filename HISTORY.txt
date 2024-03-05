@@ -29,6 +29,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Added: Compatible plugin upgrades directly from the Plugins panel.
+* Added: Create and install new plugins directly from the Plugins panel.
 * Added: Plugin multi-edit option: revert to last installed code content.
 * Added: All plugin metadata exposed in the Plugin Edit panel.
 * Added: Plugin (zip-only) export feature.
@@ -45,6 +46,8 @@ Changes in 4.9.0 (upcoming)
 * Added: 'lang' attribute to <txp:page_url />.
 * Added: <txp:if_items_count /> tag.
 * Added: Reload language packs from disk.
+* Added: Shift+Space shortcut for 'Tab' indent in textareas.
+* Added: Input length tooltip when appropriate.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
@@ -58,6 +61,7 @@ Changes in 4.9.0 (upcoming)
   indexes.
 * Changed: Category & section description field sizes increased to 1023.
 * Changed: <txp:header /> tag requires 'form' privilege.
+* Changed: Section-aware default search.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class

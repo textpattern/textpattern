@@ -116,11 +116,13 @@ class Mail implements \Textpattern\Mail\AdapterInterface
             $this->encoded->headers['Content-Type'] = 'text/plain; charset="ISO-8859-1"';
         }
 
-        if (filter_var(get_pref('smtp_from'), FILTER_VALIDATE_EMAIL)) {
+        $smtp_from = $this->encoder->fromRfcEmail(get_pref('smtp_from'));
+
+        if (filter_var($smtp_from['email'], FILTER_VALIDATE_EMAIL)) {
             if (IS_WIN) {
-                ini_set('sendmail_from', get_pref('smtp_from'));
+                ini_set('sendmail_from', $smtp_from['email']);
             } else {
-                $this->smtpFrom = get_pref('smtp_from');
+                $this->smtpFrom = $smtp_from['email'];
             }
         }
     }
@@ -296,6 +298,8 @@ EOMIME;
             $headers['Reply-to'] = $this->encoded->replyTo;
         }
 
+        // Concatenation preserves existing array entries so primary headers aren't
+        // overwritten by custom ones.
         $headers += $this->encoded->headers;
 
         foreach ($headers as $name => &$value) {
