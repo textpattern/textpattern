@@ -1262,7 +1262,7 @@ function filterCustomFields($valid = true)
     static $reserved = null;
 
     isset($reserved) or $reserved = array_keys(array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
-        return preg_match('/^[\w\-]+$/', $key);
+        return preg_match('/^[\w\-]+$/u', $key);
     }, ARRAY_FILTER_USE_KEY));
 
     return $valid
