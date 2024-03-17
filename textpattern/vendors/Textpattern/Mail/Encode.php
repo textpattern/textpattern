@@ -159,7 +159,7 @@ class Encode
      * Extract email and name from a combined RFC email string.
      *
      * @param  string $string The string
-     * @return array  The name and email component parts
+     * @return array  The name and email component parts, if given
      */
 
     public function fromRfcEmail($rfc_email_string) {
