@@ -68,6 +68,7 @@ Changes in 4.9.0 (upcoming)
   to save memory. Plugins must call them via processTags() function.
 * Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
+* Developer: 'Visitor logs' panel is now bound to the new 'lore' event name (was: 'log') to prevent conflicts with privacy filters.
 * jQuery 3.7.1.
 * Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
