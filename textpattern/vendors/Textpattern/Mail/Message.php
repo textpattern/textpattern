@@ -99,4 +99,13 @@ class Message
         'Content-Transfer-Encoding' => '8bit',
         'Content-Type'              => 'text/plain; charset="UTF-8"',
     );
+
+    /**
+     * An array of attachments.
+     *
+     * @var array
+     */
+
+    public $attachment = array();
+
 }

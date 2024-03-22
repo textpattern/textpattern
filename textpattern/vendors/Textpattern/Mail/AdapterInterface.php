@@ -83,6 +83,20 @@ interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
     public function header($name, $value);
 
     /**
+     * Attach a file to the message.
+     *
+     * <code>
+     * Txp::get('\Textpattern\Mail\Compose')->attach('/path/to/file.pdf');
+     * </code>
+     *
+     * @param  array $fileInfo File details (name, path, size, MIME type, etc)
+     * @return AdapterInterface
+     * @throws \Textpattern\Mail\Exception
+     */
+
+    public function attach($fileInfo);
+
+    /**
      * Send an email.
      *
      * <code>

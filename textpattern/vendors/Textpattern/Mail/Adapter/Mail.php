@@ -68,12 +68,14 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     protected $charset = 'UTF-8';
 
     /**
-     * Multipart boundary delimiter.
+     * Multipart boundary delimiters.
      *
-     * @var string
+     * Array key is the boundary type, and its value is the boundary string.
+     *
+     * @var array
      */
 
-    protected $boundary = null;
+    protected $boundary = array();
 
     /**
      * SMTP envelope sender address.
@@ -100,7 +102,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         $this->mail = new Message();
         $this->encoded = new Message();
         $this->encoder = new Encode();
-        $this->boundary = "Multipart_Boundary_x".md5(time())."x";
+        $this->boundary['alternative'] = "Multipart_Boundary_alternative".md5(time());
 
         if (IS_WIN) {
             $this->separator = "\r\n";
@@ -226,12 +228,12 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         if (empty($body['html'])) {
             $out = $body['plain'];
         } else {
-            $this->mail->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary.'"';
-            $this->encoded->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary.'"';
+            $this->mail->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary['alternative'].'"';
+            $this->encoded->headers['Content-Type'] = 'multipart/alternative; boundary="'.$this->boundary['alternative'].'"';
 
             if (!empty($body['plain'])) {
                 $out .= <<<EOMIME
---{$this->boundary}
+--{$this->boundary['alternative']}
 Content-Type: text/plain; charset="{$this->charset}"
 
 {$body['plain']}
@@ -240,11 +242,11 @@ EOMIME;
             }
 
             $out .= <<<EOMIME
---{$this->boundary}
+--{$this->boundary['alternative']}
 Content-Type: text/html; charset="{$this->charset}"
 
 {$body['html']}
---{$this->boundary}--
+--{$this->boundary['alternative']}--
 EOMIME;
         }
 
@@ -263,6 +265,17 @@ EOMIME;
 
         $this->mail->headers[$name] = $value;
         $this->encoded->headers[$name] = $this->encoder->header($this->encoder->escapeHeader($value), 'phrase');
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function attach($fileInfo)
+    {
+        $this->mail->attachment[] = $fileInfo;
 
         return $this;
     }
@@ -296,6 +309,34 @@ EOMIME;
 
         if ($this->encoded->replyTo) {
             $headers['Reply-to'] = $this->encoded->replyTo;
+        }
+
+        // Handle attachments and boundaries.
+        if ($this->mail->attachment) {
+            $this->boundary['mixed'] = "Multipart_Boundary_mixed".md5(time());
+            $this->mail->headers['Content-Type'] = 'multipart/mixed; boundary="' . $this->boundary['mixed'] . '"';
+            $this->encoded->headers['Content-Type'] = 'multipart/mixed; boundary="' . $this->boundary['mixed'] . '"';
+            $bodyField = '--' . $this->boundary['mixed'] . $this->separator . $bodyField;
+
+            // Related (inline) content would wrap the current $bodyField here, but we
+            // don't support that yet. So, directly append Mixed (attachment) content.
+            foreach ($this->mail->attachment as $attachment) {
+                $content = file_get_contents($attachment['filepath']);
+                $content = chunk_split(base64_encode($content));
+                $attachName = basename($attachment['name']);
+                $bodyField .= $this->separator . <<<EOMIME
+--{$this->boundary['mixed']}
+Content-Type: {$attachment['type']}; name="{$attachName}"
+Content-Description: {$attachment['name']}
+Content-Disposition: attachment; filename="{$attachment['name']}";
+Content-Transfer-Encoding: base64
+
+{$content}
+
+EOMIME;
+            }
+
+            $bodyField .= '--' . $this->boundary['mixed'] . '--';
         }
 
         // Concatenation preserves existing array entries so primary headers aren't

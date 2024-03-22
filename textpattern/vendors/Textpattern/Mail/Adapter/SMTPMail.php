@@ -250,6 +250,17 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * {@inheritdoc}
      */
 
+    public function attach($fileInfo)
+    {
+        $this->mailer->addAttachment($fileInfo['filepath'], $fileInfo['name']);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function send()
     {
         if (!$this->mail->from || !$this->mail->to) {
