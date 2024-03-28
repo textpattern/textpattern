@@ -551,7 +551,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2) || $trailing_slash < 0) {
+                                if (isset($u2) || $trailing_slash < 0 && isset($permlink_modes[$u1])) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
