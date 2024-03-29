@@ -265,7 +265,7 @@ function areas()
     }
 
     if (get_pref('logging') !== 'none' && get_pref('expire_logs_after')) {
-        $areas['admin'][gTxt('tab_logs')] = 'log';
+        $areas['admin'][gTxt('tab_logs')] = 'lore';
     }
 
     if (is_array($plugin_areas)) {
