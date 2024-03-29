@@ -942,7 +942,7 @@ function custom_set($name, $val)
         foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
             $str = '';
 
-            foreach (str_split($field) as $char) {
+            foreach (preg_split('/(.)/u', $field, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $char) {
                 $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
             }
 
