@@ -614,7 +614,7 @@ function section_save()
     }
 
     // Prevent non-URL characters on section names.
-    $mbstrings = extension_loaded('mbstrings');
+    $mbstrings = extension_loaded('mbstring');
     $in['name'] = $mbstrings ?
         mb_strtolower(sanitizeForUrl($in['name']), 'UTF-8') :
         strtolower(sanitizeForUrl($in['name']));
