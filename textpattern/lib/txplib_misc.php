@@ -2248,7 +2248,7 @@ function splat($text)
     if (!isset($stack[$sha])) {
         $stack[$sha] = $parse[$sha] = array();
 
-        if (preg_match_all('@(\$?[\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@su', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@(\$?'.TXP_TAG.')(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -3348,8 +3348,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):[\w\-]+(?:\[-?\d+\])?(?:\s+\$?[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@su';
-    $t = '@^</?('.TXP_PATTERN.'):([\w\-]+)(?:\[(-?\d+)\])?(.*)\>$@su';
+    $f = '@(</?(?:'.TXP_PATTERN.'):'.TXP_TAG.'(?:\[-?\d+\])?(?:\s+\$?'.TXP_TAG.'(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):('.TXP_TAG.')(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
@@ -3616,7 +3616,7 @@ function fetch_form($name, $theme = null)
 
 function parse_form($name, $theme = null)
 {
-    global $production_status, $skin, $txp_current_form, $trace;
+    global $is_form, $production_status, $skin, $txp_current_form, $trace;
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
@@ -3649,7 +3649,9 @@ function parse_form($name, $theme = null)
         $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
     }
 
+    $is_form++;
     $out = parse($f);
+    $is_form--;
 
     $txp_current_form = $old_form;
     $stack[$name]--;
