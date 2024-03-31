@@ -31,6 +31,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('page_url')
     ->register('css')
+    ->register('txp_date', 'date')
     ->register('output_form')
     ->register('txp_yield', 'yield')
     ->register('txp_if_yield', 'if_yield')
@@ -45,7 +46,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_description'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_category'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_id'))
-    ->register('posted', array('link_date', array('type' => 'link', 'time' => 'date')))
+    ->register('txp_date', array('link_date', array('type' => 'link', 'time' => 'date')))
     ->register('if_first', 'if_first_link', 'link')
     ->register('if_last', 'if_last_link', 'link')
     ->register('email')
@@ -71,9 +72,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_id')
     ->register('article_url_title')
     ->register('if_article_id')
-    ->register('posted')
-    ->register('posted', array('modified', array('time' => 'modified')))
-    ->register('posted', array('expires', array('time' => 'expires')))
+    ->register('txp_date', array('posted', array('type' => 'article', 'time' => 'posted')))
+    ->register('txp_date', array('modified', array('type' => 'article', 'time' => 'modified')))
+    ->register('txp_date', array('expires', array('type' => 'article', 'time' => 'expires')))
     ->register('if_expires')
     ->register('if_expired')
     ->register('comments_invite')
@@ -97,7 +98,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_web'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_message'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_anchor'))
-    ->register('posted', array('comment_time', array('type' => 'comment', 'time' => 'time')))
+    ->register('txp_date', array('comment_time', array('type' => 'comment', 'time' => 'time')))
     ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
     ->register('author')
     ->register('author_email')
@@ -184,8 +185,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_author'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_downloads'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_description'))
-    ->register('posted', array('file_download_created', array('type' => 'file', 'time' => 'created')))
-    ->register('posted', array('file_download_modified', array('type' => 'file', 'time' => 'modified')))
+    ->register('txp_date', array('file_download_created', array('type' => 'file', 'time' => 'created')))
+    ->register('txp_date', array('file_download_modified', array('type' => 'file', 'time' => 'modified')))
     ->register('if_first', 'if_first_file', 'file')
     ->register('if_last', 'if_last_file', 'file')
     ->register('rsd')
@@ -382,9 +383,9 @@ function component($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $txp_atts, $yield, $txp_yield, $is_form;
+    global $txp_atts, $yield, $txp_yield;
 
-    if (empty($atts['form'])) {
+    if (!isset($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
 
         return '';
@@ -423,11 +424,9 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
-    $is_form++;
     $yield[] = $thing;
     $out = parse_form($form);
     array_pop($yield);
-    $is_form--;
 
     foreach ($atts as $name => $value) {
         $result = array_pop($txp_yield[$name]);
@@ -1307,7 +1306,7 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts, $thing = null)
+function txp_date($atts)
 {
     global $id, $c, $pg, $dateformat, $archive_dateformat, $comments_dateformat;
 
@@ -1316,17 +1315,21 @@ function posted($atts, $thing = null)
         'format'   => '',
         'gmt'      => '',
         'lang'     => '',
-        'time'     => 'posted',
-        'type' => 'article',
+        'time'     => true,
+        'type' => null,
     ), $atts));
-
-    assert_context($type);
-    global ${'this'.$type};
 
     if ($time === true) {
         $time = time();
-    } elseif (isset(${'this'.$type}[$time])) {
-        $time = ${'this'.$type}[$time];
+    } elseif (isset($type)) {
+        assert_context($type);
+        global ${'this'.$type};
+
+        if (isset(${'this'.$type}[$time])) {
+            $time = ${'this'.$type}[$time];
+        } else {
+            return '';
+        }
     }
 
     if (!is_numeric($time) && ($time = strtotime($time)) === false) {
@@ -1586,7 +1589,7 @@ function if_article_author($atts, $thing = null)
 function txp_sandbox($atts = array(), $thing = null)
 {
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
-    global $thisarticle, $is_article_body, $is_form, $txp_atts;
+    global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
 
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
@@ -1629,7 +1632,7 @@ function txp_sandbox($atts = array(), $thing = null)
 
     $field and $stack[$id]--;
 
-    if (!preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $thing;
     }
 
