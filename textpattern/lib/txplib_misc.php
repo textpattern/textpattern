@@ -3563,7 +3563,7 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name, $theme = null)
+function fetch_form($name, $theme = null, &$fname = null)
 {
     global $skin, $production_status, $trace;
     static $forms = array();
@@ -3571,39 +3571,56 @@ function fetch_form($name, $theme = null)
     isset($theme) or $theme = $skin;
     isset($forms[$theme]) or $forms[$theme] = array();
     $fetch = is_array($name);
+    $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : do_list_unique($name, '|');
+    $fetched = $fetch ? $names : array();
+    $custom = has_handler('form.fetch');
 
-    if ($fetch || !isset($forms[$theme][$name])) {
-        $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : array($name);
+    if (empty($names)) {
+        return;
+    }
 
-        if (has_handler('form.fetch')) {
+    if ($fetch) {
+        if ($custom) {
             foreach ($names as $name) {
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
-        } elseif ($fetch) {
+        } else {
             $forms[$theme] += array_fill_keys($names, false);
-            $nameset = implode(',', quote_list($names));
 
-            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
+            if ($rs = safe_rows_start('name, Form', 'txp_form', "name IN (".quote_list($names, ',').") AND skin = '".doSlash($theme)."'")) {
                 while ($row = nextRow($rs)) {
                     $forms[$theme][$row['name']] = $row['Form'];
                 }
             }
-        } else {
-            $forms[$theme][$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
         }
+    } elseif (!isset($forms[$theme][$name])) {
+        foreach ($names as $name) {
+            if (!isset($forms[$theme][$name])) {
+                $fetched[0] = $name;
+                $forms[$theme][$name] = $custom ?
+                    callback_event('form.fetch', '', false, compact('name', 'skin', 'theme')) :
+                    safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
+            }
 
-        foreach ($names as $form) {
-            if ($forms[$theme][$form] === false) {
-                trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
-            } elseif ($production_status !== 'live') {
-                $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
+            if ($forms[$theme][$name] !== false) {
+                break;
             }
         }
     }
 
-    if (!$fetch) {
-        return $forms[$theme][$name];
+    foreach ($fetched as $form) {
+        if ($forms[$theme][$form] === false) {
+            trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
+        } elseif ($production_status !== 'live') {
+            $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
+        }
     }
+
+    if (isset($fname)) {
+        $fname = $name;
+    }
+
+    return $fetch ? null : $forms[$theme][$name];
 }
 
 /**
@@ -3624,8 +3641,9 @@ function parse_form($name, $theme = null)
     }
 
     isset($theme) or $theme = $skin;
-    $name = (string) $name;
-    $f = fetch_form($name, $theme);
+    $name = $fname = (string) $name;
+    $f = fetch_form($name, $theme, $fname);
+    $name = $fname;
 
     if ($f === false) {
         return false;

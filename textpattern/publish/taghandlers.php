@@ -197,7 +197,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('txp_die')
     ->register('txp_eval', 'evaluate')
 // Global attributes (false just removes unknown attribute warning)
-    ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
+    ->registerAttr(true, 'form, labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
 
@@ -389,13 +389,9 @@ function output_form($atts, $thing = null)
         trigger_error(gTxt('form_not_specified'));
 
         return '';
-    } elseif (strpos($atts['form'], '|') === false) {
-        $form = $atts['form'];
-    } else {
-        $form = do_list($atts['form'], '|');
-        $form = $form[rand(0, count($form) - 1)];
     }
 
+    $form = $atts['form'];
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
