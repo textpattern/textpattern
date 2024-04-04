@@ -3348,7 +3348,7 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):'.TXP_TAG.'(?:\[-?\d+\])?(?:\s+\$?'.TXP_TAG.'(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):'.TXP_TAG.'(?:\[-?\d+\])?(?:\s+\$?'.TXP_TAG.'(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?(?<!\-\-)\>)@s';
     $t = '@^</?('.TXP_PATTERN.'):('.TXP_TAG.')(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
