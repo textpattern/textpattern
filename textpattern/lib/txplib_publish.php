@@ -494,7 +494,7 @@ function parse($thing, $condition = true, $in_tag = true)
 
 function processTags($tag, $atts = '', $thing = null, $log = false)
 {
-    global $is_form, $pretext, $trace, $txp_atts, $txp_tag;
+    global $pretext, $trace, $txp_atts, $txp_tag;
     static $registry = null, $globatts;
 
     if (empty($tag)) {
@@ -525,12 +525,6 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
             $txp_atts['$query'] = $txp_atts['evaluate'];
             unset($txp_atts['evaluate']);
         }
-
-        if (!empty($txp_atts['form']) && $tag !== 'output_form' && ($form = fetch_form($txp_atts['form']))) {
-            $was_form = $is_form;
-            $is_form++;
-            $thing = $form;
-        }
     } else {
         $txp_atts = null;
         $split = array();
@@ -538,7 +532,6 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
 
     $txp_tag = null;
     $out = $registry->process($tag, $split, $thing);
-    !isset($was_form) or $is_form = $was_form;
 
     if ($out === false) {
         trigger_error($tag.' '.gTxt('unknown_tag'), E_USER_WARNING);
@@ -550,7 +543,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
             $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
         }
 
-        unset($txp_atts['evaluate'], $txp_atts['form'], $txp_atts['not'], $txp_atts['$query']);
+        unset($txp_atts['evaluate'], $txp_atts['not'], $txp_atts['$query']);
 
         if ($txp_atts && $txp_tag !== false) {
             $pretext['@txp_atts'] = true;
