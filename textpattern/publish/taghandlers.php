@@ -199,7 +199,11 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
+    ->registerAttr(
+        function ($atts, $thing = null) {
+            return variable(array('name' => $atts['variable']), $thing);
+        }, 'variable');
 
 // -------------------------------------------------------------
 
@@ -3108,6 +3112,7 @@ function txp_eval($atts, $thing = null)
     $staged = null;
 
     extract(lAtts(array(
+        'alias' => null,
         'query' => null,
         'test'  => !isset($atts['query']),
     ), $atts));
@@ -3150,6 +3155,17 @@ function txp_eval($atts, $thing = null)
                     $function = empty($_functions[$match[1]]) ? $match[1] : $_functions[$match[1]];
 
                     return "php:function('$function'".($match[2] ? ')' : ',');
+                },
+                $query
+            );
+        }
+
+        if (isset($alias) && $alias = implode('|', do_list($alias))) {
+            global $variable;
+
+            $query = preg_replace_callback('/\$('.$alias.')\b/',
+                function ($match) use ($variable) {
+                    return isset($variable[$match[1]]) ? $variable[$match[1]] : '';
                 },
                 $query
             );
