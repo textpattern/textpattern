@@ -200,10 +200,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
-    ->registerAttr(
-        function ($atts, $thing = null) {
-            return variable(array('name' => $atts['variable']), $thing);
-        }, 'variable');
+    ->registerAttr('txp_variable', 'variable');
 
 // -------------------------------------------------------------
 
@@ -3420,4 +3417,13 @@ function txp_wraptag($atts, $thing = '')
     }
 
     return $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_variable($atts, $thing = null) {
+    global $txp_atts;
+    unset($txp_atts['variable']);
+
+    return variable(array('name' => $atts['variable']), $thing);
 }
