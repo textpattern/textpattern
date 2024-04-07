@@ -48,6 +48,9 @@ Changes in 4.9.0 (upcoming)
 * Added: Reload language packs from disk.
 * Added: Shift+Space shortcut for 'Tab' indent in textareas.
 * Added: Input length tooltip when appropriate.
+* Added: <txp:date /> tag.
+* Added: Global 'variable' attribute.
+* Added: 'alias' attribute to <txp:evaluate />.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
@@ -62,6 +65,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Category & section description field sizes increased to 1023.
 * Changed: <txp:header /> tag requires 'form' privilege.
 * Changed: Section-aware default search.
+* Changed: Extend character set that can be used in tag/attribute names.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
