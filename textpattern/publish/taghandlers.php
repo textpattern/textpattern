@@ -3103,7 +3103,8 @@ function if_request($atts, $thing = null)
 function txp_eval($atts, $thing = null)
 {
     global $prefs, $txp_tag, $txp_atts;
-    static $xpath = null, $functions = null, $_functions = null;
+    static $xpath = null, $functions = null, $_functions = null,
+        $tr = array("'" => "',\"'\",'");
 
     unset($txp_atts['evaluate']);
     $staged = null;
@@ -3161,8 +3162,14 @@ function txp_eval($atts, $thing = null)
             global $variable;
 
             $query = preg_replace_callback('/\$('.$alias.')\b/',
-                function ($match) use ($variable) {
-                    return isset($variable[$match[1]]) ? $variable[$match[1]] : '';
+                function ($match) use ($variable, $tr) {
+                    $var = isset($variable[$match[1]]) ? $variable[$match[1]] : '';
+
+                    if ($var && !is_numeric($var)) {
+                        $var = strpos($var, "'") === false ? "'$var'" : "concat('".strtr($var, $tr)."')";
+                    }
+
+                    return $var;
                 },
                 $query
             );
@@ -3425,5 +3432,5 @@ function txp_variable($atts, $thing = null) {
     global $txp_atts;
     unset($txp_atts['variable']);
 
-    return variable(array('name' => $atts['variable']), $thing);
+    return isset($atts['variable']) ? variable(array('name' => $atts['variable']), $thing) : $thing;
 }
