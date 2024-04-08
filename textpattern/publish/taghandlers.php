@@ -3159,7 +3159,7 @@ function txp_eval($atts, $thing = null)
         }
 
         if (isset($alias) && $alias = implode('|', $alias === true ? array_keys($variable) : do_list($alias))) {
-            $query = preg_replace_callback('/\$('.$alias.')\b/',
+            $query = preg_replace_callback('/\$('.$alias.')\b/u',
                 function ($match) use ($variable, $tr) {
                     $var = isset($variable[$match[1]]) ? $variable[$match[1]] : '';
 
