@@ -3103,8 +3103,7 @@ function if_request($atts, $thing = null)
 function txp_eval($atts, $thing = null)
 {
     global $prefs, $txp_tag, $txp_atts, $variable;
-    static $xpath = null, $functions = null, $_functions = null,
-        $tr = array("'" => "',\"'\",'");
+    static $xpath = null, $functions = null, $_functions = null;
 
     unset($txp_atts['evaluate']);
     $staged = null;
@@ -3160,11 +3159,11 @@ function txp_eval($atts, $thing = null)
 
         if (isset($alias) && $alias = implode('|', $alias === true ? array_keys($variable) : do_list($alias))) {
             $query = preg_replace_callback('/\$('.$alias.')\b/u',
-                function ($match) use ($variable, $tr) {
+                function ($match) use ($variable) {
                     $var = isset($variable[$match[1]]) ? $variable[$match[1]] : '';
 
                     if ($var && !is_numeric($var)) {
-                        $var = strpos($var, "'") === false ? "'$var'" : "concat('".strtr($var, $tr)."')";
+                        $var = strpos($var, "'") === false ? "'$var'" : "concat('".strtr($var, array("'" => "',\"'\",'"))."')";
                     }
 
                     return $var;
@@ -3232,7 +3231,7 @@ function txp_escape($escape, $thing = '')
 {
     global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
-        $mb = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
+        $mb = null, $LocaleInfo = null;
 
     if (is_array($escape)) {
         extract(lAtts(array('escape' => true), $escape, false));
@@ -3361,7 +3360,7 @@ function txp_escape($escape, $thing = '')
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
                 break;
             case 'quote':
-                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, array("'" => "',\"'\",'"))."')";
                 break;
             default:
                 $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
