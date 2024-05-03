@@ -51,6 +51,7 @@ Changes in 4.9.0 (upcoming)
 * Added: <txp:date /> tag.
 * Added: Global 'variable' attribute.
 * Added: 'alias' attribute to <txp:evaluate />.
+* Added: 'parent' attribute to <txp:category />.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
