@@ -264,6 +264,8 @@ function prefs_list($message = '')
                 case '\YesNoRadioSet':
                 case '\OnOffRadioSet':
                 case 'is_dst':
+                case 'enhanced_email':
+                case 'trailing_slash':
                     $label = '';
                     break;
                 case 'gmtoffset_select':
@@ -500,7 +502,7 @@ function pref_longtext_input($name, $val, $constraints = array())
         $atts = $constraints;
     }
 
-    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val);
+    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val)->setAtt('id', $name);
 
     if (!empty($atts)) {
         $out->setConstraints(Txp::get('Textpattern\Validator\SizeConstraint', null, $atts));
