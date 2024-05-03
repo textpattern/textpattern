@@ -1753,6 +1753,7 @@ function category($atts, $thing = null)
         'class'        => '',
         'link'         => 0,
         'name'         => '',
+        'parent'       => 0,
         'section'      => $s,
         'this_section' => 0,
         'title'        => 0,
@@ -1770,6 +1771,12 @@ function category($atts, $thing = null)
     } else {
         $category = $c;
         $type = $context;
+    }
+
+    if ($category && ($parent = (int)$parent)) {
+        $path = array_column(getRootPath($category, $type), 'name');
+        $parent > 0 or $parent = count($path) + $parent;
+        $category = isset($path[$parent]) ? $path[$parent] : false;
     }
 
     if ($category) {
@@ -2475,7 +2482,7 @@ function if_category($atts, $thing = null)
     }
 
     if ($x && $parent && $category) {
-        $path = array_column(getRootPath($category, $theType), 'name');
+        $path = array_column(getRootPath($category, $theType), 'name');dmp($path);
 
         if (!$parentname) {
             $name = $parent;
@@ -2487,7 +2494,7 @@ function if_category($atts, $thing = null)
         if ($parent === true) {
             $x = $path && ($name === false || array_intersect($path, $names));
         } else {
-            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent - 1;
+            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent;
             $x = isset($path[$parent]) && ($name === false || in_array($path[$parent], $names));
         }
     }
