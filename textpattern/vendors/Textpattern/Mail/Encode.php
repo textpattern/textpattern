@@ -68,7 +68,7 @@ class Encode
 
         foreach ($value as $email => $name) {
             if ($this->charset != 'UTF-8') {
-                $name = utf8_decode($name);
+                $name = safe_encode($name, $this->charset, 'UTF-8');
             }
 
             $out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');

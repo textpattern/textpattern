@@ -197,7 +197,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         $this->mail->subject = $subject;
 
         if ($this->mailer->CharSet !== 'UTF-8') {
-            $subject = utf8_decode($subject);
+            $subject = safe_encode($subject, $this->mailer->CharSet, 'UTF-8');
         }
 
         $this->mailer->Subject = $subject;
@@ -218,7 +218,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             $this->mail->body[$key] = $block;
 
             if ($this->mailer->CharSet !== 'UTF-8') {
-                $block = utf8_decode($block);
+                $block = safe_encode($block, $this->mailer->CharSet, 'UTF-8');
             }
 
             if ($key === 'plain') {

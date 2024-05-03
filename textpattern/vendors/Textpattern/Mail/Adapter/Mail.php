@@ -181,7 +181,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         $this->mail->subject = $subject;
 
         if ($this->charset != 'UTF-8') {
-            $subject = utf8_decode($subject);
+            $subject = safe_encode($subject, $this->charset, 'UTF-8');
         }
 
         $this->encoded->subject = $this->encoder->header($this->encoder->escapeHeader($subject), 'text');
@@ -202,7 +202,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
             $this->mail->body[$key] = $block;
 
             if ($this->charset !== 'UTF-8') {
-                $block = utf8_decode($block);
+                $block = safe_encode($block, $this->charset, 'UTF-8');
             }
 
             $block = str_replace("\r\n", "\n", $block);
