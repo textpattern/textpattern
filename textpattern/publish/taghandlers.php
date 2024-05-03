@@ -2482,7 +2482,7 @@ function if_category($atts, $thing = null)
     }
 
     if ($x && $parent && $category) {
-        $path = array_column(getRootPath($category, $theType), 'name');dmp($path);
+        $path = array_column(getRootPath($category, $theType), 'name');
 
         if (!$parentname) {
             $name = $parent;
