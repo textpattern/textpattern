@@ -189,7 +189,7 @@ class Plugin
     public function extract($plugin, $normalize = true)
     {
         if (strpos($plugin, '$plugin=\'') !== false) {
-            @ini_set('pcre.backtrack_limit', '1000000');
+            ini_set('pcre.backtrack_limit', '1000000');
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         }
 
@@ -198,7 +198,7 @@ class Plugin
         $plugin = base64_decode($plugin);
 
         if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
-            $plugin = @gzinflate(substr($plugin, 10));
+            $plugin = gzinflate(substr($plugin, 10));
         }
 
         set_error_handler(function () {}, E_WARNING|E_NOTICE);
@@ -747,12 +747,12 @@ class Plugin
                     $currFile = $directory . $file;
 
                     if (is_file($currFile)) {
-                        if ($file != '' && $file != '.' && $file != '..') {
+                        if ($file !== '' && strpos($file, '.') !== 0) {
                             $zipArchive->addFile($currFile, str_replace($basedir, '', $currFile));
                         }
                     } else {
                         if (is_dir($currFile)) {
-                            if ($file != '' && $file != '.' && $file != '..') {
+                            if ($file != '' && strpos($file, '.') !== 0 && strpos($file, '__MACOSX') !== 0) {
                                 $zipArchive->addEmptyDir(str_replace($basedir, '', $currFile));
                                 $directory = $currFile . '/';
                                 $this->zipDirectory($zipArchive, $directory);
