@@ -77,7 +77,7 @@ date_default_timezone_set($timezone_key);
 isset($pretext) or $pretext = array();
 
 // Set a higher error level during initialisation.
-set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+set_error_level($production_status == 'live' ? 'testing' : $production_status);
 
 // disable tracing in live environment.
 if ($production_status == 'live') {
@@ -199,6 +199,7 @@ if ($use_plugins) {
 // Request URI rewrite, anyone?
 callback_event('pretext', '', 1);
 $pretext = preText($pretext, null) + array('secondpass' => 0, '@txp_atts' => false);
+callback_event('pretext_end', '', 1);
 
 // Send 304 Not Modified if appropriate.
 
@@ -211,8 +212,6 @@ if (txpinterface === 'css') {
 
     exit;
 }
-
-callback_event('pretext_end', '', 1);
 
 $txp_sections = safe_column(array('name'), 'txp_section');
 
