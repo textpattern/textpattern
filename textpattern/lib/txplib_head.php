@@ -120,7 +120,7 @@ function pagetop($pagetitle = '', $message = '')
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery-4.0.0-beta.min.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
     ->setRoute('file, image').
