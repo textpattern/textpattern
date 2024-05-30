@@ -152,13 +152,12 @@ $txpcfg['client_flags'] = 0;
 
 //$headerCsp =
 //    "base-uri 'none';".
-//    "block-all-mixed-content;".
 //    "connect-src 'self';".
 //    "default-src 'none';".
 //    "font-src 'self';".
 //    "form-action 'self';".
 //    "frame-ancestors 'self';".
-//    "img-src data: 'self';".
+//    "img-src blob: data: 'self';".
 //    "media-src 'self';".
 //    "script-src 'self' 'unsafe-inline';".
 //    "script-src-attr 'none';".
