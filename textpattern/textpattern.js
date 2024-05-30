@@ -597,6 +597,7 @@ function setClassRemember(className, force) {
 
 function sendAsyncEvent(data, fn, format) {
     var formdata = false;
+    format = format || 'xml';
 
     if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
@@ -610,7 +611,6 @@ function sendAsyncEvent(data, fn, format) {
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format || 'xml';
     return formdata ? $.ajax({
         type: 'POST',
         url: 'index.php',
@@ -618,7 +618,8 @@ function sendAsyncEvent(data, fn, format) {
         success: fn,
         dataType: format,
         processData: false,
-        contentType: false
+        contentType: false,
+        headers: {} // jQuery 4 cheat, otherwise it switches to GET
     }) : $.post('index.php', data, fn, format);
 }
 
