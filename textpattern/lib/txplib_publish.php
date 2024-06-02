@@ -861,6 +861,9 @@ function filterAtts($atts = null, $iscustom = null)
         'exclude'       => ''
     );
 
+    // For the txp:article tag, some attributes are taken from globals;
+    // override them, then stash all filter attributes.
+
     if ($iscustom) {
         $sortAtts += array(
             'category'  => isset($excluded['category']) ? true : '',
@@ -871,6 +874,12 @@ function filterAtts($atts = null, $iscustom = null)
         );
     } else {
         $extralAtts += array(
+            'category' => !empty($pretext['c']) ? $pretext['c'] : '',
+            'section' => (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '',
+            'author' => (!empty($pretext['author']) ? $pretext['author'] : ''),
+            'month' => (!empty($pretext['month']) ? $pretext['month'] : ''),
+            'expired' => get_pref('publish_expired_articles'),
+            'frontpage' => !empty($atts['frontpage']) && empty($atts['section']),
             'listform'     => '',
             'searchform'   => '',
             'searchsticky' => 0,
@@ -910,23 +919,10 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
+    $q = $iscustom ? '' : trim($pretext['q']);
+
     // Getting attributes.
     $theAtts = lAtts($coreAtts + $customlAtts, $atts);
-
-    // For the txp:article tag, some attributes are taken from globals;
-    // override them, then stash all filter attributes.
-    if (!$iscustom) {
-        $theAtts['category'] = !empty($pretext['c']) ? $pretext['c'] : '';
-        $theAtts['section'] = (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '';
-        $theAtts['author'] = (!empty($pretext['author']) ? $pretext['author'] : '');
-        $theAtts['month'] = (!empty($pretext['month']) ? $pretext['month'] : '');
-        $theAtts['expired'] = get_pref('publish_expired_articles');
-        $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
-        $q = trim($pretext['q']);
-    } else {
-        $q = '';
-    }
-
     extract($theAtts, EXTR_SKIP);
 
     // Treat sticky articles differently wrt search filtering, etc.
@@ -975,7 +971,7 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    $not = $iscustom && ($excluded === true || isset($excluded['category'])) ? '!' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['category']) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
     $category  = !$catquery  ? '' : " AND $not($catquery)";
 
@@ -991,13 +987,13 @@ function filterAtts($atts = null, $iscustom = null)
         $section = '';
     }
 
-    $not = $iscustom && ($excluded === true || isset($excluded['section'])) ? 'NOT' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['section']) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
     $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
         ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
-    $not = $iscustom && ($excluded === true || isset($excluded['author'])) ? 'NOT' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['author']) ? 'NOT' : '';
     $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
@@ -1005,7 +1001,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = $iscustom && ($month || $time !== null) && ($excluded === true || isset($excluded['month']));
+        $not = ($month || $time !== null) && ($iscustom && $excluded === true || isset($excluded['month']));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {

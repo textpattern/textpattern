@@ -709,9 +709,7 @@ function preText($store, $prefs = null)
 
 function textpattern()
 {
-    global $pretext, $production_status, $has_article_tag;
-
-    $has_article_tag = false;
+    global $pretext;
 
     callback_event('textpattern');
 
@@ -731,11 +729,6 @@ function textpattern()
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
-    }
-
-    // Make sure the page has an article tag if necessary.
-    if (!$has_article_tag && $production_status != 'live' && $pretext['context'] == 'article' && (!empty($pretext['id']) || !empty($pretext['c']) || !empty($pretext['q']) || !empty($pretext['pg']))) {
-        trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
     }
 
     restore_error_handler();
@@ -902,15 +895,13 @@ function output_file_download($filename)
 // -------------------------------------------------------------
 function article($atts, $thing = null)
 {
-    global $is_article_body, $has_article_tag;
+    global $is_article_body;
 
     if ($is_article_body) {
         trigger_error(gTxt('article_tag_illegal_body'));
 
         return '';
     }
-
-    $has_article_tag = true;
 
     return parseArticles($atts, '0', $thing);
 }
