@@ -853,7 +853,7 @@ function filterAtts($atts = null, $iscustom = null)
         'keywords'      => '',
         'time'          => null,
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
-        'frontpage'     => !$iscustom,
+        'frontpage'     => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
         'match'         => 'Category',
         'depth'         => 0,
         'id'            => '',
@@ -873,13 +873,15 @@ function filterAtts($atts = null, $iscustom = null)
             'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         );
     } else {
-        $extralAtts += array(
+        $sortAtts += array(
             'category' => !empty($pretext['c']) ? $pretext['c'] : '',
             'section' => (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '',
             'author' => (!empty($pretext['author']) ? $pretext['author'] : ''),
             'month' => (!empty($pretext['month']) ? $pretext['month'] : ''),
             'expired' => get_pref('publish_expired_articles'),
-            'frontpage' => !empty($atts['frontpage']) && empty($atts['section']),
+        );
+
+        $extralAtts += array(
             'listform'     => '',
             'searchform'   => '',
             'searchsticky' => 0,
