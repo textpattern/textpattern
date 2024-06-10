@@ -80,7 +80,7 @@ Changes in 4.9.0 (upcoming)
 * PrismJS 1.29.0.
 * DOMPurify 3.0.6.
 * PHPMailer 6.9.1.
-* jQuery UI 1.12.1.
+* jQuery UI 1.13.3.
 
 Changes in 4.8.8 (24 Jan 2022)
 
