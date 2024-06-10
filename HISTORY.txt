@@ -75,11 +75,12 @@ Changes in 4.9.0 (upcoming)
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
 * Developer: 'Visitor logs' panel is now bound to the new 'lore' event name (was: 'log') to prevent conflicts with privacy filters.
 * jQuery 3.7.1.
-* Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
+* Textile 4.1.1. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
 * PrismJS 1.29.0.
-* DOMPurify 3.0.6
-* PHPMailer 6.9.1
+* DOMPurify 3.0.6.
+* PHPMailer 6.9.1.
+* jQuery UI 1.12.1.
 
 Changes in 4.8.8 (24 Jan 2022)
 

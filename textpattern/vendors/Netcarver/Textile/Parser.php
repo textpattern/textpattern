@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.0';
+    protected $ver = '4.1.1';
 
     /**
      * Regular expression snippets.
@@ -1971,6 +1971,9 @@ class Parser
 
             // Inline markup (em, strong, sup, sub, del etc).
             $text = $this->spans($text);
+
+            // Generate links.
+            $text = $this->links($text);
 
             // Glyph level substitutions (mainly typographic -- " & ' => curly quotes, -- => em-dash etc.
             $text = $this->glyphs($text);

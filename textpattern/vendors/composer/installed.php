@@ -3,7 +3,7 @@
         'name' => 'textpattern/textpattern',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '41705a8429c54f6c892126289dfa09104ca24534',
+        'reference' => '8286690af7c4f067245932684531f22d727f60c5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'textpattern/textpattern' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '41705a8429c54f6c892126289dfa09104ca24534',
+            'reference' => '8286690af7c4f067245932684531f22d727f60c5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),
