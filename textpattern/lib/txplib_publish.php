@@ -856,7 +856,7 @@ function filterAtts($atts = null, $iscustom = null)
         'frontpage'     => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
         'match'         => 'Category',
         'depth'         => 0,
-        'id'            => '',
+        'id'            => isset($excluded['id']) ? true : '',
         'excerpted'     => '',
         'exclude'       => ''
     );
