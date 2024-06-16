@@ -2999,7 +2999,7 @@ function set_error_level($level)
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
         error_reporting(E_ALL ^ $suppress);
-        @ini_set("display_errors", "1");
+        ini_set("display_errors", "1");
     } else {
         // Default is 'testing': display everything except notices.
         error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
@@ -3175,7 +3175,7 @@ function txp_get_contents($file, $opts = null)
 {
     // Local file
     if (!is_array($opts)) {
-        return is_readable($file) ? file_get_contents($file) : '';
+        return is_readable($file) ? file_get_contents($file, false, $opts) : '';
     }
 
     $opts += array('method' => 'POST', 'content' => '', 'header' => 'Content-type: application/x-www-form-urlencoded');
@@ -3190,7 +3190,7 @@ function txp_get_contents($file, $opts = null)
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, strtoupper($opts['method']) == 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $opts['content']);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [$opts['header']]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, (array)$opts['header']);
 
         $contents = curl_exec($ch);
         curl_close($ch);
