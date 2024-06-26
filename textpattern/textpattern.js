@@ -867,26 +867,44 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         },
         handle = function(html, xhr) {
             if (typeof html === 'string') {
-                let $html = textpattern.decodeHTML(html);
+                const download = xhr ? xhr.getResponseHeader("Content-Disposition") : null;
 
-                $.each(list.split(','), function(index, value) {
-                    const host = value.match(/^(?:(.*)>>)?(.+)$/);
-                    const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
-                    $(host[2]).each(function() {
-                        const id = this.getAttribute('id');
-                        const $target = $(this.content || this);
+                if (download && download.match(/^\s*attachment\b/i)) {
+                    // Create a new Blob object using the response data
+                    var blob = new Blob([html]/*, {type: 'text/html'}*/);
+                    //Create a DOMString representing the blob and point a link element towards it
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement("a");
+                    const filename = download.match(/\bfilename\*?=(.*)/);
+                    a.href = url;
+                    a.download = filename ? filename[1].trim().replaceAll(/["']/g, '') : 'download.txt';
+                    a.click();
+                    a.remove();
+                    $(list).removeClass('disabled')
+                    //release the reference to the file by revoking the Object URL
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    let $html = textpattern.decodeHTML(html);
 
-                        if (id) {
-                            if (!embed) {
-                                $target.replaceWith($html.getElementById(id)).remove();
-                            } else {
-                                $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                    $.each(list.split(','), function(index, value) {
+                        const host = value.match(/^(?:(.*)>>)?(.+)$/);
+                        const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
+                        $(host[2]).each(function() {
+                            const id = this.getAttribute('id');
+                            const $target = $(this.content || this);
+
+                            if (id) {
+                                if (!embed) {
+                                    $target.replaceWith($html.getElementById(id)).remove();
+                                } else {
+                                    $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                                }
+
+                                $('#' + id).removeClass('disabled').trigger('updateList', xhr);
                             }
-
-                            $('#' + id).removeClass('disabled').trigger('updateList', xhr);
-                        }
+                        });
                     });
-                });
+                }
             }
 
             callback(data.event);
