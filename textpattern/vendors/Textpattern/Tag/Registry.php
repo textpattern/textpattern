@@ -123,7 +123,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
-    public function process($tag, array $atts = null, $thing = null)
+    public function process($tag, array $atts = array(), $thing = null)
     {
         if ($this->isRegistered($tag)) {
             $atts = (array)$atts;
@@ -148,7 +148,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * Processes an attribute by name.
      *
      * @param  string      $tag   The attribute
-     * @param  string|null $atts  The value of attribute
+     * @param  array|null  $atts  The value of attribute
      * @param  string|null $thing The processed statement
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
