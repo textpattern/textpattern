@@ -154,7 +154,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
 
-    public function __call($field, array $args = null)
+    public function __call($field, array $args = array())
     {
         if (!$args) {
             if (property_exists($this->mail, $field) === false) {
