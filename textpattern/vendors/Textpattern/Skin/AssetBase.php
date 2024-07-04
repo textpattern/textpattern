@@ -96,7 +96,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * Constructor.
      */
 
-    public function __construct(Skin|null $skin = null)
+    public function __construct(Skin $skin = null)
     {
         parent::__construct();
 
@@ -107,7 +107,7 @@ abstract class AssetBase extends CommonBase implements AssetInterface
      * {@inheritdoc}
      */
 
-    public function setSkin(Skin|null $skin = null)
+    public function setSkin(Skin $skin = null)
     {
         $this->skin = $skin === null ? \Txp::get('Textpattern\Skin\Skin')->setName() : $skin;
 

@@ -38,7 +38,7 @@ interface AssetInterface
      * $skin property setter.
      */
 
-    public function setSkin(Skin|null $skin = null);
+    public function setSkin(Skin $skin = null);
 
     /**
      * $essential property getter.
