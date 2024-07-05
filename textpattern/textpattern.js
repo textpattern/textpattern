@@ -875,14 +875,14 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                     //Create a DOMString representing the blob and point a link element towards it
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement("a");
-                    const filename = download.match(/\bfilename\*?=(.*)/);
+                    const filename = download.match(/\bfilename\*?\s*=\s*([^;]+)/);
                     a.href = url;
                     a.download = filename ? filename[1].trim().replaceAll(/["']/g, '') : 'download.txt';
                     a.click();
-                    a.remove();
-                    $(list).removeClass('disabled')
                     //release the reference to the file by revoking the Object URL
                     window.URL.revokeObjectURL(url);
+                    a.remove();
+                    $(list).removeClass('disabled')
                 } else {
                     let $html = textpattern.decodeHTML(html);
 
@@ -1941,6 +1941,18 @@ jQuery.fn.txpUploadPreview = function (template) {
         return this;
     }
 
+    const hashCode = function(str) {
+        var hash = 0, i, chr;
+
+        for (i = 0; i < str.length; i++) {
+            chr = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+
+        return hash;
+    }
+
     var form = $(this),
         uploadPreview = form.find('div.txp-upload-preview'),
         previewable = textpattern.prefs.previewable || /^(image\/)/i,
@@ -1958,7 +1970,7 @@ jQuery.fn.txpUploadPreview = function (template) {
             let src = null,
                 preview = null,
                 mime = this.type.toLowerCase().split('/'),
-                hash = typeof md5 == 'function' ? md5(this.name) : index,
+                hash = hashCode(this.name),
                 status = this.size > maxSize ? 'alert' : null;
 
             if (createObjectURL && previewable.test(this.type) && (src = createObjectURL(this))) {
