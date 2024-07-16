@@ -956,6 +956,9 @@ function file_insert()
         'description',
     ))));
 
+    // Call pre-file-upload plugins.
+    callback_event('files_uploaded', '', true);
+
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         extract($file);
@@ -985,6 +988,9 @@ function file_insert()
                     $ids[] = $GLOBALS['ID'] = $id;
                     $messages[] = array(gTxt('file_uploaded',
                         array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false), 0);
+
+                    // Call post-upload plugins with the current file $id.
+                    callback_event('file_uploaded', '', false, compact('id', 'title', 'category', 'description', 'size', 'newpath'));
                 }
             }
         } else {
@@ -1001,6 +1007,9 @@ function file_insert()
     if ($ids) {
         update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
         now('created', true);
+
+        // Call post-upload plugins with all the new file $ids.
+        callback_event('files_uploaded', '', false, $ids);
     }
 
     if ($app_mode == 'async') {
