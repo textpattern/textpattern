@@ -1,9 +1,11 @@
 Changes in 4.9.0 (upcoming)
 
-* Feature release with support for PHP 8.3.1+, new functionality, security
+* Feature release with support for PHP 8.4.0+, new functionality, security
   enhancements, general improvements and bug fixes.
-* Changed: Minimum system requirements increased to PHP 5.6.
-* Changed: Minimum system requirements increased to MySQL 5.5.
+* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
+  recommended)
+* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
+  recommended).
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
@@ -20,7 +22,7 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.2 and PHP 8.3.1+.
+* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php.
@@ -73,7 +75,10 @@ Changes in 4.9.0 (upcoming)
   to save memory. Plugins must call them via processTags() function.
 * Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
-* Developer: 'Visitor logs' panel is now bound to the new 'lore' event name (was: 'log') to prevent conflicts with privacy filters.
+* Developer: 'Visitor logs' panel is now bound to the new 'lore' event name
+  (was: 'log') to prevent conflicts with privacy filters.
+* Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
+* Developer: Activation emails can be skipped via hidden notify="skip" field.
 * jQuery 3.7.1.
 * Textile 4.1.1. See https://github.com/textile/php-textile/releases/ for full
   list of changes in this release (thanks, gocom).
