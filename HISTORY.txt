@@ -79,13 +79,13 @@ Changes in 4.9.0 (upcoming)
   (was: 'log') to prevent conflicts with privacy filters.
 * Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
 * Developer: Activation emails can be skipped via hidden notify="skip" field.
-* Third-party: DOMPurify 3.0.6.
-* Third-party: jQuery 3.7.1.
-* Third-party: jQuery UI 1.13.3.
-* Third-party: PHPMailer 6.9.1.
-* Third-party: PrismJS 1.29.0.
-* Third-party: Textile 4.1.1. (thanks, gocom).
-* Third-party: UglifyJS 3.19.0.
+* Vendors: DOMPurify 3.0.6.
+* Vendors: jQuery 3.7.1.
+* Vendors: jQuery UI 1.13.3.
+* Vendors: PHPMailer 6.9.1.
+* Vendors: PrismJS 1.29.0.
+* Vendors: Textile 4.1.1. (thanks, gocom).
+* Vendors: UglifyJS 3.19.0.
 
 Changes in 4.8.8 (24 Jan 2022)
 
