@@ -79,13 +79,13 @@ Changes in 4.9.0 (upcoming)
   (was: 'log') to prevent conflicts with privacy filters.
 * Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
 * Developer: Activation emails can be skipped via hidden notify="skip" field.
-* jQuery 3.7.1.
-* Textile 4.1.1. See https://github.com/textile/php-textile/releases/ for full
-  list of changes in this release (thanks, gocom).
-* PrismJS 1.29.0.
-* DOMPurify 3.0.6.
-* PHPMailer 6.9.1.
-* jQuery UI 1.13.3.
+* Third-party library: DOMPurify 3.0.6.
+* Third-party library: jQuery 3.7.1.
+* Third-party library: jQuery UI 1.13.3.
+* Third-party library: PHPMailer 6.9.1.
+* Third-party library: PrismJS 1.29.0.
+* Third-party library: Textile 4.1.1. (thanks, gocom).
+* Third-party library: UglifyJS 3.19.0.
 
 Changes in 4.8.8 (24 Jan 2022)
 
