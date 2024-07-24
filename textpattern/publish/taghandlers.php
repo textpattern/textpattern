@@ -2607,9 +2607,10 @@ function hide($atts = array(), $thing = null)
         return '';
     }
 
-    global $pretext;
+    global $pretext, $production_status;
 
     extract(lAtts(array('process' => null), $atts));
+    $out = '';
 
     if (!$process) {
         return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
@@ -2617,11 +2618,16 @@ function hide($atts = array(), $thing = null)
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
             ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
-    } elseif ($process) {
+    } elseif ($process === true) {
         parse($thing);
+    } elseif (in_array($process, array('live', 'testing', 'debug'))) {
+        $old_status = $production_status;
+        $production_status = php() ? $process : $production_status;
+        $out = parse($thing);
+        $production_status = $old_status;
     }
 
-    return '';
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -3236,7 +3242,6 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($escape, $thing = '')
 {
-    global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
         $mb = null, $LocaleInfo = null;
 
@@ -3354,14 +3359,14 @@ function txp_escape($escape, $thing = '')
                 break;
             case 'tidy':
                 $tidy = true;
-                $thing = preg_replace('/\s+/', ' ', trim($thing));
+                $thing = preg_replace('/\s\s+/', ' ', trim($thing));
                 break;
             case 'untidy':
                 $tidy = false;
                 break;
             case 'textile':
                 if ($textile === null) {
-                    $textile = Txp::get('\Textpattern\Textile\Parser', $prefs['doctype']);
+                    $textile = Txp::get('\Textpattern\Textile\Parser', get_pref('doctype'));
                 }
 
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
