@@ -3359,7 +3359,7 @@ function txp_escape($escape, $thing = '')
                 break;
             case 'tidy':
                 $tidy = true;
-                $thing = preg_replace('/\s\s+/', ' ', trim($thing));
+                $thing = preg_replace('/\s{2,}|[^\S ]/', ' ', trim($thing));
                 break;
             case 'untidy':
                 $tidy = false;
