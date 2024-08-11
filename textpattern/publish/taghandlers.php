@@ -240,8 +240,10 @@ function page_title($atts)
 function css($atts)
 {
     global $css, $doctype, $pretext;
+    static $stylebody = null;
 
     extract(lAtts(array(
+        'escape' => true,
         'format' => 'url',
         'media'  => 'screen',
         'name'   => $css,
@@ -271,6 +273,13 @@ function css($atts)
         $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
     }
 
+    if (empty($format) || $format === "inline") {
+        isset($stylebody[$name.'_'.$theme]) or $stylebody = array(
+            $name.'_'.$theme => safe_field('css', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($theme) . "'")
+        );
+        $content = ($escape === true) ? $stylebody[$name.'_'.$theme] : txp_escape($escape, $stylebody[$name.'_'.$theme]);
+    }
+
     switch ($format) {
         case 'link':
             foreach ((array)$url as $href) {
@@ -282,6 +291,12 @@ function css($atts)
                     'href'  => $href,
                 )).n;
             }
+            break;
+        case '':
+            $out .= $content;
+            break;
+        case 'inline':
+            $out .= (!empty($content)) ? tag($content, 'style') : '';
             break;
         default:
             $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);
