@@ -68,14 +68,14 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.0, 8.1 or 8.2) |
-| MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(5.7 and/or 8.0, depends on platform) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.1, 8.2 or 8.3) |
+| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.0 or 8.4) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.23) or stable (1.24) |
+| Nginx  | &mdash; | mainline (1.27) or stable (1.26) |
 
 ## Contributing
 
-Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
+Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for full details.
 
 ## GitHub topic tags
 
@@ -133,7 +133,7 @@ npm run txp-gitdist 1.2.3 ../my-dest-dir
 
 ## Thank You
 
-Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
+Thank you to our [GitHub sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
 
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
