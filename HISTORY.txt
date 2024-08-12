@@ -1,4 +1,4 @@
-Changes in 4.9.0 (upcoming)
+Changes in 4.9.0 at beta
 
 * Feature release with support for PHP 8.4.0+, new functionality, security
   enhancements, general improvements and bug fixes.
@@ -9,7 +9,8 @@ Changes in 4.9.0 (upcoming)
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
-* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
+  instead.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
