@@ -1,4 +1,4 @@
-Changes in 4.9.0 at beta (12 Aug 2024)
+Changes in 4.9.0 at beta.1 (12 Aug 2024)
 
 * Feature release with support for PHP 8.4.0+, new functionality, security
   enhancements, general improvements and bug fixes.
