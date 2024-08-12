@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -207,8 +207,8 @@ abstract class CommonBase implements CommonInterface
     /**
      * Sanitizes a string for use in a theme template's name.
      *
-     * Just runs sanitizeForPage() followed by sanitizeForFile(),
-     * then limits the number of characters to 63.
+     * Just runs sanitizeForPage() followed by sanitizeForFile(), then converts
+     * spaces to underscores and limits the number of characters to 63.
      *
      * @param  string $text The string
      * @return string
@@ -218,7 +218,9 @@ abstract class CommonBase implements CommonInterface
     {
         $out = sanitizeForFile(sanitizeForPage($text));
 
-        return \Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
+        return \Txp::get('\Textpattern\Type\StringType', $out)
+            ->replace(array(' ', chr(9), chr(0xA0)), '_')
+            ->substring(0, 63)->getString();
     }
 
     /**

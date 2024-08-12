@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -197,10 +197,10 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-    $blocklist = is_blacklisted($ip);
+    $blocklist = is_blocklisted($ip);
 
     if ($blocklist) {
-        txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blocklist), '403');
+        txp_die(gTxt('your_ip_is_blocklisted_by'.' '.$blocklist), '403');
     }
 
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
@@ -588,7 +588,7 @@ function checkCommentsAllowed($id)
 
 function comments_help()
 {
-    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.txpspecialchars(LANG).'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
+    return '<a id="txpCommentHelpLink" rel="external" target="_blank" href="'.HELP_URL.'">'.gTxt('textile_help').'</a>';
 }
 
 /**
@@ -695,7 +695,7 @@ function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '
         ($class) ? ' class="'.$class.'"'  : '',
         ($tab)   ? ' tabindex="'.$tab.'"' : '',
         ($chkd)  ? ' checked="checked"'   : '',
-        ' />'.n,
+        (get_pref('doctype') === 'html5' ? '>' : ' />').n,
     );
 
     return join('', $o);

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,6 +38,10 @@ class Compose extends \Textpattern\Adaptable\Providable
 
     public function getDefaultAdapter()
     {
-        return new \Textpattern\Mail\Adapter\Mail();
+        if (get_pref('enhanced_email')) {
+            return new \Textpattern\Mail\Adapter\SMTPMail();
+        } else {
+            return new \Textpattern\Mail\Adapter\Mail();
+        }
     }
 }

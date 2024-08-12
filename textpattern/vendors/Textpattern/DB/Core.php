@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -97,6 +97,40 @@ class Core
     }
 
     /**
+     * Grab the varchar sizes from the DB table files.
+     *
+     * @param  string       $table   Table name to query
+     * @param  string|array $columns List/array of column names to extract. Must be VARCHAR types
+     * @return array                 Matching name=>sizes entries
+     **/
+
+    public function columnSizes($table, $columns)
+    {
+        $sizes = array();
+
+        if (!is_array($columns)) {
+            $columns = do_list($columns);
+        }
+
+        if ($data = $this->getStructure($table)) {
+            $separator = "\r\n";
+            $line = strtok($data, $separator);
+
+            while ($line !== false) {
+                $ret = preg_match('/^([a-zA-Z0-9_]+)\s+VARCHAR\((\d+)\).*$/', $line, $matches);
+
+                if ($ret && in_array($matches[1], $columns)) {
+                    $sizes[$matches[1]] = $matches[2];
+                }
+
+                $line = strtok($separator);
+            }
+        }
+
+        return $sizes;
+    }
+
+    /**
      * Initial mandatory data
      */
 
@@ -117,7 +151,8 @@ class Core
     {
         foreach ($this->getPrefsDefault() as $name => $p) {
             if (empty($p['private'])) {
-                create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                $evt = empty($p['collection']) ? $p['event'] : array($p['event'], $p['collection']);
+                create_pref($name, $p['val'], $evt, $p['type'], $p['html'], $p['position']);
             }
         }
     }
@@ -216,7 +251,7 @@ class Core
             }
         }
 
-        if (!empty($deleted['private'])) {
+        if (!empty($renamed['private'])) {
             foreach ($renamed['private'] as $oldKey => $newKey) {
                 safe_update('txp_prefs', "name = '".doSlash($newKey)."'", "name='".doSlash($oldKey)."' AND user_name != ''");
             }
@@ -248,9 +283,14 @@ class Core
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
 
-
                     if ($def['event'] != 'custom' && $def != $row) {
-                        set_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
+                        $evt = $def['event'];
+
+                        if (!empty($def['collection'])) {
+                            $evt = array($def['event'], $def['collection']);
+                        }
+
+                        set_pref($name, null, $evt, $def['type'], $def['html'], $def['position'], $private);
                     }
 
                     unset($prefs_check[$name]);

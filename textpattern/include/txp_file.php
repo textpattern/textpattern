@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * Copyright (C) 2004 Michael Manfre
@@ -387,37 +387,22 @@ function file_list($message = '', $ids = array())
 
                 if ($category) {
                     $category = span(txpspecialchars($category_title), array(
-                        'title'      => $category,
-                        'aria-label' => $category,
+                        'title' => $category,
                     ));
                 }
 
                 if ($can_edit) {
-                    $name = href(txpspecialchars($filename), $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
                 } else {
                     $name = txpspecialchars($filename);
                 }
 
                 if ($can_edit) {
-                    $id_column = href($id, $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ));
+                    $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
                     $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
                 } else {
                     $id_column = $id;
                     $multi_edit = '';
-                }
-
-                if ($file_exists) {
-                    $id_column .= span(
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.make_download_link($id, gTxt('download'), $filename),
-                        array('class' => 'txp-option-link')
-                    );
                 }
 
                 if (isset($file_statuses[$status])) {
@@ -472,10 +457,7 @@ function file_list($message = '', $ids = array())
                     ).
                     (
                         $show_authors
-                        ? td(span(txpspecialchars($realname), array(
-                            'title'      => $author,
-                            'aria-label' => $author,
-                        )), '', 'txp-list-col-author name')
+                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                         : ''
                     )
                 );
@@ -499,10 +481,9 @@ function file_list($message = '', $ids = array())
         n.tag(
         null,
         'div', array(
-            'class'      => 'txp-tagbuilder-content',
-            'id'         => 'tagbuild_links',
-            'title'      => gTxt('tagbuilder'),
-            'aria-label' => gTxt('tagbuilder'),
+            'class' => 'txp-tagbuilder-content',
+            'id'    => 'tagbuild_links',
+            'title' => gTxt('tagbuilder'),
         ));
 }
 
@@ -677,6 +658,8 @@ function file_edit($message = '', $id = '')
 
         pagetop(gTxt('edit_file'), $message);
 
+        $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_file', 'filename, title');
+
         if ($permissions == '') {
             $permissions = '-1';
         }
@@ -687,13 +670,29 @@ function file_edit($message = '', $id = '')
 
         $file_exists = is_file(build_file_path($file_base_path, $filename));
         $existing_files = get_filenames();
+        $existing_files = empty($existing_files)
+            ? ''
+            : tag(tag(gTxt('existing_file'), 'label', 'for="existing_file"').
+                selectInput('newfile', $existing_files, '', 1, '', 'existing_file').
+                hInput('perms', ($permissions == '-1') ? '' : $permissions), 'div', 'id="existing_container"'
+            );
+        $can_delete = has_privs('file.delete') || ($author == $txp_user && has_privs('file.delete.own'));
+        $is_writable = is_dir($file_base_path) && is_writeable($file_base_path);
 
-        if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-            $replace = '';
-        } else {
+        if ($is_writable) {
             $replace = ($file_exists)
-                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
-                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
+                ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', 'async replace-file', array('div', 'div'), array('postinput' => $existing_files))
+                : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', 'async upload-file', array('div', 'div'), array('postinput' => $existing_files));
+            $delete = $can_delete
+                ? form(
+                    eInput('file').
+                    sInput('file_multi_edit').
+                    hInput('edit_method', 'delete').
+                    hInput('selected[]', $id)
+                , '', '', 'post', '', '', 'delete-file')
+                : '';
+        } else {
+            $replace = $delete = '';
         }
 
         $condition = span((($file_exists)
@@ -701,7 +700,7 @@ function file_edit($message = '', $id = '')
                 : gTxt('status_missing')
             ), array('class' => 'alert-block alert-pill '.(($file_exists) ? 'success' : 'error')));
 
-        $downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
+        $downloadlink = ($file_exists) ? make_download_link($id, '', $filename) : '';
 
         $created =
             inputLabel(
@@ -732,83 +731,107 @@ function file_edit($message = '', $id = '')
                 'div', array('class' => 'txp-form-field-shim posted-now')
             );
 
-        echo n.tag_start('div', array('class' => 'txp-edit')).
-            hed(gTxt('edit_file'), 2).
-            $replace.
-            inputLabel(
-                'condition',
-                $condition,
-                '', '', array('class' => 'txp-form-field edit-file-condition')
-            ).
-            inputLabel(
-                'id',
-                $id,
-                'id', '', array('class' => 'txp-form-field edit-file-id')
-            ).
-            inputLabel(
-                'name',
-                $downloadlink,
-                '', '', array('class' => 'txp-form-field edit-file-name')
-            ).
-            inputLabel(
-                'download_count',
-                $downloads,
-                '', '', array('class' => 'txp-form-field edit-file-download-count')
-            ).
-            form(
-                (($file_exists)
-                ? inputLabel(
+        echo tag(
+            hed(gTxt('edit_file'), 2, array('class' => 'txp-heading')).
+            ($replace ? tag($replace.n.$delete, 'div') : '').
+            n.form(
+                inputLabel(
+                    'condition',
+                    $condition,
+                    '', '', array('class' => 'txp-form-field edit-file-condition')
+                ).
+                inputLabel(
+                    'id',
+                    $id,
+                    '', '', array('class' => 'txp-form-field edit-file-id')
+                ).
+                inputLabel(
+                    'name',
+                    Txp::get('\Textpattern\UI\Input', 'filename', 'text', $filename)->setAtts(array(
+                            'id'        => 'filename',
+                            'size'      => INPUT_REGULAR,
+                            'maxlength' => $fieldSizes['filename'],
+                        )),
+                    '', '', array('class' => 'txp-form-field edit-file-name')
+                ).inputLabel(
                         'file_status',
                         selectInput('status', $file_statuses, $status, false, '', 'file_status'),
                         'file_status', '', array('class' => 'txp-form-field edit-file-status')
+                ).
+                inputLabel(
+                    'file_category',
+                    event_category_popup('file', $category, 'file_category').
+                    n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                    'category', '', array('class' => 'txp-form-field edit-file-category')
+                ).
+                inputLabel(
+                    'file_title',
+                    Txp::get('\Textpattern\UI\Input', 'title', 'text', $title)->setAtts(array(
+                        'id'        => 'file_title',
+                        'size'      => INPUT_REGULAR,
+                        'maxlength' => $fieldSizes['title'],
+                    )),
+                    'title', '', array('class' => 'txp-form-field edit-file-title')
+                ).
+                inputLabel(
+                    'file_description',
+                    '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
+                    'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
+                ).
+                pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
+                $created.
+                inputLabel(
+                    'modified',
+                    gTime($modified),
+                    'modified', '', array('class' => 'txp-form-field edit-file-modified')
+                ).
+                inputLabel(
+                    'file_size',
+                    format_filesize($size),
+                    '', '', array('class' => 'txp-form-field edit-file-size')
+                ).
+                inputLabel(
+                    'download_count',
+                    Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
+                       ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) .n. $downloadlink,
+                    '', '', array('class' => 'txp-form-field edit-file-download-count')
+                ).
+                graf(
+                    ($can_delete
+                        ? tag_void('input', array(
+                            'class'    => 'caution',
+                            'name'     => 'file_delete',
+                            'type'     => 'submit',
+                            'form'     => 'delete-file',
+                            'value'    =>  gTxt('delete'),
+                            'disabled' => !$is_writable,
+                        ))
+                        : ''
                     ).
-                    $created.
-                    inputLabel(
-                        'file_title',
-                        fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
-                        'title', '', array('class' => 'txp-form-field edit-file-title')
-                    ).
-                    inputLabel(
-                        'file_category',
-                        event_category_popup('file', $category, 'file_category').
-                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                        'category', '', array('class' => 'txp-form-field edit-file-category')
-                    ).
+                    href(gTxt('go_back'), array(
+                        'event'         => 'file',
+                        'sort'          => $sort,
+                        'dir'           => $dir,
+                        'page'          => $page,
+                        'search_method' => $search_method,
+                        'crit'          => $crit,
+                    ), array('class' => 'txp-button')).
+                    fInput('submit', '', gTxt('save'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                ).
+                eInput('file').
+                sInput('file_save').
+                hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', 'file_details'),
 //                    inputLabel(
 //                        'perms',
 //                        selectInput('perms', $levels, $permissions),
 //                        'permissions'
 //                    ).
-                    inputLabel(
-                        'file_description',
-                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
-                        'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
-                    ).
-                    pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(
-                        sLink('file', '', gTxt('cancel'), 'txp-button').
-                        fInput('submit', '', gTxt('save'), 'publish'),
-                        array('class' => 'txp-edit-actions')
-                    ).
-                    hInput('filename', $filename)
-                : (empty($existing_files)
-                        ? ''
-                        : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
-                    ).
-                    pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(
-                        sLink('file', '', gTxt('cancel'), 'txp-button').
-                        fInput('submit', '', gTxt('save'), 'publish'),
-                        array('class' => 'txp-edit-actions')
-                    ).
-                    hInput('perms', ($permissions == '-1') ? '' : $permissions).
-                    hInput(compact('category', 'title', 'description', 'status'))
-                ).
-                eInput('file').
-                sInput('file_save').
-                hInput(compact('id', 'sort', 'dir', 'page', 'search_method', 'crit')),
-            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.tag_end('div');
+            'div', array('class' => 'txp-edit')
+        );
+
+
     }
 }
 
@@ -933,6 +956,9 @@ function file_insert()
         'description',
     ))));
 
+    // Call pre-file-upload plugins.
+    callback_event('files_uploaded', '', true);
+
     foreach ($files as $i => $file) {
         $chunked = $fileshandler->dechunk($file);
         extract($file);
@@ -960,10 +986,11 @@ function file_insert()
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $messages[] = array(gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    ))), false), 0);
+                    $messages[] = array(gTxt('file_uploaded',
+                        array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false), 0);
+
+                    // Call post-upload plugins with the current file $id.
+                    callback_event('file_uploaded', '', false, compact('id', 'title', 'category', 'description', 'size', 'newpath'));
                 }
             }
         } else {
@@ -980,6 +1007,9 @@ function file_insert()
     if ($ids) {
         update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
         now('created', true);
+
+        // Call post-upload plugins with all the new file $ids.
+        callback_event('files_uploaded', '', false, $ids);
     }
 
     if ($app_mode == 'async') {
@@ -1016,9 +1046,16 @@ function file_insert()
 
 function file_replace()
 {
-    global $txp_user, $file_base_path;
+    global $app_mode, $txp_user, $file_base_path;
 
     $id = assert_int(gps('id'));
+
+    $newfile = sanitizeForFile(gps('newfile')) and $new_path = build_file_path($file_base_path, $newfile) and is_file($new_path) or $new_path = false;
+
+    if (empty($new_path) && !isset($_FILES['thefile'])) {
+        return file_edit('', $id);
+    }
+
     $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
 
     if (!$rs) {
@@ -1034,19 +1071,35 @@ function file_replace()
         require_privs();
     }
 
-    $file = file_get_uploaded();
-    $name = file_get_uploaded_name();
+    if (isset($_FILES['thefile'])) {
+        $fileshandler = Txp::get('\Textpattern\Server\Files');
+        $files = $fileshandler->refactor($_FILES['thefile']);
+        
+        foreach ($files as $file) {
+            $fileshandler->dechunk($file);
+        }
 
-    if ($file === false) {
-        // Could not get uploaded file.
-        file_list(array(gTxt('file_upload_failed')." $name ".upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
+        if (!empty($file)) {
+            extract($file);
+            $file = $tmp_name;
 
-        return;
+            if ($file === false) {
+                // Could not get uploaded file.
+                file_list(array(gTxt('file_upload_failed', array('{list}' => $name)).n.upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
+
+                return;
+            }
+        }
+    }
+
+    if (empty($file)) {
+        $file = $new_path;
+        $name = $newfile;
     }
 
     if (!$filename) {
         file_list(array(gTxt('invalid_filename'), E_ERROR));
-    } else {
+    } elseif ($file) {
         $newpath = build_file_path($file_base_path, $filename);
 
         if (is_file($newpath)) {
@@ -1057,7 +1110,9 @@ function file_replace()
             file_list(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR));
 
             // Rename tmp back.
-            rename($newpath.'.tmp', $newpath);
+            if (is_file($newpath.'.tmp')) {
+                rename($newpath.'.tmp', $newpath);
+            }
 
             // Remove tmp upload.
             unlink(realpath($file));
@@ -1065,17 +1120,27 @@ function file_replace()
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
             now('created', true);
+            $message = gTxt('file_uploaded', array('{name}' => $name));
 
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', "size = $size, modified = NOW()", "id = '$id'");
             }
 
-            file_edit(gTxt('file_uploaded', array('{name}' => $name)), $id);
-
             // Clean up old.
             if (is_file($newpath.'.tmp')) {
                 unlink(realpath($newpath.'.tmp'));
             }
+
+            if ($app_mode == 'async') {
+                $response = 'textpattern.Console.addMessage('.json_encode((array)$message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
+        
+                send_script_response($response);
+        
+                // Bail out.
+                return;
+            }
+        
+            file_edit($message, $id);
         }
     }
 }
@@ -1093,6 +1158,7 @@ function file_save()
         'description',
         'status',
         'publish_now',
+        'downloads',
         'year',
         'month',
         'day',
@@ -1120,19 +1186,18 @@ function file_save()
 
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
-    $rs = safe_row("filename, author", 'txp_file', "id = '$id'");
+    $rs = safe_row("filename, author, size", 'txp_file', "id = '$id'");
 
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
     }
 
     $old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
+    $old_path = build_file_path($file_base_path, $old_filename);
+    $new_path = build_file_path($file_base_path, $filename);
 
     if ($old_filename != false && strcmp($old_filename, $filename) != 0) {
-        $old_path = build_file_path($file_base_path, $old_filename);
-        $new_path = build_file_path($file_base_path, $filename);
-
-        if (is_file($old_path) && shift_uploaded_file($old_path, $new_path) === false) {
+        if (file_exists($new_path) || (is_file($old_path) && shift_uploaded_file($old_path, $new_path) === false)) {
             file_list(array(gTxt('file_cannot_rename', array('{name}' => $filename)), E_ERROR));
 
             return;
@@ -1141,7 +1206,7 @@ function file_save()
         }
     }
 
-    $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+    $created_ts = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 
     if ($publish_now) {
         $created = "NOW()";
@@ -1151,7 +1216,7 @@ function file_save()
         $created = '';
     }
 
-    $size = filesize(build_file_path($file_base_path, $filename));
+    $size = file_exists($new_path) ? filesize($new_path) : $rs['size'];
 
     $constraints = array(
         'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
@@ -1169,6 +1234,7 @@ function file_save()
         category = '$category',
         permissions = '$perms',
         description = '$description',
+        downloads = '".(int)$downloads."',
         status = '$status',
         size = '$size',
         modified = NOW()"
@@ -1225,9 +1291,9 @@ function file_delete($ids = array())
                 callback_event('file_deleted', '', false, $id, $filepath);
 
                 $rsd = safe_delete('txp_file', "id = '$id'");
-                $ul = false;
+                $ul = !is_file($filepath);
 
-                if ($rsd && is_file($filepath)) {
+                if ($rsd && !$ul) {
                     $ul = unlink(realpath($filepath));
                 }
 
@@ -1273,7 +1339,7 @@ function file_get_uploaded()
 
 function file_set_perm($file)
 {
-    return @chmod($file, 0644);
+    return chmod($file, 0644);
 }
 
 /**

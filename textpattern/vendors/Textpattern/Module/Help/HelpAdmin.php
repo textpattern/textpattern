@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -131,8 +131,6 @@ class HelpAdmin
         $lang_ui = ($lang) ? $lang : get_pref('language_ui', LANG);
 
         if (!$xml = self::pophelp_load($lang_ui)) {
-            $lang_ui = TEXTPATTERN_DEFAULT_LANG;
-
             if (!empty(self::$fallback_xml)) {
                 $xml = self::$fallback_xml;
             }

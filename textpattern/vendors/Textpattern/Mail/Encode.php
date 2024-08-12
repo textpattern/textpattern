@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -68,7 +68,7 @@ class Encode
 
         foreach ($value as $email => $name) {
             if ($this->charset != 'UTF-8') {
-                $name = utf8_decode($name);
+                $name = safe_encode($name, $this->charset, 'UTF-8');
             }
 
             $out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');
@@ -153,5 +153,33 @@ class Encode
     public function escapeHeader($string)
     {
         return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string)$string);
+    }
+
+    /**
+     * Extract email and name from a combined RFC email string.
+     *
+     * @param  string $string The string
+     * @return array  The name and email component parts, if given
+     */
+
+    public function fromRfcEmail($rfc_email_string) {
+        $out = array('email' => '', 'name' => '');
+
+        $mailAddress = preg_match('/(?:<)(.+)(?:>)$/', $rfc_email_string, $matches);
+
+        if (!empty($matches[1])) {
+            $out['email'] = $matches[1];
+        } else {
+            $out['email'] = $rfc_email_string;
+        }
+
+        $name = preg_match('/[\w\s]+/', $rfc_email_string, $matches);
+
+        if (!empty($matches[0])) {
+            $matches[0] = trim($matches[0]);
+            $out['name'] = $matches[0];
+        }
+
+        return $out;
     }
 }

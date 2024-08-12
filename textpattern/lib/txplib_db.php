@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -241,14 +241,14 @@ class DB
         }
 
         // Suppress screen output from mysqli_real_connect().
-        $error_reporting = error_reporting();
-        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
-
-        if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
+        try {
+            $error_reporting = error_reporting();
+            error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+            mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags);
+            error_reporting($error_reporting);
+        } catch (Exception $e) {
             die(db_down());
         }
-
-        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
@@ -803,6 +803,37 @@ function safe_drop($table, $debug = false)
 }
 
 /**
+ * Check if given table(s) exist in the database.
+ *
+ * @param  string|array $table Table(s) to check
+ * @param  bool         $debug Dump query
+ * @return bool         True if all nominated tables exist
+ * @since 4.9.0
+ * @example
+ * if (!safe_exists('myTable, myOtherTable'))
+ * {
+ *     // Create tables here;
+ * }
+ */
+
+function safe_exists($table, $debug = false)
+{
+    $table = is_array($table) ? $table : do_list_unique($table);
+    $table_set = array();
+
+    foreach ($table as $tbl) {
+        $table_set[] = "TABLE_NAME = '". safe_pfx($tbl) . "'";
+    }
+
+    $expected = count($table_set);
+    $table_clause = implode(' OR ', $table_set);
+
+    $ret = getThing("SELECT count(1) as num FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND (".$table_clause.")", $debug);
+
+    return $ret == $expected;
+}
+
+/**
  * Creates a table.
  *
  * Creates a table with the given name. This table will be created with
@@ -1352,7 +1383,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".quote_list($exclude, ',').")" : '';
 
     $nocache = !$children || $sql_limit || $children == $level;
-    $hash = md5($nocache ? uniqid() : $sql_query);
+    $hash = txp_hash($nocache ? uniqid() : $sql_query);
 
     if (!isset($cache[$hash])) {
         $cache[$hash] = array('' => array());
@@ -1427,7 +1458,12 @@ function get_tree($atts = array(), $tbl = 'txp_category')
 
         $cache[$hash][''] = array_filter($cache[$hash]['']);
     }
-
+/*
+    if (isset($atts['limit']) && is_numeric($atts['limit'])) {
+        $count = count($cache[$hash]['']);
+        $atts['limit'] = $limit = $limit - $count;
+    }
+*/
     $out = array();
 
     foreach ($cache[$hash][$root] as $name => $cat) {
@@ -1437,7 +1473,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
             $out[$name] = $cat;
             $out[$name]['level'] = $level - 1;
 
-            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 &&
+            if (isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1 && //(int)$limit > 0 &&
                 $nodes = get_tree(array(
                     'parent'  => $name,
                     'exclude' => array_merge($exclude, array($name))
@@ -1463,7 +1499,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
         }
     }
 
-    return $out;
+    return $out;//array_slice($out, 0, (int)$limit);
 }
 
 /**

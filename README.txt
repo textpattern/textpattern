@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Textpattern CMS 4.8.8
+=======
+Textpattern CMS 4.9.0-beta
+>>>>>>> release-4.9.0-beta
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
@@ -31,12 +35,10 @@ system. Textpattern is free and open source.
 * Website:       https://textpattern.com/
 * Support forum: https://forum.textpattern.com
 * Documentation: https://docs.textpattern.com
-
-* Social:        https://textpattern.com/twitter
-
+* Social:        https://textpattern.com/mastodon
+                 https://textpattern.com/twitter
 * Development:   https://textpattern.com/github
 * Contributing:  https://docs.textpattern.com/development/contributing
-
 * Sponsor:       https://github.com/sponsors/textpattern
                  https://opencollective.com/textpattern-collective
 * Donate:        https://textpattern.com/about/patrons

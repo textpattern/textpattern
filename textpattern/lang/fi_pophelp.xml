@@ -28,7 +28,8 @@
         <item id="file_category" title="Tiedostot"><![CDATA[<h2>Tiedostot</h2>
 <p>Tiedostokategoriat ovat vapaaehtoisia, ja hyödyllisiä tiedostojen ryhmittelemisessä.</p>
         ]]></item>
-        <item id="image_category" title="Kuvat"><![CDATA[]]></item>
+        <item id="image_category" title="Kuvat"><![CDATA[<h2>Kuvat</h2>
+<p>Kuvien kategoriat ovat valinnaisia, ja hyödyllisiä sekä kuvien järjestelemiseen sisäisesti että kuvakokoelmien luomiseen, jotta niitä voidaan näyttää käyttäen tageja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</5</a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</span></a>.</p>]]></item>
         <item id="link_category" title="Linkit"><![CDATA[]]></item>
     </group>
 
@@ -126,7 +127,7 @@
         <item id="comments_mode" title="Kommentointitapa"><![CDATA[]]></item>
         <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[]]></item>
         <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
+        <item id="comments_require_email" title="Kommentointi vaatii kommentoijan sähköpostiosoitteen?"><![CDATA[]]></item>
         <item id="comments_require_name" title="Kommentointi vaatii kommentoijan nimen?"><![CDATA[]]></item>
         <item id="comments_sendmail" title="Lähetä kommentit kirjoittajalle?"><![CDATA[]]></item>
         <item id="comments_use_fat_textile" title="Salli lisää Textile-merkintäkieltä kommenteissa?"><![CDATA[]]></item>
@@ -148,7 +149,7 @@
         <item id="include_email_atom" title="Liitä sähköpostiosoite Atom-syötteisiin?"><![CDATA[]]></item>
         <item id="is_dst" title="Kesäaika käytössä?"><![CDATA[]]></item>
         <item id="logging" title="Kirjaaminen"><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
+        <item id="max_url_len" title="URLin enimmäispituus (merkkimääränä)"><![CDATA[]]></item>
         <item id="module_pophelp" title="Näytä hallintapaneelissa sisällön seassa ohjelinkkejä"><![CDATA[]]></item>
         <item id="never_display_email" title="Piilota kommentoijan sähköpostiosoite?"><![CDATA[]]></item>
         <item id="override_emailcharset" title="Käytä ISO-8859-1 -merkistokoodausta sähköposteissa (oletuksena UTF-8)?"><![CDATA[]]></item>
@@ -169,7 +170,7 @@
         <item id="siteurl" title="Sivuston URL"><![CDATA[]]></item>
         <item id="skin_dir" title="Teemahakemisto"><![CDATA[]]></item>
         <item id="smtp_from" title="SMTP-kirjeen lähettäjän osoite"><![CDATA[]]></item>
-        <item id="spam_blacklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
+        <item id="spam_blocklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndikoi vain artikkelin johdanto?"><![CDATA[]]></item>
         <item id="tempdir" title="Tilapäisten tiedostojen hakemistopolku"><![CDATA[]]></item>
         <item id="theme_name" title="Hallintapaneelin teema"><![CDATA[]]></item>

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -793,7 +793,7 @@ class Skin extends CommonBase implements SkinInterface
             }
 
             if (!self::isExportable($name)) {
-                $this->mergeResult($event.'_unsafe_name', $name);
+                $this->mergeResult($event.'_name_unsafe', $name);
             } elseif (!$override && is_dir($nameDirPath)) {
                 $this->mergeResult($event.'_already_exists', $nameDirPath);
             } elseif (!is_dir($nameDirPath) && !@mkdir($nameDirPath)) {
@@ -1371,16 +1371,13 @@ class Skin extends CommonBase implements SkinInterface
 
                 $tdAuthor = txpspecialchars($skin_author);
                 empty($skin_author_uri) or $tdAuthor = href($tdAuthor.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $skin_author_uri, array(
-                    'rel'    => 'external noopener',
+                    'rel'    => 'external',
                     'target' => '_blank',
                 ));
 
                 $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                     .hCell(
-                        href(txpspecialchars($skin_name), $editUrl, array(
-                            'title'      => gTxt('edit'),
-                            'aria-label' => gTxt('edit'),
-                        )).
+                        href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))).
                         ($numThemes > 1 ? ' | '.href(gTxt('assign_sections'), 'index.php?event=section&step=section_select_skin&skin='.urlencode($skin_name)).
                         (${$event.'_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) :
                             (${$event.'_dev_section_count'} > 0 ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill warning')) : '')
@@ -1414,10 +1411,7 @@ class Skin extends CommonBase implements SkinInterface
                         $tdVal = href(
                             ${$event.'_'.$name.'_count'},
                             $linkParams,
-                            array(
-                                'title'      => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
-                                'aria-label' => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})),
-                            )
+                            array('title' => gTxt($event.'_count_'.$name, array('{num}' => ${$event.'_'.$name.'_count'})))
                         );
                     } else {
                         $tdVal = 0;
@@ -1553,25 +1547,40 @@ class Skin extends CommonBase implements SkinInterface
         extract($rs, EXTR_PREFIX_ALL, $event);
         pagetop(gTxt('tab_'.$event));
 
+        $fieldSizes = \Txp::get('\Textpattern\DB\Core')->columnSizes('txp_skin', $fields);
         $content = hed($caption, 2);
 
         foreach ($fields as $field) {
             $current = ${$event.'_'.$field};
 
             if ($field === 'description') {
-                $input = text_area($field, 0, 0, $current, $event.'_'.$field);
+                $input = \Txp::get('\Textpattern\UI\Textarea', $field, $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'maxlength' => $fieldSizes[$field],
+                            ));
             } elseif ($field === 'name') {
-                $input = fInput(
-                    'text',
-                    array(
-                        'name'      => $field,
-                        'maxlength' => '63',
-                    ), $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', true
-                );
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'text', $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes[$field],
+                            ))->setBool('required');
             } elseif ($field === 'author_uri') {
-                $input = fInput('url', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field, '', '', 'http(s)://');
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'url', $current)
+                            ->setAtts(array(
+                                'id'          => $event.'_'.$field,
+                                'size'        => INPUT_REGULAR,
+                                'maxlength'   => $fieldSizes[$field],
+                                'placeholder' => 'http(s)://',
+                            ));
             } else {
-                $input = fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
+                $input = \Txp::get('\Textpattern\UI\Input', $field, 'text', $current)
+                            ->setAtts(array(
+                                'id'        => $event.'_'.$field,
+                                'size'      => INPUT_REGULAR,
+                                'maxlength' => $fieldSizes[$field],
+                            ));
             }
 
             $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field, $event.'_'.$field);

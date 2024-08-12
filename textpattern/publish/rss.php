@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,22 +48,23 @@ function rss()
 
     // Build filter criteria from a comma-separated list of sections
     // and categories.
-    $feed_filter_limit = get_pref('feed_filter_limit', 10);
-    $section = gps('section');
-    $category = gps('category');
+    $in_rss = array_filter(array_column($txp_sections, 'in_rss', 'name'));
+    $section = do_list_unique(gps('section'));
+    $st = array();
 
-    if (!is_scalar($section) || !is_scalar($category)) {
-        txp_die('Not Found', 404);
+    if ($section && $in_rss) {
+        $in_rss = array_intersect_key($in_rss, array_fill_keys($section, null));
     }
 
-    $section = ($section ? array_slice(do_list_unique($section), 0, $feed_filter_limit) : array());
-    $category = ($category ? array_slice(do_list_unique($category), 0, $feed_filter_limit) : array());
-    $st = array();
+    if ($rss_how_many == 0 || (!$area || $area == 'article') && empty($in_rss)) {
+        txp_die(gTxt('404_not_found'), 404);
+    }
 
     foreach ($section as $s) {
         $st[] = fetch_section_title($s);
     }
 
+    $category = do_list_unique(gps('category'));
     $ct = array();
 
     foreach ($category as $c) {
@@ -73,7 +74,7 @@ function rss()
     $sitename .= ($section) ? ' - '.join(' - ', $st) : '';
     $sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
     $dn = explode('/', $siteurl);
-    $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
+    $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
 
     // Feed header.
     $out[] = tag('https://textpattern.com/?v='.$version, 'generator');
@@ -98,16 +99,14 @@ function rss()
     $limit = ($limit) ? $limit : $rss_how_many;
     $limit = intval(min($limit, max(100, $rss_how_many)));
 
-    if (!$area or $area == 'article') {
+    if (!$area || $area == 'article') {
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
 
         $query = array($sfilter, $cfilter);
 
-        $rs = array_filter(array_column($txp_sections, 'in_rss', 'name'));
-
-        if ($rs) {
-            $query[] = 'AND Section IN('.join(',', quote_list(array_keys($rs))).')';
+        if ($rs = filterFrontPage('Section', 'in_rss')) {
+            $query[] = $rs;
         }
 
         if ($atts = callback_event('feed_filter')) {
@@ -117,7 +116,7 @@ function rss()
         }
 
         $atts = filterAtts($atts, true);
-        $where = $atts['*'].' '.join(' ', $query);
+        $where = $atts['?'].' '.join(' ', $query);
 
         $rs = safe_rows_start(
             "*,
@@ -126,7 +125,7 @@ function rss()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY Posted DESC LIMIT $limit"
+            $where." ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -332,42 +332,45 @@ function form_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_form'), 'txp-new')
-        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
-            'class'     => 'txp-clone',
+        $actionsExtras .= sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_form').'"></span>'.sp.gTxt('create_form'), 'txp-new')
+        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
+            'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'form_form',
         ));
     }
 
     $actions = graf(
         $actionsExtras,
-        array('class' => 'txp-actions txp-actions-inline')
+        array('class' => 'txp-actions')
     );
 
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
-            span(
-                checkbox2('export', gps('export'), 0, 'export').
+            n.span(
+                checkbox2('export', gps('export'), 0, 'export', 'form_form').
                 n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
         ).
+        '<span class="txp-save-button">'.
         n.tag_void('input', array(
-            'class'  => 'publish',
-            'type'   => 'submit',
-            'method' => 'post',
-            'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+            'class' => 'publish',
+            'name'  => 'save',
+            'type'  => 'submit',
+            'form'  => 'form_form',
+            'value' => gTxt('save'),
+        )).
+        '</span>', ' class="txp-save"'
     );
 
     $listActions = graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'allforms_form',
         )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'allforms_form',
         )), array('class' => 'txp-actions')
     );
@@ -397,15 +400,32 @@ function form_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_forms'), $message);
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        );
+    echo n.'<div class="txp-layout">';
+
+    // Forms code column.
+    echo n.tag(
+        hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
+        $skinBlock.
+        form(
+            $partials['name']['html'].
+            $partials['type']['html'].
+            $partials['template']['html'],
+            '', '', 'post', $class, '', 'form_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
+            'role'  => 'region',
+        )
+    );
 
     // Forms create/switcher column.
     echo n.tag(
-        $skinBlock.$listActions.n.
+        n.tag(
+            $buttons.
+            $actions,
+            'div', array('class' => 'txp-save-zone')
+        ).
+        $listActions.n.
         $partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
@@ -414,29 +434,13 @@ function form_edit($message = '', $refresh_partials = false)
         )
     );
 
-    // Forms code column.
-    echo n.tag(
-        form(
-            $actions.
-            $partials['name']['html'].
-            $partials['type']['html'].
-            $partials['template']['html'].
-            $buttons, '', '', 'post', $class, '', 'form_form'),
-        'div', array(
-            'class' => 'txp-layout-4col-3span',
-            'id'    => 'main_content',
-            'role'  => 'region',
-        )
-    );
-
     // Tag builder dialog placeholder.
     echo n.tag(
         '&nbsp;',
         'div', array(
-            'class'      => 'txp-tagbuilder-content',
-            'id'         => 'tagbuild_links',
-            'title'      => gTxt('tagbuilder'),
-            'aria-label' => gTxt('tagbuilder'),
+            'class' => 'txp-tagbuilder-content',
+            'id'    => 'tagbuild_links',
+            'title' => gTxt('tagbuilder'),
         ));
 
     echo n.'</div>'; // End of .txp-layout.
@@ -731,11 +735,19 @@ function form_partial_name($rs)
     $skin = $rs['skin'];
     $type = $rs['type'];
     $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_form', 'name');
+    $nameInput = Txp::get('\Textpattern\UI\Input', 'newname', 'text', $name)->setAtts(array(
+            'class'     => 'input-medium',
+            'id'        => 'new_form',
+            'size'      => INPUT_MEDIUM,
+            'pattern'   => $nameRegex,
+            'maxlength' => $fieldSizes['name'],
+        ));
 
     if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+        $nameInput->setBool('disabled');
     } else {
-        $nameInput = fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $nameInput->setBool('required');
     }
 
     $name_widgets = inputLabel(

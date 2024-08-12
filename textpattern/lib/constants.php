@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -24,6 +24,20 @@
 /**
  * Constants.
  */
+
+/**
+ * Textpattern version.
+ */
+
+$thisversion = '4.9.0-dev';
+
+/**
+ * Development environment?
+ *
+ * Set false for releases.
+ */
+
+$txp_is_dev = true;
 
 if (!defined('TXP_DEBUG')) {
     /**
@@ -78,10 +92,10 @@ if (!defined('HELP_URL')) {
      * This constant can be overridden from the config.php.
      *
      * @example
-     * define('HELP_URL', 'https://rpc.example.com/help/');
+     * define('HELP_URL', 'https://example.com/help/');
      */
 
-    define('HELP_URL', 'https://rpc.textpattern.com/help/');
+    define('HELP_URL', 'https://textile-lang.com');
 }
 
 /**
@@ -311,6 +325,21 @@ if (!defined('PLUGINPATH')) {
     define('PLUGINPATH', $admin_path.DS.'plugins');
 }
 
+if (!defined('PLUGIN_REPO_URL')) {
+    /**
+     * Remote plugin repository.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Plugin
+     * @since   4.9.0
+     * @example
+     * define('PLUGIN_REPO_URL', 'https://example.com/my-plugins');
+     */
+
+    define('PLUGIN_REPO_URL', 'https://plugins.textpattern.com');
+}
+
 if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
      * Sets accepted protocols for HTTP referrer header.
@@ -376,7 +405,7 @@ if (!defined('PASSWORD_SYMBOLS')) {
      *
      * @package User
      * @since   4.6.0
-     * @see     generate_password()
+     * @see     Textpattern\Password\Generator
      * @example
      * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */
@@ -515,7 +544,7 @@ if (!defined('AJAX_TIMEOUT')) {
      * define('AJAX_TIMEOUT', 10);
      */
 
-    define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+    define('AJAX_TIMEOUT', 1000 * max(30, (int)ini_get('max_execution_time')));
 }
 
 /**
@@ -706,7 +735,7 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  * @package System
  */
 
-define('REQUIRED_PHP_VERSION', '5.5.0');
+define('REQUIRED_PHP_VERSION', '5.6.0');
 
 /**
  * Required OPENSSL version.
@@ -949,14 +978,15 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 
 define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-/**
+ /**
  * Define the default parser hash algo
  *
  * @since   4.8.8
  */
 
 if (!defined('TEXTPATTERN_HASH_ALGO')) {
-    define('TEXTPATTERN_HASH_ALGO', in_array('xxh128', hash_algos()) ? 'xxh128' : 'tiger192,3');
+    $algos = array_intersect(array('xxh128', 'murmur3f', 'murmur3c'), hash_algos());
+    define('TEXTPATTERN_HASH_ALGO', $algos ? $algos[0] : 'md5');
 }
 
 /**
@@ -968,6 +998,26 @@ if (!defined('TEXTPATTERN_HASH_ALGO')) {
 if (!defined('TEXTPATTERN_HASH_LENGTH')) {
     define('TEXTPATTERN_HASH_LENGTH', strlen(hash(TEXTPATTERN_HASH_ALGO, '')));
 }
+
+/**
+ * Define the default theme directories
+ *
+ * @since   4.9.0
+ */
+
+ const TXP_THEME_TREE = array(
+     'forms'  => 'forms',
+     'pages'  => 'pages',
+     'styles' => 'styles'
+ );
+
+ /**
+  * Define txp tag/attribute name pattern
+  *
+  * @since   4.9.0
+  */
+ 
+  const TXP_TAG = '[\w\-\x80-\xffff]+'; //'[^\x00-\x2c\x2f\x3a-\x3f\x5b-\x5d\x7b-\x7f]+';
 
 /**
  * A tab character.

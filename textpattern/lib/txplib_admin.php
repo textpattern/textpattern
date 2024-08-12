@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -39,7 +39,7 @@ function send_account_activation($name)
     global $sitename;
 
     require_privs('admin.edit');
-
+    $type = 'account_activation';
     $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
 
     if ($rs) {
@@ -47,7 +47,8 @@ function send_account_activation($name)
 
         $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
 
-        $activation_code = generate_user_token($user_id, 'account_activation', $expiryTimestamp, $pass, $nonce);
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+        $activation_code = $txpToken->generate($user_id, $type, $expiryTimestamp, $pass, $nonce);
 
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
@@ -73,8 +74,10 @@ function send_account_activation($name)
                 '{time}'  => $expiryTime,
             ));
 
-        $subject = gTxt('account_activation');
+        // Tidy up expired activation requests.
+        $txpToken->remove($type, null, (ACTIVATION_EXPIRY_HOURS + 1).' HOUR');
 
+        $subject = gTxt('account_activation');
         $txpLang->swapStrings(null);
 
         if (txpMail($email, "[$sitename] ".$subject, $message)) {
@@ -106,6 +109,7 @@ function send_reset_confirmation_request($name)
 
     $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
     $safeName = doSlash($name);
+    $type = 'password_reset';
 
     $rs = safe_query(
         "SELECT
@@ -133,7 +137,8 @@ function send_reset_confirmation_request($name)
             }
         }
 
-        $confirm = generate_user_token($user_id, 'password_reset', $expiryTimestamp, $pass, $nonce);
+        $txpToken = \Txp::get('\Textpattern\Security\Token');
+        $confirm = $txpToken->generate($user_id, $type, $expiryTimestamp, $pass, $nonce);
 
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
@@ -156,6 +161,9 @@ function send_reset_confirmation_request($name)
                 '{time}'  => $expiryTime,
             ));
 
+        // Tidy up expired password reset requests.
+        $txpToken->remove($type, null, (RESET_EXPIRY_MINUTES + 1).' MINUTE');
+
         $subject = gTxt('password_reset_confirmation_request');
         $txpLang->swapStrings(null);
 
@@ -170,167 +178,6 @@ function send_reset_confirmation_request($name)
         // a possibility of a timing attack revealing the existence of an
         // account, which we could defend against to some degree.
         return gTxt('password_reset_confirmation_request_sent');
-    }
-}
-
-/**
- * Emails a new user with login details.
- *
- * This function can be only executed when the currently authenticated user
- * trying to send the email was granted 'admin.edit' privileges.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      string $RealName The real name
- * @param      string $name     The login name
- * @param      string $email    The email address
- * @param      string $password The password
- * @return     bool FALSE on error.
- * @deprecated in 4.6.0
- * @see        send_new_password(), send_reset_confirmation_request
- * @example
- * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
- * {
- *     echo "Login details sent.";
- * }
- */
-
-function send_password($RealName, $name, $email, $password)
-{
-    global $sitename;
-
-    require_privs('admin.edit');
-
-    $message = gTxt('salutation', array('{name}' => $RealName)).
-
-        n.n.gTxt('you_have_been_registered').' '.$sitename.
-
-        n.n.gTxt('your_login_is').' '.$name.
-        n.gTxt('your_password_is').' '.$password.
-
-        n.n.gTxt('log_in_at').' '.ahu.'index.php';
-
-    return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
-}
-
-/**
- * Sends a new password to an existing user.
- *
- * If the $name is FALSE, the password is sent to the currently
- * authenticated user.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      string $password The new password
- * @param      string $email    The email address
- * @param      string $name     The login name
- * @return     bool FALSE on error.
- * @deprecated in 4.6.0
- * @see        send_reset_confirmation_request
- * @see        reset_author_pass()
- * @example
- * $pass = generate_password();
- * if (send_new_password($pass, 'example@example.tld', 'user'))
- * {
- *     echo "Password was sent to 'user'.";
- * }
- */
-
-function send_new_password($password, $email, $name)
-{
-    global $txp_user, $sitename;
-
-    if (empty($name)) {
-        $name = $txp_user;
-    }
-
-    $message = gTxt('salutation', array('{name}' => $name)).
-
-        n.n.gTxt('your_password_is').' '.$password.
-
-        n.n.gTxt('log_in_at').' '.ahu.'index.php';
-
-    return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-}
-
-/**
- * Generates a password.
- *
- * Generates a random password of given length using the symbols set in
- * PASSWORD_SYMBOLS constant.
- *
- * Should NEVER be used as it is not cryptographically secure.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param      int $length The length of the password
- * @return     string Random plain-text password
- * @deprecated in 4.6.0
- * @see        \Textpattern\Password\Generate
- * @see        \Textpattern\Password\Random
- * @example
- * echo generate_password(128);
- */
-
-function generate_password($length = 10)
-{
-    static $chars;
-
-    if (!$chars) {
-        $chars = str_split(PASSWORD_SYMBOLS);
-    }
-
-    $pool = false;
-    $pass = '';
-
-    for ($i = 0; $i < $length; $i++) {
-        if (!$pool) {
-            $pool = $chars;
-        }
-
-        $index = mt_rand(0, count($pool) - 1);
-        $pass .= $pool[$index];
-        unset($pool[$index]);
-        $pool = array_values($pool);
-    }
-
-    return $pass;
-}
-
-/**
- * Resets the given user's password and emails it.
- *
- * The old password is replaced with a new random-generated one.
- *
- * Should NEVER be used as sending plaintext passwords is wrong.
- * Will be removed in future, in lieu of sending reset request tokens.
- *
- * @param  string $name The login name
- * @return string A localized message string
- * @deprecated in 4.6.0
- * @see    PASSWORD_LENGTH
- * @see    generate_password()
- * @example
- * echo reset_author_pass('username');
- */
-
-function reset_author_pass($name)
-{
-    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
-
-    $new_pass = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
-
-    $rs = change_user_password($name, $new_pass);
-
-    if ($rs) {
-        if (send_new_password($new_pass, $email, $name)) {
-            return gTxt('password_sent_to').' '.$email;
-        } else {
-            return gTxt('could_not_mail').' '.$email;
-        }
-    } else {
-        return gTxt('could_not_update_author').' '.txpspecialchars($name);
     }
 }
 
@@ -363,7 +210,7 @@ function gTxtScript($var, $atts = array(), $route = array())
         }
 
         $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
-        $textarray_script = $textarray_script + array_combine((array) $var, $data);
+        $textarray_script += array_combine((array) $var, $data);
     }
 }
 
@@ -434,7 +281,7 @@ function updateVolatilePartials($partials)
 /**
  * Checks if GD supports the given image type.
  *
- * @param   string $image_type Either '.gif', '.jpg', '.png'
+ * @param   string $image_type Either '.gif', '.jpg', '.png', '.svg'
  * @return  bool TRUE if the type is supported
  * @package Image
  */
@@ -458,6 +305,11 @@ function check_gd($image_type)
         case '.png':
             return ($gd_info['PNG Support'] == true);
             break;
+        case '.svg':
+            if (has_privs('image.create.trusted')) {
+                return true;
+            }
+            break;
         case '.webp':
             return (!empty($gd_info['WebP Support']));
             break;
@@ -470,6 +322,103 @@ function check_gd($image_type)
 }
 
 /**
+ * Find SVG element in XML tree
+ *
+ * @param   SimpleXMLElement  $node  start tree
+ * @param   SimpleXMLElement  &$svg  return SVG tree, if any
+ * @package Image
+ */
+
+function findSVG($node, &$svg) {
+    if ($node->getName() == 'svg') {
+        $svg = $node;
+        return;
+    }
+    foreach ($node->children() as $child) {
+        findSVG($child, $svg);
+    }
+}
+
+/**
+ * Provide GD equivalent function to create image from SVG
+ *
+ * @param   string  $file             Filename
+ * @param   bool    $makestandalone   Remove non-svg elements from tree
+ * @package Image
+ */
+
+function imagecreatefromsvg($file, $makestandalone = true)
+{
+    $xml = file_get_contents($file);
+    if ($makestandalone) {
+        $xmlend = strpos($xml, '?>') + 2;
+        $xmltree = simplexml_load_string($xml);
+        $svg = null;
+        findSVG($xmltree, $svg);
+        if ($svg == null) {
+            return false;
+        }
+        $newxml = $svg->asXML();
+        if (substr($newxml, 0, 5) != "<?xml") {
+            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
+        } else {
+            return $newxml . PHP_EOL;
+        }
+    } else {
+      return $xml;
+    }
+}
+
+/**
+ * Private implementation of PHP getimagesize() that includes SVG
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpgetimagesize($file)
+{
+    $content = file_get_contents($file);
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
+        return getimagesize($file);
+    }
+    
+    if (strpos($content, "<svg") === false) {
+        return false;
+    }
+
+    if (($xml = simplexml_load_string($content)) === false) {
+        return false;
+    }
+
+    $svg = null;
+    findSVG($xml, $svg);
+    if ($svg == null) {
+        return false;
+    }
+ 
+    $width = svgtopx($svg['width']);
+    $height = svgtopx($svg['height']);
+    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
+        if (empty($svg['viewBox'])) {
+            return false;
+        }
+        $viewbox = explode(' ', $svg['viewBox']);
+        $width = $viewbox[2] - $viewbox[0];
+        $height = $viewbox[3] - $viewbox[1];
+        if ($width <= 0 || $height <= 0) {
+            return false;
+        }
+    }
+    $data = array();
+    $data[0] = $width;
+    $data[1] = $height;
+    $data[2] = IMAGETYPE_SVG;
+    return $data;
+}
+
+/**
  * Returns the given image file data.
  *
  * @param   array      $file     HTTP file upload variables
@@ -479,7 +428,7 @@ function check_gd($image_type)
 
 function txpimagesize($file, $create = false)
 {
-    if ($data = getimagesize($file)) {
+    if ($data = txpgetimagesize($file)) {
         list($w, $h, $ext) = $data;
         $exts = get_safe_image_types();
         $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
@@ -508,7 +457,12 @@ function txpimagesize($file, $create = false)
 
         $errlevel = error_reporting(0);
 
-        if ($data['image'] = $imgf($file)) {
+        if ($ext == '.svg') {
+            $data['image'] = $imgf($file, false);
+        } else {
+            $data['image'] = $imgf($file);
+        }
+        if ($data['image']) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
             $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
@@ -615,7 +569,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
     $newpath = IMPATH.$id.$ext;
 
-    if (shift_uploaded_file($file, $newpath) == false) {
+    if (shift_uploaded_file($file, $newpath, $ext == '.svg') == false) {
         if (!empty($rs)) {
             safe_delete('txp_image', "id = '$id'");
             unset($GLOBALS['ID']);
@@ -712,7 +666,7 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
         $msg = gTxt('internal_error');
     }
 
-    if ($production_status == 'debug' && has_privs('debug.backtrace')) {
+    if ($production_status == 'debug' /*&& has_privs('debug.backtrace')*/) {
         $msg .= n."in $errfile at line $errline";
         $backtrace = join(n, get_caller(10, 1));
     }
@@ -1161,12 +1115,21 @@ function get_filenames($path = null, $options = GLOB_NOSORT)
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
+ * @param   bool $issvg  Image type is SVG
  * @return  bool TRUE on success, or FALSE on error
  * @package File
  */
 
-function shift_uploaded_file($f, $dest)
+function shift_uploaded_file($f, $dest, $issvg = false)
 {
+    if ($issvg) {
+        if (($svg = imagecreatefromsvg($f)) !== false) {
+            unlink($f);
+            if (file_put_contents($dest, $svg) !== false)
+                return true;
+        }
+    }
+
     if (@rename($f, $dest)) {
         return true;
     }
@@ -1647,39 +1610,12 @@ function txp_hash_password($password)
  * @param  string $nonce           Random nonce associated with the user's account
  * @return string                  Secure token suitable for emailing as part of a link
  * @since  4.6.1
+ * @deprecated in 4.9.0
  */
 
 function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 {
-    $ref = assert_int($ref);
-    $expiry = date('Y-m-d H:i:s', $expiryTimestamp);
-
-    // The selector becomes an indirect reference to the user row id,
-    // and thus does not leak information when publicly displayed.
-    $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-
-    // Use a hash of the nonce, selector and password.
-    // This ensures that requests expire automatically when:
-    //  a) The person logs in, or
-    //  b) They successfully set/change their password
-    // Using the selector in the hash just injects randomness, otherwise two requests
-    // back-to-back would generate the same code.
-    // Old requests for the same user id are purged when password is set.
-    $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce.$selector.$pass), 0, SALT_LENGTH)));
-    $user_token = $token.$selector;
-
-    // Remove any previous activation tokens and insert the new one.
-    $safe_type = doSlash($type);
-    safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
-    safe_insert("txp_token",
-            "reference_id = '$ref',
-            type = '$safe_type',
-            selector = '".doSlash($selector)."',
-            token = '".doSlash($token)."',
-            expires = '".doSlash($expiry)."'
-        ");
-
-    return $user_token;
+    return Txp::get('\Textpattern\Security\Token')->generate($ref, $type, $expiryTimestamp, $pass, $nonce);
 }
 
 /**
@@ -1704,7 +1640,7 @@ function modal_halt($thing)
 /**
  * Sends an activity message to the client.
  *
- * @param   string|array $message The message
+ * @param   string|array $message The message
  * @param   int          $type    The type, either 0, E_ERROR, E_WARNING
  * @param   int          $flags   Flags, consisting of TEXTPATTERN_ANNOUNCE_ADAPTIVE | TEXTPATTERN_ANNOUNCE_ASYNC | TEXTPATTERN_ANNOUNCE_MODAL | TEXTPATTERN_ANNOUNCE_REGULAR
  * @package Announce
@@ -1730,37 +1666,6 @@ function announce($message, $type = 0, $flags = TEXTPATTERN_ANNOUNCE_ADAPTIVE)
     }
 
     return $theme->announce($message);
-}
-
-/**
- * Loads date definitions from a localisation file.
- *
- * @param      string $lang The language
- * @package    L10n
- * @deprecated in 4.6.0
- */
-
-function load_lang_dates($lang)
-{
-    $filename = is_file(txpath.'/lang/'.$lang.'_dates.txt') ?
-        txpath.'/lang/'.$lang.'_dates.txt' :
-        txpath.'/lang/en-gb_dates.txt';
-    $file = @file(txpath.'/lang/'.$lang.'_dates.txt', 'r');
-
-    if (is_array($file)) {
-        foreach ($file as $line) {
-            if ($line[0] == '#' || strlen($line) < 2) {
-                continue;
-            }
-
-            list($name, $val) = explode('=>', $line, 2);
-            $out[trim($name)] = trim($val);
-        }
-
-        return $out;
-    }
-
-    return false;
 }
 
 /**
@@ -1815,28 +1720,43 @@ function install_textpack($textpack, $add_new_langs = false)
 }
 
 /**
+ * Checks a version string sits between a pair of min/max versions
+ *
+ * @param      string $minVer   Minimum version string (>=)
+ * @param      string $maxVer   Maximum version string (<=)
+ * @param      string compareTo The value to compare to. Defaults to txp_version
+ * @return     bool
+ * @package    Plugin
+ */
+
+function check_compatibility($minVer, $maxVer, $compareTo = txp_version)
+{
+    // Need to compare on an even playing field for $maxVer.
+    $max = explode('.', $maxVer);
+    $maxParts = count($max);
+    $thisVer = explode('.', $compareTo, ($maxParts === 2 ? -1 : 0));
+    $compareMax = implode('.', $thisVer);
+
+    $mn = $minVer ? version_compare($compareTo, $minVer, '>=') : true;
+    $mx = $maxVer ? version_compare($compareMax, $maxVer, '<=') : true;
+
+    return $mn && $mx;
+}
+
+/**
  * Generate a ciphered token.
  *
  * The token is reproducible, unique among sites and users, expires later.
  *
- * @return  string The token
- * @see     bouncer()
- * @package CSRF
+ * @return     string The token
+ * @see        bouncer()
+ * @package    CSRF
+ * @deprecated in 4.9.0
  */
 
 function form_token()
 {
-    static $token = null;
-    global $txp_user;
-
-    // Generate a ciphered token from the current user's nonce (thus valid for
-    // login time plus 30 days) and a pinch of salt from the blog UID.
-    if ($token === null && $txp_user) {
-        $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
-        $token = md5($nonce.get_pref('blog_uid'));
-    }
-
-    return $token;
+    return Txp::get('\Textpattern\Security\Token')->csrf();
 }
 
 /**
@@ -1858,50 +1778,12 @@ function form_token()
  * @return  bool If the $step is valid, proceeds and returns TRUE. Dies on CSRF attempt.
  * @see     form_token()
  * @package CSRF
- * @example
- * global $step;
- * if (bouncer($step, array(
- *     'browse'     => false,
- *     'edit'       => false,
- *     'save'       => true,
- *     'multi_edit' => true,
- * )))
- * {
- *     echo "The '{$step}' is valid.";
- * }
+ * @deprecated in 4.9.0
  */
 
 function bouncer($step, $steps)
 {
-    global $event;
-
-    if (empty($step)) {
-        return true;
-    }
-
-    // Validate step.
-    if (!array_key_exists($step, $steps)) {
-        return false;
-    }
-
-    // Does this step require a token?
-    if (!$steps[$step]) {
-        return true;
-    }
-
-    if (is_array($steps[$step]) && gpsa(array_keys($steps[$step])) != $steps[$step]) {
-        return true;
-    }
-
-    // Validate token.
-    if (gps('_txp_token') === form_token()) {
-        return true;
-    }
-
-    die(gTxt('get_off_my_lawn', array(
-        '{event}' => $event,
-        '{step}'  => $step,
-    )));
+    return Txp::get('\Textpattern\Security\Token')->bouncer($step, $steps);
 }
 
 /**
@@ -2050,17 +1932,17 @@ function txp_dateformats()
 
     $dayname = '%A';
     $dayshort = '%a';
-    $daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
+    $daynum = '%d';
     $daynumlead = '%d';
-    $daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+    $daynumord = $daynum;
     $monthname = '%B';
     $monthshort = '%b';
     $monthnum = '%m';
     $year = '%Y';
     $yearshort = '%y';
     $time24 = '%H:%M';
-    $time12 = @strftime('%p') ? '%I:%M %p' : $time24;
-    $date = @strftime('%x') ? '%x' : '%Y-%m-%d';
+    $time12 = '%I:%M %p';
+    $date = '%Y-%m-%d';
 
     error_reporting($old_reporting);
 

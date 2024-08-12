@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -43,7 +43,8 @@ if ($event == 'plugin') {
         'plugin_install'    => true,
         'plugin_save'       => true,
         'plugin_upload'     => true,
-        'plugin_load'       => true,
+        'plugin_import'     => true,
+        'plugin_export'     => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
         'plugin_multi_edit' => true,
@@ -77,10 +78,17 @@ function plugin_list($message = '')
             'search_method',
     )));
 
+    $now = time();
+    $lastCheck = json_decode(get_pref('last_plugin_update_check', ''), true);
+
+    if (empty($lastCheck) || $now > ($lastCheck['when'] + (60 * 60))) {
+        $lastCheck = checkPluginUpdates();
+    }
+
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
+        if (!in_array($sort, array('name', 'status', 'author', 'version', 'load_order'))) {
             $sort = 'name';
         }
 
@@ -171,7 +179,7 @@ function plugin_list($message = '')
     $contentBlock = '';
     $existing_files = get_filenames(PLUGINPATH.DS, GLOB_ONLYDIR) or $existing_files = array();
 
-    foreach (safe_column_num('name', 'txp_plugin', 1) as $name) {
+    foreach ($installed = safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
     }
 
@@ -223,23 +231,19 @@ function plugin_list($message = '')
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'author', 'author', 'plugin', true, $switch_dir, '', '',
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
-                ).
-                column_head(
                     'version', 'version', 'plugin', true, $switch_dir, '', '',
                         (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
-                    'modified', 'modified', 'plugin', true, $switch_dir, '', '',
-                        (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
+                    'active', 'status', 'plugin', true, $switch_dir, '', '',
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                ).
+                column_head(
+                    'author', 'author', 'plugin', true, $switch_dir, '', '',
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 hCell(gTxt(
                     'description'), '', ' class="txp-list-col-description" scope="col"'
-                ).
-                column_head(
-                    'active', 'status', 'plugin', true, $switch_dir, '', '',
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
                     'order', 'load_order', 'plugin', true, $switch_dir, '', '',
@@ -282,12 +286,25 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
+                    href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
                 $plugin_prefs = '';
+            }
+
+            if (class_exists('\ZipArchive')) {
+                $download = span(
+                    href(gTxt('export'), array(
+                        'event'      => 'plugin',
+                        'step'       => 'plugin_export',
+                        'name'       => $name,
+                        '_txp_token' => form_token(),
+                    )),
+                    array('class' => 'plugin-download')
+                );
+            } else {
+                $download = '';
             }
 
             $manage = array();
@@ -300,7 +317,17 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join($manage) : '-';
+            if ($download) {
+                $manage[] = $download;
+            }
+
+            if (!empty($lastCheck['plugins'][$name])) {
+                foreach ($lastCheck['plugins'][$name] as $pluginType => $pluginMeta) {
+                    $manage[] = href(gTxt('plugin_upgrade', array('{version}' => $pluginMeta['version'], '{type}' => $pluginType)), $pluginMeta['endpoint']);
+                }
+            }
+
+            $manage_items = ($manage) ? implode(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
             $edit_url = array(
                 'event'         => 'plugin',
                 'step'          => 'plugin_edit',
@@ -313,41 +340,37 @@ function plugin_list($message = '')
                 '_txp_token'    => form_token(),
             );
 
-            $statusLink = status_link($status, $name, yes_no($status), array(
-                'title'      => gTxt('toggle_yes_no'),
-                'aria-label' => gTxt('toggle_yes_no'),
-            ));
+            $statusLink = status_link($status, $name, yes_no($status), array('title' => gTxt('toggle_yes_no')));
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
                 : $statusLink;
+            $showModified = ($modified ? sp.span(gTxt('modified'), array('class' => 'warning')) : '');
 
             $contentBlock .= tr(
                 td(
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($name, $edit_url, array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    )), '', ' class="txp-list-col-name" scope="row"'
+                    href($name, $edit_url, array('title' => gTxt('edit'))), '', ' class="txp-list-col-name" scope="row"'
+                ).
+                td(
+                    (!empty($lastCheck['plugins'][$name])
+                        ? href($version.$showModified.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
+                        'rel'    => 'external',
+                        'target' => '_blank',))
+                        : $version.$showModified), '', 'txp-list-col-version'
+                ).
+                td(
+                    $statusDisplay, '', 'txp-list-col-status'
                 ).
                 td(
                     ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
-                        'rel'    => 'external noopener',
+                        'rel'    => 'external',
                         'target' => '_blank',
                     )) : $author), '', 'txp-list-col-author'
                 ).
                 td(
-                    $version, '', 'txp-list-col-version'
-                ).
-                td(
-                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified'
-                ).
-                td(
                     $description, '', 'txp-list-col-description'
-                ).
-                td(
-                    $statusDisplay, '', 'txp-list-col-status'
                 ).
                 td(
                     $load_order, '', 'txp-list-col-load-order'
@@ -378,7 +401,16 @@ function plugin_list($message = '')
                 array('class' => 'alert-block warning')
             ).n;
     } else {
-        $createBlock = tag(plugin_form($existing_files), 'div', array('class' => 'txp-control-panel'));
+        $createBlock = tag(
+            tag(href(gTxt('create'), array(
+                'event'      => 'plugin',
+                'step'       => 'plugin_edit',
+                '_txp_token' => form_token(),
+            ), 'class="txp-button"'), 'p').
+            wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : ''),
+            'div',
+            array('class' => 'txp-control-panel')
+        );
     }
 
     $pageBlock = $paginator->render().
@@ -460,40 +492,240 @@ function plugin_help()
 function plugin_edit_form($name = '')
 {
     assert_string($name);
-    $code = ($name) ? fetch('code', 'txp_plugin', 'name', $name) : '';
-    $thing = ($code) ? $code : '';
 
-    return
-        form(
-            hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-            '<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>'.
-            graf(
-                sLink('plugin', '', gTxt('cancel'), 'txp-button').
-                fInput('submit', '', gTxt('save'), 'publish'),
-                array('class' => 'txp-edit-actions')
+    $vars = array(
+        'version',
+        'type',
+        'order',
+        'author',
+        'author_uri',
+        'description',
+        'flags',
+        'code',
+        'help_raw',
+        'textpack',
+    );
+
+    if ($name) {
+        $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+    } else {
+        $userInfo = is_logged_in();
+        $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '', 'author_uri' => hu);
+    }
+
+    if (empty($plugin)) {
+        return graf(gTxt('plugin_not_editable'), array('class' => 'alert-block warning'));
+    }
+
+    foreach ($vars as $key) {
+        if (empty($plugin[$key])) {
+            $plugin[$key] = '';
+        }
+    }
+
+    $flagset = array();
+
+    if ((int)$plugin['flags'] & PLUGIN_HAS_PREFS) {
+        $flagset[] = PLUGIN_HAS_PREFS;
+    }
+
+    if ((int)$plugin['flags'] & PLUGIN_LIFECYCLE_NOTIFY) {
+        $flagset[] = PLUGIN_LIFECYCLE_NOTIFY;
+    }
+
+    $buttons = graf(
+        sLink('plugin', '', gTxt('cancel'), 'txp-button').n.
+        fInput('submit', '', gTxt('save'), 'publish'),
+        array('class' => 'txp-edit-actions')
+    );
+
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_plugin', 'name, author, author_uri, version');
+
+    return form(
+        tag(
+            hed(gTxt('edit_plugin', array('{name}' => $name)), 2, array('class' => 'txp-heading')).
+            Txp::get('\Textpattern\UI\InputLabel', 'code', Txp::get('\Textpattern\UI\Textarea', 'code', $plugin['code'])->setAtts(array(
+                'class' => 'code',
+                'id'    => 'plugin_code',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), array('code', 'plugin_code')).
+            Txp::get('\Textpattern\UI\InputLabel', 'help_raw', Txp::get('\Textpattern\UI\Textarea', 'help_raw', $plugin['help_raw'])->setAtts(array(
+                'class' => 'help code',
+                'id'    => 'plugin_help',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), array('help', 'plugin_help')).
+            Txp::get('\Textpattern\UI\InputLabel', 'textpack', Txp::get('\Textpattern\UI\Textarea', 'textpack', $plugin['textpack'])->setAtts(array(
+                'class' => 'textpack code',
+                'id'    => 'plugin_textpack',
+                'cols'  => INPUT_XLARGE,
+                'rows'  => TEXTAREA_HEIGHT_LARGE,
+                'dir'   => 'ltr',
+            )), array('textpack', 'plugin_textpack')),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
+            'role'  => 'region',
+        )).
+        tag(
+            n.tag(
+                $buttons,
+                'div', array('class' => 'txp-save-zone')
             ).
-            eInput('plugin').
-            sInput('plugin_save').
-            hInput('name', $name).
-            hInput('sort', gps('sort')).
-            hInput('dir', gps('dir')).
-            hInput('page', gps('page')).
-            hInput('search_method', gps('search_method')).
-            hInput('crit', gps('crit')).
-            hInput('name', $name), '', '', 'post', 'edit-plugin-code', '', 'plugin_details');
+            tag(
+                hed(gTxt('plugin_details'), 3, array('id' => 'plugin-details-label')).
+                tag(
+                    Txp::get('\Textpattern\UI\InputLabel', 'newname',
+                        Txp::get('\Textpattern\UI\Input', 'newname', 'text', $plugin['name'])
+                            ->setAtts(array(
+                                'id'        => 'newname',
+                                'maxlength' => $fieldSizes['name'],
+                            ))
+                            ->setBool('required'),
+                        'name'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'version',
+                        Txp::get('\Textpattern\UI\Input', 'version', 'text', $plugin['version'])
+                            ->setAtts(array(
+                                'id'        => 'version',
+                                'maxlength' => $fieldSizes['version'],
+                            )),
+                        'version'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'type',
+                        Txp::get('\Textpattern\UI\Select', 'type', array(
+                            0 => gTxt('plugin_type_public'),
+                            1 => gTxt('plugin_type_public_admin'),
+                            2 => gTxt('plugin_type_library'),
+                            3 => gTxt('plugin_type_admin'),
+                            4 => gTxt('plugin_type_admin_async'),
+                            5 => gTxt('plugin_type_public_admin_async'),
+                        ), $plugin['type'])->setAtt('id', 'plugin_type'),
+                        array('type', 'plugin_type')
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'order',
+                        Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order'])
+                            ->setAtt('id', 'order'),
+                        'order'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'author',
+                        Txp::get('\Textpattern\UI\Input', 'author', 'text', $plugin['author'])
+                            ->setAtts(array(
+                                'id'        => 'author',
+                                'maxlength' => $fieldSizes['author'],
+                        )),
+                        'author'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'author_uri',
+                        Txp::get('\Textpattern\UI\Input', 'author_uri', 'text', $plugin['author_uri'])
+                            ->setAtts(array(
+                                'id'        => 'author_uri',
+                                'size'      => INPUT_LARGE,
+                                'maxlength' => $fieldSizes['author_uri'],
+                            )),
+                        'author_uri'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'description',
+                        Txp::get('\Textpattern\UI\Input', 'description', 'text', $plugin['description'])
+                            ->setAtts(array(
+                                'id'   => 'description',
+                                'size' => INPUT_XLARGE,
+                        )),
+                        'description'
+                    ).
+                    Txp::get('\Textpattern\UI\InputLabel', 'flags',
+                        Txp::get('\Textpattern\UI\CheckboxSet', 'flags', array(
+                            1 => gTxt('plugin_has_prefs'),
+                            2 => gTxt('plugin_lifecycle_notify'),
+                        ), $flagset)
+                    ).
+                    eInput('plugin').
+                    sInput('plugin_save').
+                    hInput('help_hash', md5($plugin['help_raw'])).
+                    hInput('sort', gps('sort')).
+                    hInput('dir', gps('dir')).
+                    hInput('page', gps('page')).
+                    hInput('search_method', gps('search_method')).
+                    hInput('crit', gps('crit')).
+                    hInput('name', $name),
+                'div', array(
+                    'role' => 'group',
+                ))
+            , 'section', array(
+                'class'           => 'txp-details',
+                'id'              => 'plugin-details',
+                'aria-labelledby' => 'plugin-details-label',
+            )),
+        'div', array(
+            'class' => 'txp-layout-4col-alt',
+            'role'  => 'region',
+        ))
+        , '', '', 'post', 'edit-plugin-code txp-layout', '', 'plugin_details');
 }
 
 /**
- * Saves edited plugin code.
+ * Saves edited plugin information.
  */
 
 function plugin_save()
 {
-    extract(array_map('assert_string', gpsa(array('name', 'code'))));
+    $vars = array(
+        'version'     => 'version',
+        'type'        => 'type',
+        'load_order'  => 'order',
+        'author'      => 'author',
+        'author_uri'  => 'author_uri',
+        'description' => 'description',
+        'code'        => 'code',
+        'textpack'    => 'textpack',
+    );
 
-    safe_update('txp_plugin', "code = '".doSlash($code)."'", "name = '".doSlash($name)."'");
-    Txp::get('\Textpattern\Plugin\Plugin')->updateFile($name, $code);
-    $message = gTxt('plugin_saved', array('{name}' => $name));
+    $plugObj = Txp::get('\Textpattern\Plugin\Plugin');
+    $plugin = array_map('assert_string', gpsa(array_merge($vars, array('name', 'newname', 'help_raw', 'help_hash'))));
+
+    extract($plugin);
+    $flags = (array)gps('flags', 0);
+
+    if (empty($name)) {
+        $plugin['name'] = $plugin['newname'];
+    }
+
+    if ($name !== $newname) {
+        $ret = $name ? $plugObj->rename($name, $newname) : $plugObj->install($plugin);
+
+        if ($ret === false) {
+            // @todo issue a warning and stay on page?
+            pagetop(gTxt('edit_plugins'));
+            echo plugin_edit_form($name);
+
+            return;
+        }
+    }
+
+    if ($help_hash !== md5($help_raw)) {
+        // Help has changed, so recompile it.
+        $help = Txp::get('\Netcarver\Textile\Parser', 'html5')->parse($help_raw);
+    } else {
+        $help = $help_raw;
+    }
+
+    $vars['help'] = 'help';
+    $vars['flags'] = 'flags';
+    $clause = array();
+    $flags = array_sum($flags);
+
+    foreach ($vars as $key => $var) {
+        $clause[] = "$key = '".doSlash($$var)."'";
+    }
+
+    $vars['help_raw'] = 'help_raw';
+
+    safe_update('txp_plugin', implode(',', $clause), "name = '".doSlash($newname)."'");
+    $plugObj->updateFile($newname, compact($vars));
+    $message = gTxt('plugin_saved', array('{name}' => $newname));
 
     plugin_list($message);
 }
@@ -525,33 +757,67 @@ function status_link($status, $name, $linktext, $atts = '')
 /**
  * Plugin installation's preview step.
  *
- * Outputs a panel displaying the plugin's source code
- * and the included help file.
+ * Outputs a panel displaying the plugin's source code,
+ * the included help file, Textpack strings, additional
+ * data and any bundled files (if a zipped archive).
+ *
+ * @param array                      $payload   Information passed from the upload step, if applicable
+ * @param \Textpattern\Plugin\Plugin $txpPlugin Plugin object from upload step
  */
 
-function plugin_verify()
+function plugin_verify($payload = array(), $txpPlugin = null)
 {
-    $plugin64 = assert_string(ps('plugin'));
+    $extras = '';
 
-    if ($plugin = Txp::get('\Textpattern\Plugin\Plugin')->extract($plugin64)) {
-        $source = '';
+    if (!empty($payload['plugin-filename'])) {
+        $extras .= hInput('plugin-filename', assert_string($payload['plugin-filename'])).
+            hInput('plugin-token', $txpPlugin->generateToken());
+
+        if (!empty($payload['files'])) {
+            $extras .= hed(gTxt('upload'), 2).
+                tag(implode(br, (array)$payload['files']), 'pre', array('id' => 'preview-data'));
+        }
+
+        $plugin = $payload['plugin'];
+    } else {
+        $plugin64 = assert_string(empty($payload['plugin64']) ? ps('plugin') : $payload['plugin64']);
+
+        if (preg_match("#^https?://.+#", $plugin64) && @fopen($plugin64, 'r')) {
+            // Dealing with a URL so forge a call to 'upload' it, which will redirect
+            // back to this function when done to handle it properly.
+            plugin_upload($plugin64);
+            return;
+        }
+
+        $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
+        $plugin = $txpPlugin->extract($plugin64);
+        $extras .= hInput('plugin64', $plugin64).
+            hInput('plugin-token', $txpPlugin->generateToken());
+    }
+
+    if ($plugin) {
         $textpack = '';
+        $data = '';
 
         if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
             $textile = new \Textpattern\Textile\RestrictedParser();
             $help_source = $textile->setLite(false)->setImages(true)->parse($plugin['help_raw']);
         } else {
-            $help_source = $plugin['help'] ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
+            $help_source = isset($plugin['help']) ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
         }
 
         if (isset($plugin['textpack'])) {
             $textpack = $plugin['textpack'];
         }
 
-        $source .= txpspecialchars($plugin['code']);
+        if (isset($plugin['data'])) {
+            $data = txpspecialchars($plugin['data']);
+        }
+
+        $source = isset($plugin['code']) ? txpspecialchars($plugin['code']) : '';
         $sub = graf(
-            sLink('plugin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', '', gTxt('install'), 'publish'),
+            fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button').
+            fInput('submit', 'plugin-go', gTxt('install'), 'publish'),
             array('class' => 'txp-edit-actions')
         );
 
@@ -583,10 +849,20 @@ function plugin_verify()
                     )
                 : ''
             ).
+            ($data
+                ? hed(gTxt('meta'), 2).
+                    tag(
+                        tag($data, 'code', array('dir' => 'ltr')),
+                        'pre', array('id' => 'preview-plugin')
+                    )
+                : ''
+            ).
+            $extras.
             $sub.
             sInput('plugin_install').
             eInput('plugin').
-            hInput('plugin64', $plugin64), '', '', 'post', 'plugin-info', '', 'plugin_preview'
+            hInput('plugin-name', $plugin['name'])
+            , '', '', 'post', 'plugin-info', '', 'plugin_preview'
         );
 
         return;
@@ -597,67 +873,188 @@ function plugin_verify()
 
 /**
  * Installs a plugin.
+ *
+ * Also handles cancellation of plugin installation by tidying up temp files.
  */
 
 function plugin_install()
 {
-    $plugin64 = assert_string(ps('plugin64'));
-    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin64);
+    $message = array(gTxt('bad_plugin_code'), E_ERROR);
 
-    plugin_list($message);
-}
+    $srcFile = ps('plugin-filename');
+    $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
+    $name = sanitizeForFile(ps('plugin-name'));
+    $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
-/**
- * Uploads a plugin.
- */
+    if (ps('plugin-cancel')) {
+        if ($source) {
+            unlink($source);
+        }
 
-function plugin_upload()
-{
-    $plugin = array();
+        $message = array(gTxt('plugin_install_cancelled'), E_WARNING);
+    } elseif (ps('plugin-go')) {
+        $hash = assert_string(ps('plugin-token'));
 
-    if ($_FILES["theplugin"]["name"]) {
-        $filename = $_FILES["theplugin"]["name"];
-        $source = $_FILES["theplugin"]["tmp_name"];
-        $target_path = rtrim(get_pref('tempdir', PLUGINPATH), DS).DS.$filename;
+        if ($source && is_readable($source)) {
+            if ($hash) {
+                $message = $txpPlugin->verifyToken($hash, $source);
+            }
 
-        if (move_uploaded_file($source, $target_path)) {
-            extract(pathinfo($target_path));
+            if ($message === true) {
+                $target_dir = rtrim(PLUGINPATH, DS).DS.$name;
+                $target_path = $target_dir.DS.basename($source);
 
-            if (strtolower($extension) === 'php') {
-                $write = true;
-                $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read(array($filename, $target_path));
-            } elseif (class_exists('ZipArchive')) {
-                $zip = new ZipArchive();
-                $x = $zip->open($target_path);
+                if (!file_exists($target_dir)) {
+                    mkdir($target_dir);
+                }
 
-                if ($x === true) {
-                    for ($i = 0; $i < $zip->numFiles; $i++) {
-                        if (strpos($zip->getNameIndex($i), $filename.'/') !== 0) {
-                            $makedir = true;
+                if (rename($source, $target_path)) {
+                    extract(pathinfo($target_path));
+                    $extension = strtolower($extension);
 
-                            break;
+                    if ($extension === 'txt') {
+                        $write = true;
+                        $plugin = $txpPlugin->extract(file_get_contents($target_path));
+                        unlink($target_path);
+                    } elseif ($extension === 'php') {
+                        $write = true;
+                        $plugin = $txpPlugin->read($target_path);
+                    } elseif ($extension === 'zip' && class_exists('ZipArchive')) {
+                        $zip = new \ZipArchive();
+                        $zh = $zip->open($target_path);
+
+                        if ($zh === true) {
+                            $makedir = PLUGINPATH;
+                            $badSlash = false;
+
+                            for ($i = 0; $i < $zip->numFiles; $i++) {
+                                $entryName = $zip->getNameIndex($i);
+
+                                if (strpos($entryName, '\\') !== false) {
+                                    $badSlash = true;
+                                }
+
+                                if (strpos(str_replace('\\', '/', $entryName), $filename.'/') !== 0) {
+                                    $makedir = PLUGINPATH.DS.$filename;
+                                }
+                            }
+
+                            if ($badSlash && DS !== '\\') {// Windows zip on Linux
+                                $umask = umask();
+
+                                for ($i = 0; $i < $zip->numFiles; $i++) {
+                                    $entryName = $zip->getNameIndex($i);
+                                    extract(pathinfo(str_replace('\\', '/', $entryName)));
+                                    $dirname = $makedir . '/' . $dirname;
+
+                                    if (!is_dir($dirname)) {
+                                        mkdir($dirname, $umask, true);
+                                    }
+
+                                    $tmpname = md5($entryName);
+                                    $zip->renameIndex($i, $tmpname);
+                                    $zip->extractTo($dirname, $tmpname);
+                                    rename($dirname.'/'.$tmpname, $dirname.'/'.$basename);
+                                }
+                            } else {
+                                $zip->extractTo($makedir);
+                            }
+
+                            $zip->close();
+
+                            list($plugin, $files) = $txpPlugin->read($target_path);
+                            unlink($target_path);
                         }
                     }
 
-                    $zip->extractTo(PLUGINPATH.(empty($makedir) ? '' : DS.$filename));
-                    $zip->close();
-                    $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($filename);
+                    $message = $txpPlugin->install($plugin, null, !empty($write));
+                }
+            } else {
+                unlink($source);
+            }
+        } else {
+            $plugin64 = assert_string(ps('plugin64'));
+
+            if ($hash) {
+                $message = $txpPlugin->verifyToken($hash, $plugin64);
+
+                if ($message === true) {
+                    $message = $txpPlugin->install($plugin64);
                 }
             }
-
-            unlink($target_path);
         }
     }
 
-    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin, null, !empty($write));
+    Txp::get('\Textpattern\Security\Token')->remove('plugin_verify', $txpPlugin->computeRef($name), '2 HOUR');
+    checkPluginUpdates();
+
     plugin_list($message);
 }
 
 /**
  * Uploads a plugin.
+ *
+ * @param string $url Fetch the plugin from this remote location instead
  */
 
-function plugin_load()
+function plugin_upload($url = null)
+{
+    $payload = array();
+    $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
+    $dest = rtrim(get_pref('tempdir', sys_get_temp_dir()), DS);
+    $ready = false;
+
+    if ($url || $_FILES["theplugin"]["name"]) {
+        if ($url) {
+            $urlParts = parse_url($url);
+            $pathParts = pathinfo($urlParts['path']);
+            $filename = $pathParts['basename'];
+            $target = $dest.DS.sanitizeForFile($filename);
+            $content = file_get_contents($url);
+
+            // Don't need to test for 'false', since '0' (number of returned bytes) is
+            // still a 'failure' to write anything meaningful.
+            if (file_put_contents($target, $content)) {
+                $ready = true;
+            }
+        } else {
+            $fileParts = pathinfo($_FILES["theplugin"]["name"]);
+            $source = $_FILES["theplugin"]["tmp_name"];
+            $target = $dest.DS.$fileParts['basename'];
+
+            if (move_uploaded_file($source, $target)) {
+                $ready = true;
+            }
+        }
+
+        if ($ready) {
+            extract(pathinfo($target));
+
+            $extension = strtolower($extension);
+            $payload['plugin-filename'] = basename($target);
+
+            if ($extension === 'txt') {
+                $payload['plugin64'] = file_get_contents($target);
+                $payload['plugin-filename'] = '';
+                unlink($target);
+            } elseif ($extension === 'php') {
+                $payload['plugin'] = $txpPlugin->read($target);
+            } elseif ($extension === 'zip' && class_exists('ZipArchive')) {
+                list($plugin, $files) = $txpPlugin->read($target);
+                $payload['plugin'] = $plugin;
+                $payload['files'] = $files;
+            }
+        }
+    }
+
+    plugin_verify($payload, $txpPlugin);
+}
+
+/**
+ * Imports a plugin that is already in the filesystem but is not yet in the DB.
+ */
+
+function plugin_import()
 {
     $plugin = array();
 
@@ -667,6 +1064,17 @@ function plugin_load()
 
     $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin);
     plugin_list($message);
+}
+
+/**
+ * Exports a plugin as a zip file.
+ */
+
+function plugin_export()
+{
+    if ($name = gps('name')) {
+        echo Txp::get('\Textpattern\Plugin\Plugin')->createZip($name, true);
+    }
 }
 
 /**
@@ -686,7 +1094,7 @@ function plugin_form($existing_files = array())
             'type'     => 'file',
             'name'     => 'theplugin',
             'id'       => 'plugin-upload',
-            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php",
+            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php, .txt",
             'required' => 'required',
         )).
         fInput('submit', 'install_new', gTxt('upload')).
@@ -699,10 +1107,10 @@ function plugin_form($existing_files = array())
             'action'       => 'index.php',
             'enctype'      => 'multipart/form-data'
         )
-    ).br.
+    ).
     ($existing_files ? form(
         eInput('plugin').
-        sInput('plugin_load').
+        sInput('plugin_import').
         tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
         selectInput('filename', $existing_files, null, false, '', 'file-existing').
         fInput('submit', '', gTxt('import')),
@@ -764,6 +1172,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'html'  => $orders,
         ),
         'update'       => gTxt('update_from_disk'),
+        'coderevert'   => gTxt('revert_to_last_installed'),
         'delete'       => array(
             'label' => gTxt('delete'),
             'html' => checkbox2('sync', gps('sync'), 0, 'sync').n.
@@ -810,9 +1219,100 @@ function plugin_multi_edit()
                 $plugin->install($plugin->read($name));
             }
             break;
+        case 'coderevert':
+            foreach ($selected as $name) {
+                $plugin->revert($name);
+            }
+            break;
     }
 
     $message = gTxt('plugin_'.($method == 'delete' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
 
     plugin_list($message);
+}
+
+/**
+ * Checks for Textpattern plugin updates.
+ *
+ * @return  array|null When updates are found, an array of metadata about each installed plugin
+ */
+
+function checkPluginUpdates()
+{
+    static $plugins;
+
+    $endpoint = PLUGIN_REPO_URL.'/all';
+
+    // Can't use the globals, since plugins aren't loaded on the Plugins panel.
+    if (empty($plugins)) {
+        $rs = safe_rows('name, version', 'txp_plugin', '1');
+
+        foreach ($rs as $a) {
+            $n = array_shift($a);
+            $plugins[$n] = $a['version'];
+        }
+    }
+
+    $lastCheck = array(
+        'when'     => time(),
+        'msg'      => '',
+        'plugins'  => array(),
+        'response' => true,
+    );
+
+    if (OPENSSL_VERSION_NUMBER < REQUIRED_OPENSSL_VERSION) {
+        $lastCheck['msg'] = 'problem_connecting_plugin_server';
+        $lastCheck['response'] = false;
+    } else {
+        if (function_exists('curl_version')) {
+            $ch = curl_init($endpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $contents = curl_exec($ch);
+        } else {
+            $contents = file_get_contents($endpoint);
+        }
+
+        $allPlugins = json_decode($contents, true);
+
+        if (is_array($allPlugins)) {
+            foreach ($allPlugins as $pluginSet) {
+                foreach ($pluginSet as $plugin) {
+                    if ($plugins && array_key_exists($plugin['name'], $plugins)) {
+                        // Check version dependencies.
+                        if ($ret = pluginDependency($plugins, $plugin, 'stable')) {
+                            $lastCheck['plugins'][$plugin['name']]['stable'] = $ret;
+                        }
+                        if ($ret = pluginDependency($plugins, $plugin, 'beta')) {
+                            $lastCheck['plugins'][$plugin['name']]['beta'] = $ret;
+                        }
+                        // @todo: grab supersededBy so it can be flagged in the UI.
+                    }
+                }
+            }
+        }
+    }
+
+    set_pref('last_plugin_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+
+    return $lastCheck;
+}
+
+function pluginDependency($plugins, $plugin, $type = 'stable')
+{
+    $out = array();
+
+    if (!empty($plugin[$type])) {
+        $txpVersion = get_pref('version');
+        $thisPluginVersion = !empty($plugin[$type]['version']) ? $plugin[$type]['version'] : 0;
+        $minTxpVersion = !empty($plugin[$type]['verifiedMinTxpCompatibility']) ? $plugin[$type]['verifiedMinTxpCompatibility'] : 0;
+        $maxTxpVersion = !empty($plugin[$type]['verifiedMaxTxpCompatibility']) ? $plugin[$type]['verifiedMaxTxpCompatibility'] : 0;
+
+        if ((version_compare($plugins[$plugin['name']], $thisPluginVersion) < 0)
+                && (check_compatibility($minTxpVersion, $maxTxpVersion))) {
+            $out['endpoint'] = $plugin[$type]['endpointUrl'];
+            $out['version'] = $plugin[$type]['version'];
+        }
+    }
+
+    return $out;
 }

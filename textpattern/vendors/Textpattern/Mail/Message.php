@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,10 +59,10 @@ class Message
     /**
      * The message body.
      *
-     * @var string
+     * @var array
      */
 
-    public $body = '';
+    public $body = array('plain' => '', 'html' => '');
 
     /**
      * An array of reply to addresses.
@@ -99,4 +99,13 @@ class Message
         'Content-Transfer-Encoding' => '8bit',
         'Content-Type'              => 'text/plain; charset="UTF-8"',
     );
+
+    /**
+     * An array of attachments.
+     *
+     * @var array
+     */
+
+    public $attachment = array();
+
 }

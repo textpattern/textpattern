@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -55,7 +55,7 @@ function doAuth()
                 '{window.location.assign("index.php")}';
             exit();
         } else {
-            set_cookie('txp_test_cookie', '1', array('expires' => 0));
+            set_cookie('txp_test_cookie', '1', array('expires' => 0, 'httponly' => false));
             doLoginForm($message);
         }
     }
@@ -196,10 +196,7 @@ function doLoginForm($message)
                 href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
             ).
             graf(
-                href(htmlspecialchars(get_pref('sitename')), hu, array(
-                    'title'      => gTxt('tab_view_site'),
-                    'aria-label' => gTxt('tab_view_site'),
-                )), array('class' => 'login-view-site')
+                href(htmlspecialchars(get_pref('sitename')), hu), array('class' => 'login-view-site')
             );
 
         if (gps('event')) {
@@ -341,14 +338,6 @@ function doTxpValidate()
                 set_pref('language_ui', $lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
             }
 
-            script_js(<<<EOS
-$(document).ready(function ()
-{
-    cookieEnabled = checkCookies();
-});
-EOS
-            , false);
-
             return '';
         } else {
             sleep(3);
@@ -383,7 +372,7 @@ EOS
                     $uid = assert_int($tokenInfo['reference_id']);
                     $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = '$uid'");
 
-                    if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
+                    if ($row && $row['nonce'] && ($hash === Txp::get('\Textpattern\Security\Token')->constructHash($selector, $row['old_pass'], $row['nonce']).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
                                 n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);

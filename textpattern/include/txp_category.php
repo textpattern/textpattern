@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -94,15 +94,12 @@ function cat_category_list($message = "")
         ),
         n.'</div>', // End of .txp-layout.
         script_js(<<<EOS
-            $(document).ready(function ()
-            {
-                $('.category-tree').txpMultiEditForm({
-                    'row' : 'p',
-                    'highlighted' : 'p'
-                });
-            });
+    $('.category-tree').txpMultiEditForm({
+        'row' : 'p',
+        'highlighted' : 'p'
+    });
 EOS
-        , false),
+        , false, true),
     );
     echo join(n, $out);
 }
@@ -382,12 +379,17 @@ function cat_event_category_list($event)
 
     $heading = 'tab_'.($event == 'article' ? 'list' : $event);
     $for = $rs ? ' for="'.$event.'_category_parent"' : '';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_category', 'title');
 
     $out = hed(gTxt($heading).popHelp($event.'_category'), 2).
         form(
             graf(
                 tag(gTxt('create_category'), 'label', array('for' => $event.'_category_new')).br.
-                fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new', false, true)
+                Txp::get('\Textpattern\UI\Input', 'title', 'text')->setAtts(array(
+                    'id'        => $event.'_category_new',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['title'],
+                ))->setBool('required')
             ).
             (($rs)
                 ? graf('<label'.$for.'>'.gTxt('parent').'</label>'.br.
@@ -420,13 +422,9 @@ function cat_event_category_list($event)
         } else {
             switch ($event) {
                 case 'link':
-                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_link', "1 = 1 GROUP BY category");
-                    break;
                 case 'image':
-                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_image', "1 = 1 GROUP BY category");
-                    break;
                 case 'file':
-                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_file', "1 = 1 GROUP BY category");
+                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_'.$event, "1 = 1 GROUP BY category");
                     break;
             }
 
@@ -464,8 +462,7 @@ function cat_event_category_list($event)
             }
 
             $count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url, array(
-                'title'      => gTxt('category_count', array('{num}' => $total_count[$name])),
-                'aria-label' => gTxt('category_count', array('{num}' => $total_count[$name])),
+                'title' => gTxt('category_count', array('{num}' => $total_count[$name])),
             )) : '(0)';
 
             if (empty($title)) {
@@ -539,6 +536,7 @@ function cat_event_category_edit($evname, $message = '')
 {
     $id     = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_category', 'name, title, description');
 
     $row = safe_row("*", 'txp_category', "id = '$id'");
 
@@ -550,7 +548,11 @@ function cat_event_category_edit($evname, $message = '')
         $out = hed(gTxt('edit_category'), 2).
             inputLabel(
                 'category_name',
-                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'name', 'text', $name)->setAtts(array(
+                    'id'        => 'category_name',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['name'],
+                ))->setBool('required'),
                 $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
             inputLabel(
@@ -560,12 +562,16 @@ function cat_event_category_edit($evname, $message = '')
             ).
             inputLabel(
                 'category_title',
-                fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'),
+                Txp::get('\Textpattern\UI\Input', 'title', 'text', $title)->setAtts(array(
+                    'id'        => 'category_title',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['title'],
+                )),
                 $evname.'_category_title', '', array('class' => 'txp-form-field edit-category-title')
             ).
             inputLabel(
                 'category_description',
-                '<textarea id="category_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                '<textarea id="category_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" maxlength="'.$fieldSizes['description'].'">'.$description.'</textarea>',
                 $evname.'_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
             ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).

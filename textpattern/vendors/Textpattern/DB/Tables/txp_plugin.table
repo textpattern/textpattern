@@ -14,5 +14,5 @@ type         INT               NOT NULL DEFAULT '0',
 load_order   TINYINT  UNSIGNED NOT NULL DEFAULT '5',
 flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
 
-UNIQUE name            (name),
+PRIMARY KEY            (name(63)),
 INDEX  status_type_idx (status, type)

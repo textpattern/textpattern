@@ -1,8 +1,0 @@
-<div class="search" aria-label="<txp:text item="search" />" itemscope itemtype="https://schema.org/WebSite">
-    <meta itemprop="url" content="<txp:site_url />">
-    <form role="search" method="get" action="<txp:site_url />" itemprop="potentialAction" itemscope itemtype="https://schema.org/SearchAction">
-        <meta itemprop="target" content="<txp:site_url />?q={q}">
-        <label class="accessibility" for="search"><txp:text item="search" /></label>
-        <input id="search" name="q" type="search" itemprop="query-input" placeholder="<txp:text item="search" />"<txp:if_search> value="<txp:search_term />"</txp:if_search>>
-    </form>
-</div>

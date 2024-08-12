@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -202,10 +202,6 @@ class StringType implements TypeInterface
 
         if (strpos($this->string, '->')) {
             $callback = explode('->', $this->string);
-
-            if (class_exists($callback[0])) {
-                $callback[0] = new $callback[0];
-            }
         } elseif (strpos($this->string, '::')) {
             $callback = explode('::', $this->string);
         }

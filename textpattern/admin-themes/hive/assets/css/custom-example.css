@@ -9,11 +9,8 @@
  * new version of Textpattern!
  */
 
-
-
 /* Global
    ========================================================================== */
-
 
 /**
  * Remove Textpattern branding.
@@ -24,10 +21,9 @@
     background: none !important;
 
     a {
-        margin-left: 0 !important;
+        margin-inline-start: 0 !important;
     }
 } */
-
 
 /**
  * Remove page headings.
@@ -37,7 +33,6 @@
     display: none !important;
 } */
 
-
 /**
  * Remove lightbulb (light/dark mode toggle).
  */
@@ -46,11 +41,16 @@
     display: none !important;
 } */
 
+/**
+ * Tab character length in code editor/text areas.
+ */
 
+/* textarea, pre {
+    tab-size: 2 !important;
+} */
 
 /* Content -> Write panel
    ========================================================================== */
-
 
 /**
  * Hide the Write panel Text/HTML/Preview tabs group.
@@ -60,7 +60,6 @@
     display: none !important;
 } */
 
-
 /**
  * Hide the Write panel 'Expires' group.
  */
@@ -68,7 +67,6 @@
 /* .expires-datetime-group {
     display: none !important;
 } */
-
 
 /**
  * Hide the Write panel 'Keywords' field.
@@ -78,7 +76,6 @@
     display: none !important;
 } */
 
-
 /**
  * Hide the Write panel 'Comment options' group.
  */
@@ -86,7 +83,6 @@
 /* #txp-comments-group {
     display: none !important;
 } */
-
 
 /**
  * Hide the Write panel 'Article image' group.
@@ -96,7 +92,6 @@
     display: none !important;
 } */
 
-
 /**
  * Hide the Write panel 'Custom fields' group.
  */
@@ -104,7 +99,6 @@
 /* #txp-custom-field-group {
     display: none !important;
 } */
-
 
 /**
  * Hide the Write panel 'Advanced options' group.
@@ -114,7 +108,6 @@
     display: none !important;
 } */
 
-
 /**
  * Hide the Write panel 'Text formatting options' fields.
  */
@@ -122,7 +115,6 @@
 /* .txp-textfilter-options {
     display: none !important;
 } */
-
 
 /**
  * Hide the Write panel 'Recent articles' group.
@@ -132,11 +124,8 @@
     display: none !important;
 } */
 
-
-
 /* Content -> Images panel
    ========================================================================== */
-
 
 /**
  * Hide the Images panel 'Caption' field.

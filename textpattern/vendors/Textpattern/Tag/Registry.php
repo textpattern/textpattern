@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,8 +59,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
-            if ($tag === null && is_string($callback)) {
-                $tag = $callback;
+            if ($tag === null) {
+                $tag = is_string($callback) ? $callback : $callback[1];
             } elseif (is_array($tag)) {
                 list($tag, $atts) = $tag + array(null, null);
             }
@@ -123,7 +123,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
-    public function process($tag, array $atts = null, $thing = null)
+    public function process($tag, array $atts = array(), $thing = null)
     {
         if ($this->isRegistered($tag)) {
             $atts = (array)$atts;
@@ -133,10 +133,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             try {
-                //TODO: switch to args unpacking for php 5.6+
                 return isset($this->params[$tag]) ?
-    //                (string) call_user_func($this->tags[$tag], (array)$atts, $thing, ...$this->params[$tag]) :
-                    (string) call_user_func_array($this->tags[$tag], array_merge(array($atts, $thing), $this->params[$tag])) :
+                    (string) call_user_func($this->tags[$tag], $atts, $thing, ...$this->params[$tag]) :
                     (string) call_user_func($this->tags[$tag], $atts, $thing);
             } catch (\Exception $e) {
                 trigger_error($e->getMessage());
@@ -150,7 +148,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * Processes an attribute by name.
      *
      * @param  string      $tag   The attribute
-     * @param  string|null $atts  The value of attribute
+     * @param  array|null  $atts  The value of attribute
      * @param  string|null $thing The processed statement
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */

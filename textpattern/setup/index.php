@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -269,13 +269,31 @@ function txp_setup_progress_meter($stage = 1)
 
 function step_getDbInfo()
 {
-    global $cfg;
+    global $cfg, $txp_is_dev;
 
     echo preamble();
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
     check_config_exists();
+
+    $changes = check_file_integrity() or array();
+
+    unset(
+        $changes['/../rpc/index.php'],
+        $changes['/../rpc/TXP_RPCServer.php']
+    );
+
+    // Report files that are missing or don't match their checksums.
+    if ($mangled_files = array_keys($changes, INTEGRITY_MISSING)) {
+        echo '<pre>'.gTxt('missing_files', array('{list}' => n.t.implode(', '.n.t, $mangled_files))).'</pre>';
+    }
+
+    if (!$txp_is_dev) {
+        if ($modified_files = array_keys($changes, INTEGRITY_MODIFIED)) {
+            echo '<pre>'.gTxt('modified_files', array('{list}' => n.t.implode(', '.n.t, $modified_files))).'</pre>';
+        }
+    }
 
     $dbuser = !empty($cfg['database']['user']) ? $cfg['database']['user'] : '';
     $dbpass = !empty($cfg['database']['password']) ? $cfg['database']['password'] : '';
@@ -426,7 +444,7 @@ function step_getTxpLogin()
     $public_themes_class->setDirPath(txpath.DS.'setup'.DS.'themes');
     $vals = array_merge($public_themes_class->getUploaded(false), $vals);
 
-    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-eight' : $cfg['site']['public_theme']);
+    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-nine' : $cfg['site']['public_theme']);
 
     $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 

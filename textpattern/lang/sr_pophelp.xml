@@ -69,6 +69,9 @@
         <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
         <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
         <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="php_scripting_enabled" title="PHP skriptovanje je omogućeno"><![CDATA[    <h2>PHP skriptovanje je omogućeno</h2>
+    <p>Textpattern dozvoljava autorima i administratorima da ugrade PHP kod unutar članaka i stranica/obrasca ako su ove funkcije omogućene. Pošto je ovo bezbednosni problem – bilo koja vrsta PHP-a može da se izvrši, uključujući potencijalno štetan/opasan kod koji može dovesti do uništenja vaše instalacije ili curenja informacija trećim stranama – toplo se preporučuje da isključite ove opcije u <a href="?event=prefs#prefs_group_publish">Panelu sa podešavanjima</a> osim ako apsolutno ne zahtevate ovu funkciju.</p>
+    <p>Mnoga poboljšanja Textpattern sajtova za koje je ranije bio potreban PHP kod sada se mogu izvršiti <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">pomoću osnovnih tagova</a>.</p>]]></item>
     </group>
 
     <group id="file" title="">
@@ -112,7 +115,9 @@
     <group id="prefs" title="">
         <item id="admin_side_plugins" title=""><![CDATA[]]></item>
         <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
+        <item id="allow_article_php_scripting" title=""><![CDATA[<h2>Dozvoli PHP u člancima?</h2>
+<p>Kada je omogućeno, ovo podešavanje će omogućiti upotrebu PHP-a u člancima. Autor mora imati dovoljne privilegije da to uradi (podrazumevano, samo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Izdavači’ <span class="ui-icon ui-icon-extlink">(otvara spoljnu vezu u novom prozoru)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(otvara spoljnu vezu u novom prozoru)</span></a> i <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editori’ <span class="ui-icon ui-icon-extlink">(otvara spoljnu vezu u novom prozoru)</span></a> mogu).</p>
+<p>PHP kod mora da ima izostavljene PHP oznake za otvaranje i zatvaranje, kao i da bude zatvoren unutar <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tagova <span class="ui-icon ui-icon-extlink">(otvara spoljnu vezu u novom prozoru)</span></a>.</p>]]></item>
         <item id="allow_form_override" title="Dozvoliti zamenu obrasca?"><![CDATA[<h2>Dozvoliti zamenu obrasca?</h2>
 <p>Ova postavka omogućava autorima članaka da ponište obrazac koji će se koristiti kada se njihov članak generiše. Ako je omogućeno, „Zameni obrazac“ padajući meni  biće dostupan prilikom uređivanja članka.</p>]]></item>
         <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
@@ -145,7 +150,9 @@
         <item id="enable_short_tags" title=""><![CDATA[]]></item>
         <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
         <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
+        <item id="file_base_path" title=""><![CDATA[<h2>Putanja do direktorijuma datoteka</h2>
+<p>Ovo postavlja <strong>apsolutnu putanju</strong> u direktorijum gde će otpremljene datoteke biti trajno sačuvane. PHP treba da ima pristup za pisanje u ovaj direktorijum.</p>
+<p><strong>Napomena:</strong> Razmislite o premeštanju ovog direktorijuma van javno dostupnog docroot-a vaše veb lokacije, radi dodatne bezbednosti.</p>]]></item>
         <item id="file_max_upload_size" title=""><![CDATA[]]></item>
         <item id="gmtoffset" title=""><![CDATA[]]></item>
         <item id="img_dir" title=""><![CDATA[]]></item>
@@ -174,9 +181,17 @@
         <item id="siteurl" title=""><![CDATA[]]></item>
         <item id="skin_dir" title=""><![CDATA[]]></item>
         <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blacklists" title=""><![CDATA[]]></item>
+        <item id="spam_blocklists" title=""><![CDATA[]]></item>
         <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
+        <item id="tempdir" title=""><![CDATA[<h2>Privremena putanja direktorijuma</h2>
+<p>Postavlja <strong>apsolutnu putanju</strong> u privremeni (ponekad poznat kao 'tmp' ili 'temp') direktorijum. PHP treba da ima pristup za pisanje u ovaj direktorijum. Ovaj direktorijum se koristi za privremene datoteke, na primer za otpremanje bilo koje vrste (dodaci, datoteke ili slike).</p>
+<p><strong>Napomena:</strong>
+<ul>
+    <li>Nemojte navoditi isti direktorijum za 'privremeni' i 'keš dodataka' jer će to izazvati probleme (Textpattern bi pokušao da pokrene sadržaj privremenih datoteka evidencije kao dodataka).</li>
+    <li>Razmislite o premeštanju ovog direktorijuma van javno dostupnog docroot-a vaše veb lokacije, radi dodatne bezbednosti.</li>
+</ul>
+</p>
+        ]]></item>
         <item id="theme_name" title=""><![CDATA[]]></item>
         <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
         <item id="use_comments" title=""><![CDATA[]]></item>

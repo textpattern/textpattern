@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,7 +38,7 @@ interface AssetInterface
      * $skin property setter.
      */
 
-    public function setSkin(Skin $skin = null);
+    public function setSkin($skin = null);
 
     /**
      * $essential property getter.

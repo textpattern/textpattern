@@ -308,6 +308,11 @@
 <h2>Site directory unreadable</h2>
 <p>The directory containing the root <code>index.php</code> file specified as the index for the site is unreadable by the server. Please check permissions.</p>
         ]]></item>
+        <item id="php_scripting_enabled" title="PHP scripting enabled"><![CDATA[
+<h2>PHP scripting enabled</h2>
+<p>Textpattern permits authors and administrators to embed PHP code inside articles and pages/forms if these features are enabled. Since this is a security concern - any kind of PHP could be executed, including potentially damaging/dangerous code that may lead to destruction of your installation or leaking information to third parties - it is strongly recommended you turn these options off in the <a href="?event=prefs#prefs_group_publish">Preferences panel</a> unless you absolutely require the feature.</p>
+<p>Many enhancements to Textpattern sites that previously required snippets of PHP can now be performed in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">core tags</a>.</p>
+        ]]></item>
         <item id="php_version_required" title="Minimum version requirements"><![CDATA[
 <h2>Minimum version requirements</h2>
 <p>Textpattern requires certain functionality present in the PHP programming language and MySQL database server. Please consult the following table to determine the minimum system requirements:</p>
@@ -737,6 +742,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="file_base_path" title="File directory path"><![CDATA[
 <h2>File directory path</h2>
 <p>This sets the <strong>absolute path</strong> to the directory where file uploads will be permanently saved. PHP needs to have write access to this directory.</p>
+<p><strong>Note:</strong> Consider moving this directory outside of your website's publicly accessible docroot, for added security.</p>
         ]]></item>
         <item id="file_max_upload_size" title="Maximum file size of uploads (in bytes)"><![CDATA[
 <h2>Maximum file size of uploads (in bytes)</h2>
@@ -911,9 +917,9 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
 <p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you’ve entered here, which is a requirement for sending email on some web servers.</p>
         ]]></item>
-        <item id="spam_blacklists" title="Spam blocklists (comma-separated)"><![CDATA[
+        <item id="spam_blocklists" title="Spam blocklists (comma-separated)"><![CDATA[
 <h2>Spam blocklists (comma-separated)</h2>
-<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
+<p>The <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> providers entered here will be queried when a comment is posted to your blog, and the IP address of the comment poster will be checked. If the IP address is listed it means there has been one or more spamming reports made about this IP in the past, and the comment will be rejected. Irrespective of the check results, the IP address of the comment poster is not stored by Textpattern.</p>
 <p>You can enter a list of domain names here, separated by commas. Please note that it is your responsibility to ensure blocklists are fit for purpose.</p>
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
@@ -924,7 +930,12 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="tempdir" title="Temporary directory path"><![CDATA[
 <h2>Temporary directory path</h2>
 <p>Sets an <strong>absolute path</strong> to a temporary (sometimes know as ‘tmp’ or ‘temp’) directory. PHP needs to have write access to this directory. This directory is used for temporary files, for example uploads of any kind (plugins, files or images).</p>
-<p><strong>Note:</strong> Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</p>
+<p><strong>Notes:</strong>
+<ul>
+    <li>Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</li>
+    <li>Consider moving this directory outside of your website's publicly accessible docroot, for added security.</li>
+</ul>
+</p>
         ]]></item>
         <item id="theme_name" title="Admin-side theme"><![CDATA[
 <h2>Admin-side theme</h2>

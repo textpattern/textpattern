@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -194,33 +194,36 @@ function css_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_css'), 'txp-new')
-        .href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
-            'class'     => 'txp-clone',
+        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_css').'"></span>'.sp.gTxt('create_css'), 'txp-new')
+        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
+            'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'style_form',
         ));
     }
 
     $actions = graf(
         $actionsExtras,
-        array('class' => 'txp-actions txp-actions-inline')
+        array('class' => 'txp-actions')
     );
 
     $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
-            span(
-                checkbox2('export', gps('export'), 0, 'export').
+            n.span(
+                checkbox2('export', gps('export'), 0, 'export', 'style_form').
                 n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
             , array('class' => 'txp-save-export'))
-        ).n.
-        tag_void('input', array(
-            'class'  => 'publish',
-            'type'   => 'submit',
-            'method' => 'post',
-            'value'  =>  gTxt('save'),
-        )), ' class="txp-save"'
+        ).
+        '<span class="txp-save-button">'.
+        n.tag_void('input', array(
+            'class' => 'publish',
+            'name'  => 'save',
+            'type'  => 'submit',
+            'form'  => 'style_form',
+            'value' => gTxt('save'),
+        )).
+        '</span>', ' class="txp-save"'
     );
 
     $rs = array(
@@ -248,32 +251,34 @@ function css_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_style'), $message);
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        );
+    echo n.'<div class="txp-layout">';
 
-    // Styles create/switcher column.
+    // Styles code column.
     echo n.tag(
-        $skinBlock.$partials['list']['html'].n,
+        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
+        $skinBlock.
+        form(
+            $partials['name']['html'].
+            $partials['css']['html'],
+            '', '', 'post', $class, '', 'style_form'),
         'div', array(
-            'class' => 'txp-layout-4col-alt',
-            'id'    => 'content_switcher',
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
             'role'  => 'region',
         )
     );
 
-    // Styles code column.
+    // Styles create/switcher column.
     echo n.tag(
-        form(
-            $actions.
-            $partials['name']['html'].
-            $partials['css']['html'].
-            $buttons, '', '', 'post', $class, '', 'style_form'),
+        n.tag(
+            $buttons.
+            $actions,
+            'div', array('class' => 'txp-save-zone')
+        ).
+        $partials['list']['html'].n,
         'div', array(
-            'class' => 'txp-layout-4col-3span',
-            'id'    => 'main_content',
+            'class' => 'txp-layout-4col-alt',
+            'id'    => 'content_switcher',
             'role'  => 'region',
         )
     );
@@ -450,10 +455,17 @@ function css_partial_name($rs)
     $name = $rs['name'];
     $skin = $rs['skin'];
     $nameRegex = '^(?=[^.\s])[^\x00-\x1f\x22\x26\x27\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+';
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_css', 'name');
 
     $titleblock = inputLabel(
         'new_style',
-        fInput('text', array('name' => 'newname', 'pattern' => $nameRegex), $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
+        Txp::get('\Textpattern\UI\Input', 'newname', 'text', $name)->setAtts(array(
+            'class'     => 'input-medium',
+            'id'        => 'new_style',
+            'size'      => INPUT_MEDIUM,
+            'pattern'   => $nameRegex,
+            'maxlength' => $fieldSizes['name'],
+        ))->setBool('required'),
         'css_name',
         array('', 'instructions_style_name'),
         array('class' => 'txp-form-field name')

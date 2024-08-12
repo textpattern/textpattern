@@ -352,6 +352,11 @@
         <item id="warn_mail_unavailable" title="V instalaci PHP chybí funkce mail()"><![CDATA[
 <h2>V instalaci PHP chybí funkce mail()</h2>
 <p>Funkce PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otevřít odkaz v novém okně)</span></a> je vypnuta. Proto Textpattern nebude moci odesílat e-maily a nebudou k dispozici některé funkce. Například nebudou odesílána e-mailová upozornění na nové komentáře a noví uživatelé neobdrží uvítací e-mail. Nicméně noví uživatelé přidáni být mohou.</p>        ]]></item>
+        <item id="php_scripting_enabled" title="PHP skriptování povoleno"><![CDATA[
+        <h2>PHP funkce povoleny</h2>
+        <p>Textpattern umožňuje autorům a správcům vložit do článků, stránek/forem kód PHP, pokud je tato možnost v Nastavení povolena. Vzhledem k tomu, že se jedná o možný bezpečnostní problém - mohl by být proveden jakýkoli druh PHP, včetně potenciálně škodlivého/nebezpečného kódu, který by mohl vést ke zničení instalace nebo úniku informací třetím stranám - je důrazně doporučeno vypnout tuto možnost v panelu <a href="?event=prefs#prefs_group_publish">Nastavení</a> , pokud tuto funcionalitu nutně nepotřebuješ.</p>
+        <p>Mnohá vylepšení na stránkách vytvářených v systému Textpattern, která dříve vyžadovaly snippety PHP, můžeš nyní provést pomocí TXP tagů samotného systému Textpattern. <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/"></a>.</p>
+                ]]></item>
     </group>
 
     <group id="file" title="Panel Soubory">
@@ -476,8 +481,9 @@ např.: #@language cs-cz</p>
 </ul>        ]]></item>
         <item id="allow_article_php_scripting" title="Povolit PHP v článcích?"><![CDATA[
 <h2>Povolit PHP v článcích?</h2>
-<p>Tato volba umožní autorům používat příkazy PHP v článcích. Autor musí mít dostatečná práva. (Ve výchozím stavu má taková práva pouze <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Vydavatel (Publisher)’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Šéfredaktor (Managing Editor)’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>).</p>
-<p>PHP kód musí být bez otevíracích a uzavíracích značek PHP, ale musí být uzavřen mezi tagy <a rel="external" target="_blank" title="viz dokumentace na https://docs.textpattern.com/tags/php" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a <code>&lt;/txp:php&gt;</code>.</p>        ]]></item>
+<p>Pokud je povoleno, umožní toto nastavení používat PHP v článcích. Autor k tomu  musí mít dostatečná oprávnění (ve výchozím nastavení pouze <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Vydavatelé“ <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Managing Editors <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Kopírovat editory <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a> může).</p>
+<p>PHP kódu musí mít vynecháno otevírací a uzavírací PHP tagy, a být také uzavřen uvnitř <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tagů <span class="ui-icon ui-icon-extlink">(otevře externí odkaz v novém okně)</span></a>.</p>
+        ]]></item>
         <item id="allow_form_override" title="Povolit ruční volbu forem?"><![CDATA[
 <h2>Povolit ruční volbu forem?</h2>
 <p>Tato volba umožňuje autorům při psaní či úpravě článku vybrat si formu, která bude pro tento článek použita namísto výchozí. Pokud je tato možnost povolena, je při úpravách článku k dispozici rozbalovací nabídka ‘Přebít formu’.  </p>        ]]></item>
@@ -642,8 +648,15 @@ Pokud šablona formy vyžaduje zpracování (pokud obsahuje tagy Textpattern), m
 <p>Používáš-li záznamy návštěv, zde můžeš nastavit, jak dlouho (kolik dní) budou záznamy uchovávány.</p>
 <p><strong>Pozn.:</strong> Staré záznamy se odstraňují vždy až v okamžiku, kdy si je zobrazíš. Pokud se na ně tedy nepodíváš několik týdnů, staré záznamy za celou tu dobu zůstanou v databázi zachovány.</p>        ]]></item>
         <item id="file_base_path" title="Cesta pro soubory"><![CDATA[
-<h2>Cesta pro soubory</h2>
-<p>Nastavení <strong>absolutní cesty</strong> k adresáři, kde jsou trvale uloženy soubory, které na server nahraješ. PHP musí mít oprávnění pro zápis do tohoto adresáře.</p>        ]]></item>
+<h2>Adresář dočasných souborů?</h2>
+<p>Zadej <strong>absolutní cestu</strong> k adresáři dočasných souborů (označovaný jako‘tmp’ nebo ‘temp’). PHP musí mít do toho adresáře oprávnění pro zápis (zpravidla vyžaduje nastavení práv na 777). Tento adresář slouží pro dočasné soubory, např. při nahrávání pluginů, souborů nebo obrázků. 
+</p>
+<p><p><strong>Poznámka:</strong>
+<ul>
+    <li>Nepoužívej stejný adresář pro ‘dočasné soubory’ a zároveň pro ‘cache pluginů’, protože to způsobuje potíže (Textpattern by se pokoušel spustit obsah dočasných souborů jako pluginy)..</li>
+    <li>Pro zvýšení bezpečnosti zvaž přesunutí tohoto adresáře mimo veřejně přístupný adresář tvého webu.</li>
+</ul>
+</p>]]></item>
         <item id="file_max_upload_size" title="Mez velikosti souborů (v bajtech)"><![CDATA[
 <h2>Mez velikosti souborů (v bajtech)</h2>
 Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<br>
@@ -782,7 +795,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
     <li>Na serverech se systémem Windows je zadaná emailová adresa použitá pro nastavení (nebo přepsání) <code>sendmail_from</code> v souboru <code>php.ini</code></li>
 </ul>
 <p>To zajistí, že SMTP adresa odesílatele (která nemusí být nutně stejná jako záhlaví “Od:” v emailech) je nastavena na emailovou adresu, kterou jsi zde zadal, což je na některých webových serverech podmínkou pro odesílání emailů.</p>        ]]></item>
-        <item id="spam_blacklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
+        <item id="spam_blocklists" title="Černé listiny spamu (odděluj čárkou)"><![CDATA[
 <h2>Černé listiny spamu (odděluj čárkou)</h2>
 <p>Po přijetí nového komentáře se Textpattern spojí se zde uvedenými poskytovateli <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Blacklisting">černých listin (spam blocklists)<span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> a ověří adresu IP autora komentáře. Pokud tuto adresu na některém ze seznamů najde, odmítne komentář přijmout, protože na tuto adresy byly v minulosti zaznamenány stížnosti kvůli spamu.</p>
 <p>Kontrola schválených komentářů navíc probíhá, když se článek zobrazí na stránce. Pokud narazíš na zpomalení při zobrazování článků s komentáři, zvaž smazání černé listiny spamu.</p>
@@ -794,7 +807,7 @@ Zde můžeš nastavit maximální velikost nahrávaných souborů (v bajtech).<b
         <item id="tempdir" title="Adresář dočasných souborů"><![CDATA[
 <h2>Adresář dočasných souborů?</h2>
 <p>Zadej <strong>absolutní cestu</strong> k adresáři dočasných souborů (označovaný jako‘tmp’ nebo ‘temp’). PHP musí mít do toho adresáře oprávnění pro zápis (zpravidla vyžaduje nastavení práv na 777). Tento adresář slouží pro dočasné soubory, např. při nahrávání pluginů, souborů nebo obrázků.</p>
-<p><strong>Pozn.:</strong> Nepoužívej stejný adresář pro ‘dočasné soubory’a zároveň pro ‘cache pluginů’, protože to způsobuje potíže (Textpattern by se pokoušel spustit obsah dočasných souborů jako pluginy).</p>        ]]></item>
+<p><strong>Pozn.:</strong> Nepoužívej stejný adresář pro ‘dočasné soubory’ a zároveň pro ‘cache pluginů’, protože to způsobuje potíže (Textpattern by se pokoušel spustit obsah dočasných souborů jako pluginy).</p>        ]]></item>
         <item id="theme_name" title="Volba vzhledu administrace"><![CDATA[
 <h2>Volba vzhledu administrace</h2>
 <p>Tady zvol téma vzhledu administračního prostředí, které bude použito při každém přihlášení do systému Textpattern. Textpattern je dodáván s několika předinstalovanými motivy administrace. Také můžeš přidat vlastní balíček s tématem vzhledu do adresáře <code>textpattern/admin-themes</code>, poté ho objevíš tady jako jednu z voleb.</p>        ]]></item>

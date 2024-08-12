@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.8.8-dev';
+textpattern.version = '4.9.0-beta';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -2211,7 +2211,7 @@ textpattern.Route.add('file, image', function () {
             }
         });
     });
-    $('form.upload-form.async').txpUploadPreview().txpFileupload({
+    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
         formData: [{
             name: 'app_mode',
             value: 'async'

@@ -1,4 +1,98 @@
+<<<<<<< HEAD
 Changes in 4.8.8 (24 January 2022)
+=======
+Changes in 4.9.0 at beta (12 Aug 2024)
+
+* Feature release with support for PHP 8.4.0+, new functionality, security
+  enhancements, general improvements and bug fixes.
+* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
+  recommended).
+* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
+  recommended).
+* Changed: Removed 'noopener' from target="_blank" links (now default behaviour
+  in all supported browsers) (thanks, phiw13).
+* Changed: Removed 'aria-label' attributes where 'title' already exists.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
+  instead.
+* Fixed: Improved support for images with EXIF orientation metadata
+  (thanks, jools-r).
+* Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
+* Fixed: Compiled plugins upload on PHP 5.
+* Fixed: Windows-generated zip plugins installable on Linux.
+* Fixed: Restored empty 'height' and 'width' attributes behaviour of
+  <txp:image />.
+* Fixed: Self-closing tag output for html5 doctype to silence validator
+ (thanks, jools-r).
+* Fixed: Ignore search in individual article mode.
+* Fixed: Take rfc2616 mail headers setting into account for separator.
+* Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
+* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
+* Added: SVG image support (thanks, osadl and jools-r).
+* Added: Option to define a Content Security Policy header for the Textpattern
+  admin-side via config.php.
+* Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Multi-edit for changing author language.
+* Added: Plugins can be uploaded from a URL by dragging to upload textarea.
+* Added: Compiled plugins can be uploaded via Browse... feature.
+* Added: Compatible plugin upgrades directly from the Plugins panel.
+* Added: Create and install new plugins directly from the Plugins panel.
+* Added: Plugin multi-edit option: revert to last installed code content.
+* Added: All plugin metadata exposed in the Plugin Edit panel.
+* Added: Plugin (zip-only) export feature.
+* Added: Support for aggregate window functions in compatible MySQL versions.
+* Added: Trailing slash URL preference.
+* Added: File download header preference.
+* Added: In-use asset counters to the Users panel.
+* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
+* Added: 'level' attribute to <txp:if_category />.
+* Added: Activity indicator for long upload processes.
+* Added: metaWeblog.newMediaObject for image upload over the MovableType API
+  (thanks, Melonking906).
+* Added: Global 'offset' can be set by URL parameters.
+* Added: 'lang' attribute to <txp:page_url />.
+* Added: <txp:if_items_count /> tag.
+* Added: Reload language packs from disk.
+* Added: Shift+Space shortcut for 'Tab' indent in textareas.
+* Added: Input length tooltip when appropriate.
+* Added: <txp:date /> tag.
+* Added: Global 'variable' attribute.
+* Added: 'alias' attribute to <txp:evaluate />.
+* Added: 'parent' attribute to <txp:category />.
+* Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: File Edit panel has the ability to rename and delete files, and
+  change the download counter value (thanks, adi).
+* Changed: Image Edit panel has the ability to delete images.
+* Changed: In-use languages can not be deleted.
+* Changed: Image tags can take HTML attributes.
+* Changed: Less collision-prone custom fields name processing.
+* Changed: Do not generate empty syndication feeds for feedless sections.
+* Changed: Allow PHP scripting options off by default, and Diagnostics warning.
+* Changed: Introduce primary keys for all database tables, replacing some old
+  indexes.
+* Changed: Category & section description field sizes increased to 1023.
+* Changed: <txp:header /> tag requires 'form' privilege.
+* Changed: Section-aware default search.
+* Changed: Extend character set that can be used in tag/attribute names.
+* Developer: Introduce UI class library for building interface components.
+* Developer: Tag registration is now mandatory.
+* Developer: Some of the lesser-used tags are loaded on demand from their class
+  to save memory. Plugins must call them via processTags() function.
+* Developer: Add safe_exists() function to database layer.
+* Developer: Move $thisversion and $txp_is_dev to constants.php.
+* Developer: 'Visitor logs' panel is now bound to the new 'lore' event name
+  (was: 'log') to prevent conflicts with privacy filters.
+* Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
+* Developer: Activation emails can be skipped via hidden notify="skip" field.
+* Vendors: DOMPurify 3.0.6.
+* Vendors: jQuery 3.7.1.
+* Vendors: jQuery UI 1.13.3.
+* Vendors: PHPMailer 6.9.1.
+* Vendors: PrismJS 1.29.0.
+* Vendors: Textile 4.1.1. (thanks, gocom).
+* Vendors: UglifyJS 3.19.0.
+
+Changes in 4.8.8 (24 Jan 2022)
+>>>>>>> release-4.9.0-beta
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.

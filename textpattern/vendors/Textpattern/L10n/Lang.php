@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -217,12 +217,19 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $meta['filename'] = $filename;
 
             if ($fp = fopen($file, 'r')) {
-                for ($idx = 0; $idx < $numMetaRows; $idx++) {
-                    $rows[] = fgets($fp, 1024);
+                $count = 0;
+            
+                while (!feof($fp)) {
+                    $line = fgets($fp, 1024);
+
+                    if ($count++ < $numMetaRows) {
+                        $rows[] = $line;
+                    }
                 }
 
                 fclose($fp);
                 $meta['time'] = filemtime($file);
+                $meta['count'] = $count;
 
                 if ($ini) {
                     $langInfo = parse_ini_string(join($rows));
@@ -320,6 +327,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                         $available_lang[$name]['name'] = $meta['name'];
                         $available_lang[$name]['direction'] = $meta['direction'];
                         $available_lang[$name]['type'] = 'available';
+                        $available_lang[$name]['count'] = $meta['count'];
                     }
                 }
             }
@@ -455,7 +463,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @param string $lang_code The lang identifier to load
      */
 
-    public function installFile($lang_code, $owner = '')
+    public function installFile($lang_code, $owner = '', $reset = false)
     {
         $langpack = $this->getPack($lang_code);
 
@@ -470,7 +478,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack += $fallpack;
         }
 
-        return ($this->upsertPack($langpack, $owner) === false) ? false : true;
+        return ($this->upsertPack($langpack, array($owner, $lang_code), $reset) === false) ? false : true;
     }
 
 
@@ -491,7 +499,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $pack->parse($textpack);
 
         if (!isset($useLang)) {
-            $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+            $useLang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         }
 
         $wholePack = $pack->getStrings($useLang);
@@ -568,23 +576,31 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @return result set
      */
 
-    public function upsertPack($langpack, $owner_ref = '')
+    public function upsertPack($langpack, $owner_ref = '', $reset = false)
     {
         $result = false;
 
         if ($langpack) {
             $values = array();
+            list ($owner_ref, $lang) = (array)$owner_ref + array(null, null);
+            $owner_ref = doSlash($owner_ref);
 
             foreach ($langpack as $key => $translation) {
                 extract(doSlash($translation));
 
-                $owner = empty($owner) ? doSlash($owner_ref) : $owner;
+                $owner = empty($owner) ? $owner_ref : $owner;
                 $lastmod = empty($lastmod) ? 'NOW()' : "'$lastmod'";
                 $values[] = "('$name', '$lang', '$data', '$event', '$owner', $lastmod)";
             }
 
             if ($values) {
                 $value = implode(',', $values);
+
+                if ($reset) {
+                    $names = quote_list(array_column($langpack, 'name'), ',');
+                    safe_delete('txp_lang', ($lang ? "lang = '".doSlash($lang)."' AND " : '')."owner = '$owner_ref' AND name NOT IN($names)");
+                }
+
                 $result = safe_query("INSERT INTO ".PFX."txp_lang
                     (name, lang, data, event, owner, lastmod)
                     VALUES $value

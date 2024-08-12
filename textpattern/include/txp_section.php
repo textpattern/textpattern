@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -290,38 +290,26 @@ function sec_section_list($message = '', $update = false)
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'on_frontpage',
-                    ), array(
-                        'title'      => gTxt('toggle_yes_no'),
-                        'aria-label' => gTxt('toggle_yes_no'),
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     $sec_in_rss = asyncHref(yes_no($sec_in_rss), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'in_rss',
-                    ), array(
-                        'title'      => gTxt('toggle_yes_no'),
-                        'aria-label' => gTxt('toggle_yes_no'),
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     $sec_searchable = asyncHref(yes_no($sec_searchable), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
                         'property' => 'searchable',
-                    ), array(
-                        'title'      => gTxt('toggle_yes_no'),
-                        'aria-label' => gTxt('toggle_yes_no'),
-                    ));
+                    ), array('title' => gTxt('toggle_yes_no')));
 
                     if ($sec_article_count > 0) {
                         $articles = href($sec_article_count, array(
                             'event'         => 'list',
                             'search_method' => 'section',
                             'crit'          => '"'.$sec_name.'"',
-                        ), array(
-                            'title'      => gTxt('article_count', array('{num}' => $sec_article_count)),
-                            'aria-label' => gTxt('article_count', array('{num}' => $sec_article_count)),
-                        ));
+                        ), array('title' => gTxt('article_count', array('{num}' => $sec_article_count))));
                     } else {
                         $articles = 0;
                     }
@@ -348,10 +336,7 @@ function sec_section_list($message = '', $update = false)
                         'event' => $item,
                         'name'  => $sec_item,
                         'skin'  => $sec_skin,
-                    ), array(
-                        'title'      => gTxt('edit'),
-                        'aria-label' => gTxt('edit'),
-                    )
+                    ), array('title' => gTxt('edit'))
                     ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
                     ($replaced ?
                         n.'<hr class="secondary" />'.n.
@@ -359,10 +344,7 @@ function sec_section_list($message = '', $update = false)
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array(
-                            'title'      => gTxt('edit'),
-                            'aria-label' => gTxt('edit'),
-                        )).
+                        ), array('title' => gTxt('edit'))).
                         ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
                     : '');
                 }
@@ -377,10 +359,7 @@ function sec_section_list($message = '', $update = false)
                     ).
                     hCell(
                         href(
-                            txpspecialchars($sec_name), $edit_url, array(
-                                'title'      => gTxt('edit'),
-                                'aria-label' => gTxt('edit'),
-                            )
+                            txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
                         ).
                         span(
                             sp.span('&#124;', array('role' => 'separator')).
@@ -500,6 +479,8 @@ function section_edit()
     extract($rs, EXTR_PREFIX_ALL, 'sec');
     pagetop(gTxt('tab_sections'));
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_section', 'name, title, description');
+
     $out = array();
 
     $out[] = hed($caption, 2);
@@ -509,12 +490,20 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
+                Txp::get('\Textpattern\UI\Input', 'name', 'text', $sec_name)->setAtts(array(
+                    'id'        => 'section_name',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['name'],
+                ))->setBool('required'),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
                 'section_title',
-                fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
+                Txp::get('\Textpattern\UI\Input', 'title', 'text', $sec_title)->setAtts(array(
+                    'id'        => 'section_title',
+                    'size'      => INPUT_REGULAR,
+                    'maxlength' => $fieldSizes['title'],
+                ))->setBool('required'),
                 'section_longtitle', '', array('class' => 'txp-form-field edit-section-longtitle')
             );
     }
@@ -581,7 +570,7 @@ EOJS
 
     $out[] = inputLabel(
             'section_description',
-            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
+            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" maxlength="'.$fieldSizes['description'].'">'.$sec_description.'</textarea>',
             'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
         );
 
@@ -625,7 +614,7 @@ function section_save()
     }
 
     // Prevent non-URL characters on section names.
-    $mbstrings = extension_loaded('mbstrings');
+    $mbstrings = extension_loaded('mbstring');
     $in['name'] = $mbstrings ?
         mb_strtolower(sanitizeForUrl($in['name']), 'UTF-8') :
         strtolower(sanitizeForUrl($in['name']));
@@ -967,20 +956,20 @@ var skin_style = {$json_style};
 var page_sel = null;
 var style_sel = null;
 EOJS;
+script_js($script, false);
 
     if ($step == 'section_select_skin') {
         $script .= <<<EOJS
-$(function() {
 //    $('#select_all').click();
     $('[name="edit_method"]').val('changepagestyle').change();
     var skin = $('#multiedit_skin');
     var selected = skin.find('option[selected]').val();
     skin.val(selected || '').change();
-});
 EOJS;
+        script_js($script, false, true);
     }
-    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method).
-    script_js($script, false);
+
+    return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
 /**

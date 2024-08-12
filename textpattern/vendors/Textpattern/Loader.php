@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -109,6 +109,8 @@ class Loader
 
     public function __construct($directory, $namespace = null, $separator = '\\', $extension = '.php')
     {
+        include_once txpath.'/vendors/autoload.php';
+
         if (file_exists($directory) && is_dir($directory)) {
             $this->directory = $directory;
             $this->namespace = $namespace;

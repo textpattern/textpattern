@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2022 The Textpattern Development Team
+ * Copyright (C) 2024 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,9 +48,13 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $file_max_upload_size, $csp_nonce;
 
-    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
+    if (strpos(CONTENT_SECURITY_POLICY, '{TEXTPATTERN_CSP_NONCE}') !== false && $csp_nonce === null) {
+        $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
+    }
+
+    header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, CONTENT_SECURITY_POLICY));
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
     if ($app_mode == 'async') {
@@ -83,10 +87,15 @@ function pagetop($pagetitle = '', $message = '')
 
     gTxtScript(array(
         'are_you_sure',
+        'body',
         'close',
+        'confirm_delete_popup',
         'cookies_must_be_enabled',
+        'custom_field_clash',
         'documentation',
+        'excerpt',
         'form_submission_error',
+        'found_unsafe',
         'help',
         'list_options',
         'ok',
@@ -111,54 +120,58 @@ function pagetop($pagetitle = '', $message = '')
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-    script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/blueimp/fileupload/jquery.fileupload.js', TEXTPATTERN_SCRIPT_URL, array("file, image")).
-    script_js(
-        'var textpattern = '.json_encode(
-            array(
-                '_txp_uid' => get_pref('blog_uid'),
-                'event' => $event,
-                'step' => $step,
-                '_txp_token' => form_token(),
-                'ajax_timeout' => (int) AJAX_TIMEOUT,
-                'prefs' => array(
-                    'max_file_size' => $file_max_upload_size,
-                    'max_upload_size' => real_max_upload_size(0),
-                    'production_status' => get_pref('production_status'),
-                    'do_spellcheck' => get_pref(
-                        'do_spellcheck',
-                        '#page-article #body, #page-article #title,'.
-                        '#page-image #image_alt_text, #page-image #caption,'.
-                        '#page-file #description,'.
-                        '#page-link #link-title, #page-link #link-description'
-                    ),
-                    'language_ui' => get_pref(
-                        'language_ui',
-                        TEXTPATTERN_DEFAULT_LANG
-                    ),
-                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
-                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
-    {message}
-    <a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
-</span>'
-                ),
-                'textarray' => (object) null,
-            ),
-            TEXTPATTERN_JSON
-        ).';'
-    ).
-    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
+    ->setRoute('file, image').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
+    ->setRoute('article');
 
-echo script_js("
-    $(function() {
-        if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
-            alert('Please force-reload the page or clear your browser caches.')
-        }
-    })", false);
+    $txpOut = 'var textpattern = '.json_encode(
+    array(
+        '_txp_uid' => get_pref('blog_uid'),
+        'event' => $event,
+        'step' => $step,
+        '_txp_token' => form_token(),
+        'ajax_timeout' => (int) AJAX_TIMEOUT,
+        'prefs' => array(
+            'max_file_size' => $file_max_upload_size,
+            'max_upload_size' => real_max_upload_size(0),
+            'production_status' => get_pref('production_status'),
+            'do_spellcheck' => get_pref(
+                'do_spellcheck',
+                '#page-article #body, #page-article #title,'.
+                '#page-image #image_alt_text, #page-image #caption,'.
+                '#page-file #description,'.
+                '#page-link #link-title, #page-link #link-description'
+            ),
+            'language_ui' => get_pref(
+                'language_ui',
+                TEXTPATTERN_DEFAULT_LANG
+            ),
+            'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+            'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+{message}
+<button class="close txp-reduced-ui-button" title="{close}"><span class="ui-icon ui-icon-close">{close}</span></button>
+</span>'
+        ),
+        'textarray' => (object) null,
+    ),
+    TEXTPATTERN_JSON
+).';';
+
+echo Txp::get('\Textpattern\UI\Script')->setContent($txpOut).
+    Txp::get('\Textpattern\UI\Script')->setSource('textpattern.js').n;
+$txpOut = "
+    if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
+        alert('Please force-reload the page or clear your browser caches.')
+    }";
+// Set but don't display this bit yet.
+script_js($txpOut, false, true);
+
 echo $theme->html_head();
 echo $theme->html_head_custom();
-    callback_event('admin_side', 'head_end'); ?>
+callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <noscript>Please enable JavaScript in your browser to use this application.</noscript>
@@ -198,78 +211,6 @@ function admin_title($pagetitle)
     $title = escape_title($title).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
 
     return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
-}
-
-/**
- * Creates an area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $event
- * @param      string $tarea
- * @param      string $area
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function areatab($label, $event, $tarea, $area)
-{
-    $tc = ($area == $event) ? 'tabup' : 'tabdown';
-    $atts = ' class="'.$tc.'"';
-    $hatts = ' href="?event='.$tarea.'"';
-
-    return tda(tag($label, 'a', $hatts), $atts);
-}
-
-/**
- * Creates a secondary area tab.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $label
- * @param      string $tabevent
- * @param      string $event
- * @return     string HTML table column
- * @deprecated in 4.6.0
- */
-
-function tabber($label, $tabevent, $event)
-{
-    $tc = ($event == $tabevent) ? 'tabup' : 'tabdown2';
-    $out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
-
-    return $out;
-}
-
-/**
- * Creates a table based navigation bar row.
- *
- * This can be used to create table based navigation bars.
- *
- * @param      string $area
- * @param      string $event
- * @return     string HTML table columns
- * @deprecated in 4.6.0
- */
-
-function tabsort($area, $event)
-{
-    if ($area) {
-        $areas = areas();
-
-        $out = array();
-
-        foreach ($areas[$area] as $a => $b) {
-            if (has_privs($b)) {
-                $out[] = tabber($a, $b, $event, 2);
-            }
-        }
-
-        return ($out) ? join('', $out) : '';
-    }
-
-    return '';
 }
 
 /**
@@ -324,7 +265,7 @@ function areas()
     }
 
     if (get_pref('logging') !== 'none' && get_pref('expire_logs_after')) {
-        $areas['admin'][gTxt('tab_logs')] = 'log';
+        $areas['admin'][gTxt('tab_logs')] = 'lore';
     }
 
     if (is_array($plugin_areas)) {
@@ -375,17 +316,4 @@ function navPop($inline = '')
             n.'</select>'.
             n.'</form>';
     }
-}
-
-/**
- * Generates a button link.
- *
- * @param      string $label
- * @param      string $link
- * @deprecated in 4.6.0
- */
-
-function button($label, $link)
-{
-    return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 }

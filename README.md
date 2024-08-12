@@ -48,7 +48,7 @@ Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/REA
 
 ## Help and Support
 
-The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Twitter](https://textpattern.com/@textpattern).
+The [Textpattern support forum](https://forum.textpattern.com) is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has a social network presence on [Mastodon](https://textpattern.com/mastodon) and [Twitter](https://textpattern.com/twitter).
 
 ## Development
 
@@ -68,14 +68,14 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(7.4, 8.0 or 8.1) |
-| MySQL  | 5.5 | [vendor supported](https://www.mysql.com/support/supportedplatforms/database.html)<br />(5.7 and/or 8.0, depends on platform) |
+| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.1, 8.2 or 8.3) |
+| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.0 or 8.4) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.21) or stable (1.20) |
+| Nginx  | &mdash; | mainline (1.27) or stable (1.26) |
 
 ## Contributing
 
-Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md) for full details.
+Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for full details.
 
 ## GitHub topic tags
 
@@ -120,18 +120,6 @@ npm run get-hive-admin-theme 4.8.x
 npm run get-textpacks 4.8.x
 ```
 
-You can verify PHP code via a PHP linter from the CLI, like so:
-
-```ShellSession
-npm run phplint
-```
-
-You can verify JavaScript code via a JavaScript linter from the CLI, like so:
-
-```ShellSession
-npm run eslint
-```
-
 Release tools:
 
 Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
@@ -145,7 +133,7 @@ npm run txp-gitdist 1.2.3 ../my-dest-dir
 
 ## Thank You
 
-Thank you to our [GitHub monthly sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
+Thank you to our [GitHub sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
 
 We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
