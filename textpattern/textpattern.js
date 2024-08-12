@@ -27,11 +27,7 @@
  * Collection of client-side tools.
  */
 
-<<<<<<< HEAD
-textpattern.version = '4.8.8';
-=======
-textpattern.version = '4.9.0-beta';
->>>>>>> release-4.9.0-beta
+textpattern.version = '4.9.0-beta.1';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.

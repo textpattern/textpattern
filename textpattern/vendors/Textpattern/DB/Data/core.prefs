@@ -595,11 +595,7 @@
         "position": "0"
     },
     "version": {
-<<<<<<< HEAD
-        "val": "4.8.8",
-=======
-        "val": "4.9.0-beta",
->>>>>>> release-4.9.0-beta
+        "val": "4.9.0-beta.1",
         "type": "2",
         "event": "publish",
         "html": "text_input",

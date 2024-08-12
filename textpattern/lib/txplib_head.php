@@ -54,7 +54,14 @@ function pagetop($pagetitle = '', $message = '')
         $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
     }
 
-    header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, CONTENT_SECURITY_POLICY));
+    // Only output the CSP header if a nonce is defined.
+    // This is not placed in the conditional block above because that is only triggered
+    // if {TEXTPATTERN_CSP_NONCE} is part of the CSP value. It's perfectly valid to
+    // create one without this convenience (e.g. via a plugin or callback).
+    if ($csp_nonce) {
+        header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, CONTENT_SECURITY_POLICY));
+    }
+
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
     if ($app_mode == 'async') {
