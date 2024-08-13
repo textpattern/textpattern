@@ -89,7 +89,6 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Vendors: UglifyJS 3.19.0.
 
 Changes in 4.8.8 (24 Jan 2022)
->>>>>>> release-4.9.0-beta
 
 * Maintenance release with support for PHP 8.1, security enhancements, general
   improvements and bug fixes.
