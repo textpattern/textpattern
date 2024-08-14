@@ -240,7 +240,7 @@ function page_title($atts)
 function css($atts)
 {
     global $css, $doctype, $pretext;
-    static $stylebody = null;
+    static $stylebody = array();
 
     extract(lAtts(array(
         'escape' => true,
@@ -274,10 +274,14 @@ function css($atts)
     }
 
     if (empty($format) || $format === "inline") {
-        isset($stylebody[$name.'_'.$theme]) or $stylebody = array(
-            $name.'_'.$theme => safe_field('css', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($theme) . "'")
+        $skinObj = Txp::get('Textpattern\Skin\Skin');
+        $safeName = $skinObj->sanitize($name);
+        $safeTheme = $skinObj->sanitize($theme);
+
+        isset($stylebody[$safeName.'_'.$safeTheme]) or $stylebody = array(
+            $safeName.'_'.$safeTheme => safe_field('css', 'txp_css', "name='".doSlash($safeName)."' AND skin='" . doSlash($safeTheme) . "'")
         );
-        $content = ($escape === true) ? $stylebody[$name.'_'.$theme] : txp_escape($escape, $stylebody[$name.'_'.$theme]);
+        $content = ($escape === true) ? $stylebody[$safeName.'_'.$safeTheme] : txp_escape($escape, $stylebody[$safeName.'_'.$safeTheme]);
     }
 
     switch ($format) {
