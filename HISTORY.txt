@@ -86,7 +86,7 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Vendors: PHPMailer 6.9.1.
 * Vendors: PrismJS 1.29.0.
 * Vendors: Textile 4.1.1. (thanks, gocom).
-* Vendors: UglifyJS 3.19.0.
+* Vendors: UglifyJS 3.19.2.
 
 Changes in 4.8.8 (24 Jan 2022)
 
