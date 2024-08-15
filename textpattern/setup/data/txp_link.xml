@@ -40,8 +40,8 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>https://textpattern.com/twitter</url>
-            <linkname>Textpattern on Twitter</linkname>
+            <url>https://textpattern.com/x/url>
+            <linkname>Textpattern on X</linkname>
             <linksort>50</linksort>
             <description></description>
             <author></author>
