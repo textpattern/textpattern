@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.0-beta';
+textpattern.version = '4.9.0-dev';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -43,13 +43,15 @@ var langdir = document.documentElement.dir,
  */
 
 function checkCookies() {
-    cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
+    let cookieEnabled = navigator.cookieEnabled && (document.cookie.indexOf('txp_test_cookie') >= 0 || document.cookie.indexOf('txp_login') >= 0);
 
     if (!cookieEnabled) {
         textpattern.Console.addMessage([textpattern.gTxt('cookies_must_be_enabled'), 1]);
     } else {
         document.cookie = 'txp_test_cookie=; Max-Age=0; SameSite=Lax';
     }
+
+    return cookieEnabled;
 }
 
 /**
@@ -89,7 +91,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'confirmation': textpattern.gTxt('are_you_sure')
     };
 
-    if ($.type(method) !== 'string') {
+    if (typeof(method) !== 'string') {
         opt = method;
         method = null;
     } else {
@@ -291,16 +293,18 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
 
         lib.checked = function () {
             $this.on('change', opt.checkbox, function (e) {
-                var box = $(this);
+                if ($this.hasClass('multi_edit_form')) {
+                    var box = $(this);
 
-                if (box.prop('checked')) {
-                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
-                        textpattern.Relay.data.selected.push(box.val());
+                    if (box.prop('checked')) {
+                        if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
+                            textpattern.Relay.data.selected.push(box.val());
+                        }
+                    } else {
+                        textpattern.Relay.data.selected = $.grep(textpattern.Relay.data.selected, function(value) {
+                            return value != box.val();
+                        });
                     }
-                } else {
-                    textpattern.Relay.data.selected = $.grep(textpattern.Relay.data.selected, function(value) {
-                        return value != box.val();
-                    });
                 }
 
                 if (typeof(e.originalEvent) != 'undefined') {
@@ -593,10 +597,11 @@ function setClassRemember(className, force) {
 
 function sendAsyncEvent(data, fn, format) {
     var formdata = false;
+    format = format || 'xml';
 
-    if ($.type(data) === 'string' && data.length > 0) {
+    if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
+        data = data + '&' + $.param({app_mode: 'async', _txp_token: textpattern._txp_token});
     } else if (data instanceof FormData) {
         formdata = true;
         data.append('app_mode', 'async');
@@ -606,7 +611,6 @@ function sendAsyncEvent(data, fn, format) {
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format || 'xml';
     return formdata ? $.ajax({
         type: 'POST',
         url: 'index.php',
@@ -614,7 +618,8 @@ function sendAsyncEvent(data, fn, format) {
         success: fn,
         dataType: format,
         processData: false,
-        contentType: false
+        contentType: false,
+        headers: {} // jQuery 4 cheat, otherwise it switches to GET
     }) : $.post('index.php', data, fn, format);
 }
 
@@ -643,9 +648,9 @@ textpattern.Relay = {
             return $(this).trigger(event, data);
         }
 
-        textpattern.Relay.timeouts[event] = setTimeout($.proxy(function() {
+        textpattern.Relay.timeouts[event] = setTimeout(function() {
             return textpattern.Relay.callback(event, data);
-        }, this), parseInt(timeout, 10));
+        }.bind(this), parseInt(timeout, 10));
     },
 
     /**
@@ -851,47 +856,64 @@ textpattern.Console = {
  */
 
 textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
-    if ($.type(console) === 'object' && $.type(console.log) === 'function') {
+    if (typeof(console) === 'object' && typeof(console.log) === 'function') {
         console.log(data.message);
     }
-}).register('uploadProgress', function (event, data) {
-    $('progress.txp-upload-progress').val(data.loaded / data.total);
-}).register('uploadStart', function (event, data) {
-    $('progress.txp-upload-progress').val(0).show();
-}).register('uploadEnd', function (event, data) {
-    $('progress.txp-upload-progress').hide();
 }).register('updateList', function (event, data) {
-    var list = data.list || '#messagepane, .txp-async-update',
+    const list = data.list || '#messagepane, .txp-async-update',
         url = data.url || 'index.php',
         callback = data.callback || function(event) {
             textpattern.Console.announce(event);
         },
-        handle = function(html) {
-            if (html) {
-                var $html = $(html);
+        handle = function(html, xhr) {
+            if (typeof html === 'string') {
+                const download = xhr ? xhr.getResponseHeader("Content-Disposition") : null;
 
-                $.each(list.split(','), function(index, value) {
-                    $(value).each(function() {
-                        var id = this.id;
+                if (download && download.match(/^\s*attachment\b/i)) {
+                    // Create a new Blob object using the response data
+                    var blob = new Blob([html]/*, {type: 'text/html'}*/);
+                    //Create a DOMString representing the blob and point a link element towards it
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement("a");
+                    const filename = download.match(/\bfilename\*?\s*=\s*([^;]+)/);
+                    a.href = url;
+                    a.download = filename ? filename[1].trim().replaceAll(/["']/g, '') : 'download.txt';
+                    a.click();
+                    //release the reference to the file by revoking the Object URL
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                    $(list).removeClass('disabled')
+                } else {
+                    let $html = textpattern.decodeHTML(html);
 
-                        if (id) {
-                            $(this).replaceWith($html.find('#' + id)).remove();
-                            $('#' + id).trigger('updateList');
-                        }
+                    $.each(list.split(','), function(index, value) {
+                        const host = value.match(/^(?:(.*)>>)?(.+)$/);
+                        const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
+                        $(host[2]).each(function() {
+                            const id = this.getAttribute('id');
+                            const $target = $(this.content || this);
+
+                            if (id) {
+                                if (!embed) {
+                                    $target.replaceWith($html.getElementById(id)).remove();
+                                } else {
+                                    $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                                }
+
+                                $('#' + id).removeClass('disabled').trigger('updateList', xhr);
+                            }
+                        });
                     });
-                });
-
-                $html.remove();
+                }
             }
 
             callback(data.event);
         };
 
-    $(list).addClass('disabled');
-
     if (typeof data.html == 'undefined') {
-        $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
-            handle(this);
+        $(list).addClass('disabled');
+        $.post(url, data.data, function(responseText, textStatus, jqXHR) {
+            handle(responseText, jqXHR);
         });
     } else {
         handle(data.html);
@@ -904,9 +926,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
             close: textpattern.gTxt('close')
         }) : '';
 
-    if (message) {
-        $('#messagepane').html(message);
-    }
+
+    $('#messagepane').html(message ? message : null);
 });
 
 /**
@@ -932,7 +953,7 @@ textpattern.Route = {
     add: function (pages, fn) {
         $.each(pages.split(','), function (index, page) {
             textpattern.Route.attached.push({
-                'page': $.trim(page),
+                'page': page.trim(),
                 'fn': fn
             });
         });
@@ -1039,9 +1060,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                     form.data.append(key, val);
                 });
             } else {
-                $.each(form.extra, function(key, val) {
-                    form.data += '&' + key + '=' + val;
-                });
+                form.data += '&' + $.param(form.extra);
             }
         }
 
@@ -1338,65 +1357,10 @@ jQuery.fn.txpSortable = function (options) {
 textpattern.passwordMask = function () {
     $('form').on('click', '#show_password', function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
-        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
-        textpattern.changeType(inputBox, newType);
+        var newType = (inputBox.prop('type') === 'password') ? 'text' : 'password';
+        inputBox.prop('type', newType);
         $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text');
     }).find('#show_password').prop('checked', false);
-};
-
-/**
- * Change the type of an input element.
- *
- * @param  {object} elem The <input/> element
- * @param  {string} type The desired type
- *
- * @see    https://gist.github.com/3559343 for original
- * @since  4.6.0
- */
-
-textpattern.changeType = function (elem, type) {
-    if (elem.prop('type') === type) {
-        // Already the correct type.
-        return elem;
-    }
-
-    try {
-        // May fail if browser prevents it.
-        return elem.prop('type', type);
-    } catch (e) {
-        // Create the element by hand.
-        // Clone it via a div (jQuery has no html() method for an element).
-        var html = $('<div>').append(elem.clone()).html();
-
-        // Match existing attributes of type=text or type="text".
-        var regex = /type=(\")?([^\"\s]+)(\")?/;
-
-        // If no match, add the type attribute to the end; otherwise, replace it.
-        var tmp = $(html.match(regex) == null ? html.replace('>', ' type="' + type + '">') : html.replace(regex, 'type="' + type + '"'));
-
-        // Copy data from old element.
-        tmp.data('type', elem.data('type'));
-        var events = elem.data('events');
-        var cb = function (events) {
-            return function () {
-                // Re-bind all prior events.
-                for (var idx in events) {
-                    var ydx = events[idx];
-
-                    for (var jdx in ydx) {
-                        tmp.bind(idx, ydx[jdx].handler);
-                    }
-                }
-            };
-        }(events);
-
-        elem.replaceWith(tmp);
-
-        // Wait a smidge before firing callback.
-        setTimeout(cb, 10);
-
-        return tmp;
-    }
 };
 
 /**
@@ -1408,7 +1372,7 @@ textpattern.changeType = function (elem, type) {
  */
 
 textpattern.encodeHTML = function (string) {
-    return $('<div/>').text(string).html();
+    return $('<textarea>').html(string).text();
 };
 
 /**
@@ -1420,11 +1384,35 @@ textpattern.encodeHTML = function (string) {
  */
 
 textpattern.decodeHTML = function (string) {
-    let div = document.createElement('template');
-    div.innerHTML = string.trim();
-
-    return div.content;
+    const template = document.createElement('template');
+    template.remove();
+    template.innerHTML = string;
+    
+    return template.content;
 };
+
+/**
+ * Wraps HTML as string.
+ *
+ * @param  {node|string} node The node
+ * @param  {string} tag The tag name
+ * @param  {object} attr The tag attributes
+ * @return {node} Wrapped string
+ * @since  4.9.0
+ */
+
+textpattern.wrapHTML = function (node, tag, attr) {
+    const wrapNode = document.createElement(tag || 'span');
+    wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
+
+    if (typeof attr === 'object') {
+        for (const key of Object.keys(attr)) {
+            wrapNode.setAttribute(key, attr[key]);
+        }
+    }
+
+    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
+}
 
 /**
  * Translates given substrings.
@@ -1499,7 +1487,7 @@ textpattern.gTxt = function (i18n, atts, escape) {
     var string = i18n;
     var name = string.toLowerCase();
 
-    if ($.type(textpattern.textarray[name]) !== 'undefined') {
+    if (typeof textpattern.textarray[name] !== 'undefined') {
         string = textpattern.textarray[name];
     }
 
@@ -1552,7 +1540,7 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
  * @since 4.7.0
  */
 
-$(document).keydown (function(e) {
+$(document).on('keydown', function(e) {
     var key = e.which;
 
     if (key === 27) {
@@ -1562,7 +1550,9 @@ $(document).keydown (function(e) {
 
         if (obj.length) {
             e.preventDefault();
-            obj.eq(0).closest('form').submit();
+            let form = $('#'+obj.eq(0).attr('form'));
+            form.length > 0 || (form = obj.eq(0).closest('form'));
+            form.trigger('submit');
         }
     }
 });
@@ -1684,7 +1674,7 @@ jQuery.fn.txpColumnize = function () {
 
     $headers.each(function (index) {
         var $this = $(this),
-            $title = $this.text().trim(),
+            $title = this.textContent.trim(),
             $id = $this.data('col');
 
         if (!$title) {
@@ -1733,7 +1723,7 @@ jQuery.fn.txpColumnize = function () {
     }
 
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide(),
-        $button = $('<a class="txp-list-options-button" href="#" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
+        $button = $('<button class="txp-list-options-button txp-reduced-ui-button" />').text(textpattern.gTxt('list_options')).prepend('<span class="ui-icon ui-icon-gear"></span> ');
     var $li = $('<li class="txp-dropdown-toggle-all" />'),
         $box = $('<input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox" />').attr('checked', selectAll);
 
@@ -1747,7 +1737,7 @@ jQuery.fn.txpColumnize = function () {
     if (!$ui.length) {
         $ui = $('<div class="txp-list-options"></div>');
     } else {
-        $ui.find('a.txp-list-options-button, ul.txp-dropdown').remove();
+        $ui.find('.txp-list-options-button, ul.txp-dropdown').remove();
         $panel = false;
     }
 
@@ -1865,6 +1855,7 @@ jQuery.fn.txpFileupload = function (options) {
         maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER);
 
     form.fileupload($.extend({
+        url: this.attr('action'),
         paramName: fileInput.attr('name'),
         dataType: 'script',
         maxFileSize: maxFileSize,
@@ -1878,8 +1869,13 @@ jQuery.fn.txpFileupload = function (options) {
         //    form.uploadCount++;
         //    data.submit();
         //},
-        progressall: function (e, data) {
+        progress: function (e, data) {
+            data.target = this;
             textpattern.Relay.callback('uploadProgress', data);
+        },
+        progressall: function (e, data) {
+            data.target = this;
+            textpattern.Relay.callback('uploadProgressAll', data);
         },
         start: function (e) {
             textpattern.Relay.callback('uploadStart', e);
@@ -1902,7 +1898,11 @@ jQuery.fn.txpFileupload = function (options) {
             }
         }
 
-        if (!files.length) {
+        if (!files.length) {/*
+            form.fileupload('add', {
+                files: [{order: 0}]
+            });*/
+            form.trigger('fileuploadsubmit', e, {});
             textpattern.Console.announce('uploadEnd');
         } else {
             form.fileupload('add', {
@@ -1911,11 +1911,11 @@ jQuery.fn.txpFileupload = function (options) {
         }
 
         fileInput.val('');
-    }).bind('fileuploadsubmit', function (e, data) {
-        data.formData = $.merge([{
+    }).on('fileuploadsubmit', function (e, data) {
+        data.formData = $.merge(data.files ? [{
             'name': 'fileInputOrder',
             'value': data.files[0].order + '/' + form.uploadCount
-        }], options.formData);
+        }] : [], options.formData);
 
         $.merge(data.formData, form.serializeArray());
 
@@ -1941,56 +1941,66 @@ jQuery.fn.txpUploadPreview = function (template) {
         return this;
     }
 
+    const hashCode = function(str) {
+        var hash = 0, i, chr;
+
+        for (i = 0; i < str.length; i++) {
+            chr = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+
+        return hash;
+    }
+
     var form = $(this),
-        last = form.children(':last-child'),
+        uploadPreview = form.find('div.txp-upload-preview'),
+        previewable = textpattern.prefs.previewable || /^(image\/)/i,
         maxSize = textpattern.prefs.max_file_size;
-    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL;
+    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL,
+        revokeObjectURL = (window.URL || window.webkitURL || {}).revokeObjectURL;
 
     form.find('input[type="reset"]').on('click', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
     });
 
     form.find('input[type="file"]').on('change', function (e) {
-        last.nextAll().remove();
+        uploadPreview.empty();
         $(this.files).each(function (index) {
-            var preview = '',
-                mime = this.type.split('/'),
-                hash = typeof md5 == 'function' ? md5(this.name) : index,
-                status = this.size > maxSize ? 'alert' : '';
+            let src = null,
+                preview = null,
+                mime = this.type.toLowerCase().split('/'),
+                hash = hashCode(this.name),
+                status = this.size > maxSize ? 'alert' : null;
 
-            if (createObjectURL) {
+            if (createObjectURL && previewable.test(this.type) && (src = createObjectURL(this))) {
                 switch (mime[0]) {
                     case 'image':
-                        preview = '<img src="' + createObjectURL(this) + '" />';
+                        preview = '<img src="' + src + '" />';
                         break;
-                    // TODO case 'video':?
+                    case 'video':
                     case 'audio':
-                        preview = '<' + mime[0] + ' controls src="' + createObjectURL(this) + '" />';
+                        preview = '<' + mime[0] + ' controls src="' + src + '" type="' + this.type + '" />';
+                        break;
+                    default:
+                        preview = '<embed type="' + this.type + '" src="' + src + '" />';
                         break;
                 }
             }
 
             preview = textpattern.mustache(template, $.extend(this, {
                 hash: hash,
-                preview: preview,
-                status: status,
-                title: textpattern.encodeHTML(this.name.replace(/\.[^\.]*$/, ''))
-            }));
+                title: textpattern.encodeHTML(this.name)
+            }, preview ? {preview: preview} : {}, status ? {status: status} : {}));
 
-            form.append(preview);
+            uploadPreview.append(preview);
+
+            if (src && mime[0] != 'audio' && mime[0] != 'video') revokeObjectURL(src);
         });
-    }).change();
+    }).trigger('change');
 
     return this;
 };
-
-/**
- * Cookie status.
- *
- * @deprecated in 4.6.0
- */
-
-var cookieEnabled = true;
 
 // Setup panel.
 textpattern.Route.add('setup', function () {
@@ -2012,12 +2022,17 @@ textpattern.Route.add('setup', function () {
 // Login panel.
 textpattern.Route.add('login', function () {
     // Check cookies.
-    cookieEnabled = checkCookies();
+    if (!checkCookies()) {
+        $('#login_form').on('submit', function() {
+            alert(textpattern.gTxt('cookies_must_be_enabled'));
+            return false;
+        }).find('input[type=submit]').prop('disabled', 'disabled');
+    }
 
     // Focus on either username or password when empty.
     $('#login_form input').filter(function () {
         return !this.value;
-    }).first().focus();
+    }).first().trigger('focus');
 
     textpattern.passwordMask();
 });
@@ -2060,35 +2075,8 @@ textpattern.Route.add('article', function () {
         }
     }).change();
 
-    var status = 'select[name=Status]',
-        form = $(status).parents('form');
-
-    $('#article_form').on('change', status, function () {
-        let submitButton = form.find('input[type=submit]');
-
-        if (!form.hasClass('published')) {
-            if ($(this).val() < 4) {
-                submitButton.val(textpattern.gTxt('save'));
-            } else {
-                submitButton.val(textpattern.gTxt('publish'));
-            }
-        }
-    }).on('submit.txpAsyncForm', function (e) {
-        if ($pane.dialog('isOpen') && !$('#live-preview').is(':checked')) {
-            $viewMode.click();
-        }
-    }).on('click', '.txp-clone', function (e) {
-        e.preventDefault();
-        form.trigger('submit', {
-            data: {
-                copy: 1,
-                publish: 1
-            }
-        });
-    });
-
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-view').closest('.txp-dialog'),
+    var $pane = $('#pane-preview').closest('.txp-dialog'),
         $field = '',
         $viewMode = $('#view_modes li.active [data-view-mode]');
 
@@ -2109,6 +2097,26 @@ textpattern.Route.add('article', function () {
         $('#body, #excerpt').off('input', txp_article_preview);
     });
 
+    var status = 'select[name=Status]',
+        form = $(status).parents('form');
+
+    $('#article_form').on('change', status, function () {
+        let submitButton = form.find('input[type=submit]');
+
+        if (!form.hasClass('published')) {
+            if ($(this).val() < 4) {
+                submitButton.val(textpattern.gTxt('save'));
+            } else {
+                submitButton.val(textpattern.gTxt('publish'));
+            }
+        }
+    }).on('submit.txpAsyncForm', function (e) {
+        $pane.dialog('close');
+    }).on('click', '.txp-clone', function (e) {
+        e.preventDefault();
+        form.trigger('submit', {data: {copy:1, publish:1}});
+    });
+
     $('#live-preview').on('change', function () {
         if ($(this).is(':checked')) {
             $('#body, #excerpt').on('input', txp_article_preview);
@@ -2117,8 +2125,20 @@ textpattern.Route.add('article', function () {
         }
     });
 
+    $('#clean-preview').on('change', function () {
+        if ($viewMode.data('view-mode') != 'html') {
+            $viewMode.click();
+        }
+    });
+
+    $('#parse-preview').on('change', function () {
+        $viewMode.click();
+    });
+
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
+        const $view = $viewMode.data('view-mode');
+        $('#pane-preview').addClass('disabled');
 
         data.push({
             name: 'app_mode',
@@ -2131,37 +2151,89 @@ textpattern.Route.add('article', function () {
             value: $field
         },{
             name: 'view',
-            value: $viewMode.data('view-mode')
+            value: $view
         });
         textpattern.Relay.callback('updateList', {
-            url: 'index.php #pane-view',
+            url: 'index.php',
             data: data,
-            list: '#pane-view',
-            callback: function() {
-                $pane.dialog('open');
-            }
+            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
+            callback: function() {}
         });
     });
 
-    $(document).on('click', '[data-view-mode]', function (e) {
+    $(document).on('change', '#clean-view', function () {
+        const link = document.getElementById('article_partial_article_view'),
+            href = link.href.replace(/\.~$/, '');
+        link.href = this.checked ? href + '.~' : href;
+    }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
+        $('#pane-preview').attr('class', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
-        $pane.dialog('option', 'title', $(this).text());
+        $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
-    }).on('updateList', '#pane-view.html', function () {
+    }).on('updateList', '#pane-preview.html', function () {
         Prism.highlightAllUnder(this);
+        $pane.dialog('open');
+        textpattern.Console.clear().announce("preview");
+    }).on('updateList', '#pane-template', async function (e, jqxhr) {
+        const pane = document.getElementById('pane-preview');
+        const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
+        const ntags = data.tags_count || 0;
+
+        if ($('#clean-preview').is(':checked')) {
+            DOMPurify.sanitize(this);
+
+            if (ntags || DOMPurify.removed.length) {
+                const message = textpattern.gTxt('found_unsafe', {
+                    '{tags}': ntags, '{elements}': DOMPurify.removed.length
+                });
+                textpattern.Console.addMessage([message, 2], "preview");
+            }
+        }
+
+        if (!pane.shadowRoot) {
+            const shadow = pane.attachShadow({mode: 'open'});
+
+            if (shadow.adoptedStyleSheets) {
+                const sheet = new CSSStyleSheet();
+                const css = await fetch('preview.css');
+                sheet.replaceSync(await css.text());
+                shadow.adoptedStyleSheets = [sheet];
+            }
+        }
+
+        pane.shadowRoot.replaceChildren(this.content);
+        pane.classList.remove('disabled');
+        $pane.dialog('open');
+        textpattern.Console.clear().announce("preview");
+    });
+
+    DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+
+    DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
+        if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
+        }
+    });
+
+    DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
+        if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
+        }
     });
 
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }
+
+    $("#clean-view").trigger("change");
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
@@ -2187,38 +2259,6 @@ textpattern.Route.add('article.init', function () {
     $('.txp-textfilter-options .jquery-ui-selectmenu').trigger('selectmenuchange');
 });
 
-textpattern.Route.add('file, image', function () {
-    if (!$('#txp-list-container').length) return;
-    textpattern.Relay.register('uploadStart', function (event) {
-        textpattern.Relay.data.fileid = [];
-    }).register('uploadEnd', function (event) {
-        var callback = function () {
-            textpattern.Console.clear().announce(event.type);
-        };
-
-        $(function () {
-            $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
-
-            if (textpattern.Relay.data.fileid.length) {
-                textpattern.Relay.callback('updateList', {
-                    data: $('nav.prev-next form').serializeArray(),
-                    list: '#txp-list-container',
-                    event: event.type,
-                    callback: callback
-                });
-            } else {
-                callback();
-            }
-        });
-    });
-    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
-        formData: [{
-            name: 'app_mode',
-            value: 'async'
-        }]
-    });
-});
-
 // Uncheck reset on timestamp change.
 textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
@@ -2226,8 +2266,84 @@ textpattern.Route.add('article, file', function () {
     });
 });
 
-// 'Clone' button on Pages, Forms, Styles panels.
-textpattern.Route.add('skin, css, page, form', function () {
+textpattern.Route.add('file, image', function () {
+    if (!$('#txp-list-container').length) {
+        textpattern.Relay.register('uploadEnd', function (event, data) {
+            $(function () {
+                let options = {
+                    data: $(data.target).serializeArray(),
+                    list: textpattern.event == 'image' ? '#fullsize-image, #image_name, #thumbnail-image, #thumbnail-upload' : '#file_details, #existing_container',
+                    event: event.type
+                };
+                textpattern.Relay.callback('updateList', options);
+            });
+        });
+    } else {
+        textpattern.Relay.register('uploadStart', function (event) {
+            textpattern.Relay.data.fileid = [];
+        }).register('uploadEnd', function (event) {
+            var callback = function () {
+                textpattern.Console.clear().announce(event.type);
+            };
+
+            $(function () {
+                $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid);
+
+                if (textpattern.Relay.data.fileid.length) {
+                    textpattern.Relay.callback('updateList', {
+                        data: $('nav.prev-next form').serializeArray(),
+                        list: '#txp-list-container',
+                        event: event.type,
+                        callback: callback
+                    });
+                } else {
+                    callback();
+                }
+            });
+        });
+    }
+
+    $('form.txp-upload-form.async').txpUploadPreview().txpFileupload({
+        formData: [{
+            name: 'app_mode',
+            value: 'async'
+        }]
+    });
+
+    $(document).on('submit', '#delete-file, #delete-image', function() {
+        return verify(textpattern.gTxt('confirm_delete_popup'));
+    })
+});
+
+// Check file extensions match.
+textpattern.Route.add('file.file_edit', function () {
+    const checkExtMatch = function(oldname, newname) {
+        const oldarray = oldname.split('.'),
+            newarray = newname.split('.'),
+            oldext = oldarray.length <= 1 ? '' : oldarray.pop().toLowerCase(),
+            newext = newarray.length <= 1 ? '' : newarray.pop().toLowerCase();
+
+            return newext == oldext || confirm(newname + ' => ' + oldname + "\n\n" + textpattern.gTxt('are_you_sure'));
+    }
+
+    $(document).on('fileuploadsubmit', 'form.txp-upload-form.async', function (e, data) {
+        const oldname = document.getElementById('filename').value;
+        const files = data.files;
+        const newname = !!files ? files[0].name : (document.getElementById('existing_file').value || '');
+        const match = checkExtMatch(oldname, newname);
+        if (newname && match && !files) {
+            $('#existing_file').val('').trigger('change');
+            sendAsyncEvent(data.formData, textpattern.Relay.callback('uploadEnd', e, data), 'script');
+        }
+        return match;
+    }).on('change', '#existing_file, #file_replace, #file_reassign', function () {
+        $(this).prop('required', true);
+        $('#existing_file, #file_replace, #file_reassign').not(this).val('').prop('required', false);
+    });
+});
+
+// 'Clone' button on Theme, Pages, Forms, Styles, and Link panels.
+textpattern.Route.add('skin, css, page, form, link', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
@@ -2290,6 +2406,7 @@ textpattern.Route.add('', function () {
         $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data));
         $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
     });
+
     $('body').on('click', '.pophelp', function (ev) {
         var $pophelp = $('#pophelp_dialog');
 
@@ -2318,6 +2435,33 @@ textpattern.Route.add('', function () {
         }
 
         return false;
+    });
+
+    $(document).on('keypress', 'textarea', function(e) {
+        if (e.shiftKey && e.key == ' ') { //Shift+Space pressed
+            e.preventDefault();
+            if (document.execCommand) {
+                document.execCommand("insertText", false, '\t');
+            } else {
+                const textarea = e.target;
+                textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
+            }
+        }
+    }).on('input', '[maxlength]', function() {
+        if (!$(this).tooltip('instance')) {
+            $(this).tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
+        }
+
+        if (this.value.length >= 0.8*this.maxLength) {
+            $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
+            $(this).tooltip('enable').tooltip('open');
+        } else {
+            $(this).tooltip('disable');
+        }
+    }).on('focusout', '[maxlength]', function() {
+        if ($(this).tooltip('instance')) {
+            $(this).tooltip('destroy');
+        }
     });
 });
 
@@ -2348,6 +2492,45 @@ textpattern.Route.add('plugin', function () {
     textpattern.Relay.register('txpAsyncHref.success', function (event, data) {
         $(data['this']).closest('tr').toggleClass('active');
     });
+});
+
+// Metastore panel.
+
+textpattern.Route.add('meta', function ()
+{
+    $('#render').change(function (e)
+    {
+        var meVal = $(this).val();
+        var edTxf = $('.edit-meta-textfilter');
+
+        // Don't want Textfilter information to be submitted if there
+        // are no filters available for the selected type.
+        if ($.inArray(meVal, textfilter_map) > -1) {
+            edTxf.show().find('select').removeAttr('disabled');
+        } else {
+            edTxf.hide().find('select').prop('disabled', 'true');
+        }
+
+        if ($.inArray(meVal, option_map) > -1) {
+            $('.edit-meta-options').show();
+        } else {
+            $('.edit-meta-options').hide();
+        }
+
+        if ($.inArray(meVal, delimiter_map) > -1) {
+            $('.edit-meta-delimiter').show();
+        } else {
+            $('.edit-meta-delimiter').hide();
+        }
+    }).change();
+
+    $('#labelStr').change(function (e)
+    {
+        if ($('#name').val() === '') {
+            $('#name').val($(this).val());
+        }
+    });
+
 });
 
 // Diagnostics panel.
@@ -2417,7 +2600,7 @@ textpattern.Route.add('section', function () {
 
             $.each(skin_page[skin], function (key, item) {
                 var isSelected = (item == page_sel) ? ' selected' : '';
-                $pageSelect.append('<option' + isSelected + '>' + item + '</option>');
+                $pageSelect.append('<option' + isSelected + '>' + textpattern.encodeHTML(item) + '</option>');
             });
 
             if (page_sel === null) {
@@ -2430,7 +2613,7 @@ textpattern.Route.add('section', function () {
 
             $.each(skin_style[skin], function (key, item) {
                 var isSelected = (item == style_sel) ? ' selected' : '';
-                $styleSelect.append('<option' + isSelected + '>' + item + '</option>');
+                $styleSelect.append('<option' + isSelected + '>' + textpattern.encodeHTML(item) + '</option>');
             });
 
             if (style_sel === null) {
@@ -2490,7 +2673,7 @@ textpattern.Route.add('plugin.plugin_help', function () {
         });
 
         // Grab the heading, strip out markup, then sanitize.
-        var tabTitle = $('<div>').html($tabHead.html()).text();
+        var tabTitle = textpattern.encodeHTML($tabHead.html());
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = sectIdPrefix + tabName;
 
@@ -2506,8 +2689,13 @@ textpattern.Route.add('plugin.plugin_help', function () {
 
 // Prefs panel.
 textpattern.Route.add('prefs', function () {
+    textpattern.textarray['custom_field_clash'] = textpattern.textarray['custom_field_clash'].replace(/<\/?\w+>/g, '');
     $('#dateformat, #archive_dateformat, #comments_dateformat').on('change', function() {
         $(this).next('input').val($(this).val());
+    });
+    $('#prefs_group_custom input').on('input', function(){
+        this.setCustomValidity(this.validity.patternMismatch ? textpattern.gTxt('custom_field_clash', {'{list}' : this.value}) : '');
+        this.reportValidity();
     });
 });
 
@@ -2687,24 +2875,26 @@ $(function () {
         textpattern.Relay.callback('updateList', {
             data: $(this).serializeArray()
         });
-    }).on('click', '.txp-navigation a', function (e) {
-        if ($(this).hasClass('pophelp')) {
-            return;
-        }
-
+    }).on('click', '.txp-navigation a:not(.pophelp)', function (e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {
             url: $(this).attr('href'),
-            data: $('nav.prev-next form').serializeArray()
+            data: $('nav.prev-next form').serializeArray(),
+            callback: scroll({top: 0, behavior: 'auto'})
         });
-
-        scroll(0, 0);
     }).on('click', '.txp-list thead th a', function (e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {
             list: '#txp-list-container',
             url: $(this).attr('href'),
             data: $('nav.prev-next form').serializeArray()
+        });
+    }).on('click', 'a.txp-search-link', function (e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {
+            list: '#txp-list-container, #search_form',
+            url: $(this).attr('href'),
+            callback: txp_search
         });
     }).on('submit', 'form[name="longform"]', function (e) {
         e.preventDefault();
@@ -2740,7 +2930,7 @@ $(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?logout=1&lang=' + textpattern.prefs.language_ui + '&_txp_token=' + textpattern._txp_token);
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?' + $.param({logout: 1, lang: textpattern.prefs.language_ui, _txp_token: textpattern._txp_token}));
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
@@ -2749,6 +2939,18 @@ $(function () {
     textpattern.Route.init({
         'step': 'init'
     });
+
+    // Set default upload progress bars
+    if (typeof textpattern.prefs.uploadPreview == 'undefined') {
+        textpattern.Relay.register('uploadProgressAll', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(data.loaded / data.total);
+        }).register('uploadStart', function (event, data) {
+            $(data.target).children('.txp-upload-progress').val(0).show();
+        }).register('uploadEnd', function (event, data) {
+            $(data.target).find('div.txp-upload-preview').empty();
+            $(data.target).children('.txp-upload-progress').hide();
+        });
+    }
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
