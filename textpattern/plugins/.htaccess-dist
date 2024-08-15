@@ -7,6 +7,7 @@
 </IfModule>
 
 # Inhibit direct file downloads
+
 RedirectMatch 403 ^.*\.(?!(js|css)).*$
 
 # END Textpattern
