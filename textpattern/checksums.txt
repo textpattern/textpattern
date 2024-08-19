@@ -32,7 +32,7 @@
 /lib/admin_config.php: e247f41e62d3ae217d7e2dc86b256fea
 /lib/class.thumb.php: 86dd117ccde53057fb2145ded4dd555d
 /lib/class.trace.php: e513b301279a394581aee5adf97dec3d
-/lib/constants.php: c4d2c1ca858051b27845efb309700856
+/lib/constants.php: 372e67dfedef83c6f84a4fe18867501f
 /lib/IXRClass.php: a1b525b4a9ed12dcb5677d5232a3d92e
 /lib/PasswordHash.php: 66a8aa4b2d6e0527877a797907efc035
 /lib/taglib.php: 508d7fba46db16c63177df580c129dc9
@@ -53,7 +53,7 @@
 /publish/search.php: b19b56072bc0a12eb6e6670bde2a7d2c
 /publish/taghandlers.php: 49416ddd78d2461e1d4221f57ee9c62c
 /publish.php: 2678e29c8f693e0bbf53be5e13f4001a
-/textpattern.js: 52780fbd0500ed1a71f69109c06f64ea
+/textpattern.js: dc7468210de27493d1488b9008353984
 /tmp/index.php: b3612b473531b49801f1bcd7ff330117
 /update/_to_4.0.3.php: f249d23e9d9f0db33092366a0d2e38a3
 /update/_to_4.0.4.php: e41e0f2fc7fcb4fda73939210996cb57
@@ -84,7 +84,7 @@
 /vendors/composer/InstalledVersions.php: 182d5924ff0b528f008a83d1f5809d02
 /vendors/composer/platform_check.php: 15e1efff88933be3dd5740e3c9530478
 /vendors/cure53/DOMPurify/dist/purify.min.js: cf8aa1856bd9a130c1e1841f42726f15
-/vendors/jquery/jquery/jquery-4.0.0-beta.min.js: 8ead8ba31f1d12bc53d78be1cae060c4
+/vendors/jquery/jquery/jquery-4.0.0-beta.min.js: 
 /vendors/jquery/jquery/jquery.js: 2c872dbe60f4ba70fb85356113d8b35e
 /vendors/jquery/jquery-ui/jquery-ui.js: 3305041b1dffc2ada01dd1f54417f300
 /vendors/Netcarver/Textile/DataBag.php: c039ce23f63ec2d00540b28c9dfa9a95
