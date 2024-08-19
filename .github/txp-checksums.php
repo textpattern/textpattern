@@ -32,7 +32,6 @@ if (empty($argv[1])) {
 $action = empty($argv[2]) ? 'update' : $argv[2];
 
 define('txpath', rtrim(realpath($argv[1]), '/'));
-define('n', "\n");
 
 $event = '';
 $prefs['enable_xmlrpc_server'] = true;
