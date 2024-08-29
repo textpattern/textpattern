@@ -83,7 +83,7 @@ class Tag extends DataBag
      * @param array<string, int|string> $attributes  An array of attributes
      * @param bool  $selfclosing Whether the tag is self-closing
      */
-    public function __construct($name, array $attributes = null, $selfclosing = true)
+    public function __construct($name, $attributes = null, $selfclosing = true)
     {
         parent::__construct($attributes);
         $this->tag = $name;

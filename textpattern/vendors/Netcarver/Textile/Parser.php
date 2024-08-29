@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.1';
+    protected $ver = '4.1.2';
 
     /**
      * Regular expression snippets.
@@ -3039,8 +3039,8 @@ class Parser
 
         foreach ($list as $index => $m) {
             $start = '';
-            $content = trim($m['content']);
-            $ltype = $this->liType($m['tl']);
+            $content = trim((string) $m['content']);
+            $ltype = $this->liType((string) $m['tl']);
 
             if (isset($list[$index + 1])) {
                 $next = $list[$index + 1];
@@ -3048,9 +3048,9 @@ class Parser
                 $next = false;
             }
 
-            if (strpos($m['tl'], ';') !== false) {
+            if (strpos((string) $m['tl'], ';') !== false) {
                 $litem = 'dt';
-            } elseif (strpos($m['tl'], ':') !== false) {
+            } elseif (strpos((string) $m['tl'], ':') !== false) {
                 $litem = 'dd';
             } else {
                 $litem = 'li';
@@ -3080,12 +3080,16 @@ class Parser
                 }
             }
 
-            if ($prev && $prev['tl'] && strpos($prev['tl'], ';') !== false && strpos($m['tl'], ':') !== false) {
+            if ($prev
+                && $prev['tl']
+                && strpos((string) $prev['tl'], ';') !== false
+                && strpos((string) $m['tl'], ':') !== false
+            ) {
                 $lists[$m['tl']] = 2;
             }
 
-            $tabs = str_repeat("\t", $m['level'] - 1);
-            $atts = $this->parseAttribs($m['atts']);
+            $tabs = str_repeat("\t", ((int) $m['level']) - 1);
+            $atts = $this->parseAttribs((string) $m['atts']);
 
             if (!isset($lists[$m['tl']])) {
                 $lists[$m['tl']] = 1;
@@ -3760,7 +3764,6 @@ class Parser
                 ksort($o);
             }
 
-            // @phpstan-ignore-next-line
             $this->notes = $o;
         }
 
@@ -3955,6 +3958,7 @@ class Parser
         // If we are referencing a note that hasn't had the definition parsed yet, then assign it an ID.
 
         if (empty($this->notes[$m['label']]['id'])) {
+            // @phpstan-ignore-next-line
             $id = $this->notes[$m['label']]['id'] = $this->linkPrefix . ($this->linkIndex++);
         } else {
             $id = $this->notes[$m['label']]['id'];
@@ -3964,6 +3968,7 @@ class Parser
         $out = '<span id="noteref'.$refid.'">'.$num.'</span>';
 
         if (!$nolink) {
+            // @phpstan-ignore-next-line
             $out = '<a href="#note'.$id.'">'.$out.'</a>';
         }
 

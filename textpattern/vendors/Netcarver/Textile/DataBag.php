@@ -64,7 +64,7 @@ class DataBag
      *
      * @param array<string, string|int>|null $data The initial data array stored in the bag
      */
-    public function __construct(array $data = null)
+    public function __construct($data = null)
     {
         $this->data = (array) $data;
     }
