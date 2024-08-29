@@ -2620,11 +2620,8 @@ function hide($atts = array(), $thing = null)
             ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
     } elseif ($process === true) {
         parse($thing);
-    } elseif (in_array($process, array('live', 'testing', 'debug'))) {
-        $old_status = $production_status;
-        $production_status = php() ? $process : $production_status;
+    } elseif (strtolower($process) === $production_status) {
         $out = parse($thing);
-        $production_status = $old_status;
     }
 
     return $out;
