@@ -176,7 +176,9 @@ function article_save()
         $incoming['textile_excerpt'] = $oldArticle['textile_excerpt'];
     }
 
+    callback_event_ref('article_submit', empty($incoming['ID']) ? 'post' : 'save', 1, $incoming);
     $incoming = textile_main_fields($incoming);
+    callback_event_ref('article_submit', empty($incoming['ID']) ? 'post' : 'save', 0, $incoming);
 
     extract(doSlash($incoming));
     $ID = intval($ID);
