@@ -1,13 +1,21 @@
-Changes in 4.9.0 (upcoming)
+Changes in 4.9.0-beta.2 (upcoming)
 
-* Feature release with support for PHP 8.3.1+, new functionality, security
+* Vendors: Textile 4.1.2. (thanks, gocom).
+* Vendors: UglifyJS 3.19.2.
+
+Changes in 4.9.0-beta.1 (12 Aug 2024)
+
+* Feature release with support for PHP 8.4.0+, new functionality, security
   enhancements, general improvements and bug fixes.
-* Changed: Minimum system requirements increased to PHP 5.6.
-* Changed: Minimum system requirements increased to MySQL 5.5.
+* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
+  recommended).
+* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
+  recommended).
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
-* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count /> instead.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
+  instead.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
@@ -20,7 +28,7 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take rfc2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.2 and PHP 8.3.1+.
+* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php.
@@ -48,6 +56,10 @@ Changes in 4.9.0 (upcoming)
 * Added: Reload language packs from disk.
 * Added: Shift+Space shortcut for 'Tab' indent in textareas.
 * Added: Input length tooltip when appropriate.
+* Added: <txp:date /> tag.
+* Added: Global 'variable' attribute.
+* Added: 'alias' attribute to <txp:evaluate />.
+* Added: 'parent' attribute to <txp:category />.
 * Changed: Plugins of all types trigger verify step (with improved security).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
@@ -62,18 +74,24 @@ Changes in 4.9.0 (upcoming)
 * Changed: Category & section description field sizes increased to 1023.
 * Changed: <txp:header /> tag requires 'form' privilege.
 * Changed: Section-aware default search.
+* Changed: Extend character set that can be used in tag/attribute names.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
   to save memory. Plugins must call them via processTags() function.
 * Developer: Add safe_exists() function to database layer.
 * Developer: Move $thisversion and $txp_is_dev to constants.php.
-* jQuery 3.7.1.
-* Textile 4.1.0. See https://github.com/textile/php-textile/releases/ for full
-  list of changes in this release (thanks, gocom).
-* PrismJS 1.29.0.
-* DOMPurify 3.0.6
-* PHPMailer 6.9.1
+* Developer: 'Visitor logs' panel is now bound to the new 'lore' event name
+  (was: 'log') to prevent conflicts with privacy filters.
+* Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
+* Developer: Activation emails can be skipped via hidden notify="skip" field.
+* Vendors: DOMPurify 3.0.6.
+* Vendors: jQuery 3.7.1.
+* Vendors: jQuery UI 1.13.3.
+* Vendors: PHPMailer 6.9.1.
+* Vendors: PrismJS 1.29.0.
+* Vendors: Textile 4.1.1. (thanks, gocom).
+* Vendors: UglifyJS 3.19.2.
 
 Changes in 4.8.8 (24 Jan 2022)
 

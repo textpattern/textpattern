@@ -168,6 +168,7 @@ function author_save_new()
         'email',
         'RealName',
         'language',
+        'notify',
     )));
 
     $privs = assert_int($privs);
@@ -199,7 +200,11 @@ function author_save_new()
                 );
             }
 
-            $message = send_account_activation($name);
+            if (strtolower($notify) !== 'skip') {
+                $message = send_account_activation($name);
+            } else {
+                $message = gTxt('author_updated', array('{name}' => $name));
+            }
 
             author_list($message);
 

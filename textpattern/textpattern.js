@@ -597,6 +597,7 @@ function setClassRemember(className, force) {
 
 function sendAsyncEvent(data, fn, format) {
     var formdata = false;
+    format = format || 'xml';
 
     if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
@@ -610,7 +611,6 @@ function sendAsyncEvent(data, fn, format) {
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format || 'xml';
     return formdata ? $.ajax({
         type: 'POST',
         url: 'index.php',
@@ -618,7 +618,8 @@ function sendAsyncEvent(data, fn, format) {
         success: fn,
         dataType: format,
         processData: false,
-        contentType: false
+        contentType: false,
+        headers: {} // jQuery 4 cheat, otherwise it switches to GET
     }) : $.post('index.php', data, fn, format);
 }
 
@@ -866,26 +867,44 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         },
         handle = function(html, xhr) {
             if (typeof html === 'string') {
-                let $html = textpattern.decodeHTML(html);
+                const download = xhr ? xhr.getResponseHeader("Content-Disposition") : null;
 
-                $.each(list.split(','), function(index, value) {
-                    const host = value.match(/^(?:(.*)>>)?(.+)$/);
-                    const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
-                    $(host[2]).each(function() {
-                        const id = this.getAttribute('id');
-                        const $target = $(this.content || this);
+                if (download && download.match(/^\s*attachment\b/i)) {
+                    // Create a new Blob object using the response data
+                    var blob = new Blob([html]/*, {type: 'text/html'}*/);
+                    //Create a DOMString representing the blob and point a link element towards it
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement("a");
+                    const filename = download.match(/\bfilename\*?\s*=\s*([^;]+)/);
+                    a.href = url;
+                    a.download = filename ? filename[1].trim().replaceAll(/["']/g, '') : 'download.txt';
+                    a.click();
+                    //release the reference to the file by revoking the Object URL
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                    $(list).removeClass('disabled')
+                } else {
+                    let $html = textpattern.decodeHTML(html);
 
-                        if (id) {
-                            if (!embed) {
-                                $target.replaceWith($html.getElementById(id)).remove();
-                            } else {
-                                $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                    $.each(list.split(','), function(index, value) {
+                        const host = value.match(/^(?:(.*)>>)?(.+)$/);
+                        const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
+                        $(host[2]).each(function() {
+                            const id = this.getAttribute('id');
+                            const $target = $(this.content || this);
+
+                            if (id) {
+                                if (!embed) {
+                                    $target.replaceWith($html.getElementById(id)).remove();
+                                } else {
+                                    $target.html(embed === true ? $html : $html.querySelectorAll(host[1]));
+                                }
+
+                                $('#' + id).removeClass('disabled').trigger('updateList', xhr);
                             }
-
-                            $('#' + id).removeClass('disabled').trigger('updateList', xhr);
-                        }
+                        });
                     });
-                });
+                }
             }
 
             callback(data.event);
@@ -1922,6 +1941,18 @@ jQuery.fn.txpUploadPreview = function (template) {
         return this;
     }
 
+    const hashCode = function(str) {
+        var hash = 0, i, chr;
+
+        for (i = 0; i < str.length; i++) {
+            chr = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+
+        return hash;
+    }
+
     var form = $(this),
         uploadPreview = form.find('div.txp-upload-preview'),
         previewable = textpattern.prefs.previewable || /^(image\/)/i,
@@ -1939,7 +1970,7 @@ jQuery.fn.txpUploadPreview = function (template) {
             let src = null,
                 preview = null,
                 mime = this.type.toLowerCase().split('/'),
-                hash = typeof md5 == 'function' ? md5(this.name) : index,
+                hash = hashCode(this.name),
                 status = this.size > maxSize ? 'alert' : null;
 
             if (createObjectURL && previewable.test(this.type) && (src = createObjectURL(this))) {

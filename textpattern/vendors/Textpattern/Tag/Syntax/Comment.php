@@ -180,7 +180,7 @@ class Comment
         } else {
             // Display a comment preview if required.
             if (ps('preview') && $show_preview) {
-                $out = comments_preview(array());
+                $out = self::comments_preview(array());
             }
     
             extract(doDeEnt(psa(array('parentid', 'backpage'))));

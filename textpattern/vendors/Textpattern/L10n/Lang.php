@@ -217,12 +217,19 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $meta['filename'] = $filename;
 
             if ($fp = fopen($file, 'r')) {
-                for ($idx = 0; $idx < $numMetaRows; $idx++) {
-                    $rows[] = fgets($fp, 1024);
+                $count = 0;
+            
+                while (!feof($fp)) {
+                    $line = fgets($fp, 1024);
+
+                    if ($count++ < $numMetaRows) {
+                        $rows[] = $line;
+                    }
                 }
 
                 fclose($fp);
                 $meta['time'] = filemtime($file);
+                $meta['count'] = $count;
 
                 if ($ini) {
                     $langInfo = parse_ini_string(join($rows));
@@ -320,6 +327,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                         $available_lang[$name]['name'] = $meta['name'];
                         $available_lang[$name]['direction'] = $meta['direction'];
                         $available_lang[$name]['type'] = 'available';
+                        $available_lang[$name]['count'] = $meta['count'];
                     }
                 }
             }

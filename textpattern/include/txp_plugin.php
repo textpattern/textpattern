@@ -402,6 +402,11 @@ function plugin_list($message = '')
             ).n;
     } else {
         $createBlock = tag(
+            tag(href(gTxt('create'), array(
+                'event'      => 'plugin',
+                'step'       => 'plugin_edit',
+                '_txp_token' => form_token(),
+            ), 'class="txp-button"'), 'p').
             wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : ''),
             'div',
             array('class' => 'txp-control-panel')
@@ -1083,12 +1088,7 @@ function plugin_export()
 
 function plugin_form($existing_files = array())
 {
-    return tag(href(gTxt('edit'), array(
-        'event'      => 'plugin',
-        'step'       => 'plugin_edit',
-        '_txp_token' => form_token(),
-    ), 'class="txp-button"'), 'p').
-    tag(
+    return tag(
         tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
         n.tag_void('input', array(
             'type'     => 'file',

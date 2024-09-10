@@ -80,8 +80,7 @@ $txpcfg['txpath'] = '/home/path/to/textpattern';
 /**
  * Database connection charset.
  *
- * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1
- * or utf8.
+ * Must be equal to the table-charset, e.g. latin1 or utf8.
  *
  * @global string $txpcfg['dbcharset']
  */
@@ -100,6 +99,20 @@ $txpcfg['dbcharset'] = 'utf8';
  */
 
 $txpcfg['client_flags'] = 0;
+
+/**
+ * Optional, advanced: use a particular collation for tables.
+ *
+ * @global string $txpcfg['table_collation']
+ */
+
+//$txpcfg['table_collation'] = 'utf8mb4_general_ci';
+
+/*
+ * Optional, advanced: use a different database engine.
+ */
+
+//$txpcfg['dbengine'] = 'InnoDB';
 
 /*
  * Optional, advanced: include an external PHP script if needed.
@@ -131,6 +144,29 @@ $txpcfg['client_flags'] = 0;
  */
 
 // define('PROTOCOL', 'https://');
+
+/*
+ * Optional, advanced: define a Content Security Policy header.
+ * see TODO
+ */
+
+//$headerCsp =
+//    "base-uri 'none';".
+//    "connect-src 'self';".
+//    "default-src 'none';".
+//    "font-src 'self';".
+//    "form-action 'self';".
+//    "frame-ancestors 'self';".
+//    "img-src blob: data: 'self';".
+//    "media-src 'self';".
+//    "script-src 'self' 'unsafe-inline';".
+//    "script-src-attr 'none';".
+//    "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+//    "style-src 'self' 'unsafe-inline';".
+//    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
+//    "style-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+//    "worker-src 'none'";
+//define('CONTENT_SECURITY_POLICY', $headerCsp);
 
 /**
  * Multi-Site setup:

@@ -31,6 +31,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('page_url')
     ->register('css')
+    ->register('txp_date', 'date')
     ->register('output_form')
     ->register('txp_yield', 'yield')
     ->register('txp_if_yield', 'if_yield')
@@ -45,7 +46,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_description'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_category'))
     ->register(array('\Textpattern\Tag\Syntax\Link', 'link_id'))
-    ->register('posted', array('link_date', array('type' => 'link', 'time' => 'date')))
+    ->register('txp_date', array('link_date', array('type' => 'link', 'time' => 'date')))
     ->register('if_first', 'if_first_link', 'link')
     ->register('if_last', 'if_last_link', 'link')
     ->register('email')
@@ -71,9 +72,9 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_id')
     ->register('article_url_title')
     ->register('if_article_id')
-    ->register('posted')
-    ->register('posted', array('modified', array('time' => 'modified')))
-    ->register('posted', array('expires', array('time' => 'expires')))
+    ->register('txp_date', array('posted', array('type' => 'article', 'time' => 'posted')))
+    ->register('txp_date', array('modified', array('type' => 'article', 'time' => 'modified')))
+    ->register('txp_date', array('expires', array('type' => 'article', 'time' => 'expires')))
     ->register('if_expires')
     ->register('if_expired')
     ->register('comments_invite')
@@ -97,7 +98,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_web'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_message'))
     ->register(array('\Textpattern\Tag\Syntax\Comment', 'comment_anchor'))
-    ->register('posted', array('comment_time', array('type' => 'comment', 'time' => 'time')))
+    ->register('txp_date', array('comment_time', array('type' => 'comment', 'time' => 'time')))
     ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
     ->register('author')
     ->register('author_email')
@@ -184,8 +185,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_author'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_downloads'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_description'))
-    ->register('posted', array('file_download_created', array('type' => 'file', 'time' => 'created')))
-    ->register('posted', array('file_download_modified', array('type' => 'file', 'time' => 'modified')))
+    ->register('txp_date', array('file_download_created', array('type' => 'file', 'time' => 'created')))
+    ->register('txp_date', array('file_download_modified', array('type' => 'file', 'time' => 'modified')))
     ->register('if_first', 'if_first_file', 'file')
     ->register('if_last', 'if_last_file', 'file')
     ->register('rsd')
@@ -198,7 +199,8 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort');
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
+    ->registerAttr('txp_variable', 'variable');
 
 // -------------------------------------------------------------
 
@@ -382,19 +384,15 @@ function component($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $txp_atts, $yield, $txp_yield, $is_form;
+    global $txp_atts, $yield, $txp_yield;
 
-    if (empty($atts['form'])) {
+    if (!isset($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
 
         return '';
-    } elseif (strpos($atts['form'], '|') === false) {
-        $form = $atts['form'];
-    } else {
-        $form = do_list($atts['form'], '|');
-        $form = $form[rand(0, count($form) - 1)];
     }
 
+    $form = $atts['form'];
     $to_yield = isset($atts['yield']) ? $atts['yield'] : false;
     unset($atts['form'], $atts['yield'], $txp_atts['form'], $txp_atts['yield']);
 
@@ -423,11 +421,9 @@ function output_form($atts, $thing = null)
         $txp_yield[$name][] = array($value, false);
     }
 
-    $is_form++;
     $yield[] = $thing;
     $out = parse_form($form);
     array_pop($yield);
-    $is_form--;
 
     foreach ($atts as $name => $value) {
         $result = array_pop($txp_yield[$name]);
@@ -1307,7 +1303,7 @@ function if_article_id($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function posted($atts, $thing = null)
+function txp_date($atts)
 {
     global $id, $c, $pg, $dateformat, $archive_dateformat, $comments_dateformat;
 
@@ -1316,17 +1312,21 @@ function posted($atts, $thing = null)
         'format'   => '',
         'gmt'      => '',
         'lang'     => '',
-        'time'     => 'posted',
-        'type' => 'article',
+        'time'     => true,
+        'type' => null,
     ), $atts));
-
-    assert_context($type);
-    global ${'this'.$type};
 
     if ($time === true) {
         $time = time();
-    } elseif (isset(${'this'.$type}[$time])) {
-        $time = ${'this'.$type}[$time];
+    } elseif (isset($type)) {
+        assert_context($type);
+        global ${'this'.$type};
+
+        if (isset(${'this'.$type}[$time])) {
+            $time = ${'this'.$type}[$time];
+        } else {
+            return '';
+        }
     }
 
     if (!is_numeric($time) && ($time = strtotime($time)) === false) {
@@ -1586,7 +1586,7 @@ function if_article_author($atts, $thing = null)
 function txp_sandbox($atts = array(), $thing = null)
 {
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
-    global $thisarticle, $is_article_body, $is_form, $txp_atts;
+    global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
 
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
@@ -1629,7 +1629,7 @@ function txp_sandbox($atts = array(), $thing = null)
 
     $field and $stack[$id]--;
 
-    if (!preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         return $thing;
     }
 
@@ -1753,6 +1753,7 @@ function category($atts, $thing = null)
         'class'        => '',
         'link'         => 0,
         'name'         => '',
+        'parent'       => 0,
         'section'      => $s,
         'this_section' => 0,
         'title'        => 0,
@@ -1770,6 +1771,12 @@ function category($atts, $thing = null)
     } else {
         $category = $c;
         $type = $context;
+    }
+
+    if ($category && ($parent = (int)$parent)) {
+        $path = array_column(getRootPath($category, $type), 'name');
+        $parent > 0 or $parent = count($path) + $parent;
+        $category = isset($path[$parent]) ? $path[$parent] : false;
     }
 
     if ($category) {
@@ -2487,7 +2494,7 @@ function if_category($atts, $thing = null)
         if ($parent === true) {
             $x = $path && ($name === false || array_intersect($path, $names));
         } else {
-            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent - 1;
+            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent;
             $x = isset($path[$parent]) && ($name === false || in_array($path[$parent], $names));
         }
     }
@@ -2600,9 +2607,10 @@ function hide($atts = array(), $thing = null)
         return '';
     }
 
-    global $pretext;
+    global $pretext, $production_status;
 
     extract(lAtts(array('process' => null), $atts));
+    $out = '';
 
     if (!$process) {
         return trim((string)$process) === '' && $pretext['secondpass'] < (int)get_pref('secondpass', 1) ? postpone_process() : $thing;
@@ -2610,11 +2618,13 @@ function hide($atts = array(), $thing = null)
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
             ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
-    } elseif ($process) {
+    } elseif ($process === true) {
         parse($thing);
+    } elseif (strtolower($process) === $production_status) {
+        $out = parse($thing);
     }
 
-    return '';
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -3112,13 +3122,14 @@ function if_request($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $prefs, $txp_tag, $txp_atts;
+    global $prefs, $txp_tag, $txp_atts, $variable;
     static $xpath = null, $functions = null, $_functions = null;
 
     unset($txp_atts['evaluate']);
     $staged = null;
 
     extract(lAtts(array(
+        'alias' => null,
         'query' => null,
         'test'  => !isset($atts['query']),
     ), $atts));
@@ -3161,6 +3172,21 @@ function txp_eval($atts, $thing = null)
                     $function = empty($_functions[$match[1]]) ? $match[1] : $_functions[$match[1]];
 
                     return "php:function('$function'".($match[2] ? ')' : ',');
+                },
+                $query
+            );
+        }
+
+        if (isset($alias) && $alias = implode('|', $alias === true ? array_keys($variable) : do_list($alias))) {
+            $query = preg_replace_callback('/\$('.$alias.')\b/u',
+                function ($match) use ($variable) {
+                    $var = isset($variable[$match[1]]) ? $variable[$match[1]] : '';
+
+                    if ($var && !is_numeric($var)) {
+                        $var = strpos($var, "'") === false ? "'$var'" : "concat('".strtr($var, array("'" => "',\"'\",'"))."')";
+                    }
+
+                    return $var;
                 },
                 $query
             );
@@ -3223,9 +3249,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($escape, $thing = '')
 {
-    global $prefs;
     static $textile = null, $decimal = null, $spellout = null, $ordinal = null,
-        $mb = null, $LocaleInfo = null, $tr = array("'" => "',\"'\",'");
+        $mb = null, $LocaleInfo = null;
 
     if (is_array($escape)) {
         extract(lAtts(array('escape' => true), $escape, false));
@@ -3341,20 +3366,20 @@ function txp_escape($escape, $thing = '')
                 break;
             case 'tidy':
                 $tidy = true;
-                $thing = preg_replace('/\s+/', ' ', trim($thing));
+                $thing = preg_replace('/\s{2,}|[^\S ]/', ' ', trim($thing));
                 break;
             case 'untidy':
                 $tidy = false;
                 break;
             case 'textile':
                 if ($textile === null) {
-                    $textile = Txp::get('\Textpattern\Textile\Parser', $prefs['doctype']);
+                    $textile = Txp::get('\Textpattern\Textile\Parser', get_pref('doctype'));
                 }
 
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
                 break;
             case 'quote':
-                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, array("'" => "',\"'\",'"))."')";
                 break;
             default:
                 $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
@@ -3415,4 +3440,13 @@ function txp_wraptag($atts, $thing = '')
     }
 
     return $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_variable($atts, $thing = null) {
+    global $txp_atts;
+    unset($txp_atts['variable']);
+
+    return isset($atts['variable']) ? variable(array('name' => $atts['variable']), $thing) : $thing;
 }

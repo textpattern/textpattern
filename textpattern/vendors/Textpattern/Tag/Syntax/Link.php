@@ -58,8 +58,14 @@ class Link
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
     
-        if ($category) {
-            $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
+        if ($category and $category = do_list_unique($category)) {
+            $catquery = array();
+
+            foreach ($category as $cat) {
+                $catquery[] = "category LIKE '".strtr(doSlash($cat), array('_' => '\_', '*' => '_'))."'";
+            }
+
+            $where[] = '('.implode(' OR ', $catquery).')';
         }
     
         if ($id) {

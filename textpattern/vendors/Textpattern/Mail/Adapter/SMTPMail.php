@@ -154,7 +154,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
 
-    public function __call($field, array $args = null)
+    public function __call($field, array $args = array())
     {
         if (!$args) {
             if (property_exists($this->mail, $field) === false) {
@@ -197,7 +197,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         $this->mail->subject = $subject;
 
         if ($this->mailer->CharSet !== 'UTF-8') {
-            $subject = utf8_decode($subject);
+            $subject = safe_encode($subject, $this->mailer->CharSet, 'UTF-8');
         }
 
         $this->mailer->Subject = $subject;
@@ -218,7 +218,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
             $this->mail->body[$key] = $block;
 
             if ($this->mailer->CharSet !== 'UTF-8') {
-                $block = utf8_decode($block);
+                $block = safe_encode($block, $this->mailer->CharSet, 'UTF-8');
             }
 
             if ($key === 'plain') {
@@ -250,6 +250,17 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
      * {@inheritdoc}
      */
 
+    public function attach($fileInfo)
+    {
+        $this->mailer->addAttachment($fileInfo['filepath'], $fileInfo['name']);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function send()
     {
         if (!$this->mail->from || !$this->mail->to) {
@@ -259,7 +270,7 @@ class SMTPMail implements \Textpattern\Mail\AdapterInterface
         // Custom headers come first so important ones (like From) get overwritten by sane values.
         foreach ($this->mail->headers as $hkey => $hval) {
             // Skip a few that PHPMailer handles automatically.
-            if (!in_array($hkey, array('Content-Transfer-Encoding', 'Content-Type'))) {
+            if (!in_array($hkey, array('Content-Transfer-Encoding', 'Content-Type', 'MIME-Version'))) {
                 $this->mailer->addCustomHeader($hkey, $hval);
             }
         }

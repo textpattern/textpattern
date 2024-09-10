@@ -264,6 +264,8 @@ function prefs_list($message = '')
                 case '\YesNoRadioSet':
                 case '\OnOffRadioSet':
                 case 'is_dst':
+                case 'enhanced_email':
+                case 'trailing_slash':
                     $label = '';
                     break;
                 case 'gmtoffset_select':
@@ -500,7 +502,7 @@ function pref_longtext_input($name, $val, $constraints = array())
         $atts = $constraints;
     }
 
-    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val);
+    $out = Txp::get('\Textpattern\UI\Textarea', $name, $val)->setAtt('id', $name);
 
     if (!empty($atts)) {
         $out->setConstraints(Txp::get('Textpattern\Validator\SizeConstraint', null, $atts));
@@ -942,7 +944,7 @@ function custom_set($name, $val)
         foreach (article_column_map() + array('is_first' => null, 'is_last' => null) as $field => $v) {
             $str = '';
 
-            foreach (str_split($field) as $char) {
+            foreach (preg_split('/(.)/u', $field, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $char) {
                 $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
             }
 

@@ -82,4 +82,4 @@ Sure, we break our own rules sometimes. But, as a rule, we err on the side of si
 
 ## Code of conduct
 
-Please see [Contributor covenant code of conduct](https://github.com/textpattern/textpattern/blob/dev/.github/CODE_OF_CONDUCT.md).
+Please see [Contributor covenant code of conduct](https://github.com/textpattern/textpattern/blob/dev/CODE_OF_CONDUCT.md).

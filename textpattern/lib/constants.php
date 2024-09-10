@@ -1011,6 +1011,14 @@ if (!defined('TEXTPATTERN_HASH_LENGTH')) {
      'styles' => 'styles'
  );
 
+ /**
+  * Define txp tag/attribute name pattern
+  *
+  * @since   4.9.0
+  */
+ 
+  const TXP_TAG = '[\w\-\x80-\xffff]+'; //'[^\x00-\x2c\x2f\x3a-\x3f\x5b-\x5d\x7b-\x7f]+';
+
 /**
  * A tab character.
  *

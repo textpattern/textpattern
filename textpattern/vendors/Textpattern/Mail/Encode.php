@@ -68,7 +68,7 @@ class Encode
 
         foreach ($value as $email => $name) {
             if ($this->charset != 'UTF-8') {
-                $name = utf8_decode($name);
+                $name = safe_encode($name, $this->charset, 'UTF-8');
             }
 
             $out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');
@@ -159,7 +159,7 @@ class Encode
      * Extract email and name from a combined RFC email string.
      *
      * @param  string $string The string
-     * @return array  The name and email component parts
+     * @return array  The name and email component parts, if given
      */
 
     public function fromRfcEmail($rfc_email_string) {

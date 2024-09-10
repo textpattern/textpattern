@@ -87,7 +87,7 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
         array(
             'name' => 'comment_form',
             'type' => 'comment',
-            'Form' => '<!-- Contents of the \'comments_form\' comment form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
+            'Form' => '<!-- Contents of the \'comment_form\' comment form goes here. Refer to https://docs.textpattern.com/ for further information. -->',
         ),
         array(
             'name' => 'default',

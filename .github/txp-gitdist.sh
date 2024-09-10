@@ -4,9 +4,7 @@
 # * Textpattern Content Management System
 # * https://textpattern.com/
 # *
-# * Copyright (C) 2024 The Textpattern Development Team
-# *
-# * This file is part of Textpattern.
+# * Copyright (C) 2020 The Textpattern Development Team
 # *
 # * Textpattern is free software; you can redistribute it and/or
 # * modify it under the terms of the GNU General Public License
@@ -22,57 +20,100 @@
 # */
 
 if [ $# -lt 1 ]; then
-    echo 1>&2 Usage: npm run txp-gitdist '<version> [dest-dir]';
-    echo 1>&2 ' dest-dir defaults to a temporary location';
-    exit 127;
+    echo 1>&2 Usage: $0 '<version> [dest-dir] [repo-dir]'
+    echo 1>&2 ' dest-dir defaults to a temporary location, repo-dir to the current directory.';
+    exit 127
 fi
+
+VER=$1
+DESTDIR=`mktemp -d "${TMPDIR:-/tmp}/txp.XXXXXXXXX"`
+OLDDIR=`pwd`
+REPODIR=$OLDDIR
 
 if [ $# -eq 2 ]; then
-    DESTDIR=$2;
-else
-    DESTDIR=`mktemp -d "${TMPDIR:-/tmp}/txp.XXXXXXXXX"`;
+    DESTDIR=$2
 fi
 
-VER=$1;
-OLDDIR=`pwd`;
+if [ $# -eq 3 ]; then
+    DESTDIR=$2
+    REPODIR=$3
+fi
 
-rm -rf $DESTDIR/textpattern-$VER;
+cd $REPODIR
+
 # Export repo to destination -- trailing slash is important!
 git checkout-index -a -f --prefix=$DESTDIR/textpattern-$VER/
 
-# Check actual checksums. Add '-badchecksum' suffix, if error
-cmp --silent textpattern/checksums.txt $DESTDIR/textpattern-$VER/textpattern/checksums.txt;
-if [ $? -eq 0 ] ; then
-    SUFFIX="";
-else
-    echo "BAD CHECKSUM! Commit file 'checksums.txt' before release.";
-    SUFFIX="-badchecksum";
+cd $DESTDIR
+
+# Tidy and remove development helper files.
+rm textpattern-$VER.tar.gz
+rm textpattern-$VER.zip
+rm textpattern-$VER.tar.gz.SHA256SUM
+rm textpattern-$VER.zip.SHA256SUM
+rm textpattern-$VER/.gitattributes
+rm textpattern-$VER/.phpstorm.meta.php
+rm textpattern-$VER/CODE_OF_CONDUCT.md
+rm textpattern-$VER/composer.json
+rm textpattern-$VER/composer.lock
+rm textpattern-$VER/CONTRIBUTING.md
+rm textpattern-$VER/package.json
+rm textpattern-$VER/phpcs.xml
+rm textpattern-$VER/README.md
+rm textpattern-$VER/SECURITY.md
+rm -rf textpattern-$VER/.github
+find . -name '.gitignore' -type f -delete
+find . -name '.DS_Store' -type f -delete
+
+# Tidy and remove vendor furniture.
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/.editorconfig
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/COMMITMENT
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/README.md
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/SECURITY.md
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/VERSION
+rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/composer.json
+
+# Build .tar.gz.
+echo -e "\n"
+echo '== Building textpattern-'$VER'.tar.gz in '$DESTDIR'.'
+tar cf - -C $DESTDIR textpattern-$VER | gzip -c9 -q > textpattern-$VER.tar.gz \
+&& echo ' - Built textpattern-'$VER'.tar.gz ('$(wc -c textpattern-$VER.tar.gz | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
+
+# Build .zip.
+echo -e "\n"
+echo '== Building textpattern-'$VER'.zip in '$DESTDIR'.'
+zip --symlinks -r -q -9 textpattern-$VER.zip textpattern-$VER --exclude textpattern-$VER/sites/\* \
+&& echo ' - Built textpattern-'$VER'.zip ('$(wc -c textpattern-$VER.zip | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
+
+# Tests and checksums for .tar.gz.
+echo -e "\n"
+echo '== Testing textpattern-'$VER'.tar.gz integrity...'
+if gzip -t textpattern-$VER.tar.gz 2>&1 | sed 's/^/   /'; then
+    echo ' - textpattern-'$VER'.tar.gz passed `gzip -t` integrity test.' \
+    && echo ' - Calculating textpattern-'$VER'.tar.gz SHA256 checksum...' \
+    && shasum -a 256 textpattern-$VER.tar.gz > textpattern-$VER.tar.gz.SHA256SUM \
+    && echo '   '$(cat textpattern-$VER.tar.gz.SHA256SUM | cut -c1-64) \
+    && echo ' - Checking textpattern-'$VER'.tar.gz checksum...' \
+    && shasum -a 256 -c textpattern-$VER.tar.gz.SHA256SUM 2>&1 | sed 's/^/   /'
+else 
+    echo ' - textpattern-$VER.tar.gz failed `gzip -t` integrity test.'
 fi
 
-
-cd $DESTDIR
-rm -f textpattern-$VER.tar.gz
-rm -f textpattern-$VER-badchecksum.tar.gz
-rm -f textpattern-$VER.zip
-rm -f textpattern-$VER-badchecksum.zip
-rm -f textpattern-$VER/composer.json
-rm -f textpattern-$VER/package.json
-rm -f textpattern-$VER/.gitattributes
-rm -f textpattern-$VER/.gitignore
-rm -f textpattern-$VER/images/.gitignore
-rm -f textpattern-$VER/textpattern/.gitignore
-rm -f textpattern-$VER/textpattern/tmp/.gitignore
-rm -f textpattern-$VER/phpcs.xml
-rm -f textpattern-$VER/.phpstorm.meta.php
-rm -f textpattern-$VER/README.md
-rm -rf textpattern-$VER/.github
-
-tar cfz textpattern-$VER$SUFFIX.tar.gz textpattern-$VER
-shasum -a 256 textpattern-$VER$SUFFIX.tar.gz > textpattern-$VER$SUFFIX.tar.gz.SHA256SUM
-
-zip -q -r textpattern-$VER$SUFFIX.zip textpattern-$VER --exclude textpattern-$VER/sites/\*
-shasum -a 256 textpattern-$VER$SUFFIX.zip > textpattern-$VER$SUFFIX.zip.SHA256SUM
+# Tests and checksums for .zip.
+echo -e "\n"
+echo '== Testing textpattern-'$VER'.zip integrity...'
+if unzip -q -t textpattern-$VER.zip 2>&1 | sed 's/^/   /'; then
+    echo ' - textpattern-'$VER'.zip passed `unzip -t` integrity test.' \
+    && echo ' - Calculating textpattern-'$VER'.zip SHA256 checksum...' \
+    && shasum -a 256 textpattern-$VER.zip > textpattern-$VER.zip.SHA256SUM \
+    && echo '   '$(cat textpattern-$VER.zip.SHA256SUM | cut -c1-64) \
+    && echo ' - Checking textpattern-'$VER'.zip checksum...' \
+    && shasum -a 256 -c textpattern-$VER.zip.SHA256SUM 2>&1 | sed 's/^/   /'
+else 
+    echo ' - textpattern-$VER.zip failed `unzip -t` integrity test.'
+fi
 
 cd $OLDDIR
-echo Textpattern v$VER$SUFFIX built in $DESTDIR
-echo "";
+
+echo -e "\n"
+echo '== Textpattern v'$VER' built in '$DESTDIR

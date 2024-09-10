@@ -171,7 +171,9 @@ function article_save()
         $incoming['textile_excerpt'] = $oldArticle['textile_excerpt'];
     }
 
+    callback_event_ref('article_submit', empty($incoming['ID']) ? 'post' : 'save', 1, $incoming);
     $incoming = textile_main_fields($incoming);
+    callback_event_ref('article_submit', empty($incoming['ID']) ? 'post' : 'save', 0, $incoming);
 
     extract(doSlash($incoming));
     $ID = intval($ID);
@@ -370,8 +372,10 @@ function article_preview($field = false)
         $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
         $opts = array(
             'method' => "POST",
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n".
-                "Cookie: txp_login_public=".cs('txp_login_public'),
+            'header' => [
+                "Content-type: application/x-www-form-urlencoded",
+                "Cookie: txp_login_public=".cs('txp_login_public')
+            ],
             'content' => $data,
         );
 

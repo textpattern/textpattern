@@ -2248,7 +2248,7 @@ function splat($text)
     if (!isset($stack[$sha])) {
         $stack[$sha] = $parse[$sha] = array();
 
-        if (preg_match_all('@(\$?[\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@(\$?'.TXP_TAG.')(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -2999,7 +2999,7 @@ function set_error_level($level)
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
         error_reporting(E_ALL ^ $suppress);
-        @ini_set("display_errors", "1");
+        ini_set("display_errors", "1");
     } else {
         // Default is 'testing': display everything except notices.
         error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
@@ -3175,7 +3175,7 @@ function txp_get_contents($file, $opts = null)
 {
     // Local file
     if (!is_array($opts)) {
-        return is_readable($file) ? file_get_contents($file) : '';
+        return is_readable($file) ? file_get_contents($file, false, $opts) : '';
     }
 
     $opts += array('method' => 'POST', 'content' => '', 'header' => 'Content-type: application/x-www-form-urlencoded');
@@ -3190,7 +3190,7 @@ function txp_get_contents($file, $opts = null)
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, strtoupper($opts['method']) == 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $opts['content']);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [$opts['header']]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, (array)$opts['header']);
 
         $contents = curl_exec($ch);
         curl_close($ch);
@@ -3348,8 +3348,8 @@ function txp_tokenize($thing, $hash = null, $transform = null)
 
     isset($short_tags) or $short_tags = get_pref('enable_short_tags', false);
 
-    $f = '@(</?(?:'.TXP_PATTERN.'):\w+(?:\[-?\d+\])?(?:\s+\$?[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-    $t = '@^</?('.TXP_PATTERN.'):(\w+)(?:\[(-?\d+)\])?(.*)\>$@s';
+    $f = '@(</?(?:'.TXP_PATTERN.'):'.TXP_TAG.'(?:\[-?\d+\])?(?:\s+\$?'.TXP_TAG.'(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?(?<!\-\-)\>)@s';
+    $t = '@^</?('.TXP_PATTERN.'):('.TXP_TAG.')(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
     $last = count($parsed);
@@ -3563,7 +3563,7 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name, $theme = null)
+function fetch_form($name, $theme = null, &$fname = null)
 {
     global $skin, $production_status, $trace;
     static $forms = array();
@@ -3571,39 +3571,56 @@ function fetch_form($name, $theme = null)
     isset($theme) or $theme = $skin;
     isset($forms[$theme]) or $forms[$theme] = array();
     $fetch = is_array($name);
+    $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : do_list_unique($name, '|');
+    $fetched = $fetch ? $names : array();
+    $custom = has_handler('form.fetch');
 
-    if ($fetch || !isset($forms[$theme][$name])) {
-        $names = $fetch ? array_diff($name, array_keys($forms[$theme])) : array($name);
+    if (empty($names)) {
+        return;
+    }
 
-        if (has_handler('form.fetch')) {
+    if ($fetch) {
+        if ($custom) {
             foreach ($names as $name) {
                 $forms[$theme][$name] = callback_event('form.fetch', '', false, compact('name', 'skin', 'theme'));
             }
-        } elseif ($fetch) {
+        } else {
             $forms[$theme] += array_fill_keys($names, false);
-            $nameset = implode(',', quote_list($names));
 
-            if ($nameset and $rs = safe_rows_start('name, Form', 'txp_form', "name IN (".$nameset.") AND skin = '".doSlash($theme)."'")) {
+            if ($rs = safe_rows_start('name, Form', 'txp_form', "name IN (".quote_list($names, ',').") AND skin = '".doSlash($theme)."'")) {
                 while ($row = nextRow($rs)) {
                     $forms[$theme][$row['name']] = $row['Form'];
                 }
             }
-        } else {
-            $forms[$theme][$name] = safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
         }
+    } elseif (!isset($forms[$theme][$name])) {
+        foreach ($names as $name) {
+            if (!isset($forms[$theme][$name])) {
+                $fetched[0] = $name;
+                $forms[$theme][$name] = $custom ?
+                    callback_event('form.fetch', '', false, compact('name', 'skin', 'theme')) :
+                    safe_field('Form', 'txp_form', "name ='".doSlash($name)."' AND skin = '".doSlash($theme)."'");
+            }
 
-        foreach ($names as $form) {
-            if ($forms[$theme][$form] === false) {
-                trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
-            } elseif ($production_status !== 'live') {
-                $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
+            if ($forms[$theme][$name] !== false) {
+                break;
             }
         }
     }
 
-    if (!$fetch) {
-        return $forms[$theme][$name];
+    foreach ($fetched as $form) {
+        if ($forms[$theme][$form] === false) {
+            trigger_error(gTxt('form_not_found', array('{theme}' => $theme, '{form}' => $form)));
+        } elseif ($production_status !== 'live') {
+            $trace->log("[Loading form: '$skin.$form']", array('Forms' => array($form)));
+        }
     }
+
+    if (isset($fname)) {
+        $fname = $name;
+    }
+
+    return $fetch ? null : $forms[$theme][$name];
 }
 
 /**
@@ -3616,7 +3633,7 @@ function fetch_form($name, $theme = null)
 
 function parse_form($name, $theme = null)
 {
-    global $production_status, $skin, $txp_current_form, $trace;
+    global $is_form, $production_status, $skin, $txp_current_form, $trace;
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
@@ -3624,8 +3641,9 @@ function parse_form($name, $theme = null)
     }
 
     isset($theme) or $theme = $skin;
-    $name = (string) $name;
-    $f = fetch_form($name, $theme);
+    $name = $fname = (string) $name;
+    $f = fetch_form($name, $theme, $fname);
+    $name = $fname;
 
     if ($f === false) {
         return false;
@@ -3649,7 +3667,9 @@ function parse_form($name, $theme = null)
         $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
     }
 
+    $is_form++;
     $out = parse($f);
+    $is_form--;
 
     $txp_current_form = $old_form;
     $stack[$name]--;
@@ -5114,7 +5134,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array, $hu = null)
 {
     global $permlink_mode, $prefs, $permlinks, $txp_sections;
-    static $internals = array('id', 's', 'context', 'pg', 'p'), $now = null,
+    static $internals = array('id', 's', 'context', 'p'), $now = null,
         $fields = array(
             'thisid'    => null,
             'id'        => null,

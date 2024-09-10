@@ -497,7 +497,7 @@ function parse($thing, $condition = true, $in_tag = true)
 
 function processTags($tag, $atts = '', $thing = null, $log = false)
 {
-    global $pretext, $txp_atts, $txp_tag, $trace;
+    global $pretext, $trace, $txp_atts, $txp_tag;
     static $registry = null, $globatts;
 
     if (empty($tag)) {
@@ -546,7 +546,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
             $out = txp_eval(array('query' => $txp_atts['$query'], 'test' => $out));
         }
 
-        unset($txp_atts['not'], $txp_atts['evaluate'], $txp_atts['$query']);
+        unset($txp_atts['evaluate'], $txp_atts['not'], $txp_atts['$query']);
 
         if ($txp_atts && $txp_tag !== false) {
             $pretext['@txp_atts'] = true;
@@ -889,15 +889,18 @@ function filterAtts($atts = null, $iscustom = null)
         'keywords'      => '',
         'time'          => null,
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
-        'frontpage'     => !$iscustom,
+        'frontpage'     => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
         'match'         => 'Category',
         'depth'         => 0,
-        'id'            => '',
+        'id'            => isset($excluded['id']) ? true : '',
         'excerpted'     => '',
         'exclude'       => '',
         'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         'url_title'     => ''
     );
+
+    // For the txp:article tag, some attributes are taken from globals;
+    // override them, then stash all filter attributes.
 
     if ($iscustom) {
         $sortAtts += array(
@@ -907,6 +910,14 @@ function filterAtts($atts = null, $iscustom = null)
             'month'     => isset($excluded['month']) ? true : '',
         );
     } else {
+        $sortAtts += array(
+            'category' => !empty($pretext['c']) ? $pretext['c'] : '',
+            'section' => (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '',
+            'author' => (!empty($pretext['author']) ? $pretext['author'] : ''),
+            'month' => (!empty($pretext['month']) ? $pretext['month'] : ''),
+            'expired' => get_pref('publish_expired_articles'),
+        );
+
         $extralAtts += array(
             'listform'     => '',
             'searchform'   => '',
@@ -943,24 +954,10 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
+    $q = $iscustom ? '' : trim($pretext['q']);
+
     // Getting attributes.
     $theAtts = lAtts($coreAtts + $customlAtts, $atts);
-
-    // For the txp:article tag, some attributes are taken from globals;
-    // override them, then stash all filter attributes.
-    if (!$iscustom) {
-        $theAtts['category'] = !empty($pretext['c']) ? $pretext['c'] : '';
-        $theAtts['section'] = (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '';
-        $theAtts['author'] = (!empty($pretext['author']) ? $pretext['author'] : '');
-        $theAtts['month'] = (!empty($pretext['month']) ? $pretext['month'] : '');
-        $theAtts['expired'] = get_pref('publish_expired_articles');
-        $theAtts['frontpage'] = ($theAtts['frontpage'] && !$theAtts['section']);
-        $q = trim($pretext['q']);
-    } else {
-        // Custom articles must not render search results.
-        $q = '';
-    }
-
     extract($theAtts, EXTR_SKIP);
 
     // Treat sticky articles differently wrt search filtering, etc.
@@ -1010,7 +1007,7 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    $not = $iscustom && ($excluded === true || isset($excluded['category'])) ? '!' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['category']) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
     $category  = !$catquery  ? '' : " AND $not($catquery)";
 
@@ -1026,13 +1023,13 @@ function filterAtts($atts = null, $iscustom = null)
         $section = '';
     }
 
-    $not = $iscustom && ($excluded === true || isset($excluded['section'])) ? 'NOT' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['section']) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
     $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
         ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
-    $not = $iscustom && ($excluded === true || isset($excluded['author'])) ? 'NOT' : '';
+    $not = $iscustom && $excluded === true || isset($excluded['author']) ? 'NOT' : '';
     $author !== true or $author = processTags('author', 'escape="" title=""');
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
@@ -1040,7 +1037,7 @@ function filterAtts($atts = null, $iscustom = null)
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
 
     if ($time === null || $month || !$expired || $expired == '1') {
-        $not = $iscustom && ($month || $time !== null) && ($excluded === true || isset($excluded['month']));
+        $not = ($month || $time !== null) && ($iscustom && $excluded === true || isset($excluded['month']));
         $timeq = buildTimeSql($month, $time === null ? 'past' : $time);
         $timeq = ' AND '.($not ? "!($timeq)" : $timeq);
     } else {
@@ -1321,7 +1318,7 @@ function filterCustomFields($valid = true)
     static $reserved = null;
 
     isset($reserved) or $reserved = array_keys(array_filter(filterAtts(true, false) + filterAtts(true, true), function($key) {
-        return preg_match('/^[\w\-]+$/', $key);
+        return preg_match('/^[\w\-]+$/u', $key);
     }, ARRAY_FILTER_USE_KEY));
 
     return $valid

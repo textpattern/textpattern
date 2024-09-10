@@ -69,6 +69,8 @@ function list_languages($message = '')
     $represented_lang = array_merge($active_lang, $installed_lang);
 
     $def_lastmod = $txp_is_dev && isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['file_lastmod'] : 0;
+    $def_count = isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['count'] : 0;
+
     $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
     $ui_lang = get_pref('language_ui', $site_lang, true);
     $cpanel = '';
@@ -117,6 +119,7 @@ function list_languages($message = '')
         }
 
         $file_updated = (isset($langdata['db_lastmod']) && max($def_lastmod, $langdata['file_lastmod']) > $langdata['db_lastmod']);
+        $count = $def_count && isset($available_lang[$langname]) ? floor(100*$available_lang[$langname]['count']/$def_count) : null;
 
         if (array_key_exists($langname, $represented_lang)) {
             if ($file_updated) {
@@ -165,7 +168,7 @@ function list_languages($message = '')
 
         $langMeta = graf(
             ($icon ? '<span class="ui-icon '.$icon.'" role="status">'.$status.'</span>' : '').n.
-            tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
+            tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).(isset($count) ? sp."($count%)": '').br.
             tag($langname, 'code', array('dir' => 'ltr')).
             (array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
         );
