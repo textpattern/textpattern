@@ -2994,7 +2994,7 @@ function make_download_link($id, $label = '', $filename = '')
 function set_error_level($level)
 {
     if ($level == 'debug') {
-        error_reporting(E_ALL | E_STRICT);
+        error_reporting(E_ALL);
     } elseif ($level == 'live') {
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
@@ -3002,7 +3002,7 @@ function set_error_level($level)
         ini_set("display_errors", "1");
     } else {
         // Default is 'testing': display everything except notices.
-        error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
+        error_reporting((E_ALL) ^ (E_NOTICE | E_USER_NOTICE));
     }
 }
 
