@@ -9,8 +9,8 @@ Changes in 4.9.0-beta.2 (upcoming)
 
 Changes in 4.9.0-beta.1 (12 Aug 2024)
 
-* Feature release with support for PHP 8.4.0+, new functionality, security
-  enhancements, general improvements and bug fixes.
+* Feature release with support for PHP 8.4.0+, PHP 8.3, PHP 8.2, new
+  functionality, security enhancements, improvements, and bug fixes.
 * Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
   recommended).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
