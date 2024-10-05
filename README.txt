@@ -32,7 +32,7 @@ system. Textpattern is free and open source.
 * Support forum: https://forum.textpattern.com
 * Documentation: https://docs.textpattern.com
 * Social:        https://textpattern.com/mastodon
-                 https://textpattern.com/twitter
+                 https://textpattern.com/x
 * Development:   https://textpattern.com/github
 * Contributing:  https://docs.textpattern.com/development/contributing
 * Sponsor:       https://github.com/sponsors/textpattern
