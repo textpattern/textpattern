@@ -155,12 +155,11 @@ class Pagination
             $items[$item] = isset($txp_item[$item]) ? $txp_item[$item] : null;
         }
     
+        $out = array();
         $txp_item['total'] = $numPages;
         $limit = $limit ? (int)$limit : -1;
         $old_context = $txp_context;
-        $txp_context += get_context();
-        $out = array();
-        $rel_att = $rel === '' ? '' : ' rel="'.txpspecialchars($rel).'"';
+        $txp_context += get_context($txp_context ? null : true);
         $class_att = $wraptag === '' && $class !== '' ? ' class="'.txpspecialchars($class).'"' : '';
         $id_att = $wraptag === '' && $html_id !== '' ? ' id="'.txpspecialchars($html_id).'"' : '';
     
@@ -197,6 +196,8 @@ class Pagination
                     }
     
                     $item = isset($thing) ? parse($thing) : ($newer === null ? $nextpg : $url);
+                    $rel_att = $rel === true ? ($nextpg == $thepg + 1 ? ' rel="next"' : ($nextpg == $thepg - 1 ? ' rel="prev"' : '')) :
+                        ($rel === '' ? '' : ' rel="'.txpspecialchars($rel).'"');
                     $url = $link || $link === false && $nextpg != $thispg ? href(
                         $item,
                         $url,
