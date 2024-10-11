@@ -26,7 +26,7 @@ if (!defined('txpath')) {
 }
 
 define("txpinterface", "admin");
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 ini_set("display_errors", "1");
 
 define('MSG_OK', 'alert-block success');

@@ -37,7 +37,7 @@ Table of Contents
     /path/to/your/site/textpattern/index.php at line xx
     Undefined variable: gmtoffset in
     /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
-  The messages will be not appear after subsequent navigation in the admin-side.
+  The messages will not appear after subsequent navigation in the admin-side.
 * Upgrades from <4.7.0 may present an 'Unknown section' message on the
   front-side after upgraded files have been transferred and before the first
   admin-side log in. The message will disappear following the first log in
@@ -63,6 +63,11 @@ Table of Contents
     /textpattern/plugins/
     /themes/
 * Set file and directory permissions according to your site.
+* For Apache web server and derivatives, it is highly recommended that
+  /textpattern/plugins/.htaccess-dist is renamed to .htaccess so plugin
+  code cannot be executed directly from the browser.
+  For systems other than Apache, please ensure direct access to the plugins
+  directory from the browser is prohibited.
 * Log in to the Textpattern admin-side. Any upgrade script(s) will run
   automatically. Refer to the site diagnostics (Admin -> Diagnostics) to
   confirm the Textpattern version and note any warnings or errors.
@@ -77,7 +82,7 @@ Table of Contents
 * Support forum: https://forum.textpattern.com
 * Documentation: https://docs.textpattern.com
 * Social:        https://textpattern.com/mastodon
-                 https://textpattern.com/twitter
+                 https://textpattern.com/x
 * Development:   https://textpattern.com/github
 * Contributing:  https://docs.textpattern.com/development/contributing
 * Sponsor:       https://github.com/sponsors/textpattern

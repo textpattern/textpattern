@@ -45,8 +45,8 @@ if (!isset($txpcfg['table_prefix']) && (!is_readable('./config.php') || !include
 
 header("Content-Type: text/html; charset=utf-8");
 
-error_reporting(E_ALL | E_STRICT);
-@ini_set("display_errors", "1");
+error_reporting(E_ALL);
+ini_set("display_errors", "1");
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 $trace->start('[PHP includes]');

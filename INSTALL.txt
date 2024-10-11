@@ -41,6 +41,11 @@ Table of Contents
     /.htaccess
   Note: This file is hidden by default on some operating systems. File transfer
   clients typically have an option to show these hidden files.
+* For Apache web server and derivatives, rename:
+    /textpattern/plugins/.htaccess-dist to /textpattern/plugins/.htaccess
+  This is so plugin code cannot be executed directly from the browser.
+  For systems other than Apache, please ensure direct access to the plugins
+  directory from the browser is prohibited.
 
 
 - Setup -
@@ -79,7 +84,7 @@ Table of Contents
 * Support forum: https://forum.textpattern.com
 * Documentation: https://docs.textpattern.com
 * Social:        https://textpattern.com/mastodon
-                 https://textpattern.com/twitter
+                 https://textpattern.com/x
 * Development:   https://textpattern.com/github
 * Contributing:  https://docs.textpattern.com/development/contributing
 * Sponsor:       https://github.com/sponsors/textpattern

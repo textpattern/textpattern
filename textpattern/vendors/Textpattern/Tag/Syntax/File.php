@@ -175,37 +175,47 @@ class File
     
     public static function file_download($atts, $thing = null)
     {
-        global $thisfile;
+        global $file_base_path, $thisfile;
     
         extract(lAtts(array(
             'filename' => '',
-            'form'     => 'files',
+            'form'     => isset($atts['type']) ? '' : 'files',
             'id'       => '',
+            'sort'     => '',
+            'type'     => null,
         ), $atts));
     
-        $from_form = false;
+        $oldfile = $thisfile;
+        $sort = $sort ? ' ORDER BY '.$sort : '';
+        $where = array();
+
+        empty($id) or $where[] = "id IN (".implode(',', array_map('intval', do_list($id, array(',', '-')))).")";
+        empty($filename) or $where[] = "filename = '".doSlash($filename)."'";
     
-        if ($id) {
-            $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
-        } elseif ($filename) {
-            $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
+        if ($where) {
+            $where = implode(' AND ', $where).($type ? " AND status = ".STATUS_LIVE : '');
+            $thisfile = fileDownloadFetchInfo($where." AND created <= ".now('created').$sort.' LIMIT 1');
         } else {
             assert_file();
-    
-            $from_form = true;
         }
     
-        if ($thisfile) {
-            $out = ($thing) ? parse($thing) : parse_form($form);
-    
-            // Cleanup: this wasn't called from a form, so we don't want this
-            // value remaining.
-            if (!$from_form) {
-                $thisfile = '';
+        if (empty($thisfile)) {
+            $out = $thing ? parse($thing, false) : '';
+        } else {
+            $out = isset($thing) ? parse($thing) : ($form ? parse_form($form) : '');
+
+            if ($type && php(null, null, true)) {
+                $type !== true or $type = mime_content_type(build_file_path($file_base_path, $thisfile['filename']));
+                set_headers(array('content-type' => $type));
+
+                output_file_download($thisfile);
+                exit;
             }
-    
-            return $out;
         }
+
+        $thisfile = $oldfile;
+
+        return $out;
     }
     
     // -------------------------------------------------------------

@@ -841,6 +841,13 @@ function output_file_download($filename)
     callback_event('file_download');
 
     if (!isset($file_error)) {
+        if (is_array($filename)) {
+            $id = $filename['id'];
+            $filename = $filename['filename'];
+        } else {
+            $id = $pretext['id'];
+        }
+
         parse(get_pref('file_download_header'));
         $filename = sanitizeForFile($filename);
         $fullpath = build_file_path($file_base_path, $filename);
@@ -859,9 +866,9 @@ function output_file_download($filename)
                 'cache-control' => 'private'
             ));
 
-            @ini_set("zlib.output_compression", "Off");
-            @set_time_limit(0);
-            @ignore_user_abort(true);
+            ini_set("zlib.output_compression", "Off");
+            set_time_limit(0);
+            ignore_user_abort(true);
 
             if ($file = fopen($fullpath, 'rb')) {
                 while (!feof($file) and (connection_status() == 0)) {
@@ -875,7 +882,7 @@ function output_file_download($filename)
 
                 // Record download.
                 if ((connection_status() == 0) and !connection_aborted()) {
-                    safe_update('txp_file', "downloads = downloads + 1", "id = ".intval($pretext['id']));
+                    safe_update('txp_file', "downloads = downloads + 1", "id = ".intval($id));
                 } else {
                     $pretext['request_uri'] .= ($sent >= $filesize)
                         ? '#aborted'

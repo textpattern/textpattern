@@ -54,7 +54,7 @@ define('MSG_OK', '[OK]');
 define('MSG_ALERT', '[WARNING]');
 define('MSG_ERROR', '[ERROR]');
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 @ini_set("display_errors", "1");
 
 include_once txpath.'/lib/class.trace.php';
