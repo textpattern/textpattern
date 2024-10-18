@@ -576,7 +576,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     }
 
     return n.tag($content, 'section', array(
-        'class'           => trim('txp-details '.$class),
+        'class'           => trim($label ? 'txp-details '.$class : $class),
         'id'              => $id,
         'aria-labelledby' => $content ? $id.'-label' : '',
     ));

@@ -619,6 +619,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_recent_articles',
         ),
+        // 'Extended column' area.
+        'extended_column' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-extended-group .txp-container', '.txp-container'),
+            'cb'       => 'article_partial_extended_column',
+        ),
     );
 
     // Add partials for custom fields (and their values which is redundant by
@@ -983,6 +989,40 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     if (has_handler('article_ui', 'extend_col_1')) {
+        echo wrapRegion('txp-extended-group', $partials['extended_column']['html'], 'txp-extended-group-content', '', '');
+    }
+
+    // 'Recent articles' collapsible section.
+//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+
+    echo n.'</div>'; // End of #supporting_content.
+
+    // Prev/next article links.
+//    echo $partials['article_nav']['html'];
+
+    echo n.'</div>'; // End of .txp-layout-4col-alt.
+
+    echo //tInput().
+        n.'</div>'. // End of .txp-layout.
+        n.'</form>';
+}
+
+/**
+ * Renders article extended column.
+ *
+ * The rendered widget can be customised via the 'article_ui > extend_col_1'
+ * pluggable UI callback event.
+ *
+ * @param  array $rs Article data
+ * @return string HTML
+ */
+
+function article_partial_extended_column($rs)
+{
+
+    if (has_handler('article_ui', 'extend_col_1')) {
+        extract($rs);
+
         if ($ID) {
             try {
                 $sort = get_pref('article_sort_column', 'posted');
@@ -1018,22 +1058,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         // Custom menu entries.
-        echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+        return tag(pluggable_ui('article_ui', 'extend_col_1', '', $rs), 'div', array('class' => 'txp-container'));
     }
-
-    // 'Recent articles' collapsible section.
-//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
-
-    echo n.'</div>'; // End of #supporting_content.
-
-    // Prev/next article links.
-//    echo $partials['article_nav']['html'];
-
-    echo n.'</div>'; // End of .txp-layout-4col-alt.
-
-    echo //tInput().
-        n.'</div>'. // End of .txp-layout.
-        n.'</form>';
 }
 
 /**
