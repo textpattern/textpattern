@@ -989,7 +989,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     if (has_handler('article_ui', 'extend_col_1')) {
-        echo wrapRegion('txp-extended-group', $partials['extended_column']['html'], 'txp-extended-group-content', '', '');
+        echo wrapGroup('txp-extended-group', $partials['extended_column']['html'], '');
     }
 
     // 'Recent articles' collapsible section.

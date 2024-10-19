@@ -567,18 +567,18 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     }
 
     if ($content) {
-        $content =
+        $content = ($label ?
             hed($label.popHelp($help), 3, array(
                 'class' => $heading_class,
                 'id'    => $id.'-label',
-            )).
+            )) : '').
             n.tag($content.n, 'div', $display_state).n;
     }
 
     return n.tag($content, 'section', array(
         'class'           => trim($label ? 'txp-details '.$class : $class),
         'id'              => $id,
-        'aria-labelledby' => $content ? $id.'-label' : '',
+        'aria-labelledby' => $content && $label ? $id.'-label' : false,
     ));
 }
 

@@ -101,7 +101,7 @@ function css_list($current)
         $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
     }
 
-    $list = wrapGroup('all_styles_css', tag(join(n, $out), 'ul', array('class' => 'switcher-list')), gTxt('all_stylesheets'));
+    $list = wrapGroup('all_styles_css', tag(join(n, $out), 'ul', array('class' => 'switcher-list')), 'all_stylesheets');
 
     return n.tag($list, 'div', array(
             'id'    => 'all_styles',
