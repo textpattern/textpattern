@@ -1401,7 +1401,7 @@ textpattern.decodeHTML = function (string) {
  * @since  4.9.0
  */
 
-textpattern.wrapHTML = function (node, tag, attr) {
+textpattern.wrapHTML = function (node, tag, attr, clone) {
     const wrapNode = document.createElement(tag || 'span');
     wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
 
@@ -1411,7 +1411,8 @@ textpattern.wrapHTML = function (node, tag, attr) {
         }
     }
 
-    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
+    if (!!clone) return node.parentNode.insertBefore(wrapNode, node);
+    else return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
 }
 
 /**
@@ -2218,7 +2219,7 @@ textpattern.Route.add('article', function () {
 
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
+            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')}, hookEvent.tagName == '#comment');
         }
     });
 
