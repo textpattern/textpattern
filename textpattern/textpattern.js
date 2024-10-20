@@ -2219,13 +2219,13 @@ textpattern.Route.add('article', function () {
 
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')}, hookEvent.tagName == '#comment');
+            textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')}, !(currentNode instanceof Element));
         }
     });
 
     DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
         if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
+            textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
         }
     });
 
