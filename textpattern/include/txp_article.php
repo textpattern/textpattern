@@ -389,7 +389,7 @@ function article_preview($field = false)
         $dbfield = txp_get_contents(hu, $opts);
     }
 
-    if ($view == 'preview') {
+    if ($view == 'preview' || $view == 'html') {
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
         $tags = 0;
@@ -411,20 +411,13 @@ function article_preview($field = false)
         header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
 
         $preview = implode('', $parsed);
-    } elseif ($view == 'html') {
-        $preview = tag(
-            tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
-                'class' => 'language-markup',
-                'dir'   => 'ltr',
-            )),
-            'pre', array('class' => $field)
-        );
     } else {
         $preview = '<div id="pane-preview"></div>'.n.
+            '<div id="pane-html" dir="ltr"></div>'.n.
             '<template id="pane-template"></template>';
     }
 
-    return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
+    return $preview;
 }
 
 /**
@@ -988,12 +981,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
     }
 
+    // 'Recent articles' collapsible section.
+//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+
     if (has_handler('article_ui', 'extend_col_1')) {
         echo wrapGroup('txp-extended-group', $partials['extended_column']['html'], '');
     }
-
-    // 'Recent articles' collapsible section.
-//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
     echo n.'</div>'; // End of #supporting_content.
 
