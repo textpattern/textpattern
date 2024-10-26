@@ -1404,8 +1404,8 @@ textpattern.decodeHTML = function (string) {
  * @since  4.9.0
  */
 
-textpattern.wrapHTML = function (node, tag, attr, clone) {
-    const text = document.createTextNode(node.data || node.outerHTML || node);
+textpattern.wrapHTML = function (node, tag, attr, replace) {
+    const text = document.createTextNode(node.outerHTML || node.data || node);
     const wrapNode = tag ? document.createElement(tag) : text;
 
     if (tag) {
@@ -1418,7 +1418,7 @@ textpattern.wrapHTML = function (node, tag, attr, clone) {
         }
     }
 
-    if (!!clone) return node.parentNode ? node.parentNode.insertBefore(wrapNode, node) : wrapNode;
+    if (!replace) return wrapNode;
     else return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
 }
 
@@ -2231,8 +2231,11 @@ textpattern.Route.add('article', function () {
 
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            if (currentNode instanceof Element) {
+            if ($viewMode.data('view-mode') == 'html'/*currentNode instanceof Element*/) {
                 currentNode.parentNode.insertBefore(document.createComment(currentNode.nodeName), currentNode);
+            } else {
+                const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'removed ' + hookEvent.tagName.replace('#', '-')});
+                currentNode.parentNode.insertBefore(node, currentNode);
             }
         }
     });
