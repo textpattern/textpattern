@@ -1835,13 +1835,13 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
                 for ($i = 0; count($list); $i = ($i + 1)%$count) {
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
-
         }
 
         empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     $old_item = $txp_item;
+    $txp_item['total'] = count($list);
 
     if ($escape) {
         foreach ($list as &$item) {
