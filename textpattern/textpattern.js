@@ -2211,16 +2211,20 @@ textpattern.Route.add('article', function () {
 
         if (escape) {
             let txt = document.createElement('textarea'), pre = document.createElement('pre'), code = document.createElement('code');
-            code.classList.add('language-markup');
             this.content.childNodes.forEach(node => {
                 if (node.nodeName == '#comment') txt.innerHTML +=  node.data.match(/^\[CDATA\[.*\]\]$/ms) ? '<!'+node.data+'>' : '<!--'+node.data+'-->';
                 else txt.innerHTML += (node.outerHTML || node.textContent);
             });
+            code.classList.add('language-markup');
             code.innerHTML = txt.innerHTML;
+            txt.remove();
             pre.replaceChildren(code);
             pane.replaceChildren(pre);
             Prism.highlightAllUnder(pane);
         } else {
+            this.content.querySelectorAll('a').forEach(node => {
+                if (!node.getAttribute('target')) node.setAttribute('target', '_new');
+            });
             pane.shadowRoot.replaceChildren(this.content);
         }
 
@@ -2231,11 +2235,13 @@ textpattern.Route.add('article', function () {
 
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            if ($viewMode.data('view-mode') == 'html'/*currentNode instanceof Element*/) {
-                currentNode.parentNode.insertBefore(document.createComment(currentNode.nodeName), currentNode);
+            const tagName = hookEvent.tagName == '#comment' ? (currentNode.data.match(/^\[CDATA\[/i) ? '-cdata' : '-comment') : hookEvent.tagName;
+            if ($viewMode.data('view-mode') == 'html') {
+                currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
             } else {
-                const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'removed ' + hookEvent.tagName.replace('#', '-')});
-                currentNode.parentNode.insertBefore(node, currentNode);
+                const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
+                if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
+                else currentNode.parentNode.insertBefore(node, currentNode);
             }
         }
     });
