@@ -2,7 +2,7 @@ img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; he
 pre { overflow: auto; }
 * { -webkit-hyphens: auto; hyphens: auto; }
 pre > code { -webkit-hyphens: none; hyphens: none; }
-code.txp-sanitized { opacity: 0.5; text-decoration-line: line-through; }
+code.txp-sanitized { opacity: 0.6; text-decoration-line: line-through; }
 code.-comment::before { content:"<!--"; }
 code.-comment::after { content:"-->"; }
 code.-cdata::before { content:"<!"; }
