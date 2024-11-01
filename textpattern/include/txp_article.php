@@ -393,18 +393,27 @@ function article_preview($field = false)
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
         $tags = 0;
+        $tagopen = $view == 'preview' ? '<code class="txp-tag">' : '';
+        $tagclose = $view == 'preview' ? '</code>' : '';
 
         foreach($parsed as $i => &$chunk) {
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
+                    $chunk = txpspecialchars($chunk).$tagclose;
                 } elseif (strpos($chunk, '<txp:else ') !== 0) {
                     $tags++;
-                    $level += (int)($chunk[strlen($chunk)-2] !== '/');
-                }
-            }
 
-            $chunk = $level > 0 || ($i%2) ? txpspecialchars($chunk) : $chunk;
+                    if ($chunk[strlen($chunk)-2] === '/') {
+                        $chunk = $tagopen.txpspecialchars($chunk).$tagclose;
+                    } else {
+                        $chunk = $tagopen.txpspecialchars($chunk);
+                        $level++;
+                    }
+                }
+            } elseif ($level > 0) {
+                $chunk = txpspecialchars($chunk);
+            }
         }
 
         unset($chunk);
