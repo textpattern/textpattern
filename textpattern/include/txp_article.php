@@ -393,7 +393,7 @@ function article_preview($field = false)
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
         $tags = 0;
-        $tagopen = $view == 'preview' ? '<code class="txp-tag">' : '';
+        $tagopen = $view == 'preview' ? '<code class="language-markup txp-tag">' : '';
         $tagclose = $view == 'preview' ? '</code>' : '';
 
         foreach($parsed as $i => &$chunk) {
