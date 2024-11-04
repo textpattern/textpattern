@@ -3,15 +3,18 @@ img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; he
 pre { overflow: auto; }
 * { -webkit-hyphens: auto; hyphens: auto; }
 pre > code { -webkit-hyphens: none; hyphens: none; }
-code.txp-sanitized { opacity: 0.6; text-decoration-line: line-through; }
-code.-comment::before { content: "<!--"; }
-code.-comment::after { content: "-->"; }
-code.-cdata::before { content: "<!"; }
-code.-cdata::after { content: ">"; }
+code{
+    &.txp-sanitized { opacity: 0.6; text-decoration-line: line-through; }
+    &.-comment::before { content: "<!--"; }
+    &.-comment::after { content: "-->"; }
+    &.-cdata::before { content: "<!"; }
+    &.-cdata::after { content: ">"; }
+}
 
 /* PrismJS 1.29.0 */
-code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}:not(pre)>code[class*=language-]{white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#a67f59}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}body.darkmode .token.punctuation{color:var(--clr-text-enforced-white)}body.darkmode .token.boolean,body.darkmode .token.constant,body.darkmode .token.deleted,body.darkmode .token.number,body.darkmode .token.property,body.darkmode .token.symbol,body.darkmode .token.tag{color:var(--clr-error-text)}body.darkmode .token.attr-name,body.darkmode .token.builtin,body.darkmode .token.char,body.darkmode .token.inserted,body.darkmode .token.selector,body.darkmode .token.string{color:var(--clr-success-text)}body.darkmode .language-css .token.string,body.darkmode .style .token.string,body.darkmode .token.entity,body.darkmode .token.operator,body.darkmode .token.url{color:var(--clr-warning-text)}body.darkmode .token.atrule,body.darkmode .token.attr-value,body.darkmode .token.keyword{color:var(--clr-info-text)}
+code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}:not(pre)>code[class*=language-]{white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#a67f59}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}:host(.darkmode) .token.punctuation{color:var(--clr-text-enforced-white)}:host(.darkmode) .token.boolean,:host(.darkmode) .token.constant,:host(.darkmode) .token.deleted,:host(.darkmode) .token.number,:host(.darkmode) .token.property,:host(.darkmode) .token.symbol,:host(.darkmode) .token.tag{color:var(--clr-error-text)}:host(.darkmode) .token.attr-name,:host(.darkmode) .token.builtin,:host(.darkmode) .token.char,:host(.darkmode) .token.inserted,:host(.darkmode) .token.selector,:host(.darkmode) .token.string{color:var(--clr-success-text)}:host(.darkmode) .language-css .token.string,:host(.darkmode) .style .token.string,:host(.darkmode) .token.entity,:host(.darkmode) .token.operator,:host(.darkmode) .token.url{color:var(--clr-warning-text)}:host(.darkmode) .token.atrule,:host(.darkmode) .token.attr-value,:host(.darkmode) .token.keyword{color:var(--clr-info-text)}
 
 /* User editable example */
 .token.txp > .token.tag {color: rebeccapurple;}
+:host(.darkmode) .token.txp > .token.tag {color: rgb(255, 217, 66);}
 /*.txp-tag {display: inline-block; outline: 1px solid rebeccapurple;}*/
