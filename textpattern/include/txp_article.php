@@ -400,14 +400,14 @@ function article_preview($field = false)
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
-                    $chunk = txpspecialchars($chunk).$tagclose;
+                    $chunk = txpspecialchars($chunk).($level ? '' : $tagclose);
                 } elseif (strpos($chunk, '<txp:else ') !== 0) {
                     $tags++;
 
                     if ($chunk[strlen($chunk)-2] === '/') {
-                        $chunk = $tagopen.txpspecialchars($chunk).$tagclose;
+                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk).($level ? '' : $tagclose);
                     } else {
-                        $chunk = $tagopen.txpspecialchars($chunk);
+                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk);
                         $level++;
                     }
                 }
