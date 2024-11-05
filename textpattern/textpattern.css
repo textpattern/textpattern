@@ -1,0 +1,12 @@
+:root {
+    --txp-prism-token-1: #708090;
+    --txp-prism-token-2: #905;
+    --txp-prism-token-3: #690;
+    --txp-prism-token-4: #a67f59;
+    --txp-prism-token-5: #07a;
+    --txp-prism-token-6: #dd4a68;
+    --txp-prism-token-7: #e90;
+  }
+
+.hidden{display:none}
+.not-ready main{opacity:0}

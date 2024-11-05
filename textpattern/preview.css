@@ -12,9 +12,91 @@ code{
 }
 
 /* PrismJS 1.29.0 */
-code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}:not(pre)>code[class*=language-]{white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#a67f59}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}:host(.darkmode) .token.punctuation{color:var(--clr-text-enforced-white)}:host(.darkmode) .token.boolean,:host(.darkmode) .token.constant,:host(.darkmode) .token.deleted,:host(.darkmode) .token.number,:host(.darkmode) .token.property,:host(.darkmode) .token.symbol,:host(.darkmode) .token.tag{color:var(--clr-error-text)}:host(.darkmode) .token.attr-name,:host(.darkmode) .token.builtin,:host(.darkmode) .token.char,:host(.darkmode) .token.inserted,:host(.darkmode) .token.selector,:host(.darkmode) .token.string{color:var(--clr-success-text)}:host(.darkmode) .language-css .token.string,:host(.darkmode) .style .token.string,:host(.darkmode) .token.entity,:host(.darkmode) .token.operator,:host(.darkmode) .token.url{color:var(--clr-warning-text)}:host(.darkmode) .token.atrule,:host(.darkmode) .token.attr-value,:host(.darkmode) .token.keyword{color:var(--clr-info-text)}
+code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:pre;word-break:normal;word-spacing:normal}
+:not(pre)>code[class*=language-]{white-space:normal}
+.token{
+    &.bold,&.important{font-weight:700}
+    &.italic{font-style:italic}
+    &.entity{cursor:help}
+    &.namespace {opacity: 0.7;}
+}
+:host(.preview) code[class*=language-] {white-space:break-spaces;}
+:host(.html)>pre{background: var(--clr-bkgd-box); border: 1px solid var(--clr-brdr); padding: 1em;}
+
+/* Hive darkmode */
+:host(.darkmode) {
+    & .token.punctuation{color:var(--clr-text-enforced-white)}
+    & .token.boolean,
+    & .token.constant,
+    & .token.deleted,
+    & .token.number,
+    & .token.property,
+    & .token.symbol,
+    & .token.tag{color:var(--clr-error-text)}
+    & .token.attr-name,
+    & .token.builtin,
+    & .token.char,
+    & .token.inserted,
+    & .token.selector,
+    & .token.string{color:var(--clr-success-text)}
+    & .language-css .token.string,
+    & .style .token.string,
+    & .token.entity,
+    & .token.operator,
+    & .token.url{color:var(--clr-warning-text)}
+    & .token.atrule,
+    & .token.attr-value,
+    & .token.keyword{color:var(--clr-info-text)}
+}
 
 /* User editable example */
 .token.txp > .token.tag {color: rebeccapurple;}
-:host(.darkmode) .token.txp > .token.tag {color: rgb(255, 217, 66);}
+:host(.darkmode) .token.txp > .token.tag {color: #ffdb58;}
 /*.txp-tag {display: inline-block; outline: 1px solid rebeccapurple;}*/
+
+.token.cdata,
+.token.comment,
+.token.doctype,
+.token.prolog {
+  color: var(--txp-prism-token-1, #708090);
+}
+.token.punctuation {
+  color: var(--txp-prism-token-1, #708090);
+}
+.token.boolean,
+.token.constant,
+.token.deleted,
+.token.number,
+.token.property,
+.token.symbol,
+.token.tag {
+  color: var(--txp-prism-token-2, #905);
+}
+.token.attr-name,
+.token.builtin,
+.token.char,
+.token.inserted,
+.token.selector,
+.token.string {
+  color: var(--txp-prism-token-3, #690);
+}
+.language-css .token.string,
+.style .token.string,
+.token.entity,
+.token.operator,
+.token.url {
+  color: var(--txp-prism-token-4, #a67f59);
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--txp-prism-token-5, #07a);
+}
+.token.function {
+  color: var(--txp-prism-token-6, #dd4a68);
+}
+.token.important,
+.token.regex,
+.token.variable {
+  color: var(--txp-prism-token-7, #e90);
+}

@@ -2139,8 +2139,7 @@ textpattern.Route.add('article', function () {
 
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
-        const $view = $viewMode.data('view-mode');
-        $('#pane-preview, #pane-html').addClass('disabled');
+        $('#pane-preview').addClass('disabled');
 
         data.push({
             name: 'app_mode',
@@ -2153,7 +2152,7 @@ textpattern.Route.add('article', function () {
             value: $field
         },{
             name: 'view',
-            value: $view
+            value: $viewMode.data('view-mode')
         });
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
@@ -2172,6 +2171,7 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
+        $('#pane-preview').attr('class', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
@@ -2179,9 +2179,7 @@ textpattern.Route.add('article', function () {
         $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
-        const escape = $viewMode.data('view-mode') == 'html';
-        const pane = document.getElementById(escape ? 'pane-html' : 'pane-preview');
-        const nopane = document.getElementById(!escape ? 'pane-html' : 'pane-preview');
+        const pane = document.getElementById('pane-preview');
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
@@ -2196,7 +2194,7 @@ textpattern.Route.add('article', function () {
             }
         }
 
-        if (!escape && !pane.shadowRoot) {
+        if (!pane.shadowRoot) {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
@@ -2207,9 +2205,7 @@ textpattern.Route.add('article', function () {
             }
         }
 
-        nopane.classList.add('hidden');
-
-        if (escape) {
+        if ($viewMode.data('view-mode') == 'html') {
             let txt = document.createElement('textarea'), pre = document.createElement('pre'), code = document.createElement('code');
             this.content.childNodes.forEach(node => {
                 if (node.nodeName == '#comment') txt.innerHTML +=  node.data.match(/^\[CDATA\[.*\]\]$/ms) ? '<!'+node.data+'>' : '<!--'+node.data+'-->';
@@ -2219,8 +2215,8 @@ textpattern.Route.add('article', function () {
             code.innerHTML = txt.innerHTML;
             txt.remove();
             pre.replaceChildren(code);
-            pane.replaceChildren(pre);
-            Prism.highlightAllUnder(pane);
+            Prism.highlightAllUnder(pre);
+            pane.shadowRoot.replaceChildren(pre);
         } else {
             this.content.querySelectorAll('a').forEach(node => {
                 if (!node.getAttribute('target')) node.setAttribute('target', '_new');
@@ -2229,7 +2225,7 @@ textpattern.Route.add('article', function () {
             pane.shadowRoot.replaceChildren(this.content);
         }
 
-        pane.classList.remove('hidden', 'disabled');
+        pane.classList.remove('disabled');
         $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
