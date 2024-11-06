@@ -2171,7 +2171,7 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
-        $('#pane-preview').attr('class', $view);
+        $('#pane-preview').attr('data-mode', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
@@ -2198,9 +2198,14 @@ textpattern.Route.add('article', function () {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
+                const getMatchedCSSRules = (name, css = document.styleSheets) => 
+                [].concat(...[...css].map(s => [...s.cssRules||[]]))
+                    .filter(r => r instanceof CSSLayerBlockRule && r.name == name);
+
                 const sheet = new CSSStyleSheet();
+                const custom = ''.concat(...getMatchedCSSRules('txp-preview').map(r => '\n' + r.cssText));
                 const css = await fetch('preview.css');
-                sheet.replaceSync(await css.text());
+                sheet.replaceSync(await (css.ok ? css.text() : '') + custom);
                 shadow.adoptedStyleSheets = [sheet];
             }
         }
@@ -2250,7 +2255,7 @@ textpattern.Route.add('article', function () {
             }
         }
     });
-
+    
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);

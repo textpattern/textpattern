@@ -6,7 +6,24 @@
     --txp-prism-token-5: #07a;
     --txp-prism-token-6: #dd4a68;
     --txp-prism-token-7: #e90;
-  }
+    --txp-prism-token-8: #663399;
+}
+:root:has(body.darkmode) {
+    --txp-prism-token-1: #f8f8f2;
+    --txp-prism-token-2: #f92672;
+    --txp-prism-token-3: #a6e22e;
+    --txp-prism-token-4: #f7f7d5;
+    --txp-prism-token-5: #e6db74;
+    --txp-prism-token-6: #dd4a68;
+    --txp-prism-token-7: #fd971f;
+    --txp-prism-token-8: #ffdb58;
+}
 
 .hidden{display:none}
 .not-ready main{opacity:0}
+/*
+@layer txp-preview {
+    :host(#pane-preview) {
+    }
+}
+*/

@@ -421,7 +421,7 @@ function article_preview($field = false)
 
         $preview = implode('', $parsed);
     } else {
-        $preview = '<div id="pane-preview" class="preview"></div>'.n.
+        $preview = '<div id="pane-preview"></div>'.n.
             '<template id="pane-template"></template>';
     }
 
