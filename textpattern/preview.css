@@ -1,7 +1,69 @@
-img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
+img, picture, audio, video, iframe, pre, table {max-width: 100%; height: auto; }
 pre { overflow: auto; }
 * { -webkit-hyphens: auto; hyphens: auto; }
 pre > code { -webkit-hyphens: none; hyphens: none; }
-code.removed { opacity: 0.75; text-decoration-line: line-through; }
-code.-comment::before { content:"<!--"; }
-code.-comment::after { content:"-->"; }
+code{
+    &.txp-sanitized { opacity: 0.6; text-decoration-line: line-through; }
+    &.-comment::before { content: "<!--"; }
+    &.-comment::after { content: "-->"; }
+    &.-cdata::before { content: "<!"; }
+    &.-cdata::after { content: ">"; }
+}
+
+/* PrismJS 1.29.0 */
+code[class*=language-],pre[class*=language-]{direction:ltr;margin:0;padding:0;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}
+:not(pre)>code[class*=language-]{white-space:normal}
+.token{
+    &.bold,
+    &.important{font-weight:700}
+    &.italic{font-style:italic}
+    &.entity{cursor:help}
+    &.namespace {opacity: 0.7;}
+    &.cdata,
+    &.comment,
+    &.doctype,
+    &.prolog {
+    color: var(--txp-prism-token-1, #708090);
+    }
+    &.punctuation {
+    color: var(--txp-prism-token-1, #708090);
+    }
+    &.boolean,
+    &.constant,
+    &.deleted,
+    &.number,
+    &.property,
+    &.symbol,
+    &.tag {
+    color: var(--txp-prism-token-2, #905);
+    }
+    &.attr-name,
+    &.builtin,
+    &.char,
+    &.inserted,
+    &.selector,
+    &.string {
+    color: var(--txp-prism-token-3, #690);
+    }
+    &.entity,
+    &.operator,
+    &.url {
+    color: var(--txp-prism-token-4, #a67f59);
+    }
+    &.atrule,
+    &.attr-value,
+    &.keyword {
+    color: var(--txp-prism-token-5, #07a);
+    }
+    &.function {
+    color: var(--txp-prism-token-6, #dd4a68);
+    }
+    &.important,
+    &.regex,
+    &.variable {
+    color: var(--txp-prism-token-7, #e90);
+    }
+    &.txp > .token.tag {
+    color: var(--txp-prism-token-8, rebeccapurple);
+    }
+}

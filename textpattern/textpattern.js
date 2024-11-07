@@ -891,9 +891,12 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                         const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
                         $(host[2]).each(function() {
                             const id = this.getAttribute('id');
-                            const $target = $(this.content || this);
 
                             if (id) {
+                                let $target = this.content || this;
+                                $target.replaceChildren([]);
+                                $target = $($target);
+
                                 if (!embed) {
                                     $target.replaceWith($html.getElementById(id)).remove();
                                 } else {
@@ -1401,17 +1404,22 @@ textpattern.decodeHTML = function (string) {
  * @since  4.9.0
  */
 
-textpattern.wrapHTML = function (node, tag, attr) {
-    const wrapNode = document.createElement(tag || 'span');
-    wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
+textpattern.wrapHTML = function (node, tag, attr, replace) {
+    const text = document.createTextNode(node.outerHTML || node.data || node);
+    const wrapNode = tag ? document.createElement(tag) : text;
 
-    if (typeof attr === 'object') {
-        for (const key of Object.keys(attr)) {
-            wrapNode.setAttribute(key, attr[key]);
+    if (tag) {
+        wrapNode.append(text);
+
+        if (typeof attr === 'object') {
+            for (const key of Object.keys(attr)) {
+                wrapNode.setAttribute(key, attr[key]);
+            }
         }
     }
 
-    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
+    if (!replace) return wrapNode;
+    else return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
 }
 
 /**
@@ -2125,19 +2133,12 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    $('#clean-preview').on('change', function () {
-        if ($viewMode.data('view-mode') != 'html') {
-            $viewMode.click();
-        }
-    });
-
-    $('#parse-preview').on('change', function () {
+    $('#clean-preview, #parse-preview').on('change', function () {
         $viewMode.click();
     });
 
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
-        const $view = $viewMode.data('view-mode');
         $('#pane-preview').addClass('disabled');
 
         data.push({
@@ -2151,12 +2152,12 @@ textpattern.Route.add('article', function () {
             value: $field
         },{
             name: 'view',
-            value: $view
+            value: $viewMode.data('view-mode')
         });
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
+            list: '>>#pane-template',
             callback: function() {}
         });
     });
@@ -2170,24 +2171,20 @@ textpattern.Route.add('article', function () {
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
-        $('#pane-preview').attr('class', $view);
+        $('#pane-preview').attr('data-mode', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
         $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
-    }).on('updateList', '#pane-preview.html', function () {
-        Prism.highlightAllUnder(this);
-        $pane.dialog('open');
-        textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
         if ($('#clean-preview').is(':checked')) {
-            DOMPurify.sanitize(this);
+            DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
                 const message = textpattern.gTxt('found_unsafe', {
@@ -2201,33 +2198,64 @@ textpattern.Route.add('article', function () {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
+                const getMatchedCSSRules = (name, css = document.styleSheets) => 
+                [].concat(...[...css].map(s => [...s.cssRules||[]]))
+                    .filter(r => r instanceof CSSLayerBlockRule && r.name == name);
+
                 const sheet = new CSSStyleSheet();
+                const custom = ''.concat(...getMatchedCSSRules('txp-preview').map(r => '\n' + r.cssText));
                 const css = await fetch('preview.css');
-                sheet.replaceSync(await css.text());
+                sheet.replaceSync(await (css.ok ? css.text() : '') + custom);
                 shadow.adoptedStyleSheets = [sheet];
             }
         }
 
-        pane.shadowRoot.replaceChildren(this.content);
+        if ($viewMode.data('view-mode') == 'html') {
+            let txt = document.createElement('textarea'), pre = document.createElement('pre'), code = document.createElement('code');
+            this.content.childNodes.forEach(node => {
+                if (node.nodeName == '#comment') txt.innerHTML +=  node.data.match(/^\[CDATA\[.*\]\]$/ms) ? '<!'+node.data+'>' : '<!--'+node.data+'-->';
+                else txt.innerHTML += (node.outerHTML || node.textContent);
+            });
+            code.classList.add('language-markup');
+            code.innerHTML = txt.innerHTML;
+            txt.remove();
+            pre.replaceChildren(code);
+            Prism.highlightAllUnder(pre);
+            pane.shadowRoot.replaceChildren(pre);
+        } else {
+            this.content.querySelectorAll('a').forEach(node => {
+                if (!node.getAttribute('target')) node.setAttribute('target', '_new');
+            });
+            Prism.highlightAllUnder(this.content);
+            pane.shadowRoot.replaceChildren(this.content);
+        }
+
         pane.classList.remove('disabled');
         $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
 
-    DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
-
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
+            const tagName = hookEvent.tagName == '#comment' ? (currentNode.data.match(/^\[CDATA\[/i) ? '-cdata' : '-comment') : hookEvent.tagName;
+            if ($viewMode.data('view-mode') == 'html') {
+                currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
+            } else {
+                const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
+                if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
+                else currentNode.parentNode.insertBefore(node, currentNode);
+            }
         }
     });
 
     DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
         if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
+            if ($viewMode.data('view-mode') == 'html') {
+                currentNode.parentNode.insertBefore(document.createComment(hookEvent.attrName), currentNode);
+            }
         }
     });
-
+    
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
@@ -2260,9 +2288,13 @@ textpattern.Route.add('article.init', function () {
 });
 
 // Uncheck reset on timestamp change.
-textpattern.Route.add('article, file', function () {
+textpattern.Route.add('article, file, image', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
+    });
+
+    $(document).on('submit', '#delete-file, #delete-image, #delete-article', function() {
+        return verify(textpattern.gTxt('confirm_delete_popup'));
     });
 });
 
@@ -2309,10 +2341,6 @@ textpattern.Route.add('file, image', function () {
             value: 'async'
         }]
     });
-
-    $(document).on('submit', '#delete-file, #delete-image', function() {
-        return verify(textpattern.gTxt('confirm_delete_popup'));
-    })
 });
 
 // Check file extensions match.

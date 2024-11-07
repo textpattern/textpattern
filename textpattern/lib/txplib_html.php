@@ -47,6 +47,7 @@ function end_page()
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
         echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL, array('article', 'edit')).
+            script_js('vendors/PrismJS/prism/prism-txp.js', TEXTPATTERN_SCRIPT_URL, array('article', 'edit')).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
@@ -567,18 +568,18 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     }
 
     if ($content) {
-        $content =
+        $content = ($label ?
             hed($label.popHelp($help), 3, array(
                 'class' => $heading_class,
                 'id'    => $id.'-label',
-            )).
+            )) : '').
             n.tag($content.n, 'div', $display_state).n;
     }
 
     return n.tag($content, 'section', array(
-        'class'           => trim('txp-details '.$class),
+        'class'           => trim($label ? 'txp-details '.$class : $class),
         'id'              => $id,
-        'aria-labelledby' => $content ? $id.'-label' : '',
+        'aria-labelledby' => $content && $label ? $id.'-label' : false,
     ));
 }
 
@@ -1835,13 +1836,13 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
                 for ($i = 0; count($list); $i = ($i + 1)%$count) {
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
-
         }
 
         empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     $old_item = $txp_item;
+    $txp_item['total'] = count($list);
 
     if ($escape) {
         foreach ($list as &$item) {

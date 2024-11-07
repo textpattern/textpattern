@@ -382,42 +382,43 @@ function article_preview($field = false)
         $dbfield = txp_get_contents(hu, $opts);
     }
 
-    if ($view == 'preview') {
+    if ($view == 'preview' || $view == 'html') {
         $parsed = txp_tokenize($dbfield, false, false);
         $level = 0;
         $tags = 0;
+        $tagopen = $view == 'preview' ? '<code class="language-markup txp-tag">' : '';
+        $tagclose = $view == 'preview' ? '</code>' : '';
 
         foreach($parsed as $i => &$chunk) {
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
+                    $chunk = txpspecialchars($chunk).($level ? '' : $tagclose);
                 } elseif (strpos($chunk, '<txp:else ') !== 0) {
                     $tags++;
-                    $level += (int)($chunk[strlen($chunk)-2] !== '/');
-                }
-            }
 
-            $chunk = $level > 0 || ($i%2) ? txpspecialchars($chunk) : $chunk;
+                    if ($chunk[strlen($chunk)-2] === '/') {
+                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk).($level ? '' : $tagclose);
+                    } else {
+                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk);
+                        $level++;
+                    }
+                }
+            } elseif ($level > 0) {
+                $chunk = txpspecialchars($chunk);
+            }
         }
 
         unset($chunk);
         header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
 
         $preview = implode('', $parsed);
-    } elseif ($view == 'html') {
-        $preview = tag(
-            tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($dbfield)), 'code', array(
-                'class' => 'language-markup',
-                'dir'   => 'ltr',
-            )),
-            'pre', array('class' => $field)
-        );
     } else {
         $preview = '<div id="pane-preview"></div>'.n.
             '<template id="pane-template"></template>';
     }
 
-    return $view == 'html' ? '<div id="pane-preview" class="html">'.$preview.'</div>' : $preview;
+    return $preview;
 }
 
 /**
@@ -611,6 +612,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'mode'     => PARTIAL_VOLATILE,
             'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_recent_articles',
+        ),
+        // 'Extended column' area.
+        'extended_column' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-extended-group .txp-container', '.txp-container'),
+            'cb'       => 'article_partial_extended_column',
         ),
     );
 
@@ -975,7 +982,41 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
     }
 
+    // 'Recent articles' collapsible section.
+//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+
     if (has_handler('article_ui', 'extend_col_1')) {
+        echo wrapGroup('txp-extended-group', $partials['extended_column']['html'], '');
+    }
+
+    echo n.'</div>'; // End of #supporting_content.
+
+    // Prev/next article links.
+//    echo $partials['article_nav']['html'];
+
+    echo n.'</div>'; // End of .txp-layout-4col-alt.
+
+    echo //tInput().
+        n.'</div>'. // End of .txp-layout.
+        n.'</form>';
+}
+
+/**
+ * Renders article extended column.
+ *
+ * The rendered widget can be customised via the 'article_ui > extend_col_1'
+ * pluggable UI callback event.
+ *
+ * @param  array $rs Article data
+ * @return string HTML
+ */
+
+function article_partial_extended_column($rs)
+{
+
+    if (has_handler('article_ui', 'extend_col_1')) {
+        extract($rs);
+
         if ($ID) {
             try {
                 $sort = get_pref('article_sort_column', 'posted');
@@ -1011,22 +1052,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         // Custom menu entries.
-        echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+        return tag(pluggable_ui('article_ui', 'extend_col_1', '', $rs), 'div', array('class' => 'txp-container'));
     }
-
-    // 'Recent articles' collapsible section.
-//    echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
-
-    echo n.'</div>'; // End of #supporting_content.
-
-    // Prev/next article links.
-//    echo $partials['article_nav']['html'];
-
-    echo n.'</div>'; // End of .txp-layout-4col-alt.
-
-    echo //tInput().
-        n.'</div>'. // End of .txp-layout.
-        n.'</form>';
 }
 
 /**

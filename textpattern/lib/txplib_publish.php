@@ -1373,9 +1373,22 @@ function parseList($rs, &$object, $populate, $atts = array())
         $old_item = $txp_item;
         $txp_item['total'] = $last;
         unset($txp_item['breakby']);
-        $groupby = !$breakby || is_numeric(strtr($breakby, ' ,', '00')) ?
-            false :
-            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? (int)php(null, null, 'form') : 2);
+        $groupby = !$breakby ? false : (is_numeric(strtr($breakby, ' ,-', '000')) ? 3 :
+            (preg_match('@<(?:'.TXP_PATTERN.'):@', $breakby) ? (int)php(null, null, 'form') : 2));
+        if ($groupby === 3) {
+            $breaknum = array_merge(array_filter(array_map('intval', do_list($breakby))));
+            $list = range(1, $last);
+    
+            if ($cnt = count($breaknum)) {
+                $groupmap = array();
+                    for ($i = $item = 0; count($list); $i = ($i+1)%$cnt, $item++) {
+                        $newlist = $breaknum[$i] > 0 ? array_splice($list, 0, $breaknum[$i]) :  array_splice($list, $breaknum[$i]);
+                        $groupmap += array_fill_keys($newlist, $item);
+                    }
+            } else {
+                $groupby = false;
+            }
+        }
 
         while ($count++ <= $last) {
             if ($a = nextRow($rs)) {
@@ -1390,8 +1403,8 @@ function parseList($rs, &$object, $populate, $atts = array())
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
 
                 $newbreak = !$groupby ? $count : ($groupby === 1 ?
-                    parse($breakby, true, false) :
-                    parse_form($breakby)
+                    parse($breakby, true, false) : ($groupby === 2 ?
+                    parse_form($breakby) : $groupmap[$count])
                 );
             } else {
                 $newbreak = null;
@@ -1406,8 +1419,10 @@ function parseList($rs, &$object, $populate, $atts = array())
                     $object = $tmpobject;
                 }
 
-                $chunk === false or $articles[] = $chunk;
-                $chunk = false;
+                if ($chunk !== false) {
+                    $groupby === 3 ? $articles[$groupmap[$count-1]] = $chunk : $articles[] = $chunk;
+                    $chunk = false;
+                }
             }
 
             if ($count <= $last) {
@@ -1437,6 +1452,8 @@ function parseList($rs, &$object, $populate, $atts = array())
         $txp_item = $old_item;
         $object = $store;
     }
+
+    $groupby !== 3 or ksort($articles);
 
     return $articles;
 }
