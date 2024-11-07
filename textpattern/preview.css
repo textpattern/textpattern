@@ -1,4 +1,4 @@
-img, picture, audio, video, iframe, pre, table {max-width: 100%; width: auto; height: auto; }
+img, picture, audio, video, iframe, pre, table {max-width: 100%; height: auto; }
 pre { overflow: auto; }
 * { -webkit-hyphens: auto; hyphens: auto; }
 pre > code { -webkit-hyphens: none; hyphens: none; }
@@ -11,7 +11,7 @@ code{
 }
 
 /* PrismJS 1.29.0 */
-code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}
+code[class*=language-],pre[class*=language-]{direction:ltr;margin:0;padding:0;-webkit-hyphens:none;hyphens:none;text-align:left;word-wrap:normal;white-space:break-spaces;word-break:normal;word-spacing:normal}
 :not(pre)>code[class*=language-]{white-space:normal}
 .token{
     &.bold,
@@ -66,10 +66,4 @@ code[class*=language-],pre[class*=language-]{direction:ltr;-webkit-hyphens:none;
     &.txp > .token.tag {
     color: var(--txp-prism-token-8, rebeccapurple);
     }
-}
-
-:host(#pane-preview[data-mode='html']) {
-    pre{background: var(--clr-bkgd-box); border: 1px solid var(--clr-brdr); padding: 1em;}
-    .token.script,
-    .token.style {white-space:pre;}
 }
