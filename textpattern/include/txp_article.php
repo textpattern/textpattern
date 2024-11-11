@@ -401,8 +401,8 @@ function article_preview($field = false)
                 if ($chunk[1] === '/') {
                     $level--;
                     $chunk = txpspecialchars($chunk).($level ? '' : $tagclose);
-                } elseif (strpos($chunk, '<txp:else ') !== 0) {
-                    $tags++;
+                } else {
+                    $tags += (int)(strpos($chunk, '<txp:else ') !== 0);
 
                     if ($chunk[strlen($chunk)-2] === '/') {
                         $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk).($level ? '' : $tagclose);
