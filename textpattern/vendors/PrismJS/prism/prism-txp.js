@@ -10,8 +10,8 @@
     txp.pattern = RegExp(`${txptag}`);
     txp.inside['attr-value'].pattern = RegExp(`=\\s*(?:${txpattr})`);
     txp.inside['attr-value'].inside.txp = txp;
-    Prism.languages.markup.tag.inside['attr-value'].pattern = RegExp(`=\\s*(?:"(?:(?:${txptag})|[^"])*"|\'(?:(?:${txptag})|[^\'])*\')`);
-    Prism.languages.markup.tag.pattern = RegExp(`<\\/?(?!\\d)[^\\s>\\/=$<%]+(?:\\s+[^\\s>\\/=]+(?:\\s*=\\s*(?:"(?:(?:${txptag})|[^"])*"|\'(?:(?:${txptag})|[^\'])*\'|[^\\s\'"\\/>]+(?=[\s>])))?)*\\s*\\/?\\>`);
+    Prism.languages.markup.tag.inside['attr-value'].pattern = RegExp(`=\\s*(?:(?<x>["\'])(?:(?:${txptag})|(?!\\k<x>).)*\\k<x>)`, 's');
+    Prism.languages.markup.tag.pattern = RegExp(`<\\/?(?!\\d)[^\\s>\\/=$<%]+(?:\\s+[^\\s>\\/=]+(?:\\s*=\\s*(?:(?<x>["\'])(?:(?:${txptag})|(?!\\k<x>).)*\\k<x>|[^\\s\'"\\/>]+(?=[\s>])))?)*\\s*\\/?\\>`, 's');
     Prism.languages.markup.tag.inside['attr-value'].inside.txp = txp;
     Prism.languages.insertBefore('markup', 'tag', {txp: txp});
 })();
