@@ -2226,7 +2226,7 @@ textpattern.Route.add('article', function () {
             this.content.querySelectorAll('a').forEach(node => {
                 if (!node.getAttribute('target')) node.setAttribute('target', '_new');
             });
-            Prism.highlightAllUnder(this.content);
+            //Prism.highlightAllUnder(this.content);
             pane.shadowRoot.replaceChildren(this.content);
         }
 

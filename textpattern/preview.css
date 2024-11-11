@@ -8,6 +8,7 @@ code{
     &.-comment::after { content: "-->"; }
     &.-cdata::before { content: "<!"; }
     &.-cdata::after { content: ">"; }
+    &.txp-tag { color: var(--txp-prism-token-8, rebeccapurple); }
 }
 
 /* PrismJS 1.29.0 */
@@ -28,10 +29,6 @@ code[class*=language-],pre[class*=language-]{direction:ltr;margin:0;padding:0;-w
     &.punctuation {
     color: var(--txp-prism-token-1, #708090);
     }
-    &.boolean,
-    &.constant,
-    &.deleted,
-    &.number,
     &.property,
     &.symbol,
     &.tag {
@@ -45,7 +42,10 @@ code[class*=language-],pre[class*=language-]{direction:ltr;margin:0;padding:0;-w
     &.string {
     color: var(--txp-prism-token-3, #690);
     }
+    &.boolean,
+    &.constant,
     &.entity,
+    &.number,
     &.operator,
     &.url {
     color: var(--txp-prism-token-4, #a67f59);
@@ -58,6 +58,7 @@ code[class*=language-],pre[class*=language-]{direction:ltr;margin:0;padding:0;-w
     &.function {
     color: var(--txp-prism-token-6, #dd4a68);
     }
+    &.deleted,
     &.important,
     &.regex,
     &.variable {

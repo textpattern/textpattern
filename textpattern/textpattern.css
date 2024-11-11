@@ -1,11 +1,13 @@
 :root {
-    --txp-prism-token-1: light-dark(#708090, #f8f8f2);
-    --txp-prism-token-2: light-dark(#905, #f92672);
+    color-scheme: light dark;
+    /* Code hightlight */
+    --txp-prism-token-1: light-dark(#708090, #ccc);
+    --txp-prism-token-2: light-dark(#905, #e2777a);
     --txp-prism-token-3: light-dark(#690, #a6e22e);
     --txp-prism-token-4: light-dark(#a67f59, #f7f7d5);
-    --txp-prism-token-5: light-dark(#07a, #e6db74);
+    --txp-prism-token-5: light-dark(#07a, #7ec699);
     --txp-prism-token-6: light-dark(#dd4a68, #dd4a68);
-    --txp-prism-token-7: light-dark(#e90, #fd971f);
+    --txp-prism-token-7: light-dark(#861, #fd971f);
     --txp-prism-token-8: light-dark(#663399, #ffdb58);
 }
 :root:has(body.darkmode) {
