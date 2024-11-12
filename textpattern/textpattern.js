@@ -2226,6 +2226,12 @@ textpattern.Route.add('article', function () {
             this.content.querySelectorAll('a').forEach(node => {
                 if (!node.getAttribute('target')) node.setAttribute('target', '_new');
             });
+            if (!document.getElementById('clean-preview').checked) {
+                this.content.querySelectorAll('code.txp-tag').forEach(node => {
+                    node.title = node.innerText;
+                    node.innerText = node.innerText.replace(/^\<([a-z]+::?[\w\-\x80-\xffff]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1 … \/>');
+                });
+            }
             //Prism.highlightAllUnder(this.content);
             pane.shadowRoot.replaceChildren(this.content);
         }
