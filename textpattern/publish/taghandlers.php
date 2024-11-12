@@ -480,10 +480,12 @@ function txp_if_yield($atts, $thing = null)
     global $yield, $txp_yield, $txp_item;
 
     extract(lAtts(array(
-        'name'  => '',
         'else'  => false,
+        'item'  => null,
+        'name'  => '',
+        'match' => '',
+        'separator' => '',
         'value' => null,
-        'item'  => null
     ), $atts));
 
     if (isset($item)) {
@@ -500,7 +502,7 @@ function txp_if_yield($atts, $thing = null)
         list($inner) = end($txp_yield[$name]);
     }
 
-    return parse($thing, isset($inner) && ($value === null || (string)$inner === (string)$value || $inner && $value === true));
+    return parse($thing, isset($inner) && ($value === null || $value === true && $inner || ($match === '' ? (string)$inner === (string)$value: txp_match($atts, $inner))));
 }
 
 // -------------------------------------------------------------
