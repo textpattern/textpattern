@@ -2223,12 +2223,22 @@ textpattern.Route.add('article', function () {
             Prism.highlightAllUnder(pre);
             pane.shadowRoot.replaceChildren(pre);
         } else {
+            const fold = pane.classList.contains('fold');
+
+            this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
+                node.dataset.abbr = node.classList.contains('-comment') ? '…' :
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
+                node.addEventListener('click', e => {
+                    if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
+                        txp_fold_preview(node, !node.classList.contains('txp-fold'));
+                    }
+                });
+                if (fold) txp_fold_preview(node, true);
+            });        
+
             this.content.querySelectorAll('a, form').forEach(node => {
                 if (!node.getAttribute('target')) node.setAttribute('target', '_blank');
             });
-
-            if (pane.classList.contains('fold'))
-                txp_fold_preview(this.content, 'code.txp-sanitized, code.txp-tag', true);
 
             //Prism.highlightAllUnder(this.content);
             pane.shadowRoot.replaceChildren(this.content);
@@ -2263,23 +2273,25 @@ textpattern.Route.add('article', function () {
     document.querySelector('#view_modes label:has(#clean-preview)').addEventListener('click', e => {
         if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
             const pane = document.getElementById('pane-preview');
-            txp_fold_preview(pane.shadowRoot, 'code.txp-sanitized, code.txp-tag', pane.classList.toggle('fold'));
+            const fold = pane.classList.toggle('fold');
+            pane.shadowRoot.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
+                txp_fold_preview(node, fold);
+            });
         }
     });
 
-    function txp_fold_preview (pane, selector, fold) {
-        pane.querySelectorAll(selector).forEach(node => {
-            if (fold) {
-                node.dataset.abbr || (node.dataset.abbr = node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
-                node.title = node.innerText;
-                node.innerText = node.dataset.abbr;
-            } else {
-                node.innerText = node.title;
-                node.title = '';
-            }
+    function txp_fold_preview (node, fold) {
+        const folded = node.classList.contains('txp-fold');
 
-            node.classList.toggle('txp-fold', fold);
-        });
+        if (fold && !folded) {
+            node.title = node.innerText;
+            node.innerText = node.dataset.abbr;
+        } else if (!fold && folded) {
+            node.innerText = node.title;
+            node.title = '';
+        }
+
+        node.classList.toggle('txp-fold', fold);
     }
 
     function txp_article_preview() {
