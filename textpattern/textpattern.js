@@ -2183,7 +2183,7 @@ textpattern.Route.add('article', function () {
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
-        if ($('#clean-preview').is(':checked')) {
+        if (document.getElementById('clean-preview').checked) {
             DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
@@ -2223,15 +2223,13 @@ textpattern.Route.add('article', function () {
             Prism.highlightAllUnder(pre);
             pane.shadowRoot.replaceChildren(pre);
         } else {
-            this.content.querySelectorAll('a').forEach(node => {
-                if (!node.getAttribute('target')) node.setAttribute('target', '_new');
+            this.content.querySelectorAll('a, form').forEach(node => {
+                if (!node.getAttribute('target')) node.setAttribute('target', '_blank');
             });
-            if (!document.getElementById('clean-preview').checked) {
-                this.content.querySelectorAll('code.txp-tag').forEach(node => {
-                    node.title = node.innerText;
-                    node.innerText = node.innerText.replace(/^\<([a-z]+::?[\w\-\x80-\xffff]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1 … \/>');
-                });
-            }
+
+            if (pane.classList.contains('fold'))
+                txp_fold_preview(this.content, 'code.txp-sanitized, code.txp-tag', true);
+
             //Prism.highlightAllUnder(this.content);
             pane.shadowRoot.replaceChildren(this.content);
         }
@@ -2261,7 +2259,29 @@ textpattern.Route.add('article', function () {
             }
         }
     });
-    
+
+    document.querySelector('#view_modes label:has(#clean-preview)').addEventListener('click', e => {
+        if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
+            const pane = document.getElementById('pane-preview');
+            txp_fold_preview(pane.shadowRoot, 'code.txp-sanitized, code.txp-tag', pane.classList.toggle('fold'));
+        }
+    });
+
+    function txp_fold_preview (pane, selector, fold) {
+        pane.querySelectorAll(selector).forEach(node => {
+            if (fold) {
+                node.dataset.abbr || (node.dataset.abbr = node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
+                node.title = node.innerText;
+                node.innerText = node.dataset.abbr;
+            } else {
+                node.innerText = node.title;
+                node.title = '';
+            }
+
+            node.classList.toggle('txp-fold', fold);
+        });
+    }
+
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
