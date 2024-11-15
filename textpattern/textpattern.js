@@ -2274,19 +2274,18 @@ textpattern.Route.add('article', function () {
         if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
             const pane = document.getElementById('pane-preview');
             const fold = pane.classList.toggle('fold');
-            pane.shadowRoot.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
+            const selector = fold ? 'code.txp-sanitized:not(.txp-fold), code.txp-tag:not(.txp-fold)': 'code.txp-sanitized.txp-fold, code.txp-tag.txp-fold';
+            pane.shadowRoot.querySelectorAll(selector).forEach(node => {
                 txp_fold_preview(node, fold);
             });
         }
     });
 
     function txp_fold_preview (node, fold) {
-        const folded = node.classList.contains('txp-fold');
-
-        if (fold && !folded) {
+        if (fold) {
             node.title = node.innerText;
             node.innerText = node.dataset.abbr;
-        } else if (!fold && folded) {
+        } else {
             node.innerText = node.title;
             node.title = '';
         }
