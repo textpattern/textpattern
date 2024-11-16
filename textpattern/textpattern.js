@@ -2229,7 +2229,7 @@ textpattern.Route.add('article', function () {
                 node.dataset.abbr = node.classList.contains('-comment') ? '…' :
                     (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
                 node.addEventListener('click', e => {
-                    if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
+                    if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
                         txp_fold_preview(node, !node.classList.contains('txp-fold'));
                     }
                 });
@@ -2271,7 +2271,7 @@ textpattern.Route.add('article', function () {
     });
 
     document.querySelector('#view_modes label:has(#clean-preview)').addEventListener('click', e => {
-        if (e.ctrlKey && $viewMode.data('view-mode') != 'html') {
+        if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
             const pane = document.getElementById('pane-preview');
             const fold = pane.classList.toggle('fold');
             const selector = fold ? 'code.txp-sanitized:not(.txp-fold), code.txp-tag:not(.txp-fold)': 'code.txp-sanitized.txp-fold, code.txp-tag.txp-fold';
