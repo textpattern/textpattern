@@ -2183,7 +2183,7 @@ textpattern.Route.add('article', function () {
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
-        if ($('#clean-preview').is(':checked')) {
+        if (document.getElementById('clean-preview').checked) {
             DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
@@ -2223,10 +2223,25 @@ textpattern.Route.add('article', function () {
             Prism.highlightAllUnder(pre);
             pane.shadowRoot.replaceChildren(pre);
         } else {
-            this.content.querySelectorAll('a').forEach(node => {
-                if (!node.getAttribute('target')) node.setAttribute('target', '_new');
+            const fold = pane.classList.contains('fold');
+
+            this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
+                node.dataset.abbr = node.classList.contains('-comment') ? '…' :
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
+                node.addEventListener('click', e => {
+                    if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+                        e.preventDefault();
+                        txp_fold_preview(node, !node.classList.contains('txp-fold'));
+                    }
+                });
+                if (fold) txp_fold_preview(node, true);
+            });        
+
+            this.content.querySelectorAll('a, form').forEach(node => {
+                if (!node.getAttribute('target')) node.setAttribute('target', '_blank');
             });
-            Prism.highlightAllUnder(this.content);
+
+            //Prism.highlightAllUnder(this.content);
             pane.shadowRoot.replaceChildren(this.content);
         }
 
@@ -2255,7 +2270,31 @@ textpattern.Route.add('article', function () {
             }
         }
     });
-    
+
+    document.querySelector('#view_modes label:has(#clean-preview)').addEventListener('click', e => {
+        if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+            e.preventDefault();
+            const pane = document.getElementById('pane-preview');
+            const fold = pane.classList.toggle('fold');
+            const selector = fold ? 'code.txp-sanitized:not(.txp-fold), code.txp-tag:not(.txp-fold)': 'code.txp-sanitized.txp-fold, code.txp-tag.txp-fold';
+            pane.shadowRoot.querySelectorAll(selector).forEach(node => {
+                txp_fold_preview(node, fold);
+            });
+        }
+    });
+
+    function txp_fold_preview (node, fold) {
+        if (fold) {
+            node.title = node.innerText;
+            node.innerText = node.dataset.abbr;
+        } else {
+            node.innerText = node.title;
+            node.title = '';
+        }
+
+        node.classList.toggle('txp-fold', fold);
+    }
+
     function txp_article_preview() {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);

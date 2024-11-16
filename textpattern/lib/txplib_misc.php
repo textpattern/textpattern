@@ -6297,8 +6297,10 @@ function txp_match($atts, $what)
     if ($value !== null) {
         switch ($match) {
             case '':
-            case 'exact':
                 $cond = (is_array($what) ? $what == do_list($value, $separator ? $separator : ',') : $what == $value);
+                break;
+            case 'exact':
+                $cond = (is_array($what) ? $what === do_list($value, $separator ? $separator : ',') : (string)$what === (string)$value);
                 break;
             case 'any':
                 $values = do_list_unique($value);
