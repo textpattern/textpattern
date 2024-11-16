@@ -483,7 +483,7 @@ function txp_if_yield($atts, $thing = null)
         'else'  => false,
         'item'  => null,
         'name'  => '',
-        'match' => '',
+        'match' => 'exact',
         'separator' => '',
         'value' => null,
     ), $atts));
@@ -502,7 +502,7 @@ function txp_if_yield($atts, $thing = null)
         list($inner) = end($txp_yield[$name]);
     }
 
-    return parse($thing, isset($inner) && ($value === null || $value === true && $inner || ($match === '' ? (string)$inner === (string)$value: txp_match($atts, $inner))));
+    return parse($thing, isset($inner) && ($value === null || $value === true && $inner || txp_match($atts, $inner)));
 }
 
 // -------------------------------------------------------------
@@ -2720,7 +2720,7 @@ function if_custom_field($atts, $thing = null)
     extract($atts = lAtts(array(
         'name'      => get_pref('custom_1_set'),
         'value'     => null,
-        'match'     => 'exact',
+        'match'     => '',
         'separator' => '',
     ), $atts));
 
@@ -2967,7 +2967,7 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
-    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']) ? false : null;
+    $set = isset($thing) || isset($atts['value']) || isset($atts['add']) || isset($atts['reset']);
 
     extract(lAtts(array(
         'name'      => '',
@@ -2983,7 +2983,7 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif ($set === null && !isset($var) && !isset($output)) {
+    } elseif (!$set && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
@@ -3019,7 +3019,7 @@ function variable($atts, $thing = null)
         }
     }
 
-    if ($set !== null) {
+    if ($set) {
         global $txp_atts;
 
         if ($txp_atts) {
@@ -3048,7 +3048,7 @@ function if_variable($atts, $thing = null)
     extract($atts = lAtts(array(
         'name'      => '',
         'value'     => false,
-        'match'     => 'exact',
+        'match'     => '',
         'separator' => '',
     ), $atts));
 
