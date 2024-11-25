@@ -1393,9 +1393,8 @@ function parseList($rs, &$object, $populate, $atts = array())
 
         $txp_item = $old_item;
         $object = $store;
+        $groupby !== 3 or ksort($articles);
     }
-
-    $groupby !== 3 or ksort($articles);
 
     return $articles;
 }
