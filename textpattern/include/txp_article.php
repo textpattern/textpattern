@@ -397,6 +397,10 @@ function article_preview($field = false)
         $tagclose = $view == 'preview' ? '</code>' : '';
 
         foreach($parsed as $i => &$chunk) {
+            if ($view == 'html') {
+                $chunk = preg_replace('/&([a-z\d]{1,8}|#x?[a-f\d]{1,8});/i', '&amp;$1;', $chunk);
+            }
+
             if ($i%2) {
                 if ($chunk[1] === '/') {
                     $level--;
