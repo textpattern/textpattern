@@ -195,6 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article')
     ->register('article_custom')
     ->register('txp_die')
+    ->register('txp_die', 'die')
     ->register('txp_eval', 'evaluate')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
@@ -1590,6 +1591,7 @@ function txp_sandbox($atts = array(), $thing = null)
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
 
+    lAtts();
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
     $id = isset($atts['id']) ? $atts['id'] : null;

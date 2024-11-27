@@ -1803,7 +1803,7 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
  * @package TagParser
  */
 
-function lAtts($pairs, $atts, $warn = true)
+function lAtts($pairs = array(), $atts = array(), $warn = true)
 {
     global $pretext, $production_status, $txp_atts;
     static $globatts = null, $global_atts, $partial;
@@ -1845,6 +1845,10 @@ function lAtts($pairs, $atts, $warn = true)
             } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $global_atts)) {
                 trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
             }
+        }
+
+        if (!empty($pretext['@txp_grok'])) {
+            throw new \Exception($pairs ? json_encode($pairs) : null);
         }
     } else { // don't import unset globals
         foreach ($atts as $name => $value) {
@@ -5595,10 +5599,10 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
 
 function assert_context($type = 'article', $throw = true)
 {
-    global ${'this'.$type};
+    global ${'this'.$type}, $production_status;
 
     if (empty(${'this'.$type})) {
-        if ($throw) {
+        if ($throw && $production_status != 'live') {
             throw new \Exception(gTxt("error_{$type}_context"));
         } else {
             return false;

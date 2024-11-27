@@ -209,4 +209,33 @@ class Registry implements \Textpattern\Container\ReusableInterface
     {
         return $this->isRegistered($tag) ? $this->tags[$tag] : false;
     }
+
+    /**
+     * Atts getter.
+     *
+     * @param  string $tag
+     * @return array|bool|null
+     */
+
+    public function getAtts($tag)
+    {
+        if ($this->isRegistered($tag)) {
+            global $pretext;
+
+            $pretext['@txp_grok'] = true;
+            $atts = isset($this->atts[$tag]) ? $this->atts[$tag] : array();
+
+            try {
+                if (isset($this->params[$tag])) call_user_func($this->tags[$tag], $atts, null, ...$this->params[$tag]);
+                else call_user_func($this->tags[$tag], $atts, null);
+            } catch (\Exception $e) {
+                $res = json_decode($e->getMessage(), true);
+                return $res ? $res : $e->getMessage();
+            } finally {
+                $pretext['@txp_grok'] = false;
+            }
+        }
+
+        return false;
+    }
 }

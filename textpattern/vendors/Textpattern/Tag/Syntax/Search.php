@@ -101,7 +101,10 @@ class Search
     
         assert_article();
     
-        return posted($atts);
+        return txp_date(array(
+            'time'     => 'posted',
+            'type' => 'article')
+        + $atts);
     }
 
     // -------------------------------------------------------------
