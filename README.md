@@ -3,6 +3,7 @@
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
 [![Known Vulnerabilities](https://snyk.io/test/github/textpattern/textpattern/badge.svg)](https://snyk.io/test/github/textpattern/textpattern/)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern?ref=badge_shield)
 
 <img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
 
@@ -150,3 +151,7 @@ Includes contributions licensed under the GNU Lesser General Public License. See
 Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/main/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
 ![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.png)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern?ref=badge_large)

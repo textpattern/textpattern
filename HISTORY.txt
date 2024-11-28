@@ -4,9 +4,9 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Added: 'type' attribute to <txp:file_download />.
 * Changed: Wildcards in file/image/link category queries.
 * Developer: Pre+post textfilter callbacks (article_submit) on article save.
-* Vendors: DOMPurify 3.2.0.
+* Vendors: DOMPurify 3.2.1.
 * Vendors: jQuery UI 1.14.1.
-* Vendors: PHPMailer 6.9.2.
+* Vendors: PHPMailer 6.9.3.
 * Vendors: Textile 4.1.2. (thanks, gocom).
 * Vendors: UglifyJS 3.19.3.
 
@@ -33,7 +33,7 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Fixed: Self-closing tag output for html5 doctype to silence validator
  (thanks, jools-r).
 * Fixed: Ignore search in individual article mode.
-* Fixed: Take rfc2616 mail headers setting into account for separator.
+* Fixed: Take RFC 2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
 * Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
 * Added: SVG image support (thanks, osadl and jools-r).
