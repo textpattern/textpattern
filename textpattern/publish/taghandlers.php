@@ -131,8 +131,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
+    ->register('txp_date', array('search_result_date', array('type' => 'article', 'time' => 'posted', '$deprecate' => true)))
+    ->register('items_count', array('search_result_count', array('$deprecate' => true)))
     ->register('items_count')
     ->register('if_items_count')
     ->register('if_items_count', 'if_search_results')
@@ -195,10 +195,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article')
     ->register('article_custom')
     ->register('txp_die')
+    ->register('txp_die', 'die')
     ->register('txp_eval', 'evaluate')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_deprecate', '$deprecate')
     ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
     ->registerAttr('txp_variable', 'variable');
 
@@ -650,24 +652,19 @@ function recent_articles($atts, $thing = null)
 
 function related_articles($atts, $thing = null)
 {
-    global $thisarticle, $prefs, $txp_atts;
+    global $thisarticle, $prefs;
 
     assert_article();
 
-    $globatts = array(
-        'break'    => br,
+    $atts += lAtts(array(
+        'break'    => 'br',
         'class'    => __FUNCTION__,
         'label'    => gTxt('related_articles'),
         'labeltag' => '',
-    );
-
-    $atts += $globatts + array(
         'form'     => '',
         'match'    => 'Category',
         'no_widow' => '',
-    );
-
-    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globatts;
+    ));
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
@@ -1590,6 +1587,7 @@ function txp_sandbox($atts = array(), $thing = null)
     static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
 
+    lAtts();
     isset($depth) or $depth = get_pref('form_circular_depth', 15);
 
     $id = isset($atts['id']) ? $atts['id'] : null;
@@ -3413,6 +3411,7 @@ function txp_wraptag($atts, $thing = '')
     ), $atts, false));
 
     $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
+    $thing = (string)$thing;
 
     if (isset($breakby)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
@@ -3451,4 +3450,12 @@ function txp_variable($atts, $thing = null) {
     unset($txp_atts['variable']);
 
     return isset($atts['variable']) ? variable(array('name' => $atts['variable']), $thing) : $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_deprecate($atts, $thing = null) {
+    empty($atts['$deprecate']) or trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
+    return $thing;
 }

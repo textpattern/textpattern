@@ -46,7 +46,7 @@ Scripted unit tests are becoming increasingly important in the Textpattern relea
 
 ### Coding standard
 
-The project follows the [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/) standards with PHP 5.3 style namespacing. You can use [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) to make sure your additions follow them, too:
+The project follows the [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/) standards with PHP 5.3 style namespacing. You can use [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer/) to make sure your additions follow them, too:
 
 ~~~ ShellSession
 $ ./vendor/bin/phpcs --standard=phpcs.xml *.php textpattern

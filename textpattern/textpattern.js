@@ -2227,9 +2227,9 @@ textpattern.Route.add('article', function () {
 
             this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
                 node.dataset.abbr = node.classList.contains('-comment') ? '…' :
-                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\S.*(?:<\/\1\>|\/>)$/s, '<$1…\/>'));
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*(?:<\/\1\>|\S.*\/>)$/s, '<$1…\/>'));
                 node.addEventListener('click', e => {
-                    if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+                    if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
                         e.preventDefault();
                         txp_fold_preview(node, !node.classList.contains('txp-fold'));
                     }
@@ -2271,8 +2271,8 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    document.querySelector('#view_modes label:has(#clean-preview)').addEventListener('click', e => {
-        if ((e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+    document.querySelector('#view_modes').addEventListener('click', e => {
+        if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
             e.preventDefault();
             const pane = document.getElementById('pane-preview');
             const fold = pane.classList.toggle('fold');

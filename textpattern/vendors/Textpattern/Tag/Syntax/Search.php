@@ -92,24 +92,4 @@ class Search
     
         return permlink($atts, $l);
     }
-    
-    // -------------------------------------------------------------
-    
-    public static function search_result_date($atts)
-    {
-        trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
-        assert_article();
-    
-        return posted($atts);
-    }
-
-    // -------------------------------------------------------------
-    
-    public static function search_result_count($atts)
-    {
-        trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
-        return items_count($atts);
-    }    
 }

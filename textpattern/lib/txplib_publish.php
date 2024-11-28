@@ -804,7 +804,7 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $is_article_list, $pretext, $trace, $thisarticle;
+    global $is_article_list, $pretext, $trace, $thisarticle, $txp_atts;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
     static $aggregate = array(
         'avg' => 'AVG(?)',
@@ -902,7 +902,7 @@ function filterAtts($atts = null, $iscustom = null)
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
 
-    if ($iscustom) {
+    if ($iscustom && (int)$iscustom >= 0) {
         $sortAtts += array(
             'category'  => isset($excluded['category']) ? true : '',
             'section'   => isset($excluded['section']) ? true : '',
@@ -950,7 +950,7 @@ function filterAtts($atts = null, $iscustom = null)
     foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
             $postWhere['$'.$field] = $atts['$'.$field];
-            unset($atts['$'.$field]);
+            unset($atts['$'.$field], $txp_atts['$'.$field]);
         }
     }
 
@@ -1451,9 +1451,8 @@ function parseList($rs, &$object, $populate, $atts = array())
 
         $txp_item = $old_item;
         $object = $store;
+        $groupby !== 3 or ksort($articles);
     }
-
-    $groupby !== 3 or ksort($articles);
 
     return $articles;
 }
