@@ -790,7 +790,7 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function filterAtts($atts = null, $iscustom = null)
 {
-    global $is_article_list, $pretext, $trace, $thisarticle;
+    global $is_article_list, $pretext, $trace, $thisarticle, $txp_atts;
     static $date_fields = array('posted' => 'Posted', 'modified' => 'LastMod', 'expires' => 'Expires');
     static $aggregate = array(
         'avg' => 'AVG(?)',
@@ -917,7 +917,7 @@ function filterAtts($atts = null, $iscustom = null)
     foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
             $postWhere['$'.$field] = $atts['$'.$field];
-            unset($atts['$'.$field]);
+            unset($atts['$'.$field], $txp_atts['$'.$field]);
         }
     }
 

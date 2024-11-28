@@ -131,8 +131,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_excerpt'))
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_url'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_date'))
-    ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_count'))
+    ->register('txp_date', array('search_result_date', array('type' => 'article', 'time' => 'posted', '$deprecate' => true)))
+    ->register('items_count', array('search_result_count', array('$deprecate' => true)))
     ->register('items_count')
     ->register('if_items_count')
     ->register('if_items_count', 'if_search_results')
@@ -200,6 +200,7 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
     ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_deprecate', '$deprecate')
     ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
     ->registerAttr('txp_variable', 'variable');
 
@@ -3405,6 +3406,7 @@ function txp_wraptag($atts, $thing = '')
     ), $atts, false));
 
     $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
+    $thing = (string)$thing;
 
     if (isset($breakby)) {
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
@@ -3443,4 +3445,12 @@ function txp_variable($atts, $thing = null) {
     unset($txp_atts['variable']);
 
     return isset($atts['variable']) ? variable(array('name' => $atts['variable']), $thing) : $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_deprecate($atts, $thing = null) {
+    empty($atts['$deprecate']) or trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
+    return $thing;
 }

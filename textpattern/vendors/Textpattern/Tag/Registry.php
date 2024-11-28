@@ -129,6 +129,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
             $atts = (array)$atts;
 
             if (isset($this->atts[$tag])) {
+                global $txp_atts;
+                $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + array_intersect_key($this->atts[$tag], $this->attr);
                 $atts += $this->atts[$tag];
             }
 
