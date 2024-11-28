@@ -33,7 +33,7 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Fixed: Self-closing tag output for html5 doctype to silence validator
  (thanks, jools-r).
 * Fixed: Ignore search in individual article mode.
-* Fixed: Take rfc2616 mail headers setting into account for separator.
+* Fixed: Take RFC 2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
 * Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
 * Added: SVG image support (thanks, osadl and jools-r).
