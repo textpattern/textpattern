@@ -902,14 +902,21 @@ function output_file_download($filename)
 // -------------------------------------------------------------
 function article($atts, $thing = null)
 {
-    global $is_article_body;
-/*
-    if ($is_article_body) {
+    global $is_article_body, $pretext;
+
+    if ($is_article_body) {/*
         trigger_error(gTxt('article_tag_illegal_body'));
 
-        return '';
+        return '';*/
+        $atts += array(
+            'category' => !empty($pretext['c']) ? $pretext['c'] : '',
+            'section' => (!empty($pretext['s']) && $pretext['s'] != 'default') ? $pretext['s'] : '',
+            'author' => (!empty($pretext['author']) ? $pretext['author'] : ''),
+            'month' => (!empty($pretext['month']) ? $pretext['month'] : ''),
+            'expired' => get_pref('publish_expired_articles'),
+        );
     }
-*/
+
     return parseArticles($atts, $is_article_body, $thing);
 }
 
