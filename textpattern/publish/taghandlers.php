@@ -652,24 +652,19 @@ function recent_articles($atts, $thing = null)
 
 function related_articles($atts, $thing = null)
 {
-    global $thisarticle, $prefs, $txp_atts;
+    global $thisarticle, $prefs;
 
     assert_article();
 
-    $globatts = array(
-        'break'    => br,
+    $atts += lAtts(array(
+        'break'    => 'br',
         'class'    => __FUNCTION__,
         'label'    => gTxt('related_articles'),
         'labeltag' => '',
-    );
-
-    $atts += $globatts + array(
         'form'     => '',
         'match'    => 'Category',
         'no_widow' => '',
-    );
-
-    $txp_atts = (isset($txp_atts) ? $txp_atts : array()) + $globatts;
+    ));
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();

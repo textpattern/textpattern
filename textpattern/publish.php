@@ -903,14 +903,21 @@ function output_file_download($filename)
 function article($atts, $thing = null)
 {
     global $is_article_body;
-
+/*
     if ($is_article_body) {
         trigger_error(gTxt('article_tag_illegal_body'));
 
         return '';
     }
+*/
+    return parseArticles($atts, $is_article_body, $thing);
+}
 
-    return parseArticles($atts, '0', $thing);
+// -------------------------------------------------------------
+
+function article_custom($atts, $thing = null)
+{
+    return parseArticles($atts, '1', $thing);
 }
 
 // -------------------------------------------------------------
@@ -1058,18 +1065,11 @@ function doArticle($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function article_custom($atts, $thing = null)
-{
-    return parseArticles($atts, '1', $thing);
-}
-
-// -------------------------------------------------------------
-
 function parseArticles($atts, $iscustom = 0, $thing = null)
 {
     global $pretext, $is_article_list;
     $old_ial = $is_article_list;
-    $is_article_list = empty($pretext['id']) || $iscustom;
+    $is_article_list = $iscustom || empty($pretext['id']);
     article_push();
     $r = ($is_article_list) ? doArticles($atts, $iscustom, $thing) : doArticle($atts, $thing);
     article_pop();
