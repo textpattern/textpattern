@@ -1809,7 +1809,7 @@ function lAtts($pairs = array(), $atts = array(), $warn = true)
     static $globatts = null, $global_atts, $partial;
 
     if (!empty($pretext['@txp_grok'])) {
-        throw new \Exception($pairs ? json_encode($pairs) : null);
+        throw new \Exception(json_encode($pairs));
     }
 
     if ($globatts === null) {
