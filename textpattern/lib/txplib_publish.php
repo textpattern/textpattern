@@ -864,7 +864,7 @@ function filterAtts($atts = null, $iscustom = null)
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
 
-    if ($iscustom) {
+    if ($iscustom && (int)$iscustom >= 0) {
         $sortAtts += array(
             'category'  => isset($excluded['category']) ? true : '',
             'section'   => isset($excluded['section']) ? true : '',
