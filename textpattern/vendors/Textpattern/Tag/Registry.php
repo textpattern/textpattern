@@ -232,7 +232,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
                 else call_user_func($this->tags[$tag], $atts, null);
             } catch (\Exception $e) {
                 $res = json_decode($e->getMessage(), true);
-                return $res ? $res : $e->getMessage();
+                return is_array($res) ? $res : null;
             } finally {
                 $pretext['@txp_grok'] = false;
             }

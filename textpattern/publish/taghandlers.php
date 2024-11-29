@@ -727,6 +727,7 @@ function popup($atts)
         'wraptag'      => '',
         'class'        => '',
         'section'      => '',
+        'target'       => false,
         'this_section' => 0,
         'type'         => 'category',
     ), $atts));
@@ -785,13 +786,14 @@ function popup($atts)
                 $his = '';
             }
 
-            return '<form method="get" action="'.$action.'">'.
+            return tag(
                 '<div>'.
-                $his.
-                n.$out.
-                n.'<noscript><div><input type="submit" value="'.gTxt('go').'"'.(get_pref('doctype') === 'html5' ? '>' : ' />').'</div></noscript>'.
-                n.'</div>'.
-                n.'</form>';
+                    $his.n.$out.
+                    n.'<noscript><div><input type="submit" value="'.gTxt('go').'"'.(get_pref('doctype') === 'html5' ? '>' : ' />').'</div></noscript>'.
+                    n.'</div>',
+                'form',
+                array('method' => "get", 'action' => $action, 'target' => $target)
+            );
         }
     }
 }
@@ -2029,14 +2031,14 @@ function items_count($atts)
 {
     global $thispage;
 
-    if (empty($thispage)) {
-        return postpone_process();
-    }
-
     extract(lAtts(array(
         'text'   => null,
         'pageby' => 1,
     ), $atts));
+
+    if (empty($thispage)) {
+        return postpone_process();
+    }
 
     $t = $thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
@@ -2426,15 +2428,15 @@ function if_items_count($atts, $thing = null)
 {
     global $thispage, $is_article_list;
 
-    if (empty($thispage)) {
-        return $is_article_list ? postpone_process() : '';
-    }
-
     extract(lAtts(array(
         'min'    => 1,
         'max'    => 0,
         'pageby' => 1,
     ), $atts));
+
+    if (empty($thispage)) {
+        return $is_article_list ? postpone_process() : '';
+    }
 
     $results = (int)$thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
