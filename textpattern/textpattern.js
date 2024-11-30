@@ -1039,7 +1039,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         $inputs.prop('disabled', false); // Safari workaround.
 
         if (typeof extra['_txp_submit'] !== 'undefined') {
-            form.button = $this.find(extra['_txp_submit']).eq(0);
+            form.button = extra['_txp_submit'] ? $this.find(extra['_txp_submit']).eq(0) : null;
         } else {
             form.button = $this.find('input[type="submit"]:focus').eq(0);
 
@@ -1049,13 +1049,18 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
-        $.extend(true, form.extra, options.data, extra.data);
+        if (form.button) {
+            form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
 
-        // Show feedback while processing.
-        form.button.attr('disabled', true).after(form.spinner.val(0));
-        $this.addClass('busy');
-        $('body').addClass('busy');
+            // Show feedback while processing.
+            form.button.attr('disabled', true).after(form.spinner.val(0));
+            $this.addClass('busy');
+            $('body').addClass('busy');
+        }
+
+        $.extend(true, form.extra, options.data, extra.data);
+        var opt = new Object;
+        $.extend(true, opt, options, extra.options);
 
         if (form.data) {
             if (form.data instanceof FormData) {
@@ -1067,9 +1072,9 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        sendAsyncEvent(form.data, function () {}, options.dataType).done(function (data, textStatus, jqXHR) {
-            if (options.success) {
-                options.success($this, event, data, textStatus, jqXHR);
+        sendAsyncEvent(form.data, function () {}, opt.dataType).done(function (data, textStatus, jqXHR) {
+            if (opt.success) {
+                opt.success($this, event, data, textStatus, jqXHR);
             }
 
             textpattern.Relay.callback('txpAsyncForm.success', {
@@ -1080,8 +1085,8 @@ jQuery.fn.txpAsyncForm = function (options) {
                 'jqXHR': jqXHR
             });
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            if (options.error) {
-                options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
+            if (opt.error) {
+                opt.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
             }
 
             textpattern.Relay.callback('txpAsyncForm.error', {
@@ -1093,7 +1098,7 @@ jQuery.fn.txpAsyncForm = function (options) {
             });
         }).always(function () {
             $this.removeClass('busy');
-            form.button.removeAttr('disabled');
+            !form.button || form.button.removeAttr('disabled');
             form.spinner.remove();
             $('body').removeClass('busy');
             textpattern.Console.announce();
@@ -2107,7 +2112,7 @@ textpattern.Route.add('article', function () {
     });
 
     var status = 'select[name=Status]',
-        form = $(status).parents('form');
+        form = $('#article_form');//$(status).parents('form');
 
     $('#article_form').on('change', status, function () {
         let submitButton = form.find('input[type=submit]');
@@ -2120,8 +2125,10 @@ textpattern.Route.add('article', function () {
             }
         }
     }).on('submit.txpAsyncForm', function (e) {
-        $pane.dialog('close');
-        form.find('.reset').addClass('hidden');
+        if (!e.isTrigger) {//jQuery
+            $pane.dialog('close');
+            form.find('.reset').addClass('hidden');
+        }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
         form.trigger('submit', {data: {copy:1, publish:1}});
@@ -2164,31 +2171,34 @@ textpattern.Route.add('article', function () {
         });
     });
 
-    document.getElementById('preview-frame').addEventListener('load', function() {
-        this.classList.remove('disabled')
-    });
-
     $(document).on('change', '#clean-view', function () {
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
         link.href = this.checked ? href + '.~' : href;
     }).on('click', '#article_partial_article_view', function (e) {
-        const preview = document.getElementById('preview-frame');
+        var frame = document.getElementById('preview-frame');
 
         if (e.originalEvent.shiftKey) {
             e.preventDefault();
-            preview.classList.toggle('hidden');
+            frame.classList.toggle('hidden');
         }
-
-        this.target =  preview.classList.contains('hidden') ? '_blank' : 'preview';
         
-        if (this.target == 'preview') {
-            preview.classList.add('disabled');
-            preview.src = this.href;
-            preview.classList.remove('hidden');
-        } 
-    })
-    .on('click', '[data-view-mode]', function (e) {
+        if (!frame.classList.contains('hidden')) {
+            e.preventDefault();
+            frame.classList.add('disabled');
+            form.trigger('submit', {
+                data: {view: 'view', preview: '', _txp_parse: 1},
+                _txp_submit: false,
+                options: {dataType: 'html', success: (obj, e, data) => {
+                    const clean = document.getElementById('preview-frame');
+                    if (clean && clean.checked) frame.setAttribute('sandbox', true);
+                    else frame.removeAttribute('sandbox');
+                    frame.srcdoc = data;
+                    frame.classList.remove('disabled');
+                }}
+            });
+        }
+    }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');

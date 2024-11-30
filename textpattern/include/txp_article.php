@@ -94,10 +94,11 @@ $statuses = status_list();
 if (!empty($event) && $event == 'article') {
     require_privs('article');
 
-    $save = gps('save');
-    $publish = gps('publish');
+    extract(gpsa(array('save', 'publish', 'view')));
 
-    if ($save || $publish) {
+    if ($view) {
+        $step = 'view';
+    } elseif ($save || $publish) {
         $step = 'save';
     } elseif (empty($step)) {
         $step = 'edit';
@@ -106,11 +107,15 @@ if (!empty($event) && $event == 'article') {
     bouncer($step, array(
         'create'         => false,
         'publish'        => true,
-        'edit'           => array('view' => 'preview'),
+        'edit'           => false,
+        'view'           => true,
         'save'           => true,
     ));
 
     switch ($step) {
+        case 'view':
+            article_preview(ps('preview'));
+            break;
         case 'publish':
         case 'save':
             article_save();
@@ -124,7 +129,7 @@ if (!empty($event) && $event == 'article') {
  * Processes sent forms and saves/updates existing articles.
  */
 
-function article_save()
+function article_save($write = true)
 {
     global $txp_user, $vars, $prefs;
 
@@ -180,7 +185,7 @@ function article_save()
     $incoming = textile_main_fields($incoming);
     callback_event_ref('article_submit', empty($incoming['ID']) ? 'post' : 'save', 0, $incoming);
 
-    extract(doSlash($incoming));
+    extract($incoming);
     $ID = intval($ID);
     $Status = assert_int($Status);
 
@@ -271,50 +276,57 @@ function article_save()
         $url_title = stripSpace($Title_plain, 1);
     }
 
-    $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
-    $user = doSlash($txp_user);
+    $Keywords = trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', ');
 
     $cfq = array();
     $cfs = getCustomFields();
 
     foreach ($cfs as $i => $cf_name) {
         $custom_x = "custom_{$i}";
-        $cfq[] = "custom_$i = '".$$custom_x."'";
+        $cfq["custom_$i"] = $$custom_x;
     }
-
-    $cfq = join(', ', $cfq);
 
     $rs = compact($vars);
 
     if (article_validate($rs, $msg)) {
-        $set =
-           "Title           = '$Title',
-            Body            = '$Body',
-            Body_html       = '$Body_html',
-            Excerpt         = '$Excerpt',
-            Excerpt_html    = '$Excerpt_html',
-            Keywords        = '$Keywords',
-            description     = '$description',
-            Image           = '$Image',
-            Status          = '$Status',
-            Posted          =  $whenposted,
-            Expires         =  $whenexpires,
-            LastMod         =  NOW(),
-            LastModID       = '$user',
-            Section         = '$Section',
-            Category1       = '$Category1',
-            Category2       = '$Category2',
-            Annotate        =  $Annotate,
-            textile_body    = '$textile_body',
-            textile_excerpt = '$textile_excerpt',
-            override_form   = '$override_form',
-            url_title       = '$url_title',
-            AnnotateInvite  = '$AnnotateInvite'"
-            .(($cfs) ? ', '.$cfq : '')
-            .(!empty($ID) ? '' :
-            ", AuthorID        = '$user',
-            uid             = '".md5(uniqid(rand(), true))."',
-            feed_time       = NOW()");
+        $setnq = array(
+            "Posted"          =>  $whenposted,
+            "Expires"         =>  $whenexpires,
+            "LastMod"         =>  'NOW()',
+            "Status"          =>  $Status,
+            "Annotate"        =>  $Annotate,
+        ) + (!empty($ID) ? array() : array(
+            "feed_time"       => 'NOW()'
+        ));
+
+        $set = array(
+            "Title"           => $Title,
+            "Body"            => $Body,
+            "Body_html"       => $Body_html,
+            "Excerpt"         => $Excerpt,
+            "Excerpt_html"    => $Excerpt_html,
+            "Keywords"        => $Keywords,
+            "description"     => $description,
+            "Image"           => $Image,
+            "LastModID"       => $txp_user,
+            "Section"         => $Section,
+            "Category1"       => $Category1,
+            "Category2"       => $Category2,
+            "textile_body"    => $textile_body,
+            "textile_excerpt" => $textile_excerpt,
+            "override_form"   => $override_form,
+            "url_title"       => $url_title,
+            "AnnotateInvite"  => $AnnotateInvite
+        ) + (!empty($ID) ? array() : array(
+            "AuthorID"        => $txp_user,
+            "uid"             => md5(uniqid(rand(), true)),
+        )) + $cfq;
+
+        if (!$write) {
+            return $setnq + $set;
+        }
+
+        $set = join_qs($setnq + quote_list($set), ',');
 
         if ($ID && safe_update('textpattern', $set, "ID = $ID")
             || !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
@@ -348,6 +360,8 @@ function article_save()
         } else {
             $msg = array(gTxt('article_save_failed'), E_ERROR);
         }
+    } elseif (!$write) {
+        return false;
     }
 
     article_edit($msg, false, true);
@@ -366,17 +380,25 @@ function article_preview($field = false)
     // Assume they came from post.
     $view = ps('view');
 
-    if ($view && $field) {
+    if ($view) {/*
         $field == 'excerpt' or $field = 'body';
-        $rs = textile_main_fields(psa(array('textile_body', 'textile_excerpt', ucfirst($field))));
-        $dbfield = ($field == 'excerpt' ? $rs['Excerpt_html'] : $rs['Body_html']);
+        $rs = textile_main_fields(psa(array('textile_body', 'textile_excerpt', ucfirst($field))));*/
+
+        if (!is_array($rs = article_save(false))) {
+            exit($rs);
+        }
+
+        $preview = ($field == 'excerpt' ? $rs['Excerpt_html'] : $rs['Body_html']);
+    } else {
+        return '<div id="pane-preview"></div>'.n.
+            '<template id="pane-template"></template>';
     }
 
     // Preview pane
     if (ps('_txp_parse')) {
         $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
         $id = intval(ps('ID')).'.'.$token;
-        $data = array('id' => $id, 'f' => $token, 'field' => $field, 'content' => $dbfield);
+        $data = array('id' => $id) + ($field ? array('f' => $token, 'field' => $field, /*'content' => $preview*/) : array()) + $rs;
         $opts = array(
             'method' => "POST",
             'header' => [
@@ -386,11 +408,11 @@ function article_preview($field = false)
             'content' => $data,
         );
 
-        $dbfield = txp_get_contents(hu, $opts);
+        $preview = txp_get_contents(hu, $opts);
     }
 
     if ($view == 'preview' || $view == 'html') {
-        $parsed = txp_tokenize($dbfield, false, false);
+        $parsed = txp_tokenize($preview, false, false);
         $level = 0;
         $tags = 0;
         $tagopen = $view == 'preview' ? '<code class="language-markup txp-tag">' : '';
@@ -424,12 +446,9 @@ function article_preview($field = false)
         header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
 
         $preview = implode('', $parsed);
-    } else {
-        $preview = '<div id="pane-preview"></div>'.n.
-            '<template id="pane-template"></template>';
     }
 
-    return $preview;
+    exit($preview);
 }
 
 /**
@@ -442,13 +461,7 @@ function article_preview($field = false)
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $step, $view, $app_mode;
-
-    $view = gps('view', 'text');
-
-    if ($view != 'text') {
-        exit(article_preview(gps('preview')));
-    }
+    global $vars, $txp_user, $prefs, $step;
 
     extract($prefs);
 
@@ -1767,16 +1780,14 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    if ($live) {
+    if (has_privs('article.preview')) {
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+    } elseif ($live) {
         $url = permlinkurl_id($rs['ID']);
         $clean = '';
     } else {
-        if (!has_privs('article.preview')) {
-            return;
-        }
-
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
-        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+        return;
     }
 
     return n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(

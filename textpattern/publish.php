@@ -639,25 +639,23 @@ function preText($store, $prefs = null)
                 $out['id'] = $out['s'] = '';
             } else {
                 $out['id'] = $rs['ID'];
-                $out['s'] = $rs['Section'];
                 populateArticleData($rs);
             }
         }
 
         if (!empty($thisarticle)) {
+            if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
+                article_format_info(array_diff_key($_POST, array('ID' => null, 'AuthorID' => null)), false);
+            }
+
             unset($thiscategory);
             $uExpires = $thisarticle['expires'];
+            $out['s'] = $thisarticle['section'];
             $out['id_keywords'] = $thisarticle['keywords'];
             $out['id_author']   = $thisarticle['authorid'];
 
             if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $is_404 = '410';
-            }
-
-            if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
-                if (isset($_POST['field']) && isset($_POST['content'])) {
-                    $thisarticle[$_POST['field']] = $_POST['content'];
-                }
             }
         }
     }

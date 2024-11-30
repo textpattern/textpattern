@@ -84,6 +84,7 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * bugfixing and ease the addition of new article tags.
  *
  * @param array $rs An article as an associative array
+ * @param bool  $all Rewrite all data
  * @example
  * if ($rs = safe_rows_start("*,
  *     UNIX_TIMESTAMP(Posted) AS uPosted,
@@ -102,12 +103,16 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * }
  */
 
-function populateArticleData($rs)
+function populateArticleData($rs, $all = true)
 {
     global $production_status, $thisarticle, $trace;
 
     foreach (article_column_map() as $key => $column) {
-        $thisarticle[$key] = isset($rs[$column]) ? $rs[$column] : null;
+        if (isset($rs[$column])) {
+            $thisarticle[$key] = $rs[$column];
+        } elseif ($all) {
+            $thisarticle[$key] = null;
+        }
     }
 
     if ($production_status === 'debug') {
@@ -125,18 +130,19 @@ function populateArticleData($rs)
  * of in the SQL statement.
  *
  * @param array $rs An article as an associative array
+ * @param bool  $all Rewrite all data
  * @example
  * article_format_info(
  *     safe_row('*', 'textpattern', 'Status = 4 LIMIT 1')
  * )
  */
 
-function article_format_info($rs)
+function article_format_info($rs, $all = true)
 {
     $rs['uPosted']  = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
     $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
     $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
-    populateArticleData($rs);
+    populateArticleData($rs, $all);
 }
 
 /**
