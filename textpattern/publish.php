@@ -645,7 +645,8 @@ function preText($store, $prefs = null)
 
         if (!empty($thisarticle)) {
             if (!empty($out['@txp_preview']) && can_modify(array('Status' => $thisarticle['status'], 'AuthorID' => $thisarticle['authorid']))) {
-                article_format_info(array_diff_key($_POST, array('ID' => null, 'AuthorID' => null)), false);
+                $out['id'] = $thisarticle['thisid'] ? $thisarticle['thisid'] : -1;
+                article_format_info(array('ID' => $out['id'], 'AuthorID' => $thisarticle['authorid']) + $_POST, false);
             }
 
             unset($thiscategory);

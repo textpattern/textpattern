@@ -304,13 +304,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['posted']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['posted']).")";
                 break;
             case 'Expires':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['expires']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['expires']).")";
                 break;
             case 'LastMod':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['modified']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['modified']).")";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -504,7 +504,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
     static $registry = null, $globatts;
 
     if (empty($tag)) {
-        return;
+        return false;
     }
 
     if ($registry === null) {
