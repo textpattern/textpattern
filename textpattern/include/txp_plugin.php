@@ -44,6 +44,7 @@ if ($event == 'plugin') {
         'plugin_save'       => true,
         'plugin_upload'     => true,
         'plugin_import'     => true,
+        'plugin_compile'    => true,
         'plugin_export'     => true,
         'plugin_verify'     => true,
         'switch_status'     => true,
@@ -317,6 +318,13 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
+            $manage[] = href(gTxt('compile'), array(
+                    'event'      => 'plugin',
+                    'step'       => 'plugin_compile',
+                    'name'       => $name,
+                    '_txp_token' => form_token(),
+                ), array('class' => 'plugin-download'));
+
             if ($download) {
                 $manage[] = $download;
             }
@@ -506,8 +514,10 @@ function plugin_edit_form($name = '')
         'textpack',
     );
 
+    $pluginObj = Txp::get('\Textpattern\Plugin\Plugin');
+
     if ($name) {
-        $plugin = Txp::get('\Textpattern\Plugin\Plugin')->read($name);
+        $plugin = $pluginObj->read($name);
     } else {
         $userInfo = is_logged_in();
         $plugin = array('name' => '', 'order' => 5, 'version' => '0.1', 'author' => $userInfo ? $userInfo['RealName'] : '', 'author_uri' => hu);
@@ -596,14 +606,8 @@ function plugin_edit_form($name = '')
                         'version'
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'type',
-                        Txp::get('\Textpattern\UI\Select', 'type', array(
-                            0 => gTxt('plugin_type_public'),
-                            1 => gTxt('plugin_type_public_admin'),
-                            2 => gTxt('plugin_type_library'),
-                            3 => gTxt('plugin_type_admin'),
-                            4 => gTxt('plugin_type_admin_async'),
-                            5 => gTxt('plugin_type_public_admin_async'),
-                        ), $plugin['type'])->setAtt('id', 'plugin_type'),
+                        Txp::get('\Textpattern\UI\Select', 'type', $pluginObj->getTypes(), $plugin['type'])
+                            ->setAtt('id', 'plugin_type'),
                         array('type', 'plugin_type')
                     ).
                     Txp::get('\Textpattern\UI\InputLabel', 'order',
@@ -1075,6 +1079,23 @@ function plugin_export()
     if ($name = gps('name')) {
         echo Txp::get('\Textpattern\Plugin\Plugin')->createZip($name, true);
     }
+
+    exit;
+}
+
+/**
+ * Exports a plugin as a compiled .txt file.
+ */
+
+function plugin_compile()
+{
+    $compress = empty(gps('full')) ? true : false;
+
+    if ($name = gps('name')) {
+        echo Txp::get('\Textpattern\Plugin\Plugin')->compile($name, $compress, true);
+    }
+
+    exit;
 }
 
 /**
