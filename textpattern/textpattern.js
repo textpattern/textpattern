@@ -2171,6 +2171,10 @@ textpattern.Route.add('article', function () {
         });
     });
 
+    document.getElementById('preview-frame').addEventListener('load', function () {
+        this.classList.remove('disabled');
+    });
+
     $(document).on('change', '#clean-view', function () {
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
@@ -2194,7 +2198,6 @@ textpattern.Route.add('article', function () {
                     if (clean && clean.checked) frame.setAttribute('sandbox', true);
                     else frame.removeAttribute('sandbox');
                     frame.srcdoc = data;
-                    frame.classList.remove('disabled');
                 }}
             });
         }
