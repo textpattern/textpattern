@@ -2194,8 +2194,8 @@ textpattern.Route.add('article', function () {
                 data: {view: 'view', preview: '', _txp_parse: 1},
                 _txp_submit: false,
                 options: {dataType: 'html', success: (obj, e, data) => {
-                    const clean = document.getElementById('preview-frame');
-                    if (clean && clean.checked) frame.setAttribute('sandbox', true);
+                    const clean = document.getElementById('clean-view');
+                    if (clean && clean.checked) frame.setAttribute('sandbox', '');
                     else frame.removeAttribute('sandbox');
                     frame.srcdoc = data;
                 }}
