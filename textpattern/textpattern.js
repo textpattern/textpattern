@@ -1558,7 +1558,6 @@ $(document).on('keydown', function(e) {
 
     if (key === 27) {
         $('.close').parent().hide();
-        $('.reset').addClass('hidden');
     } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's')) {
         var obj = $('input.publish');
 
@@ -2126,8 +2125,7 @@ textpattern.Route.add('article', function () {
         }
     }).on('submit.txpAsyncForm', function (e) {
         if (!e.isTrigger) {//jQuery
-            $pane.dialog('close');
-            form.find('.reset').addClass('hidden');
+            $('.txp-dialog').dialog('close');
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
@@ -2171,8 +2169,14 @@ textpattern.Route.add('article', function () {
         });
     });
 
-    document.getElementById('preview-frame').addEventListener('load', function () {
+    $('#preview-frame').on('load', function() {
         this.classList.remove('disabled');
+    }).dialog({
+        dialogClass: 'txp-preview-container',
+        buttons: [],
+        closeOnEscape: false,
+        maxWidth: '100%',
+        title: (document.getElementById('article_partial_article_view') || {}).innerText
     });
 
     $(document).on('change', '#clean-view', function () {
@@ -2180,14 +2184,10 @@ textpattern.Route.add('article', function () {
             href = link.href.replace(/\.~$/, '');
         link.href = this.checked ? href + '.~' : href;
     }).on('click', '#article_partial_article_view', function (e) {
-        var frame = document.getElementById('preview-frame');
+        var frame = document.getElementById('preview-frame'),
+            $frame = $(frame);
 
-        if (e.originalEvent.shiftKey) {
-            e.preventDefault();
-            frame.classList.toggle('hidden');
-        }
-        
-        if (!frame.classList.contains('hidden')) {
+        if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
             e.preventDefault();
             frame.classList.add('disabled');
             form.trigger('submit', {
@@ -2195,7 +2195,9 @@ textpattern.Route.add('article', function () {
                 _txp_submit: false,
                 options: {dataType: 'html', success: (obj, e, data) => {
                     const clean = document.getElementById('clean-view');
-                    if (clean && clean.checked) frame.setAttribute('sandbox', '');
+                    if (clean && clean.checked) {
+                        frame.setAttribute('sandbox', '');
+                    }
                     else frame.removeAttribute('sandbox');
                     frame.srcdoc = data;
                 }}
@@ -2219,7 +2221,7 @@ textpattern.Route.add('article', function () {
         const ntags = data.tags_count || 0;
 
         if (document.getElementById('clean-preview').checked) {
-            DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
+            DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
                 const message = textpattern.gTxt('found_unsafe', {

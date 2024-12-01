@@ -829,7 +829,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo article_preview();
     echo n.'</div>';// End of .txp-dialog.
 
-    echo '<iframe id="preview-frame" name="preview" tabindex="-1" class="hidden reset"></iframe>';
+    if (has_privs('article.preview')) {
+        echo '<iframe id="preview-frame" name="preview" tabindex="-1" class="txp-dialog"></iframe>';
+    }
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
