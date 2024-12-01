@@ -322,6 +322,7 @@ function plugin_list($message = '')
                     'event'      => 'plugin',
                     'step'       => 'plugin_compile',
                     'name'       => $name,
+                    'compress'   => 1,
                     '_txp_token' => form_token(),
                 ), array('class' => 'plugin-download'));
 
@@ -1089,7 +1090,7 @@ function plugin_export()
 
 function plugin_compile()
 {
-    $compress = empty(gps('full')) ? true : false;
+    $compress = empty(gps('compress')) ? false : true;
 
     if ($name = gps('name')) {
         echo Txp::get('\Textpattern\Plugin\Plugin')->compile($name, $compress, true);
