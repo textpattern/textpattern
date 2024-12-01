@@ -736,9 +736,9 @@ class Plugin
             !empty($plugin['load_order']) or $plugin['load_order'] = '5';
 
             $plugin['md5'] = md5($plugin['code']);
-            $fname = $name.'_v'.$plugin['version'].($compress ? '_zip' : '').'.txt';
+            $fname = $name.'_v'.$plugin['version'].($compress ? '' : '_uncompressed').'.txt';
 
-            $out = '# Name: '.$name.' v'.$plugin['version'].($compress ? " (compressed)" : "").'
+            $out = '# Name: '.$name.' v'.$plugin['version'].($compress ? "" : " (uncompressed)").'
 # Type: '.$types[$plugin['type']].' plugin
 # '.$plugin['description'].'
 # Author: '.$plugin['author'].'
