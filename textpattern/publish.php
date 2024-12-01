@@ -349,8 +349,10 @@ function preText($store, $prefs = null)
         global $txp_user;
         header('Cache-Control: no-cache, no-store, max-age=0');
         list($id, $hash, $raw) = explode('.', $out['id']) + array(null, null, null);
-//        doAuth();
-        if (!has_privs('article.preview') || Txp::get('\Textpattern\Security\Token')->csrf($txp_user) !== $hash) {
+        $harray = array('id' => $id) + $_POST;
+        ksort($harray);
+        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user.($_POST ? json_encode($harray) : ''));
+        if (!has_privs('article.preview') || $token !== $hash) {
             txp_status_header('401 Unauthorized');
             exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
@@ -359,6 +361,10 @@ function preText($store, $prefs = null)
             $nolog = true;
             if ($raw === '~') header('Content-Security-Policy: sandbox');
             $out['@txp_preview'] = $hash;
+
+            if (!empty($_POST['field'])) {
+                $out['f'] = $hash;
+            }
 
             if (empty($id)) {
                 populateArticleData(array(

@@ -380,15 +380,13 @@ function article_preview($field = false)
     // Assume they came from post.
     $view = ps('view');
 
-    if ($view) {/*
-        $field == 'excerpt' or $field = 'body';
-        $rs = textile_main_fields(psa(array('textile_body', 'textile_excerpt', ucfirst($field))));*/
-
+    if ($view) {
         if (!is_array($rs = article_save(false))) {
             exit($rs);
         }
 
-        $preview = ($field == 'excerpt' ? $rs['Excerpt_html'] : $rs['Body_html']);
+        $dbfield = ucfirst($field).'_html';
+        $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : $rs['Body_html']);
     } else {
         return '<div id="pane-preview"></div>'.n.
             '<template id="pane-template"></template>';
@@ -396,9 +394,11 @@ function article_preview($field = false)
 
     // Preview pane
     if (ps('_txp_parse')) {
-        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
-        $id = intval(ps('ID')).'.'.$token;
-        $data = array('id' => $id) + ($field ? array('f' => $token, 'field' => $field, /*'content' => $preview*/) : array()) + $rs;
+        $id = intval(ps('ID'));
+        $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
+        ksort($data);
+        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user.json_encode($data));
+        $data['id'] = $id.'.'.$token;
         $opts = array(
             'method' => "POST",
             'header' => [
@@ -1781,12 +1781,12 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    if (has_privs('article.preview')) {
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
-        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
-    } elseif ($live) {
+    if ($live) {
         $url = permlinkurl_id($rs['ID']);
         $clean = '';
+    } elseif (has_privs('article.preview')) {
+        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $clean = tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     } else {
         return;
     }

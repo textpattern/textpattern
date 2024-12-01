@@ -2190,12 +2190,12 @@ textpattern.Route.add('article', function () {
         if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
             e.preventDefault();
             frame.classList.add('disabled');
-            form.trigger('submit', {
+            form.trigger('submit.txpAsyncForm', {
                 data: {view: 'view', preview: '', _txp_parse: 1},
                 _txp_submit: false,
                 options: {dataType: 'html', success: (obj, e, data) => {
                     const clean = document.getElementById('clean-view');
-                    if (clean && clean.checked) {
+                    if (clean == null || clean.checked) {
                         frame.setAttribute('sandbox', '');
                     }
                     else frame.removeAttribute('sandbox');
@@ -2320,7 +2320,7 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    function txp_fold_preview (node, fold) {
+    const txp_fold_preview = function (node, fold) {
         if (fold) {
             node.title = node.innerText;
             node.innerText = node.dataset.abbr;
@@ -2332,7 +2332,7 @@ textpattern.Route.add('article', function () {
         node.classList.toggle('txp-fold', fold);
     }
 
-    function txp_article_preview() {
+    const txp_article_preview = function ()  {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }
