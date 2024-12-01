@@ -62,9 +62,9 @@ The following table outlines anticipated forthcoming changes to system requireme
 
 #### Textpattern development versions
 
-Note that targeted versions listed may change multiple times during the development process.
-
 We are targeting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements.
+
+Note that targeted versions listed may change multiple times during the development process.
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
@@ -75,7 +75,7 @@ We are targeting Textpattern 4.9 as the next minor release. Refer to the followi
 
 ## Contributing
 
-Do you want to help with the development of Textpattern? Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for full details.
+Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development. 
 
 ## GitHub topic tags
 
@@ -89,7 +89,7 @@ If you use GitHub for Textpattern-related development please consider adding som
 
 ## Additional development tools
 
-Various components used within Textpattern (such as the bundled themes and language translations) are maintained in standalone repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
+Various components used within Textpattern (such as the bundled themes and language translations) are maintained in other repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
 
 You can install Node.js using the [installer](https://nodejs.org/en/download/) or [package manager](https://nodejs.org/en/download/package-manager/).
 
@@ -99,7 +99,7 @@ Install required dev tools:
 npm install
 ```
 
-You can then pull the following components from the CLI, like so:
+Pull the following components from the CLI:
 
 ```ShellSession
 npm run get-default-theme
@@ -122,8 +122,7 @@ npm run get-textpacks 4.8.x
 
 Release tools:
 
-Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
-temporary location).
+Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a temporary location).
 
 ```ShellSession
 npm run txp-index
@@ -150,7 +149,3 @@ Includes contributions licensed under the GNU Lesser General Public License. See
 Includes contributions licensed under the New BSD License. See [LICENSE-BSD-3.txt](https://github.com/textpattern/textpattern/blob/main/textpattern/lib/LICENSE-BSD-3.txt) for terms and conditions.
 
 ![Textpattern CMS blogging illustration](https://textpattern.com/assets/img/com/readme-footer.png)
-
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern?ref=badge_large)
