@@ -3,7 +3,6 @@
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
 [![Known Vulnerabilities](https://snyk.io/test/github/textpattern/textpattern/badge.svg)](https://snyk.io/test/github/textpattern/textpattern/)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftextpattern%2Ftextpattern?ref=badge_shield)
 
 <img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
 
