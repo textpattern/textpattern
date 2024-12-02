@@ -286,7 +286,7 @@ log_hit($status);
 
 function preText($store, $prefs = null)
 {
-    global $thisarticle, $txp_sections;
+    global $thisarticle, $txp_sections, $userInfo;
     static $url = array(), $out = null;
 
     if (empty($url)) {
@@ -351,8 +351,12 @@ function preText($store, $prefs = null)
         list($id, $hash, $raw) = explode('.', $out['id']) + array(null, null, null);
         $harray = array('id' => $id) + $_POST;
         ksort($harray);
-        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user.($_POST ? json_encode($harray) : ''));
-        if (!has_privs('article.preview') || $token !== $hash) {
+        $token = Txp::get('\Textpattern\Security\Token');
+        $userhash = $token->csrf($txp_user);
+        if (!has_privs('article.preview', $userInfo)
+            || strpos($hash, $userhash) !== 0
+            || $hash !== $userhash.($_POST ? $token->csrf(json_encode($harray)) : '')
+        ) {
             txp_status_header('401 Unauthorized');
             exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         } else {
@@ -684,8 +688,6 @@ function preText($store, $prefs = null)
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $userInfo = is_logged_in();
-
         if ($userInfo && has_privs('skin.preview', $userInfo)) {
             foreach ($txp_sections as &$rs) {
                 empty($rs['dev_skin']) or $rs['skin'] = $rs['dev_skin'];

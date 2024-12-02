@@ -2187,6 +2187,8 @@ textpattern.Route.add('article', function () {
         var frame = document.getElementById('preview-frame'),
             $frame = $(frame);
 
+        if (!frame) return true;
+
         if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
             e.preventDefault();
             frame.classList.add('disabled');
