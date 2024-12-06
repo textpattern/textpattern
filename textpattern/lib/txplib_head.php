@@ -137,6 +137,7 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/pur
 
     $txpOut = 'var textpattern = '.json_encode(
     array(
+        'site_url' => hu,
         '_txp_uid' => get_pref('blog_uid'),
         'event' => $event,
         'step' => $step,

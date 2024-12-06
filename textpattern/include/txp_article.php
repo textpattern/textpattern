@@ -1781,12 +1781,12 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    if ($live) {
-        $url = permlinkurl_id($rs['ID']);
-        $clean = '';
-    } elseif (has_privs('article.preview')) {
+    if (has_privs('article.preview')) {
         $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
         $clean = tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+    } elseif ($live) {
+        $url = permlinkurl_id($rs['ID']);
+        $clean = '';
     } else {
         return;
     }

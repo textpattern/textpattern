@@ -2187,7 +2187,7 @@ textpattern.Route.add('article', function () {
         var frame = document.getElementById('preview-frame'),
             $frame = $(frame);
 
-        if (!frame) return true;
+        if (!frame || e.ctrlKey || e.metaKey) return true;
 
         if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
             e.preventDefault();
@@ -2202,6 +2202,7 @@ textpattern.Route.add('article', function () {
                     }
                     else frame.removeAttribute('sandbox');
                     frame.srcdoc = data;
+                    $frame.dialog('moveToTop');
                 }}
             });
         }
@@ -2263,10 +2264,11 @@ textpattern.Route.add('article', function () {
             pane.shadowRoot.replaceChildren(pre);
         } else {
             const fold = pane.classList.contains('fold');
+            const base = textpattern.site_url;
 
             this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
                 node.dataset.abbr = node.classList.contains('-comment') ? '…' :
-                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*(?:<\/\1\>|\S.*\/>)$/s, '<$1…\/>'));
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\>$/s, '<$1…\/>'));
                 node.addEventListener('click', e => {
                     if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
                         e.preventDefault();
@@ -2274,10 +2276,15 @@ textpattern.Route.add('article', function () {
                     }
                 });
                 if (fold) txp_fold_preview(node, true);
-            });        
+            });    
 
-            this.content.querySelectorAll('a, form').forEach(node => {
-                if (!node.getAttribute('target')) node.setAttribute('target', '_blank');
+            this.content.querySelectorAll('a, form, link').forEach(node => {
+                if ('target' in node && !node.getAttribute('target')) node.target = '_blank';
+                if ('href' in node) node.href = new URL(node.getAttribute('href'), base).href;
+                if ('action' in node) node.action = new URL(node.getAttribute('action'), base).href;
+            });
+            this.content.querySelectorAll('audio, embed, iframe, img, input, script, source, track, video').forEach(node => {
+                if (node.getAttribute('src')) node.setAttribute('src', new URL(node.getAttribute('src'), base).href);
             });
 
             //Prism.highlightAllUnder(this.content);
