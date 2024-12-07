@@ -31,7 +31,6 @@ cp -f ../textpattern/config-dist.php ../sites/site1/private/config-dist.php
 # Multisite public root
 cp -f ../.htaccess ../sites/site1/public/.htaccess
 cp -f ../css.php ../sites/site1/public/css.php
-cp -f ../index.php ../sites/site1/public/index.php
 
 # Multisite files
 cp -f ../files/.htaccess ../sites/site1/public/files/.htaccess
