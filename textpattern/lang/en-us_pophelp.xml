@@ -559,8 +559,8 @@
 <h2>Archive date format</h2>
 <p>How dates will appear on articles in sections of your site.</p>
         ]]></item>
-        <item id="articles_use_excerpts" title="Use excerpts on articles?"><![CDATA[
-<h2>Use excerpts on articles?</h2>
+        <item id="articles_use_excerpts" title="Show excerpt on article edit page?"><![CDATA[
+<h2>Show excerpt on article edit page?</h2>
 <p>By choosing ‘No’ the excerpt field will not be shown to the author on the article editing screen.</p>
         ]]></item>
         <item id="attach_titles_to_permalinks" title="Attach titles to permalinks?"><![CDATA[
