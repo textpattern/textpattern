@@ -891,9 +891,12 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                         const embed = (typeof host[1] == 'undefined' ? false : (host[1] || true));
                         $(host[2]).each(function() {
                             const id = this.getAttribute('id');
-                            const $target = $(this.content || this);
 
                             if (id) {
+                                let $target = this.content || this;
+                                $target.replaceChildren([]);
+                                $target = $($target);
+
                                 if (!embed) {
                                     $target.replaceWith($html.getElementById(id)).remove();
                                 } else {
@@ -1036,7 +1039,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         $inputs.prop('disabled', false); // Safari workaround.
 
         if (typeof extra['_txp_submit'] !== 'undefined') {
-            form.button = $this.find(extra['_txp_submit']).eq(0);
+            form.button = extra['_txp_submit'] ? $this.find(extra['_txp_submit']).eq(0) : null;
         } else {
             form.button = $this.find('input[type="submit"]:focus').eq(0);
 
@@ -1046,13 +1049,18 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
-        $.extend(true, form.extra, options.data, extra.data);
+        if (form.button) {
+            form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
 
-        // Show feedback while processing.
-        form.button.attr('disabled', true).after(form.spinner.val(0));
-        $this.addClass('busy');
-        $('body').addClass('busy');
+            // Show feedback while processing.
+            form.button.attr('disabled', true).after(form.spinner.val(0));
+            $this.addClass('busy');
+            $('body').addClass('busy');
+        }
+
+        $.extend(true, form.extra, options.data, extra.data);
+        var opt = new Object;
+        $.extend(true, opt, options, extra.options);
 
         if (form.data) {
             if (form.data instanceof FormData) {
@@ -1064,9 +1072,9 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        sendAsyncEvent(form.data, function () {}, options.dataType).done(function (data, textStatus, jqXHR) {
-            if (options.success) {
-                options.success($this, event, data, textStatus, jqXHR);
+        sendAsyncEvent(form.data, function () {}, opt.dataType).done(function (data, textStatus, jqXHR) {
+            if (opt.success) {
+                opt.success($this, event, data, textStatus, jqXHR);
             }
 
             textpattern.Relay.callback('txpAsyncForm.success', {
@@ -1077,8 +1085,8 @@ jQuery.fn.txpAsyncForm = function (options) {
                 'jqXHR': jqXHR
             });
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            if (options.error) {
-                options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
+            if (opt.error) {
+                opt.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
             }
 
             textpattern.Relay.callback('txpAsyncForm.error', {
@@ -1090,7 +1098,7 @@ jQuery.fn.txpAsyncForm = function (options) {
             });
         }).always(function () {
             $this.removeClass('busy');
-            form.button.removeAttr('disabled');
+            !form.button || form.button.removeAttr('disabled');
             form.spinner.remove();
             $('body').removeClass('busy');
             textpattern.Console.announce();
@@ -1401,17 +1409,22 @@ textpattern.decodeHTML = function (string) {
  * @since  4.9.0
  */
 
-textpattern.wrapHTML = function (node, tag, attr) {
-    const wrapNode = document.createElement(tag || 'span');
-    wrapNode.append(document.createTextNode(node.data || node.outerHTML || node));
+textpattern.wrapHTML = function (node, tag, attr, replace) {
+    const text = document.createTextNode(node.outerHTML || node.data || node);
+    const wrapNode = tag ? document.createElement(tag) : text;
 
-    if (typeof attr === 'object') {
-        for (const key of Object.keys(attr)) {
-            wrapNode.setAttribute(key, attr[key]);
+    if (tag) {
+        wrapNode.append(text);
+
+        if (typeof attr === 'object') {
+            for (const key of Object.keys(attr)) {
+                wrapNode.setAttribute(key, attr[key]);
+            }
         }
     }
 
-    return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
+    if (!replace) return wrapNode;
+    else return node.parentNode ? node.parentNode.replaceChild(wrapNode, node) : node.replaceWith(wrapNode).remove();
 }
 
 /**
@@ -1544,7 +1557,7 @@ $(document).on('keydown', function(e) {
     var key = e.which;
 
     if (key === 27) {
-        $('.close').parent().toggle();
+        $('.close').parent().hide();
     } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's')) {
         var obj = $('input.publish');
 
@@ -2098,7 +2111,7 @@ textpattern.Route.add('article', function () {
     });
 
     var status = 'select[name=Status]',
-        form = $(status).parents('form');
+        form = $('#article_form');//$(status).parents('form');
 
     $('#article_form').on('change', status, function () {
         let submitButton = form.find('input[type=submit]');
@@ -2111,7 +2124,9 @@ textpattern.Route.add('article', function () {
             }
         }
     }).on('submit.txpAsyncForm', function (e) {
-        $pane.dialog('close');
+        if (!e.isTrigger) {//jQuery
+            $('.txp-dialog').dialog('close');
+        }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
         form.trigger('submit', {data: {copy:1, publish:1}});
@@ -2125,19 +2140,12 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    $('#clean-preview').on('change', function () {
-        if ($viewMode.data('view-mode') != 'html') {
-            $viewMode.click();
-        }
-    });
-
-    $('#parse-preview').on('change', function () {
+    $('#clean-preview, #parse-preview').on('change', function () {
         $viewMode.click();
     });
 
     textpattern.Relay.register('article.preview', function (e) {
         var data = form.serializeArray();
-        const $view = $viewMode.data('view-mode');
         $('#pane-preview').addClass('disabled');
 
         data.push({
@@ -2151,43 +2159,72 @@ textpattern.Route.add('article', function () {
             value: $field
         },{
             name: 'view',
-            value: $view
+            value: $viewMode.data('view-mode')
         });
         textpattern.Relay.callback('updateList', {
             url: 'index.php',
             data: data,
-            list: $view == 'html' ? '#pane-preview' : '>>#pane-template',
+            list: '>>#pane-template',
             callback: function() {}
         });
+    });
+
+    $('#preview-frame').on('load', function() {
+        this.classList.remove('disabled');
+    }).dialog({
+        dialogClass: 'txp-preview-container',
+        buttons: [],
+        closeOnEscape: false,
+        maxWidth: '100%',
+        title: (document.getElementById('article_partial_article_view') || {}).innerText
     });
 
     $(document).on('change', '#clean-view', function () {
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
         link.href = this.checked ? href + '.~' : href;
+    }).on('click', '#article_partial_article_view', function (e) {
+        var frame = document.getElementById('preview-frame'),
+            $frame = $(frame);
+
+        if (!frame || e.ctrlKey || e.metaKey) return true;
+
+        if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
+            e.preventDefault();
+            frame.classList.add('disabled');
+            form.trigger('submit.txpAsyncForm', {
+                data: {view: 'view', preview: '', _txp_parse: 1},
+                _txp_submit: false,
+                options: {dataType: 'html', success: (obj, e, data) => {
+                    const clean = document.getElementById('clean-view');
+                    if (clean == null || clean.checked) {
+                        frame.setAttribute('sandbox', '');
+                    }
+                    else frame.removeAttribute('sandbox');
+                    frame.srcdoc = data;
+                    $frame.dialog('moveToTop');
+                }}
+            });
+        }
     }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);
         let $view = $viewMode.data('view-mode');
         $viewMode.closest('ul').children('li').removeClass('active').filter('#tab-' + $view).addClass('active');
-        $('#pane-preview').attr('class', $view);
+        $('#pane-preview').attr('data-mode', $view);
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
         $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
-    }).on('updateList', '#pane-preview.html', function () {
-        Prism.highlightAllUnder(this);
-        $pane.dialog('open');
-        textpattern.Console.clear().announce("preview");
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
         const data = JSON.parse(jqxhr.getResponseHeader('x-txp-data')) || {};
         const ntags = data.tags_count || 0;
 
-        if ($('#clean-preview').is(':checked')) {
-            DOMPurify.sanitize(this);
+        if (document.getElementById('clean-preview').checked) {
+            DOMPurify.sanitize(this, {/*ADD_TAGS: ['#comment'],*/ FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
 
             if (ntags || DOMPurify.removed.length) {
                 const message = textpattern.gTxt('found_unsafe', {
@@ -2201,34 +2238,110 @@ textpattern.Route.add('article', function () {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
+                const getMatchedCSSRules = (name, css = document.styleSheets) => 
+                [].concat(...[...css].map(s => [...s.cssRules||[]]))
+                    .filter(r => r instanceof CSSLayerBlockRule && r.name == name);
+
                 const sheet = new CSSStyleSheet();
+                const custom = ''.concat(...getMatchedCSSRules('txp-preview').map(r => '\n' + r.cssText));
                 const css = await fetch('preview.css');
-                sheet.replaceSync(await css.text());
+                sheet.replaceSync(await (css.ok ? css.text() : '') + custom);
                 shadow.adoptedStyleSheets = [sheet];
             }
         }
 
-        pane.shadowRoot.replaceChildren(this.content);
+        if ($viewMode.data('view-mode') == 'html') {
+            let txt = document.createElement('textarea'), pre = document.createElement('pre'), code = document.createElement('code');
+            this.content.childNodes.forEach(node => {
+                if (node.nodeName == '#comment') txt.innerHTML +=  node.data.match(/^\[CDATA\[.*\]\]$/ms) ? '<!'+node.data+'>' : '<!--'+node.data+'-->';
+                else txt.innerHTML += (node.outerHTML || node.textContent);
+            });
+            code.classList.add('language-markup');
+            code.innerHTML = txt.innerHTML;
+            txt.remove();
+            pre.replaceChildren(code);
+            Prism.highlightAllUnder(pre);
+            pane.shadowRoot.replaceChildren(pre);
+        } else {
+            const fold = pane.classList.contains('fold');
+            const base = textpattern.site_url;
+
+            this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
+                node.dataset.abbr = node.classList.contains('-comment') ? '…' :
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\>$/s, '<$1…\/>'));
+                node.addEventListener('click', e => {
+                    if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+                        e.preventDefault();
+                        txp_fold_preview(node, !node.classList.contains('txp-fold'));
+                    }
+                });
+                if (fold) txp_fold_preview(node, true);
+            });    
+
+            this.content.querySelectorAll('a, form, link').forEach(node => {
+                if ('target' in node && !node.getAttribute('target')) node.target = '_blank';
+                if ('href' in node) node.href = new URL(node.getAttribute('href'), base).href;
+                if ('action' in node) node.action = new URL(node.getAttribute('action'), base).href;
+            });
+            this.content.querySelectorAll('audio, embed, iframe, img, input, script, source, track, video').forEach(node => {
+                if (node.getAttribute('src')) node.setAttribute('src', new URL(node.getAttribute('src'), base).href);
+            });
+
+            //Prism.highlightAllUnder(this.content);
+            pane.shadowRoot.replaceChildren(this.content);
+        }
+
         pane.classList.remove('disabled');
         $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
 
-    DOMPurify.setConfig({FORBID_TAGS: ['style'], FORBID_ATTR: ['style'], IN_PLACE: true});
-
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.tagName.replace('#', '-')});
+            const tagName = hookEvent.tagName == '#comment' ? (currentNode.data.match(/^\[CDATA\[/i) ? '-cdata' : '-comment') : hookEvent.tagName;
+            if ($viewMode.data('view-mode') == 'html') {
+                currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
+            } else {
+                const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
+                if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
+                else currentNode.parentNode.insertBefore(node, currentNode);
+            }
         }
     });
 
     DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
         if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
-            return textpattern.wrapHTML(currentNode, 'code', {'class':'removed '+hookEvent.attrName.replace('#', '-')});
+            if ($viewMode.data('view-mode') == 'html') {
+                currentNode.parentNode.insertBefore(document.createComment(hookEvent.attrName), currentNode);
+            }
         }
     });
 
-    function txp_article_preview() {
+    document.querySelector('#view_modes').addEventListener('click', e => {
+        if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
+            e.preventDefault();
+            const pane = document.getElementById('pane-preview');
+            const fold = pane.classList.toggle('fold');
+            const selector = fold ? 'code.txp-sanitized:not(.txp-fold), code.txp-tag:not(.txp-fold)': 'code.txp-sanitized.txp-fold, code.txp-tag.txp-fold';
+            pane.shadowRoot.querySelectorAll(selector).forEach(node => {
+                txp_fold_preview(node, fold);
+            });
+        }
+    });
+
+    const txp_fold_preview = function (node, fold) {
+        if (fold) {
+            node.title = node.innerText;
+            node.innerText = node.dataset.abbr;
+        } else {
+            node.innerText = node.title;
+            node.title = '';
+        }
+
+        node.classList.toggle('txp-fold', fold);
+    }
+
+    const txp_article_preview = function ()  {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }
@@ -2260,9 +2373,13 @@ textpattern.Route.add('article.init', function () {
 });
 
 // Uncheck reset on timestamp change.
-textpattern.Route.add('article, file', function () {
+textpattern.Route.add('article, file, image', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
+    });
+
+    $(document).on('submit', '#delete-file, #delete-image, #delete-article', function() {
+        return verify(textpattern.gTxt('confirm_delete_popup'));
     });
 });
 
@@ -2309,10 +2426,6 @@ textpattern.Route.add('file, image', function () {
             value: 'async'
         }]
     });
-
-    $(document).on('submit', '#delete-file, #delete-image', function() {
-        return verify(textpattern.gTxt('confirm_delete_popup'));
-    })
 });
 
 // Check file extensions match.
