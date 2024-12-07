@@ -25,7 +25,8 @@
     AddEncoding gzip       svgz
 </IfModule>
 
-# For additional .htaccess configuration settings, please refer to:
+# For .htaccess configuration settings and explanations, please refer to:
 # https://github.com/h5bp/server-configs-apache/blob/main/dist/.htaccess
+# https://httpd.apache.org/docs/
 
 # END Textpattern
