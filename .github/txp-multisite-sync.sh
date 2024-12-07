@@ -22,6 +22,9 @@
 # Multisite admin root
 cp -f ../textpattern/textpattern.js ../sites/site1/admin/textpattern.js
 
+# Multisite admin plugins
+cp -f ../textpattern/plugins/.htaccess-dist ../sites/site1/admin/plugins/.htaccess-dist
+
 # Multisite private
 cp -f ../textpattern/config-dist.php ../sites/site1/private/config-dist.php
 
