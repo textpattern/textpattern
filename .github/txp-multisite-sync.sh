@@ -19,6 +19,9 @@
 # * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
 # */
 
+# Multisite admin root
+cp -f ../textpattern/textpattern.js ../sites/site1/admin/textpattern.js
+
 # Multisite private
 cp -f ../textpattern/config-dist.php ../sites/site1/private/config-dist.php
 
