@@ -19,6 +19,9 @@
 # * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
 # */
 
+# Multisite private
+cp -f ../textpattern/config-dist.php ../sites/site1/private/config-dist.php
+
 # Multisite public root
 cp -f ../.htaccess ../sites/site1/public/.htaccess
 cp -f ../css.php ../sites/site1/public/css.php
