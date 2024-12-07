@@ -48,8 +48,10 @@ cd $DESTDIR
 
 # Tidy and remove development helper files.
 rm textpattern-$VER.tar.gz
+rm textpattern-$VER.tar.xz
 rm textpattern-$VER.zip
 rm textpattern-$VER.tar.gz.SHA256SUM
+rm textpattern-$VER.tar.xz.SHA256SUM
 rm textpattern-$VER.zip.SHA256SUM
 rm textpattern-$VER/.gitattributes
 rm textpattern-$VER/.phpstorm.meta.php
@@ -75,40 +77,60 @@ rm textpattern-$VER/textpattern/vendors/phpmailer/phpmailer/composer.json
 
 # Build .tar.gz.
 echo -e "\n"
-echo '== Building textpattern-'$VER'.tar.gz in '$DESTDIR'.'
-tar cf - -C $DESTDIR textpattern-$VER | gzip -c9 -q > textpattern-$VER.tar.gz \
-&& echo ' - Built textpattern-'$VER'.tar.gz ('$(wc -c textpattern-$VER.tar.gz | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
+echo '== Building textpattern-'"$VER"'.tar.gz in '"$DESTDIR"'.'
+tar cf - -C "$DESTDIR" textpattern-"$VER" | gzip -c9 -q > textpattern-"$VER".tar.gz \
+&& echo ' - Built textpattern-'"$VER"'.tar.gz ('$(wc -c textpattern-"$VER".tar.gz | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
+
+# Build .tar.xz.
+echo -e "\n"
+echo '== Building textpattern-'"$VER"'.tar.xz in '"$DESTDIR"'.'
+tar cf - -C "$DESTDIR" textpattern-"$VER" | xz -9e -z -q > textpattern-"$VER".tar.xz \
+&& echo ' - Built textpattern-'"$VER"'.tar.xz ('$(wc -c textpattern-"$VER".tar.xz | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
 
 # Build .zip.
 echo -e "\n"
-echo '== Building textpattern-'$VER'.zip in '$DESTDIR'.'
-zip --symlinks -r -q -9 textpattern-$VER.zip textpattern-$VER --exclude textpattern-$VER/sites/\* \
-&& echo ' - Built textpattern-'$VER'.zip ('$(wc -c textpattern-$VER.zip | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
+echo '== Building textpattern-'"$VER"'.zip in '"$DESTDIR"'.'
+zip --symlinks -r -q -9 textpattern-"$VER".zip textpattern-"$VER" --exclude textpattern-"$VER"/sites/\* \
+&& echo ' - Built textpattern-'"$VER"'.zip ('$(wc -c textpattern-"$VER".zip | awk '{print $1}' | xargs -I {} echo "scale=4; {}/1024^2" | bc | xargs printf "%.2f")'MB).'
 
 # Tests and checksums for .tar.gz.
 echo -e "\n"
-echo '== Testing textpattern-'$VER'.tar.gz integrity...'
-if gzip -t textpattern-$VER.tar.gz 2>&1 | sed 's/^/   /'; then
-    echo ' - textpattern-'$VER'.tar.gz passed `gzip -t` integrity test.' \
-    && echo ' - Calculating textpattern-'$VER'.tar.gz SHA256 checksum...' \
-    && shasum -a 256 textpattern-$VER.tar.gz > textpattern-$VER.tar.gz.SHA256SUM \
-    && echo '   '$(cat textpattern-$VER.tar.gz.SHA256SUM | cut -c1-64) \
-    && echo ' - Checking textpattern-'$VER'.tar.gz checksum...' \
-    && shasum -a 256 -c textpattern-$VER.tar.gz.SHA256SUM 2>&1 | sed 's/^/   /'
+echo '== Testing textpattern-'"$VER"'.tar.gz integrity...'
+if gzip -t textpattern-"$VER".tar.gz 2>&1 | sed 's/^/   /'; then
+    echo ' - textpattern-'"$VER"'.tar.gz passed `gzip -t` integrity test.' \
+    && echo ' - Calculating textpattern-'"$VER"'.tar.gz SHA256 checksum...' \
+    && shasum -a 256 textpattern-"$VER".tar.gz > textpattern-"$VER".tar.gz.SHA256SUM \
+    && echo '   '$(cat textpattern-"$VER".tar.gz.SHA256SUM | cut -c1-64) \
+    && echo ' - Checking textpattern-'"$VER"'.tar.gz checksum...' \
+    && shasum -a 256 -c textpattern-"$VER".tar.gz.SHA256SUM 2>&1 | sed 's/^/   /'
 else 
     echo ' - textpattern-$VER.tar.gz failed `gzip -t` integrity test.'
 fi
 
+# Tests and checksums for .tar.xz.
+echo -e "\n"
+echo '== Testing textpattern-'"$VER"'.tar.xz integrity...'
+if xz -q -t textpattern-"$VER".tar.xz 2>&1 | sed 's/^/   /'; then
+    echo ' - textpattern-'"$VER"'.tar.xz passed `xz -t` integrity test.' \
+    && echo ' - Calculating textpattern-'"$VER"'.tar.xz SHA256 checksum...' \
+    && shasum -a 256 textpattern-"$VER".tar.xz > textpattern-"$VER".tar.xz.SHA256SUM \
+    && echo '   '$(cat textpattern-"$VER".tar.xz.SHA256SUM | cut -c1-64) \
+    && echo ' - Checking textpattern-'"$VER"'.tar.xz checksum...' \
+    && shasum -a 256 -c textpattern-"$VER".tar.xz.SHA256SUM 2>&1 | sed 's/^/   /'
+else 
+    echo ' - textpattern-$VER.tar.xz failed `xz -t` integrity test.'
+fi
+
 # Tests and checksums for .zip.
 echo -e "\n"
-echo '== Testing textpattern-'$VER'.zip integrity...'
-if unzip -q -t textpattern-$VER.zip 2>&1 | sed 's/^/   /'; then
-    echo ' - textpattern-'$VER'.zip passed `unzip -t` integrity test.' \
-    && echo ' - Calculating textpattern-'$VER'.zip SHA256 checksum...' \
-    && shasum -a 256 textpattern-$VER.zip > textpattern-$VER.zip.SHA256SUM \
-    && echo '   '$(cat textpattern-$VER.zip.SHA256SUM | cut -c1-64) \
-    && echo ' - Checking textpattern-'$VER'.zip checksum...' \
-    && shasum -a 256 -c textpattern-$VER.zip.SHA256SUM 2>&1 | sed 's/^/   /'
+echo '== Testing textpattern-'"$VER"'.zip integrity...'
+if unzip -q -t textpattern-"$VER".zip 2>&1 | sed 's/^/   /'; then
+    echo ' - textpattern-'"$VER"'.zip passed `unzip -t` integrity test.' \
+    && echo ' - Calculating textpattern-'"$VER"'.zip SHA256 checksum...' \
+    && shasum -a 256 textpattern-"$VER".zip > textpattern-"$VER".zip.SHA256SUM \
+    && echo '   '$(cat textpattern-"$VER".zip.SHA256SUM | cut -c1-64) \
+    && echo ' - Checking textpattern-'"$VER"'.zip checksum...' \
+    && shasum -a 256 -c textpattern-"$VER".zip.SHA256SUM 2>&1 | sed 's/^/   /'
 else 
     echo ' - textpattern-$VER.zip failed `unzip -t` integrity test.'
 fi
@@ -116,4 +138,4 @@ fi
 cd $OLDDIR
 
 echo -e "\n"
-echo '== Textpattern v'$VER' built in '$DESTDIR
+echo '== Textpattern '$VER' built in '$DESTDIR
