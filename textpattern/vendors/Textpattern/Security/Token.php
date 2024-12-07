@@ -44,7 +44,7 @@ class Token implements \Textpattern\Container\ReusableInterface
 
     public function csrf($salt = null)
     {
-        static $token = array(), $blog_uid = null;
+        static $token = array(), $blog_uid = null, $nonce = null;
         global $txp_user;
 
         // Generate a ciphered token from the current user's nonce (thus valid for
@@ -58,8 +58,11 @@ class Token implements \Textpattern\Container\ReusableInterface
             $salt = $blog_uid;
         }
 
-        if (!isset($token[$salt])) {
+        if (!isset($nonce)) {
             $nonce = $txp_user ? safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'") : '';
+        }
+
+        if (!isset($token[$salt])) {
             $token[$salt] = md5($nonce.$salt);
         }
 

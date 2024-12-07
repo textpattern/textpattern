@@ -2187,19 +2187,22 @@ textpattern.Route.add('article', function () {
         var frame = document.getElementById('preview-frame'),
             $frame = $(frame);
 
+        if (!frame || e.ctrlKey || e.metaKey) return true;
+
         if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
             e.preventDefault();
             frame.classList.add('disabled');
-            form.trigger('submit', {
+            form.trigger('submit.txpAsyncForm', {
                 data: {view: 'view', preview: '', _txp_parse: 1},
                 _txp_submit: false,
                 options: {dataType: 'html', success: (obj, e, data) => {
                     const clean = document.getElementById('clean-view');
-                    if (clean && clean.checked) {
+                    if (clean == null || clean.checked) {
                         frame.setAttribute('sandbox', '');
                     }
                     else frame.removeAttribute('sandbox');
                     frame.srcdoc = data;
+                    $frame.dialog('moveToTop');
                 }}
             });
         }
@@ -2261,10 +2264,11 @@ textpattern.Route.add('article', function () {
             pane.shadowRoot.replaceChildren(pre);
         } else {
             const fold = pane.classList.contains('fold');
+            const base = textpattern.site_url;
 
             this.content.querySelectorAll('code.txp-sanitized, code.txp-tag').forEach(node => {
                 node.dataset.abbr = node.classList.contains('-comment') ? '…' :
-                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*(?:<\/\1\>|\S.*\/>)$/s, '<$1…\/>'));
+                    (node.classList.contains('-cdata') ? '[CDATA[…]]' : node.innerText.replace(/^\<([^\s\[\>]+)[\s\[\>].*\>$/s, '<$1…\/>'));
                 node.addEventListener('click', e => {
                     if ((e.detail == 2 || e.metaKey || e.ctrlKey) && $viewMode.data('view-mode') != 'html') {
                         e.preventDefault();
@@ -2272,10 +2276,15 @@ textpattern.Route.add('article', function () {
                     }
                 });
                 if (fold) txp_fold_preview(node, true);
-            });        
+            });    
 
-            this.content.querySelectorAll('a, form').forEach(node => {
-                if (!node.getAttribute('target')) node.setAttribute('target', '_blank');
+            this.content.querySelectorAll('a, form, link').forEach(node => {
+                if ('target' in node && !node.getAttribute('target')) node.target = '_blank';
+                if ('href' in node) node.href = new URL(node.getAttribute('href'), base).href;
+                if ('action' in node) node.action = new URL(node.getAttribute('action'), base).href;
+            });
+            this.content.querySelectorAll('audio, embed, iframe, img, input, script, source, track, video').forEach(node => {
+                if (node.getAttribute('src')) node.setAttribute('src', new URL(node.getAttribute('src'), base).href);
             });
 
             //Prism.highlightAllUnder(this.content);
@@ -2320,7 +2329,7 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    function txp_fold_preview (node, fold) {
+    const txp_fold_preview = function (node, fold) {
         if (fold) {
             node.title = node.innerText;
             node.innerText = node.dataset.abbr;
@@ -2332,7 +2341,7 @@ textpattern.Route.add('article', function () {
         node.classList.toggle('txp-fold', fold);
     }
 
-    function txp_article_preview() {
+    const txp_article_preview = function ()  {
         $field = this.id;
         textpattern.Relay.callback('article.preview', null, 1000);
     }

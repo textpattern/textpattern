@@ -133,7 +133,7 @@ function article_save($write = true)
 {
     global $txp_user, $vars, $prefs;
 
-    extract($prefs);
+//    extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
     $is_clone = ps('copy');
@@ -150,25 +150,27 @@ function article_save($write = true)
             UNIX_TIMESTAMP(Expires) AS sExpires",
             'textpattern', "ID = ".(int) $incoming['ID']);
 
-        if (!can_modify($oldArticle)) {
-            // Not allowed, you silly rabbit, you shouldn't even be here.
-            // Show default editing screen.
-            article_edit();
+        if ($write) {
+                if (!can_modify($oldArticle)) {
+                // Not allowed, you silly rabbit, you shouldn't even be here.
+                // Show default editing screen.
+                article_edit();
 
-            return;
-        }
+                return;
+            }
 
-        if ($oldArticle['sLastMod'] != $incoming['sLastMod']) {
-            article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
+            if ($oldArticle['sLastMod'] != $incoming['sLastMod']) {
+                article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
 
-            return;
+                return;
+            }
         }
     } else {
         $oldArticle = array('Status' => STATUS_PENDING,
             'url_title'       => '',
             'Title'           => '',
-            'textile_body'    => $use_textile,
-            'textile_excerpt' => $use_textile,
+            'textile_body'    => $prefs['use_textile'],
+            'textile_excerpt' => $prefs['use_textile'],
             'sLastMod'        => null,
             'LastModID'       => $txp_user,
             'sPosted'         => time(),
@@ -187,7 +189,7 @@ function article_save($write = true)
 
     extract($incoming);
     $ID = intval($ID);
-    $Status = assert_int($Status);
+    $Status = intval($Status);
 
     if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
         $Status = STATUS_PENDING;
@@ -288,7 +290,7 @@ function article_save($write = true)
 
     $rs = compact($vars);
 
-    if (article_validate($rs, $msg)) {
+    if (!$write || article_validate($rs, $msg)) {
         $setnq = array(
             "Posted"          =>  $whenposted,
             "Expires"         =>  $whenexpires,
@@ -360,8 +362,6 @@ function article_save($write = true)
         } else {
             $msg = array(gTxt('article_save_failed'), E_ERROR);
         }
-    } elseif (!$write) {
-        return false;
     }
 
     article_edit($msg, false, true);
@@ -380,15 +380,13 @@ function article_preview($field = false)
     // Assume they came from post.
     $view = ps('view');
 
-    if ($view) {/*
-        $field == 'excerpt' or $field = 'body';
-        $rs = textile_main_fields(psa(array('textile_body', 'textile_excerpt', ucfirst($field))));*/
-
+    if ($view) {
         if (!is_array($rs = article_save(false))) {
             exit($rs);
         }
 
-        $preview = ($field == 'excerpt' ? $rs['Excerpt_html'] : $rs['Body_html']);
+        $dbfield = ucfirst($field).'_html';
+        $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : $rs['Body_html']);
     } else {
         return '<div id="pane-preview"></div>'.n.
             '<template id="pane-template"></template>';
@@ -396,9 +394,11 @@ function article_preview($field = false)
 
     // Preview pane
     if (ps('_txp_parse')) {
-        $token = Txp::get('\Textpattern\Security\Token')->csrf($txp_user);
-        $id = intval(ps('ID')).'.'.$token;
-        $data = array('id' => $id) + ($field ? array('f' => $token, 'field' => $field, /*'content' => $preview*/) : array()) + $rs;
+        $token = Txp::get('\Textpattern\Security\Token');
+        $id = intval(ps('ID'));
+        $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
+        ksort($data);
+        $data['id'] = $id.'.'.$token->csrf($txp_user).$token->csrf(json_encode($data));
         $opts = array(
             'method' => "POST",
             'header' => [
@@ -1783,7 +1783,7 @@ function article_partial_article_view($rs)
 
     if (has_privs('article.preview')) {
         $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
-        $clean = tag(checkbox2('', $rs['LastModID'] !== $txp_user, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+        $clean = tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     } elseif ($live) {
         $url = permlinkurl_id($rs['ID']);
         $clean = '';
