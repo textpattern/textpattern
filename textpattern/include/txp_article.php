@@ -393,17 +393,17 @@ function article_preview($field = false)
             $cfields = getCustomFields();
             $field = isset($cfields[$matches[1]]) ? $cfields[$matches[1]] : $field;
         } else {
-            $dbfield = ucfirst($field).'_html';
+            $dbfield = $field ? ucfirst($field).'_html' : '';
         }
 
-        $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : $rs['Body_html']);
+        $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : '');
     } else {
         return '<div id="pane-preview"></div>'.n.
             '<template id="pane-template"></template>';
     }
 
     // Preview pane
-    if (ps('_txp_parse') && preg_match('@<(?:'.TXP_PATTERN.'):@', $preview)) {
+    if (ps('_txp_parse') && (!$field || preg_match('@<(?:'.TXP_PATTERN.'):@', $preview))) {
         $token = Txp::get('\Textpattern\Security\Token');
         $id = intval(ps('ID'));
         $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!

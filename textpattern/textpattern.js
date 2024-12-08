@@ -2219,10 +2219,10 @@ textpattern.Route.add('article', function () {
             const inputid = $field.replace('_', '-');
             $input = $('#' + inputid);
 
-            const $label = $('label[for="'+inputid+'"]').contents().filter(function () { 
+            const label = $('label[for="'+inputid+'"]').contents().filter(function () { 
                 return this.nodeType === Node.TEXT_NODE; 
             }).text();
-            $pane.dialog('option', 'title', $label);
+            $pane.dialog('option', 'title', label);
         }
         $('#live-preview').trigger('change');
         $pane.dialog('open');
