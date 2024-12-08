@@ -2107,7 +2107,7 @@ textpattern.Route.add('article', function () {
     $pane.on('dialogopen', function (event, ui) {
         $('#live-preview').trigger('change');
     }).on('dialogclose', function (event, ui) {
-        $('#body, #excerpt').off('input', txp_article_preview);
+        $('#body, #excerpt, #txp-custom-field-group-content input').off('input', txp_article_preview);
     });
 
     var status = 'select[name=Status]',
@@ -2134,9 +2134,9 @@ textpattern.Route.add('article', function () {
 
     $('#live-preview').on('change', function () {
         if ($(this).is(':checked')) {
-            $('#body, #excerpt').on('input', txp_article_preview);
+            $('#body, #excerpt, #txp-custom-field-group-content input').on('input', txp_article_preview);
         } else {
-            $('#body, #excerpt').off('input', txp_article_preview);
+            $('#body, #excerpt, #txp-custom-field-group-content input').off('input', txp_article_preview);
         }
     });
 
@@ -2216,7 +2216,7 @@ textpattern.Route.add('article', function () {
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         $field = $(this).data('preview-link');
-        $pane.dialog('option', 'title', textpattern.gTxt($field));
+//        $pane.dialog('option', 'title', textpattern.gTxt($field));
         $viewMode.click();
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
@@ -2291,6 +2291,13 @@ textpattern.Route.add('article', function () {
             pane.shadowRoot.replaceChildren(this.content);
         }
 
+        if ($pane.dialog('option', 'title') != data.field) {
+            const $label = $('label[for="'+$field.replace('_', '-')+'"]').contents().filter(function () { 
+                return this.nodeType === Node.TEXT_NODE; 
+            }).text();
+            $pane.dialog('option', 'title', $label);
+        }
+
         pane.classList.remove('disabled');
         $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
@@ -2342,7 +2349,7 @@ textpattern.Route.add('article', function () {
     }
 
     const txp_article_preview = function ()  {
-        $field = this.id;
+        $field = this.id.replace('-', '_');
         textpattern.Relay.callback('article.preview', null, 1000);
     }
 

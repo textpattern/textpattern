@@ -637,7 +637,7 @@ function can_modify($rs, $user = null) {
     return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
     ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
     ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
+    (empty($rs['ID']) || ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user) && has_privs('article.edit.own'));
 }
 
 /**

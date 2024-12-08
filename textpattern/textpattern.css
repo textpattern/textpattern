@@ -1,5 +1,38 @@
 :root {
     color-scheme: light dark;
+
+    /* base: color & background, border */
+    --txp-primary-text: light-dark(hsl(0 0% 20%), hsl(210 14% 83%));
+    --txp-primary-back: light-dark(hsl(0 0% 97%), hsl(210 11% 23%));
+    --txp-demoted-text: light-dark(hsl(0 0% 35%), hsl(210 14% 70%));/* secondary,  Hive:--clr-text-demoted */
+    --txp-secondary-back: light-dark(hsl(0 0% 94%), hsl(210 11% 20%));/* Hive:--clr-bkgd-box */
+
+    --txp-border: light-dark(hsl(0 0% 80%), hsl(210 7% 50%));
+    --txp-border-light: light-dark(hsl(0 0% 82%), hsl(210 7% 40%));
+    --txp-border-dark: light-dark(hsl(0 0% 75%), hsl(210 7% 20%));
+
+    /* notifications */
+    --txp-success-text: light-dark(hsl(120 60% 34%), hsl(100 60% 50%));
+    --txp-warning-text: light-dark(hsl(26 100% 20%), hsl(40 70% 62%));
+    --txp-error-text: light-dark(hsl(4 69% 36%), hsl(337 100% 60%));
+    --txp-info-text: light-dark(hsl(200 50% 45%), hsl(207 100% 63%));
+
+    --txp-success-back: light-dark(hsl(120 40% 90%), hsl(109 27% 20%));
+    --txp-warning-back: light-dark(hsl(41 64% 91%), hsl(49 35% 21%));
+    --txp-error-back: light-dark(hsl(4 43% 91%), hsl(348 34% 21%));
+    --txp-info-back: light-dark(hsl(200 78% 95%), hsl(207 68% 17%));
+
+    --txp-success-border: light-dark(hsl(102 40% 68%), hsl(100 60% 50% / 0.33));
+    --txp-warning-border: light-dark(hsl(41 64% 71%), hsl(40 70% 62% / 0.33));
+    --txp-error-border: light-dark(hsl(4 43% 78%), hsl(337 100% 60% / 0.43));
+    --txp-info-border: light-dark(hsl(200 78% 82%), hsl(207 100% 63% / 0.38));
+
+    /* form controls: buttons, input fields, … */
+    --txp-form-placeholder: light-dark(hsl(0 0% 60%), hsl(210 6% 48%));
+
+    /* layout */
+    --txp-spacing: 1em;  /* space between blocks, as margin, padding or gap. use calc() to adjust depending on need, eg @calc(var(—margin) * 0.5)@ for smaller or larger spacing */
+
     /* Code hightlight */
     --txp-prism-token-1: light-dark(#708090, #ccc);
     --txp-prism-token-2: light-dark(#905, #e2777a);
@@ -10,6 +43,7 @@
     --txp-prism-token-7: light-dark(#861, #fd971f);
     --txp-prism-token-8: light-dark(#663399, #ffdb58);
 }
+
 :root:has(body.darkmode) {
     color-scheme: dark;
 }
@@ -17,13 +51,7 @@
 .hidden{display:none}
 .not-ready main{opacity:0}
 
-/* Themes? */
-/*
-#pane-preview {
-    margin: 1em 0; padding: 1em;
-    &[data-mode='html'] {background: var(--clr-bkgd-box); outline: 1px solid var(--clr-brdr);}
-}
-*/
+/* When Safari is ready */
 /*
 @layer txp-preview {
     :host(#pane-preview) {
