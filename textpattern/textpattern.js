@@ -2091,6 +2091,7 @@ textpattern.Route.add('article', function () {
     // Switch to Text/HTML/Preview mode.
     var $pane = $('#pane-preview').closest('.txp-dialog'),
         $field = '',
+        $input = null,
         $viewMode = $('#view_modes li.active [data-view-mode]');
 
     if (!$viewMode.length) {
@@ -2104,9 +2105,7 @@ textpattern.Route.add('article', function () {
         maxWidth: '100%'
     });
 
-    $pane.on('dialogopen', function (event, ui) {
-        $('#live-preview').trigger('change');
-    }).on('dialogclose', function (event, ui) {
+    $pane.on('dialogclose', function (event, ui) {
         $('#body, #excerpt, #txp-custom-field-group-content input').off('input', txp_article_preview);
     });
 
@@ -2133,10 +2132,9 @@ textpattern.Route.add('article', function () {
     });
 
     $('#live-preview').on('change', function () {
+        $input.off('input', txp_article_preview);
         if ($(this).is(':checked')) {
-            $('#body, #excerpt, #txp-custom-field-group-content input').on('input', txp_article_preview);
-        } else {
-            $('#body, #excerpt, #txp-custom-field-group-content input').off('input', txp_article_preview);
+            $input.on('input', txp_article_preview);
         }
     });
 
@@ -2215,8 +2213,19 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('article.preview');
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
-        $field = $(this).data('preview-link');
-//        $pane.dialog('option', 'title', textpattern.gTxt($field));
+        if ($field != $(this).data('preview-link')) {
+            if ($input) $input.off('input', txp_article_preview);
+            $field = $(this).data('preview-link');
+            const inputid = $field.replace('_', '-');
+            $input = $('#' + inputid);
+
+            const $label = $('label[for="'+inputid+'"]').contents().filter(function () { 
+                return this.nodeType === Node.TEXT_NODE; 
+            }).text();
+            $pane.dialog('option', 'title', $label);
+        }
+        $('#live-preview').trigger('change');
+        $pane.dialog('open');
         $viewMode.click();
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
@@ -2291,15 +2300,7 @@ textpattern.Route.add('article', function () {
             pane.shadowRoot.replaceChildren(this.content);
         }
 
-        if ($pane.dialog('option', 'title') != data.field) {
-            const $label = $('label[for="'+$field.replace('_', '-')+'"]').contents().filter(function () { 
-                return this.nodeType === Node.TEXT_NODE; 
-            }).text();
-            $pane.dialog('option', 'title', $label);
-        }
-
         pane.classList.remove('disabled');
-        $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
 
