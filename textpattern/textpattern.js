@@ -2225,7 +2225,6 @@ textpattern.Route.add('article', function () {
             $pane.dialog('option', 'title', label);
         }
         $('#live-preview').trigger('change');
-        $pane.dialog('open');
         $viewMode.click();
     }).on('updateList', '#pane-template', async function (e, jqxhr) {
         const pane = document.getElementById('pane-preview');
@@ -2301,6 +2300,7 @@ textpattern.Route.add('article', function () {
         }
 
         pane.classList.remove('disabled');
+        $pane.dialog('open');
         textpattern.Console.clear().announce("preview");
     });
 
@@ -2369,7 +2369,7 @@ textpattern.Route.add('article', function () {
         wrapper.find('.textfilter-help').html(renderHelp);
 
         if ($pane.dialog('isOpen')) {
-            wrapper.find('[data-preview-link]').click();
+            wrapper.find('[data-preview-link='+$field+']').click();
         }
     });
 
