@@ -108,6 +108,7 @@ function pagetop($pagetitle = '', $message = '')
         'ok',
         'plugin_help',
         'publish',
+        'reload',
         'save',
         'select',
         'toggle_all_selected',

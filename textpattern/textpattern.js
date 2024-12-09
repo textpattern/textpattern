@@ -2171,7 +2171,19 @@ textpattern.Route.add('article', function () {
         this.classList.remove('disabled');
     }).dialog({
         dialogClass: 'txp-preview-container',
-        buttons: [],
+        buttons: [
+            {
+              text: textpattern.gTxt('reload'),
+              icon: "ui-icon-refresh",
+              click: function() {
+                $('#article_partial_article_preview').trigger('click');
+              }
+         
+              // Uncommenting the following line would hide the text,
+              // resulting in the label being used as a tooltip
+              //showText: false
+            }
+        ],
         closeOnEscape: false,
         maxWidth: '100%',
         title: (document.getElementById('article_partial_article_preview') || {}).innerText
