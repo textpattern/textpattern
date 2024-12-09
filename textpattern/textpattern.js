@@ -2089,8 +2089,8 @@ textpattern.Route.add('article', function () {
     }).change();
 
     // Switch to Text/HTML/Preview mode.
-    var $pane = $('#pane-preview').closest('.txp-dialog'),
-        $field = '',
+    const $pane = $('#pane-preview').closest('.txp-dialog');
+    var $field = '',
         $input = null,
         $viewMode = $('#view_modes li.active [data-view-mode]');
 
@@ -2174,36 +2174,34 @@ textpattern.Route.add('article', function () {
         buttons: [],
         closeOnEscape: false,
         maxWidth: '100%',
-        title: (document.getElementById('article_partial_article_view') || {}).innerText
+        title: (document.getElementById('article_partial_article_preview') || {}).innerText
     });
 
     $(document).on('change', '#clean-view', function () {
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
         link.href = this.checked ? href + '.~' : href;
-    }).on('click', '#article_partial_article_view', function (e) {
+    }).on('click', '#article_partial_article_preview', function (e) {
+        e.preventDefault();
         var frame = document.getElementById('preview-frame'),
             $frame = $(frame);
 
-        if (!frame || e.ctrlKey || e.metaKey) return true;
+        if (!frame) return;
 
-        if ($frame.dialog('isOpen') || e.originalEvent.shiftKey && $frame.dialog('open')) {
-            e.preventDefault();
-            frame.classList.add('disabled');
-            form.trigger('submit.txpAsyncForm', {
-                data: {view: 'view', preview: '', _txp_parse: 1},
-                _txp_submit: false,
-                options: {dataType: 'html', success: (obj, e, data) => {
-                    const clean = document.getElementById('clean-view');
-                    if (clean == null || clean.checked) {
-                        frame.setAttribute('sandbox', '');
-                    }
-                    else frame.removeAttribute('sandbox');
-                    frame.srcdoc = data;
-                    $frame.dialog('moveToTop');
-                }}
-            });
-        }
+        frame.classList.add('disabled');
+        form.trigger('submit.txpAsyncForm', {
+            data: {view: 'view', preview: '', _txp_parse: 1},
+            _txp_submit: false,
+            options: {dataType: 'html', success: (obj, e, data) => {
+                const clean = document.getElementById('clean-view');
+                if (clean == null || clean.checked) {
+                    frame.setAttribute('sandbox', '');
+                }
+                else frame.removeAttribute('sandbox');
+                frame.srcdoc = data;
+                $frame.dialog('open').dialog('moveToTop');
+            }}
+        });
     }).on('click', '[data-view-mode]', function (e) {
         e.preventDefault();
         $viewMode = $(this);

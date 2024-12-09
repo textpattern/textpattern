@@ -502,6 +502,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '#view_modes',
             'cb'       => 'article_partial_view_modes',
         ),
+        // 'View/Preview' links region.
+        'article_partial_article_view' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#article_partial_article_view',
+            'cb'       => 'article_partial_article_view',
+        ),
         // 'Title' region.
         'title' => array(
             'mode'     => PARTIAL_STATIC,
@@ -822,8 +828,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         eInput('article').
         sInput($step);
 
-        echo n.'<div class="txp-layout-4col-3span">'.
-        hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
+        echo n.'<div class="txp-layout-4col-3span">'.'<div id="pane-header">'.
+            hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')).
+            graf(article_partial_article_view($rs)).'</div>';
 
     echo n.'<div role="region" id="main_content">';
 
@@ -1522,7 +1529,7 @@ function article_partial_actions($rs)
         graf(($rs['ID']
             ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
             .article_partial_article_clone($rs)
-            : null).article_partial_article_view($rs),
+            : null),
             array(
                 'class' => 'txp-actions',
         )).n.'</div>';
@@ -1802,7 +1809,10 @@ function article_partial_article_view($rs)
 
     if (has_privs('article.preview')) {
         $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
-        $clean = tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+        $clean = tag(gTxt('preview'), 'button', array(
+            'class' => 'txp-reduced-ui-button',
+            'id'    => 'article_partial_article_preview',
+        )).tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
     } elseif ($live) {
         $url = permlinkurl_id($rs['ID']);
         $clean = '';
@@ -1811,7 +1821,7 @@ function article_partial_article_view($rs)
     }
 
     return n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
-        'class'  => 'txp-article-view',
+        'class'  => 'txp-article-view'.($ID ? '' : ' disabled'),
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
     )).$clean;
