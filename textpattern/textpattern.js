@@ -2180,7 +2180,7 @@ textpattern.Route.add('article', function () {
     $(document).on('change', '#clean-view', function () {
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
-        link.href = this.checked ? href + '.~' : href;
+        if (href) link.href = this.checked ? href + '.~' : href;
     }).on('click', '#article_partial_article_preview', function (e) {
         e.preventDefault();
         var frame = document.getElementById('preview-frame'),

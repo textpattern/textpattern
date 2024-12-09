@@ -1032,14 +1032,16 @@ function hed($item, $level, $atts = '')
 
 function href($item, $href, $atts = '')
 {
-    if (is_array($atts)) {
-        $atts['href'] = $href;
-    } else {
-        if (is_array($href)) {
-            $href = join_qs($href);
-        }
+    if ($href !== false) {
+        if (is_array($atts)) {
+            $atts['href'] = $href;
+        } else {
+            if (is_array($href)) {
+                $href = join_qs($href);
+            }
 
-        $atts .= ' href="'.$href.'"';
+            $atts .= ' href="'.$href.'"';
+        }
     }
 
     return tag($item, 'a', $atts);

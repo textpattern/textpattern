@@ -1808,7 +1808,7 @@ function article_partial_article_view($rs)
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
     if (has_privs('article.preview')) {
-        $url = hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)); // Article ID plus token.
+        $url = $ID ? hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
         $clean = tag(gTxt('preview'), 'button', array(
             'class' => 'txp-reduced-ui-button',
             'id'    => 'article_partial_article_preview',
