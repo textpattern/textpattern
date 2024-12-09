@@ -201,7 +201,7 @@ function article_save($write = true)
     // Set and validate article timestamp.
     if ($publish_now || $reset_time) {
         $whenposted = "NOW()";
-        $when_ts = time();
+        $uPosted = time();
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
             $ts = false;
@@ -210,21 +210,21 @@ function article_save($write = true)
         }
 
         if ($ts === false || $ts < 0) {
-            $when_ts = $oldArticle['sPosted'];
+            $uPosted = $oldArticle['sPosted'];
             $msg = array(gTxt('invalid_postdate'), E_ERROR);
         } else {
-            $when_ts = $ts - tz_offset($ts);
+            $uPosted = $ts - tz_offset($ts);
         }
 
-        $whenposted = "FROM_UNIXTIME($when_ts)";
+        $whenposted = "FROM_UNIXTIME($uPosted)";
     }
 
     // Set and validate expiry timestamp.
     if ($expire_now) {
         $ts = time();
-        $expires = $ts - tz_offset($ts);
+        $uExpires = $ts - tz_offset($ts);
     } elseif (empty($exp_year)) {
-        $expires = 0;
+        $uExpires = 0;
     } else {
         if (empty($exp_month)) {
             $exp_month = 1;
@@ -249,20 +249,20 @@ function article_save($write = true)
         $ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
 
         if ($ts === false || $ts < 0) {
-            $expires = $oldArticle['sExpires'];
+            $uExpires = $oldArticle['sExpires'];
             $msg = array(gTxt('invalid_expiredate'), E_ERROR);
         } else {
-            $expires = $ts - tz_offset($ts);
+            $uExpires = $ts - tz_offset($ts);
         }
     }
 
-    if ($expires && ($expires <= $when_ts)) {
-        $expires = $oldArticle['sExpires'];
+    if ($uExpires && ($uExpires <= $uPosted)) {
+        $uExpires = $oldArticle['sExpires'];
         $msg = array(gTxt('article_expires_before_postdate'), E_ERROR);
     }
 
-    if ($expires) {
-        $whenexpires = "FROM_UNIXTIME($expires)";
+    if ($uExpires) {
+        $whenexpires = "FROM_UNIXTIME($uExpires)";
     } else {
         $whenexpires = "NULL";
     }
@@ -299,7 +299,13 @@ function article_save($write = true)
             "Annotate"        =>  $Annotate,
         ) + (!empty($ID) ? array() : array(
             "feed_time"       => 'NOW()'
-        ));
+        )) + ($write ? array() :
+            array(
+                'uPosted' => $uPosted,
+                'uExpires' => $uExpires,
+                'uLastMod' => time()
+            )
+        );
 
         $set = array(
             "Title"           => $Title,

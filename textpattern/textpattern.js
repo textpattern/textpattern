@@ -2173,7 +2173,7 @@ textpattern.Route.add('article', function () {
         dialogClass: 'txp-preview-container',
         buttons: [
             {
-              text: textpattern.gTxt('reload'),
+              text: textpattern.gTxt('update'),
               icon: "ui-icon-refresh",
               click: function() {
                 $('#article_partial_article_preview').trigger('click');
