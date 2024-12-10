@@ -886,10 +886,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
             'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
+            'type'          => 'button',
         )).
         tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
             'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
+            'type'          => 'button',
         )), array('class' => 'txp-actions')
     );
 
@@ -1256,7 +1258,8 @@ function tab($tabevent, $view, $tag = 'li')
     $link = tag($label, 'button', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
         'aria-pressed'   => $pressed,
-        'class'           => 'txp-reduced-ui-button',
+        'class'          => 'txp-reduced-ui-button',
+        'type'           => 'button',
     ));
 
     return $tag ? n.tag($link, 'li', array(
@@ -1562,6 +1565,7 @@ function article_partial_custom_field($rs, $key)
         .tag(gTxt('view_preview_short'), 'button', array(
             'class'             => 'txp-textarea-preview txp-reduced-ui-button',
             'data-preview-link' => $custom_x,
+            'type'              => 'button',
         )).'</div>' :
         '';
 
@@ -1818,7 +1822,10 @@ function article_partial_article_view($rs)
         $clean = tag('<span class="ui-icon ui-icon-play" title="'.gTxt('preview').'"></span>'.gTxt('preview'), 'button', array(
             'class' => 'txp-reduced-ui-button',
             'id'    => 'article_partial_article_preview',
-        )).tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
+            'type'  => 'button',
+        )).tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview')
+            .'<span>'.popHelp('article_preview').'</span>',
+        'label');
     } elseif ($live) {
         $url = permlinkurl_id($rs['ID']);
         $clean = '';
@@ -1848,6 +1855,7 @@ function article_partial_body($rs)
     $textarea_options = can_modify($rs)? n.tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'body',
+        'type'              => 'button',
     )) : '';
 
     // Article markup selection.
@@ -1918,6 +1926,7 @@ function article_partial_excerpt($rs)
     $textarea_options = can_modify($rs)? n.tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'excerpt',
+        'type'              => 'button',
     )) : '';
 
     // Excerpt markup selection.

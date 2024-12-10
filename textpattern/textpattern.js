@@ -2167,7 +2167,11 @@ textpattern.Route.add('article', function () {
         });
     });
 
-    $('#preview-frame').on('load', function() {
+    const $frame = $('#preview-frame');
+    $frame.on('load', function() {/*
+        this.contentWindow.document.querySelectorAll('a').forEach((a) => {
+            a.removeAttribute('href');
+        });*/
         this.classList.remove('disabled');
     }).dialog({
         dialogClass: 'txp-preview-container',
@@ -2187,6 +2191,10 @@ textpattern.Route.add('article', function () {
         closeOnEscape: false,
         maxWidth: '100%',
         title: (document.getElementById('article_partial_article_preview') || {}).innerText
+    }).on('dialogopen', function (event, ui) {
+        document.getElementById('article_partial_article_preview').setAttribute('type', 'submit');
+    }).on('dialogclose', function (event, ui) {
+        document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
     });
 
     $(document).on('change', '#clean-view', function () {
@@ -2194,11 +2202,10 @@ textpattern.Route.add('article', function () {
             href = link.href.replace(/\.~$/, '');
         if (href) link.href = this.checked ? href + '.~' : href;
     }).on('click', '#article_partial_article_preview', function (e) {
-        e.preventDefault();
-        var frame = document.getElementById('preview-frame'),
-            $frame = $(frame);
+        if (!$frame.length) return;
 
-        if (!frame) return;
+        e.preventDefault();
+        const frame = $frame[0];
 
         frame.classList.add('disabled');
         $frame.dialog('open').dialog('moveToTop');
