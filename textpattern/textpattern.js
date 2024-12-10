@@ -2201,6 +2201,7 @@ textpattern.Route.add('article', function () {
         if (!frame) return;
 
         frame.classList.add('disabled');
+        $frame.dialog('open').dialog('moveToTop');
         form.trigger('submit.txpAsyncForm', {
             data: {view: 'view', preview: '', _txp_parse: 1},
             _txp_submit: false,
@@ -2211,7 +2212,6 @@ textpattern.Route.add('article', function () {
                 }
                 else frame.removeAttribute('sandbox');
                 frame.srcdoc = data;
-                $frame.dialog('open').dialog('moveToTop');
             }}
         });
     }).on('click', '[data-view-mode]', function (e) {

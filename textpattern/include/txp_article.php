@@ -836,7 +836,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo n.'<div class="txp-layout-4col-3span">'.'<div id="pane-header">'.
             hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')).
-            graf(article_partial_article_view($rs)).'</div>';
+            graf(article_partial_article_view($rs), array('class' => 'txp-actions')).'</div>';
 
     echo n.'<div role="region" id="main_content">';
 
@@ -1815,7 +1815,7 @@ function article_partial_article_view($rs)
 
     if (has_privs('article.preview')) {
         $url = $ID ? hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
-        $clean = tag(gTxt('preview'), 'button', array(
+        $clean = tag('<span class="ui-icon ui-icon-play" title="'.gTxt('preview').'"></span>'.gTxt('preview'), 'button', array(
             'class' => 'txp-reduced-ui-button',
             'id'    => 'article_partial_article_preview',
         )).tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview'), 'label');
