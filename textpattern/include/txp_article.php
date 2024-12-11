@@ -854,7 +854,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n.'</div>';// End of .txp-dialog.
 
     if (has_privs('article.preview')) {
-        echo '<iframe id="preview-frame" name="preview" tabindex="-1" class="txp-dialog"></iframe>';
+        echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
     }
 
     echo n.'</div>'.// End of #main_content.
@@ -1817,27 +1817,27 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    if (has_privs('article.preview')) {
-        $url = $ID ? hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
-        $clean = tag('<span class="ui-icon ui-icon-play" title="'.gTxt('preview').'"></span>'.gTxt('preview'), 'button', array(
-            'class' => 'txp-reduced-ui-button',
-            'id'    => 'article_partial_article_preview',
-            'type'  => 'button',
-        )).tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview')
-            .'<span>'.popHelp('article_preview').'</span>',
-        'label');
-    } elseif ($live) {
+    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-play" title="'.gTxt('preview').'"></span>'.gTxt('preview'), 'button', array(
+        'class' => 'txp-reduced-ui-button',
+        'id'    => 'article_partial_article_preview',
+        'type'  => 'button',
+    ))/*.tag(checkbox2('', true, 0, 'clean-view').sp.gTxt('clean_preview')
+        .'<span>'.popHelp('article_preview').'</span>',
+    'label')*/ : '';
+
+    if ($live) {
         $url = permlinkurl_id($rs['ID']);
-        $clean = '';
+    } elseif ($clean) {
+        $url = $ID ? hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
     } else {
         return;
     }
 
-    return n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
+    return $clean.n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
         'class'  => 'txp-article-view'.($ID ? '' : ' disabled'),
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
-    )).$clean;
+    ));
 }
 
 /**

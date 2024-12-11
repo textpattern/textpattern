@@ -2168,10 +2168,7 @@ textpattern.Route.add('article', function () {
     });
 
     const $frame = $('#preview-frame');
-    $frame.on('load', function() {/*
-        this.contentWindow.document.querySelectorAll('a').forEach((a) => {
-            a.removeAttribute('href');
-        });*/
+    $frame.on('load', function() {
         this.classList.remove('disabled');
     }).dialog({
         dialogClass: 'txp-preview-container',
@@ -2188,6 +2185,10 @@ textpattern.Route.add('article', function () {
               //showText: false
             }
         ],
+        resizeStop: function( event, ui ) {
+            let r = document.querySelector(':root');
+            r.style.setProperty('--txp-spinner-radius', `min(${ui.size.height/4}px, ${ui.size.width/4}px)`);
+        },
         closeOnEscape: false,
         maxWidth: '100%',
         title: (document.getElementById('article_partial_article_preview') || {}).innerText
@@ -2196,11 +2197,16 @@ textpattern.Route.add('article', function () {
     }).on('dialogclose', function (event, ui) {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
     });
+    $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
+        `<label><input class="checkbox" id="clean-view" type="checkbox" value="1">&nbsp;Javascript</label>`
+    );
 
-    $(document).on('change', '#clean-view', function () {
+    $(document).on('change', '#clean-view', function () {/*
         const link = document.getElementById('article_partial_article_view'),
             href = link.href.replace(/\.~$/, '');
-        if (href) link.href = this.checked ? href + '.~' : href;
+        if (href) link.href = this.checked ? href + '.~' : href;*/
+        $frame.attr('sandbox', this.checked ? 'allow-scripts' : '');
+        $('#article_partial_article_preview').trigger('click');
     }).on('click', '#article_partial_article_preview', function (e) {
         if (!$frame.length) return;
 
@@ -2212,12 +2218,13 @@ textpattern.Route.add('article', function () {
         form.trigger('submit.txpAsyncForm', {
             data: {view: 'view', preview: '', _txp_parse: 1},
             _txp_submit: false,
-            options: {dataType: 'html', success: (obj, e, data) => {
+            options: {dataType: 'html', success: (obj, e, data) => {/*
                 const clean = document.getElementById('clean-view');
                 if (clean == null || clean.checked) {
                     frame.setAttribute('sandbox', '');
                 }
-                else frame.removeAttribute('sandbox');
+//                else frame.removeAttribute('sandbox');
+                else frame.setAttribute('sandbox', 'allow-scripts');*/
                 frame.srcdoc = data;
             }}
         });
@@ -2371,7 +2378,7 @@ textpattern.Route.add('article', function () {
         textpattern.Relay.callback('article.preview', null, 1000);
     }
 
-    $("#clean-view").trigger("change");
+//    $("#clean-view").trigger("change");
 
     // Handle Textfilter options.
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
