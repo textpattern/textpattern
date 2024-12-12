@@ -2184,11 +2184,11 @@ textpattern.Route.add('article', function () {
               // resulting in the label being used as a tooltip
               //showText: false
             }
-        ],
+        ],/*
         resizeStop: function( event, ui ) {
             let r = document.querySelector(':root');
             r.style.setProperty('--txp-spinner-radius', `min(${ui.size.height/4}px, ${ui.size.width/4}px)`);
-        },
+        },*/
         closeOnEscape: false,
         maxWidth: '100%',
         title: (document.getElementById('article_partial_article_preview') || {}).innerText
@@ -2198,14 +2198,11 @@ textpattern.Route.add('article', function () {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
     });
     $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
-        `<label><input class="checkbox" id="clean-view" type="checkbox" value="1">&nbsp;Javascript</label>`
+        `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>`
     );
 
-    $(document).on('change', '#clean-view', function () {/*
-        const link = document.getElementById('article_partial_article_view'),
-            href = link.href.replace(/\.~$/, '');
-        if (href) link.href = this.checked ? href + '.~' : href;*/
-        $frame.attr('sandbox', this.checked ? 'allow-scripts' : '');
+    $(document).on('change', '#clean-view', function () {
+        $frame.attr('sandbox', this.checked ? '' : null);
         $('#article_partial_article_preview').trigger('click');
     }).on('click', '#article_partial_article_preview', function (e) {
         if (!$frame.length) return;
@@ -2218,13 +2215,7 @@ textpattern.Route.add('article', function () {
         form.trigger('submit.txpAsyncForm', {
             data: {view: 'view', preview: '', _txp_parse: 1},
             _txp_submit: false,
-            options: {dataType: 'html', success: (obj, e, data) => {/*
-                const clean = document.getElementById('clean-view');
-                if (clean == null || clean.checked) {
-                    frame.setAttribute('sandbox', '');
-                }
-//                else frame.removeAttribute('sandbox');
-                else frame.setAttribute('sandbox', 'allow-scripts');*/
+            options: {dataType: 'html', success: (obj, e, data) => {
                 frame.srcdoc = data;
             }}
         });
