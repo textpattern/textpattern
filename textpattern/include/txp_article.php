@@ -320,7 +320,7 @@ function article_save($write = true)
         ) + (!empty($ID) ? array() : array(
             "AuthorID"        => $txp_user,
             "uid"             => md5(uniqid(rand(), true)),
-        )) + $cfq;
+        ));
 
         if (!$write) {
             return $setnq + $set;
