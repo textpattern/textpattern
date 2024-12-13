@@ -566,7 +566,7 @@ function checkCommentsAllowed($id)
         );
     }
 
-    if ($Annotate != 1) {
+    if (empty($Annotate)) {
         return false;
     }
 

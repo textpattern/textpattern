@@ -111,6 +111,7 @@ function pagetop($pagetitle = '', $message = '')
         'save',
         'select',
         'toggle_all_selected',
+        'update',
         'upload_err_form_size',
         'with_selected_option',
     ));
@@ -137,6 +138,7 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/pur
 
     $txpOut = 'var textpattern = '.json_encode(
     array(
+        'site_url' => hu,
         '_txp_uid' => get_pref('blog_uid'),
         'event' => $event,
         'step' => $step,

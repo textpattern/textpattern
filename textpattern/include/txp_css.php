@@ -92,7 +92,7 @@ function css_list($current)
         extract($a);
 
         $active = ($current['name'] === $name);
-        $edit = eLink('css', '', 'name', $name, $name);
+        $edit = eLink('css', '', compact('name'), $name, $name);
 
         if (!array_key_exists($name, $protected)) {
             $edit .= dLink('css', 'css_delete', 'name', $name);

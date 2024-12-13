@@ -72,13 +72,13 @@ class Privacy
 
     public static function password_protect($atts, $thing = null)
     {
-        ob_start();
-
         extract(lAtts(array(
             'login' => null,
             'pass'  => null,
             'privs' => null,
         ), $atts));
+
+        ob_start();
 
         if ($pass === null) {
             $access = ($user = is_logged_in($login)) !== false && ($privs === null || in_list($user['privs'], $privs));

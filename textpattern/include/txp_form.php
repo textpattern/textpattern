@@ -140,7 +140,7 @@ function form_list($current)
                 $group_out = array();
             }
 
-            $editlink = eLink('form', 'form_edit', 'name', $name, $name);
+            $editlink = eLink('form', 'form_edit', compact('name'), $name, $name);
             $in_use = isset($forms_in_use[$name]) ? sp.tag(gTxt('status_in_use'), 'small', array('class' => 'alert-block alert-pill success')) : '';
 
             if (!in_array($name, $essential_forms)) {

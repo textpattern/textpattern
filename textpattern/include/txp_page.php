@@ -284,7 +284,7 @@ function page_list($current)
             extract($a);
             $active = ($current['name'] === $name);
 
-            $edit = eLink('page', '', 'name', $name, $name);
+            $edit = eLink('page', '', compact('name'), $name, $name);
 
             if (!in_array($name, $protected)) {
                 $edit .= dLink('page', 'page_delete', 'name', $name);

@@ -84,6 +84,7 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * bugfixing and ease the addition of new article tags.
  *
  * @param array $rs An article as an associative array
+ * @param bool  $all Rewrite all data
  * @example
  * if ($rs = safe_rows_start("*,
  *     UNIX_TIMESTAMP(Posted) AS uPosted,
@@ -102,12 +103,16 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * }
  */
 
-function populateArticleData($rs)
+function populateArticleData($rs, $all = true)
 {
     global $production_status, $thisarticle, $trace;
 
     foreach (article_column_map() as $key => $column) {
-        $thisarticle[$key] = isset($rs[$column]) ? $rs[$column] : null;
+        if (isset($rs[$column])) {
+            $thisarticle[$key] = $rs[$column];
+        } elseif ($all) {
+            $thisarticle[$key] = null;
+        }
     }
 
     if ($production_status === 'debug') {
@@ -125,18 +130,19 @@ function populateArticleData($rs)
  * of in the SQL statement.
  *
  * @param array $rs An article as an associative array
+ * @param bool  $all Rewrite all data
  * @example
  * article_format_info(
  *     safe_row('*', 'textpattern', 'Status = 4 LIMIT 1')
  * )
  */
 
-function article_format_info($rs)
+function article_format_info($rs, $all = true)
 {
     $rs['uPosted']  = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
     $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
     $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
-    populateArticleData($rs);
+    populateArticleData($rs, $all);
 }
 
 /**
@@ -301,13 +307,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['posted']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['posted']).")";
                 break;
             case 'Expires':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['expires']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['expires']).")";
                 break;
             case 'LastMod':
-                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['modified']).")";
+                $threshold = "FROM_UNIXTIME(".intval($thisarticle['modified']).")";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -501,7 +507,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
     static $registry = null, $globatts;
 
     if (empty($tag)) {
-        return;
+        return false;
     }
 
     if ($registry === null) {

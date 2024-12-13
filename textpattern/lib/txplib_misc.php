@@ -637,7 +637,7 @@ function can_modify($rs, $user = null) {
     return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
     ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
     ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-    ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own'));
+    (empty($rs['ID']) || ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user) && has_privs('article.edit.own'));
 }
 
 /**
@@ -1808,6 +1808,10 @@ function lAtts($pairs = array(), $atts = array(), $warn = true)
     global $pretext, $production_status, $txp_atts;
     static $globatts = null, $global_atts, $partial;
 
+    if (!empty($pretext['@txp_grok'])) {
+        throw new \Exception(json_encode($atts + $pairs));
+    }
+
     if ($globatts === null) {
         $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
         $globatts = array_filter($global_atts);
@@ -1845,10 +1849,6 @@ function lAtts($pairs = array(), $atts = array(), $warn = true)
             } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $global_atts)) {
                 trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
             }
-        }
-
-        if (!empty($pretext['@txp_grok'])) {
-            throw new \Exception($pairs ? json_encode($pairs) : null);
         }
     } else { // don't import unset globals
         foreach ($atts as $name => $value) {

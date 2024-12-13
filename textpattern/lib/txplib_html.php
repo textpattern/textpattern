@@ -215,14 +215,20 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
     } else {
         $linktext = escape_title($linktext);
     }
+    if (is_array($thing)) {
+        $atts = $thing + ($thing2 ? array($thing2 => $val2) : array());
+    } else {
+        $atts = array(
+            $thing => $value,
+            $thing2 => $val2,
+            '_txp_token' => form_token()
+        );
+    }
 
     return href($linktext, array(
         'event'      => $event,
         'step'       => $step,
-        $thing       => $value,
-        $thing2      => $val2,
-        '_txp_token' => form_token(),
-    ), array(
+    ) + $atts, array(
         'class' => $class,
         'title' => $title,
     ));
@@ -1032,14 +1038,16 @@ function hed($item, $level, $atts = '')
 
 function href($item, $href, $atts = '')
 {
-    if (is_array($atts)) {
-        $atts['href'] = $href;
-    } else {
-        if (is_array($href)) {
-            $href = join_qs($href);
-        }
+    if ($href !== false) {
+        if (is_array($atts)) {
+            $atts['href'] = $href;
+        } else {
+            if (is_array($href)) {
+                $href = join_qs($href);
+            }
 
-        $atts .= ' href="'.$href.'"';
+            $atts .= ' href="'.$href.'"';
+        }
     }
 
     return tag($item, 'a', $atts);

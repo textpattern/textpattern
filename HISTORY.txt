@@ -3,8 +3,9 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Added: Site status values to 'process' attribute of <txp:hide />.
 * Added: 'type' attribute to <txp:file_download />.
 * Changed: Wildcards in file/image/link category queries.
+* Changed: Multi-site scaffold optimisations.
 * Developer: Pre+post textfilter callbacks (article_submit) on article save.
-* Vendors: DOMPurify 3.2.1.
+* Vendors: DOMPurify 3.2.3.
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.9.3.
 * Vendors: Textile 4.1.2. (thanks, gocom).

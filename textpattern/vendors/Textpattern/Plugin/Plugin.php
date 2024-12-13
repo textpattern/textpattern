@@ -43,6 +43,14 @@ class Plugin
     );
 
     /**
+     * Available plugin types.
+     *
+     * @var array
+     */
+
+    protected $types = array();
+
+    /**
      * The plugin name that has been extracted/read.
      *
      * @var string
@@ -64,7 +72,25 @@ class Plugin
 
     public function __construct()
     {
+        $this->types = array(
+            0 => gTxt('plugin_type_public'),
+            1 => gTxt('plugin_type_public_admin'),
+            2 => gTxt('plugin_type_library'),
+            3 => gTxt('plugin_type_admin'),
+            4 => gTxt('plugin_type_admin_async'),
+            5 => gTxt('plugin_type_public_admin_async'),
+        );
+    }
 
+    /**
+     * Fetch the available plugin types
+     *
+     * @return array Type names and their corresponding index values
+     */
+
+    public function getTypes()
+    {
+        return (array)$this->types;
     }
 
     /**
@@ -483,11 +509,7 @@ class Plugin
     {
         list ($name, $lang) = (array)$name + array(null, null);
         $owner = doSlash($name);
-/*
-        if ($reset) {
-            safe_delete('txp_lang', "owner = '{$owner}'".($lang ? " AND lang = '".doSlash($lang)."'" : ''));
-        }
-*/
+
         if (has_handler('txp.plugin', 'textpack.fetch')) {
             $textpack = callback_event('txp.plugin', 'textpack.fetch', false, compact('name'));
         } else {
@@ -687,6 +709,56 @@ class Plugin
         }
 
         return $data;
+    }
+
+    /**
+     * Create a compiled .txt version of the plugin
+     *
+     * @param  string $name     The plugin name
+     * @param  string $compress Whether to gzip the file
+     * @param  bool   $download Whether to immediately serve the txt file or echo it to screen
+     * @return string|content   Either the (base64) txt plugin, or the file to download
+     */
+
+    public function compile($name, $compress = true, $download = true)
+    {
+        $plugin = $this->read($name);
+
+        if ($plugin) {
+            $types = $this->getTypes();
+
+            (isset($plugin['type']) && is_numeric($plugin['type'])) or $plugin['type'] = '5';
+            !empty($plugin['version']) or $plugin['version'] = '1.0.0';
+            !empty($plugin['description']) or $plugin['description'] = 'No description';
+            !empty($plugin['author']) or $plugin['author'] = '';
+            !empty($plugin['author_uri']) or $plugin['author_uri'] = 'https://plugins.textpattern.com';
+            !empty($plugin['code']) or $plugin['code'] = '';
+            !empty($plugin['load_order']) or $plugin['load_order'] = '5';
+
+            $plugin['md5'] = md5($plugin['code']);
+            $fname = $name.'_v'.$plugin['version'].($compress ? '' : '_uncompressed').'.txt';
+
+            $out = '# Name: '.$name.' v'.$plugin['version'].($compress ? "" : " (uncompressed)").'
+# Type: '.$types[$plugin['type']].' plugin
+# '.$plugin['description'].'
+# Author: '.$plugin['author'].'
+# URL: '.$plugin['author_uri'].'
+# Recommended load order: '.$plugin['load_order'].'
+
+# .....................................................................
+# This is a plugin for Textpattern CMS - https://textpattern.com/
+# To install: textpattern > admin > plugins
+# Paste the following text into the \'Install plugin\' box:
+# .....................................................................
+
+'.($compress ? chunk_split(base64_encode(gzencode(serialize($plugin))), 72) : chunk_split(base64_encode(serialize($plugin)), 72));
+            if ($download && !headers_sent()) {
+                header('Content-type: text/plain');
+                header('Content-Disposition: attachment; filename="' . $fname . '"');
+            }
+
+            return $out;
+        }
     }
 
     /**
