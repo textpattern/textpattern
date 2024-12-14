@@ -94,13 +94,11 @@ function pagetop($pagetitle = '', $message = '')
 
     gTxtScript(array(
         'are_you_sure',
-        'body',
         'close',
         'confirm_delete_popup',
         'cookies_must_be_enabled',
         'custom_field_clash',
         'documentation',
-        'excerpt',
         'form_submission_error',
         'found_unsafe',
         'help',

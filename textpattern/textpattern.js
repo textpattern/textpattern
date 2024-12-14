@@ -2106,16 +2106,15 @@ textpattern.Route.add('article', function () {
     });
 
     $pane.on('dialogclose', function (event, ui) {
-        $('#body, #excerpt, #txp-custom-field-group-content input').off('input', txp_article_preview);
+        $input && $input.off('input', txp_article_preview);
     });
 
-    var status = 'select[name=Status]',
-        form = $('#article_form');//$(status).parents('form');
+    var $form = $('#article_form');
 
-    $('#article_form').on('change', status, function () {
-        let submitButton = form.find('input[type=submit]');
+    $form.on('change', 'select[name=Status]', function () {
+        let submitButton = $form.find('input[type=submit]');
 
-        if (!form.hasClass('published')) {
+        if (!$form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
             } else {
@@ -2128,7 +2127,7 @@ textpattern.Route.add('article', function () {
         }
     }).on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit', {data: {copy:1, publish:1}});
+        $form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
     $('#live-preview').on('change', function () {
@@ -2143,7 +2142,7 @@ textpattern.Route.add('article', function () {
     });
 
     textpattern.Relay.register('article.preview', function (e) {
-        var data = form.serializeArray();
+        var data = $form.serializeArray();
         $('#pane-preview').addClass('disabled');
 
         data.push({
@@ -2184,11 +2183,7 @@ textpattern.Route.add('article', function () {
               // resulting in the label being used as a tooltip
               //showText: false
             }
-        ],/*
-        resizeStop: function( event, ui ) {
-            let r = document.querySelector(':root');
-            r.style.setProperty('--txp-spinner-radius', `min(${ui.size.height/4}px, ${ui.size.width/4}px)`);
-        },*/
+        ],
         closeOnEscape: false,
         maxWidth: '100%',
         title: (document.getElementById('article_partial_article_preview') || {}).innerText
@@ -2212,7 +2207,7 @@ textpattern.Route.add('article', function () {
 
         frame.classList.add('disabled');
         $frame.dialog('open').dialog('moveToTop');
-        form.trigger('submit.txpAsyncForm', {
+        $form.trigger('submit.txpAsyncForm', {
             data: {view: 'view', preview: '', _txp_parse: 1},
             _txp_submit: false,
             options: {dataType: 'html', success: (obj, e, data) => {
@@ -2229,7 +2224,7 @@ textpattern.Route.add('article', function () {
     }).on('click', '[data-preview-link]', function (e) {
         e.preventDefault();
         if ($field != $(this).data('preview-link')) {
-            if ($input) $input.off('input', txp_article_preview);
+            $input && $input.off('input', txp_article_preview);
             $field = $(this).data('preview-link');
             const inputid = $field.replace('_', '-');
             $input = $('#' + inputid);
