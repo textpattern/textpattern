@@ -1546,30 +1546,6 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
     return this;
 };
 
-/**
- * ESC button closes alert messages.
- * CTRL+S triggers Save buttons click.
- *
- * @since 4.7.0
- */
-
-$(document).on('keydown', function(e) {
-    var key = e.which;
-
-    if (key === 27) {
-        $('.close').parent().hide();
-    } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's')) {
-        var obj = $('input.publish');
-
-        if (obj.length) {
-            e.preventDefault();
-            let form = $('#'+obj.eq(0).attr('form'));
-            form.length > 0 || (form = obj.eq(0).closest('form'));
-            form.trigger('submit');
-        }
-    }
-});
-
 jQuery.fn.txpMenu = function (button) {
     var menu = this;
 
@@ -2067,6 +2043,10 @@ textpattern.Route.add('article', function () {
         }
     );
 
+    textpattern.Relay.register('txpAsyncForm.success', function () {
+        $('#txp-extended-group').restorePanes();
+    });
+
     textpattern.Relay.register('article.section_changed', function (event, data) {
         var $overrideForm = $('#override-form');
         var override_sel = $overrideForm.val();
@@ -2531,71 +2511,6 @@ textpattern.Route.add('page, form, file, image', function () {
     });
 });
 
-// Pophelp.
-textpattern.Route.add('', function () {
-    textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-        $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data));
-        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
-    });
-
-    $('body').on('click', '.pophelp', function (ev) {
-        var $pophelp = $('#pophelp_dialog');
-
-        if ($pophelp.length == 0) {
-            $pophelp = $('<div id="pophelp_dialog"></div>');
-            $('body').append($pophelp);
-            $pophelp.dialog({
-                classes: {
-                    'ui-dialog': 'txp-dialog-container'
-                },
-                autoOpen: false,
-                width: 440,
-                title: textpattern.gTxt('help'),
-                focus: function (ev, ui) {
-                    $(ev.target).closest('.ui-dialog').focus();
-                }
-            });
-        }
-
-        var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
-
-        if (typeof item === 'undefined') {
-            txpAsyncLink(ev, 'pophelp');
-        } else {
-            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
-        }
-
-        return false;
-    });
-
-    $(document).on('keypress', 'textarea', function(e) {
-        if (e.shiftKey && e.key == ' ') { //Shift+Space pressed
-            e.preventDefault();
-            if (document.execCommand) {
-                document.execCommand("insertText", false, '\t');
-            } else {
-                const textarea = e.target;
-                textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
-            }
-        }
-    }).on('input', '[maxlength]', function() {
-        if (!$(this).tooltip('instance')) {
-            $(this).tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
-        }
-
-        if (this.value.length >= 0.8*this.maxLength) {
-            $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
-            $(this).tooltip('enable').tooltip('open');
-        } else {
-            $(this).tooltip('disable');
-        }
-    }).on('focusout', '[maxlength]', function() {
-        if ($(this).tooltip('instance')) {
-            $(this).tooltip('destroy');
-        }
-    });
-});
-
 // Forms panel.
 textpattern.Route.add('form', function () {
     $('#allforms_form').txpMultiEditForm({
@@ -2832,6 +2747,93 @@ textpattern.Route.add('prefs', function () {
 
 // All panels?
 textpattern.Route.add('', function () {
+    // Pophelp
+    textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
+        $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data));
+        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open');
+    });
+
+    $('body').on('click', '.pophelp', function (ev) {
+        var $pophelp = $('#pophelp_dialog');
+
+        if ($pophelp.length == 0) {
+            $pophelp = $('<div id="pophelp_dialog"></div>');
+            $('body').append($pophelp);
+            $pophelp.dialog({
+                classes: {
+                    'ui-dialog': 'txp-dialog-container'
+                },
+                autoOpen: false,
+                width: 440,
+                title: textpattern.gTxt('help'),
+                focus: function (ev, ui) {
+                    $(ev.target).closest('.ui-dialog').focus();
+                }
+            });
+        }
+
+        var item = $(ev.target).parent().attr('data-item') || $(ev.target).attr('data-item');
+
+        if (typeof item === 'undefined') {
+            txpAsyncLink(ev, 'pophelp');
+        } else {
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open');
+        }
+
+        return false;
+    });
+
+    /**
+     * ESC button closes alert messages.
+     * CTRL+S triggers Save buttons click.
+     *
+     * @since 4.7.0
+     */
+
+    $(document).on('keydown', function(e) {
+        var key = e.which;
+
+        if (key === 27) {
+            $('.close').parent().hide();
+        } else if (key === 19 || (!e.altKey && (e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's')) {
+            var obj = $('input.publish');
+
+            if (obj.length) {
+                e.preventDefault();
+                let form = $('#'+obj.eq(0).attr('form'));
+                form.length > 0 || (form = obj.eq(0).closest('form'));
+                form.trigger('submit');
+            }
+        }
+    });
+
+    $(document).on('keypress', 'textarea', function(e) {
+        if (e.shiftKey && e.key == ' ') { //Shift+Space pressed
+            e.preventDefault();
+            if (document.execCommand) {
+                document.execCommand("insertText", false, '\t');
+            } else {
+                const textarea = e.target;
+                textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionStart, 'end');
+            }
+        }
+    }).on('input', '[maxlength]', function() {
+        if (!$(this).tooltip('instance')) {
+            $(this).tooltip({items: '[maxLength]', position: { my: "right-6.25% bottom+25%", at: "right top" }});
+        }
+
+        if (this.value.length >= 0.8*this.maxLength) {
+            $(this).tooltip('option', 'content', this.value.length + ' / ' + this.maxLength);
+            $(this).tooltip('enable').tooltip('open');
+        } else {
+            $(this).tooltip('disable');
+        }
+    }).on('focusout', '[maxlength]', function() {
+        if ($(this).tooltip('instance')) {
+            $(this).tooltip('destroy');
+        }
+    });
+
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
