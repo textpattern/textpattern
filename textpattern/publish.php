@@ -378,6 +378,7 @@ function preText($store, $prefs = null)
             global $nolog;
     
             $nolog = true;
+            
             if ($raw === '~') header('Content-Security-Policy: sandbox');
             $out['@txp_preview'] = $hash;
 
@@ -829,7 +830,7 @@ function output_css($s = '', $n = '', $t = '')
         $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
-        @header('Content-Type: text/css; charset=utf-8');
+        header('Content-Type: text/css; charset=utf-8');
         echo $css;
         restore_error_handler();
     }

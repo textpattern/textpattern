@@ -3,12 +3,12 @@ pre { overflow: auto; }
 * { -webkit-hyphens: auto; hyphens: auto; }
 pre > code { -webkit-hyphens: none; hyphens: none; }
 code{
-    &.txp-sanitized { opacity: 0.6; text-decoration-line: line-through; }
+    &.txp-sanitized { color: var(--txp-demoted-text); /*opacity: 0.6;*/ text-decoration-line: line-through; }
     &.-comment::before { content: "<!--"; }
     &.-comment::after { content: "-->"; }
     &.-cdata::before { content: "<!"; }
     &.-cdata::after { content: ">"; }
-    &.txp-tag { opacity: 0.6; }
+    &.txp-tag { color: var(--txp-demoted-text); /*opacity: 0.6;*/ }
 }
 
 /* PrismJS 1.29.0 */
