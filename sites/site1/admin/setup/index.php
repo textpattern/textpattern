@@ -110,6 +110,14 @@ eod;
                     'path'   => 'admin',
                     'is_dir' => true
                     ),
+                'preview.css' => array(
+                    'path'   => 'admin',
+                    'is_dir' => false
+                    ),
+                'textpattern.css' => array(
+                    'path'   => 'admin',
+                    'is_dir' => false
+                    ),
                 'textpattern.js' => array(
                     'path'   => 'admin',
                     'is_dir' => false

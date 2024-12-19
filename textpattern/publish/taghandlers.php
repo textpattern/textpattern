@@ -1945,6 +1945,7 @@ function article_image($atts)
     }
 
     $out = array();
+    $thumb = $thumbnail;
     
     if ($range === true) {
         $items = array_keys($images);
@@ -1984,14 +1985,14 @@ function article_image($atts)
 
             $rs = $dbimages[$image];
 
-            if ($thumbnail && empty($rs['thumbnail'])) {
+            if ($thumb && empty($rs['thumbnail'])) {
                 continue;
             }
 
-            $w = $width !== '' ? $width : $rs[$thumbnail ? 'thumb_w' :'w'];
-            $h = $height !== '' ? $height : $rs[$thumbnail ? 'thumb_h' :'h'];
+            $w = $width !== '' ? $width : $rs[$thumb ? 'thumb_w' :'w'];
+            $h = $height !== '' ? $height : $rs[$thumb ? 'thumb_h' :'h'];
 
-            extract($rs, EXTR_SKIP);
+            extract($rs);
 
             if ($title === true) {
                 $title = $caption;
