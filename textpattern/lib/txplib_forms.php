@@ -442,7 +442,7 @@ function tInput()
  * echo checkbox('name', 'value', true);
  */
 
-function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $multiple = false)
+function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $form = false, $multiple = false)
 {
     $class = 'checkbox';
 
@@ -455,7 +455,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $mult
         'id'       => $id,
         'name'     => $name . ((bool)$multiple ? '[]' : ''),
         'type'     => 'checkbox',
-//        'form'     => $form,
+        'form'     => $form,
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
     ), TEXTPATTERN_STRIP_EMPTY);

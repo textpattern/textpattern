@@ -472,7 +472,7 @@ function article_preview($field = false)
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $step, $app_mode;
+    global $vars, $txp_user, $prefs, $step, $app_mode, $txpnow;
 
     extract($prefs);
 
