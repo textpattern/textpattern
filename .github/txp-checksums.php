@@ -35,11 +35,11 @@ define('txpath', rtrim(realpath($argv[1]), '/'));
 
 $event = '';
 $prefs['enable_xmlrpc_server'] = true;
-require_once(txpath.'/lib/constants.php');
-require_once(txpath.'/lib/txplib_misc.php');
-require_once(txpath.'/lib/txplib_admin.php');
+require_once(txpath . '/lib/constants.php');
+require_once(txpath . '/lib/txplib_misc.php');
+require_once(txpath . '/lib/txplib_admin.php');
 $files = array();
-$destination = txpath.DS.'checksums.txt';
+$destination = txpath . DS . 'checksums.txt';
 
 switch ($action) {
     case 'update':
@@ -49,8 +49,8 @@ switch ($action) {
         $files = files_to_checksum(txpath, '/.*\.(?:php|js)$/');
 
         // Append root and rpc files.
-        $files = array_merge($files, glob(txpath.DS.'..'.DS.'*.php'));
-        $files = array_merge($files, glob(txpath.DS.'..'.DS.'rpc'.DS.'*.php'));
+        $files = array_merge($files, glob(txpath . DS . '..' . DS . '*.php'));
+        $files = array_merge($files, glob(txpath . DS . '..' . DS . 'rpc' . DS . '*.php'));
 
         // Remove setup and config-dist.php.
         $files = array_filter($files, function($e) { return (strpos($e, '/setup') === false); });
@@ -58,7 +58,7 @@ switch ($action) {
 
         // Output list.
         if ($files) {
-            $files = array_map(function ($str) { return str_replace(txpath, '', $str.": ".str_repeat('a', 32)); }, $files);
+            $files = array_map(function ($str) { return str_replace(txpath, '', $str . ": " . str_repeat('a', 32)); }, $files);
             file_put_contents($destination, implode(n, $files));
             $files = calculate_checksums();
         }
@@ -67,7 +67,7 @@ switch ($action) {
 
 if ($files) {
     file_put_contents($destination, implode(n, $files));
-    echo "Checksums updated in ".$destination.".\n";
+    echo "Checksums updated in " . $destination . ".\n";
 }
 
 /**
