@@ -32,7 +32,7 @@ if (!isset($txpcfg['table_prefix'])) {
 }
 
 if (!defined('txpath')) {
-    define("txpath", dirname(realpath(dirname(__FILE__).'/vendors')));
+    define("txpath", dirname(realpath(dirname(__FILE__) . '/vendors')));
 }
 
-include txpath.'/index.php';
+include txpath . '/index.php';
