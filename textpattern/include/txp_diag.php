@@ -41,7 +41,7 @@ define("cs", ': ');
  * @ignore
  */
 
-define("ln", str_repeat('-', 24).n);
+define("ln", str_repeat('-', 24) . n);
 
 /**
  * @ignore
@@ -49,7 +49,7 @@ define("ln", str_repeat('-', 24).n);
 
 define("priv", '=== ');
 
-include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
+include_once(txpath . DS . 'lib' . DS . 'txplib_publish.php');
 
 global $files;
 
@@ -122,8 +122,8 @@ function apache_module($m)
 
 function list_txp_tables()
 {
-    $table_names = array(PFX.'textpattern');
-    $rows = getRows("SHOW TABLES LIKE '".PFX."txp\_%'");
+    $table_names = array(PFX . 'textpattern');
+    $rows = getRows("SHOW TABLES LIKE '" . PFX . "txp\_%'");
 
     foreach ($rows as $row) {
         $table_names[] = array_shift($row);
@@ -154,7 +154,7 @@ function check_tables($tables, $type = 'FAST', $warnings = 0)
         if ($rs) {
             foreach ($rs as $r) {
                 if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning')) {
-                    $msgs[] = $table.cs.$r['Msg_type'].cs.$r['Msg_text'];
+                    $msgs[] = $table . cs . $r['Msg_type'] . cs . $r['Msg_text'];
                 }
             }
         }
@@ -198,7 +198,7 @@ function doDiagnostics()
 
     $urlparts = parse_url(hu);
     $mydomain = $urlparts['host'];
-    $path_to_index = $path_to_site."/index.php";
+    $path_to_index = $path_to_site . "/index.php";
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
@@ -254,16 +254,16 @@ function doDiagnostics()
         $fail['e'][] = array('index_inaccessible', 'path_inaccessible', array('{path}' => $path_to_index));
     }
 
-    if (!is_writable($path_to_site.DS.$img_dir)) {
-        $notReadable[] = array('{dirtype}' => 'img_dir', '{path}' => $path_to_site.DS.$img_dir);
+    if (!is_writable($path_to_site . DS . $img_dir)) {
+        $notReadable[] = array('{dirtype}' => 'img_dir', '{path}' => $path_to_site . DS . $img_dir);
     }
 
     if (!is_writable($file_base_path)) {
         $notReadable[] = array('{dirtype}' => 'file_base_path', '{path}' => $file_base_path);
     }
 
-    if (!is_writable($path_to_site.DS.$skin_dir)) {
-        $notReadable[] = array('{dirtype}' => 'skin_dir', '{path}' => $path_to_site.DS.$skin_dir);
+    if (!is_writable($path_to_site . DS . $skin_dir)) {
+        $notReadable[] = array('{dirtype}' => 'skin_dir', '{path}' => $path_to_site . DS . $skin_dir);
     }
 
     if (!is_writable($tempdir)) {
@@ -274,7 +274,7 @@ function doDiagnostics()
         $notReadable[] = array('{dirtype}' => 'plugin_dir', '{path}' => PLUGINPATH);
     }
 
-    if ($permlink_mode != 'messy' && $is_apache && !is_readable($path_to_site.'/.htaccess')) {
+    if ($permlink_mode != 'messy' && $is_apache && !is_readable($path_to_site . '/.htaccess')) {
         $fail['e'][] = array('htaccess_missing');
     }
 
@@ -286,10 +286,10 @@ function doDiagnostics()
         $fail['i'][] = array('file_uploads_disabled');
     }
 
-    $basePath = isset($txpcfg['multisite_root_path']) ? $txpcfg['multisite_root_path'].DS.'admin' : txpath;
+    $basePath = isset($txpcfg['multisite_root_path']) ? $txpcfg['multisite_root_path'] . DS . 'admin' : txpath;
 
-    if (!$txp_is_dev && is_dir($basePath.DS.'setup') && !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup')) {
-        $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath.DS.'setup'.DS));
+    if (!$txp_is_dev && is_dir($basePath . DS . 'setup') && !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup')) {
+        $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath . DS . 'setup' . DS));
     }
 
     if (empty($tempdir)) {
@@ -306,8 +306,8 @@ function doDiagnostics()
 
     if ($permlink_mode != 'messy') {
         foreach (array_keys($txp_sections) as $name) {
-            if ($name != 'default' && file_exists($path_to_site.DS.$name)) {
-                $fail['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site.DS.$name));
+            if ($name != 'default' && file_exists($path_to_site . DS . $name)) {
+                $fail['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site . DS . $name));
             }
         }
     }
@@ -320,7 +320,7 @@ function doDiagnostics()
 
     // Files that don't match their checksums.
     if (!$txp_is_dev && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
-        $fail['w'][] = array('modified_files', null, array('{list}' => n.t.implode(', '.n.t, $modified_files)));
+        $fail['w'][] = array('modified_files', null, array('{list}' => n . t . implode(', ' . n . t, $modified_files)));
     }
 
     // Running development code in live mode is not recommended.
@@ -333,8 +333,9 @@ function doDiagnostics()
         array_keys($cs, INTEGRITY_MISSING),
         array_keys($cs, INTEGRITY_NOT_FILE),
         array_keys($cs, INTEGRITY_NOT_READABLE)
-    )) {
-        $fail['e'][] = array('missing_files', null, array('{list}' => n.t.implode(', '.n.t, $missing)));
+    )
+    ) {
+        $fail['e'][] = array('missing_files', null, array('{list}' => n . t . implode(', ' . n . t, $missing)));
     }
 
     // Anything might break if arbitrary functions are disabled.
@@ -368,7 +369,7 @@ function doDiagnostics()
 //    if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
 //    $fail['cgi_header_config'] = gTxt('cgi_header_config');
 
-    $guess_site_url = $_SERVER['HTTP_HOST'].preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+    $guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
     if ($siteurl && strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // Skip warning if multi-site setup, as $guess_site_url and $siteurl will mismatch.
@@ -383,12 +384,12 @@ function doDiagnostics()
             $s = md5(uniqid(rand(), true));
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = file(hu.$s.'/?txpcleantest=1');
+            $pretext_data = file(hu . $s . '/?txpcleantest=1');
 
             if ($pretext_data) {
                 $pretext_req = trim(@$pretext_data[0]);
 
-                if ($pretext_req != md5('/'.$s.'/?txpcleantest=1')) {
+                if ($pretext_req != md5('/' . $s . '/?txpcleantest=1')) {
                     $fail['w'][] = array('clean_url_data_failed', null, array('{data}' => txpspecialchars($pretext_req)));
                 }
             } else {
@@ -401,12 +402,12 @@ function doDiagnostics()
         $table_errors = check_tables($tables);
 
         if ($table_errors) {
-            $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n.t.implode(', '.n.t, $table_errors)));
+            $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n . t . implode(', ' . n . t, $table_errors)));
         }
     }
 
     if ($badCF = filterCustomFields(false)) {
-        $fail['w'][] = array('custom_field_clash', null, array('{list}'=> implode(', ', $badCF)));
+        $fail['w'][] = array('custom_field_clash', null, array('{list}' => implode(', ', $badCF)));
     }
 
     $active_plugins = array();
@@ -421,12 +422,12 @@ function doDiagnostics()
         $showTypes = '0, 1, 2, 3, 4, 5';
     }
 
-    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 AND type IN (".$showTypes.") ORDER BY name")) {
+    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 AND type IN (" . $showTypes . ") ORDER BY name")) {
         foreach ($rows as $row) {
-            $n = $row['name'].'-'.$row['version'];
+            $n = $row['name'] . '-' . $row['version'];
 
             if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
-                $n .= ' ('.gTxt('diag_modified').')';
+                $n .= ' (' . gTxt('diag_modified') . ')';
             }
 
             $active_plugins[] = $n;
@@ -507,16 +508,16 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
+    echo n . '<div class="txp-layout">' .
+        n . tag(
             hed($heading, 1, array('class' => 'txp-heading')),
             'div', array('class' => 'txp-layout-1col')
-        ).
-        n.tag_start('div', array(
+        ) .
+        n . tag_start('div', array(
             'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        )).
-        n.tag_start('div', array('id' => 'pre_flight_check')).
+            'id'    => $event . '_container',
+        )) .
+        n . tag_start('div', array('id' => 'pre_flight_check')) .
         hed(gTxt('preflight_check'), 2);
 
     $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
@@ -571,7 +572,7 @@ function doDiagnostics()
             }
         } else {
             $pfcStrings[$lang][] = array(
-                'msg' => '<span class="ui-icon ui-icon-check"></span>'.sp.gTxt('all_checks_passed'),
+                'msg' => '<span class="ui-icon ui-icon-check"></span>' . sp . gTxt('all_checks_passed'),
                 'help' => '',
                 'type' => array('class' => 'success')
             );
@@ -583,31 +584,31 @@ function doDiagnostics()
     // The lang will now be back to the local lingo so we can use $lang
     // to display the correct pre-flight check.
     foreach ($pfcStrings[$lang] as $preflight) {
-        echo n.graf($preflight['msg'].$preflight['help'], $preflight['type']);
+        echo n . graf($preflight['msg'] . $preflight['help'], $preflight['type']);
     }
 
     // End of #pre_flight_check.
-    echo n.tag_end('div');
+    echo n . tag_end('div');
 
     $out = array();
 
-    echo n.tag_start('div', array('id' => 'diagnostics')).
+    echo n . tag_start('div', array('id' => 'diagnostics')) .
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = 'Y-m-d H:i:s';
-    $updateTime = ($dbupdatetime) ? gmdate($fmt_date, $dbupdatetime).'/' : '';
+    $updateTime = ($dbupdatetime) ? gmdate($fmt_date, $dbupdatetime) . '/' : '';
 
     $out = array(
         form(
-            eInput('diag').
-            href(gTxt('php_diagnostics').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), array(
+            eInput('diag') .
+            href(gTxt('php_diagnostics') . sp . span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), array(
                 'event'      => 'diag',
                 'step'       => 'phpinfo',
                 '_txp_token' => form_token(),
             ), array(
                 'rel'    => 'external',
                 'target' => '_blank',
-            )).
+            )) .
             pluggable_ui(
                 'diag_ui',
                 'level',
@@ -620,7 +621,7 @@ function doDiagnostics()
                     ''
                 ),
                 $diag_levels
-            ).
+            ) .
             inputLabel(
                 'diag_clear_private',
                 checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
@@ -629,92 +630,92 @@ function doDiagnostics()
             )
         ),
 
-        '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        '<textarea class="code" id="diagnostics-detail" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr" readonly>',
         '</textarea>',
 
         (isset($txpcfg['multisite_root_path']))
-        ? '<textarea class="code hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(dirname($txpcfg['multisite_root_path'])).'" dir="ltr" readonly>'
-        : '<textarea class="code hidden" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(txpath).'" dir="ltr" readonly>',
+        ? '<textarea class="code hidden" id="diagnostics-data" cols="' . INPUT_LARGE . '" data-txproot="' . dirname(dirname($txpcfg['multisite_root_path'])) . '" dir="ltr" readonly>'
+        : '<textarea class="code hidden" id="diagnostics-data" cols="' . INPUT_LARGE . '" data-txproot="' . dirname(txpath) . '" dir="ltr" readonly>',
 
-        gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
+        gTxt('diag_txp_version') . cs . txp_version . ' (' . check_file_integrity(INTEGRITY_DIGEST) . ')' . n,
 
-        gTxt('diag_last_update').cs.$updateTime.gmdate($fmt_date, filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update') . cs . $updateTime . gmdate($fmt_date, filemtime(txpath . '/update/_update.php')) . n,
 
-        priv.gTxt('diag_web_domain').cs.$siteurl.n,
+        priv . gTxt('diag_web_domain') . cs . $siteurl . n,
 
-        (defined('ahu')) ? priv.gTxt('diag_admin_url').cs.rtrim(preg_replace('|^https?://|', '', ahu), '/').n : '',
+        (defined('ahu')) ? priv . gTxt('diag_admin_url') . cs . rtrim(preg_replace('|^https?://|', '', ahu), '/') . n : '',
 
-        (!empty($txpcfg['cookie_domain'])) ? priv.gTxt('diag_cookie_domain').cs.cookie_domain.n : '',
+        (!empty($txpcfg['cookie_domain'])) ? priv . gTxt('diag_cookie_domain') . cs . cookie_domain . n : '',
 
-        priv.gTxt('diag_document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
+        priv . gTxt('diag_document_root') . cs . @$_SERVER['DOCUMENT_ROOT'] . (($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' (' . $real_doc_root . ')' : '') . n,
 
-        (isset($txpcfg['multisite_root_path'])) ? gTxt('diag_multisite_root_path').cs.$txpcfg['multisite_root_path'].n : '',
+        (isset($txpcfg['multisite_root_path'])) ? gTxt('diag_multisite_root_path') . cs . $txpcfg['multisite_root_path'] . n : '',
 
-        priv.'$path_to_site'.cs.$path_to_site.n,
+        priv . '$path_to_site' . cs . $path_to_site . n,
 
-        gTxt('diag_txp_path').cs.txpath.n,
+        gTxt('diag_txp_path') . cs . txpath . n,
 
-        gTxt('diag_permlink_mode').cs.$permlink_mode.n,
+        gTxt('diag_permlink_mode') . cs . $permlink_mode . n,
 
-        gTxt('diag_production_status').cs.$production_status.n,
+        gTxt('diag_production_status') . cs . $production_status . n,
 
-        (ini_get('open_basedir')) ? 'open_basedir'.cs.ini_get('open_basedir').n : '',
+        (ini_get('open_basedir')) ? 'open_basedir' . cs . ini_get('open_basedir') . n : '',
 
-        (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir'.cs.ini_get('upload_tmp_dir').n : '',
+        (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir' . cs . ini_get('upload_tmp_dir') . n : '',
 
-        gTxt('diag_tempdir').cs.$tempdir.n,
+        gTxt('diag_tempdir') . cs . $tempdir . n,
 
-        gTxt('diag_php_version').cs.phpversion().n,
+        gTxt('diag_php_version') . cs . phpversion() . n,
 
-        gTxt('diag_gd_library').cs.$gd.n,
+        gTxt('diag_gd_library') . cs . $gd . n,
 
 
-        gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
+        gTxt('diag_server_timezone') . cs . Txp::get('\Textpattern\Date\Timezone')->getTimeZone() . n,
 
-        gTxt('diag_server_time').cs.date('Y-m-d H:i:s').n,
+        gTxt('diag_server_time') . cs . date('Y-m-d H:i:s') . n,
 
-        strip_tags(gTxt('diag_is_dst')).cs.$is_dst.n,
+        strip_tags(gTxt('diag_is_dst')) . cs . $is_dst . n,
 
-        strip_tags(gTxt('diag_auto_dst')).cs.$auto_dst.n,
+        strip_tags(gTxt('diag_auto_dst')) . cs . $auto_dst . n,
 
-        strip_tags(gTxt('diag_gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
+        strip_tags(gTxt('diag_gmtoffset')) . cs . $timezone_key . sp . "($gmtoffset)" . n,
 
-        'MySQL'.cs.$DB->version.' ('.getThing('SELECT @@GLOBAL.version_comment').') '.n,
+        'MySQL' . cs . $DB->version . ' (' . getThing('SELECT @@GLOBAL.version_comment') . ') ' . n,
 
-        gTxt('diag_db_server_time').cs.$db_server_time.n,
+        gTxt('diag_db_server_time') . cs . $db_server_time . n,
 
-        gTxt('diag_db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
+        gTxt('diag_db_server_timeoffset') . cs . $db_server_timeoffset . ' s' . n,
 
-        gTxt('diag_db_global_timezone').cs.$db_global_timezone.n,
+        gTxt('diag_db_global_timezone') . cs . $db_global_timezone . n,
 
-        gTxt('diag_db_session_timezone').cs.$db_session_timezone.n,
+        gTxt('diag_db_session_timezone') . cs . $db_session_timezone . n,
 
-        gTxt('diag_locale').cs.$locale.n,
+        gTxt('diag_locale') . cs . $locale . n,
 
-        gTxt('diag_languages', array('{site_lang}' => $siteLang, '{admin_lang}' => $thisLang)).n,
+        gTxt('diag_languages', array('{site_lang}' => $siteLang, '{admin_lang}' => $thisLang)) . n,
 
-        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
+        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server') . cs . $_SERVER['SERVER_SOFTWARE'] . n : '',
 
-        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.apache_get_version().n : '',
+        (is_callable('apache_get_version')) ? gTxt('diag_apache_version') . cs . apache_get_version() . n : '',
 
-        gTxt('diag_php_sapi_mode').cs.PHP_SAPI.n,
+        gTxt('diag_php_sapi_mode') . cs . PHP_SAPI . n,
 
-        gTxt('diag_ssl_version').cs.OPENSSL_VERSION_TEXT.n,
+        gTxt('diag_ssl_version') . cs . OPENSSL_VERSION_TEXT . n,
 
-        gTxt('diag_rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
+        gTxt('diag_rfc2616_headers') . cs . ini_get('cgi.rfc2616_headers') . n,
 
-        gTxt('diag_server_os_version').cs.php_uname('s').' '.php_uname('r').($step === 'high' ? ' '.php_uname('v').' '.php_uname('m') : '').n,
+        gTxt('diag_server_os_version') . cs . php_uname('s') . ' ' . php_uname('r') . ($step === 'high' ? ' ' . php_uname('v') . ' ' . php_uname('m') : '') . n,
 
-        gTxt('diag_theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
+        gTxt('diag_theme_name') . cs . $theme_name . sp . @$theme_manifest['version'] . n,
 
-        ($active_plugins ? gTxt('diag_active_plugins').cs.n.t.implode(n.t, $active_plugins).n : ''),
+        ($active_plugins ? gTxt('diag_active_plugins') . cs . n . t . implode(n . t, $active_plugins) . n : ''),
 
         ($fail || $not_readable)
-        ? n.gTxt('diag_preflight_check').cs.n.ln.implode(n, doStripTags(array_column($pfcStrings['en'], 'msg'))).n.ln
+        ? n . gTxt('diag_preflight_check') . cs . n . ln . implode(n, doStripTags(array_column($pfcStrings['en'], 'msg'))) . n . ln
         : '',
 
-        ($is_apache && is_readable($path_to_site.'/.htaccess'))
-        ? n.gTxt('diag_htaccess_contents').cs.n.ln.txpspecialchars(implode('', file($path_to_site.'/.htaccess'))).n.ln
+        ($is_apache && is_readable($path_to_site . '/.htaccess'))
+        ? n . gTxt('diag_htaccess_contents') . cs . n . ln . txpspecialchars(implode('', file($path_to_site . '/.htaccess'))) . n . ln
         : '',
     );
 
@@ -726,23 +727,23 @@ function doDiagnostics()
             $relbeta = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
             $msgmain = empty($lastCheck['msg']) ? '' : strip_tags(gTxt($lastCheck['msg'], $relmain));
             $msgbeta = empty($lastCheck['msg2']) ? '' : strip_tags(gTxt($lastCheck['msg2'], $relbeta));
-            $out[] = n.gTxt('diag_last_update_check').cs.date('Y-m-d H:i:s', $lastCheck['when']).', '.$msgmain.' '.$msgbeta.n;
+            $out[] = n . gTxt('diag_last_update_check') . cs . date('Y-m-d H:i:s', $lastCheck['when']) . ', ' . $msgmain . ' ' . $msgbeta . n;
         }
 
-        $out[] = n.gTxt('diag_db_charset').cs.$DB->default_charset.'/'.$DB->charset.n;
+        $out[] = n . gTxt('diag_db_charset') . cs . $DB->default_charset . '/' . $DB->charset . n;
 
         $result = safe_query("SHOW variables WHERE Variable_name LIKE 'character_se%' OR Variable_name LIKE 'collation%'");
 
         while ($row = mysqli_fetch_row($result)) {
-            $out[] = $row[0].cs.$row[1].n;
+            $out[] = $row[0] . cs . $row[1] . n;
 
             if ($row[0] == 'character_set_connection') {
                 $conn_char = $row[1];
             }
         }
 
-        $table_names = array(PFX.'textpattern');
-        $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
+        $table_names = array(PFX . 'textpattern');
+        $result = safe_query("SHOW TABLES LIKE '" . PFX . "txp\_%'");
 
         while ($row = mysqli_fetch_row($result)) {
             $table_names[] = $row[0];
@@ -769,7 +770,7 @@ function doDiagnostics()
             $row = mysqli_fetch_assoc($ctr);
 
             if (in_array($row['Msg_type'], array('error', 'warning'))) {
-                $table_msg[] = $table.cs.$row['Msg_Text'];
+                $table_msg[] = $table . cs . $row['Msg_Text'];
             }
         }
 
@@ -777,52 +778,52 @@ function doDiagnostics()
             $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
         }
 
-        $out[] = count($table_names).sp.gTxt('diag_db_tables').cs.implode(', ', $table_msg).n;
+        $out[] = count($table_names) . sp . gTxt('diag_db_tables') . cs . implode(', ', $table_msg) . n;
 
-        $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
-        $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('diag_custom').cs.
-                    implode(', ', $cf).sp.'('.count($cf).')'.n;
+        $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `" . PFX . "textpattern`"));
+        $out[] = n . get_pref('max_custom_fields', 10) . sp . gTxt('diag_custom') . cs .
+                    implode(', ', $cf) . sp . '(' . count($cf) . ')' . n;
 
         $extv = array();
 
         foreach ($extns as $e) {
-            $extv[] = $e.(phpversion($e) ? ' ('.phpversion($e).')' : '');
+            $extv[] = $e . (phpversion($e) ? ' (' . phpversion($e) . ')' : '');
         }
 
         if ($extv) {
-            $out[] = n.gTxt('diag_extensions_installed').cs.implode(', ', $extv).n;
+            $out[] = n . gTxt('diag_extensions_installed') . cs . implode(', ', $extv) . n;
         }
 
         if ($exts_missing_recommended) {
-            $out[] = n.gTxt('diag_extensions_recommended').cs.implode(', ', array_filter($exts_missing_recommended)).n;
+            $out[] = n . gTxt('diag_extensions_recommended') . cs . implode(', ', array_filter($exts_missing_recommended)) . n;
         }
 
         if (is_callable('apache_get_modules')) {
-            $out[] = n.gTxt('diag_apache_modules').cs.implode(', ', apache_get_modules()).n;
+            $out[] = n . gTxt('diag_apache_modules') . cs . implode(', ', apache_get_modules()) . n;
         }
 
         if (isset($pretext_data) && is_array($pretext_data) and count($pretext_data) > 1) {
-            $out[] = n.gTxt('diag_pretext_data').cs.txpspecialchars(implode('', array_slice($pretext_data, 1, 20))).n;
+            $out[] = n . gTxt('diag_pretext_data') . cs . txpspecialchars(implode('', array_slice($pretext_data, 1, 20))) . n;
         }
 
         $out[] = n;
 
         if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
             foreach ($md5s as $f => $checksum) {
-                $out[] = $f.cs.n.t.(!$checksum ? gTxt('diag_unknown') : $checksum).n;
+                $out[] = $f . cs . n . t . (!$checksum ? gTxt('diag_unknown') : $checksum) . n;
             }
         }
 
-        $out[] = n.ln;
+        $out[] = n . ln;
     }
 
-    $out[] = callback_event('diag_results', $step).n;
+    $out[] = callback_event('diag_results', $step) . n;
     $out[] = '</textarea>';
 
     echo implode('', $out),
-        n.tag_end('div'). // End of #diagnostics.
-        n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.;
+        n . tag_end('div') . // End of #diagnostics.
+        n . tag_end('div') . // End of .txp-layout-1col.
+        n . '</div>'; // End of .txp-layout.;
 }
 
 /**
