@@ -103,10 +103,11 @@ function plugin_list($message = '')
         set_pref('plugin_sort_dir', $dir, 'plugin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
+    $sort_sql = "$sort $dir" . ($sort == 'name' ? '' : ", name");
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'name' => array(
                 'column' => 'txp_plugin.name',
@@ -169,16 +170,16 @@ function plugin_list($message = '')
     $total = safe_count('txp_plugin', $criteria);
 
     $searchBlock =
-        n.tag(
+        n . tag(
             $search->renderForm('plugin', $search_render_options),
             'div', array(
                 'class' => 'txp-layout-4col-3span',
-                'id'    => $event.'_control',
+                'id'    => $event . '_control',
             )
         );
 
     $contentBlock = '';
-    $existing_files = get_filenames(PLUGINPATH.DS, GLOB_ONLYDIR) or $existing_files = array();
+    $existing_files = get_filenames(PLUGINPATH . DS, GLOB_ONLYDIR) or $existing_files = array();
 
     foreach ($installed = safe_column_num('name', 'txp_plugin', 1) as $name) {
         unset($existing_files[$name]);
@@ -192,7 +193,7 @@ function plugin_list($message = '')
     if ($total < 1) {
         if ($crit !== '') {
             $contentBlock .= graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
                 gTxt('no_results_found'),
                 array('class' => 'alert-block information')
             );
@@ -208,54 +209,54 @@ function plugin_list($message = '')
         $adminOn = get_pref('admin_side_plugins');
 
         $contentBlock .=
-            n.tag_start('form', array(
+            n . tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'plugin_form',
                 'name'   => 'longform',
                 'method' => 'post',
                 'action' => 'index.php',
-            )).
-            n.tag_start('div', array(
+            )) .
+            n . tag_start('div', array(
                 'class'      => 'txp-listtables',
                 'tabindex'   => 0,
                 'aria-label' => gTxt('list'),
-            )).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
+            )) .
+            n . tag_start('table', array('class' => 'txp-list')) .
+            n . tag_start('thead') .
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                ).
+                    '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                ) .
                 column_head(
                     'plugin', 'name', 'plugin', true, $switch_dir, '', '',
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
-                ).
+                    (('name' == $sort) ? "$dir " : '') . 'txp-list-col-name'
+                ) .
                 column_head(
                     'version', 'version', 'plugin', true, $switch_dir, '', '',
-                        (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
-                ).
+                    (('version' == $sort) ? "$dir " : '') . 'txp-list-col-version'
+                ) .
                 column_head(
                     'active', 'status', 'plugin', true, $switch_dir, '', '',
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
-                ).
+                    (('status' == $sort) ? "$dir " : '') . 'txp-list-col-status'
+                ) .
                 column_head(
                     'author', 'author', 'plugin', true, $switch_dir, '', '',
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
-                ).
+                    (('author' == $sort) ? "$dir " : '') . 'txp-list-col-author'
+                ) .
                 hCell(gTxt(
-                    'description'), '', ' class="txp-list-col-description" scope="col"'
-                ).
+                    'description'
+                ), '', ' class="txp-list-col-description" scope="col"') .
                 column_head(
                     'order', 'load_order', 'plugin', true, $switch_dir, '', '',
-                        (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
-                ).
+                    (('load_order' == $sort) ? "$dir " : '') . 'txp-list-col-load-order'
+                ) .
                 hCell(
                     gTxt('manage'), '', ' class="txp-list-col-manage" scope="col"'
                 )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
+            ) .
+            n . tag_end('thead') .
+            n . tag_start('tbody');
 
         while ($a = nextRow($rs)) {
             foreach ($a as $key => $value) {
@@ -287,7 +288,7 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
-                    href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
+                    href(gTxt('options'), array('event' => 'plugin_prefs.' . $name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
@@ -336,7 +337,7 @@ function plugin_list($message = '')
                 }
             }
 
-            $manage_items = ($manage) ? implode(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
+            $manage_items = ($manage) ? implode(sp . span('&#124;', array('role' => 'separator')) . sp, $manage) : '-';
             $edit_url = array(
                 'event'         => 'plugin',
                 'step'          => 'plugin_edit',
@@ -353,37 +354,37 @@ function plugin_list($message = '')
             $statusDisplay = (!$publicOn && $type == 0) || (!$adminOn && in_array($type, array(3, 4))) || (!$publicOn && !$adminOn && in_array($type, array(0, 1, 3, 4, 5)))
                 ? tag($statusLink, 's')
                 : $statusLink;
-            $showModified = ($modified ? sp.span(gTxt('modified'), array('class' => 'warning')) : '');
+            $showModified = ($modified ? sp . span(gTxt('modified'), array('class' => 'warning')) : '');
 
             $contentBlock .= tr(
                 td(
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
-                ).
+                ) .
                 hCell(
                     href($name, $edit_url, array('title' => gTxt('edit'))), '', ' class="txp-list-col-name" scope="row"'
-                ).
+                ) .
                 td(
                     (!empty($lastCheck['plugins'][$name])
-                        ? href($version.$showModified.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL.'/plugins/'.$name, array(
+                        ? href($version . $showModified . sp . span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), PLUGIN_REPO_URL . '/plugins/' . $name, array(
                         'rel'    => 'external',
                         'target' => '_blank',))
-                        : $version.$showModified), '', 'txp-list-col-version'
-                ).
+                        : $version . $showModified), '', 'txp-list-col-version'
+                ) .
                 td(
                     $statusDisplay, '', 'txp-list-col-status'
-                ).
+                ) .
                 td(
-                    ($author_uri ? href($author.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
+                    ($author_uri ? href($author . sp . span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), $a['author_uri'], array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )) : $author), '', 'txp-list-col-author'
-                ).
+                ) .
                 td(
                     $description, '', 'txp-list-col-description'
-                ).
+                ) .
                 td(
                     $load_order, '', 'txp-list-col-load-order'
-                ).
+                ) .
                 td(
                     $manage_items, '', 'txp-list-col-manage'
                 ),
@@ -394,35 +395,35 @@ function plugin_list($message = '')
         }
 
         $contentBlock .=
-            n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            plugin_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form');
+            n . tag_end('tbody') .
+            n . tag_end('table') .
+            n . tag_end('div') . // End of .txp-listtables.
+            plugin_multiedit_form($page, $sort, $dir, $crit, $search_method) .
+            tInput() .
+            n . tag_end('form');
     }
 
     if (!is_dir(PLUGINPATH) || !is_writeable(PLUGINPATH)) {
         $createBlock =
             graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                span(null, array('class' => 'ui-icon ui-icon-alert')) . ' ' .
                 gTxt('plugin_dir_not_writeable', array('{plugindir}' => PLUGINPATH)),
                 array('class' => 'alert-block warning')
-            ).n;
+            ) . n;
     } else {
         $createBlock = tag(
             tag(href(gTxt('create'), array(
                 'event'      => 'plugin',
                 'step'       => 'plugin_edit',
                 '_txp_token' => form_token(),
-            ), 'class="txp-button"'), 'p').
+            ), 'class="txp-button"'), 'p') .
             wrapRegion('txp-plugins-group', plugin_form($existing_files), 'txp-plugins-group-content', 'install_plugin', $installed ? 'plugin_install' : ''),
             'div',
             array('class' => 'txp-control-panel')
         );
     }
 
-    $pageBlock = $paginator->render().
+    $pageBlock = $paginator->render() .
         nav_form('plugin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table();
@@ -468,7 +469,7 @@ function plugin_help()
     $default_lang = $lang_plugin = 'en';
 
     pagetop(gTxt('plugin_help'));
-    $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
+    $help = ($name) ? safe_field('help', 'txp_plugin', "name = '" . doSlash($name) . "'") : '';
     $helpArray = do_list($help, n);
 
     if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
@@ -477,14 +478,14 @@ function plugin_help()
     }
 
     if ($lang_plugin !== $default_lang) {
-        $direction = safe_field('data', 'txp_lang', "lang = '".doSlash($lang_plugin)."' AND name='lang_dir'");
+        $direction = safe_field('data', 'txp_lang', "lang = '" . doSlash($lang_plugin) . "' AND name='lang_dir'");
     }
 
     if (empty($direction) || !in_array($direction, array('ltr', 'rtl'))) {
         $direction = 'ltr';
     }
 
-    echo n.tag($help, 'div', array(
+    echo n . tag($help, 'div', array(
         'class' => 'txp-layout-textbox',
         'lang'  => $lang_plugin,
         'dir'   => $direction,
@@ -545,7 +546,7 @@ function plugin_edit_form($name = '')
     }
 
     $buttons = graf(
-        sLink('plugin', '', gTxt('cancel'), 'txp-button').n.
+        sLink('plugin', '', gTxt('cancel'), 'txp-button') . n .
         fInput('submit', '', gTxt('save'), 'publish'),
         array('class' => 'txp-edit-actions')
     );
@@ -554,21 +555,21 @@ function plugin_edit_form($name = '')
 
     return form(
         tag(
-            hed(gTxt('edit_plugin', array('{name}' => $name)), 2, array('class' => 'txp-heading')).
+            hed(gTxt('edit_plugin', array('{name}' => $name)), 2, array('class' => 'txp-heading')) .
             Txp::get('\Textpattern\UI\InputLabel', 'code', Txp::get('\Textpattern\UI\Textarea', 'code', $plugin['code'])->setAtts(array(
                 'class' => 'code',
                 'id'    => 'plugin_code',
                 'cols'  => INPUT_XLARGE,
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
-            )), array('code', 'plugin_code')).
+            )), array('code', 'plugin_code')) .
             Txp::get('\Textpattern\UI\InputLabel', 'help_raw', Txp::get('\Textpattern\UI\Textarea', 'help_raw', $plugin['help_raw'])->setAtts(array(
                 'class' => 'help code',
                 'id'    => 'plugin_help',
                 'cols'  => INPUT_XLARGE,
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
-            )), array('help', 'plugin_help')).
+            )), array('help', 'plugin_help')) .
             Txp::get('\Textpattern\UI\InputLabel', 'textpack', Txp::get('\Textpattern\UI\Textarea', 'textpack', $plugin['textpack'])->setAtts(array(
                 'class' => 'textpack code',
                 'id'    => 'plugin_textpack',
@@ -576,20 +577,22 @@ function plugin_edit_form($name = '')
                 'rows'  => TEXTAREA_HEIGHT_LARGE,
                 'dir'   => 'ltr',
             )), array('textpack', 'plugin_textpack')),
-        'div', array(
+            'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
             'role'  => 'region',
-        )).
+            )
+        ) .
         tag(
-            n.tag(
+            n . tag(
                 $buttons,
                 'div', array('class' => 'txp-save-zone')
-            ).
+            ) .
             tag(
-                hed(gTxt('plugin_details'), 3, array('id' => 'plugin-details-label')).
+                hed(gTxt('plugin_details'), 3, array('id' => 'plugin-details-label')) .
                 tag(
-                    Txp::get('\Textpattern\UI\InputLabel', 'newname',
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'newname',
                         Txp::get('\Textpattern\UI\Input', 'newname', 'text', $plugin['name'])
                             ->setAtts(array(
                                 'id'        => 'newname',
@@ -597,34 +600,39 @@ function plugin_edit_form($name = '')
                             ))
                             ->setBool('required'),
                         'name'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'version',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'version',
                         Txp::get('\Textpattern\UI\Input', 'version', 'text', $plugin['version'])
                             ->setAtts(array(
                                 'id'        => 'version',
                                 'maxlength' => $fieldSizes['version'],
                             )),
                         'version'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'type',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'type',
                         Txp::get('\Textpattern\UI\Select', 'type', $pluginObj->getTypes(), $plugin['type'])
                             ->setAtt('id', 'plugin_type'),
                         array('type', 'plugin_type')
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'order',
-                        Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1,9), range(1,9)), $plugin['order'])
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'order',
+                        Txp::get('\Textpattern\UI\Select', 'order', array_combine(range(1, 9), range(1, 9)), $plugin['order'])
                             ->setAtt('id', 'order'),
                         'order'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'author',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'author',
                         Txp::get('\Textpattern\UI\Input', 'author', 'text', $plugin['author'])
                             ->setAtts(array(
                                 'id'        => 'author',
                                 'maxlength' => $fieldSizes['author'],
-                        )),
+                            )),
                         'author'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'author_uri',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'author_uri',
                         Txp::get('\Textpattern\UI\Input', 'author_uri', 'text', $plugin['author_uri'])
                             ->setAtts(array(
                                 'id'        => 'author_uri',
@@ -632,43 +640,49 @@ function plugin_edit_form($name = '')
                                 'maxlength' => $fieldSizes['author_uri'],
                             )),
                         'author_uri'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'description',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'description',
                         Txp::get('\Textpattern\UI\Input', 'description', 'text', $plugin['description'])
                             ->setAtts(array(
                                 'id'   => 'description',
                                 'size' => INPUT_XLARGE,
-                        )),
+                            )),
                         'description'
-                    ).
-                    Txp::get('\Textpattern\UI\InputLabel', 'flags',
+                    ) .
+                    Txp::get(
+                        '\Textpattern\UI\InputLabel', 'flags',
                         Txp::get('\Textpattern\UI\CheckboxSet', 'flags', array(
                             1 => gTxt('plugin_has_prefs'),
                             2 => gTxt('plugin_lifecycle_notify'),
                         ), $flagset)
-                    ).
-                    eInput('plugin').
-                    sInput('plugin_save').
-                    hInput('help_hash', md5($plugin['help_raw'])).
-                    hInput('sort', gps('sort')).
-                    hInput('dir', gps('dir')).
-                    hInput('page', gps('page')).
-                    hInput('search_method', gps('search_method')).
-                    hInput('crit', gps('crit')).
+                    ) .
+                    eInput('plugin') .
+                    sInput('plugin_save') .
+                    hInput('help_hash', md5($plugin['help_raw'])) .
+                    hInput('sort', gps('sort')) .
+                    hInput('dir', gps('dir')) .
+                    hInput('page', gps('page')) .
+                    hInput('search_method', gps('search_method')) .
+                    hInput('crit', gps('crit')) .
                     hInput('name', $name),
-                'div', array(
+                    'div', array(
                     'role' => 'group',
-                ))
-            , 'section', array(
+                    )
+                ),
+                'section', array(
                 'class'           => 'txp-details',
                 'id'              => 'plugin-details',
                 'aria-labelledby' => 'plugin-details-label',
-            )),
-        'div', array(
+                )
+            ),
+            'div', array(
             'class' => 'txp-layout-4col-alt',
             'role'  => 'region',
-        ))
-        , '', '', 'post', 'edit-plugin-code txp-layout', '', 'plugin_details');
+            )
+        ),
+        '', '', 'post', 'edit-plugin-code txp-layout', '', 'plugin_details'
+    );
 }
 
 /**
@@ -723,12 +737,12 @@ function plugin_save()
     $flags = array_sum($flags);
 
     foreach ($vars as $key => $var) {
-        $clause[] = "$key = '".doSlash($$var)."'";
+        $clause[] = "$key = '" . doSlash($$var) . "'";
     }
 
     $vars['help_raw'] = 'help_raw';
 
-    safe_update('txp_plugin', implode(',', $clause), "name = '".doSlash($newname)."'");
+    safe_update('txp_plugin', implode(',', $clause), "name = '" . doSlash($newname) . "'");
     $plugObj->updateFile($newname, compact($vars));
     $message = gTxt('plugin_saved', array('{name}' => $newname));
 
@@ -775,11 +789,11 @@ function plugin_verify($payload = array(), $txpPlugin = null)
     $extras = '';
 
     if (!empty($payload['plugin-filename'])) {
-        $extras .= hInput('plugin-filename', assert_string($payload['plugin-filename'])).
+        $extras .= hInput('plugin-filename', assert_string($payload['plugin-filename'])) .
             hInput('plugin-token', $txpPlugin->generateToken());
 
         if (!empty($payload['files'])) {
-            $extras .= hed(gTxt('upload'), 2).
+            $extras .= hed(gTxt('upload'), 2) .
                 tag(implode(br, (array)$payload['files']), 'pre', array('id' => 'preview-data'));
         }
 
@@ -796,7 +810,7 @@ function plugin_verify($payload = array(), $txpPlugin = null)
 
         $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
         $plugin = $txpPlugin->extract($plugin64);
-        $extras .= hInput('plugin64', $plugin64).
+        $extras .= hInput('plugin64', $plugin64) .
             hInput('plugin-token', $txpPlugin->generateToken());
     }
 
@@ -808,7 +822,7 @@ function plugin_verify($payload = array(), $txpPlugin = null)
             $textile = new \Textpattern\Textile\RestrictedParser();
             $help_source = $textile->setLite(false)->setImages(true)->parse($plugin['help_raw']);
         } else {
-            $help_source = isset($plugin['help']) ? str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($plugin['help'])) : '';
+            $help_source = isset($plugin['help']) ? str_replace(array(t), array(sp . sp . sp . sp), txpspecialchars($plugin['help'])) : '';
         }
 
         if (isset($plugin['textpack'])) {
@@ -821,23 +835,23 @@ function plugin_verify($payload = array(), $txpPlugin = null)
 
         $source = isset($plugin['code']) ? txpspecialchars($plugin['code']) : '';
         $sub = graf(
-            fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button').
+            fInput('submit', 'plugin-cancel', gTxt('cancel'), 'txp-button') .
             fInput('submit', 'plugin-go', gTxt('install'), 'publish'),
             array('class' => 'txp-edit-actions')
         );
 
         pagetop(gTxt('verify_plugin'));
         echo form(
-            hed(gTxt('previewing_plugin'), 2).
+            hed(gTxt('previewing_plugin'), 2) .
             tag(
                 tag($source, 'code', array(
                     'class' => 'language-php',
                     'dir'   => 'ltr',
                 )),
                 'pre', array('id' => 'preview-plugin')
-            ).
+            ) .
             ($help_source
-                ? hed(gTxt('plugin_help'), 2).
+                ? hed(gTxt('plugin_help'), 2) .
                     tag(
                         tag($help_source, 'code', array(
                             'class' => 'language-markup',
@@ -846,28 +860,28 @@ function plugin_verify($payload = array(), $txpPlugin = null)
                         'pre', array('id' => 'preview-help')
                     )
                 : ''
-            ).
+            ) .
             ($textpack
-                ? hed(tag('Textpack', 'bdi', array('dir' => 'ltr')), 2).
+                ? hed(tag('Textpack', 'bdi', array('dir' => 'ltr')), 2) .
                     tag(
                         tag($textpack, 'code', array('dir' => 'ltr')), 'pre', array('id' => 'preview-textpack')
                     )
                 : ''
-            ).
+            ) .
             ($data
-                ? hed(gTxt('meta'), 2).
+                ? hed(gTxt('meta'), 2) .
                     tag(
                         tag($data, 'code', array('dir' => 'ltr')),
                         'pre', array('id' => 'preview-plugin')
                     )
                 : ''
-            ).
-            $extras.
-            $sub.
-            sInput('plugin_install').
-            eInput('plugin').
-            hInput('plugin-name', $plugin['name'])
-            , '', '', 'post', 'plugin-info', '', 'plugin_preview'
+            ) .
+            $extras .
+            $sub .
+            sInput('plugin_install') .
+            eInput('plugin') .
+            hInput('plugin-name', $plugin['name']),
+            '', '', 'post', 'plugin-info', '', 'plugin_preview'
         );
 
         return;
@@ -887,7 +901,7 @@ function plugin_install()
     $message = array(gTxt('bad_plugin_code'), E_ERROR);
 
     $srcFile = ps('plugin-filename');
-    $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS).DS.sanitizeForFile($srcFile) : '';
+    $source = $srcFile ? rtrim(get_pref('tempdir', sys_get_temp_dir()), DS) . DS . sanitizeForFile($srcFile) : '';
     $name = sanitizeForFile(ps('plugin-name'));
     $txpPlugin = Txp::get('\Textpattern\Plugin\Plugin');
 
@@ -906,8 +920,8 @@ function plugin_install()
             }
 
             if ($message === true) {
-                $target_dir = rtrim(PLUGINPATH, DS).DS.$name;
-                $target_path = $target_dir.DS.basename($source);
+                $target_dir = rtrim(PLUGINPATH, DS) . DS . $name;
+                $target_path = $target_dir . DS . basename($source);
 
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir);
@@ -939,8 +953,8 @@ function plugin_install()
                                     $badSlash = true;
                                 }
 
-                                if (strpos(str_replace('\\', '/', $entryName), $filename.'/') !== 0) {
-                                    $makedir = PLUGINPATH.DS.$filename;
+                                if (strpos(str_replace('\\', '/', $entryName), $filename . '/') !== 0) {
+                                    $makedir = PLUGINPATH . DS . $filename;
                                 }
                             }
 
@@ -959,7 +973,7 @@ function plugin_install()
                                     $tmpname = md5($entryName);
                                     $zip->renameIndex($i, $tmpname);
                                     $zip->extractTo($dirname, $tmpname);
-                                    rename($dirname.'/'.$tmpname, $dirname.'/'.$basename);
+                                    rename($dirname . '/' . $tmpname, $dirname . '/' . $basename);
                                 }
                             } else {
                                 $zip->extractTo($makedir);
@@ -1014,7 +1028,7 @@ function plugin_upload($url = null)
             $urlParts = parse_url($url);
             $pathParts = pathinfo($urlParts['path']);
             $filename = $pathParts['basename'];
-            $target = $dest.DS.sanitizeForFile($filename);
+            $target = $dest . DS . sanitizeForFile($filename);
             $content = file_get_contents($url);
 
             // Don't need to test for 'false', since '0' (number of returned bytes) is
@@ -1025,7 +1039,7 @@ function plugin_upload($url = null)
         } else {
             $fileParts = pathinfo($_FILES["theplugin"]["name"]);
             $source = $_FILES["theplugin"]["tmp_name"];
-            $target = $dest.DS.$fileParts['basename'];
+            $target = $dest . DS . $fileParts['basename'];
 
             if (move_uploaded_file($source, $target)) {
                 $ready = true;
@@ -1111,38 +1125,38 @@ function plugin_compile()
 function plugin_form($existing_files = array())
 {
     return tag(
-        tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"').popHelp('upload_plugin').
-        n.tag_void('input', array(
+        tag(gTxt('upload_plugin'), 'label', ' for="plugin-upload"') . popHelp('upload_plugin') .
+        n . tag_void('input', array(
             'type'     => 'file',
             'name'     => 'theplugin',
             'id'       => 'plugin-upload',
-            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '').".php, .txt",
+            'accept'   => (class_exists('ZipArchive') ? "application/x-zip-compressed, application/zip, " : '') . ".php, .txt",
             'required' => 'required',
-        )).
-        fInput('submit', 'install_new', gTxt('upload')).
-        eInput('plugin').
-        sInput('plugin_upload').
-        tInput().n, 'form', array(
+        )) .
+        fInput('submit', 'install_new', gTxt('upload')) .
+        eInput('plugin') .
+        sInput('plugin_upload') .
+        tInput() . n, 'form', array(
             'class'        => 'plugin-file',
             'id'           => 'plugin_upload_form',
             'method'       => 'post',
             'action'       => 'index.php',
             'enctype'      => 'multipart/form-data'
         )
-    ).
+    ) .
     ($existing_files ? form(
-        eInput('plugin').
-        sInput('plugin_import').
-        tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')).
-        selectInput('filename', $existing_files, null, false, '', 'file-existing').
+        eInput('plugin') .
+        sInput('plugin_import') .
+        tag(gTxt('import_from_disk'), 'label', array('for' => 'file-existing')) .
+        selectInput('filename', $existing_files, null, false, '', 'file-existing') .
         fInput('submit', '', gTxt('import')),
         '', '', 'post', 'assign-existing-form txp-async-update', '', 'assign_file'
-    ) : '').
+    ) : '') .
     form(
-        tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-        n.'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
-        fInput('submit', 'install_new', gTxt('upload')).
-        eInput('plugin').
+        tag(gTxt('install_plugin'), 'label', ' for="plugin-install"') . popHelp('install_plugin') .
+        n . '<textarea class="code" id="plugin-install" name="plugin" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" dir="ltr" required="required"></textarea>' .
+        fInput('submit', 'install_new', gTxt('upload')) .
+        eInput('plugin') .
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
     );
 }
@@ -1197,7 +1211,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'coderevert'   => gTxt('revert_to_last_installed'),
         'delete'       => array(
             'label' => gTxt('delete'),
-            'html' => checkbox2('sync', gps('sync'), 0, 'sync').n.
+            'html' => checkbox2('sync', gps('sync'), 0, 'sync') . n .
                 tag(gTxt('plugin_delete_entirely'), 'label', array('for' => 'sync'))
         )
     );
@@ -1248,7 +1262,7 @@ function plugin_multi_edit()
             break;
     }
 
-    $message = gTxt('plugin_'.($method == 'delete' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
+    $message = gTxt('plugin_' . ($method == 'delete' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
 
     plugin_list($message);
 }
@@ -1263,7 +1277,7 @@ function checkPluginUpdates()
 {
     static $plugins;
 
-    $endpoint = PLUGIN_REPO_URL.'/all';
+    $endpoint = PLUGIN_REPO_URL . '/all';
 
     // Can't use the globals, since plugins aren't loaded on the Plugins panel.
     if (empty($plugins)) {
@@ -1330,7 +1344,8 @@ function pluginDependency($plugins, $plugin, $type = 'stable')
         $maxTxpVersion = !empty($plugin[$type]['verifiedMaxTxpCompatibility']) ? $plugin[$type]['verifiedMaxTxpCompatibility'] : 0;
 
         if ((version_compare($plugins[$plugin['name']], $thisPluginVersion) < 0)
-                && (check_compatibility($minTxpVersion, $maxTxpVersion))) {
+                && (check_compatibility($minTxpVersion, $maxTxpVersion))
+        ) {
             $out['endpoint'] = $plugin[$type]['endpointUrl'];
             $out['version'] = $plugin[$type]['version'];
         }
