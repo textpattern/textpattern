@@ -86,11 +86,11 @@ class BuilderTags
     public function tagbuildDialog($ev)
     {
         $listActions = graf(
-            tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> ' . gTxt('expand_all'), 'button', array(
                 'class'         => 'txp-expand-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
-            )).
-            tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+            )) .
+            tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> ' . gTxt('collapse_all'), 'button', array(
                 'class'         => 'txp-collapse-all txp-reduced-ui-button',
                 'aria-controls' => 'tagbuild_links',
             )), array('class' => 'txp-actions')
@@ -129,12 +129,12 @@ class BuilderTags
         $tagbuild_links = '';
 
         foreach ($tagbuild_items as $tb => $item) {
-            $tagbuild_links .= wrapRegion($item[1].'_group', $this->popTagLinks($tb, $ev), $item[1], $item[0], $item[1]);
+            $tagbuild_links .= wrapRegion($item[1] . '_group', $this->popTagLinks($tb, $ev), $item[1], $item[0], $item[1]);
         }
 
         // Tag builder dialog.
         if ($tagbuild_links) {
-            return $listActions.$tagbuild_links;
+            return $listActions . $tagbuild_links;
         }
 
         return false;
@@ -275,17 +275,17 @@ class BuilderTags
     protected function popTagLinks($type, $panel)
     {
         $tagGroups = $this->tagbuildGroups();
-        $arname = $type.'_tags';
+        $arname = $type . '_tags';
 
         $out = array();
 
         if (isset($tagGroups[$arname])) {
             foreach ($tagGroups[$arname] as $a) {
-                $out[] = tag(popTag($a, gTxt('tag_'.$a), array('panel' => $panel)), 'li');
+                $out[] = tag(popTag($a, gTxt('tag_' . $a), array('panel' => $panel)), 'li');
             }
         }
 
-        return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
+        return n . tag(n . join(n, $out) . n, 'ul', array('class' => 'plain-list'));
     }
 
     /**
@@ -299,7 +299,7 @@ class BuilderTags
     public function renderTagHelp($name, $panel)
     {
         $this->tagname = (string)$name;
-        $method = 'tag_'.$this->tagname;
+        $method = 'tag_' . $this->tagname;
 
         if (method_exists($this, $method)) {
             $backLink = '';
@@ -315,11 +315,11 @@ class BuilderTags
                 );
             }
 
-            $this->startblock = $backLink.
-                hed(gTxt('tag_'.$this->tagname), 2).
+            $this->startblock = $backLink .
+                hed(gTxt('tag_' . $this->tagname), 2) .
                 href(
-                    gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
-                    'https://docs.textpattern.com/tags/'.$this->tagname,
+                    gTxt('documentation') . sp . span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
+                    'https://docs.textpattern.com/tags/' . $this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
                         'rel'    => 'external',
@@ -329,10 +329,10 @@ class BuilderTags
 
             $this->endform = graf(
                 span(fInput('submit', '', gTxt('build')), array('class' => 'txp-save-button'))
-            ).
-            eInput('tag').
-            sInput('build').
-            hInput('tag_name', $this->tagname).
+            ) .
+            eInput('tag') .
+            sInput('build') .
+            hInput('tag_name', $this->tagname) .
             hInput('panel', $panel);
 
             return $this->$method($this->tagname);
@@ -410,7 +410,7 @@ class BuilderTags
 
     private function tbNoAtts()
     {
-        return $this->tagbuildForm($this->startblock.$this->widgets().$this->endform).$this->tdb($this->tb($this->tagname));
+        return $this->tagbuildForm($this->startblock . $this->widgets() . $this->endform) . $this->tdb($this->tb($this->tagname));
     }
 
     /**
@@ -434,15 +434,15 @@ class BuilderTags
         foreach ($atts_list as $att => $val) {
             if ($val or $val === '0' or $val === '{att_empty}') {
                 $val = str_replace('{att_empty}', '', $val);
-                $atts[] = ' '.$att.'="'.$val.'"';
+                $atts[] = ' ' . $att . '="' . $val . '"';
             }
         }
 
         $atts = ($atts) ? join('', $atts) : '';
 
         return !empty($thing) ?
-            '<txp:'.$tag.$atts.'>'.$thing.'</txp:'.$tag.'>' :
-            '<txp:'.$tag.$atts.' />';
+            '<txp:' . $tag . $atts . '>' . $thing . '</txp:' . $tag . '>' :
+            '<txp:' . $tag . $atts . ' />';
     }
 
     /**
@@ -454,7 +454,7 @@ class BuilderTags
 
     private function tdb($thing)
     {
-        return graf('<label for="txp-tagbuilder-output">'.gTxt('code').'</label>'.n.text_area(
+        return graf('<label for="txp-tagbuilder-output">' . gTxt('code') . '</label>' . n . text_area(
             'txp-tagbuilder-output',
             '',
             '',
@@ -501,7 +501,7 @@ class BuilderTags
             'any'    => gTxt('any'),
         );
 
-        return ' '.selectInput('time', $vals, $time, true, '', 'time');
+        return ' ' . selectInput('time', $vals, $time, true, '', 'time');
     }
 
     /**
@@ -523,7 +523,7 @@ class BuilderTags
             $value = (int)$value;
         }
 
-        return ' '.selectInput($select_name, $vals, $value, true, '', $select_name, true);
+        return ' ' . selectInput($select_name, $vals, $value, true, '', $select_name, true);
     }
 
     /**
@@ -548,7 +548,7 @@ class BuilderTags
             unset($vals[STATUS_DRAFT], $vals[STATUS_STICKY]);
         }
 
-        return ' '.selectInput('status', $vals, $value, true, '', 'status');
+        return ' ' . selectInput('status', $vals, $value, true, '', 'status');
     }
 
     /**
@@ -560,26 +560,26 @@ class BuilderTags
 
     private function tbSortPop($value)
     {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
+        $asc = ' (' . gTxt('ascending') . ')';
+        $desc = ' (' . gTxt('descending') . ')';
 
         $vals = array(
-            'Title asc'      => gTxt('title').$asc,
-            'Title desc'     => gTxt('title').$desc,
-            'Posted asc'     => gTxt('posted').$asc,
-            'Posted desc'    => gTxt('posted').$desc,
-            'LastMod asc'    => gTxt('last_modification').$asc,
-            'LastMod desc'   => gTxt('last_modification').$desc,
-            'Section asc'    => gTxt('section').$asc,
-            'Section desc'   => gTxt('section').$desc,
-            'Category1 asc'  => gTxt('category1').$asc,
-            'Category1 desc' => gTxt('category1').$desc,
-            'Category2 asc'  => gTxt('category2').$asc,
-            'Category2 desc' => gTxt('category2').$desc,
+            'Title asc'      => gTxt('title') . $asc,
+            'Title desc'     => gTxt('title') . $desc,
+            'Posted asc'     => gTxt('posted') . $asc,
+            'Posted desc'    => gTxt('posted') . $desc,
+            'LastMod asc'    => gTxt('last_modification') . $asc,
+            'LastMod desc'   => gTxt('last_modification') . $desc,
+            'Section asc'    => gTxt('section') . $asc,
+            'Section desc'   => gTxt('section') . $desc,
+            'Category1 asc'  => gTxt('category1') . $asc,
+            'Category1 desc' => gTxt('category1') . $desc,
+            'Category2 asc'  => gTxt('category2') . $asc,
+            'Category2 desc' => gTxt('category2') . $desc,
             'rand()'         => gTxt('random'),
         );
 
-        return ' '.selectInput('sort', $vals, $value, true, '', 'sort');
+        return ' ' . selectInput('sort', $vals, $value, true, '', 'sort');
     }
 
     /**
@@ -591,15 +591,15 @@ class BuilderTags
 
     private function tbDiscussSortPop($value)
     {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
+        $asc = ' (' . gTxt('ascending') . ')';
+        $desc = ' (' . gTxt('descending') . ')';
 
         $vals = array(
-            'posted asc'  => gTxt('posted').$asc,
-            'posted desc' => gTxt('posted').$desc,
+            'posted asc'  => gTxt('posted') . $asc,
+            'posted desc' => gTxt('posted') . $desc,
         );
 
-        return ' '.selectInput('sort', $vals, $value, true, '', 'sort');
+        return ' ' . selectInput('sort', $vals, $value, true, '', 'sort');
     }
 
     /**
@@ -611,17 +611,17 @@ class BuilderTags
 
     private function tbListSortPop($value)
     {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
+        $asc = ' (' . gTxt('ascending') . ')';
+        $desc = ' (' . gTxt('descending') . ')';
 
         $vals = array(
-            'title asc'  => gTxt('title').$asc,
-            'title desc' => gTxt('title').$desc,
-            'name asc'   => gTxt('name').$asc,
-            'name desc'  => gTxt('name').$desc,
+            'title asc'  => gTxt('title') . $asc,
+            'title desc' => gTxt('title') . $desc,
+            'name asc'   => gTxt('name') . $asc,
+            'name desc'  => gTxt('name') . $desc,
         );
 
-        return ' '.selectInput('sort', $vals, $value, true, '', 'sort');
+        return ' ' . selectInput('sort', $vals, $value, true, '', 'sort');
     }
 
     /**
@@ -644,7 +644,7 @@ class BuilderTags
                 $vals[$name] = $name;
             }
 
-            return ' '.selectInput('author', $vals, $value, true, '', 'author');
+            return ' ' . selectInput('author', $vals, $value, true, '', 'author');
         }
     }
 
@@ -669,7 +669,7 @@ class BuilderTags
                 $vals[$name] = $title;
             }
 
-            return ' '.selectInput($select_name, $vals, $value, true, '', $select_name);
+            return ' ' . selectInput($select_name, $vals, $value, true, '', $select_name);
         }
 
         return gTxt('no_sections_available');
@@ -688,7 +688,7 @@ class BuilderTags
         $vals = getTree('root', $type);
 
         if ($vals) {
-            return ' '.treeSelectInput('category', $vals, $value, 'category');
+            return ' ' . treeSelectInput('category', $vals, $value, 'category');
         }
 
         return gTxt('no_categories_available');
@@ -704,13 +704,13 @@ class BuilderTags
     private function tbMatchCatPop($value)
     {
         $vals = array(
-            'Category'            => gTxt('category1').' '.gTxt('or').' '.gTxt('category2'),
-            'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
+            'Category'            => gTxt('category1') . ' ' . gTxt('or') . ' ' . gTxt('category2'),
+            'Category1,Category2' => gTxt('category1') . ' ' . gTxt('and') . ' ' . gTxt('category2'),
             'Category1'           => gTxt('category1'),
             'Category2'           => gTxt('category2'),
         );
 
-        return ' '.selectInput('match', $vals, $value, true, '', 'match');
+        return ' ' . selectInput('match', $vals, $value, true, '', 'match');
     }
 
     /**
@@ -728,7 +728,7 @@ class BuilderTags
             'all'   => gTxt('all'),
         );
 
-        return ' '.selectInput('match', $vals, $value, false, '', 'match');
+        return ' ' . selectInput('match', $vals, $value, false, '', 'match');
     }
 
     /**
@@ -747,7 +747,7 @@ class BuilderTags
             'link'    => gTxt('link'),
         );
 
-        return ' '.selectInput('type', $vals, $value, true, '', 'type');
+        return ' ' . selectInput('type', $vals, $value, true, '', 'type');
     }
 
     /**
@@ -770,7 +770,7 @@ class BuilderTags
                 $vals[$name] = $title;
             }
 
-            return ' '.selectInput('theme', $vals, $value, true, '', 'theme');
+            return ' ' . selectInput('theme', $vals, $value, true, '', 'theme');
         }
 
         return false;
@@ -789,7 +789,7 @@ class BuilderTags
     {
         $vals = array();
 
-        $type = ($type) ? "type = '".doSlash($type)."'" : "1 = 1";
+        $type = ($type) ? "type = '" . doSlash($type) . "'" : "1 = 1";
 
         $rs = safe_rows_start("name", 'txp_form', "$type ORDER BY name");
 
@@ -800,7 +800,7 @@ class BuilderTags
                 $vals[$name] = $name;
             }
 
-            return ' '.selectInput($select_name, $vals, $value, true, '', $select_name);
+            return ' ' . selectInput($select_name, $vals, $value, true, '', $select_name);
         }
 
         return gTxt('no_forms_available');
@@ -826,7 +826,7 @@ class BuilderTags
                 $vals[$name] = $name;
             }
 
-            return ' '.selectInput('name', $vals, $value, true, '', 'name');
+            return ' ' . selectInput('name', $vals, $value, true, '', 'name');
         }
 
         return false;
@@ -846,7 +846,7 @@ class BuilderTags
             'url'  => 'css.php?...',
         );
 
-        return ' '.selectInput('format', $vals, $value, true, '', 'format');
+        return ' ' . selectInput('format', $vals, $value, true, '', 'format');
     }
 
     /**
@@ -863,7 +863,7 @@ class BuilderTags
             'html'        => 'HTML',
         );
 
-        return ' '.selectInput('escape', $vals, $value, false, '', 'escape');
+        return ' ' . selectInput('escape', $vals, $value, false, '', 'escape');
     }
 
     /**
@@ -880,7 +880,7 @@ class BuilderTags
             'rss'  => 'RSS 2.0',
         );
 
-        return ' '.selectInput('flavor', $vals, $value, true, '', 'flavor');
+        return ' ' . selectInput('flavor', $vals, $value, true, '', 'flavor');
     }
 
     /**
@@ -897,7 +897,7 @@ class BuilderTags
             'link' => '<link rel...',
         );
 
-        return ' '.selectInput('format', $vals, $value, true, '', 'format');
+        return ' ' . selectInput('format', $vals, $value, true, '', 'format');
     }
 
     /**
@@ -914,7 +914,7 @@ class BuilderTags
             'url'  => gTxt('url'),
         );
 
-        return ' '.selectInput('format', $vals, $value, true, '', 'format');
+        return ' ' . selectInput('format', $vals, $value, true, '', 'format');
     }
 
     /**
@@ -964,14 +964,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'status'        => $this->tbStatusPop($status),
                 'time'          => $this->tbTimePop($time),
                 'searchall'     => $this->tbYesNoPop('searchall', $searchall),
                 'searchsticky'  => $this->tbYesNoPop('searchsticky', $searchsticky),
                 'on_front_page' => $this->tbYesNoPop('frontpage', $frontpage),
-                'keywords'      => '<textarea name="keywords" id="keywords">'.txpspecialchars($keywords).'</textarea>',
+                'keywords'      => '<textarea name="keywords" id="keywords">' . txpspecialchars($keywords) . '</textarea>',
                 'limit'         => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'        => $this->tbInput('offset', $offset, INPUT_TINY),
                 'pageby'        => $this->tbInput('pageby', $pageby, INPUT_TINY),
@@ -986,9 +986,9 @@ class BuilderTags
                 'form'          => $this->tbFormPop('form', 'article', $form),
                 'listform'      => $this->tbFormPop('listform', 'article', $listform),
                 'searchform'    => $this->tbFormPop('searchform', 'article', $searchform),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1029,7 +1029,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'id'            => $this->tbInput('id', $id),
                 'status'        => $this->tbStatusPop($status),
@@ -1048,8 +1048,8 @@ class BuilderTags
                     7,
                     '',
                     'month'
-                ).' ('.gTxt('yyyy-mm').')',
-                'keywords'      => '<textarea name="keywords" id="keywords">'.txpspecialchars($keywords).'</textarea>',
+                ) . ' (' . gTxt('yyyy-mm') . ')',
+                'keywords'      => '<textarea name="keywords" id="keywords">' . txpspecialchars($keywords) . '</textarea>',
                 'has_excerpt'   => $this->tbYesNoPop('excerpted', $excerpted),
                 'frontpage'     => $this->tbYesNoPop('frontpage', $frontpage),
                 'expired'       => $this->tbYesNoPop('expired', $expired),
@@ -1064,9 +1064,9 @@ class BuilderTags
                 'class'         => $this->tbInput('class', $class, INPUT_REGULAR),
                 'break'         => $this->tbInput('break', $break),
                 'form'          => $this->tbFormPop('form', 'article', $form),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1092,7 +1092,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'use_thumbnail' => $this->tbYesNoPop('thumbnail', $thumbnail),
                 'escape'        => $this->tbEscapePop($escape),
@@ -1102,9 +1102,9 @@ class BuilderTags
                 'wraptag'       => $this->tbInput('wraptag', $wraptag),
                 'width'         => $this->tbInput('width', $width, INPUT_SMALL),
                 'height'        => $this->tbInput('height', $height, INPUT_SMALL),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1128,7 +1128,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'escape'              => $this->tbEscapePop($escape),
                 'format'              => $this->tbAuthorFormatPop($format),
@@ -1136,9 +1136,9 @@ class BuilderTags
                 'section'             => $this->tbSectionPop('section', $section),
                 'this_section'        => $this->tbYesNoPop('this_section', $this_section),
                 'title'               => $this->tbYesNoPop('title', $title),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1177,7 +1177,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'breadcrumb_separator' => $this->tbInput('separator', $separator, INPUT_XSMALL, 'breadcrumb_separator'),
                 'breadcrumb_linked'    => $this->tbYesNoPop('link', $link),
@@ -1191,9 +1191,9 @@ class BuilderTags
                 'offset'               => $this->tbInput('offset', $offset, INPUT_TINY),
                 'wraptag'              => $this->tbInput('wraptag', $wraptag),
                 'class'                => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1220,7 +1220,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'name'                  => $this->tbInput('name', $name, INPUT_REGULAR),
                 'link_to_this_category' => $this->tbYesNoPop('link', $link),
@@ -1231,9 +1231,9 @@ class BuilderTags
                 'url'                   => $this->tbYesNoPop('url', $url),
                 'wraptag'               => $this->tbInput('wraptag', $wraptag),
                 'class'                 => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1273,7 +1273,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'type'                  => $this->tbTypePop($type),
                 'parent'                => $this->tbInput('parent', $parent, INPUT_REGULAR),
@@ -1293,9 +1293,9 @@ class BuilderTags
                 'active_class'          => $this->tbInput('active_class', $active_class, INPUT_REGULAR),
                 'html_id'               => $this->tbInput('html_id', $html_id, INPUT_REGULAR),
                 'break'                 => $this->tbInput('break', $break),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1319,7 +1319,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'title'                 => $this->tbYesNoPop('title', $title),
                 'link_to_this_category' => $this->tbYesNoPop('link', $link),
@@ -1327,9 +1327,9 @@ class BuilderTags
                 'this_section'          => $this->tbYesNoPop('this_section', $this_section),
                 'wraptag'               => $this->tbInput('wraptag', $wraptag),
                 'class'                 => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1353,7 +1353,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'title'                 => $this->tbYesNoPop('title', $title),
                 'link_to_this_category' => $this->tbYesNoPop('link', $link),
@@ -1361,9 +1361,9 @@ class BuilderTags
                 'this_section'          => $this->tbYesNoPop('this_section', $this_section),
                 'wraptag'               => $this->tbInput('wraptag', $wraptag),
                 'class'                 => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1394,15 +1394,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
                 'class'       => $this->tbInput('class', $class),
                 'placeholder' => $this->tbInput('placeholder', $placeholder),
                 'aria_label'  => $this->tbInput('aria_label', $aria_label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1434,16 +1434,16 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'msgcols'     => $this->tbInput('cols', $cols, INPUT_TINY),
                 'msgrows'     => $this->tbInput('rows', $rows, INPUT_TINY),
                 'class'       => $this->tbInput('class', $class),
                 'placeholder' => $this->tbInput('placeholder', $placeholder),
                 'aria_label'  => $this->tbInput('aria_label', $aria_label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1462,10 +1462,10 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
-            $this->widget('comment_name_link', $this->tbYesNoPop('link', $link)).
+            $this->startblock .
+            $this->widget('comment_name_link', $this->tbYesNoPop('link', $link)) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1487,15 +1487,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
                 'class'       => $this->tbInput('class', $class),
                 'placeholder' => $this->tbInput('placeholder', $placeholder),
                 'aria_label'  => $this->tbInput('aria_label', $aria_label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1524,13 +1524,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'class' => $this->tbInput('class', $class),
                 'label' => $this->tbInput('label', $label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1559,13 +1559,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'class' => $this->tbInput('class', $class),
                 'label' => $this->tbInput('label', $label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1586,14 +1586,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'time_format' => $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format'),
                 'gmt'         => $this->tbYesNoPop('gmt', $gmt),
                 'locale'      => $this->tbInput('lang', $lang, INPUT_MEDIUM, 'locale'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1624,15 +1624,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'input_size'  => $this->tbInput('size', $size, INPUT_TINY),
                 'class'       => $this->tbInput('class', $class),
                 'placeholder' => $this->tbInput('placeholder', $placeholder),
                 'aria_label'  => $this->tbInput('aria_label', $aria_label),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1657,7 +1657,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'sort'    => $this->tbDiscussSortPop($sort),
@@ -1666,9 +1666,9 @@ class BuilderTags
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
                 'break'   => $this->tbInput('break', $break),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1689,14 +1689,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'class'   => $this->tbInput('class', $class),
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1718,15 +1718,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'textonly'  => $this->tbYesNoPop('textonly', $textonly),
                 'showcount' => $this->tbYesNoPop('showcount', $showcount),
                 'wraptag'   => $this->tbInput('wraptag', $wraptag),
                 'class'     => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1747,14 +1747,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1778,7 +1778,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'name'   => $this->tbCssPop($name),
                 'skin'   => $this->tbThemePop($theme),
@@ -1786,9 +1786,9 @@ class BuilderTags
                 'media'  => $this->tbInput('media', $media, INPUT_REGULAR),
                 'rel'    => $this->tbInput('rel', $rel, INPUT_REGULAR),
                 'title'  => $this->tbInput('title', $title, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1809,14 +1809,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'email_address' => $this->tbInput('email', $email, INPUT_REGULAR, 'email_address'),
                 'tooltip'       => $this->tbInput('title', $title, INPUT_REGULAR, 'tooltip'),
                 'link_text'     => $this->tbInput('linktext', $linktext, INPUT_REGULAR, 'link_text'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1854,7 +1854,7 @@ class BuilderTags
         $label = $label ? $label : 'XML';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'flavor'   => $this->tbFeedFlavorPop($flavor),
                 'format'   => $this->tbFeedFormatPop($format),
@@ -1865,9 +1865,9 @@ class BuilderTags
                 'title'    => $this->tbInput('title', $title, INPUT_REGULAR),
                 'wraptag'  => $this->tbInput('wraptag', $wraptag),
                 'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1888,14 +1888,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'id'       => $this->tbInput('id', $id),
                 'filename' => $this->tbInput('filename', $filename, INPUT_REGULAR),
                 'form'     => $this->tbFormPop('form', 'file', $form),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1917,15 +1917,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'title'   => $this->tbYesNoPop('title', $title),
                 'escape'  => $this->tbEscapePop($escape),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1944,10 +1944,10 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
-            $this->widget('time_format', $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format')).
+            $this->startblock .
+            $this->widget('time_format', $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format')) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -1968,14 +1968,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'escape'  => $this->tbEscapePop($escape),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2019,14 +2019,14 @@ class BuilderTags
         );
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
-                'type'        => ''.selectInput('type', $types, $type, false, '', 'type'),
+                'type'        => '' . selectInput('type', $types, $type, false, '', 'type'),
                 'id'          => $this->tbInput('id', $id),
                 'filename'    => $this->tbInput('filename', $filename, INPUT_REGULAR),
                 'link_text'   => $this->tbInput('linktext', ($linktext ? $linktext : ''), INPUT_REGULAR, 'link_text'),
-                'description' => '<textarea id="description" name="description" cols="'.INPUT_REGULAR.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($description).'</textarea>',
-            )).
+                'description' => '<textarea id="description" name="description" cols="' . INPUT_REGULAR . '" rows="' . TEXTAREA_HEIGHT_SMALL . '">' . txpspecialchars($description) . '</textarea>',
+            )) .
             $this->endform
         );
 
@@ -2034,18 +2034,18 @@ class BuilderTags
             $desc = str_replace('&', '&#38;', txpspecialchars($description));
             $urlinfo = parse_url(hu);
             $url = ($permlink_mode === 'messy')
-                ? $urlinfo['path'].'index.php?s=file_download'.($type === 'textile' ? '&' : a).'id='.$id
-                : $urlinfo['path'].'file_download'.'/'.$id.($filename ? '/'.urlencode($filename) : '');
+                ? $urlinfo['path'] . 'index.php?s=file_download' . ($type === 'textile' ? '&' : a) . 'id=' . $id
+                : $urlinfo['path'] . 'file_download' . '/' . $id . ($filename ? '/' . urlencode($filename) : '');
 
             switch ($type) {
                 case 'textile':
                     $link = ($linktext) ? $linktext : $filename;
-                    $desc = ($desc) ? ' ('.$desc.')' : '';
-                    $out .= $this->tdb('"'.$link.$desc.'":'.$url);
+                    $desc = ($desc) ? ' (' . $desc . ')' : '';
+                    $out .= $this->tdb('"' . $link . $desc . '":' . $url);
                     break;
                 case 'html':
                     $link = ($linktext) ? $linktext : $filename;
-                    $desc = ($desc) ? ' title="'.$desc.'"' : '';
+                    $desc = ($desc) ? ' title="' . $desc . '"' : '';
                     $out .= $this->tdb(href($link, $url, $desc));
                     break;
                 case 'textpattern':
@@ -2085,27 +2085,27 @@ class BuilderTags
             'wraptag',
         ));
 
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
+        $asc = ' (' . gTxt('ascending') . ')';
+        $desc = ' (' . gTxt('descending') . ')';
 
         $sorts = array(
-            'filename asc'   => gTxt('filename').$asc,
-            'filename desc'  => gTxt('filename').$desc,
-            'downloads asc'  => gTxt('downloads').$asc,
-            'downloads desc' => gTxt('downloads').$desc,
+            'filename asc'   => gTxt('filename') . $asc,
+            'filename desc'  => gTxt('filename') . $desc,
+            'downloads asc'  => gTxt('downloads') . $asc,
+            'downloads desc' => gTxt('downloads') . $desc,
             'rand()'         => 'Random',
         );
 
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'author'     => $this->tbAuthorPop($author),
                 'category'   => $this->tbCategoryPop($category, 'file'),
                 'id'         => $this->tbInput('id', $id),
                 'status'     => $this->tbStatusPop($status, 'file'),
-                'sort'       => ' '.selectInput('sort', $sorts, $sort, true),
+                'sort'       => ' ' . selectInput('sort', $sorts, $sort, true),
                 'limit'      => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'     => $this->tbInput('offset', $offset, INPUT_TINY),
                 'pageby'     => $this->tbInput('pageby', $pageby, INPUT_TINY),
@@ -2115,9 +2115,9 @@ class BuilderTags
                 'break'      => $this->tbInput('break', $break),
                 'form'       => $this->tbFormPop('form', 'file', $form),
                 'match_type' => $this->tbInput('auto_detect', $auto_detect, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2136,13 +2136,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widget(
                 'time_format',
                 $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format')
-            ).
+            ) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2183,13 +2183,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
-                'size_format' => ' '.selectInput('format', $formats, $format, true, '', 'size_format'),
+                'size_format' => ' ' . selectInput('format', $formats, $format, true, '', 'size_format'),
                 'decimals'    => $this->tbInput('decimals', $decimals, INPUT_XSMALL),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2211,15 +2211,15 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'category' => $this->tbInput('category', $category, INPUT_REGULAR),
                 'parent'   => $this->tbInput('parent', $parent, INPUT_REGULAR),
                 'name'     => $this->tbInput('name', $name, INPUT_REGULAR),
                 'type'     => $this->tbTypePop($type),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts, gTxt('...'));
 
         return $out;
@@ -2238,10 +2238,10 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
-            $this->widget('name', $this->tbSectionPop('name', $name)).
+            $this->startblock .
+            $this->widget('name', $this->tbSectionPop('name', $name)) .
             $this->endform
-        ).
+        ) .
         $this->build($atts, gTxt('...'));
 
         return $out;
@@ -2284,9 +2284,9 @@ class BuilderTags
         );
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
-                'type'         => ''.selectInput(
+                'type'         => '' . selectInput(
                     'type',
                     $types,
                     $type,
@@ -2299,13 +2299,13 @@ class BuilderTags
                 'class'        => $this->tbInput('class', $class, INPUT_REGULAR),
                 'inline_style' => $this->tbInput('style', $style, INPUT_REGULAR, 'inline_style'),
                 'wraptag'      => $this->tbInput('wraptag', $wraptag),
-            )).
-            hInput('id', $id).
-            hInput('ext', $ext).
-            hInput('w', $w).
-            hInput('h', $h).
-            hInput('alt', $alt).
-            hInput('caption', $caption).
+            )) .
+            hInput('id', $id) .
+            hInput('ext', $ext) .
+            hInput('w', $w) .
+            hInput('h', $h) .
+            hInput('alt', $alt) .
+            hInput('caption', $caption) .
             $this->endform
         );
 
@@ -2317,14 +2317,14 @@ class BuilderTags
 
             switch ($type) {
                 case 'textile':
-                    $alternate = ($alt) ? ' ('.$alt.')' : '';
+                    $alternate = ($alt) ? ' (' . $alt . ')' : '';
                     $modifiers = '';
 
                     if ($class) {
-                        $modifiers .= '('.$class;
+                        $modifiers .= '(' . $class;
 
                         if ($html_id) {
-                            $modifiers .= '#'.$html_id;
+                            $modifiers .= '#' . $html_id;
                         }
 
                         $modifiers .= ')';
@@ -2333,25 +2333,25 @@ class BuilderTags
                     }
 
                     if ($style) {
-                        $modifiers .= '{'.$style.'}';
+                        $modifiers .= '{' . $style . '}';
                     }
 
-                    $wrap = ($wraptag) ? $wraptag.$modifiers.'. ' : '';
+                    $wrap = ($wraptag) ? $wraptag . $modifiers . '. ' : '';
 
                     $out .= $this->tdb(
-                        (($wrap) ? $wrap : '').'!'.(($wrap) ? '' : $modifiers).$url.$alternate.'!'
+                        (($wrap) ? $wrap : '') . '!' . (($wrap) ? '' : $modifiers) . $url . $alternate . '!'
                     );
                     break;
                 case 'html':
-                    $alternate = ' alt="'.txpspecialchars($alt).'"';
-                    $cap = ($caption) ? ' title="'.txpspecialchars($caption).'"' : '';
-                    $cls = ($class) ? ' class="'.$class.'"' : '';
-                    $htmlid = ($html_id) ? ' id="'.$html_id.'"' : '';
-                    $inlinestyle = ($style) ? ' style="'.$style.'"' : '';
+                    $alternate = ' alt="' . txpspecialchars($alt) . '"';
+                    $cap = ($caption) ? ' title="' . txpspecialchars($caption) . '"' : '';
+                    $cls = ($class) ? ' class="' . $class . '"' : '';
+                    $htmlid = ($html_id) ? ' id="' . $html_id . '"' : '';
+                    $inlinestyle = ($style) ? ' style="' . $style . '"' : '';
 
                     $out .= $this->tdb(
-                        ($wraptag ? "<$wraptag>" : '').
-                        '<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alternate.$cap.$htmlid.$cls.$inlinestyle.(get_pref('doctype') === 'html5' ? '>' : ' />').
+                        ($wraptag ? "<$wraptag>" : '') .
+                        '<img src="' . $url . '" width="' . $w . '" height="' . $h . '"' . $alternate . $cap . $htmlid . $cls . $inlinestyle . (get_pref('doctype') === 'html5' ? '>' : ' />') .
                         ($wraptag ? "</$wraptag>" : '')
                     );
                     break;
@@ -2397,14 +2397,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'id'   => $this->tbInput('id', $id),
                 'name' => $this->tbInput('name', $name, INPUT_REGULAR),
                 'rel'  => $this->tbInput('rel', $rel, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2427,16 +2427,16 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'title'    => $this->tbYesNoPop('title', $title),
                 'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
                 'labeltag' => $this->tbInput('labeltag', $labeltag),
                 'wraptag'  => $this->tbInput('wraptag', $wraptag),
                 'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2457,14 +2457,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'time_format' => $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format'),
                 'gmt'         => $this->tbYesNoPop('gmt', $gmt),
                 'locale'      => $this->tbInput('lang', $lang, INPUT_MEDIUM, 'locale'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2487,16 +2487,16 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'escape'   => $this->tbEscapePop($escape),
                 'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
                 'labeltag' => $this->tbInput('labeltag', $labeltag),
                 'wraptag'  => $this->tbInput('wraptag', $wraptag),
                 'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2523,7 +2523,7 @@ class BuilderTags
         $label = (!$label) ? 'XML' : $label;
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'flavor'   => $this->tbFeedFlavorPop($flavor),
                 'format'   => $this->tbFeedFormatPop($format),
@@ -2532,9 +2532,9 @@ class BuilderTags
                 'title'    => $this->tbInput('title', $title, INPUT_REGULAR),
                 'wraptag'  => $this->tbInput('wraptag', $wraptag),
                 'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2553,10 +2553,10 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
-            $this->widget('escape', $this->tbEscapePop($escape)).
+            $this->startblock .
+            $this->widget('escape', $this->tbEscapePop($escape)) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2577,7 +2577,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : gTxt('tag_home');
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'link_text' => $this->tbInput(
                     'linktext',
@@ -2586,9 +2586,9 @@ class BuilderTags
                     'link_text'
                 ),
                 'class'     => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts, $linktext);
 
         return $out;
@@ -2609,7 +2609,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:next_title />';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'link_text'  => $this->tbInput(
                     'linktext',
@@ -2618,9 +2618,9 @@ class BuilderTags
                     'link_text'
                 ),
                 'showalways' => $this->tbYesNoPop('showalways', $showalways),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts, $linktext);
 
         return $out;
@@ -2641,7 +2641,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:prev_title />';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'link_text'  => $this->tbInput(
                     'linktext',
@@ -2650,9 +2650,9 @@ class BuilderTags
                     'link_text'
                 ),
                 'showalways' => $this->tbYesNoPop('showalways', $showalways),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts, $linktext);
 
         return $out;
@@ -2671,10 +2671,10 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
-                $this->widget('rel', $this->tbInput('rel', $rel, INPUT_REGULAR)).
+            $this->startblock .
+                $this->widget('rel', $this->tbInput('rel', $rel, INPUT_REGULAR)) .
                 $this->endform
-        ).
+        ) .
             $this->build($atts);
 
         return $out;
@@ -2705,23 +2705,23 @@ class BuilderTags
             'wraptag',
         ));
 
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
+        $asc = ' (' . gTxt('ascending') . ')';
+        $desc = ' (' . gTxt('descending') . ')';
 
         $sorts = array(
-            'linksort asc'  => gTxt('name').$asc,
-            'linksort desc' => gTxt('name').$desc,
-            'category asc'  => gTxt('category').$asc,
-            'category desc' => gTxt('category').$desc,
-            'date asc'      => gTxt('date').$asc,
-            'date desc'     => gTxt('date').$desc,
+            'linksort asc'  => gTxt('name') . $asc,
+            'linksort desc' => gTxt('name') . $desc,
+            'category asc'  => gTxt('category') . $asc,
+            'category desc' => gTxt('category') . $desc,
+            'date asc'      => gTxt('date') . $asc,
+            'date desc'     => gTxt('date') . $desc,
             'rand()'        => gTxt('random'),
         );
 
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'author'     => $this->tbAuthorPop($author),
                 'category'   => $this->tbCategoryPop($category, 'link'),
@@ -2729,7 +2729,7 @@ class BuilderTags
                 'limit'      => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'     => $this->tbInput('offset', $offset, INPUT_TINY),
                 'pageby'     => $this->tbInput('pageby', $pageby, INPUT_TINY),
-                'sort'       => ' '.selectInput('sort', $sorts, $sort, false, '', 'sort'),
+                'sort'       => ' ' . selectInput('sort', $sorts, $sort, false, '', 'sort'),
                 'label'      => $this->tbInput('label', $label, INPUT_REGULAR),
                 'labeltag'   => $this->tbInput('labeltag', $labeltag),
                 'wraptag'    => $this->tbInput('wraptag', $wraptag),
@@ -2737,9 +2737,9 @@ class BuilderTags
                 'break'      => $this->tbInput('break', $break),
                 'form'       => $this->tbFormPop('form', 'link', $form),
                 'match_type' => $this->tbInput('auto_detect', $auto_detect, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2754,7 +2754,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:text item="newer" />';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widget(
                 'link_text',
                 $this->tbInput(
@@ -2763,9 +2763,9 @@ class BuilderTags
                     INPUT_REGULAR,
                     'link_text'
                 )
-            ).
+            ) .
             $this->endform
-        ).
+        ) .
         $this->build(array(), $linktext);
 
         return $out;
@@ -2789,7 +2789,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:text item="older" />';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widget(
                 'link_text',
                 $this->tbInput(
@@ -2798,9 +2798,9 @@ class BuilderTags
                     INPUT_REGULAR,
                     'link_text'
                 )
-            ).
+            ) .
             $this->endform
-        ).
+        ) .
             $this->build(array(), $linktext);
 
         return $out;
@@ -2819,13 +2819,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widget(
                 'form',
                 $this->tbFormPop('form', 'misc', $form)
-            ).
+            ) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2844,13 +2844,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widget(
                 'title_separator',
                 $this->tbInput('separator', $separator, INPUT_XSMALL, 'title_separator')
-            ).
+            ) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2870,13 +2870,13 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'login'    => $this->tbInput('login', $login, INPUT_REGULAR),
                 'password' => $this->tbInput('pass', $pass, INPUT_REGULAR, 'password'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2900,7 +2900,7 @@ class BuilderTags
         $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:title />';
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'id'           => $this->tbInput('id', $id),
                 'link_text'    => $this->tbInput(
@@ -2912,9 +2912,9 @@ class BuilderTags
                 'title'        => $this->tbInput('title', $title, INPUT_REGULAR),
                 'class'        => $this->tbInput('class', $class, INPUT_REGULAR),
                 'inline_style' => $this->tbInput('style', $style, INPUT_REGULAR, 'inline_style'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
             $this->build($atts, $linktext);
 
         return $out;
@@ -2947,17 +2947,17 @@ class BuilderTags
         );
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
-                'type'         => ' '.selectInput('type', $types, $type, true, '', 'type'),
+                'type'         => ' ' . selectInput('type', $types, $type, true, '', 'type'),
                 'section'      => $this->tbSectionPop('section', $section),
                 'this_section' => $this->tbYesNoPop('this_section', $this_section),
                 'label'        => $this->tbInput('label', $label, INPUT_REGULAR),
                 'wraptag'      => $this->tbInput('wraptag', $wraptag),
                 'class'        => $this->tbInput('class', $class, INPUT_REGULAR),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -2978,14 +2978,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'time_format' => $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format'),
                 'gmt'         => $this->tbYesNoPop('gmt', $gmt),
                 'locale'      => $this->tbInput('lang', $lang, INPUT_MEDIUM, 'locale'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3026,7 +3026,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'section'  => $this->tbSectionPop('section', $section),
                 'category' => $this->tbCategoryPop($category),
@@ -3038,9 +3038,9 @@ class BuilderTags
                 'wraptag'  => $this->tbInput('wraptag', $wraptag),
                 'class'    => $this->tbInput('class', $class),
                 'break'    => $this->tbInput('break', $break),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3071,7 +3071,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'sort'     => $this->tbDiscussSortPop($sort),
                 'limit'    => $this->tbInput('limit', $limit, INPUT_TINY),
@@ -3082,9 +3082,9 @@ class BuilderTags
                 'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
                 'break'    => $this->tbInput('break', $break),
                 'form'     => $this->tbFormPop('form', 'comment', $form),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3117,7 +3117,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'section'    => $this->tbSectionPop('section', $section),
                 'match_type' => $this->tbMatchCatPop($match),
@@ -3130,9 +3130,9 @@ class BuilderTags
                 'class'      => $this->tbInput('class', $class, INPUT_REGULAR),
                 'break'      => $this->tbInput('break', $break),
                 'form'       => $this->tbFormPop('form', 'article', $form),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3163,7 +3163,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'match_type'  => $this->tbPatternPop($match),
                 'section'     => $this->tbSectionPop('section', $section),
@@ -3174,9 +3174,9 @@ class BuilderTags
                 'wraptag'     => $this->tbInput('wraptag', $wraptag),
                 'class'       => $this->tbInput('class', $class, INPUT_REGULAR),
                 'form'        => $this->tbFormPop('form', 'misc', $form),
-            )).
+            )) .
              $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3197,14 +3197,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'time_format' => $this->tbInput('format', $format, INPUT_MEDIUM, 'time_format'),
                 'gmt'         => $this->tbYesNoPop('gmt', $gmt),
                 'locale'      => $this->tbInput('lang', $lang, INPUT_MEDIUM, 'locale'),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3225,14 +3225,14 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'hilight'       => $this->tbInput('hilight', $hilight),
                 'hilight_limit' => $this->tbInput('limit', $limit, INPUT_TINY, 'hilight_limit'),
                 'separator'     => $this->tbInput('separator', $separator),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3274,7 +3274,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'name'                 => $this->tbSectionPop('name', $name),
                 'link_to_this_section' => $this->tbYesNoPop('link', $link),
@@ -3282,9 +3282,9 @@ class BuilderTags
                 'wraptag'              => $this->tbInput('wraptag', $wraptag),
                 'class'                => $this->tbInput('class', $class, INPUT_REGULAR),
                 'title'                => $this->tbYesNoPop('title', $title),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
@@ -3317,7 +3317,7 @@ class BuilderTags
         extract($atts);
 
         $out = $this->tagbuildForm(
-            $this->startblock.
+            $this->startblock .
             $this->widgets(array(
                 'include_default' => $this->tbYesNoPop('include_default', $include_default),
                 'sort'            => $this->tbListSortPop($sort),
@@ -3334,9 +3334,9 @@ class BuilderTags
                 'active_class'    => $this->tbInput('active_class', $active_class, INPUT_REGULAR),
                 'break'           => $this->tbInput('break', $break),
                 'form'            => $this->tbFormPop('form', 'misc', $form),
-            )).
+            )) .
             $this->endform
-        ).
+        ) .
         $this->build($atts);
 
         return $out;
