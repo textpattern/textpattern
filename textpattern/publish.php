@@ -26,24 +26,24 @@ if (!defined('txpath')) {
 }
 
 if (!defined("txpinterface")) {
-    die('If you just updated and expect to see your site here, please also update the files in your main installation directory.'.
+    die('If you just updated and expect to see your site here, please also update the files in your main installation directory.' .
         ' (Otherwise note that publish.php cannot be called directly.)');
 }
 
 global $trace;
 
 $trace->start('[PHP includes, stage 2]');
-include_once txpath.'/vendors/Textpattern/Loader.php';
+include_once txpath . '/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath . '/vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath . '/lib');
 $loader->register();
 
-include_once txpath.'/lib/txplib_db.php';
-include_once txpath.'/lib/admin_config.php';
-include_once txpath.'/publish/log.php';
+include_once txpath . '/lib/txplib_db.php';
+include_once txpath . '/lib/admin_config.php';
+include_once txpath . '/publish/log.php';
 
 $trace->stop();
 
@@ -87,7 +87,7 @@ if ($production_status == 'live') {
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
     $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-    $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname($_SERVER['SCRIPT_NAME']), DS);
+    $prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname($_SERVER['SCRIPT_NAME']), DS);
 }
 
 if (empty($path_to_site)) {
@@ -108,7 +108,7 @@ if (!defined('PROTOCOL')) {
 
 // Definitive HTTP address of the site.
 if (!defined('hu')) {
-    define('hu', PROTOCOL.$siteurl.'/');
+    define('hu', PROTOCOL . $siteurl . '/');
 }
 
 // Relative URL global.
@@ -124,9 +124,9 @@ if (!defined('ihu')) {
 // HTTP address of Textpattern admin URL.
 if (!defined('ahu')) {
     if (empty($txpcfg['admin_url'])) {
-        $adminurl = hu.'textpattern/';
+        $adminurl = hu . 'textpattern/';
     } else {
-        $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
+        $adminurl = PROTOCOL . rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/') . '/';
     }
 
     define('ahu', $adminurl);
@@ -159,7 +159,7 @@ if (!defined('IMPATH')) {
      * @package Image
      */
 
-    define('IMPATH', $path_to_site.DS.$img_dir.DS);
+    define('IMPATH', $path_to_site . DS . $img_dir . DS);
 }
 
 // 1.0: a new $here variable in the top-level index.php should let us know the
@@ -217,11 +217,11 @@ $txp_sections = safe_column(array('name'), 'txp_section');
 
 $trace->start('[PHP includes, stage 3]');
 
-include_once txpath.'/lib/txplib_publish.php';
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/publish/comment.php';
-include_once txpath.'/publish/taghandlers.php';
+include_once txpath . '/lib/txplib_publish.php';
+include_once txpath . '/lib/txplib_html.php';
+include_once txpath . '/lib/txplib_forms.php';
+include_once txpath . '/publish/comment.php';
+include_once txpath . '/publish/taghandlers.php';
 
 $trace->stop();
 
@@ -247,7 +247,7 @@ extract($pretext);
 set_error_level($production_status);
 
 if ($status == '200' && !empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
-    include txpath."/publish/{$feed}.php";
+    include txpath . "/publish/{$feed}.php";
     echo $feed();
 
     if ($production_status !== 'live') {
@@ -296,7 +296,7 @@ function preText($store, $prefs = null)
 
         // IIS fix.
         if (!$out['request_uri'] and serverSet('SCRIPT_NAME')) {
-            $out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
+            $out['request_uri'] = serverSet('SCRIPT_NAME') . ((serverSet('QUERY_STRING')) ? '?' . serverSet('QUERY_STRING') : '');
         }
 
         // Another IIS fix.
@@ -312,7 +312,7 @@ function preText($store, $prefs = null)
 
         $url = chopUrl($req, 5);
 
-        for ($out[0] = 0; isset($url['u'.($out[0]+1)]); $out[++$out[0]] = $url['u'.$out[0]]);
+        for ($out[0] = 0; isset($url['u' . ($out[0] + 1)]); $out[++$out[0]] = $url['u' . $out[0]]);
 
         if ($url['u1'] == 'rss' || gps('rss')) {
             $out['feed'] = 'rss';
@@ -342,7 +342,7 @@ function preText($store, $prefs = null)
 
     $is_404 = ($out['status'] == '404');
     $title = null;
-    $status = strpos($out['id'], '.') === false ? " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")" : '';
+    $status = strpos($out['id'], '.') === false ? " AND Status IN (" . STATUS_LIVE . "," . STATUS_STICKY . ")" : '';
 
     // Handle article preview.
     if (!$status) {
@@ -355,16 +355,18 @@ function preText($store, $prefs = null)
         $userhash = $token->csrf($txp_user);
         if (!has_privs('article.preview', $userInfo)
             || strpos($hash, $userhash) !== 0
-            || $hash !== $userhash.($_POST ? $token->csrf(json_encode($harray)) : '')
+            || $hash !== $userhash . ($_POST ? $token->csrf(json_encode($harray)) : '')
         ) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
+            exit(hed('401 Unauthorized', 1) . graf(gTxt('restricted_area')));
         } else {
             global $nolog;
-    
+
             $nolog = true;
-            
-            if ($raw === '~') header('Content-Security-Policy: sandbox');
+
+            if ($raw === '~') {
+                header('Content-Security-Policy: sandbox');
+            }
             $out['@txp_preview'] = $hash;
 
             if (!empty($_POST['field'])) {
@@ -423,7 +425,7 @@ function preText($store, $prefs = null)
                 case urldecode(strtolower(urlencode(gTxt('category')))):
                     $out['context'] = $u3 ? validContext($u2) : 'article';
                     if ($permlink_mode == 'breadcrumb_title') {
-                        $n < 2 or $out['c'] = $un ? $un : $out[$n-1];
+                        $n < 2 or $out['c'] = $un ? $un : $out[$n - 1];
                     } else {
                         $out['c'] = $u3 ? $u3 : $u2;
                     }
@@ -465,13 +467,13 @@ function preText($store, $prefs = null)
                         $guessarticles = safe_rows(
                             '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
                             'textpattern',
-                            "(url_title='$safe_un'".($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')').$status
+                            "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );
 
                         foreach ($guessarticles as $a) {
                             populateArticleData($a);
 
-                            if ('/'.$a['Section'].'/'.$a['url_title'].$slash === $u0) {
+                            if ('/' . $a['Section'] . '/' . $a['url_title'] . $slash === $u0) {
                                 $permlink_guess = 'section_title';
                                 break;
                             }
@@ -524,14 +526,14 @@ function preText($store, $prefs = null)
                             case 'breadcrumb_title':
                                 $out['s'] = $u1;
                                 $title = $n < 2 || empty($un) ? null : $un;
-                                isset($title) || $n <= 2 or $out['c'] = $out[$n-1];
+                                isset($title) || $n <= 2 or $out['c'] = $out[$n - 1];
 
                                 break;
 
                             case 'year_month_day_title':
-                                if ($month = is_date(trim($u1.'-'.$u2.'-'.$u3, '-'))) {
+                                if ($month = is_date(trim($u1 . '-' . $u2 . '-' . $u3, '-'))) {
                                     $title = empty($u4) ? null : $u4;
-                                } elseif (!empty($u2) && $month = is_date(trim($u2.'-'.$u3.'-'.$u4, '-'))) {
+                                } elseif (!empty($u2) && $month = is_date(trim($u2 . '-' . $u3 . '-' . $u4, '-'))) {
                                     $title = empty($u5) ? null : $u5;
                                     $out['s'] = $u1;
                                 } elseif (empty($u3)) {
@@ -590,7 +592,7 @@ function preText($store, $prefs = null)
     }
 
     // Resolve AuthorID from Authorname.
-    if (!$is_404 && $out['author'] && $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'")) {
+    if (!$is_404 && $out['author'] && $name = safe_field('name', 'txp_users', "RealName LIKE '" . doSlash($out['author']) . "'")) {
         $out['realname'] = $out['author'];
         $out['author'] = $name;
     } else {
@@ -622,8 +624,8 @@ function preText($store, $prefs = null)
                 $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
             }
 
-            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+            $fn = empty($out['filename']) ? '' : " AND filename = '" . doSlash($out['filename']) . "'";
+            $rs = safe_row('*', 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
 
             $thisfile = $rs ? file_download_format_info($rs) : null;
         }
@@ -759,11 +761,11 @@ function output_component($n = '')
     if (!isset($mimetypes)) {
         $null = null;
         $mimetypes = get_mediatypes($null);
-        $typequery = " AND type IN ('".implode("','", doSlash(array_keys($mimetypes)))."')";
+        $typequery = " AND type IN ('" . implode("','", doSlash(array_keys($mimetypes))) . "')";
     }
 
     $t = $pretext['skin'];
-    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
+    $skinquery = $t ? " AND skin='" . doSlash($t) . "'" : '';
 
     $n = do_list_unique(doSlash($n));
     $name = join("','", $n);
@@ -772,9 +774,9 @@ function output_component($n = '')
     $assets = array();
 
     if (isset($pretext['@txp_preview']) && $name === $pretext['@txp_preview']) {
-        $assets[] = '<txp:custom_field name="'.txpspecialchars(ps('field', 'body')).'" escape="" />';
+        $assets[] = '<txp:custom_field name="' . txpspecialchars(ps('field', 'body')) . '" escape="" />';
         $mimetype = 'text/html';
-    } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')".$typequery.$skinquery.$order)) {
+    } elseif (!empty($name) && !empty($mimetypes) && $rs = safe_rows('Form, type', 'txp_form', "name IN ('$name')" . $typequery . $skinquery . $order)) {
         foreach ($rs as $row) {
             if (!isset($mimetype) || $mimetypes[$row['type']] == $mimetype) {
                 $assets[] = $row['Form'];
@@ -784,7 +786,7 @@ function output_component($n = '')
     }
 
     set_error_handler('tagErrorHandler');
-    header('Content-Type: '.$mimetype.'; charset=utf-8');
+    header('Content-Type: ' . $mimetype . '; charset=utf-8');
     echo ltrim(parse_page(null, null, implode(n, $assets)));
     restore_error_handler();
 }
@@ -804,14 +806,14 @@ function output_css($s = '', $n = '', $t = '')
         if (count($n) > 1) {
             $order = " ORDER BY FIELD(name, '$cssname')";
         }
-    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='".doSlash($s)."'")) {
+    } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='" . doSlash($s) . "'")) {
         $cssname = $res['css'];
         $t or $t = $res['skin'];
     }
 
     if (!empty($cssname)) {
-        $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
-        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
+        $skinquery = $t ? " AND skin='" . doSlash($t) . "'" : '';
+        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')" . $skinquery . $order));
         set_error_handler('tagErrorHandler');
         header('Content-Type: text/css; charset=utf-8');
         echo $css;
@@ -851,7 +853,7 @@ function output_file_download($filename)
 
             set_headers(array(
                 'content-type' => 'application/octet-stream',
-                'content-disposition' => 'attachment; filename="'.$filename.'"',
+                'content-disposition' => 'attachment; filename="' . $filename . '"',
                 'content-length' => $filesize,
                 // Fix for IE6 PDF bug on servers configured to send cache headers.
                 'cache-control' => 'private'
@@ -873,11 +875,11 @@ function output_file_download($filename)
 
                 // Record download.
                 if ((connection_status() == 0) and !connection_aborted()) {
-                    safe_update('txp_file', "downloads = downloads + 1", "id = ".intval($id));
+                    safe_update('txp_file', "downloads = downloads + 1", "id = " . intval($id));
                 } else {
                     $pretext['request_uri'] .= ($sent >= $filesize)
                         ? '#aborted'
-                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
+                        : "#aborted-at-" . floor($sent * 100 / $filesize) . "%";
                 }
 
                 log_hit('200');
@@ -997,15 +999,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $where = $theAtts['?'];
 
-    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT ".
-        intval($pgoffset).", ".($limit ? intval($limit) : PHP_INT_MAX)
-    );
+    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT " .
+        intval($pgoffset) . ", " . ($limit ? intval($limit) : PHP_INT_MAX));
 
     $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing', 'form'));
 //    unset($GLOBALS['thisarticle']);
 
     return !empty($articles) ?
-        doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'class')) :
+        doLabel($label, $labeltag) . doWrap($articles, $wraptag, compact('break', 'class')) :
         ($thing ? parse($thing, false) : '');
 }
 
@@ -1114,7 +1115,7 @@ function validContext($context)
 
     if (empty($valid)) {
         foreach (array('article', 'image', 'file', 'link') as $type) {
-            $valid[gTxt($type.'_context')] = $type;
+            $valid[gTxt($type . '_context')] = $type;
             $valid[$type] = $type;
         }
     }
@@ -1139,7 +1140,7 @@ function chopUrl($req, $min = 4)
     $o = array('u0' => $req);
 
     for ($i = 1; $i < $n; $i++) {
-        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : null;
+        $o['u' . $i] = (isset($r[$i])) ? $r[$i] : null;
     }
 
     return $o;
