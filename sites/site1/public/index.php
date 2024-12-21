@@ -30,14 +30,14 @@ if (!isset($txpcfg['table_prefix'])) {
     $this_protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
     $this_domain   = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
     $admin_subdomain = 'admin'; // assumed admin subdomain
-    $config_missing_setup_url = txpspecialchars($this_protocol.$admin_subdomain.'.'.substr($this_domain, strpos($this_domain, '.') + 1)).'/setup/';
+    $config_missing_setup_url = txpspecialchars($this_protocol . $admin_subdomain . '.' . substr($this_domain, strpos($this_domain, '.') + 1)) . '/setup/';
 
     header("HTTP/1.0 503 Service Unavailable");
-    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain).</p>');
+    exit('<p>config.php is missing or corrupt. To install Textpattern, visit <a href="' . $config_missing_setup_url . '">' . $config_missing_setup_url . '</a> (if necessary, replace \'' . $admin_subdomain . '\' with your own admin subdomain).</p>');
 }
 
 if (!defined('txpath')) {
-    define("txpath", dirname(realpath(dirname(__FILE__).'/../admin/vendors')));
+    define("txpath", dirname(realpath(dirname(__FILE__) . '/../admin/vendors')));
 }
 
 // Save server path to site root.
@@ -45,4 +45,4 @@ if (!isset($here)) {
     $here = dirname(__FILE__);
 }
 
-include txpath.'/../index.php';
+include txpath . '/../index.php';
