@@ -29,8 +29,7 @@ ob_end_clean();
 $multisite_admin_path = dirname(__FILE__, 2);
 
 // Does 'vendors' symlink resolve to correct location?
-if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
-
+if (!is_dir(realpath($multisite_admin_path . '/vendors'))) {
     // System is Windows if TRUE.
     define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
 
@@ -56,10 +55,9 @@ eod;
 
     // NO: 'vendor' symlink does not exist or does not resolve correctly.
     if (!isset($_POST['txp-root-path'])) {
-
         // No Textpattern root path specified: request path from user.
         $sites_dir = dirname($multisite_admin_path, 2);
-        $txp_root_suggestion = dirname($multisite_admin_path, 3).DS.'textpattern';
+        $txp_root_suggestion = dirname($multisite_admin_path, 3) . DS . 'textpattern';
 
         $out[] = <<<eod
 <form class="prefs-form" method="post" action="{$self_url}">
@@ -75,12 +73,10 @@ eod;
         echo join("\n", $out);
         exit("</div></main></body></html>");
     } else {
-
         // User has specified Textpattern root path.
         $multisite_txp_root_path = rtrim(htmlspecialchars($_POST['txp-root-path']), '/');
 
-        if (!is_dir(realpath($multisite_txp_root_path.DS.'textpattern'))) {
-
+        if (!is_dir(realpath($multisite_txp_root_path . DS . 'textpattern'))) {
             // Root path incorrect, please retry -> back to beginning.
             $out[] = <<<eod
 <p class="alert-block error"><span class="ui-icon ui-icon-alert"></span> Textpattern root directory details incorrect!</p>
@@ -136,19 +132,19 @@ eod;
             $lastkey = array_pop(array_keys($symlinks));
 
             // Relative path from current /admin/setup directory to multisite base directory
-            $symlink_relpath = '..'.DS.'..'.DS;
+            $symlink_relpath = '..' . DS . '..' . DS;
 
             // Create symlinks.
             foreach ($symlinks as $symlink => $atts) {
-                $symlink_local = $atts['path'].DS.$symlink;
-                $symlink_target = $relative_path.DS.($atts["path"] === "admin" ? 'textpattern'.DS : '').$symlink;
+                $symlink_local = $atts['path'] . DS . $symlink;
+                $symlink_target = $relative_path . DS . ($atts["path"] === "admin" ? 'textpattern' . DS : '') . $symlink;
 
-                unlink($symlink_relpath.$symlink_local);
-                symlink($symlink_target, $symlink_relpath.$symlink_local);
+                unlink($symlink_relpath . $symlink_local);
+                symlink($symlink_target, $symlink_relpath . $symlink_local);
 
                 // symlink resolves successfully?
-                if (realpath($symlink_relpath.$symlink_local)) {
-                    $out[] = '<p>Symlink created: <code>'.$symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local).'</code></p>';
+                if (realpath($symlink_relpath . $symlink_local)) {
+                    $out[] = '<p>Symlink created: <code>' . $symlink_local . ' <span class="success">&#8594;</span> ' . readlink($symlink_relpath . $symlink_local) . '</code></p>';
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
@@ -163,10 +159,10 @@ eod;
 
                     if (IS_WIN) {
                         // "mklink [/D] link target" on windows with /D flag for directory symlink
-                        $out[] = "mklink ".($atts['is_dir'] === true ? "/D " : "").$atts['path'].DS.$symlink." ".$symlink_target;
+                        $out[] = "mklink " . ($atts['is_dir'] === true ? "/D " : "") . $atts['path'] . DS . $symlink . " " . $symlink_target;
                     } else {
                         // "ln -sf target link" on linux
-                        $out[] = "ln -sf ".$symlink_target." ".$atts['path'].DS.$symlink;
+                        $out[] = "ln -sf " . $symlink_target . " " . $atts['path'] . DS . $symlink;
                     }
 
                     if ($symlink === $lastkey) {
@@ -182,16 +178,15 @@ eod;
         }
     }
 } else {
-
     // YES: vendor symlink resolves correctly. Proceed with regular multisite installation.
     if (!defined('txpath')) {
-        define("txpath", dirname(realpath(dirname(__FILE__).'/../vendors')));
+        define("txpath", dirname(realpath(dirname(__FILE__) . '/../vendors')));
     }
 
     define("is_multisite", true);
     define("multisite_root_path", dirname(__FILE__, 3));
 
-    include txpath.'/setup/index.php';
+    include txpath . '/setup/index.php';
 }
 
 /**
@@ -222,7 +217,7 @@ function find_relative_path($frompath, $topath)
     // Add '..' until the path is the same
     while ($i <= $j) {
         if (!empty($from[$j])) {
-            $relpath .= '..'.DS;
+            $relpath .= '..' . DS;
         }
 
         $j--;
@@ -230,7 +225,7 @@ function find_relative_path($frompath, $topath)
     // Go to folder from where it starts differing
     while (isset($to[$i])) {
         if (!empty($to[$i])) {
-            $relpath .= $to[$i].DS;
+            $relpath .= $to[$i] . DS;
         }
 
         $i++;
