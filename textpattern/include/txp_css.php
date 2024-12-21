@@ -98,16 +98,15 @@ function css_list($current)
             $edit .= dLink('css', 'css_delete', 'name', $name);
         }
 
-        $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
+        $out[] = tag(n . $edit . n, 'li', array('class' => $active ? 'active' : ''));
     }
 
     $list = wrapGroup('all_styles_css', tag(join(n, $out), 'ul', array('class' => 'switcher-list')), 'all_stylesheets');
 
-    return n.tag($list, 'div', array(
+    return n . tag($list, 'div', array(
             'id'    => 'all_styles',
             'role'  => 'region',
-        )
-    );
+        ));
 }
 
 /**
@@ -186,7 +185,7 @@ function css_edit($message = '', $refresh_partials = false)
     }
 
     if (!$save_error) {
-        $thecss = safe_field('css', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($skin) . "'");
+        $thecss = safe_field('css', 'txp_css', "name='" . doSlash($name) . "' AND skin='" . doSlash($skin) . "'");
     } else {
         $thecss = gps('css');
     }
@@ -194,8 +193,8 @@ function css_edit($message = '', $refresh_partials = false)
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_css').'"></span>'.sp.gTxt('create_css'), 'txp-new')
-        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
+        $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document" title="' . gTxt('create_css') . '"></span>' . sp . gTxt('create_css'), 'txp-new')
+        . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
             'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'style_form',
         ));
@@ -206,23 +205,24 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions')
     );
 
-    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
+    $skinBlock = n . $instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
-            n.span(
-                checkbox2('export', gps('export'), 0, 'export', 'style_form').
-                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
-            , array('class' => 'txp-save-export'))
-        ).
-        '<span class="txp-save-button">'.
-        n.tag_void('input', array(
+            n . span(
+                checkbox2('export', gps('export'), 0, 'export', 'style_form') .
+                n . tag(gTxt('export_to_disk'), 'label', array('for' => 'export')),
+                array('class' => 'txp-save-export')
+            )
+        ) .
+        '<span class="txp-save-button">' .
+        n . tag_void('input', array(
             'class' => 'publish',
             'name'  => 'save',
             'type'  => 'submit',
             'form'  => 'style_form',
             'value' => gTxt('save'),
-        )).
+        )) .
         '</span>', ' class="txp-save"'
     );
 
@@ -251,16 +251,17 @@ function css_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_style'), $message);
 
-    echo n.'<div class="txp-layout">';
+    echo n . '<div class="txp-layout">';
 
     // Styles code column.
-    echo n.tag(
-        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
-        $skinBlock.
+    echo n . tag(
+        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')) .
+        $skinBlock .
         form(
-            $partials['name']['html'].
+            $partials['name']['html'] .
             $partials['css']['html'],
-            '', '', 'post', $class, '', 'style_form'),
+            '', '', 'post', $class, '', 'style_form'
+        ),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -269,13 +270,13 @@ function css_edit($message = '', $refresh_partials = false)
     );
 
     // Styles create/switcher column.
-    echo n.tag(
-        n.tag(
-            $buttons.
+    echo n . tag(
+        n . tag(
+            $buttons .
             $actions,
             'div', array('class' => 'txp-save-zone')
-        ).
-        $partials['list']['html'].n,
+        ) .
+        $partials['list']['html'] . n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
@@ -283,7 +284,7 @@ function css_edit($message = '', $refresh_partials = false)
         )
     );
 
-    echo n.'</div>'; // End of .txp-layout.
+    echo n . '</div>'; // End of .txp-layout.
 }
 
 /**
@@ -358,9 +359,12 @@ function css_save()
                     $save_error = true;
                 }
             } else {
-                if (safe_update('txp_css',
+                if (safe_update(
+                    'txp_css',
                     "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
-                    "name = '$safe_name' AND skin = '$safe_skin'")) {
+                    "name = '$safe_name' AND skin = '$safe_skin'"
+                )
+                ) {
                     safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name' AND skin='$safe_skin'");
                     safe_update('txp_section', "dev_css = '$safe_newname'", "dev_css='$safe_name' AND dev_skin='$safe_skin'");
                     set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
@@ -477,8 +481,8 @@ function css_partial_name($rs)
         $titleblock .= hInput('name', $name);
     }
 
-    $titleblock .= hInput('skin', $skin).
-        eInput('css').sInput('css_save');
+    $titleblock .= hInput('skin', $skin) .
+        eInput('css') . sInput('css_save');
 
     return $titleblock;
 }
@@ -506,7 +510,7 @@ function css_partial_css($rs)
 {
     $out = inputLabel(
         'css',
-        '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['css']).'</textarea>',
+        '<textarea class="code" id="css" name="css" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr">' . txpspecialchars($rs['css']) . '</textarea>',
         'css_code',
         array('', 'instructions_style_code'),
         array('class' => 'txp-form-field css')
