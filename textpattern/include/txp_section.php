@@ -112,14 +112,15 @@ function sec_section_list($message = '', $update = false)
     }
 
     if (isset($columns[$sort])) {
-        $sort_sql = "$sort $dir".($sort == 'name' ? '' : ", name");
+        $sort_sql = "$sort $dir" . ($sort == 'name' ? '' : ", name");
     } else {
         $sort_sql = "name $dir";
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'name' => array(
                 'column' => 'txp_section.name',
@@ -179,11 +180,11 @@ function sec_section_list($message = '', $update = false)
     $total = safe_count('txp_section', $criteria);
 
     $searchBlock =
-        n.tag(
+        n . tag(
             $search->renderForm('sec_section', $search_render_options),
             'div', array(
                 'class' => 'txp-layout-4col-3span',
-                'id'    => $event.'_control',
+                'id'    => $event . '_control',
             )
         );
 
@@ -193,21 +194,21 @@ function sec_section_list($message = '', $update = false)
 
     if (has_privs('section.edit')) {
         $createBlock[] =
-            n.tag(
-                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
-                n.tag_start('form', array(
+            n . tag(
+                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button') .
+                n . tag_start('form', array(
                     'class'  => 'async',
                     'id'     => 'default_section_form',
                     'name'   => 'default_section_form',
                     'method' => 'post',
                     'action' => 'index.php',
-                )).
-                tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
-                popHelp('section_default').
-                section_select_list().
-                eInput('section').
-                sInput('section_set_default').
-                n.tag_end('form'),
+                )) .
+                tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')) .
+                popHelp('section_default') .
+                section_select_list() .
+                eInput('section') .
+                sInput('section_set_default') .
+                n . tag_end('form'),
                 'div', array('class' => 'txp-control-panel')
             );
     }
@@ -224,14 +225,14 @@ function sec_section_list($message = '', $update = false)
     if ($total < 1) {
         if ($crit !== '') {
             $contentBlock .= graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
                 gTxt('no_results_found'),
                 array('class' => 'alert-block information')
             );
         }
     } else {
         $rs = safe_rows_start(
-            "*, (SELECT COUNT(*) FROM ".safe_pfx_j('textpattern')." WHERE textpattern.Section = txp_section.name) AS article_count",
+            "*, (SELECT COUNT(*) FROM " . safe_pfx_j('textpattern') . " WHERE textpattern.Section = txp_section.name) AS article_count",
             'txp_section',
             "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
@@ -239,35 +240,35 @@ function sec_section_list($message = '', $update = false)
         if ($rs) {
             $dev_set = false;
             $dev_preview = get_pref('enable_dev_preview') && has_privs('skin.edit');
-            $contentBlock .= n.tag_start('form', array(
+            $contentBlock .= n . tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'section_form',
                     'name'   => 'longform',
                     'method' => 'post',
                     'action' => 'index.php',
-                )).
-                n.tag_start('div', array(
+                )) .
+                n . tag_start('div', array(
                     'class'      => 'txp-listtables',
                     'tabindex'   => 0,
                     'aria-label' => gTxt('list'),
-                )).
-                n.tag_start('table', array('class' => 'txp-list')).
-                n.tag_start('thead');
+                )) .
+                n . tag_start('table', array('class' => 'txp-list')) .
+                n . tag_start('thead');
                 $thead = hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
                 );
 
             foreach ($columns as $column => $label) {
                 $thead .= column_head(
                     $label, $column, 'section', true, $switch_dir, $crit, $search_method,
-                        (($column == $sort) ? "$dir " : '').'txp-list-col-'.$column
+                    (($column == $sort) ? "$dir " : '') . 'txp-list-col-' . $column
                 );
             }
 
-            $contentBlock .= tr($thead).
-            n.tag_end('thead').
-            n.tag_start('tbody');
+            $contentBlock .= tr($thead) .
+            n . tag_end('thead') .
+            n . tag_start('tbody');
 
             while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'sec');
@@ -308,7 +309,7 @@ function sec_section_list($message = '', $update = false)
                         $articles = href($sec_article_count, array(
                             'event'         => 'list',
                             'search_method' => 'section',
-                            'crit'          => '"'.$sec_name.'"',
+                            'crit'          => '"' . $sec_name . '"',
                         ), array('title' => gTxt('article_count', array('{num}' => $sec_article_count))));
                     } else {
                         $articles = 0;
@@ -336,16 +337,15 @@ function sec_section_list($message = '', $update = false)
                         'event' => $item,
                         'name'  => $sec_item,
                         'skin'  => $sec_skin,
-                    ), array('title' => gTxt('edit'))
-                    ), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))).
+                    ), array('title' => gTxt('edit'))), $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') : tag(gTxt('none'), 'span', array('class' => 'disabled'))) .
                     ($replaced ?
-                        n.'<hr class="secondary" />'.n.
+                        n . '<hr class="secondary" />' . n .
                         href(txpspecialchars($sec_dev_item), array(
                             'event' => $item,
                             'name'  => $sec_dev_item,
                             'skin'  => $sec_dev_skin,
-                        ), array('title' => gTxt('edit'))).
-                        ($missing ? sp.tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
+                        ), array('title' => gTxt('edit'))) .
+                        ($missing ? sp . tag(gTxt('status_missing'), 'small', array('class' => 'alert-block alert-pill error')) : '')
                     : '');
                 }
 
@@ -356,65 +356,65 @@ function sec_section_list($message = '', $update = false)
                 $contentBlock .= tr(
                     td(
                         fInput('checkbox', array('name' => 'selected[]', 'checked' => $sec_skin == $skin || $sec_dev_skin == $skin), $sec_name), '', 'txp-list-col-multi-edit'
-                    ).
+                    ) .
                     hCell(
                         href(
                             txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
-                        ).
+                        ) .
                         span(
-                            sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
+                            sp . span('&#124;', array('role' => 'separator')) .
+                            sp . href(gTxt('view'), pagelinkurl(array('s' => $sec_name), null, $sec_permlink_mode)),
                             array('class' => 'txp-option-link')
-                        ).
-                        ($in_dev ? n.'<hr class="secondary" />'.n.tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')) : ''), '', array(
+                        ) .
+                        ($in_dev ? n . '<hr class="secondary" />' . n . tag(gTxt('dev_theme'), 'small', array('class' => 'alert-block alert-pill warning')) : ''), '', array(
                             'class' => 'txp-list-col-name',
                             'scope' => 'row',
                         )
-                    ).
+                    ) .
                     td(
                         txpspecialchars($sec_title), '', 'txp-list-col-title'
-                    ).
+                    ) .
                     td(
-                        tag($sec_skin, $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '').($replaced ? n.'<hr class="secondary" />'.n.$sec_dev_skin : ''),
+                        tag($sec_skin, $replaced ? 'span' : null, $replaced ? array('class' => 'secondary-text') : '') . ($replaced ? n . '<hr class="secondary" />' . n . $sec_dev_skin : ''),
                         '', 'txp-list-col-skin'
-                    ).
+                    ) .
                     td(
                         $sec_page, '', 'txp-list-col-page'
-                    ).
+                    ) .
                     td(
                         $sec_css, '', 'txp-list-col-style'
-                    ).
+                    ) .
                     td(
-                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">'.gTxt(get_pref('permlink_mode')).'</span>', '', 'txp-list-col-permlink_mode'
-                    ).
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">' . gTxt(get_pref('permlink_mode')) . '</span>', '', 'txp-list-col-permlink_mode'
+                    ) .
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
-                    ).
+                    ) .
                     td(
                         $sec_in_rss, '', 'txp-list-col-in_rss'
-                    ).
+                    ) .
                     td(
                         $sec_searchable, '', 'txp-list-col-searchable'
-                    ).
+                    ) .
                     td(
                         $articles, '', 'txp-list-col-article_count'
                     ),
-                    array('id' => 'txp_section_'.$sec_name)
+                    array('id' => 'txp_section_' . $sec_name)
                 );
             }
 
             $disabled = $dev_set ? array() : array('switchdevlive');
 
-            $contentBlock .= n.tag_end('tbody').
-                n.tag_end('table').
-                n.tag_end('div'). // End of .txp-listtables.
-                section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled).
-                tInput().
-                n.tag_end('form');
+            $contentBlock .= n . tag_end('tbody') .
+                n . tag_end('table') .
+                n . tag_end('div') . // End of .txp-listtables.
+                section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disabled) .
+                tInput() .
+                n . tag_end('form');
         }
     }
 
-    $pageBlock = $paginator->render().
+    $pageBlock = $paginator->render() .
         nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
@@ -448,7 +448,7 @@ function section_edit()
         $rs = safe_row(
             "*",
             'txp_section',
-            "name = '".doSlash($name)."'"
+            "name = '" . doSlash($name) . "'"
         );
 
         if ($name == 'default') {
@@ -489,14 +489,14 @@ function section_edit()
         $out[] = hInput('name', 'default');
     } else {
         $out[] = inputLabel(
-                'section_name',
-                Txp::get('\Textpattern\UI\Input', 'name', 'text', $sec_name)->setAtts(array(
+            'section_name',
+            Txp::get('\Textpattern\UI\Input', 'name', 'text', $sec_name)->setAtts(array(
                     'id'        => 'section_name',
                     'size'      => INPUT_REGULAR,
                     'maxlength' => $fieldSizes['name'],
                 ))->setBool('required'),
-                'section_name', '', array('class' => 'txp-form-field edit-section-name')
-            ).
+            'section_name', '', array('class' => 'txp-form-field edit-section-name')
+        ) .
             inputLabel(
                 'section_title',
                 Txp::get('\Textpattern\UI\Input', 'title', 'text', $sec_title)->setAtts(array(
@@ -520,28 +520,28 @@ function section_edit()
             'uses_skin',
             'section_uses_skin',
             array('class' => 'txp-form-field edit-section-uses-skin')
-        ).
+        ) .
         inputLabel(
             'section_page',
             $pageSelect,
             'uses_page',
             'section_uses_page',
             array('class' => 'txp-form-field edit-section-uses-page')
-        ).
+        ) .
         inputLabel(
             'section_css',
             $styleSelect,
             'uses_style',
             'section_uses_css',
             array('class' => 'txp-form-field edit-section-uses-css')
-        ).
+        ) .
         inputLabel(
             'permlink_mode',
             permlinkmodes('permlink_mode', $is_default_section ? get_pref('permlink_mode') : $sec_permlink_mode, $is_default_section ? false : array('' => gTxt('default'))),
             'permlink_mode',
             'permlink_mode',
             array('class' => 'txp-form-field edit-section-permlink-mode')
-        ).
+        ) .
         script_js(<<<EOJS
 var skin_page = {$json_page};
 var skin_style = {$json_style};
@@ -552,15 +552,15 @@ EOJS
 
     if (!$is_default_section) {
         $out[] = inputLabel(
-                'on_front_page',
-                yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name),
-                '', 'section_on_frontpage', array('class' => 'txp-form-field edit-section-on-frontpage')
-            ).
+            'on_front_page',
+            yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name),
+            '', 'section_on_frontpage', array('class' => 'txp-form-field edit-section-on-frontpage')
+        ) .
             inputLabel(
                 'syndicate',
                 yesnoradio('in_rss', $sec_in_rss, '', $sec_name),
                 '', 'section_syndicate', array('class' => 'txp-form-field edit-section-syndicate')
-            ).
+            ) .
             inputLabel(
                 'include_in_search',
                 yesnoradio('searchable', $sec_searchable, '', $sec_name),
@@ -569,24 +569,24 @@ EOJS
     }
 
     $out[] = inputLabel(
-            'section_description',
-            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" maxlength="'.$fieldSizes['description'].'">'.$sec_description.'</textarea>',
-            'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
-        );
+        'section_description',
+        '<textarea id="section_description" name="description" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" maxlength="' . $fieldSizes['description'] . '">' . $sec_description . '</textarea>',
+        'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
+    );
 
-    $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
+    $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs) .
         graf(
-            sLink('section', '', gTxt('cancel'), 'txp-button').
+            sLink('section', '', gTxt('cancel'), 'txp-button') .
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
-        ).
-        eInput('section').
-        sInput('section_save').
-        hInput('old_name', $sec_name).
-        hInput('search_method', $search_method).
-        hInput('crit', $crit).
-        hInput('page', $page).
-        hInput('sort', $sort).
+        ) .
+        eInput('section') .
+        sInput('section_save') .
+        hInput('old_name', $sec_name) .
+        hInput('search_method', $search_method) .
+        hInput('crit', $crit) .
+        hInput('page', $page) .
+        hInput('sort', $sort) .
         hInput('dir', $dir);
 
     echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'section_details');
@@ -729,7 +729,7 @@ function section_toggle_option()
     $value = (int) ($value === gTxt('no'));
 
     if (in_array($property, array('on_frontpage', 'in_rss', 'searchable'))) {
-        if (safe_update('txp_section', "$property = $value", "name = '".doSlash($thing)."'")) {
+        if (safe_update('txp_section', "$property = $value", "name = '" . doSlash($thing) . "'")) {
             echo yes_no($value);
 
             return;
@@ -747,7 +747,7 @@ function section_set_default()
 {
     extract(psa(array('default_section')));
 
-    $exists = safe_row("name", 'txp_section', "name = '".doSlash($default_section)."'");
+    $exists = safe_row("name", 'txp_section', "name = '" . doSlash($default_section) . "'");
 
     if ($exists && set_pref('default_section', $default_section, 'section', PREF_HIDDEN)) {
         send_script_response(announce(gTxt('default_section_updated')));
@@ -797,12 +797,12 @@ function section_delete()
     $sections = safe_column(
         "name",
         'txp_section',
-        "name != 'default' AND name IN ($selected) AND name NOT IN (SELECT Section FROM ".safe_pfx('textpattern').")"
+        "name != 'default' AND name IN ($selected) AND name NOT IN (SELECT Section FROM " . safe_pfx('textpattern') . ")"
     );
 
     $sectionsNotDeleted = array_diff($selectedList, $sections);
 
-    if ($sections && safe_delete('txp_section', "name IN (".join(',', quote_list($sections)).")")) {
+    if ($sections && safe_delete('txp_section', "name IN (" . join(',', quote_list($sections)) . ")")) {
         foreach ($sections as $section) {
             unset($txp_sections[$section]);
         }
@@ -813,7 +813,7 @@ function section_delete()
 
     if ($sectionsNotDeleted) {
         $severity = ($message) ? E_WARNING : E_ERROR;
-        $message = array(($message ? $message.n : '').gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
+        $message = array(($message ? $message . n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
     }
 
     sec_section_list($message);
@@ -833,10 +833,10 @@ function section_set_theme($type = 'dev_skin')
     if (isset($all_skins[$skin]) && has_privs('skin.edit')) {
         safe_update(
             'txp_section',
-            "$type = '".doSlash($skin)."'",
-            $type == 'dev_skin' ? '1' : 'page IN ('.join(',', quote_list($all_pages[$skin])).') AND css IN ('.join(',', quote_list($all_styles[$skin])).')'
+            "$type = '" . doSlash($skin) . "'",
+            $type == 'dev_skin' ? '1' : 'page IN (' . join(',', quote_list($all_pages[$skin])) . ') AND css IN (' . join(',', quote_list($all_styles[$skin])) . ')'
         );
-        $message = gTxt($type == 'dev_skin' ? 'dev_theme' : 'live_theme').': '.txpspecialchars($all_skins[$skin]);
+        $message = gTxt($type == 'dev_skin' ? 'dev_theme' : 'live_theme') . ': ' . txpspecialchars($all_skins[$skin]);
 
         if ($type == 'dev_skin') {
             Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
@@ -911,10 +911,12 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method, $disa
             'label' => gTxt('change_page_style'),
             'html'  => (!$dev_preview ?
                 hInput('live_theme', 1) :
-                inputLabel('dev_theme',
+                inputLabel(
+                    'dev_theme',
                     checkbox2('dev_theme', 1, 0, 'dev_theme'),
                     'dev_theme', '', array('class' => 'multi-option multi-step'), ''
-                ) . inputLabel('live_theme',
+                ) . inputLabel(
+                    'live_theme',
                     checkbox2('live_theme', 0, 0, 'live_theme'),
                     'live_theme', '', array('class' => 'multi-option multi-step'), ''
                 )
@@ -956,7 +958,7 @@ var skin_style = {$json_style};
 var page_sel = null;
 var style_sel = null;
 EOJS;
-script_js($script, false);
+    script_js($script, false);
 
     if ($step == 'section_select_skin') {
         $script .= <<<EOJS
@@ -1034,7 +1036,7 @@ function section_multi_edit()
     $setpage = "IF(dev_page > '', dev_page, page)";
     $setcss = "IF(dev_css > '', dev_css, css)";
 
-    $filter = array("name IN (".join(',', quote_list($selected)).")");
+    $filter = array("name IN (" . join(',', quote_list($selected)) . ")");
     $message = '';
 
     if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
@@ -1043,30 +1045,30 @@ function section_multi_edit()
         if (empty($nameVal['page'])) {
             $filter[] = empty($all_pages[$skin]) ?
                 '0' :
-                "page IN (".join(',', quote_list($all_pages[$skin])).")";
+                "page IN (" . join(',', quote_list($all_pages[$skin])) . ")";
         }
 
         if (empty($nameVal['css'])) {
             $filter[] = empty($all_styles[$skin]) ?
                 '0' :
-                "css IN (".join(',', quote_list($all_styles[$skin])).")";
+                "css IN (" . join(',', quote_list($all_styles[$skin])) . ")";
         }
     } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
         $skinset = array();
 
         foreach ($all_skins as $skin => $title) {
-            $skinset[] = "$setskin = '".doSlash($skin)."' AND ($setpage = '' OR ".
+            $skinset[] = "$setskin = '" . doSlash($skin) . "' AND ($setpage = '' OR " .
             (empty($all_pages[$skin]) ?
                 '0' :
-                "$setpage IN (".join(',', quote_list($all_pages[$skin]))."))"
-            )." AND ($setcss = '' OR ".
+                "$setpage IN (" . join(',', quote_list($all_pages[$skin])) . "))"
+            ) . " AND ($setcss = '' OR " .
             (empty($all_styles[$skin]) ?
                 '0' :
-                "$setcss IN (".join(',', quote_list($all_styles[$skin]))."))"
+                "$setcss IN (" . join(',', quote_list($all_styles[$skin])) . "))"
             );
         }
 
-        $filter[] = '('.implode(' OR ', $skinset).')';
+        $filter[] = '(' . implode(' OR ', $skinset) . ')';
     }
 
     $sections = safe_column(
@@ -1081,9 +1083,9 @@ function section_multi_edit()
                 "skin = $setskin,
                 page = $setpage,
                 css = $setcss, "
-            )."dev_skin = '', dev_page = '', dev_css = ''";
+            ) . "dev_skin = '', dev_page = '', dev_css = ''";
         } elseif ($edit_method == 'permlinkmode') {
-            $set = "permlink_mode = IF(name='default', '', '".doSlash($nameVal['permlink_mode'])."')";
+            $set = "permlink_mode = IF(name='default', '', '" . doSlash($nameVal['permlink_mode']) . "')";
 
             if ($nameVal['permlink_mode'] && in_array('default', $sections)) {
                 set_pref('permlink_mode', $nameVal['permlink_mode']);
@@ -1093,7 +1095,7 @@ function section_multi_edit()
 
             foreach ($nameVal as $key => $val) {
                 if ((string)$val != '*') {
-                    $in[] = "{$key} = '".doSlash($val)."'";
+                    $in[] = "{$key} = '" . doSlash($val) . "'";
                 }
             }
 
@@ -1104,7 +1106,7 @@ function section_multi_edit()
             safe_update(
                 'txp_section',
                 $set,
-                "name IN (".join(',', quote_list($sections)).")"
+                "name IN (" . join(',', quote_list($sections)) . ")"
             )
         ) {
             $message = gTxt('section_updated', array('{name}' => join(', ', $sections)));
