@@ -154,21 +154,21 @@ function lore_list($message = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     $searchBlock =
-        n.tag(
+        n . tag(
             $search->renderForm('log_list', $search_render_options),
             'div',
             array(
                 'class' => 'txp-layout-4col-3span',
-                'id'    => $event.'_control',
+                'id'    => $event . '_control',
             )
         );
 
-    $contentBlock ='';
+    $contentBlock = '';
 
     if ($total < 1) {
         $contentBlock .=
             graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
                 gTxt($crit === '' ? 'no_refers_recorded' : 'no_results_found'),
                 array('class' => 'alert-block information')
             );
@@ -180,26 +180,26 @@ function lore_list($message = '')
         );
 
         if ($rs) {
-            $contentBlock .= n.tag_start('form', array(
+            $contentBlock .= n . tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'log_form',
                     'name'   => 'longform',
                     'method' => 'post',
                     'action' => 'index.php',
-                )).
-                n.tag_start('div', array(
+                )) .
+                n . tag_start('div', array(
                     'class'      => 'txp-listtables',
                     'tabindex'   => 0,
                     'aria-label' => gTxt('list'),
-                )).
-                n.tag_start('table', array('class' => 'txp-list')).
-                n.tag_start('thead').
+                )) .
+                n . tag_start('table', array('class' => 'txp-list')) .
+                n . tag_start('thead') .
                 tr(
                     hCell(
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
                         '',
-                        ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                    ).
+                        ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                    ) .
                     column_head(
                         'time',
                         'time',
@@ -208,8 +208,8 @@ function lore_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                        (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
-                    ).
+                        (('time' == $sort) ? "$dir " : '') . 'txp-list-col-time'
+                    ) .
                     column_head(
                         'page',
                         'page',
@@ -218,8 +218,8 @@ function lore_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
-                    ).
+                        (('page' == $sort) ? "$dir " : '') . 'txp-list-col-page'
+                    ) .
                     column_head(
                         'referrer',
                         'refer',
@@ -228,8 +228,8 @@ function lore_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                        (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
-                    ).
+                        (('refer' == $sort) ? "$dir " : '') . 'txp-list-col-refer'
+                    ) .
                     column_head(
                         'method',
                         'method',
@@ -238,8 +238,8 @@ function lore_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
-                    ).
+                        (('method' == $sort) ? "$dir " : '') . 'txp-list-col-method'
+                    ) .
                     column_head(
                         'status',
                         'status',
@@ -248,17 +248,17 @@ function lore_list($message = '')
                         $switch_dir,
                         $crit,
                         $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                        (('status' == $sort) ? "$dir " : '') . 'txp-list-col-status'
                     )
-                ).
-                n.tag_end('thead').
-                n.tag_start('tbody');
+                ) .
+                n . tag_end('thead') .
+                n . tag_start('tbody');
 
             while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'log');
 
                 if ($log_refer) {
-                    $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)).sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), txpspecialchars($log_refer), array(
+                    $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)) . sp . span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), txpspecialchars($log_refer), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     ));
@@ -267,7 +267,7 @@ function lore_list($message = '')
                 if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
-                    $log_page = href('/'.txpspecialchars($log_anchor), rtrim(hu, '/').txpspecialchars($log_page), array(
+                    $log_page = href('/' . txpspecialchars($log_anchor), rtrim(hu, '/') . txpspecialchars($log_page), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                         'title'  => gTxt('view'),
@@ -283,27 +283,27 @@ function lore_list($message = '')
                         fInput('checkbox', 'selected[]', $log_id),
                         '',
                         'txp-list-col-multi-edit'
-                    ).
+                    ) .
                     hCell(
                         gTime($log_uTime),
                         '',
                         ' class="txp-list-col-time" scope="row"'
-                    ).
+                    ) .
                     td(
                         $log_page,
                         '',
                         'txp-list-col-page'
-                    ).
+                    ) .
                     td(
                         $log_refer,
                         '',
                         'txp-list-col-refer'
-                    ).
+                    ) .
                     td(
                         txpspecialchars($log_method),
                         '',
                         'txp-list-col-method'
-                    ).
+                    ) .
                     td(
                         $log_status,
                         '',
@@ -313,17 +313,17 @@ function lore_list($message = '')
             }
 
             $contentBlock .=
-                n.tag_end('tbody').
-                n.tag_end('table').
-                n.tag_end('div'). // End of .txp-listtables.
-                lore_multiedit_form($page, $sort, $dir, $crit, $search_method).
-                tInput().
-                n.tag_end('form');
+                n . tag_end('tbody') .
+                n . tag_end('table') .
+                n . tag_end('div') . // End of .txp-listtables.
+                lore_multiedit_form($page, $sort, $dir, $crit, $search_method) .
+                tInput() .
+                n . tag_end('form');
         }
     }
 
     $createBlock = '';
-    $pageBlock = $paginator->render().
+    $pageBlock = $paginator->render() .
         nav_form('lore', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
