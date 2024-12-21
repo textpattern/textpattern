@@ -33,7 +33,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-include_once(txpath.DS.'lib'.DS.'txplib_publish.php');
+include_once(txpath . DS . 'lib' . DS . 'txplib_publish.php');
 
 if ($event == 'prefs') {
     require_privs('prefs');
@@ -64,13 +64,13 @@ function prefs_save()
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
-    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE ".safe_pfx('textpattern'))));
+    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE " . safe_pfx('textpattern'))));
     set_pref('max_custom_fields', $max_custom_fields, 'publish', PREF_HIDDEN);
 
     $sql = array();
-    $sql[] = "event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
-    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
-            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
+    $sql[] = "event != '' AND type IN (" . PREF_CORE . ", " . PREF_PLUGIN . ", " . PREF_HIDDEN . ")";
+    $sql[] = "(user_name = '' OR (user_name = '" . doSlash($txp_user) . "' AND name NOT IN (
+            SELECT name FROM " . safe_pfx('txp_prefs') . " WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 0, 1)) {
@@ -128,7 +128,7 @@ function prefs_save()
     while ($a = nextRow($prefnames)) {
         extract($a);
 
-        if (!isset($post[$name]) || (!has_privs('prefs.'.$event) && $user_name === '')) {
+        if (!isset($post[$name]) || (!has_privs('prefs.' . $event) && $user_name === '')) {
             continue;
         }
 
@@ -141,7 +141,7 @@ function prefs_save()
         }
 
         if ($name === 'expire_logs_after' && (int)$post[$name] !== (int) $val) {
-            safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
+            safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL " . intval($post[$name]) . " DAY)");
         }
 
         if ((string) $post[$name] !== $val) {
@@ -179,7 +179,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $prefs['locale']);
 
-    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
+    echo n . '<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'mail', 'comments', 'custom');
@@ -190,13 +190,13 @@ function prefs_list($message = '')
 
     foreach ($txp_options as $pref => $option) {
         if (is_array($option) && isset($option[0]) && !in_list($level, $option[0])) {
-            $sql[] = "name != '".doSlash($pref)."'";
+            $sql[] = "name != '" . doSlash($pref) . "'";
         }
     }
 
-    $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
-    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
-            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
+    $sql[] = 'event != "" AND type IN(' . PREF_CORE . ', ' . PREF_PLUGIN . ')';
+    $sql[] = "(user_name = '' OR (user_name = '" . doSlash($txp_user) . "' AND name NOT IN (
+            SELECT name FROM " . safe_pfx('txp_prefs') . " WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 0, 1)) {
@@ -206,7 +206,7 @@ function prefs_list($message = '')
     $rs = safe_rows_start(
         "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, collection, position"
+        join(" AND ", $sql) . " ORDER BY sort_value = 0, sort_value, event, collection, position"
     );
 
     $last_event = $last_sub_event = null;
@@ -226,30 +226,33 @@ function prefs_list($message = '')
             $mainEvent = $eventParts[0];
             $subEvent = isset($eventParts[1]) ? $eventParts[1] : $a['collection'];
 
-            if (!has_privs('prefs.'.$a['event']) && $a['user_name'] === '') {
+            if (!has_privs('prefs.' . $a['event']) && $a['user_name'] === '') {
                 continue;
             }
 
             if ($mainEvent !== $last_event) {
                 if ($last_event !== null) {
-                    $overview_help = in_array($last_event.'_overview', $pophelp_keys, true) ? $last_event.'_overview' : '';
+                    $overview_help = in_array($last_event . '_overview', $pophelp_keys, true) ? $last_event . '_overview' : '';
                     $build[] = tag(
-                        hed(gTxt($last_event).popHelp($overview_help), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        hed(gTxt($last_event) . popHelp($overview_help), 2, array('id' => 'prefs_group_' . $last_event . '-label')) .
                         join(n, $out), 'section', array(
                             'class'           => 'txp-tabs-vertical-group',
-                            'id'              => 'prefs_group_'.$last_event,
-                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                            'id'              => 'prefs_group_' . $last_event,
+                            'aria-labelledby' => 'prefs_group_' . $last_event . '-label',
                         )
                     );
 
-                    $groupOut[] = n.tag(href(
-                        gTxt($last_event),
-                        '#prefs_group_'.$last_event,
-                        array(
+                    $groupOut[] = n . tag(
+                        href(
+                            gTxt($last_event),
+                            '#prefs_group_' . $last_event,
+                            array(
                                 'data-txp-pane'  => $last_event,
-                                'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
-                            )),
-                        'li');
+                                'data-txp-token' => md5($last_event . 'prefs' . form_token() . get_pref('blog_uid')),
+                            )
+                        ),
+                        'li'
+                    );
                 }
 
                 $last_event = $mainEvent;
@@ -291,10 +294,10 @@ function prefs_list($message = '')
                 $a['name'],
                 pref_func($a['html'], $a['name'], $a['val'], $constraints),
                 $label,
-                array($help, 'instructions_'.$a['name']),
+                array($help, 'instructions_' . $a['name']),
                 array(
-                    'class' => 'txp-form-field'.(!empty($a['collection']) ? ' '.$a['collection'] : ''),
-                    'id'    => 'prefs-'.$a['name'],
+                    'class' => 'txp-form-field' . (!empty($a['collection']) ? ' ' . $a['collection'] : ''),
+                    'id'    => 'prefs-' . $a['name'],
                 )
             );
         }
@@ -302,39 +305,42 @@ function prefs_list($message = '')
 
     if ($last_event === null) {
         echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
             gTxt('no_preferences'),
             array('class' => 'alert-block information')
         );
     } else {
-        $overview_help = in_array($last_event.'_overview', $pophelp_keys, true) ? $last_event.'_overview' : '';
+        $overview_help = in_array($last_event . '_overview', $pophelp_keys, true) ? $last_event . '_overview' : '';
         $build[] = tag(
-            hed(gTxt($last_event).popHelp($overview_help), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            hed(gTxt($last_event) . popHelp($overview_help), 2, array('id' => 'prefs_group_' . $last_event . '-label')) .
             join(n, $out), 'section', array(
                 'class'           => 'txp-tabs-vertical-group',
-                'id'              => 'prefs_group_'.$last_event,
-                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                'id'              => 'prefs_group_' . $last_event,
+                'aria-labelledby' => 'prefs_group_' . $last_event . '-label',
             )
         );
 
-        $groupOut[] = n.tag(href(
-            gTxt($last_event),
-            '#prefs_group_'.$last_event,
-            array(
+        $groupOut[] = n . tag(
+            href(
+                gTxt($last_event),
+                '#prefs_group_' . $last_event,
+                array(
                     'data-txp-pane'  => $last_event,
-                    'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
-                )),
-            'li').n;
+                    'data-txp-token' => md5($last_event . 'prefs' . form_token() . get_pref('blog_uid')),
+                )
+            ),
+            'li'
+        ) . n;
 
-        echo n.'<div class="txp-layout">'.
-            n.tag(
+        echo n . '<div class="txp-layout">' .
+            n . tag(
                 hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')),
                 'div', array('class' => 'txp-layout-1col')
-            ).
-            n.tag_start('div', array('class' => 'txp-layout-4col-alt')).
+            ) .
+            n . tag_start('div', array('class' => 'txp-layout-4col-alt')) .
             wrapGroup(
                 'all_preferences',
-                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
+                n . tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
                 'all_preferences'
             );
 
@@ -342,21 +348,22 @@ function prefs_list($message = '')
             echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        echo n.tag_end('div'). // End of .txp-layout-4col-alt.
-            n.tag_start('div', array('class' => 'txp-layout-4col-3span')).
-            join(n, $build).
-            n.tag_end('div'). // End of .txp-layout-4col-3span.
-            sInput('prefs_save').
-            eInput('prefs').
+        echo n . tag_end('div') . // End of .txp-layout-4col-alt.
+            n . tag_start('div', array('class' => 'txp-layout-4col-3span')) .
+            join(n, $build) .
+            n . tag_end('div') . // End of .txp-layout-4col-3span.
+            sInput('prefs_save') .
+            eInput('prefs') .
             tInput();
     }
 
-    echo n.'</div>'. // End of .txp-layout.
-        n.'</form>';
+    echo n . '</div>' . // End of .txp-layout.
+        n . '</form>';
 
     if (!empty($prefs['max_url_len']) &&
-        (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))) {
-        echo announce(gTxt('max_url_len').' < '.$min_len, E_WARNING);
+        (int)$prefs['max_url_len'] < ($min_len = strlen(preg_replace('/^https?:\/{2}[^\/]+/i', '', hu)))
+    ) {
+        echo announce(gTxt('max_url_len') . ' < ' . $min_len, E_WARNING);
     }
 
     if ($step == 'prefs_save' && $badCF = filterCustomFields(false)) {
@@ -376,14 +383,14 @@ function prefs_list($message = '')
 
 function pref_func($func, $name, $val, $constraints = array())
 {
-    if ($func != 'func' && is_callable('pref_'.$func)) {
-        $func = 'pref_'.$func;
+    if ($func != 'func' && is_callable('pref_' . $func)) {
+        $func = 'pref_' . $func;
     } else {
         $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
         if (is_string($func) && strpos($func, '\\') === 0) {
-            $func = '\Textpattern\UI'.$func;
+            $func = '\Textpattern\UI' . $func;
 
             if (class_exists($func)) {
                 $out = new $func($name, $val);
@@ -556,7 +563,7 @@ function is_dst($name, $val)
     }
 
 
-    $ui = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).
+    $ui = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val) .
     script_js(<<<EOS
     var radio = $("#prefs-is_dst");
     var radioInput = radio.find('input');
@@ -689,7 +696,7 @@ function enhanced_email($name, $val)
 EOS
     , false, true);
 
-    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val).$js;
+    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val) . $js;
 }
 
 /**
@@ -754,7 +761,7 @@ EOS
     , false, true);
 
 
-    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name').$js;
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name') . $js;
 }
 
 /**
@@ -792,14 +799,14 @@ function weeks($name, $val)
 
     $vals = array(
         '0' => gTxt('never'),
-        7   => '1 '.gTxt('week'),
-        14  => '2 '.$weeks,
-        21  => '3 '.$weeks,
-        28  => '4 '.$weeks,
-        35  => '5 '.$weeks,
-        42  => '6 '.$weeks,
-        56  => '8 '.$weeks,
-        84  => '12 '.$weeks,
+        7   => '1 ' . gTxt('week'),
+        14  => '2 ' . $weeks,
+        21  => '3 ' . $weeks,
+        28  => '4 ' . $weeks,
+        35  => '5 ' . $weeks,
+        42  => '6 ' . $weeks,
+        56  => '8 ' . $weeks,
+        84  => '12 ' . $weeks,
     );
 
     return pluggable_ui('prefs_ui', 'weeks', Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name), $name, $val);
@@ -831,7 +838,7 @@ function dateformats($name, $val)
 
     $vals['since'] = gTxt('hours_days_ago');
     $input = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name)//selectInput(false, $vals, $val, '', '', $name)
-        .n.fInput('text', $name, $val, '', gTxt('code'), '', 16);
+        . n . fInput('text', $name, $val, '', gTxt('code'), '', 16);
 
     return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
@@ -890,19 +897,19 @@ function default_event($name, $val)
 
     foreach ($vals as $a => $b) {
         if (count($b) > 0) {
-            $out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
+            $out[] = n . '<optgroup label="' . gTxt('tab_' . $a) . '">';
 
             foreach ($b as $c => $d) {
-                $out[] = n.'<option value="'.$d.'"'.($val == $d ? ' selected="selected"' : '').'>'.$c.'</option>';
+                $out[] = n . '<option value="' . $d . '"' . ($val == $d ? ' selected="selected"' : '') . '>' . $c . '</option>';
             }
 
-            $out[] = n.'</optgroup>';
+            $out[] = n . '</optgroup>';
         }
     }
 
-    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
-        join('', $out).
-        n.'</select>';
+    return n . '<select class="default-events" id="default_event" name="' . $name . '">' .
+        join('', $out) .
+        n . '</select>';
 }
 
 /**
@@ -945,7 +952,7 @@ function custom_set($name, $val)
             $str = '';
 
             foreach (preg_split('/(.)/u', $field, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $char) {
-                $str .= ctype_alpha($char) ? '['.strtolower($char).strtoupper($char).']' : $char;
+                $str .= ctype_alpha($char) ? '[' . strtolower($char) . strtoupper($char) . ']' : $char;
             }
 
             $reserved[$field] = $str;
@@ -954,7 +961,7 @@ function custom_set($name, $val)
 
     $pattern = $reserved;
     unset($pattern[strtolower($val)]);
-    $pattern = implode('|', $pattern).'|[cC][uU][sS][tT][oO][mM]_\d+';
+    $pattern = implode('|', $pattern) . '|[cC][uU][sS][tT][oO][mM]_\d+';
     $constraints = array('size' => INPUT_REGULAR, 'pattern' => "^(?!(?:$pattern)$).*$");
 
     return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, $constraints), $name, $val);
