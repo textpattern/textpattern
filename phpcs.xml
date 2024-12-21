@@ -6,6 +6,7 @@
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
         <!-- hand wavey formatting things that could be done sooner -->
         <exclude name="Generic.Formatting.DisallowMultipleStatements.SameLine"/>
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine"/>
         <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace"/>
         <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
         <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
