@@ -30,7 +30,8 @@
  * @see ./txp_lore.php
  */
 
-if (!defined("txpath"))
+if (!defined("txpath")) {
     define("txpath", dirname(__FILE__));
+}
 
-require_once txpath.'/include/txp_lore.php';
+require_once txpath . '/include/txp_lore.php';
