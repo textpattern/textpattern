@@ -1,5 +1,5 @@
-If you are interested in translating Textpattern into your own language,
-please visit https://translate.textpattern.com/.
+If you are interested in translating Textpattern CMS into your preferred
+language, please visit https://translate.textpattern.com/.
 
 == Language Files [lang].ini ==
 
@@ -10,20 +10,21 @@ Admin -> Languages administration panel. You may also install additional
 languages from there.
 
 All language strings are installed from files in the /textpattern/lang/
-directory. If you wish to update any language to use the latest strings:
+directory. If you wish to update any language(s) to use the latest
+translations:
 
 1. Visit https://textpattern.com/textpacks-download
-2. Unzip the downloaded file.
-3. Upload the files within to your server /textpattern/lang/ directory.
-4. Visit the Languages administration panel in your Textpattern admin area.
-5. Click 'Update' alongside the language in the grid.
+2. Decompress the downloaded archive.
+3. Upload the expanded files to your /textpattern/lang/ directory.
+4. Visit the Languages administration panel in the Textpattern admin area.
+5. Click 'Update' alongside the language(s) in the grid.
 
 == Inline Help Files [lang]_pophelp.xml ==
 
-All language help texts used by Textpattern CMS are stored as XML files and
+All language help texts used by Textpattern are stored as XML files and
 are installed into the /textpattern/lang/ directory. If you wish to update
 any inline help files to use the latest translation:
 
 1. Visit https://textpattern.com/pophelp-download
-2. Unzip the downloaded file.
-3. Upload the files within to your server /textpattern/lang/ directory.
+2. Decompress the downloaded archive.
+3. Upload the expanded files to your /textpattern/lang/ directory.
