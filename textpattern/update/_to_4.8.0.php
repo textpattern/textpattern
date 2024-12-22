@@ -26,9 +26,11 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // ... and Sections...
-$cols = getThings('describe `'.PFX.'txp_section`');
+$cols = getThings('describe `' . PFX . 'txp_section`');
 
 if (!in_array('permlink_mode', $cols)) {
-    safe_alter('txp_section',
-        "ADD permlink_mode VARCHAR(63) NOT NULL AFTER css");
+    safe_alter(
+        'txp_section',
+        "ADD permlink_mode VARCHAR(63) NOT NULL AFTER css"
+    );
 }

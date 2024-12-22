@@ -27,11 +27,13 @@ if (!defined('TXP_UPDATE')) {
 
 safe_update('txp_prefs', "name = 'spam_blocklists'", "name = 'spam_blacklists'");
 
-$cols = getThings('describe `'.PFX.'txp_prefs`');
+$cols = getThings('describe `' . PFX . 'txp_prefs`');
 
 if (!in_array('collection', $cols)) {
-    safe_alter('txp_prefs',
-        "ADD collection VARCHAR(255) NOT NULL DEFAULT '' AFTER event");
+    safe_alter(
+        'txp_prefs',
+        "ADD collection VARCHAR(255) NOT NULL DEFAULT '' AFTER event"
+    );
 }
 
 // Populate new Mail subsection in Prefs, migrating some prefs there.
@@ -83,7 +85,7 @@ $new_prefs = array(
         'html'       => 'trailing_slash',
         'position'   => 185,
     ),
-    'file_download_header'=> array(
+    'file_download_header' => array(
         'val'      => '',
         'event'    => 'advanced_options',
         'html'     => 'longtext_input',
@@ -103,15 +105,15 @@ foreach ($smtp_prefs + $new_prefs as $prefname => $block) {
 $primaries = array('css', 'form', 'page');
 
 foreach ($primaries as $table) {
-    safe_drop_index('txp_'.$table, 'name_skin');
-    safe_create_index('txp_'.$table, 'name(63), skin(63)', 'primary');
+    safe_drop_index('txp_' . $table, 'name_skin');
+    safe_create_index('txp_' . $table, 'name(63), skin(63)', 'primary');
 }
 
 $primaries = array('plugin', 'section');
 
 foreach ($primaries as $table) {
-    safe_drop_index('txp_'.$table, 'name');
-    safe_create_index('txp_'.$table, 'name(63)', 'primary');
+    safe_drop_index('txp_' . $table, 'name');
+    safe_create_index('txp_' . $table, 'name(63)', 'primary');
 }
 
 safe_drop_index('txp_prefs', 'prefs_idx');
@@ -120,4 +122,3 @@ safe_create_index('txp_prefs', 'name(185), user_name', 'primary');
 // Increase section and category description fields.
 safe_alter('txp_section', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
 safe_alter('txp_category', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
-

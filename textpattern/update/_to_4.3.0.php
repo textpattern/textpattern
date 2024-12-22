@@ -25,16 +25,16 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-$rs = getRows("SELECT name, css FROM `".PFX."txp_css`");
+$rs = getRows("SELECT name, css FROM `" . PFX . "txp_css`");
 foreach ($rs as $row) {
     if (preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $row['css'])) {
         // Data is still base64 encoded.
-        safe_update('txp_css', "css = '".doSlash(base64_decode($row['css']))."'", "name = '".doSlash($row['name'])."'");
+        safe_update('txp_css', "css = '" . doSlash(base64_decode($row['css'])) . "'", "name = '" . doSlash($row['name']) . "'");
     }
 }
 
 // Add column for file title.
-$cols = getThings("DESCRIBE `".PFX."txp_file`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_file`");
 
 if (!in_array('title', $cols)) {
     safe_alter('txp_file', "ADD title VARCHAR(255) NULL AFTER filename");
