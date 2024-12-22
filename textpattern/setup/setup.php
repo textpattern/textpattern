@@ -57,39 +57,39 @@ define('MSG_ERROR', '[ERROR]');
 error_reporting(E_ALL);
 @ini_set("display_errors", "1");
 
-include_once txpath.'/lib/class.trace.php';
+include_once txpath . '/lib/class.trace.php';
 $trace = new Trace();
-include_once txpath.'/lib/constants.php';
-include_once txpath.'/lib/txplib_misc.php';
-include_once txpath.'/lib/txplib_admin.php';
-include_once txpath.'/vendors/Textpattern/Loader.php';
+include_once txpath . '/lib/constants.php';
+include_once txpath . '/lib/txplib_misc.php';
+include_once txpath . '/lib/txplib_admin.php';
+include_once txpath . '/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath . '/vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath . '/lib');
 $loader->register();
 
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/include/txp_auth.php';
-include_once txpath.'/setup/setup_lib.php';
+include_once txpath . '/lib/txplib_html.php';
+include_once txpath . '/lib/txplib_forms.php';
+include_once txpath . '/include/txp_auth.php';
+include_once txpath . '/setup/setup_lib.php';
 
 assert_system_requirements();
 setup_load_lang(@$cfg['site']['language_code']);
 
-if (!isset($params['force']) && file_exists(txpath.'/config.php')) {
+if (!isset($params['force']) && file_exists(txpath . '/config.php')) {
     msg(gTxt('already_installed', array('{configpath}' => txpath)), MSG_ERROR);
 }
 
 setup_connect();
 $cfg_php = setup_makeConfig($cfg);
 
-if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
+if (@file_put_contents(txpath . '/config.php', $cfg_php) === false) {
     msg(gTxt('config_php_write_error'), MSG_ERROR);
 }
 
-@include txpath.'/config.php';
+@include txpath . '/config.php';
 
 if (empty($cfg['user']['login_name'])) {
     msg(gTxt('name_required'), MSG_ERROR);
@@ -110,7 +110,7 @@ setup_die(0);
 
 function msg($msg, $class = MSG_OK, $back = false)
 {
-    echo "$class\t".strip_tags($msg)."\n";
+    echo "$class\t" . strip_tags($msg) . "\n";
     if ($class == MSG_ERROR) {
         setup_die(128);
     }

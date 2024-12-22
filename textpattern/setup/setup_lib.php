@@ -25,22 +25,22 @@ function setup_db($cfg = array())
 {
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;
     global $permlink_mode, $siteurl, $adminurl, $theme_name, $public_themes, $step;
-    include_once txpath.'/lib/txplib_db.php';
-    include_once txpath.'/lib/admin_config.php';
+    include_once txpath . '/lib/txplib_db.php';
+    include_once txpath . '/lib/admin_config.php';
 
     $siteurl = rtrim($cfg['site']['public_url'], '/');
 
     if (!preg_match('%^https?://%', $siteurl)) {
-        $siteurl = 'http://'.$siteurl;
+        $siteurl = 'http://' . $siteurl;
     }
 
     if (empty($cfg['site']['admin_url'])) {
-        $adminurl = $siteurl.'/textpattern';
+        $adminurl = $siteurl . '/textpattern';
     } else {
         $adminurl = rtrim($cfg['site']['admin_url'], '/');
 
         if (!preg_match('%^https?://%', $adminurl)) {
-            $adminurl = 'http://'.$adminurl;
+            $adminurl = 'http://' . $adminurl;
         }
     }
 
@@ -58,7 +58,7 @@ function setup_db($cfg = array())
 
     // Variable set.
     if (!defined('hu')) {
-        define('hu', $siteurl.'/');
+        define('hu', $siteurl . '/');
     }
 
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
@@ -67,12 +67,12 @@ function setup_db($cfg = array())
 
     $Skin = Txp::get('Textpattern\Skin\Skin');
 
-    $setup_path = txpath.DS.'setup';
-    $setup_themes_path = $setup_path.DS.'themes';
+    $setup_path = txpath . DS . 'setup';
+    $setup_themes_path = $setup_path . DS . 'themes';
     $Skin->setDirPath($setup_themes_path);
     $setup_public_themes = $Skin->getUploaded();
 
-    $root_themes_path = txpath.DS.'..'.DS.'themes';
+    $root_themes_path = txpath . DS . '..' . DS . 'themes';
     $Skin->setDirPath($root_themes_path);
     $root_public_themes = $Skin->getUploaded();
 
@@ -94,7 +94,7 @@ function setup_db($cfg = array())
         */
 
         if (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'theme') {
-            $datadir = $is_from_setup ? $setup_themes_path.DS.$public_theme : $root_public_themes.DS.$public_theme;
+            $datadir = $is_from_setup ? $setup_themes_path . DS . $public_theme : $root_public_themes . DS . $public_theme;
         } elseif (!empty($public_themes[$public_theme]['txp-data']) && $public_themes[$public_theme]['txp-data'] == 'none') {
             $datadir = '';
         } else {
@@ -104,10 +104,10 @@ function setup_db($cfg = array())
         $datadir = $cfg['site']['content_directory'];
     }
 
-    if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
+    if (numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"))) {
         if (! empty($step)) {
             $step = 'step_printConfig';
-            echo txp_setup_progress_meter(4).n.'<div class="txp-setup">';
+            echo txp_setup_progress_meter(4) . n . '<div class="txp-setup">';
         }
 
         msg(gTxt('tables_exist', array('{dbname}' => (!empty($txpcfg['db']) ? $txpcfg['db'] : ''))), MSG_ERROR, true);
@@ -139,7 +139,7 @@ function setup_db($cfg = array())
                                         global  - Used in setup and for AutoCreate missing prefs.
                                         private - Will be created after user login
         */
-        foreach (get_files_content($datadir.'/data', 'prefs') as $key => $data) {
+        foreach (get_files_content($datadir . '/data', 'prefs') as $key => $data) {
             if (($out = json_decode($data, true)) !== null) {
                 msg("Prefs: 'data/{$key}'");
 
@@ -154,19 +154,19 @@ function setup_db($cfg = array())
         $prefs = get_prefs();
         $plugin = new \Textpattern\Plugin\Plugin();
 
-        foreach (get_files_content($datadir.'/plugin', 'txt') as $key => $data) {
+        foreach (get_files_content($datadir . '/plugin', 'txt') as $key => $data) {
             $result = $plugin->install($data, 1);
-            msg("Plugin: '{$key}' - ".(is_array($result) ? $result[0] : $result));
+            msg("Plugin: '{$key}' - " . (is_array($result) ? $result[0] : $result));
         }
 
         $import = new \Textpattern\Import\TxpXML();
 
-        foreach (get_files_content($datadir.'/data', 'xml') as $key => $data) {
+        foreach (get_files_content($datadir . '/data', 'xml') as $key => $data) {
             $import->importXml($data);
             msg("Import: 'data/{$key}'");
         }
 
-        foreach (get_files_content($datadir.'/articles', 'xml') as $key => $data) {
+        foreach (get_files_content($datadir . '/articles', 'xml') as $key => $data) {
             $import->importXml($data);
             msg("Import: 'articles/{$key}'");
         }
@@ -174,7 +174,7 @@ function setup_db($cfg = array())
 
     // --- Theme setup.
     // Import theme assets.
-    msg(gTxt('public_theme').": '{$public_theme}'");
+    msg(gTxt('public_theme') . ": '{$public_theme}'");
     $is_from_setup ? $Skin->setDirPath($setup_themes_path) : '';
     $Skin->setNames(array($public_theme))
          ->import()
@@ -236,7 +236,7 @@ function setup_load_lang($langs)
 
     $langs = do_list($langs);
     $lang = $langs[0];
-    $lang_path = txpath.DS.'setup'.DS.'lang'.DS;
+    $lang_path = txpath . DS . 'setup' . DS . 'lang' . DS;
     $group = 'common, setup';
     $strings = array();
 
@@ -285,22 +285,22 @@ function setup_makeConfig($cfg, $doSpecial = false)
     }
 
     $config_details =
-    "<"."?php\n"
-    .o.'db'.m.$cfg['database']['db_name'].nl
-    .o.'user'.m.$cfg['database']['user'].nl
-    .o.'pass'.m.$cfg['database']['password'].nl
-    .o.'host'.m.$cfg['database']['host'].nl
-    .(empty($cfg['database']['client_flags']) ? '' : o.'client_flags'."'] = ".$cfg['database']['client_flags'].";\n")
-    .o.'table_prefix'.m.$cfg['database']['table_prefix'].nl
-    .o.'txpath'.m.txpath.nl
-    .o.'dbcharset'.m.$cfg['database']['charset'].nl;
+    "<" . "?php\n"
+    . o . 'db' . m . $cfg['database']['db_name'] . nl
+    . o . 'user' . m . $cfg['database']['user'] . nl
+    . o . 'pass' . m . $cfg['database']['password'] . nl
+    . o . 'host' . m . $cfg['database']['host'] . nl
+    . (empty($cfg['database']['client_flags']) ? '' : o . 'client_flags' . "'] = " . $cfg['database']['client_flags'] . ";\n")
+    . o . 'table_prefix' . m . $cfg['database']['table_prefix'] . nl
+    . o . 'txpath' . m . txpath . nl
+    . o . 'dbcharset' . m . $cfg['database']['charset'] . nl;
 
     if (defined('is_multisite')) {
         $config_details .=
-             o.'multisite_root_path'.m.multisite_root_path.nl
-            .o.'admin_url'.m.$cfg['site']['admin_url'].nl
-            .o.'cookie_domain'.m.$cfg['site']['cookie_domain'].nl
-            .'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }'."\n";
+             o . 'multisite_root_path' . m . multisite_root_path . nl
+            . o . 'admin_url' . m . $cfg['site']['admin_url'] . nl
+            . o . 'cookie_domain' . m . $cfg['site']['cookie_domain'] . nl
+            . 'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }' . "\n";
     }
 
     $config_details .=
@@ -349,8 +349,11 @@ function setup_connect()
     echo msg(gTxt('db_connected'));
 
     if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
-        msg(gTxt('prefix_bad_characters',
-            array('{dbprefix}' => txpspecialchars($cfg['database']['table_prefix']))),
+        msg(
+            gTxt(
+                'prefix_bad_characters',
+                array('{dbprefix}' => txpspecialchars($cfg['database']['table_prefix']))
+            ),
             MSG_ERROR, true
         );
     }
@@ -376,29 +379,35 @@ function setup_connect()
     }
 
     if (!empty($cfg['database']['create'])) {
-        $result = mysqli_query($mylink, "CREATE DATABASE IF NOT EXISTS `".mysqli_real_escape_string($mylink, $cfg['database']['db_name'])."` CHARACTER SET `".mysqli_real_escape_string($mylink, $cfg['database']['charset'])."`");
+        $result = mysqli_query($mylink, "CREATE DATABASE IF NOT EXISTS `" . mysqli_real_escape_string($mylink, $cfg['database']['db_name']) . "` CHARACTER SET `" . mysqli_real_escape_string($mylink, $cfg['database']['charset']) . "`");
     }
 
     try {
         $mydb = mysqli_select_db($mylink, $cfg['database']['db_name']);
     } catch (mysqli_sql_exception $e) {
         error_log($e->getMessage());
-        msg(gTxt('db_doesnt_exist',
-            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+        msg(
+            gTxt(
+                'db_doesnt_exist',
+                array('{dbname}' => txpspecialchars($cfg['database']['db_name']))
+            ),
             MSG_ERROR, true
         );
     }
 
     try {
-        $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
+        $tables_exist = mysqli_query($mylink, "DESCRIBE `" . $cfg['database']['table_prefix'] . "textpattern`");
     } catch (mysqli_sql_exception $e) {
         // It's good if the tables don't exist!
         $tables_exist = false;
     }
 
     if ($tables_exist) {
-        msg(gTxt('tables_exist',
-            array('{dbname}' => txpspecialchars($cfg['database']['db_name']))),
+        msg(
+            gTxt(
+                'tables_exist',
+                array('{dbname}' => txpspecialchars($cfg['database']['db_name']))
+            ),
             MSG_ERROR, true
         );
     }
