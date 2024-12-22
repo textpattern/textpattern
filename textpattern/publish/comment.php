@@ -44,7 +44,7 @@ function fetchComments($id)
     $rs = safe_rows(
         "*, UNIX_TIMESTAMP(posted) AS time",
         'txp_discuss',
-        "parentid = ".intval($id)." AND visible = ".VISIBLE." ORDER BY posted ASC"
+        "parentid = " . intval($id) . " AND visible = " . VISIBLE . " ORDER BY posted ASC"
     );
 
     if ($rs) {
@@ -152,8 +152,8 @@ function getComment($obfuscated = false)
     $n = array();
 
     foreach (stripPost() as $k => $v) {
-        if (preg_match('#^[A-Fa-f0-9]{32}$#', $k.$v)) {
-            $n[] = doSlash($k.$v);
+        if (preg_match('#^[A-Fa-f0-9]{32}$#', $k . $v)) {
+            $n[] = doSlash($k . $v);
         }
     }
 
@@ -161,13 +161,13 @@ function getComment($obfuscated = false)
     $c['secret'] = '';
 
     if (!empty($n)) {
-        $rs = safe_row("nonce, secret", 'txp_discuss_nonce', "nonce IN ('".join("','", $n)."')");
+        $rs = safe_row("nonce, secret", 'txp_discuss_nonce', "nonce IN ('" . join("','", $n) . "')");
         $c['nonce'] = $rs['nonce'];
         $c['secret'] = $rs['secret'];
     }
 
     if ($obfuscated || $c['message'] == '') {
-        $c['message'] = ps(md5('message'.$c['secret']));
+        $c['message'] = ps(md5('message' . $c['secret']));
     }
 
     $c['name']    = trim(strip_tags(deEntBrackets($c['name'])));
@@ -200,7 +200,7 @@ function saveComment()
     $blocklist = is_blocklisted($ip);
 
     if ($blocklist) {
-        txp_die(gTxt('your_ip_is_blocklisted_by'.' '.$blocklist), '403');
+        txp_die(gTxt('your_ip_is_blocklisted_by' . ' ' . $blocklist), '403');
     }
 
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
@@ -214,7 +214,7 @@ function saveComment()
     $isdup = safe_row(
         "message, name",
         'txp_discuss',
-        "name = '".doSlash($name)."' AND message = '".doSlash($message2db)."'"
+        "name = '" . doSlash($name) . "' AND message = '" . doSlash($message2db) . "'"
     );
 
     checkCommentRequired($comment);
@@ -232,16 +232,16 @@ function saveComment()
             $commentid = safe_insert(
                 'txp_discuss',
                 "parentid = $parentid,
-                 name     = '".doSlash($name)."',
-                 email    = '".doSlash($email)."',
-                 web      = '".doSlash($web)."',
-                 message  = '".doSlash($message2db)."',
-                 visible  = ".intval($visible).",
+                 name     = '" . doSlash($name) . "',
+                 email    = '" . doSlash($email) . "',
+                 web      = '" . doSlash($web) . "',
+                 message  = '" . doSlash($message2db) . "',
+                 visible  = " . intval($visible) . ",
                  posted   = NOW()"
             );
 
             if ($commentid) {
-                safe_update('txp_discuss_nonce', "used = 1", "nonce = '".doSlash($nonce)."'");
+                safe_update('txp_discuss_nonce', "used = 1", "nonce = '" . doSlash($nonce) . "'");
 
                 if ($prefs['comment_means_site_updated']) {
                     update_lastmod('comment_saved', compact('commentid', 'parentid', 'name', 'email', 'web', 'message', 'visible', 'ip'));
@@ -263,20 +263,20 @@ function saveComment()
                 $updated = update_comments_count($parentid);
                 $backpage = substr($backpage, 0, $prefs['max_url_len']);
                 $backpage = preg_replace("/[\x0a\x0d#].*$/s", '', $backpage);
-                $backpage = preg_replace("#(https?://[^/]+)/.*$#", "$1", hu).$backpage;
+                $backpage = preg_replace("#(https?://[^/]+)/.*$#", "$1", hu) . $backpage;
 
                 if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
                     $backpage = permlinkurl_id($parentid);
                 }
 
-                $backpage .= ((strstr($backpage, '?')) ? '&' : '?').'commented='.(($visible == VISIBLE) ? '1' : '0');
+                $backpage .= ((strstr($backpage, '?')) ? '&' : '?') . 'commented=' . (($visible == VISIBLE) ? '1' : '0');
 
                 txp_status_header('302 Found');
 
                 if ($comments_moderate && !is_logged_in()) {
-                    header('Location: '.$backpage.'#txpCommentInputForm');
+                    header('Location: ' . $backpage . '#txpCommentInputForm');
                 } else {
-                    header('Location: '.$backpage.'#c'.sprintf("%06s", $commentid));
+                    header('Location: ' . $backpage . '#c' . sprintf("%06s", $commentid));
                 }
 
                 log_hit('302');
@@ -382,7 +382,7 @@ class comment_evaluation
         );
 
         $this->message = $this->status;
-        $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'], time()).")";
+        $this->txpspamtrace[] = "Comment on $parentid by $name (" . safe_strftime($prefs['archive_dateformat'], time()) . ")";
 
         if ($prefs['comments_moderate'] && !is_logged_in()) {
             $this->status[MODERATE][] = 0.5;
@@ -410,7 +410,7 @@ class comment_evaluation
             trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
         }
 
-        $this->txpspamtrace[] = "   $type; ".max(0, min(1, $probability))."; $msg";
+        $this->txpspamtrace[] = "   $type; " . max(0, min(1, $probability)) . "; $msg";
         //FIXME trace is only viewable for RELOADS. Maybe add info to HTTP-Headers in debug-mode
 
         $this->status[$type][] = max(0, min(1, $probability));
@@ -467,16 +467,15 @@ class comment_evaluation
     public function write_trace()
     {
         global $prefs;
-        $file = $prefs['tempdir'].DS.'evaluator_trace.php';
+        $file = $prefs['tempdir'] . DS . 'evaluator_trace.php';
 
         if (!file_exists($file)) {
             $fp = fopen($file, 'wb');
 
             if ($fp) {
-                fwrite($fp, "<?php return; ?>\n".
-                    "This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'], time()).")\n".
-                    "Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n"
-                );
+                fwrite($fp, "<?php return; ?>\n" .
+                    "This trace-file tracks saved comments. (created " . safe_strftime($prefs['archive_dateformat'], time()) . ")\n" .
+                    "Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n");
             }
         } else {
             $fp = fopen($file, 'ab');
@@ -484,7 +483,7 @@ class comment_evaluation
 
         if ($fp) {
             fwrite($fp, implode("\n", $this->txpspamtrace));
-            fwrite($fp, "\n  RESULT: ".$this->get_result()."\n\n");
+            fwrite($fp, "\n  RESULT: " . $this->get_result() . "\n\n");
             fclose($fp);
         }
     }
@@ -528,7 +527,7 @@ function checkNonce($nonce)
     safe_delete('txp_discuss_nonce', "issue_time < DATE_SUB(NOW(), INTERVAL 10 MINUTE)");
 
     // Check for nonce.
-    return (safe_row("*", 'txp_discuss_nonce', "nonce = '".doSlash($nonce)."' AND used = 0")) ? true : false;
+    return (safe_row("*", 'txp_discuss_nonce', "nonce = '" . doSlash($nonce) . "' AND used = 0")) ? true : false;
 }
 
 /**
@@ -588,7 +587,7 @@ function checkCommentsAllowed($id)
 
 function comments_help()
 {
-    return '<a id="txpCommentHelpLink" rel="external" target="_blank" href="'.HELP_URL.'">'.gTxt('textile_help').'</a>';
+    return '<a id="txpCommentHelpLink" rel="external" target="_blank" href="' . HELP_URL . '">' . gTxt('textile_help') . '</a>';
 }
 
 /**
@@ -636,20 +635,20 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $adminLang = in_array($adminLang, $installed) ? $adminLang : LANG;
     $txpLang->swapStrings($adminLang, 'common, public');
 
-    $out = gTxt('salutation', array('{name}' => $RealName)).n;
-    $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
-    $out .= permlinkurl_id($parentid).n;
+    $out = gTxt('salutation', array('{name}' => $RealName)) . n;
+    $out .= str_replace('{title}', $Title, gTxt('comment_recorded')) . n;
+    $out .= permlinkurl_id($parentid) . n;
 
     if (has_privs('discuss', $AuthorID)) {
-        $out .= ahu.'index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
+        $out .= ahu . 'index.php?event=discuss&step=discuss_edit&discussid=' . $discussid . n;
     }
 
-    $out .= gTxt('status').": ".$evaluator->get_result('text').'. '.implode(',', $evaluator->get_result_message()).n;
+    $out .= gTxt('status') . ": " . $evaluator->get_result('text') . '. ' . implode(',', $evaluator->get_result_message()) . n;
     $out .= n;
-    $out .= gTxt('comment_name').": $cname".n;
-    $out .= gTxt('comment_email').": $cemail".n;
-    $out .= gTxt('comment_web').": $cweb".n;
-    $out .= gTxt('comment_comment').": $message";
+    $out .= gTxt('comment_name') . ": $cname" . n;
+    $out .= gTxt('comment_email') . ": $cemail" . n;
+    $out .= gTxt('comment_web') . ": $cweb" . n;
+    $out .= gTxt('comment_comment') . ": $message";
 
     $subject = strtr(gTxt('comment_received'), array(
         '{site}'  => $sitename,
@@ -690,12 +689,12 @@ function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '
     )), E_USER_NOTICE);
 
     $o = array(
-        '<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
-        ($size)  ? ' size="'.$size.'"'    : '',
-        ($class) ? ' class="'.$class.'"'  : '',
-        ($tab)   ? ' tabindex="'.$tab.'"' : '',
+        '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $val . '"',
+        ($size)  ? ' size="' . $size . '"'    : '',
+        ($class) ? ' class="' . $class . '"'  : '',
+        ($tab)   ? ' tabindex="' . $tab . '"' : '',
         ($chkd)  ? ' checked="checked"'   : '',
-        (get_pref('doctype') === 'html5' ? '>' : ' />').n,
+        (get_pref('doctype') === 'html5' ? '>' : ' />') . n,
     );
 
     return join('', $o);

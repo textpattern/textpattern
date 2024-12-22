@@ -212,24 +212,24 @@ function page_title($atts)
 
     extract(lAtts(array('separator' => ' | '), $atts));
 
-    $appending = $separator !== '' ? txpspecialchars($separator.$sitename) : '';
+    $appending = $separator !== '' ? txpspecialchars($separator . $sitename) : '';
     $parent_id = (int) $parentid;
-    $pageStr = ($pg ? $separator.gTxt('page').' '.$pg : '');
+    $pageStr = ($pg ? $separator . gTxt('page') . ' ' . $pg : '');
 
     if ($parent_id) {
-        $out = gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id")).$appending;
+        $out = gTxt('comments_on') . ' ' . escape_title(safe_field("Title", 'textpattern', "ID = $parent_id")) . $appending;
     } elseif (isset($thisarticle['title'])) {
-        $out = escape_title($thisarticle['title']).$appending;
+        $out = escape_title($thisarticle['title']) . $appending;
     } elseif ($q) {
-        $out = gTxt('search_results').' '.gTxt('txt_quote_double_open').txpspecialchars($q).gTxt('txt_quote_double_close').$pageStr.$appending;
+        $out = gTxt('search_results') . ' ' . gTxt('txt_quote_double_open') . txpspecialchars($q) . gTxt('txt_quote_double_close') . $pageStr . $appending;
     } elseif ($c) {
-        $out = txpspecialchars(fetch_category_title($c, $context)).$pageStr.$appending;
+        $out = txpspecialchars(fetch_category_title($c, $context)) . $pageStr . $appending;
     } elseif ($s && $s != 'default') {
-        $out = txpspecialchars(fetch_section_title($s)).$pageStr.$appending;
+        $out = txpspecialchars(fetch_section_title($s)) . $pageStr . $appending;
     } elseif ($author) {
-        $out = txpspecialchars(get_author_name($author)).$pageStr.$appending;
+        $out = txpspecialchars(get_author_name($author)) . $pageStr . $appending;
     } elseif ($pg) {
-        $out = gTxt('page').' '.$pg.$appending;
+        $out = gTxt('page') . ' ' . $pg . $appending;
     } else {
         $out = txpspecialchars($sitename);
     }
@@ -258,7 +258,7 @@ function css($atts)
 
     $out = '';
     $format = strtolower(preg_replace('/\s+/', '', $format));
-    list($mode, $format) = explode('.', $format.'.'.$format);
+    list($mode, $format) = explode('.', $format . '.' . $format);
 
     if (has_handler('css.url')) {
         $url = callback_event('css.url', '', false, compact('name', 'theme'));
@@ -267,10 +267,10 @@ function css($atts)
         $skin_dir = urlencode(get_pref('skin_dir'));
 
         foreach (do_list_unique($name) as $n) {
-            $url[] = hu.$skin_dir.'/'.urlencode($theme).'/'.TXP_THEME_TREE['styles'].'/'.urlencode($n).'.css';
+            $url[] = hu . $skin_dir . '/' . urlencode($theme) . '/' . TXP_THEME_TREE['styles'] . '/' . urlencode($n) . '.css';
         }
     } else {
-        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
+        $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme);
     }
 
     switch ($format) {
@@ -282,7 +282,7 @@ function css($atts)
                     'media' => $media,
                     'title' => $title,
                     'href'  => $href,
-                )).n;
+                )) . n;
             }
             break;
         default:
@@ -306,7 +306,7 @@ function component($atts)
         'context' => null,
         'rel'     => '',
         'title'   => '',
-    );
+        );
 
     extract(lAtts($defaults, $atts, false));
 
@@ -315,7 +315,7 @@ function component($atts)
     }
 
     $format = strtolower(preg_replace('/\s+/', '', $format));
-    list($mode, $format) = explode('.', $format.'.'.$format);
+    list($mode, $format) = explode('.', $format . '.' . $format);
     $out = '';
     $qs = get_context($context, $internals) + array_diff_key($atts, $defaults);
 
@@ -331,7 +331,7 @@ function component($atts)
         foreach (do_list_unique($form) as $n) {
             $type = pathinfo($n, PATHINFO_EXTENSION);
             if (isset($mimetypes[$type])) {
-                $url[] = hu.$skin_dir.'/'.$pretext['skin'].'/'.TXP_THEME_TREE['forms'].'/'.urlencode($type).'/'.urlencode($n).($qs ? join_qs($qs) : '');
+                $url[] = hu . $skin_dir . '/' . $pretext['skin'] . '/' . TXP_THEME_TREE['forms'] . '/' . urlencode($type) . '/' . urlencode($n) . ($qs ? join_qs($qs) : '');
             } else {
                 $url[] = pagelinkurl(array('f' => $n) + $qs);
             }
@@ -351,7 +351,7 @@ function component($atts)
                     'rel'   => $rel,
                     'title' => $title,
                     'href'  => $href,
-                )).n;
+                )) . n;
             }
             break;
         case 'script':
@@ -360,7 +360,7 @@ function component($atts)
                     'title' => $title,
                     'type'  => $doctype != 'html5' ? 'application/javascript' : '',
                     'src'  => $href,
-                )).n;
+                )) . n;
             }
             break;
         case 'image':
@@ -368,14 +368,14 @@ function component($atts)
                 $out .= tag_void('img', array(
                     'title' => $title,
                     'src'  => $href,
-                )).n;
+                )) . n;
             }
             break;
         default:
             foreach ((array)$url as $href) {
                 $out .= href($title ? $title : $href, $href, array(
                     'rel'   => $rel,
-                )).n;
+                )) . n;
             }
     }
 
@@ -539,7 +539,7 @@ function feed_link($atts, $thing = null)
     $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
     if ($format == 'link') {
-        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+        return '<link rel="alternate" type="' . $type . '" title="' . $title . '" href="' . $url . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />');
     }
 
     $txt = ($thing === null ? $label : parse($thing));
@@ -583,7 +583,7 @@ function link_feed_link($atts)
     $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
     if ($format == 'link') {
-        return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+        return '<link rel="alternate" type="' . $type . '" title="' . $title . '" href="' . $url . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />');
     }
 
     $out = href($label, $url, array(
@@ -616,8 +616,8 @@ function email($atts, $thing = null)
 
         return href(
             $linktext,
-            Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress('mailto:'.$email),
-            ($title ? ' title="'.txpspecialchars($title).'"' : '')
+            Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress('mailto:' . $email),
+            ($title ? ' title="' . txpspecialchars($title) . '"' : '')
         );
     }
 
@@ -640,7 +640,7 @@ function recent_articles($atts, $thing = null)
     );
 
     if (!isset($thing) && !$atts['form']) {
-        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+        $thing = '<txp:permlink><txp:title no_widow="' . ($atts['no_widow'] ? '1' : '') . '" /></txp:permlink>';
     }
 
     unset($atts['no_widow']);
@@ -674,7 +674,7 @@ function related_articles($atts, $thing = null)
             case 'category':
             case 'category1':
             case 'category2':
-                foreach(($cf == 'category' ? array('category1', 'category2') : array($cf)) as $cat) {
+                foreach (($cf == 'category' ? array('category1', 'category2') : array($cf)) as $cat) {
                     if (!empty($thisarticle[$cat])) {
                         $cats[] = $thisarticle[$cat];
                     }
@@ -708,7 +708,7 @@ function related_articles($atts, $thing = null)
     $atts['exclude'] = $thisarticle['thisid'];
 
     if ($atts['form'] === '' && $thing === null) {
-        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+        $thing = '<txp:permlink><txp:title no_widow="' . ($atts['no_widow'] ? '1' : '') . '" /></txp:permlink>';
     }
 
     unset($atts['no_widow']);
@@ -756,7 +756,7 @@ function popup($atts)
                 $selected = true;
             }
 
-            $out[] = '<option value="'.$name.'"'.$sel.'>'.txpspecialchars($title).'</option>';
+            $out[] = '<option value="' . $name . '"' . $sel . '>' . txpspecialchars($title) . '</option>';
 
             $sel = '';
         }
@@ -764,13 +764,13 @@ function popup($atts)
         if ($out) {
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-            $out = n.'<select name="'.txpspecialchars($type).'" onchange="submit(this.form);">'.
-                n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&#160;</option>'.
-                n.t.join(n.t, $out).
-                n.'</select>';
+            $out = n . '<select name="' . txpspecialchars($type) . '" onchange="submit(this.form);">' .
+                n . t . '<option value=""' . ($selected ? '' : ' selected="selected"') . '>&#160;</option>' .
+                n . t . join(n . t, $out) .
+                n . '</select>';
 
             if ($label) {
-                $out = $label.br.$out;
+                $out = $label . br . $out;
             }
 
             if ($wraptag) {
@@ -779,7 +779,7 @@ function popup($atts)
 
             if (($type == 's' || $permlink_mode == 'messy')) {
                 $action = hu;
-                $his = ($section !== '') ? n.hInput('s', $section) : '';
+                $his = ($section !== '') ? n . hInput('s', $section) : '';
             } else {
                 // Clean URLs for category popup.
                 $action = pagelinkurl(array('s' => $section));
@@ -787,10 +787,10 @@ function popup($atts)
             }
 
             return tag(
-                '<div>'.
-                    $his.n.$out.
-                    n.'<noscript><div><input type="submit" value="'.gTxt('go').'"'.(get_pref('doctype') === 'html5' ? '>' : ' />').'</div></noscript>'.
-                    n.'</div>',
+                '<div>' .
+                    $his . n . $out .
+                    n . '<noscript><div><input type="submit" value="' . gTxt('go') . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />') . '</div></noscript>' .
+                    n . '</div>',
                 'form',
                 array('method' => "get", 'action' => $action, 'target' => $target)
             );
@@ -849,13 +849,14 @@ function category_list($atts, $thing = null)
         unset($thiscategory['children']/*, $thiscategory['level']*/);
 
         if (!isset($thing) && !$form) {
-            $cat = $link ? tag(txpspecialchars($thiscategory['title']), 'a',
-                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '').
-                ' href="'.pagelinkurl(array(
+            $cat = $link ? tag(
+                txpspecialchars($thiscategory['title']), 'a',
+                (($active_class && (0 == strcasecmp($c, $name))) ? ' class="' . $active_class . '"' : '') .
+                ' href="' . pagelinkurl(array(
                     's'       => $section,
                     'c'       => $name,
                     'context' => $type,
-                )).'"'
+                )) . '"'
             ) : $name;
         } else {
             $thiscategory['type'] = $type;
@@ -869,13 +870,13 @@ function category_list($atts, $thing = null)
             $cat = $form ? parse_form($form) : parse($thing);
         }
 
-        $out[] = is_numeric($children) && $children <= 1 || strpos($cat, '<+>') === false ? $cat.$nodes : str_replace('<+>', $nodes, $cat);
+        $out[] = is_numeric($children) && $children <= 1 || strpos($cat, '<+>') === false ? $cat . $nodes : str_replace('<+>', $nodes, $cat);
     }
 
     $thiscategory = $oldcategory;
 
     return $out ?
-        ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) :
+        ($label ? doLabel($label, $labeltag) : '') . doWrap($out, $wraptag, compact('break', 'class', 'html_id')) :
         ($thing ? parse($thing, false) : '');
 }
 
@@ -908,7 +909,7 @@ function section_list($atts, $thing = null)
     $sql = array();
 
     if ($limit !== '' || $offset) {
-        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
+        $sql_limit = " LIMIT " . intval($offset) . ", " . ($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
     if ($sections === true) {
@@ -929,7 +930,7 @@ function section_list($atts, $thing = null)
     }
 
     if ($filter) {
-        foreach(do_list($filter) as $f) {
+        foreach (do_list($filter) as $f) {
             $sql[$f] = filterFrontPage('', $f);
         }
     }
@@ -950,13 +951,13 @@ function section_list($atts, $thing = null)
     }
 
     if ($include_default) {
-        $sql_sort = "name != 'default', ".$sql_sort;
+        $sql_sort = "name != 'default', " . $sql_sort;
     }
 
     $rs = safe_rows_start(
         "name, title, description",
         'txp_section',
-        '1'.join('', $sql)." ORDER BY ".$sql_sort.$sql_limit
+        '1' . join('', $sql) . " ORDER BY " . $sql_sort . $sql_limit
     );
 
     if ($rs && $last = numRows($rs)) {
@@ -978,9 +979,10 @@ function section_list($atts, $thing = null)
             if ($form === '' && $thing === null) {
                 $url = pagelinkurl(array('s' => $name));
 
-                $out[] = tag(txpspecialchars($title), 'a',
-                    (($active_class && (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
-                    ' href="'.$url.'"'
+                $out[] = tag(
+                    txpspecialchars($title), 'a',
+                    (($active_class && (0 == strcasecmp($s, $name))) ? ' class="' . txpspecialchars($active_class) . '"' : '') .
+                    ' href="' . $url . '"'
                 );
             } else {
                 $thissection = array(
@@ -1070,29 +1072,29 @@ function search_input($atts, $thing = null)
         return $out;
     }
 
-    $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'"'.(get_pref('doctype') === 'html5' ? '>' : ' />') : '';
-    $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
+    $sub = (!empty($button)) ? '<input type="submit" value="' . txpspecialchars($button) . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />') : '';
+    $id =  (!empty($html_id)) ? ' id="' . txpspecialchars($html_id) . '"' : '';
 
-    $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
-    $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
+    $out = (!empty($label)) ? txpspecialchars($label) . br . $out . $sub : $out . $sub;
+    $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)) . $out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
-        return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
-            n.$out.
-            n.'</form>';
+        return '<form role="search" method="get" action="' . hu . '"' . $id . '>' .
+            n . $out .
+            n . '</form>';
     }
 
     if ($permlink_mode != 'messy') {
-        return '<form role="search" method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
-            n.$out.
-            n.'</form>';
+        return '<form role="search" method="get" action="' . pagelinkurl(array('s' => $section)) . '"' . $id . '>' .
+            n . $out .
+            n . '</form>';
     }
 
-    return '<form role="search" method="get" action="'.hu.'"'.$id.'>'.
-        n.hInput('s', $section).
-        n.$out.
-        n.'</form>';
+    return '<form role="search" method="get" action="' . hu . '"' . $id . '>' .
+        n . hInput('s', $section) .
+        n . $out .
+        n . '</form>';
 }
 
 // -------------------------------------------------------------
@@ -1148,8 +1150,8 @@ function link_to($atts, $thing = null, $target = 'next')
             $url = $link ? href(
                 $thing,
                 $url,
-                ($target_title != $thing ? ' title="'.$target_title.'"' : '').
-                ' rel="'.$target.'"'
+                ($target_title != $thing ? ' title="' . $target_title . '"' : '') .
+                ' rel="' . $target . '"'
             ) : $thing;
         }
 
@@ -1228,12 +1230,12 @@ function link_to_home($atts, $thing = null)
     extract(lAtts(array('class' => false), $atts));
 
     if ($thing) {
-        $class = ($class) ? ' class="'.txpspecialchars($class).'"' : '';
+        $class = ($class) ? ' class="' . txpspecialchars($class) . '"' : '';
 
         return href(
             parse($thing),
             hu,
-            $class.
+            $class .
             ' rel="home"'
         );
     }
@@ -1262,7 +1264,7 @@ function text($atts)
     $tags = array();
 
     foreach ($atts as $name => $value) {
-        $tags['{'.$name.'}'] = $value;
+        $tags['{' . $name . '}'] = $value;
     }
 
     return gTxt($item, $tags, isset($escape) ? '' : 'html');
@@ -1321,10 +1323,10 @@ function txp_date($atts)
         $time = time();
     } elseif (isset($type)) {
         assert_context($type);
-        global ${'this'.$type};
+        global ${'this' . $type};
 
-        if (isset(${'this'.$type}[$time])) {
-            $time = ${'this'.$type}[$time];
+        if (isset(${'this' . $type}[$time])) {
+            $time = ${'this' . $type}[$time];
         } else {
             return '';
         }
@@ -1335,7 +1337,7 @@ function txp_date($atts)
     }
 
     if ($calendar) {
-        $lang = ($lang ? $lang : LANG)."@calendar=$calendar";
+        $lang = ($lang ? $lang : LANG) . "@calendar=$calendar";
     }
 
     if (empty($format)) {
@@ -1349,7 +1351,8 @@ function txp_date($atts)
             case 'comment':
                 $format = $comments_dateformat;
                 break;
-            default: $format = $dateformat;
+            default:
+                $format = $dateformat;
         }
     }
 
@@ -1403,7 +1406,7 @@ function comments_count()
 
     return $thisarticle['comments_count'];
 }
-    
+
 // -------------------------------------------------------------
 
 function comments_invite($atts)
@@ -1426,17 +1429,17 @@ function comments_invite($atts)
 
     if (($thisarticle['annotate'] || $comments_count) && ($showalways || $is_article_list)) {
         $comments_invite = txpspecialchars($comments_invite);
-        $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
+        $ccount = ($comments_count && $showcount) ?  ' [' . $comments_count . ']' : '';
 
         if ($textonly) {
-            $invite_return = $comments_invite.$ccount;
+            $invite_return = $comments_invite . $ccount;
         } else {
             global $comments_mode;
             if (!$comments_mode) {
-                $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" ').$ccount;
+                $invite_return = doTag($comments_invite, 'a', $class, ' href="' . permlinkurl($thisarticle) . '#' . gTxt('comment') . '" ') . $ccount;
             } else {
                 $thisid = $thisarticle['thisid'];
-                $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
+                $invite_return = "<a href=\"" . hu . "?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"" . (($class) ? ' class="' . txpspecialchars($class) . '"' : '') . '>' . $comments_invite . '</a> ' . $ccount;
             }
         }
 
@@ -1607,7 +1610,7 @@ function txp_sandbox($atts = array(), $thing = null)
             $stack[$id] = 1;
         } elseif ($stack[$id] >= $depth) {
             trigger_error(gTxt('form_circular_reference', array(
-                '{name}' => '<txp:article id="'.$id.'"/>'
+                '{name}' => '<txp:article id="' . $id . '"/>'
             )));
 
             return '';
@@ -1631,12 +1634,12 @@ function txp_sandbox($atts = array(), $thing = null)
 
     $field and $stack[$id]--;
 
-    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
+    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing)) {
         return $thing;
     }
 
     if (!isset($uniqid)) {
-        $uniqid = 'sandbox_'.strtr(uniqid('', true), '.', '_');
+        $uniqid = 'sandbox_' . strtr(uniqid('', true), '.', '_');
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
 
@@ -1645,7 +1648,7 @@ function txp_sandbox($atts = array(), $thing = null)
     unset($atts['field']);
     isset($articles[$id]) or $articles[$id] = $thisarticle;
 
-    return "<txp:$uniqid".($atts ? join_atts($atts) : '').">{$thing}</txp:$uniqid>";
+    return "<txp:$uniqid" . ($atts ? join_atts($atts) : '') . ">{$thing}</txp:$uniqid>";
 }
 
 // -------------------------------------------------------------
@@ -1703,7 +1706,7 @@ function article_category($atts, $thing = null)
 
     assert_article();
 
-    $cat = 'category'.intval($number);
+    $cat = 'category' . intval($number);
 
     if (!empty($thisarticle[$cat])) {
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
@@ -1718,8 +1721,8 @@ function article_category($atts, $thing = null)
                     's' => $section,
                     'c' => $category,
                 )),
-                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.txpspecialchars($label).'"' : '').
+                (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                ($title ? ' title="' . txpspecialchars($label) . '"' : '') .
                 ($permlink_mode != 'messy' ? ' rel="tag"' : '')
             );
         } else {
@@ -1800,14 +1803,14 @@ function category($atts, $thing = null)
             $out = href(
                 parse($thing),
                 $href,
-                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.$label.'"' : '')
+                (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                ($title ? ' title="' . $label . '"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 $href,
-                ($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+                ($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : ''
             );
         } elseif ($url) {
             $out = $href;
@@ -1853,14 +1856,14 @@ function section($atts, $thing = null)
             $out = href(
                 parse($thing),
                 $href,
-                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.$label.'"' : '')
+                (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                ($title ? ' title="' . $label . '"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 $href,
-                ($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+                ($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : ''
             );
         } elseif ($url) {
             $out = $href;
@@ -1929,7 +1932,7 @@ function article_image($atts)
         'loading'   => null,
     );
 
-    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
+    $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
     $atts = array_intersect_key($atts, $tagAtts);
 
     extract(lAtts($tagAtts, $atts));
@@ -1946,7 +1949,7 @@ function article_image($atts)
 
     $out = array();
     $thumb = $thumbnail;
-    
+
     if ($range === true) {
         $items = array_keys($images);
     } else {
@@ -1969,58 +1972,60 @@ function article_image($atts)
 
     $dbimages = array_filter(array_map('intval', $images));
     $dbimages = empty($dbimages) ? array() :
-        array_column(safe_rows('*', 'txp_image', 'id IN('.implode(',', $dbimages).')'), null, 'id');
+        array_column(safe_rows('*', 'txp_image', 'id IN(' . implode(',', $dbimages) . ')'), null, 'id');
 
-    foreach ($items as $item) if (isset($images[$item])) {
-        $image = $images[$item];
+    foreach ($items as $item) {
+        if (isset($images[$item])) {
+            $image = $images[$item];
 
-        if (intval($image)) {
-            $image = intval($image);
+            if (intval($image)) {
+                $image = intval($image);
 
-            if (!isset($dbimages[$image])) {
-                trigger_error(gTxt('unknown_image'));
+                if (!isset($dbimages[$image])) {
+                    trigger_error(gTxt('unknown_image'));
 
-                continue;
+                    continue;
+                }
+
+                $rs = $dbimages[$image];
+
+                if ($thumb && empty($rs['thumbnail'])) {
+                    continue;
+                }
+
+                $w = $width !== '' ? $width : $rs[$thumb ? 'thumb_w' : 'w'];
+                $h = $height !== '' ? $height : $rs[$thumb ? 'thumb_h' : 'h'];
+
+                extract($rs);
+
+                if ($title === true) {
+                    $title = $caption;
+                }
+
+                $img = '<img src="' . imagesrcurl($id, $ext, !empty($atts['thumbnail'])) .
+                '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
+                ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+            } else {
+                $w = $width !== '' ? $width : 0;
+                $h = $height !== '' ? $height : 0;
+                $img = '<img src="' . txpspecialchars($image) . '" alt=""' .
+                ($title && $title !== true ? ' title="' . txpspecialchars($title) . '"' : '');
             }
 
-            $rs = $dbimages[$image];
-
-            if ($thumb && empty($rs['thumbnail'])) {
-                continue;
+            if ($loading && $doctype === 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
+                $img .= ' loading="' . $loading . '"';
             }
 
-            $w = $width !== '' ? $width : $rs[$thumb ? 'thumb_w' :'w'];
-            $h = $height !== '' ? $height : $rs[$thumb ? 'thumb_h' :'h'];
-
-            extract($rs);
-
-            if ($title === true) {
-                $title = $caption;
-            }
-
-            $img = '<img src="'.imagesrcurl($id, $ext, !empty($atts['thumbnail'])).
-                '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"'.
-                ($title ? ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"' : '');
-        } else {
-            $w = $width !== '' ? $width : 0;
-            $h = $height !== '' ? $height : 0;
-            $img = '<img src="'.txpspecialchars($image).'" alt=""'.
-                ($title && $title !== true ? ' title="'.txpspecialchars($title).'"' : '');
-        }
-
-        if ($loading && $doctype === 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
-            $img .= ' loading="'.$loading.'"';
-        }
-
-        $img .=
-            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-            ($w ? ' width="'.(int) $w.'"' : '').
-            ($h ? ' height="'.(int) $h.'"' : '').
-            $extAtts.
+            $img .=
+            (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
+            (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+            ($w ? ' width="' . (int) $w . '"' : '') .
+            ($h ? ' height="' . (int) $h . '"' : '') .
+            $extAtts .
             (get_pref('doctype') === 'html5' ? '>' : ' />');
 
             $out[] = $img;
+        }
     }
 
     return $wraptag ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : implode($break, $out);
@@ -2043,13 +2048,13 @@ function items_count($atts)
 
     $t = $thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
-    $by == 1 or $t = ceil($t/$by);
+    $by == 1 or $t = ceil($t / $by);
 
     if (!isset($text)) {
         $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
     }
 
-    return $t.($text ? ' '.$text : '');
+    return $t . ($text ? ' ' . $text : '');
 }
 
 // -------------------------------------------------------------
@@ -2063,7 +2068,7 @@ function if_comments($atts, $thing = null)
     $x = ($thisarticle['comments_count'] > 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
-    
+
 // -------------------------------------------------------------
 
 function if_comments_preview($atts, $thing = null)
@@ -2071,7 +2076,7 @@ function if_comments_preview($atts, $thing = null)
     $x = ps('preview') && checkCommentsAllowed(gps('parentid'));
     return isset($thing) ? parse($thing, $x) : $x;
 }
-    
+
 // -------------------------------------------------------------
 
 function if_comments_error($atts, $thing = null)
@@ -2190,7 +2195,7 @@ function meta_description($atts)
         $content = ($escape === true) ? txpspecialchars($content) : txp_escape($escape, $content);
 
         if ($format === 'meta') {
-            $out = '<meta name="description" content="'.$content.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+            $out = '<meta name="description" content="' . $content . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />');
         } else {
             $out = $content;
         }
@@ -2229,7 +2234,7 @@ function meta_keywords($atts)
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
-            $out = '<meta name="keywords" content="'.$content.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+            $out = '<meta name="keywords" content="' . $content . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />');
         } else {
             $out = $content;
         }
@@ -2258,7 +2263,7 @@ function meta_author($atts)
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
-            $out = '<meta name="author" content="'.$display_name.'"'.(get_pref('doctype') === 'html5' ? '>' : ' />');
+            $out = '<meta name="author" content="' . $display_name . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />');
         } else {
             $out = $display_name;
         }
@@ -2356,14 +2361,14 @@ function breadcrumb($atts, $thing = null)
     $section != 'default' or $section = '';
 
     if ($link && $label) {
-        $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
+        $label = doTag($label, 'a', $linkclass, ' href="' . hu . '"');
     }
 
     if (!empty($section)) {
         $section_title = ($title) ? fetch_section_title($section) : $section;
         $section_title_html = escape_title($section_title);
         $content[] = ($link)
-            ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s' => $s)).'"'))
+            ? (doTag($section_title_html, 'a', $linkclass, ' href="' . pagelinkurl(array('s' => $s)) . '"'))
             : $section_title_html;
     }
 
@@ -2383,11 +2388,11 @@ function breadcrumb($atts, $thing = null)
     foreach ($catpath as $thiscategory) {
         $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
         $content[] = ($link)
-            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array(
+            ? doTag($category_title_html, 'a', $linkclass, ' href="' . pagelinkurl(array(
                 'c'       => $thiscategory['name'],
                 'context' => $type,
                 's'       => $section
-            )).'"')
+            )) . '"')
             : $category_title_html;
     }
 
@@ -2441,7 +2446,7 @@ function if_items_count($atts, $thing = null)
 
     $results = (int)$thispage[$pageby === true ? 'numPages' : 'grand_total'];
     $by = (int)$pageby or $by = 1;
-    $by == 1 or $results = ceil($results/$by);
+    $by == 1 or $results = ceil($results / $by);
     $x = $results >= $min && (!$max || $results <= $max);
 
     return isset($thing) ? parse($thing, $x) : $x;
@@ -2519,8 +2524,8 @@ function if_article_category($atts, $thing = null)
     $cats = array();
 
     if ($number) {
-        if (!empty($thisarticle['category'.$number])) {
-            $cats = array($thisarticle['category'.$number]);
+        if (!empty($thisarticle['category' . $number])) {
+            $cats = array($thisarticle['category' . $number]);
         }
     } else {
         if (!empty($thisarticle['category1'])) {
@@ -2567,7 +2572,7 @@ function if_section($atts, $thing = null)
     }
 
     if ($x && $filter) {
-        foreach(do_list($filter) as $f) {
+        foreach (do_list($filter) as $f) {
             if (empty($section ? $txp_sections[$section][$f] : array_filter(array_column($txp_sections, $f)))) {
                 $x = false;
                 break;
@@ -2591,7 +2596,7 @@ function if_article_section($atts, $thing = null)
     $x = $section !== '' && ($name === true ? !empty($txp_sections[$section]['page']) : in_list($section, $name));
 
     if ($x && $filter) {
-        foreach(do_list($filter) as $f) {
+        foreach (do_list($filter) as $f) {
             if (empty($txp_sections[$section][$f])) {
                 $x = false;
                 break;
@@ -2620,7 +2625,7 @@ function hide($atts = array(), $thing = null)
     } elseif (is_numeric($process)) {
         return abs($process) > $pretext['secondpass'] + 1 ?
             postpone_process($process) :
-            ($process > 0 ? parse($thing) : '<txp:hide>'.parse($thing).'</txp:hide>');
+            ($process > 0 ? parse($thing) : '<txp:hide>' . parse($thing) . '</txp:hide>');
     } elseif ($process === true) {
         parse($thing);
     } elseif (strtolower($process) === $production_status) {
@@ -2807,9 +2812,9 @@ function page_url($atts, $thing = null)
 
     isset($specials) or $specials = array(
         'admin_root'  => ahu,
-        'images_root' => ihu.get_pref('img_dir'),
-        'themes_root' => hu.get_pref('skin_dir'),
-        'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
+        'images_root' => ihu . get_pref('img_dir'),
+        'themes_root' => hu . get_pref('skin_dir'),
+        'theme_path'  => hu . get_pref('skin_dir') . '/' . $pretext['skin'],
         'theme'       => $pretext['skin'],
     );
 
@@ -2959,7 +2964,7 @@ function rsd()
 
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
-    return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/"'.(get_pref('doctype') === 'html5' ? '>' : ' />') : '';
+    return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="' . hu . 'rpc/"' . (get_pref('doctype') === 'html5' ? '>' : ' />') : '';
 }
 
 // -------------------------------------------------------------
@@ -3016,7 +3021,7 @@ function variable($atts, $thing = null)
         if (!isset($separator) && is_numeric($add) && (empty($var) || is_numeric($var))) {
             $var += $add;
         } else {
-            $var .= ($var ? $separator : '').$add;
+            $var .= ($var ? $separator : '') . $add;
         }
     }
 
@@ -3089,9 +3094,9 @@ function if_request($atts, $thing = null)
         case 'COOKIE':
         case 'SESSION':
         case 'SERVER':
-            global ${'_'.$type};
-            $what = isset(${'_'.$type}[$name]) ? ${'_'.$type}[$name] : null;
-            $x = $name === '' ? !empty(${'_'.$type}) : txp_match($atts, $what);
+            global ${'_' . $type};
+            $what = isset(${'_' . $type}[$name]) ? ${'_' . $type}[$name] : null;
+            $x = $name === '' ? !empty(${'_' . $type}) : txp_match($atts, $what);
             break;
         case 'HEADER':
             $what = set_headers(array($name => true));
@@ -3138,7 +3143,7 @@ function txp_eval($atts, $thing = null)
         $x = $query;
     } elseif (class_exists('DOMDocument')) {
         if (!isset($xpath)) {
-            $xpath = new DOMXpath(new DOMDocument);
+            $xpath = new DOMXpath(new DOMDocument());
             $functions = do_list_unique(get_pref('txp_evaluate_functions'));
             $_functions = array();
 
@@ -3160,23 +3165,25 @@ function txp_eval($atts, $thing = null)
         }
 
         if ($functions) {
-            $query = preg_replace_callback('/\b('.$functions.')\s*\(\s*(\)?)/',
+            $query = preg_replace_callback(
+                '/\b(' . $functions . ')\s*\(\s*(\)?)/',
                 function ($match) use ($_functions) {
                     $function = empty($_functions[$match[1]]) ? $match[1] : $_functions[$match[1]];
 
-                    return "php:function('$function'".($match[2] ? ')' : ',');
+                    return "php:function('$function'" . ($match[2] ? ')' : ',');
                 },
                 $query
             );
         }
 
         if (isset($alias) && $alias = implode('|', $alias === true ? array_keys($variable) : do_list($alias))) {
-            $query = preg_replace_callback('/\$('.$alias.')\b/u',
+            $query = preg_replace_callback(
+                '/\$(' . $alias . ')\b/u',
                 function ($match) use ($variable) {
                     $var = isset($variable[$match[1]]) ? $variable[$match[1]] : '';
 
                     if ($var && !is_numeric($var)) {
-                        $var = strpos($var, "'") === false ? "'$var'" : "concat('".strtr($var, array("'" => "',\"'\",'"))."')";
+                        $var = strpos($var, "'") === false ? "'$var'" : "concat('" . strtr($var, array("'" => "',\"'\",'")) . "')";
                     }
 
                     return $var;
@@ -3284,24 +3291,26 @@ function txp_escape($escape, $thing = '')
             case 'integer':
                 !$filter or $thing = do_list($thing);
                 // no break
-            case 'number': case 'float': case 'spell': case 'ordinal':
-                isset($LocaleInfo) or $LocaleInfo = localeconv();
-                $dec_point = $LocaleInfo['decimal_point'];
-                $thousands_sep = $LocaleInfo['thousands_sep'];
-                !$thousands_sep or $thing = str_replace($thousands_sep, '', $thing);
-                $dec_point == '.' or $thing = str_replace($dec_point, '.', $thing);
+            case 'number':
+            case 'float':
+            case 'spell':
+            case 'ordinal':
+                        isset($LocaleInfo) or $LocaleInfo = localeconv();
+                        $dec_point = $LocaleInfo['decimal_point'];
+                        $thousands_sep = $LocaleInfo['thousands_sep'];
+                        !$thousands_sep or $thing = str_replace($thousands_sep, '', $thing);
+                        $dec_point == '.' or $thing = str_replace($dec_point, '.', $thing);
 
                 if (is_array($thing)) {// integer mode
                     $value = $tidy ?
-                        array_map(function ($str) {
-                            return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-                        }, $thing) :
-                        $thing;
+                    array_map(function ($str) {
+                        return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                    }, $thing) :
+                    $thing;
                 } else {
                     $value = floatval($tidy ?
                         filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) :
-                        $thing
-                    );
+                        $thing);
                 }
 
                 switch ($attr) {
@@ -3345,17 +3354,20 @@ function txp_escape($escape, $thing = '')
             case 'tags':
                 $thing = strip_tags($thing);
                 break;
-            case 'upper': case 'lower':
-                $function = ($mb && mb_detect_encoding($thing) != 'ASCII' ? 'mb_strto' : 'strto').$attr;
+            case 'upper':
+            case 'lower':
+                $function = ($mb && mb_detect_encoding($thing) != 'ASCII' ? 'mb_strto' : 'strto') . $attr;
                 $thing = $function($thing);
                 break;
             case 'title':
                 $thing = $mb && mb_detect_encoding($thing) != 'ASCII' ?
                     mb_convert_case($thing, MB_CASE_TITLE) : ucwords($thing);
                 break;
-            case 'trim': case 'ltrim': case 'rtrim':
-                $filter = true;
-                $thing = is_int($thing) ? ($thing ? $thing : '') : $attr($thing);
+            case 'trim':
+            case 'ltrim':
+            case 'rtrim':
+                    $filter = true;
+                    $thing = is_int($thing) ? ($thing ? $thing : '') : $attr($thing);
                 break;
             case 'tidy':
                 $tidy = true;
@@ -3372,10 +3384,10 @@ function txp_escape($escape, $thing = '')
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
                 break;
             case 'quote':
-                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, array("'" => "',\"'\",'"))."')";
+                $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('" . strtr($thing, array("'" => "',\"'\",'")) . "')";
                 break;
             default:
-                $thing = preg_replace('@</?'.($tidy ? preg_quote($attr) : $attr).'\b[^<>]*>@Usi', '', $thing);
+                $thing = preg_replace('@</?' . ($tidy ? preg_quote($attr) : $attr) . '\b[^<>]*>@Usi', '', $thing);
         }
     }
 
@@ -3430,7 +3442,7 @@ function txp_wraptag($atts, $thing = '')
 
     if (trim($thing) !== '') {
         $thing = $wraptag ? doTag($thing, $wraptag, $class, '', $html_id) : $thing;
-        $thing = $label ? doLabel($label, $labeltag).n.$thing : $thing;
+        $thing = $label ? doLabel($label, $labeltag) . n . $thing : $thing;
     }
 
     return $thing;
@@ -3438,7 +3450,8 @@ function txp_wraptag($atts, $thing = '')
 
 // -------------------------------------------------------------
 
-function txp_variable($atts, $thing = null) {
+function txp_variable($atts, $thing = null)
+{
     global $txp_atts;
     unset($txp_atts['variable']);
 
@@ -3447,7 +3460,8 @@ function txp_variable($atts, $thing = null) {
 
 // -------------------------------------------------------------
 
-function txp_deprecate($atts, $thing = null) {
+function txp_deprecate($atts, $thing = null)
+{
     empty($atts['$deprecate']) or trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
     return $thing;

@@ -71,22 +71,22 @@ function rss()
         $ct[] = fetch_category_title($c);
     }
 
-    $sitename .= ($section) ? ' - '.join(' - ', $st) : '';
-    $sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
+    $sitename .= ($section) ? ' - ' . join(' - ', $st) : '';
+    $sitename .= ($category) ? ' - ' . join(' - ', $ct) : '';
     $dn = explode('/', $siteurl);
     $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
 
     // Feed header.
-    $out[] = tag('https://textpattern.com/?v='.$version, 'generator');
+    $out[] = tag('https://textpattern.com/?v=' . $version, 'generator');
     $out[] = tag(doSpecial($sitename), 'title');
     $out[] = tag(hu, 'link');
-    $out[] = '<atom:link href="'.pagelinkurl(array(
+    $out[] = '<atom:link href="' . pagelinkurl(array(
         'rss'      => 1,
         'area'     => $area,
         'section'  => $section,
         'category' => $category,
         'limit'    => $limit,
-    )).'" rel="self" type="application/rss+xml" />';
+    )) . '" rel="self" type="application/rss+xml" />';
     $out[] = tag(doSpecial($site_slogan), 'description');
     $out[] = tag(safe_strftime('rss', strtotime($lastmod)), 'pubDate');
     $out[] = callback_event('rss_head');
@@ -100,8 +100,8 @@ function rss()
     $limit = intval(min($limit, max(100, $rss_how_many)));
 
     if (!$area || $area == 'article') {
-        $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
-        $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
+        $sfilter = (!empty($section)) ? "AND Section IN ('" . join("','", $section) . "')" : '';
+        $cfilter = (!empty($category)) ? "AND (Category1 IN ('" . join("','", $category) . "') OR Category2 IN ('" . join("','", $category) . "'))" : '';
 
         $query = array($sfilter, $cfilter);
 
@@ -116,7 +116,7 @@ function rss()
         }
 
         $atts = filterAtts($atts, true);
-        $where = $atts['?'].' '.join(' ', $query);
+        $where = $atts['?'] . ' ' . join(' ', $query);
 
         $rs = safe_rows_start(
             "*,
@@ -125,7 +125,7 @@ function rss()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY uPosted DESC LIMIT $limit"
+            $where . " ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -140,14 +140,14 @@ function rss()
                 extract(array_intersect_key($thisarticle, $fields));
 
                 if ($show_comment_count_in_feed) {
-                    $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
+                    $count = ($comments_count > 0) ? ' [' . $comments_count . ']' : '';
                 } else {
                     $count = '';
                 }
 
                 $permlink = permlinkurl($thisarticle);
                 $thisauthor = get_author_name($authorid);
-                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($title), ENT_QUOTES, 'UTF-8'))).$count;
+                $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($title), ENT_QUOTES, 'UTF-8'))) . $count;
                 $summary = trim(parse($excerpt));
                 $content = '';
 
@@ -161,22 +161,22 @@ function rss()
                 }
 
                 $item =
-                    n.t.t.tag($Title, 'title').
-                    ($summary !== '' ? n.t.t.tag(escape_cdata($summary), 'description') : '').
-                    ($content !== '' ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
-                    n.t.t.tag($permlink, 'link').
-                    n.t.t.tag(safe_strftime('rss', $posted), 'pubDate').
-                    n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
-                    n.t.t.tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'guid', ' isPermaLink="false"').n.
+                    n . t . t . tag($Title, 'title') .
+                    ($summary !== '' ? n . t . t . tag(escape_cdata($summary), 'description') : '') .
+                    ($content !== '' ? n . t . t . tag(escape_cdata($content) . n, 'content:encoded') : '') .
+                    n . t . t . tag($permlink, 'link') .
+                    n . t . t . tag(safe_strftime('rss', $posted), 'pubDate') .
+                    n . t . t . tag(htmlspecialchars($thisauthor), 'dc:creator') .
+                    n . t . t . tag('tag:' . $mail_or_domain . ',' . $a['feed_time'] . ':' . $blog_uid . '/' . $a['uid'], 'guid', ' isPermaLink="false"') . n .
                     $cb;
 
-                $articles[$thisid] = tag(replace_relative_urls($item, $permlink).t, 'item');
+                $articles[$thisid] = tag(replace_relative_urls($item, $permlink) . t, 'item');
 
                 $dates[$thisid] = $modified;
             }
         }
     } elseif ($area == 'link') {
-        $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
+        $cfilter = ($category) ? "category IN ('" . join("','", $category) . "')" : '1';
 
         $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
@@ -184,11 +184,11 @@ function rss()
             while ($a = nextRow($rs)) {
                 extract($a);
                 $item =
-                    n.t.t.tag(doSpecial($linkname), 'title').
-                    (trim($description) ? n.t.t.tag(doSpecial($description), 'description') : '').
-                    n.t.t.tag(doSpecial($url), 'link').
-                    n.t.t.tag(safe_strftime('rss', $uDate), 'pubDate').n;
-                $articles[$id] = tag($item.t, 'item');
+                    n . t . t . tag(doSpecial($linkname), 'title') .
+                    (trim($description) ? n . t . t . tag(doSpecial($description), 'description') : '') .
+                    n . t . t . tag(doSpecial($url), 'link') .
+                    n . t . t . tag(safe_strftime('rss', $uDate), 'pubDate') . n;
+                $articles[$id] = tag($item . t, 'item');
 
                 $dates[$id] = $uDate;
             }
@@ -197,7 +197,7 @@ function rss()
 
     if (!$articles) {
         if ($section) {
-            if (safe_field("name", 'txp_section', "name IN ('".join("','", $section)."')") == false) {
+            if (safe_field("name", 'txp_section', "name IN ('" . join("','", $section) . "')") == false) {
                 txp_die(gTxt('404_not_found'), '404');
             }
         } elseif ($category) {
@@ -210,7 +210,7 @@ function rss()
                     break;
                 case 'article':
                 default:
-                    if (safe_field("id", 'txp_category', "name IN ('".join("','", $category)."') AND type = 'article'") == false) {
+                    if (safe_field("id", 'txp_category', "name IN ('" . join("','", $category) . "') AND type = 'article'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
 
@@ -241,8 +241,8 @@ function rss()
 
         if (isset($_SERVER["HTTP_A_IM"]) &&
             strpos($_SERVER["HTTP_A_IM"], "feed") &&
-            isset($clfd) && $clfd > 0) {
-
+            isset($clfd) && $clfd > 0
+        ) {
             // Remove articles with timestamps older than the request timestamp
             foreach ($articles as $id => $entry) {
                 if ($dates[$id] <= $clfd) {
@@ -272,14 +272,14 @@ function rss()
     );
 
     foreach ($feeds_namespaces as $ns => $url) {
-        $xmlns .= ' xmlns:'.$ns.'="'.$url.'"';
+        $xmlns .= ' xmlns:' . $ns . '="' . $url . '"';
     }
 
     header('Content-Type: application/rss+xml; charset=utf-8');
 
     return
-        '<?xml version="1.0" encoding="UTF-8"?>'.n.
-        '<rss version="2.0"'.$xmlns.'>'.n.
-        tag(n.t.join(n.t, $out).n, 'channel').n.
+        '<?xml version="1.0" encoding="UTF-8"?>' . n .
+        '<rss version="2.0"' . $xmlns . '>' . n .
+        tag(n . t . join(n . t, $out) . n, 'channel') . n .
         '</rss>';
 }
