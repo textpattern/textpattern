@@ -4582,10 +4582,8 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
         $custom = getCustomFields($custom, null, null);
     }
 
-    if (!isset($pairs)) {
-        $customFields = getCustomFields();
-        $pairs = array_fill_keys($customFields, null);
-    }
+    $pairs = (array)$pairs;
+    $pairs += array_fill_keys(getCustomFields(), null);
 
     $table = safe_pfx('textpattern');
     $columns = $where = array();
@@ -4598,7 +4596,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                 $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
 
-                if (isset($pairs[$k])) {
+                if (isset($val)) {
                     $not = $exclude === true || isset($exclude[$k]) ? 'NOT' : '';
                     $val === true or (string)$dlm === '' or $val = do_list_unique($val, $dlm, TEXTPATTERN_STRIP_NONE);
                     $parts = buildWhereSql($val, 'value');

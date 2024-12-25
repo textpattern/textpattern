@@ -937,10 +937,10 @@ function filterAtts($atts = null, $iscustom = null)
         return $coreAtts;
     }
 
-    $customFields = getCustomFields() + array('url_title' => 'url_title');
+    $customFields = getCustomFields('article', null, null);
     $postWhere = $customPairs = $customlAtts = array();
 
-    foreach ($customFields as $num => $field) {
+    foreach ($customFields['by_id'] + array('url_title' => 'url_title') as $num => $field) {
         $customlAtts[$field] = null;
 
         if (isset($atts['custom_'.$num])) {
