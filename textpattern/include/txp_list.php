@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -145,7 +145,8 @@ function list_list($message = '', $post = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'id' => array(
                 'column' => 'textpattern.ID',
@@ -206,11 +207,11 @@ function list_list($message = '', $post = '')
     $search_render_options = array('placeholder' => 'search_articles');
 
     $sql_from =
-        safe_pfx('textpattern')." textpattern
-        LEFT JOIN ".safe_pfx('txp_category')." category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
-        LEFT JOIN ".safe_pfx('txp_category')." category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
-        LEFT JOIN ".safe_pfx('txp_section')." section ON section.name = textpattern.Section
-        LEFT JOIN ".safe_pfx('txp_users')." user ON user.name = textpattern.AuthorID";
+        safe_pfx('textpattern') . " textpattern
+        LEFT JOIN " . safe_pfx('txp_category') . " category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
+        LEFT JOIN " . safe_pfx('txp_category') . " category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
+        LEFT JOIN " . safe_pfx('txp_section') . " section ON section.name = textpattern.Section
+        LEFT JOIN " . safe_pfx('txp_users') . " user ON user.name = textpattern.AuthorID";
 
     if ($crit === '') {
         $total = safe_count('textpattern', $criteria);
@@ -219,11 +220,11 @@ function list_list($message = '', $post = '')
     }
 
     $searchBlock =
-        n.tag(
+        n . tag(
             $search->renderForm('list', $search_render_options),
             'div', array(
                 'class' => 'txp-layout-4col-3span',
-                'id'    => $event.'_control',
+                'id'    => $event . '_control',
             )
         );
 
@@ -231,7 +232,7 @@ function list_list($message = '', $post = '')
 
     if (has_privs('article.edit.own')) {
         $createBlock[] =
-            n.tag(
+            n . tag(
                 sLink('article', '', gTxt('create_article'), 'txp-button'),
                 'div', array('class' => 'txp-control-panel')
             );
@@ -246,7 +247,7 @@ function list_list($message = '', $post = '')
 
     if ($total < 1) {
         $contentBlock .= graf(
-            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
             gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
             array('class' => 'alert-block information')
         );
@@ -284,7 +285,7 @@ function list_list($message = '', $post = '')
                 category2.title AS category2_title,
                 section.title AS section_title,
                 user.RealName AS RealName,
-                (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." WHERE parentid = textpattern.ID) AS total_comments
+                (SELECT COUNT(*) FROM " . safe_pfx('txp_discuss') . " WHERE parentid = textpattern.ID) AS total_comments
             FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
@@ -295,16 +296,16 @@ function list_list($message = '', $post = '')
                 'is_link' => true,
                 'dir'   => $switch_dir,
                 'crit'  => $crit,
-                'method'=> $search_method,
+                'method' => $search_method,
             );
 
             $dates = array('posted', 'lastmod', 'expires');
 
             $head_row = hCell(
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                    '', 'class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-            ).column_head(array(
-                'options' => array('class' => trim('txp-list-col-id'.('id' == $sort ? " $dir" : ''))),
+                '', 'class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+            ) . column_head(array(
+                'options' => array('class' => trim('txp-list-col-id' . ('id' == $sort ? " $dir" : ''))),
                 'value' => 'ID',
                 'sort'  => 'id'
             ) + $common_atts);
@@ -312,33 +313,33 @@ function list_list($message = '', $post = '')
             foreach ($headers as $header => $column_head) {
                 $head_row .= column_head(array(
                         'options' => array(
-                            'class' => trim('txp-list-col-'.$header.($header == $sort ? " $dir" : '').(in_array($header, $dates) ? ' date' : ''))),
+                            'class' => trim('txp-list-col-' . $header . ($header == $sort ? " $dir" : '') . (in_array($header, $dates) ? ' date' : ''))),
                         'value' => $column_head,
                         'sort'  => $header
                     ) + $common_atts);
             }
 
-            $contentBlock .= n.tag_start('form', array(
+            $contentBlock .= n . tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'articles_form',
                     'name'   => 'longform',
                     'method' => 'post',
                     'action' => 'index.php',
-                )).
-                n.tag_start('div', array(
+                )) .
+                n . tag_start('div', array(
                     'class'      => 'txp-listtables',
                     'tabindex'   => 0,
                     'aria-label' => gTxt('list'),
-                )).
-                n.tag_start('table', array('class' => 'txp-list')).
-                n.tag_start('thead').
-                tr($head_row).
-                n.tag_end('thead');
+                )) .
+                n . tag_start('table', array('class' => 'txp-list')) .
+                n . tag_start('thead') .
+                tr($head_row) .
+                n . tag_end('thead');
 
-            include_once txpath.'/publish/taghandlers.php';
+            include_once txpath . '/publish/taghandlers.php';
             $can_preview = has_privs('article.preview');
 
-            $contentBlock .= n.tag_start('tbody');
+            $contentBlock .= n . tag_start('tbody');
 
             $validator = new Validator();
 
@@ -346,7 +347,7 @@ function list_list($message = '', $post = '')
                 extract($a);
 
                 if ($Title === '') {
-                    $Title = '<em>'.eLink('article', 'edit', compact('ID'), $ID, gTxt('untitled'), '' , '', gTxt('edit')).'</em>';
+                    $Title = '<em>' . eLink('article', 'edit', compact('ID'), $ID, gTxt('untitled'), '', '', gTxt('edit')) . '</em>';
                 } else {
                     $Title = eLink('article', 'edit', compact('ID'), $ID, $Title, '', '', gTxt('edit'));
                 }
@@ -367,7 +368,7 @@ function list_list($message = '', $post = '')
                 if ($Status == STATUS_LIVE || $Status == STATUS_STICKY) {
                     $view_url = permlinkurl($a);
                 } else {
-                    $view_url = $can_preview ? hu.'?id='.intval($ID).'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : '';
+                    $view_url = $can_preview ? hu . '?id=' . intval($ID) . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : '';
                 }
 
                 if (isset($statuses[$Status])) {
@@ -397,7 +398,7 @@ function list_list($message = '', $post = '')
                 }
 
                 $comments =
-                    tag($comment_status, 'span', array('class' => 'comments-status')).' '.
+                    tag($comment_status, 'span', array('class' => 'comments-status')) . ' ' .
                     tag($comments, 'span', array('class' => 'comments-manage'));
 
                 $contentBlock .= tr(
@@ -412,7 +413,7 @@ function list_list($message = '', $post = '')
                         ? fInput('checkbox', 'selected[]', $ID, 'checkbox')
                         : ''
                         ), '', 'txp-list-col-multi-edit'
-                    ).
+                    ) .
                     hCell(
                         eLink('article', 'edit', compact('ID'), $ID, $ID, '', '', gTxt('edit')),
                         '',
@@ -420,40 +421,39 @@ function list_list($message = '', $post = '')
                             'class' => '',
                             'scope' => 'row',
                         )
-                    ).
+                    ) .
                     td(
                         $Title, '', 'txp-list-col-title'
-                    ).
+                    ) .
                     td(
-                        gTime($posted), '', 'txp-list-col-posted date'.($posted < time() ? '' : ' unpublished')
-                    ).
+                        gTime($posted), '', 'txp-list-col-posted date' . ($posted < time() ? '' : ' unpublished')
+                    ) .
                     td(
-                        gTime($lastmod), '', 'txp-list-col-lastmod date'.($posted === $lastmod ? ' not-modified' : '')
-                    ).
+                        gTime($lastmod), '', 'txp-list-col-lastmod date' . ($posted === $lastmod ? ' not-modified' : '')
+                    ) .
                     td(
                         ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
-                    ).
+                    ) .
                     td(
-                        span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
-                    ).
+                        span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section' . $vs
+                    ) .
                     td(
-                        $Category1, '', 'txp-list-col-category1 category'.$vc[1]
-                    ).
+                        $Category1, '', 'txp-list-col-category1 category' . $vc[1]
+                    ) .
                     td(
-                        $Category2, '', 'txp-list-col-category2 category'.$vc[2]
-                    ).
+                        $Category2, '', 'txp-list-col-category2 category' . $vc[2]
+                    ) .
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
                             'rel'    => 'external',
                             'target' => '_blank',
                             'title'  => gTxt('view'),
-                        ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status'
-                    ).
+                        ), TEXTPATTERN_STRIP_EMPTY)) : $Status, '', 'txp-list-col-status') .
                     (
                         $show_authors
                         ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name')
                         : ''
-                    ).
+                    ) .
                     (
                         $use_comments
                         ? td($comments, '', 'txp-list-col-comments')
@@ -462,16 +462,16 @@ function list_list($message = '', $post = '')
                 );
             }
 
-            $contentBlock .= n.tag_end('tbody').
-                n.tag_end('table').
-                n.tag_end('div'). // End of .txp-listtables.
-                list_multiedit_form($page, $sort, $dir, $crit, $search_method).
-                tInput().
-                n.tag_end('form');
+            $contentBlock .= n . tag_end('tbody') .
+                n . tag_end('table') .
+                n . tag_end('div') . // End of .txp-listtables.
+                list_multiedit_form($page, $sort, $dir, $crit, $search_method) .
+                tInput() .
+                n . tag_end('form');
         }
     }
 
-    $pageBlock = $paginator->render().
+    $pageBlock = $paginator->render() .
         nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
@@ -601,7 +601,7 @@ function list_multi_edit()
                     $allowed = safe_column_num(
                         "ID",
                         'textpattern',
-                        "ID IN (".join(',', $selected).") AND AuthorID = '".doSlash($txp_user)."'"
+                        "ID IN (" . join(',', $selected) . ") AND AuthorID = '" . doSlash($txp_user) . "'"
                     );
                 }
 
@@ -609,14 +609,14 @@ function list_multi_edit()
             }
 
             // @todo Post-delete callback should match event/step here when hooks are standardised.
-            callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+            callback_event('articles', 'multi_edit.' . $edit_method, 1, compact('selected', 'field', 'value'));
 
             // @todo : delete CFs by iterating over the txp_meta_value_* tables and killing anything
             // with this content_id.
-            if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
+            if ($selected && safe_delete('textpattern', "ID IN (" . join(',', $selected) . ")")) {
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
-                safe_delete('txp_discuss', "parentid IN (".join(',', $selected).")");
+                safe_delete('txp_discuss', "parentid IN (" . join(',', $selected) . ")");
                 update_lastmod('articles_deleted', $selected);
                 now('posted', true);
                 now('expires', true);
@@ -677,7 +677,7 @@ function list_multi_edit()
         $selected = safe_rows(
             "ID, AuthorID, Status",
             'textpattern',
-            "ID IN (".join(',', $selected).")"
+            "ID IN (" . join(',', $selected) . ")"
         );
     }
 
@@ -695,13 +695,13 @@ function list_multi_edit()
     $selected = $allowed;
 
     // @todo Post-edit callback should match event/step here when hooks are standardised.
-    callback_event('articles', 'multi_edit.'.$edit_method, 1, compact('selected', 'field', 'value'));
+    callback_event('articles', 'multi_edit.' . $edit_method, 1, compact('selected', 'field', 'value'));
 
     if ($selected) {
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
         if ($edit_method === 'duplicate') {
-            $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
+            $rs = safe_rows_start("*", 'textpattern', "ID IN (" . join(',', $selected) . ")");
             $created = $selected = array();
 
             if ($rs) {
@@ -718,12 +718,12 @@ function list_multi_edit()
                         if ($name == 'Expires' && !$value) {
                             $value = "Expires = NULL";
                         } else {
-                            $value = "`$name` = '".doSlash($value)."'";
+                            $value = "`$name` = '" . doSlash($value) . "'";
                         }
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
-                        $url_title = stripSpace($title." ($id)", 1);
+                        $url_title = stripSpace($title . " ($id)", 1);
                         $created[$id] = $url_title;
                         $selected[$id] = $pid;
                     }
@@ -744,7 +744,7 @@ function list_multi_edit()
             }
 
             $message = gTxt('articles_duplicated', array('{list}' => join(', ', $selected)));
-        } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID IN (".join(',', $selected).")") === false) {
+        } elseif (!$field || safe_update('textpattern', "$field = '" . doSlash($value) . "'", "ID IN (" . join(',', $selected) . ")") === false) {
             return list_list();
         }
 

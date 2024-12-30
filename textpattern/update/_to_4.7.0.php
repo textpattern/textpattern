@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -26,19 +26,19 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Remove a few licence files. De-clutters the root directory a tad.
-Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'..', array('LICENSE-BSD-3.txt', 'LICENSE-LESSER.txt'));
-Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'vendors', 'dropbox');
-Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'lang', 'en-gb.txt');
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath . DS . '..', array('LICENSE-BSD-3.txt', 'LICENSE-LESSER.txt'));
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath . DS . 'vendors', 'dropbox');
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath . DS . 'lang', 'en-gb.txt');
 
 // Drop the ip column in txp_discuss
-$cols = getThings("DESCRIBE `".PFX."txp_discuss`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_discuss`");
 
 if (in_array('ip', $cols)) {
     safe_alter('txp_discuss', "DROP ip");
 }
 
 // Drop the ip and host column in txp_log
-$cols = getThings("DESCRIBE `".PFX."txp_log`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_log`");
 
 if (in_array('ip', $cols)) {
     safe_drop_index('txp_log', 'ip');
@@ -52,7 +52,7 @@ if (in_array('host', $cols)) {
 safe_delete('txp_prefs', "name='use_dns'");
 
 // Drop the prefs_id column in txp_prefs
-$cols = getThings("DESCRIBE `".PFX."txp_prefs`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_prefs`");
 
 if (in_array('prefs_id', $cols)) {
     safe_drop_index('txp_prefs', 'prefs_idx');
@@ -69,7 +69,7 @@ $installed_keys = array_keys($installed_lang);
 foreach ($installed_keys as $key) {
     if (!in_array($key, $available_keys)) {
         $newKey = Txp::get('\Textpattern\L10n\Locale')->validLocale($key);
-        safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
+        safe_update('txp_lang', "lang='" . doSlash($newKey) . "'", "lang='" . doSlash($key) . "'");
 
         if (get_pref('language') === $key) {
             update_pref('language', $newKey);
@@ -78,7 +78,7 @@ foreach ($installed_keys as $key) {
 }
 
 // New fields in the plugin table.
-$colInfo = getRows("DESCRIBE `".PFX."txp_plugin`");
+$colInfo = getRows("DESCRIBE `" . PFX . "txp_plugin`");
 $cols = array_map(function ($el) {
     return $el['Field'];
 }, $colInfo);
@@ -115,59 +115,73 @@ safe_create('txp_skin', "
 ");
 
 // Add theme support to Pages...
-$cols = getThings('describe `'.PFX.'txp_page`');
+$cols = getThings('describe `' . PFX . 'txp_page`');
 
 if (!in_array('lastmod', $cols)) {
-    safe_alter('txp_page',
-        "ADD lastmod DATETIME DEFAULT NULL AFTER user_html");
+    safe_alter(
+        'txp_page',
+        "ADD lastmod DATETIME DEFAULT NULL AFTER user_html"
+    );
 }
 
 if (!in_array('skin', $cols)) {
-    safe_alter('txp_page',
-        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER user_html");
+    safe_alter(
+        'txp_page',
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER user_html"
+    );
 }
 
 safe_drop_index('txp_page', 'primary');
 safe_create_index('txp_page', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... Forms...
-$cols = getThings('describe `'.PFX.'txp_form`');
+$cols = getThings('describe `' . PFX . 'txp_form`');
 
 if (!in_array('lastmod', $cols)) {
-    safe_alter('txp_form',
-        "ADD lastmod DATETIME DEFAULT NULL AFTER Form");
+    safe_alter(
+        'txp_form',
+        "ADD lastmod DATETIME DEFAULT NULL AFTER Form"
+    );
 }
 
 if (!in_array('skin', $cols)) {
-    safe_alter('txp_form',
-        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER Form");
+    safe_alter(
+        'txp_form',
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER Form"
+    );
 }
 
 safe_drop_index('txp_form', 'primary');
 safe_create_index('txp_form', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... Stylesheets...
-$cols = getThings('describe `'.PFX.'txp_css`');
+$cols = getThings('describe `' . PFX . 'txp_css`');
 
 if (!in_array('lastmod', $cols)) {
-    safe_alter('txp_css',
-        "ADD lastmod DATETIME DEFAULT NULL AFTER css");
+    safe_alter(
+        'txp_css',
+        "ADD lastmod DATETIME DEFAULT NULL AFTER css"
+    );
 }
 
 if (!in_array('skin', $cols)) {
-    safe_alter('txp_css',
-        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER css");
+    safe_alter(
+        'txp_css',
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER css"
+    );
 }
 
 safe_drop_index('txp_css', 'name');
 safe_create_index('txp_css', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... and Sections...
-$cols = getThings('describe `'.PFX.'txp_section`');
+$cols = getThings('describe `' . PFX . 'txp_section`');
 
 if (!in_array('skin', $cols)) {
-    safe_alter('txp_section',
-        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER name");
+    safe_alter(
+        'txp_section',
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER name"
+    );
 }
 
 safe_drop_index('txp_section', 'primary');
@@ -177,10 +191,11 @@ safe_create_index('txp_section', 'css(50), skin(63)', 'css_skin');
 $exists = safe_row('name', 'txp_skin', "1=1");
 
 if (!$exists) {
-    safe_insert('txp_skin',
+    safe_insert(
+        'txp_skin',
         "name = 'default',
         title = 'Default',
-        version = '".txp_version."',
+        version = '" . txp_version . "',
         author = 'Team Textpattern',
         author_uri = 'https://textpattern.com/'"
     );

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -149,17 +149,18 @@ function page_edit($message = '', $refresh_partials = false)
     }
 
     if (!$save_error) {
-        $html = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
+        $html = safe_field('user_html', 'txp_page', "name = '" . doSlash($name) . "' AND skin = '" . doSlash($skin) . "'");
     } else {
         $html = gps('html', false);
     }
 
-    $html !== false or $name = ''; 
+    $html !== false or $name = '';
     $actionsExtras = '';
 
     if ($name) {
-        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document" title="'.gTxt('create_page').'"></span>'.sp.gTxt('create_page'), 'txp-new')
-        .tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button',
+        $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document" title="' . gTxt('create_page') . '"></span>' . sp . gTxt('create_page'), 'txp-new')
+        . tag(
+            '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
             array(
                 'class'     => 'txp-clone txp-reduced-ui-button',
                 'data-form' => 'page_form',
@@ -172,23 +173,24 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions')
     );
 
-    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
+    $skinBlock = n . $instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         (!is_writable($instance->getDirPath()) ? '' :
-            n.span(
-                checkbox2('export', gps('export'), 0, 'export', 'page_form').
-                n.tag(gTxt('export_to_disk'), 'label', array('for' => 'export'))
-            , array('class' => 'txp-save-export'))
-        ).
-        '<span class="txp-save-button">'.
-        n.tag_void('input', array(
+            n . span(
+                checkbox2('export', gps('export'), 0, 'export', 'page_form') .
+                n . tag(gTxt('export_to_disk'), 'label', array('for' => 'export')),
+                array('class' => 'txp-save-export')
+            )
+        ) .
+        '<span class="txp-save-button">' .
+        n . tag_void('input', array(
             'class' => 'publish',
             'name'  => 'save',
             'type'  => 'submit',
             'form'  => 'page_form',
             'value' => gTxt('save'),
-        )).
+        )) .
         '</span>', ' class="txp-save"'
     );
 
@@ -217,16 +219,17 @@ function page_edit($message = '', $refresh_partials = false)
 
     pagetop(gTxt('tab_pages'), $message);
 
-    echo n.'<div class="txp-layout">';
+    echo n . '<div class="txp-layout">';
 
     // Pages code column.
-    echo n.tag(
-        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
-        $skinBlock.
+    echo n . tag(
+        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')) .
+        $skinBlock .
         form(
-            $partials['name']['html'].
+            $partials['name']['html'] .
             $partials['template']['html'],
-            '', '', 'post', $class, '', 'page_form'),
+            '', '', 'post', $class, '', 'page_form'
+        ),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -235,13 +238,13 @@ function page_edit($message = '', $refresh_partials = false)
     );
 
     // Pages create/switcher column.
-    echo n.tag(
-        n.tag(
-            $buttons.
+    echo n . tag(
+        n . tag(
+            $buttons .
             $actions,
             'div', array('class' => 'txp-save-zone')
-        ).
-        $partials['list']['html'].n,
+        ) .
+        $partials['list']['html'] . n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
@@ -250,15 +253,16 @@ function page_edit($message = '', $refresh_partials = false)
     );
 
     // Tag builder dialog placeholder.
-    echo n.tag(
+    echo n . tag(
         '&nbsp;',
         'div', array(
             'class' => 'txp-tagbuilder-content',
             'id'    => 'tagbuild_links',
             'title' => gTxt('tagbuilder'),
-        ));
+        )
+    );
 
-    echo n.'</div>'; // End of .txp-layout.
+    echo n . '</div>'; // End of .txp-layout.
 }
 
 /**
@@ -290,7 +294,7 @@ function page_list($current)
                 $edit .= dLink('page', 'page_delete', 'name', $name);
             }
 
-            $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
+            $out[] = tag(n . $edit . n, 'li', array('class' => $active ? 'active' : ''));
         }
 
         $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list'));
@@ -425,9 +429,12 @@ function page_save()
                     $save_error = true;
                 }
             } else {
-                if (safe_update('txp_page',
-                        "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
-                        "name = '$safe_name' AND skin = '$safe_skin'")) {
+                if (safe_update(
+                    'txp_page',
+                    "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
+                    "name = '$safe_name' AND skin = '$safe_skin'"
+                )
+                ) {
                     safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name' AND skin='$safe_skin'");
                     safe_update('txp_section', "dev_page = '$safe_newname'", "dev_page='$safe_name' AND dev_skin='$safe_skin'");
                     set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
@@ -482,11 +489,11 @@ function page_new()
 function page_tagbuild()
 {
     $listActions = graf(
-        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> ' . gTxt('expand_all'), 'button', array(
             'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'tagbuild_links',
-        )).
-        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+        )) .
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> ' . gTxt('collapse_all'), 'button', array(
             'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'tagbuild_links',
         )), array('class' => 'txp-actions')
@@ -505,10 +512,10 @@ function page_tagbuild()
     $tagbuild_links = '';
 
     foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
+        $tagbuild_links .= wrapRegion($item[1] . '_group', taglinks($tb), $item[1], $item[0], 'page_' . $item[1]);
     }
 
-    return $listActions.$tagbuild_links;
+    return $listActions . $tagbuild_links;
 }
 
 /**
@@ -559,8 +566,8 @@ function page_partial_name($rs)
         $titleblock .= hInput('name', $name);
     }
 
-    $titleblock .= hInput('skin', $skin).
-        eInput('page').sInput('page_save');
+    $titleblock .= hInput('skin', $skin) .
+        eInput('page') . sInput('page_save');
 
     return $titleblock;
 }
@@ -590,13 +597,13 @@ function page_partial_template($rs)
 
     $out = inputLabel(
         'html',
-        '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['html']).'</textarea>',
+        '<textarea class="code" id="html" name="html" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr">' . txpspecialchars($rs['html']) . '</textarea>',
         array(
             'page_code',
-            n.span(
+            n . span(
                 (has_privs('tag')
                     ? href(
-                        span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
+                        span(null, array('class' => 'ui-icon ui-extra-icon-code')) . ' ' . gTxt('tagbuilder'),
                         array('event' => 'tag', 'panel' => $event),
                         array('class' => 'txp-tagbuilder-dialog')
                     )

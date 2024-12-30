@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,7 @@ if (!defined('TXP_UPDATE')) {
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
 // New status field for file downloads.
-$txpfile = getThings("DESCRIBE `".PFX."txp_file`");
+$txpfile = getThings("DESCRIBE `" . PFX . "txp_file`");
 
 if (!in_array('status', $txpfile)) {
     safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
@@ -54,12 +54,12 @@ if (!in_array('downloads', $txpfile)) {
     safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
 }
 
-$txpfile = getThings("DESCRIBE `".PFX."txp_file`");
+$txpfile = getThings("DESCRIBE `" . PFX . "txp_file`");
 
 // Copy existing file timestamps into the new database columns.
 if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
     $rs  = safe_rows("*", 'txp_file', "1 = 1");
-    $dir = get_pref('file_base_path', dirname(txpath).DS.'files');
+    $dir = get_pref('file_base_path', dirname(txpath) . DS . 'files');
 
     foreach ($rs as $row) {
         if (empty($row['filename'])) {
@@ -69,12 +69,13 @@ if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
         $path = build_file_path($dir, $row['filename']);
 
         if (file_exists($path) and ($stat = @stat($path))) {
-            safe_update('txp_file', "created = '".date('Y-m-d H:i:s', $stat['ctime'])."', modified = '".date('Y-m-d H:i:s', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");
+            safe_update('txp_file', "created = '" . date('Y-m-d H:i:s', $stat['ctime']) . "', modified = '" . date('Y-m-d H:i:s', $stat['mtime']) . "', size = '" . doSlash(sprintf('%u', $stat['size'])) . "'", "id = '" . doSlash($row['id']) . "'");
         }
     }
 }
 
-safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
+safe_update(
+    'textpattern', "Keywords = TRIM(BOTH ',' FROM
     REPLACE(
         REPLACE(
             REPLACE(

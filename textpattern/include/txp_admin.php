@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -97,10 +97,10 @@ function author_save()
     if ($rs && $language) {
         safe_upsert(
             'txp_prefs',
-            "val = '".doSlash($language)."',
+            "val = '" . doSlash($language) . "',
             event = 'admin',
             html = 'text_input',
-            type = ".PREF_HIDDEN.",
+            type = " . PREF_HIDDEN . ",
             position = 0",
             array(
                 'name'      => 'language_ui',
@@ -188,10 +188,10 @@ function author_save_new()
             if ($language) {
                 safe_upsert(
                     'txp_prefs',
-                    "val = '".doSlash($language)."',
+                    "val = '" . doSlash($language) . "',
                     event = 'admin',
                     html = 'text_input',
-                    type = ".PREF_HIDDEN.",
+                    type = " . PREF_HIDDEN . ",
                     position = 0",
                     array(
                         'name'      => 'language_ui',
@@ -254,37 +254,43 @@ function new_pass_form($message = '')
     pagetop(gTxt('tab_site_admin'), $message);
 
     echo form(
-        hed(gTxt('change_password'), 2).
+        hed(gTxt('change_password'), 2) .
         inputLabel(
             'current_pass',
-            fInput('password',
+            fInput(
+                'password',
                 array(
                     'name'         => 'current_pass',
                     'autocomplete' => 'current-password',
-                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
+                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'current_pass', false, true
+            ),
             'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
-        ).
+        ) .
         inputLabel(
             'new_pass',
-            fInput('password',
+            fInput(
+                'password',
                 array(
                     'name'         => 'new_pass',
                     'autocomplete' => 'new-password',
-                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
-            n.tag(
-                checkbox('unmask', 1, false, 0, 'show_password').
-                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
-                'div', array('class' => 'edit-admin-show-password')),
+                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true
+            ) .
+            n . tag(
+                checkbox('unmask', 1, false, 0, 'show_password') .
+                n . tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'edit-admin-show-password')
+            ),
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
-        ).
+        ) .
         graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            sLink('admin', '', gTxt('cancel'), 'txp-button') .
             fInput('submit', 'change_pass', gTxt('submit'), 'publish'),
             array('class' => 'txp-edit-actions')
-        ).
-        eInput('admin').
+        ) .
+        eInput('admin') .
         sInput('change_pass'),
-    '', '', 'post', 'txp-edit', '', 'change_password');
+        '', '', 'post', 'txp-edit', '', 'change_password'
+    );
 }
 
 /**
@@ -339,31 +345,31 @@ function author_list($message = '')
         ),
     );
 
-    $sql_from = safe_pfx_j('txp_users'). ' LEFT JOIN
+    $sql_from = safe_pfx_j('txp_users') . ' LEFT JOIN
             (SELECT
                 AuthorID as author, count(AuthorID) AS total
-                FROM '.PFX.'textpattern
+                FROM ' . PFX . 'textpattern
                 GROUP BY AuthorID
             ) AS articles
             ON txp_users.name = articles.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
-                FROM '.PFX.'txp_image
+                FROM ' . PFX . 'txp_image
                 GROUP BY author
             ) AS images
             ON txp_users.name = images.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
-                FROM '.PFX.'txp_file
+                FROM ' . PFX . 'txp_file
                 GROUP BY author
             ) AS files
             ON txp_users.name = files.author
         LEFT JOIN
             (SELECT
                 author, count(author) AS total
-                FROM '.PFX.'txp_link
+                FROM ' . PFX . 'txp_link
                 GROUP BY author
             ) AS links
             ON txp_users.name = links.author';
@@ -376,7 +382,7 @@ function author_list($message = '')
     // Build field list: shame that array_filter() can't get keys and
     // values 'til PHP 5.6. @todo One day.
     foreach ($fields as $fld => $def) {
-        $fieldlist[] = isset($def['column']) ? $def['column'].' AS '. $fld : $fld;
+        $fieldlist[] = isset($def['column']) ? $def['column'] . ' AS ' . $fld : $fld;
     }
 
     // User list.
@@ -385,7 +391,7 @@ function author_list($message = '')
 
         if (is_disabled('mail')) {
             echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                span(null, array('class' => 'ui-icon ui-icon-alert')) . ' ' .
                 gTxt('warn_mail_unavailable'),
                 array('class' => 'alert-block warning')
             );
@@ -404,7 +410,8 @@ function author_list($message = '')
 
         if (!in_array($sort, array_keys(array_filter($fields, function($value) {
                 return !isset($value['sortable']) || !empty($value['sortable']);
-            })))) {
+            })))
+        ) {
             $sort = 'name';
         }
 
@@ -417,11 +424,12 @@ function author_list($message = '')
             set_pref('admin_sort_dir', $dir, 'admin', PREF_HIDDEN, '', 0, PREF_PRIVATE);
         }
 
-        $sort_sql = $sort.' '.$dir.($sort == 'name' ? '' : ", name $dir");
+        $sort_sql = $sort . ' ' . $dir . ($sort == 'name' ? '' : ", name $dir");
 
         $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-        $search = new Filter($event,
+        $search = new Filter(
+            $event,
             array(
                 'login' => array(
                     'column' => 'txp_users.name',
@@ -472,7 +480,7 @@ function author_list($message = '')
         $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
         $searchBlock =
-            n.tag(
+            n . tag(
                 $search->renderForm('author_list', $search_render_options),
                 'div', array(
                     'class' => 'txp-layout-4col-3span',
@@ -480,7 +488,7 @@ function author_list($message = '')
                 )
             );
 
-        $createBlock = n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+        $createBlock = n . tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
 
         $contentBlock = '';
 
@@ -493,7 +501,7 @@ function author_list($message = '')
             if ($crit !== '') {
                 $contentBlock .=
                     graf(
-                        span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                        span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
                         gTxt('no_results_found'),
                         array('class' => 'alert-block information')
                     );
@@ -501,62 +509,60 @@ function author_list($message = '')
         } else {
             $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
-            $rs = safe_query("SELECT ".implode(', ', $fieldlist).
-                " FROM $sql_from".
-                " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-            );
+            $rs = safe_query("SELECT " . implode(', ', $fieldlist) .
+                " FROM $sql_from" .
+                " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit");
 
             if ($rs) {
                 $contentBlock .=
-                    n.tag_start('form', array(
+                    n . tag_start('form', array(
                         'class'  => 'multi_edit_form',
                         'id'     => 'users_form',
                         'name'   => 'longform',
                         'method' => 'post',
                         'action' => 'index.php',
-                    )).
-                    n.tag_start('div', array(
+                    )) .
+                    n . tag_start('div', array(
                         'class'      => 'txp-listtables',
                         'tabindex'   => 0,
                         'aria-label' => gTxt('list'),
-                    )).
-                    n.tag_start('table', array('class' => 'txp-list')).
-                    n.tag_start('thead');
+                    )) .
+                    n . tag_start('table', array('class' => 'txp-list')) .
+                    n . tag_start('thead');
 
                     $headings = array();
                     $headings[] = ($use_multi_edit)
                         ? hCell(
                             fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                                '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                            '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
                         )
                         : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"');
 
-                    foreach ($fields as $col => $opts) {
-                        if (isset($opts['visible']) && empty($opts['visible'])) {
-                            continue;
-                        }
-
-                        $lbl = empty($opts['label']) ? $col : $opts['label'];
-                        $cls = empty($opts['class']) ? $col : $opts['class'];
-                        $headings[] = column_head(
-                            $lbl,
-                            $col,
-                            'admin',
-                            true,
-                            $switch_dir,
-                            '',
-                            '',
-                            (($col == $sort) ? "$dir " : '').
-                                'txp-list-col-'.strtolower(str_replace('_', '-', $lbl)).' '.$cls
-                        );
-
+                foreach ($fields as $col => $opts) {
+                    if (isset($opts['visible']) && empty($opts['visible'])) {
+                        continue;
                     }
+
+                    $lbl = empty($opts['label']) ? $col : $opts['label'];
+                    $cls = empty($opts['class']) ? $col : $opts['class'];
+                    $headings[] = column_head(
+                        $lbl,
+                        $col,
+                        'admin',
+                        true,
+                        $switch_dir,
+                        '',
+                        '',
+                        (($col == $sort) ? "$dir " : '') .
+                            'txp-list-col-' . strtolower(str_replace('_', '-', $lbl)) . ' ' . $cls
+                    );
+                }
 
                     $contentBlock .= tr(
                         implode(n, $headings)
-                    ).
-                    n.tag_end('thead').
-                    n.tag_start('tbody');
+                    ) .
+                    n . tag_end('thead') .
+                    n . tag_start('tbody');
 
                 foreach ($rs as $a) {
                     extract(doSpecial($a));
@@ -564,58 +570,57 @@ function author_list($message = '')
                     $contentBlock .= tr(
                         td(
                             ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
-                        ).
+                        ) .
                         hCell(
                             ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name, '', '', gTxt('edit')) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
-                        ).
+                        ) .
                         td(
                             $RealName, '', 'txp-list-col-real-name name'
-                        ).
+                        ) .
                         td(
-                            href($email, 'mailto:'.$email), '', 'txp-list-col-email'
-                        ).
+                            href($email, 'mailto:' . $email), '', 'txp-list-col-email'
+                        ) .
                         td(
                             get_priv_level($privs), '', 'txp-list-col-privs'
-                        ).
+                        ) .
                         td(
                             ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
-                        ).
+                        ) .
                         td(
                             $a['article_count'] ? eLink('list', 'list', 'search_method', 'author', $a['article_count'], 'crit', $a['name']) : '0'
-                        ).
+                        ) .
                         td(
                             $a['image_count'] ? eLink('image', 'image_list', 'search_method', 'author', $a['image_count'], 'crit', $a['name']) : '0'
-                        ).
+                        ) .
                         td(
                             $a['file_count'] ? eLink('file', 'file_list', 'search_method', 'author', $a['file_count'], 'crit', $a['name']) : '0'
-                        ).
+                        ) .
                         td(
                             $a['link_count'] ? eLink('link', 'link_list', 'search_method', 'author', $a['link_count'], 'crit', $a['name']) : '0'
-                        ).
+                        ) .
                         pluggable_ui('user_ui', 'list.row', '', $a)
                     );
                 }
 
                 $contentBlock .=
-                    n.tag_end('tbody').
-                    n.tag_end('table').
-                    n.tag_end('div'). // End of .txp-listtables.
+                    n . tag_end('tbody') .
+                    n . tag_end('table') .
+                    n . tag_end('div') . // End of .txp-listtables.
                     (
                         ($use_multi_edit)
                         ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
                         : ''
-                    ).
-                    tInput().
-                    n.tag_end('form');
+                    ) .
+                    tInput() .
+                    n . tag_end('form');
             }
         }
 
-        $pageBlock = $paginator->render().
+        $pageBlock = $paginator->render() .
         nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
         $table = new \Textpattern\Admin\Table('users');
         echo $table->render(compact('total', 'crit') + array('heading' => 'tab_site_admin'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
-
     } elseif (has_privs('admin.edit.own')) {
         echo author_edit($message, true);
     } else {
@@ -676,7 +681,7 @@ function author_edit($message = '', $fullEdit = false)
             $is_edit = false;
         }
     } else {
-        $rs = safe_row("*", 'txp_users', "name = '".doSlash($txp_user)."'");
+        $rs = safe_row("*", 'txp_users', "name = '" . doSlash($txp_user) . "'");
         extract($rs);
         $is_edit = true;
     }
@@ -708,8 +713,8 @@ function author_edit($message = '', $fullEdit = false)
     // Get author's current admin language, if defined,
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
     $langList = $txpLang->languageList();
-    $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '".doSlash($name)."'");
-    $authorLang = in_array($authorLang, $txpLang->installed()) ? $authorLang : ($is_edit? null : TEXTPATTERN_DEFAULT_LANG);
+    $authorLang = safe_field('val', 'txp_prefs', "name='language_ui' AND user_name = '" . doSlash($name) . "'");
+    $authorLang = in_array($authorLang, $txpLang->installed()) ? $authorLang : ($is_edit ? null : TEXTPATTERN_DEFAULT_LANG);
 
     if (count($langList) > 1) {
         $langField = inputLabel(
@@ -722,14 +727,14 @@ function author_edit($message = '', $fullEdit = false)
     }
 
     $out[] = inputLabel(
-            'real_name',
-            Txp::get('\Textpattern\UI\Input', 'RealName', 'text', $RealName)->setAtts(array(
+        'real_name',
+        Txp::get('\Textpattern\UI\Input', 'RealName', 'text', $RealName)->setAtts(array(
                 'id'        => 'real_name',
                 'size'      => INPUT_REGULAR,
                 'maxlength' => $fieldSizes['RealName'],
             )),
-            'real_name', '', array('class' => 'txp-form-field edit-admin-name')
-        ).
+        'real_name', '', array('class' => 'txp-form-field edit-admin-name')
+    ) .
         inputLabel(
             'login_email',
             Txp::get('\Textpattern\UI\Input', 'email', 'email', $email)->setAtts(array(
@@ -751,38 +756,38 @@ function author_edit($message = '', $fullEdit = false)
             'privileges',
             strong(get_priv_level($privs)),
             '', '', array('class' => 'txp-form-field edit-admin-privileges')
-        ).
+        ) .
         hInput('privs', $privs);
     }
 
     $out[] = $langField;
-    $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
+    $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs) .
         graf(
-            ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')).
+            ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')) .
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
-        ).
+        ) .
         eInput('admin');
 
     if ($is_edit) {
-        $out[] = hInput('user_id', $user_id).
-            hInput('name', $name).
+        $out[] = hInput('user_id', $user_id) .
+            hInput('name', $name) .
             sInput('author_save');
     } else {
         $out[] = sInput('author_save_new');
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
+    echo n . '<div class="txp-layout">' .
+        n . tag(
             hed(gTxt('tab_site_account'), 1, array('class' => 'txp-heading')),
             'div', array('class' => 'txp-layout-1col')
-        ).
-        n.tag_start('div', array(
+        ) .
+        n . tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => 'users_container',
-        )).
+        )) .
         ($fullEdit
-            ? n.tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
+            ? n . tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
             : ''
         );
 
@@ -792,8 +797,8 @@ function author_edit($message = '', $fullEdit = false)
         echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    echo n . tag_end('div') . // End of .txp-layout-1col.
+        n . '</div>'; // End of .txp-layout.
 }
 
 /**
@@ -842,7 +847,7 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
     if (count($users) > 1) {
         $methods['delete'] = array(
             'label' => gTxt('delete'),
-            'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')).
+            'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')) .
                 selectInput('assign_assets', $users, '', true, '', 'assign_assets'),
         );
     }
@@ -886,7 +891,7 @@ function admin_multi_edit()
     $names = safe_column(
         "name",
         'txp_users',
-        "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'".$clause
+        "name IN (" . join(',', quote_list($selected)) . ") AND name != '" . doSlash($txp_user) . "'" . $clause
     );
 
     if (!$names) {
@@ -919,7 +924,7 @@ function admin_multi_edit()
 
         case 'changelanguage':
             $nameSet = join(',', quote_list((array) $names));
-            $ret = safe_update('txp_prefs', "val = '".doSlash(ps('lang'))."'", "name='language_ui' AND user_name IN ($nameSet)");
+            $ret = safe_update('txp_prefs', "val = '" . doSlash(ps('lang')) . "'", "name='language_ui' AND user_name IN ($nameSet)");
 
             if ($ret) {
                 $changed = $names;

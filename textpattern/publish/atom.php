@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -111,36 +111,36 @@ function atom()
         $ct[] = fetch_category_title($c);
     }
 
-    $sitename .= ($section) ? ' - '.join(' - ', $st) : '';
-    $sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
+    $sitename .= ($section) ? ' - ' . join(' - ', $st) : '';
+    $sitename .= ($category) ? ' - ' . join(' - ', $ct) : '';
 
     $pub = safe_row("RealName, email", 'txp_users', "privs = 1");
 
     // Feed header.
     $out[] = tag(htmlspecialchars($sitename), 'title', t_text);
     $out[] = tag(htmlspecialchars($site_slogan), 'subtitle', t_text);
-    $out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
+    $out[] = '<link' . r_relself . ' href="' . pagelinkurl(array(
         'atom'     => 1,
         'area'     => $area,
         'section'  => $section,
         'category' => $category,
         'limit'    => $limit,
-    )).'" />';
-    $out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
+    )) . '" />';
+    $out[] = '<link' . r_relalt . t_texthtml . ' href="' . hu . '" />';
 
     // Atom feeds with mail or domain name.
     $dn = explode('/', $siteurl);
     $mail_or_domain = ($use_mail_on_feeds_id) ? Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($blog_mail_uid) : $dn[0];
-    $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
+    $out[] = tag('tag:' . $mail_or_domain . ',' . $blog_time_uid . ':' . $blog_uid . (($section) ? '/' . join(',', $section) : '') . (($category) ? '/' . join(',', $category) : ''), 'id');
 
-    $out[] = tag('Textpattern', 'generator', ' uri="https://textpattern.com/" version="'.$version.'"');
+    $out[] = tag('Textpattern', 'generator', ' uri="https://textpattern.com/" version="' . $version . '"');
     $out[] = tag(safe_strftime("w3cdtf", strtotime($lastmod)), 'updated');
 
     $auth[] = tag($pub['RealName'], 'name');
     $auth[] = ($include_email_atom) ? tag(Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($pub['email']), 'email') : '';
     $auth[] = tag(hu, 'uri');
 
-    $out[] = tag(n.t.t.join(n.t.t, $auth).n.t, 'author');
+    $out[] = tag(n . t . t . join(n . t . t, $auth) . n . t, 'author');
     $out[] = callback_event('atom_head');
 
     // Feed items.
@@ -152,8 +152,8 @@ function atom()
     $limit = intval(min($limit, max(100, $rss_how_many)));
 
     if (!$area || $area == 'article') {
-        $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
-        $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
+        $sfilter = (!empty($section)) ? "AND Section IN ('" . join("','", $section) . "')" : '';
+        $cfilter = (!empty($category)) ? "AND (Category1 IN ('" . join("','", $category) . "') OR Category2 IN ('" . join("','", $category) . "'))" : '';
 
         $query = array($sfilter, $cfilter);
 
@@ -168,7 +168,7 @@ function atom()
         }
 
         $atts = filterAtts($atts, true);
-        $where = $atts['?'].' '.join(' ', $query);
+        $where = $atts['?'] . ' ' . join(' ', $query);
 
         $rs = safe_rows_start(
             "*,
@@ -177,7 +177,7 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            $where." ORDER BY uPosted DESC LIMIT $limit"
+            $where . " ORDER BY uPosted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -192,28 +192,28 @@ function atom()
                 $e = array();
 
                 if ($show_comment_count_in_feed) {
-                    $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
+                    $count = ($comments_count > 0) ? ' [' . $comments_count . ']' : '';
                 } else {
                     $count = '';
                 }
 
                 $thisauthor = get_author_name($authorid);
 
-                $e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor), 'name').n.t.t, 'author');
+                $e['thisauthor'] = tag(n . t . t . t . tag(htmlspecialchars($thisauthor), 'name') . n . t . t, 'author');
 
                 $e['issued'] = tag(safe_strftime('w3cdtf', $posted), 'published');
                 $e['modified'] = tag(safe_strftime('w3cdtf', $modified), 'updated');
 
                 $escaped_title = htmlspecialchars($title);
-                $e['title'] = tag($escaped_title.$count, 'title', t_html);
+                $e['title'] = tag($escaped_title . $count, 'title', t_html);
 
                 $permlink = permlinkurl($thisarticle);
-                $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
+                $e['link'] = '<link' . r_relalt . t_texthtml . ' href="' . $permlink . '" />';
 
-                $e['id'] = tag('tag:'.$mail_or_domain.','.$a['feed_time'].':'.$blog_uid.'/'.$a['uid'], 'id');
+                $e['id'] = tag('tag:' . $mail_or_domain . ',' . $a['feed_time'] . ':' . $blog_uid . '/' . $a['uid'], 'id');
 
-                $e['category1'] = (trim($category1) ? '<category term="'.htmlspecialchars($category1).'" />' : '');
-                $e['category2'] = (trim($category2) ? '<category term="'.htmlspecialchars($category2).'" />' : '');
+                $e['category1'] = (trim($category1) ? '<category term="' . htmlspecialchars($category1) . '" />' : '');
+                $e['category2'] = (trim($category2) ? '<category term="' . htmlspecialchars($category2) . '" />' : '');
 
                 $summary = trim(replace_relative_urls(parse($excerpt), $permlink));
                 $content = '';
@@ -235,13 +235,13 @@ function atom()
                     $e['summary'] = tag(escape_cdata($summary), 'summary', t_html);
                 }
 
-                $articles[$thisid] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
+                $articles[$thisid] = tag(n . t . t . join(n . t . t, $e) . n . t . $cb, 'entry');
 
                 $dates[$thisid] = $modified;
             }
         }
     } elseif ($area == 'link') {
-        $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
+        $cfilter = ($category) ? "category IN ('" . join("','", $category) . "')" : '1';
 
         $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
@@ -255,13 +255,13 @@ function atom()
 
                 $url = (preg_replace("/^\/(.*)/", "https?://$siteurl/$1", $url));
                 $url = preg_replace("/&((?U).*)=/", "&amp;\\1=", $url);
-                $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
+                $e['link'] = '<link' . r_relalt . t_texthtml . ' href="' . $url . '" />';
 
                 $e['issued'] = tag(safe_strftime('w3cdtf', $uDate), 'published');
                 $e['modified'] = tag(safe_strftime('w3cdtf', $uDate), 'updated');
-                $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', $uDate).':'.$blog_uid.'/'.$id, 'id');
+                $e['id'] = tag('tag:' . $mail_or_domain . ',' . safe_strftime('%Y-%m-%d', $uDate) . ':' . $blog_uid . '/' . $id, 'id');
 
-                $articles[$id] = tag(n.t.t.join(n.t.t, $e).n.t, 'entry');
+                $articles[$id] = tag(n . t . t . join(n . t . t, $e) . n . t, 'entry');
 
                 $dates[$id] = $uDate;
             }
@@ -270,7 +270,7 @@ function atom()
 
     if (!$articles) {
         if ($section) {
-            if (safe_field("name", 'txp_section', "name IN ('".join("','", $section)."')") == false) {
+            if (safe_field("name", 'txp_section', "name IN ('" . join("','", $section) . "')") == false) {
                 txp_die(gTxt('404_not_found'), '404');
             }
         } elseif ($category) {
@@ -283,7 +283,7 @@ function atom()
                     break;
                 case 'article':
                 default:
-                    if (safe_field("id", 'txp_category', "name IN ('".join("','", $category)."') AND type = 'article'") == false) {
+                    if (safe_field("id", 'txp_category', "name IN ('" . join("','", $category) . "') AND type = 'article'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
 
@@ -314,8 +314,8 @@ function atom()
 
         if (isset($_SERVER["HTTP_A_IM"]) &&
             strpos($_SERVER["HTTP_A_IM"], "feed") &&
-            isset($clfd) && $clfd > 0) {
-
+            isset($clfd) && $clfd > 0
+        ) {
             // Remove articles with timestamps older than the request timestamp
             foreach ($articles as $id => $entry) {
                 if ($dates[$id] <= $clfd) {
@@ -340,14 +340,14 @@ function atom()
     is_array($feeds_namespaces) or $feeds_namespaces = array();
 
     foreach ($feeds_namespaces as $ns => $url) {
-        $xmlns .= ' xmlns:'.$ns.'="'.$url.'"';
+        $xmlns .= ' xmlns:' . $ns . '="' . $url . '"';
     }
 
     header('Content-Type: application/atom+xml; charset=utf-8');
 
     return
-        '<?xml version="1.0" encoding="UTF-8"?>'.n.
-        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom"'.$xmlns.'>'.n.t.
-        join(n.t, $out).n.
+        '<?xml version="1.0" encoding="UTF-8"?>' . n .
+        '<feed xml:lang="' . txpspecialchars($language) . '" xmlns="http://www.w3.org/2005/Atom"' . $xmlns . '>' . n . t .
+        join(n . t, $out) . n .
         '</feed>';
 }

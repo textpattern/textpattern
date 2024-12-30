@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * https://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
@@ -29,12 +29,12 @@ if (!defined('txpath')) {
     die('txpath is undefined.');
 }
 
-require_once txpath.'/lib/txplib_html.php';
-require_once txpath.'/lib/constants.php';
-require_once txpath.'/lib/txplib_db.php';
-require_once txpath.'/lib/txplib_misc.php';
+require_once txpath . '/lib/txplib_html.php';
+require_once txpath . '/lib/constants.php';
+require_once txpath . '/lib/txplib_db.php';
+require_once txpath . '/lib/txplib_misc.php';
 
-define('IMPATH', $path_to_site.DS.$img_dir.DS);
+define('IMPATH', $path_to_site . DS . $img_dir . DS);
 
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
@@ -287,12 +287,12 @@ EOD;
     function output($xml, $enc = 'UTF-8')
     {
         $xml = $enc == 'UTF-8' ? $xml : safe_encode($xml, $enc, 'UTF-8');
-        $xml = '<?xml version="1.0" encoding="'.$enc.'" ?>'.n.$xml;
+        $xml = '<?xml version="1.0" encoding="' . $enc . '" ?>' . n . $xml;
         $length = strlen($xml);
         header('Connection: close');
-        header('Content-Length: '.$length);
-        header('Content-Type: text/xml charset='.$enc);
-        header('Date: '.date('r'));
+        header('Content-Length: ' . $length);
+        header('Content-Type: text/xml charset=' . $enc);
+        header('Date: ' . date('r'));
         echo $xml;
         exit;
     }
@@ -307,18 +307,21 @@ EOD;
         if ($enable_xmlrpc_server) {
             $this->output(
                 tag(
-                    n.tag(
-                        n.tag('Textpattern', 'engineName').
-                        n.tag('https://textpattern.com/', 'engineLink').
-                        n.tag(hu, 'homePageLink').
-                        n.tag(
-                            n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.
-                            n.'<api name="MetaWeblog" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.
-                            n.'<api name="Blogger" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.n,
-                            'apis').n,
-                    'service').n,
-                    'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
-                );
+                    n . tag(
+                        n . tag('Textpattern', 'engineName') .
+                        n . tag('https://textpattern.com/', 'engineLink') .
+                        n . tag(hu, 'homePageLink') .
+                        n . tag(
+                            n . '<api name="Movable Type" blogID="" preferred="true" apiLink="' . txrpcpath . '" />' .
+                            n . '<api name="MetaWeblog" blogID="" preferred="false" apiLink="' . txrpcpath . '" />' .
+                            n . '<api name="Blogger" blogID="" preferred="false" apiLink="' . txrpcpath . '" />' . n,
+                            'apis'
+                        ) . n,
+                        'service'
+                    ) . n,
+                    'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"'
+                )
+            );
         } else {
             header('Status: 501 Not Implemented');
             header('HTTP/1.1 501 Not Implemented');
@@ -571,7 +574,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -681,7 +684,7 @@ EOD;
                 'categoryName' => $c['title'],
                 'description'  => $c['title'],
                 'htmlUrl'      => pagelinkurl(array('c' => $c['name'])),
-                'rssUrl'       => hu.'?rss=1&#38;category='.$c['name'],
+                'rssUrl'       => hu . '?rss=1&#38;category=' . $c['name'],
             );
         }
 
@@ -698,8 +701,10 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
-            "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList(
+            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
+            "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false
+        );
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -729,7 +734,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Title, AuthorID, unix_timestamp(Posted) as uPosted', "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Title, AuthorID, unix_timestamp(Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -903,32 +908,32 @@ EOD;
     */
     function mt_uploadImage($params)
     {
-       list($blogid, $username, $password, $file) = $params;
-       
-       $txp = new TXP_Wrapper($username, $password);
-       if (!$txp->loggedin) {
-           return new IXR_Error(100, gTxt('bad_login'));
-       }
-       
+        list($blogid, $username, $password, $file) = $params;
+
+        $txp = new TXP_Wrapper($username, $password);
+        if (!$txp->loggedin) {
+            return new IXR_Error(100, gTxt('bad_login'));
+        }
+
        //Temp File Upload
-       $tempImageFolder = get_pref('tempdir');
-       file_put_contents($tempImageFolder.$file['name'], $file['bits']);
-       
+        $tempImageFolder = get_pref('tempdir');
+        file_put_contents($tempImageFolder . $file['name'], $file['bits']);
+
        //Convert the file to the standard Textpattern input struct
-       $newfile = array(
+        $newfile = array(
            'name' => $file['name'],
            'error' => false,
-           'tmp_name' => $tempImageFolder.$file['name']
-       );
-       $id = image_data($newfile, false, 0, false)[1]; //Move the file and input into database
-       $ext = end(explode('.', $file['name'])); //Get the uploaded filetype
-       
+           'tmp_name' => $tempImageFolder . $file['name']
+        );
+        $id = image_data($newfile, false, 0, false)[1]; //Move the file and input into database
+        $ext = end(explode('.', $file['name'])); //Get the uploaded filetype
+
        //Return
-       $returnValue = array(
-          'url' => get_pref('img_dir').DS.$id.'.'.$ext
-       );
-       
-       return $returnValue;
+        $returnValue = array(
+          'url' => get_pref('img_dir') . DS . $id . '.' . $ext
+        );
+
+        return $returnValue;
     }
 
     // Code refactoring for blogger_newPost and blogger_editPost.
@@ -1011,7 +1016,7 @@ EOD;
         }
 
         if (isset($struct['mt_text_more'])) {
-            $contents['Body'] .= n.n.str_replace('\n', n, $struct['mt_text_more']);
+            $contents['Body'] .= n . n . str_replace('\n', n, $struct['mt_text_more']);
         }
 
         if (isset($struct['mt_excerpt'])) {
@@ -1040,11 +1045,11 @@ EOD;
 
         switch ($permlink_mode) {
             case 'section_id_title':
-                $url = hu.join('/', array($rs['Section'], $rs['ID'], $rs['url_title']));
+                $url = hu . join('/', array($rs['Section'], $rs['ID'], $rs['url_title']));
                 break;
 
             case 'year_month_day_title':
-                $url = hu.join('/', array(
+                $url = hu . join('/', array(
                     date("Y", $rs['uPosted']),
                     date("m", $rs['uPosted']),
                     date("d", $rs['uPosted']),
@@ -1053,20 +1058,20 @@ EOD;
                 break;
 
             case 'title_only':
-                $url = hu.$rs['url_title'];
+                $url = hu . $rs['url_title'];
                 break;
 
             case 'section_title':
-                $url = hu.join('/', array($rs['Section'], $rs['url_title']));
+                $url = hu . join('/', array($rs['Section'], $rs['url_title']));
                 break;
 
             case 'id_title':
-                $url = hu.join('/', array($rs['ID'], $rs['url_title']));
+                $url = hu . join('/', array($rs['ID'], $rs['url_title']));
                 break;
 
             default:
                 // Assume messy mode?
-                $url = hu.'?id='.$rs['ID'];
+                $url = hu . '?id=' . $rs['ID'];
                 break;
         }
 

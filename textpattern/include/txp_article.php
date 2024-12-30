@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -139,14 +139,16 @@ function article_save($write = true)
     }
 
     if ($incoming['ID']) {
-        $oldArticle = safe_row("Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
+        $oldArticle = safe_row(
+            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
             UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
             UNIX_TIMESTAMP(Posted) AS sPosted,
             UNIX_TIMESTAMP(Expires) AS sExpires",
-            'textpattern', "ID = ".(int) $incoming['ID']);
+            'textpattern', "ID = " . (int) $incoming['ID']
+        );
 
         if ($write) {
-                if (!can_modify($oldArticle)) {
+            if (!can_modify($oldArticle)) {
                 // Not allowed, you silly rabbit, you shouldn't even be here.
                 // Show default editing screen.
                 article_edit();
@@ -201,7 +203,7 @@ function article_save($write = true)
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
             $ts = false;
         } else {
-            $ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+            $ts = strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
         }
 
         if ($ts === false || $ts < 0) {
@@ -241,7 +243,7 @@ function article_save($write = true)
             $exp_second = 0;
         }
 
-        $ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+        $ts = strtotime($exp_year . '-' . $exp_month . '-' . $exp_day . ' ' . $exp_hour . ':' . $exp_minute . ':' . $exp_second);
 
         if ($ts === false || $ts < 0) {
             $uExpires = $oldArticle['sExpires'];
@@ -269,7 +271,8 @@ function article_save($write = true)
         && ($oldArticle['url_title'] === $url_title)
         && ($oldArticle['Title'] !== $Title)
         && ($oldArticle['url_title'] === stripSpace($oldArticle['Title'], 1))
-    )) {
+        )
+    ) {
         $url_title = stripSpace($Title_plain, 1);
     }
 
@@ -336,12 +339,12 @@ function article_save($write = true)
             $mfs->store($_POST, 'article', $rs['ID']);
 
             if ($is_clone) {
-                $url_title = stripSpace($Title_plain.' ('.$rs['ID'].')', 1);
+                $url_title = stripSpace($Title_plain . ' (' . $rs['ID'] . ')', 1);
                 safe_update(
                     'textpattern',
                     "Title = CONCAT(Title, ' (', ID, ')'),
                     url_title = '$url_title'",
-                    "ID = ".$rs['ID']
+                    "ID = " . $rs['ID']
                 );
             }
 
@@ -359,7 +362,7 @@ function article_save($write = true)
 
             if (empty($msg)) {
                 $s = check_url_title($url_title);
-                $msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+                $msg = array(get_status_message($Status) . ' ' . $s, $s ? E_WARNING : 0);
             }
         } else {
             $msg = array(gTxt('article_save_failed'), E_ERROR);
@@ -395,27 +398,27 @@ function article_preview($field = false)
             $cfields = getCustomFields();
             $field = isset($cfields[$matches[1]]) ? $cfields[$matches[1]] : $field;
         } else {
-            $dbfield = $field ? ucfirst($field).'_html' : '';
+            $dbfield = $field ? ucfirst($field) . '_html' : '';
         }
 
         $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : '');
     } else {
-        return '<div id="pane-preview"></div>'.n.
+        return '<div id="pane-preview"></div>' . n .
             '<template id="pane-template"></template>';
     }
 
     // Preview pane
-    if (ps('_txp_parse') && (!$field || preg_match('@<(?:'.TXP_PATTERN.'):@', $preview))) {
+    if (ps('_txp_parse') && (!$field || preg_match('@<(?:' . TXP_PATTERN . '):@', $preview))) {
         $token = Txp::get('\Textpattern\Security\Token');
         $id = intval(ps('ID'));
         $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
         ksort($data);
-        $data['id'] = $id.'.'.$token->csrf($txp_user).$token->csrf(json_encode($data));
+        $data['id'] = $id . '.' . $token->csrf($txp_user) . $token->csrf(json_encode($data));
         $opts = array(
             'method' => "POST",
             'header' => [
                 "Content-type: application/x-www-form-urlencoded",
-                "Cookie: txp_login_public=".cs('txp_login_public')
+                "Cookie: txp_login_public=" . cs('txp_login_public')
             ],
             'content' => $data,
         );
@@ -429,22 +432,22 @@ function article_preview($field = false)
         $tagopen = $view == 'preview' ? '<code class="language-markup txp-tag">' : '';
         $tagclose = $view == 'preview' ? '</code>' : '';
 
-        foreach($parsed as $i => &$chunk) {
+        foreach ($parsed as $i => &$chunk) {
             if ($view == 'html') {
                 $chunk = preg_replace('/&([a-z\d]{1,8}|#x?[a-f\d]{1,8});/i', '&amp;$1;', $chunk);
             }
 
-            if ($i%2) {
+            if ($i % 2) {
                 if ($chunk[1] === '/') {
                     $level--;
-                    $chunk = txpspecialchars($chunk).($level ? '' : $tagclose);
+                    $chunk = txpspecialchars($chunk) . ($level ? '' : $tagclose);
                 } else {
                     $tags += (int)(strpos($chunk, '<txp:else ') !== 0);
 
-                    if ($chunk[strlen($chunk)-2] === '/') {
-                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk).($level ? '' : $tagclose);
+                    if ($chunk[strlen($chunk) - 2] === '/') {
+                        $chunk = ($level ? '' : $tagopen) . txpspecialchars($chunk) . ($level ? '' : $tagclose);
                     } else {
-                        $chunk = ($level ? '' : $tagopen).txpspecialchars($chunk);
+                        $chunk = ($level ? '' : $tagopen) . txpspecialchars($chunk);
                         $level++;
                     }
                 }
@@ -457,7 +460,7 @@ function article_preview($field = false)
         $preview = implode('', $parsed);
     }
 
-    header('x-txp-data:'.json_encode(array('field' => $field, 'tags_count' => $tags)));
+    header('x-txp-data:' . json_encode(array('field' => $field, 'tags_count' => $tags)));
 
     exit($preview);
 }
@@ -734,13 +737,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $rs['exp_second'] = 0;
             }
 
-            $rs['sExpires'] = safe_strtotime($rs['exp_year'].'-'.$rs['exp_month'].'-'.$rs['exp_day'].' '.
-                $rs['exp_hour'].':'.$rs['exp_minute'].':'.$rs['exp_second']);
+            $rs['sExpires'] = safe_strtotime($rs['exp_year'] . '-' . $rs['exp_month'] . '-' . $rs['exp_day'] . ' ' .
+                $rs['exp_hour'] . ':' . $rs['exp_minute'] . ':' . $rs['exp_second']);
         }
 
         if (!empty($rs['year'])) {
-            $rs['sPosted'] = safe_strtotime($rs['year'].'-'.$rs['month'].'-'.$rs['day'].' '.
-                $rs['hour'].':'.$rs['minute'].':'.$rs['second']);
+            $rs['sPosted'] = safe_strtotime($rs['year'] . '-' . $rs['month'] . '-' . $rs['day'] . ' ' .
+                $rs['hour'] . ':' . $rs['minute'] . ':' . $rs['second']);
         }
     }
 
@@ -801,7 +804,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
     if (!$message && $AuthorID == $txp_user && $LastModID != $txp_user) {
-        $message = array(gTxt('modified_by').' '.txpspecialchars($LastModID), 2);
+        $message = array(gTxt('modified_by') . ' ' . txpspecialchars($LastModID), 2);
     }
 
     $page_title = $ID ? $Title : gTxt('write');
@@ -815,26 +818,26 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $class[] = 'saved';
     }
 
-    echo n.tag_start('form', array(
+    echo n . tag_start('form', array(
             'class'  => $class,
             'id'     => 'article_form',
             'name'   => 'article_form',
             'method' => 'post',
             'action' => 'index.php',
-        )).
-        n.'<div class="txp-layout">';
+        )) .
+        n . '<div class="txp-layout">';
 
-    echo hInput('ID', $ID).
-        eInput('article').
+    echo hInput('ID', $ID) .
+        eInput('article') .
         sInput($step);
 
-        echo n.'<div class="txp-layout-4col-3span">'.'<div id="pane-header">'.
-            hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')).
-            graf(article_partial_article_view($rs), array('class' => 'txp-actions')).'</div>';
+        echo n . '<div class="txp-layout-4col-3span">' . '<div id="pane-header">' .
+            hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')) .
+            graf(article_partial_article_view($rs), array('class' => 'txp-actions')) . '</div>';
 
-    echo n.'<div role="region" id="main_content">';
+    echo n . '<div role="region" id="main_content">';
 
-    echo n.'<div class="text" id="pane-text">'.$partials['title']['html'],
+    echo n . '<div class="text" id="pane-text">' . $partials['title']['html'],
         $partials['author']['html'],
         $partials['body']['html'];
 
@@ -842,32 +845,33 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo $partials['excerpt']['html'];
     }
 
-    echo n.'</div>';
+    echo n . '</div>';
 
-    echo n.'<div class="txp-dialog">';
-    echo n.$partials['view_modes']['html'];
+    echo n . '<div class="txp-dialog">';
+    echo n . $partials['view_modes']['html'];
     echo article_preview();
-    echo n.'</div>';// End of .txp-dialog.
+    echo n . '</div>';// End of .txp-dialog.
 
     if (has_privs('article.preview')) {
         echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
     }
 
-    echo n.'</div>'.// End of #main_content.
-        n.'</div>'; // End of .txp-layout-4col-3span.
+    echo n . '</div>' . // End of #main_content.
+        n . '</div>'; // End of .txp-layout-4col-3span.
 
     // Sidebar column (only shown if in text editing view).
-    echo n.'<div class="txp-layout-4col-alt">';
+    echo n . '<div class="txp-layout-4col-alt">';
 
     // 'Publish/Save' button.
     echo $partials['actions']['html'];
 
-    echo n.'<div role="region" id="supporting_content">';
+    echo n . '<div role="region" id="supporting_content">';
 
     // 'Override form' selection.
     $form_pop = $allow_form_override ? form_pop($override_form, 'override-form', $rs['Section']) : '';
     $html_override = $form_pop
-        ? pluggable_ui('article_ui', 'override',
+        ? pluggable_ui(
+            'article_ui', 'override',
             inputLabel(
                 'override-form',
                 $form_pop,
@@ -875,16 +879,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 array('override_form', 'instructions_override_form'),
                 array('class' => 'txp-form-field override-form')
             ),
-            $rs)
+            $rs
+        )
         : '';
 
     echo graf(
-        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), 'button', array(
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> ' . gTxt('expand_all'), 'button', array(
             'class'         => 'txp-expand-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
             'type'          => 'button',
-        )).
-        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), 'button', array(
+        )) .
+        tag('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> ' . gTxt('collapse_all'), 'button', array(
             'class'         => 'txp-collapse-all txp-reduced-ui-button',
             'aria-controls' => 'supporting_content',
             'type'          => 'button',
@@ -895,7 +900,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo pluggable_ui(
         'article_ui',
         'sort_display',
-        wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, 'txp-sort-group-content', gTxt('sort_display'), $ID && $live ? 'article_sort' : ''),
+        wrapRegion('txp-write-sort-group', $partials['status']['html'] . $partials['section']['html'] . $html_override, 'txp-sort-group-content', gTxt('sort_display'), $ID && $live ? 'article_sort' : ''),
         $rs
     );
 
@@ -906,8 +911,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         if (!empty($store_out['year'])) {
             $persist_timestamp = safe_strtotime(
-                $store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.
-                $store_out['hour'].':'.$store_out['minute'].':'.$store_out['second']
+                $store_out['year'] . '-' . $store_out['month'] . '-' . $store_out['day'] . ' ' .
+                $store_out['hour'] . ':' . $store_out['minute'] . ':' . $store_out['second']
             );
         } else {
             $persist_timestamp = time();
@@ -918,29 +923,29 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'timestamp',
             inputLabel(
                 'year',
-                tsi('year', '%Y', $persist_timestamp, '', 'year').
-                ' <span role="separator">/</span> '.
-                tsi('month', '%m', $persist_timestamp, '', 'month').
-                ' <span role="separator">/</span> '.
+                tsi('year', '%Y', $persist_timestamp, '', 'year') .
+                ' <span role="separator">/</span> ' .
+                tsi('month', '%m', $persist_timestamp, '', 'month') .
+                ' <span role="separator">/</span> ' .
                 tsi('day', '%d', $persist_timestamp, '', 'day'),
                 'publish_date',
                 array('publish_date', 'instructions_publish_date'),
                 array('class' => 'txp-form-field date posted')
-            ).
+            ) .
             inputLabel(
                 'hour',
-                tsi('hour', '%H', $persist_timestamp, '', 'hour').
-                ' <span role="separator">:</span> '.
-                tsi('minute', '%M', $persist_timestamp, '', 'minute').
-                ' <span role="separator">:</span> '.
+                tsi('hour', '%H', $persist_timestamp, '', 'hour') .
+                ' <span role="separator">:</span> ' .
+                tsi('minute', '%M', $persist_timestamp, '', 'minute') .
+                ' <span role="separator">:</span> ' .
                 tsi('second', '%S', $persist_timestamp, '', 'second'),
                 'publish_time',
                 array('', 'instructions_publish_time'),
                 array('class' => 'txp-form-field time posted')
-            ).
-            n.tag(
-                checkbox('publish_now', '1', true, '', 'publish_now').
-                n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
+            ) .
+            n . tag(
+                checkbox('publish_now', '1', true, '', 'publish_now') .
+                n . tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
                 'div', array('class' => 'txp-form-field posted-now')
             ),
             array('sPosted' => $persist_timestamp) + $rs
@@ -949,8 +954,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // Expires.
         if (!empty($store_out['exp_year'])) {
             $persist_timestamp = safe_strtotime(
-                $store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.
-                $store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second']
+                $store_out['exp_year'] . '-' . $store_out['exp_month'] . '-' . $store_out['exp_day'] . ' ' .
+                $store_out['exp_hour'] . ':' . $store_out['exp_minute'] . ':' . $store_out['second']
             );
         } else {
             $persist_timestamp = 0;
@@ -961,29 +966,29 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'expires',
             inputLabel(
                 'exp_year',
-                tsi('exp_year', '%Y', $persist_timestamp, '', 'exp_year').
-                ' <span role="separator">/</span> '.
-                tsi('exp_month', '%m', $persist_timestamp, '', 'exp_month').
-                ' <span role="separator">/</span> '.
+                tsi('exp_year', '%Y', $persist_timestamp, '', 'exp_year') .
+                ' <span role="separator">/</span> ' .
+                tsi('exp_month', '%m', $persist_timestamp, '', 'exp_month') .
+                ' <span role="separator">/</span> ' .
                 tsi('exp_day', '%d', $persist_timestamp, '', 'exp_day'),
                 'expire_date',
                 array('expire_date', 'instructions_expire_date'),
                 array('class' => 'txp-form-field date expires')
-            ).
+            ) .
             inputLabel(
                 'exp_hour',
-                tsi('exp_hour', '%H', $persist_timestamp, '', 'exp_hour').
-                ' <span role="separator">:</span> '.
-                tsi('exp_minute', '%M', $persist_timestamp, '', 'exp_minute').
-                ' <span role="separator">:</span> '.
+                tsi('exp_hour', '%H', $persist_timestamp, '', 'exp_hour') .
+                ' <span role="separator">:</span> ' .
+                tsi('exp_minute', '%M', $persist_timestamp, '', 'exp_minute') .
+                ' <span role="separator">:</span> ' .
                 tsi('exp_second', '%S', $persist_timestamp, '', 'exp_second'),
                 'expire_time',
                 array('', 'instructions_expire_time'),
                 array('class' => 'txp-form-field time expires')
-            ).
-            n.tag(
-                checkbox('expire_now', '1', false, '', 'expire_now').
-                n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+            ) .
+            n . tag(
+                checkbox('expire_now', '1', false, '', 'expire_now') .
+                n . tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
                 'div', array('class' => 'txp-form-field expire-now')
             ),
             $rs
@@ -996,7 +1001,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $expires_block = $partials['expires']['html'];
     }
 
-    echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
+    echo wrapRegion('txp-dates-group', $posted_block . $expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
 
     // 'Categories' section.
     $html_categories = pluggable_ui('article_ui', 'categories', $partials['categories']['html'], $rs);
@@ -1013,7 +1018,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // 'Keywords' field.
     $html_keywords = $partials['keywords']['html'];
 
-    echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
+    echo wrapRegion('txp-meta-group', $html_url_title . $html_description . $html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
 
     // 'Comment options' collapsible section.
     echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
@@ -1039,16 +1044,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapGroup('txp-extended-group', $partials['extended_column']['html'], '');
     }
 
-    echo n.'</div>'; // End of #supporting_content.
+    echo n . '</div>'; // End of #supporting_content.
 
     // Prev/next article links.
 //    echo $partials['article_nav']['html'];
 
-    echo n.'</div>'; // End of .txp-layout-4col-alt.
+    echo n . '</div>'; // End of .txp-layout-4col-alt.
 
     echo //tInput().
-        n.'</div>'. // End of .txp-layout.
-        n.'</form>';
+        n . '</div>' . // End of .txp-layout.
+        n . '</form>';
 }
 
 /**
@@ -1085,15 +1090,15 @@ function article_partial_extended_column($rs)
                         $sort_sql = "LastMod, ID";
                         break;
                     default:
-                        $sort_sql = ucfirst($sort).", ID";
+                        $sort_sql = ucfirst($sort) . ", ID";
                         break;
                 }
-            
-                $rs += getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM ".safe_pfx('textpattern')." WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=".$ID);
-            } catch(Exception $e) {
+
+                $rs += getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM " . safe_pfx('textpattern') . " WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=" . $ID);
+            } catch (Exception $e) {
                 // Previous record?
                 $rs['prev_id'] = empty($sPosted) ? 0 : checkIfNeighbour('prev', $sPosted, $ID);
-    
+
                 // Next record?
                 $rs['next_id'] = empty($sPosted) ? 0 : checkIfNeighbour('next', $sPosted, $ID);
             }
@@ -1127,8 +1132,10 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
     $crit = callback_event('txp.article', 'neighbour.criteria', 0, compact('ID', 'whichway', 'sPosted'));
 
-    return safe_field("ID", 'textpattern',
-        "(Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1");
+    return safe_field(
+        "ID", 'textpattern',
+        "(Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+    );
 }
 
 /**
@@ -1224,7 +1231,7 @@ function tab($tabevent, $view, $tag = 'li')
     if (is_array($tabevent)) {
         list($tabevent, $label) = $tabevent + array(null, gTxt('text'));
     } else {
-        $label = gTxt('view_'.$tabevent.'_short');
+        $label = gTxt('view_' . $tabevent . '_short');
     }
 
     $link = tag($label, 'button', array(
@@ -1234,9 +1241,9 @@ function tab($tabevent, $view, $tag = 'li')
         'type'           => 'button',
     ));
 
-    return $tag ? n.tag($link, 'li', array(
+    return $tag ? n . tag($link, 'li', array(
         'class' => $state,
-        'id'    => 'tab-'.$tabevent,
+        'id'    => 'tab-' . $tabevent,
     )) : $link;
 }
 
@@ -1256,7 +1263,7 @@ function form_pop($form, $id, $section)
     $skinforms = array();
     $form_types = get_pref('override_form_types');
 
-    $rs = safe_rows('skin, name, type', 'txp_form', "type IN (".implode(",", quote_list(do_list($form_types))).") AND name != 'default' ORDER BY type,name");
+    $rs = safe_rows('skin, name, type', 'txp_form', "type IN (" . implode(",", quote_list(do_list($form_types))) . ") AND name != 'default' ORDER BY type,name");
 
     foreach ($txp_sections as $name => $row) {
         $skin = $row['skin'];
@@ -1268,7 +1275,7 @@ function form_pop($form, $id, $section)
         }
     }
 
-    script_js('var allForms = '.json_encode($skinforms, TEXTPATTERN_JSON), false);
+    script_js('var allForms = ' . json_encode($skinforms, TEXTPATTERN_JSON), false);
 
     $skin = isset($txp_sections[$section]['skin']) ? $txp_sections[$section]['skin'] : false;
     $rs = $skin && isset($skinforms[$skin]) ? array_combine($skinforms[$skin], $skinforms[$skin]) : false;
@@ -1455,14 +1462,14 @@ function article_partial_author($rs)
 {
     extract($rs);
 
-    $out = n.'<div class="author">';
+    $out = n . '<div class="author">';
 
     if (!empty($ID)) {
         $out .= '<small>';
-        $out .= gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
+        $out .= gTxt('id') . ' ' . txpspecialchars($ID) . sp . span('&#183;', array('role' => 'separator')) . sp . gTxt('posted_by') . ' ' . txpspecialchars($AuthorID) . sp . span('&#183;', array('role' => 'separator')) . sp . safe_strftime('%d %b %Y %X', $sPosted);
 
         if ($sPosted != $sLastMod) {
-            $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);
+            $out .= sp . span('&#124;', array('role' => 'separator')) . sp . gTxt('modified_by') . ' ' . txpspecialchars($LastModID) . sp . span('&#183;', array('role' => 'separator')) . sp . safe_strftime('%d %b %Y %X', $sLastMod);
         }
 
         $out .= '</small>';
@@ -1497,23 +1504,25 @@ function article_partial_actions($rs)
     } elseif (can_modify($rs)) {
         $push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
     } else {
-        script_js('$("#supporting_content").find(":input:not(button)").prop("disabled", true);'.n.
+        script_js('$("#supporting_content").find(":input:not(button)").prop("disabled", true);' . n .
             '$("#main_content").find(":input, textarea").prop("readonly", true);', false);
     }
 
-    return n.'<div id="txp-article-actions" class="txp-save-zone">'.n.
-        hInput('sPosted', $rs['sPosted']).
-        hInput('sLastMod', $rs['sLastMod']).
-        hInput('AuthorID', $rs['AuthorID']).
-        hInput('LastModID', $rs['LastModID']).n.
-        $push_button.
-        graf(($rs['ID']
-            ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
-            .article_partial_article_clone($rs)
+    return n . '<div id="txp-article-actions" class="txp-save-zone">' . n .
+        hInput('sPosted', $rs['sPosted']) .
+        hInput('sLastMod', $rs['sLastMod']) .
+        hInput('AuthorID', $rs['AuthorID']) .
+        hInput('LastModID', $rs['LastModID']) . n .
+        $push_button .
+        graf(
+            ($rs['ID']
+            ? href('<span class="ui-icon ui-extra-icon-new-document"></span> ' . gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
+            . article_partial_article_clone($rs)
             : null),
             array(
                 'class' => 'txp-actions',
-        )).n.'</div>';
+            )
+        ) . n . '</div>';
 }
 
 /**
@@ -1776,7 +1785,7 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n.tag('<span class="ui-icon ui-icon-copy" title="'.gTxt('duplicate').'"></span>'.sp.gTxt('duplicate'), 'button', array(
+    return n . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
         'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
     ));
@@ -1795,7 +1804,7 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-play" title="'.gTxt('preview').'"></span>'.gTxt('preview'), 'button', array(
+    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-play" title="' . gTxt('preview') . '"></span>' . gTxt('preview'), 'button', array(
         'class' => 'txp-reduced-ui-button',
         'id'    => 'article_partial_article_preview',
         'type'  => 'button',
@@ -1806,13 +1815,13 @@ function article_partial_article_view($rs)
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
     } elseif ($clean) {
-        $url = $ID ? hu.'?id='.$ID.'.'.urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
+        $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
     } else {
         return;
     }
 
-    return $clean.n.href('<span class="ui-icon ui-icon-notice" title="'.gTxt('view').'"></span>'.sp.gTxt('view'), $url, array(
-        'class'  => 'txp-article-view'.($ID ? '' : ' disabled'),
+    return $clean . n . href('<span class="ui-icon ui-icon-notice" title="' . gTxt('view') . '"></span>' . sp . gTxt('view'), $url, array(
+        'class'  => 'txp-article-view' . ($ID ? '' : ' disabled'),
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
     ));
@@ -1830,7 +1839,7 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = can_modify($rs)? n.tag(gTxt('view_preview_short'), 'button', array(
+    $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'body',
         'type'              => 'button',
@@ -1864,23 +1873,25 @@ function article_partial_body($rs)
         }
 
         // Note: not using span() for the textfilter help, because it doesn't render empty content.
-        $html_markup = tag(implode(n, $html_markup),
+        $html_markup = tag(
+            implode(n, $html_markup),
             'select',
-            array('class' => 'jquery-ui-selectmenu'))
-            .tag_void('input', array(
+            array('class' => 'jquery-ui-selectmenu')
+        )
+            . tag_void('input', array(
                 'class' => 'textfilter-value',
                 'name'  => 'textile_body',
                 'type'  => 'hidden',
                 'value' => $rs['textile_body'],
             ));
-        $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-            '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
+        $textarea_options = n . '<label>' . gTxt('textfilter') . n . $html_markup . '</label>' .
+            '<span class="textfilter-help">' . $help . '</span>' . $textarea_options;
     }
 
-    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">' . $textarea_options . '</div>';
     $out = inputLabel(
         'body',
-        '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>',
+        '<textarea id="body" name="Body" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_REGULAR . '">' . txpspecialchars($rs['Body']) . '</textarea>',
         array('body', $textarea_options),
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field txp-form-field-textarea body')
@@ -1901,7 +1912,7 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
-    $textarea_options = can_modify($rs)? n.tag(gTxt('view_preview_short'), 'button', array(
+    $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => 'excerpt',
         'type'              => 'button',
@@ -1935,23 +1946,25 @@ function article_partial_excerpt($rs)
         }
 
         // Note: not using span() for the textfilter help, because it doesn't render empty content.
-        $html_markup = tag(implode(n, $html_markup),
+        $html_markup = tag(
+            implode(n, $html_markup),
             'select',
-            array('class' => 'jquery-ui-selectmenu'))
-            .tag_void('input', array(
+            array('class' => 'jquery-ui-selectmenu')
+        )
+            . tag_void('input', array(
                 'class' => 'textfilter-value',
                 'name'  => 'textile_excerpt',
                 'type'  => 'hidden',
                 'value' => $rs['textile_excerpt'],
             ));
-            $textarea_options = n.'<label>'.gTxt('textfilter').n.$html_markup.'</label>'.
-                '<span class="textfilter-help">'.$help.'</span>'.$textarea_options;
+            $textarea_options = n . '<label>' . gTxt('textfilter') . n . $html_markup . '</label>' .
+                '<span class="textfilter-help">' . $help . '</span>' . $textarea_options;
     }
 
-    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.$textarea_options.'</div>';
+    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">' . $textarea_options . '</div>';
     $out = inputLabel(
         'excerpt',
-        '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
+        '<textarea id="excerpt" name="Excerpt" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '">' . txpspecialchars($rs['Excerpt']) . '</textarea>',
         array('excerpt', $textarea_options),
         array('excerpt', 'instructions_excerpt'),
         array('class' => 'txp-form-field txp-form-field-textarea excerpt')
@@ -1974,15 +1987,15 @@ function article_partial_view_modes($rs)
 {
     global $view;
 
-    $out = n.'<div class="txp-textarea-options txp-live-preview">'.
-        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form').sp.gTxt('tags'), 'label') : '').
-        tag(checkbox2('', true, 0, 'clean-preview').sp.gTxt('clean_preview'), 'label').
-        tag(checkbox2('', false, 0, 'live-preview').sp.gTxt('live_preview'), 'label').
-        n.'</div>'.
-        n.tag(tab(array('preview'), $view).tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
+    $out = n . '<div class="txp-textarea-options txp-live-preview">' .
+        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form') . sp . gTxt('tags'), 'label') : '') .
+        tag(checkbox2('', true, 0, 'clean-preview') . sp . gTxt('clean_preview'), 'label') .
+        tag(checkbox2('', false, 0, 'live-preview') . sp . gTxt('live_preview'), 'label') .
+        n . '</div>' .
+        n . tag(tab(array('preview'), $view) . tab(array('html', '<bdi dir="ltr">HTML</bdi>'), $view), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
-    return n.tag($out.n, 'div', array('id' => 'view_modes'));
+    return n . tag($out . n, 'div', array('id' => 'view_modes'));
 }
 
 /**
@@ -2015,7 +2028,7 @@ function article_partial_article_nav($rs)
         ));
     }
 
-    return n.tag(join('', $out), 'nav', array('class' => 'nav-tertiary'));
+    return n . tag(join('', $out), 'nav', array('class' => 'nav-tertiary'));
 }
 
 /**
@@ -2030,7 +2043,7 @@ function article_partial_article_nav($rs)
 
 function article_partial_status($rs)
 {
-    return n.tag(pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs), 'div', array('id' => 'txp-container-status'));
+    return n . tag(pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs), 'div', array('id' => 'txp-container-status'));
 }
 
 /**
@@ -2047,8 +2060,8 @@ function article_partial_section($rs)
 {
     $out = inputLabel(
         'section',
-        section_popup($rs['Section'], 'section').
-        (has_privs('section.edit') ? n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
+        section_popup($rs['Section'], 'section') .
+        (has_privs('section.edit') ? n . eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'section',
         array('', 'instructions_section'),
         array('class' => 'txp-form-field section')
@@ -2071,12 +2084,12 @@ function article_partial_categories($rs)
 {
     $out = inputLabel(
         'category-1',
-        category_popup('Category1', $rs['Category1'], 'category-1').
-        (has_privs('category') ? n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
+        category_popup('Category1', $rs['Category1'], 'category-1') .
+        (has_privs('category') ? n . eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link') : ''),
         'category1',
         array('', 'instructions_category1'),
         array('class' => 'txp-form-field category category-1')
-    ).
+    ) .
     inputLabel(
         'category-2',
         category_popup('Category2', $rs['Category2'], 'category-2'),
@@ -2132,10 +2145,10 @@ function article_partial_comments($rs)
         if ($comments_expired) {
             $invite = graf(gTxt('expired'), array('class' => 'comment-annotate-expired'));
         } else {
-            $invite = n.tag(
-                    onoffRadio('Annotate', $Annotate),
-                    'div', array('class' => 'txp-form-field comment-annotate')
-                ).
+            $invite = n . tag(
+                onoffRadio('Annotate', $Annotate),
+                'div', array('class' => 'txp-form-field comment-annotate')
+            ) .
                 inputLabel(
                     'comment-invite',
                     Txp::get('\Textpattern\UI\Input', 'AnnotateInvite', 'text', $AnnotateInvite)->setAtts(array(
@@ -2149,9 +2162,9 @@ function article_partial_comments($rs)
                 );
         }
 
-        return n.tag_start('div', array('id' => 'write-comments')).
-            pluggable_ui('article_ui', 'annotate_invite', $invite, $rs).
-            n.tag_end('div');
+        return n . tag_start('div', array('id' => 'write-comments')) .
+            pluggable_ui('article_ui', 'annotate_invite', $invite, $rs) .
+            n . tag_end('div');
     }
 }
 
@@ -2172,35 +2185,35 @@ function article_partial_posted($rs)
     $out =
         inputLabel(
             'year',
-            tsi('year', '%Y', $sPosted, '', 'year').
-            ' <span role="separator">/</span> '.
-            tsi('month', '%m', $sPosted, '', 'month').
-            ' <span role="separator">/</span> '.
+            tsi('year', '%Y', $sPosted, '', 'year') .
+            ' <span role="separator">/</span> ' .
+            tsi('month', '%m', $sPosted, '', 'month') .
+            ' <span role="separator">/</span> ' .
             tsi('day', '%d', $sPosted, '', 'day'),
             'publish_date',
             array('publish_date', 'instructions_publish_date'),
             array('class' => 'txp-form-field date posted')
-        ).
+        ) .
         inputLabel(
             'hour',
-            tsi('hour', '%H', $sPosted, '', 'hour').
-            ' <span role="separator">:</span> '.
-            tsi('minute', '%M', $sPosted, '', 'minute').
-            ' <span role="separator">:</span> '.
+            tsi('hour', '%H', $sPosted, '', 'hour') .
+            ' <span role="separator">:</span> ' .
+            tsi('minute', '%M', $sPosted, '', 'minute') .
+            ' <span role="separator">:</span> ' .
             tsi('second', '%S', $sPosted, '', 'second'),
             'publish_time',
             array('', 'instructions_publish_time'),
             array('class' => 'txp-form-field time posted')
-        ).
-        n.tag(
-            checkbox('reset_time', '1', $reset_time, '', 'reset_time').
-            n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
+        ) .
+        n . tag(
+            checkbox('reset_time', '1', $reset_time, '', 'reset_time') .
+            n . tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
             'div', array('class' => 'txp-form-field reset-time')
         );
 
-    return n.tag_start('div', array('id' => 'publish-datetime-group')).
-        pluggable_ui('article_ui', 'timestamp', $out, $rs).
-        n.tag_end('div');
+    return n . tag_start('div', array('id' => 'publish-datetime-group')) .
+        pluggable_ui('article_ui', 'timestamp', $out, $rs) .
+        n . tag_end('div');
 }
 
 /**
@@ -2220,36 +2233,36 @@ function article_partial_expires($rs)
     $out =
         inputLabel(
             'exp_year',
-            tsi('exp_year', '%Y', $sExpires, '', 'exp_year').
-            ' <span role="separator">/</span> '.
-            tsi('exp_month', '%m', $sExpires, '', 'exp_month').
-            ' <span role="separator">/</span> '.
+            tsi('exp_year', '%Y', $sExpires, '', 'exp_year') .
+            ' <span role="separator">/</span> ' .
+            tsi('exp_month', '%m', $sExpires, '', 'exp_month') .
+            ' <span role="separator">/</span> ' .
             tsi('exp_day', '%d', $sExpires, '', 'exp_day'),
             'expire_date',
             array('expire_date', 'instructions_expire_date'),
             array('class' => 'txp-form-field date expires')
-        ).
+        ) .
         inputLabel(
             'exp_hour',
-            tsi('exp_hour', '%H', $sExpires, '', 'exp_hour').
-            ' <span role="separator">:</span> '.
-            tsi('exp_minute', '%M', $sExpires, '', 'exp_minute').
-            ' <span role="separator">:</span> '.
+            tsi('exp_hour', '%H', $sExpires, '', 'exp_hour') .
+            ' <span role="separator">:</span> ' .
+            tsi('exp_minute', '%M', $sExpires, '', 'exp_minute') .
+            ' <span role="separator">:</span> ' .
             tsi('exp_second', '%S', $sExpires, '', 'exp_second'),
             'expire_time',
             array('', 'instructions_expire_time'),
             array('class' => 'txp-form-field time expires')
-        ).
-        n.tag(
-            checkbox('expire_now', '1', $expire_now, '', 'expire_now').
-            n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+        ) .
+        n . tag(
+            checkbox('expire_now', '1', $expire_now, '', 'expire_now') .
+            n . tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
             'div', array('class' => 'txp-form-field expire-now')
-        ).
+        ) .
         hInput('sExpires', $sExpires);
 
-    return n.tag_start('div', array('id' => 'expires-datetime-group')).
-        pluggable_ui('article_ui', 'expires', $out, $rs).
-        n.tag_end('div');
+    return n . tag_start('div', array('id' => 'expires-datetime-group')) .
+        pluggable_ui('article_ui', 'expires', $out, $rs) .
+        n . tag_end('div');
 }
 
 /**

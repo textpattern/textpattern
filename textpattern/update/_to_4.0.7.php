@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,14 +25,14 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-$txpplugin = getThings('DESCRIBE `'.PFX.'txp_plugin`');
+$txpplugin = getThings('DESCRIBE `' . PFX . 'txp_plugin`');
 
 if (!in_array('load_order', $txpplugin)) {
     safe_alter('txp_plugin', "ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
 }
 
 // Expiry datetime for articles.
-$txp = getThings("DESCRIBE `".PFX."textpattern`");
+$txp = getThings("DESCRIBE `" . PFX . "textpattern`");
 
 if (!in_array('Expires', $txp)) {
     safe_alter('textpattern', "ADD Expires DATETIME AFTER Posted");

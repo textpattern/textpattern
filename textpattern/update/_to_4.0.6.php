@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,7 +38,7 @@ $tags = array(
 
 foreach ($tags as $search => $replace) {
     foreach (array(' ', '/') as $end) {
-        safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:".$search.$end."', '<txp:".$replace.' '.trim($end)."')", "1 = 1");
-        safe_update('txp_form', "Form = REPLACE(Form, '<txp:".$search.$end."', '<txp:".$replace.' '.trim($end)."')", "1 = 1");
+        safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:" . $search . $end . "', '<txp:" . $replace . ' ' . trim($end) . "')", "1 = 1");
+        safe_update('txp_form', "Form = REPLACE(Form, '<txp:" . $search . $end . "', '<txp:" . $replace . ' ' . trim($end) . "')", "1 = 1");
     }
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,7 +30,8 @@
  * @see ./txp_lore.php
  */
 
-if (!defined("txpath"))
+if (!defined("txpath")) {
     define("txpath", dirname(__FILE__));
+}
 
-require_once txpath.'/include/txp_lore.php';
+require_once txpath . '/include/txp_lore.php';

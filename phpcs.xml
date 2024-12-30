@@ -1,16 +1,25 @@
 <?xml version="1.0"?>
 <ruleset>
-    <rule ref="PSR2">
-        <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
-        <exclude name="Generic.Files.LineLength" />
+    <rule ref="PSR12">
+        <!-- swerve these checks until Textpattern 5 is nearer -->
+        <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase"/>
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+        <!-- affects RPC only? -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>
+        <exclude name="Squiz.Scope.MethodScope.Missing"/>
+        <!-- hand wavey formatting things that could be done sooner -->
+        <exclude name="Generic.Formatting.DisallowMultipleStatements.SameLine"/>
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
     </rule>
-    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
-        <severity>0</severity>
-    </rule>
-    <rule ref="PEAR.NamingConventions.ValidClassName" />
     <file>./</file>
+    <exclude-pattern>*\.(css|js)$</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
 </ruleset>

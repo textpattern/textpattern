@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -41,11 +41,11 @@ $dbupdates = array(
 function newest_file()
 {
     $newest = 0;
-    $dp = opendir(txpath.'/update/');
+    $dp = opendir(txpath . '/update/');
 
     while (false !== ($file = readdir($dp))) {
         if (strpos($file, "_") === 0) {
-            $newest = max($newest, filemtime(txpath."/update/$file"));
+            $newest = max($newest, filemtime(txpath . "/update/$file"));
         }
     }
 
@@ -56,12 +56,14 @@ function newest_file()
 
 if (($dbversion == '') ||
     (strpos($dbversion, 'g1') === 0) ||
-    (strpos($dbversion, '1.0rc') === 0)) {
+    (strpos($dbversion, '1.0rc') === 0)
+) {
     $dbversion = '0.9.9';
 }
 
 if ($dbversion == $thisversion ||
-    ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
+    ($txp_is_dev && (newest_file() <= $dbupdatetime))
+) {
     return;
 }
 
@@ -94,12 +96,12 @@ try {
             do_list_unique($sql_mode),
             array('NO_ZERO_IN_DATE', 'NO_ZERO_DATE', 'TRADITIONAL')
         ));
-        safe_query("SET SESSION sql_mode = '".doSlash($tmp_mode)."'");
+        safe_query("SET SESSION sql_mode = '" . doSlash($tmp_mode) . "'");
     }
 
     foreach ($updates as $dbupdate => $update) {
         if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $baseversion, '<=')) {
-            if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
+            if ($update && (include txpath . DS . 'update' . DS . '_to_' . $dbupdate . '.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
 
@@ -111,11 +113,11 @@ try {
 
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
-    safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+    safe_insert('txp_prefs', "name = 'dbupdatetime', val = '" . max(newest_file(), time()) . "', type = '2'");
 
     // Restore sql_mode
     if (!empty($sql_mode)) {
-        safe_query("SET SESSION sql_mode = '".doSlash($sql_mode)."'");
+        safe_query("SET SESSION sql_mode = '" . doSlash($sql_mode) . "'");
     }
 } catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
@@ -150,7 +152,7 @@ if (!$txp_is_dev) {
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
 
     if (isset($txpcfg['multisite_root_path'])) {
-        Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
+        Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'] . DS . 'admin', 'setup');
     } else {
         Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
     }
@@ -160,7 +162,7 @@ if (!$txp_is_dev) {
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
 // where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.com/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
-$files = glob(txpath.'/update/custom/post-update*.php');
+$files = glob(txpath . '/update/custom/post-update*.php');
 
 if (is_array($files)) {
     foreach ($files as $f) {

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -82,7 +82,7 @@ function logit($r = '', $status = 200)
 
     if ($referer) {
         foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
-            if (strpos($referer, $option.'://') === 0) {
+            if (strpos($referer, $option . '://') === 0) {
                 $protocol = $option;
                 $referer = substr($referer, strlen($protocol) + 3);
                 break;
@@ -91,10 +91,10 @@ function logit($r = '', $status = 200)
 
         if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://')) {
             $referer = '';
-        } elseif (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer)) {
+        } elseif (preg_match('/^[^\.]*\.?' . preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/') . '/i', $referer)) {
             $referer = '';
         } else {
-            $referer = $protocol.'://'.clean_url($referer);
+            $referer = $protocol . '://' . clean_url($referer);
         }
     }
 

@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * https://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
@@ -31,31 +31,31 @@ error_reporting(E_ALL & ~E_NOTICE);
 // TODO: if display_errors is set to 0... who will ever see errors? See https://github.com/textpattern/textpattern/issues/1012
 ini_set("display_errors", "0");
 
-define('txpath', dirname(dirname(__FILE__)).'/textpattern');
+define('txpath', dirname(dirname(__FILE__)) . '/textpattern');
 define('txpinterface', 'xmlrpc');
 
-require_once txpath.'/config.php';
-require_once txpath.'/lib/class.trace.php';
+require_once txpath . '/config.php';
+require_once txpath . '/lib/class.trace.php';
 
 $trace = new Trace();
 
-require_once txpath.'/lib/constants.php';
-require_once txpath.'/lib/txplib_db.php';
-require_once txpath.'/lib/txplib_misc.php';
-require_once txpath.'/lib/txplib_admin.php';
-require_once txpath.'/lib/admin_config.php';
-require_once txpath.'/lib/IXRClass.php';
+require_once txpath . '/lib/constants.php';
+require_once txpath . '/lib/txplib_db.php';
+require_once txpath . '/lib/txplib_misc.php';
+require_once txpath . '/lib/txplib_admin.php';
+require_once txpath . '/lib/admin_config.php';
+require_once txpath . '/lib/IXRClass.php';
 
-require_once txpath.'/vendors/Textpattern/Loader.php';
+require_once txpath . '/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath . '/vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath . '/lib');
 $loader->register();
 
 
-if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
+if ($connected && numRows(safe_query("show tables like '" . PFX . "textpattern'"))) {
     // TODO: where is dbversion used?
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 
@@ -68,11 +68,11 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     }
 
     if (!defined('hu')) {
-        define("hu", 'http://'.$siteurl.'/');
+        define("hu", 'http://' . $siteurl . '/');
     }
 
     if (!defined('txrpcpath')) {
-        define('txrpcpath', hu.'rpc/');
+        define('txrpcpath', hu . 'rpc/');
     }
 
     if (!empty($locale)) {
@@ -104,7 +104,7 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     }
 }
 
-require_once txpath.'/lib/txplib_wrapper.php';
+require_once txpath . '/lib/txplib_wrapper.php';
 require_once 'TXP_RPCServer.php';
 
 // Run the XML-RPC server.
@@ -121,14 +121,14 @@ function write_log()
         define('txpdmpfile', 'txpxmlrpc.txt');
     }
 
-    $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog', 'a');
+    $fp = @fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xmlrpclog', 'a');
 
     if ($fp) {
         $lnsep = "\n================================\n";
-        fwrite($fp, "\n$lnsep".date('Y-m-d H:i:s'));
-        fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
+        fwrite($fp, "\n$lnsep" . date('Y-m-d H:i:s'));
+        fwrite($fp, '[USER_AGENT] ' . $_SERVER['HTTP_USER_AGENT']);
         fwrite($fp, $lnsep);
-        fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
+        fwrite($fp, '[ACCEPT_ENCODING] ' . $_SERVER['HTTP_ACCEPT_ENCODING']);
 
         if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false && is_callable('getallheaders')) {
             fwrite($fp, $lnsep);

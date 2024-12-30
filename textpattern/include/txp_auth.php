@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -51,7 +51,7 @@ function doAuth()
 
     if (!$txp_user) {
         if (trim(gps('app_mode')) == 'async') {
-            echo 'if (confirm("'.escape_js(gTxt('login_to_textpattern')).'"))'.n.
+            echo 'if (confirm("' . escape_js(gTxt('login_to_textpattern')) . '"))' . n .
                 '{window.location.assign("index.php")}';
             exit();
         } else {
@@ -76,7 +76,7 @@ function doLoginForm($message)
 {
     global $textarray_script, $event, $step;
 
-    include txpath.'/lib/txplib_head.php';
+    include txpath . '/lib/txplib_head.php';
 
     $event = 'login';
 
@@ -109,92 +109,101 @@ function doLoginForm($message)
 
     if ($reset) {
         $pageTitle = gTxt('password_reset');
-        $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
+        $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')) .
             inputLabel(
                 'login_name',
-                fInput('text',
+                fInput(
+                    'text',
                     array(
                         'name'         => 'p_userid',
                         'autocomplete' => 'username',
                         'autofocus'    => true,
-                    ), $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                    ), $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true
+                ),
                 'name', '', array('class' => 'txp-form-field login-name')
-            ).
+            ) .
             graf(
                 fInput('submit', '', gTxt('password_reset_button'), 'publish')
-            ).
+            ) .
             graf(
-                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
-            ).
-            hInput('lang', $lang).
+                href(gTxt('back_to_login'), 'index.php?lang=' . $lang), array('class' => 'login-return')
+            ) .
+            hInput('lang', $lang) .
             hInput('p_reset', 1);
     } elseif ($confirm || $activate) {
         $pageTitle = ($confirm) ? gTxt('change_password') : gTxt('set_password');
         $label = ($confirm) ? 'change_password' : 'set_password';
         $class = ($confirm) ? 'change-password' : 'set-password';
-        $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
+        $out[] = hed($pageTitle, 1, array('id' => 'txp-' . $class . '-heading')) .
             inputLabel(
                 $label,
-                fInput('password',
+                fInput(
+                    'password',
                     array(
                         'name'         => 'p_password',
                         'autocomplete' => 'new-password',
                         'autofocus'    => true,
-                    ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true).
-                n.tag(
-                    checkbox('unmask', 1, false, 0, 'show_password').
-                    n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
-                    'div', array('class' => 'show-password')),
-                'new_password', '', array('class' => 'txp-form-field '.$class)
-            ).
+                    ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true
+                ) .
+                n . tag(
+                    checkbox('unmask', 1, false, 0, 'show_password') .
+                    n . tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                    'div', array('class' => 'show-password')
+                ),
+                'new_password', '', array('class' => 'txp-form-field ' . $class)
+            ) .
             graf(
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish')
-            ).
+            ) .
             ($confirm ? graf(
-                href(gTxt('back_to_login'), 'index.php?lang='.$lang), array('class' => 'login-return')
-            ) : '').
-            hInput('hash', gps('confirm').gps('activate')).
-            hInput('lang', $lang).
+                href(gTxt('back_to_login'), 'index.php?lang=' . $lang), array('class' => 'login-return')
+            ) : '') .
+            hInput('hash', gps('confirm') . gps('activate')) .
+            hInput('lang', $lang) .
             hInput(($confirm ? 'p_alter' : 'p_set'), 1);
     } else {
         $pageTitle = gTxt('login');
-        $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
+        $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')) .
             (count($langList) > 1
                 ? graf(
-                    tag(gTxt('language'), 'label', array('for' => 'lang')).
-                    $txpLang->languageSelect('lang', $lang)
-                    , array('class' => 'login-language txp-reduced-ui')
-                ) : hInput('lang', $lang)).
+                    tag(gTxt('language'), 'label', array('for' => 'lang')) .
+                    $txpLang->languageSelect('lang', $lang),
+                    array('class' => 'login-language txp-reduced-ui')
+                ) : hInput('lang', $lang)) .
             inputLabel(
                 'login_name',
-                fInput('text',
+                fInput(
+                    'text',
                     array(
                         'name'         => 'p_userid',
                         'autocomplete' => 'username',
                         'autofocus'    => true,
-                    ), $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
+                    ), $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true
+                ),
                 'name', '', array('class' => 'txp-form-field login-name')
-            ).
+            ) .
             inputLabel(
                 'login_password',
-                fInput('password',
+                fInput(
+                    'password',
                     array(
                         'name'         => 'p_password',
                         'autocomplete' => 'current-password',
-                    ), '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
+                    ), '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true
+                ),
                 'password', '', array('class' => 'txp-form-field login-password')
-            ).
+            ) .
             graf(
-                checkbox('stay', 1, $stay, '', 'login_stay').n.
-                tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
+                checkbox('stay', 1, $stay, '', 'login_stay') . n .
+                tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')) .
                 popHelp(array('remember_login', $lang)), array('class' => 'login-stay')
-            ).
+            ) .
             graf(
                 fInput('submit', '', gTxt('log_in_button'), 'publish')
-            ).
+            ) .
             graf(
-                href(gTxt('password_forgotten'), '?reset=1&lang='.$lang), array('class' => 'login-forgot')
-            ).
+                href(gTxt('password_forgotten'), '?reset=1&lang=' . $lang), array('class' => 'login-forgot')
+            ) .
             graf(
                 href(htmlspecialchars(get_pref('sitename')), hu), array('class' => 'login-view-site')
             );
@@ -207,9 +216,10 @@ function doLoginForm($message)
     pagetop($pageTitle, $message);
 
     echo form(
-        join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
-    script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
-    n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
+        join('', $out), '', '', 'post', 'txp-login', '', 'login_form'
+    ) .
+    script_js('textpattern.textarray = ' . json_encode($textarray_script, TEXTPATTERN_JSON)) .
+    n . '</main><!-- /txp-body -->' . n . '</body>' . n . '</html>';
 
     exit(0);
 }
@@ -249,7 +259,7 @@ function doTxpValidate()
     $logout     = gps('logout');
     $lang       = sanitizeForUrl(gps('lang'));
     $message    = '';
-    $pub_path   = preg_replace('|//$|', '/', rhu.'/');
+    $pub_path   = preg_replace('|//$|', '/', rhu . '/');
     $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
 
     if (cs('txp_login') && strpos(cs('txp_login'), ',')) {
@@ -267,10 +277,10 @@ function doTxpValidate()
         $r = safe_row(
             "name, nonce",
             'txp_users',
-            "name = '".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
+            "name = '" . doSlash($c_userid) . "' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
-        if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
+        if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid . pack('H*', $c_hash))) {
             // Cookie is good.
             if ($logout) {
                 $txp_user = $c_userid;
@@ -281,8 +291,8 @@ function doTxpValidate()
                 // Destroy nonce.
                 safe_update(
                     'txp_users',
-                    "nonce = '".doSlash(md5(uniqid(mt_rand(), true)))."'",
-                    "name = '".doSlash($c_userid)."'"
+                    "nonce = '" . doSlash(md5(uniqid(mt_rand(), true))) . "'",
+                    "name = '" . doSlash($c_userid) . "'"
                 );
             } else {
                 // Create $txp_user.
@@ -302,17 +312,17 @@ function doTxpValidate()
 
         if ($name !== false) {
             $c_hash = md5(uniqid(mt_rand(), true));
-            $nonce  = md5($name.pack('H*', $c_hash));
+            $nonce  = md5($name . pack('H*', $c_hash));
 
             safe_update(
                 'txp_users',
-                "nonce = '".doSlash($nonce)."'",
-                "name = '".doSlash($name)."'"
+                "nonce = '" . doSlash($nonce) . "'",
+                "name = '" . doSlash($name) . "'"
             );
 
             set_cookie(
                 'txp_login',
-                $name.','.$c_hash,
+                $name . ',' . $c_hash,
                 array(
                     'expires' => $stay ? time() + 3600 * 24 * 365 : 0,
                     'httponly' => LOGIN_COOKIE_HTTP_ONLY
@@ -321,7 +331,7 @@ function doTxpValidate()
 
             set_cookie(
                 'txp_login_public',
-                substr(md5($nonce), -10).$name,
+                substr(md5($nonce), -10) . $name,
                 array(
                     'expires' => $stay ? time() + 3600 * 24 * 30 : 0,
                     'path' => $pub_path,
@@ -363,7 +373,7 @@ function doTxpValidate()
             $hash = gps('hash');
             $selector = substr($hash, SALT_LENGTH);
 
-            $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='$type'");
+            $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '" . doSlash($selector) . "' AND type='$type'");
 
             if ($tokenInfo) {
                 if (strtotime($tokenInfo['expires']) <= time()) {
@@ -372,12 +382,12 @@ function doTxpValidate()
                     $uid = assert_int($tokenInfo['reference_id']);
                     $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = '$uid'");
 
-                    if ($row && $row['nonce'] && ($hash === Txp::get('\Textpattern\Security\Token')->constructHash($selector, $row['old_pass'], $row['nonce']).$selector)) {
+                    if ($row && $row['nonce'] && ($hash === Txp::get('\Textpattern\Security\Token')->constructHash($selector, $row['old_pass'], $row['nonce']) . $selector)) {
                         if (change_user_password($row['name'], $pass)) {
-                            $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php?lang='.$lang);
+                            $body = gTxt('salutation', array('{name}' => $row['name'])) .
+                                n . n . ($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation') . n . n . gTxt('log_in_at') . ' ' . ahu . 'index.php?lang=' . $lang);
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
-                            txpMail($row['email'], "[$sitename] ".$message, $body);
+                            txpMail($row['email'], "[$sitename] " . $message, $body);
 
                             // Invalidate all tokens in the wild for this user.
                             safe_delete("txp_token", "reference_id = '$uid' AND type IN ('password_reset', 'account_activation')");

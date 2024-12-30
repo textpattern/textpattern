@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,7 +48,7 @@ function filterSearch()
 
     if (!isset($filterSearch)) {
         $rs = array_filter(array_column($txp_sections, 'searchable', 'name'));
-        $filterSearch = $rs ? 'AND Section IN('.join(',', quote_list(array_keys($rs))).')' : false;
+        $filterSearch = $rs ? 'AND Section IN(' . join(',', quote_list(array_keys($rs))) . ')' : false;
     }
 
     return $filterSearch;

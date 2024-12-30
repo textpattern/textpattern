@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -26,14 +26,14 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Support for per-user private prefs.
-$cols = getThings("DESCRIBE `".PFX."txp_prefs`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_prefs`");
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "ADD user_name VARCHAR(64) NOT NULL DEFAULT ''");
     safe_create_index('txp_prefs', 'user_name', 'user_name');
 }
 
 // Add columns for thumbnail dimensions.
-$cols = getThings("DESCRIBE `".PFX."txp_image`");
+$cols = getThings("DESCRIBE `" . PFX . "txp_image`");
 
 if (!in_array('thumb_w', $cols)) {
     safe_alter('txp_image', "ADD thumb_w int(8) NOT NULL DEFAULT 0");
@@ -44,7 +44,7 @@ if (!in_array('thumb_h', $cols)) {
 }
 
 // Plugin flags.
-$cols = getThings('DESCRIBE `'.PFX.'txp_plugin`');
+$cols = getThings('DESCRIBE `' . PFX . 'txp_plugin`');
 
 if (!in_array('flags', $cols)) {
     safe_alter('txp_plugin', "ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
@@ -58,12 +58,12 @@ safe_alter('txp_prefs', "MODIFY val TEXT NOT NULL");
 // Add author column to files and links, boldly assuming that the publisher in
 // charge of updating this site is the author of any existing content items.
 foreach (array('txp_file', 'txp_link') as $table) {
-    $cols = getThings("DESCRIBE `".PFX.$table."`");
+    $cols = getThings("DESCRIBE `" . PFX . $table . "`");
 
     if (!in_array('author', $cols)) {
         safe_alter($table, "ADD author varchar(64) NOT NULL DEFAULT ''");
         safe_create_index($table, 'author', 'author_idx');
-        safe_update($table, "author = '".doSlash($txp_user)."'", "1 = 1");
+        safe_update($table, "author = '" . doSlash($txp_user) . "'", "1 = 1");
     }
 }
 

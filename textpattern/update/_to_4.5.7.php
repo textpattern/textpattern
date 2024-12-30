@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2024 The Textpattern Development Team
+ * Copyright (C) 2025 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -35,7 +35,7 @@ safe_alter('txp_log', "MODIFY ip VARCHAR(45) NOT NULL DEFAULT ''");
 safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL DEFAULT ''");
 
 // Ensure all memory-mappable columns have defaults
-safe_alter('txp_form',    "MODIFY name     VARCHAR(64)  NOT NULL DEFAULT ''");
-safe_alter('txp_page',    "MODIFY name     VARCHAR(128) NOT NULL DEFAULT ''");
-safe_alter('txp_prefs',   "MODIFY name     VARCHAR(255) NOT NULL DEFAULT ''");
+safe_alter('txp_form', "MODIFY name     VARCHAR(64)  NOT NULL DEFAULT ''");
+safe_alter('txp_page', "MODIFY name     VARCHAR(128) NOT NULL DEFAULT ''");
+safe_alter('txp_prefs', "MODIFY name     VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_section', "MODIFY name     VARCHAR(128) NOT NULL DEFAULT ''");
