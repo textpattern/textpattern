@@ -27,7 +27,7 @@
  * Each entry is a set of properties that define the way
  * the data type is represented in Textpattern.
  *
- * @since   4.8.0
+ * @since   5.0.0
  * @package CustomField
  */
 
@@ -74,7 +74,7 @@ class DataType implements \IteratorAggregate
             'constraints' => array('Min', 'Max'),
         ),
         'dateTime' => array(
-            'type'        => 'datetime-local',
+            'type'        => 'datetime',
             'size'        => null,
             'textfilter'  => false,
             'options'     => false,
