@@ -1,7 +1,7 @@
 Changes in 4.9.0-beta.2 (upcoming)
 
 * Added: Site status values to 'process' attribute of <txp:hide />.
-* Added: 'inline' value to <txp:css /> 'format' attribute (thanks, jools-r).
+* Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
 * Added: 'type' attribute to <txp:file_download />.
 * Changed: Wildcards in file/image/link category queries.
 * Changed: Multi-site scaffold optimisations.
