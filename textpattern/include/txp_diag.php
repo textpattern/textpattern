@@ -526,6 +526,8 @@ function doDiagnostics()
     $pfcCounter = 0;
     $langCounter = 0;
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $pfc_hash = sha1(json_encode(array_merge($preflight, $notReadable)));
+    $prev_pfc_hash = get_pref('last_pfc_hash', '');
 
     foreach ($langs as $lang) {
         // Overwrite the lang strings to English, then revert on second pass.
@@ -598,9 +600,17 @@ function doDiagnostics()
             ->setAtts($pflight['type']));
     }
 
-    echo Txp::get('\Textpattern\UI\Disclosure', 'txp-preflight', 'txp-ack_preflight')
+    $pfcObj = Txp::get('\Textpattern\UI\Disclosure', 'txp-preflight', 'txp-ack_preflight')
         ->setLabel('preflight_check', array('{count}' => $pfcCounter))
         ->add($pfcBlock);
+
+    if ($pfc_hash !== $prev_pfc_hash) {
+        $pfcObj->setVisible(true);
+    }
+
+    echo $pfcObj;
+
+    set_pref('last_pfc_hash', $pfc_hash, 'diagnostics', PREF_HIDDEN, 'text_input');
 
     $out = array();
 
