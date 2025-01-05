@@ -653,12 +653,7 @@ function meta_multi_edit()
         case 'delete':
             if (has_privs('meta')) {
                 foreach ($selected as $id) {
-                    // @Todo Atomic with rollback?
-                    $dType = safe_field('data_type', 'txp_meta', 'id = '.$id);
-                    safe_delete('txp_meta_value_'.$dType, 'meta_id = '.$id);
-                    safe_delete('txp_meta_options', 'meta_id = '.$id);
-
-                    if (safe_delete('txp_meta', 'id = '.$id)) {
+                    if (Txp::get('\Textpattern\Meta\Field', $id)->delete()) {
                         $changed[] = $id;
                     }
                 }
@@ -669,22 +664,28 @@ function meta_multi_edit()
             }
 
             $key = '';
+
             break;
         case 'changecontenttype':
             $val = ps('content_type');
+
             if (in_array($val, $all_content_types)) {
                 $key = 'content_type';
             }
+
             break;
         case 'changerendertype':
             $val = ps('render');
+
             if (in_array($val, $all_render_types)) {
                 $key = 'render';
             }
+
             break;
         default:
             $key = '';
             $val = '';
+
             break;
     }
 /*
@@ -708,5 +709,7 @@ function meta_multi_edit()
         return;
     }
 */
-    meta_list();
+    meta_list(gTxt(
+        ($method == 'delete' ? 'meta_deleted' : 'meta_updated'),
+        array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
 }

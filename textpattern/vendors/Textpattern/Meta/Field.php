@@ -24,7 +24,7 @@
 /**
  * A custom field.
  *
- * @since   4.8.0
+ * @since   5.0.0
  * @package CustomField
  */
 
@@ -566,7 +566,7 @@ class Field
                     safe_query('ROLLBACK');
                     $this->message = array(gTxt('meta_save_failed'), E_ERROR);
                 }
-            } catch (DatabaseException $e) {
+            } catch (\DatabaseException $e) {
                 safe_query('ROLLBACK');
                 $this->message = array(gTxt('meta_save_failed'), E_ERROR);
             }
@@ -575,6 +575,30 @@ class Field
         }
 
         return $this->message;
+    }
+
+    /**
+     * Remove a field and its associated labels/help.
+     *
+     * @return bool Deletion success/failure (true/false)
+     */
+
+    public function delete()
+    {
+        $this_id = $this->get('id');
+        $label = $this->get('name');
+        $labelRefs[] = $this->getLabelReference($label);
+        $labelRefs[] = $this->getHelpReference($label);
+        $labelRefs[] = $this->getHelpReference($label, 'inline');
+        $langClause = 'name IN (' . join(',', quote_list($labelRefs)) . ')';
+
+        // @todo Transaction/rollback?
+        safe_delete('txp_meta_value_'.$this->dataType, 'meta_id = '.$this_id);
+        safe_delete('txp_meta_options', 'meta_id = '.$this_id);
+        safe_delete('txp_lang', $langClause);
+        safe_delete('txp_meta', 'id = '.$this_id);
+
+        return true;
     }
 
     /**

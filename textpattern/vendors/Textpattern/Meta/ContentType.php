@@ -27,7 +27,7 @@
  * Each entry in the array is a place in Textpattern where
  * custom field content may be stored.
  *
- * @since   4.8.0
+ * @since   5.0.0
  * @package CustomField
  */
 

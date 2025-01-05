@@ -27,7 +27,7 @@
  * Whereas a field's name can be reused between content types, each field
  * has a custom_N id, which is unique across ALL types.
  *
- * @since   4.8.0
+ * @since   5.0.0
  * @package CustomField
  */
 
