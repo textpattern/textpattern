@@ -560,7 +560,9 @@ function doDiagnostics()
                     );
                 }
 
-                $pfcCounter++;
+                if ($langCounter === 0) {
+                    $pfcCounter++;
+                }
             }
 
             if ($not_readable) {
@@ -571,7 +573,9 @@ function doDiagnostics()
                         'type' => array(),
                     );
 
-                    $pfcCounter++;
+                    if ($langCounter === 0) {
+                        $pfcCounter++;
+                    }
                 }
             }
         } else {
