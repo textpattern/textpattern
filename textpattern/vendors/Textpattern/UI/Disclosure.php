@@ -67,6 +67,14 @@ class Disclosure extends Tag implements UICollectionInterface
     protected $label_id = null;
 
     /**
+     * The label replacement pairs.
+     *
+     * @var array
+     */
+
+    protected $labelReps = array();
+
+    /**
      * The help topic used for the disclosure.
      *
      * @var string
@@ -136,14 +144,19 @@ class Disclosure extends Tag implements UICollectionInterface
      * Define the label for the disclosure. Chainable.
      *
      * @param string $label The label to use
+     * @param array  $reps  Any replacement key=>values pairs for the label.
      */
 
-    public function setLabel($label)
+    public function setLabel($label, $reps = array())
     {
 //        $heading = new \Textpattern\UI\Tag('summary');
 //        $heading->setContent(txpspecialchars($label));
 
         $this->label = $label;
+
+        if ($reps) {
+            $this->labelReps = (array)$reps;
+        }
 
         return $this;
     }
@@ -251,7 +264,7 @@ class Disclosure extends Tag implements UICollectionInterface
         $state = $this->getProperty('state');
         $heading_class = '';
         $display_state = array('role' => 'group');
-        $anchorText = ($this->label ? gTxt($this->label) : null);
+        $anchorText = ($this->label ? gTxt($this->label, $this->labelReps) : null);
 
         if ($this->pane_id !== null) {
             $pane_token = md5($this->pane_id.$event.form_token().get_pref('blog_uid'));

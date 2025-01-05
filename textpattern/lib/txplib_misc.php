@@ -1107,7 +1107,7 @@ function set_cookie($name, $value = '', $options = array())
         'domain' => '',
         'secure' => strtolower(PROTOCOL) == 'https://',
         'httponly' => true,
-        'samesite' => 'Lax' // None || Lax  || Strict
+        'samesite' => 'Lax' // None || Lax || Strict
     );
 
     if (version_compare(phpversion(), '7.3.0') >= 0) {
