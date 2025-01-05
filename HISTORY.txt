@@ -1,11 +1,18 @@
 Changes in 4.9.0-beta.2 (upcoming)
 
 * Added: Site status values to 'process' attribute of <txp:hide />.
+* Added: Full article previews directly from the Write panel.
 * Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
-* Added: 'type' attribute to <txp:file_download />.
+* Added: 'target' attribute to <txp:popup />.
+* Added: 'match', 'separator' attribute capability to <txp:if_yield />.
+* Added: Ability to serve files via 'type' attribute to <txp:file_download />.
+* Added: Plugin compilation directly from the Plugins panel.
 * Changed: Wildcards in file/image/link category queries.
 * Changed: Multi-site scaffold optimisations.
+* Changed: Pre-flight check visibility toggle.
 * Developer: Pre+post textfilter callbacks (article_submit) on article save.
+* Developer: Add getAtts($tag) method for fetching tag attributes.
+* Developer: Reintroduce extend_col_1 markup area on Write panel.
 * Vendors: DOMPurify 3.2.3.
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.9.3.
