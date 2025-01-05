@@ -242,8 +242,10 @@ function page_title($atts)
 function css($atts)
 {
     global $css, $doctype, $pretext;
+    static $stylebody = array();
 
     extract(lAtts(array(
+        'escape' => true,
         'format' => 'url',
         'media'  => 'screen',
         'name'   => $css,
@@ -273,6 +275,17 @@ function css($atts)
         $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme);
     }
 
+    if (empty($format) || $format === "inline") {
+        $skinObj = Txp::get('Textpattern\Skin\Skin');
+        $safeName = $skinObj->sanitize($name);
+        $safeTheme = $skinObj->sanitize($theme);
+
+        isset($stylebody[$safeName.'_'.$safeTheme]) or $stylebody = array(
+            $safeName.'_'.$safeTheme => safe_field('css', 'txp_css', "name='".doSlash($safeName)."' AND skin='" . doSlash($safeTheme) . "'")
+        );
+        $content = ($escape === true) ? $stylebody[$safeName.'_'.$safeTheme] : txp_escape($escape, $stylebody[$safeName.'_'.$safeTheme]);
+    }
+
     switch ($format) {
         case 'link':
             foreach ((array)$url as $href) {
@@ -284,6 +297,12 @@ function css($atts)
                     'href'  => $href,
                 )) . n;
             }
+            break;
+        case '':
+            $out .= $content;
+            break;
+        case 'inline':
+            $out .= (!empty($content)) ? tag($content, 'style') : '';
             break;
         default:
             $out .= txpspecialchars(is_array($url) ? implode(',', $url) : $url);

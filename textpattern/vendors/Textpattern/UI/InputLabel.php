@@ -57,6 +57,14 @@ class InputLabel extends Tag implements UICollectionInterface
     protected $hasLabel = false;
 
     /**
+     * The label replacement pairs.
+     *
+     * @var array
+     */
+
+    protected $labelReps = array();
+
+    /**
      * The help topic associated with this field.
      *
      * @var string
@@ -201,9 +209,10 @@ class InputLabel extends Tag implements UICollectionInterface
      * If no ID is specified, assumes it is the same as the key name.
      *
      * @param string|array $label The label (and optional target ID) to use.
+     * @param array        $reps  Any replacement key=>values pairs for the label.
      */
 
-    public function setLabel($label)
+    public function setLabel($label, $reps = array())
     {
         if (!is_array($label)) {
             $label = do_list($label);
@@ -212,6 +221,10 @@ class InputLabel extends Tag implements UICollectionInterface
         $this->label = $label[0];
         $this->hasLabel = true;
         $this->for = empty($label[1]) ? $this->getKey() : $label[1];
+
+        if ($reps) {
+            $this->labelReps = (array)$reps;
+        }
 
         return $this;
     }
@@ -312,11 +325,11 @@ class InputLabel extends Tag implements UICollectionInterface
         ));
 
         if ($this->hasLabel === false) {
-            $labelContent = gTxt($this->label).$help;
+            $labelContent = gTxt($this->label, $this->labelReps).$help;
         } else {
             $labelContent = new \Textpattern\UI\Tag('label');
             $labelContent->setAtts(array('for' => $for))
-                ->setContent(gTxt($this->label).$help)
+                ->setContent(gTxt($this->label, $this->labelReps).$help)
                 ->render();
         }
 

@@ -151,6 +151,7 @@ function check_tables($tables, $type = 'FAST', $warnings = 0)
 
     foreach ($tables as $table) {
         $rs = getRows("CHECK TABLE `$table` $type");
+
         if ($rs) {
             foreach ($rs as $r) {
                 if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning')) {
@@ -202,7 +203,7 @@ function doDiagnostics()
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
-    $fail = $notReadable = array();
+    $preflight = $notReadable = array();
     $now = time();
     $heading = gTxt('tab_diagnostics');
     $isUpdate = defined('TXP_UPDATE_DONE');
@@ -220,38 +221,38 @@ function doDiagnostics()
 
         if (isset($lastCheck['response']) && $lastCheck['response'] === false) {
             // Problem connecting to update server.
-            $fail['i'][] = array('update_server_inaccessible', $lastCheck['msg']);
+            $preflight['i'][] = array('update_server_inaccessible', $lastCheck['msg']);
         } else {
             if (!empty($lastCheck['msg'])) {
-                $txpver = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
-                $fail['i'][] = array('textpattern_version_update', $lastCheck['msg'], $txpver);
+                $txpver = empty($lastCheck['prm']) ? array('{version}' => '') : $lastCheck['prm'];
+                $preflight['i'][] = array('textpattern_version_update', $lastCheck['msg'], $txpver);
             }
 
-            if (!empty($lastCheck['msg2'])) {
-                $txpver = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
-                $fail['i'][] = array('textpattern_version_update_beta', $lastCheck['msg2'], $txpver);
+            if (!empty($lastCheck['msg_pre'])) {
+                $txpver = empty($lastCheck['prm_pre']) ? array('{version}' => '') : $lastCheck['prm_pre'];
+                $preflight['i'][] = array('textpattern_version_update_beta', $lastCheck['msg_pre'], $txpver);
             }
         }
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
-        $fail['e'][] = array('php_version_required', null, array('{version}' => REQUIRED_PHP_VERSION));
+        $preflight['e'][] = array('php_version_required', null, array('{version}' => REQUIRED_PHP_VERSION));
     }
 
     if (gethostbyname($mydomain) === $mydomain) {
-        $fail['w'][] = array('dns_lookup_fails', null, array('{domain}' => $mydomain));
+        $preflight['w'][] = array('dns_lookup_fails', null, array('{domain}' => $mydomain));
     }
 
     if (!is_dir($path_to_site)) {
-        $fail['e'][] = array('path_to_site_inaccessible', 'path_inaccessible', array('{path}' => $path_to_site));
+        $preflight['e'][] = array('path_to_site_inaccessible', 'path_inaccessible', array('{path}' => $path_to_site));
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
-        $fail['w'][] = array('site_trailing_slash', null, array('{path}' => $path_to_site));
+        $preflight['w'][] = array('site_trailing_slash', null, array('{path}' => $path_to_site));
     }
 
     if (!is_file($path_to_index) || !is_readable($path_to_index)) {
-        $fail['e'][] = array('index_inaccessible', 'path_inaccessible', array('{path}' => $path_to_index));
+        $preflight['e'][] = array('index_inaccessible', 'path_inaccessible', array('{path}' => $path_to_index));
     }
 
     if (!is_writable($path_to_site . DS . $img_dir)) {
@@ -275,39 +276,39 @@ function doDiagnostics()
     }
 
     if ($permlink_mode != 'messy' && $is_apache && !is_readable($path_to_site . '/.htaccess')) {
-        $fail['e'][] = array('htaccess_missing');
+        $preflight['e'][] = array('htaccess_missing');
     }
 
     if ($permlink_mode != 'messy' && is_callable('apache_get_modules') && !apache_module('mod_rewrite')) {
-        $fail['e'][] = array('mod_rewrite_missing');
+        $preflight['e'][] = array('mod_rewrite_missing');
     }
 
     if (!ini_get('file_uploads')) {
-        $fail['i'][] = array('file_uploads_disabled');
+        $preflight['i'][] = array('file_uploads_disabled');
     }
 
     $basePath = isset($txpcfg['multisite_root_path']) ? $txpcfg['multisite_root_path'] . DS . 'admin' : txpath;
 
     if (!$txp_is_dev && is_dir($basePath . DS . 'setup') && !Txp::get('\Textpattern\Admin\Tools')->removeFiles($basePath, 'setup')) {
-        $fail['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath . DS . 'setup' . DS));
+        $preflight['w'][] = array('setup_still_exists', 'still_exists', array('{path}' => $basePath . DS . 'setup' . DS));
     }
 
     if (empty($tempdir)) {
-        $fail['w'][] = array('no_temp_dir');
+        $preflight['w'][] = array('no_temp_dir');
     }
 
     if ((get_pref('enhanced_email') == 0 || (get_pref('enhanced_email') == 1 && empty(get_pref('smtp_host')))) && is_disabled('mail')) {
-        $fail['e'][] = array('warn_mail_unavailable');
+        $preflight['e'][] = array('warn_mail_unavailable');
     }
 
     if ($phpInPages || $phpInArticles) {
-        $fail['w'][] = array('php_scripting_enabled');
+        $preflight['w'][] = array('php_scripting_enabled');
     }
 
     if ($permlink_mode != 'messy') {
         foreach (array_keys($txp_sections) as $name) {
             if ($name != 'default' && file_exists($path_to_site . DS . $name)) {
-                $fail['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site . DS . $name));
+                $preflight['e'][] = array('old_placeholder_exists', 'old_placeholder', array('{path}' => $path_to_site . DS . $name));
             }
         }
     }
@@ -320,12 +321,12 @@ function doDiagnostics()
 
     // Files that don't match their checksums.
     if (!$txp_is_dev && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
-        $fail['w'][] = array('modified_files', null, array('{list}' => n . t . implode(', ' . n . t, $modified_files)));
+        $preflight['w'][] = array('modified_files', null, array('{list}' => n . t . implode(', ' . n . t, $modified_files)));
     }
 
     // Running development code in live mode is not recommended.
     if (preg_match('/-dev$/', txp_version) && $production_status == 'live') {
-        $fail['w'][] = array('dev_version_live');
+        $preflight['w'][] = array('dev_version_live');
     }
 
     // Missing files.
@@ -335,7 +336,7 @@ function doDiagnostics()
         array_keys($cs, INTEGRITY_NOT_READABLE)
     )
     ) {
-        $fail['e'][] = array('missing_files', null, array('{list}' => n . t . implode(', ' . n . t, $missing)));
+        $preflight['e'][] = array('missing_files', null, array('{list}' => n . t . implode(', ' . n . t, $missing)));
     }
 
     // Anything might break if arbitrary functions are disabled.
@@ -361,20 +362,20 @@ function doDiagnostics()
         )), function($func) {return strpos($func, 'pcntl_') !== 0;});
 
         if ($disabled_funcs) {
-            $fail['w'][] = array('some_php_functions_disabled', null, array('{list}' => implode(', ', array_filter($disabled_funcs))));
+            $preflight['w'][] = array('some_php_functions_disabled', null, array('{list}' => implode(', ', array_filter($disabled_funcs))));
         }
     }
 
     // Not sure about this one.
 //    if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
-//    $fail['cgi_header_config'] = gTxt('cgi_header_config');
+//    $preflight['cgi_header_config'] = gTxt('cgi_header_config');
 
     $guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
     if ($siteurl && strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // Skip warning if multi-site setup, as $guess_site_url and $siteurl will mismatch.
         if (!isset($txpcfg['multisite_root_path'])) {
-            $fail['w'][] = array('site_url_mismatch', null, array('{url}' => $guess_site_url));
+            $preflight['w'][] = array('site_url_mismatch', null, array('{url}' => $guess_site_url));
         }
     }
 
@@ -390,10 +391,10 @@ function doDiagnostics()
                 $pretext_req = trim(@$pretext_data[0]);
 
                 if ($pretext_req != md5('/' . $s . '/?txpcleantest=1')) {
-                    $fail['w'][] = array('clean_url_data_failed', null, array('{data}' => txpspecialchars($pretext_req)));
+                    $preflight['w'][] = array('clean_url_data_failed', null, array('{data}' => txpspecialchars($pretext_req)));
                 }
             } else {
-                $fail['w'][] = array('clean_url_test_failed');
+                $preflight['w'][] = array('clean_url_test_failed');
             }
         }
     }
@@ -402,12 +403,12 @@ function doDiagnostics()
         $table_errors = check_tables($tables);
 
         if ($table_errors) {
-            $fail['e'][] = array('mysql_table_errors', null, array('{list}' => n . t . implode(', ' . n . t, $table_errors)));
+            $preflight['e'][] = array('mysql_table_errors', null, array('{list}' => n . t . implode(', ' . n . t, $table_errors)));
         }
     }
 
     if ($badCF = filterCustomFields(false)) {
-        $fail['w'][] = array('custom_field_clash', null, array('{list}' => implode(', ', $badCF)));
+        $preflight['w'][] = array('custom_field_clash', null, array('{list}' => implode(', ', $badCF)));
     }
 
     $active_plugins = array();
@@ -495,11 +496,11 @@ function doDiagnostics()
     $exts_missing_recommended = array_diff($exts_recommended, $extns);
 
     if ($exts_missing_required) {
-        $fail['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_missing_required))));
+        $preflight['e'][] = array('extensions_missing_required', null, array('{list}' => implode(', ', array_filter($exts_missing_required))));
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
-        $fail['e'][] = array('tmp_plugin_paths_match');
+        $preflight['e'][] = array('tmp_plugin_paths_match');
     }
 
     // Database server time.
@@ -516,16 +517,17 @@ function doDiagnostics()
         n . tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event . '_container',
-        )) .
-        n . tag_start('div', array('id' => 'pre_flight_check')) .
-        hed(gTxt('preflight_check'), 2);
+        ));
 
     $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
     $siteLang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     $langs = array_unique(array('en', $thisLang));
     $pfcStrings = array();
+    $pfcCounter = 0;
     $langCounter = 0;
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $pfc_hash = sha1(json_encode(array_merge($preflight, $notReadable)));
+    $prev_pfc_hash = get_pref('last_pfc_hash', '');
 
     foreach ($langs as $lang) {
         // Overwrite the lang strings to English, then revert on second pass.
@@ -547,8 +549,8 @@ function doDiagnostics()
             $not_readable[] = diag_msg_wrap(gTxt('dir_not_writable', $strings));
         }
 
-        if ($fail || $not_readable) {
-            foreach ($fail as $type => $content) {
+        if ($preflight || $not_readable) {
+            foreach ($preflight as $type => $content) {
                 foreach ($content as $stringInfo) {
                     $help = $stringInfo[0];
                     $message = !empty($stringInfo[1]) ? $stringInfo[1] : $help;
@@ -559,6 +561,10 @@ function doDiagnostics()
                         'type' => array(),
                     );
                 }
+
+                if ($langCounter === 0) {
+                    $pfcCounter++;
+                }
             }
 
             if ($not_readable) {
@@ -568,6 +574,10 @@ function doDiagnostics()
                         'help' => ($showPophelp ? popHelp('dir_not_writable') : ''),
                         'type' => array(),
                     );
+
+                    if ($langCounter === 0) {
+                        $pfcCounter++;
+                    }
                 }
             }
         } else {
@@ -583,12 +593,24 @@ function doDiagnostics()
 
     // The lang will now be back to the local lingo so we can use $lang
     // to display the correct pre-flight check.
-    foreach ($pfcStrings[$lang] as $preflight) {
-        echo n . graf($preflight['msg'] . $preflight['help'], $preflight['type']);
+    $pfcBlock = new \Textpattern\UI\TagCollection;
+
+    foreach ($pfcStrings[$lang] as $pflight) {
+        $pfcBlock->add(Txp::get('\Textpattern\UI\Para', $pflight['msg'] . $pflight['help'])
+            ->setAtts($pflight['type']));
     }
 
-    // End of #pre_flight_check.
-    echo n . tag_end('div');
+    $pfcObj = Txp::get('\Textpattern\UI\Disclosure', 'txp-preflight', 'txp-ack_preflight')
+        ->setLabel('preflight_check', array('{count}' => $pfcCounter))
+        ->add($pfcBlock);
+
+    if ($pfc_hash !== $prev_pfc_hash) {
+        $pfcObj->setVisible(true);
+    }
+
+    echo $pfcObj;
+
+    set_pref('last_pfc_hash', $pfc_hash, 'diagnostics', PREF_HIDDEN, 'text_input');
 
     $out = array();
 
@@ -710,7 +732,7 @@ function doDiagnostics()
 
         ($active_plugins ? gTxt('diag_active_plugins') . cs . n . t . implode(n . t, $active_plugins) . n : ''),
 
-        ($fail || $not_readable)
+        ($preflight || $not_readable)
         ? n . gTxt('diag_preflight_check') . cs . n . ln . implode(n, doStripTags(array_column($pfcStrings['en'], 'msg'))) . n . ln
         : '',
 
@@ -722,11 +744,11 @@ function doDiagnostics()
     if ($step == 'high') {
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
-            $relmain = empty($lastCheck['msgval']) ? array('{version}' => '') : $lastCheck['msgval'];
-            $relbeta = empty($lastCheck['msgval2']) ? array('{version}' => '') : $lastCheck['msgval2'];
+        if (!empty($lastCheck['msg']) || !empty($lastCheck['msg_pre'])) {
+            $relmain = empty($lastCheck['prm']) ? array('{version}' => '') : $lastCheck['prm'];
+            $relbeta = empty($lastCheck['prm_pre']) ? array('{version}' => '') : $lastCheck['prm_pre'];
             $msgmain = empty($lastCheck['msg']) ? '' : strip_tags(gTxt($lastCheck['msg'], $relmain));
-            $msgbeta = empty($lastCheck['msg2']) ? '' : strip_tags(gTxt($lastCheck['msg2'], $relbeta));
+            $msgbeta = empty($lastCheck['msg_pre']) ? '' : strip_tags(gTxt($lastCheck['msg_pre'], $relbeta));
             $out[] = n . gTxt('diag_last_update_check') . cs . date('Y-m-d H:i:s', $lastCheck['when']) . ', ' . $msgmain . ' ' . $msgbeta . n;
         }
 
@@ -829,11 +851,10 @@ function doDiagnostics()
 /**
  * Checks for Textpattern updates.
  *
- * @return  array|null When updates are found returns an array consisting keys 'version', 'msg'
+ * @return  array|null When updates are found returns an array of update messages and versions
  * @example
- * if ($updates = checkUpdates())
- * {
- *     echo "New version: {$updates['version']}";
+ * if ($updates = checkUpdates()) {
+ *     echo $updates['msg'];
  * }
  */
 
@@ -844,9 +865,9 @@ function checkUpdates()
     $lastCheck = array(
         'when'     => time(),
         'msg'      => '',
-        'msg2'     => '',
-        'msgval'   => array(),
-        'msgval2'  => array(),
+        'msg_pre'  => '',
+        'prm'      => array(),
+        'prm_pre'  => array(),
         'response' => true,
     );
 
@@ -874,12 +895,12 @@ function checkUpdates()
         if (!empty($release)) {
             if (version_compare($version, $release) < 0) {
                 $lastCheck['msg'] = 'textpattern_update_available';
-                $lastCheck['msgval'] = array('{version}' => $release);
+                $lastCheck['prm'] = array('{version}' => $release);
             }
 
             if (isset($prerelease) && version_compare($version, $prerelease) < 0) {
-                $lastCheck['msg2'] = 'textpattern_update_available_beta';
-                $lastCheck['msgval2'] = array('{version}' => $prerelease);
+                $lastCheck['msg_pre'] = 'textpattern_update_available_beta';
+                $lastCheck['prm_pre'] = array('{version}' => $prerelease);
             }
         } else {
             $lastCheck['msg'] = 'problem_connecting_update_server';
