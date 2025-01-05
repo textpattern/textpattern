@@ -17,9 +17,9 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Feature release with support for PHP 8.4.0+, MySQL 8.4, new functionality,
   security enhancements, improvements, and bug fixes.
 * Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
-  recommended).
+  recommended, preferably with vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
-  recommended).
+  recommended, preferably with vendor support).
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
@@ -28,8 +28,8 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
-* Fixed: Compiled plugins upload on PHP 5.
-* Fixed: Windows-generated zip plugins installable on Linux.
+* Fixed: Compiled plugins upload on PHP 5.6.
+* Fixed: Windows-generated .zip plugins installable on Linux.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of
   <txp:image />.
 * Fixed: Self-closing tag output for html5 doctype to silence validator
@@ -49,14 +49,14 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Added: Create and install new plugins directly from the Plugins panel.
 * Added: Plugin multi-edit option: revert to last installed code content.
 * Added: All plugin metadata exposed in the Plugin Edit panel.
-* Added: Plugin (zip-only) export feature.
+* Added: Plugin export to .zip.
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
 * Added: In-use asset counters to the Users panel.
 * Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
 * Added: 'level' attribute to <txp:if_category />.
-* Added: Activity indicator for long upload processes.
+* Added: Activity indicator for extended duration file/image upload processes.
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
 * Added: Global 'offset' can be set by URL parameters.
