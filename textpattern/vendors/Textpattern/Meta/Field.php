@@ -321,14 +321,23 @@ class Field
     {
         global $txp_user, $txpnow;
 
+        extract(doSlash($data));
+
         $table_prefix = 'txp_meta_value_';
         $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
         $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
         $this->set($data);
+
+        if ($reset_time) {
+            $created = $sqlnow;
+        }
+
+        if ($expire_now) {
+            $expires = $sqlnow;
+        }
+
         // @todo Possibly validate this.
         $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
-
-        extract(doSlash($data));
 
         // doSlash() done later.
         $help = ps('help');
@@ -340,11 +349,7 @@ class Field
         );
     */
         $constraints = array();
-
-        $created = (empty($created) || $created === '0000-00-00 00:00:00') ? $sqlnow : $created;
-        $expires = (empty($expires) || $expires === '0000-00-00 00:00:00') ? "NULL" : "'".$expires."'";
         $data_type = isset($data_types[$render]) ? $data_types[$render] : $data_types['textInput'];
-
         $has_textfilter = ($textfilter !== '' && $data_type['textfilter']);
         $has_delimiter = ($delimiter !== '' && $data_type['delimited']);
 
@@ -376,9 +381,9 @@ class Field
                         textfilter   = $txf,
                         delimiter    = $dlm,
                         ordinal      = '$ordinal',
-                        created      = '$created',
                         modified     = '$sqlnow',
-                        expires      = $expires",
+                        created      = ". ($created ? "'$created'" : 'NULL') . ",
+                        expires      = ". ($expires ? "'$expires'" : 'NULL'),
                         "id = $id"
                     );
                 } else {
@@ -391,9 +396,9 @@ class Field
                         textfilter   = $txf,
                         delimiter    = $dlm,
                         ordinal      = '$ordinal',
-                        created      = '$created',
                         modified     = '$sqlnow',
-                        expires      = $expires"
+                        created      = ". ($created ? "'$created'" : 'NULL') . ",
+                        expires      = ". ($expires ? "'$expires'" : 'NULL')
                     );
 
                     if ($ok) {

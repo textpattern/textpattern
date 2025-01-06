@@ -49,8 +49,10 @@ if ($event == 'meta') {
         'delimiter',
         'ordinal',
         'created',
+        'reset_time',
         'modified',
         'expires',
+        'expire_now',
     );
 
     global $all_content_types, $all_render_types;
@@ -393,7 +395,7 @@ function meta_edit($message = '')
         }
     }
 
-    $is_edit = ($id && $step == 'meta_edit');
+    $is_edit = ($id && $step === 'meta_edit');
     $default = '';
     $label_ref = '';
     $help_ref = '';
@@ -502,11 +504,20 @@ EOJS
                 'created',
                 fInput('text', 'created', txpspecialchars($created), '', '', '', INPUT_REGULAR, '', 'created'),
                 'created', '', array('class' => 'txp-form-field edit-meta-created')
+            ).n.tag(
+                checkbox('reset_time', '1', $reset_time, '', 'reset_time').
+                n . tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
+                'div', array('class' => 'txp-form-field-shim reset-time')
             ).
             inputLabel(
                 'expires',
                 fInput('text', 'expires', txpspecialchars($expires), '', '', '', INPUT_REGULAR, '', 'expires'),
                 'expires', '', array('class' => 'txp-form-field edit-meta-expires')
+            ).
+            n.tag(
+                checkbox('expire_now', '1', $expire_now, '', 'expire_now').
+                n . tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+                'div', array('class' => 'txp-form-field-shim expire-now')
             ).
             inputLabel(
                 'options',
