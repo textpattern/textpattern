@@ -103,6 +103,13 @@ class Field
     protected $optionPfx = 'txpopt_';
 
     /**
+     * Language designator currently in use.
+     *
+     * @var string
+     */
+    protected $lang = '';
+
+    /**
      * Return status message holder.
      *
      * @todo Use a dedicated message store / throw exceptions?
@@ -143,9 +150,16 @@ class Field
             'expires',
         );
 
+        if (txpinterface === 'admin') {
+            $this->lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+        } else {
+            $this->lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+        }
+
         if ($idName) {
             $this->loadField($idName)
                 ->loadOptions()
+                ->loadTitles()
                 ->loadContent();
         }
     }
@@ -269,6 +283,28 @@ class Field
                     $this->options[$idx]['label'] = gTxt($this->getOptionReference($row['name']));
                 }
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the titles for the current (or given) language. Chainable.
+     *
+     * @param  string  $lang  Language designator.
+     *                        If omitted, uses user/site lang depending on where this method is called from
+     * @param  boolean $force true = always fetch the data from the database, false = use cached value
+     */
+    public function loadTitles($lang = '', $force = false)
+    {
+        if (empty($lang)) {
+            $lang = $this->lang;
+        }
+
+        if (!isset($this->definition['title'][$lang]) || $force) {
+            $label = $this->getLabelReference($this->get('name'));
+            $this->definition['title'][$lang] = safe_field('data', 'txp_lang', "name = '" . doSlash($label) . "' AND lang = '" . doSlash($lang) . "'");
+
         }
 
         return $this;
@@ -672,6 +708,9 @@ class Field
                     break;
                 case 'content':
                     $out[$item] = $this->content;
+                    break;
+                case 'title':
+                    $out[$item] = $this->definition['title'][$this->lang];
                     break;
                 default:
                     if (in_array($item, $this->properties)) {

@@ -4485,9 +4485,9 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
         foreach ($cfs as $def) {
             $thisId = $def->get('id');
             $thisName = $def->get('name');
-
             $out[$when]['by_id'][$thisId] = $thisName;
             $out[$when]['by_name'][$thisName] = $thisId;
+            $out[$when]['by_title'][$thisName][LANG] = $def->get('title');
             $out[$when]['by_field']['custom_' . $thisId] = $thisName;
             $out[$when]['by_type'][$thisId] = $def->get('data_type');
             $out[$when]['by_content'][$thisId] = $def->get('content_type');

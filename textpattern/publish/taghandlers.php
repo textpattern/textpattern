@@ -2715,20 +2715,35 @@ function custom_field($atts = array())
 {
     global $thisarticle;
     static $customFields = null;
+    static $customFieldTitles = null;
 
     if ($customFields === null) {
         $customFields = getCustomFields('article', null, 'name');
+    }
+
+    if ($customFieldTitles === null) {
+        $customFieldTitles = getCustomFields('article', null, 'title');
     }
 
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
         'escape'  => null,
         'default' => '',
+        'lang'    => '',
+        'title'   => 0,
     ), $atts));
 
     assert_article();
 
     $name = strtolower($name);
+
+    if (empty($lang)) {
+        if (txpinterface === 'admin') {
+            $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+        } else {
+            $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+        }
+    }
 
     if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
@@ -2736,7 +2751,11 @@ function custom_field($atts = array())
         return '';
     }
 
-    $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
+    if ($title) {
+        $thing = empty($customFieldTitles[$name][$lang]) ? $default : $customFieldTitles[$name][$lang];
+    } else {
+        $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
+    }
 
     return $escape === null ? txpspecialchars($thing) : txp_sandbox(array('id' => null, 'field' => $name) + $atts, $thing);
 }

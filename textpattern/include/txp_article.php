@@ -1548,7 +1548,7 @@ function article_partial_custom_field($rs, $key)
 
         if ($cf) {
             $ref = ($rs['ID']) ? $rs['ID'] : null;
-            $cf->loadContent($ref, true);
+            $cf->loadContent($ref, true)->loadTitles();
             $out = $cf->render();
         }
     }

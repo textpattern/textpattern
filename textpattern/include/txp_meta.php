@@ -664,7 +664,6 @@ function meta_multi_edit()
             }
 
             $key = '';
-
             break;
         case 'changecontenttype':
             $val = ps('content_type');
@@ -672,7 +671,6 @@ function meta_multi_edit()
             if (in_array($val, $all_content_types)) {
                 $key = 'content_type';
             }
-
             break;
         case 'changerendertype':
             $val = ps('render');
@@ -680,12 +678,10 @@ function meta_multi_edit()
             if (in_array($val, $all_render_types)) {
                 $key = 'render';
             }
-
             break;
         default:
             $key = '';
             $val = '';
-
             break;
     }
 /*
