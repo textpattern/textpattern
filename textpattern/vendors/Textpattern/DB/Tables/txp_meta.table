@@ -7,7 +7,7 @@ family       VARCHAR(255)         NULL DEFAULT NULL,
 textfilter   TINYINT(4)           NULL DEFAULT NULL,
 delimiter    VARCHAR(31)          NULL DEFAULT NULL,
 ordinal      SMALLINT(5) UNSIGNED NULL DEFAULT NULL,
-created      TIMESTAMP            NULL DEFAULT CURRENT_TIMESTAMP,
+created      TIMESTAMP            NULL DEFAULT NULL,
 modified     TIMESTAMP            NULL DEFAULT NULL,
 expires      TIMESTAMP            NULL DEFAULT NULL,
 
