@@ -2729,7 +2729,6 @@ function custom_field($atts = array())
         'name'    => get_pref('custom_1_set'),
         'escape'  => null,
         'default' => '',
-        'lang'    => '',
         'title'   => 0,
     ), $atts));
 
@@ -2737,12 +2736,10 @@ function custom_field($atts = array())
 
     $name = strtolower($name);
 
-    if (empty($lang)) {
-        if (txpinterface === 'admin') {
-            $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
-        } else {
-            $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
-        }
+    if (txpinterface === 'admin') {
+        $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+    } else {
+        $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     }
 
     if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
