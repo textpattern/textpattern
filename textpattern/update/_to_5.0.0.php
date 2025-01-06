@@ -71,8 +71,8 @@ safe_create(
     "`meta_id` int(12) NULL DEFAULT NULL,
     `content_id` int(12) NULL DEFAULT NULL,
     `value_id` tinyint(4) NULL DEFAULT '0',
-    `value_raw` varchar(255) NULL DEFAULT NULL,
-    `value` varchar(255) NULL DEFAULT NULL,
+    `value_raw` varchar(7500) NULL DEFAULT NULL,
+    `value` varchar(7500) NULL DEFAULT NULL,
     UNIQUE KEY `meta_content` (`meta_id`,`content_id`,`value_id`)"
 );
 

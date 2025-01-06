@@ -139,7 +139,7 @@ class DataType implements \IteratorAggregate
         ),
         'textInput' => array(
             'type'        => 'varchar',
-            'size'        => 255,
+            'size'        => 7500,
             'textfilter'  => true,
             'options'     => false,
             'delimited'   => false,
