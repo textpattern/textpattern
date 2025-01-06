@@ -585,7 +585,7 @@ function image_multi_edit()
 
 function image_edit($message = '', $id = '')
 {
-    global $file_max_upload_size, $txp_user, $event, $all_image_cats;
+    global $file_max_upload_size, $txp_user, $event, $all_image_cats, $txpnow;
 
     if (!$id) {
         $id = gps('id');
@@ -730,6 +730,17 @@ function image_edit($message = '', $id = '')
             $rs
         );
 
+        $cfBlock = array();
+
+        $cfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
+            ->filterCollectionAt('image', ($uDate ? $uDate : $txpnow));
+
+        foreach ($cfs as $cf) {
+            $ref = $id ? $id : null;
+            $cf->loadContent($ref, true)->loadTitles();
+            $cfBlock[] = $cf->render();
+        }
+
         echo n . '<div class="txp-layout">' .
             n . tag(
                 hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')),
@@ -779,6 +790,7 @@ function image_edit($message = '', $id = '')
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ) .
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs) .
+                        pluggable_ui('image_ui', 'custom_fields', join(n, $cfBlock), $rs) .
                         graf(
                             ($can_delete
                                 ? tag_void('input', array(
@@ -812,6 +824,7 @@ function image_edit($message = '', $id = '')
                         hInput('page', $page) .
                         hInput('search_method', $search_method) .
                         hInput('crit', $crit),
+                        hInput('uDate', $uDate),
                         'image_details'
                     ),
                     '', '', 'post', '', '', 'image_details_form'
@@ -1015,7 +1028,7 @@ function image_save()
 {
     global $txp_user;
 
-    $varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt')));
+    $varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt', 'uDate')));
     extract(doSlash($varray));
     $id = $varray['id'] = assert_int($id);
     $author = fetch('author', 'txp_image', 'id', $id);
@@ -1025,6 +1038,10 @@ function image_save()
 
         return;
     }
+
+    // ToDo: Run custom fields through validator.
+    $mfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
+        ->filterCollectionAt('image', $uDate);
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
     callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
@@ -1039,6 +1056,7 @@ function image_save()
         "id = '$id'"
     )
     ) {
+        $mfs->store($_POST, 'image', $id);
         $message = gTxt('image_updated', array('{name}' => doStrip($name)));
         update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
     } else {
