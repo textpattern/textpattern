@@ -241,7 +241,7 @@ class Field
                     continue;
                 }
 
-                $content[$idx]['label'] = gTxt($this->getOptionReference($row[$this->getValueField()]));
+                $content[$idx]['label'] = gTxt($this->getOptionReference($this->get('name')));
             }
 
             // @Todo What if the value needs to be 0 or empty?
