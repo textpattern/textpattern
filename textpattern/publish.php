@@ -959,6 +959,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $theAtts = filterAtts($atts, $iscustom);
+
     extract($theAtts);
     $issticky = $theAtts['status'] == STATUS_STICKY;
 

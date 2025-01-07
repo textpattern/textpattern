@@ -33,7 +33,7 @@
 
 namespace Textpattern\Meta;
 
-class FieldSet implements \IteratorAggregate, \Textpattern\Container\ReusableInterface
+class FieldSet implements \IteratorAggregate
 {
     /**
      * Collection of Meta_Field entities by content type.

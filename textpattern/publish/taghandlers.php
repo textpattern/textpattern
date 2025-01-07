@@ -2713,28 +2713,70 @@ function txp_header($atts)
 
 function custom_field($atts = array())
 {
-    global $thisarticle;
-    static $customFields = null;
-    static $customFieldTitles = null;
-
-    if ($customFields === null) {
-        $customFields = getCustomFields('article', null, 'name');
-    }
-
-    if ($customFieldTitles === null) {
-        $customFieldTitles = getCustomFields('article', null, 'title');
-    }
+    global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor;
+    static $customFields = array();
+    static $customFieldTitles = array();
 
     extract(lAtts(array(
-        'name'    => get_pref('custom_1_set'),
-        'escape'  => null,
-        'default' => '',
-        'title'   => 0,
+        'auto_detect' => true,
+        'default'     => '',
+        'escape'      => null,
+        'name'        => '',
+        'title'       => 0,
+        'type'        => null,
     ), $atts));
 
-    assert_article();
+    // Find the current context by checking each one in a defined order (article last,
+    // since the other content contexts are a subset of it).
+    // @todo: Sections require table changes (needs an id column) before they can be used.
+    // Note: type is purposely NOT validated so that plugins can offer their own contexts.
+    if ($auto_detect && $type === null) {
+        $context_list = ($auto_detect !== true) ? do_list_unique($auto_detect) : array('author', 'category', 'link', 'file', 'image', 'article');
+        foreach ($context_list as $ctxt) {
+            switch ($ctxt) {
+                case 'author':
+                    $type = $thisauthor ? 'author' : null;
+                    break;
+                case 'category':
+                    $type = $thiscategory ? 'category' : null;
+                    break;
+                case 'link':
+                    $type = $thislink ? 'link' : null;
+                    break;
+                case 'file':
+                    $type = $thisfile ? 'file' : null;
+                    break;
+                case 'image':
+                    $type = $thisimage ? 'image' : null;
+                    break;
+                case 'article':
+                    $type = $thisarticle ? 'article' : null;
+                    break;
+            }
 
-    $name = strtolower($name);
+            // Only one context must match.
+            if ($type) {
+                break;
+            }
+        }
+    }
+
+    // Fallback on article for backwards-compatibility.
+    if (!$type) {
+        $type = 'article';
+    }
+
+    $context = 'this'.(string)$type;
+
+    if (empty($customFields[$type])) {
+        $customFields[$type] = getCustomFields($type, null, 'name');
+    }
+
+    if (empty($customFieldTitles[$type])) {
+        $customFieldTitles[$type] = getCustomFields($type, null, 'title');
+    }
+
+    $name = strtolower((string)$name);
 
     if (txpinterface === 'admin') {
         $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
@@ -2742,16 +2784,16 @@ function custom_field($atts = array())
         $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     }
 
-    if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
+    if (!isset(${$context}['name']) && !isset($customFields[$type][$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
         return '';
     }
 
     if ($title) {
-        $thing = empty($customFieldTitles[$name][$lang]) ? $default : $customFieldTitles[$name][$lang];
+        $thing = empty($customFieldTitles[$type][$name][$lang]) ? $default : $customFieldTitles[$type][$name][$lang];
     } else {
-        $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
+        $thing = isset(${$context}[$name]) ? ${$context}[$name] : $default;
     }
 
     return $escape === null ? txpspecialchars($thing) : txp_sandbox(array('id' => null, 'field' => $name) + $atts, $thing);
@@ -2761,7 +2803,7 @@ function custom_field($atts = array())
 
 function if_custom_field($atts, $thing = null)
 {
-    global $thisarticle;
+    global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor;
     static $customFields = null;
 
     if ($customFields === null) {
@@ -2773,22 +2815,17 @@ function if_custom_field($atts, $thing = null)
         'value'     => null,
         'match'     => '',
         'separator' => '',
+        'type'      => 'article',
     ), $atts));
 
-    assert_article();
-
     $name = strtolower($name);
-
-    if (!isset($thisarticle[$name]) && !isset($customFields[$name])) {
-        trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
-
-        return '';
-    }
+    $context = 'this'.(string)$type;
+    $test = isset(${$context}[$name]) ? ${$context}[$name] : '';
 
     if ($value !== null) {
-        $cond = txp_match($atts, $thisarticle[$name]);
+        $cond = txp_match($atts, $test);
     } else {
-        $cond = ($thisarticle[$name] !== '');
+        $cond = $test !== '';
     }
 
     return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);

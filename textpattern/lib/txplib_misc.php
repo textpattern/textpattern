@@ -825,9 +825,10 @@ function txp_image_type_to_mime_type($image_type)
 
 function image_format_info($image)
 {
+    global $txpnow;
     static $mimetypes;
 
-    if (($unix_ts = @strtotime($image['date'])) > 0) {
+    if (($unix_ts = strtotime($image['date'])) > 0) {
         $image['date'] = $unix_ts;
     }
 
@@ -836,6 +837,24 @@ function image_format_info($image)
     }
 
     $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? txp_image_type_to_mime_type($mime) : '';
+
+    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
+        ->filterCollectionAt('image', ($unix_ts ? $unix_ts : $txpnow));
+
+
+    foreach ($cfs as $cf) {
+        $ref = $image['id'] ? $image['id'] : null;
+        $cf->loadContent($ref, true);
+        $valueField = $cf->getValueField();
+        $contentSet = $cf->getContent();
+        $vals = array();
+
+        foreach ($contentSet as $contentRow) {
+            $vals[] = $contentRow[$valueField];
+        }
+
+        $image[$cf->get('name')] = implode($cf->get('delimiter'), $vals);
+    }
 
     return $image;
 }
@@ -851,7 +870,7 @@ function image_format_info($image)
 
 function link_format_info($link)
 {
-    if (($unix_ts = @strtotime($link['date'])) > 0) {
+    if (($unix_ts = strtotime($link['date'])) > 0) {
         $link['date'] = $unix_ts;
     }
 
@@ -4476,29 +4495,28 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
     assert_int($when);
 
-    if (!isset($out[$when])) {
+    if (!isset($out[$when][$type])) {
         $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
             ->filterCollectionAt($type, $when);
-
-        $out[$when] = array();
+        $out[$when][$type] = array();
 
         foreach ($cfs as $def) {
             $thisId = $def->get('id');
             $thisName = $def->get('name');
-            $out[$when]['by_id'][$thisId] = $thisName;
-            $out[$when]['by_name'][$thisName] = $thisId;
-            $out[$when]['by_title'][$thisName][LANG] = $def->get('title');
-            $out[$when]['by_field']['custom_' . $thisId] = $thisName;
-            $out[$when]['by_type'][$thisId] = $def->get('data_type');
-            $out[$when]['by_content'][$thisId] = $def->get('content_type');
-            $out[$when]['by_callback'][$thisId] = $def->get('render');
-            $out[$when]['by_family'][$thisId] = $def->get('family');
-            $out[$when]['by_textfilter'][$thisId] = $def->get('textfilter');
-            $out[$when]['by_delimiter'][$thisId] = $def->get('delimiter');
-            $out[$when]['by_ordinal'][$thisId] = $def->get('ordinal');
-            $out[$when]['by_created'][$thisId] = $def->get('created');
-            $out[$when]['by_modified'][$thisId] = $def->get('modified');
-            $out[$when]['by_expires'][$thisId] = $def->get('expires');
+            $out[$when][$type]['by_id'][$thisId] = $thisName;
+            $out[$when][$type]['by_name'][$thisName] = $thisId;
+            $out[$when][$type]['by_title'][$thisName][LANG] = $def->get('title');
+            $out[$when][$type]['by_field']['custom_' . $thisId] = $thisName;
+            $out[$when][$type]['by_type'][$thisId] = $def->get('data_type');
+            $out[$when][$type]['by_content'][$thisId] = $def->get('content_type');
+            $out[$when][$type]['by_callback'][$thisId] = $def->get('render');
+            $out[$when][$type]['by_family'][$thisId] = $def->get('family');
+            $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
+            $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
+            $out[$when][$type]['by_ordinal'][$thisId] = $def->get('ordinal');
+            $out[$when][$type]['by_created'][$thisId] = $def->get('created');
+            $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
+            $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
         }
 
         ksort($out, SORT_NUMERIC);
@@ -4506,11 +4524,11 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
     $by = 'by_'.$by;
 
-    if (isset($out[$when][$by])) {
-        return $out[$when][$by];
+    if (isset($out[$when][$type][$by])) {
+        return $out[$when][$type][$by];
     }
 
-    return $out[$when];
+    return $out[$when][$type];
 }
 
 /**
@@ -5680,6 +5698,7 @@ function getMetaDescription($type = null)
 
 /**
  * Get some URL data.
+ *
  * @param mixed $context The data to retrieve
  * @param array $internals Data restrictions
  * @return array The retrieved data
