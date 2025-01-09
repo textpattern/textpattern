@@ -5915,6 +5915,8 @@ function show_clean_test($pretext)
     if (serverSet('SERVER_ADDR') === serverSet('REMOTE_ADDR')) {
         var_export($pretext);
     }
+
+    return 0;
 }
 
 /**
