@@ -73,8 +73,13 @@ class Select extends Tag implements UIInterface
         $this->setKey($name)
             ->setAtt('name', $name);
 
-        $multiple = is_array($default);
-        $multiple or $default = (string) $default;
+        if ($default === null) {
+            $default = array();
+        } elseif (!is_array($default)) {
+            $default = do_list($default);
+        }
+
+        $multiple = is_array($default) && count($default) > 1;
 
         if ($multiple) {
             $this->setMultiple();
