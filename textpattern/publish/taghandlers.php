@@ -2784,7 +2784,7 @@ function custom_field($atts = array())
         $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     }
 
-    if (!isset(${$context}['name']) && !isset($customFields[$type][$name])) {
+    if (!isset(${$context}[$name]) && !isset($customFields[$type][$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
         return '';
