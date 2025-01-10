@@ -1743,14 +1743,14 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
+        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wraptag', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
     });
 
     if (is_array($break)) {
-        extract($break + array('break' => ''));
+        extract($break + array('break' => null));
     }
 
     foreach ($import as $global) {
