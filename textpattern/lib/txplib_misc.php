@@ -5403,6 +5403,8 @@ function do_list($list, $delim = ',')
         return array();
     } elseif (is_array($list)) {
         return array_map('trim', $list);
+    } elseif ($delim === null) {
+        return array(trim($list));
     }
 
     if (is_array($delim)) {

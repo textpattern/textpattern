@@ -2711,16 +2711,16 @@ function txp_header($atts)
 
 // -------------------------------------------------------------
 
-function custom_field($atts = array())
+function custom_field($atts = array(), $thing = null)
 {
     global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor;
     static $customFields = array();
-    static $customFieldTitles = array();
 
     extract(lAtts(array(
         'auto_detect' => true,
         'default'     => '',
         'escape'      => null,
+        'form'        => null,
         'name'        => '',
         'title'       => 0,
         'type'        => null,
@@ -2768,12 +2768,8 @@ function custom_field($atts = array())
 
     $context = 'this'.(string)$type;
 
-    if (empty($customFields[$type])) {
-        $customFields[$type] = getCustomFields($type, null, 'name');
-    }
-
-    if (empty($customFieldTitles[$type])) {
-        $customFieldTitles[$type] = getCustomFields($type, null, 'title');
+    if (!isset($customFields[$type])) {
+        $customFields[$type] = getCustomFields($type, null, null);
     }
 
     $name = strtolower((string)$name);
@@ -2784,19 +2780,27 @@ function custom_field($atts = array())
         $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
     }
 
-    if (!isset(${$context}['name']) && !isset($customFields[$type][$name])) {
+    if (!isset(${$context}[$name]) && !isset($customFields[$type]['by_name'][$name])) {
         trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
         return '';
     }
 
     if ($title) {
-        $thing = empty($customFieldTitles[$type][$name][$lang]) ? $default : $customFieldTitles[$type][$name][$lang];
+        return empty($customFields[$type][$name]['by_title'][$lang]) ? $default : $customFields[$type]['by_title'][$name][$lang];
+    } elseif (isset(${$context}[$name])) {
+        isset($thing) or $thing = '<txp:yield item />';
+        $no = $customFields[$type]['by_name'][$name];
+        $dlm = $customFields[$type]['by_delimiter'][$no];
+        $null = null;
+        $out = parseList(do_list(${$context}[$name], $dlm), $null, null, compact('form', 'thing'));
+        isset($escape) or $escape = true;
+        $thing = $out ? doWrap($out, null, compact('escape')) : '';
     } else {
-        $thing = isset(${$context}[$name]) ? ${$context}[$name] : $default;
+        $thing = $default;
     }
 
-    return $escape === null ? txpspecialchars($thing) : txp_sandbox(array('id' => null, 'field' => $name) + $atts, $thing);
+    return $thing; //txp_sandbox(array('field' => $name) + $atts, $thing);
 }
 
 // -------------------------------------------------------------

@@ -1362,7 +1362,7 @@ function parseList($rs, &$object, $populate, $atts = array())
 
     $articles = array();
 
-    if ($rs && $last = numRows($rs)) {
+    if ($rs && $last = is_array($rs) ? count($rs) : numRows($rs)) {
         extract($atts + array(
                 'form' => '',
                 'thing' => null,
@@ -1396,15 +1396,17 @@ function parseList($rs, &$object, $populate, $atts = array())
         }
 
         while ($count++ <= $last) {
-            if ($a = nextRow($rs)) {
-                $res = call_user_func($populate, $a);
+            if ($a = is_array($rs) ? ($count == 1 ? reset($rs) : next($rs)) : nextRow($rs)) {
+                $res = $populate ? call_user_func($populate, $a) : $a;
 
                 if (is_array($res)) {
                     $object = $res;
+                    $object['is_first'] = ($count == 1);
+                    $object['is_last'] = ($count == $last);
+                } else {
+                    $txp_item[true] = $res;
                 }
  
-                $object['is_first'] = ($count == 1);
-                $object['is_last'] = ($count == $last);
                 $txp_item['count'] = isset($a['count']) ? $a['count'] : $count;
 
                 $newbreak = !$groupby ? $count : ($groupby === 1 ?
