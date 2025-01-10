@@ -935,6 +935,11 @@ class Field
 
                 $widget = \Txp::get('\Textpattern\UI\Select', $name, $vals, $thisContent)
                     ->setAtt('id', $id);
+
+                if ($type === 'multiSelect') {
+                    $widget->setMultiple();
+                }
+
                 break;
             case 'textArea':
                 $widget = \Txp::get('\Textpattern\UI\Textarea', $name, implode('', $thisContent))
