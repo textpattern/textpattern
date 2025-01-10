@@ -79,9 +79,9 @@ class Select extends Tag implements UIInterface
             $default = do_list($default);
         }
 
-        $multiple = is_array($default) && count($default) > 1;
-
-        if ($multiple) {
+        // This doesn't guarantee multiple. Will fail if the default/current set only has one item selected.
+        // Calling ->setMultiple() manually is recommended.
+        if (count($default) > 1) {
             $this->setMultiple();
         }
 
