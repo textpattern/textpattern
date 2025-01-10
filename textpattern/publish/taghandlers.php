@@ -2787,7 +2787,7 @@ function custom_field($atts = array(), $thing = null)
     }
 
     if ($title) {
-        return empty($customFields[$type][$name]['by_title'][$lang]) ? $default : $customFields[$type]['by_title'][$name][$lang];
+        return empty($customFields[$type]['by_title'][$name][$lang]) ? $default : $customFields[$type]['by_title'][$name][$lang];
     } elseif (isset(${$context}[$name])) {
         isset($thing) or $thing = '<txp:yield item />';
         $no = $customFields[$type]['by_name'][$name];
