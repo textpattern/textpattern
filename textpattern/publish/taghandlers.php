@@ -1608,7 +1608,7 @@ function if_article_author($atts, $thing = null)
 
 function txp_sandbox($atts = array(), $thing = null)
 {
-    static $articles = array(), $uniqid = null, $stack = array(), $depth = null;
+    static $articles = array(), $sandbox = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
 
     lAtts();
@@ -1624,7 +1624,13 @@ function txp_sandbox($atts = array(), $thing = null)
         return;
     }
 
-    if ($field) {
+    if (isset($thing)) {
+        if (!isset($sandbox[$thing])) {
+            return;
+        } else {
+            $thing = $sandbox[$thing];
+        }
+    } elseif ($field) {
         if (!isset($stack[$id])) {
             $stack[$id] = 1;
         } elseif ($stack[$id] >= $depth) {
@@ -1662,12 +1668,14 @@ function txp_sandbox($atts = array(), $thing = null)
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
 
+    $hash = md5($thing);
+    $sandbox[$hash] = $thing;
     $txp_atts = null;
     $atts['id'] = $id;
     unset($atts['field']);
     isset($articles[$id]) or $articles[$id] = $thisarticle;
 
-    return "<txp:$uniqid" . ($atts ? join_atts($atts) : '') . ">{$thing}</txp:$uniqid>";
+    return "<txp:$uniqid" . ($atts ? join_atts($atts, TEXTPATTERN_STRIP_TXP) : '') . ">{$hash}</txp:$uniqid>";
 }
 
 // -------------------------------------------------------------
