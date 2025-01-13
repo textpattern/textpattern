@@ -135,9 +135,11 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             try {
-                return isset($this->params[$tag]) ?
-                    (string) call_user_func($this->tags[$tag], $atts, $thing, ...$this->params[$tag]) :
-                    (string) call_user_func($this->tags[$tag], $atts, $thing);
+                $out = isset($this->params[$tag]) ?
+                    call_user_func($this->tags[$tag], $atts, $thing, ...$this->params[$tag]) :
+                    call_user_func($this->tags[$tag], $atts, $thing);
+
+                    return is_scalar($out) ? (string) $out : $out;
             } catch (\Exception $e) {
                 trigger_error($e->getMessage());
             }
@@ -158,7 +160,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function processAttr($tag, $atts = null, $thing = null)
     {
         if ($this->isRegisteredAttr($tag)) {
-            return (string) call_user_func($this->attr[$tag], $atts, $thing);
+            $out = call_user_func($this->attr[$tag], $atts, $thing);
+
+            return is_scalar($out) ? (string) $out : $out;
         } else {
             return false;
         }

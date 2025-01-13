@@ -1606,7 +1606,7 @@ function if_article_author($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function txp_sandbox($atts = array(), $thing = null)
+function txp_sandbox($atts = array(), $thing = null, $raw = false)
 {
     static $articles = array(), $sandbox = array(), $uniqid = null, $stack = array(), $depth = null;
     global $thisarticle, $is_article_body, $is_form, $pretext, $txp_atts;
@@ -1624,7 +1624,7 @@ function txp_sandbox($atts = array(), $thing = null)
         return;
     }
 
-    if (isset($thing)) {
+    if (isset($thing) && !$raw) {
         if (!isset($sandbox[$thing])) {
             return;
         } else {
@@ -1650,16 +1650,27 @@ function txp_sandbox($atts = array(), $thing = null)
     $is_article_body = $thisarticle['authorid'];
     $was_form = $is_form;
     $is_form = 0;
+    $out = array();
+    $clean = true;
 
-    $thing = parse(isset($thing) ? $thing : $thisarticle[$field]);
+    if (isset($thing)) {
+        foreach((array)$thing as $i => $chunk) {
+            $out[] = $raw ? $chunk : parse($chunk);
+            $clean = $clean && !preg_match('@<(?:' . TXP_PATTERN . '):@', current($out));
+        }
+
+        $thing = $out;
+    } else {
+        $thing = parse($thisarticle[$field]);
+        $clean = !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing);
+    }
 
     $is_article_body = $was_article_body;
     $is_form = $was_form;
     $thisarticle = $oldarticle;
-
     $field and $stack[$id]--;
 
-    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing)) {
+    if ($clean || $pretext['secondpass'] >= (int)get_pref('secondpass', 1)) {
         return $thing;
     }
 
@@ -1668,7 +1679,7 @@ function txp_sandbox($atts = array(), $thing = null)
         Txp::get('\Textpattern\Tag\Registry')->register('txp_sandbox', $uniqid);
     }
 
-    $hash = md5($thing);
+    $hash = md5(is_scalar($thing) ? $thing : json_encode($thing));
     $sandbox[$hash] = $thing;
     $txp_atts = null;
     $atts['id'] = $id;
@@ -1682,7 +1693,7 @@ function txp_sandbox($atts = array(), $thing = null)
 
 function body($atts = array())
 {
-    return txp_sandbox(array('id' => null, 'field' => 'body') + $atts);
+    return txp_sandbox(array('field' => 'body') + $atts);
 }
 
 // -------------------------------------------------------------
@@ -1711,7 +1722,7 @@ function title($atts)
 
 function excerpt($atts = array())
 {
-    return txp_sandbox(array('id' => null, 'field' => 'excerpt') + $atts);
+    return txp_sandbox(array('field' => 'excerpt') + $atts);
 }
 
 // -------------------------------------------------------------
@@ -2721,12 +2732,11 @@ function txp_header($atts)
 
 function custom_field($atts = array(), $thing = null)
 {
-    global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor;
-    static $customFields = array();
+    global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor, $txp_item;
+    static $customFields = array(), $delimited = null;
 
     extract(lAtts(array(
         'auto_detect' => true,
-        'default'     => '',
         'escape'      => null,
         'form'        => null,
         'name'        => '',
@@ -2781,34 +2791,69 @@ function custom_field($atts = array(), $thing = null)
     }
 
     $name = strtolower((string)$name);
-
-    if (txpinterface === 'admin') {
-        $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
-    } else {
-        $lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
-    }
-
-    if (!isset(${$context}[$name]) && !isset($customFields[$type]['by_name'][$name])) {
-        trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
-
-        return '';
-    }
+    $no = isset($customFields[$type]['by_name'][$name]) ? $customFields[$type]['by_name'][$name] : null;
+    $dlm = $no === null ? null : $customFields[$type]['by_delimiter'][$no];
 
     if ($title) {
-        return empty($customFields[$type]['by_title'][$name][$lang]) ? $default : $customFields[$type]['by_title'][$name][$lang];
-    } elseif (isset(${$context}[$name])) {
-        isset($thing) or $thing = '<txp:yield item />';
-        $no = $customFields[$type]['by_name'][$name];
-        $dlm = $customFields[$type]['by_delimiter'][$no];
-        $null = null;
-        $out = parseList(do_list(${$context}[$name], $dlm), $null, null, compact('form', 'thing'));
-        isset($escape) or $escape = true;
-        $thing = $out ? doWrap($out, null, compact('escape')) : '';
-    } else {
-        $thing = $default;
+        $lang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
+    
+        return empty($customFields[$type]['by_title'][$name][$lang]) ? '' : $customFields[$type]['by_title'][$name][$lang];
     }
 
-    return $thing; //txp_sandbox(array('field' => $name) + $atts, $thing);
+    if ($delimited === null) {
+        $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
+
+        foreach ($dataTypeMap as $k => $def) {
+            if ($def['delimited']) {
+                $delimited[] = $k;
+            }
+        }
+    }
+
+    if (!isset(${$context}[$name])) {
+        if ($no === null) {
+            trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
+
+            return '';
+        } else {
+            // TODO: replace with a type-specific function.
+            $id = ${$context}['thisid'];
+            $tableName = 'txp_meta_value_' . $customFields[$type]['by_type'][$no];
+            $where = "meta_id = '$no' AND content_id = $id";
+            $unique = !in_array($customFields[$type]['by_callback'][$no], $delimited);
+            ${$context}[$name] = $unique ?
+                getThing('SELECT value FROM '.PFX.$tableName." WHERE $where") :
+                safe_column_num('value', $tableName, $where);
+        }
+    }
+    
+    if (empty(${$context}[$name])) {
+        return '';
+    }
+    
+    // TODO: optimize for scalar cf.
+    isset($thing) or $thing = '<txp:yield item />';
+    $list = do_list(${$context}[$name], $dlm);
+    $out = array();
+
+    if (isset($escape)) {
+        $old_item = $txp_item;
+
+        foreach ($list as $i => $value) {
+            $txp_item[true] = $value;
+            $txp_item['count'] = $i;
+            $out[] = $form ? parse_form($form) : parse($thing);
+        }
+
+        $txp_item = $old_item;
+        $out = txp_sandbox(array('field' => $name) + $atts, $out, true);
+    } else {
+        $out = array_map('txpspecialchars', $list);
+    }
+
+    $thing = is_array($out) ? doWrap($out, null, compact('escape')) : ($out ? $out : parse($thing, false));
+
+    return $thing;
 }
 
 // -------------------------------------------------------------
@@ -3353,6 +3398,10 @@ function txp_escape($escape, $thing = '')
     if (empty($escape)) {
         return $thing;
     }
+    
+    if (is_array($thing)) {
+        return txp_wraptag(compact('escape'), $thing);
+    }
 
     $escape = $escape === true ? array('html') : do_list(strtolower($escape));
     $filter = $tidy = $quoted = false;
@@ -3510,9 +3559,10 @@ function txp_wraptag($atts, $thing = '')
     ), $atts, false));
 
     $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
-    $thing = (string)$thing;
 
-    if (isset($breakby)) {
+    if (isset($breakby) && is_scalar($thing)) {
+        $thing = (string)$thing;
+
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
@@ -3532,6 +3582,7 @@ function txp_wraptag($atts, $thing = '')
         $thing = txp_escape($escape, $thing);
     }
 
+//    $thing = (string)$thing;
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if (trim($thing) !== '') {

@@ -482,7 +482,7 @@ function preText($store, $prefs = null)
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
-                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'.$customColumns,
+                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod'/*.$customColumns*/,
                             'textpattern',
                             "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );

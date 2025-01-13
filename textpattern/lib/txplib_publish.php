@@ -573,7 +573,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         $trace->stop($tag_stop);
     }
 
-    return $out;
+    return is_array($out) ? implode('', $out) : $out;
 }
 
 /**
@@ -677,7 +677,7 @@ function ckExID($val, $debug = false)
 function lookupByTitle($val, $debug = false)
 {
     $customData = buildCustomSql('article');
-    $customColumns = $customData ? $customData['columns'] : false;
+    $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
@@ -710,7 +710,7 @@ function lookupByTitle($val, $debug = false)
 function lookupByTitleSection($val, $section, $debug = false)
 {
     $customData = buildCustomSql('article');
-    $customColumns = $customData ? $customData['columns'] : false;
+    $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
@@ -734,7 +734,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 function lookupByIDSection($id, $section, $debug = false)
 {
     $customData = buildCustomSql('article');
-    $customColumns = $customData ? $customData['columns'] : false;
+    $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
@@ -757,7 +757,7 @@ function lookupByIDSection($id, $section, $debug = false)
 function lookupByID($id, $debug = false)
 {
     $customData = buildCustomSql('article');
-    $customColumns = $customData ? $customData['columns'] : false;
+    $customColumns = '';//$customData ? $customData['columns'] : false;
 
     return safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
@@ -786,7 +786,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     }
 
     $customData = buildCustomSql('article');
-    $customColumns = $customData ? $customData['columns'] : false;
+    $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
@@ -1272,7 +1272,7 @@ function filterAtts($atts = null, $iscustom = null)
     } elseif ($fields) {
         $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
     } else {
-        $fields = implode(', ', $coreColumns).$customColumns.$score;
+        $fields = implode(', ', $coreColumns)./*$customColumns.*/$score;
     }
 
     $custom = !empty($customData['where']) ? ' AND '.implode(' AND ', $customData['where']) : '';
@@ -1362,7 +1362,7 @@ function parseList($rs, &$object, $populate, $atts = array())
 
     $articles = array();
 
-    if ($rs && $last = is_array($rs) ? count($rs) : numRows($rs)) {
+    if ($rs && $last = numRows($rs)) {
         extract($atts + array(
                 'form' => '',
                 'thing' => null,
@@ -1396,7 +1396,7 @@ function parseList($rs, &$object, $populate, $atts = array())
         }
 
         while ($count++ <= $last) {
-            if ($a = is_array($rs) ? ($count == 1 ? reset($rs) : next($rs)) : nextRow($rs)) {
+            if ($a = nextRow($rs)) {
                 $res = $populate ? call_user_func($populate, $a) : $a;
 
                 if (is_array($res)) {
