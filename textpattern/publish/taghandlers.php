@@ -3582,7 +3582,7 @@ function txp_wraptag($atts, $thing = '')
         $thing = txp_escape($escape, $thing);
     }
 
-//    $thing = (string)$thing;
+    $thing = (string)$thing;
     !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if (trim($thing) !== '') {
