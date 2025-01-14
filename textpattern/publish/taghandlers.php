@@ -2838,10 +2838,11 @@ function custom_field($atts = array(), $thing = null)
 
     if (isset($escape)) {
         $old_item = $txp_item;
+        $txp_item['total'] = count($list);
 
         foreach ($list as $i => $value) {
             $txp_item[true] = $value;
-            $txp_item['count'] = $i;
+            $txp_item['count'] = $i + 1;
             $out[] = $form ? parse_form($form) : parse($thing);
         }
 
