@@ -1811,7 +1811,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         $rand ? shuffle($list) : (strpos($sort, 'desc') !== false ? rsort($list, $flag) : ($sort ? sort($list, $flag) : null));
     }
 
-    if($limit || $offset) {
+    if ($limit || $offset) {
         if (!$offset || is_numeric($offset)) {
             $list = array_slice($list, (int)$offset, isset($limit) ? (int)$limit : null);
         } else {
