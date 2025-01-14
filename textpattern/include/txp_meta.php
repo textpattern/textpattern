@@ -198,7 +198,7 @@ function meta_list($message = '')
     if ($criteria === 1) {
         $total = safe_count('txp_meta', $criteria);
     } else {
-        $total = getThing("SELECT COUNT(*) FROM txp_meta WHERE $criteria");
+        $total = getThing("SELECT COUNT(*) FROM " . safe_pfx('txp_meta') . " WHERE $criteria");
     }
 
     $searchBlock =
