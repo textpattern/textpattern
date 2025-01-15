@@ -83,7 +83,7 @@ if ($event == 'meta') {
 
 function meta_list($message = '')
 {
-    global $event, $step, $meta_list_pageby, $txp_user;
+    global $app_mode, $event, $step, $meta_list_pageby, $txp_user;
 
     pagetop(gTxt('tab_meta'), $message);
 
@@ -102,14 +102,14 @@ function meta_list($message = '')
             $sort = 'name';
         }
 
-        set_pref('meta_sort_column', $sort, 'meta', 2, '', 0, PREF_PRIVATE);
+        set_pref('meta_sort_column', $sort, 'meta', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('meta_sort_dir', 'asc');
     } else {
         $dir = ($dir == 'asc') ? "asc" : "desc";
-        set_pref('meta_sort_dir', $dir, 'meta', 2, '', 0, PREF_PRIVATE);
+        set_pref('meta_sort_dir', $dir, 'meta', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
@@ -195,7 +195,7 @@ function meta_list($message = '')
 
     $search_render_options = array('placeholder' => 'search_meta');
 
-    if ($criteria === 1) {
+    if ($crit === '') {
         $total = safe_count('txp_meta', $criteria);
     } else {
         $total = getThing("SELECT COUNT(*) FROM " . safe_pfx('txp_meta') . " WHERE $criteria");
@@ -225,6 +225,11 @@ function meta_list($message = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
+        if ($app_mode == 'json') {
+            send_json_response(array());
+            exit;
+        }
+
         $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
             gTxt($criteria == 1 ? 'no_meta_recorded' : 'no_results_found'),
@@ -232,6 +237,13 @@ function meta_list($message = '')
         );
     } else {
         $rs = safe_rows_start('*', 'txp_meta', "$criteria order by $sort_sql limit $offset, $limit");
+
+        if ($app_mode == 'json') {
+            send_json_response($rs);
+            exit;
+        }
+
+        $contentBlock .= pluggable_ui('meta_ui', 'extend_controls', '', $rs);
 
         if ($rs && numRows($rs)) {
             $contentBlock .= n.tag_start('form', array(
@@ -355,10 +367,10 @@ TODO: constraints
     }
 
     $pageBlock = $paginator->render().
-        nav_form('meta', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
-    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
+    echo $table->render(compact('total', 'crit'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**
