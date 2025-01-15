@@ -634,7 +634,7 @@ class Field
         $langClause = 'name IN (' . join(',', quote_list($labelRefs)) . ')';
 
         // @todo Transaction/rollback?
-        safe_delete('txp_meta_value_'.$this->dataType, 'meta_id = '.$this_id);
+        safe_delete('txp_meta_value_'.$this->dataType['type'], 'meta_id = '.$this_id);
         safe_delete('txp_meta_options', 'meta_id = '.$this_id);
         safe_delete('txp_lang', $langClause);
         safe_delete('txp_meta', 'id = '.$this_id);
