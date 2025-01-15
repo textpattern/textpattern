@@ -939,7 +939,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $postWhere = $customPairs = $customlAtts = array();
 
-    foreach ($customFields['by_id'] + array('url_title' => 'url_title') as $num => $field) {
+    foreach (($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title') as $num => $field) {
         $customlAtts[$field] = null;
 
         if (isset($atts['custom_'.$num])) {
