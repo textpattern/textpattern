@@ -853,7 +853,7 @@ function image_format_info($image)
             $vals[] = $contentRow[$valueField];
         }
 
-        $image[$cf->get('name')] = implode($cf->get('delimiter'), $vals);
+        $image[$cf->get('name')] = implode((string)$cf->get('delimiter'), $vals);
     }
 
     return $image;
@@ -2880,7 +2880,9 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
 
 function safe_strtotime($time_str)
 {
-    $ts = strtotime($time_str);
+    if (!is_string($time_str) || ($ts = strtotime($time_str)) === false) {
+        return 0;
+    }
 
     // tz_offset calculations are expensive
     $tz_offset = tz_offset($ts);
