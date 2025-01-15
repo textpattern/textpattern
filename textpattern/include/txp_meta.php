@@ -375,25 +375,11 @@ function meta_edit($message = '')
 
     extract(array_map('assert_string', gpsa($vars)));
 
-    $data_types = Txp::get('\Textpattern\Meta\DataType')->get();
-
-    $textfilter_types = array();
-    $option_types = array();
-    $delimited_types = array();
-
-    foreach ($data_types as $key => $data_type) {
-        if ($data_type['textfilter']) {
-            $textfilter_types[] = $key;
-        }
-
-        if ($data_type['options']) {
-            $option_types[] = $key;
-        }
-
-        if ($data_type['delimited']) {
-            $delimited_types[] = $key;
-        }
-    }
+    $dataTypeObj = Txp::get('\Textpattern\Meta\DataType');
+    $data_types = $dataTypeObj->get();
+    $textfilter_types = $dataTypeObj->getBy('textfilter');
+    $option_types = $dataTypeObj->getBy('options');
+    $delimited_types = $dataTypeObj->getBy('delimited');
 
     $is_edit = ($id && $step === 'meta_edit');
     $default = '';

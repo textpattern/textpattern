@@ -39,11 +39,12 @@ class DataType implements \IteratorAggregate
      * Default data field map. May be altered by plugins.
      *
      * Each entry comprises:
-     *  type       : (string) database field type
-     *  size       : (int) database field size (width). null = system defined
-     *  textfilter : (bool) whether the field can accept Textfiltered content
-     *  options    : (bool) whether the field is made of a set of options (e.g. select list)
-     *  delimited  : (bool) whether the field content requires a delimiter between stored values
+     *  type        : (string) database field type
+     *  size        : (int) database field size (width). null = system defined
+     *  textfilter  : (bool) whether the field can accept Textfiltered content
+     *  options     : (bool) whether the field is made of a set of options (e.g. select list)
+     *  delimited   : (bool) whether the field content requires a delimiter between stored values
+     *  constraints : (array) The constraint object names that apply to this data type
      *
      * @var array
      * @todo Could (should?) be an array of DataType objects.
@@ -164,6 +165,18 @@ class DataType implements \IteratorAggregate
     );
 
     /**
+     * Data types grouped by other columns.
+     *
+     * @var array
+     */
+
+    protected $typesBy = array(
+        'delimited' => array(),
+        'options' => array(),
+        'textfilter' => array(),
+    );
+
+    /**
      * General constructor for the map.
      *
      * The map can be extended with a 'txp.meta > data.types' callback event.
@@ -184,7 +197,7 @@ class DataType implements \IteratorAggregate
     /**
      * Return meta data field types and their associated properties.
      *
-     * @param  string|array List of meta data keys to exclude
+     * @param  string|array $exclude List of meta data keys to exclude
      * @return array        A meta data types map array
      */
 
@@ -201,6 +214,40 @@ class DataType implements \IteratorAggregate
         }
 
         return $map;
+    }
+
+    /**
+     * Return meta data field names that match the given column attribute.
+     *
+     * @param  string       $column  Data type attribute to fetch
+     * @param  string|array $exclude List of meta data types to exclude
+     * @return array        Data types with the given attribute set true, less exclusions
+     */
+
+    public function getBy($column, $exclude = array())
+    {
+        $out = array();
+
+        if (array_key_exists($column, $this->typesBy)) {
+            if (empty($this->typesBy[$column])) {
+                $map = $this->dataTypeMap;
+
+                foreach ($map as $key => $data_type) {
+                    if ($data_type[$column]) {
+                        $this->typesBy[$column][] = $key;
+                    }
+                }
+            }
+
+            $out = $this->typesBy[$column];
+            $exclude = do_list($exclude);
+
+            foreach ($exclude as $remove) {
+                unset($out[(string)$remove]);
+            }
+        }
+
+        return $out;
     }
 
     /**

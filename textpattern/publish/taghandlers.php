@@ -2801,13 +2801,7 @@ function custom_field($atts = array(), $thing = null)
     }
 
     if ($delimited === null) {
-        $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
-
-        foreach ($dataTypeMap as $k => $def) {
-            if ($def['delimited']) {
-                $delimited[] = $k;
-            }
-        }
+        $delimited = \Txp::get('\Textpattern\Meta\DataType')->getBy('delimited');
     }
 
     if (!isset(${$context}[$name])) {
