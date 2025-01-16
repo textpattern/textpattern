@@ -328,13 +328,15 @@ class Field
         $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
         $this->set($data);
 
-        if ($reset_time) {
+        if (isset($reset_time)) {
             $created = $sqlnow;
         }
 
-        if ($expire_now) {
+        if (isset($expire_now)) {
             $expires = $sqlnow;
         }
+
+        isset($name_orig) or $name_orig = $name;
 
         // @todo Possibly validate this.
         $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);

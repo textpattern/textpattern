@@ -845,12 +845,13 @@ function image_format_info($image)
     foreach ($cfs as $cf) {
         $ref = $image['id'] ? $image['id'] : null;
         $cf->loadContent($ref, true);
+
         $valueField = $cf->getValueField();
         $contentSet = $cf->getContent();
         $vals = array();
 
         foreach ($contentSet as $contentRow) {
-            $vals[] = $contentRow[$valueField];
+            $vals[] = is_array($contentRow) ? $contentRow[$valueField] : $contentRow;
         }
 
         $image[$cf->get('name')] = implode((string)$cf->get('delimiter'), $vals);
