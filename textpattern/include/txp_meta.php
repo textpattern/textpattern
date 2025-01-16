@@ -619,19 +619,19 @@ function meta_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     global $all_content_types, $all_render_types;
 
-    $content_types = $all_content_types ? selectInput('content_type', $all_content_types, '') : '';
+//    $content_types = $all_content_types ? selectInput('content_type', $all_content_types, '') : '';
     $render_types = $all_render_types ? selectInput('render', $all_render_types, '') : '';
 
     $methods = array(
-        'changecontenttype' => array('label' => gTxt('changecontenttype'), 'html' => $content_types),
+//        'changecontenttype' => array('label' => gTxt('changecontenttype'), 'html' => $content_types),
         'changerendertype'  => array('label' => gTxt('changerendertype'), 'html' => $render_types),
         'delete'            => gTxt('delete'),
     );
-
+/*
     if (!$content_types) {
         unset($methods['changecontenttype']);
     }
-
+*/
     if (!$render_types) {
         unset($methods['changerendertype']);
     }
@@ -674,13 +674,13 @@ function meta_multi_edit()
 
             $key = '';
             break;
-        case 'changecontenttype':
+/*        case 'changecontenttype':
             $val = ps('content_type');
 
             if (in_array($val, $all_content_types)) {
                 $key = 'content_type';
             }
-            break;
+            break;*/
         case 'changerendertype':
             $val = ps('render');
 
