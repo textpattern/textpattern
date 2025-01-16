@@ -573,7 +573,7 @@ function processTags($tag, $atts = '', $thing = null, $log = false)
         $trace->stop($tag_stop);
     }
 
-    return is_array($out) ? implode('', $out) : $out;
+    return is_array($out) ? implode('', $out) : (string)$out;
 }
 
 /**
