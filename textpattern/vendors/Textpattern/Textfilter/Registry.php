@@ -112,7 +112,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
     public function filter($key, $thing, $context)
     {
         // Preprocessing, anyone?
-        callback_event_ref('textfilter', 'filter', 0, $thing, $context);
+        callback_event_ref('textfilter', 'filter', 1, $thing, $context);
 
         if (isset($this[$key])) {
             $thing = $this[$key]->filter($thing, $context['options']);
@@ -121,7 +121,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
         }
 
         // Postprocessing, anyone?
-        callback_event_ref('textfilter', 'filter', 1, $thing, $context);
+        callback_event_ref('textfilter', 'filter', 0, $thing, $context);
 
         return $thing;
     }
