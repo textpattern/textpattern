@@ -302,9 +302,9 @@ class Field
         }
 
         if (!isset($this->definition['title'][$lang]) || $force) {
+            $userlang = txpinterface == 'admin' ? get_pref('language_ui', LANG) : LANG;
             $label = $this->getLabelReference($this->get('name'));
-            $this->definition['title'][$lang] = safe_field('data', 'txp_lang', "name = '" . doSlash($label) . "' AND lang = '" . doSlash($lang) . "'");
-
+            $this->definition['title'][$lang] = $lang == $userlang ? gTxt($label) : safe_field('data', 'txp_lang', "name = '" . doSlash($label) . "' AND lang = '" . doSlash($lang) . "'");
         }
 
         return $this;
@@ -328,11 +328,11 @@ class Field
         $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
         $this->set($data);
 
-        if (isset($reset_time)) {
+        if (!empty($reset_time)) {
             $created = $sqlnow;
         }
 
-        if (isset($expire_now)) {
+        if (!empty($expire_now)) {
             $expires = $sqlnow;
         }
 
