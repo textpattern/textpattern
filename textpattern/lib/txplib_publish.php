@@ -1268,11 +1268,11 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     if ($fields === true) {
-        $fields = implode(', ', $coreColumns).$score;
+        $fields = implode(', ', $coreColumns).$customColumns.$score;
     } elseif ($fields) {
         $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
     } else {
-        $fields = implode(', ', $coreColumns)./*$customColumns.*/$score;
+        $fields = implode(', ', $coreColumns).$score;
     }
 
     $custom = !empty($customData['where']) ? ' AND '.implode(' AND ', $customData['where']) : '';
