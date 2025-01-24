@@ -2726,7 +2726,6 @@ function custom_field($atts = array())
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
         'escape'  => null,
-        'default' => '',
     ), $atts));
 
     assert_article();
@@ -2739,9 +2738,7 @@ function custom_field($atts = array())
         return '';
     }
 
-    $thing = $thisarticle[$name] !== '' ? $thisarticle[$name] : $default;
-
-    return $escape === null ? txpspecialchars($thing) : txp_sandbox(array('id' => null, 'field' => $name) + $atts, $thing);
+    return $escape === null ? txpspecialchars($thisarticle[$name]) : txp_sandbox(array('id' => null, 'field' => $name) + $atts);
 }
 
 // -------------------------------------------------------------
