@@ -182,6 +182,7 @@ class IXR_Message
     var $faultString;
     var $methodName;
     var $params;
+    var $currentTag;
 
     // Current variable stacks
     var $_arraystructs = array();   // The stack used to keep track of the current array/struct
@@ -975,6 +976,8 @@ class IXR_IntrospectionServer extends IXR_Server
         // Make sure it's in an array
         if ($args && !is_array($args)) {
             $args = array($args);
+        } else if (!is_array($args)) {
+            $args = [];
         }
 
         // Over-rides default call method, adds signature check
