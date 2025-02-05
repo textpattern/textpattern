@@ -704,11 +704,17 @@ class TXP_Wrapper
         $incoming['Title'] = $incoming_with_markup['Title'];
 
         if (empty($incoming['Body_html']) && !empty($incoming['Body'])) {
-            $incoming['Body_html'] = $incoming_with_markup['Body_html'];
+            if(!empty($incoming_with_markup['Body_html']))
+                $incoming['Body_html'] = $incoming_with_markup['Body_html'];
+            else // Handle the situation where no explicit html is being received - e.g. body may be html
+                $incoming['Body_html'] = $incoming['Body'];
         }
-
+        
         if (empty($incoming['Excerpt_html']) && !empty($incoming['Excerpt'])) {
-            $incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
+            if(!empty($incoming_with_markup['Body_html']))
+                $incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
+            else // Handle the situation where no explicit html is being received - e.g. body may be html
+                $incoming['Excerpt_html'] = $incoming['Excerpt'];
         }
 
         unset($incoming_with_markup);

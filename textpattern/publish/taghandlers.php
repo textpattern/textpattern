@@ -2538,7 +2538,7 @@ function if_category($atts, $thing = null)
         $names = do_list_unique($name);
 
         if ($parent === true) {
-            $x = $path && ($name === false || array_intersect($path, $names));
+            $x = count($path) > 1 && ($name === false || array_intersect($path, $names));
         } else {
             ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent;
             $x = isset($path[$parent]) && ($name === false || in_array($path[$parent], $names));

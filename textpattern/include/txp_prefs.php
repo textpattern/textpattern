@@ -761,7 +761,7 @@ EOS
     , false, true);
 
 
-    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple('name') . $js;
+    return Txp::get('\Textpattern\UI\Select', $name, $form_types, $val)->setAtt('id', $name)->setMultiple() . $js;
 }
 
 /**
@@ -837,8 +837,10 @@ function dateformats($name, $val)
     }
 
     $vals['since'] = gTxt('hours_days_ago');
-    $input = Txp::get('\Textpattern\UI\Select', $name, $vals, $val)->setAtt('id', $name)//selectInput(false, $vals, $val, '', '', $name)
-        . n . fInput('text', $name, $val, '', gTxt('code'), '', 16);
+
+    $input = Txp::get('\Textpattern\UI\Select', $name, $vals, array($val))->setAtt('id', $name)
+        . n . Txp::get('\Textpattern\UI\Input', $name, 'text', $val)
+            ->setAtts(array('title' => gTxt('code'), 'size' => INPUT_MEDIUM));
 
     return pluggable_ui('prefs_ui', 'dateformats', $input, compact('vals', 'name', 'val', 'ts'));
 }
