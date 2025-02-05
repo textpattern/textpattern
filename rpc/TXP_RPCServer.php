@@ -36,6 +36,11 @@ require_once txpath . '/lib/txplib_misc.php';
 
 define('IMPATH', $path_to_site . DS . $img_dir . DS);
 
+// HTTP address of the site serving images.
+if (!defined('ihu')) {
+    define('ihu', hu);
+}
+
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
     function __construct()
@@ -915,11 +920,11 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-       //Temp File Upload
+        //Temp File Upload
         $tempImageFolder = get_pref('tempdir');
         file_put_contents($tempImageFolder . $file['name'], $file['bits']);
 
-       //Convert the file to the standard Textpattern input struct
+        //Convert the file to the standard Textpattern input struct
         $newfile = array(
            'name' => $file['name'],
            'error' => false,
@@ -927,10 +932,18 @@ EOD;
         );
         $id = image_data($newfile, false, 0, false)[1]; //Move the file and input into database
         $ext = end(explode('.', $file['name'])); //Get the uploaded filetype
-
-       //Return
+        
+        //case standardization
+        $id = strtolower($id);
+        $ext = strtolower($ext);
+           
+        //Jpeg standardization
+        if($ext == 'jpeg')
+            $ext = 'jpg';
+        
+        //Return
         $returnValue = array(
-          'url' => get_pref('img_dir') . DS . $id . '.' . $ext
+            'url' => DS . get_pref('img_dir') . DS . $id . '.' . $ext
         );
 
         return $returnValue;
@@ -983,19 +996,19 @@ EOD;
 
         if (isset($struct['date_created_gmt'])) {
             $struct['dateCreated'] = $struct['date_created_gmt'];
-            $struct['dateCreated']->tz = 'Z'; // force GMT timezone
+            $struct['dateCreated']->timezone = 'Z'; // force GMT timezone
         }
 
         if (isset($struct['dateCreated'])) {
-            if ($struct['dateCreated']->tz == 'Z') {
+            if ($struct['dateCreated']->timezone == 'Z') {
                 // GMT-based posting time; transform into server time zone.
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0);
-            } elseif (!$struct['dateCreated']->tz) {
+            } elseif (!$struct['dateCreated']->timezone) {
                 // Posting in an unspecified time zone: Assume site time.
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset();
             } else {
                 // Numeric time zone offsets.
-                if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->tz, $t)) {
+                if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->timezone, $t)) {
                     $tz = $t[1] * 3600 + $t[2] * 60;
                     $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0) - $tz;
                 }
@@ -1076,9 +1089,9 @@ EOD;
         }
 
         $cat  = $txp->getCategory($rs['Category1']);
-        $cat1 = $cat['title'];
+        $cat1 = $cat['title'] ?? '';
         $cat  = $txp->getCategory($rs['Category2']);
-        $cat2 = $cat['title'];
+        $cat2 = $cat['title'] ?? '';
 
         $out = array(
             'categories'  => array($cat1, $cat2),
@@ -1091,7 +1104,7 @@ EOD;
             'title'       => $rs['Title'],
         );
 
-        $out['dateCreated']->tz = 'Z'; // GMT.
+        $out['dateCreated']->timezone = 'Z'; // GMT.
 
         // MovableType Implementation add-ons.
         if (isset($rs['Annotate']) && !empty($rs['Annotate'])) {
