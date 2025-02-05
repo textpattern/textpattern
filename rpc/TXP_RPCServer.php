@@ -1089,9 +1089,9 @@ EOD;
         }
 
         $cat  = $txp->getCategory($rs['Category1']);
-        $cat1 = $cat['title'] ?? '';
+        $cat1 = isset($cat['title']) ? $cat['title'] : '';
         $cat  = $txp->getCategory($rs['Category2']);
-        $cat2 = $cat['title'] ?? '';
+        $cat2 = isset($cat['title']) ? $cat['title'] : '';
         
         switch ($rs['Status']) {
             case 1:
