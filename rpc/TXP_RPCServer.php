@@ -707,7 +707,7 @@ EOD;
         }
 
         $articles = $txp->getArticleList(
-            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
+            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted, Status',
             "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false
         );
 
@@ -1092,6 +1092,26 @@ EOD;
         $cat1 = $cat['title'] ?? '';
         $cat  = $txp->getCategory($rs['Category2']);
         $cat2 = $cat['title'] ?? '';
+        
+        switch ($rs['Status']) {
+            case 1:
+                $status = 'draft'; // draft
+                break;
+            case 2:
+                $status = 'private'; // hidden
+                break;
+            case 3:
+                $status = 'private'; // pending
+                break;
+            case 4:
+                $status = 'live'; // live
+                break;
+            case 5:
+                $status = 'live'; // sticky
+                break;
+            default:
+                $status = 'draft'; // client may accidentally publish live posts, so if in doubt say draft
+        }
 
         $out = array(
             'categories'  => array($cat1, $cat2),
@@ -1102,6 +1122,7 @@ EOD;
             'link'        => $url,
             'permaLink'   => $url,
             'title'       => $rs['Title'],
+            'post_status' => $status,
         );
 
         $out['dateCreated']->timezone = 'Z'; // GMT.
