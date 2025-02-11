@@ -8,6 +8,7 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Added: Ability to serve files via 'type' attribute to <txp:file_download />.
 * Added: Plugin compilation directly from the Plugins panel.
 * Changed: Wildcards in file/image/link category queries.
+* Changed: enhancements to RPC functionality (thanks, Melonking906)
 * Changed: Multi-site scaffold optimisations.
 * Changed: Pre-flight check visibility toggle.
 * Developer: Pre+post textfilter callbacks (article_submit) on article save.
