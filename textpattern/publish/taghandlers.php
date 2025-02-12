@@ -2332,11 +2332,15 @@ function permlink($atts, $thing = null)
     $id = $atts['id'];
 
     if (!$id && empty($thisarticle)) {
-        return;
+        $url = false;
+    } elseif (filter_var($thisarticle['url_title'], FILTER_VALIDATE_URL) !== false) {
+        $url = $thisarticle['url_title'];
+        $external = strpos($url, hu) !== 0;
+    } else {
+        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
     }
 
-    $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
-    $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
     $txp_context = $old_context;
 
     if ($url) {
@@ -2345,7 +2349,7 @@ function permlink($atts, $thing = null)
         }
 
         return tag((string)parse($thing), 'a', array(
-            'rel'   => 'bookmark',
+            'rel'   => empty($external) ? 'bookmark' : 'external',
             'href'  => $url,
             'title' => $atts['title'],
             'style' => $atts['style'],
