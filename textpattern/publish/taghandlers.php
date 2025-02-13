@@ -2331,21 +2331,20 @@ function permlink($atts, $thing = null)
 
     $id = $atts['id'];
 
-    if (!$id && empty($thisarticle)) {
-        return;
+    if ($id || !empty($thisarticle)) {
+        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
     }
 
-    $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
-    $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
     $txp_context = $old_context;
 
-    if ($url) {
+    if (isset($url)) {
         if ($thing === null) {
             return $url;
         }
 
         return tag((string)parse($thing), 'a', array(
-            'rel'   => 'bookmark',
+            'rel'   => filter_var($url, FILTER_VALIDATE_URL) === false || strpos($url, hu) === 0 ? 'bookmark' : 'external',
             'href'  => $url,
             'title' => $atts['title'],
             'style' => $atts['style'],

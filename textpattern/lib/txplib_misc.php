@@ -5079,6 +5079,10 @@ function permlinkurl($article_array, $hu = null)
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
+    if (filter_var(preg_replace('@^//@', PROTOCOL, $url_title), FILTER_VALIDATE_URL) !== false) {
+        return $url_title;
+    }
+
     if (empty($section)) {
         $url_mode = 'messy';
     } elseif (isset($txp_sections[$section])) {
@@ -5584,7 +5588,8 @@ function get_context($context = true, $internals = array('id', 's', 'c', 'contex
         if (isset($v)) {
             $out[$q] = $v;
         } elseif (isset($pretext[$q]) && in_array($q, $internals)) {
-            $out[$q] = $q === 'author' ? $pretext['realname'] : $pretext[$q];
+            $v = $q === 'author' ? $pretext['realname'] : $pretext[$q];
+            empty($v) or $out[$q] = $v;
         } else {
             $out[$q] = gps($q, $v);
         }
