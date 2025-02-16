@@ -1193,6 +1193,8 @@ function load_plugin($name, $force = false)
             $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
             $plugins_ver[$name] = isset($plugin['version']) ? $plugin['version'] : 0;
 
+            callback_event("plugin_lifecycle.$name", 'loaded');
+
             if (isset($plugin['textpack'])) {
                 Txp::get('\Textpattern\L10n\Lang')->loadTextpack($plugin['textpack']);
             }
