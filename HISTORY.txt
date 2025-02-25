@@ -14,7 +14,7 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Developer: Pre+post textfilter callbacks (article_submit) on article save.
 * Developer: Add getAtts($tag) method for fetching tag attributes.
 * Developer: Reintroduce extend_col_1 markup area on Write panel.
-* Vendors: DOMPurify 3.2.3.
+* Vendors: DOMPurify 3.2.4.
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.9.3.
 * Vendors: Textile 4.1.2. (thanks, gocom).
