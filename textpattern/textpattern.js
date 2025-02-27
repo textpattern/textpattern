@@ -2173,7 +2173,7 @@ textpattern.Route.add('article', function () {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
     });
     $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
-        `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>`
+        `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>&nbsp;`
     );
 
     $(document).on('change', '#clean-view', function () {
