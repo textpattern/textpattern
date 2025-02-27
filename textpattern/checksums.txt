@@ -1,4 +1,4 @@
-/admin-themes/classic/classic.php: f9b31d417376a56339bfdb05752087e4
+/admin-themes/classic/classic.php: 60e0083e14a48be6c5f1f264a843e640
 /admin-themes/hive/assets/js/autosize.js: 6c387982910532e35c6164946b58a29e
 /admin-themes/hive/assets/js/darkmode.js: 9fa4ab0fe32ef4d866a1286b3a8ba1af
 /admin-themes/hive/assets/js/main.js: 87002803f37d092d56634151256d87db
@@ -8,7 +8,7 @@
 /admin-themes/hiveneutral/assets/js/main.js: 87002803f37d092d56634151256d87db
 /admin-themes/hiveneutral/hiveneutral.php: 031445c0156eaa0eb59d48e43a5aa645
 /include/txp_admin.php: 9309485a47cd7018062317ed7195282c
-/include/txp_article.php: c67bde9b9da253886b40aa896d720af9
+/include/txp_article.php: ffe5514d794e85a5e63d5375b5d2b8ff
 /include/txp_auth.php: b735dacaaa2c1ec73cfa5c2158112d1f
 /include/txp_category.php: 6d5f4d37e08e267bd96e6627b23d460f
 /include/txp_css.php: 99211d0a729b8f894e61b3d288d7be40
@@ -24,7 +24,7 @@
 /include/txp_lore.php: 69d6da91d4e747efeb0a53b20b345d38
 /include/txp_page.php: 97e54121f672ed46566712fa9fcfee1f
 /include/txp_plugin.php: 3b50304707e27dd5e3285581e1da1a93
-/include/txp_prefs.php: 337feb0586f5d2b61f822933f5e46194
+/include/txp_prefs.php: f7706807a0990aae8d153253ad9b02f3
 /include/txp_section.php: cca63155d9e1b4699a82c7b6c75f10f5
 /include/txp_skin.php: e5acc1aa070e3adb720be162e11b0167
 /include/txp_tag.php: a0dae5974c0d0dbd6142294466c554a9
@@ -32,28 +32,28 @@
 /lib/admin_config.php: 4708a43f923cb27de2686571b69de9f8
 /lib/class.thumb.php: 86dd117ccde53057fb2145ded4dd555d
 /lib/class.trace.php: e513b301279a394581aee5adf97dec3d
-/lib/constants.php: 9024f81e46a57ce998c835b5b1757d91
-/lib/IXRClass.php: a1b525b4a9ed12dcb5677d5232a3d92e
+/lib/constants.php: a9ec328bddd5346c5ebd722b6982e637
+/lib/IXRClass.php: b0affd8ceb2864e2df17e35d5880de0f
 /lib/PasswordHash.php: 66a8aa4b2d6e0527877a797907efc035
 /lib/taglib.php: 20c6bb919ddf7e5f4b212fa7f51c9304
 /lib/txplib_admin.php: 5f7b5e9f10a3146c5756e2240554c2c7
 /lib/txplib_db.php: 3de84300e3f0979d7c3ca2914c4ed4f9
 /lib/txplib_forms.php: f0a89fb0be421917495ee77f2e072e69
 /lib/txplib_head.php: 773ef2975b9b0f76f158c4ac1e59b5f8
-/lib/txplib_html.php: 78ae286b8f74b6e2481ccb6115912dca
-/lib/txplib_misc.php: 7fb5420678e1e9606f55d40885cee17c
+/lib/txplib_html.php: ad98524dd6be89e3c4b8b1e90a4d290e
+/lib/txplib_misc.php: 8da3df36bee8e28e26b6ee9eda38055a
 /lib/txplib_publish.php: 96317a57b8ade4b3b2bb7a91c75ce1cc
 /lib/txplib_update.php: 9ae9f59858eed39bff194f92f66065e5
 /lib/txplib_validator.php: b889134139fab7bc302ae8982f0fd145
-/lib/txplib_wrapper.php: 08c0e6ede3c2216b59ccd6c108ab211a
+/lib/txplib_wrapper.php: 0e8fc2ea3b6f0aa74c717387f5d3b793
 /publish/atom.php: 004cd8a3ad95c0f644a8880f08107357
 /publish/comment.php: fef65da5891a9c7add93eaf5f951d1c9
 /publish/log.php: 361dfbeca29b39b2f56b454c0c0a83ae
 /publish/rss.php: 369796c0efa75a66889a522186d19b4c
 /publish/search.php: d56f02043f25d0284424a7d270630fe2
-/publish/taghandlers.php: 6c11bb337dc36dfe6e885973ea83c59f
+/publish/taghandlers.php: 3eea39e0070287e2fc301e1d014fa0f4
 /publish.php: 4dd88fed820b86a772645039180ced54
-/textpattern.js: 5db89a4ddb1f9a9e403f544612c45ae8
+/textpattern.js: b57dbbf5e476989c052613d25b39b5ba
 /tmp/index.php: b3612b473531b49801f1bcd7ff330117
 /update/_to_4.0.3.php: 86aa484b4627079e5d88705330829ded
 /update/_to_4.0.4.php: 1fd835aa807e0a2dd7e59668236a8b77
@@ -83,7 +83,8 @@
 /vendors/composer/installed.php: 84fce96a4a0e021a231dc50eb3318375
 /vendors/composer/InstalledVersions.php: 182d5924ff0b528f008a83d1f5809d02
 /vendors/composer/platform_check.php: 15e1efff88933be3dd5740e3c9530478
-/vendors/cure53/DOMPurify/dist/purify.min.js: ebc82a29aca94e91d6b87a26aff434e6
+/vendors/cure53/DOMPurify/dist/purify.min.js: 549c43ecd1cb8a901f5729c257abb068
+/vendors/jquery/jquery/jquery-4.0.0-beta.2.min.js: c350b5b77152c38464eb9079410729b3
 /vendors/jquery/jquery/jquery.js: 2c872dbe60f4ba70fb85356113d8b35e
 /vendors/jquery/jquery-ui/jquery-ui.js: 12c28b31a1369383b3549abf958b01fe
 /vendors/Netcarver/Textile/DataBag.php: f8de6d8cb14ff6b0403922e13cbd71ff
@@ -121,6 +122,7 @@
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ja.php: 47bc2e74a6a0de906e46fdc3f05335ad
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ka.php: 693af2da3a7837d6c2ce877a6296c9fa
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ko.php: c95e8ca9669773f869b54ad91f2df771
+/vendors/phpmailer/phpmailer/language/phpmailer.lang-ku.php: ab9efa84143e00cb8e8dc2e06dae4796
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-lt.php: a1db8ce612b6a47aaa32635d66aa6147
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-lv.php: a9a3d00075ac3e83c74e43a394dfba54
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-mg.php: 6c8fe8f190a0ccc9f750851ba0d65585
@@ -142,6 +144,7 @@
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-tl.php: ea1ce8d9353133c43fb3f14ad663454b
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-tr.php: af90792796806d25cc4893d335b70fc1
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-uk.php: dd92241bba4087a70ce50c99ef16dd4a
+/vendors/phpmailer/phpmailer/language/phpmailer.lang-ur.php: 017186f1054213e892d27ab5be64cc33
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-vi.php: b98d51c1f17b610fed45013e58bd1701
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-zh.php: 05274f5c2fc2da491392f5b9e3f859e6
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-zh_cn.php: fd539432a2254bb959d54a7010001574
@@ -152,6 +155,7 @@
 /vendors/phpmailer/phpmailer/src/PHPMailer.php: e88e574de119bb2bc8c5dc5135480be1
 /vendors/phpmailer/phpmailer/src/POP3.php: ad0d035b2b5280255db6d47e76b75537
 /vendors/phpmailer/phpmailer/src/SMTP.php: 16403b1d60833801c30a23981c453e11
+/vendors/PrismJS/prism/prism-txp.js: e0bfe0559dc4b882f2708f556d625ad4
 /vendors/PrismJS/prism/prism.js: c7e2b59d35cb5e8e0200e17891d7b775
 /vendors/Textpattern/Adaptable/AdapterInterface.php: 6ae8d319255c0603c8777031120c34c7
 /vendors/Textpattern/Adaptable/Providable.php: e62a675bb8d696c4b0c3e8645e44d075
@@ -176,7 +180,7 @@
 /vendors/Textpattern/Iterator/RecDirIterator.php: c18c08ccf5fb7442e7a648ead68b5099
 /vendors/Textpattern/Iterator/RecFilterIterator.php: 828b3a1244ec6e0599a83669e3ad617a
 /vendors/Textpattern/Iterator/RecIteratorIterator.php: 9cf354e5e0a4a0d11f0a45ff15b3410d
-/vendors/Textpattern/L10n/Lang.php: c314d84fd749e6b80c5fbcc4b1d19a80
+/vendors/Textpattern/L10n/Lang.php: afd4d2a151851d07968a8d34742b3fca
 /vendors/Textpattern/L10n/Locale.php: 7673a29218af7e68949ce199679991ad
 /vendors/Textpattern/Loader.php: 6a6179a79e391bc3a02c3877bfd49028
 /vendors/Textpattern/Mail/Adapter/Mail.php: 09e234b8570213c8bb54bd37fbeacadb
@@ -192,7 +196,7 @@
 /vendors/Textpattern/Password/Generator.php: 08e2198a641f1926669cf77f8f1a9e4c
 /vendors/Textpattern/Password/Hash.php: 0c6dcedfea4f5bdd6c21c3092b2ffc9e
 /vendors/Textpattern/Password/Random.php: 214853bd22b7edaa811b86f678ba6184
-/vendors/Textpattern/Plugin/Plugin.php: c4e6fba181612bc0029aa71b98e701cb
+/vendors/Textpattern/Plugin/Plugin.php: 6e346093997991df17dec874596c7c4c
 /vendors/Textpattern/Search/Filter.php: 4be36939079f26cf989f85c72fc7ff77
 /vendors/Textpattern/Search/Method.php: aa0b20340563a5b7930bf24a7046e6f9
 /vendors/Textpattern/Security/Exception.php: c47463552de83dcf58751e95a4d3d040
@@ -226,7 +230,7 @@
 /vendors/Textpattern/Textfilter/Constraint.php: 0652457a3aa5d75226e3edeb6619ee67
 /vendors/Textpattern/Textfilter/Nl2Br.php: fefb7c116d9271292ded919427c495de
 /vendors/Textpattern/Textfilter/Plain.php: 272b824e41e2b9549ae826b3e82e52db
-/vendors/Textpattern/Textfilter/Registry.php: c9f4694f99b144462d10d9d47325257f
+/vendors/Textpattern/Textfilter/Registry.php: 79bdca7da8f716593c91cc5d7f213211
 /vendors/Textpattern/Textfilter/TextfilterInterface.php: a20b677d0385acdc076c0cb9ba0210f5
 /vendors/Textpattern/Textfilter/Textile.php: f96aa1ed0d80e684946dfc6e62c17c35
 /vendors/Textpattern/Textile/Parser.php: c78317390a8c01713b6959e5ee683a77
@@ -258,7 +262,7 @@
 /vendors/Textpattern/UI/Radio.php: 0b774099888b72e77de118edbca128d1
 /vendors/Textpattern/UI/RadioSet.php: 08b20a30a7e3f53844addcbabb30e536
 /vendors/Textpattern/UI/Script.php: a15d945a8718d348b2b16faaeafab412
-/vendors/Textpattern/UI/Select.php: e990aba933bb0619ba0b14df407c8a38
+/vendors/Textpattern/UI/Select.php: 693f2c6d3cb1917db3e63808a6502f97
 /vendors/Textpattern/UI/SelectTree.php: 9aa3c514bbc647d98b21672591bc4a91
 /vendors/Textpattern/UI/Span.php: 0a4be0ff900cf067b627d72cf300c41b
 /vendors/Textpattern/UI/Style.php: 9638f7f3ae586a4564eabe1d203ee294
@@ -287,5 +291,5 @@
 /vendors/Txp.php: fbb7f8d8a3e7ad794ef71dda359c06a7
 /../css.php: 96ce45e186cfe17d04ecc72164883880
 /../index.php: 4332e421a4b3a45a6fe0dba68e4267b0
-/../rpc/TXP_RPCServer.php: f347638b071ad7b30d6ebf0637404287
+/../rpc/TXP_RPCServer.php: dba3ea153f43e4daf9aa68779d5c44f0
 /../rpc/index.php: 66653fc3eb759916c0471945c535be13
