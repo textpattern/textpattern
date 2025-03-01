@@ -180,7 +180,7 @@ class TxpXML
                 $article['textile_excerpt'] = 0;
             }
 
-            $article['AuthorID'] = $txp_user;
+            $article['AuthorID'] = $article['LastModID'] = $txp_user;
             $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
             $article['uid'] = md5(uniqid(rand(), true));
 
