@@ -145,41 +145,6 @@ $txpcfg['client_flags'] = 0;
 
 // define('PROTOCOL', 'https://');
 
-/**
- * Optional: Multi-Site setup:
- * Set HTTP address of Textpattern admin URL.
- *
- */
-
-// $txpcfg['admin_url'] = 'admin.example.com';
-
-/**
- * Optional: Multi-Site setup:
- * Define top-level cookie domain for txp_login_public cookie.
- *
- */
-
-// $txpcfg['cookie_domain'] = 'example.com';
-
-/**
- * Optional: Multi-Site setup:
- * Full server path to multi-site root directory, no slash at the end
- * This directory contains the site's /public, /private, and /admin directories.
- *
- */
-
-// $txpcfg['multisite_root_path'] = '/path/to/sites/example-site-dir';
-
-/**
- * Optional: Multi-Site setup:
- * Set txpath for shared txp and vendor directories
- * see https://github.com/textpattern/textpattern/blob/main/sites/README.txt
- */
-
-// if (!defined('txpath')) {
-//  define('txpath', $txpcfg['txpath']);
-// }
-
 /*
  * Optional, advanced: define a Content Security Policy header.
  * see TODO
