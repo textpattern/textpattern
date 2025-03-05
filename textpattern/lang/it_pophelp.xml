@@ -394,6 +394,7 @@
         <item id="warn_mail_unavailable" title="Nella tua installazione di PHP non è presente la funzione mail()"><![CDATA[<h2>La tua installazione PHP è mancante dalla funzione mail()</h2>
 <p>La funzione di PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(apre un collegamento esterno in una nuova finestra)</span></a> è disabilitata. Dunque, Textpattern non può inviare email e alcune funzionalità non saranno disponibili. Ad esempio, le notifiche email per i nuovi commenti non saranno inviate e i nuovi utenti non riceveranno un'email di benvenuto. Tuttavia, gli utenti possono comunque esser aggiunti.</p>
         ]]></item>
+        <item id="php_scripting_enabled" title="Script PHP abilitato"><![CDATA[]]></item>
     </group>
 
     <group id="file" title="Pannello file">
@@ -528,11 +529,7 @@
     <li>Tipi di template di moduli personalizzati.</li>
 </ul>
         ]]></item>
-        <item id="allow_article_php_scripting" title="Accetta codice PHP negli articoli?"><![CDATA[
-<h2>Accetta codice PHP negli articoli?</h2>
-<p>Se attivata, questa impostazione consente l’uso di codice PHP all’interno di articoli. L’autore deve avere privilegi sufficienti per farlo (per default, solo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Editori’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Redattori capo’ <span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a> possono farlo).</p>
-<p>Il codice PHP deve avere tag PHP di apertura e chiusura omessi, e deve anche essere racchiuso tra <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php">tag <code>&lt;txp:php&gt;</code><span class="ui-icon ui-icon-extlink">(apre un link esterno in una nuova finestra)</span></a>.</p>
-        ]]></item>
+        <item id="allow_article_php_scripting" title="Accetta codice PHP negli articoli?"><![CDATA[]]></item>
         <item id="allow_form_override" title="Consenti la sostituzione di moduli?"><![CDATA[
 <h2>Consenti la sostituzione di moduli?</h2>
 <p>Questa impostazione consente gli autori di articoli di forzare il modulo da usare nel rendering dell’articolo. Se attivata, un campo a tendina ’Sostituisci il modulo’ sarà disponibile sotto ‘Assegna l’articolo’, quando si edita un articolo.</p>
@@ -724,10 +721,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Quando la registrazione delle visite (logging) Textpattern è abilitata, è possibile specificare per quanto tempo (in giorni) devono essere conservati i log. ‘7’ manterrà i registri disponibili per sette giorni.</p>
 <p><strong>Nota:</strong> i registri vengono tagliati solo quando si visualizza il pannello ‘Registro dei visitatori’. Altrimenti i log continueranno a crescere di numero.</p>
         ]]></item>
-        <item id="file_base_path" title="Percorso directory di file"><![CDATA[
-<h2>Percorso directory di file</h2>
-<p>Imposta il <strong>percorso assoluto</strong> della directory dove i file caricati verranno salvati permanentemente. PHP ha bisogno di avere accesso in scrittura a tale directory.</p>
-        ]]></item>
+        <item id="file_base_path" title="Percorso directory di file"><![CDATA[]]></item>
         <item id="file_max_upload_size" title="Dimensione massima di upload (in byte)"><![CDATA[
 <h2>Dimensione massima di file in upload (in byte)</h2>
 <p>È possibile limitare la dimensione massima (in byte) per il caricamento di file. Si noti che questo valore è limitato anche dalla configurazione di PHP. Se Textpattern rileva che la configurazione di PHP limita la dimensione di caricamento ad un valore inferiore, esso viene automaticamente corretto verso il basso. Se si desidera consentire il caricamento di file di grandi dimensioni tramite upload dal browser, contatta il tuo host (i valori pertinenti in <code>php. ini</code> sono <code>post_max_size</code>, <code>upload_max_filesize</code> e <code>memory_limit</code>).</p>
@@ -908,11 +902,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
 <p>Se impostato su ‘No’, gli elementi del feed conterranno il corpo completo dell’articolo.</p>
 <p>Se impostato su ‘Sì’, gli elementi del feed conterranno il sommario articolo invece del corpo dell’articolo, se disponibile.</p>
         ]]></item>
-        <item id="tempdir" title="Percorso directory temporanea"><![CDATA[
-<h2>Percorso directory temporanea</h2>
-<p>Imposta un <strong>percorso assoluto</strong> ad una directory temporanea (a volte denominata ‘tmp’ o ‘temp’). PHP deve avere accesso in scrittura a tale directory. Questa directory viene utilizzata per file temporanei, per esempio caricamenti di qualsiasi tipo (plugins, file o immagini).</p>
-<p><strong>Nota:</strong> Non impostare la stessa directory per questa e quella per la ‘cache dei plugin’, perché ciò può causare conflitti (Textpattern cercherebbe di eseguire il contenuto di file di log temporanei come plugin).</p>
-        ]]></item>
+        <item id="tempdir" title="Percorso directory temporanea"><![CDATA[]]></item>
         <item id="theme_name" title="Tema lato amministrazione"><![CDATA[
 <h2>Tema lato amministrazione</h2>
 <p>il tema lato admin di default che verrà utilizzato quando qualcuno accede a Textpattern. Una scelta di temi admin preinstallati è inclusa con Textpattern, ed è inoltre possibile aggiungere pacchetti di temi personalizzati nella directory <code>textpattern/admin-themes</code> per renderli disponibili all’uso.</p>
