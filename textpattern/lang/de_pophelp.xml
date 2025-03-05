@@ -754,7 +754,16 @@ Der Modus <p>„?=unordentlich“ ist am kompatibelsten - er funktioniert mit we
         <item id="syndicate_body_or_excerpt" title="Nur Exzerpte syndizieren?"><![CDATA[<h2><strong>Nur</strong> Exzerpte syndizieren</h2>
 <p>Wenn dies auf „Nein“ gesetzt wird, enthalten die Feeds den kompletten Haupttext des Artikels.</p>
 <p>Wenn dies auf „Ja“ gesetzt wird, enthalten die Feeds das Exzerpt des Artikels anstelle des Haupttextes, sofern dieses verfügbar ist.</p>]]></item>
-        <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[]]></item>
+        <item id="tempdir" title="Temporärer Verzeichnispfad"><![CDATA[
+<h2>Temporärer Verzeichnispfad</h2>
+<p>Setzt einen <strong>absoluten Pfad</strong> in ein temporäres (manchmal als 'tmp' oder 'temp' bekannt) Verzeichnis. PHP muss Schreibzugriff auf dieses Verzeichnis haben. Dieses Verzeichnis wird für temporäre Dateien verwendet, zum Beispiel für Uploads jeglicher Art (Plugins, Dateien oder Bilder).</p>
+<p><strong>Anmerkungen:</strong>
+<ul>
+    <li>Geben Sie nicht das gleiche Verzeichnis für ‘temporary’ und ‘plugin cache’, an da dies zu Problemen führt (Textpattern würde versuchen, den Inhalt von temporären Logdateien als Plugins auszuführen).</li>
+    <li>Erwägen Sie, dieses Verzeichnis aus Gründen der Sicherheit außerhalb des öffentlich zugänglichen docroot Ihrer Website zu verschieben.</li>
+</ul>
+</p>
+        ]]></item>
         <item id="theme_name" title="Design der Admin-Oberfläche"><![CDATA[<h2>Admin-Design</h2>
 <p>Das Standard-Admin-Design, das verwendet wird, wenn man sich in Textpattern anmeldet. Einige vorinstallierte Admin-Designs sind bereits in Textpattern enthalten. Sie können auch eigene Design-Pakete im Verzeichnis <code>textpattern/admin-themes</code> ablegen, um sie für die Verwendung bereitzustellen.</p>]]></item>
         <item id="txp_evaluate_functions" title="In txp:evaluate aktivierte PHP-Funktionen"><![CDATA[<h2>PHP-Funktionen, die in txp:evaluate aktiviert sind</h2>

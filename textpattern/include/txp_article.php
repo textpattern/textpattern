@@ -808,11 +808,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
-
-    if (!$message && $AuthorID == $txp_user && $LastModID != $txp_user) {
-        $message = array(gTxt('modified_by') . ' ' . txpspecialchars($LastModID), 2);
-    }
-
     $page_title = $ID ? $Title : gTxt('write');
     pagetop($page_title, $message);
 
