@@ -1,3 +1,12 @@
+Changes in 4.9.0 (upcoming)
+
+* Feature release with support for PHP 8.4.0+, MySQL 8.4, new functionality,
+  security enhancements, improvements, and bug fixes.
+* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
+  recommended, preferably with vendor support).
+* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
+  recommended, preferably with vendor support).
+
 Changes in 4.9.0-beta.2 (upcoming)
 
 * Added: Site status values to 'process' attribute of <txp:hide />.
@@ -28,12 +37,6 @@ Changes in 4.9.0-beta.2 (upcoming)
 
 Changes in 4.9.0-beta.1 (12 Aug 2024)
 
-* Feature release with support for PHP 8.4.0+, MySQL 8.4, new functionality,
-  security enhancements, improvements, and bug fixes.
-* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
-  recommended, preferably with vendor support).
-* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
-  recommended, preferably with vendor support).
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
