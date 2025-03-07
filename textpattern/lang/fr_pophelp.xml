@@ -306,16 +306,16 @@
 <p>Le répertoire contenant le fichier <code>index.php</code> reconnu comme index du site est inaccessible en écriture par le serveur. Veuillez vérifier ses permissions d’accès.</p>
         ]]></item>
         <item id="php_scripting_enabled" title="Scripts PHP activés"><![CDATA[\n<h2>Scripts PHP activés</h2>\n<p>Textpattern permet aux auteurs et aux administrateurs d’intégrer du code PHP dans les articles et les pages/forms si ces fonctionnalités sont activées. Puisqu’il s’agit d’un problème potentiel de sécurité (tout type de PHP peut être exécuté, y compris du code potentiellement dommageable/dangereux pouvant entraîner la destruction de votre installation ou la fuite d’informations à des tiers), il est fortement recommandé de désactiver ces options dans le <a href=\"?event=prefs#prefs_group_publish\">Panneau Préférences</a> sauf si vous avez absolument besoin de cette fonctionnalité.</p>\n<p>De nombreuses améliorations, auparavant nécessaires pour Textpattern et nécessitant du code PHP, peuvent désormais être effectuées avec les <a rel=\"external\" target=\"_blank\" href=\"https://docs.textpattern.com/tags/\">balises natives</a>.</p>\n        ]]></item>
-        <item id="php_version_required" title="Exigences minimales de la version"><![CDATA[
-<h2>Exigences minimales de la version</h2>
-<p>Textpattern nécessite certaines fonctionnalités présentes dans le langage de programmation PHP et dans le serveur de base de données MySQL. Veuillez consulter cette table pour vérifier les pré-requis du système :</p>
+        <item id="php_version_required" title="Prérequis minimums de la version"><![CDATA[
+<h2>Prérequis minimums de la version</h2>
+<p>Textpattern nécessite certaines fonctionnalités présentes dans le langage de programmation PHP et dans le serveur de base de données MySQL. Veuillez consulter cette table pour vérifier les prérequis du système :</p>
  <div class="txp-listtables">
    <table class="txp-list">
       <thead>
          <tr>
-            <th scope="col">Textpattern version</th>
-            <th scope="col">Minimum PHP version</th>
-            <th scope="col">Minimum MySQL version</th>
+            <th scope="col">Version de Textpattern</th>
+            <th scope="col">Version minimale de PHP</th>
+            <th scope="col">Version minimale de MySQL</th>
          </tr>
       </thead>
       <tbody>
@@ -342,14 +342,14 @@
       </tbody>
    </table>
  </div>
-<p>En complément au pré-requis système ci-dessus, les extensions PHP suivantes sont nécessaires :</p> <ul>
+<p>En complément au prérequis système ci-dessus, les extensions PHP suivantes sont nécessaires :</p> <ul>
    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
    <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
  </ul>
-<p>Le fichier du site <code>php.ini</code>, quil soit global ou local, réclame un paramètre <code>date.timezone</code>.</p>
+<p>Le fichier du site <code>php.ini</code>, qui’l soit global ou local, nécessite le paramètre <code>date.timezone</code>.</p>
         ]]></item>
-        <item id="setup_still_exists" title="Répertoire d’installation existe toujours"><![CDATA[
+        <item id="setup_still_exists" title="Le répertoire d’installation est encore présent"><![CDATA[
 <h2>Le répertoire d’installation existe toujours</h2>
 <p>Après l’installation de Textpattern, le répertoire <code>textpattern/setup</code>, ainsi que son contenu, n’est plus nécessaire et doit être supprimé pour des raisons de sécurité.</p>
         ]]></item>
@@ -361,7 +361,7 @@
         ]]></item>
         <item id="some_php_functions_disabled" title="Les fonctions PHP [...] sont désactivées sur votre serveur"><![CDATA[
 <h2>Les fonctions PHP [...] sont désactivées sur votre serveur</h2>
-<p>L’hôte du site ou l’administrateur serveur a désactivé une ou plusieurs fonction PHP et l’absence de certaines d’entre-elles pourraient affecter le bon fonctionnement de Textpattern.</p>
+<p>L’hôte du site ou l’administrateur serveur a désactivé une ou plusieurs fonctions PHP et l’absence de certaines d’entre elles pourraient affecter le bon fonctionnement de Textpattern.</p>
 <p>Veuillez consulter le document <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations.</p>
         ]]></item>
         <item id="textpattern_version_update" title="Mise à jour de Textpattern"><![CDATA[
@@ -370,13 +370,13 @@
 <p>En dépit de nos efforts afin de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, veuillez considérer ces recommandations :</p>
 <ul>
     <li>si seul le dernier chiffre diffère de votre version utilisée, la mise à jour est considérée être rétrocompatible avec les plugins et les thèmes ;</li>
-    <li>si les deux derniers chiffres diffèrent de votre version utilisée, la mise à jour nécessitera la mise à niveau de certains plugins et/ou thèmes bien qu'ils continueront probablement à fonctionner mais néanmoins de manière limitée ;</li>
+    <li>si les deux derniers chiffres diffèrent de votre version utilisée, la mise à jour nécessitera la mise à niveau de certains plugins et/ou thèmes, bien qu'ils continueront probablement à fonctionner, mais néanmoins de manière limitée ;</li>
     <li>si le premier chiffre diffère de votre version utilisée, la mise à jour est fortement recommandée pour la plupart des plugins et des thèmes. Si vos besoins nécessitent l’usage d’un plugin ou une fonctionnalité de thème en particulier, veuillez vous renseigner auprès des auteurs ou des membres de la communauté avant de commencer la mise à niveau.</li>
 </ul>
         ]]></item>
         <item id="textpattern_version_update_beta" title="Pré-version de Textpattern disponible"><![CDATA[
 <h2>Mise à jour de pré-version de Textpattern</h2>
-<p>Une pré-version plus récente de Textpattern est disponible. Nous recherchons des volontaires afin de tester cette version avant de réaliser la distribution finale officielle la plus stable possible. Nous-nous efforçons de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, même pour les versions bêta.</p>
+<p>Une pré-version plus récente de Textpattern est disponible. Nous recherchons des volontaires afin de tester cette version avant de réaliser la distribution finale officielle la plus stable possible. Nous nous efforçons de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, même pour les versions bêta.</p>
 <p>Si vous décidez de participer, veuillez considérer ces recommandations :</p>
 <ul>
     <li>N’utilisez pas cette version bêta sur un site en production sans au préalable disposer d’une sauvegarde à la fois des fichiers du site que de sa base de données et assurez-vous de savoir comment en disposer ;</li>
@@ -386,7 +386,7 @@
         ]]></item>
         <item id="tmp_plugin_paths_match" title="Le répertoire temporaire et le répertoire de cache des plugins doivent être différents"><![CDATA[
 <h2>Le répertoire temporaire et le répertoire de cache des plugins doivent être différents</h2>
-<p>Les plugins doivent disposer de leur propre répertoire et ne pas partager le répertoire temporaire. Cela constitue un risque potentiel de sécurité et peut nuire à votre site si le répertoire temporaire est vidé. Veuillez vous assurer que le chemin d’accès du répertoire temporaire est différent de celui du cache des plugins.</p>
+<p>Les plugins doivent disposer de leur propre répertoire et ne pas partager le répertoire temporaire. Cela constitue un risque de sécurité et peut nuire à votre site si le répertoire temporaire est vidé. Veuillez vous assurer que le chemin d’accès du répertoire temporaire est différent de celui du cache des plugins.</p>
         ]]></item>
         <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[\n<h2>Serveur de mise à jour inaccessible</h2>\n<p>La vérification des mises à jour a échoué, souvent en raison d’une congestion du réseau ou d’un délai de connexion. En général, cela se résout de soi dans l’heure ou les deux heures qui suivent ; réessayez plus tard.</p>\n        ]]></item>
         <item id="warn_mail_unavailable" title="Votre installation PHP ne dispose pas de la fonction mail()"><![CDATA[
@@ -543,7 +543,7 @@
         ]]></item>
         <item id="articles_use_excerpts" title="Afficher le résumé sur la page d'édition d'article ?"><![CDATA[
 <h2>Afficher le résumé sur la page de modification des articles ?</h2>
-<p>Si vous choisissez «Non», le champ du résumé ne sera pas visible par l’auteur dans l’interface d’édition d’article.</p>
+<p>Si vous choisissez «Non», le champ du résumé ne sera pas visible par les utilisateurs dans l’interface d’édition d’article.</p>
         ]]></item>
         <item id="attach_titles_to_permalinks" title="Attacher le titre aux liens permanents ?"><![CDATA[
 <h2>Attacher le titre aux liens permanents ?</h2>
@@ -742,7 +742,7 @@ title="HTML"
         <item id="enhanced_email" title="Utiliser des fonctionnalités de messagerie améliorées ?"><![CDATA[
 <h2>Utiliser des fonctionnalités de messagerie améliorées</h2>
 <p>En choisissant «Non», tous les e-mails (comme les demandes de réinitialisation de mot de passe et les e-mails envoyés par des plugins tels que com_connect) passeront par la fonction <code>mail()</code> de PHP. Sélectionner «Oui» utilisera la librairie PHPMailer intégrée, ce qui vous permet éventuellement d’acheminer les e-mails via un serveur SMTP externe.</p>
-<p>Si vous rencontrez des problèmes de réception de courriels (notamment avec des services en ligne comme gmail ou hotmail), la cause probable est que votre domaine n’est pas perçu comme source fiable. Passer sur «Oui» peut améliorer la délivrabilité. L’usage du SMTP améliore souvent ce point davantage.</p>
+<p>Si vous rencontrez des problèmes de réception de courriels (notamment avec des services en ligne comme gmail ou hotmail), la cause probable est que votre domaine n’est pas perçu comme source fiable. Sélectionner «Oui» peut améliorer la transmission. L’usage du SMTP améliore souvent ce point davantage.</p>
         ]]></item>
         <item id="expire_logs_after" title="Le journal d’activités (log) expire après ?"><![CDATA[
 <h2>Le journal d’activités (log) expire après ?</h2>
@@ -801,14 +801,14 @@ title="HTML"
         ]]></item>
         <item id="module_pophelp" title="Afficher dans l’administration les liens de l’aide en ligne"><![CDATA[
 <h2>Afficher dans l’administration les liens de l’aide en ligne</h2>
-<p>Si vous préférez cacher les liens de l’aide en ligne (les fenêtre modales d’aide) dans l’interface d’administration de Textpattern, choisissez «Aucun».</p>
+<p>Si vous préférez cacher les liens de l’aide en ligne (les fenêtres modales d’aide) dans l’interface d’administration de Textpattern, choisissez «Aucun».</p>
         ]]></item>
         <item id="never_display_email" title="Toujours masquer les adresses e-mail des commentaires ?"><![CDATA[
 <h2>Toujours masquer les adresses e-mail des commentaires ?</h2>
 <p>Ce paramètre contrôle l’affichage publique des adresses e-mail des commentateurs.</p>
 <p>Il est vivement recommandé que ces adresses e-mail ne soient pas affichées publiquement, eu égard à vos visiteurs, mais certaines situations peuvent, cependant, l’exiger.</p>
         ]]></item>
-        <item id="override_emailcharset" title="Utiliser l’encodage ISO-8859-1 dans les emails (par défaut UTF-8) ?"><![CDATA[
+        <item id="override_emailcharset" title="Utiliser l’encodage ISO-8859-1 dans les e-mails (par défaut UTF-8) ?"><![CDATA[
 <h2>Transformer les e-mails en Latin 1 (ISO-8859-1) ?</h2>
 <p>Textpattern utilise l’encodage UTF-8 par défaut dans la mesure du possible, y compris pour les e-mails sortants. Toutefois, certains anciens clients de messagerie électronique (y compris certaines versions de Microsoft Outlook) ne dispose pas d’un bon support UTF-8. Si vous obtenez des caractères inintelligibles dans vos messages, ce paramètre permettra d’utiliser l’encodage ISO-8859-1.</p>
 <p><strong>Remarque :</strong> si vous utilisez une langue dont les caractères ne peuvent être représentés en ISO-8859-1, ce paramètre ne vous aidera malheureusement pas. Vous devrez faire usage d’un client de messagerie compatible UTF-8.</p>
