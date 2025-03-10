@@ -31,7 +31,7 @@
     "dompurify": "3.2.4",
     "jquery": "3.7.1",
     "jquery-ui": "1.14.1",
-    "prismjs": "1.29.0"
+    "prismjs": "1.30.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
