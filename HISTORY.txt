@@ -17,7 +17,7 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Added: 'match', 'separator' attribute capability to <txp:if_yield />.
 * Added: Ability to serve files via 'type' attribute to <txp:file_download />.
 * Added: Plugin compilation directly from the Plugins panel.
-* Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm)
+* Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
 * Changed: Wildcards in file/image/link category queries.
 * Changed: Enhancements to RPC functionality (thanks, Melonking906).
 * Changed: Multi-site scaffold optimisations.
