@@ -10,8 +10,8 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.9.0-beta.2 (upcoming)
 
-* Added: Site status values to 'process' attribute of <txp:hide />.
 * Added: Full article previews directly from the Write panel.
+* Added: Site status values to 'process' attribute of <txp:hide />.
 * Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
 * Added: 'target' attribute to <txp:popup />.
 * Added: 'match', 'separator' attribute capability to <txp:if_yield />.
