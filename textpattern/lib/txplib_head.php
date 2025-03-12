@@ -131,7 +131,7 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js')
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
     ->setRoute('file, image').
-Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/dist/purify.min.js')
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/purify.min.js')
     ->setRoute('article');
 
     $txpOut = 'var textpattern = '.json_encode(
