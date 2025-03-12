@@ -834,15 +834,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     $pane_header = '<div class="txp-layout-4col-3span">' . '<div id="pane-header">' .
     hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')) .
-    graf(
-        ($rs['ID']
-        ? href('<span class="ui-icon ui-extra-icon-new-document"></span> ' . gTxt('create_article'), 'index.php?event=article', array('class' => 'txp-new'))
-        . article_partial_article_clone($rs)
-        : null),
-        array(
-            'class' => 'txp-actions',
-        )
-    ) . '</div>';
+    '</div>';
 
     echo n . pluggable_ui('article_ui', 'pane_header', $pane_header, $rs);
 
@@ -1547,7 +1539,7 @@ function article_partial_actions($rs)
     hInput('AuthorID', $rs['AuthorID']) .
     hInput('LastModID', $rs['LastModID']) . n .
     $push_button .
-    graf(article_partial_article_view($rs), array('class' => 'txp-actions')) . n .
+    graf(article_partial_article_clone($rs) . article_partial_article_view($rs), array('class' => 'txp-actions')) . n .
     '</div>';
 
     return pluggable_ui('article_ui', 'save_zone', $out, $push_button, $rs);
@@ -1826,7 +1818,7 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-play" title="' . gTxt('preview') . '"></span>' . gTxt('preview'), 'button', array(
+    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-notice" title="' . gTxt('preview') . '"></span>' . sp . gTxt('preview'), 'button', array(
         'class' => 'txp-reduced-ui-button',
         'id'    => 'article_partial_article_preview',
         'type'  => 'button',
@@ -1842,7 +1834,7 @@ function article_partial_article_view($rs)
         return;
     }
 
-    return $clean . n . href('<span class="ui-icon ui-icon-notice" title="' . gTxt('view') . '"></span>' . sp . gTxt('view'), $url, array(
+    return $clean . n . href('<span class="ui-icon ui-icon-view-page" title="' . gTxt('view') . '"></span>' . sp . gTxt('view'), $url, array(
         'class'  => 'txp-article-view' . ($ID ? '' : ' disabled'),
         'id'     => 'article_partial_article_view',
         'target' => '_blank',
