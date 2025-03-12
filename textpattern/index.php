@@ -166,7 +166,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
      * @ignore
      */
 
-    define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+    define('SITE_HOST', (string)@parse_url(hu, PHP_URL_HOST));
 
     /**
      * @ignore
