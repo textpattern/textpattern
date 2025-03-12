@@ -1,12 +1,23 @@
+Changes in 4.9.0 (upcoming)
+
+* Feature release with support for PHP 8.4, MySQL 8.4, new functionality,
+  security enhancements, improvements, and bug fixes.
+* Added: Latest text translations. Thank you to all our translators.
+* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
+  recommended, preferably with vendor support).
+* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
+  recommended, preferably with vendor support).
+
 Changes in 4.9.0-beta.2 (upcoming)
 
-* Added: Site status values to 'process' attribute of <txp:hide />.
 * Added: Full article previews directly from the Write panel.
+* Added: Site status values to 'process' attribute of <txp:hide />.
 * Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
 * Added: 'target' attribute to <txp:popup />.
 * Added: 'match', 'separator' attribute capability to <txp:if_yield />.
 * Added: Ability to serve files via 'type' attribute to <txp:file_download />.
 * Added: Plugin compilation directly from the Plugins panel.
+* Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
 * Changed: Wildcards in file/image/link category queries.
 * Changed: Enhancements to RPC functionality (thanks, Melonking906).
 * Changed: Multi-site scaffold optimisations.
@@ -23,17 +34,12 @@ Changes in 4.9.0-beta.2 (upcoming)
 * Vendors: DOMPurify 3.2.4.
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.9.3.
+* Vendors: PrismJS 1.30.0.
 * Vendors: Textile 4.1.2. (thanks, gocom).
 * Vendors: UglifyJS 3.19.3.
 
 Changes in 4.9.0-beta.1 (12 Aug 2024)
 
-* Feature release with support for PHP 8.4.0+, MySQL 8.4, new functionality,
-  security enhancements, improvements, and bug fixes.
-* Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
-  recommended, preferably with vendor support).
-* Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
-  recommended, preferably with vendor support).
 * Changed: Removed 'noopener' from target="_blank" links (now default behaviour
   in all supported browsers) (thanks, phiw13).
 * Changed: Removed 'aria-label' attributes where 'title' already exists.
@@ -51,7 +57,7 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take RFC 2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.0+.
+* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Option to define a Content Security Policy header for the Textpattern
   admin-side via config.php.

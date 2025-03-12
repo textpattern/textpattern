@@ -1,14 +1,14 @@
 /admin-themes/classic/classic.php: 60e0083e14a48be6c5f1f264a843e640
-/admin-themes/hive/assets/js/autosize.js: 6c387982910532e35c6164946b58a29e
-/admin-themes/hive/assets/js/darkmode.js: 9fa4ab0fe32ef4d866a1286b3a8ba1af
-/admin-themes/hive/assets/js/main.js: 87002803f37d092d56634151256d87db
+/admin-themes/hive/assets/js/autosize.js: b27350f7e815cb870ece1e4c221a9808
+/admin-themes/hive/assets/js/darkmode.js: 880398a61f932f55aa7f15148dcd4a72
+/admin-themes/hive/assets/js/main.js: b471bb7bd026646a3942c5d2349ec425
 /admin-themes/hive/hive.php: c09c57ffc213b3917d41da31e02b89f6
-/admin-themes/hiveneutral/assets/js/autosize.js: 6c387982910532e35c6164946b58a29e
-/admin-themes/hiveneutral/assets/js/darkmode.js: 9fa4ab0fe32ef4d866a1286b3a8ba1af
-/admin-themes/hiveneutral/assets/js/main.js: 87002803f37d092d56634151256d87db
+/admin-themes/hiveneutral/assets/js/autosize.js: b27350f7e815cb870ece1e4c221a9808
+/admin-themes/hiveneutral/assets/js/darkmode.js: 880398a61f932f55aa7f15148dcd4a72
+/admin-themes/hiveneutral/assets/js/main.js: b471bb7bd026646a3942c5d2349ec425
 /admin-themes/hiveneutral/hiveneutral.php: 031445c0156eaa0eb59d48e43a5aa645
 /include/txp_admin.php: 9309485a47cd7018062317ed7195282c
-/include/txp_article.php: ffe5514d794e85a5e63d5375b5d2b8ff
+/include/txp_article.php: b09ffd617b7037dd95c943b1fdaabce7
 /include/txp_auth.php: b735dacaaa2c1ec73cfa5c2158112d1f
 /include/txp_category.php: 6d5f4d37e08e267bd96e6627b23d460f
 /include/txp_css.php: 99211d0a729b8f894e61b3d288d7be40
@@ -28,7 +28,7 @@
 /include/txp_section.php: cca63155d9e1b4699a82c7b6c75f10f5
 /include/txp_skin.php: e5acc1aa070e3adb720be162e11b0167
 /include/txp_tag.php: a0dae5974c0d0dbd6142294466c554a9
-/index.php: 55bc8d9ac1fd0ce92a52b7f0994977a8
+/index.php: da1d43ef28731f900eab007feda4e44e
 /lib/admin_config.php: 4708a43f923cb27de2686571b69de9f8
 /lib/class.thumb.php: 86dd117ccde53057fb2145ded4dd555d
 /lib/class.trace.php: e513b301279a394581aee5adf97dec3d
@@ -39,7 +39,7 @@
 /lib/txplib_admin.php: 5f7b5e9f10a3146c5756e2240554c2c7
 /lib/txplib_db.php: 3de84300e3f0979d7c3ca2914c4ed4f9
 /lib/txplib_forms.php: f0a89fb0be421917495ee77f2e072e69
-/lib/txplib_head.php: 773ef2975b9b0f76f158c4ac1e59b5f8
+/lib/txplib_head.php: ed14a0c2aa2e3b35cb153dd461634e1f
 /lib/txplib_html.php: ad98524dd6be89e3c4b8b1e90a4d290e
 /lib/txplib_misc.php: 8da3df36bee8e28e26b6ee9eda38055a
 /lib/txplib_publish.php: 96317a57b8ade4b3b2bb7a91c75ce1cc
@@ -83,12 +83,13 @@
 /vendors/composer/installed.php: 84fce96a4a0e021a231dc50eb3318375
 /vendors/composer/InstalledVersions.php: 182d5924ff0b528f008a83d1f5809d02
 /vendors/composer/platform_check.php: 15e1efff88933be3dd5740e3c9530478
-/vendors/cure53/DOMPurify/dist/purify.min.js: 549c43ecd1cb8a901f5729c257abb068
-/vendors/jquery/jquery/jquery-4.0.0-beta.2.min.js: c350b5b77152c38464eb9079410729b3
+/vendors/cure53/DOMPurify/dist/purify.min.js: 
+/vendors/jquery/jquery/jquery-4.0.0-beta.2.min.js: 
+/vendors/cure53/DOMPurify/purify.js: 549c43ecd1cb8a901f5729c257abb068
 /vendors/jquery/jquery/jquery.js: 2c872dbe60f4ba70fb85356113d8b35e
 /vendors/jquery/jquery-ui/jquery-ui.js: 12c28b31a1369383b3549abf958b01fe
 /vendors/Netcarver/Textile/DataBag.php: f8de6d8cb14ff6b0403922e13cbd71ff
-/vendors/Netcarver/Textile/Parser.php: fcc2ff0d01a1ecf29c09eb35caa589fe
+/vendors/Netcarver/Textile/Parser.php: a1fb4c85f2f6dc965ccd21188ebbdec9
 /vendors/Netcarver/Textile/Tag.php: b60bfa411bac04fbf9e5731cde3d4e19
 /vendors/phpmailer/phpmailer/get_oauth_token.php: c3476fca44328c54f4f9782b8314976d
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-af.php: 7941a78d274605ae2e3caf320b78a687
@@ -156,7 +157,7 @@
 /vendors/phpmailer/phpmailer/src/POP3.php: ad0d035b2b5280255db6d47e76b75537
 /vendors/phpmailer/phpmailer/src/SMTP.php: 16403b1d60833801c30a23981c453e11
 /vendors/PrismJS/prism/prism-txp.js: e0bfe0559dc4b882f2708f556d625ad4
-/vendors/PrismJS/prism/prism.js: c7e2b59d35cb5e8e0200e17891d7b775
+/vendors/PrismJS/prism/prism.js: 73c524763c413ff640b6a6f3e5660947
 /vendors/Textpattern/Adaptable/AdapterInterface.php: 6ae8d319255c0603c8777031120c34c7
 /vendors/Textpattern/Adaptable/Providable.php: e62a675bb8d696c4b0c3e8645e44d075
 /vendors/Textpattern/Adaptable/ProvidableInterface.php: 501b81d26634e2b7aae17660f8a3ac65
@@ -175,7 +176,7 @@
 /vendors/Textpattern/Filter/FilterCallable.php: 5896950255d08f75f462f667b21c7aef
 /vendors/Textpattern/Filter/StringFilter.php: 9d0c47bbfcb97a7f9208d4076e9e2aa3
 /vendors/Textpattern/Http/Request.php: 88fd45a87b68ff3b0aada3f38421586f
-/vendors/Textpattern/Import/TxpXML.php: aa2c15323b4f1ad353c2e4e1812e5938
+/vendors/Textpattern/Import/TxpXML.php: 4e2deecd69150c5d572317c2190e5475
 /vendors/Textpattern/Iterator/FileIterator.php: 2cbc549f33cd0dc121b21f5ff9f681e2
 /vendors/Textpattern/Iterator/RecDirIterator.php: c18c08ccf5fb7442e7a648ead68b5099
 /vendors/Textpattern/Iterator/RecFilterIterator.php: 828b3a1244ec6e0599a83669e3ad617a

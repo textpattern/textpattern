@@ -47,37 +47,37 @@ header("Content-Type: text/html; charset=utf-8");
 
 error_reporting(E_ALL);
 ini_set("display_errors", "1");
-include txpath . '/lib/class.trace.php';
+include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 $trace->start('[PHP includes]');
-include_once txpath . '/lib/constants.php';
-include txpath . '/lib/txplib_misc.php';
-include txpath . '/lib/txplib_admin.php';
+include_once txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
+include txpath.'/lib/txplib_admin.php';
 
-include txpath . '/vendors/Textpattern/Loader.php';
+include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath . '/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath . '/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
-include txpath . '/lib/txplib_db.php';
-include txpath . '/lib/txplib_forms.php';
-include txpath . '/lib/txplib_html.php';
-include txpath . '/lib/admin_config.php';
+include txpath.'/lib/txplib_db.php';
+include txpath.'/lib/txplib_forms.php';
+include txpath.'/lib/txplib_html.php';
+include txpath.'/lib/admin_config.php';
 $trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"))) {
+if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-        $prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), DS);
+        $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), DS);
     }
 
     if (empty($path_to_site)) {
@@ -100,7 +100,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
         }
     }
 
-    define('hu', PROTOCOL . $siteurl . '/');
+    define('hu', PROTOCOL.$siteurl.'/');
 
     // Relative URL global.
     define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
@@ -113,9 +113,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
     // HTTP address of Textpattern admin URL.
     if (!defined('ahu')) {
         if (empty($txpcfg['admin_url'])) {
-            $adminurl = hu . 'textpattern/';
+            $adminurl = hu.'textpattern/';
         } else {
-            $adminurl = PROTOCOL . rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/') . '/';
+            $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
         }
 
         define('ahu', $adminurl);
@@ -148,7 +148,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
 
-    include txpath . '/include/txp_auth.php';
+    include txpath.'/include/txp_auth.php';
     doAuth();
 
     // Add private preferences.
@@ -166,17 +166,17 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
      * @ignore
      */
 
-    define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+    define('SITE_HOST', (string)@parse_url(hu, PHP_URL_HOST));
 
     /**
      * @ignore
      */
 
-    define('IMPATH', $path_to_site . DS . $img_dir . DS);
+    define('IMPATH', $path_to_site.DS.$img_dir.DS);
 
     if (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev) {
         define('TXP_UPDATE', 1);
-        include txpath . '/update/_update.php';
+        include txpath.'/update/_update.php';
     }
 
     janitor();
@@ -208,11 +208,11 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
     // Initialise private theme.
     $theme = \Textpattern\Admin\Theme::init();
 
-    include txpath . '/lib/txplib_head.php';
+    include txpath.'/lib/txplib_head.php';
 
     require_privs($event);
     callback_event($event, $step, 1);
-    $inc = txpath . '/include/txp_' . $event . '.php';
+    $inc = txpath.'/include/txp_'.$event.'.php';
 
     if (is_readable($inc)) {
         include($inc);
@@ -231,7 +231,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '" . PFX . "textpattern'"
             }
         } else {
             foreach ($trace->summary(true) as $key => $value) {
-                header('X-Textpattern-' . preg_replace('/[^\w]+/', '', $key) . ': ' . $value);
+                header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
             }
         }
     }
