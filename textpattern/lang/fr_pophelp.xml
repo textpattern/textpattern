@@ -305,16 +305,17 @@
 <h2>Répertoire du site non accessible en écriture</h2>
 <p>Le répertoire contenant le fichier <code>index.php</code> reconnu comme index du site est inaccessible en écriture par le serveur. Veuillez vérifier ses permissions d’accès.</p>
         ]]></item>
-        <item id="php_version_required" title="Exigences minimales de la version"><![CDATA[
-<h2>Exigences minimales de la version</h2>
-<p>Textpattern nécessite certaines fonctionnalités présentes dans le langage de programmation PHP et dans le serveur de base de données MySQL. Veuillez consulter cette table pour vérifier les pré-requis du système :</p>
+        <item id="php_scripting_enabled" title="Scripts PHP activés"><![CDATA[\n<h2>Scripts PHP activés</h2>\n<p>Textpattern permet aux auteurs et aux administrateurs d’intégrer du code PHP dans les articles et les pages/forms si ces fonctionnalités sont activées. Puisqu’il s’agit d’un problème potentiel de sécurité (tout type de PHP peut être exécuté, y compris du code potentiellement dommageable/dangereux pouvant entraîner la destruction de votre installation ou la fuite d’informations à des tiers), il est fortement recommandé de désactiver ces options dans le <a href=\"?event=prefs#prefs_group_publish\">Panneau Préférences</a> sauf si vous avez absolument besoin de cette fonctionnalité.</p>\n<p>De nombreuses améliorations, auparavant nécessaires pour Textpattern et nécessitant du code PHP, peuvent désormais être effectuées avec les <a rel=\"external\" target=\"_blank\" href=\"https://docs.textpattern.com/tags/\">balises natives</a>.</p>\n        ]]></item>
+        <item id="php_version_required" title="Prérequis minimums de la version"><![CDATA[
+<h2>Prérequis minimums de la version</h2>
+<p>Textpattern nécessite certaines fonctionnalités présentes dans le langage de programmation PHP et dans le serveur de base de données MySQL. Veuillez consulter cette table pour vérifier les prérequis du système :</p>
  <div class="txp-listtables">
    <table class="txp-list">
       <thead>
          <tr>
-            <th scope="col">Textpattern version</th>
-            <th scope="col">Minimum PHP version</th>
-            <th scope="col">Minimum MySQL version</th>
+            <th scope="col">Version de Textpattern</th>
+            <th scope="col">Version minimale de PHP</th>
+            <th scope="col">Version minimale de MySQL</th>
          </tr>
       </thead>
       <tbody>
@@ -341,14 +342,14 @@
       </tbody>
    </table>
  </div>
-<p>En complément au pré-requis système ci-dessus, les extensions PHP suivantes sont nécessaires :</p> <ul>
-   <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
-   <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
-   <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
+<p>En complément au prérequis système ci-dessus, les extensions PHP suivantes sont nécessaires :</p> <ul>
+   <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
+   <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
+   <li><a rel="external" target="_blank" href="https://secure.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a></li>
  </ul>
-<p>Le fichier du site <code>php.ini</code>, quil soit global ou local, réclame un paramètre <code>date.timezone</code>.</p>
+<p>Le fichier du site <code>php.ini</code>, qui’l soit global ou local, nécessite le paramètre <code>date.timezone</code>.</p>
         ]]></item>
-        <item id="setup_still_exists" title="Répertoire d’installation existe toujours"><![CDATA[
+        <item id="setup_still_exists" title="Le répertoire d’installation est encore présent"><![CDATA[
 <h2>Le répertoire d’installation existe toujours</h2>
 <p>Après l’installation de Textpattern, le répertoire <code>textpattern/setup</code>, ainsi que son contenu, n’est plus nécessaire et doit être supprimé pour des raisons de sécurité.</p>
         ]]></item>
@@ -360,34 +361,38 @@
         ]]></item>
         <item id="some_php_functions_disabled" title="Les fonctions PHP [...] sont désactivées sur votre serveur"><![CDATA[
 <h2>Les fonctions PHP [...] sont désactivées sur votre serveur</h2>
-<p>L’hôte du site ou l’administrateur serveur a désactivé une ou plusieurs fonction PHP et l’absence de certaines d’entre-elles pourraient affecter le bon fonctionnement de Textpattern.</p>
+<p>L’hôte du site ou l’administrateur serveur a désactivé une ou plusieurs fonctions PHP et l’absence de certaines d’entre elles pourraient affecter le bon fonctionnement de Textpattern.</p>
 <p>Veuillez consulter le document <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> pour de plus amples informations.</p>
         ]]></item>
-        <item id="textpattern_version_update" title="Mise à jour de Textpattern"><![CDATA[<h2>Version de mise à jour de Textpattern</h2>
+        <item id="textpattern_version_update" title="Mise à jour de Textpattern"><![CDATA[
+<h2>Version de mise à jour de Textpattern</h2>
 <p>Il existe une version plus récente de Textpattern disponible. Pour profiter des avantages des dernières fonctionnalités et de l’amélioration de la sécurité, il est recommandé d’effectuer une mise à jour.</p>
 <p>En dépit de nos efforts afin de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, veuillez considérer ces recommandations :</p>
 <ul>
     <li>si seul le dernier chiffre diffère de votre version utilisée, la mise à jour est considérée être rétrocompatible avec les plugins et les thèmes ;</li>
-    <li>si les deux derniers chiffres diffèrent de votre version utilisée, la mise à jour nécessitera la mise à niveau de certains plugins et/ou thèmes bien qu'ils continueront probablement à fonctionner mais néanmoins de manière limitée ;</li>
+    <li>si les deux derniers chiffres diffèrent de votre version utilisée, la mise à jour nécessitera la mise à niveau de certains plugins et/ou thèmes, bien qu'ils continueront probablement à fonctionner, mais néanmoins de manière limitée ;</li>
     <li>si le premier chiffre diffère de votre version utilisée, la mise à jour est fortement recommandée pour la plupart des plugins et des thèmes. Si vos besoins nécessitent l’usage d’un plugin ou une fonctionnalité de thème en particulier, veuillez vous renseigner auprès des auteurs ou des membres de la communauté avant de commencer la mise à niveau.</li>
 </ul>
         ]]></item>
-        <item id="textpattern_version_update_beta" title="Pré-version de Textpattern disponible"><![CDATA[<h2>Mise à jour de pré-version de Textpattern</h2>
-<p>Une pré-version plus récente de Textpattern est disponible. Nous recherchons des volontaires afin de tester cette version afin de réaliser la distribution finale officielle la plus stable possible. Nous-nous efforçons de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, même pour les versions bêta.</p>
+        <item id="textpattern_version_update_beta" title="Pré-version de Textpattern disponible"><![CDATA[
+<h2>Mise à jour de pré-version de Textpattern</h2>
+<p>Une pré-version plus récente de Textpattern est disponible. Nous recherchons des volontaires afin de tester cette version avant de réaliser la distribution finale officielle la plus stable possible. Nous nous efforçons de rendre l’expérience de mise à niveau sans encombre et aussi transparente que possible, même pour les versions bêta.</p>
 <p>Si vous décidez de participer, veuillez considérer ces recommandations :</p>
 <ul>
-    <li>n’utilisez pas cette version bêta sur un site en production sans au préalable disposer d’une sauvegarde à la fois des fichiers du site que de sa base de données et assurez-vous de savoir comment en disposer ;</li>
-    <li>assurez-vous, si vous utilisez cette version bêta, de mettre à niveau vers la version finale dès sa disponibilité.</li>
+    <li>N’utilisez pas cette version bêta sur un site en production sans au préalable disposer d’une sauvegarde à la fois des fichiers du site que de sa base de données et assurez-vous de savoir comment en disposer ;</li>
+<li>Veuillez <a href="https://github.com/textpattern/textpattern/issues">signaler tout problème</a>, en indiquant la version bêta que vous utilisez. D'autres versions bêta peuvent être nécessaires avant la version stable, en fonction des problèmes signalés.</li>
+    <li>Assurez-vous, si vous utilisez cette version bêta, de mettre à niveau vers la version finale dès sa disponibilité.</li>
 </ul>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques"><![CDATA[<h2>Le chemin du répertoire temporaire et celui des plugins ne doivent pas être identiques</h2>
-<p>Le plugins doivent disposer de leur propre répertoire et ne doivent rien partager avec le répertoire temporaire. A défaut, c’est un risque de sécurité potentiel et peut nuire au bon fonctionnement de votre site si votre répertoire temporaire est vidé. Veuillez vous assurer que ces deux chemins vers des répertoires distincts sont différents.</p>]]></item>
-        <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[<h2>Serveur de mise à jour inaccessible</h2>
-<p>La vérification de mises à jour a échoué, souvent due à un encombrement du réseau ou à un délai de connexion excessif. Cette situation se résout souvent d’elle-même au bout d’une heure ou deux ; aussi, veuillez retourner sur cette page ultérieurement.</p>]]></item>
-        <item id="warn_mail_unavailable" title="Votre installation de PHP ne dispose pas de la fonction mail()"><![CDATA[<h2>Votre installation de PHP ne dispose pas de la fonction mail()</h2>
-<p>La fonction <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> de PHP est désactivée. Par conséquent, Textpattern ne peut envoyer de e-mails et certaines de ses fonctionnalités seront inopérantes. Par exemple, les notifications par e-mail des nouveaux commentaires ne seront pas adressées et les nouveaux utilisateurs de sites ne recevront pas de message de bienvenue. Cependant, les utilisateurs pourront être ajoutés, néanmoins.</p>]]></item>
-        <item id="php_scripting_enabled" title="Scripts PHP activés"><![CDATA[<h2>Scripts PHP activés<p></h2>
-<p>Textpattern permet aux auteurs et aux administrateurs d’intégrer du code PHP dans les articles et les pages/modules si cette fonctionnalité est activée. Puisqu’il s'agit d'un problème potentiel de sécurité (tout type de PHP peut être exécuté, y compris du code potentiellement dommageable/dangereux pouvant entraîner la destruction de votre installation ou la fuite d'informations à des tiers), il est fortement recommandé de désactiver ces options depuis la page du <a href="?event=prefs#prefs_group_publish">Panneau Préférences</a> sauf si vous avez absolument besoin de cette fonctionnalité.</p>]]></item>
+        <item id="tmp_plugin_paths_match" title="Le répertoire temporaire et le répertoire de cache des plugins doivent être différents"><![CDATA[
+<h2>Le répertoire temporaire et le répertoire de cache des plugins doivent être différents</h2>
+<p>Les plugins doivent disposer de leur propre répertoire et ne pas partager le répertoire temporaire. Cela constitue un risque de sécurité et peut nuire à votre site si le répertoire temporaire est vidé. Veuillez vous assurer que le chemin d’accès du répertoire temporaire est différent de celui du cache des plugins.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Serveur de mise à jour inaccessible"><![CDATA[\n<h2>Serveur de mise à jour inaccessible</h2>\n<p>La vérification des mises à jour a échoué, souvent en raison d’une congestion du réseau ou d’un délai de connexion. En général, cela se résout de soi dans l’heure ou les deux heures qui suivent ; réessayez plus tard.</p>\n        ]]></item>
+        <item id="warn_mail_unavailable" title="Votre installation PHP ne dispose pas de la fonction mail()"><![CDATA[
+<h2>Votre installation PHP ne dispose pas de la fonction mail()</h2>
+<p>La fonction PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(ouvrir le lien externe dans une nouvelle fenêtre)</span></a> est désactivée. Par conséquent, Textpattern ne peut pas envoyer des e-mails et certaines fonctionnalités ne seront pas disponibles. Par exemple, les notifications par courriel de nouveaux commentaires ne seront pas envoyées et les nouveaux utilisateurs ne recevront pas leur e-mail de bienvenue. Les utilisateurs peuvent toujours être ajoutés, toutefois.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Fichiers">
@@ -536,9 +541,9 @@
 <h2>Format de la date des archives</h2>
 <p>Définit l’aspect des dates pour les articles dans les sections de votre site.</p>
         ]]></item>
-        <item id="articles_use_excerpts" title="Les articles utilisent un résumé ?"><![CDATA[
-<h2>Les articles utilisent un résumé ?</h2>
-<p>En choisissant «Non», le champ de saisie des résumés d’articles ne sera pas disponible aux auteur•e•s sur la page d’édition.</p>
+        <item id="articles_use_excerpts" title="Afficher le résumé sur la page d'édition d'article ?"><![CDATA[
+<h2>Afficher le résumé sur la page de modification des articles ?</h2>
+<p>Si vous choisissez «Non», le champ du résumé ne sera pas visible par les utilisateurs dans l’interface d’édition d’article.</p>
         ]]></item>
         <item id="attach_titles_to_permalinks" title="Attacher le titre aux liens permanents ?"><![CDATA[
 <h2>Attacher le titre aux liens permanents ?</h2>
@@ -734,18 +739,34 @@ title="HTML"
 <h2>Activer le serveur XML-RPC ?</h2>
 <p>Si vous souhaitez utiliser <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> afin de contrôler Textpattern par un processus distant (ex. via une application de bureau ou mobile), vous devez activer le serveur XML-RPC en réglant ce paramètre sur «Oui».</p>
         ]]></item>
+        <item id="enhanced_email" title="Utiliser des fonctionnalités de messagerie améliorées ?"><![CDATA[
+<h2>Utiliser des fonctionnalités de messagerie améliorées</h2>
+<p>En choisissant «Non», tous les e-mails (comme les demandes de réinitialisation de mot de passe et les e-mails envoyés par des plugins tels que com_connect) passeront par la fonction <code>mail()</code> de PHP. Sélectionner «Oui» utilisera la librairie PHPMailer intégrée, ce qui vous permet éventuellement d’acheminer les e-mails via un serveur SMTP externe.</p>
+<p>Si vous rencontrez des problèmes de réception de courriels (notamment avec des services en ligne comme gmail ou hotmail), la cause probable est que votre domaine n’est pas perçu comme source fiable. Sélectionner «Oui» peut améliorer la transmission. L’usage du SMTP améliore souvent ce point davantage.</p>
+        ]]></item>
         <item id="expire_logs_after" title="Le journal d’activités (log) expire après ?"><![CDATA[
 <h2>Le journal d’activités (log) expire après ?</h2>
 <p>Lorsque la journalisation des visites de Textpattern est activée, vous pouvez choisir le délai (en jours) de conservation des traces des accès. Le chiffre «7» signifie que les logs seront disponibles pendant une semaine.</p>
 <p><strong>Remarque :</strong> les logs sont réduits lorsque vous consultez la page «Activité». Sinon, leur taille continuera de croître.</p>
         ]]></item>
-        <item id="file_base_path" title="Chemin du répertoire des fichiers téléversés"><![CDATA[<h2>Chemin du répertoire des fichiers</h2>
+        <item id="file_base_path" title="Chemin du répertoire des fichiers téléchargés"><![CDATA[
+<h2>Chemin du répertoire des fichiers</h2>
 <p>Ceci définit le <strong>chemin absolu</strong> du répertoire où sont téléversés les fichiers afin d’être disponibles en permanence. PHP réclame des droits d’accès en écriture dans ce dossier.</p>
-<p><strong>Note :</strong> Envisagez de déplacer ce dossier en dehors de votre racine publique dans le but d'accroître la sécurité.</p>]]></item>
+<p><strong>Note :</strong> Envisagez de déplacer ce dossier en dehors de votre racine publique dans le but d'accroître la sécurité.</p>        ]]></item>
+        <item id="file_download_header" title="Entête (header) de fichier téléchargeable"><![CDATA[
+<h2>Entête de fichier téléchargeable</h2>
+<p>Vous permet de personnaliser la manière dont les téléchargements de fichiers sont gérés.</p>
+<p>Par défaut, tous les téléchargements sont traités en tant que pièces jointes et sont téléchargés (selon la configuration de votre navigateur pour ce type de fichier). Si vous souhaitez fournir des indications sur la manière dont vous préféreriez traiter certains ou tous les types de fichiers, vous pouvez insérer ici du code de balise. Par exemple, afficher en ligne les fichiers PDF qui appartiennent à la catégorie "inline-pdf" de Textpattern au lieu de les télécharger :</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
         <item id="file_max_upload_size" title="Taille maximale d’un fichier envoyé sur le serveur (octets)"><![CDATA[
 <h2>Taille maximale d’un fichier téléversé (en octets)</h2>
-<p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s’y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>  ]]></item>
-        <item id="gmtoffset" title="Fuseau horaire"><![CDATA[
+<p>Vous pouvez restreindre la taille maximale (en octets) pour le téléversement des fichiers. Notez que cette restriction est également régie par la configuration de PHP. Si Textpattern détecte une valeur plus petite dans votre configuration de PHP, il s’y adaptera automatiquement. Si vous voulez autoriser l’usage de fichiers plus volumineux depuis cette interface d’administration dans votre navigateur, contactez votre hébergeur (les valeurs correspondantes dans <code>php.ini</code> sont : <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>        ]]></item>
+        <item id="gmtoffset" title="Fuseau horaire &lt;abbr title=&quot;Greenwich Mean Time&quot;>GMT&lt;/abbr>"><![CDATA[
 <h2>Fuseau horaire</h2>
 <p>Afin dafficher les dates selon votre situation géographique, veuillez sélectionner votre fuseau horaire.</p>
         ]]></item>
@@ -774,26 +795,27 @@ title="HTML"
 <p>Depuis sa version 4.7.0, aucune information sur les adresses IP des visiteurs n’est collectée par Textpattern. Si vous collectez et enregistrez ces adresses IP en dehors de Textpattern, veuillez prendre toutes les dispositions requises en accord avec les lois applicables et, notamment, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RGPD <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> ; veuillez mettre en place sur votre serveur une stratégie globale de sécurité y compris pour votre installation de Textpattern afin d’empêcher que ces données ne soient compromises.</p>
 <p>Il est vivement recommandé de laisser ce paramètre sur sa valeur par défaut, à savoir «Aucun», à moins que les besoins de ces informations ne soient absolument nécessaires et, en outre, d’informer explicitement de l’usage que vous comptez en faire.</p>
         ]]></item>
-        <item id="max_url_len" title="Longueur maximale d’une URL (en caractères)"><![CDATA[
+        <item id="max_url_len" title="Taille maximum d’une URL (en caractères)"><![CDATA[
 <h2>Longueur maximale d’une URL (en caractères)</h2>
 <p>Permet de prévenir le fonctionnement des URL plus longues que la valeur spécifiée. Utile pour réduire les dommages et accroître la sécurité du site.</p>
         ]]></item>
         <item id="module_pophelp" title="Afficher dans l’administration les liens de l’aide en ligne"><![CDATA[
 <h2>Afficher dans l’administration les liens de l’aide en ligne</h2>
-<p>Si vous préférez cacher les liens de l’aide en ligne (les fenêtre modales d’aide) dans l’interface d’administration de Textpattern, choisissez «Aucun».</p>
+<p>Si vous préférez cacher les liens de l’aide en ligne (les fenêtres modales d’aide) dans l’interface d’administration de Textpattern, choisissez «Aucun».</p>
         ]]></item>
         <item id="never_display_email" title="Toujours masquer les adresses e-mail des commentaires ?"><![CDATA[
 <h2>Toujours masquer les adresses e-mail des commentaires ?</h2>
 <p>Ce paramètre contrôle l’affichage publique des adresses e-mail des commentateurs.</p>
 <p>Il est vivement recommandé que ces adresses e-mail ne soient pas affichées publiquement, eu égard à vos visiteurs, mais certaines situations peuvent, cependant, l’exiger.</p>
         ]]></item>
-        <item id="override_emailcharset" title="Transformer les e-mails en Latin 1 (ISO-8859-1) ?"><![CDATA[
+        <item id="override_emailcharset" title="Utiliser l’encodage ISO-8859-1 dans les e-mails (par défaut UTF-8) ?"><![CDATA[
 <h2>Transformer les e-mails en Latin 1 (ISO-8859-1) ?</h2>
-<p>Textpattern utilise l’encodage UTF-8  par défaut dans la mesure du possible, y compris pour les e-mails sortants. Toutefois, certains anciens clients de messagerie électronique (y compris certaines versions de Microsoft Outlook) ne dispose pas d’un bon support UTF-8. Si vous obtenez des caractères inintelligibles dans vos messages, ce paramètre permettra d’utiliser l’encodage ISO-8859-1.</p>
+<p>Textpattern utilise l’encodage UTF-8 par défaut dans la mesure du possible, y compris pour les e-mails sortants. Toutefois, certains anciens clients de messagerie électronique (y compris certaines versions de Microsoft Outlook) ne dispose pas d’un bon support UTF-8. Si vous obtenez des caractères inintelligibles dans vos messages, ce paramètre permettra d’utiliser l’encodage ISO-8859-1.</p>
 <p><strong>Remarque :</strong> si vous utilisez une langue dont les caractères ne peuvent être représentés en ISO-8859-1, ce paramètre ne vous aidera malheureusement pas. Vous devrez faire usage d’un client de messagerie compatible UTF-8.</p>
         ]]></item>
-        <item id="override_form_types" title="Sélection des modules de remplacements"><![CDATA[<h2>Sélection des modules de remplacements</h2>
-<p>Choisissez ici quels types de modules vous souhaitez donner accès depuis la page Rédiger pour modules de remplacement (sélection multiple autorisée).</p>]]></item>
+        <item id="override_form_types" title="Sélection des modules de remplacement"><![CDATA[
+<h2>Sélection des modules de remplacements</h2>
+<p>Choisissez ici quels types de modules vous souhaitez donner accès depuis la page Rédiger pour modules de remplacement (sélection multiple autorisée).</p>        ]]></item>
         <item id="permlink_format" title="Permaliens : forme des titres d’URL"><![CDATA[
 <h2>Permaliens : forme des titres d’URL</h2>
 <p>Détermine la méthode à employer pour la construction et l’association des URL des articles lorsque la forme brute n’est pas en usage.</p>
@@ -802,21 +824,18 @@ title="HTML"
 <p>Lorsque l’option de choix d’URL est sélectionné à «Avec traits d’union (titre-comme-cela)», l’URL pour cet article sera alors :</p>
 <pre><code>https://example.com/anne-et-jean-mangent-un-gateau</code></pre>
 <p>Si la même option est sélectionnée à «Casse de chameau (TitreCommeCela)», l’URL pour cet article deviendra alors :</p>
-<pre><code>https://example.com/AnneetJeanmangentungateau</code></pre>
-        ]]></item>
+<pre><code>https://example.com/AnneetJeanmangentungateau</code></pre>        ]]></item>
         <item id="permlink_mode" title="Format des URL"><![CDATA[
 <h2>Format des URL</h2>
-<p>Détermine la méthode avec laquelle les articles individuels sont liés par des URL avec les balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
+<p>Détermine la méthode avec laquelle les articles individuels sont liés par des URL avec les balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
 <p>brute (?=paramètres) est le plus compatible il fonction sans pratiquement aucune configuration particulière mais est pénalisant en terme de lisibilité et d’optimisation à destination des moteurs de recherches (SEO). Avec ce mode, les URL de vos articles ressembleront à :</p>
 <pre><code></code></pre>
-<p>Tous les autres modes requièrent les capacités de réécriture d’URL par le serveur (c-à-d <code>mod_rewrite</code> d’Apache ou les directives de réécriture NGINX dans le bloc <code>server</code>). Si votre serveur ne supporte pas la réécriture des URL, veuillez contacter votre hébergeur pour faire usage du mode brute (?=paramètres) expliqué ci-avant.</p>
-        ]]></item>
+<p>Tous les autres modes requièrent les capacités de réécriture d’URL par le serveur (c-à-d <code>mod_rewrite</code> d’Apache ou les directives de réécriture NGINX dans le bloc <code>server</code>). Si votre serveur ne supporte pas la réécriture des URL, veuillez contacter votre hébergeur pour faire usage du mode brute (?=paramètres) expliqué ci-avant.</p>        ]]></item>
         <item id="plugin_cache_dir" title="Chemin du répertoire de cache des plugins"><![CDATA[
 <h2>Chemin du répertoire de cache des plugins</h2>
 <p>Ce paramètre s’adresse principalement aux développeurs de plugins. Lorsque renseigné, le code source d’un plugin (non encore compilé) placé dans ce dossier sera chargé automatiquement par Textpattern et permet d’en éditer facilement le code et contrôler son fonctionnement sans devoir installer/activer le plugin. <strong>Attention</strong> toutefois avec cette méthode : un plugin défaillant (qui échoue dans sa compilation) brisera l’exécution de Textpattern !</p>
 <p>Il est recommandé de charger les plugins selon la procédure standard depuis la page «Installer un plugin» sur un site en production plutôt que d’utiliser ce répertoire de cache.</p>
-<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p>
-        ]]></item>
+<p><strong>Remarque :</strong> veillez à ne pas renseigner le même emplacement pour le répertoire temporaire et celui du cache des plugins ce qui occasionnerait des problèmes de fonctionnement (Textpattern chercherait à exécuter les fichiers d’activités en tant que plugins).</p>        ]]></item>
         <item id="production_status" title="Statut de production"><![CDATA[
 <h2>Statut de production</h2>
 <p>Un site Textpattern fonctionne dans l’un de ces trois modes :</p>
@@ -841,28 +860,25 @@ title="HTML"
    <li>la consommation approximative de la mémoire</li>
 </ul>
 <h3>Le mode de production</h3>
-<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p>
-        ]]></item>
+<p>Aucune erreur ni aucune information de diagnostic ne seront envoyée à la page. Généralement, ce mode de production est préférable puisqu’il assure la meilleure expérience utilisateur et mobilise moins de charge pour le serveur.</p>        ]]></item>
         <item id="public_theme_name" title="Thème du site public"><![CDATA[
 <h2>Thème du site public</h2>
-<p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu’une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>
-        ]]></item>
+<p>Le thème par défaut affiché lorsque quiconque consultera le site public. Un thème par défaut est pré-fourni avec Textpattern ainsi qu'une option autorisant une installation brute de Textpattern sans aucun thème. Vous pouvez également ajouter des distributions de thèmes dans le répertoire <code>textpattern/themes</code> afin de pouvoir les utiliser.</p>        ]]></item>
         <item id="publish_expired_articles" title="Publier les articles qui ont expiré ?"><![CDATA[
 <h2>Publier les articles qui ont expiré ?</h2>
 <p>Si renseigné sur «Oui», les articles expirés continueront à s’afficher sur le site public après leur date d’expiration. Vous pouvez utiliser la balise <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code><span class="ui-icon ui-icon-extlink">(ouvre le lien dans une nouvelle fenêtre)</span></a> pour afficher un contenu alternatif ou une structure de substitution aux articles expirés.</p>
 <p>Si renseigné sur «Non», les articles expirés seront supprimés du site public et toute tentative d’y accéder renverra un statut HTTP «401 Gone» à la place. Le paramètre par défaut est «Non».</p>
         ]]></item>
-        <item id="publisher_email" title="Envoi des informations de connexion à cette adresse e-mail"><![CDATA[
+        <item id="publisher_email" title="Envoi des informations de connexion à une adresse email"><![CDATA[
 <h2>Envoi des informations de connexion à cette adresse e-mail</h2>
 <p>Renseigne une adresse e-mail utilisée pour origine d’expéditeur «De :» dans les messages d’envoi des informations de connexion aux nouveaux utilisateurs du site.</p>
-<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p>
-        ]]></item>
+<p>Si ce paramètre est laissé vide ou contient une adresse e-mail erronée, Textpattern utilisera le nom et l’adresse de l’utilisat•eur•rice connecté•e à la place.</p>        ]]></item>
         <item id="rss_how_many" title="Combien d’articles par flux XML (RSS) ?"><![CDATA[
 <h2>Combien d’articles par flux XML (RSS/Atom) ?</h2>
 <p>Il s’agit du nombre maximum d’articles à syndiquer à la fois, dans flux au format RSS et Atom.</p>
-<p>Une valeur faible, comme <code>5</code> plutôt que <code>15</code>, est préférable.</p>
-        ]]></item>
-        <item id="secondpass" title="Nombre d’itérations de l’interpréteur "><![CDATA[<h2>Nombre d’itérations de l’interpréteur</h2>
+<p>Une valeur faible, comme <code>5</code> plutôt que <code>15</code>, est préférable.</p>        ]]></item>
+        <item id="secondpass" title="Nombre d’itérations de l’interpréteur"><![CDATA[
+<h2>Nombre d’itérations de l’interpréteur</h2>
 <p>L’interpréteur de Textpattern remplace généralement vos balises spécifiques par le contenu de la base de données en une seule itération des pages. Dans certains cas cela peut s’avérer être insuffisant. Par exemple :</p>
 <ul>
 <li>Lors de l’usage de plugins dans des attributs de balises et dont l’ordre de chargement est de bas niveau</li>
@@ -871,16 +887,14 @@ title="HTML"
 </ul>
 <p>Textpattern procède toujours par une analyse supplémentaire (nommé "secondpass") pour des raisons d’antériorité d’où la raison du réglage de cette préférence  sur <code>1</code>. L’augmentation de ce cycle, cependant, accroît le risque que des balises inattendues soient interprétées. Les récentes améliorations apportées à l’interpréteur de balises ont réduit le besoin de cette seconde analyse. Aussi, à moins que vous n’utilisiez le deuxième balayage pour une raison spécifique, veuillez réduire cette valeur à <code>0</code> afin de mieux sécuriser votre site.</p>
 <p>Si vous trouvez par la suite des balises non traitées en cours de rendu sur votre site Web (tandis qu’aucune autre erreur de balise n’est affichée dans les statuts de production «En test/En débogage» en raison de paires de balises incompatibles) veuillez nous contacter avec votre modèle de page/code/exemple de plugin. Nous essayerons d’éliminer les itérations supplémentaires de l’interpréteur, et cette information nous aidera à y parvenir.</p>
-        
-]]></item>
+        ]]></item>
         <item id="send_lastmod" title="Envoyer l’entête de dernière modification &quot;Last-Modified&quot; ?"><![CDATA[
 <h2>Envoyer l’entête de dernière modification ?</h2>
 <p>Si renseigné, Textpattern comparera l’entête HTTP <code>If-Modified-Since</code> des visiteurs (si elle existe) avec la dernière modification intervenue sur le site. Si rien n’a changé depuis la dernière visite de l’Internaute (ex. si l’horodatage transmis par le navigateur est identique à celui de la dernière mise à jour du site), alors une entête sera envoyée pour que le navigateur du visiteur affiche la version de la page mise dans son cache.</p>
-<p>Permet de réduire la consommation de la bande passante, le délai de chargement des pages, et la charge du serveur.</p>  ]]></item>
+<p>Permet de réduire la consommation de la bande passante, le délai de chargement des pages, et la charge du serveur.</p>        ]]></item>
         <item id="show_comment_count_in_feed" title="Afficher le nombre de commentaires dans les flux XML ?"><![CDATA[
 <h2>Afficher le nombre de commentaires dans les flux XML ?</h2>
-<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p>
-        ]]></item>
+<p>Si renseigné sur «Oui», ce paramètre ajoutera le nombre des commentaires aux titres d’articles dans les flux RSS/Atom.</p>        ]]></item>
         <item id="site_slogan" title="Slogan du site"><![CDATA[
 <h2>Slogan du site</h2>
 <p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan du site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est un résumé ou une courte description de votre site. Qui sera utilisé comme description du site dès que nécessaire, comme dans vos flux RSS/Atom, et peut aussi être utilisé partout ailleurs sur votre site à discrétion.</p>
@@ -888,19 +902,16 @@ title="HTML"
         ]]></item>
         <item id="sitename" title="Nom du site"><![CDATA[
 <h2>Nom du site</h2>
-<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom ou titre général de votre site <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>. Apparaîtra dans la barre de titres des navigateurs ou dans les lecteurs de flux de syndications et partout ailleurs sur votre site, à discrétion.</p>
-        ]]></item>
+<p>Le <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom ou titre général de votre site</a>(ouvre le lien externe dans une nouvelle fenêtre)</span></2>. Apparaîtra dans la barre de titres des navigateurs ou dans les lecteurs de flux de syndications et partout ailleurs sur votre site, à discrétion.</p>        ]]></item>
         <item id="siteurl" title="URL du site"><![CDATA[
 <h2>URL du site</h2>
 <p>C’est l’adresse de votre site Textpattern, par exemple : <code>www.example.com</code>.</p>
-<p><strong>Remarque :</strong> Aucun préfixe <code>http://</code>, <code>https://</code> ni de barres obliques n’est requis.</p>
-        ]]></item>
+<p><strong>Remarque :</strong> Aucun préfixe <code>http://</code>, <code>https://</code> ni de barres obliques n’est requis.</p>        ]]></item>
         <item id="skin_dir" title="Répertoire du thème"><![CDATA[
 <h2>Répertoire du thème</h2>
 <p>Si vous souhaitez personnaliser le choix de votre répertoire de thèmes où les fichiers plats (Flat Files) du modèle public seront conservés. Vous devrez, d’abord, créer ce dossier à la racine de votre installation de Textpattern et lui accorder les droits d’accès en écriture.</p>
 <p>Ce chemin est toujours <strong>un chemin relatif</strong>(au répertoire racine de votre installation de Textpattern).</p>
-<p>Par défaut c’est <code>themes</code>.</p>
-        ]]></item>
+<p>Par défaut c’est <code>themes</code>.</p>        ]]></item>
         <item id="smtp_from" title="Adresse d’envoi SMTP"><![CDATA[
 <h2>Adresse d’envoi SMTP</h2>
 <p>Cette préférence devrait rester vide à moins que vous rencontriez des problèmes avec les envois de e-mails depuis Textpattern (si aucun e-mail n’est transmis). Si ce problème devait survenir, vous pourrez, alors, renseigner une adresse e-mail valide ici bien qu’il serait préférable qu’elle ait le même nom de domaine que celui où vous avez installé Textpattern (ex. si l’adresse de votre site est <code>https://example.com</code>, vous devriez utiliser <code>you@example.com</code>).</p>
@@ -909,9 +920,38 @@ title="HTML"
     <li>Sur serveurs UNIX-like/MacOS, l’adresse e-mail renseignée est utilisée comme 4ème paramètre (préfixé par "-f") pour la fonction PHP <code>mail()</code></li>
     <li>Sur serveur Windows, l’adresse e-mail renseignée est utilisée pour définir (ou remplacer) le paramètre <code>sendmail_from</code> du fichier php.ini</li>
 </ul>
-<p>Cela garanti que l’enveloppe SMTP de l’adresse d’expédition (qui n’est par nécessairement la même que celle de l’entête "From:" visible dans les messages) est configurée avec l’adresse renseignée ici, ce qui est requis pour l’envoi de e-mail sur certains serveurs.</p>
+<p>Cela garanti que l’enveloppe SMTP de l’adresse d’expédition (qui n’est par nécessairement la même que celle de l’entête "From:" visible dans les messages) est configurée avec l’adresse renseignée ici, ce qui est requis pour l’envoi de e-mail sur certains serveurs.</p>        ]]></item>
+        <item id="smtp_host" title="Hôte SMTP"><![CDATA[
+<h2>Hôte SMTP</h2>
+<p>Pour améliorer la délivrabilité des e-mails et/ou utiliser un service externe (SendGrid, AWS SES, Mailchimp, Mailgun, etc.), spécifiez l’hôte SMTP ici. Consultez la documentation de votre fournisseur SMTP pour connaître la valeur correcte.</p>
+<p>Cette valeur peut aussi être définie via la constante <code>SMTP_HOST</code> dans config.php ; dans ce cas, l’option sera grisée dans les Préférences.</p>
         ]]></item>
-        <item id="spam_blocklists" title="Liste de blocage des spams (séparés par une virgule)"><![CDATA[
+        <item id="smtp_pass" title="Mot de passe SMTP"><![CDATA[
+<h2>Mot de passe SMTP</h2>
+<p>Si votre connexion SMTP exige un mot de passe pour l’utilisateur spécifié, indiquez-le ici. Consultez la documentation du fournisseur pour plus de détails.</p>
+<p>Remarque : même s’il ne sera pas affiché ici, il <em>sera</em> stocké en clair dans la table prefs de la base de données. Pour plus de sécurité, vous pouvez définir la constante <code>SMTP_PASS</code> dans config.php.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>Port SMTP</h2>
+<p>Si vous avez spécifié un hôte SMTP, vous devez spécifier un port pour activer l’envoi via SMTP. Les ports courants sont :</p>
+<ul>
+    <li>25 : non sécurisé</li>
+    <li>465 : hérité (non officiel) pour TLS/SSL</li>
+    <li>587 : par défaut (recommandé) pour TLS</li>
+</ul>
+<p>Votre fournisseur SMTP peut utiliser un autre port, vérifiez sa documentation.</p>\n<p>Cette valeur peut aussi être définie via la constante <code>SMTP_PORT</code> dans config.php ; dans ce cas, l’option sera grisée dans les Préférences.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Méthode de sécurité SMTP"><![CDATA[
+<h2>Méthode de sécurité SMTP</h2>
+<p>Choisissez le protocole de sécurité utilisé par votre fournisseur SMTP. Consultez la documentation concernée pour plus de détails.</p>
+<p>Cette valeur peut également être définie via la constante <code>SMTP_SECTYPE</code> dans config.php, auquel cas elle sera grisée dans les Préférences.</p>
+        ]]></item>
+        <item id="smtp_user" title="Nom d’utilisateur SMTP"><![CDATA[
+<h2>Nom d’utilisateur SMTP</h2>
+<p>Si votre connexion SMTP demande un identifiant, fournissez-le ici. Consultez la documentation du fournisseur pour plus de détails.</p>
+<p>Cette valeur peut être définie via la constante <code>SMTP_USER</code> dans config.php, auquel cas elle sera grisée dans les Préférences.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[
 <h2>Liste de blocage des spams (séparés par une virgule)</h2>
 <p>La <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blacklisting">liste de blocage <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> des fournisseurs d’accès renseignée ici sera interrogée lors de la création d’un nouveau commentaire de votre blog et l’adresse IP du commentateur sera vérifiée. Si l’adresse IP est listée, c-à-d qu’elle a fait l’objet de plusieurs rapport de spamming auparavant, le commentaire sera de facto rejeté. Ces adresses IP rejetées ne sont pas conservées par Textpattern.</p>
 <p>Vous pouvez renseigner une liste de noms de domaine, séparés par une virgule. Veuillez prendre note que ces listes relèvent de votre responsabilité et correspondent, effectivement, à vos besoins.</p>
@@ -919,45 +959,52 @@ title="HTML"
         <item id="syndicate_body_or_excerpt" title="Le résumé plutôt que l’article complet dans les flux XML ?"><![CDATA[
 <h2>Le résumé <strong>plutôt</strong> que l’article complet dans les flux XML ?</h2>
 <p>Si renseigné sur «Non», les flux contiendront les corps des articles complets.</p>
-<p>Si renseigné sur «Oui», les flux contiendront les résumés à la place des corps d’articles chaque fois que possible.</p>
-        ]]></item>
-        <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[<h2>Chemin du répertoire temporaire</h2>
+<p>Si renseigné sur «Oui», les flux contiendront les résumés à la place des corps d’articles chaque fois que possible.</p>        ]]></item>
+        <item id="tempdir" title="Chemin du répertoire temporaire"><![CDATA[
+<h2>Chemin du répertoire temporaire</h2>
 <p>Renseignez un <strong>chemin absolu</strong> vers le répertoire temporaire (parfois désigné "tmp" ou "temp"). PHP nécessite des droits d’accès en écriture sur ce dossier. Ce répertoire est utilisé pour stocker temporairement des fichiers de toute nature (par ex. des plugins, des fichiers, des images)</p>
 <p><strong>Note :</strong>
 <ul>
 <li>Ne renseignez pas le même dossier pour celui temporaire et celui du cache des plugins. Cela occasionnerait des problèmes de fonctionnement (Textpattern essaierait d’exécuter le contenu des fichiers journaux temporaires en tant que plugins). </li>
 <li>Envisagez de déplacer ce dossier hors de votre répertoire racine public de votre site afin d’accroître la sécurité.</li>
 </ul>
-</p>]]></item>
+</p>        ]]></item>
         <item id="theme_name" title="Thème de l’administration"><![CDATA[
 <h2>Thème de l’administration</h2>
-<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>
+<p>Le thème de l’interface d’administration par défaut utilisée lorsque quiconque se connectera à Textpattern. Un choix de thèmes pré-fournis sont inclus avec les distributions de Textpattern et vous pouvez les compléter par des distributions à placer dans le répertoire <code>textpattern/admin-themes</code> afin de les rendre disponibles.</p>        ]]></item>
+        <item id="trailing_slash" title="Ajouter une barre oblique finale aux URL"><![CDATA[
+<h2>Ajouter un slash final aux URL ?</h2>
+<p>Détermine si Textpattern ajoute automatiquement ou non un slash final à toutes les URL qu’il génère. Les options sont :</p>
+<ul>
+    <li><strong>Non</strong> : Jamais</li>
+    <li><strong>Oui</strong> : Toujours</li>
+    <li><strong>Liste</strong> : Seulement sur les pages de liste (c.-à-d. pas sur une page d’article individuel)</li>
+</ul>
         ]]></item>
-        <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[<h2>Fonctions PHP associées à txp:evaluate</h2>
-<p>Une liste séparée par des virgules de <code>function</code> ou de <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments de cette liste peuvent être utilisés avec l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
+        <item id="txp_evaluate_functions" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
+<h2>Fonctions PHP autorisées dans txp:evaluate</h2>
+<p>Il s’agit d’une liste séparée par des virgules de <code>function</code> ou <code>alias=function</code>, par exemple <code>md5</code>, <code>replace=str_replace</code>. Les éléments ainsi spécifiés peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
-<p>Les <code>fonctions</code> doivent retourner une valeur scalaire (<strong>et non pas</strong> un array/object).</p>
+<p><code>function</code> doit renvoyer une valeur scalaire (<strong>pas</strong> un tableau ou un objet).</p>
         ]]></item>
-        <item id="use_comments" title="Fonctions PHP associées à txp:evaluate"><![CDATA[
-<h2>Functions PHP associées à txp:evaluate</h2>
-<p>Renseignez une liste de <code>function</code> séparées par une virgule ou des <code>alias=function</code> (ex. <code>md5</code>, <code>replace=str_replace</code>). Les éléments renseignés dans cette liste peuvent être utilisés dans l’attribut <code>query</code> de la balise <code>&lt;txp:evaluate /&gt;</code> :</p>
-<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
-<p><code>function</code> doit retourner une valeur scalaire (<strong>pas</strong> un array/object).</p>
+        <item id="use_comments" title="Accepter les commentaires ?"><![CDATA[
+<h2>Accepter les commentaires ?</h2>
+<p>Détermine si les fonctionnalités de commentaires de Textpattern doivent être activées ou désactivées.</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="Accepter les commentaires ?"><![CDATA[
-<h2>Accepter les commentaires ?</h2>
-<p>Choix d’acceptation ou non des fonctionnalités des commentaires.</p>
+        <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs (default is site URL)?"><![CDATA[
+<h2>Utiliser l’e-mail pour créer les ID de flux (par défaut : l’URL du site) ?</h2>\n<p>Les éléments d’un flux Atom requièrent un ID unique.</p>
+<p>Pour générer un ID propre à votre site, Textpattern vous permet de choisir entre l’utilisation d’une adresse e-mail ou celle de votre nom de domaine. L’adresse e-mail sera celle spécifiée lors de la création du site. Sauf si vous pensez changer de nom de domaine à l’avenir, il est probablement plus sûr de choisir «Non».</p>
         ]]></item>
-        <item id="use_plugins" title="Utiliser l’e-mail pour l’identification des flux XML ?"><![CDATA[
-<h2>Utiliser l’e-mail pour l’identification ID des flux XML (par défaut : l’URL du site) ?</h2>
-<p>Les éléments contenus dans les flux Atom nécessitent un identifiant unique.</p>
-<p>Pour générer cet identifiant ID pour votre site, Textpattern vous permet de choisir entre soit une adresse e-mail, soit votre nom de domaine. L’adresse e-mail sera la première utilisée lors de la création du site. À moins de préférer changer pour votre nom de domaine dans le futur, mieux vaut régler ce paramètre sur «Non».</p>
+        <item id="use_plugins" title="Utiliser les plugins ?"><![CDATA[
+<h2>Utiliser les plugins ?</h2>
+<p>Active ou désactive complètement la prise en charge des plugins Textpattern. Cela peut être utile pour le débogage, si vous suspectez qu’un ou plusieurs plugins causent des erreurs.</p>
         ]]></item>
-        <item id="use_textile" title="Formatage du texte par défaut"><![CDATA[<h2>Formatage du texte par défaut</h2>
-<p>Le paramètre de format du texte choisi devient celui par défaut pour les résumés et corps de textes dans la page « Rédiger ». Vous pouvez choisir d’autoriser la transcription complète en Textile, de convertir seulement les retours de lignes dans le format des paragraphes HTML ou, encore, de laisser le texte tel quel.</p>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile<span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a> est une convention destinée à la conversion de texte brut en HTML. Lorsque activé, Textile interprétera le corps de texte des articles pour afficher du balisage structurel en HTML.</p>
-<p>Textile offre aussi de puissantes commandes facilement compréhensibles afin de formater du texte, définir des structures comme des listes, des titres et citations, insérer des liens ou des images.</p>
-]]></item>
+        <item id="use_textile" title="Formatage du texte par défaut"><![CDATA[
+<h2>Formatage du texte par défaut</h2>
+<p>Le paramètre de formatage choisi ici devient la valeur par défaut pour le résumé et le corps dans le panneau «Rédiger». Vous pouvez choisir d’autoriser le traitement complet avec Textile, de convertir uniquement les sauts de ligne en balises de paragraphe HTML, ou de ne rien convertir.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(ouvre un lien externe dans une nouvelle fenêtre)</span></a> est un utilitaire conçu pour faciliter la conversion du texte brut en HTML. Lorsqu’il est activé, Textile traitera le corps de l’article pour produire un code HTML structurel.</p>
+<p>Textile offre également un ensemble de commandes puissantes et simples à apprendre pour la mise en forme, la gestion des listes, des titres, des citations, ainsi que l’insertion de liens et d’images.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Nom de la section">

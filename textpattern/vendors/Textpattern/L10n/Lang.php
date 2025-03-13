@@ -750,7 +750,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         global $textarray; // deprecated since 4.7
 
+        // These keywords need translating as they cannot exist as keys in .ini files.
+        $reserved = array('false', 'no', 'none', 'null', 'off', 'on', 'true', 'yes');
+
         $v = strtolower($var);
+        $v = in_array($v, $reserved) ? 'txp_'.$v : $v;
 
         if (isset($this->strings[$v])) {
             $out = $this->strings[$v];

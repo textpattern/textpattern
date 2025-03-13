@@ -31,7 +31,7 @@
     "dompurify": "3.2.4",
     "jquery": "3.7.1",
     "jquery-ui": "1.14.1",
-    "prismjs": "1.29.0"
+    "prismjs": "1.30.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -59,7 +59,7 @@
     "eslint": "./node_modules/.bin/eslint textpattern/textpattern.js; exit 0",
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:blueimp-file-upload": "uglifyjs -c -m -o textpattern/vendors/blueimp/fileupload/jquery.fileupload.js node_modules/blueimp-file-upload/js/jquery.fileupload.js",
-    "copy:dompurify": "rimraf textpattern/vendors/cure53/DOMPurify/dist/purify.min.js textpattern/vendors/cure53/DOMPurify/dist/purify.min.js.map && cp node_modules/dompurify/dist/purify.min.js textpattern/vendors/cure53/DOMPurify/dist/purify.min.js && cp node_modules/dompurify/dist/purify.min.js.map textpattern/vendors/cure53/DOMPurify/dist/purify.min.js.map",
+    "copy:dompurify": "rimraf textpattern/vendors/cure53/DOMPurify/purify.js && cp node_modules/dompurify/dist/purify.min.js textpattern/vendors/cure53/DOMPurify/purify.js",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
     "copy:jquery-ui": "rimraf textpattern/vendors/jquery/jquery-ui/jquery-ui.js && cp node_modules/jquery-ui/dist/jquery-ui.min.js textpattern/vendors/jquery/jquery-ui/jquery-ui.js",
     "copy:prismjs": "uglifyjs -c -m -o textpattern/vendors/PrismJS/prism/prism.js node_modules/prismjs/prism.js node_modules/prismjs/components/prism-markup-templating.js node_modules/prismjs/components/prism-bash.js node_modules/prismjs/components/prism-json.js node_modules/prismjs/components/prism-markdown.js node_modules/prismjs/components/prism-php.js node_modules/prismjs/components/prism-textile.js",

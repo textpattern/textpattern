@@ -377,7 +377,7 @@ class Plugin
                 if ($info = txp_get_contents($dirname.DS.$fn)) {
                     $plugin += json_decode($info, true);
                 }
-            } else {
+            } elseif (empty($plugin[$key])) {
                 if ($content = txp_get_contents($dirname.DS.$fn)) {
                     $plugin[$key] = $content;
                 }
