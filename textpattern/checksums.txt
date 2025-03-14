@@ -32,7 +32,7 @@
 /lib/admin_config.php: 4708a43f923cb27de2686571b69de9f8
 /lib/class.thumb.php: 86dd117ccde53057fb2145ded4dd555d
 /lib/class.trace.php: e513b301279a394581aee5adf97dec3d
-/lib/constants.php: a9ec328bddd5346c5ebd722b6982e637
+/lib/constants.php: 9024f81e46a57ce998c835b5b1757d91
 /lib/IXRClass.php: b0affd8ceb2864e2df17e35d5880de0f
 /lib/PasswordHash.php: 66a8aa4b2d6e0527877a797907efc035
 /lib/taglib.php: 20c6bb919ddf7e5f4b212fa7f51c9304
@@ -53,7 +53,7 @@
 /publish/search.php: d56f02043f25d0284424a7d270630fe2
 /publish/taghandlers.php: 3eea39e0070287e2fc301e1d014fa0f4
 /publish.php: 4dd88fed820b86a772645039180ced54
-/textpattern.js: 9f0ea485ecbbff1bd6ab47b74221a788
+/textpattern.js: 78715028e3988c893aa1ba06f490519e
 /tmp/index.php: b3612b473531b49801f1bcd7ff330117
 /update/_to_4.0.3.php: 86aa484b4627079e5d88705330829ded
 /update/_to_4.0.4.php: 1fd835aa807e0a2dd7e59668236a8b77
