@@ -53,7 +53,7 @@
 /publish/search.php: d56f02043f25d0284424a7d270630fe2
 /publish/taghandlers.php: 3eea39e0070287e2fc301e1d014fa0f4
 /publish.php: 4dd88fed820b86a772645039180ced54
-/textpattern.js: 5db89a4ddb1f9a9e403f544612c45ae8
+/textpattern.js: 78715028e3988c893aa1ba06f490519e
 /tmp/index.php: b3612b473531b49801f1bcd7ff330117
 /update/_to_4.0.3.php: 86aa484b4627079e5d88705330829ded
 /update/_to_4.0.4.php: 1fd835aa807e0a2dd7e59668236a8b77
@@ -83,7 +83,7 @@
 /vendors/composer/installed.php: 84fce96a4a0e021a231dc50eb3318375
 /vendors/composer/InstalledVersions.php: 182d5924ff0b528f008a83d1f5809d02
 /vendors/composer/platform_check.php: 15e1efff88933be3dd5740e3c9530478
-/vendors/cure53/DOMPurify/purify.js: 549c43ecd1cb8a901f5729c257abb068
+/vendors/cure53/DOMPurify/purify.js: fb6e0faf158250add138249dcee45197
 /vendors/jquery/jquery/jquery.js: 2c872dbe60f4ba70fb85356113d8b35e
 /vendors/jquery/jquery-ui/jquery-ui.js: 12c28b31a1369383b3549abf958b01fe
 /vendors/Netcarver/Textile/DataBag.php: f8de6d8cb14ff6b0403922e13cbd71ff
@@ -121,6 +121,7 @@
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ja.php: 47bc2e74a6a0de906e46fdc3f05335ad
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ka.php: 693af2da3a7837d6c2ce877a6296c9fa
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-ko.php: c95e8ca9669773f869b54ad91f2df771
+/vendors/phpmailer/phpmailer/language/phpmailer.lang-ku.php: ab9efa84143e00cb8e8dc2e06dae4796
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-lt.php: a1db8ce612b6a47aaa32635d66aa6147
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-lv.php: a9a3d00075ac3e83c74e43a394dfba54
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-mg.php: 6c8fe8f190a0ccc9f750851ba0d65585
@@ -142,6 +143,7 @@
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-tl.php: ea1ce8d9353133c43fb3f14ad663454b
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-tr.php: af90792796806d25cc4893d335b70fc1
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-uk.php: dd92241bba4087a70ce50c99ef16dd4a
+/vendors/phpmailer/phpmailer/language/phpmailer.lang-ur.php: 017186f1054213e892d27ab5be64cc33
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-vi.php: b98d51c1f17b610fed45013e58bd1701
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-zh.php: 05274f5c2fc2da491392f5b9e3f859e6
 /vendors/phpmailer/phpmailer/language/phpmailer.lang-zh_cn.php: fd539432a2254bb959d54a7010001574
@@ -152,6 +154,7 @@
 /vendors/phpmailer/phpmailer/src/PHPMailer.php: e88e574de119bb2bc8c5dc5135480be1
 /vendors/phpmailer/phpmailer/src/POP3.php: ad0d035b2b5280255db6d47e76b75537
 /vendors/phpmailer/phpmailer/src/SMTP.php: 16403b1d60833801c30a23981c453e11
+/vendors/PrismJS/prism/prism-txp.js: e0bfe0559dc4b882f2708f556d625ad4
 /vendors/PrismJS/prism/prism.js: 73c524763c413ff640b6a6f3e5660947
 /vendors/Textpattern/Adaptable/AdapterInterface.php: 6ae8d319255c0603c8777031120c34c7
 /vendors/Textpattern/Adaptable/Providable.php: e62a675bb8d696c4b0c3e8645e44d075

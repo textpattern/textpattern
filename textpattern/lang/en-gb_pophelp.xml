@@ -84,13 +84,14 @@
     <group id="article" title="Write panel">
         <item id="article_image" title="Article image"><![CDATA[
 <h2>Article image</h2>
-<p>To associate a single image with this article, place one of the following here:</p>
+<p>To associate images with this article, place one of the following here:</p>
 <ol>
-    <li>a Textpattern image ID (e.g. <code>12</code>)</li>
-    <li>a relative URL to the image (e.g. <code>/images/my_pic.jpg</code>)</li>
-    <li>a fully-qualified URL (e.g. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+    <li>one or more Textpattern image IDs, comma-separated (e.g. <code>12, 25, 18</code>)</li>
+    <li>one or more relative URLs to the image, comma-separated (e.g. <code>/images/my_pic.jpg</code>)</li>
+    <li>one or more fully-qualified URLs, comma-separated (e.g. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>The image can be displayed by placing a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to the chosen image.</p>
+<p>The first image can be displayed by placing a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. By default, it will output a complete HTML <code>&lt;img&gt;</code> tag to the chosen image.</p>
+<p>You may display galleries using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="body" title="Body"><![CDATA[
 <h2>Body</h2>
@@ -142,17 +143,13 @@
 <p>Defines the publishing visibility status of this Textpattern article.</p>
 <p>The publishing status is one of the following:</p>
 <ul>
-    <li>Draft</li>
-    <li>Hidden</li>
-    <li>Pending</li>
-    <li>Live</li>
-    <li>Sticky</li>
+<li><strong>Draft</strong>: considered a work-in-progress and is not viewable outside of the Textpattern administration area (i.e. not visible on the website and not syndicated in feeds).</li>
+<li><strong>Hidden</strong>: article is not viewable outside of the Textpattern administration area. Useful to remove content from the website that you don't necessarily wish to delete.</li>
+<li><strong>Pending</strong>: considered ready for publication and awaiting approval, but is not viewable outside of the Textpattern administration area.</li>
+<li><strong>Live</strong>: typically viewable outside the Textpattern administration area (i.e. visible on the website, syndicated in feeds if the preference permits). If an article is live and has an expiration date, the status will remain Live after that date has been reached, but the article only appears outside the administration area if expired articles are permitted to be published.</li>
+<li><strong>Sticky</strong>: similar to a <strong>Live</strong> article insofar as it can be viewed by website visitors, but will <strong>not</strong> appear in article lists unless the respective <code>article</code> or <code>article_custom</code> tag includes a <code>status</code> attribute with a <code>sticky</code> value.</li>
 </ul>
-<p>A <strong>draft</strong> article is considered a work-in-progress and is not viewable outside of the Textpattern administration area (i.e. not visible on the Textpattern front side and not syndicated in feeds).</p>
-<p>A <strong>hidden</strong> article is not viewable outside of the Textpattern administration area.</p>
-<p>A <strong>pending</strong> article is considered ready for publication and awaiting approval, but is not viewable outside of the Textpattern administration area.</p>
-<p>A <strong>live</strong> article is typically viewable outside the Textpattern administration area (i.e. visible on the Textpattern front side, syndicated in feeds if the preference permits). If an article is live and has an expiration date, the status will remain as live after that date has been reached, but the article only appears outside the administration area if expired articles are permitted to be published.</p>
-<p>A <strong>sticky</strong> article is similar to a <strong>live</strong> article insofar as it can be viewed outside the Textpattern administration area but will <strong>not</strong> appear in article lists unless the respective <code>article</code> or <code>article_custom</code> tag includes a <code>status</code> attribute with a <code>sticky</code> value.</p>
+<p>Note: content that is not publicly viewable on the website may still be previewd by logged-in users.</p>
         ]]></item>
         <item id="title" title="Title"><![CDATA[
 <h2>Title</h2>
@@ -191,7 +188,7 @@
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
 <h2>Images</h2>
-<p>Image categories are optional, and useful both for internal organisation and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
+<p>Image categories are optional, and useful both for internal organisation and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tag.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
 <h2>Links</h2>
@@ -517,13 +514,24 @@
     <group id="plugin" title="Plugin panel">
         <item id="install_plugin" title="Install plugin"><![CDATA[
 <h2>Install plugin</h2>
-<p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+<p>Paste the contents of the compiled plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
 <p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
+<p>You can often obtain compiled versions of plugins from the <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or a plugin author's designated channel, such as their website or GitHub.</p>
+<p>You may also paste a URL to a Textpattern compiled text file here, if the external site permits it.</p>
+<p>All uploaded plugins will go through a verification step allowing you to inspect the plugin code and contents prior to installation.</p>
         ]]></item>
         <item id="upload_plugin" title="Upload plugin"><![CDATA[
 <h2>Upload plugin</h2>
-<p>Use this form to upload a plugin file (either a PHP file or a zipped archive). Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
+<p>Use this form to upload a plugin file. Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
+<p>Plugin types that may be uploaded here are:</p>
+<ul>
+<li>Textpattern PHP Template files that contain complete code, metadata, Textpack strings and help text.</li>
+<li>Textpattern compiled text files that contain complete code, metadata, Textpack strings and help text.</li>
+<li>Textpattern zip bundles that contain manifest information and code, metadata, Textpack strings, help text and supporting files.</li>
+<li>Raw PHP files (though these will not populate additional metadata and are not recommended).</li>
+</ul>
 <p>Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+<p>All uploaded plugins will go through a verification step allowing you to inspect the plugin code and contents prior to installation.</p>
         ]]></item>
     </group>
 
@@ -544,6 +552,7 @@
         <item id="allow_article_php_scripting" title="Allow PHP in articles?"><![CDATA[
 <h2>Allow PHP in articles?</h2>
 <p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
+<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging/dangerous PHP code that may destroy your website or leak information to third parties could be added by any author and executed by anyone viewing that article.</p>
 <p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="Allow form override?"><![CDATA[
@@ -553,7 +562,8 @@
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page templates and form templates.</p>
-<p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging/dangerous PHP code that may destroy your website or leak information to third parties could be added by any other user and executed by an unsuspecting administrator or site visitor.</p>
+<p>PHP code must omit opening and closing PHP tags, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Archive date format"><![CDATA[
 <h2>Archive date format</h2>
@@ -627,7 +637,7 @@
         <item id="comments_on_default" title="Comments on by default?"><![CDATA[
 <h2>Comments on by default?</h2>
 <p>If this is set to ‘Yes’, comments will be automatically enabled for every article published. If set to ‘No’, you must enable comments on the article ‘Write’ panel each time you want to accept comments.</p>
-<p>Note that allowing comments can be turned on or off at any time, on a per-article basis.</p>
+<p>Comments can be enabled/disabled at any time, on a per-article basis.</p>
         ]]></item>
         <item id="comments_require_email" title="Comments require commenter’s email address?"><![CDATA[
 <h2>Comments require user’s email address?</h2>
