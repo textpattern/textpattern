@@ -83,9 +83,7 @@
 /vendors/composer/installed.php: 84fce96a4a0e021a231dc50eb3318375
 /vendors/composer/InstalledVersions.php: 182d5924ff0b528f008a83d1f5809d02
 /vendors/composer/platform_check.php: 15e1efff88933be3dd5740e3c9530478
-/vendors/cure53/DOMPurify/dist/purify.min.js: 
-/vendors/jquery/jquery/jquery-4.0.0-beta.2.min.js: 
-/vendors/cure53/DOMPurify/purify.js: 549c43ecd1cb8a901f5729c257abb068
+/vendors/cure53/DOMPurify/purify.js: fb6e0faf158250add138249dcee45197
 /vendors/jquery/jquery/jquery.js: 2c872dbe60f4ba70fb85356113d8b35e
 /vendors/jquery/jquery-ui/jquery-ui.js: 12c28b31a1369383b3549abf958b01fe
 /vendors/Netcarver/Textile/DataBag.php: f8de6d8cb14ff6b0403922e13cbd71ff
