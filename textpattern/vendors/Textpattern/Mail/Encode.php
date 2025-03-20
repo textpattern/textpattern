@@ -109,7 +109,14 @@ class Encode
         }
 
         $end = '?=';
-        $sep = IS_WIN ? "\r\n" : "\n";
+        $sep = "\n";
+
+        if (IS_WIN) {
+            $sep = "\r\n";
+        } elseif (ini_get('cgi.rfc2616_headers') != 0) {
+            $sep = "\r\n";
+        }
+
         preg_match_all($pcre, $string, $matches);
 
         return $start.join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])).$end;
