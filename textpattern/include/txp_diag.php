@@ -560,10 +560,10 @@ function doDiagnostics()
                         'help' => ($showPophelp ? popHelp($help) : ''),
                         'type' => array(),
                     );
-                }
 
-                if ($langCounter === 0) {
-                    $pfcCounter++;
+                    if ($langCounter === 0) {
+                        $pfcCounter++;
+                    }
                 }
             }
 
