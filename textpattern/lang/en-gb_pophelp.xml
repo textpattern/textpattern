@@ -222,6 +222,10 @@
 </ul>
 <p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved messy URLs (e.g. <code>https://example.com?s=section&amp;id=4</code>) should be used. Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
         ]]></item>
+        <item id="concurrent_user_live" title="Concurrent logins on a live server"><![CDATA[
+<h2>Concurrent logins on a live server</h2>
+<p>Allowing your user account to log in from multiple sessions is a security risk and not recommended. Please disable this feature from the advanced preferences panel, unless the risks are understood and acceptable.</p>
+        ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
 <p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpattern support forum, this reduces a security risk by omitting sensitive server information.</p>
@@ -664,6 +668,11 @@
 </ul>
 <p><strong>Note:</strong> For security reasons, raw HTML is transformed into regular text.</p>
         ]]></item>
+        <item id="concurrent_logins" title="Accounts permitted to login concurrently"><![CDATA[
+<h2>Accounts permitted to login concurrently</h2>
+<p>A comma-separated list of login account names that may log in across multiple browsers/sessions. This is helpful during development to share a login with clients.</p>
+<p>Using this feature is a security risk and <strong>not recommended on live sites</strong>. Diagnostics will issue a warning if your user account is configured for concurrency on a live website.</p>
+        ]]></item>
         <item id="custom_form_types" title="Custom form template types"><![CDATA[
 <h2>Custom form template types</h2>
 <p>In addition to the standard form template types (article, file, misc, etc.), Publishers can define custom types. The purpose of custom form template types is twofold: easier form template classification and custom asset definitions.</p>
@@ -747,7 +756,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="enhanced_email" title="Use enhanced mail features"><![CDATA[
 <h2>Use enhanced mail features</h2>
 <p>Setting this to ‘No’ will route all email - such as account password reset requests, and email from plugins such as com_connect - through PHP's <code>mail()</code> function. Selecting ‘Yes’ will use the bundled PHPMailer instead, which opens up optional settings for routing mail via external SMTP servers.</p>
-<p>If you are having trouble with reception of emails (especially in online providers such as gmail, hotmail, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Using SMTP will often further enhance deliverability.</p>
+<p>If you are having trouble with reception of emails (especially in online providers such as gmail, hotmail, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
         ]]></item>
         <item id="expire_logs_after" title="Logs expire after how many days?"><![CDATA[
 <h2>Logs expire after how many days?</h2>
