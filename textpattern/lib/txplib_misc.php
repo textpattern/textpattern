@@ -2190,7 +2190,12 @@ function is_blocklisted($ip, $checks = '')
 
 function is_logged_in($user = '')
 {
-    static $users = array();
+    static $users = array(), $concurrentUsers = null;
+
+    if ($concurrentUsers === null) {
+        // Can't use get_pref() as they may not be loaded.
+        $concurrentUsers = do_list_unique(safe_field('val', 'txp_prefs', "name='concurrent_logins'"));
+    }
 
     $name = substr(cs('txp_login_public'), 10);
 
@@ -2204,7 +2209,7 @@ function is_logged_in($user = '')
 
     $rs = $users[$name];
 
-    if ($rs && substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
+    if ($rs && (in_array($rs['name'], $concurrentUsers) ? true : substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10))) {
         unset($rs['nonce']);
 
         return $rs;

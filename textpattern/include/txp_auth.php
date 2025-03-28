@@ -261,6 +261,7 @@ function doTxpValidate()
     $message    = '';
     $pub_path   = preg_replace('|//$|', '/', rhu . '/');
     $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
+    $conUsers = do_list_unique(get_pref('concurrent_logins'));
 
     if (cs('txp_login') && strpos(cs('txp_login'), ',')) {
         $txp_login = explode(',', cs('txp_login'));
@@ -280,7 +281,7 @@ function doTxpValidate()
             "name = '" . doSlash($c_userid) . "' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
-        if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid . pack('H*', $c_hash))) {
+        if ($r && $r['nonce'] && (in_array($c_userid, $conUsers) ? true : $r['nonce'] === md5($c_userid . pack('H*', $c_hash)))) {
             // Cookie is good.
             if ($logout) {
                 $txp_user = $c_userid;

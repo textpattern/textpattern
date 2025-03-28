@@ -194,7 +194,7 @@ function diag_msg_wrap($msg, $type = 'e')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels, $txp_sections;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels, $txp_sections, $txp_user;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -327,6 +327,13 @@ function doDiagnostics()
     // Running development code in live mode is not recommended.
     if (preg_match('/-dev$/', txp_version) && $production_status == 'live') {
         $preflight['w'][] = array('dev_version_live');
+    }
+
+    // Using concurrent users in live mode is not recommended
+    $conUsers = do_list_unique(get_pref('concurrent_logins'));
+
+    if (in_array($txp_user, $conUsers) && $production_status == 'live') {
+        $preflight['w'][] = array('concurrent_user_live');
     }
 
     // Missing files.
