@@ -627,8 +627,8 @@ function doDiagnostics()
     $fmt_date = 'Y-m-d H:i:s';
     $updateTime = ($dbupdatetime) ? gmdate($fmt_date, $dbupdatetime) . '/' : '';
 
-    $inivars = ((ini_get('open_basedir')) ? t . 'open_basedir' . cs . ini_get('open_basedir') . n : '').
-        ((ini_get('upload_tmp_dir')) ? t . 'upload_tmp_dir' . cs . ini_get('upload_tmp_dir') . n : '');
+    $inivars = ((ini_get('open_basedir')) ? priv . t . 'open_basedir' . cs . ini_get('open_basedir') . n : '').
+        ((ini_get('upload_tmp_dir')) ? priv . t . 'upload_tmp_dir' . cs . ini_get('upload_tmp_dir') . n : '');
 
     $out = array(
         form(
@@ -691,7 +691,7 @@ function doDiagnostics()
 
         gTxt('diag_production_status') . cs . $production_status . n,
 
-        ($inivars ? 'PHP.ini:' . n . $inivars : ''),
+        priv . ($inivars ? 'PHP.ini:' . n . $inivars : ''),
 
         gTxt('diag_tempdir') . cs . $tempdir . n,
 
