@@ -7,6 +7,9 @@ Changes in 4.9.0 (upcoming)
   recommended, preferably with vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with vendor support).
+
+Changes in 4.9.0-rc.1 (upcoming)
+
 * Developer: Permitted concurrent logins for dev use. See Advanced Prefs.
 * Vendors: DOMPurify 3.2.5.
 
