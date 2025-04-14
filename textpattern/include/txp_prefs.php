@@ -232,7 +232,9 @@ function prefs_list($message = '')
 
             if ($mainEvent !== $last_event) {
                 if ($last_event !== null) {
-                    $overview_help = in_array($last_event . '_overview', $pophelp_keys, true) ? $last_event . '_overview' : '';
+                    $overview_help = array_key_exists($last_event . '_overview', $pophelp_keys)
+                        ? ($pophelp_keys[$last_event . '_overview'] === 'textpattern' ? '' : $pophelp_keys[$last_event . '_overview'] . ':') . $last_event . '_overview'
+                        : '';
                     $build[] = tag(
                         hed(gTxt($last_event) . popHelp($overview_help), 2, array('id' => 'prefs_group_' . $last_event . '-label')) .
                         join(n, $out), 'section', array(
@@ -279,7 +281,9 @@ function prefs_list($message = '')
                     break;
             }
 
-            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
+            $help = array_key_exists($a['name'], $pophelp_keys)
+                ? ($pophelp_keys[$a['name']] === 'textpattern' ? '' : $pophelp_keys[$a['name']] . ':') . $a['name']
+                : '';
 
             // @todo: Ready for constraints to be read from $a['constraints'].
             $constraints = array();
@@ -310,7 +314,10 @@ function prefs_list($message = '')
             array('class' => 'alert-block information')
         );
     } else {
-        $overview_help = in_array($last_event . '_overview', $pophelp_keys, true) ? $last_event . '_overview' : '';
+        $overview_help = array_key_exists($last_event . '_overview', $pophelp_keys)
+            ? ($pophelp_keys[$last_event . '_overview'] === 'textpattern' ? '' : $pophelp_keys[$last_event . '_overview'] . ':') . $last_event . '_overview'
+            : '';
+
         $build[] = tag(
             hed(gTxt($last_event) . popHelp($overview_help), 2, array('id' => 'prefs_group_' . $last_event . '-label')) .
             join(n, $out), 'section', array(
