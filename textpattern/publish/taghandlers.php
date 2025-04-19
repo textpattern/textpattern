@@ -789,7 +789,7 @@ function popup($atts)
                 n . '</select>';
 
             if ($label) {
-                $out = $label . br . $out;
+                $out = $label . (get_pref('doctype') === 'html5' ? '<br>' : '<br />') . $out;
             }
 
             if ($wraptag) {
@@ -826,7 +826,7 @@ function category_list($atts, $thing = null)
 
     extract(lAtts(array(
         'active_class' => '',
-        'break'        => br,
+        'break'        => 'br',
         'categories'   => null,
         'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'class'        => __FUNCTION__,
@@ -908,7 +908,7 @@ function section_list($atts, $thing = null)
 
     extract(lAtts(array(
         'active_class'    => '',
-        'break'           => br,
+        'break'           => 'br',
         'class'           => __FUNCTION__,
         'default_title'   => get_pref('sitename'),
         'exclude'         => '',
@@ -1094,7 +1094,7 @@ function search_input($atts, $thing = null)
     $sub = (!empty($button)) ? '<input type="submit" value="' . txpspecialchars($button) . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />') : '';
     $id =  (!empty($html_id)) ? ' id="' . txpspecialchars($html_id) . '"' : '';
 
-    $out = (!empty($label)) ? txpspecialchars($label) . br . $out . $sub : $out . $sub;
+    $out = (!empty($label)) ? txpspecialchars($label) . (get_pref('doctype') === 'html5' ? '<br>' : '<br />') . $out . $sub : $out . $sub;
     $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)) . $out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 

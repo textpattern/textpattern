@@ -37,7 +37,7 @@ class Comment
         global $thisarticle, $thiscomment;
     
         extract(lAtts(array(
-            'break'    => br,
+            'break'    => 'br',
             'class'    => __FUNCTION__,
             'form'     => '',
             'limit'    => 10,
