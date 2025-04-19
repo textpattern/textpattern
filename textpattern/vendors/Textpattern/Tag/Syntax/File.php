@@ -36,7 +36,7 @@ class File
         global $s, $c, $context, $thisfile, $thispage, $pretext;
     
         extract(lAtts(array(
-            'break'       => br,
+            'break'       => 'br',
             'category'    => '',
             'author'      => '',
             'realname'    => '',

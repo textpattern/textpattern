@@ -159,7 +159,7 @@ class Image
         global $c;
     
         lAtts(array(
-            'break'    => br,
+            'break'    => 'br',
             'wraptag'  => '',
             'class'    => __FUNCTION__,
             'category' => $c,
@@ -212,7 +212,7 @@ class Image
             'thumbnail'   => true,
             'size'        => '',
             'auto_detect' => 'article, category, author',
-            'break'       => br,
+            'break'       => 'br',
             'wraptag'     => '',
             'class'       => __FUNCTION__,
             'html_id'     => '',

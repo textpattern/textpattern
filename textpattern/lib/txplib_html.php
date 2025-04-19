@@ -1895,7 +1895,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
     // Non-enclosing breaks.
     elseif ($break === 'br' || $break === 'hr') {
-        $content = join("<$break $breakatts".(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
+        $content = join("<$break".($breakatts ? " ".$breakatts : "").(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
     } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {
