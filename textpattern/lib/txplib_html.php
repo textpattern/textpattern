@@ -962,7 +962,9 @@ function tag($content, $tag, $atts = '')
 
 function tag_void($tag, $atts = '')
 {
-    return '<'.$tag.join_atts($atts).(get_pref('doctype') === 'html5' ? '>' : ' />');
+    $tag_close = (in_array($tag, HTML5_VOID_TAGS) && get_pref('doctype') === 'html5') ? '>' : ' />';
+
+    return '<'.$tag.join_atts($atts).$tag_close;
 }
 
 /**

@@ -1020,6 +1020,16 @@ if (!defined('TEXTPATTERN_HASH_LENGTH')) {
   const TXP_TAG = '[\w\-\x80-\xffff]+'; //'[^\x00-\x2c\x2f\x3a-\x3f\x5b-\x5d\x7b-\x7f]+';
 
 /**
+  * Define valid HTML5 void tags
+  *
+  * @since   4.9.0
+  */
+
+const HTML5_VOID_TAGS = array(
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
+);
+
+/**
  * A tab character.
  *
  * @var string
