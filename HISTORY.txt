@@ -10,6 +10,7 @@ Changes in 4.9.0 (upcoming)
 
 Changes in 4.9.0-rc.1 (upcoming)
 
+* Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Developer: Permitted concurrent logins for dev use. See Advanced Prefs.
 * Vendors: DOMPurify 3.2.5.
 
