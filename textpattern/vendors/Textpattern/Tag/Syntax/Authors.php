@@ -44,17 +44,12 @@ class Authors
         global $thisauthor, $txp_groups;
 
         extract(lAtts(array(
-            'break'    => '',
-            'class'    => '',
             'form'     => '',
             'group'    => '',
-            'label'    => '',
-            'labeltag' => '',
             'limit'    => '',
             'name'     => '',
             'offset'   => '',
             'sort'     => 'name ASC',
-            'wraptag'  => '',
         ), $atts));
 
         $sql = array("1 = 1");
@@ -104,7 +99,7 @@ class Authors
 
             unset($thisauthor);
 
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+            return doWrap($out);
         }
 
         return '';
