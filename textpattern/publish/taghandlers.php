@@ -1131,6 +1131,61 @@ function search_term($atts)
 
 // -------------------------------------------------------------
 
+function permlink($atts, $thing = null)
+{
+    global $thisarticle, $txp_context;
+    static $lAtts = array(
+        'class'   => '',
+        'context' => null,
+        'form'    => '',
+        'id'      => '',
+        'style'   => '',
+        'title'   => '',
+    );
+
+    $old_context = $txp_context;
+
+    if (!isset($atts['context'])) {
+        if (empty($txp_context)) {
+            $atts = lAtts($lAtts, $atts);
+        } else {
+            $atts = lAtts($lAtts + $txp_context, $atts);
+            $txp_context = array_intersect_key($atts, $txp_context);
+        }
+    } elseif ($atts['context'] === true) {
+        $atts = lAtts($lAtts, $atts);
+    } else {
+        $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
+        $atts = lAtts($lAtts + $extralAtts, $atts);
+        $extralAtts = array_intersect_key($atts, $extralAtts);
+    }
+
+    $id = $atts['id'];
+
+    if ($id || !empty($thisarticle)) {
+        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    }
+
+    $txp_context = $old_context;
+
+    if (isset($url)) {
+        if ($thing === null && empty($atts['form'])) {
+            return $url;
+        }
+
+        return tag(empty($atts['form']) ? (string)parse($thing) : (string)parse_form($atts['form']), 'a', array(
+            'rel'   => filter_var($url, FILTER_VALIDATE_URL) === false || strpos($url, hu) === 0 ? 'bookmark' : 'external',
+            'href'  => $url,
+            'title' => $atts['title'],
+            'style' => $atts['style'],
+            'class' => $atts['class'],
+        ));
+    }
+}
+
+// -------------------------------------------------------------
+
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = 'next')
 {
@@ -2055,7 +2110,7 @@ function article_image($atts)
         }
     }
 
-    return $wraptag ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : implode($break, $out);
+    return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
 }
 
 // -------------------------------------------------------------
@@ -2297,60 +2352,6 @@ function meta_author($atts)
     }
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function permlink($atts, $thing = null)
-{
-    global $thisarticle, $txp_context;
-    static $lAtts = array(
-        'class'   => '',
-        'id'      => '',
-        'style'   => '',
-        'title'   => '',
-        'context' => null,
-    );
-
-    $old_context = $txp_context;
-
-    if (!isset($atts['context'])) {
-        if (empty($txp_context)) {
-            $atts = lAtts($lAtts, $atts);
-        } else {
-            $atts = lAtts($lAtts + $txp_context, $atts);
-            $txp_context = array_intersect_key($atts, $txp_context);
-        }
-    } elseif ($atts['context'] === true) {
-        $atts = lAtts($lAtts, $atts);
-    } else {
-        $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
-        $atts = lAtts($lAtts + $extralAtts, $atts);
-        $extralAtts = array_intersect_key($atts, $extralAtts);
-    }
-
-    $id = $atts['id'];
-
-    if ($id || !empty($thisarticle)) {
-        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
-        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
-    }
-
-    $txp_context = $old_context;
-
-    if (isset($url)) {
-        if ($thing === null) {
-            return $url;
-        }
-
-        return tag((string)parse($thing), 'a', array(
-            'rel'   => filter_var($url, FILTER_VALIDATE_URL) === false || strpos($url, hu) === 0 ? 'bookmark' : 'external',
-            'href'  => $url,
-            'title' => $atts['title'],
-            'style' => $atts['style'],
-            'class' => $atts['class'],
-        ));
-    }
 }
 
 // -------------------------------------------------------------
