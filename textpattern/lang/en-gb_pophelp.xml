@@ -378,8 +378,8 @@
 <p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this message can be safely ignored.</p>
 <p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP functions […] are disabled on your server"><![CDATA[
-<h2>PHP functions […] are disabled on your server</h2>
+        <item id="some_php_functions_disabled" title="PHP functions [&hellip;] are disabled on your server"><![CDATA[
+<h2>PHP functions [&hellip;] are disabled on your server</h2>
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
@@ -1096,7 +1096,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="section_uses_page" title="Uses page"><![CDATA[
 <h2>Uses page</h2>
-<p>In Textpattern, sections are married to page templates. It’s kind of sweet, really…</p>
+<p>In Textpattern, sections are married to page templates.</p>
         ]]></item>
         <item id="section_uses_skin" title="Uses theme"><![CDATA[
 <h2>Uses theme</h2>
@@ -1105,6 +1105,16 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     </group>
 
     <group id="setup" title="Setup panel">
+        <item id="setup_admin_url" title="Admin subdomain"><![CDATA[
+<h2>Admin subdomain</h2>
+<p>The subdomain you wish to use to access the Textpattern administration interface (e.g. <code>admin.example.com</code>).</p>
+<p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
+        ]]></item>
+        <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+<h2>Cookie domain</h2>
+<p>The (sub)domain you wish to use for Textpattern cookie(s).</p>
+<p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
+        ]]></item>
         <item id="setup_user_login" title="User login"><![CDATA[
 <h2>User login</h2>
 <p>The login name of the administrator (‘Publisher’) account that you will use for administering of your site.</p>
