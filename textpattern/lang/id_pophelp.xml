@@ -309,6 +309,16 @@
         </thead>
         <tbody>
             <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
                 <td>5.0.3</td>
