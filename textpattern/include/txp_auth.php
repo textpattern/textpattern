@@ -303,7 +303,7 @@ function doTxpValidate()
             return $message;
         } else {
             txp_status_header('401 Your session has expired');
-            set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 365));
+            set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 30));
             set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
@@ -325,7 +325,7 @@ function doTxpValidate()
                 'txp_login',
                 $name . ',' . $c_hash,
                 array(
-                    'expires' => $stay ? time() + 3600 * 24 * 365 : 0,
+                    'expires' => $stay ? time() + 3600 * 24 * 30 : 0,
                     'httponly' => LOGIN_COOKIE_HTTP_ONLY
                 )
             );
