@@ -12,6 +12,8 @@ Changes in 4.9.0-rc.1 (upcoming)
 
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Developer: Permitted concurrent logins for dev use. See Advanced Prefs.
+* Developer: Removed duplicate pluggable_ui callback for
+  article_ui›categories (thanks, jools-r).
 * Vendors: DOMPurify 3.2.5.
 * Vendors: PHPMailer 6.10.0.
 
