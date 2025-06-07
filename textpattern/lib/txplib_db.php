@@ -1348,16 +1348,17 @@ function getCount($table, $where, $debug = false)
 function get_tree($atts = array(), $tbl = 'txp_category')
 {
     static $cache = array(), $level = 0, $lAtts = array(
-        'categories'   => null,
-        'exclude'      => '',
-        'parent'       => '',
-        'children'     => true,
-        'sort'         => 'name ASC',
-        'type'         => 'article',
-        'where'        => '1',
-        'limit'        => '',
-        'offset'       => '',
-        'flatten'      => true,
+        'categories' => null,
+        'exclude'    => '',
+        'parent'     => '',
+        'children'   => true,
+        'sort'       => 'name ASC',
+        'type'       => 'article',
+        'where'      => '1',
+        'limit'      => '',
+        'offset'     => '',
+        'flatten'    => true,
+        'refresh'    => false,
     );
 
     extract(array_intersect_key($atts, $lAtts) + $lAtts);
@@ -1382,7 +1383,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".quote_list($exclude, ',').")" : '';
 
-    $nocache = !$children || $sql_limit || $children == $level;
+    $nocache = $refresh || !$children || $sql_limit || $children == $level;
     $hash = txp_hash($nocache ? uniqid() : $sql_query);
 
     if (!isset($cache[$hash])) {
@@ -1524,7 +1525,7 @@ function getTree($root = 'root', $type = 'article', $where = "1", $tbl = 'txp_ca
     }
 
     $names = is_array($root);
-    $rows = get_tree($roots + compact('type', 'where') + array('children' => !empty($depth)), $tbl);
+    $rows = get_tree($roots + compact('type', 'where') + array('refresh' => true, 'children' => !empty($depth)), $tbl);
     $out = array();
 
     foreach ($rows as $name => $row) {
