@@ -938,8 +938,24 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($status === true) {
         $status = array(STATUS_LIVE, STATUS_STICKY);
+    } elseif ($issticky) {
+        $status = array(STATUS_STICKY);
     } else {
-        $status = array($issticky ? STATUS_STICKY : STATUS_LIVE);
+        $allowed_status = status_list(false, array(STATUS_DRAFT, STATUS_HIDDEN));
+        $statuses = do_list($status);
+        $status = array();
+
+        foreach ($statuses as $idx => $st) {
+            $valid = is_numeric($st) ? (array_key_exists($st, $allowed_status) ? $st : false) : array_search($st, $allowed_status);
+
+            if ($valid && !in_array($valid, $status)) {
+                $status[] = (int)$valid;
+            }
+        }
+
+        if (!$status) {
+            $status[] = STATUS_LIVE;
+        }
     }
 
     // Categories
