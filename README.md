@@ -44,7 +44,7 @@ Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/REA
 
 ## Upgrade Textpattern
 
-Please see [README.txt](https://github.com/textpattern/textpattern/blob/main/README.txt) for details on upgrading Textpattern.
+Please see [UPGRADE.txt](https://github.com/textpattern/textpattern/blob/main/UPGRADE.txt) for details on upgrading Textpattern.
 
 ## Help and Support
 
