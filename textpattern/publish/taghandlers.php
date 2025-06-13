@@ -72,6 +72,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_id')
     ->register('article_url_title')
     ->register('if_article_id')
+    ->register('if_article_status')
     ->register('txp_date', array('posted', array('type' => 'article', 'time' => 'posted')))
     ->register('txp_date', array('modified', array('type' => 'article', 'time' => 'modified')))
     ->register('txp_date', array('expires', array('type' => 'article', 'time' => 'expires')))
@@ -1375,6 +1376,25 @@ function if_article_id($atts, $thing = null)
     extract(lAtts(array('id' => $pretext['id']), $atts));
 
     $x = $id && isset($thisarticle['thisid']) && in_list($thisarticle['thisid'], $id);
+    return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function if_article_status($atts, $thing = null)
+{
+    global $thisarticle, $pretext;
+
+    extract(lAtts(array('status' => 'live'), $atts));
+
+    if ($status === true) {
+        $status = 'live, sticky';
+    }
+
+    $all_status = status_list(false);
+    $allowed_status = array_filter(array_map(function($value) use ($all_status) { return is_numeric($value) ? (array_key_exists($value, $all_status) ? $value : false) : array_search($value, $all_status); }, do_list($status)));
+
+    $x = $status && isset($thisarticle['status']) && in_list($thisarticle['status'], $allowed_status);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
