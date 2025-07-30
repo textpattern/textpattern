@@ -200,7 +200,7 @@ function saveComment()
     $blocklist = is_blocklisted($ip);
 
     if ($blocklist) {
-        txp_die(gTxt('your_ip_is_blocklisted_by' . ' ' . $blocklist), '403');
+        txp_die(gTxt('your_ip_is_blocklisted_by', array('{list}' => $blocklist)), '403');
     }
 
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
