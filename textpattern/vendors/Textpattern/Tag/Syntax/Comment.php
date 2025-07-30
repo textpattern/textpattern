@@ -168,7 +168,7 @@ class Comment
         if (!checkCommentsAllowed($thisarticle['thisid'])) {
             $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
         } elseif ($blocklisted) {
-            $out = graf(gTxt('your_ip_is_blocklisted_by'.' '.$blocklisted), ' id="comments_blocklisted"');
+            $out = graf(gTxt('your_ip_is_blocklisted_by', array('{list}' => $blocklisted)), ' id="comments_blocklisted"');
         } elseif (gps('commented') !== '') {
             $out = gTxt('comment_posted');
     
