@@ -680,7 +680,10 @@ function svgtopx($svgsize)
     }
 }
 
-const IMAGETYPE_SVG = 99;
+if (!defined('IMAGETYPE_SVG')) {
+    define('IMAGETYPE_SVG', 99);
+}
+
 /**
  * Lists image types that can be safely uploaded.
  *
@@ -730,7 +733,7 @@ function get_safe_image_types($type = null)
 
 function sizeImage($name)
 {
-    $size = @getimagesize($name);
+    $size = getimagesize($name);
 
     return is_array($size) ? $size[3] : false;
 }
@@ -827,7 +830,7 @@ function image_format_info($image)
 {
     static $mimetypes;
 
-    if (($unix_ts = @strtotime($image['date'])) > 0) {
+    if (($unix_ts = strtotime($image['date'])) > 0) {
         $image['date'] = $unix_ts;
     }
 
@@ -851,7 +854,7 @@ function image_format_info($image)
 
 function link_format_info($link)
 {
-    if (($unix_ts = @strtotime($link['date'])) > 0) {
+    if (($unix_ts = strtotime($link['date'])) > 0) {
         $link['date'] = $unix_ts;
     }
 
@@ -3137,11 +3140,11 @@ function fileDownloadFetchInfo($where)
 
 function file_download_format_info($file)
 {
-    if (($unix_ts = @strtotime($file['created'])) > 0) {
+    if (($unix_ts = strtotime($file['created'])) > 0) {
         $file['created'] = $unix_ts;
     }
 
-    if (($unix_ts = @strtotime($file['modified'])) > 0) {
+    if (($unix_ts = strtotime($file['modified'])) > 0) {
         $file['modified'] = $unix_ts;
     }
 
@@ -3930,8 +3933,9 @@ function markup_comment($msg)
 
 function update_lastmod($trigger = '', $rs = array())
 {
+    global $prefs;
     $whenStamp = time();
-    $whenDate = date('Y-m-d H:i:s', $whenStamp);
+    $whenDate = $prefs['lastmod'] = date('Y-m-d H:i:s', $whenStamp);
 
     safe_upsert('txp_prefs', "val = '$whenDate'", "name = 'lastmod'");
     callback_event('site.update', $trigger, 0, $rs, compact('whenStamp', 'whenDate'));
@@ -3948,7 +3952,7 @@ function update_lastmod($trigger = '', $rs = array())
 function get_lastmod($unix_ts = null)
 {
     if ($unix_ts === null) {
-        $unix_ts = @strtotime(get_pref('lastmod'));
+        $unix_ts = strtotime(get_pref('lastmod'));
     }
 
     // Check for future articles that are now visible.
@@ -4575,7 +4579,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $dateClause = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash($month)."%'";
             $timeq .= " AND $dateClause";
         }
-    } elseif (strpos($time, '%') !== false) {
+    } elseif ($time && strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
         $offset = date('P', $start);
         $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
@@ -4594,7 +4598,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
         } elseif ($time === 'until') {
             $timeq = "$safe_field <= $from";
         } else {
-            $stop = strtotime($time, $start) or $stop = time();
+            $stop = (isset($time) ? strtotime($time, $start) : time()) or $stop = time();
 
             if ($start > $stop) {
                 list($start, $stop) = array($stop, $start);
