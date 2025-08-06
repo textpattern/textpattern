@@ -686,7 +686,7 @@ function related_articles($atts, $thing = null)
         'no_widow' => '',
     ));
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'image', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
 
     foreach ($match as $cf) {
@@ -700,7 +700,7 @@ function related_articles($atts, $thing = null)
                     }
                 }
 
-                $categories[] = ucwords($cf);
+                $categories[] = $cf;
                 break;
             case 'author':
                 $atts['author'] = $thisarticle['authorid'];
@@ -709,12 +709,13 @@ function related_articles($atts, $thing = null)
                 !empty($atts['section']) or $atts['section'] = $thisarticle['section'];
                 break;
             default:
-                if (empty($thisarticle[$cf])) {
+                $f = $cf === 'image' ? 'article_image' : $cf;
+
+                if (empty($thisarticle[$f])) {
                     return '';
                 }
 
-                $atts[$cf] = $thisarticle[$cf];
-                break;
+                $atts[$cf] = $thisarticle[$f];
         }
     }
 
