@@ -268,9 +268,10 @@ class Image
             }
         }
     
+        // Handle extensions, with or without the leading dot.
         if ($extension) {
             $not = $exclude === true || in_array('extension', $exclude) ? ' NOT' : '';
-            $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique($extension)))."')";
+            $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique(preg_replace('/(?<!\.)\b(\w)/', '.$1', $extension))))."')";
         }
     
         if ($thumbnail === '0' || $thumbnail === '1') {
@@ -278,25 +279,36 @@ class Image
         }
     
         // Handle aspect ratio filtering.
-        if ($size === 'portrait') {
-            $where[] = "h > w";
-        } elseif ($size === 'landscape') {
-            $where[] = "w > h";
-        } elseif ($size === 'square') {
-            $where[] = "w = h";
-        } elseif (is_numeric($size)) {
-            $where[] = "ROUND(w/h, 2) = $size";
-        } elseif (strpos($size, ':') !== false) {
-            $ratio = explode(':', $size);
-            $ratiow = $ratio[0];
-            $ratioh = !empty($ratio[1]) ? $ratio[1] : '';
-    
-            if (is_numeric($ratiow) && is_numeric($ratioh)) {
-                $where[] = "ROUND(w/h, 2) = ".round($ratiow/$ratioh, 2);
-            } elseif (is_numeric($ratiow)) {
-                $where[] = "w = $ratiow";
-            } elseif (is_numeric($ratioh)) {
-                $where[] = "h = $ratioh";
+        if ($size) {
+            $sizes = array();
+
+            foreach (do_list_unique($size) as $size) {
+                if ($size === 'portrait') {
+                    $sizes[] = "h > w";
+                } elseif ($size === 'landscape') {
+                    $sizes[] = "w > h";
+                } elseif ($size === 'square') {
+                    $sizes[] = "w = h";
+                } elseif (is_numeric($size)) {
+                    $sizes[] = "ROUND(w/h, 2) = $size";
+                } elseif (strpos($size, ':') !== false) {
+                    $ratio = explode(':', $size);
+                    $ratiow = $ratio[0];
+                    $ratioh = !empty($ratio[1]) ? $ratio[1] : '';
+            
+                    if (is_numeric($ratiow) && is_numeric($ratioh)) {
+                        $sizes[] = "ROUND(w/h, 2) = ".round($ratiow/$ratioh, 2);
+                    } elseif (is_numeric($ratiow)) {
+                        $sizes[] = "w = $ratiow";
+                    } elseif (is_numeric($ratioh)) {
+                        $sizes[] = "h = $ratioh";
+                    }
+                }
+            }
+
+            if ($sizes) {
+                $not = $exclude === true || in_array('size', $exclude) ? 'NOT ' : '';
+                $where[] = $not.'('.join(' OR ', $sizes).')';
             }
         }
     
