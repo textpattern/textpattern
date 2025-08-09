@@ -232,6 +232,17 @@ class Image
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
+
+        if ($exclude && is_array($exclude) && $excluded = array_filter($exclude, function($e) {
+            return preg_match('/^\d+(?:\s*\-\s*\d+)?$/', $e);
+        })) {
+            foreach ($excluded as $value) {
+                list($start, $end) = explode('-', $value) + array(null, null);
+                $where[] = isset($end) ? "id NOT BETWEEN $start AND $end" : "id != $start";
+            }
+
+            $exclude = array_diff($exclude, $excluded);
+        }
     
         if ($name) {
             $not = $exclude === true || in_array('name', $exclude) ? ' NOT' : '';
