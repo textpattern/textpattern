@@ -4,11 +4,14 @@ Changes in 4.9.0 (upcoming)
   security enhancements, improvements, and bug fixes.
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
+* Added: filter articles by image.
+* Added: 'exclude' attribute to <txp:images />.
 * Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
   recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
+* Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
 * Developer: Permitted concurrent logins. See Advanced Prefs.
 * Developer: Removed duplicate pluggable_ui callback for
   article_ui›categories (thanks, jools-r).
