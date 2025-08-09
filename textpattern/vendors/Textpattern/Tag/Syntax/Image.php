@@ -211,6 +211,7 @@ class Image
             'extension'   => '',
             'thumbnail'   => true,
             'size'        => '',
+            'exclude'     => '',
             'auto_detect' => 'article, category, author',
             'break'       => 'br',
             'wraptag'     => '',
@@ -230,9 +231,11 @@ class Image
         $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || isset($atts['size']) || $thumbnail === '1' || $thumbnail === '0';
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
+        $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
     
         if ($name) {
-            $where[] = "name IN ('".join("','", doSlash(do_list_unique($name)))."')";
+            $not = $exclude === true || in_array('name', $exclude) ? ' NOT' : '';
+            $where[] = "name$not IN ('".join("','", doSlash(do_list_unique($name)))."')";
         }
 
         if ($category and $category = do_list_unique($category)) {
@@ -242,27 +245,32 @@ class Image
                 $catquery[] = "category LIKE '".strtr(doSlash($cat), array('_' => '\_', '*' => '_'))."'";
             }
 
-            $where[] = '('.implode(' OR ', $catquery).')';
+            $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
         if ($id) {
+            $not = $exclude === true || in_array('id', $exclude) ? ' NOT' : '';
             $id = join(',', array_map('intval', do_list_unique($id, array(',', '-'))));
-            $where[] = "id IN ($id)";
+            $where[] = "id$not IN ($id)";
         }
     
         if ($author) {
-            $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
+            $not = $exclude === true || in_array('author', $exclude) ? ' NOT' : '';
+            $where[] = "author$not IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
             if ($authorlist) {
-                $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+                $not = $exclude === true || in_array('realname', $exclude) ? ' NOT' : '';
+                $where[] = "author$not IN ('".join("','", doSlash($authorlist))."')";
             }
         }
     
         if ($extension) {
-            $where[] = "ext IN ('".join("','", doSlash(do_list_unique($extension)))."')";
+            $not = $exclude === true || in_array('extension', $exclude) ? ' NOT' : '';
+            $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique($extension)))."')";
         }
     
         if ($thumbnail === '0' || $thumbnail === '1') {
@@ -299,7 +307,7 @@ class Image
                     case 'article':
                         // ...the article image field.
                         if ($thisarticle && !empty($thisarticle['article_image'])) {
-                            if ($thing === null && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
+                            if (!$has_content && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
                                 $range = $limit || $offset ? ($offset + 1).'-'.($offset + $limit) : true;
 
                                 return processTags('article_image', compact('class', 'html_id', 'wraptag', 'break', 'thumbnail', 'range'));
