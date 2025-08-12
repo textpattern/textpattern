@@ -1001,7 +1001,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo wrapRegion('txp-dates-group', $posted_block . $expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
 
     // 'Categories' section.
-    $html_categories = pluggable_ui('article_ui', 'categories', $partials['categories']['html'], $rs);
+    $html_categories = $partials['categories']['html'];
     echo wrapRegion('txp-categories-group', $html_categories, 'txp-categories-group-content', 'categories', 'categories');
 
     // 'Meta' collapsible section.

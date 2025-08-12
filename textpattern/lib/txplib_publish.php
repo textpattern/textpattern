@@ -892,6 +892,7 @@ function filterAtts($atts = null, $iscustom = null)
     $sortAtts = array(
         'fields'        => null,
         'sort'          => '',
+        'image'         => '',
         'keywords'      => '',
         'time'          => null,
         'status'        => empty($atts['id']) ? STATUS_LIVE : true,
@@ -970,8 +971,24 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($status === true) {
         $status = array(STATUS_LIVE, STATUS_STICKY);
+    } elseif ($issticky) {
+        $status = array(STATUS_STICKY);
     } else {
-        $status = array($issticky ? STATUS_STICKY : STATUS_LIVE);
+        $allowed_status = status_list(false, array(STATUS_DRAFT, STATUS_HIDDEN));
+        $statuses = do_list($status);
+        $status = array();
+
+        foreach ($statuses as $idx => $st) {
+            $valid = is_numeric($st) ? (array_key_exists($st, $allowed_status) ? $st : false) : array_search($st, $allowed_status);
+
+            if ($valid && !in_array($valid, $status)) {
+                $status[] = (int)$valid;
+            }
+        }
+
+        if (!$status) {
+            $status[] = STATUS_LIVE;
+        }
     }
 
     // Categories
@@ -1061,27 +1078,33 @@ function filterAtts($atts = null, $iscustom = null)
         $statusq = " AND Status IN (".implode(',', $status).")";
     }
 
-    // Allow keywords for no-custom articles. That tagging mode, you know.
-    $not = $excluded === true || isset($excluded['keywords']) ? '!' : '';
-    $keyparts = array();
+    // Allow images and keywords for articles. That tagging mode, you know.
+    $keyquery = '';
 
-    if ($keywords === true) {
-        $keyparts[] = "Keywords != ''";
-    } else {
-        if (!$keywords && isset($match['keywords'])) {
-            $keywords = $match['keywords'] === false && isset($thisarticle['keywords']) ?
-                $thisarticle['keywords'] :
-                gps($match['keywords'] ? $match['keywords'] : 'keywords');
-        }
+    foreach (array('article_image' => 'Image', 'keywords' => 'Keywords') as $field => $col) {
+        $attr = strtolower($col);
+        $val = ${$attr};
+        $not = $excluded === true || isset($excluded[$attr]) ? '!' : '';
+        $keyparts = array();
 
-        if ($keywords) {
-            foreach (doSlash(do_list_unique($keywords)) as $key) {
-                $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
+        if ($val === true) {
+            $keyparts[] = "$col != ''";
+        } else {
+            if (!$val && isset($match[$attr])) {
+                $val = $match[$attr] === false && isset($thisarticle[$field]) ?
+                    $thisarticle[$field] :
+                    gps($match[$attr] ? $match[$attr] : $attr);
+            }
+
+            if ($val) {
+                foreach (doSlash(do_list_unique($val)) as $key) {
+                    $keyparts[] = "FIND_IN_SET('".$key."', $col)";
+                }
             }
         }
-    }
 
-    $keywords = $keyparts ? " AND $not(".join(' or ', $keyparts).")" : '';
+        $keyquery .= ($keyparts ? " AND $not(".join(' OR ', $keyparts).")" : '');
+    }
 
     // Give control to search, if necessary.
     $search = $score = $smatch = '';
@@ -1281,7 +1304,7 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['form'] = $fname;
     $theAtts['sort'] = $sort ? $sort : ($getid ? "FIELD(ID, $ids)" : 'Posted DESC');
     $theAtts['%'] = empty($groupby) ? null : implode(', ', $groupby);
-    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keywords.$url_title.$search.$custom;
+    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keyquery.$url_title.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
     $theAtts['#'] = safe_pfx('textpattern');
     $theAtts['*'] = $fields;

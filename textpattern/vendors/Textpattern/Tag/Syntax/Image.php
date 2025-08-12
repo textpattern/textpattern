@@ -159,7 +159,7 @@ class Image
         global $c;
     
         lAtts(array(
-            'break'    => br,
+            'break'    => 'br',
             'wraptag'  => '',
             'class'    => __FUNCTION__,
             'category' => $c,
@@ -211,8 +211,9 @@ class Image
             'extension'   => '',
             'thumbnail'   => true,
             'size'        => '',
+            'exclude'     => '',
             'auto_detect' => 'article, category, author',
-            'break'       => br,
+            'break'       => 'br',
             'wraptag'     => '',
             'class'       => __FUNCTION__,
             'html_id'     => '',
@@ -230,9 +231,22 @@ class Image
         $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || isset($atts['size']) || $thumbnail === '1' || $thumbnail === '0';
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
+        $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
+
+        if ($exclude && is_array($exclude) && $excluded = array_filter($exclude, function($e) {
+            return preg_match('/^\d+(?:\s*\-\s*\d+)?$/', $e);
+        })) {
+            foreach ($excluded as $value) {
+                list($start, $end) = explode('-', $value) + array(null, null);
+                $where[] = isset($end) ? "id NOT BETWEEN $start AND $end" : "id != $start";
+            }
+
+            $exclude = array_diff($exclude, $excluded);
+        }
     
         if ($name) {
-            $where[] = "name IN ('".join("','", doSlash(do_list_unique($name)))."')";
+            $not = $exclude === true || in_array('name', $exclude) ? ' NOT' : '';
+            $where[] = "name$not IN ('".join("','", doSlash(do_list_unique($name)))."')";
         }
 
         if ($category and $category = do_list_unique($category)) {
@@ -242,27 +256,33 @@ class Image
                 $catquery[] = "category LIKE '".strtr(doSlash($cat), array('_' => '\_', '*' => '_'))."'";
             }
 
-            $where[] = '('.implode(' OR ', $catquery).')';
+            $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
         if ($id) {
+            $not = $exclude === true || in_array('id', $exclude) ? ' NOT' : '';
             $id = join(',', array_map('intval', do_list_unique($id, array(',', '-'))));
-            $where[] = "id IN ($id)";
+            $where[] = "id$not IN ($id)";
         }
     
         if ($author) {
-            $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
+            $not = $exclude === true || in_array('author', $exclude) ? ' NOT' : '';
+            $where[] = "author$not IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
             if ($authorlist) {
-                $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+                $not = $exclude === true || in_array('realname', $exclude) ? ' NOT' : '';
+                $where[] = "author$not IN ('".join("','", doSlash($authorlist))."')";
             }
         }
     
+        // Handle extensions, with or without the leading dot.
         if ($extension) {
-            $where[] = "ext IN ('".join("','", doSlash(do_list_unique($extension)))."')";
+            $not = $exclude === true || in_array('extension', $exclude) ? ' NOT' : '';
+            $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique(preg_replace('/(?<!\.)\b(\w)/', '.$1', $extension))))."')";
         }
     
         if ($thumbnail === '0' || $thumbnail === '1') {
@@ -270,25 +290,36 @@ class Image
         }
     
         // Handle aspect ratio filtering.
-        if ($size === 'portrait') {
-            $where[] = "h > w";
-        } elseif ($size === 'landscape') {
-            $where[] = "w > h";
-        } elseif ($size === 'square') {
-            $where[] = "w = h";
-        } elseif (is_numeric($size)) {
-            $where[] = "ROUND(w/h, 2) = $size";
-        } elseif (strpos($size, ':') !== false) {
-            $ratio = explode(':', $size);
-            $ratiow = $ratio[0];
-            $ratioh = !empty($ratio[1]) ? $ratio[1] : '';
-    
-            if (is_numeric($ratiow) && is_numeric($ratioh)) {
-                $where[] = "ROUND(w/h, 2) = ".round($ratiow/$ratioh, 2);
-            } elseif (is_numeric($ratiow)) {
-                $where[] = "w = $ratiow";
-            } elseif (is_numeric($ratioh)) {
-                $where[] = "h = $ratioh";
+        if ($size) {
+            $sizes = array();
+
+            foreach (do_list_unique($size) as $size) {
+                if ($size === 'portrait') {
+                    $sizes[] = "h > w";
+                } elseif ($size === 'landscape') {
+                    $sizes[] = "w > h";
+                } elseif ($size === 'square') {
+                    $sizes[] = "w = h";
+                } elseif (is_numeric($size)) {
+                    $sizes[] = "ROUND(w/h, 2) = $size";
+                } elseif (strpos($size, ':') !== false) {
+                    $ratio = explode(':', $size);
+                    $ratiow = $ratio[0];
+                    $ratioh = !empty($ratio[1]) ? $ratio[1] : '';
+            
+                    if (is_numeric($ratiow) && is_numeric($ratioh)) {
+                        $sizes[] = "ROUND(w/h, 2) = ".round($ratiow/$ratioh, 2);
+                    } elseif (is_numeric($ratiow)) {
+                        $sizes[] = "w = $ratiow";
+                    } elseif (is_numeric($ratioh)) {
+                        $sizes[] = "h = $ratioh";
+                    }
+                }
+            }
+
+            if ($sizes) {
+                $not = $exclude === true || in_array('size', $exclude) ? 'NOT ' : '';
+                $where[] = $not.'('.join(' OR ', $sizes).')';
             }
         }
     
@@ -299,7 +330,7 @@ class Image
                     case 'article':
                         // ...the article image field.
                         if ($thisarticle && !empty($thisarticle['article_image'])) {
-                            if ($thing === null && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
+                            if (!$has_content && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
                                 $range = $limit || $offset ? ($offset + 1).'-'.($offset + $limit) : true;
 
                                 return processTags('article_image', compact('class', 'html_id', 'wraptag', 'break', 'thumbnail', 'range'));

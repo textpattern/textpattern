@@ -2,11 +2,21 @@ Changes in 4.9.0 (upcoming)
 
 * Feature release with support for PHP 8.4, MySQL 8.4, new functionality,
   security enhancements, improvements, and bug fixes.
+* Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
+* Added: filter articles by image.
+* Added: 'exclude' attribute to <txp:images />.
 * Changed: Minimum system requirements increased to PHP 5.6 (PHP 8.2+
-  recommended, preferably with vendor support).
+  recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
-  recommended, preferably with vendor support).
+  recommended, preferably with ongoing vendor support).
+* Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
+* Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
+* Developer: Permitted concurrent logins. See Advanced Prefs.
+* Developer: Removed duplicate pluggable_ui callback for
+  article_ui›categories (thanks, jools-r).
+* Vendors: DOMPurify 3.2.6.
+* Vendors: PHPMailer 6.10.0.
 
 Changes in 4.9.0-beta.2 (14 Mar 2025)
 
@@ -35,7 +45,7 @@ Changes in 4.9.0-beta.2 (14 Mar 2025)
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.9.3.
 * Vendors: PrismJS 1.30.0.
-* Vendors: Textile 4.1.2. (thanks, gocom).
+* Vendors: Textile 4.1.3. (thanks, gocom).
 * Vendors: UglifyJS 3.19.3.
 
 Changes in 4.9.0-beta.1 (12 Aug 2024)

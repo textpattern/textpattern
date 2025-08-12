@@ -312,6 +312,7 @@ function cat_category_multiedit()
                     }
 
                     callback_event('categories_deleted', $type, 0, $catid);
+                    update_lastmod('categories_deleted', $catid);
 
                     $message = count($things) == count($catid) ?
                         gTxt($type . '_categories_deleted', array('{list}' => join(', ', $catid))) :
@@ -343,6 +344,7 @@ function cat_category_multiedit()
 
                 if ($ret) {
                     insert_nodes($to_change, array('parent' => $name, 'at' => $rgt), $type);
+                    update_lastmod('categories_affected', $to_change);
 
                     $message = !empty($affected)
                         ? gTxt('categories_set_parent', array(
@@ -519,6 +521,7 @@ function cat_event_category_create($event)
 
     if (insert_nodes(null, compact('name', 'title', 'parent'), $event)) {
         $message = gTxt($event . '_category_created', array('{name}' => $name));
+        update_lastmod($event . '_category_created', array('{name}' => $name));
 
         cat_category_list($message);
     } else {

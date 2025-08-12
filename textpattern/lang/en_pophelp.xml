@@ -102,7 +102,7 @@
 <h2>Description</h2>
 <p>The article description is an optional component that can help search engines and website crawlers better identify and sort content.</p>
 <p>The article description is limited to a maximum of 255 characters. Note that some search engines place character limits on the length of a page’s <code>meta description</code> for practicality of display in search engine results pages (SERPs) and this may be less than the 255 character limit in Textpattern.</p>
-<p>Note that the article description differs from the article excerpt, though they both accept similar content. The article description should be primarily intended for use with search engines and crawlers, whereas the the article excerpt is more suited for a human-readable article summary where desired.</p>
+<p>Note that the article description differs from the article excerpt, though they both accept similar content. The article description should be primarily intended for use with search engines and crawlers, whereas the article excerpt is more suited for a human-readable article summary where desired.</p>
         ]]></item>
         <item id="excerpt" title="Excerpt"><![CDATA[
 <h2>Excerpt</h2>
@@ -222,6 +222,10 @@
 </ul>
 <p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved messy URLs (e.g. <code>https://example.com?s=section&amp;id=4</code>) should be used. Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
         ]]></item>
+        <item id="concurrent_user_live" title="Concurrent logins on a live server"><![CDATA[
+<h2>Concurrent logins on a live server</h2>
+<p>Allowing your user account to log in from multiple sessions is a security risk and not recommended. Please disable this feature from the advanced preferences panel, unless the risks are understood and acceptable.</p>
+        ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
 <p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpattern support forum, this reduces a security risk by omitting sensitive server information.</p>
@@ -324,6 +328,16 @@
         </thead>
         <tbody>
             <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
                 <td>5.0.3</td>
@@ -361,11 +375,11 @@
         <item id="site_url_mismatch" title="Site URL mismatch"><![CDATA[
 <h2>Site URL mismatch</h2>
 <p>The Site URL as set in the ‘Preferences’ panel does not match the actual URL used to visit the site.</p>
-<p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this messaged can be safely ignored.</p>
+<p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this message can be safely ignored.</p>
 <p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP functions […] are disabled on your server"><![CDATA[
-<h2>PHP functions […] are disabled on your server</h2>
+        <item id="some_php_functions_disabled" title="PHP functions ... are disabled on your server"><![CDATA[
+<h2>PHP functions ... are disabled on your server</h2>
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
@@ -664,6 +678,11 @@
 </ul>
 <p><strong>Note:</strong> For security reasons, raw HTML is transformed into regular text.</p>
         ]]></item>
+        <item id="concurrent_logins" title="Accounts permitted to login concurrently"><![CDATA[
+<h2>Accounts permitted to login concurrently</h2>
+<p>A comma-separated list of login account names that may log in across multiple browsers/sessions. This is helpful during development to share a login with clients.</p>
+<p>Using this feature is a security risk and <strong>not recommended on live sites</strong>. Diagnostics will issue a warning if your user account is configured for concurrency on a live website.</p>
+        ]]></item>
         <item id="custom_form_types" title="Custom form template types"><![CDATA[
 <h2>Custom form template types</h2>
 <p>In addition to the standard form template types (article, file, misc, etc.), Publishers can define custom types. The purpose of custom form template types is twofold: easier form template classification and custom asset definitions.</p>
@@ -747,7 +766,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="enhanced_email" title="Use enhanced mail features"><![CDATA[
 <h2>Use enhanced mail features</h2>
 <p>Setting this to ‘No’ will route all email - such as account password reset requests, and email from plugins such as com_connect - through PHP's <code>mail()</code> function. Selecting ‘Yes’ will use the bundled PHPMailer instead, which opens up optional settings for routing mail via external SMTP servers.</p>
-<p>If you are having trouble with reception of emails (especially in online providers such as gmail, hotmail, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Using SMTP will often further enhance deliverability.</p>
+<p>If you are having trouble with reception of emails (especially in online providers such as gmail, hotmail, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
         ]]></item>
         <item id="expire_logs_after" title="Logs expire after how many days?"><![CDATA[
 <h2>Logs expire after how many days?</h2>
@@ -1002,8 +1021,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>Whether Textpattern will automatically add a trailing slash to URLs it generates. The options are:</p>
 <ul>
     <li><strong>No</strong> - Never</li>
-    <li><strong>Yes</strong> - Always</li>
     <li><strong>List</strong> - Only on list-based landing pages (i.e. not when viewing individual articles)</li>
+    <li><strong>Yes</strong> - Always</li>
 </ul>
         ]]></item>
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
@@ -1077,7 +1096,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="section_uses_page" title="Uses page"><![CDATA[
 <h2>Uses page</h2>
-<p>In Textpattern, sections are married to page templates. It’s kind of sweet, really…</p>
+<p>In Textpattern, sections are married to page templates.</p>
         ]]></item>
         <item id="section_uses_skin" title="Uses theme"><![CDATA[
 <h2>Uses theme</h2>
@@ -1086,6 +1105,16 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     </group>
 
     <group id="setup" title="Setup panel">
+        <item id="setup_admin_url" title="Admin subdomain"><![CDATA[
+<h2>Admin subdomain</h2>
+<p>The subdomain you wish to use to access the Textpattern administration interface (e.g. <code>admin.example.com</code>).</p>
+<p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+<h2>Cookie domain</h2>
+<p>The (sub)domain you wish to use for Textpattern cookie(s).</p>
+<p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
+        ]]></item>
         <item id="setup_user_login" title="User login"><![CDATA[
 <h2>User login</h2>
 <p>The login name of the administrator (‘Publisher’) account that you will use for administering of your site.</p>

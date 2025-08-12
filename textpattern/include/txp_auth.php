@@ -261,6 +261,7 @@ function doTxpValidate()
     $message    = '';
     $pub_path   = preg_replace('|//$|', '/', rhu . '/');
     $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
+    $conUsers = do_list_unique(get_pref('concurrent_logins'));
 
     if (cs('txp_login') && strpos(cs('txp_login'), ',')) {
         $txp_login = explode(',', cs('txp_login'));
@@ -280,7 +281,7 @@ function doTxpValidate()
             "name = '" . doSlash($c_userid) . "' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
-        if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid . pack('H*', $c_hash))) {
+        if ($r && $r['nonce'] && (in_array($c_userid, $conUsers) ? true : $r['nonce'] === md5($c_userid . pack('H*', $c_hash)))) {
             // Cookie is good.
             if ($logout) {
                 $txp_user = $c_userid;
@@ -302,7 +303,7 @@ function doTxpValidate()
             return $message;
         } else {
             txp_status_header('401 Your session has expired');
-            set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 365));
+            set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 30));
             set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
@@ -324,7 +325,7 @@ function doTxpValidate()
                 'txp_login',
                 $name . ',' . $c_hash,
                 array(
-                    'expires' => $stay ? time() + 3600 * 24 * 365 : 0,
+                    'expires' => $stay ? time() + 3600 * 24 * 30 : 0,
                     'httponly' => LOGIN_COOKIE_HTTP_ONLY
                 )
             );

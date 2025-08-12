@@ -89,7 +89,13 @@ $new_prefs = array(
         'val'      => '',
         'event'    => 'advanced_options',
         'html'     => 'longtext_input',
-        'position' => 250
+        'position' => 250,
+    ),
+    'concurrent_logins' => array(
+        'val'      => '',
+        'event'    => 'advanced_options',
+        'html'     => 'text_input',
+        'position' => 350,
     ),
 );
 

@@ -686,5 +686,12 @@
         "event": "advanced_options",
         "html": "number",
         "position": "300"
+    },
+    "concurrent_logins": {
+        "val": "",
+        "type": "0",
+        "event": "advanced_options",
+        "html": "text_input",
+        "position": "350"
     }
 }

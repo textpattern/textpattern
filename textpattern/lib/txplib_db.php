@@ -1346,7 +1346,7 @@ function getCount($table, $where, $debug = false)
 // Output a nested array of categories.
 function get_tree($atts = array(), $tbl = 'txp_category')
 {
-    static $cache = array(), $level = 0, $lAtts = array(
+    static $cache = array(), $level = 0, $lastmod = -1, $lAtts = array(
         'categories'   => null,
         'exclude'      => '',
         'parent'       => '',
@@ -1380,6 +1380,13 @@ function get_tree($atts = array(), $tbl = 'txp_category')
     $sql_query = "$where AND type = '".doSlash($type)."'".($sort ? ' order by '.sanitizeForSort($sort) : ($categories ? " order by FIELD(name, ".quote_list($categories, ',').")": ''));
     $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".quote_list($exclude, ',').")" : '';
+
+    $unix_ts = (int)strtotime(get_pref('lastmod'));
+
+    if ($unix_ts > $lastmod) {
+        $lastmod = $unix_ts;
+        $cache = array();
+    }
 
     $nocache = !$children || $sql_limit || $children == $level;
     $hash = txp_hash($nocache ? uniqid() : $sql_query);

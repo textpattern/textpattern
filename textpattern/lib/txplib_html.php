@@ -962,7 +962,9 @@ function tag($content, $tag, $atts = '')
 
 function tag_void($tag, $atts = '')
 {
-    return '<'.$tag.join_atts($atts).(get_pref('doctype') === 'html5' ? '>' : ' />');
+    $tag_close = (in_array($tag, HTML5_VOID_TAGS) && get_pref('doctype') === 'html5') ? '>' : ' />';
+
+    return '<'.$tag.join_atts($atts).$tag_close;
 }
 
 /**
@@ -1743,7 +1745,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
 {
     global $txp_atts, $txp_item;
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
-        $import = array('break', 'breakby', 'breakclass', 'breakform', 'class', 'escape', 'html_id', 'wraptag', 'wrapform', 'trim', 'replace', 'limit', 'offset', 'sort');
+        $import = array('wraptag', 'class', 'html_id', 'wrapform', 'break', 'breakby', 'breakclass', 'breakform', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort');
 
     $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
         return $v !== false;
@@ -1893,7 +1895,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
     // Non-enclosing breaks.
     elseif ($break === 'br' || $break === 'hr') {
-        $content = join("<$break $breakatts".(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
+        $content = join("<$break".($breakatts ? " ".$breakatts : "").(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
     } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
         $content = join($break, $list);
     } else {

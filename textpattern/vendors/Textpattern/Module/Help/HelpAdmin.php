@@ -64,17 +64,20 @@ class HelpAdmin
      *
      * Also load fallback file if it's not the same language.
      *
-     * @param string $lang
+     * @param string $lang   Language designator of the pophelp pack to load
+     * @param string $source Where to find the file: the core /lang dir or a plugin's own folder
      */
 
-    private static function pophelp_load($lang)
+    private static function pophelp_load($lang, $source = 'textpattern')
     {
-        $file = txpath."/lang/{$lang}_pophelp.xml";
-        $fallback_file = txpath."/lang/".TEXTPATTERN_DEFAULT_LANG."_pophelp.xml";
+        $source_path = $source === 'textpattern' ? txpath : PLUGINPATH . DS . $source;
+
+        $file = $source_path."/lang/{$lang}_pophelp.xml";
+        $fallback_file = $source_path."/lang/".TEXTPATTERN_DEFAULT_LANG."_pophelp.xml";
 
         if (is_readable($fallback_file) && $fallback_file !== $file) {
-            if (empty(self::$fallback_xml)) {
-                self::$fallback_xml = simplexml_load_file($fallback_file, "SimpleXMLElement", LIBXML_NOCDATA);
+            if (empty(self::$fallback_xml[$source])) {
+                self::$fallback_xml[$source] = simplexml_load_file($fallback_file, "SimpleXMLElement", LIBXML_NOCDATA);
             }
         }
 
@@ -82,11 +85,11 @@ class HelpAdmin
             return false;
         }
 
-        if (empty(self::$pophelp_xml)) {
-            self::$pophelp_xml = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
+        if (empty(self::$pophelp_xml[$source])) {
+            self::$pophelp_xml[$source] = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
         }
 
-        return self::$pophelp_xml;
+        return self::$pophelp_xml[$source];
     }
 
     /**
@@ -97,14 +100,26 @@ class HelpAdmin
 
     public static function pophelp_keys($group)
     {
-        $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
-        $help = $xml ? $xml->xpath("//group[@id='{$group}']/item") : array();
+        static $popfiles = null;
+
+        if ($popfiles === null) {
+            $popfiles[] = 'textpattern';
+
+            foreach (glob(PLUGINPATH.'/*/lang/'.TEXTPATTERN_DEFAULT_LANG.'_pophelp.xml') as $plugfile) {
+                $popfiles[] = dirname(str_replace(PLUGINPATH . DS, '', $plugfile), 2);
+            }
+        }
 
         $keys = array();
 
-        foreach ($help as $item) {
-            if ($item->attributes()->id) {
-                $keys[] = (string)$item->attributes()->id;
+        foreach ($popfiles as $popfile) {
+            $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG, $popfile);
+            $help = $xml ? $xml->xpath("//group[@id='{$group}']/item") : array();
+
+            foreach ($help as $item) {
+                if ($item->attributes()->id) {
+                    $keys[(string)$item->attributes()->id] = $popfile;
+                }
             }
         }
 
@@ -124,23 +139,33 @@ class HelpAdmin
 
         $item = empty($string) ? gps('item') : $string;
 
-        if (empty($item) || preg_match('/[^\w]/i', $item)) {
+        if (empty($item) || preg_match('/[^\w:]/i', $item)) {
             exit;
+        }
+
+        $var_source = do_list($item, ':');
+
+        if (!empty($var_source[1])) {
+            $item = $var_source[1];
+            $source = $var_source[0];
+        } else {
+            $item = $var_source[0];
+            $source = 'textpattern';
         }
 
         $lang_ui = ($lang) ? $lang : get_pref('language_ui', LANG);
 
-        if (!$xml = self::pophelp_load($lang_ui)) {
-            if (!empty(self::$fallback_xml)) {
-                $xml = self::$fallback_xml;
+        if (!$xml = self::pophelp_load($lang_ui, $source)) {
+            if (!empty(self::$fallback_xml[$source])) {
+                $xml = self::$fallback_xml[$source];
             }
         }
 
         $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
         $pophelp = $x ? trim($x[0]) : false;
 
-        if (!$pophelp && !empty(self::$fallback_xml)) {
-            $xml = self::$fallback_xml;
+        if (!$pophelp && !empty(self::$fallback_xml[$source])) {
+            $xml = self::$fallback_xml[$source];
             $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
             $pophelp = $x ? trim($x[0]) : false;
         }

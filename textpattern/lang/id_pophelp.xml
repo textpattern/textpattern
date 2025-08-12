@@ -309,6 +309,16 @@
         </thead>
         <tbody>
             <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
                 <td>5.0.3</td>
@@ -341,7 +351,7 @@
         ]]></item>
         <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
         <item id="site_url_mismatch" title="Ketidakcocokan URL situs"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP […] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP ... telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Versi pembaruan Textpattern"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title="Versi pra-rilis Textpattern tersedia"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title="Jalur direktori &quot;Sementara&quot; dan Kes Plugin tidak boleh sama"><![CDATA[]]></item>
@@ -488,7 +498,7 @@
         ]]></item>
         <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
 <h2>Gunakan halaman</h2>
-<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh…</p>
+<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh...</p>
         ]]></item>
         <item id="section_uses_skin" title="Gunakan tema"><![CDATA[
 <h2>Gunakan tema</h2>

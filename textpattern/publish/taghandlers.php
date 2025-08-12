@@ -72,6 +72,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article_id')
     ->register('article_url_title')
     ->register('if_article_id')
+    ->register('if_article_status')
     ->register('txp_date', array('posted', array('type' => 'article', 'time' => 'posted')))
     ->register('txp_date', array('modified', array('type' => 'article', 'time' => 'modified')))
     ->register('txp_date', array('expires', array('type' => 'article', 'time' => 'expires')))
@@ -685,7 +686,7 @@ function related_articles($atts, $thing = null)
         'no_widow' => '',
     ));
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'keywords', 'section'), getCustomFields()));
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category', 'category1', 'category2', 'author', 'image', 'keywords', 'section'), getCustomFields()));
     $categories = $cats = array();
 
     foreach ($match as $cf) {
@@ -699,7 +700,7 @@ function related_articles($atts, $thing = null)
                     }
                 }
 
-                $categories[] = ucwords($cf);
+                $categories[] = $cf;
                 break;
             case 'author':
                 $atts['author'] = $thisarticle['authorid'];
@@ -708,12 +709,13 @@ function related_articles($atts, $thing = null)
                 !empty($atts['section']) or $atts['section'] = $thisarticle['section'];
                 break;
             default:
-                if (empty($thisarticle[$cf])) {
+                $f = $cf === 'image' ? 'article_image' : $cf;
+
+                if (empty($thisarticle[$f])) {
                     return '';
                 }
 
-                $atts[$cf] = $thisarticle[$cf];
-                break;
+                $atts[$cf] = $thisarticle[$f];
         }
     }
 
@@ -789,7 +791,7 @@ function popup($atts)
                 n . '</select>';
 
             if ($label) {
-                $out = $label . br . $out;
+                $out = $label . (get_pref('doctype') === 'html5' ? '<br>' : '<br />') . $out;
             }
 
             if ($wraptag) {
@@ -826,7 +828,7 @@ function category_list($atts, $thing = null)
 
     extract(lAtts(array(
         'active_class' => '',
-        'break'        => br,
+        'break'        => 'br',
         'categories'   => null,
         'children'     => !isset($atts['categories']) ? 1 : (!empty($atts['parent']) ? true : 0),
         'class'        => __FUNCTION__,
@@ -908,7 +910,7 @@ function section_list($atts, $thing = null)
 
     extract(lAtts(array(
         'active_class'    => '',
-        'break'           => br,
+        'break'           => 'br',
         'class'           => __FUNCTION__,
         'default_title'   => get_pref('sitename'),
         'exclude'         => '',
@@ -1094,7 +1096,7 @@ function search_input($atts, $thing = null)
     $sub = (!empty($button)) ? '<input type="submit" value="' . txpspecialchars($button) . '"' . (get_pref('doctype') === 'html5' ? '>' : ' />') : '';
     $id =  (!empty($html_id)) ? ' id="' . txpspecialchars($html_id) . '"' : '';
 
-    $out = (!empty($label)) ? txpspecialchars($label) . br . $out . $sub : $out . $sub;
+    $out = (!empty($label)) ? txpspecialchars($label) . (get_pref('doctype') === 'html5' ? '<br>' : '<br />') . $out . $sub : $out . $sub;
     $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)) . $out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
@@ -1127,6 +1129,61 @@ function search_term($atts)
     }
 
     return txpspecialchars($q);
+}
+
+// -------------------------------------------------------------
+
+function permlink($atts, $thing = null)
+{
+    global $thisarticle, $txp_context;
+    static $lAtts = array(
+        'class'   => '',
+        'context' => null,
+        'form'    => '',
+        'id'      => '',
+        'style'   => '',
+        'title'   => '',
+    );
+
+    $old_context = $txp_context;
+
+    if (!isset($atts['context'])) {
+        if (empty($txp_context)) {
+            $atts = lAtts($lAtts, $atts);
+        } else {
+            $atts = lAtts($lAtts + $txp_context, $atts);
+            $txp_context = array_intersect_key($atts, $txp_context);
+        }
+    } elseif ($atts['context'] === true) {
+        $atts = lAtts($lAtts, $atts);
+    } else {
+        $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
+        $atts = lAtts($lAtts + $extralAtts, $atts);
+        $extralAtts = array_intersect_key($atts, $extralAtts);
+    }
+
+    $id = $atts['id'];
+
+    if ($id || !empty($thisarticle)) {
+        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
+        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
+    }
+
+    $txp_context = $old_context;
+
+    if (isset($url)) {
+        if ($thing === null && empty($atts['form'])) {
+            return $url;
+        }
+
+        return tag(empty($atts['form']) ? (string)parse($thing) : (string)parse_form($atts['form']), 'a', array(
+            'rel'   => filter_var($url, FILTER_VALIDATE_URL) === false || strpos($url, hu) === 0 ? 'bookmark' : 'external',
+            'href'  => $url,
+            'title' => $atts['title'],
+            'style' => $atts['style'],
+            'class' => $atts['class'],
+        ));
+    }
 }
 
 // -------------------------------------------------------------
@@ -1320,6 +1377,25 @@ function if_article_id($atts, $thing = null)
     extract(lAtts(array('id' => $pretext['id']), $atts));
 
     $x = $id && isset($thisarticle['thisid']) && in_list($thisarticle['thisid'], $id);
+    return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function if_article_status($atts, $thing = null)
+{
+    global $thisarticle, $pretext;
+
+    extract(lAtts(array('status' => 'live'), $atts));
+
+    if ($status === true) {
+        $status = 'live, sticky';
+    }
+
+    $all_status = status_list(false);
+    $allowed_status = array_filter(array_map(function($value) use ($all_status) { return is_numeric($value) ? (array_key_exists($value, $all_status) ? $value : false) : array_search($value, $all_status); }, do_list($status)));
+
+    $x = $status && isset($thisarticle['status']) && in_list($thisarticle['status'], $allowed_status);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
@@ -2066,7 +2142,7 @@ function article_image($atts)
         }
     }
 
-    return $wraptag ? doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : implode($break, $out);
+    return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
 }
 
 // -------------------------------------------------------------
@@ -2308,60 +2384,6 @@ function meta_author($atts)
     }
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function permlink($atts, $thing = null)
-{
-    global $thisarticle, $txp_context;
-    static $lAtts = array(
-        'class'   => '',
-        'id'      => '',
-        'style'   => '',
-        'title'   => '',
-        'context' => null,
-    );
-
-    $old_context = $txp_context;
-
-    if (!isset($atts['context'])) {
-        if (empty($txp_context)) {
-            $atts = lAtts($lAtts, $atts);
-        } else {
-            $atts = lAtts($lAtts + $txp_context, $atts);
-            $txp_context = array_intersect_key($atts, $txp_context);
-        }
-    } elseif ($atts['context'] === true) {
-        $atts = lAtts($lAtts, $atts);
-    } else {
-        $extralAtts = array_fill_keys(do_list_unique($atts['context']), null);
-        $atts = lAtts($lAtts + $extralAtts, $atts);
-        $extralAtts = array_intersect_key($atts, $extralAtts);
-    }
-
-    $id = $atts['id'];
-
-    if ($id || !empty($thisarticle)) {
-        $txp_context = get_context(isset($extralAtts) ? $extralAtts : $atts['context']);
-        $url = $id ? permlinkurl_id($id) : permlinkurl($thisarticle);
-    }
-
-    $txp_context = $old_context;
-
-    if (isset($url)) {
-        if ($thing === null) {
-            return $url;
-        }
-
-        return tag((string)parse($thing), 'a', array(
-            'rel'   => filter_var($url, FILTER_VALIDATE_URL) === false || strpos($url, hu) === 0 ? 'bookmark' : 'external',
-            'href'  => $url,
-            'title' => $atts['title'],
-            'style' => $atts['style'],
-            'class' => $atts['class'],
-        ));
-    }
 }
 
 // -------------------------------------------------------------

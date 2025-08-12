@@ -327,6 +327,16 @@
         </thead>
         <tbody>
             <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
                 <td>5.0.3</td>
@@ -1056,7 +1066,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         ]]></item>
         <item id="section_uses_page" title="Utilizza la pagina"><![CDATA[
 <h2>Utilizza la pagina</h2>
-<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero…</p>
+<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero...</p>
         ]]></item>
         <item id="section_uses_skin" title="Usa il tema"><![CDATA[
 <h2>Usa il tema</h2>

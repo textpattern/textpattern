@@ -296,6 +296,16 @@
         </thead>
         <tbody>
             <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
                 <td>5.0.3</td>
@@ -337,7 +347,7 @@
 <p>De lo contrario, verifique y modifique la configuración de “URL del sitio” en Preferencias de administrador según sea necesario. En el mensaje de advertencia previa al piloto en el panel “Diagnóstico” se muestra una conjetura de la URL correcta del sitio.</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="Las funciones de PHP [...] están deshabilitadas en su servidor"><![CDATA[
-<h2>Las funciones PHP […] están deshabilitadas en su servidor</h2>
+<h2>Las funciones PHP ... están deshabilitadas en su servidor</h2>
 <p>El host del sitio o el administrador del servidor ha deshabilitado una o más funciones de PHP, algunas de las cuales pueden afectar la ejecución de Textpattern.</p>
 <p>Consulte la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentación del usuario de Textpattern <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> para obtener más información.</p>
         ]]></item>
@@ -1020,7 +1030,7 @@
         ]]></item>
         <item id="section_uses_page" title="Usa página"><![CDATA[
 <h2>Utiliza la página</h2>
-<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente…</p>
+<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente...</p>
         ]]></item>
         <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[
 <h2>Utiliza el tema</h2>
