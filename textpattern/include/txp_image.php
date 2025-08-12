@@ -694,10 +694,10 @@ function image_edit($message = '', $id = '')
                     form(
                         graf(
                             n . '<label for="width">' . gTxt('width') . '</label>' .
-                            fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width') .
+                            fInput('text', 'width', $thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width') .
                             n . '<a class="thumbnail-swap-size">' . gTxt('swap_values') . '</a>' .
                             n . '<label for="height">' . gTxt('height') . '</label>' .
-                            fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height') .
+                            fInput('text', 'height', $thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height') .
                             n . '<label for="crop">' . gTxt('keep_square_pixels') . '</label>' .
                             checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop') .
                             fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'

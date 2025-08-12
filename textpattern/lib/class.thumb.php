@@ -137,7 +137,7 @@ class wet_thumb
     public $addgreytohint;
 
     /**
-     * JPEG image quality (0...100, defaults to 80).
+     * JPEG/WEBP/AVIF image quality (0...100, defaults to 80).
      *
      * @var int
      */
@@ -195,7 +195,7 @@ class wet_thumb
         $this->sharpen = true;
         $this->hint = true;
         $this->addgreytohint = true;
-        $this->quality = 80;
+        $this->quality = TEXTPATTERN_THUMB_QUALITY;
         $this->html = ' alt="" title="" ';
 //        $this->link = true;
     }
@@ -525,8 +525,8 @@ class wet_thumb
         }
 
         if (isset($imagefn) && function_exists($imagefn)) {
-            $result = $imagefn == 'imagejpeg' ?
-                imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality) :
+            $result = in_array($imagefn, array('imagejpeg', 'imagewebp', 'imageavif')) ?
+                $imagefn($this->_DST['image'], $this->_DST['file'], $this->quality) :
                 $imagefn($this->_DST['image'], $this->_DST['file']);
         }
 

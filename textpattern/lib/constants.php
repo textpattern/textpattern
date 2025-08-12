@@ -1029,6 +1029,16 @@ const HTML5_VOID_TAGS = array(
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
 );
 
+if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
+    /**
+     * Thumbnail quality percent
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_QUALITY', 80);
+}
+
 /**
  * A tab character.
  *
