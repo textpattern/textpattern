@@ -1,6 +1,6 @@
 Changes in 4.9.0 (upcoming)
 
-* Feature release with support for PHP 8.4, MySQL 8.4, new functionality,
+* Feature release with support for PHP 8.5, MySQL 8.4, new functionality,
   security enhancements, improvements, and bug fixes.
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
