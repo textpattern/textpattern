@@ -1137,7 +1137,7 @@ function permlink($atts, $thing = null)
 {
     global $thisarticle, $txp_context;
     static $lAtts = array(
-        'class'   => '',
+        'class'   => isset($thing) ? '' : null,
         'context' => null,
         'form'    => '',
         'id'      => '',
