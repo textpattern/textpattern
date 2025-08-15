@@ -4558,6 +4558,8 @@ function buildCustomSql($custom, $pairs, $exclude = array())
 
 function buildTimeSql($month, $time, $field = 'Posted')
 {
+    !is_string($month) or $month = trim($month);
+    !is_string($time) or $time = trim($time);
     $safe_field = '`'.doSlash($field).'`';
     $timeq = '1';
 
