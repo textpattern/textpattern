@@ -2351,38 +2351,56 @@ function is_valid_email($address)
  * }
  * </code>
  *
- * @param   string $to_address The receiver
- * @param   string $subject    The subject
- * @param   string $body       The message
- * @param   string $reply_to   The reply to address
+ * @param   string $to_address  The receiver
+ * @param   string $subject     The subject
+ * @param   string $body        The message
+ * @param   string $reply_to    The reply to address
+ * @param   string|array $from  The sender email | array(email, name)
  * @return  bool   FALSE when sending failed
  * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
 
-function txpMail($to_address, $subject, $body, $reply_to = null)
+function txpMail($to_address, $subject, $body, $reply_to = null, $from = null)
 {
     global $txp_user;
 
-    // Send the email as the currently logged in user.
-    if ($txp_user) {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "name = '".doSlash($txp_user)."'"
-        );
+    if (!$from) {
+        // Send the email as the currently logged in user.
+        if ($txp_user) {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "name = '".doSlash($txp_user)."'"
+            );
 
-        if ($sender && is_valid_email(get_pref('publisher_email'))) {
+            if ($sender && is_valid_email(get_pref('publisher_email'))) {
+                $sender['email'] = get_pref('publisher_email');
+            }
+        }
+        // If not logged in, the receiver is the sender.
+        else {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "email = '".doSlash($to_address)."'"
+            );
+        }
+    } else {
+        // Send the email from an email address specified in $from
+        $sender['email'] = is_array($from) ? $from[0] : $from;
+
+        // Fallback if invalid
+        if (!is_valid_email($sender['email'])) {
             $sender['email'] = get_pref('publisher_email');
         }
-    }
-    // If not logged in, the receiver is the sender.
-    else {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "email = '".doSlash($to_address)."'"
-        );
+
+        // Use sender name from the $from array if specified
+        if (is_array($from) && isset($from[1])) {
+            $sender['RealName'] = $from[1];
+        } else {
+            $sender['RealName'] = get_pref('sitename');
+        }
     }
 
     if ($sender) {
