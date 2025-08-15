@@ -1137,7 +1137,7 @@ function permlink($atts, $thing = null)
 {
     global $thisarticle, $txp_context;
     static $lAtts = array(
-        'class'   => isset($thing) ? '' : null,
+        'class'   => '',
         'context' => null,
         'form'    => '',
         'id'      => '',
@@ -1145,6 +1145,8 @@ function permlink($atts, $thing = null)
         'title'   => '',
     );
 
+    $has_content = isset($thing) || !empty($atts['form']);
+    $lAtts['class'] = $has_content ? '' : null;
     $old_context = $txp_context;
 
     if (!isset($atts['context'])) {
@@ -1172,7 +1174,7 @@ function permlink($atts, $thing = null)
     $txp_context = $old_context;
 
     if (isset($url)) {
-        if ($thing === null && empty($atts['form'])) {
+        if (!$has_content) {
             return $url;
         }
 
