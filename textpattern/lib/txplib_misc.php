@@ -760,7 +760,7 @@ function imageFetchInfo($id = "", $name = "")
     if ($id) {
         if (isset($cache['i'][$id])) {
             return $cache['i'][$id];
-        } elseif (is_numeric($id)) {
+        } elseif (preg_match('/^\d+$/', trim($id))) {
             $where = 'id = '.intval($id).' LIMIT 1';
         } else {
             if (!isset($fields)) {
