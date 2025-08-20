@@ -755,13 +755,25 @@ function sizeImage($name)
 function imageFetchInfo($id = "", $name = "")
 {
     global $thisimage, $p;
-    static $cache = array();
+    static $cache = array(), $fields = null;
 
     if ($id) {
         if (isset($cache['i'][$id])) {
             return $cache['i'][$id];
-        } else {
+        } elseif (is_numeric($id)) {
             $where = 'id = '.intval($id).' LIMIT 1';
+        } else {
+            if (!isset($fields)) {
+                $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
+                $fields['date'] = date('c');
+            }
+
+            $pathinfo = pathinfo($id);
+            $fields['name'] = isset($pathinfo['filename']) ? $pathinfo['filename'] : '';
+            $fields['ext'] = isset($pathinfo['extension']) ? '.'.$pathinfo['extension'] : '';
+            $fields['id'] = $id;
+
+            return $fields;
         }
     } elseif ($name) {
         if (isset($cache['n'][$name])) {
@@ -5259,7 +5271,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
     global $img_dir;
     $thumbnail = $thumbnail ? 't' : '';
 
-    return ihu.$img_dir.'/'.$id.$thumbnail.$ext;
+    return preg_match('/^\d+$/', $id) ? ihu.$img_dir.'/'.$id.$thumbnail.$ext : $id;
 }
 
 /**

@@ -260,12 +260,6 @@ class Image
             $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
-        if ($id) {
-            $not = $exclude === true || in_array('id', $exclude) ? ' NOT' : '';
-            $id = join(',', array_map('intval', do_list_unique($id, array(',', '-'))));
-            $where[] = "id$not IN ($id)";
-        }
-    
         if ($author) {
             $not = $exclude === true || in_array('author', $exclude) ? ' NOT' : '';
             $where[] = "author$not IN ('".join("','", doSlash(do_list_unique($author)))."')";
@@ -330,16 +324,7 @@ class Image
                     case 'article':
                         // ...the article image field.
                         if ($thisarticle && !empty($thisarticle['article_image'])) {
-                            if (!$has_content && !is_numeric(str_replace(array(',', '-', ' '), '', $thisarticle['article_image']))) {
-                                $range = $limit || $offset ? ($offset + 1).'-'.($offset + $limit) : true;
-
-                                return processTags('article_image', compact('class', 'html_id', 'wraptag', 'break', 'thumbnail', 'range'));
-                            }
-    
-                            $id = join(",", array_filter(array_map('intval', do_list_unique($thisarticle['article_image'], array(',', '-')))));
-    
-                            // Note: This clause will squash duplicate ids.
-                            $where[] = $id ? "id IN ($id)" : '0';
+                            $id = $thisarticle['article_image'];
                         }
                         break;
                     case 'category':
@@ -361,20 +346,49 @@ class Image
                 }
             }
         }
-    
+
+        if ($id) {
+            $not = $exclude === true || in_array('id', $exclude) ? ' NOT' : '';
+            $ids = $extid = $numid = array();
+
+            foreach (do_list_unique($id, array(',', '-')) as $id) {
+                if (preg_match('/^\d+$/', $id)) {
+                    $ids[] = $numid[] = $id;
+                } elseif (!$not) {
+                    $ids[] = doQuote(doSlash($id));
+                    $fields = array();
+                    foreach (imageFetchInfo($id) as $k => $v) {
+                        $v = is_string($v) ? "'".doSlash($v)."'" : (is_null($v) ? 'NULL' : $v);
+                        $fields[] = "$v AS $k";
+                    }
+                    $extid[] = implode(',', $fields);
+                }
+            }
+
+            $extid = implode(' UNION ALL SELECT ', $extid);
+
+            if ($extid && $where) {
+                $extid = "* FROM (SELECT $extid) AS extid WHERE ".implode(' AND ', $where);
+            }
+
+            $numid = join(",", array_filter($numid));
+            $id = implode(',', $ids);
+
+            // Note: This clause will squash duplicate ids.
+            $where[] = $numid ? "id$not IN ($numid)" : ($not ? '1' : '0');
+        }
+
         // Order of ids in 'id' attribute overrides default 'sort' attribute.
         if (empty($atts['sort']) && $id) {
             $safe_sort = "FIELD(id, $id)";
         }
     
-        // If nothing matches from the filterable attributes, output nothing.
-        if (!$where && $filters) {
-            return isset($thing) ? parse($thing, false) : '';
-        }
-    
-        // If no images are filtered, start with all images.
         if (!$where) {
-            $where[] = "1 = 1";
+            if ($filters) {// If nothing matches from the filterable attributes, output nothing.
+                return isset($thing) ? parse($thing, false) : '';
+            } else {// If no images are filtered, start with all images.
+                $where[] = '1';
+            }
         }
     
         $where = join(" AND ", $where);
@@ -403,13 +417,15 @@ class Image
             $pgoffset = $offset;
         }
     
-        $qparts = array(
+        $qparts = join(' ', array(
             $where,
             "ORDER BY ".$safe_sort,
             ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
-        );
+        ));
     
-        $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
+        $rs = empty($extid) ?
+            safe_rows_start("*", 'txp_image', $qparts) :
+            safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts);
     
         if (!$has_content) {
             $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";
