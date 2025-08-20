@@ -231,6 +231,7 @@ class Image
         $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || isset($atts['size']) || $thumbnail === '1' || $thumbnail === '0';
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
+        $id !== true or $id = empty($thisarticle['article_image']) ? '' : $thisarticle['article_image'];
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
 
         if ($exclude && is_array($exclude) && $excluded = array_filter($exclude, function($e) {
@@ -365,10 +366,12 @@ class Image
                 }
             }
 
+            $extnum = count($extid);
             $extid = implode(' UNION ALL SELECT ', $extid);
 
             if ($extid && $where) {
                 $extid = "* FROM (SELECT $extid) AS extid WHERE ".implode(' AND ', $where);
+                $extcount = "SELECT COUNT(*)".ltrim($extid, '*');
             }
 
             $numid = join(",", array_filter($numid));
@@ -399,7 +402,7 @@ class Image
             $pgoffset = $offset + (($pg - 1) * $pageby);
     
             if (empty($thispage)) {
-                $grand_total = safe_count('txp_image', $where);
+                $grand_total = safe_count('txp_image', $where) + (empty($extnum) ? 0 : (empty($extcount) ? $extnum : getThing($extcount)));
                 $total = $grand_total - $offset;
                 $numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
     
