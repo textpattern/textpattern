@@ -753,13 +753,13 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-id')
                 ) .
                 inputLabel(
-                    'name',
+                    'filename',
                     Txp::get('\Textpattern\UI\Input', 'filename', 'text', $filename)->setAtts(array(
                             'id'        => 'filename',
                             'size'      => INPUT_REGULAR,
                             'maxlength' => $fieldSizes['filename'],
                         )),
-                    '', '', array('class' => 'txp-form-field edit-file-name')
+                    'name', '', array('class' => 'txp-form-field edit-file-name')
                 ) . inputLabel(
                     'file_status',
                     selectInput('status', $file_statuses, $status, false, '', 'file_status'),
@@ -790,7 +790,7 @@ function file_edit($message = '', $id = '')
                 inputLabel(
                     'modified',
                     gTime($modified),
-                    'modified', '', array('class' => 'txp-form-field edit-file-modified')
+                    '', '', array('class' => 'txp-form-field edit-file-modified')
                 ) .
                 inputLabel(
                     'file_size',
@@ -798,10 +798,10 @@ function file_edit($message = '', $id = '')
                     '', '', array('class' => 'txp-form-field edit-file-size')
                 ) .
                 inputLabel(
-                    'download_count',
+                    'downloads',
                     Txp::get('\Textpattern\UI\Number', 'downloads', $downloads)
                        ->setAtts(array('class' => 'input-small', 'min' => 0), array('strip' => TEXTPATTERN_STRIP_NONE)) . n . $downloadlink,
-                    '', '', array('class' => 'txp-form-field edit-file-download-count')
+                    'download_count', '', array('class' => 'txp-form-field edit-file-download-count')
                 ) .
                 graf(
                     ($can_delete
