@@ -497,10 +497,12 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
             'class'     => 'current-page',
             'id'        => 'current-page',
             'name'      => 'page',
-            'type'      => 'text',
+            'type'      => 'number',
             'size'      => INPUT_XSMALL,
             'inputmode' => 'numeric',
-            'pattern'   => '[0-9]+',
+            'pattern'   => '[1-9]\d*',
+            'min'       => 1,
+            'max'       => $numPages,
             'value'     => $page,
         )).
         n.gTxt('of').

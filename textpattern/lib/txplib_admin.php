@@ -584,7 +584,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         }
     }
 
-    @chmod($newpath, 0644);
+    chmod($newpath, 0644);
 
     // GD is supported
     if (check_gd($ext)) {
@@ -1130,11 +1130,11 @@ function shift_uploaded_file($f, $dest, $issvg = false)
         }
     }
 
-    if (@rename($f, $dest)) {
+    if (rename($f, $dest)) {
         return true;
     }
 
-    if (@copy($f, $dest)) {
+    if (copy($f, $dest)) {
         unlink($f);
 
         return true;

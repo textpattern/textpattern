@@ -755,13 +755,25 @@ function sizeImage($name)
 function imageFetchInfo($id = "", $name = "")
 {
     global $thisimage, $p;
-    static $cache = array();
+    static $cache = array(), $fields = null;
 
     if ($id) {
         if (isset($cache['i'][$id])) {
             return $cache['i'][$id];
-        } else {
+        } elseif (preg_match('/^\d+$/', trim($id))) {
             $where = 'id = '.intval($id).' LIMIT 1';
+        } else {
+            if (!isset($fields)) {
+                $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
+                $fields['date'] = date('c');
+            }
+
+            $pathinfo = pathinfo($id);
+            $fields['name'] = isset($pathinfo['filename']) ? $pathinfo['filename'] : '';
+            $fields['ext'] = isset($pathinfo['extension']) ? '.'.$pathinfo['extension'] : '';
+            $fields['id'] = $id;
+
+            return $fields;
         }
     } elseif ($name) {
         if (isset($cache['n'][$name])) {
@@ -2371,38 +2383,56 @@ function is_valid_email($address)
  * }
  * </code>
  *
- * @param   string $to_address The receiver
- * @param   string $subject    The subject
- * @param   string $body       The message
- * @param   string $reply_to   The reply to address
+ * @param   string $to_address  The receiver
+ * @param   string $subject     The subject
+ * @param   string $body        The message
+ * @param   string $reply_to    The reply to address
+ * @param   string|array $from  The sender email | array(email, name)
  * @return  bool   FALSE when sending failed
  * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
 
-function txpMail($to_address, $subject, $body, $reply_to = null)
+function txpMail($to_address, $subject, $body, $reply_to = null, $from = null)
 {
     global $txp_user;
 
-    // Send the email as the currently logged in user.
-    if ($txp_user) {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "name = '".doSlash($txp_user)."'"
-        );
+    if (!$from) {
+        // Send the email as the currently logged in user.
+        if ($txp_user) {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "name = '".doSlash($txp_user)."'"
+            );
 
-        if ($sender && is_valid_email(get_pref('publisher_email'))) {
+            if ($sender && is_valid_email(get_pref('publisher_email'))) {
+                $sender['email'] = get_pref('publisher_email');
+            }
+        }
+        // If not logged in, the receiver is the sender.
+        else {
+            $sender = safe_row(
+                "RealName, email",
+                'txp_users',
+                "email = '".doSlash($to_address)."'"
+            );
+        }
+    } else {
+        // Send the email from an email address specified in $from
+        $sender['email'] = is_array($from) ? $from[0] : $from;
+
+        // Fallback if invalid
+        if (!is_valid_email($sender['email'])) {
             $sender['email'] = get_pref('publisher_email');
         }
-    }
-    // If not logged in, the receiver is the sender.
-    else {
-        $sender = safe_row(
-            "RealName, email",
-            'txp_users',
-            "email = '".doSlash($to_address)."'"
-        );
+
+        // Use sender name from the $from array if specified
+        if (is_array($from) && isset($from[1])) {
+            $sender['RealName'] = $from[1];
+        } else {
+            $sender['RealName'] = get_pref('sitename');
+        }
     }
 
     if ($sender) {
@@ -4692,6 +4722,8 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
 
 function buildTimeSql($month, $time, $field = 'Posted')
 {
+    !is_string($month) or $month = trim($month);
+    !is_string($time) or $time = trim($time);
     $safe_field = '`'.doSlash($field).'`';
     $timeq = '1';
 
@@ -5379,7 +5411,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
     global $img_dir;
     $thumbnail = $thumbnail ? 't' : '';
 
-    return ihu.$img_dir.'/'.$id.$thumbnail.$ext;
+    return preg_match('/^\d+$/', $id) ? ihu.$img_dir.'/'.$id.$thumbnail.$ext : $id;
 }
 
 /**
