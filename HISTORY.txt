@@ -6,6 +6,8 @@ Changes in 4.9.0 (upcoming)
   recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
+* Fixed: remove 'br' tags from article image markup where >1 is image is
+  supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: filter articles by image.
