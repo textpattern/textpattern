@@ -353,7 +353,7 @@
 <p>Quando o Textpattern é instalado, o diretório <code>textpattern/setup</code> e seu conteúdo não são mais necessários e devem ser excluídos por questões de segurança.</p>
         ]]></item>
         <item id="site_url_mismatch" title="Incompatibilidade de URL do site"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Funções PHP ... estão desabilitadas em seu servidor"><![CDATA[<h2>Funções PHP ... estão desabilitadas em seu servidor</h2>
+        <item id="some_php_functions_disabled" title="Funções PHP &hellip; estão desabilitadas em seu servidor"><![CDATA[<h2>Funções PHP &hellip; estão desabilitadas em seu servidor</h2>
 <p>O host do site ou administrador do servidor desabilitou uma ou mais funções PHP, algumas das quais podem afetar a execução do Textpattern.</p>
 <p>Consulte a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentação do usuário do padrão de texto <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a> para obter mais informações.</p>
         ]]></item>

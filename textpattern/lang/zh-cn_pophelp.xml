@@ -366,8 +366,8 @@
 <p>如果可以通过多个不同的URL访问该站点，并且该站点的行为符合预期，则可以安全地忽略此消息。</p>
 <p>否则，请根据需要检查并修改“管理偏好设置”中的“站点URL”设置。“诊断”面板上的启用前警告消息中显示了对正确的站点URL的有根据的猜测。</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP 函数 ... 在您的服务器上被禁用"><![CDATA[
-<h2>PHP 函数 ... 在您的服务器上被禁用。</h2>
+        <item id="some_php_functions_disabled" title="PHP 函数 [&hellip;] 在您的服务器上被禁用"><![CDATA[
+<h2>PHP 函数 [&hellip;] 在您的服务器上被禁用。</h2>
 <p>网站主机或服务器管理员已禁用一个或多个PHP 功能，其中有些可能影响到Textpattern的运行。</p>
 <p>请参阅<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions"> Textpattern用户文档<span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>以获取更多信息。</p>
         ]]></item>

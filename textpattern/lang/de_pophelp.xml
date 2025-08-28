@@ -341,8 +341,8 @@
 <p>Wenn die Website über mehrere verschiedene URLs erreichbar ist und sie sich wie erwartet verhält, kann diese Nachricht getrost ignoriert werden.</p>
 <p>Andernfalls überprüfen und ändern Sie bitte die Einstellung „Webadresse“ in den Admin-Einstellungen nach Bedarf. Die korrekte URL wird in der Voruntersuchungsmeldung im Fenster „Diagnose“ angezeigt.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP-Funktionen ... sind auf Ihrem Server deaktiviert"><![CDATA[
-<h2>PHP-Funktionen ... sind auf Ihrem Server deaktiviert</h2>
+        <item id="some_php_functions_disabled" title="PHP-Funktionen [&hellip;] sind auf Ihrem Server deaktiviert"><![CDATA[
+<h2>PHP-Funktionen [&hellip;] sind auf Ihrem Server deaktiviert</h2>
 <p>Der Site-Host oder Server-Administrator hat eine oder mehrere PHP-Funktionen deaktiviert, einige davon können das Ausführen von Textpattern beeinflussen.</p>
 <p>Bitte konsultieren Sie die <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern Benutzerdokumentation <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> für weitere Informationen.</p>
         ]]></item>
@@ -635,7 +635,7 @@ Wenn eine Bausteinvorlage verarbeitet werden muss (wenn sie Textpattern-Tags ent
         <item id="enhanced_email" title="Erweiterte E-Mail-Funktionen verwenden"><![CDATA[
 <h2>Erweiterte E-Mail-Funktionen verwenden?</h2>
 <p>Wenn Sie "No" wählen, werden alle E-Mails – etwa Anfragen zum Zurücksetzen von Passwörtern und E-Mails von Plugins wie com_connect – über die PHP-<code>mail()</code>-Funktion geleitet. Wenn Sie "Yes" wählen, wird stattdessen der mitgelieferte PHPMailer genutzt, der optionale Einstellungen zum Versand über externe SMTP-Server eröffnet.</p>
-<p>Falls Sie Probleme mit dem Empfang von E-Mails haben (insbesondere bei Anbietern wie Gmail, Hotmail usw.), kann dies daran liegen, dass Ihre Domain nicht als vertrauenswürdige Quelle eingestuft wird. Die Einstellung "Yes" kann die Zustellbarkeit verbessern. Die Verwendung von SMTP kann diese zusätzlich optimieren.</p>
+<p>Falls Sie Probleme mit dem Empfang von E-Mails haben (insbesondere bei Anbietern wie Gmail, Outlook, Yahoo! usw.), kann dies daran liegen, dass Ihre Domain nicht als vertrauenswürdige Quelle eingestuft wird. Die Einstellung "Yes" kann die Zustellbarkeit verbessern. Die Verwendung von SMTP kann diese zusätzlich optimieren.</p>
         ]]></item>
         <item id="expire_logs_after" title="Protokolle laufen nach wie vielen Tagen ab?"><![CDATA[
 <h2>Protokolle laufen nach wie vielen Tagen ab?</h2>
@@ -832,7 +832,7 @@ Wenn eine Bausteinvorlage verarbeitet werden muss (wenn sie Textpattern-Tags ent
         ]]></item>
         <item id="smtp_host" title="SMTP-Server"><![CDATA[
 <h2>SMTP host</h2>
-<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP hosting endpoint URL hier. Consult your SMTP provider to obtain this value.</p>
+<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP server here. Consult your SMTP provider to obtain this value.</p>
 <p>Dieses Feld kann auch festgelegt werden, indem die Konstante <code>SMTP_HOST</code> in der config.php deklariert wird; in diesem Fall wird der Wert in den Einstellungen ausgegraut.</p>
         ]]></item>
         <item id="smtp_pass" title="SMTP-Passwort"><![CDATA[

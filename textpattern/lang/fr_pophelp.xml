@@ -742,7 +742,7 @@ title="HTML"
         <item id="enhanced_email" title="Utiliser des fonctionnalités de messagerie améliorées ?"><![CDATA[
 <h2>Utiliser des fonctionnalités de messagerie améliorées</h2>
 <p>En choisissant «Non», tous les e-mails (comme les demandes de réinitialisation de mot de passe et les e-mails envoyés par des plugins tels que com_connect) passeront par la fonction <code>mail()</code> de PHP. Sélectionner «Oui» utilisera la librairie PHPMailer intégrée, ce qui vous permet éventuellement d’acheminer les e-mails via un serveur SMTP externe.</p>
-<p>Si vous rencontrez des problèmes de réception de courriels (notamment avec des services en ligne comme gmail ou hotmail), la cause probable est que votre domaine n’est pas perçu comme source fiable. Sélectionner «Oui» peut améliorer la transmission. L’usage du SMTP améliore souvent ce point davantage.</p>
+<p>Si vous rencontrez des problèmes de réception de courriels (notamment avec des services en ligne comme Gmail ou Outlook), la cause probable est que votre domaine n’est pas perçu comme source fiable. Sélectionner «Oui» peut améliorer la transmission. L’usage du SMTP améliore souvent ce point davantage.</p>
         ]]></item>
         <item id="expire_logs_after" title="Le journal d’activités (log) expire après ?"><![CDATA[
 <h2>Le journal d’activités (log) expire après ?</h2>

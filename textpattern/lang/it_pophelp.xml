@@ -742,7 +742,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         <item id="enhanced_email" title="Utilizzare funzionalità di posta avanzate"><![CDATA[
 <h2>Usa funzionalità di posta avanzate</h2>
 <p>Impostare questa opzione su ‘No’ invierà tutta la posta - come le richieste di reimpostazione password account e le email dai plugin come com_connect - attraverso la funzione <code>mail()</code> di PHP. Selezionando ‘Yes’ verrà invece utilizzato PHPMailer incluso con Textpattern, che permette di configurare opzioni per inoltrare la posta via server SMTP esterni.</p>
-<p>Se riscontri problemi nella consegna delle email (specialmente verso provider online come gmail, hotmail, ecc.), il motivo probabile è che il tuo dominio non è considerato una fonte attendibile. Passando a ‘Yes’ è possibile migliorare la consegna. Usare SMTP può ulteriormente migliorare la recapitabilità.</p>
+<p>Se riscontri problemi nella consegna delle email (specialmente verso provider online come Gmail, Outlook, Yahoo!, ecc.), il motivo probabile è che il tuo dominio non è considerato una fonte attendibile. Passando a ‘Yes’ è possibile migliorare la consegna. Usare SMTP può ulteriormente migliorare la recapitabilità.</p>
         ]]></item>
         <item id="expire_logs_after" title="Gli accessi scompaiono dopo?"><![CDATA[
 <h2>I registri scadono dopo quanti giorni?</h2>
@@ -1066,7 +1066,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         ]]></item>
         <item id="section_uses_page" title="Utilizza la pagina"><![CDATA[
 <h2>Utilizza la pagina</h2>
-<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero...</p>
+<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero&hellip;</p>
         ]]></item>
         <item id="section_uses_skin" title="Usa il tema"><![CDATA[
 <h2>Usa il tema</h2>
