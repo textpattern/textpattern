@@ -833,12 +833,12 @@ Wenn eine Bausteinvorlage verarbeitet werden muss (wenn sie Textpattern-Tags ent
         <item id="smtp_host" title="SMTP-Server"><![CDATA[
 <h2>SMTP host</h2>
 <p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP server here. Consult your SMTP provider to obtain this value.</p>
-<p>Dieses Feld kann auch festgelegt werden, indem die Konstante <code>SMTP_HOST</code> in der config.php deklariert wird; in diesem Fall wird der Wert in den Einstellungen ausgegraut.</p>
+<p>Dieses Feld kann auch festgelegt werden, indem die Konstante <code>SMTP_HOST</code> in der <code>config.php</code> deklariert wird; in diesem Fall wird der Wert in den Einstellungen ausgegraut.</p>
         ]]></item>
         <item id="smtp_pass" title="SMTP-Passwort"><![CDATA[
 <h2>SMTP password</h2>
 <p>Wenn Ihre SMTP-Verbindung ein Passwort für den angegebenen Benutzernamen erfordert, hinterlegen Sie es hier. Siehe bitte die Dokumentation Ihres Anbieters dafür.</p>
-<p>Hinweis: Obwohl das Passwort hier nicht angezeigt wird, wird es im Klartext in der Datenbanktabelle prefs gespeichert. Wenn Sie die Sicherheit erhöhen möchten, können Sie stattdessen die Konstante <code>SMTP_PASS</code> in Ihrer config.php definieren.</p>
+<p>Hinweis: Obwohl das Passwort hier nicht angezeigt wird, wird es im Klartext in der Datenbanktabelle prefs gespeichert. Wenn Sie die Sicherheit erhöhen möchten, können Sie stattdessen die Konstante <code>SMTP_PASS</code> in Ihrer <code>config.php</code> definieren.</p>
         ]]></item>
         <item id="smtp_port" title="SMTP-Port"><![CDATA[
 <h2>SMTP port</h2>
@@ -849,17 +849,17 @@ Wenn eine Bausteinvorlage verarbeitet werden muss (wenn sie Textpattern-Tags ent
     <li>587 - Standard (empfohlen) für sichere TLS-E-Mails</li>
 </ul>
 <p>Möglicherweise nutzt Ihr SMTP-Anbieter einen anderen Port; bitte schauen Sie in dessen Dokumentation nach.</p>
-<p>Dieser Wert kann auch durch die Konstante <code>SMTP_PORT</code> in der config.php festgelegt werden, in dem Fall ist der Wert in den Einstellungen ausgegraut.</p>
+<p>Dieser Wert kann auch durch die Konstante <code>SMTP_PORT</code> in der <code>config.php</code> festgelegt werden, in dem Fall ist der Wert in den Einstellungen ausgegraut.</p>
         ]]></item>
         <item id="smtp_sectype" title="SMTP-Sicherheitsmethode"><![CDATA[
 <h2>SMTP security method</h2>
 <p>Wählen Sie den Mechanismus, den Ihr SMTP-Anbieter als E-Mail-Sicherheitsprotokoll verwendet. Schauen Sie in der Dokumentation des Anbieters nach Details.</p>
-<p>Dieser Wert kann auch durch die Konstante <code>SMTP_SECTYPE</code> in der config.php festgelegt werden, wobei er dann in den Einstellungen ausgegraut erscheint.</p>
+<p>Dieser Wert kann auch durch die Konstante <code>SMTP_SECTYPE</code> in der <code>config.php</code> festgelegt werden, wobei er dann in den Einstellungen ausgegraut erscheint.</p>
         ]]></item>
         <item id="smtp_user" title="SMTP-Benutzername"><![CDATA[
 <h2>SMTP user name</h2>
 <p>Falls Ihre SMTP-Verbindung einen Benutzernamen bzw. Login erfordert, geben Sie ihn hier an. Siehe bitte die Dokumentation Ihres Anbieters.</p>
-<p>Dieser Wert kann auch durch die Konstante <code>SMTP_USER</code> in der config.php festgelegt werden, wobei er dann in den Einstellungen ausgegraut erscheint.</p>
+<p>Dieser Wert kann auch durch die Konstante <code>SMTP_USER</code> in der <code>config.php</code> festgelegt werden, wobei er dann in den Einstellungen ausgegraut erscheint.</p>
         ]]></item>
         <item id="spam_blocklists" title="Spam-Blacklists (kommagetrennt)"><![CDATA[
 <h2>Spam-Blocklisten (durch Kommas getrennt)</h2>

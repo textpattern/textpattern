@@ -939,12 +939,12 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         <item id="smtp_host" title="Host SMTP"><![CDATA[
 <h2>Host SMTP</h2>
 <p>Per migliorare la consegna dei messaggi e sfruttare l'invio di email tramite un servizio esterno (SendGrid, AWS SES, Mailchimp, Mailgun, ecc.), specifica qui l'endpoint host SMTP. Consulta la documentazione del tuo fornitore SMTP per ottenere questo valore.</p>
-<p>Questo valore può essere fornito definendo una costante <code>SMTP_HOST</code> in config.php, nel qual caso il valore apparirà disabilitato nel pannello Preferenze.</p>
+<p>Questo valore può essere fornito definendo una costante <code>SMTP_HOST</code> in <code>config.php</code>, nel qual caso il valore apparirà disabilitato nel pannello Preferenze.</p>
         ]]></item>
         <item id="smtp_pass" title="Password SMTP"><![CDATA[
 <h2>Password SMTP</h2>
 <p>Se la connessione SMTP richiede una password per l'utente specificato, inseriscila qui. Consulta la documentazione del tuo fornitore per i dettagli.</p>
-<p>Nota: anche se la password non verrà mostrata qui, verrà comunque memorizzata in testo normale nella tabella prefs del database. Se desideri maggiore sicurezza, puoi invece definire una costante <code>SMTP_PASS</code> nel tuo file config.php.</p>
+<p>Nota: anche se la password non verrà mostrata qui, verrà comunque memorizzata in testo normale nella tabella prefs del database. Se desideri maggiore sicurezza, puoi invece definire una costante <code>SMTP_PASS</code> nel tuo file <code>config.php</code>.</p>
         ]]></item>
         <item id="smtp_port" title="Porta SMTP"><![CDATA[
 <h2>SMTP port</h2>
@@ -955,7 +955,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
     <li>587 - impostazione predefinita (consigliata) per TLS</li>
 </ul>
 <p>Controlla la documentazione del tuo fornitore SMTP per la porta corretta.</p>
-<p>Puoi definire <code>SMTP_PORT</code> in config.php, nel qual caso il valore è in sola lettura nel pannello Preferenze.</p>
+<p>Puoi definire <code>SMTP_PORT</code> in <code>config.php</code>, nel qual caso il valore è in sola lettura nel pannello Preferenze.</p>
         ]]></item>
         <item id="smtp_sectype" title="Metodo di sicurezza SMTP"><![CDATA[
 <h2>Metodo di sicurezza SMTP</h2>
@@ -965,7 +965,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         <item id="smtp_user" title="Nome utente SMTP"><![CDATA[
 <h2>Nome utente SMTP</h2>
 <p>Se la connessione SMTP richiede un nome utente, inseriscilo qui. Consulta la documentazione del tuo provider per maggiori dettagli.</p>
-<p>Puoi definire <code>SMTP_USER</code> in config.php, nel qual caso il valore sarà bloccato nel pannello Preferenze.</p>
+<p>Puoi definire <code>SMTP_USER</code> in <code>config.php</code>, nel qual caso il valore sarà bloccato nel pannello Preferenze.</p>
         ]]></item>
         <item id="spam_blocklists" title="Liste nere degli spammer (separate da virgola)"><![CDATA[
 <h2>Liste nere degli spammer (separate da virgola)</h2>

@@ -924,12 +924,12 @@ title="HTML"
         <item id="smtp_host" title="Hôte SMTP"><![CDATA[
 <h2>Hôte SMTP</h2>
 <p>Pour améliorer la délivrabilité des e-mails et/ou utiliser un service externe (SendGrid, AWS SES, Mailchimp, Mailgun, etc.), spécifiez l’hôte SMTP ici. Consultez la documentation de votre fournisseur SMTP pour connaître la valeur correcte.</p>
-<p>Cette valeur peut aussi être définie via la constante <code>SMTP_HOST</code> dans config.php ; dans ce cas, l’option sera grisée dans les Préférences.</p>
+<p>Cette valeur peut aussi être définie via la constante <code>SMTP_HOST</code> dans <code>config.php</code> ; dans ce cas, l’option sera grisée dans les Préférences.</p>
         ]]></item>
         <item id="smtp_pass" title="Mot de passe SMTP"><![CDATA[
 <h2>Mot de passe SMTP</h2>
 <p>Si votre connexion SMTP exige un mot de passe pour l’utilisateur spécifié, indiquez-le ici. Consultez la documentation du fournisseur pour plus de détails.</p>
-<p>Remarque : même s’il ne sera pas affiché ici, il <em>sera</em> stocké en clair dans la table prefs de la base de données. Pour plus de sécurité, vous pouvez définir la constante <code>SMTP_PASS</code> dans config.php.</p>
+<p>Remarque : même s’il ne sera pas affiché ici, il <em>sera</em> stocké en clair dans la table prefs de la base de données. Pour plus de sécurité, vous pouvez définir la constante <code>SMTP_PASS</code> dans <code>config.php</code>.</p>
         ]]></item>
         <item id="smtp_port" title="Port SMTP"><![CDATA[
 <h2>Port SMTP</h2>
@@ -939,17 +939,17 @@ title="HTML"
     <li>465 : hérité (non officiel) pour TLS/SSL</li>
     <li>587 : par défaut (recommandé) pour TLS</li>
 </ul>
-<p>Votre fournisseur SMTP peut utiliser un autre port, vérifiez sa documentation.</p>\n<p>Cette valeur peut aussi être définie via la constante <code>SMTP_PORT</code> dans config.php ; dans ce cas, l’option sera grisée dans les Préférences.</p>
+<p>Votre fournisseur SMTP peut utiliser un autre port, vérifiez sa documentation.</p>\n<p>Cette valeur peut aussi être définie via la constante <code>SMTP_PORT</code> dans <code>config.php</code> ; dans ce cas, l’option sera grisée dans les Préférences.</p>
         ]]></item>
         <item id="smtp_sectype" title="Méthode de sécurité SMTP"><![CDATA[
 <h2>Méthode de sécurité SMTP</h2>
 <p>Choisissez le protocole de sécurité utilisé par votre fournisseur SMTP. Consultez la documentation concernée pour plus de détails.</p>
-<p>Cette valeur peut également être définie via la constante <code>SMTP_SECTYPE</code> dans config.php, auquel cas elle sera grisée dans les Préférences.</p>
+<p>Cette valeur peut également être définie via la constante <code>SMTP_SECTYPE</code> dans <code>config.php</code>, auquel cas elle sera grisée dans les Préférences.</p>
         ]]></item>
         <item id="smtp_user" title="Nom d’utilisateur SMTP"><![CDATA[
 <h2>Nom d’utilisateur SMTP</h2>
 <p>Si votre connexion SMTP demande un identifiant, fournissez-le ici. Consultez la documentation du fournisseur pour plus de détails.</p>
-<p>Cette valeur peut être définie via la constante <code>SMTP_USER</code> dans config.php, auquel cas elle sera grisée dans les Préférences.</p>
+<p>Cette valeur peut être définie via la constante <code>SMTP_USER</code> dans <code>config.php</code>, auquel cas elle sera grisée dans les Préférences.</p>
         ]]></item>
         <item id="spam_blocklists" title="Listes noires anti-spam (séparées par une virgule)"><![CDATA[
 <h2>Liste de blocage des spams (séparés par une virgule)</h2>
