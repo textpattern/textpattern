@@ -132,10 +132,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
 function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false, $disabled = false)
 {
     $out = array();
-
-    $selected = false;
-    $multiple = is_array($value);
-    $multiple or $value = (string) $value;
+    $selected = 0;
 
     if (is_array($disabled)) {
         $disable = $disabled;
@@ -144,16 +141,20 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $disable = array();
     }
 
-    if (is_array($blank_first)) {
-        $array = $blank_first + $array;
-        $blank_first = false;
+    if ($blank_first) {
+        $array = (is_array($blank_first) ? $blank_first : array('' => ' ')) + $array;
+    }
+
+    if (!($multiple = is_array($value))) {
+        $value = ((string) $value === '' && !isset($array['']) ? array() : array((string) $value));
     }
 
     foreach ($array as $avalue => $alabel) {
         $atts = array('value' => $avalue, 'dir' => 'auto', 'disabled' => in_array($avalue, $disable));
 
-        if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
-            $atts['selected'] = $selected = true;
+        if (in_array((string) $avalue, $value)) {
+            $atts['selected'] = true;
+            $selected++;
         }
 
         if (is_array($alabel)) {
@@ -166,8 +167,11 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $out[] = '<option'.$atts.'>'.txpspecialchars($alabel).'</option>';
     }
 
-    if ($blank_first) {
-        array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
+    if ($value && $selected < count($value)) {
+        foreach (array_diff($value, $array) as $v) {
+            $atts = join_atts(array('value' => $v, 'dir' => 'auto', 'selected' => true, 'disabled' => true), TEXTPATTERN_STRIP_NONE);
+            $out[] = '<option'.$atts.'>'.txpspecialchars(gTxt('invalid_argument')).'</option>';
+        }
     }
 
     $name_m = (is_array($name) ? $name['name'] : $name).($multiple ? '[]' : '');
