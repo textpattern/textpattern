@@ -1385,20 +1385,16 @@ function textile_main_fields($incoming, $options = array('lite' => false))
         $incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
     }
 
-    if (isset($incoming['Body'])) {
-        $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
-            $incoming['textile_body'],
-            $incoming['Body'],
-            array('field' => 'Body', 'options' => $options, 'data' => $incoming)
-        );
-    }
-
-    if (isset($incoming['Excerpt'])) {
-        $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
-            $incoming['textile_excerpt'],
-            $incoming['Excerpt'],
-            array('field' => 'Excerpt', 'options' => $options, 'data' => $incoming)
-        );
+    foreach (array('Body', 'Excerpt') as $field) try {
+        if (isset($incoming[$field])) {
+            $incoming[$field.'_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
+                $incoming['textile_'.strtolower($field)],
+                $incoming[$field],
+                array('field' => $field, 'options' => $options, 'data' => $incoming)
+            );
+        }
+    } catch (Exception $e) {
+        $incoming[$field.'_html'] = false;
     }
 
     return $incoming;
@@ -1853,65 +1849,7 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
-    $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
-        'class'             => 'txp-textarea-preview txp-reduced-ui-button',
-        'data-preview-link' => 'body',
-        'type'              => 'button',
-    )) : '';
-
-    // Article markup selection.
-    if (has_privs('article.set_markup')) {
-        // Markup help.
-        $help = '';
-        $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
-        isset($textfilter_opts[$rs['textile_body']]) or $rs['textile_body'] = LEAVE_TEXT_UNTOUCHED;
-
-        $html_markup = array();
-
-        foreach ($textfilter_opts as $filter_key => $filter_name) {
-            $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
-            $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
-            $selected = (string)$filter_key === (string)$rs['textile_body'];
-
-            $html_markup[] = tag(
-                $filter_name, 'option', array(
-                    'data-id'   => $filter_key,
-                    'data-help' => $renderHelp,
-                    'selected'  => $selected,
-                )
-            );
-
-            if ($selected) {
-                $help = $renderHelp;
-            }
-        }
-
-        // Note: not using span() for the textfilter help, because it doesn't render empty content.
-        $html_markup = tag(
-            implode(n, $html_markup),
-            'select',
-            array('class' => 'jquery-ui-selectmenu')
-        )
-            . tag_void('input', array(
-                'class' => 'textfilter-value',
-                'name'  => 'textile_body',
-                'type'  => 'hidden',
-                'value' => $rs['textile_body'],
-            ));
-        $textarea_options = n . '<label>' . gTxt('textfilter') . n . $html_markup . '</label>' .
-            '<span class="textfilter-help">' . $help . '</span>' . $textarea_options;
-    }
-
-    $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">' . $textarea_options . '</div>';
-    $out = inputLabel(
-        'body',
-        '<textarea id="body" name="Body" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_REGULAR . '">' . txpspecialchars($rs['Body']) . '</textarea>',
-        array('body', $textarea_options),
-        array('body', 'instructions_body'),
-        array('class' => 'txp-form-field txp-form-field-textarea body')
-    );
-
-    return pluggable_ui('article_ui', 'body', $out, $rs);
+    return article_textarea($rs, 'body', TEXTAREA_HEIGHT_REGULAR);
 }
 
 /**
@@ -1926,31 +1864,42 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
+    return article_textarea($rs, 'excerpt', TEXTAREA_HEIGHT_SMALL);
+}
+
+function article_textarea($rs, $field = 'body', $size = array(INPUT_LARGE, TEXTAREA_HEIGHT_REGULAR))
+{
     $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
-        'data-preview-link' => 'excerpt',
+        'data-preview-link' => $field,
         'type'              => 'button',
     )) : '';
 
-    // Excerpt markup selection.
+    $textile_field = 'textile_' . $field;
+    $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
+
+    if (!isset($textfilter_opts[$rs[$textile_field]])) {
+        $textfilter_opts[$rs[$textile_field]] = false;//$rs[$textile_field] = LEAVE_TEXT_UNTOUCHED;
+        script_js(announce(gTxt('invalid_textfilter_'.$field), E_WARNING, TEXTPATTERN_ANNOUNCE_ASYNC), false);
+    }
+
+    // Markup selection.
     if (has_privs('article.set_markup')) {
         // Markup help.
         $help = '';
-        $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
-        isset($textfilter_opts[$rs['textile_excerpt']]) or $rs['textile_excerpt'] = LEAVE_TEXT_UNTOUCHED;
-
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
             $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
-            $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
-            $selected = (string)$filter_key === (string)$rs['textile_excerpt'];
+            $renderHelp = $thisHelp ? popHelp($thisHelp) : '';
+            $selected = (string)$filter_key === (string)$rs[$textile_field];
 
             $html_markup[] = tag(
-                $filter_name, 'option', array(
+                $filter_name === false ? gTxt('invalid_argument') : $filter_name, 'option', array(
                     'data-id'   => $filter_key,
                     'data-help' => $renderHelp,
                     'selected'  => $selected,
+                    'disabled'  => $filter_name === false,
                 )
             );
 
@@ -1959,7 +1908,6 @@ function article_partial_excerpt($rs)
             }
         }
 
-        // Note: not using span() for the textfilter help, because it doesn't render empty content.
         $html_markup = tag(
             implode(n, $html_markup),
             'select',
@@ -1967,24 +1915,40 @@ function article_partial_excerpt($rs)
         )
             . tag_void('input', array(
                 'class' => 'textfilter-value',
-                'name'  => 'textile_excerpt',
+                'name'  => $textile_field,
                 'type'  => 'hidden',
-                'value' => $rs['textile_excerpt'],
+                'value' => $rs[$textile_field],
             ));
-            $textarea_options = n . '<label>' . gTxt('textfilter') . n . $html_markup . '</label>' .
-                '<span class="textfilter-help">' . $help . '</span>' . $textarea_options;
+    } else {
+        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs[$textile_field]);
+        $help = $help ? popHelp($help) : '';
+        $html_markup = span(
+            $textfilter_opts[$rs[$textile_field]] === false ? gTxt('invalid_argument') : $textfilter_opts[$rs[$textile_field]],
+            array('class' => 'textfilter-value')
+        );
     }
 
+    // Note: not using span() for the textfilter help, because it doesn't render empty content.
+    $textarea_options = n . '<label>' . gTxt('textfilter') . n . $html_markup . '</label>' .
+        '<span class="textfilter-help">' . $help . '</span>' . $textarea_options;
+
+    list($cols, $rows) = is_array($size) ? $size + array(null, TEXTAREA_HEIGHT_REGULAR) : array(INPUT_LARGE, $size);
     $textarea_options = '<div class="txp-textarea-options txp-textfilter-options no-ui-button">' . $textarea_options . '</div>';
+    $db_field = ucfirst($field);
+
     $out = inputLabel(
-        'excerpt',
-        '<textarea id="excerpt" name="Excerpt" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '">' . txpspecialchars($rs['Excerpt']) . '</textarea>',
-        array('excerpt', $textarea_options),
-        array('excerpt', 'instructions_excerpt'),
-        array('class' => 'txp-form-field txp-form-field-textarea excerpt')
+        $field,
+        tag(
+            $rs[$db_field] !== '' ? txpspecialchars($rs[$db_field]) : null,
+            'textarea',
+            array('id' => $field, 'name' => $db_field, 'cols' => $cols, 'rows' => $rows)
+        ),
+        array($field, $textarea_options),
+        array($field, 'instructions_'.$field),
+        array('class' => 'txp-form-field txp-form-field-textarea '.$field)
     );
 
-    return pluggable_ui('article_ui', 'excerpt', $out, $rs);
+    return pluggable_ui('article_ui', $field, $out, $rs);
 }
 
 /**
