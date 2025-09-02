@@ -537,7 +537,7 @@ function safe_insert($table, $set, $debug = false)
  * Inserts a new row, or updates an existing if a matching row is found.
  *
  * @param  string       $table The table
- * @param  string       $set   The set clause
+ * @param  string|array $set   The set clause
  * @param  string|array $where The where clause
  * @param  bool         $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE

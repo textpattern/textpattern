@@ -655,6 +655,7 @@ function svgtopx($svgsize)
     }
 
     preg_match('/([0-9\.]*)([A-Za-z]*)/', $svgsize, $matches);
+
     switch (substr($matches[2], 0, 2)) {
         case '':
             return($svgsize);
@@ -678,10 +679,6 @@ function svgtopx($svgsize)
             return($matches[1]);
             break;
     }
-}
-
-if (!defined('IMAGETYPE_SVG')) {
-    define('IMAGETYPE_SVG', 99);
 }
 
 /**
@@ -823,6 +820,7 @@ function txp_image_type_to_mime_type($image_type)
   if ($image_type == IMAGETYPE_SVG) {
     return 'image/svg+xml';
   }
+
   return image_type_to_mime_type($image_type);
 }
 
