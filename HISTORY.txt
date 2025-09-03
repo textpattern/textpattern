@@ -17,6 +17,7 @@ Changes in 4.9.0 (upcoming)
 * Developer: Permitted concurrent logins. See Advanced Prefs.
 * Developer: Removed duplicate pluggable_ui callback for
   article_ui›categories (thanks, jools-r).
+* Developer: Added pophelp support in a plugins' own /lang directory.
 * Vendors: DOMPurify 3.2.6.
 * Vendors: PHPMailer 6.10.0.
 
