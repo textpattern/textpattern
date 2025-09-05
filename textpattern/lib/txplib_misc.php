@@ -3637,7 +3637,9 @@ function fetch_form($name, $theme = null, &$fname = null)
         }
     } elseif (!isset($forms[$theme][$name])) {
         foreach ($names as $name) {
-            if (!isset($forms[$theme][$name])) {
+            if ($name === '*') {
+                return false;
+            } elseif (!isset($forms[$theme][$name])) {
                 $fetched[0] = $name;
                 $forms[$theme][$name] = $custom ?
                     callback_event('form.fetch', '', false, compact('name', 'skin', 'theme')) :
