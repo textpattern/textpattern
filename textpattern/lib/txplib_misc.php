@@ -436,6 +436,7 @@ function load_lang($lang, $events = null)
 /**
  * Gets a list of user groups.
  *
+ * @param bool $keys Whether to fetch the array as keys (true) or gTxt() strings (false)
  * @return  array
  * @package User
  * @example
@@ -444,11 +445,13 @@ function load_lang($lang, $events = null)
  * );
  */
 
-function get_groups()
+function get_groups($keys = false)
 {
     global $txp_groups;
 
-    return doArray($txp_groups, 'gTxt');
+    callback_event_ref('user', 'groups', 0, $txp_groups);
+
+    return $keys ? $txp_groups : doArray($txp_groups, 'gTxt');
 }
 
 /**
