@@ -304,7 +304,7 @@ class IXR_Message
                 $valueFlag = true;
                 break;
             case 'double':
-                $value = (double)trim($this->_currentTagContents);
+                $value = (float)trim($this->_currentTagContents);
                 $valueFlag = true;
                 break;
             case 'string':

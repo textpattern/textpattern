@@ -361,11 +361,11 @@ class wet_thumb
 
         if ($this->crop != false) {
             if ($this->_SRC['height'] < $this->_SRC['width']) {
-                $ratio = (double) ($this->_SRC['height'] / $this->_DST['height']);
+                $ratio = (float) ($this->_SRC['height'] / $this->_DST['height']);
                 $cpyWidth = round($this->_DST['width'] * $ratio);
 
                 if ($cpyWidth > $this->_SRC['width']) {
-                    $ratio = (double) ($this->_SRC['width'] / $this->_DST['width']);
+                    $ratio = (float) ($this->_SRC['width'] / $this->_DST['width']);
                     $cpyWidth = $this->_SRC['width'];
                     $cpyHeight = round($this->_DST['height'] * $ratio);
                     $off_w = 0;
@@ -378,11 +378,11 @@ class wet_thumb
                     $this->_SRC['width'] = $cpyWidth;
                 }
             } else {
-                $ratio = (double) ($this->_SRC['width'] / $this->_DST['width']);
+                $ratio = (float) ($this->_SRC['width'] / $this->_DST['width']);
                 $cpyHeight = round($this->_DST['height'] * $ratio);
 
                 if ($cpyHeight > $this->_SRC['height']) {
-                    $ratio = (double) ($this->_SRC['height'] / $this->_DST['height']);
+                    $ratio = (float) ($this->_SRC['height'] / $this->_DST['height']);
                     $cpyHeight = $this->_SRC['height'];
                     $cpyWidth = round($this->_DST['width'] * $ratio);
                     $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
