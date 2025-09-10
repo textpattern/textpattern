@@ -53,6 +53,6 @@ class FalseConstraint extends Constraint
 
     public function validate()
     {
-        return !(boolean)$this->value;
+        return !(bool)$this->value;
     }
 }
