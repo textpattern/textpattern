@@ -1250,9 +1250,6 @@ function category_popup($name, $val, $id)
 
 function tab($tabevent, $view, $tag = 'li')
 {
-    $state = ($view == $tabevent) ? 'active' : '';
-    $pressed = ($view == $tabevent) ? 'true' : 'false';
-
     if (is_array($tabevent)) {
         list($tabevent, $label) = $tabevent + array(null, gTxt('text'));
     } else {
@@ -1261,13 +1258,11 @@ function tab($tabevent, $view, $tag = 'li')
 
     $link = tag($label, 'button', array(
         'data-view-mode' => $tabevent ? $tabevent : false,
-        'aria-pressed'   => $pressed,
         'class'          => 'txp-reduced-ui-button',
         'type'           => 'button',
     ));
 
     return $tag ? n . tag($link, 'li', array(
-        'class' => $state,
         'id'    => 'tab-' . $tabevent,
     )) : $link;
 }
