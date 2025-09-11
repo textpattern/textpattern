@@ -436,6 +436,7 @@ function load_lang($lang, $events = null)
 /**
  * Gets a list of user groups.
  *
+ * @param bool $keys Whether to fetch the array as keys (true) or gTxt() strings (false)
  * @return  array
  * @package User
  * @example
@@ -444,11 +445,13 @@ function load_lang($lang, $events = null)
  * );
  */
 
-function get_groups()
+function get_groups($keys = false)
 {
     global $txp_groups;
 
-    return doArray($txp_groups, 'gTxt');
+    callback_event_ref('user', 'groups', 0, $txp_groups);
+
+    return $keys ? $txp_groups : doArray($txp_groups, 'gTxt');
 }
 
 /**
@@ -655,6 +658,7 @@ function svgtopx($svgsize)
     }
 
     preg_match('/([0-9\.]*)([A-Za-z]*)/', $svgsize, $matches);
+
     switch (substr($matches[2], 0, 2)) {
         case '':
             return($svgsize);
@@ -678,10 +682,6 @@ function svgtopx($svgsize)
             return($matches[1]);
             break;
     }
-}
-
-if (!defined('IMAGETYPE_SVG')) {
-    define('IMAGETYPE_SVG', 99);
 }
 
 /**
@@ -823,6 +823,7 @@ function txp_image_type_to_mime_type($image_type)
   if ($image_type == IMAGETYPE_SVG) {
     return 'image/svg+xml';
   }
+
   return image_type_to_mime_type($image_type);
 }
 
@@ -3661,7 +3662,9 @@ function fetch_form($name, $theme = null, &$fname = null)
         }
     } elseif (!isset($forms[$theme][$name])) {
         foreach ($names as $name) {
-            if (!isset($forms[$theme][$name])) {
+            if ($name === '*') {
+                return false;
+            } elseif (!isset($forms[$theme][$name])) {
                 $fetched[0] = $name;
                 $forms[$theme][$name] = $custom ?
                     callback_event('form.fetch', '', false, compact('name', 'skin', 'theme')) :

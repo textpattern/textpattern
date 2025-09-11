@@ -378,8 +378,8 @@
 <p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this message can be safely ignored.</p>
 <p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP functions ... are disabled on your server"><![CDATA[
-<h2>PHP functions ... are disabled on your server</h2>
+        <item id="some_php_functions_disabled" title="PHP functions [&#8230;] are disabled on your server"><![CDATA[
+<h2>PHP functions [&#8230;] are disabled on your server</h2>
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
@@ -766,7 +766,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="enhanced_email" title="Use enhanced mail features"><![CDATA[
 <h2>Use enhanced mail features</h2>
 <p>Setting this to ‘No’ will route all email - such as account password reset requests, and email from plugins such as com_connect - through PHP's <code>mail()</code> function. Selecting ‘Yes’ will use the bundled PHPMailer instead, which opens up optional settings for routing mail via external SMTP servers.</p>
-<p>If you are having trouble with reception of emails (especially in online providers such as gmail, hotmail, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
+<p>If you are having trouble with deliverability of emails (especially with online providers such as Gmail, Outlook, Yahoo!, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
         ]]></item>
         <item id="expire_logs_after" title="Logs expire after how many days?"><![CDATA[
 <h2>Logs expire after how many days?</h2>
@@ -963,13 +963,13 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="smtp_host" title="SMTP host"><![CDATA[
 <h2>SMTP host</h2>
-<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP hosting endpoint URL here. Consult your SMTP provider to obtain this value.</p>
-<p>This value may be provided by defining an <code>SMTP_HOST</code> constant in config.php, in which case the value is greyed out in the Preferences panel.</p>
+<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP server here. Consult your SMTP provider to obtain this value.</p>
+<p>This value may be provided by defining an <code>SMTP_HOST</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="smtp_pass" title="SMTP password"><![CDATA[
 <h2>SMTP password</h2>
 <p>If your SMTP connection requires a password for the specified user name, provide it here. Consult the provider's documentation for details.</p>
-<p>Note: Although the password will not be displayed here, it <em>will</em> be stored in plaintext in the database prefs table. If you wish to increase security, you may define an <code>SMTP_PASS</code> constant in your config.php instead.</p>
+<p>Note: Although the password will not be displayed here, it <em>will</em> be stored in plaintext in the database prefs table. If you wish to increase security, you may define an <code>SMTP_PASS</code> constant in your <code>config.php</code> instead.</p>
         ]]></item>
         <item id="smtp_port" title="SMTP port"><![CDATA[
 <h2>SMTP port</h2>
@@ -980,17 +980,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     <li>587 - default (recommended) for secure TLS email</li>
 </ul>
 <p>Your SMTP provider of choice may well use a different port, so consult their documentation.</p>
-<p>This value may be provided by defining an <code>SMTP_PORT</code> constant in config.php, in which case the value is greyed out in the Preferences panel.</p>
+<p>This value may be provided by defining an <code>SMTP_PORT</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="smtp_sectype" title="SMTP security method"><![CDATA[
 <h2>SMTP security method</h2>
 <p>Choose the mechanism your SMTP provider uses as its email security protocol. Consult their documentation for details.</p>
-<p>This value may be provided by defining an <code>SMTP_SECTYPE</code> constant in config.php, in which case the value is greyed out in the Preferences panel.</p>
+<p>This value may be provided by defining an <code>SMTP_SECTYPE</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="smtp_user" title="SMTP user name"><![CDATA[
 <h2>SMTP user name</h2>
 <p>If your SMTP connection requires a user/login name, provide it here. Consult the provider's documentation for details.</p>
-<p>This value may be provided by defining an <code>SMTP_USER</code> constant in config.php, in which case the value is greyed out in the Preferences panel.</p>
+<p>This value may be provided by defining an <code>SMTP_USER</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="spam_blocklists" title="Spam blocklists (comma-separated)"><![CDATA[
 <h2>Spam blocklists (comma-separated)</h2>

@@ -1040,6 +1040,15 @@ if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
 }
 
 /**
+  * Custom image type for SVG
+  *
+  * @since   4.9.0
+  */
+if (!defined('IMAGETYPE_SVG')) {
+    define('IMAGETYPE_SVG', 99);
+}
+
+/**
  * A tab character.
  *
  * @var string

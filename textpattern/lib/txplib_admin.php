@@ -329,13 +329,14 @@ function check_gd($image_type)
  * @package Image
  */
 
-function findSVG($node, &$svg) {
+function txpfindSVG($node, &$svg) {
     if ($node->getName() == 'svg') {
         $svg = $node;
         return;
     }
+
     foreach ($node->children() as $child) {
-        findSVG($child, $svg);
+        txpfindSVG($child, $svg);
     }
 }
 
@@ -350,22 +351,27 @@ function findSVG($node, &$svg) {
 function imagecreatefromsvg($file, $makestandalone = true)
 {
     $xml = file_get_contents($file);
+
     if ($makestandalone) {
         $xmlend = strpos($xml, '?>') + 2;
         $xmltree = simplexml_load_string($xml);
         $svg = null;
-        findSVG($xmltree, $svg);
+
+        txpfindSVG($xmltree, $svg);
+
         if ($svg == null) {
             return false;
         }
+
         $newxml = $svg->asXML();
+
         if (substr($newxml, 0, 5) != "<?xml") {
             return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
         } else {
             return $newxml . PHP_EOL;
         }
     } else {
-      return $xml;
+        return $xml;
     }
 }
 
@@ -380,6 +386,7 @@ function imagecreatefromsvg($file, $makestandalone = true)
 function txpgetimagesize($file)
 {
     $content = file_get_contents($file);
+
     if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
         return getimagesize($file);
     }
@@ -393,28 +400,34 @@ function txpgetimagesize($file)
     }
 
     $svg = null;
-    findSVG($xml, $svg);
+    txpfindSVG($xml, $svg);
+
     if ($svg == null) {
         return false;
     }
  
-    $width = svgtopx($svg['width']);
-    $height = svgtopx($svg['height']);
+    $width = txpsvgtopx($svg['width']);
+    $height = txpsvgtopx($svg['height']);
+
     if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
         if (empty($svg['viewBox'])) {
             return false;
         }
+
         $viewbox = explode(' ', $svg['viewBox']);
         $width = $viewbox[2] - $viewbox[0];
         $height = $viewbox[3] - $viewbox[1];
+
         if ($width <= 0 || $height <= 0) {
             return false;
         }
     }
+
     $data = array();
     $data[0] = $width;
     $data[1] = $height;
     $data[2] = IMAGETYPE_SVG;
+
     return $data;
 }
 
@@ -462,6 +475,7 @@ function txpimagesize($file, $create = false)
         } else {
             $data['image'] = $imgf($file);
         }
+
         if ($data['image']) {
             $data[0] or $data[0] = imagesx($data['image']);
             $data[1] or $data[1] = imagesy($data['image']);
@@ -1125,6 +1139,7 @@ function shift_uploaded_file($f, $dest, $issvg = false)
     if ($issvg) {
         if (($svg = imagecreatefromsvg($f)) !== false) {
             unlink($f);
+
             if (file_put_contents($dest, $svg) !== false)
                 return true;
         }

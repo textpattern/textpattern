@@ -347,7 +347,7 @@
 <p>De lo contrario, verifique y modifique la configuración de “URL del sitio” en Preferencias de administrador según sea necesario. En el mensaje de advertencia previa al piloto en el panel “Diagnóstico” se muestra una conjetura de la URL correcta del sitio.</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="Las funciones de PHP [...] están deshabilitadas en su servidor"><![CDATA[
-<h2>Las funciones PHP ... están deshabilitadas en su servidor</h2>
+<h2>Las funciones PHP [&#8230;] están deshabilitadas en su servidor</h2>
 <p>El host del sitio o el administrador del servidor ha deshabilitado una o más funciones de PHP, algunas de las cuales pueden afectar la ejecución de Textpattern.</p>
 <p>Consulte la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentación del usuario de Textpattern <span class="ui-icon ui-icon-extlink">(abre un enlace externo en una nueva ventana)</span></a> para obtener más información.</p>
         ]]></item>
@@ -709,7 +709,7 @@
         <item id="enhanced_email" title="Usar características de correo mejoradas"><![CDATA[
 <h2>Usar características de correo mejoradas</h2>
 <p>Si estableces esta opción en “No”, todo el correo (como solicitudes de restablecimiento de contraseña de la cuenta y correos enviados por plugins como com_connect) se enviarán a través de la función <code>mail()</code> de PHP. Al elegir “Sí”, se utilizará en su lugar el PHPMailer incluido, lo que habilita parámetros opcionales para enviar correos a través de servidores SMTP externos.</p>
-<p>Si tienes problemas con la recepción de correos (sobre todo en proveedores en línea como Gmail, Hotmail, etc.), es probable que tu dominio no se considere una fuente fiable. Cambiar a “Sí” puede mejorar la entregabilidad. Usar SMTP a menudo mejorará aún más la entregabilidad.</p>
+<p>Si tienes problemas con la recepción de correos (sobre todo en proveedores en línea como Gmail, Outlook, Yahoo!, etc.), es probable que tu dominio no se considere una fuente fiable. Cambiar a “Sí” puede mejorar la entregabilidad. Usar SMTP a menudo mejorará aún más la entregabilidad.</p>
         ]]></item>
         <item id="expire_logs_after" title="¿En cuántos días caducan los registros?"><![CDATA[
 <h2>¿En cuántos días caducan los registros?</h2>
@@ -898,12 +898,12 @@
         <item id="smtp_host" title="Servidor SMTP"><![CDATA[
 <h2>SMTP host</h2>
 <p>Para mejorar la entregabilidad de los mensajes y aprovechar el envío de correos mediante un servicio externo (como SendGrid, AWS SES, Mailchimp, Mailgun, etc.), especifica aquí la URL del servidor SMTP. Consulta la documentación de tu proveedor SMTP para más información.</p>
-<p>Este valor se puede proporcionar definiendo una constante <code>SMTP_HOST</code> en config.php; en ese caso, el valor aparecerá deshabilitado en el panel de Preferencias.</p>
+<p>Este valor se puede proporcionar definiendo una constante <code>SMTP_HOST</code> en <code>config.php</code>; en ese caso, el valor aparecerá deshabilitado en el panel de Preferencias.</p>
         ]]></item>
         <item id="smtp_pass" title="Contraseña SMTP"><![CDATA[
 <h2>SMTP password</h2>
 <p>Si tu conexión SMTP requiere una contraseña para el usuario especificado, introdúcela aquí. Consulta la documentación de tu proveedor para más detalles.</p>
-<p>Nota: Aunque la contraseña no se mostrará aquí, sí se almacenará en texto sin formato en la tabla de preferencias de la base de datos. Si deseas más seguridad, puedes definir una constante <code>SMTP_PASS</code> en tu config.php.</p>
+<p>Nota: Aunque la contraseña no se mostrará aquí, sí se almacenará en texto sin formato en la tabla de preferencias de la base de datos. Si deseas más seguridad, puedes definir una constante <code>SMTP_PASS</code> en tu <code>config.php</code>.</p>
         ]]></item>
         <item id="smtp_port" title="Puerto SMTP"><![CDATA[
 <h2>SMTP port</h2>
@@ -914,17 +914,17 @@
     <li>587 - predeterminado (recomendado) para correo seguro TLS</li>
 </ul>
 <p>Puede que tu proveedor SMTP use un puerto diferente, así que revisa su documentación.</p>
-<p>Este valor puede definirse en config.php con la constante <code>SMTP_PORT</code>, en cuyo caso aparecerá deshabilitado en el panel de Preferencias.</p>
+<p>Este valor puede definirse en <code>config.php</code> con la constante <code>SMTP_PORT</code>, en cuyo caso aparecerá deshabilitado en el panel de Preferencias.</p>
         ]]></item>
         <item id="smtp_sectype" title="Método de seguridad SMTP"><![CDATA[
 <h2>Método de seguridad SMTP</h2>
 <p>Elige el mecanismo que tu proveedor SMTP usa como protocolo de seguridad. Consulta su documentación para más detalles.</p>
-<p>Este valor puede definirse con la constante <code>SMTP_SECTYPE</code> en config.php; en ese caso, aparecerá deshabilitado en el panel de Preferencias.</p>
+<p>Este valor puede definirse con la constante <code>SMTP_SECTYPE</code> en <code>config.php</code>; en ese caso, aparecerá deshabilitado en el panel de Preferencias.</p>
         ]]></item>
         <item id="smtp_user" title="Nombre de usuario SMTP"><![CDATA[
 <h2>SMTP user name</h2>
 <p>Si la conexión SMTP requiere un nombre de usuario o login, proporciónalo aquí. Consulta la documentación de tu proveedor para más detalles.</p>
-<p>Este valor puede definirse con la constante <code>SMTP_USER</code> en config.php; en ese caso, aparecerá deshabilitado en el panel de Preferencias.</p>
+<p>Este valor puede definirse con la constante <code>SMTP_USER</code> en <code>config.php</code>; en ese caso, aparecerá deshabilitado en el panel de Preferencias.</p>
         ]]></item>
         <item id="spam_blocklists" title="Listas de bloqueo por spam (separadas por comas)"><![CDATA[
 <h2>Listas de bloqueo de spam (separadas por comas)</h2>
@@ -1030,7 +1030,7 @@
         ]]></item>
         <item id="section_uses_page" title="Usa página"><![CDATA[
 <h2>Utiliza la página</h2>
-<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente...</p>
+<p>En Textpattern, las secciones están casadas con plantillas de página. Es una especie de dulce, realmente&#8230;</p>
         ]]></item>
         <item id="section_uses_skin" title="Utiliza el tema"><![CDATA[
 <h2>Utiliza el tema</h2>
