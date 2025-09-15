@@ -6,6 +6,7 @@ Changes in 4.9.0 (upcoming)
   recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
+* Changed: Pending articles may be displayed on the site.
 * Fixed: remove 'br' tags from article image markup where >1 is image is
   supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
@@ -18,6 +19,11 @@ Changes in 4.9.0 (upcoming)
 * Developer: Removed duplicate pluggable_ui callback for
   article_ui›categories (thanks, jools-r).
 * Developer: Added pophelp support in plugin 'lang' directory.
+* Developer: Articles (list) panel callbacks:
+    articles>fields and articles>from to manipulate the query
+    articles>controls to affect the button area
+    articles_ui>list.row (pluggable_ui) for adding table data
+    articles>steps for plugins to register custom panel-level functionality.
 * Vendors: DOMPurify 3.2.6.
 * Vendors: PHPMailer 6.10.0.
 

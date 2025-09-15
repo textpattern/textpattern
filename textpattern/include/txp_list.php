@@ -290,17 +290,16 @@ function list_list($message = '', $post = '')
             )
         );
 
-    $createBlock = array();
+    $buttons = array();
 
     if (has_privs('article.edit.own')) {
-        $createBlock[] =
-            n . tag(
-                sLink('article', '', gTxt('create_article'), 'txp-button'),
-                'div', array('class' => 'txp-control-panel')
-            );
+        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
     }
 
-    $createBlock = implode(n, $createBlock);
+    callback_event_ref('articles', 'controls', 'panel', $buttons);
+
+    $createBlock = n . tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+
     $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator($event, 'article');
