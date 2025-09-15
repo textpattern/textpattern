@@ -49,7 +49,7 @@ if ($event == 'list') {
     );
 
     $plugin_steps = array();
-    callback_event_ref('list', 'steps', 0, $plugin_steps);
+    callback_event_ref('articles', 'steps', 0, $plugin_steps);
 
     $statuses = status_list();
 
@@ -173,8 +173,8 @@ function list_list($message = '', $post = '')
         LEFT JOIN " . safe_pfx('txp_section') . " section ON section.name = textpattern.Section
         LEFT JOIN " . safe_pfx('txp_users') . " user ON user.name = textpattern.AuthorID";
 
-    callback_event_ref('list', 'fields', 'list', $fields);
-    callback_event_ref('list', 'from', 'list', $sql_from);
+    callback_event_ref('articles', 'fields', 'list', $fields);
+    callback_event_ref('articles', 'from', 'list', $sql_from);
 
     $fieldlist = array();
 
@@ -492,7 +492,7 @@ function list_list($message = '', $post = '')
                         ? td($comments, '', 'txp-list-col-comments')
                         : ''
                     ).
-                    pluggable_ui('list_ui', 'list.row', '', $a)
+                    pluggable_ui('articles_ui', 'list.row', '', $a)
                 );
             }
 
