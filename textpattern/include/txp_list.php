@@ -62,8 +62,12 @@ if ($event == 'list') {
         $all_sections[$name] = $title;
     }
 
-    if ($step && bouncer($step, $available_steps)) {
-        $step();
+    if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
+        if (array_key_exists($step, $available_steps)) {
+            $step();
+        } else {
+            callback_event('articles', $step, 0);
+        }
     } else {
         list_list();
     }
