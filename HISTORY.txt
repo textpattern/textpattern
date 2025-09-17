@@ -7,7 +7,7 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
 * Changed: Pending articles may be displayed on the site.
-* Fixed: remove 'br' tags from article image markup where >1 is image is
+* Fixed: remove 'br' tags from article image markup where >1 image is
   supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
