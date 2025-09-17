@@ -1265,7 +1265,7 @@ function load_plugin($name, $force = false)
 function require_plugin($name)
 {
     if (!load_plugin($name)) {
-        trigger_error(gTxt('plugin_include_error', array('{name}' => $name)), E_USER_ERROR);
+        trigger_error(gTxt('plugin_include_error', array('{name}' => $name)));
 
         return false;
     }
