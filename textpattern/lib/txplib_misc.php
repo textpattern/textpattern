@@ -1255,7 +1255,7 @@ function load_plugin($name, $force = false)
 /**
  * Loads a plugin.
  *
- * Identical to load_plugin() except upon failure it issues an E_USER_ERROR.
+ * Identical to include_plugin().
  *
  * @param  string $name The plugin
  * @return bool
@@ -1264,13 +1264,7 @@ function load_plugin($name, $force = false)
 
 function require_plugin($name)
 {
-    if (!load_plugin($name)) {
-        trigger_error(gTxt('plugin_include_error', array('{name}' => $name)));
-
-        return false;
-    }
-
-    return true;
+    return include_plugin($name);
 }
 
 /**
@@ -5739,7 +5733,7 @@ function assert_int($myvar)
         return (int) $myvar;
     }
 
-    trigger_error(gTxt('assert_int_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
+    trigger_error(gTxt('assert_int_value', array('{name}' => (string) $myvar)));
 
     return false;
 }
@@ -5757,7 +5751,7 @@ function assert_string($myvar)
         return $myvar;
     }
 
-    trigger_error(gTxt('assert_string_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
+    trigger_error(gTxt('assert_string_value', array('{name}' => (string) $myvar)));
 
     return false;
 }
@@ -5775,7 +5769,7 @@ function assert_array($myvar)
         return $myvar;
     }
 
-    trigger_error(gTxt('assert_array_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
+    trigger_error(gTxt('assert_array_value', array('{name}' => (string) $myvar)));
 
     return false;
 }

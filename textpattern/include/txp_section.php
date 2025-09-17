@@ -736,7 +736,7 @@ function section_toggle_option()
         }
     }
 
-    trigger_error(gTxt('section_save_failed'), E_USER_ERROR);
+    trigger_error(gTxt('section_save_failed'));
 }
 
 /**

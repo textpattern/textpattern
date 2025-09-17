@@ -252,7 +252,7 @@ function updateVolatilePartials($partials)
     foreach ($partials as $k => $p) {
         // Volatile partials need a target DOM selector.
         if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
-            trigger_error(gTxt('empty_partial_selector', array('{name}' => $k)), E_USER_ERROR);
+            trigger_error(gTxt('empty_partial_selector', array('{name}' => $k)));
         } else {
             // Build response script.
             list($selector, $fragment) = (array)$p['selector'] + array(null, null);
