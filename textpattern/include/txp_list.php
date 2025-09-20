@@ -42,6 +42,15 @@ if ($event == 'list') {
 
     require_privs('article');
 
+    $available_steps = array(
+        'list_list'          => false,
+        'list_change_pageby' => true,
+        'list_multi_edit'    => true,
+    );
+
+    $plugin_steps = array();
+    callback_event_ref('articles', 'steps', 0, $plugin_steps);
+
     $statuses = status_list();
 
     $all_cats = getTree('root', 'article');
@@ -53,14 +62,12 @@ if ($event == 'list') {
         $all_sections[$name] = $title;
     }
 
-    $available_steps = array(
-        'list_list'          => false,
-        'list_change_pageby' => true,
-        'list_multi_edit'    => true,
-    );
-
-    if ($step && bouncer($step, $available_steps)) {
-        $step();
+    if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
+        if (array_key_exists($step, $available_steps)) {
+            $step();
+        } else {
+            callback_event('articles', $step, 0);
+        }
     } else {
         list_list();
     }
@@ -77,6 +84,110 @@ function list_list($message = '', $post = '')
 {
     global $statuses, $use_comments, $comments_disabled_after, $step, $txp_user, $event;
 
+    $show_authors = !has_single_author('textpattern', 'AuthorID');
+
+    $fields = array(
+        'ID' => array(
+            'column' => 'textpattern.ID',
+            'label' => 'id',
+            'visible' => false,
+        ),
+        'Title' => array(
+            'column' => 'textpattern.Title',
+            'label' => 'title',
+            'class' => 'title',
+        ),
+        'posted' => array(
+            'column' => 'UNIX_TIMESTAMP(Posted)',
+            'label'  => 'posted',
+            'class'  => 'posted date',
+        ),
+        'lastmod' => array(
+            'column' => 'UNIX_TIMESTAMP(LastMod)',
+            'label'  => 'modified',
+            'class'  => 'lastmod date',
+        ),
+        'expires' => array(
+            'column' => 'UNIX_TIMESTAMP(Expires)',
+            'label'  => 'expires',
+            'class'  => 'expires date',
+        ),
+        'Section' => array(
+            'column' => 'textpattern.Section',
+            'label' => 'section',
+            'class' => 'section',
+        ),
+        'Category1' => array(
+            'column' => 'textpattern.Category1',
+            'label' => 'category1',
+            'class' => 'category1 category',
+        ),
+        'Category2' => array(
+            'column' => 'textpattern.Category2',
+            'label' => 'category2',
+            'class' => 'category2 category',
+        ),
+        'Status' => array(
+            'column' => 'textpattern.Status',
+            'label' => 'status',
+            'class' => 'status',
+        ),
+        'AuthorID' => array(
+            'column' => 'textpattern.AuthorID',
+            'label' => 'author',
+            'class' => 'author name',
+            'visible' => $show_authors,
+        ),
+        'Annotate' => array(
+            'column' => 'textpattern.Annotate',
+            'label' => 'comments',
+            'class' => 'comments',
+            'visible' => $use_comments,
+        ),
+        'url_title' => array(
+            'column' => 'textpattern.url_title',
+            'visible' => false,
+        ),
+        'category1_title' => array(
+            'column' => 'category1.title',
+            'visible' => false,
+        ),
+        'category2_title' => array(
+            'column' => 'category2.title',
+            'visible' => false,
+        ),
+        'section_title' => array(
+            'column' => 'section.title',
+            'visible' => false,
+        ),
+        'RealName' => array(
+            'column' => 'user.RealName',
+            'visible' => false,
+        ),
+        'total_comments' => array(
+            'column' => "(SELECT COUNT(*) FROM " . safe_pfx('txp_discuss') . " WHERE parentid = textpattern.ID)",
+            'visible' => false,
+        ),
+    );
+
+    $sql_from =
+        safe_pfx('textpattern') . " textpattern
+        LEFT JOIN " . safe_pfx('txp_category') . " category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
+        LEFT JOIN " . safe_pfx('txp_category') . " category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
+        LEFT JOIN " . safe_pfx('txp_section') . " section ON section.name = textpattern.Section
+        LEFT JOIN " . safe_pfx('txp_users') . " user ON user.name = textpattern.AuthorID";
+
+    callback_event_ref('articles', 'fields', 'list', $fields);
+    callback_event_ref('articles', 'from', 'list', $sql_from);
+
+    $fieldlist = array();
+
+    // Build field list: shame that array_filter() can't get keys and
+    // values 'til PHP 5.6. @todo One day.
+    foreach ($fields as $fld => $def) {
+        $fieldlist[] = isset($def['column']) ? $def['column'] . ' AS ' . $fld : $fld;
+    }
+
     pagetop(gTxt('tab_list'), $message);
 
     extract(gpsa(array(
@@ -89,13 +200,16 @@ function list_list($message = '', $post = '')
 
     if ($sort === '') {
         $sort = get_pref('article_sort_column', 'posted');
-    } else {
-        if (!in_array($sort, array('id', 'title', 'expires', 'section', 'category1', 'category2', 'status', 'author', 'comments', 'lastmod'))) {
-            $sort = 'posted';
-        }
-
-        set_pref('article_sort_column', $sort, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
+
+    if (!in_array($sort, array_keys(array_filter($fields, function($value) {
+            return !isset($value['sortable']) || !empty($value['sortable']);
+        })))
+    ) {
+        $sort = 'id';
+    }
+
+    set_pref('article_sort_column', $sort, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
     if ($dir === '') {
         $dir = get_pref('article_sort_dir', 'desc');
@@ -104,44 +218,7 @@ function list_list($message = '', $post = '')
         set_pref('article_sort_dir', $dir, 'list', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    $sesutats = array_flip($statuses);
-
-    switch ($sort) {
-        case 'id':
-            $sort_sql = "textpattern.ID $dir";
-            break;
-        case 'title':
-            $sort_sql = "textpattern.Title $dir, textpattern.ID DESC";
-            break;
-        case 'expires':
-            $sort_sql = "textpattern.Expires $dir, textpattern.ID DESC";
-            break;
-        case 'section':
-            $sort_sql = "section.title $dir, textpattern.ID DESC";
-            break;
-        case 'category1':
-            $sort_sql = "category1.title $dir, textpattern.ID DESC";
-            break;
-        case 'category2':
-            $sort_sql = "category2.title $dir, textpattern.ID DESC";
-            break;
-        case 'status':
-            $sort_sql = "textpattern.Status $dir, textpattern.ID DESC";
-            break;
-        case 'author':
-            $sort_sql = "user.RealName $dir, textpattern.ID DESC";
-            break;
-        case 'comments':
-            $sort_sql = "total_comments $dir, textpattern.ID DESC";
-            break;
-        case 'lastmod':
-            $sort_sql = "textpattern.LastMod $dir, textpattern.ID DESC";
-            break;
-        default:
-            $sort = 'posted';
-            $sort_sql = "textpattern.Posted $dir, textpattern.ID DESC";
-            break;
-    }
+    $sort_sql = $sort . ' ' . $dir . ($sort == 'id' ? '' : ", textpattern.ID $dir");
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -206,18 +283,7 @@ function list_list($message = '', $post = '')
 
     $search_render_options = array('placeholder' => 'search_articles');
 
-    $sql_from =
-        safe_pfx('textpattern') . " textpattern
-        LEFT JOIN " . safe_pfx('txp_category') . " category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
-        LEFT JOIN " . safe_pfx('txp_category') . " category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
-        LEFT JOIN " . safe_pfx('txp_section') . " section ON section.name = textpattern.Section
-        LEFT JOIN " . safe_pfx('txp_users') . " user ON user.name = textpattern.AuthorID";
-
-    if ($crit === '') {
-        $total = safe_count('textpattern', $criteria);
-    } else {
-        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
-    }
+    $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
     $searchBlock =
         n . tag(
@@ -228,17 +294,16 @@ function list_list($message = '', $post = '')
             )
         );
 
-    $createBlock = array();
+    $buttons = array();
 
     if (has_privs('article.edit.own')) {
-        $createBlock[] =
-            n . tag(
-                sLink('article', '', gTxt('create_article'), 'txp-button'),
-                'div', array('class' => 'txp-control-panel')
-            );
+        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
     }
 
-    $createBlock = implode(n, $createBlock);
+    callback_event_ref('articles', 'controls', 'panel', $buttons);
+
+    $createBlock = n . tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+
     $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator($event, 'article');
@@ -246,48 +311,17 @@ function list_list($message = '', $post = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
-        $contentBlock .= graf(
-            span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
-            gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
-            array('class' => 'alert-block information')
-        );
+        if ($crit !== '') {
+            $contentBlock .= graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
+                gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
+                array('class' => 'alert-block information')
+            );
+        }
     } else {
-        $show_authors = !has_single_author('textpattern', 'AuthorID');
-
-        $headers = array(
-            'title'     => 'title',
-            'posted'    => 'posted',
-            'lastmod'   => 'modified',
-            'expires'   => 'expires',
-            'section'   => 'section',
-            'category1' => 'category1',
-            'category2' => 'category2',
-            'status'    => 'status',
-        );
-
-        if ($show_authors) {
-            $headers['author'] = 'author';
-        }
-
-        if ($use_comments) {
-            $headers['comments'] = 'comments';
-        }
-
-        $rs = safe_query(
-            "SELECT
-                textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
-                textpattern.Category1, textpattern.Category2,
-                textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
-                UNIX_TIMESTAMP(textpattern.Posted) AS posted,
-                UNIX_TIMESTAMP(textpattern.LastMod) AS lastmod,
-                UNIX_TIMESTAMP(textpattern.Expires) AS expires,
-                category1.title AS category1_title,
-                category2.title AS category2_title,
-                section.title AS section_title,
-                user.RealName AS RealName,
-                (SELECT COUNT(*) FROM " . safe_pfx('txp_discuss') . " WHERE parentid = textpattern.ID) AS total_comments
-            FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-        );
+        $rs = safe_query("SELECT " . implode(', ', $fieldlist) .
+            " FROM $sql_from".
+            " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit");
 
         if ($rs) {
             $common_atts = array(
@@ -299,9 +333,8 @@ function list_list($message = '', $post = '')
                 'method' => $search_method,
             );
 
-            $dates = array('posted', 'lastmod', 'expires');
-
-            $head_row = hCell(
+            $headings = array();
+            $headings[] = hCell(
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
                 '', 'class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
             ) . column_head(array(
@@ -310,13 +343,16 @@ function list_list($message = '', $post = '')
                 'sort'  => 'id'
             ) + $common_atts);
 
-            foreach ($headers as $header => $column_head) {
-                $head_row .= column_head(array(
-                        'options' => array(
-                            'class' => trim('txp-list-col-' . $header . ($header == $sort ? " $dir" : '') . (in_array($header, $dates) ? ' date' : ''))),
-                        'value' => $column_head,
-                        'sort'  => $header
-                    ) + $common_atts);
+            foreach ($fields as $col => $opts) {
+                if (isset($opts['visible']) && empty($opts['visible'])) {
+                    continue;
+                }
+
+                $headings[] = column_head(array(
+                    'options' => array('class' => trim('txp-list-col-' . (empty($opts['class']) ? $col : $opts['class']) . ($col == $sort ? " $dir" : ''))),
+                    'value' => empty($opts['label']) ? $col : $opts['label'],
+                    'sort' => $col,
+                ) + $common_atts);
             }
 
             $contentBlock .= n . tag_start('form', array(
@@ -333,7 +369,7 @@ function list_list($message = '', $post = '')
                 )) .
                 n . tag_start('table', array('class' => 'txp-list')) .
                 n . tag_start('thead') .
-                tr($head_row) .
+                tr(implode(n, $headings)) .
                 n . tag_end('thead');
 
             include_once txpath . '/publish/taghandlers.php';
@@ -458,7 +494,8 @@ function list_list($message = '', $post = '')
                         $use_comments
                         ? td($comments, '', 'txp-list-col-comments')
                         : ''
-                    )
+                    ).
+                    pluggable_ui('articles_ui', 'list.row', '', $a)
                 );
             }
 

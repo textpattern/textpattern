@@ -450,7 +450,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     }
 
     if ($result === false) {
-        trigger_error(mysqli_error($DB->link), E_USER_ERROR);
+        trigger_error(mysqli_error($DB->link));
     }
 
     if (!$result) {

@@ -103,7 +103,7 @@ try {
     foreach ($updates as $dbupdate => $update) {
         if (version_compare($dbversion, $dbupdate, '<') && version_compare($dbupdate, $baseversion, '<=')) {
             if ($update && (include txpath . DS . 'update' . DS . '_to_' . $dbupdate . '.php') === false) {
-                trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
+                trigger_error('Something bad happened. Not sure what exactly');
             }
 
             if (!($txp_is_dev && $thisversion == $dbupdate)) {

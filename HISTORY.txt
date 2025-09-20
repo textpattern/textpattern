@@ -6,11 +6,12 @@ Changes in 4.9.0 (upcoming)
   recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
-* Fixed: remove 'br' tags from article image markup where >1 is image is
+* Changed: Pending articles may be displayed on the site.
+* Fixed: remove 'br' tags from article image markup where >1 image is
   supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
-* Added: filter articles by image.
+* Added: Filter articles by image.
 * Added: 'exclude' attribute to <txp:images />.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
@@ -18,7 +19,12 @@ Changes in 4.9.0 (upcoming)
 * Developer: Removed duplicate pluggable_ui callback for
   article_ui›categories (thanks, jools-r).
 * Developer: Added pophelp support in plugin 'lang' directory.
-* Vendors: DOMPurify 3.2.6.
+* Developer: Articles (list) panel callbacks:
+    articles>fields and articles>from to manipulate the query
+    articles>controls to affect the button area
+    articles_ui>list.row (pluggable_ui) for adding table data
+    articles>steps for plugins to register custom panel-level functionality.
+* Vendors: DOMPurify 3.2.7.
 * Vendors: PHPMailer 6.10.0.
 
 Changes in 4.9.0-beta.2 (14 Mar 2025)
@@ -60,7 +66,7 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
   instead.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
-* Fixed: Avoid  traversal when uploading plugins (thanks, bg1).
+* Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
 * Fixed: Compiled plugins upload on PHP 5.6.
 * Fixed: Windows-generated .zip plugins installable on Linux.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of
@@ -161,7 +167,7 @@ Changes in 4.8.8 (24 Jan 2022)
 * Added: Custom date formats.
 * Changed: <txp:category_list /> with 'children' >1 attribute behaviour.
 * Changed: Global 'escape' attribute operates at the items level in lists.
-* Changed: Multi-site plugins  defaults to site/admin/plugins.
+* Changed: Multi-site plugins directory defaults to site/admin/plugins.
 * Accessibility: Additional 'aria-label' attributes for some internal links.
 * Internal: Removed FOUND_ROWS() which is deprecated in MySQL 8.0.17.
 * Internal: Prefer is_readable() and is_file() to file_exists().
@@ -223,7 +229,7 @@ Changes in 4.8.5 (29 Mar 2021)
 * Fixed: Database connection issue for new installations on PHP 8.0.
 * Fixed: libxml_disable_entity_loader() deprecation warning on PHP 8.0.
 * Fixed: Undefined array key/offset warnings on PHP 8.0.
-* Fixed: System temp  notice on PHP 8.0.
+* Fixed: System temp directory notice on PHP 8.0.
 * Fixed: Custom field ordering on Write panel.
 * Fixed: Diagnostics panel strings no longer have 'Help' appended.
 * Fixed: Draft/hidden/pending articles output 404 Not Found status as they
@@ -368,7 +374,7 @@ Changes in 4.8.0 (25 Feb 2020)
 * Changed: Minimum system requirements increased to PHP 5.5.
 * Changed: <txp:newer /> and <txp:older /> tags support pagination ranges.
 * Changed: Author's real name is available in <txp:page_url>.
-* Changed: Refined scope of root .htaccess, and restricted  listing
+* Changed: Refined scope of root .htaccess, and restricted directory listing
   in /files/ and /textpattern/ with their respective .htaccess.
 * Changed: Non-searchable sections can be omitted from <txp:section_list>
   output with valueless 'exclude' attribute.
@@ -775,11 +781,11 @@ Changes in 4.6.0 (10 Sep 2016)
   becoming obsolete (thanks Ruud van Melick).
 * Removed: Modernizr - unnecessary due to Internet Explorer 11 being the minimum
   Internet Explorer browser requirement.
-* Changed: The /textpattern/theme/  has been renamed to
+* Changed: The /textpattern/theme/ directory has been renamed to
   /textpattern/admin-themes/ for stronger differentiation between this and the
-  public-side /themes/  planned for Textpattern 4.7. Additionally
+  public-side /themes/ directory planned for Textpattern 4.7. Additionally
   prevents breakage of preferences panel caused by old, incompatible themes
-  residing in the previously titled admin theme  during upgrade.
+  residing in the previously titled admin theme directory during upgrade.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude
   articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
@@ -1037,7 +1043,7 @@ Changes in 4.4.0 (26 Mar 2011)
   for sites running any older version. Thanks, Neal Poole.
 * Passwords are case-sensitive.
 * Hotlink protection for files: Downloads from a web-accessible '/files'
-   are inhibited. The '/file_download/$id/example.foo' route is the
+  directory are inhibited. The '/file_download/$id/example.foo' route is the
   only valid way to access downloadable files. Requires an Apache web server and
   usage of the sample .htaccess file.
 * Empty <txp:variable></txp:variable> container sets a variable's value to "".
@@ -1308,7 +1314,7 @@ Changes in 4.0.6 (02 Feb 2008)
   Santana, Vladimir Siljkovic, Süleyman Şentürk, Quang Anh Do).
 * Developer: using add_privs() for admin-side plugins is now required (used to
   be optional for publisher-only plugins).
-* Developer: dmp() prints debug output to a file in the temporary 
+* Developer: dmp() prints debug output to a file in the temporary directory
   according to preferences. Define 'txpdmpfile' for the file name.
 * Developer: Added 'modified' and 'status' to global $thisarticle array.
 * Developer: Added 'is_logged_in()' function to check on the public side if the
