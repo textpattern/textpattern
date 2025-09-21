@@ -1,0 +1,4 @@
+type_id INT(12) UNSIGNED NOT NULL,
+meta_id INT(12) UNSIGNED NOT NULL,
+
+PRIMARY KEY (type_id,meta_id)

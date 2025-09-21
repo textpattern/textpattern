@@ -1,7 +1,8 @@
-meta_id    INT(12)       NULL DEFAULT NULL,
-content_id INT(12)       NULL DEFAULT NULL,
-value_id   TINYINT(4)    NULL DEFAULT '0',
+type_id    INT(12)       NOT NULL DEFAULT 0,
+meta_id    INT(12)       NOT NULL DEFAULT 0,
+content_id INT(12)       NOT NULL DEFAULT 0,
+value_id   TINYINT(4)    NULL DEFAULT 0,
 value_raw  VARCHAR(7500) NULL DEFAULT NULL,
 value      VARCHAR(7500) NULL DEFAULT NULL,
 
-UNIQUE KEY meta_content (meta_id,content_id,value_id)
+PRIMARY KEY (type_id,meta_id,content_id,value_id)

@@ -853,7 +853,7 @@ function image_format_info($image)
     }
 
     $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? txp_image_type_to_mime_type($mime) : '';
-
+/*
     $cfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
         ->filterCollectionAt('image', ($unix_ts ? $unix_ts : $txpnow));
 
@@ -872,7 +872,7 @@ function image_format_info($image)
 
         $image[$cf->get('name')] = implode((string)$cf->get('delimiter'), $vals);
     }
-
+*/
     return $image;
 }
 
@@ -4528,48 +4528,66 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 {
     global $txpnow;
 
-    static $out = null;
+    static $out = null, $tableColumns = null, $contentTypes = null;
+
+    if ($out === null) {
+        $out = array();
+        $tableColumns = \Txp::get('Textpattern\Meta\ContentType')->getColumn();
+        $contentTypes = \Txp::get('Textpattern\Meta\ContentType')->getId();
+    }
 
     if ($when === null) {
         $when = $txpnow;
     }
 
     assert_int($when);
-
-    if (!isset($out[$when][$type])) {
-        $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
-            ->filterCollectionAt($type, $when);
-        $out[$when][$type] = array();
-
-        foreach ($cfs as $def) {
-            $thisId = $def->get('id');
-            $thisName = $def->get('name');
-            $out[$when][$type]['by_id'][$thisId] = $thisName;
-            $out[$when][$type]['by_name'][$thisName] = $thisId;
-            $out[$when][$type]['by_title'][$thisName][LANG] = $def->get('title');
-            $out[$when][$type]['by_field']['custom_' . $thisId] = $thisName;
-            $out[$when][$type]['by_type'][$thisId] = $def->get('data_type');
-            $out[$when][$type]['by_content'][$thisId] = $def->get('content_type');
-            $out[$when][$type]['by_callback'][$thisId] = $def->get('render');
-            $out[$when][$type]['by_family'][$thisId] = $def->get('family');
-            $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
-            $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
-            $out[$when][$type]['by_ordinal'][$thisId] = $def->get('ordinal');
-            $out[$when][$type]['by_created'][$thisId] = $def->get('created');
-            $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
-            $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
-        }
-
-        ksort($out, SORT_NUMERIC);
-    }
-
+    $types = do_list_unique($type);
     $by = 'by_'.$by;
 
-    if (isset($out[$when][$type][$by])) {
-        return $out[$when][$type][$by];
+    foreach ($types as $type) {
+        if (!isset($out[$when][$type])) {
+            $out[$when][$type] = array();
+            $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+                ->filterCollectionAt($type, $when);
+
+            foreach ($cfs as $def) {
+                $thisId = $def->get('id');
+                $thisName = $def->get('name');
+                $out[$when][$type]['by_id'][$thisId] = $thisName;
+                $out[$when][$type]['by_name'][$thisName] = $thisId;
+                $out[$when][$type]['by_title'][$thisName][LANG] = $def->get('title');
+                $out[$when][$type]['by_field']['custom_' . $thisId] = $thisName;
+                $out[$when][$type]['by_type'][$thisId] = $def->get('data_type');
+                $out[$when][$type]['by_content'][$thisId] = $def->get('content_type');
+                $out[$when][$type]['by_callback'][$thisId] = $def->get('render');
+                $out[$when][$type]['by_family'][$thisId] = $def->get('family');
+                $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
+                $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
+                $out[$when][$type]['by_ordinal'][$thisId] = $def->get('ordinal');
+                $out[$when][$type]['by_created'][$thisId] = $def->get('created');
+                $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
+                $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
+                $out[$when][$type]['by_column'][$thisId] = $tableColumns[$type];
+                $out[$when][$type]['by_content_id'][$thisId] = $contentTypes[$type];
+            }
+
+            ksort($out, SORT_NUMERIC);
+        }
     }
 
-    return $out[$when][$type];
+    if (count($types) <= 1) {
+        return isset($out[$when][$type][$by]) ? $out[$when][$type][$by] : $out[$when][$type];
+    }
+
+    $merge = array();
+
+    foreach ($types as $type) {
+        foreach ($out[$when][$type] as $k => $v) {
+            $merge[$k] = isset($merge[$k]) ? $merge[$k] + $v : $v;
+        }
+    }
+    
+    return isset($merge[$by]) ? $merge[$by] : $merge;
 }
 
 /**
@@ -4644,7 +4662,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
     $pairs = (array)$pairs;
     $pairs += array_fill_keys(getCustomFields(), null);
 
-    $table = safe_pfx('textpattern');
+//    $table = safe_pfx('textpattern');
     $columns = $where = array();
 
     if ($pairs && isset($custom['by_name'])) {
@@ -4654,6 +4672,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
+                $idColumn = $custom['by_column'][$no];
 
                 if (isset($val)) {
                     $not = $exclude === true || isset($exclude[$k]) ? 'NOT' : '';
@@ -4664,16 +4683,16 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $mode = empty($modes[$k]) ? 'any' : $modes[$k];
 
                         if ($unique || $val === true || $mode == 'any') {
-                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts))";
+                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts))";
                         } else {
                             $cmp = $mode == 'exact' ? '=' : '>=';
-                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID AND ($parts)) $cmp ".count($val);
+                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts)) $cmp ".count($val);
                         }
                     }
                 }
 
                 if ($unique) {
-                    $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID LIMIT 1)";
+                    $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn LIMIT 1)";
                 } else {
                     if (!empty($custom['by_aggregate'][$k]) && isset($aggregate[$custom['by_aggregate'][$k]])) {
                         $column = $aggregate[$custom['by_aggregate'][$k]];
@@ -4682,7 +4701,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $column = "GROUP_CONCAT(value SEPARATOR '$dlm')";
                     }
 
-                    $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $table.ID GROUP BY content_id)";
+                    $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn GROUP BY content_id)";
                 }
             }
         }

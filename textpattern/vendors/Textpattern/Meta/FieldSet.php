@@ -41,7 +41,7 @@ class FieldSet implements \IteratorAggregate
      * @var array
      */
 
-    protected $collection = array();
+    protected static $collection = array();
 
     /**
      * Filtered collection of Meta_Field entities by content type.
@@ -60,36 +60,36 @@ class FieldSet implements \IteratorAggregate
     public function __construct($type = 'article')
     {
         $type = (string)$type;
-
         // Haz cache?
-        if (!isset($this->collection[$type])) {
-            $cfs = safe_rows(
-                "id,
-                name,
-                content_type,
-                data_type,
-                render,
-                family,
-                textfilter,
-                delimiter,
-                ordinal,
-                created,
-                modified,
-                expires",
-                'txp_meta',
-                "content_type = '".doSlash($type)."'
-                ORDER BY family, ordinal"
-            );
+        if (!isset(self::$collection[$type])) {
+            $stype = doSlash($type);
+            $typeids = \Txp::get('Textpattern\Meta\ContentType')->getId(); //safe_field('id', 'txp_meta_entity', "name = '$stype'");
+            $typeid = isset($typeids[$type]) ? $typeids[$type] : 0;
+            self::$collection[$type] = array();
 
-            if (!isset($this->collection[$type])) {
-                $this->collection[$type] = array();
+            if ($typeid and $cfs = getRows("SELECT
+                m.id,
+                m.name,
+                '$stype' AS content_type,
+                m.data_type,
+                m.render,
+                m.family,
+                m.textfilter,
+                m.delimiter,
+                m.ordinal,
+                m.created,
+                m.modified,
+                m.expires
+                FROM ".PFX."txp_meta m JOIN ".PFX."txp_meta_fieldsets fs ON fs.meta_id = m.id
+                WHERE fs.type_id = $typeid
+                ORDER BY m.family, m.ordinal")
+            ) {
+                foreach ($cfs as $def) {
+                    self::$collection[$type][$def['id']] = new Field($def, $typeid);
+                }
             }
 
-            foreach ($cfs as $def) {
-                $this->collection[$type][$def['id']] = new Field($def);
-            }
-
-            $this->filterCollection = $this->collection[$type];
+            $this->filterCollection = self::$collection[$type];
         }
     }
 
@@ -103,27 +103,27 @@ class FieldSet implements \IteratorAggregate
 
     public function filterCollection($type, $by = null)
     {
-        if (isset($this->collection[$type])) {
+        if (isset(self::$collection[$type])) {
             $this->filterCollection = array();
 
             if ($by === null) {
-                $this->filterCollection = $this->collection[$type];
+                $this->filterCollection = self::$collection[$type];
             } else {
                 switch ($by) {
                     case 'id':
-                        foreach ($this->collection[$type] as $idx => $def) {
+                        foreach (self::$collection[$type] as $idx => $def) {
                             $this->filterCollection[$def->get('id')] = $def;
                         }
 
                         break;
                     case 'name':
-                        foreach ($this->collection[$type] as $idx => $def) {
+                        foreach (self::$collection[$type] as $idx => $def) {
                             $this->filterCollection[$def->get('name')] = $def;
                         }
 
                         break;
                     case 'field':
-                        foreach ($this->collection[$type] as $idx => $def) {
+                        foreach (self::$collection[$type] as $idx => $def) {
                             $this->filterCollection['custom_' . $def->get('id')] = $def;
                         }
 
@@ -156,7 +156,7 @@ class FieldSet implements \IteratorAggregate
 
         $this->filterCollection = array();
 
-        foreach ($this->collection[$type] as $idx => $def) {
+        foreach (self::$collection[$type] as $idx => $def) {
             $createStamp = safe_strtotime($def->get('created'));
             $expires = $def->get('expires');
             $expireStamp = empty($expires) ? 0 : safe_strtotime($expires);
@@ -178,10 +178,12 @@ class FieldSet implements \IteratorAggregate
     {
         assert_int($contentId);
 
+        $ids = \Txp::get('Textpattern\Meta\ContentType')->getId();
+        $typeId = isset($ids[$contentType]) ? $ids[$contentType] : 0;
         $cfq = array();
 
-        if (isset($this->collection[$contentType])) {
-            foreach ($this->collection[$contentType] as $id => $def) {
+        if ($typeId && isset(self::$collection[$contentType])) {
+            foreach (self::$collection[$contentType] as $id => $def) {
                 $cf_type = $def->get('data_type');
                 $custom_x = "custom_{$id}";
                 $raw = array();
@@ -222,11 +224,12 @@ class FieldSet implements \IteratorAggregate
         foreach ($cfq as $tableType => $data) {
             foreach ($data as $metaId => $content) {
                 $tableName = 'txp_meta_value_'.$tableType;
-                safe_delete($tableName, "meta_id = '" . doSlash($metaId) . "' AND content_id = $contentId");
+                $safeMetaId = doSlash($metaId);
+                safe_delete($tableName, "type_id = $typeId AND meta_id = '$safeMetaId' AND content_id = $contentId");
 
-                foreach ($content as $valueId => $set) {
-                    if ($all || isset($this->filterCollection[$metaId])) {
-                        $set .= ", meta_id = '" . doSlash($metaId) . "', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
+                if ($all || isset($this->filterCollection[$metaId])) {
+                    foreach ($content as $valueId => $set) {
+                        $set .= ", type_id = $typeId, meta_id = '$safeMetaId', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
                         safe_insert($tableName, $set);
                     }
                 }
@@ -253,7 +256,7 @@ class FieldSet implements \IteratorAggregate
 
     public function reset($type)
     {
-        $this->filterCollection = $this->collection[$type];
+        $this->filterCollection = self::$collection[$type];
 
         return $this;
     }

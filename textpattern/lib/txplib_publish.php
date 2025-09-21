@@ -852,28 +852,6 @@ function filterAtts($atts = null, $iscustom = null)
 
     $excluded === true or $excluded = array_fill_keys($excluded, true);
 
-    $customFields = getCustomFields('article', null, null);
-    $filterFields = ($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title');
-    $postWhere = $customPairs = $customlAtts = array();
-
-    foreach ($filterFields as $num => $field) {
-        $customlAtts[$field] = null;
-
-        if (isset($atts['custom_'.$num])) {
-            $customPairs[$field] = $atts['custom_'.$num];
-            $customlAtts['custom_'.$num] = null;
-        } elseif (isset($excluded[$field])) {
-            $customPairs[$field] = true;
-        }
-    }
-
-    foreach ($date_fields + $filterFields as $field => $val) {
-        if (isset($atts['$'.$field])) {
-            $postWhere['$'.$field] = $atts['$'.$field];
-            unset($atts['$'.$field]);
-        }
-    }
-
     $extralAtts = array(
         'form'          => 'default',
         'allowoverride' => !$iscustom,
@@ -938,9 +916,12 @@ function filterAtts($atts = null, $iscustom = null)
         return $coreAtts;
     }
 
+    $customFields = getCustomFields('article,book', null, null);
+    $filterFields = ($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title');
+    $searchFields = array();
     $postWhere = $customPairs = $customlAtts = array();
 
-    foreach (($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title') as $num => $field) {
+    foreach ($filterFields as $num => $field) {
         $customlAtts[$field] = null;
 
         if (isset($atts['custom_'.$num])) {
@@ -948,6 +929,18 @@ function filterAtts($atts = null, $iscustom = null)
             $customlAtts['custom_'.$num] = null;
         } elseif (isset($excluded[$field])) {
             $customPairs[$field] = true;
+        }
+
+        if (!empty($atts['sort']) && preg_match("/\b(custom_{$num}|{$field})\b/", $atts['sort'])) {
+            $atts['sort'] = preg_replace("/\bcustom_{$num}\b/", $field, $atts['sort']);
+            $searchFields[$field] = $num;
+        }
+    }
+
+    foreach ($date_fields + $filterFields as $field => $val) {
+        if (isset($atts['$'.$field])) {
+            $postWhere['$'.$field] = $atts['$'.$field];
+            unset($atts['$'.$field]);
         }
     }
 
@@ -1286,16 +1279,16 @@ function filterAtts($atts = null, $iscustom = null)
         }
     } elseif ($customData = buildCustomSql($customFields, $customPairs, $excluded, $modes)) {
         foreach ($customData['columns'] as $k => $column) {
-            $customColumns .= ", $column AS `$k`";
+            if ($fields === true || isset($searchFields[$k])) {
+                $customColumns .= ", $column AS `$k`";
+            }
         }
     }
 
-    if ($fields === true) {
-        $fields = implode(', ', $coreColumns).$customColumns.$score;
-    } elseif ($fields) {
+    if ($fields && $fields !== true) {
         $fields = ($groupby ? 'COUNT(*) AS count, ' : '').$fields.$score;
     } else {
-        $fields = implode(', ', $coreColumns).$score;
+        $fields = implode(', ', $coreColumns).$customColumns.$score;
     }
 
     $custom = !empty($customData['where']) ? ' AND '.implode(' AND ', $customData['where']) : '';
@@ -1328,7 +1321,7 @@ function filterAtts($atts = null, $iscustom = null)
         $out = array_diff_key($theAtts, $extralAtts);
         $trace->log('[filterAtts accepted]');
     }
-
+//dmp($theAtts);
     return $theAtts;
 }
 

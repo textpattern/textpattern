@@ -30,7 +30,6 @@ safe_create(
     "txp_meta",
     "`id` int(12) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(63) NULL DEFAULT NULL,
-    `content_type` varchar(31) NULL DEFAULT NULL,
     `data_type` varchar(31) NULL DEFAULT '',
     `render` varchar(255) NULL DEFAULT 'textInput',
     `family` varchar(255) NULL DEFAULT NULL,
@@ -41,7 +40,7 @@ safe_create(
     `modified` timestamp NULL DEFAULT NULL,
     `expires` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `name_content` (`name`,`content_type`)"
+    UNIQUE KEY `name` (`name`)"
 );
 
 // Allow multi-select options and constraints to be defined.
@@ -116,7 +115,6 @@ try {
                             "txp_meta",
                             "id = '$safeNum',
                             name = '$safeName',
-                            content_type = 'article',
                             data_type = 'varchar',
                             textfilter = 1,
                             ordinal = '$safeNum'

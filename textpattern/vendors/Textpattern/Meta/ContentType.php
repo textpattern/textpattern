@@ -33,14 +33,14 @@
 
 namespace Textpattern\Meta;
 
-class ContentType implements \IteratorAggregate
+class ContentType implements \IteratorAggregate, \Textpattern\Container\ReusableInterface
 {
     /**
      * Default content type map. May be altered by plugins.
      *
      * @var array
      */
-    protected $contentTypeMap = null;
+    protected $contentTypeMap = array();
 
     /**
      * General constructor for the map.
@@ -58,42 +58,66 @@ class ContentType implements \IteratorAggregate
      */
 
     public function __construct()
-    {
+    {/*
+        foreach (safe_column(array('name', 'id,label,txp_table,txp_column'), 'txp_meta_entity') as $name => $row) {
+            $this->contentTypeMap[$name] = array(
+                'id'     => $row['id'],
+                'key'    => $name,
+                'label'  => gTxt($row['label']),
+                'table'  => $row['txp_table'],
+                'column' => $row['txp_table'].'.'.$row['txp_column'],
+            );
+        }*/
+        $c = 1;
         $this->contentTypeMap = array(
             'article' => array(
+                'id'     => $c++,
                 'key'    => 'article',
                 'label'  => gTxt('article'),
+                'table'  => 'textpattern',
                 'column' => PFX.'textpattern.ID',
             ),
             'image' => array(
+                'id'     => $c++,
                 'key'    => 'image',
                 'label'  => gTxt('image'),
+                'table'  => 'txp_image',
                 'column' => PFX.'txp_image.id',
             ),
             'file' => array(
+                'id'     => $c++,
                 'key'    => 'file',
                 'label'  => gTxt('file'),
+                'table'  => 'txp_file',
                 'column' => PFX.'txp_file.id',
             ),
             'link' => array(
+                'id'     => $c++,
                 'key'    => 'link',
                 'label'  => gTxt('link'),
+                'table'  => 'txp_link',
                 'column' => PFX.'txp_link.id',
             ),
             'user' => array(
+                'id'     => $c++,
                 'key'    => 'user',
                 'label'  => gTxt('author'),
+                'table'  => 'txp_users',
                 'column' => PFX.'txp_users.user_id',
             ),
             'category' => array(
+                'id'     => $c++,
                 'key'    => 'category',
                 'label'  => gTxt('category'),
+                'table'  => 'txp_category',
                 'column' => PFX.'txp_category.id',
             ),
             'section' => array(
+                'id'     => $c++,
                 'key'    => 'section',
                 'label'  => gTxt('section'),
-                'column' => PFX.'section.name',
+                'table'  => 'txp_section',
+                'column' => PFX.'txp_section.name',
             ),
         );
 
@@ -108,19 +132,15 @@ class ContentType implements \IteratorAggregate
      * @return  array  A content types array
      */
 
-    protected function getItem($item = null, $exclude = array())
+    public function getItem($item = null, $exclude = array(), $key = 'key')
     {
         $map = $this->contentTypeMap;
 
-        if (!is_array($exclude)) {
-            $exclude = array();
-        }
-
-        foreach ($exclude as $remove) {
+        foreach ((array)$exclude as $remove) {
             unset($map[$remove]);
         }
 
-        return array_column($map, $item, 'key');
+        return array_column($map, $item, $key);
     }
 
     /**
@@ -133,6 +153,28 @@ class ContentType implements \IteratorAggregate
     public function getLabel($exclude = array())
     {
         return $this->getItem('label', $exclude);
+    }
+
+    /**
+     * Return the table of the given content type.
+     *
+     * @todo
+     */
+
+    public function getTable($exclude = array())
+    {
+        return $this->getItem('table', $exclude);
+    }
+
+    /**
+     * Return the table of the given content type.
+     *
+     * @todo
+     */
+
+    public function getId($exclude = array())
+    {
+        return $this->getItem('id', $exclude);
     }
 
     /**

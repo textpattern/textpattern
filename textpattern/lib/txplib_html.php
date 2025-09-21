@@ -1749,7 +1749,9 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     static $regex = '/([^\\\w\s]).+\1[UsiAmuS]*$/As',
         $import = array('wraptag', 'class', 'html_id', 'wrapform', 'break', 'breakby', 'breakclass', 'breakform', 'escape', 'trim', 'replace', 'limit', 'offset', 'sort');
 
-    $list = array_filter(is_array($list) ? $list : array($list), function ($v) {
+    $split = is_array($list);
+
+    $list = array_filter($split ? $list : array($list), function ($v) {
         return $v !== false;
     });
 
@@ -1762,6 +1764,15 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         unset($txp_atts[$global]);
     }
 
+    if ($break === true) {
+        $break = $wraptag ? txp_break($wraptag) : ',';
+    }
+
+    if (isset($break)) {
+        $breakout = strpos($break, '<+>') !== false;
+        $breakin = !$breakout && !preg_match('/^\w[\w\:\-\.]*$/', $break);
+    }
+
     if (isset($trim) || isset($replace)) {
         $replacement = $replace === true ? null : $replace;
 
@@ -1770,12 +1781,27 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
             !isset($replacement) or $list = preg_replace('/\s+/', $replacement, $list);
             $list = array_filter($list, function ($v) {return $v !== '';});
         } elseif (isset($trim) && $trim !== '') {
-            $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
-                preg_replace($trim, (string)$replacement, $list) :
-                (isset($replacement) ?
-                    str_replace($trim, $replacement, $list) :
-                    array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
-                );
+            if (!$split && !empty($breakin)) {
+                $trim = do_list($trim, $break);
+
+                if (isset($replacement) && strpos($replacement, $break) !== false) {
+                    $replacement = array_pad(do_list($replacement, $break), count($trim), '');
+                    $trim = array_combine($trim, $replacement);
+                    $list = array_map(function ($v) use ($trim) {return strtr($v, $trim);}, $list);
+                } else {
+                    $replacement = (string)$replacement;
+                    $list = str_replace($trim, $replacement, $list);
+                }
+
+                $break = null;
+            } else {
+                $list = strlen($trim) > 2 && preg_match($regex, $trim) ?
+                    preg_replace($trim, (string)$replacement, $list) :
+                    (isset($replacement) ?
+                        str_replace($trim, $replacement, $list) :
+                        array_map(function ($v) use ($trim) {return trim($v, $trim);}, $list)
+                    );
+            }
             $list = array_filter($list, function ($v) {return $v !== '';});
         } elseif (isset($replacement)) {
             $list = strlen($replacement) > 2 && preg_match($regex, $replacement) ?
@@ -1831,7 +1857,7 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         }
     }
 
-    if (($break || $breakform) && !empty($breakby)) { // array_merge to reindex
+    if (!empty($breakby)) { // array_merge to reindex
         $breakby = array_merge(array_filter(array_map('intval', do_list($breakby))));
         $newlist = array();
 
@@ -1880,28 +1906,22 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
         $atts .= ' class="'.txpspecialchars($class).'"';
     }
 
-    if ($breakclass) {
-        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
-    }
-
-    if ($break === true) {
-        $break = txp_break($wraptag);
-    }
-
     if ((string)$break === '') {
         $content = join('', $list);
-    } elseif (strpos($break, '<+>') !== false) {
+    } elseif (!empty($breakout)) {
         $content = array_reduce($list, function ($carry, $item) use ($break) {
             return $carry.str_replace('<+>', $item, $break);
         });
-    }
-    // Non-enclosing breaks.
-    elseif ($break === 'br' || $break === 'hr') {
-        $content = join("<$break".($breakatts ? " ".$breakatts : "").(get_pref('doctype') === 'html5' ? ">" : " />").n, $list);
-    } elseif (!preg_match('/^\w[\w\:\-\.]*$/', $break)) {
+    } elseif (!empty($breakin)) {
         $content = join($break, $list);
     } else {
-        $content = "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
+        if ($breakclass) {
+            $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
+        }
+
+        $content = $break === 'br' || $break === 'hr' ?    // Non-enclosing breaks.
+            join("<{$break}{$breakatts}".(get_pref('doctype') === 'html5' ? ">" : " />").n, $list) :
+            "<{$break}{$breakatts}>".join("</$break>".n."<{$break}{$breakatts}>", $list)."</{$break}>";
     }
 
     if (!empty($wrapform)) {

@@ -56,14 +56,16 @@ if ($event == 'meta') {
     );
 
     global $all_content_types, $all_render_types;
-    $all_content_types = Txp::get('\Textpattern\Meta\ContentType')->getLabel();
+    $all_content_types = Txp::get('\Textpattern\Meta\ContentType')->getItem('label', array(), 'id');
     $dataMap = Txp::get('\Textpattern\Meta\DataType')->get();
     $all_render_types = array_combine(array_keys($dataMap), array_keys($dataMap));
 
     $available_steps = array(
         'meta_list'          => false,
         'meta_edit'          => false,
+        'meta_type'          => false,
         'meta_save_ui'       => true,
+        'meta_save_type'     => true,
         'meta_change_pageby' => true,
         'meta_multi_edit'    => true,
     );
@@ -98,7 +100,7 @@ function meta_list($message = '')
     if ($sort === '') {
         $sort = get_pref('meta_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('id', 'name', 'content_type', 'render', 'family', 'ordinal', 'created', 'modified', 'expires'))) {
+        if (!in_array($sort, array('id', 'name', 'render', 'family', 'ordinal', 'created', 'modified', 'expires'))) {
             $sort = 'name';
         }
 
@@ -115,9 +117,6 @@ function meta_list($message = '')
     switch ($sort) {
         case 'id' :
             $sort_sql = "id $dir";
-            break;
-        case 'content_type' :
-            $sort_sql = "content_type $dir, id asc";
             break;
         case 'render' :
             $sort_sql = "render $dir, id asc";
@@ -155,12 +154,12 @@ function meta_list($message = '')
             'name' => array(
                 'column' => 'txp_meta.name',
                 'label'  => gTxt('name'),
-            ),
+            ),/*
             'content_type' => array(
-                'column' => 'txp_meta.content_type',
+                'column' => 'txp_meta_fieldsets.type_id',
                 'label'  => gTxt('content_type'),
                 'type'   => 'find_in_set',
-            ),
+            ),*/
             'data_type' => array(
                 'column' => 'txp_meta.data_type',
                 'label'  => gTxt('data_type'),
@@ -195,12 +194,6 @@ function meta_list($message = '')
 
     $search_render_options = array('placeholder' => 'search_meta');
 
-    if ($crit === '') {
-        $total = safe_count('txp_meta', $criteria);
-    } else {
-        $total = getThing("SELECT COUNT(*) FROM " . safe_pfx('txp_meta') . " WHERE $criteria");
-    }
-
     $searchBlock =
         n.tag(
             $search->renderForm('meta_list', $search_render_options),
@@ -221,6 +214,9 @@ function meta_list($message = '')
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
+    $total = safe_count('txp_meta', $criteria);
+
+    $sql_group = "(SELECT GROUP_CONCAT(type_id) FROM ".safe_pfx('txp_meta_fieldsets')." WHERE meta_id = txp_meta.id) AS content_type";
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -236,7 +232,7 @@ function meta_list($message = '')
             array('class' => 'alert-block information')
         );
     } else {
-        $rs = safe_rows_start('*', 'txp_meta', "$criteria order by $sort_sql limit $offset, $limit");
+        $rs = safe_rows_start("*, $sql_group", 'txp_meta', "$criteria order by $sort_sql limit $offset, $limit");
 
         if ($app_mode == 'json') {
             send_json_response($rs);
@@ -270,7 +266,7 @@ function meta_list($message = '')
                             (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                     ).
                     column_head(
-                        'content_type', 'content_type', 'meta', true, $switch_dir, $crit, $search_method,
+                        'content_type', 'content_type', 'meta', false, $switch_dir, $crit, $search_method,
                             (('content_type' == $sort) ? "$dir " : '').'txp-list-col-content-type'
                     ).
                     column_head(
@@ -302,6 +298,7 @@ function meta_list($message = '')
                 n.tag_start('tbody');
 
             $validator = new Validator();
+            $contentLabels = Txp::get('\Textpattern\Meta\ContentType')->getItem('label', array(), 'id');
 
             while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'meta');
@@ -322,6 +319,12 @@ TODO: constraints
                 $validator->setConstraints(array(new CategoryConstraint($meta_category, array('type' => 'meta'))));
                 $vc = $validator->validate() ? '' : ' error';
 */
+                $meta_labels = array();
+
+                foreach (do_list_unique($meta_content_type) as $_ct) {
+                    $meta_labels[] = isset($contentLabels[$_ct]) ? txpspecialchars($contentLabels[$_ct]) : $_ct;
+                }
+
                 $contentBlock .= tr(
                     td(
                         fInput('checkbox', 'selected[]', $meta_id), '', 'txp-list-col-multi-edit'
@@ -333,7 +336,7 @@ TODO: constraints
                         href(txpspecialchars($meta_name), $edit_url, ' title="'.gTxt('edit').'"'), '', 'txp-list-col-name'
                     ).
                     td(
-                        txpspecialchars($meta_content_type), '', 'txp-list-col-content-type'
+                        implode(br, $meta_labels), '', 'txp-list-col-content-type'
                     ).
                     td(
                         txpspecialchars($meta_render), '', 'txp-list-col-render'
@@ -398,7 +401,7 @@ function meta_edit($message = '')
     $label_ref = '';
     $help_ref = '';
     $inline_help_ref = '';
-    $options = array();
+    $options = $content_types = array();
 
     $rs = array();
 
@@ -425,6 +428,7 @@ function meta_edit($message = '')
 
             $default = $cf->get('default');
             $options = $cf->get('options');
+            $content_types = safe_column_num('type_id', 'txp_meta_fieldsets', "meta_id = $id");
         }
     } else {
         $render = 'textInput';
@@ -464,8 +468,8 @@ EOJS
                 'name', '', array('class' => 'txp-form-field edit-meta-name')
             ).
             inputLabel(
-                'content_type',
-                selectInput('content_type', $all_content_types, $content_type),
+                'content_types',
+                selectInput('content_types', $all_content_types, $content_types, false, '', 'content_types'),
                 'content_type', '', array('class' => 'txp-form-field edit-meta-content-type')
             ).
             inputLabel(
@@ -500,7 +504,7 @@ EOJS
             ).
             inputLabel(
                 'created',
-                fInput('text', 'created', txpspecialchars($created), '', '', '', INPUT_REGULAR, '', 'created'),
+                fInput('datetime-local', 'created', txpspecialchars($created), '', '', '', INPUT_REGULAR, '', 'created'),
                 'created', '', array('class' => 'txp-form-field edit-meta-created')
             ).n.tag(
                 checkbox('reset_time', '1', $reset_time, '', 'reset_time').
@@ -509,7 +513,7 @@ EOJS
             ).
             inputLabel(
                 'expires',
-                fInput('text', 'expires', txpspecialchars($expires), '', '', '', INPUT_REGULAR, '', 'expires'),
+                fInput('datetime-local', 'expires', txpspecialchars($expires), '', '', '', INPUT_REGULAR, '', 'expires'),
                 'expires', '', array('class' => 'txp-form-field edit-meta-expires')
             ).
             n.tag(
@@ -593,12 +597,12 @@ function meta_save()
             }
 
             $cf = new Field($varray['id']);
-            $id = $cf->save($varray);
-
+            $message = $cf->save($varray);
+/*
             if ($id) {
                 $_POST['id'] = $id;
                 $message = gTxt('meta_saved');
-            }
+            }*/
         }
     }
 
@@ -669,6 +673,7 @@ function meta_multi_edit()
             }
 
             if ($changed) {
+                safe_delete('txp_meta_fieldsets', 'meta_id in ('.join(',', $changed).')');
                 callback_event('meta_deleted', '', 0, $changed);
             }
 
@@ -718,3 +723,93 @@ function meta_multi_edit()
         ($method == 'delete' ? 'meta_deleted' : 'meta_updated'),
         array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
 }
+
+/**
+ * Renders and outputs the meta editor panel.
+ *
+ * @param string|array $message The activity message
+ */
+/*
+function meta_type($message = '')
+{
+    global $vars, $event, $step, $txp_user, $all_content_types, $all_render_types, $DB;
+
+    pagetop(gTxt('tab_meta'), $message);
+
+    extract(array_map('assert_string', gpsa($vars)));
+
+    $dataTypeObj = Txp::get('\Textpattern\Meta\DataType');
+    $data_types = $dataTypeObj->get();
+
+    $is_edit = ($id && $step === 'type_edit');
+    $default = '';
+    $label_ref = '';
+
+    $txp_tables = getThings('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = "'.$DB->db.'" AND TABLE_TYPE LIKE "BASE_TABLE" AND TABLE_NAME NOT LIKE "'.PFX.'txp\_meta%"');
+    $txp_tables = array_combine($txp_tables, $txp_tables);
+
+    $rs = array();
+
+    if ($is_edit) {
+        $id = assert_int($id);
+        $cf = new Field($id);
+        $rs = $cf->get();
+
+        if ($rs) {
+            if (!has_privs('meta')) {
+                meta_list(gTxt('restricted_area'));
+
+                return;
+            }
+
+            extract($rs);
+
+            $label_ref = $cf->getLabelReference($name);
+
+            $default = $cf->get('default');
+            $options = $cf->get('options');
+        }
+    } else {
+        $render = 'textInput';
+    }
+
+    if (has_privs('meta')) {
+        $caption = gTxt(($is_edit) ? 'edit_meta' : 'create_meta');
+
+        echo form(
+            hed($caption, 2).
+            inputLabel(
+                'labelStr',
+                fInput('text', 'labelStr', gTxt($label_ref), '', '', '', INPUT_REGULAR, '', 'labelStr'),
+                'label', '', array('class' => 'txp-form-field edit-meta-label')
+            ).
+            inputLabel(
+                'name',
+                fInput('text', 'name', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'name'),
+                'name', '', array('class' => 'txp-form-field edit-meta-name')
+            ).
+            inputLabel(
+                'txp_table',
+                selectInput('txp_table', $txp_tables, 'textpattern'),
+                'table', '', array('class' => 'txp-form-field edit-meta-content-type')
+            ).
+            inputLabel(
+                'txp_column',
+                fInput('text', 'txp_column', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'txp_column'),
+                'column', '', array('class' => 'txp-form-field edit-meta-name')
+            ).
+            pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
+            graf(
+                sLink('meta', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
+            eInput('meta').
+            sInput('meta_save_type').
+            hInput('id', $id).
+            hInput('search_method', gps('search_method')).
+            hInput('crit', gps('crit')).
+            hInput('name_orig', $name)
+        , '', '', 'post', 'txp-edit', '', 'meta_details');
+    }
+}    */

@@ -500,7 +500,13 @@ function safe_delete($table, $where, $debug = false)
 
 function safe_update($table, $set, $where, $debug = false)
 {
-    return (bool) safe_query("UPDATE ".safe_pfx($table)." SET $set WHERE $where", $debug);
+    try {
+        return (bool) safe_query("UPDATE ".safe_pfx($table)." SET $set WHERE $where", $debug);
+    } catch (Exception $e) {
+        trigger_error($e->getMessage());
+    }
+
+    return false;
 }
 
 /**
@@ -523,11 +529,14 @@ function safe_insert($table, $set, $debug = false)
 {
     global $DB;
     $q = "INSERT INTO ".safe_pfx($table)." SET $set";
+    try {
+        if ($r = safe_query($q, $debug)) {
+            $id = mysqli_insert_id($DB->link);
 
-    if ($r = safe_query($q, $debug)) {
-        $id = mysqli_insert_id($DB->link);
-
-        return ($id === 0 ? true : $id);
+            return ($id === 0 ? true : $id);
+        }
+    } catch (Exception $e) {
+        trigger_error($e->getMessage());
     }
 
     return false;

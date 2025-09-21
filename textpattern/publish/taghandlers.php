@@ -200,10 +200,11 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('txp_eval', 'evaluate')
 // Global attributes (false just removes unknown attribute warning)
     ->registerAttr(true, 'labeltag, class, html_id, not, breakclass, breakform, wrapform, evaluate')
-    ->registerAttr('txp_escape', 'escape')
+//    ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_deprecate', '$deprecate')
-    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort')
-    ->registerAttr('txp_variable', 'variable');
+    ->registerAttr('txp_wraptag', 'wraptag, break, breakby, label, trim, replace, default, limit, offset, sort, escape, variable')
+//    ->registerAttr('txp_variable', 'variable')
+    ;
 
 // -------------------------------------------------------------
 
@@ -2834,9 +2835,10 @@ function custom_field($atts = array(), $thing = null)
             return '';
         } else {
             // TODO: replace with a type-specific function.
-            $id = ${$context}['thisid'];
+            $id = ${$context}[$type === 'article' ? 'thisid' : 'id'];
             $tableName = 'txp_meta_value_' . $customFields[$type]['by_type'][$no];
-            $where = "meta_id = '$no' AND content_id = $id";
+            $typeId = (int)$customFields[$type]['by_content_id'][$no];
+            $where = "meta_id = $no AND content_id = $id AND type_id = $typeId";
             $unique = !in_array($customFields[$type]['by_callback'][$no], $delimited);
             ${$context}[$name] = $unique ?
                 getThing('SELECT value FROM '.PFX.$tableName." WHERE $where") :
@@ -3574,16 +3576,17 @@ function txp_wraptag($atts, $thing = '')
         'offset'   => null,
         'sort'     => null,
         'default'  => null,
+        'variable' => null,
     ), $atts, false));
 
-    $dobreak = array('break' => $break === true ? txp_break($wraptag) : $break);
+    $break = array('break' => $break);
 
     if (isset($breakby) && is_scalar($thing)) {
         $thing = (string)$thing;
 
         if ($breakby === '') {// cheat, php 7.4 mb_str_split would be better
             $thing = preg_split('/(.)/u', $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-        } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($dobreak['breakby'] = $breakby)) {
+        } elseif (is_numeric(str_replace(array(' ', ',', '-'), '', $breakby)) && ($break['breakby'] = $breakby)) {
             $thing = do_list($thing);
         } elseif (strlen($breakby) > 2 && preg_match('/([^\\\w\s]).+\1[UsiAmuS]*$/As', $breakby)) {
             $thing = preg_split($breakby, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
@@ -3595,20 +3598,20 @@ function txp_wraptag($atts, $thing = '')
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {
-        $thing = doWrap($thing, null, compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort') + $dobreak);
+        $thing = doWrap($thing, $wraptag, compact('escape', 'trim', 'replace', 'limit', 'offset', 'sort', 'class', 'html_id') + $break);
     } elseif ($escape) {
         $thing = txp_escape($escape, $thing);
     }
 
     $thing = (string)$thing;
-    !isset($default) or trim($thing) !== '' or $thing = $default;
 
     if (trim($thing) !== '') {
-        $thing = $wraptag ? doTag($thing, $wraptag, $class, '', $html_id) : $thing;
         $thing = $label ? doLabel($label, $labeltag) . n . $thing : $thing;
+    } elseif (isset($default)) {
+        $thing = $default;
     }
 
-    return $thing;
+    return isset($variable) ? variable(array('name' => $variable), $thing) : $thing;
 }
 
 // -------------------------------------------------------------

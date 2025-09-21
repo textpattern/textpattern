@@ -47,6 +47,13 @@ class Field
     protected $dataType = array();
 
     /**
+     * Content type.
+     *
+     * @var array
+     */
+    protected $contentType = null;
+
+    /**
      * Options.
      *
      * @var array
@@ -130,15 +137,15 @@ class Field
      * @param mixed $idName The numeric id or array(name, type) of the field to load
      */
 
-    public function __construct($idName = null)
+    public function __construct($idName = null, $typeid = null)
     {
         global $prefs;
         static $out = null;
+        $this->contentType = $typeid;
 
         $this->properties = array(
             'id',
             'name',
-            'content_type',
             'data_type',
             'render',
             'family',
@@ -182,10 +189,10 @@ class Field
                     $this->definition = safe_row(
                         "`" . implode("`,`", $this->properties) . "`",
                         'txp_meta',
-                        $clause . " ORDER by ordinal"
+                        $clause
                     );
                 } elseif (is_array($idName) && count($idName) === 2 && isset($idName['name']) && isset($idName['type'])) {
-                    $clause = "name = '" . doSlash($idName['name']) . "' AND content_type = '" . doSlash($idName['type']) . "";
+                    $clause = "name = '" . doSlash($idName['name']) . "'";
 
                     $this->definition = safe_row(
                         "`" . implode("`,`", $this->properties) . "`",
@@ -224,13 +231,16 @@ class Field
 
     public function loadContent($ref = null, $force = false)
     {
+        global $event;
+
         if ($this->content === null || (count($this->content) === 1 && isset($this->content[0]) && $this->content[0] === null) || $force) {
             $fieldCol = $this->getValueField();
+            $typeId = intval(isset($this->contentType) ? $this->contentType : 0);//TODO
 
             $content = safe_rows(
                 'content_id,'. $fieldCol,
                 'txp_meta_value_'.$this->definition['data_type'],
-                "meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR content_id = '" .$ref. "'") . ")"
+                "type_id = $typeId AND meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR content_id = '" .$ref. "'") . ")"
             );
 
             // content_id values with index="-1" contain 'default' entries that need removing.
@@ -376,7 +386,6 @@ class Field
                 if ($id) {
                     $ok = safe_update('txp_meta',
                         "name        = '$name',
-                        content_type = '$content_type',
                         data_type    = '".$data_type['type']."',
                         render       = '$render',
                         family       = '$family',
@@ -391,7 +400,6 @@ class Field
                 } else {
                     $ok = safe_insert('txp_meta',
                         "name        = '$name',
-                        content_type = '$content_type',
                         data_type    = '".$data_type['type']."',
                         render       = '$render',
                         family       = '$family',
@@ -409,6 +417,21 @@ class Field
                 }
 
                 if ($ok) {
+                    $content_types = array_map('intval', array_filter(ps('content_types')));
+                    $in_types = $content_types ? 'type_id NOT IN ('.implode(',', $content_types).')' : '1';
+                    safe_delete('txp_meta_fieldsets', "meta_id = $id AND $in_types");
+
+                    foreach ($content_types as $ct) {
+                        safe_upsert('txp_meta_fieldsets', array('type_id' => $ct), array('meta_id' => $id, 'type_id' => $ct));
+                    }
+
+                    if (isset($data_types[$render_orig])) {
+                        $data_type_orig = $data_types[$render_orig];
+                        // Remove any content from tables of types no longer associated with this field.
+                        $table_name_orig = $table_prefix . $data_type_orig['type'];
+                        safe_delete($table_name_orig, "meta_id = '$id' AND $in_types");
+                    }
+
                     // Migrate data from one type to another if necessary.
                     // N.B. Data loss may ensue! Caveat utilitor.
                     if ($render_orig !== $render) {
@@ -422,18 +445,19 @@ class Field
                             $has_textfilter_orig = ($data_type_orig['textfilter']);
 
                             // Create destination table if required.
-                            $table_def = "meta_id int(12) NOT NULL DEFAULT 0,
+                            $table_def = "type_id int(12) NOT NULL DEFAULT 0,
+                                meta_id int(12) NOT NULL DEFAULT 0,
                                 content_id int(12) NOT NULL DEFAULT 0,
                                 value_id tinyint(4) NOT NULL DEFAULT 0,
                                 " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
                                 value " . $colspec . " DEFAULT NULL,
-                                UNIQUE KEY meta_content (meta_id,content_id,value_id)";
+                                PRIMARY KEY (type_id,meta_id,content_id,value_id)";
 
                             safe_create($table_name, $table_def);
 
                             $sql = "INSERT IGNORE INTO `" . safe_pfx($table_name) . "`
-                                        (meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
-                                    SELECT meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
+                                        (type_id,meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
+                                    SELECT type_id,meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
                                         FROM " . safe_pfx($table_name_orig) . "
                                         WHERE meta_id = '$id';";
                             safe_query($sql);
@@ -580,7 +604,7 @@ class Field
                         'name',
                         'name_orig',
                         'labelStr',
-                        'content_type',
+                        'content_types',
                         'render',
                         'render_orig',
                         'options',
@@ -789,8 +813,8 @@ class Field
     public function getLabelReference($name)
     {
         return $this->getLabelPrefix()
-            . doSlash($this->sanitizeName($this->get('content_type')))
-            . '_' . $this->sanitizeName($name);
+//            . doSlash($this->sanitizeName($this->get('id'))). '_' 
+            . $this->sanitizeName($name);
     }
 
     /**
@@ -804,8 +828,8 @@ class Field
     public function getHelpReference($name, $type = 'pophelp')
     {
         return $this->getHelpPrefix($type)
-            . doSlash($this->sanitizeName($this->get('content_type')))
-            . '_' . $this->sanitizeName($name);
+//            . doSlash($this->sanitizeName($this->get('id'))). '_' 
+            . $this->sanitizeName($name);
     }
 
     /**
@@ -818,8 +842,8 @@ class Field
     public function getOptionReference($name)
     {
         return $this->getOptionPrefix()
-            . doSlash($this->sanitizeName($this->get('content_type')))
-            . '_' . $this->sanitizeName($name);
+//            . doSlash($this->sanitizeName($this->get('id'))) '_' 
+            . $this->sanitizeName($name);
     }
 
     /**
