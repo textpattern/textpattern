@@ -5,4 +5,4 @@ value_id   TINYINT(4)    NULL DEFAULT 0,
 value_raw  VARCHAR(7500) NULL DEFAULT NULL,
 value      VARCHAR(7500) NULL DEFAULT NULL,
 
-PRIMARY KEY (type_id,meta_id,content_id,value_id)
+UNIQUE KEY (type_id,meta_id,content_id,value_id)
