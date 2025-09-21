@@ -1,4 +1,4 @@
-id           INT(12) UNSIGNED     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id           INT(12) UNSIGNED     NOT NULL AUTO_INCREMENT,
 name         VARCHAR(63)          NULL DEFAULT NULL,
 data_type    VARCHAR(31)          NULL DEFAULT '',
 render       VARCHAR(255)         NULL DEFAULT 'textInput',
@@ -10,4 +10,5 @@ created      TIMESTAMP            NULL DEFAULT NULL,
 modified     TIMESTAMP            NULL DEFAULT NULL,
 expires      TIMESTAMP            NULL DEFAULT NULL,
 
+PRIMARY KEY (id),
 UNIQUE KEY name (name)
