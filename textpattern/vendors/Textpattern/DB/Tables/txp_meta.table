@@ -11,4 +11,4 @@ modified     TIMESTAMP            NULL DEFAULT NULL,
 expires      TIMESTAMP            NULL DEFAULT NULL,
 
 PRIMARY KEY (id),
-UNIQUE KEY name (name)
+UNIQUE name (name)
