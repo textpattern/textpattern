@@ -144,7 +144,7 @@
 <p>Un cop instal·lat Textpattern, el directori  <code>textpattern/setup</code> i el seu contingut ja no es necessiten més, i cal esborrar-los per raons de seguretat.</p>
         ]]></item>
         <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Les funcions de PHP [&#8230;] són desactivades al teu servidor"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Les funcions de PHP [&hellip;] són desactivades al teu servidor"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Actualització de Textpattern"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title="Hi ha disponible una versió prèvia (pre-release) de Textpattern"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title="La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir"><![CDATA[<h2>La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir</h2>

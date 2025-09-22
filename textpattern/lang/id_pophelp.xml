@@ -351,7 +351,7 @@
         ]]></item>
         <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
         <item id="site_url_mismatch" title="Ketidakcocokan URL situs"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP [&#8230;] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP [&hellip;] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Versi pembaruan Textpattern"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title="Versi pra-rilis Textpattern tersedia"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title="Jalur direktori &quot;Sementara&quot; dan Kes Plugin tidak boleh sama"><![CDATA[]]></item>
@@ -498,7 +498,7 @@
         ]]></item>
         <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
 <h2>Gunakan halaman</h2>
-<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh&#8230;</p>
+<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh&hellip;</p>
         ]]></item>
         <item id="section_uses_skin" title="Gunakan tema"><![CDATA[
 <h2>Gunakan tema</h2>

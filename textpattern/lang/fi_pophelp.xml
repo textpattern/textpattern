@@ -56,7 +56,7 @@
         <item id="php_version_required" title="Version vähimmäisvaatimukset"><![CDATA[]]></item>
         <item id="setup_still_exists" title="Asennushakemisto on vielä olemassa"><![CDATA[]]></item>
         <item id="site_url_mismatch" title="Sivuston URL ei täsmää"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="PHP-funktiot [&#8230;] on otettu pois käytöstä palvelimella"><![CDATA[]]></item>
+        <item id="some_php_functions_disabled" title="PHP-funktiot [&hellip;] on otettu pois käytöstä palvelimella"><![CDATA[]]></item>
         <item id="textpattern_version_update" title="Textpatternin version päivitys"><![CDATA[]]></item>
         <item id="textpattern_version_update_beta" title="Textpatternin ennakkojulkaisuversio saatavilla"><![CDATA[]]></item>
         <item id="tmp_plugin_paths_match" title="Tilapäisten ja liitännäisten cache-hakemistopolun ei tulisi olla sama"><![CDATA[]]></item>

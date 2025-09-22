@@ -341,8 +341,8 @@
 <p>Wenn die Website über mehrere verschiedene URLs erreichbar ist und sie sich wie erwartet verhält, kann diese Nachricht getrost ignoriert werden.</p>
 <p>Andernfalls überprüfen und ändern Sie bitte die Einstellung „Webadresse“ in den Admin-Einstellungen nach Bedarf. Die korrekte URL wird in der Voruntersuchungsmeldung im Fenster „Diagnose“ angezeigt.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP-Funktionen [&#8230;] sind auf Ihrem Server deaktiviert"><![CDATA[
-<h2>PHP-Funktionen [&#8230;] sind auf Ihrem Server deaktiviert</h2>
+        <item id="some_php_functions_disabled" title="PHP-Funktionen [&hellip;] sind auf Ihrem Server deaktiviert"><![CDATA[
+<h2>PHP-Funktionen [&hellip;] sind auf Ihrem Server deaktiviert</h2>
 <p>Der Site-Host oder Server-Administrator hat eine oder mehrere PHP-Funktionen deaktiviert, einige davon können das Ausführen von Textpattern beeinflussen.</p>
 <p>Bitte konsultieren Sie die <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern Benutzerdokumentation <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> für weitere Informationen.</p>
         ]]></item>
