@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.0-beta.2';
+textpattern.version = '4.9.0-dev';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -2173,7 +2173,7 @@ textpattern.Route.add('article', function () {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
     });
     $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
-        `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>`
+        `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>&nbsp;`
     );
 
     $(document).on('change', '#clean-view', function () {
@@ -2297,7 +2297,7 @@ textpattern.Route.add('article', function () {
     DOMPurify.addHook('uponSanitizeElement', function (currentNode, hookEvent, config) {
         if (!hookEvent.allowedTags[hookEvent.tagName] || config.FORBID_TAGS.includes(hookEvent.tagName)) {
             const tagName = hookEvent.tagName == '#comment' ? (currentNode.data.match(/^\[CDATA\[/i) ? '-cdata' : '-comment') : hookEvent.tagName;
-            if ($viewMode.data('view-mode') == 'html') {
+            if ($viewMode.data('view-mode') == 'html' && currentNode.parentNode) {
                 currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
             } else {
                 const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
@@ -2309,7 +2309,7 @@ textpattern.Route.add('article', function () {
 
     DOMPurify.addHook('uponSanitizeAttribute', function(currentNode, hookEvent, config) {
         if (!hookEvent.allowedAttributes[hookEvent.attrName] || config.FORBID_ATTR.includes(hookEvent.attrName)) {
-            if ($viewMode.data('view-mode') == 'html') {
+            if ($viewMode.data('view-mode') == 'html' && currentNode.parentNode) {
                 currentNode.parentNode.insertBefore(document.createComment(hookEvent.attrName), currentNode);
             }
         }
