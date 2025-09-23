@@ -378,8 +378,8 @@
 <p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this message can be safely ignored.</p>
 <p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
         ]]></item>
-        <item id="some_php_functions_disabled" title="PHP functions [&hellip;] are disabled on your server"><![CDATA[
-<h2>PHP functions [&hellip;] are disabled on your server</h2>
+        <item id="some_php_functions_disabled" title="PHP functions [&#8230;] are disabled on your server"><![CDATA[
+<h2>PHP functions [&#8230;] are disabled on your server</h2>
 <p>The site host or server administrator has disabled one or more PHP functions, some of which may affect the running of Textpattern.</p>
 <p>Please consult the <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information.</p>
         ]]></item>
