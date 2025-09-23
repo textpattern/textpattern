@@ -329,8 +329,8 @@
 <p>Adresa URL webu uvedená v Nastavení/Server neodpovídá skutečné adrese URL, kterou používáš pro prohlížení svých webových stránek.</p>
 <p>Pokud jsou tvoje webové stránky dosažitelné prostřednictvím více různých adres URL, nebo v případě, že odkazy na tvých webových stránkách fungují správně, můžeš toto upozornění bez obav ignorovat.</p>
 <p>V opačném případě je doporučeno opravit nastavení ‘Webová adresa (doména)‘ v předvolbách Správce. Kvalifikovaný odhad správné adresy URL webu je zobrazen ve zprávě Poslední kontrola před odletem na kartě Diagnostika.</p>        ]]></item>
-        <item id="some_php_functions_disabled" title="Následující funkce PHP [&hellip;] jsou na serveru vypnuty"><![CDATA[
-<h2>Následující funkce PHP: [&hellip;] jsou na serveru vypnuty</h2>
+        <item id="some_php_functions_disabled" title="Následující funkce PHP [&#8230;] jsou na serveru vypnuty"><![CDATA[
+<h2>Následující funkce PHP: [&#8230;] jsou na serveru vypnuty</h2>
 <p>To znamená, že tvoje hostingová společnost nebo správce serveru zakázal jednu nebo více PHP funkcí, z nichž některé mohou mít vliv na chod Textpatternu.</p>
 <p>Další informace najdeš v <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentaci Textpattern <span class = "ui-icon ui-icon-extlink"> (otevře externí odkaz v novém okně)</span></a>.</p>        ]]></item>
         <item id="textpattern_version_update" title="Aktualizace verze Textpattern"><![CDATA[
