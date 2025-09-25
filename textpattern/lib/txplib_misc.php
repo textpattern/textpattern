@@ -4528,10 +4528,11 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 {
     global $txpnow;
 
-    static $out = null, $tableColumns = null, $contentTypes = null;
+    static $out = null, $tableColumns = null, $contentTypes = null, $columnIds = null;
 
     if ($out === null) {
         $out = array();
+        $columnIds = \Txp::get('Textpattern\Meta\ContentType')->getItem('tableId');
         $tableColumns = \Txp::get('Textpattern\Meta\ContentType')->getColumn();
         $contentTypes = \Txp::get('Textpattern\Meta\ContentType')->getId();
     }
@@ -4541,8 +4542,13 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
     }
 
     assert_int($when);
-    $types = do_list_unique($type);
     $by = 'by_'.$by;
+
+    if (is_int($type)) {
+        $types = array_keys(\Txp::get('Textpattern\Meta\ContentType')->getItem('tableId', function($v) use ($type) { return $v['tableId'] == $type; }));
+    } else {
+        $types = do_list_unique($type);
+    }
 
     foreach ($types as $type) {
         if (!isset($out[$when][$type])) {
@@ -4563,7 +4569,6 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
                 $out[$when][$type]['by_family'][$thisId] = $def->get('family');
                 $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
                 $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
-                $out[$when][$type]['by_ordinal'][$thisId] = $def->get('ordinal');
                 $out[$when][$type]['by_created'][$thisId] = $def->get('created');
                 $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
                 $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');

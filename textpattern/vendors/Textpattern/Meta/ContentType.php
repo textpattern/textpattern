@@ -36,6 +36,13 @@ namespace Textpattern\Meta;
 class ContentType implements \IteratorAggregate, \Textpattern\Container\ReusableInterface
 {
     /**
+     * Default table map. May be altered by plugins.
+     *
+     * @var array
+     */
+    protected $tableColumnMap = array();
+
+    /**
      * Default content type map. May be altered by plugins.
      *
      * @var array
@@ -58,62 +65,54 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
      */
 
     public function __construct()
-    {/*
-        foreach (safe_column(array('name', 'id,label,txp_table,txp_column'), 'txp_meta_entity') as $name => $row) {
-            $this->contentTypeMap[$name] = array(
-                'id'     => $row['id'],
-                'key'    => $name,
-                'label'  => gTxt($row['label']),
-                'table'  => $row['txp_table'],
-                'column' => $row['txp_table'].'.'.$row['txp_column'],
-            );
-        }*/
-        $c = 1;
-        $this->contentTypeMap = array(
-            'article' => array(
-                'id'     => $c++,
+    {
+        // TODO
+        $c = 0;
+        $this->tableColumnMap = array(
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'article',
                 'label'  => gTxt('article'),
                 'table'  => 'textpattern',
                 'column' => PFX.'textpattern.ID',
             ),
-            'image' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'image',
                 'label'  => gTxt('image'),
                 'table'  => 'txp_image',
                 'column' => PFX.'txp_image.id',
             ),
-            'file' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'file',
                 'label'  => gTxt('file'),
                 'table'  => 'txp_file',
                 'column' => PFX.'txp_file.id',
             ),
-            'link' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'link',
                 'label'  => gTxt('link'),
                 'table'  => 'txp_link',
                 'column' => PFX.'txp_link.id',
             ),
-            'user' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'user',
                 'label'  => gTxt('author'),
                 'table'  => 'txp_users',
                 'column' => PFX.'txp_users.user_id',
             ),
-            'category' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'category',
                 'label'  => gTxt('category'),
                 'table'  => 'txp_category',
                 'column' => PFX.'txp_category.id',
             ),
-            'section' => array(
-                'id'     => $c++,
+            ++$c => array(
+                'id'     => $c,
                 'key'    => 'section',
                 'label'  => gTxt('section'),
                 'table'  => 'txp_section',
@@ -121,7 +120,43 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
             ),
         );
 
+        foreach (safe_column(array('name', 'id,label,table_id'), 'txp_meta_entity') as $name => $row) {
+            if (!isset($this->tableColumnMap[$row['table_id']])) {
+                continue;
+            }
+
+            $this->contentTypeMap[$name] = array(
+                'tableId'     => $row['table_id'],
+                'id'     => $row['id'],
+                'key'    => $name,
+                'label'  => gTxt($row['label']),
+//                'table'  => $this->tableColumnMap[$row['table_id']]['table'],
+                'column' => $this->tableColumnMap[$row['table_id']]['column'],
+            );
+        }
+
+
         callback_event_ref('txp.meta', 'content.types', 0, $this->contentTypeMap);
+    }
+
+    public function getTableColumnMap($id = null)
+    {
+        return $id === null ? $this->tableColumnMap :
+            (isset($this->tableColumnMap[$id]) ? $this->tableColumnMap[$id] : null);
+    }
+
+    public function getItemEntity($content_id, $id = 1, $raw = false)
+    {
+        $content_id = (int)$content_id;
+        $id = (int)$id;
+/*        $ids = implode(',', array_column(array_filter($this->contentTypeMap, function ($v) use ($id) {
+            return $v['tableId'] == $id;
+        }), 'id'));
+        $type = $ids ? safe_field('type_id', 'txp_meta_registry', "content_id = $content_id AND type_id IN ($ids)") : 0;*/
+        $type = $id ? getThing('SELECT id FROM '.PFX.'txp_meta_entity JOIN '.PFX."txp_meta_registry r ON id = r.type_id WHERE r.content_id = $content_id AND table_id = $id LIMIT 1") : 0;
+        $types = $type ? $this->getItem('key', array(), 'id') : null;
+
+        return $raw ? $type : (isset($types[$type]) ? $types[$type] : false);
     }
 
     /**
@@ -136,8 +171,12 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     {
         $map = $this->contentTypeMap;
 
-        foreach ((array)$exclude as $remove) {
-            unset($map[$remove]);
+        if (is_callable($exclude)) {
+            $map = array_filter($map, $exclude);
+        } else {
+            foreach ((array)$exclude as $remove) {
+                unset($map[$remove]);
+            }
         }
 
         return array_column($map, $item, $key);
@@ -156,18 +195,7 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     }
 
     /**
-     * Return the table of the given content type.
-     *
-     * @todo
-     */
-
-    public function getTable($exclude = array())
-    {
-        return $this->getItem('table', $exclude);
-    }
-
-    /**
-     * Return the table of the given content type.
+     * Return a list of content types and their associated ids.
      *
      * @todo
      */
@@ -200,6 +228,37 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     {
         return $this->getItem(null, $exclude);
     }
+
+    /**
+     * Save the meta information defining this field.
+     *
+     * @param array $data Name-value tuples for the data to store against each field
+     * @return  string Outcome message
+     */
+
+    public function save($data = array())
+    {
+        extract($data);
+        unset($data['id']);
+        // TODO: validate data
+
+        if (empty($id)) {
+            $ok = safe_insert('txp_meta_entity', $data);
+        } else {
+            $ok = safe_update('txp_meta_entity', $data, "id = $id");
+        }
+
+        return gTxt($ok ? 'meta_saved' : 'meta_save_failed');
+    }
+
+
+    /**
+     * Delete the meta information for this item.
+     *
+     * @param int $id The ID of the item to delete
+     * @param int|string $type The type of the item to delete
+     * @return  null
+     */
 
     /**
      * IteratorAggregate interface.

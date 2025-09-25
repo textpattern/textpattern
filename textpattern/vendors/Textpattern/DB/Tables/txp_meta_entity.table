@@ -1,0 +1,6 @@
+id           INT(12) UNSIGNED     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name         VARCHAR(31)          NULL UNIQUE DEFAULT NULL,
+label        VARCHAR(63)          NULL DEFAULT NULL,
+table_id     TINYINT UNSIGNED     NOT NULL,
+
+UNIQUE (name)

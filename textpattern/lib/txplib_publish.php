@@ -676,7 +676,7 @@ function ckExID($val, $debug = false)
 
 function lookupByTitle($val, $debug = false)
 {
-    $customData = buildCustomSql('article');
+//    $customData = buildCustomSql('article');
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
@@ -709,7 +709,7 @@ function lookupByTitle($val, $debug = false)
 
 function lookupByTitleSection($val, $section, $debug = false)
 {
-    $customData = buildCustomSql('article');
+//    $customData = buildCustomSql('article');
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
@@ -733,7 +733,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 
 function lookupByIDSection($id, $section, $debug = false)
 {
-    $customData = buildCustomSql('article');
+//    $customData = buildCustomSql('article');
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
@@ -756,7 +756,7 @@ function lookupByIDSection($id, $section, $debug = false)
 
 function lookupByID($id, $debug = false)
 {
-    $customData = buildCustomSql('article');
+//    $customData = buildCustomSql('article');
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     return safe_row(
@@ -785,7 +785,7 @@ function lookupByDateTitle($when, $title, $debug = false)
         $dateClause = '1';
     }
 
-    $customData = buildCustomSql('article');
+//    $customData = buildCustomSql('article');
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
@@ -818,7 +818,7 @@ function filterAtts($atts = null, $iscustom = null)
         'min' => 'MIN(?)',
         'sum' => 'SUM(?)',
         'list' => "GROUP_CONCAT(? SEPARATOR ',')",
-        'concat' => "GROUP_CONCAT(? SEPARATOR ',')"
+        'distinct' => "GROUP_CONCAT(DISTINCT ? ORDER BY ? SEPARATOR ',')"
     ), $windowed = array(
         'count' => 'COUNT(*)',
         'dense' => 'DENSE_RANK()',
@@ -916,7 +916,7 @@ function filterAtts($atts = null, $iscustom = null)
         return $coreAtts;
     }
 
-    $customFields = getCustomFields('article', null, null);
+    $customFields = getCustomFields(1, null, null);
     $filterFields = ($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title');
     $searchFields = array();
     $postWhere = $customPairs = $customlAtts = array();

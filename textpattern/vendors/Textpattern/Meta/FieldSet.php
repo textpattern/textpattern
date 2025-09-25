@@ -76,13 +76,12 @@ class FieldSet implements \IteratorAggregate
                 m.family,
                 m.textfilter,
                 m.delimiter,
-                m.ordinal,
                 m.created,
                 m.modified,
                 m.expires
                 FROM ".PFX."txp_meta m JOIN ".PFX."txp_meta_fieldsets fs ON fs.meta_id = m.id
                 WHERE fs.type_id = $typeid
-                ORDER BY m.family, m.ordinal")
+                ORDER BY m.family, fs.ordinal")
             ) {
                 foreach ($cfs as $def) {
                     self::$collection[$type][$def['id']] = new Field($def, $typeid);
@@ -234,6 +233,37 @@ class FieldSet implements \IteratorAggregate
                     }
                 }
             }
+        }
+
+        safe_upsert('txp_meta_registry', array('content_id' => $contentId, 'type_id' => $typeId), array('content_id' => $contentId, 'type_id' => $typeId));
+
+        return $this;
+    }
+
+    /**
+     * Delete the value of each field in the collection. Chainable.
+     */
+
+    public function delete($contentType, $contentId)
+    {
+        assert_int($contentId);
+
+        $ids = \Txp::get('Textpattern\Meta\ContentType')->getId();
+        $typeId = isset($ids[$contentType]) ? $ids[$contentType] : 0;
+        $cfq = array();
+
+        if ($typeId && isset(self::$collection[$contentType])) {
+            foreach (self::$collection[$contentType] as $id => $def) {
+                $cfq[$def->get('data_type')] = $id;
+            }
+
+            // Delete the values of the appropriate custom field table based on its data type.
+            foreach ($cfq as $tableType => $metaId) {
+                $tableName = 'txp_meta_value_'.$tableType;
+                safe_delete($tableName, "type_id = $typeId AND content_id = $contentId");
+            }
+
+            safe_delete('txp_meta_registry', "content_id = $contentId AND type_id = $typeId");
         }
 
         return $this;

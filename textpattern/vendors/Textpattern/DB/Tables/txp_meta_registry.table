@@ -1,0 +1,4 @@
+content_id int(12) UNSIGNED NOT NULL,
+type_id    int(12) UNSIGNED NOT NULL,
+
+PRIMARY KEY (content_id, type_id)

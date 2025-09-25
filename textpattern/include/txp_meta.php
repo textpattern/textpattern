@@ -47,7 +47,6 @@ if ($event == 'meta') {
         'family',
         'textfilter',
         'delimiter',
-        'ordinal',
         'created',
         'reset_time',
         'modified',
@@ -100,7 +99,7 @@ function meta_list($message = '')
     if ($sort === '') {
         $sort = get_pref('meta_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('id', 'name', 'render', 'family', 'ordinal', 'created', 'modified', 'expires'))) {
+        if (!in_array($sort, array('id', 'name', 'render', 'family', 'created', 'modified', 'expires'))) {
             $sort = 'name';
         }
 
@@ -123,9 +122,6 @@ function meta_list($message = '')
             break;
         case 'family' :
             $sort_sql = "family $dir, id asc";
-            break;
-        case 'ordinal' :
-            $sort_sql = "ordinal $dir, id asc";
             break;
         case 'created' :
             $sort_sql = "created $dir";
@@ -205,7 +201,8 @@ function meta_list($message = '')
 
     $createBlock[] =
         n.tag(
-            sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button'),
+            sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button').
+            sLink('meta', 'meta_type', gTxt('create_entity'), 'txp-button'),
             'div', array('class' => 'txp-control-panel')
         );
 
@@ -278,10 +275,6 @@ function meta_list($message = '')
                             (('family' == $sort) ? "$dir " : '').'txp-list-col-family'
                     ).
                     column_head(
-                        'ordinal', 'ordinal', 'meta', true, $switch_dir, $crit, $search_method,
-                            (('ordinal' == $sort) ? "$dir " : '').'txp-list-col-order'
-                    ).
-                    column_head(
                         'created', 'created', 'meta', true, $switch_dir, $crit, $search_method,
                             (('created' == $sort) ? "$dir " : '').'txp-list-col-created date'
                     ).
@@ -343,9 +336,6 @@ TODO: constraints
                     ).
                     td(
                         txpspecialchars($meta_family), '', 'txp-list-col-family'
-                    ).
-                    td(
-                        txpspecialchars($meta_ordinal), '', 'txp-list-col-ordinal'
                     ).
                     td(
                         txpspecialchars($meta_created), '', 'txp-list-col-created date'
@@ -496,11 +486,6 @@ EOJS
                 'delimiter',
                 fInput('text', 'delimiter', txpspecialchars($delimiter), '', '', '', INPUT_SMALL, '', 'delimiter'),
                 'delimiter', '', array('class' => 'txp-form-field edit-meta-delimiter')
-            ).
-            inputLabel(
-                'ordinal',
-                fInput('text', 'ordinal', txpspecialchars($ordinal), '', '', '', INPUT_REGULAR, '', 'ordinal'),
-                'ordinal', '', array('class' => 'txp-form-field edit-meta-ordinal')
             ).
             inputLabel(
                 'created',
@@ -729,87 +714,65 @@ function meta_multi_edit()
  *
  * @param string|array $message The activity message
  */
-/*
+
 function meta_type($message = '')
 {
-    global $vars, $event, $step, $txp_user, $all_content_types, $all_render_types, $DB;
+    global $event, $step, $DB;
 
     pagetop(gTxt('tab_meta'), $message);
 
-    extract(array_map('assert_string', gpsa($vars)));
+//    $txp_tables = getThings('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = "'.$DB->db.'" AND TABLE_TYPE LIKE "BASE_TABLE" AND TABLE_NAME NOT LIKE "'.PFX.'txp\_meta%"');
+    $txp_tables = array_column(Txp::get('\Textpattern\Meta\contentType')->getTableColumnMap(), 'label', 'id');
 
-    $dataTypeObj = Txp::get('\Textpattern\Meta\DataType');
-    $data_types = $dataTypeObj->get();
+    $id = intval(gps('id'));
 
-    $is_edit = ($id && $step === 'type_edit');
-    $default = '';
-    $label_ref = '';
-
-    $txp_tables = getThings('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = "'.$DB->db.'" AND TABLE_TYPE LIKE "BASE_TABLE" AND TABLE_NAME NOT LIKE "'.PFX.'txp\_meta%"');
-    $txp_tables = array_combine($txp_tables, $txp_tables);
-
-    $rs = array();
-
-    if ($is_edit) {
-        $id = assert_int($id);
-        $cf = new Field($id);
-        $rs = $cf->get();
-
-        if ($rs) {
-            if (!has_privs('meta')) {
-                meta_list(gTxt('restricted_area'));
-
-                return;
-            }
-
-            extract($rs);
-
-            $label_ref = $cf->getLabelReference($name);
-
-            $default = $cf->get('default');
-            $options = $cf->get('options');
-        }
+    if ($type = safe_row('*', 'txp_meta_entity', "id = $id")) {
+        extract($type);
     } else {
-        $render = 'textInput';
+        list($id, $name, $label, $table_id) = array(0, '', '', 1);
     }
 
-    if (has_privs('meta')) {
-        $caption = gTxt(($is_edit) ? 'edit_meta' : 'create_meta');
+    $caption = gTxt($id ? 'edit_entity' : 'create_entity');
 
-        echo form(
-            hed($caption, 2).
-            inputLabel(
-                'labelStr',
-                fInput('text', 'labelStr', gTxt($label_ref), '', '', '', INPUT_REGULAR, '', 'labelStr'),
-                'label', '', array('class' => 'txp-form-field edit-meta-label')
-            ).
-            inputLabel(
-                'name',
-                fInput('text', 'name', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'name'),
-                'name', '', array('class' => 'txp-form-field edit-meta-name')
-            ).
-            inputLabel(
-                'txp_table',
-                selectInput('txp_table', $txp_tables, 'textpattern'),
-                'table', '', array('class' => 'txp-form-field edit-meta-content-type')
-            ).
-            inputLabel(
-                'txp_column',
-                fInput('text', 'txp_column', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'txp_column'),
-                'column', '', array('class' => 'txp-form-field edit-meta-name')
-            ).
-            pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
-            graf(
-                sLink('meta', '', gTxt('cancel'), 'txp-button').
-                fInput('submit', '', gTxt('save'), 'publish'),
-                array('class' => 'txp-edit-actions')
-            ).
-            eInput('meta').
-            sInput('meta_save_type').
-            hInput('id', $id).
-            hInput('search_method', gps('search_method')).
-            hInput('crit', gps('crit')).
-            hInput('name_orig', $name)
-        , '', '', 'post', 'txp-edit', '', 'meta_details');
-    }
-}    */
+    echo form(
+        hed($caption, 2).
+        inputLabel(
+            'label',
+            fInput('text', 'label', $label, '', '', '', INPUT_REGULAR, '', 'label'),
+            'label', '', array('class' => 'txp-form-field edit-meta-label')
+        ).
+        inputLabel(
+            'name',
+            fInput('text', 'name', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'name'),
+            'name', '', array('class' => 'txp-form-field edit-meta-name')
+        ).
+        inputLabel(
+            'table',
+            selectInput(array('name' =>'table_id', 'disabled' => !empty($id)), $txp_tables, $table_id, false, '', 'table'),
+            'family', '', array('class' => 'txp-form-field edit-meta-content-type')
+        ).
+//            pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
+        graf(
+            sLink('meta', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
+        eInput('meta').
+        sInput('meta_save_type').
+        hInput('id', $id).
+        hInput('search_method', gps('search_method')).
+        hInput('crit', gps('crit'))
+    , '', '', 'post', 'txp-edit', '', 'meta_type');
+}
+
+function meta_save_type()
+{
+    $message = \Txp::get('\Textpattern\Meta\ContentType')->save(gpsa(array(
+        'id',
+        'name',
+        'label',
+        'table_id',
+        ))
+    );
+    meta_list($message);
+}

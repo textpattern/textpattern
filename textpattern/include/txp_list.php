@@ -297,7 +297,12 @@ function list_list($message = '', $post = '')
     $buttons = array();
 
     if (has_privs('article.edit.own')) {
-        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
+        $types = \Txp::get('Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 1; });
+        $buttons[] = /*sLink('article', '', gTxt('create_article'), 'txp-button')*/form(
+            fInput('submit', '', gTxt('create_article')).
+            hInput('event', 'article').
+            ($types ? selectInput('type', $types, 'article') : '')
+        );
     }
 
     callback_event_ref('articles', 'controls', 'panel', $buttons);
@@ -651,6 +656,12 @@ function list_multi_edit()
             // @todo : delete CFs by iterating over the txp_meta_value_* tables and killing anything
             // with this content_id.
             if ($selected && safe_delete('textpattern', "ID IN (" . join(',', $selected) . ")")) {
+                foreach ($selected as $id) {
+                    if ($type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
+                        Txp::get('Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+                    }
+                }
+
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 safe_delete('txp_discuss', "parentid IN (" . join(',', $selected) . ")");

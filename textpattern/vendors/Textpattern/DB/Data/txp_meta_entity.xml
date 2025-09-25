@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <meta_entity>
+        <item>
+            <name>article</name>
+            <label>article</label>
+            <table_id>1</table_id>
+        </item>
+        <item>
+            <name>image</name>
+            <label>image</label>
+            <table_id>2</table_id>
+        </item>
+    </meta_entity>
+</resources>

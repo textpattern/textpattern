@@ -500,6 +500,10 @@ function safe_delete($table, $where, $debug = false)
 
 function safe_update($table, $set, $where, $debug = false)
 {
+    if (is_array($set)) {
+        $set = join_qs(quote_list($set), ',');
+    }
+
     try {
         return (bool) safe_query("UPDATE ".safe_pfx($table)." SET $set WHERE $where", $debug);
     } catch (Exception $e) {
@@ -528,6 +532,10 @@ function safe_update($table, $set, $where, $debug = false)
 function safe_insert($table, $set, $debug = false)
 {
     global $DB;
+    if (is_array($set)) {
+        $set = join_qs(quote_list($set), ',');
+    }
+
     $q = "INSERT INTO ".safe_pfx($table)." SET $set";
     try {
         if ($r = safe_query($q, $debug)) {
@@ -910,7 +918,7 @@ function safe_field($thing, $table, $where, $debug = false)
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $r = safe_query($q, $debug);
 
-    if (@mysqli_num_rows($r) > 0) {
+    if (mysqli_num_rows($r) > 0) {
         $row = mysqli_fetch_row($r);
         mysqli_free_result($r);
 

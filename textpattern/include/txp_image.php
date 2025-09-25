@@ -206,15 +206,16 @@ function image_list($message = '')
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
+        $types = \Txp::get('Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 2; });
         $imagetypes = get_safe_image_types();
-        $categories = event_category_popup('image', '', 'image_category');
+        $categories = ($types ? selectInput('type', $types, 'image', false, '', 'image_category') : '');//event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n . tag(
                 n . upload_form(
                     'upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '',
                     array('postinput' => ($categories
                         ? n . tag(
-                            n . tag(gTxt('category'), 'label', array('for' => 'image_category')) . $categories . n,
+                            n . tag(gTxt('entity'), 'label', array('for' => 'image_category')) . $categories . n,
                             'span',
                             array('class' => 'inline-file-uploader-actions')
                         )
@@ -732,8 +733,9 @@ function image_edit($message = '', $id = '')
 
         $cfBlock = array();
 
-        $cfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
-            ->filterCollectionAt('image', ($uDate ? $uDate : $txpnow));
+        $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['id'], 2) or $type = gps('type', 'image');
+        $cfs = Txp::get('Textpattern\Meta\FieldSet', $type)
+            ->filterCollectionAt($type, ($uDate ? $uDate : $txpnow));
 
         foreach ($cfs as $cf) {
             $ref = $id ? $id : null;
@@ -856,6 +858,13 @@ function image_insert()
     }
 
     global $app_mode, $event;
+
+    register_callback(function ($ev, $st, $id) {
+        $type = gps('type', 'image');
+        $types = Txp::get('Textpattern\Meta\ContentType')->getItem('id', function($v) { return $v['tableId'] == 2; });
+        $type = isset($types[$type]) ? $types[$type] : 2; // Default to 'image'.
+        safe_insert('txp_meta_registry', "type_id = $type, content_id = $id");
+    }, 'image_uploaded');
     $messages = $ids = array();
     $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
@@ -1040,8 +1049,9 @@ function image_save()
     }
 
     // ToDo: Run custom fields through validator.
-    $mfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
-        ->filterCollectionAt('image', $uDate);
+    $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 2) or $type = gps('type', 'image');
+    $mfs = Txp::get('Textpattern\Meta\FieldSet', $type)
+        ->filterCollectionAt($type, $uDate);
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
     callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
@@ -1056,7 +1066,7 @@ function image_save()
         "id = '$id'"
     )
     ) {
-        $mfs->store($_POST, 'image', $id);
+        $mfs->store($_POST, $type, $id);
         $message = gTxt('image_updated', array('{name}' => doStrip($name)));
         update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
     } else {
@@ -1077,6 +1087,12 @@ function image_delete($ids = array())
     global $txp_user, $event;
 
     $message = '';
+
+    register_callback(function ($ev, $st, $id) {
+        if ($type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 2)) {
+            Txp::get('Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+        }
+    }, 'image_deleted');
 
     // Fetch ids and remove bogus (false) entries to prevent SQL syntax errors being thrown.
     $ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));

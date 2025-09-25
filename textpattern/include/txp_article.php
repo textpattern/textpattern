@@ -278,9 +278,6 @@ function article_save($write = true)
 
     $Keywords = trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', ');
 
-    $mfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
-        ->filterCollectionAt('article', $uPosted);
-
     // ToDo: Run CFs through validator.
     // ToDo: Transaction
     $rs = compact($vars);
@@ -331,12 +328,15 @@ function article_save($write = true)
 
         $set = join_qs($setnq + quote_list($set), ',');
 
-        if ($ID && safe_update('textpattern', $set, "ID = $ID")
-            || !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
+        if ($ID && safe_update('textpattern', $set, "ID = $ID") ||
+            !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
         ) {
             // @Todo: Return code.
             // @Todo: Rollback if fail.
-            $mfs->store($_POST, 'article', $rs['ID']);
+            $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $type = gps('type', 'article');
+            $mfs = Txp::get('Textpattern\Meta\FieldSet', $type)
+                ->filterCollectionAt($type, $uPosted);
+            $mfs->store($_POST, $type, $rs['ID']);
 
             if ($is_clone) {
                 $url_title = stripSpace($Title_plain . ' (' . $rs['ID'] . ')', 1);
@@ -755,10 +755,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     extract($rs);
 
     $when = ($sPosted) ? $sPosted : $txpnow;
+    $meta_type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $meta_type = gps('type', 'article');
+
+    $rs['$meta_type'] = $meta_type;
 
     // Add partials for custom fields (and their values which is redundant by design, for plugins).
-    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
-        ->filterCollectionAt('article', $when);
+    $cfs = $meta_type ? Txp::get('Textpattern\Meta\FieldSet', $meta_type)
+        ->filterCollectionAt($meta_type, $when) : array();
 
     foreach ($cfs as $i => $cf_info) {
         $vars[] = "custom_$i";
@@ -824,7 +827,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo hInput('ID', $ID) .
         eInput('article') .
-        sInput($step);
+        sInput($step) .
+        hInput('type', $meta_type);
 
     $pane_header = '<div class="txp-layout-4col-3span">' . '<div id="pane-header">' .
     hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')) .
@@ -1515,7 +1519,7 @@ function article_partial_actions($rs)
  * @return string HTML
  */
 
-function article_partial_custom_field($rs, $key)
+function article_partial_custom_field($rs, $key, $meta_type = 'article')
 {
     global $txpnow;
 
@@ -1525,8 +1529,8 @@ function article_partial_custom_field($rs, $key)
 
     if (!empty($m[1])) {
         $num = $m[1];
-        $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
-            ->filterCollectionAt('article', ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
+        $cfs = Txp::get('Textpattern\Meta\FieldSet', $meta_type)
+            ->filterCollectionAt($meta_type, ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
         $cf = $cfs->getItem($num);
 
         if ($cf) {
@@ -1711,11 +1715,12 @@ function article_partial_custom_fields($rs)
     global $txpnow;
 
     $cf = '';
-    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'article')
-        ->filterCollectionAt('article', ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
+    $meta_type = isset($rs['$meta_type']) ? $rs['$meta_type'] : Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
+    $cfs = $meta_type ? Txp::get('Textpattern\Meta\FieldSet', $meta_type)
+        ->filterCollectionAt($meta_type, ($rs['sPosted'] ? $rs['sPosted'] : $txpnow)) : array();
 
     foreach ($cfs as $k => $v) {
-        $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
+        $cf .= article_partial_custom_field($rs, "custom_field_{$k}", $meta_type);
     }
 
     return tag(pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'div', array('class' => 'txp-container'));

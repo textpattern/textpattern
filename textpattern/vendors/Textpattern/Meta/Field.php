@@ -151,7 +151,6 @@ class Field
             'family',
             'textfilter',
             'delimiter',
-            'ordinal',
             'created',
             'modified',
             'expires',
@@ -197,7 +196,7 @@ class Field
                     $this->definition = safe_row(
                         "`" . implode("`,`", $this->properties) . "`",
                         'txp_meta',
-                        $clause . " ORDER by ordinal"
+                        $clause //. " ORDER by ordinal"
                     );
                 } else {
                     foreach ($idName as $key => $value) {
@@ -367,7 +366,6 @@ class Field
 
         callback_event_ref('meta_ui', 'validate_save', 0, $this->definition, $constraints);
         $validator = new \Textpattern\Validator\Validator($constraints);
-        $ordinal = empty($ordinal) ? 1 : $ordinal;
 
         if ($name === '') {
             $name = $labelStr;
@@ -391,7 +389,6 @@ class Field
                         family       = '$family',
                         textfilter   = $txf,
                         delimiter    = $dlm,
-                        ordinal      = '$ordinal',
                         modified     = '$sqlnow',
                         created      = ". ($created ? "'$created'" : 'NULL') . ",
                         expires      = ". ($expires ? "'$expires'" : 'NULL'),
@@ -405,7 +402,6 @@ class Field
                         family       = '$family',
                         textfilter   = $txf,
                         delimiter    = $dlm,
-                        ordinal      = '$ordinal',
                         modified     = '$sqlnow',
                         created      = ". ($created ? "'$created'" : 'NULL') . ",
                         expires      = ". ($expires ? "'$expires'" : 'NULL')
@@ -417,7 +413,7 @@ class Field
                 }
 
                 if ($ok) {
-                    $content_types = array_map('intval', array_filter(ps('content_types')));
+                    $content_types = array_filter(array_map('intval', ps('content_types')));
                     $in_types = $content_types ? 'type_id NOT IN ('.implode(',', $content_types).')' : '1';
                     safe_delete('txp_meta_fieldsets', "meta_id = $id AND $in_types");
 
@@ -448,10 +444,10 @@ class Field
                             $table_def = "type_id int(12) NOT NULL DEFAULT 0,
                                 meta_id int(12) NOT NULL DEFAULT 0,
                                 content_id int(12) NOT NULL DEFAULT 0,
-                                value_id tinyint(4) NOT NULL DEFAULT 0,
+                                value_id tinyint(4) NULL DEFAULT 0,
                                 " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
                                 value " . $colspec . " DEFAULT NULL,
-                                PRIMARY KEY (type_id,meta_id,content_id,value_id)";
+                                UNIQUE KEY (type_id,meta_id,content_id,value_id)";
 
                             safe_create($table_name, $table_def);
 
@@ -612,7 +608,6 @@ class Field
                         'family',
                         'textfilter',
                         'delimiter',
-                        'ordinal',
                         'created',
                         'modified',
                         'expires'
@@ -664,6 +659,7 @@ class Field
         safe_delete('txp_meta_options', 'meta_id = '.$this_id);
         safe_delete('txp_lang', $langClause);
         safe_delete('txp_meta', 'id = '.$this_id);
+        safe_delete('txp_meta_fieldsets', 'meta_id = '.$this_id);
 
         return true;
     }
