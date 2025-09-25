@@ -11,9 +11,6 @@
     <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:page_url type="theme_path" />/styles/default.css"> -->
 
     <meta name="generator" content="Textpattern CMS">
-    
-    <!-- Auto setup for rpc client programs -->
-    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="<txp:site_url />rpc" />
 
     <txp:if_search>
         <meta name="robots" content="none">

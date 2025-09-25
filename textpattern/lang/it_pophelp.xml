@@ -1066,7 +1066,7 @@ Se un template di modulo ha bisogno di essere processato (se contiene tags Textp
         ]]></item>
         <item id="section_uses_page" title="Utilizza la pagina"><![CDATA[
 <h2>Utilizza la pagina</h2>
-<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero&#8230;</p>
+<p>in Textpattern, le sezioni sono associate a template di pagina. È una funzione fantastica, davvero&hellip;</p>
         ]]></item>
         <item id="section_uses_skin" title="Usa il tema"><![CDATA[
 <h2>Usa il tema</h2>
