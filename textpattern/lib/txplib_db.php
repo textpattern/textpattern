@@ -1330,7 +1330,7 @@ function getThings($query, $debug = false)
  * @see    safe_count()
  */
 
-function getCount($table, $where, $debug = false)
+function getCount($table, $where, $debug = false, $pfx = true)
 {
     if (is_array($table)) {
         //$thing is expected to be sanitized by the caller
@@ -1339,7 +1339,9 @@ function getCount($table, $where, $debug = false)
         $thing = '*';
     }
 
-    return getThing("SELECT COUNT($thing) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
+    $table = $pfx ? safe_pfx_j($table) : $table;
+
+    return getThing("SELECT COUNT($thing) FROM $table WHERE $where", $debug);
 }
 
 // -------------------------------------------------------------
