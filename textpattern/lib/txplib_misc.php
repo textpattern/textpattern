@@ -3205,6 +3205,22 @@ function fileDownloadFormatTime($params)
     return '';
 }
 
+function safe_curl_close(&$ch): void
+{
+    if ($ch instanceof CurlHandle) {
+        // PHP 8.0+ returns CurlHandle objects
+        // In 8.5+ curl_close() is deprecated, so just nullify
+        $ch = null;
+    } elseif (is_resource($ch) && get_resource_type($ch) === 'curl') {
+        // Older PHP (< 8.0) used resources
+        curl_close($ch);
+        $ch = null;
+    } else {
+        // Not a valid cURL handle
+        $ch = null;
+    }
+}
+
 /**
  * file_get_contents wrapper.
  *
@@ -3232,7 +3248,7 @@ function txp_get_contents($file, $opts = null)
         curl_setopt($ch, CURLOPT_HTTPHEADER, (array)$opts['header']);
 
         $contents = curl_exec($ch);
-        curl_close($ch);
+        safe_curl_close($ch);
     } else {
         $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
     }
