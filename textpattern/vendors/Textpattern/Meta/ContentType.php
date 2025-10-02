@@ -148,22 +148,21 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     /**
      * Return a list of entities.
      *
-     * @param   string Item to retrive from the array (null = everything)
-     * @param   array  List of content keys to exclude
+     * @param   null|int|string Table id|name (null = everything)
      * @return  array  An entities array
      */
 
-    public function getEntities($type = null)
+    public function getEntities($id = null)
     {
-        if ($type === null) {
+        if ($id === null) {
             return $this->getItem('id', array(), 'id');
-        } elseif (is_int($type)) {
-            return $this->getItem('id', function($v) use ($type) { return $v['tableId'] == $type; }, 'id');
+        } elseif (is_int($id)) {
+            return $this->getItem('id', function($v) use ($id) { return $v['tableId'] == $id; }, 'id');
         } else {
             $entities = $this->getItem('id', array(), 'key', $this->tableColumnMap);
-            $type = isset($entities[$type]) ? $entities[$type] : 0;
+            $id = isset($entities[$id]) ? $entities[$id] : 0;
 
-            return $type ? $this->getItem('id', function($v) use($type) { return $v['tableId'] == $type; }, 'id') : array();
+            return $id ? $this->getItem('id', function($v) use($id) { return $v['tableId'] == $id; }, 'id') : array();
         }
     }
     
@@ -181,12 +180,8 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     public function getItemEntity($content_id, $id = 1, $raw = true)
     {
         $content_id = (int)$content_id;
-        $id = (int)$id;
-/*        $ids = implode(',', array_column(array_filter($this->contentTypeMap, function ($v) use ($id) {
-            return $v['tableId'] == $id;
-        }), 'id'));
-        $type = $ids ? safe_field('type_id', 'txp_meta_registry', "content_id = $content_id AND type_id IN ($ids)") : 0;*/
-        $type = $id ? (int)getThing('SELECT id FROM '.PFX.'txp_meta_entity JOIN '.PFX."txp_meta_registry r ON id = r.type_id WHERE r.content_id = $content_id AND table_id = $id LIMIT 1") : 0;
+        $ids = implode(',', $this->getEntities($id));
+        $type = $ids ? (int)safe_field('type_id', 'txp_meta_registry', "content_id = $content_id AND type_id IN ($ids) LIMIT 1") : 0;
 
         if ($raw) {
             return $type;

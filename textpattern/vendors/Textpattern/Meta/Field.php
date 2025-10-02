@@ -877,7 +877,7 @@ class Field
      * @return HTML
      */
 
-    public function render()
+    public function render($preview = false)
     {
         $widget = '';
         $num = $this->get('id');
@@ -979,6 +979,12 @@ class Field
                 break;
         }
 
-        return inputLabel($id, $widget, txpspecialchars($labelRef), array($help, $inlineHelp));
+        $textarea_options = $preview ? n . tag(gTxt('view_preview_short'), 'button', array(
+            'class'             => 'txp-preview txp-reduced-ui-button',
+            'data-preview-link' => $name,
+            'type'              => 'button',
+        )) : '';
+
+        return inputLabel($id, $widget, array(txpspecialchars($labelRef), $textarea_options), array($help, $inlineHelp));
     }
 }

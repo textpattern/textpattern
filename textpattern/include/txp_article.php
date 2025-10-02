@@ -322,8 +322,13 @@ function article_save($write = true)
             "uid"             => md5(uniqid(rand(), true)),
         ));
 
+        $type = $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : (int)ps('type', 1);
+
         if (!$write) {
-            return $setnq + $set;
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+                ->filterCollectionAt($uPosted);
+
+            return $setnq + $set + $mfs->store($_POST, 1, 0);
         }
 
         $set = join_qs($setnq + quote_list($set), ',');
@@ -333,7 +338,6 @@ function article_save($write = true)
         ) {
             // @Todo: Return code.
             // @Todo: Rollback if fail.
-            $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $type = (int)ps('type', 1);
             $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $rs['ID'])
                 ->filterCollectionAt($uPosted);
             $mfs->store($_POST, $type, $rs['ID']);
@@ -394,9 +398,9 @@ function article_preview($field = false)
         $matches = array();
 
         if (preg_match('/^custom_([1-9]\d*)$/', $field, $matches)) {
-            $dbfield = $field;
             $cfields = getCustomFields();
             $field = isset($cfields[$matches[1]]) ? $cfields[$matches[1]] : $field;
+            $dbfield = $field;
         } else {
             $dbfield = $field ? ucfirst($field) . '_html' : '';
         }
@@ -1486,7 +1490,7 @@ function article_partial_custom_field($rs, $key, $meta_type = 1)
         if ($cf) {
             $ref = $rs['ID'] ? array($rs['ID'], $meta_type) : null;
             $cf->loadContent($ref, true)->loadTitles();
-            $out = $cf->render();
+            $out = $cf->render(can_modify($rs));
         }
     }
 

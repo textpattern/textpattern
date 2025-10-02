@@ -201,10 +201,12 @@ class FieldSet implements \IteratorAggregate
         assert_int($contentId);
         assert_int($contentType);
         $cfq = array();
+        $out = array();
 
         if ($contentType) {
             foreach ($this->filterCollection as $id => $def) {
                 $cf_type = $def->get('data_type');
+                $cf_name = $def->get('name');
                 $custom_x = "custom_{$id}";
                 $raw = array();
 
@@ -227,6 +229,7 @@ class FieldSet implements \IteratorAggregate
                 foreach ($raw as $rawVal) {
                     if ($filter === null) {
                         $cfq[$cf_type][$id][] = "value = " . ($rawVal === '' ? 'NULL' : "'" . doSlash($rawVal) . "'");
+                        $out[$cf_name] = $rawVal;
                     } else {
                         $cooked = \Txp::get('Textpattern\Textfilter\Registry')->filter(
                             $filter,
@@ -235,21 +238,25 @@ class FieldSet implements \IteratorAggregate
                         );
 
                         $cfq[$cf_type][$id][] = "value_raw = '" . doSlash($rawVal) . "', value = '" . doSlash($cooked) . "'";
+                        $out[$cf_name] = $cooked;
                     }
                 }
             }
+        }
+
+        if (empty($contentId)) {
+            return $out;
         }
 
         // Store the values in the appropriate custom field table based on its data type.
         foreach ($cfq as $tableType => $data) {
             foreach ($data as $metaId => $content) {
                 $tableName = 'txp_meta_value_'.$tableType;
-                $safeMetaId = doSlash($metaId);
-                safe_delete($tableName, "type_id = $contentType AND meta_id = '$safeMetaId' AND content_id = $contentId");
+                safe_delete($tableName, "type_id = $contentType AND meta_id = $metaId AND content_id = $contentId");
 
                 if ($all || isset($this->filterCollection[$metaId])) {
                     foreach ($content as $valueId => $set) {
-                        $set .= ", type_id = $contentType, meta_id = '$safeMetaId', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
+                        $set .= ", type_id = $contentType, meta_id = $metaId, content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
                         safe_insert($tableName, $set);
                     }
                 }
