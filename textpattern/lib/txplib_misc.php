@@ -854,12 +854,12 @@ function image_format_info($image)
 
     $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? txp_image_type_to_mime_type($mime) : '';
 /*
-    $cfs = Txp::get('Textpattern\Meta\FieldSet', 'image')
-        ->filterCollectionAt('image', ($unix_ts ? $unix_ts : $txpnow));
+    $cfs = Txp::get('\Textpattern\Meta\FieldSet', 2)
+        ->filterCollectionAt($unix_ts ? $unix_ts : $txpnow);
 
 
     foreach ($cfs as $cf) {
-        $ref = $image['id'] ? $image['id'] : null;
+        $ref = $image['id'] ? array($image['id'], 2) : null;
         $cf->loadContent($ref, true);
 
         $valueField = $cf->getValueField();
@@ -3227,6 +3227,22 @@ function fileDownloadFormatTime($params)
     return '';
 }
 
+function safe_curl_close(&$ch): void
+{
+    if ($ch instanceof CurlHandle) {
+        // PHP 8.0+ returns CurlHandle objects
+        // In 8.5+ curl_close() is deprecated, so just nullify
+        $ch = null;
+    } elseif (is_resource($ch) && get_resource_type($ch) === 'curl') {
+        // Older PHP (< 8.0) used resources
+        curl_close($ch);
+        $ch = null;
+    } else {
+        // Not a valid cURL handle
+        $ch = null;
+    }
+}
+
 /**
  * file_get_contents wrapper.
  *
@@ -3254,7 +3270,7 @@ function txp_get_contents($file, $opts = null)
         curl_setopt($ch, CURLOPT_HTTPHEADER, (array)$opts['header']);
 
         $contents = curl_exec($ch);
-        curl_close($ch);
+        safe_curl_close($ch);
     } else {
         $contents = file_get_contents($file, false, stream_context_create(array('http' => $opts)));
     }
@@ -4532,9 +4548,9 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
     if ($out === null) {
         $out = array();
-        $columnIds = \Txp::get('Textpattern\Meta\ContentType')->getItem('tableId');
-        $tableColumns = \Txp::get('Textpattern\Meta\ContentType')->getColumn();
-        $contentTypes = \Txp::get('Textpattern\Meta\ContentType')->getId();
+        $columnIds = \Txp::get('\Textpattern\Meta\ContentType')->getItem('tableId');
+        $tableColumns = \Txp::get('\Textpattern\Meta\ContentType')->getColumn();
+        $contentTypes = \Txp::get('\Textpattern\Meta\ContentType')->getId();
     }
 
     if ($when === null) {
@@ -4544,55 +4560,35 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
     assert_int($when);
     $by = 'by_'.$by;
 
-    if (is_int($type)) {
-        $types = array_keys(\Txp::get('Textpattern\Meta\ContentType')->getItem('tableId', function($v) use ($type) { return $v['tableId'] == $type; }));
-    } else {
-        $types = do_list_unique($type);
-    }
+    if ($type && !isset($out[$when][$type])) {
+        $out[$when][$type] = array();
+        $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+            ->filterCollectionAt($when);
 
-    foreach ($types as $type) {
-        if (!isset($out[$when][$type])) {
-            $out[$when][$type] = array();
-            $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
-                ->filterCollectionAt($type, $when);
-
-            foreach ($cfs as $def) {
-                $thisId = $def->get('id');
-                $thisName = $def->get('name');
-                $out[$when][$type]['by_id'][$thisId] = $thisName;
-                $out[$when][$type]['by_name'][$thisName] = $thisId;
-                $out[$when][$type]['by_title'][$thisName][LANG] = $def->get('title');
-                $out[$when][$type]['by_field']['custom_' . $thisId] = $thisName;
-                $out[$when][$type]['by_type'][$thisId] = $def->get('data_type');
-                $out[$when][$type]['by_content'][$thisId] = $def->get('content_type');
-                $out[$when][$type]['by_callback'][$thisId] = $def->get('render');
-                $out[$when][$type]['by_family'][$thisId] = $def->get('family');
-                $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
-                $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
-                $out[$when][$type]['by_created'][$thisId] = $def->get('created');
-                $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
-                $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
-                $out[$when][$type]['by_column'][$thisId] = $tableColumns[$type];
-                $out[$when][$type]['by_content_id'][$thisId] = $contentTypes[$type];
-            }
-
-            ksort($out, SORT_NUMERIC);
+        foreach ($cfs as $def) {
+            $thisId = $def->get('id');
+            $thisName = $def->get('name');
+            $out[$when][$type]['by_id'][$thisId] = $thisName;
+            $out[$when][$type]['by_name'][$thisName] = $thisId;
+            $out[$when][$type]['by_title'][$thisName][LANG] = $def->get('title');
+            $out[$when][$type]['by_field']['custom_' . $thisId] = $thisName;
+            $out[$when][$type]['by_type'][$thisId] = $def->get('data_type');
+            $out[$when][$type]['by_content'][$thisId] = $def->get('content_type');
+            $out[$when][$type]['by_callback'][$thisId] = $def->get('render');
+            $out[$when][$type]['by_family'][$thisId] = $def->get('family');
+            $out[$when][$type]['by_textfilter'][$thisId] = $def->get('textfilter');
+            $out[$when][$type]['by_delimiter'][$thisId] = $def->get('delimiter');
+            $out[$when][$type]['by_created'][$thisId] = $def->get('created');
+            $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
+            $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
+            $out[$when][$type]['by_column'][$thisId] = $tableColumns[$type];
+            $out[$when][$type]['by_content_id'][$thisId] = $contentTypes[$type];
         }
+
+        ksort($out, SORT_NUMERIC);
     }
 
-    if (count($types) <= 1) {
-        return isset($out[$when][$type][$by]) ? $out[$when][$type][$by] : $out[$when][$type];
-    }
-
-    $merge = array();
-
-    foreach ($types as $type) {
-        foreach ($out[$when][$type] as $k => $v) {
-            $merge[$k] = isset($merge[$k]) ? $merge[$k] + $v : $v;
-        }
-    }
-    
-    return isset($merge[$by]) ? $merge[$by] : $merge;
+    return isset($out[$when][$type][$by]) ? $out[$when][$type][$by] : $out[$when][$type];
 }
 
 /**

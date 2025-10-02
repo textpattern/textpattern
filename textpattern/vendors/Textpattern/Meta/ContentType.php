@@ -145,7 +145,40 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
             (isset($this->tableColumnMap[$id]) ? $this->tableColumnMap[$id] : null);
     }
 
-    public function getItemEntity($content_id, $id = 1, $raw = false)
+    /**
+     * Return a list of entities.
+     *
+     * @param   string Item to retrive from the array (null = everything)
+     * @param   array  List of content keys to exclude
+     * @return  array  An entities array
+     */
+
+    public function getEntities($type = null)
+    {
+        if ($type === null) {
+            return $this->getItem('id', array(), 'id');
+        } elseif (is_int($type)) {
+            return $this->getItem('id', function($v) use ($type) { return $v['tableId'] == $type; }, 'id');
+        } else {
+            $entities = $this->getItem('id', array(), 'key', $this->tableColumnMap);
+            $type = isset($entities[$type]) ? $entities[$type] : 0;
+
+            return $type ? $this->getItem('id', function($v) use($type) { return $v['tableId'] == $type; }, 'id') : array();
+        }
+    }
+    
+    public function getEntity($type)
+    {
+        if (!is_int($type)) {
+            $type = (string)$type;
+            $typeids = $this->getId(); //safe_field('id', 'txp_meta_entity', "name = '$stype'");
+            $type = isset($typeids[$type]) ? (int)$typeids[$type] : 0;
+        }
+    
+        return isset($this->tableColumnMap[$type]) ? $type : 0;
+    }
+
+    public function getItemEntity($content_id, $id = 1, $raw = true)
     {
         $content_id = (int)$content_id;
         $id = (int)$id;
@@ -153,10 +186,15 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
             return $v['tableId'] == $id;
         }), 'id'));
         $type = $ids ? safe_field('type_id', 'txp_meta_registry', "content_id = $content_id AND type_id IN ($ids)") : 0;*/
-        $type = $id ? getThing('SELECT id FROM '.PFX.'txp_meta_entity JOIN '.PFX."txp_meta_registry r ON id = r.type_id WHERE r.content_id = $content_id AND table_id = $id LIMIT 1") : 0;
+        $type = $id ? (int)getThing('SELECT id FROM '.PFX.'txp_meta_entity JOIN '.PFX."txp_meta_registry r ON id = r.type_id WHERE r.content_id = $content_id AND table_id = $id LIMIT 1") : 0;
+
+        if ($raw) {
+            return $type;
+        }
+
         $types = $type ? $this->getItem('key', array(), 'id') : null;
 
-        return $raw ? $type : (isset($types[$type]) ? $types[$type] : false);
+        return (isset($types[$type]) ? $types[$type] : false);
     }
 
     /**
@@ -167,9 +205,9 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
      * @return  array  A content types array
      */
 
-    public function getItem($item = null, $exclude = array(), $key = 'key')
+    public function getItem($item = null, $exclude = array(), $key = 'key', $map = null)
     {
-        $map = $this->contentTypeMap;
+        isset($map) or $map = $this->contentTypeMap;
 
         if (is_callable($exclude)) {
             $map = array_filter($map, $exclude);
@@ -239,13 +277,33 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     public function save($data = array())
     {
         extract($data);
-        unset($data['id']);
+        unset($data['id'], $data['meta']);
+        $id = isset($id) ? (int)$id : 0;
+        $meta = isset($meta) ? array_filter(array_map('intval', (array)$meta)) : array();
         // TODO: validate data
 
         if (empty($id)) {
             $ok = safe_insert('txp_meta_entity', $data);
         } else {
+            unset($data['table_id']); // don't allow table changes
             $ok = safe_update('txp_meta_entity', $data, "id = $id");
+        }
+
+        if ($ok) {
+            $old_meta = $id ? safe_column_num('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
+            $id or $id = $ok;
+            $metas = safe_column('id', 'txp_meta', "1");
+
+            foreach (array_diff($meta, $old_meta) as $meta_in) {
+                if (isset($metas[$meta_in])) {
+                    safe_insert('txp_meta_fieldsets', "type_id = $id, meta_id = $meta_in");
+                    safe_delete('txp_meta_delta', "type_id = $id AND meta_id = $meta_in");
+                }
+            }
+
+            if ($meta_out = array_diff($old_meta, $meta)) {
+                \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete($id, null, $meta_out);
+            }
         }
 
         return gTxt($ok ? 'meta_saved' : 'meta_save_failed');

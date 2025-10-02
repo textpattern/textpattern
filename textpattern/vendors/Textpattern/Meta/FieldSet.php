@@ -54,41 +54,52 @@ class FieldSet implements \IteratorAggregate
     /**
      * Constructor for the field set.
      *
-     * @param string $type Content type to load
+     * @param null|string|int|array $type Content type to load
      */
 
-    public function __construct($type = 'article')
+    public function __construct($type = null, $content_id = null)
     {
-        $type = (string)$type;
-        // Haz cache?
-        if (!isset(self::$collection[$type])) {
-            $stype = doSlash($type);
-            $typeids = \Txp::get('Textpattern\Meta\ContentType')->getId(); //safe_field('id', 'txp_meta_entity', "name = '$stype'");
-            $typeid = isset($typeids[$type]) ? $typeids[$type] : 0;
-            self::$collection[$type] = array();
+        if ($type === null) {
+            $types = safe_column('id', 'txp_meta');
+        } elseif (is_string($type)) {
+            $types = implode(',', \Txp::get('\Textpattern\Meta\ContentType')->getEntities($type));
+            $types = $types ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id IN ($types)") : array();
+        } elseif (is_int($type)) {
+            $type = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($type);
+            $types = $type ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id = $type") : array();
+        } elseif (is_array($type)) {
+            $types = array_combine($type, $type);
+        } else {
+            $types = array();
+        }
+        
+        $types = array_filter((array)$types);
+        $to_fetch = array_diff_key($types, self::$collection);
+        is_int($type) or $type = null;
 
-            if ($typeid and $cfs = getRows("SELECT
-                m.id,
-                m.name,
-                '$stype' AS content_type,
-                m.data_type,
-                m.render,
-                m.family,
-                m.textfilter,
-                m.delimiter,
-                m.created,
-                m.modified,
-                m.expires
-                FROM ".PFX."txp_meta m JOIN ".PFX."txp_meta_fieldsets fs ON fs.meta_id = m.id
-                WHERE fs.type_id = $typeid
-                ORDER BY m.family, fs.ordinal")
+        if ($to_fetch) {
+            $to_fetch = implode(',', $to_fetch);
+
+            if ($cfs = getRows("SELECT * FROM ".PFX."txp_meta WHERE id IN ($to_fetch) ORDER BY family")
             ) {
                 foreach ($cfs as $def) {
-                    self::$collection[$type][$def['id']] = new Field($def, $typeid);
+                    self::$collection[$def['id']] = new Field($def);
                 }
             }
+        }
 
-            $this->filterCollection = self::$collection[$type];
+        $this->filterCollection = array_intersect_key(self::$collection, $types);
+
+        if ($type && isset($content_id) && $content_id = intval($content_id)) {
+            foreach (safe_column('meta_id', 'txp_meta_delta', "content_id = $content_id AND type_id = $type") as $meta_id) {
+                if ($meta_id < 0) {
+                    unset($this->filterCollection[-$meta_id]);
+                } elseif ($meta_id > 0 and $cfs = getRows("SELECT * FROM ".PFX."txp_meta WHERE id = $meta_id ORDER BY family")) {
+                    foreach ($cfs as $def) if (!isset($this->filterCollection[$def['id']])) {
+                        $this->filterCollection[$def['id']] = new Field($def);
+                    }
+                }
+            }
         }
     }
 
@@ -100,29 +111,36 @@ class FieldSet implements \IteratorAggregate
      * @return array
      */
 
-    public function filterCollection($type, $by = null)
+    public function filterCollection($by = null, $type = null)
     {
-        if (isset(self::$collection[$type])) {
-            $this->filterCollection = array();
+        if ($type === null) {
+            $collection = $by === null ? null : $this->filterCollection;
+        } else {
+            $type = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($type);
+            $collection = isset(self::$collection[$type]) ? self::$collection[$type] : null;
+        }
 
+        if (isset($collection)) {
             if ($by === null) {
-                $this->filterCollection = self::$collection[$type];
+                $this->filterCollection = $collection;
             } else {
+                $this->filterCollection = array();
+
                 switch ($by) {
                     case 'id':
-                        foreach (self::$collection[$type] as $idx => $def) {
+                        foreach ($collection as $idx => $def) {
                             $this->filterCollection[$def->get('id')] = $def;
                         }
 
                         break;
                     case 'name':
-                        foreach (self::$collection[$type] as $idx => $def) {
+                        foreach ($collection as $idx => $def) {
                             $this->filterCollection[$def->get('name')] = $def;
                         }
 
                         break;
                     case 'field':
-                        foreach (self::$collection[$type] as $idx => $def) {
+                        foreach ($collection as $idx => $def) {
                             $this->filterCollection['custom_' . $def->get('id')] = $def;
                         }
 
@@ -143,9 +161,14 @@ class FieldSet implements \IteratorAggregate
      * @return array
      */
 
-    public function filterCollectionAt($type, $when = null)
+    public function filterCollectionAt($when = null, $type = null)
     {
         global $txpnow;
+
+        if ($type !== null) {
+            $type = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($type);
+            $this->filterCollection = (isset(self::$collection[$type]) ? self::$collection[$type] : array());
+        }
 
         if ($when === null) {
             $when = $txpnow;
@@ -153,15 +176,15 @@ class FieldSet implements \IteratorAggregate
 
         assert_int($when);
 
-        $this->filterCollection = array();
+        if (isset($this->filterCollection)) {
+            foreach ($this->filterCollection as $idx => $def) {
+                $createStamp = safe_strtotime($def->get('created'));
+                $expires = $def->get('expires');
+                $expireStamp = empty($expires) ? 0 : safe_strtotime($expires);
 
-        foreach (self::$collection[$type] as $idx => $def) {
-            $createStamp = safe_strtotime($def->get('created'));
-            $expires = $def->get('expires');
-            $expireStamp = empty($expires) ? 0 : safe_strtotime($expires);
-
-            if ($when >= $createStamp && (empty($expireStamp) || $when <= $expireStamp)) {
-                $this->filterCollection[$def->get('id')] = $def;
+                if ($when < $createStamp || (!empty($expireStamp) && $when > $expireStamp)) {
+                    unset($this->filterCollection[$idx]);
+                }
             }
         }
 
@@ -176,13 +199,11 @@ class FieldSet implements \IteratorAggregate
     public function store($varray, $contentType, $contentId, $all = false)
     {
         assert_int($contentId);
-
-        $ids = \Txp::get('Textpattern\Meta\ContentType')->getId();
-        $typeId = isset($ids[$contentType]) ? $ids[$contentType] : 0;
+        assert_int($contentType);
         $cfq = array();
 
-        if ($typeId && isset(self::$collection[$contentType])) {
-            foreach (self::$collection[$contentType] as $id => $def) {
+        if ($contentType) {
+            foreach ($this->filterCollection as $id => $def) {
                 $cf_type = $def->get('data_type');
                 $custom_x = "custom_{$id}";
                 $raw = array();
@@ -224,46 +245,67 @@ class FieldSet implements \IteratorAggregate
             foreach ($data as $metaId => $content) {
                 $tableName = 'txp_meta_value_'.$tableType;
                 $safeMetaId = doSlash($metaId);
-                safe_delete($tableName, "type_id = $typeId AND meta_id = '$safeMetaId' AND content_id = $contentId");
+                safe_delete($tableName, "type_id = $contentType AND meta_id = '$safeMetaId' AND content_id = $contentId");
 
                 if ($all || isset($this->filterCollection[$metaId])) {
                     foreach ($content as $valueId => $set) {
-                        $set .= ", type_id = $typeId, meta_id = '$safeMetaId', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
+                        $set .= ", type_id = $contentType, meta_id = '$safeMetaId', content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
                         safe_insert($tableName, $set);
                     }
                 }
             }
         }
 
-        safe_upsert('txp_meta_registry', array('content_id' => $contentId, 'type_id' => $typeId), array('content_id' => $contentId, 'type_id' => $typeId));
+        safe_upsert('txp_meta_registry', array('content_id' => $contentId, 'type_id' => $contentType), array('content_id' => $contentId, 'type_id' => $contentType));
 
         return $this;
     }
 
     /**
-     * Delete the value of each field in the collection. Chainable.
+     * Insert fields in the collection. Chainable.
      */
 
-    public function delete($contentType, $contentId)
+    public function insert($contentType, $contentId = null, $metaId = null)
     {
-        assert_int($contentId);
+        return $this;
+    }
 
-        $ids = \Txp::get('Textpattern\Meta\ContentType')->getId();
-        $typeId = isset($ids[$contentType]) ? $ids[$contentType] : 0;
+    /**
+     * Delete fields from the collection. Chainable.
+     */
+
+    public function delete($contentType, $contentId = null, $metaId = null)
+    {
+        assert_int($contentType);
+        $contentId === null or $contentId = implode(',', array_filter(is_int($contentId) ? array($contentId) : array_map('intval', do_list_unique($contentId))));
+        $metaId === null or $metaId = implode(',', array_filter(is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId))));
+        $contentQuery = $contentId ? " AND content_id IN ($contentId)" : '';
+        $metaQuery = $metaId ? " AND meta_id IN ($metaId)" : '';
         $cfq = array();
 
-        if ($typeId && isset(self::$collection[$contentType])) {
-            foreach (self::$collection[$contentType] as $id => $def) {
+        if ($contentType) {
+            foreach ($this->filterCollection as $id => $def) {
                 $cfq[$def->get('data_type')] = $id;
             }
 
             // Delete the values of the appropriate custom field table based on its data type.
-            foreach ($cfq as $tableType => $metaId) {
+            foreach ($cfq as $tableType => $id) {
                 $tableName = 'txp_meta_value_'.$tableType;
-                safe_delete($tableName, "type_id = $typeId AND content_id = $contentId");
+                safe_delete($tableName, "type_id = {$contentType}{$contentQuery}{$metaQuery}");
             }
 
-            safe_delete('txp_meta_registry', "content_id = $contentId AND type_id = $typeId");
+            if (empty($metaQuery)) {
+                safe_delete('txp_meta_registry', "type_id = {$contentType}{$contentQuery}");
+            } else {
+                if ($contentId === null) {
+                    safe_delete('txp_meta_fieldsets', "type_id = {$contentType}{$metaQuery}");
+                    $metaQuery = $metaId ? " AND -meta_id IN ($metaId)" : '';
+                } else {
+                    $metaQuery = $metaId ? " AND ABS(meta_id) IN ($metaId)" : '';
+                }
+            }
+
+            safe_delete('txp_meta_delta', "type_id = {$contentType}{$contentQuery}{$metaQuery}");
         }
 
         return $this;
@@ -297,9 +339,11 @@ class FieldSet implements \IteratorAggregate
      * @param  string $item The key of the item to retrieve
      */
 
-    public function getItem($item)
+    public function getItem($item = null)
     {
-        if (isset($this->filterCollection[$item])) {
+        if (!isset($item)) {
+            return $this->filterCollection;
+        } elseif (isset($this->filterCollection[$item])) {
             return $this->filterCollection[$item];
         }
 

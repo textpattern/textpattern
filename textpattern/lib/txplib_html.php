@@ -1169,6 +1169,56 @@ function assHead()
 }
 
 /**
+ * Renders a section field.
+ *
+ * @param  string $Section The selected section
+ * @param  string $id      The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
+
+function section_popup($Section, $id)
+{
+    global $txp_sections;
+
+    $rs = $txp_sections;
+    unset($rs['default']);
+
+    if ($rs) {
+        $options = array();
+
+        foreach ($rs as $a) {
+            $options[$a['name']] = array('title' => $a['title'], 'data-skin' => $a['skin']);
+        }
+
+        return selectInput('Section', $options, $Section, false, '', $id);
+    }
+
+    return false;
+}
+
+/**
+ * Renders a category field.
+ *
+ * @param  string $name The Name of the field
+ * @param  string $val  The selected option
+ * @param  string $id   The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
+
+function category_popup($name, $val, $id)
+{
+    static $rs = null;
+
+    isset($rs) or $rs = getTree('root', 'article');
+
+    if ($rs) {
+        return treeSelectInput($name, $rs, $val, $id, 35);
+    }
+
+    return false;
+}
+
+/**
  * Renders the ubiquitous popup help button.
  *
  * The rendered link can be customised via a 'admin_help > {$help_var}'

@@ -333,9 +333,9 @@ function article_save($write = true)
         ) {
             // @Todo: Return code.
             // @Todo: Rollback if fail.
-            $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $type = gps('type', 'article');
-            $mfs = Txp::get('Textpattern\Meta\FieldSet', $type)
-                ->filterCollectionAt($type, $uPosted);
+            $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $type = (int)ps('type', 1);
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $rs['ID'])
+                ->filterCollectionAt($uPosted);
             $mfs->store($_POST, $type, $rs['ID']);
 
             if ($is_clone) {
@@ -755,13 +755,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     extract($rs);
 
     $when = ($sPosted) ? $sPosted : $txpnow;
-    $meta_type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) or $meta_type = gps('type', 'article');
+    $meta_type = $rs['ID'] ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) : (int)ps('type', 1);
 
     $rs['$meta_type'] = $meta_type;
 
     // Add partials for custom fields (and their values which is redundant by design, for plugins).
-    $cfs = $meta_type ? Txp::get('Textpattern\Meta\FieldSet', $meta_type)
-        ->filterCollectionAt($meta_type, $when) : array();
+    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'])
+        ->filterCollectionAt($when) : array();
 
     foreach ($cfs as $i => $cf_info) {
         $vars[] = "custom_$i";
@@ -1167,56 +1167,6 @@ function status_display($status = 0)
 }
 
 /**
- * Renders a section field.
- *
- * @param  string $Section The selected section
- * @param  string $id      The HTML id
- * @return string HTML &lt;select&gt; input
- */
-
-function section_popup($Section, $id)
-{
-    global $txp_sections;
-
-    $rs = $txp_sections;
-    unset($rs['default']);
-
-    if ($rs) {
-        $options = array();
-
-        foreach ($rs as $a) {
-            $options[$a['name']] = array('title' => $a['title'], 'data-skin' => $a['skin']);
-        }
-
-        return selectInput('Section', $options, $Section, false, '', $id);
-    }
-
-    return false;
-}
-
-/**
- * Renders a category field.
- *
- * @param  string $name The Name of the field
- * @param  string $val  The selected option
- * @param  string $id   The HTML id
- * @return string HTML &lt;select&gt; input
- */
-
-function category_popup($name, $val, $id)
-{
-    static $rs = null;
-
-    isset($rs) or $rs = getTree('root', 'article');
-
-    if ($rs) {
-        return treeSelectInput($name, $rs, $val, $id, 35);
-    }
-
-    return false;
-}
-
-/**
  * Renders a view tab.
  *
  * @param  string $tabevent Target view
@@ -1519,7 +1469,7 @@ function article_partial_actions($rs)
  * @return string HTML
  */
 
-function article_partial_custom_field($rs, $key, $meta_type = 'article')
+function article_partial_custom_field($rs, $key, $meta_type = 1)
 {
     global $txpnow;
 
@@ -1529,12 +1479,12 @@ function article_partial_custom_field($rs, $key, $meta_type = 'article')
 
     if (!empty($m[1])) {
         $num = $m[1];
-        $cfs = Txp::get('Textpattern\Meta\FieldSet', $meta_type)
-            ->filterCollectionAt($meta_type, ($rs['sPosted'] ? $rs['sPosted'] : $txpnow));
+        $cfs = Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ? $rs['ID'] : null)
+            ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow);
         $cf = $cfs->getItem($num);
 
         if ($cf) {
-            $ref = ($rs['ID']) ? $rs['ID'] : null;
+            $ref = $rs['ID'] ? array($rs['ID'], $meta_type) : null;
             $cf->loadContent($ref, true)->loadTitles();
             $out = $cf->render();
         }
@@ -1715,9 +1665,9 @@ function article_partial_custom_fields($rs)
     global $txpnow;
 
     $cf = '';
-    $meta_type = isset($rs['$meta_type']) ? $rs['$meta_type'] : Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
-    $cfs = $meta_type ? Txp::get('Textpattern\Meta\FieldSet', $meta_type)
-        ->filterCollectionAt($meta_type, ($rs['sPosted'] ? $rs['sPosted'] : $txpnow)) : array();
+    $meta_type = isset($rs['$meta_type']) ? (int)$rs['$meta_type'] : Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
+    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ? $rs['ID'] : null)
+        ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow) : array();
 
     foreach ($cfs as $k => $v) {
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}", $meta_type);

@@ -206,16 +206,16 @@ function image_list($message = '')
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
-        $types = \Txp::get('Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 2; });
+        $types = \Txp::get('\Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 2; }, 'id');
         $imagetypes = get_safe_image_types();
-        $categories = ($types ? selectInput('type', $types, 'image', false, '', 'image_category') : '');//event_category_popup('image', '', 'image_category');
+        $categories = ($types ? selectInput('type', $types, '', false, '', 'image_type') : '');//event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n . tag(
                 n . upload_form(
                     'upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '',
                     array('postinput' => ($categories
                         ? n . tag(
-                            n . tag(gTxt('entity'), 'label', array('for' => 'image_category')) . $categories . n,
+                            n . tag(gTxt('entity'), 'label', array('for' => 'image_type')) . $categories . n,
                             'span',
                             array('class' => 'inline-file-uploader-actions')
                         )
@@ -733,12 +733,12 @@ function image_edit($message = '', $id = '')
 
         $cfBlock = array();
 
-        $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($rs['id'], 2) or $type = gps('type', 'image');
-        $cfs = Txp::get('Textpattern\Meta\FieldSet', $type)
-            ->filterCollectionAt($type, ($uDate ? $uDate : $txpnow));
+        $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['id'], 2);
+        $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+            ->filterCollectionAt($uDate ? $uDate : $txpnow);
 
         foreach ($cfs as $cf) {
-            $ref = $id ? $id : null;
+            $ref = $id ? array($id, $type) : null;
             $cf->loadContent($ref, true)->loadTitles();
             $cfBlock[] = $cf->render();
         }
@@ -860,9 +860,9 @@ function image_insert()
     global $app_mode, $event;
 
     register_callback(function ($ev, $st, $id) {
-        $type = gps('type', 'image');
-        $types = Txp::get('Textpattern\Meta\ContentType')->getItem('id', function($v) { return $v['tableId'] == 2; });
-        $type = isset($types[$type]) ? $types[$type] : 2; // Default to 'image'.
+        $type = (int)ps('type', 2); // Default to 'image'.
+        $types = Txp::get('\Textpattern\Meta\ContentType')->getItem('key', function($v) { return $v['tableId'] == 2; }, 'id');
+        $type = isset($types[$type]) ? $type : 2; // Default to 'image'.
         safe_insert('txp_meta_registry', "type_id = $type, content_id = $id");
     }, 'image_uploaded');
     $messages = $ids = array();
@@ -1049,9 +1049,9 @@ function image_save()
     }
 
     // ToDo: Run custom fields through validator.
-    $type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 2) or $type = gps('type', 'image');
-    $mfs = Txp::get('Textpattern\Meta\FieldSet', $type)
-        ->filterCollectionAt($type, $uDate);
+    $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2);
+    $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+        ->filterCollectionAt($uDate);
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
     callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
@@ -1089,8 +1089,8 @@ function image_delete($ids = array())
     $message = '';
 
     register_callback(function ($ev, $st, $id) {
-        if ($type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 2)) {
-            Txp::get('Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+        if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2)) {
+            Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($type, $id);
         }
     }, 'image_deleted');
 

@@ -916,7 +916,7 @@ function filterAtts($atts = null, $iscustom = null)
         return $coreAtts;
     }
 
-    $customFields = getCustomFields(1, null, null);
+    $customFields = getCustomFields('article', null, null);
     $filterFields = ($customFields ? $customFields['by_id'] : array()) + array('url_title' => 'url_title');
     $searchFields = array();
     $postWhere = $customPairs = $customlAtts = array();

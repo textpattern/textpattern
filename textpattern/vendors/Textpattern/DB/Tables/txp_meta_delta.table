@@ -1,0 +1,5 @@
+content_id INT(12) UNSIGNED NOT NULL,
+type_id INT(12) UNSIGNED NOT NULL,
+meta_id INT(12) NOT NULL,
+
+UNIQUE KEY content_type_meta (content_id,type_id,meta_id)

@@ -1009,7 +1009,7 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where);
+        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where, false, false);
         $total -= $offset;
 
         return $pgby ? ceil($total / $pgby) : $total;

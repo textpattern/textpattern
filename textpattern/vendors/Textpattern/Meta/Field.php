@@ -137,11 +137,10 @@ class Field
      * @param mixed $idName The numeric id or array(name, type) of the field to load
      */
 
-    public function __construct($idName = null, $typeid = null)
+    public function __construct($idName = null)
     {
         global $prefs;
         static $out = null;
-        $this->contentType = $typeid;
 
         $this->properties = array(
             'id',
@@ -165,8 +164,11 @@ class Field
         if ($idName) {
             $this->loadField($idName)
                 ->loadOptions()
-                ->loadTitles()
-                ->loadContent();
+                ->loadTitles();
+
+            if (is_int($idName)) {
+                $this->loadContent();
+            }
         }
     }
 
@@ -189,14 +191,6 @@ class Field
                         "`" . implode("`,`", $this->properties) . "`",
                         'txp_meta',
                         $clause
-                    );
-                } elseif (is_array($idName) && count($idName) === 2 && isset($idName['name']) && isset($idName['type'])) {
-                    $clause = "name = '" . doSlash($idName['name']) . "'";
-
-                    $this->definition = safe_row(
-                        "`" . implode("`,`", $this->properties) . "`",
-                        'txp_meta',
-                        $clause //. " ORDER by ordinal"
                     );
                 } else {
                     foreach ($idName as $key => $value) {
@@ -221,25 +215,26 @@ class Field
     /**
      * Set the content for this field from the DB. Chainable.
      *
-     * @param string $ref   Content identifier from which to load the value
+     * @param array  $ref   Content identifier from which to load the value
      * @param bool   $force true = always fetch the data from the database, false = use cached value
      * @todo txp_section doesn't have an ID field so it can't be referenced yet.
      *       Either add an ID (preferred), or relax the content_id field of meta_value tables to be varchar,
      *       which would imply all refs to meta_id or id be sanitised as they won't be using assert_int().
      */
 
-    public function loadContent($ref = null, $force = false)
+    public function loadContent($ref = array(), $force = false)
     {
         global $event;
 
         if ($this->content === null || (count($this->content) === 1 && isset($this->content[0]) && $this->content[0] === null) || $force) {
             $fieldCol = $this->getValueField();
-            $typeId = intval(isset($this->contentType) ? $this->contentType : 0);//TODO
+            list($ref, $type) = ($ref ? (array)$ref : array()) + array(null, null);
+            $type = isset($type) ? intval($type) : 0;
 
             $content = safe_rows(
                 'content_id,'. $fieldCol,
                 'txp_meta_value_'.$this->definition['data_type'],
-                "type_id = $typeId AND meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR content_id = '" .$ref. "'") . ")"
+                "meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR type_id = $type AND content_id = '" .$ref. "'") . ")"
             );
 
             // content_id values with index="-1" contain 'default' entries that need removing.
@@ -660,6 +655,7 @@ class Field
         safe_delete('txp_lang', $langClause);
         safe_delete('txp_meta', 'id = '.$this_id);
         safe_delete('txp_meta_fieldsets', 'meta_id = '.$this_id);
+        safe_delete('txp_meta_delta', 'ABS(meta_id) = '.$this_id);
 
         return true;
     }

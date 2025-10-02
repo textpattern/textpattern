@@ -174,11 +174,10 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         }
     }
 
-    $name_m = (is_array($name) ? $name['name'] : $name).($multiple ? '[]' : '');
+    $name_m = trim(is_array($name) ? $name['name'] : $name);
+    $name_m === '' or $name_m .= ($multiple ? '[]' : '');
 
-    $atts = join_atts((is_array($name) ? $name : array(
-        'name' => $name.($multiple ? '[]' : '')
-    )) + array(
+    $atts = join_atts(array('name' => $name_m) + (is_array($name) ? $name : array()) + array(
         'id'       => $select_id,
         'disabled' => (bool) $disabled,
         'multiple' => $multiple
@@ -190,8 +189,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'.n
-        .($multiple ? hInput($name_m, '').n : ''); // TODO: use jQuery UI selectmenu?
+    return n.($multiple ? hInput($name_m, '').n : '')
+        .'<select'.$atts.'>'.n.join(n, $out).n.'</select>'.n;
 }
 
 /**

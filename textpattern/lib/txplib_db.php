@@ -476,7 +476,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
  * }
  */
 
-function safe_delete($table, $where, $debug = false)
+function safe_delete($table, $where = '1', $debug = false)
 {
     return (bool) safe_query("DELETE FROM ".safe_pfx($table)." WHERE $where", $debug);
 }
@@ -913,7 +913,7 @@ function safe_rename($table, $newname, $debug = false)
  * }
  */
 
-function safe_field($thing, $table, $where, $debug = false)
+function safe_field($thing, $table, $where = '1', $debug = false)
 {
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $r = safe_query($q, $debug);
@@ -978,7 +978,7 @@ function safe_column($thing, $table, $where = '1', $debug = false)
  * @since  4.5.0
  */
 
-function safe_column_num($thing, $table, $where, $debug = false)
+function safe_column_num($thing, $table, $where = '1', $debug = false)
 {
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
@@ -1012,7 +1012,7 @@ function safe_column_num($thing, $table, $where, $debug = false)
  * }
  */
 
-function safe_row($things, $table, $where, $debug = false)
+function safe_row($things, $table, $where = '1', $debug = false)
 {
     $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRow($q, $debug);
@@ -1047,7 +1047,7 @@ function safe_row($things, $table, $where, $debug = false)
  * }
  */
 
-function safe_rows($things, $table, $where, $debug = false)
+function safe_rows($things, $table, $where = '1', $debug = false)
 {
     $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
@@ -1079,7 +1079,7 @@ function safe_rows($things, $table, $where, $debug = false)
  * }
  */
 
-function safe_rows_start($things, $table, $where, $debug = false)
+function safe_rows_start($things, $table, $where = '1', $debug = false)
 {
     $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
 
@@ -1100,7 +1100,7 @@ function safe_rows_start($things, $table, $where, $debug = false)
  * }
  */
 
-function safe_count($table, $where, $debug = false)
+function safe_count($table, $where = '1', $debug = false)
 {
     return getCount($table, $where, $debug);
 }
@@ -1346,7 +1346,7 @@ function getThings($query, $debug = false)
  * @see    safe_count()
  */
 
-function getCount($table, $where, $debug = false)
+function getCount($table, $where = '1', $debug = false, $pfx = true)
 {
     if (is_array($table)) {
         //$thing is expected to be sanitized by the caller
@@ -1355,7 +1355,9 @@ function getCount($table, $where, $debug = false)
         $thing = '*';
     }
 
-    return getThing("SELECT COUNT($thing) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
+    $table = $pfx ? safe_pfx_j($table) : $table;
+
+    return getThing("SELECT COUNT($thing) FROM $table WHERE $where", $debug);
 }
 
 // -------------------------------------------------------------

@@ -297,11 +297,12 @@ function list_list($message = '', $post = '')
     $buttons = array();
 
     if (has_privs('article.edit.own')) {
-        $types = \Txp::get('Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 1; });
+        $types = \Txp::get('\Textpattern\Meta\ContentType')->getItem('label', function($v) { return $v['tableId'] == 1; }, 'id');
         $buttons[] = /*sLink('article', '', gTxt('create_article'), 'txp-button')*/form(
             fInput('submit', '', gTxt('create_article')).
-            hInput('event', 'article').
-            ($types ? selectInput('type', $types, 'article') : '')
+            eInput('article').
+//            section_popup('', 'section').
+            ($types ? selectInput('type', $types, 1) : '')
         );
     }
 
@@ -657,8 +658,8 @@ function list_multi_edit()
             // with this content_id.
             if ($selected && safe_delete('textpattern', "ID IN (" . join(',', $selected) . ")")) {
                 foreach ($selected as $id) {
-                    if ($type = Txp::get('Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
-                        Txp::get('Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+                    if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
+                        Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($type, $id);
                     }
                 }
 

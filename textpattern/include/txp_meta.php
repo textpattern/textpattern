@@ -84,7 +84,7 @@ if ($event == 'meta') {
 
 function meta_list($message = '')
 {
-    global $app_mode, $event, $step, $meta_list_pageby, $txp_user;
+    global $app_mode, $event, $step, $all_content_types, $meta_list_pageby, $txp_user;
 
     pagetop(gTxt('tab_meta'), $message);
 
@@ -199,10 +199,18 @@ function meta_list($message = '')
             )
         );
 
+    $types = \Txp::get('\Textpattern\Meta\ContentType')->getItem('label', array(), 'id');
+
     $createBlock[] =
         n.tag(
             sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button').
-            sLink('meta', 'meta_type', gTxt('create_entity'), 'txp-button'),
+        form(
+                fInput('submit', '', gTxt('edit_entity')).
+                eInput('meta').
+                sInput('meta_type').
+                ($types ? selectInput('id', $types, '', true) : '')
+        ),
+//            sLink('meta', 'meta_type', gTxt('create_entity'), 'txp-button'),
             'div', array('class' => 'txp-control-panel')
         );
 
@@ -291,7 +299,6 @@ function meta_list($message = '')
                 n.tag_start('tbody');
 
             $validator = new Validator();
-            $contentLabels = Txp::get('\Textpattern\Meta\ContentType')->getItem('label', array(), 'id');
 
             while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'meta');
@@ -315,7 +322,7 @@ TODO: constraints
                 $meta_labels = array();
 
                 foreach (do_list_unique($meta_content_type) as $_ct) {
-                    $meta_labels[] = isset($contentLabels[$_ct]) ? txpspecialchars($contentLabels[$_ct]) : $_ct;
+                    $meta_labels[] = isset($all_content_types[$_ct]) ? txpspecialchars($all_content_types[$_ct]) : $_ct;
                 }
 
                 $contentBlock .= tr(
@@ -722,17 +729,20 @@ function meta_type($message = '')
     pagetop(gTxt('tab_meta'), $message);
 
 //    $txp_tables = getThings('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = "'.$DB->db.'" AND TABLE_TYPE LIKE "BASE_TABLE" AND TABLE_NAME NOT LIKE "'.PFX.'txp\_meta%"');
-    $txp_tables = array_column(Txp::get('\Textpattern\Meta\contentType')->getTableColumnMap(), 'label', 'id');
+    $txp_tables = array_column(Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap(), 'label', 'id');
 
     $id = intval(gps('id'));
 
-    if ($type = safe_row('*', 'txp_meta_entity', "id = $id")) {
+    if ($id && $type = safe_row('*', 'txp_meta_entity', "id = $id")) {
         extract($type);
     } else {
         list($id, $name, $label, $table_id) = array(0, '', '', 1);
     }
 
     $caption = gTxt($id ? 'edit_entity' : 'create_entity');
+//    $families = do_list_unique(safe_field('GROUP_CONCAT(family)', 'txp_meta', "family > '' ORDER BY family"));
+    $all_metas = safe_column(array('id', 'name'), 'txp_meta', "1 ORDER BY name");
+    $metas = $id ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
 
     echo form(
         hed($caption, 2).
@@ -749,8 +759,18 @@ function meta_type($message = '')
         inputLabel(
             'table',
             selectInput(array('name' =>'table_id', 'disabled' => !empty($id)), $txp_tables, $table_id, false, '', 'table'),
-            'family', '', array('class' => 'txp-form-field edit-meta-content-type')
-        ).
+            'content_type', '', array('class' => 'txp-form-field edit-meta-content-type')
+        ).($all_metas ?
+        inputLabel(
+            'meta',
+            selectInput(array('name' => 'meta'), $all_metas, $metas, false, '', 'meta'),
+            'meta', '', array('class' => 'txp-form-field edit-meta-field')/*
+        ) : '').($families ?
+        inputLabel(
+            'family',
+            selectInput(array('name' =>false), $families, array(), false, '', 'family'),
+            'add_from', '', array('class' => 'txp-form-field edit-meta-family')*/
+        ) : '').
 //            pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
         graf(
             sLink('meta', '', gTxt('cancel'), 'txp-button').
@@ -772,6 +792,7 @@ function meta_save_type()
         'name',
         'label',
         'table_id',
+        'meta',
         ))
     );
     meta_list($message);
