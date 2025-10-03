@@ -651,7 +651,7 @@ function can_modify($rs, $user = null) {
  * @package Image
  */
 
-function svgtopx($svgsize)
+function txpsvgtopx($svgsize)
 {
     if (empty($svgsize)) {
         return($svgsize);
