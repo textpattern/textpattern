@@ -55,7 +55,7 @@ $loader = new \Textpattern\Loader(txpath . '/lib');
 $loader->register();
 
 
-if ($connected && numRows(safe_query("show tables like '" . PFX . "textpattern'"))) {
+if ($connected && safe_exists('textpattern')) {
     // TODO: where is dbversion used?
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 

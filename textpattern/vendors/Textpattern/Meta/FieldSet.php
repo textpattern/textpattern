@@ -199,7 +199,7 @@ class FieldSet implements \IteratorAggregate
     public function store($varray, $contentType, $contentId, $all = false)
     {
         assert_int($contentId);
-        assert_int($contentType);
+        $contentType = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($contentType);
         $cfq = array();
         $out = array();
 
@@ -246,6 +246,8 @@ class FieldSet implements \IteratorAggregate
 
         if (empty($contentId)) {
             return $out;
+        } elseif ($contentType) {
+            safe_upsert('txp_meta_registry', array('content_id' => $contentId, 'type_id' => $contentType), array('content_id' => $contentId, 'type_id' => $contentType));
         }
 
         // Store the values in the appropriate custom field table based on its data type.
@@ -262,8 +264,6 @@ class FieldSet implements \IteratorAggregate
                 }
             }
         }
-
-        safe_upsert('txp_meta_registry', array('content_id' => $contentId, 'type_id' => $contentType), array('content_id' => $contentId, 'type_id' => $contentType));
 
         return $this;
     }

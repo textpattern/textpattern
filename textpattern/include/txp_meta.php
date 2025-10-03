@@ -420,7 +420,7 @@ function meta_edit($message = '')
             $help_ref = $cf->getHelpReference($name);
             $inline_help_ref = $cf->getHelpReference($name, 'inline');
             $has_textfilter = ($textfilter !== null && isset($data_types[$render]) && $data_types[$render]['textfilter'] !== '');
-            $table_name = 'txp_meta_value_' . txpspecialchars($data_type);
+//            $table_name = 'txp_meta_value_' . txpspecialchars($data_type);
             $ts = safe_strtotime((string)$created);
 
             $default = $cf->get('default');
@@ -538,9 +538,9 @@ EOJS
             sInput('meta_save_ui').
             hInput('id', $id).
             hInput('search_method', gps('search_method')).
-            hInput('crit', gps('crit')).
+            hInput('crit', gps('crit'))/*.
             hInput('render_orig', $render).
-            hInput('name_orig', $name)
+            hInput('name_orig', $name)*/
         , '', '', 'post', 'txp-edit', '', 'meta_details');
     }
 }

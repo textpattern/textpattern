@@ -170,11 +170,22 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     {
         if (!is_int($type)) {
             $type = (string)$type;
-            $typeids = $this->getId(); //safe_field('id', 'txp_meta_entity', "name = '$stype'");
-            $type = isset($typeids[$type]) ? (int)$typeids[$type] : 0;
+            $typeids = $this->getId();
+        } else {
+            $typeids = $this->getItem('id', array(), 'id');
+        }
+
+        return isset($typeids[$type]) ? (int)$typeids[$type] : 0;
+    }
+    
+    public function getEntityTable($type)
+    {
+        if ($type = $this->getEntity($type)) {
+            $tableIds = $this->getItem('tableId', array(), 'id');
+            $tableId = isset($tableIds[$type]) ? (int)$tableIds[$type] : 0;
         }
     
-        return isset($this->tableColumnMap[$type]) ? $type : 0;
+        return isset($tableId) ? $tableId : 0;
     }
 
     public function getItemEntity($content_id, $id = 1, $raw = true)

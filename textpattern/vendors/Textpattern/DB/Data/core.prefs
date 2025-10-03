@@ -524,6 +524,13 @@
         "html": "text_input",
         "position": "0"
     },
+    "sql_now_date": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
     "version": {
         "val": "4.9.0-dev",
         "type": "2",

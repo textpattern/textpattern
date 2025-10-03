@@ -860,11 +860,10 @@ function image_insert()
     global $app_mode, $event;
 
     register_callback(function ($ev, $st, $id) {
-        $type = (int)ps('type', 2); // Default to 'image'.
-        $types = Txp::get('\Textpattern\Meta\ContentType')->getItem('key', function($v) { return $v['tableId'] == 2; }, 'id');
-        $type = isset($types[$type]) ? $type : 2; // Default to 'image'.
-        safe_insert('txp_meta_registry', "type_id = $type, content_id = $id");
+        $type = Txp::get('\Textpattern\Meta\ContentType')->getEntity((int)ps('type', 2)); // Default to 'image'.
+        empty($type) or safe_insert('txp_meta_registry', "type_id = $type, content_id = $id");
     }, 'image_uploaded');
+
     $messages = $ids = array();
     $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);

@@ -327,6 +327,7 @@ class Field
 
         extract(doSlash($data));
 
+        $id = isset($id) ? intval($id) : 0;
         $table_prefix = 'txp_meta_value_';
         $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
         $data_types = \Txp::get('\Textpattern\Meta\DataType')->get();
@@ -339,8 +340,6 @@ class Field
         if (!empty($expire_now)) {
             $expires = $sqlnow;
         }
-
-        isset($name_orig) or $name_orig = $name;
 
         // @todo Possibly validate this.
         $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
@@ -377,7 +376,9 @@ class Field
                 $dlm = ($has_delimiter ? "'$delimiter'" : "NULL");
 
                 if ($id) {
-                    $ok = safe_update('txp_meta',
+                    $data_orig = safe_row('name, render', 'txp_meta', "id = $id");
+
+                    $ok = $data_orig ? safe_update('txp_meta',
                         "name        = '$name',
                         data_type    = '".$data_type['type']."',
                         render       = '$render',
@@ -388,7 +389,7 @@ class Field
                         created      = ". ($created ? "'$created'" : 'NULL') . ",
                         expires      = ". ($expires ? "'$expires'" : 'NULL'),
                         "id = $id"
-                    );
+                    ) : false;
                 } else {
                     $ok = safe_insert('txp_meta',
                         "name        = '$name',
@@ -401,72 +402,78 @@ class Field
                         created      = ". ($created ? "'$created'" : 'NULL') . ",
                         expires      = ". ($expires ? "'$expires'" : 'NULL')
                     );
-
-                    if ($ok) {
-                        $id = $ok;
-                    }
                 }
 
                 if ($ok) {
+                    list($name_orig, $render_orig) = isset($data_orig)
+                        ? array($data_orig['name'], $data_orig['render'])
+                        : array($name, $render);
+
+                    if (!safe_exists($table_name)) {
+                        // Create destination table if required.
+                        $coltype = $data_type['type'];
+                        $colsize = $data_type['size'];
+                        $colspec = $coltype . ($colsize === null ? '' : '(' . $colsize . ')');
+
+                        $table_def = "type_id int(12) NOT NULL DEFAULT 0,
+                            meta_id int(12) NOT NULL DEFAULT 0,
+                            content_id int(12) NOT NULL DEFAULT 0,
+                            value_id tinyint(4) NULL DEFAULT 0,
+                            " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
+                            value " . $colspec . " DEFAULT NULL,
+                            UNIQUE KEY (type_id,meta_id,content_id,value_id)";
+
+                        safe_create($table_name, $table_def);
+                    }
+
                     $content_types = array_filter(array_map('intval', ps('content_types')));
-                    $in_types = $content_types ? 'type_id NOT IN ('.implode(',', $content_types).')' : '1';
-                    safe_delete('txp_meta_fieldsets', "meta_id = $id AND $in_types");
+                    $out_types = $content_types ? 'type_id NOT IN ('.implode(',', $content_types).')' : '1';
 
-                    foreach ($content_types as $ct) {
-                        safe_upsert('txp_meta_fieldsets', array('type_id' => $ct), array('meta_id' => $id, 'type_id' => $ct));
-                    }
-
-                    if (isset($data_types[$render_orig])) {
-                        $data_type_orig = $data_types[$render_orig];
-                        // Remove any content from tables of types no longer associated with this field.
+                    if ($id) {
+                        $data_type_orig = isset($data_types[$render_orig]) ? $data_types[$render_orig] : $data_type;
                         $table_name_orig = $table_prefix . $data_type_orig['type'];
-                        safe_delete($table_name_orig, "meta_id = '$id' AND $in_types");
-                    }
+                        // Remove any content from tables of types no longer associated with this field.
+                        safe_delete($table_name_orig, "meta_id = $id AND $out_types");
+                        safe_delete('txp_meta_fieldsets', "meta_id = $id AND $out_types");
 
-                    // Migrate data from one type to another if necessary.
-                    // N.B. Data loss may ensue! Caveat utilitor.
-                    if ($render_orig !== $render) {
-                        if (isset($data_types[$render_orig])) {
-                            $data_type_orig = $data_types[$render_orig];
-                            $coltype = $data_type['type'];
-                            $colsize = $data_type['size'];
-                            $colspec = $coltype . ($colsize === null ? '' : '(' . $colsize . ')');
-
-                            $table_name_orig = $table_prefix . $data_type_orig['type'];
-                            $has_textfilter_orig = ($data_type_orig['textfilter']);
-
-                            // Create destination table if required.
-                            $table_def = "type_id int(12) NOT NULL DEFAULT 0,
-                                meta_id int(12) NOT NULL DEFAULT 0,
-                                content_id int(12) NOT NULL DEFAULT 0,
-                                value_id tinyint(4) NULL DEFAULT 0,
-                                " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
-                                value " . $colspec . " DEFAULT NULL,
-                                UNIQUE KEY (type_id,meta_id,content_id,value_id)";
-
-                            safe_create($table_name, $table_def);
+                        if ($table_name_orig !== $table_name) {
+                            $has_textfilter_orig = $data_type_orig['textfilter'];
+                            // Migrate data from one type to another if necessary.
+                            // N.B. Data loss may ensue! Caveat utilitor.
 
                             $sql = "INSERT IGNORE INTO `" . safe_pfx($table_name) . "`
-                                        (type_id,meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
+                                    (type_id,meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
                                     SELECT type_id,meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
                                         FROM " . safe_pfx($table_name_orig) . "
-                                        WHERE meta_id = '$id';";
+                                        WHERE meta_id = $id;";
                             safe_query($sql);
 
-                            $sql = "DELETE FROM `" . safe_pfx($table_name_orig) . "` WHERE meta_id = '$id';";
+                            $sql = "DELETE FROM `" . safe_pfx($table_name_orig) . "` WHERE meta_id = $id";
                             safe_query($sql);
+
+//                          safe_delete($table_name, "meta_id = $id AND content_id = -1 AND value_id = 0");
                         }
+                    } else {
+                        $id = (int)$ok;
+                    }
+
+                    if ($content_types) {
+                        $values = array();
+                        foreach ($content_types as $ct) {
+                            $values[] = "($ct, $id)";
+                        }
+
+                        safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_fieldsets') . ' (type_id, meta_id) VALUES ' . implode(',', $values));
                     }
 
                     // Write default value.
                     // TODO: value_id.
-                    safe_delete($table_name, "meta_id='$id' AND content_id='-1' AND value_id='0'");
-                    $defaultClause = ($default === '' || $default === '0000-00-00 00:00:00') ? '' : ", value" . ($has_textfilter ? '_raw' : '') . "='$default'";
-                    safe_insert($table_name, "meta_id='$id', content_id='-1', value_id='0'".$defaultClause);
+                    $defaultClause = ($default === '' || $default === '0000-00-00 00:00:00') ? '' : ", value" . ($has_textfilter ? '_raw' : '') . " = '$default'";
+                    safe_insert($table_name, "meta_id = $id, content_id = -1, value_id = 0".$defaultClause);
 
                     // Iterate over newly inserted rows and run them through the textfilter if desired.
                     if ($data_type['textfilter']) {
-                        $rows = safe_rows('content_id, value_id, value_raw', $table_name, "meta_id = '$id'");
+                        $rows = safe_rows('content_id, value_id, value_raw', $table_name, "meta_id = $id");
 
                         foreach ($rows as $row) {
                             $filtered = \Txp::get('Textpattern\Textfilter\Registry')->filter(
@@ -482,7 +489,7 @@ class Field
                             safe_update(
                                 $table_name,
                                 "value = '" . doSlash($filtered) . "'",
-                                "meta_id = '$id'
+                                "meta_id = $id
                                     AND content_id = '" . doSlash($row['content_id']) . "'
                                     AND value_id = '" . doSlash($row['value_id']) . "'"
                             );
@@ -492,7 +499,7 @@ class Field
                     // Write the options.
                     // @Todo What if the keys are altered? Data loss would occur as the named
                     // reference from the value table would break ties with the options table.
-                    safe_delete('txp_meta_options', "meta_id = '$id'");
+                    safe_delete('txp_meta_options', "meta_id = $id");
                     $optionList = do_list($options, '\r\n');
                     $insertList = array();
                     $optLabelList = array();

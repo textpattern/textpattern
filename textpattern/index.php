@@ -70,7 +70,7 @@ $trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
+if ($connected && safe_exists('textpattern')) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
