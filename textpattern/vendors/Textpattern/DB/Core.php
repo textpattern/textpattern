@@ -219,7 +219,7 @@ class Core
         $pf['gmtoffset']       = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
         $pf['permlink_mode']   = empty($permlink_mode) ? 'messy' : $permlink_mode;
         $pf['permlink_format'] = $permlink_format;
-        $pf['sql_now_posted']  = $pf['sql_now_expires'] = $pf['sql_now_created'] = time();
+        $pf['sql_now_posted']  = $pf['sql_now_expires'] = $pf['sql_now_created'] = $pf['sql_now_date'] = time();
         $pf['comments_default_invite'] = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment'
             : gTxt('setup_comment_invite');
         $pf['default_section'] = empty($pref['default_section']) ? safe_field('name', 'txp_section', "name<>'default'")
