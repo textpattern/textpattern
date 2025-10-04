@@ -51,6 +51,8 @@ class FieldSet implements \IteratorAggregate
 
     protected $filterCollection = array();
 
+    protected $keyCollection = array();
+
     protected $type = null;
 
     /**
@@ -77,9 +79,9 @@ class FieldSet implements \IteratorAggregate
             $types = array();
         }
         
-        $types = array_filter((array)$types);
-        $to_fetch = array_diff_key($types, self::$collection);
         is_int($type) or $type = null;
+        $this->keyCollection = $types = array_filter((array)$types);
+        $to_fetch = array_diff_key($types, self::$collection);
 
         if ($to_fetch) {
             $to_fetch = implode(',', $to_fetch);
@@ -98,8 +100,8 @@ class FieldSet implements \IteratorAggregate
             foreach (safe_column('meta_id', 'txp_meta_delta', "content_id = $content_id AND type_id = $type") as $meta_id) {
                 if ($meta_id < 0) {
                     unset($this->filterCollection[-$meta_id]);
-                } elseif ($meta_id > 0 and $cfs = getRows("SELECT * FROM ".PFX."txp_meta WHERE id = $meta_id ORDER BY family")) {
-                    foreach ($cfs as $def) if (!isset($this->filterCollection[$def['id']])) {
+                } elseif ($meta_id > 0 && !isset($this->filterCollection[$meta_id])) {
+                    if ($def = getRow("SELECT * FROM ".PFX."txp_meta WHERE id = $meta_id ORDER BY family")) {
                         $this->filterCollection[$def['id']] = new Field($def);
                     }
                 }
@@ -195,7 +197,6 @@ class FieldSet implements \IteratorAggregate
         return $this;
     }
 
-
     /**
      * Stash the value of each field in the collection. Chainable.
      */
@@ -276,8 +277,32 @@ class FieldSet implements \IteratorAggregate
      * Insert fields in the collection. Chainable.
      */
 
-    public function insert($contentType, $contentId = null, $metaId = null)
+    public function insert($contentId = null, $metaId = null)
     {
+        $metaId = is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId));
+        $metaId = array_diff($metaId, array_keys($this->filterCollection));
+        $metaId = $metaId ? safe_column_num('id', 'txp_meta', 'id IN ('.implode(',', $metaId).')') : array();
+        $contentId === null or $contentId = (int)$contentId;
+
+        if ($metaId && $contentType = (int)$this->type) {
+            $values = array();
+
+            foreach ($metaId as $meta_id) {
+                $values[$meta_id] = $contentId === null ? "($contentType, $meta_id)" : "($contentId, $contentType, $meta_id)";
+            }
+            // Insert the values of the appropriate custom field table based on its data type.
+            if ($contentId === null) {
+                safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_fieldsets') . ' (type_id, meta_id) VALUES ' . implode(',', $values));
+                safe_delete('txp_meta_delta', "type_id = {$contentType} AND meta_id IN (".implode(',', $metaId).")");
+            } elseif ($contentId) {
+                safe_delete('txp_meta_delta', "type_id = {$contentType} AND -meta_id IN (".implode(',', $metaId).")");
+
+                if ($values = array_diff_key($values, $this->keyCollection)) {
+                    safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_delta') . ' (content_id, type_id, meta_id) VALUES ' . implode(',', $values));
+                }
+            }
+        }
+
         return $this;
     }
 
@@ -288,15 +313,28 @@ class FieldSet implements \IteratorAggregate
     public function delete($contentId = null, $metaId = null)
     {
         if ($contentType = (int)$this->type) {
-            $contentId === null or $contentId = implode(',', array_filter(is_int($contentId) ? array($contentId) : array_map('intval', do_list_unique($contentId))));
-            $metaId === null or $metaId = implode(',', array_filter(is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId))));
-            $contentQuery = $contentId ? " AND content_id IN ($contentId)" : '';
-            $metaQuery = $metaId ? " AND meta_id IN ($metaId)" : '';
+            if ($metaId !== null) {
+                $metaId = array_filter(is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId)));
+                $metaId = array_intersect($metaId, array_keys($this->filterCollection));
+            }
+
+            $metaQuery = $metaId ? " AND meta_id IN (".implode(',', $metaId).")" : '';
+
+            $contentId === null or $contentId = array_filter(is_int($contentId) ? array($contentId) : array_map('intval', do_list_unique($contentId)));
+            $contentQuery = $contentId ? " AND content_id IN (".implode(',', $contentId).")" : '';
 
             // Delete the values of the appropriate custom field table based on its data type.
-            foreach ($this->filterCollection as $id => $def) {
+            $deleted = array();
+
+            foreach ($this->filterCollection as $def) {
                 $tableName = 'txp_meta_value_'.$def->get('data_type');
+
+                if (isset($deleted[$tableName])) {
+                    continue;
+                }
+
                 safe_delete($tableName, "type_id = {$contentType}{$contentQuery}{$metaQuery}");
+                $deleted[$tableName] = true;
             }
 
             if (empty($metaQuery)) {
@@ -304,9 +342,17 @@ class FieldSet implements \IteratorAggregate
             } else {
                 if ($contentId === null) {
                     safe_delete('txp_meta_fieldsets', "type_id = {$contentType}{$metaQuery}");
-                    $metaQuery = $metaId ? " AND -meta_id IN ($metaId)" : '';
-                } else {
-                    $metaQuery = $metaId ? " AND ABS(meta_id) IN ($metaId)" : '';
+                    $metaQuery = str_replace('meta_id', '-meta_id', $metaQuery);
+                } elseif ($contentId) {
+                    $values = array();
+
+                    foreach ($metaId as $meta_id) {
+                        $values[$meta_id] = "($contentId[0], $contentType, -$meta_id)";
+                    }
+
+                    if ($values = array_intersect_key($values, $this->keyCollection)) {
+                        safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_delta') . ' (content_id, type_id, meta_id) VALUES ' . implode(',', $values), true);
+                    }
                 }
             }
 

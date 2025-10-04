@@ -272,6 +272,7 @@ abstract class Theme
         $defaults = array(
             'content'      => 'article',
             'presentation' => 'page',
+            'meta'         => 'admin',
             'admin'        => 'admin',
         );
 
@@ -296,6 +297,8 @@ abstract class Theme
                 }
 
                 foreach ($items as $a => $b) {
+//                    list($b, $attr) = is_array($b) ? $b : array($b, array());
+
                     if (has_privs($b)) {
                         if ($e_ === '') {
                             $e_ = $b;
@@ -309,6 +312,7 @@ abstract class Theme
                             'label'  => $a,
                             'event'  => $b,
                             'active' => ($b == $event),
+//                            'attr'   => $attr,
                         );
                     }
                 }

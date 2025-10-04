@@ -298,13 +298,9 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
         if ($ok) {
             $old_meta = $id ? safe_column_num('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
             $id or $id = $ok;
-            $metas = safe_column('id', 'txp_meta', "1");
 
-            foreach (array_diff($meta, $old_meta) as $meta_in) {
-                if (isset($metas[$meta_in])) {
-                    safe_insert('txp_meta_fieldsets', "type_id = $id, meta_id = $meta_in");
-                    safe_delete('txp_meta_delta', "type_id = $id AND meta_id = $meta_in");
-                }
+            if ($meta_in = array_diff($meta, $old_meta)) {
+                \Txp::get('\Textpattern\Meta\FieldSet', $id)->insert(null, $meta_in);
             }
 
             if ($meta_out = array_diff($old_meta, $meta)) {

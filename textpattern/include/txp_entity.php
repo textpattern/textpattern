@@ -119,7 +119,7 @@ function entity_list($message = '')
             ),
             'table' => array(
                 'column'  => 'table_id',
-                'label'   => gTxt('table'),
+                'label'   => gTxt('type'),
             ),
         )
     );

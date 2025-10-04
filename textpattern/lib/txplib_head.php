@@ -239,7 +239,14 @@ function areas()
 
     $areas['start'] = array(
     );
+/*
+    $types = \Txp::get('\Textpattern\Meta\ContentType')->getItem('tableId', function($v) { return $v['tableId'] == 1; });
+    $areas['write'] = array();
 
+    foreach($types as $type => $v) {
+        $areas['write'][gTxt($type)] = array('article', array('event' => 'article', 'type' => $type));
+    }
+*/
     $areas['content'] = array(
         gTxt('tab_write')    => 'article',
         gTxt('tab_list')     => 'list',
@@ -257,12 +264,17 @@ function areas()
         gTxt('tab_style')    => 'css',
     );
 
+    $areas['meta'] = array(
+        gTxt('tab_meta')        => 'meta',
+        gTxt('tab_entity')      => 'entity',
+    );
+
     $areas['admin'] = array(
         gTxt('tab_diagnostics') => 'diag',
         gTxt('tab_preferences') => 'prefs',
         gTxt('tab_languages')   => 'lang',
-        gTxt('tab_meta')        => 'meta',
-        gTxt('tab_entity')      => 'entity',
+//        gTxt('tab_meta')        => 'meta',
+//        gTxt('tab_entity')      => 'entity',
         $adminString            => 'admin',
         gTxt('tab_plugins')     => 'plugin',
     );

@@ -560,6 +560,9 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
     $status = selectInput('Status', $statusa, '', true);
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
+    
+    $custom = radioSet(array(gTxt('add'), gTxt('remove')), 'remove').
+        selectInput('meta', safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), array(), true);
 
     $methods = array(
         'changestatus'    => array(
@@ -585,6 +588,10 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'changeauthor'    => array(
             'label' => gTxt('changeauthor'),
             'html' => $authors,
+        ),
+        'changemeta'      => array(
+            'label' => gTxt('custom'),
+            'html' => $custom,
         ),
         'duplicate'       => gTxt('duplicate'),
         'delete'          => gTxt('delete'),
@@ -720,6 +727,12 @@ function list_multi_edit()
                 $value = STATUS_PENDING;
             }
             break;
+        // Change meta.
+        case 'changemeta':
+            $field = 'custom';
+            $value = !ps('remove');
+
+            break;
     }
 
     if ($selected) {
@@ -749,7 +762,21 @@ function list_multi_edit()
     if ($selected) {
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
-        if ($edit_method === 'duplicate') {
+        if ($edit_method === 'changemeta') {
+            if ($metas = (array)ps('meta')) {
+                foreach ($selected as $id) {
+                    if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
+                        if (!$value) {
+                        // Remove meta values.
+                            Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->delete($id, $metas);
+                        } else {
+                        // Add meta values.
+                            Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->insert($id, $metas);
+                        }
+                    }
+                }
+            }
+        } elseif ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (" . join(',', $selected) . ")");
             $created = $selected = array();
 

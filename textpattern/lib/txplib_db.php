@@ -565,13 +565,13 @@ function safe_insert($table, $set, $debug = false)
  * }
  */
 
-function safe_upsert($table, $set, $where, $debug = false)
+function safe_upsert($table, $set, $where = null, $debug = false)
 {
     global $DB;
 
     $setparams = is_array($set) ? join_qs(quote_list($set), null) : array($set);
-    $whereset = is_array($where) ? join_qs(quote_list($where), null) : array($where);
-    $where = implode(' AND ', $whereset);
+    $whereset = is_array($where) ? join_qs(quote_list($where), null) : (array)$where;
+    $where = implode(' AND ', $whereset ? $whereset : $setparams);
 
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, implode(', ', $setparams), $where, $debug);
