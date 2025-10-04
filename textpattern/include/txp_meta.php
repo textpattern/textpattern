@@ -62,9 +62,7 @@ if ($event == 'meta') {
     $available_steps = array(
         'meta_list'          => false,
         'meta_edit'          => false,
-        'meta_type'          => false,
         'meta_save_ui'       => true,
-        'meta_save_type'     => true,
         'meta_change_pageby' => true,
         'meta_multi_edit'    => true,
     );
@@ -203,14 +201,7 @@ function meta_list($message = '')
 
     $createBlock[] =
         n.tag(
-            sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button').
-        form(
-                fInput('submit', '', gTxt('edit_entity')).
-                eInput('meta').
-                sInput('meta_type').
-                ($types ? selectInput('id', $types, '', true) : '')
-        ),
-//            sLink('meta', 'meta_type', gTxt('create_entity'), 'txp-button'),
+            sLink('meta', 'meta_edit', gTxt('create_meta'), 'txp-button'),
             'div', array('class' => 'txp-control-panel')
         );
 
@@ -714,86 +705,4 @@ function meta_multi_edit()
     meta_list(gTxt(
         ($method == 'delete' ? 'meta_deleted' : 'meta_updated'),
         array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
-}
-
-/**
- * Renders and outputs the meta editor panel.
- *
- * @param string|array $message The activity message
- */
-
-function meta_type($message = '')
-{
-    global $event, $step, $DB;
-
-    pagetop(gTxt('tab_meta'), $message);
-
-//    $txp_tables = getThings('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = "'.$DB->db.'" AND TABLE_TYPE LIKE "BASE_TABLE" AND TABLE_NAME NOT LIKE "'.PFX.'txp\_meta%"');
-    $txp_tables = array_column(Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap(), 'label', 'id');
-
-    $id = intval(gps('id'));
-
-    if ($id && $type = safe_row('*', 'txp_meta_entity', "id = $id")) {
-        extract($type);
-    } else {
-        list($id, $name, $label, $table_id) = array(0, '', '', 1);
-    }
-
-    $caption = gTxt($id ? 'edit_entity' : 'create_entity');
-//    $families = do_list_unique(safe_field('GROUP_CONCAT(family)', 'txp_meta', "family > '' ORDER BY family"));
-    $all_metas = safe_column(array('id', 'name'), 'txp_meta', "1 ORDER BY name");
-    $metas = $id ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
-
-    echo form(
-        hed($caption, 2).
-        inputLabel(
-            'label',
-            fInput('text', 'label', $label, '', '', '', INPUT_REGULAR, '', 'label'),
-            'label', '', array('class' => 'txp-form-field edit-meta-label')
-        ).
-        inputLabel(
-            'name',
-            fInput('text', 'name', txpspecialchars($name), '', '', '', INPUT_REGULAR, '', 'name'),
-            'name', '', array('class' => 'txp-form-field edit-meta-name')
-        ).
-        inputLabel(
-            'table',
-            selectInput(array('name' =>'table_id', 'disabled' => !empty($id)), $txp_tables, $table_id, false, '', 'table'),
-            'content_type', '', array('class' => 'txp-form-field edit-meta-content-type')
-        ).($all_metas ?
-        inputLabel(
-            'meta',
-            selectInput(array('name' => 'meta'), $all_metas, $metas, false, '', 'meta'),
-            'meta', '', array('class' => 'txp-form-field edit-meta-field')/*
-        ) : '').($families ?
-        inputLabel(
-            'family',
-            selectInput(array('name' =>false), $families, array(), false, '', 'family'),
-            'add_from', '', array('class' => 'txp-form-field edit-meta-family')*/
-        ) : '').
-//            pluggable_ui('meta_ui', 'extend_detail_form', '', $rs).
-        graf(
-            sLink('meta', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', '', gTxt('save'), 'publish'),
-            array('class' => 'txp-edit-actions')
-        ).
-        eInput('meta').
-        sInput('meta_save_type').
-        hInput('id', $id).
-        hInput('search_method', gps('search_method')).
-        hInput('crit', gps('crit'))
-    , '', '', 'post', 'txp-edit', '', 'meta_type');
-}
-
-function meta_save_type()
-{
-    $message = \Txp::get('\Textpattern\Meta\ContentType')->save(gpsa(array(
-        'id',
-        'name',
-        'label',
-        'table_id',
-        'meta',
-        ))
-    );
-    meta_list($message);
 }

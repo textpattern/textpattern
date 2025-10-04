@@ -308,21 +308,31 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
             }
 
             if ($meta_out = array_diff($old_meta, $meta)) {
-                \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete($id, null, $meta_out);
+                \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete(null, $meta_out);
             }
         }
 
-        return gTxt($ok ? 'meta_saved' : 'meta_save_failed');
+        return $ok;
     }
 
 
     /**
      * Delete the meta information for this item.
      *
-     * @param int $id The ID of the item to delete
-     * @param int|string $type The type of the item to delete
+     * @param array|int $id The ids of the items to delete
      * @return  null
      */
+
+    public function delete($ids = array())
+    {
+        foreach ($ids = array_filter(array_map('intval', (array)$ids)) as $id) {
+            \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete();
+            safe_delete('txp_meta_fieldsets', "type_id = $id");
+            safe_delete('txp_meta_entity', "id = $id");
+        }
+
+        return;
+    }
 
     /**
      * IteratorAggregate interface.

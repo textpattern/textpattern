@@ -51,6 +51,8 @@ class FieldSet implements \IteratorAggregate
 
     protected $filterCollection = array();
 
+    protected $type = null;
+
     /**
      * Constructor for the field set.
      *
@@ -59,13 +61,15 @@ class FieldSet implements \IteratorAggregate
 
     public function __construct($type = null, $content_id = null)
     {
+        $this->type = null;
+
         if ($type === null) {
             $types = safe_column('id', 'txp_meta');
         } elseif (is_string($type)) {
             $types = implode(',', \Txp::get('\Textpattern\Meta\ContentType')->getEntities($type));
             $types = $types ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id IN ($types)") : array();
         } elseif (is_int($type)) {
-            $type = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($type);
+            $this->type = $type = \Txp::get('\Textpattern\Meta\ContentType')->getEntity($type);
             $types = $type ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id = $type") : array();
         } elseif (is_array($type)) {
             $types = array_combine($type, $type);
@@ -281,23 +285,17 @@ class FieldSet implements \IteratorAggregate
      * Delete fields from the collection. Chainable.
      */
 
-    public function delete($contentType, $contentId = null, $metaId = null)
+    public function delete($contentId = null, $metaId = null)
     {
-        assert_int($contentType);
-        $contentId === null or $contentId = implode(',', array_filter(is_int($contentId) ? array($contentId) : array_map('intval', do_list_unique($contentId))));
-        $metaId === null or $metaId = implode(',', array_filter(is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId))));
-        $contentQuery = $contentId ? " AND content_id IN ($contentId)" : '';
-        $metaQuery = $metaId ? " AND meta_id IN ($metaId)" : '';
-        $cfq = array();
-
-        if ($contentType) {
-            foreach ($this->filterCollection as $id => $def) {
-                $cfq[$def->get('data_type')] = $id;
-            }
+        if ($contentType = (int)$this->type) {
+            $contentId === null or $contentId = implode(',', array_filter(is_int($contentId) ? array($contentId) : array_map('intval', do_list_unique($contentId))));
+            $metaId === null or $metaId = implode(',', array_filter(is_int($metaId) ? array($metaId) : array_map('intval', do_list_unique($metaId))));
+            $contentQuery = $contentId ? " AND content_id IN ($contentId)" : '';
+            $metaQuery = $metaId ? " AND meta_id IN ($metaId)" : '';
 
             // Delete the values of the appropriate custom field table based on its data type.
-            foreach ($cfq as $tableType => $id) {
-                $tableName = 'txp_meta_value_'.$tableType;
+            foreach ($this->filterCollection as $id => $def) {
+                $tableName = 'txp_meta_value_'.$def->get('data_type');
                 safe_delete($tableName, "type_id = {$contentType}{$contentQuery}{$metaQuery}");
             }
 

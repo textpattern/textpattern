@@ -262,6 +262,7 @@ function areas()
         gTxt('tab_preferences') => 'prefs',
         gTxt('tab_languages')   => 'lang',
         gTxt('tab_meta')        => 'meta',
+        gTxt('tab_entity')      => 'entity',
         $adminString            => 'admin',
         gTxt('tab_plugins')     => 'plugin',
     );

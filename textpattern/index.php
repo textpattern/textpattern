@@ -70,7 +70,7 @@ $trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && safe_exists('textpattern')) {
+if ($connected) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);

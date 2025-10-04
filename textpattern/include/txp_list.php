@@ -659,7 +659,7 @@ function list_multi_edit()
             if ($selected && safe_delete('textpattern', "ID IN (" . join(',', $selected) . ")")) {
                 foreach ($selected as $id) {
                     if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
-                        Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+                        Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($id);
                     }
                 }
 

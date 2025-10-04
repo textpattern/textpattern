@@ -55,7 +55,7 @@ $loader = new \Textpattern\Loader(txpath . '/lib');
 $loader->register();
 
 
-if ($connected && safe_exists('textpattern')) {
+if ($connected) {
     // TODO: where is dbversion used?
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 

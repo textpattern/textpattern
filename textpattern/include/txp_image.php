@@ -1089,7 +1089,7 @@ function image_delete($ids = array())
 
     register_callback(function ($ev, $st, $id) {
         if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2)) {
-            Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($type, $id);
+            Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($id);
         }
     }, 'image_deleted');
 

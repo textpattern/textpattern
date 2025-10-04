@@ -56,6 +56,7 @@ $txp_permissions = array(
     'debug.backtrace'            => '1',
     'diag'                       => '1,2',
     'discuss'                    => '1,2,3',
+    'entity'                     => '1,2', // More?
     'file'                       => '1,2,3,4',
     'file.edit'                  => '1,2',
     'file.edit.own'              => '1,2,3,4',
