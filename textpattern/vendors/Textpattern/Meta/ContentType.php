@@ -125,18 +125,22 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
                 continue;
             }
 
-            $this->contentTypeMap[$name] = array(
-                'tableId'     => $row['table_id'],
-                'id'     => $row['id'],
-                'key'    => $name,
-                'label'  => gTxt($row['label']),
-//                'table'  => $this->tableColumnMap[$row['table_id']]['table'],
-                'column' => $this->tableColumnMap[$row['table_id']]['column'],
-            );
+            $this->register($name, $row);
         }
 
 
         callback_event_ref('txp.meta', 'content.types', 0, $this->contentTypeMap);
+    }
+
+    private function register($name, $row) {
+        $this->contentTypeMap[$name] = array(
+            'tableId'     => $row['table_id'],
+            'id'     => $row['id'],
+            'key'    => $name,
+            'label'  => gTxt($row['label']),
+//                'table'  => $this->tableColumnMap[$row['table_id']]['table'],
+            'column' => $this->tableColumnMap[$row['table_id']]['column'],
+        );
     }
 
     public function getTableColumnMap($id = null)
@@ -297,7 +301,11 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
 
         if ($ok) {
             $old_meta = $id ? safe_column_num('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
-            $id or $id = $ok;
+
+            if (!$id) {
+                $id = $data['id'] = (int)$ok;
+                $this->register($data['name'], $data);
+            }
 
             if ($meta_in = array_diff($meta, $old_meta)) {
                 \Txp::get('\Textpattern\Meta\FieldSet', $id)->insert(null, $meta_in);

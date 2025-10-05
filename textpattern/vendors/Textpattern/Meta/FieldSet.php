@@ -51,7 +51,7 @@ class FieldSet implements \IteratorAggregate
 
     protected $filterCollection = array();
 
-    protected $keyCollection = array();
+    protected $typeKeys = array();
 
     protected $type = null;
 
@@ -80,7 +80,7 @@ class FieldSet implements \IteratorAggregate
         }
         
         is_int($type) or $type = null;
-        $this->keyCollection = $types = array_filter((array)$types);
+        $this->typeKeys = $types = array_filter((array)$types);
         $to_fetch = array_diff_key($types, self::$collection);
 
         if ($to_fetch) {
@@ -297,7 +297,7 @@ class FieldSet implements \IteratorAggregate
             } elseif ($contentId) {
                 safe_delete('txp_meta_delta', "type_id = {$contentType} AND -meta_id IN (".implode(',', $metaId).")");
 
-                if ($values = array_diff_key($values, $this->keyCollection)) {
+                if ($values = array_diff_key($values, $this->typeKeys)) {
                     safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_delta') . ' (content_id, type_id, meta_id) VALUES ' . implode(',', $values));
                 }
             }
@@ -350,7 +350,7 @@ class FieldSet implements \IteratorAggregate
                         $values[$meta_id] = "($contentId[0], $contentType, -$meta_id)";
                     }
 
-                    if ($values = array_intersect_key($values, $this->keyCollection)) {
+                    if ($values = array_intersect_key($values, $this->typeKeys)) {
                         safe_query('INSERT IGNORE INTO ' . safe_pfx('txp_meta_delta') . ' (content_id, type_id, meta_id) VALUES ' . implode(',', $values), true);
                     }
                 }
@@ -379,7 +379,7 @@ class FieldSet implements \IteratorAggregate
 
     public function reset($type)
     {
-        $this->filterCollection = self::$collection[$type];
+        $this->filterCollection = array_intersect_key(self::$collection[$type], $this->typeKeys);
 
         return $this;
     }
