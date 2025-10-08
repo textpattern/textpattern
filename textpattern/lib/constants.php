@@ -29,7 +29,7 @@
  * Textpattern version.
  */
 
-$thisversion = '4.9.0-dev';
+$thisversion = '5.0.0-dev';
 
 /**
  * Development environment?

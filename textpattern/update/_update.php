@@ -70,8 +70,8 @@ if ($dbversion == $thisversion ||
 
 assert_system_requirements();
 
-@ignore_user_abort(1);
-@set_time_limit(0);
+ignore_user_abort(1);
+set_time_limit(0);
 
 // Wipe out the last update check setting so the next visit to Diagnostics
 // forces an update check, which resets the message. Without this, people who

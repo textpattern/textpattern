@@ -35,12 +35,45 @@ safe_create(
     `family` varchar(255) NULL DEFAULT NULL,
     `textfilter` tinyint(4) NULL DEFAULT NULL,
     `delimiter` varchar(31) NULL DEFAULT NULL,
-    `ordinal` smallint(5) unsigned NULL DEFAULT NULL,
     `created` timestamp NULL DEFAULT NULL,
     `modified` timestamp NULL DEFAULT NULL,
     `expires` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `name` (`name`)"
+    UNIQUE `name` (`name`)"
+);
+
+safe_create(
+    "txp_meta_registry",
+    "`content_id` int(12) unsigned NOT NULL,
+    `type_id` int(12) unsigned NOT NULL,
+    PRIMARY KEY (`content_id`, `type_id`)"
+);
+
+// Custom content types.
+safe_create(
+    "txp_meta_entity",
+    "`id` int(12) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` varchar(31) NULL UNIQUE DEFAULT NULL,
+    `label` varchar(63) NULL DEFAULT NULL,
+    `table_id` tinyint(4) unsigned NOT NULL,
+    UNIQUE (`name`)"
+);
+
+safe_create(
+    "txp_meta_delta",
+    "`content_id` int(12) unsigned NOT NULL,
+    `type_id` int(12) unsigned NOT NULL,
+    `meta_id` int(12) NOT NULL,
+    UNIQUE KEY `content_type_meta` (`content_id`,`type_id`,`meta_id`)"
+);
+
+// Custom field sets.
+safe_create(
+    "txp_meta_fieldsets",
+    "`type_id` int(12) unsigned NOT NULL,
+    `meta_id` int(12) unsigned NOT NULL,
+    `ordinal` smallint(5) unsigned NULL DEFAULT NULL,
+    PRIMARY KEY (`type_id`,`meta_id`)"
 );
 
 // Allow multi-select options and constraints to be defined.
@@ -67,13 +100,35 @@ safe_create(
 // on the dataTypes callback, all CF data may possibly be migrated.
 safe_create(
     "txp_meta_value_varchar",
-    "`meta_id` int(12) NULL DEFAULT NULL,
+    "`type_id` int(12) NULL DEFAULT NULL,
+    `meta_id` int(12) NULL DEFAULT NULL,
     `content_id` int(12) NULL DEFAULT NULL,
     `value_id` tinyint(4) NULL DEFAULT '0',
     `value_raw` varchar(7500) NULL DEFAULT NULL,
     `value` varchar(7500) NULL DEFAULT NULL,
-    UNIQUE KEY `meta_content` (`meta_id`,`content_id`,`value_id`)"
+    UNIQUE KEY (`type_id`,`meta_id`,`content_id`,`value_id`)"
 );
+
+// Create the entity types.
+$types = Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap();
+
+foreach ($types as $key => $def) {
+    if (safe_field('id', 'txp_meta_entity', 'id ='.(int)$key) === false) {
+        $cols = array(
+            'id' => $key,
+            'name' => $def['key'],
+            'label' => $def['label'],
+            'table_id' => $def['id'],
+        );
+
+        safe_insert('txp_meta_entity', $cols);
+    }
+}
+
+// Register 'articles' type
+if (safe_field('id', 'txp_meta_registry', 'content_id = 1 AND type_id = 1') === false) {
+    safe_insert('txp_meta_registry', array('content_id' => 1, 'type_id' => 1));
+}
 
 // Migrate existing custom field data.
 // Parts of this are from the old getCustomFields() function.
@@ -108,18 +163,18 @@ try {
 
                 // First article: create the meta fields.
                 if ($idx === 0) {
-                    $exists = safe_field('id', 'txp_meta', "id='$safeNum' AND name='$safeName'");
+                    $exists = safe_field('id', 'txp_meta', "id='$safeNum'");
 
                     if (!$exists) {
-                        safe_insert(
+                        $fld = safe_insert(
                             "txp_meta",
                             "id = '$safeNum',
                             name = '$safeName',
                             data_type = 'varchar',
-                            textfilter = 1,
-                            ordinal = '$safeNum'
+                            textfilter = 1
                             "
                         );
+
                         safe_insert(
                             "txp_lang",
                             "lang = '" . LANG . "',
@@ -129,6 +184,18 @@ try {
                             data = '$fieldName'
                             "
                         );
+
+                        $field_exists = safe_field('meta_id', 'txp_meta_fieldsets', "meta_id='".(int)$fld."' AND type_id=1");
+
+                        if (!$field_exists) {
+                            safe_insert(
+                                "txp_meta_fieldsets",
+                                "type_id = 1,
+                                meta_id = " . (int)$fld . ",
+                                ordinal = '$safeNum'
+                                "
+                            );
+                        }
                     }
                 }
 
@@ -137,7 +204,8 @@ try {
                 } else {
                     $ok = safe_insert(
                         "txp_meta_value_varchar",
-                        "meta_id = '$safeNum',
+                        "type_id = 1,
+                        meta_id = '$safeNum',
                         content_id = '$safeArticleId',
                         value_raw = '$safeContent',
                         value = '$safeContent'
@@ -158,7 +226,7 @@ try {
         //       textpattern table but the names still exist in prefs. And vice versa?
         if ($fieldTally === $numFields) {
             foreach ($fieldList as $fieldNum => $fieldName) {
-                @safe_alter('textpattern', "drop column `custom_" . $fieldNum . "`");
+                safe_alter('textpattern', "drop column `custom_" . $fieldNum . "`");
             }
 
             safe_delete('txp_prefs', "name like 'custom\_%\_set'");
