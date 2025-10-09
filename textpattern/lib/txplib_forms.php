@@ -158,13 +158,17 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         }
 
         if (is_array($alabel)) {
-            $atts = $alabel + $atts;
-            $alabel = isset($atts['title']) ? $atts['title'] : $avalue;
-            unset($atts['title']);
+            if (empty($alabel)) {
+                $atts = '';
+            } else {
+                $atts = $alabel + $atts;
+                $alabel = isset($atts['title']) ? $atts['title'] : $avalue;
+                unset($atts['title']);
+            }
         }
 
         $atts = join_atts($atts, TEXTPATTERN_STRIP_NONE);
-        $out[] = '<option'.$atts.'>'.txpspecialchars($alabel).'</option>';
+        $out[] = $atts ? '<option'.$atts.'>'.txpspecialchars($alabel).'</option>' : '<hr />';
     }
 
     if ($value && $selected < count($value)) {

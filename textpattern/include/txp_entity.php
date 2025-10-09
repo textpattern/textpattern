@@ -50,9 +50,46 @@ if ($event == 'entity') {
     if ($step && bouncer($step, $available_steps)) {
         $step();
     } else {
-        entity_list();
+        entity_list(/*test_integrity()*/);
     }
 }
+
+function test_integrity() {
+    $message = array();
+    $all_types = safe_column('id', 'txp_meta_entity');
+    $in_types = $all_types ? implode(',', $all_types) : '-1';
+    $all_metas = safe_column('id', 'txp_meta');
+    $in_metas = $all_metas ? implode(',', $all_metas) : '-1';
+
+    if ($c = safe_count('txp_meta_registry', "type_id NOT IN ($in_types)")) {
+        $message[] = $c.' invalid_registry';
+    }
+
+    if ($c = safe_count('txp_meta_fieldsets', "type_id NOT IN ($in_types) OR meta_id NOT IN ($in_metas)")) {
+        $message[] = $c.' invalid_fieldsets';
+    }
+
+    if ($c = safe_count('txp_meta_delta', "type_id NOT IN ($in_types) OR ABS(meta_id) NOT IN ($in_metas)")) {
+        $message[] = $c.' invalid_deltas';
+    }
+
+    if ($c = safe_count('txp_meta_delta', "meta_id IN (SELECT meta_id FROM ".PFX."txp_meta_fieldsets WHERE type_id = txp_meta_delta.type_id)")) {
+        $message[] = $c.' overlapping_deltas';
+    }
+
+    if ($c = safe_count('txp_meta_delta', "meta_id < 0 AND -meta_id NOT IN (SELECT meta_id FROM ".PFX."txp_meta_fieldsets WHERE type_id = txp_meta_delta.type_id)")) {
+        $message[] = $c.' underlapping_deltas';
+    }
+
+    if ($c = safe_count('txp_meta_value_varchar', "type_id > 0
+        AND meta_id NOT IN (SELECT meta_id FROM ".PFX."txp_meta_fieldsets WHERE type_id = txp_meta_value_varchar.type_id)
+        AND meta_id NOT IN (SELECT meta_id FROM ".PFX."txp_meta_delta WHERE type_id = txp_meta_value_varchar.type_id)")) {
+        $message[] = $c.' orphaned_varchar';
+    }
+
+    return $message ? array(implode(br, $message), 2) : '';
+}
+
 
 /**
  * The main panel listing all meta data (custom fields).
@@ -206,8 +243,8 @@ function entity_list($message = '')
                             (('table' == $sort) ? "$dir " : '').'txp-list-col-table'
                     ).
                     column_head(
-                        'fields', 'fields', 'entity', false, $switch_dir, $crit, $search_method,
-                            (('fields' == $sort) ? "$dir " : '').'txp-list-col-fields'
+                        'custom', 'custom', 'entity', false, $switch_dir, $crit, $search_method,
+                            (('custom' == $sort) ? "$dir " : '').'txp-list-col-custom'
                     )
                 ).
                 n.tag_end('thead').
@@ -231,7 +268,7 @@ function entity_list($message = '')
 
                 $edit_url['id'] = $id;
                 
-                $meta = safe_column('name', 'txp_meta', 'id IN (SELECT meta_id FROM '.PFX."txp_meta_fieldsets WHERE type_id = $id)");
+                $meta = safe_column('name', 'txp_meta', 'id IN (SELECT meta_id FROM '.PFX."txp_meta_fieldsets WHERE type_id = $id) ORDER BY name");
                 $meta = $meta ? implode(br, $meta) : '';
 /*
 TODO: constraints

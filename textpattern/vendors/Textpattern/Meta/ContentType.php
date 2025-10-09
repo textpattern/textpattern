@@ -156,17 +156,17 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
      * @return  array  An entities array
      */
 
-    public function getEntities($id = null)
+    public function getEntities($id = null, $item = 'id')
     {
         if ($id === null) {
-            return $this->getItem('id', array(), 'id');
+            return $this->getItem($item, array(), 'id');
         } elseif (is_int($id)) {
-            return $this->getItem('id', function($v) use ($id) { return $v['tableId'] == $id; }, 'id');
+            return $this->getItem($item, function($v) use ($id) { return $v['tableId'] == $id; }, 'id');
         } else {
             $entities = $this->getItem('id', array(), 'key', $this->tableColumnMap);
             $id = isset($entities[$id]) ? $entities[$id] : 0;
 
-            return $id ? $this->getItem('id', function($v) use($id) { return $v['tableId'] == $id; }, 'id') : array();
+            return $id ? $this->getItem($item, function($v) use($id) { return $v['tableId'] == $id; }, 'id') : array();
         }
     }
     
@@ -300,20 +300,22 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
         }
 
         if ($ok) {
-            $old_meta = $id ? safe_column_num('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
+//            $old_meta = $id ? safe_column_num('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
 
             if (!$id) {
                 $id = $data['id'] = (int)$ok;
                 $this->register($data['name'], $data);
             }
-
+            
+            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update(null, $meta);
+/*
             if ($meta_in = array_diff($meta, $old_meta)) {
-                \Txp::get('\Textpattern\Meta\FieldSet', $id)->insert(null, $meta_in);
+                \Txp::get('\Textpattern\Meta\FieldSet', $id)->insert($meta_in);
             }
 
             if ($meta_out = array_diff($old_meta, $meta)) {
-                \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete(null, $meta_out);
-            }
+                \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete($meta_out);
+            }*/
         }
 
         return $ok;
@@ -330,9 +332,9 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
     public function delete($ids = array())
     {
         foreach ($ids = array_filter(array_map('intval', (array)$ids)) as $id) {
-            \Txp::get('\Textpattern\Meta\FieldSet', $id)->delete();
-            safe_delete('txp_meta_fieldsets', "type_id = $id");
+            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update(null, false);
             safe_delete('txp_meta_entity', "id = $id");
+            unset($this->contentTypeMap[$id]);
         }
 
         return;

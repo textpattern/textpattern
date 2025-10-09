@@ -262,7 +262,7 @@ function meta_list($message = '')
                             (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                     ).
                     column_head(
-                        'content_type', 'content_type', 'meta', false, $switch_dir, $crit, $search_method,
+                        'entity', 'content_type', 'meta', false, $switch_dir, $crit, $search_method,
                             (('content_type' == $sort) ? "$dir " : '').'txp-list-col-content-type'
                     ).
                     column_head(
@@ -313,7 +313,7 @@ TODO: constraints
                 $meta_labels = array();
 
                 foreach (do_list_unique($meta_content_type) as $_ct) {
-                    $meta_labels[] = isset($all_content_types[$_ct]) ? txpspecialchars($all_content_types[$_ct]) : $_ct;
+                    $meta_labels[] = eLink('entity', 'entity_edit', 'id', $_ct, isset($all_content_types[$_ct]) ? txpspecialchars($all_content_types[$_ct]) : $_ct);
                 }
 
                 $contentBlock .= tr(

@@ -325,7 +325,7 @@ function article_save($write = true)
         $type = $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : (int)ps('type', 1);
 
         if (!$write) {
-            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $ID ? $ID : null)
                 ->filterCollectionAt($uPosted);
 
             return $setnq + $set + $mfs->store($_POST, 1, 0);
@@ -340,7 +340,7 @@ function article_save($write = true)
             // @Todo: Rollback if fail.
             $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $rs['ID'])
                 ->filterCollectionAt($uPosted);
-            $mfs->store($_POST, $type, $rs['ID']);
+            $mfs->store($_POST);
 
             if ($is_clone) {
                 $url_title = stripSpace($Title_plain . ' (' . $rs['ID'] . ')', 1);

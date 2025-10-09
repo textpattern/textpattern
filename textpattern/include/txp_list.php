@@ -85,6 +85,8 @@ function list_list($message = '', $post = '')
     global $statuses, $use_comments, $comments_disabled_after, $step, $txp_user, $event;
 
     $show_authors = !has_single_author('textpattern', 'AuthorID');
+    $entityLabels = \Txp::get('\Textpattern\Meta\ContentType')->getEntities(1, 'label'); // Articles only.
+    $entities = $entityLabels ? implode(',', array_keys($entityLabels)) : '0';
 
     $fields = array(
         'ID' => array(
@@ -126,6 +128,11 @@ function list_list($message = '', $post = '')
             'column' => 'textpattern.Category2',
             'label' => 'category2',
             'class' => 'category2 category',
+        ),
+        'custom' => array(
+            'column' => $entities ? '(SELECT type_id FROM '.PFX."txp_meta_registry WHERE content_id = textpattern.ID AND type_id IN ($entities) LIMIT 1)" : '',
+            'label' => 'custom',
+            'class' => 'custom',
         ),
         'Status' => array(
             'column' => 'textpattern.Status',
@@ -485,6 +492,11 @@ function list_list($message = '', $post = '')
                     td(
                         $Category2, '', 'txp-list-col-category2 category' . $vc[2]
                     ) .
+                    td(
+                        isset($entityLabels[$custom])
+                            ? eLink('entity', 'entity_edit', 'id', $custom, $entityLabels[$custom])
+                            : gTxt('none'), '', 'txp-list-col-custom custom'
+                    ) .
                     td($view_url ?
                         href($Status, $view_url, join_atts(array(
                             'rel'    => 'external',
@@ -560,9 +572,16 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
     $status = selectInput('Status', $statusa, '', true);
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
+
+    $options = array('add' => gTxt('add'), 'remove' => gTxt('remove'), 0 => array());
+    foreach ($entityLabels = \Txp::get('\Textpattern\Meta\ContentType')->getEntities(1, 'label') as $value => $label) {
+        $fields = safe_field('GROUP_CONCAT(meta_id)', 'txp_meta_fieldsets', "type_id = $value");
+        $options[$value] = array('title' => $label, 'data-fields' => $fields);
+    }
     
-    $custom = radioSet(array(gTxt('add'), gTxt('remove')), 'remove').
-        selectInput('meta', safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), array(), true);
+    $custom = /*radioSet(array(gTxt('add'), gTxt('remove')), 'remove').*/
+        ($options ? selectInput('entity', $options, '', false, '', 'entity-select') : '') .
+        selectInput('meta', safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), array(), false, '', 'meta-select');
 
     $methods = array(
         'changestatus'    => array(
@@ -666,7 +685,7 @@ function list_multi_edit()
             if ($selected && safe_delete('textpattern', "ID IN (" . join(',', $selected) . ")")) {
                 foreach ($selected as $id) {
                     if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
-                        Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($id);
+                        Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->update(null, false);
                     }
                 }
 
@@ -729,8 +748,8 @@ function list_multi_edit()
             break;
         // Change meta.
         case 'changemeta':
-            $field = 'custom';
-            $value = !ps('remove');
+            $field = 'entity';
+            $value = ps('entity');
 
             break;
     }
@@ -763,17 +782,19 @@ function list_multi_edit()
         $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
         if ($edit_method === 'changemeta') {
-            if ($metas = (array)ps('meta')) {
-                foreach ($selected as $id) {
-                    if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1)) {
-                        if (!$value) {
-                        // Remove meta values.
-                            Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->delete($id, $metas);
-                        } else {
-                        // Add meta values.
-                            Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->insert($id, $metas);
-                        }
-                    }
+            $metas = (array)ps('meta');
+
+            foreach ($selected as $id) {
+                $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 1);
+
+                if ($value == 'remove') {
+                // Remove meta values.
+                    $type && Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->update($metas, false);
+                } elseif ($value == 'add') {
+                // Add meta values.
+                    $type && Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->update($metas, true);
+                } elseif ($value = Txp::get('\Textpattern\Meta\ContentType')->getEntity((int)$value)) {
+                    Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->update($metas, $value);
                 }
             }
         } elseif ($edit_method === 'duplicate') {

@@ -1049,7 +1049,7 @@ function image_save()
 
     // ToDo: Run custom fields through validator.
     $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2);
-    $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
+    $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $id ? $id : null)
         ->filterCollectionAt($uDate);
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
@@ -1089,7 +1089,7 @@ function image_delete($ids = array())
 
     register_callback(function ($ev, $st, $id) {
         if ($type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2)) {
-            Txp::get('\Textpattern\Meta\FieldSet', $type)->delete($id);
+            Txp::get('\Textpattern\Meta\FieldSet', $type, $id)->update(null, false);
         }
     }, 'image_deleted');
 

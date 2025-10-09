@@ -2026,6 +2026,17 @@ textpattern.Route.add('login', function () {
     textpattern.passwordMask();
 });
 
+// List panel.
+textpattern.Route.add('list', function () {
+    $(document).on('change', '#entity-select', function () {
+        var fields = $(this).find('option:selected').data('fields');
+        fields = fields ? fields.toString().split(',') : [];
+        $('#meta-select option').each(function () {
+            $(this).prop('selected', fields.indexOf($(this).val()) != -1);
+        });
+    });
+});
+
 // Write panel.
 textpattern.Route.add('article', function () {
     // Assume users would not change the timestamp if they wanted to
