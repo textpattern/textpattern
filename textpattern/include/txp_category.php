@@ -624,7 +624,7 @@ function cat_event_category_save($event, $table_name)
         return cat_event_category_edit($event, $message);
     }
 
-    $parent or $parent = 'root';
+    $parent = $parent ?: 'root';
 
     if ($parent == $old_parent || insert_nodes($id, $data, $event)) {
         $res = safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = '$id'");

@@ -1616,7 +1616,7 @@ function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
 
-    $pre or $pre = 0;
+    $pre = $pre ?: 0;
 
     isset($plugin_callback[$event]) or $plugin_callback[$event] = array();
     isset($plugin_callback[$event][$pre]) or $plugin_callback[$event][$pre] = array();
@@ -1806,8 +1806,8 @@ function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
 {
     global $plugin_callback;
 
-    $pre or $pre = 0;
-    $step or $step = 0;
+    $pre = $pre ?: 0;
+    $step = $step ?: 0;
 
     $callbacks = isset($plugin_callback[$event][$pre][$step]) ? $plugin_callback[$event][$pre][$step] :
         (isset($plugin_callback[$event][$pre]['']) ? $plugin_callback[$event][$pre][''] : array());
@@ -2749,7 +2749,7 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $DateTime = new DateTime();
     }
 
-    $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
+    $override_locale = $override_locale ?: (txpinterface == 'admin' ? $lang_ui : LANG);
 
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
@@ -4685,6 +4685,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
 
                         if ($unique || $val === true || $mode == 'any') {
                             $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts))";
+//                            $where[$k] = "$not $idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
                         } else {
                             $cmp = $mode == 'exact' ? '=' : '>=';
                             $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts)) $cmp ".count($val);

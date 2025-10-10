@@ -825,7 +825,7 @@ function output_css($s = '', $n = '', $t = '')
         }
     } elseif ($s && $res = safe_row('css, skin', 'txp_section', "name='" . doSlash($s) . "'")) {
         $cssname = $res['css'];
-        $t or $t = $res['skin'];
+        $t = $t ?: $res['skin'];
     }
 
     if (!empty($cssname)) {

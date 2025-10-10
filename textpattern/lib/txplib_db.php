@@ -1450,7 +1450,7 @@ function get_tree($atts = array(), $tbl = 'txp_category')
             $cats = safe_rows('id, name, parent, title, description', $tbl, "name != 'root' $sql_exclude AND $sql_query $sql_limit");
         }
 
-        $cats or $cats = array();
+        $cats = $cats ?: array();
 
         foreach ($cats as $cat) {
             extract($cat);
