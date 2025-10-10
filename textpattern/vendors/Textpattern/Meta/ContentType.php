@@ -74,49 +74,49 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
                 'key'    => 'article',
                 'label'  => gTxt('article'),
                 'table'  => 'textpattern',
-                'column' => PFX.'textpattern.ID',
+                'column' => 'textpattern.ID',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'image',
                 'label'  => gTxt('image'),
                 'table'  => 'txp_image',
-                'column' => PFX.'txp_image.id',
+                'column' => 'txp_image.id',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'file',
                 'label'  => gTxt('file'),
                 'table'  => 'txp_file',
-                'column' => PFX.'txp_file.id',
+                'column' => 'txp_file.id',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'link',
                 'label'  => gTxt('link'),
                 'table'  => 'txp_link',
-                'column' => PFX.'txp_link.id',
+                'column' => 'txp_link.id',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'user',
                 'label'  => gTxt('author'),
                 'table'  => 'txp_users',
-                'column' => PFX.'txp_users.user_id',
+                'column' => 'txp_users.user_id',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'category',
                 'label'  => gTxt('category'),
                 'table'  => 'txp_category',
-                'column' => PFX.'txp_category.id',
+                'column' => 'txp_category.id',
             ),
             ++$c => array(
                 'id'     => $c,
                 'key'    => 'section',
                 'label'  => gTxt('section'),
                 'table'  => 'txp_section',
-                'column' => PFX.'txp_section.name',
+                'column' => 'txp_section.name',
             ),
         );
 
@@ -307,7 +307,7 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
                 $this->register($data['name'], $data);
             }
             
-            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update(null, $meta);
+            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update($meta);
 /*
             if ($meta_in = array_diff($meta, $old_meta)) {
                 \Txp::get('\Textpattern\Meta\FieldSet', $id)->insert($meta_in);

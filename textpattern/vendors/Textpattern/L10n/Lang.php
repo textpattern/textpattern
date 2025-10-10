@@ -753,7 +753,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         // These keywords need translating as they cannot exist as keys in .ini files.
         $reserved = array('false', 'no', 'none', 'null', 'off', 'on', 'true', 'yes');
 
-        $v = strtolower($var);
+        $v = strtolower((string)$var);
         $v = in_array($v, $reserved) ? 'txp_'.$v : $v;
 
         if (isset($this->strings[$v])) {
