@@ -415,8 +415,8 @@ function txpgetimagesize($file)
         }
 
         $viewbox = explode(' ', $svg['viewBox']);
-        $width = $viewbox[2] - $viewbox[0];
-        $height = $viewbox[3] - $viewbox[1];
+        $width = (int)$viewbox[2];
+        $height = (int)$viewbox[3];
 
         if ($width <= 0 || $height <= 0) {
             return false;

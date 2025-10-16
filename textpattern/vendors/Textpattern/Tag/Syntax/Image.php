@@ -421,14 +421,14 @@ class Image
         }
     
         $qparts = join(' ', array(
-            $where,
+            $where ? $where : '',
             "ORDER BY ".$safe_sort,
             ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
         ));
     
         $rs = empty($extid) ?
             safe_rows_start("*", 'txp_image', $qparts) :
-            safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts);
+            ($where ? safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts) : safe_query("SELECT $extid $qparts"));
     
         if (!$has_content) {
             $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";

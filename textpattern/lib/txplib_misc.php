@@ -661,7 +661,7 @@ function txpsvgtopx($svgsize)
 
     switch (substr($matches[2], 0, 2)) {
         case '':
-            return($svgsize);
+            return($matches[1]);
             break;
         case 'pt':
             return($matches[1] * 96 / 72);
