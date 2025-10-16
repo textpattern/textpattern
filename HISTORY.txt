@@ -26,7 +26,7 @@ Changes in 4.9.0 (upcoming)
     articles_ui>list.row (pluggable_ui) for adding table data
     articles>steps for plugins to register custom panel-level functionality.
 * Vendors: DOMPurify 3.3.0.
-* Vendors: PHPMailer 6.11.1.
+* Vendors: PHPMailer 6.12.0.
 
 Changes in 4.9.0-beta.2 (14 Mar 2025)
 
