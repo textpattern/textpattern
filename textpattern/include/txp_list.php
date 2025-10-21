@@ -413,6 +413,7 @@ function list_list($message = '', $post = '')
 
                 $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
+                $custom = (int)$custom;
 
                 if ($Status == STATUS_LIVE || $Status == STATUS_STICKY) {
                     $view_url = permlinkurl($a);
