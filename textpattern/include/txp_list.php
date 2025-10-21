@@ -572,16 +572,12 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $statusa = has_privs('article.publish') ? $statuses : array_diff_key($statuses, array(STATUS_LIVE => 'live', STATUS_STICKY => 'sticky'));
     $status = selectInput('Status', $statusa, '', true);
     $authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
-
-    $options = array('add' => gTxt('add'), 'remove' => gTxt('remove'), 0 => array());
-    foreach ($entityLabels = \Txp::get('\Textpattern\Meta\ContentType')->getEntities(1, 'label') as $value => $label) {
-        $fields = safe_field('GROUP_CONCAT(meta_id)', 'txp_meta_fieldsets', "type_id = $value");
-        $options[$value] = array('title' => $label, 'data-fields' => $fields);
-    }
+    $options = array('add' => gTxt('add'), 'remove' => gTxt('remove'), 0 => array()) + selectCustom(1);
     
     $custom = /*radioSet(array(gTxt('add'), gTxt('remove')), 'remove').*/
         ($options ? selectInput('entity', $options, '', false, '', 'entity-select') : '') .
         selectInput('meta', safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), array(), false, '', 'meta-select');
+
 
     $methods = array(
         'changestatus'    => array(

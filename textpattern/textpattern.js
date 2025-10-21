@@ -2027,14 +2027,20 @@ textpattern.Route.add('login', function () {
 });
 
 // List panel.
-textpattern.Route.add('list', function () {
-    $(document).on('change', '#entity-select', function () {
-        var fields = $(this).find('option:selected').data('fields');
-        fields = fields ? fields.toString().split(',') : [];
-        $('#meta-select option').each(function () {
-            $(this).prop('selected', fields.indexOf($(this).val()) != -1);
-        });
-    });
+textpattern.Route.add('article, list', function () {
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.id === 'entity-select') {
+            const select = e.target;
+            const fieldsData = select.options[select.selectedIndex].dataset.fields;
+            const fields = fieldsData ? fieldsData.toString().split(',') : [];
+
+            const metaSelect = document.getElementById('meta-select');
+            Array.from(metaSelect.options).forEach(option => {
+                option.selected = fields.indexOf(option.value) !== -1;
+            });
+            metaSelect.disabled =  (select.value === '');
+        }
+    }, true);
 });
 
 // Write panel.
@@ -2103,7 +2109,7 @@ textpattern.Route.add('article', function () {
     var $form = $('#article_form');
 
     $form.on('change', 'select[name=Status]', function () {
-        let submitButton = $form.find('input[type=submit]');
+        let submitButton = $form.find('#txp-article-actions input[type=submit]');
 
         if (!$form.hasClass('published')) {
             if ($(this).val() < 4) {

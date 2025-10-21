@@ -366,7 +366,7 @@ function dmp()
         global $prefs;
 
         if (!$f) {
-            $f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
+            $f = fopen($prefs['tempdir'].DS.txpdmpfile, 'a');
         }
 
         $stack = get_caller();
@@ -764,7 +764,23 @@ function imageFetchInfo($id = "", $name = "")
             $where = 'id = '.intval($id).' LIMIT 1';
         } else {
             if (!isset($fields)) {
-                $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
+                $fields = array(
+                    'id'    => NULL,
+                    'name' 	=> '',
+                    'category' => '',
+                    'ext'   => '',
+                    'w'     => 0,
+                    'h'     => 0,
+                    'alt'   => '',
+                    'caption' => NULL,
+                    'date'  => NULL,
+                    'author' => '',
+                    'thumbnail' => 0,
+                    'thumb_w' => 0,
+                    'thumb_h' => 0,
+                );
+
+//                $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
                 $fields['date'] = date('c');
             }
 
@@ -859,6 +875,7 @@ function image_format_info($image)
 
 
     foreach ($cfs as $cf) {
+            $table_id = Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($meta_type);
         $ref = $image['id'] ? array($image['id'], 2) : null;
         $cf->loadContent($ref, true);
 
@@ -4548,7 +4565,6 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
 
     if ($out === null) {
         $out = array();
-        $columnIds = \Txp::get('\Textpattern\Meta\ContentType')->getItem('tableId');
         $tableColumns = \Txp::get('\Textpattern\Meta\ContentType')->getColumn();
         $contentTypes = \Txp::get('\Textpattern\Meta\ContentType')->getId();
     }
@@ -4560,7 +4576,7 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
     assert_int($when);
     $by = 'by_'.$by;
 
-    if ($type && !isset($out[$when][$type])) {
+    if (!isset($out[$when][$type])) {
         $out[$when][$type] = array();
         $cfs = Txp::get('\Textpattern\Meta\FieldSet', $type)
             ->filterCollectionAt($when);
@@ -4581,8 +4597,8 @@ function getCustomFields($type = 'article', $when = null, $by = 'id')
             $out[$when][$type]['by_created'][$thisId] = $def->get('created');
             $out[$when][$type]['by_modified'][$thisId] = $def->get('modified');
             $out[$when][$type]['by_expires'][$thisId] = $def->get('expires');
-            $out[$when][$type]['by_column'][$thisId] = $tableColumns[$type];
-            $out[$when][$type]['by_content_id'][$thisId] = $contentTypes[$type];
+            $out[$when][$type]['by_column'][$thisId] = isset($tableColumns[$type]) ? $tableColumns[$type] : 0;
+            $out[$when][$type]['by_content_id'][$thisId] = isset($contentTypes[$type]) ? $contentTypes[$type] : 0;
         }
 
         ksort($out, SORT_NUMERIC);
@@ -4663,7 +4679,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
     $pairs = (array)$pairs;
     $pairs += array_fill_keys(getCustomFields(), null);
 
-//    $table = safe_pfx('textpattern');
+    $table_id = 1; // 'textpattern' table atm
     $columns = $where = array();
 
     if ($pairs && isset($custom['by_name'])) {
@@ -4684,17 +4700,17 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $mode = empty($modes[$k]) ? 'any' : $modes[$k];
 
                         if ($unique || $val === true || $mode == 'any') {
-                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts))";
-//                            $where[$k] = "$not $idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
+//                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts))";
+                            $where[$k] = "$not $idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
                         } else {
                             $cmp = $mode == 'exact' ? '=' : '>=';
-                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND ($parts)) $cmp ".count($val);
+                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts)) $cmp ".count($val);
                         }
                     }
                 }
 
                 if ($unique) {
-                    $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn LIMIT 1)";
+                    $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id LIMIT 1)";
                 } else {
                     if (!empty($custom['by_aggregate'][$k]) && isset($aggregate[$custom['by_aggregate'][$k]])) {
                         $column = $aggregate[$custom['by_aggregate'][$k]];
@@ -4703,7 +4719,7 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                         $column = "GROUP_CONCAT(value SEPARATOR '$dlm')";
                     }
 
-                    $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn GROUP BY content_id)";
+                    $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id GROUP BY content_id)";
                 }
             }
         }

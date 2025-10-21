@@ -81,9 +81,9 @@ function test_integrity() {
         $message[] = $c.' underlapping_deltas';
     }
 
-    if ($c = safe_count('txp_meta_value_varchar', "type_id > 0
-        AND meta_id NOT IN (SELECT meta_id FROM ".PFX."txp_meta_fieldsets WHERE type_id = txp_meta_value_varchar.type_id)
-        AND meta_id NOT IN (SELECT meta_id FROM ".PFX."txp_meta_delta WHERE type_id = txp_meta_value_varchar.type_id)")) {
+    if ($c = getThing("SELECT COUNT(*) FROM ".PFX."txp_meta_value_varchar v WHERE v.content_id > 0 AND v.meta_id NOT IN
+                (SELECT f.meta_id FROM ".PFX."txp_meta_fieldsets f JOIN ".PFX."txp_meta_entity e ON f.type_id=e.id JOIN ".PFX."txp_meta_registry r ON f.type_id=r.type_id WHERE e.table_id=v.table_id)")
+    ) {
         $message[] = $c.' orphaned_varchar';
     }
 
@@ -268,7 +268,12 @@ function entity_list($message = '')
 
                 $edit_url['id'] = $id;
                 
-                $meta = safe_column('name', 'txp_meta', 'id IN (SELECT meta_id FROM '.PFX."txp_meta_fieldsets WHERE type_id = $id) ORDER BY name");
+                if ($meta = safe_column(array('id', 'name'), 'txp_meta', 'id IN (SELECT meta_id FROM '.PFX."txp_meta_fieldsets WHERE type_id = $id) ORDER BY name")) {
+                    array_walk($meta, function(&$v, $k) {
+                        $v = eLink('meta', 'meta_edit', 'id', $k, $v);
+                    });
+                }
+
                 $meta = $meta ? implode(br, $meta) : '';
 /*
 TODO: constraints

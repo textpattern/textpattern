@@ -2838,7 +2838,8 @@ function custom_field($atts = array(), $thing = null)
             $id = ${$context}[$type === 'article' ? 'thisid' : 'id'];
             $tableName = 'txp_meta_value_' . $customFields[$type]['by_type'][$no];
             $typeId = (int)$customFields[$type]['by_content_id'][$no];
-            $where = "meta_id = $no AND type_id = $typeId AND content_id IN ($id, -1) ORDER BY content_id DESC";
+            $table_id = Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($typeId);
+            $where = "meta_id = $no AND table_id = $table_id AND content_id IN ($id, -1) ORDER BY content_id DESC";
             $unique = !in_array($customFields[$type]['by_callback'][$no], $delimited);
             ${$context}[$name] = $unique ?
                 getThing('SELECT value FROM '.PFX.$tableName." WHERE $where") :

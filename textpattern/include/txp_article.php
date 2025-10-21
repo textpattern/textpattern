@@ -81,6 +81,7 @@ $vars = array(
     'exp_minute',
     'exp_second',
     'sExpires',
+    'type',
 );
 
 $statuses = status_list();
@@ -322,13 +323,13 @@ function article_save($write = true)
             "uid"             => md5(uniqid(rand(), true)),
         ));
 
-        $type = $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : (int)ps('type', 1);
+        $meta_id = preg_replace('/^custom_([1-9]\d*)$/', '$1', preg_grep('/^custom_\d+$/', array_keys($_POST)));
 
         if (!$write) {
-            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $ID ? $ID : null)
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $meta_id)
                 ->filterCollectionAt($uPosted);
 
-            return $setnq + $set + $mfs->store($_POST, 1, 0);
+            return $setnq + $set + $mfs->store($_POST);
         }
 
         $set = join_qs($setnq + quote_list($set), ',');
@@ -338,9 +339,11 @@ function article_save($write = true)
         ) {
             // @Todo: Return code.
             // @Todo: Rollback if fail.
-            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $rs['ID'])
-                ->filterCollectionAt($uPosted);
-            $mfs->store($_POST);
+            $old_type = $ID ? (int)Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0;
+            $type = (int)($type ?: $old_type);
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $old_type, $rs['ID']);//$msg=implode(',', array_keys($mfs->getItem()));
+            $mfs->update($meta_id, $type);//$msg.='->'.implode(',', array_keys($mfs->getItem()));
+            $mfs->filterCollectionAt($uPosted)->store($_POST);
 
             if ($is_clone) {
                 $url_title = stripSpace($Title_plain . ' (' . $rs['ID'] . ')', 1);
@@ -398,8 +401,8 @@ function article_preview($field = false)
         $matches = array();
 
         if (preg_match('/^custom_([1-9]\d*)$/', $field, $matches)) {
-            $cfields = getCustomFields();
-            $field = isset($cfields[$matches[1]]) ? $cfields[$matches[1]] : $field;
+            $name = safe_field('name', 'txp_meta', "id = $matches[1]");
+            $field = $name === false ? $field : $name;
             $dbfield = $field;
         } else {
             $dbfield = $field ? ucfirst($field) . '_html' : '';
@@ -759,12 +762,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     extract($rs);
 
     $when = ($sPosted) ? $sPosted : $txpnow;
-    $meta_type = $rs['ID'] ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1) : (int)ps('type', 1);
+    $meta_type = (int)ps('type', $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0);
+    $metas = array_keys(Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $ID ?: null)->getItem());
+    $metas = ps('meta', $metas);
 
-    $rs['$meta_type'] = $meta_type;
+    $rs['$type'] = $meta_type;
+    $rs['$meta_type'] = $metas === false ? $meta_type : (array)$metas;
 
     // Add partials for custom fields (and their values which is redundant by design, for plugins).
-    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'])
+    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $ID ?: null)
         ->filterCollectionAt($when) : array();
 
     foreach ($cfs as $i => $cf_info) {
@@ -831,8 +837,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo hInput('ID', $ID) .
         eInput('article') .
-        sInput($step) .
-        hInput('type', $meta_type);
+        sInput($step);
 
     $pane_header = '<div class="txp-layout-4col-3span">' . '<div id="pane-header">' .
     hed(gTxt('tab_write'), 1, array('class' => 'txp-heading')) .
@@ -849,6 +854,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     if ($articles_use_excerpts) {
         echo $partials['excerpt']['html'];
     }
+
+    // 'Custom fields' section.
+    echo $partials['custom_fields']['html'];
 
     echo n . '</div>';
 
@@ -1032,7 +1040,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
 
     // 'Custom fields' collapsible section.
-    echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+//    echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+
+    if ($options = selectCustom(1)) {
+        $custom = ($options ? selectInput(array('name' => 'type', 'form' => 'cform'), $options, $meta_type ?: '', true, '', 'entity-select') : '') .
+            selectInput(array('name' => 'meta', 'form' => 'cform', 'disabled' => empty($meta_type)), safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), $metas, false, '', 'meta-select');
+
+        $custom .= '<button form="cform">'. gTxt('load') .'</button>';
+        echo wrapRegion('txp-custom-field-group', $custom, 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+    }
 
     // 'Advanced options' collapsible section.
     // Unused by core, but leaving the placeholder for legacy plugin support.
@@ -1059,6 +1075,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo //tInput().
         n . '</div>' . // End of .txp-layout.
         n . '</form>';
+    echo '<form id="cform" method="post" action="index.php#custom-fields" target="cframe">' .
+        eInput('article') .
+        hInput('ID', $ID) .
+        '</form>';
+    echo '<iframe hidden name="cframe" onload="setTimeout(()=>document.querySelector(contentWindow.location.hash||null)?.replaceChildren(...contentDocument.querySelector(contentWindow.location.hash||null)?.childNodes))"></iframe>';
 }
 
 /**
@@ -1473,25 +1494,27 @@ function article_partial_actions($rs)
  * @return string HTML
  */
 
-function article_partial_custom_field($rs, $key, $meta_type = 1)
+function article_partial_custom_field($rs, $cf, $meta_type = 1)
 {
     global $txpnow;
 
     $out = '';
 
-    preg_match('/custom_field_([0-9]+)/', $key, $m);
+    if (is_string($cf)) {
+        preg_match('/custom_field_([0-9]+)/', $cf, $m);
 
-    if (!empty($m[1])) {
-        $num = $m[1];
-        $cfs = Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ? $rs['ID'] : null)
-            ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow);
-        $cf = $cfs->getItem($num);
-
-        if ($cf) {
-            $ref = $rs['ID'] ? array($rs['ID'], $meta_type) : null;
-            $cf->loadContent($ref, true)->loadTitles();
-            $out = $cf->render(can_modify($rs));
+        if ($num = !empty($m[1]) ? $m[1] : 0) {
+            $cf = Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ? $rs['ID'] : null)
+                ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow)
+                ->getItem($num);
         }
+    }
+
+    if (!empty($cf)) {
+        $table_id = 1;//Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($meta_type);
+        $ref = $rs['ID'] ? array($rs['ID'], $table_id) : null;
+        $cf->loadContent($ref, true)->loadTitles();
+        $out = $cf->render(can_modify($rs));
     }
 
     return $out;
@@ -1668,16 +1691,18 @@ function article_partial_custom_fields($rs)
 {
     global $txpnow;
 
-    $cf = '';
-    $meta_type = isset($rs['$meta_type']) ? (int)$rs['$meta_type'] : Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
-    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ? $rs['ID'] : null)
+    $cf = hInput('type', $rs['$type']);
+    $meta_type = isset($rs['$meta_type']) ?
+        (is_array($rs['$meta_type']) ? $rs['$meta_type'] : (int)$rs['$meta_type']) :
+        Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
+    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ?: null)
         ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow) : array();
 
-    foreach ($cfs as $k => $v) {
-        $cf .= article_partial_custom_field($rs, "custom_field_{$k}", $meta_type);
+    foreach ($cfs as $v) {
+        $cf .= article_partial_custom_field($rs, $v, $meta_type);
     }
 
-    return tag(pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'div', array('class' => 'txp-container'));
+    return tag(pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'div', array('class' => 'txp-container', 'id' => 'custom-fields'));
 }
 
 /**

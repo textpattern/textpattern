@@ -477,8 +477,8 @@ function preText($store, $prefs = null)
                         $permlink_guess = $permlink_mode;
                     } elseif (!empty($un) && ($n > 1 || in_array('title_only', $permlink_modes) || in_array('id_title', $permlink_modes))) {// ID or url_title
                         $safe_un = doSlash($un);
-                        $customData = buildCustomSql('article');
-                        $customColumns = $customData ? $customData['columns'] : false;
+//                        $customData = buildCustomSql('article');
+//                        $customColumns = $customData ? $customData['columns'] : false;
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(

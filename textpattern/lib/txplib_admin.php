@@ -278,6 +278,17 @@ function updateVolatilePartials($partials)
     return $response;
 }
 
+function selectCustom ($table_id = 1) {
+    $options = array();
+
+    foreach ($entityLabels = \Txp::get('\Textpattern\Meta\ContentType')->getEntities($table_id, 'label') as $value => $label) {
+        $fields = safe_field('GROUP_CONCAT(meta_id)', 'txp_meta_fieldsets', "type_id = $value");
+        $options[$value] = array('title' => $label, 'data-fields' => $fields);
+    }
+
+    return $options;
+}
+
 /**
  * Checks if GD supports the given image type.
  *

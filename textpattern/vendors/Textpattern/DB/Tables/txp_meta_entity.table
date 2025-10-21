@@ -3,4 +3,4 @@ name         VARCHAR(31)          NULL UNIQUE DEFAULT NULL,
 label        VARCHAR(63)          NULL DEFAULT NULL,
 table_id     TINYINT(4) UNSIGNED  NOT NULL,
 
-UNIQUE (name)
+UNIQUE (name, table_id)

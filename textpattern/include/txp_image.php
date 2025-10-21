@@ -738,7 +738,8 @@ function image_edit($message = '', $id = '')
             ->filterCollectionAt($uDate ? $uDate : $txpnow);
 
         foreach ($cfs as $cf) {
-            $ref = $id ? array($id, $type) : null;
+            $table_id = Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($type);
+            $ref = $id ? array($id, $table_id) : null;
             $cf->loadContent($ref, true)->loadTitles();
             $cfBlock[] = $cf->render();
         }

@@ -56,7 +56,7 @@ safe_create(
     `name` varchar(31) NULL UNIQUE DEFAULT NULL,
     `label` varchar(63) NULL DEFAULT NULL,
     `table_id` tinyint(4) unsigned NOT NULL,
-    UNIQUE (`name`)"
+    UNIQUE (`name`, `table_id`)"
 );
 
 safe_create(
@@ -100,13 +100,13 @@ safe_create(
 // on the dataTypes callback, all CF data may possibly be migrated.
 safe_create(
     "txp_meta_value_varchar",
-    "`type_id` int(12) NULL DEFAULT NULL,
+    "`table_id` tinyint(4) NULL DEFAULT NULL,
     `meta_id` int(12) NULL DEFAULT NULL,
     `content_id` int(12) NULL DEFAULT NULL,
     `value_id` tinyint(4) NULL DEFAULT '0',
     `value_raw` varchar(7500) NULL DEFAULT NULL,
     `value` varchar(7500) NULL DEFAULT NULL,
-    UNIQUE KEY (`type_id`,`meta_id`,`content_id`,`value_id`)"
+    UNIQUE KEY (`table_id`,`meta_id`,`content_id`,`value_id`)"
 );
 
 // Create the entity types.
@@ -204,7 +204,7 @@ try {
                 } else {
                     $ok = safe_insert(
                         "txp_meta_value_varchar",
-                        "type_id = 1,
+                        "table_id = 1,
                         meta_id = '$safeNum',
                         content_id = '$safeArticleId',
                         value_raw = '$safeContent',

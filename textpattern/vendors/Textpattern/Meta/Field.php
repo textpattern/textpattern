@@ -234,7 +234,7 @@ class Field
             $content = safe_rows(
                 'content_id,'. $fieldCol,
                 'txp_meta_value_'.$this->definition['data_type'],
-                "meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR type_id = $type AND content_id = '" .$ref. "'") . ")"
+                "meta_id = '" . $this->definition['id'] . "' AND (content_id = -1" . ($ref === null ? '' : " OR table_id = $type AND content_id = '" .$ref. "'") . ")"
             );
 
             // content_id values with index="-1" contain 'default' entries that need removing.
@@ -415,13 +415,13 @@ class Field
                         $colsize = $data_type['size'];
                         $colspec = $coltype . ($colsize === null ? '' : '(' . $colsize . ')');
 
-                        $table_def = "type_id int(12) NOT NULL DEFAULT 0,
+                        $table_def = "table_id tinyint(4) NOT NULL DEFAULT 0,
                             meta_id int(12) NOT NULL DEFAULT 0,
                             content_id int(12) NOT NULL DEFAULT 0,
                             value_id tinyint(4) NULL DEFAULT 0,
                             " . ( $has_textfilter ? 'value_raw ' . $colspec . ' DEFAULT NULL,' : '') . "
                             value " . $colspec . " DEFAULT NULL,
-                            UNIQUE KEY (type_id,meta_id,content_id,value_id)";
+                            UNIQUE KEY (table_id,meta_id,content_id,value_id)";
 
                         safe_create($table_name, $table_def);
                     }
@@ -433,7 +433,19 @@ class Field
                         $data_type_orig = isset($data_types[$render_orig]) ? $data_types[$render_orig] : $data_type;
                         $table_name_orig = $table_prefix . $data_type_orig['type'];
                         // Remove any content from tables of types no longer associated with this field.
-                        safe_delete($table_name_orig, "meta_id = $id AND $out_types");
+                        if ($content_types) {
+                            foreach ($content_types as $ct) {
+                                $table_id = \Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($ct);
+                                // Ensure the content type exists.
+                                if ($table_id) {
+                                    $idSelect = 'SELECT content_id FROM '.PFX."txp_meta_registry WHERE type_id = $ct";
+                                    safe_delete($table_name_orig, "meta_id = $id AND table_id = $table_id AND content_id NOT IN ($idSelect)");
+                                }
+                            }
+                        } else {
+                            safe_delete($table_name_orig, "meta_id = $id");
+                        }
+
                         safe_delete('txp_meta_fieldsets', "meta_id = $id AND $out_types");
 
                         if ($table_name_orig !== $table_name) {
@@ -442,16 +454,14 @@ class Field
                             // N.B. Data loss may ensue! Caveat utilitor.
 
                             $sql = "INSERT IGNORE INTO `" . safe_pfx($table_name) . "`
-                                    (type_id,meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
-                                    SELECT type_id,meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
+                                    (table_id, meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
+                                    SELECT table_id, meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
                                         FROM " . safe_pfx($table_name_orig) . "
                                         WHERE meta_id = $id;";
                             safe_query($sql);
 
                             $sql = "DELETE FROM `" . safe_pfx($table_name_orig) . "` WHERE meta_id = $id";
                             safe_query($sql);
-
-//                          safe_delete($table_name, "meta_id = $id AND content_id = -1 AND value_id = 0");
                         }
                     } else {
                         $id = (int)$ok;
@@ -468,8 +478,9 @@ class Field
 
                     // Write default value.
                     // TODO: value_id.
+                    safe_delete($table_name, "table_id = $table_id AND meta_id = $id AND content_id = -1 AND value_id = 0");
                     $defaultClause = ($default === '' || $default === '0000-00-00 00:00:00') ? '' : ", value" . ($has_textfilter ? '_raw' : '') . " = '$default'";
-                    safe_insert($table_name, "meta_id = $id, content_id = -1, value_id = 0".$defaultClause);
+                    safe_insert($table_name, "table_id = $table_id, meta_id = $id, content_id = -1, value_id = 0".$defaultClause);
 
                     // Iterate over newly inserted rows and run them through the textfilter if desired.
                     if ($data_type['textfilter']) {
