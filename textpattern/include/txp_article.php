@@ -341,8 +341,8 @@ function article_save($write = true)
             // @Todo: Rollback if fail.
             $old_type = $ID ? (int)Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0;
             $type = (int)$type;
-            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $old_type, $rs['ID']);$msg=implode(',', array_keys($mfs->getItem()));
-            $mfs->update($meta_id, $type);$msg.='->'.implode(',', array_keys($mfs->getItem()));
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $old_type, $rs['ID']);//$msg=$old_type.'-'.$mfs->getType().':'.implode(',', array_keys($mfs->getItem()));
+            $mfs->update($meta_id, $type);//$msg.='->'.$type.'-'.$mfs->getType().':'.implode(',', array_keys($mfs->getItem()));
             $mfs->filterCollectionAt($uPosted)->store($_POST);
 
             if ($is_clone) {

@@ -275,11 +275,7 @@ class FieldSet implements \IteratorAggregate
 
             if ($newType != $this->type) {
                 // Change type.
-                if ($newType) {
-                    $this->export($newType);
-                } else {
-                    $this->delete();
-                }
+                $this->export($newType);
             }
 
             $old_meta = array_keys($this->filterCollection);
@@ -401,7 +397,9 @@ class FieldSet implements \IteratorAggregate
     {
         $contentId = $this->content;
 
-        if ($contentType = $this->type) {
+        if (empty($newType)) {
+            $this->delete();
+        } elseif ($contentType = $this->type) {
             $contentQuery = isset($contentId) ? " AND content_id = $contentId" : '';
 
             if ($contentId === null) {
@@ -471,6 +469,16 @@ class FieldSet implements \IteratorAggregate
         return $this->typeKeys;
     }
 
+
+    /**
+     * Fetch the type from the collection.
+     * @return array
+     */
+
+    public function getType()
+    {
+        return $this->type;
+    }
 
     /**
      * IteratorAggregate interface.

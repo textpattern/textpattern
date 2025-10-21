@@ -305,7 +305,7 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
                 $this->register($data['name'], $data);
             }
             
-            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update($meta);
+            \Txp::get('\Textpattern\Meta\FieldSet', $id)->update($meta, $id);
         }
 
         return $ok;
