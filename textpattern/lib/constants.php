@@ -749,6 +749,20 @@ define('REQUIRED_PHP_VERSION', '5.6.0');
 define('REQUIRED_OPENSSL_VERSION', '268439567');
 
 /**
+ * Hashing algorithm used for checksums (and its strlen() output in bytes).
+ *
+ * Can be cryptographically weaker than the password hashing algorithm, with
+ * focus on speed and minimising collisions.
+ *
+ * @since   4.9.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('CHECKSUM_ALGORITHM', 'tiger192,3');
+define('CHECKSUM_BYTES', 48);
+
+/**
  * File integrity status good.
  *
  * @since   4.6.0
@@ -812,11 +826,24 @@ define('INTEGRITY_STATUS', 0x1);
  * Return integrity MD5 hashes.
  *
  * @since   4.6.0
+ * @deprecated 4.9.0
  * @package Debug
  * @see     check_file_integrity()
  */
 
 define('INTEGRITY_MD5', 0x2);
+
+/**
+ * Return integrity hashes using the current CHECKSUM_ALGORITHM.
+ *
+ * Replaces INTEGRITY_MD5 (and has the same value so can be used interchangably).
+ *
+ * @since   4.9.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_HASH', 0x2);
 
 /**
  * Return full paths.

@@ -26,48 +26,96 @@ if (php_sapi_name() !== 'cli') {
 }
 
 if (empty($argv[1])) {
-    die("usage: {$argv[0]} <txpath> [update|rebuild]\n");
+    die("usage: {$argv[0]} <txpath> [all|core|admin-themes]\n");
 }
 
-$action = empty($argv[2]) ? 'update' : $argv[2];
+$locs = empty($argv[2]) ? 'all' : $argv[2];
 
 define('txpath', rtrim(realpath($argv[1]), '/'));
 
 $event = '';
 $prefs['enable_xmlrpc_server'] = true;
-require_once(txpath . '/lib/constants.php');
-require_once(txpath . '/lib/txplib_misc.php');
-require_once(txpath . '/lib/txplib_admin.php');
+require_once(txpath.'/lib/constants.php');
+require_once(txpath.'/lib/txplib_misc.php');
+require_once(txpath.'/lib/txplib_admin.php');
+
 $files = array();
-$destination = txpath . DS . 'checksums.txt';
+$fpattern = '/.*\.(?:php|js)$/';
 
-switch ($action) {
-    case 'update':
-        $files = calculate_checksums();
-        break;
-    case 'rebuild':
-        $files = files_to_checksum(txpath, '/.*\.(?:php|js)$/');
+if ($locs === 'all' || $locs === 'core') {
+    $destination = txpath;
 
-        // Append root and rpc files.
-        $files = array_merge($files, glob(txpath . DS . '..' . DS . '*.php'));
-        $files = array_merge($files, glob(txpath . DS . '..' . DS . 'rpc' . DS . '*.php'));
+    $files = files_to_checksum($destination, $fpattern);
 
-        // Remove setup and config-dist.php.
-        $files = array_filter($files, function($e) { return (strpos($e, '/setup') === false); });
-        $files = array_filter($files, function($e) { return (strpos($e, '/config-dist') === false); });
+    // Append root and rpc files.
+    $files = array_merge($files, glob(txpath.DS.'..'.DS.'*.php'));
+    $files = array_merge($files, glob(txpath.DS.'..'.DS.'rpc'.DS.'*.php'));
+
+    // Remove setup and config-dist.php.
+    $files = array_filter($files, function($e) { return (strpos($e, '/setup') === false); });
+    $files = array_filter($files, function($e) { return (strpos($e, '/config-dist') === false); });
+
+    // Remove admin-themes because they're checksummed independently.
+    $files = array_filter($files, function($e) { return (strpos($e, '/admin-themes') === false); });
+
+    // Output list.
+    if ($files) {
+        $files = prep_checksums($files);
+        write_checksums($destination, $files);
+        $files = calculate_checksums($files);
+        write_checksums($destination, $files);
+        echo "Checksums updated in ".$destination."\n";
+    }
+}
+
+if ($locs === 'all' || $locs === 'admin-themes') {
+    $destination = txpath.DS.'admin-themes';
+
+    $iterator = new DirectoryIterator($destination);
+    $themesInstalled = array();
+
+    foreach ($iterator as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            $themesInstalled[] = $fileinfo->getFilename();
+        }
+    }
+
+    foreach ($themesInstalled as $themeName) {
+        $endpoint = $destination.DS.$themeName;
+        $files = files_to_checksum($endpoint, $fpattern);
 
         // Output list.
         if ($files) {
-            $files = array_map(function ($str) { return str_replace(txpath, '', $str . ": " . str_repeat('a', 32)); }, $files);
-            file_put_contents($destination, implode(n, $files));
-            $files = calculate_checksums();
+            $files = prep_checksums($files);
+            write_checksums($endpoint, $files);
+            $files = calculate_checksums($files);
+            write_checksums($endpoint, $files);
+            echo "Checksums updated in ".$endpoint."\n";
         }
-        break;
+    }
 }
 
-if ($files) {
-    file_put_contents($destination, implode(n, $files));
-    echo "Checksums updated in " . $destination . ".\n";
+/**
+ * Create a file list, including new matching files added to the repo
+ *
+ * @param  [type] $dir   [description]
+ * @param  [type] $files [description]
+ * @return [type]        [description]
+ */
+function prep_checksums($files)
+{
+    return array_map(function ($str) { return str_replace(txpath, '', $str.": ".str_repeat('a', CHECKSUM_BYTES)); }, $files);
+}
+
+/**
+ * Commit the passed list of checksummed $files (prepped or computed) to the $dir
+ *
+ * @param  string $dir   Destination directory for the checksums.txt file
+ * @param  string $files Checksummed files
+ */
+function write_checksums($dir, $files)
+{
+    file_put_contents($dir.DS.'checksums.txt', implode(n, $files));
 }
 
 /**
@@ -94,16 +142,18 @@ function files_to_checksum($folder, $pattern)
 }
 
 /**
- * Recalculate checksums of all files in the destination file.
+ * Recalculate checksums of all files in the destination folder.
  *
  * @return array List of files and their checksums
  */
-function calculate_checksums()
+function calculate_checksums($filter = array())
 {
     $fileList = array();
 
-    foreach (check_file_integrity(INTEGRITY_MD5) as $file => $md5) {
-        $fileList[] = "$file: $md5";
+    foreach (check_file_integrity(INTEGRITY_HASH, true) as $file => $hash) {
+        if (empty($filter) || preg_grep('/^' . preg_quote($file, '/') . ':/', $filter)) {
+            $fileList[] = "$file: $hash";
+        }
     }
 
     return $fileList;

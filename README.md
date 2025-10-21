@@ -126,7 +126,7 @@ Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a temp
 
 ```ShellSession
 npm run txp-index
-npm run txp-checksums
+npm run txp-checksums ./textpattern
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
 

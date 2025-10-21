@@ -51,16 +51,6 @@ define("priv", '=== ');
 
 include_once(txpath . DS . 'lib' . DS . 'txplib_publish.php');
 
-global $files;
-
-$files = check_file_integrity();
-
-if (!$files) {
-    $files = array();
-} else {
-    $files = array_keys($files);
-}
-
 if ($event == 'diag') {
     require_privs('diag');
 
@@ -194,7 +184,7 @@ function diag_msg_wrap($msg, $type = 'e')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels, $txp_sections, $txp_user;
+    global $prefs, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev, $diag_levels, $txp_sections, $txp_user;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -838,8 +828,8 @@ function doDiagnostics()
 
         $out[] = n;
 
-        if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
-            foreach ($md5s as $f => $checksum) {
+        if ($hashes = check_file_integrity(INTEGRITY_HASH)) {
+            foreach ($hashes as $f => $checksum) {
                 $out[] = $f . cs . n . t . (!$checksum ? gTxt('diag_unknown') : $checksum) . n;
             }
         }
