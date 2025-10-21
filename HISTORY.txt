@@ -7,14 +7,15 @@ Changes in 4.9.0 (upcoming)
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
 * Changed: Pending articles may be displayed on the site.
-* Fixed: remove 'br' tags from article image markup where >1 image is
+* Fixed: Remove 'br' tags from article image markup where >1 image is
   supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: Filter articles by image.
 * Added: 'exclude' attribute to <txp:images />.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
-* Changed: Enhancements to SVG handling (thanks, jools-r).
+* Changed: Enhancements to SVG handling relating to non-px dimensions
+  (thanks, jools-r).
 * Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
 * Developer: Permitted concurrent logins. See Advanced Prefs.
 * Developer: Removed duplicate pluggable_ui callback for
@@ -26,7 +27,7 @@ Changes in 4.9.0 (upcoming)
     articles_ui>list.row (pluggable_ui) for adding table data
     articles>steps for plugins to register custom panel-level functionality.
 * Vendors: DOMPurify 3.3.0.
-* Vendors: PHPMailer 6.11.1.
+* Vendors: PHPMailer 6.12.0.
 
 Changes in 4.9.0-beta.2 (14 Mar 2025)
 
