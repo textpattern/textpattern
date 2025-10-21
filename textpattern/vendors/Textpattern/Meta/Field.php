@@ -478,9 +478,9 @@ class Field
 
                     // Write default value.
                     // TODO: value_id.
-                    safe_delete($table_name, "table_id = $table_id AND meta_id = $id AND content_id = -1 AND value_id = 0");
+                    safe_delete($table_name, "meta_id = $id AND content_id = -1 AND value_id = 0");
                     $defaultClause = ($default === '' || $default === '0000-00-00 00:00:00') ? '' : ", value" . ($has_textfilter ? '_raw' : '') . " = '$default'";
-                    safe_insert($table_name, "table_id = $table_id, meta_id = $id, content_id = -1, value_id = 0".$defaultClause);
+                    safe_insert($table_name, "meta_id = $id, content_id = -1, value_id = 0".$defaultClause);
 
                     // Iterate over newly inserted rows and run them through the textfilter if desired.
                     if ($data_type['textfilter']) {
