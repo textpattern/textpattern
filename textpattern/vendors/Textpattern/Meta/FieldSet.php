@@ -273,9 +273,13 @@ class FieldSet implements \IteratorAggregate
         } else {
             $newType = isset($newType) ? \Txp::get('\Textpattern\Meta\ContentType')->getEntity((int)$newType) : null;
 
-            if ($newType && $newType != $this->type) {
+            if ($newType != $this->type) {
                 // Change type.
-                $this->export($newType);
+                if ($newType) {
+                    $this->export($newType);
+                } else {
+                    $this->delete();
+                }
             }
 
             $old_meta = array_keys($this->filterCollection);
@@ -334,7 +338,7 @@ class FieldSet implements \IteratorAggregate
 
     private function delete($metaId = null)
     {
-        if ($contentType = (int)$this->type) {
+        if ($contentType = $this->type) {
             $table_id = \Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($contentType);
             $metaQuery = $metaId ? " AND meta_id IN (".implode(',', $metaId).")" : '';
 //            $metaId === null or $metaId = array_combine($metaId, $metaId);

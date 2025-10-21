@@ -340,9 +340,9 @@ function article_save($write = true)
             // @Todo: Return code.
             // @Todo: Rollback if fail.
             $old_type = $ID ? (int)Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0;
-            $type = (int)($type ?: $old_type);
-            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $old_type, $rs['ID']);//$msg=implode(',', array_keys($mfs->getItem()));
-            $mfs->update($meta_id, $type);//$msg.='->'.implode(',', array_keys($mfs->getItem()));
+            $type = (int)$type;
+            $mfs = Txp::get('\Textpattern\Meta\FieldSet', $old_type, $rs['ID']);$msg=implode(',', array_keys($mfs->getItem()));
+            $mfs->update($meta_id, $type);$msg.='->'.implode(',', array_keys($mfs->getItem()));
             $mfs->filterCollectionAt($uPosted)->store($_POST);
 
             if ($is_clone) {
@@ -762,9 +762,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     extract($rs);
 
     $when = ($sPosted) ? $sPosted : $txpnow;
-    $meta_type = (int)ps('type', $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0);
-    $metas = array_keys(Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $ID ?: null)->getItem());
-    $metas = ps('meta', $metas);
+    $meta_type = ps('type', false);
+
+    if ($meta_type === false) {
+        $meta_type = $ID ? Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($ID, 1) : 0;
+        $metas = array_keys(Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $ID ?: null)->getItem());
+    } else {
+        $meta_type = (int)$meta_type;
+        $metas = (array)ps('meta', null);
+    }
 
     $rs['$type'] = $meta_type;
     $rs['$meta_type'] = $metas === false ? $meta_type : (array)$metas;
