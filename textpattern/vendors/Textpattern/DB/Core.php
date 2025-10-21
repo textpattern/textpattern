@@ -117,10 +117,22 @@ class Core
             $line = strtok($data, $separator);
 
             while ($line !== false) {
-                $ret = preg_match('/^([a-zA-Z0-9_]+)\s+VARCHAR\((\d+)\).*$/', $line, $matches);
+                $ret = preg_match('/^([a-zA-Z0-9_]+)\s+MEDIUMTEXT.*$/', $line, $matches);
 
                 if ($ret && in_array($matches[1], $columns)) {
-                    $sizes[$matches[1]] = $matches[2];
+                    $sizes[$matches[1]] = (16*1024*1024) - 1;
+                } else {
+                    $ret = preg_match('/^([a-zA-Z0-9_]+)\s+TEXT.*$/', $line, $matches);
+
+                    if ($ret && in_array($matches[1], $columns)) {
+                        $sizes[$matches[1]] = (64*1024) -1;
+                    } else {
+                        $ret = preg_match('/^([a-zA-Z0-9_]+)\s+VARCHAR\((\d+)\).*$/', $line, $matches);
+
+                        if ($ret && in_array($matches[1], $columns)) {
+                            $sizes[$matches[1]] = $matches[2];
+                        }
+                    }
                 }
 
                 $line = strtok($separator);

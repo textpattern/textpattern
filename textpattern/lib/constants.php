@@ -199,6 +199,21 @@ if (!defined('EXTRA_MEMORY')) {
     define('EXTRA_MEMORY', '32M');
 }
 
+if (!defined('MAX_ALLOWED_PACKET')) {
+    /**
+     * Maximum size of MySQL packet data.
+     *
+     * If you see "MySQL server has gone away" errors, increase this by
+     * overriding it from the config.php. Must be a multiple of 1024.
+     *
+     * @package System
+     * @example
+     * define('MAX_ALLOWED_PACKET', '262144000'); // 250MB
+     */
+
+    define('MAX_ALLOWED_PACKET', '104857600');
+}
+
 /**
  * PHP is run as CGI.
  *
