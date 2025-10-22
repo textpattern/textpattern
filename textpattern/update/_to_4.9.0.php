@@ -128,3 +128,6 @@ safe_create_index('txp_prefs', 'name(185), user_name', 'primary');
 // Increase section and category description fields.
 safe_alter('txp_section', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
 safe_alter('txp_category', "MODIFY description VARCHAR(1023) NOT NULL DEFAULT ''");
+
+// Increase Page user_html field.
+safe_alter('txp_page', "MODIFY user_html MEDIUMTEXT NOT NULL");
