@@ -18,7 +18,8 @@ Changes in 4.9.0 (upcoming)
   (thanks, jools-r).
 * Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
 * Changed: Each page template can contain up to 16MB of data.
-* Changed: Admin-theme checksums computed independently.
+* Changed: Admin-theme checksums computed independently. Unused admin themes
+  can be deleted and will no longer trigger Diagnostics alert.
 * Changed: Checksums use Tiger-192,3 instead of MD5. Fewer potential clashes.
 * Developer: Permitted concurrent logins. See Advanced Prefs.
 * Developer: Removed duplicate pluggable_ui callback for
