@@ -251,12 +251,6 @@ class DB
         }
 
         $version = $this->version = mysqli_get_server_info($this->link);
-
-        $res = mysqli_query($this->link, 'SHOW GLOBAL VARIABLES WHERE variable_name = "max_allowed_packet"');
-        $var = mysqli_fetch_assoc($res);
-        $max_allowed_packet = max($var['Value'], MAX_ALLOWED_PACKET);
-        mysqli_query($this->link, "SET GLOBAL max_allowed_packet=".(int)$max_allowed_packet);
-
         $connected = true;
 
         // Be backwards compatible.
