@@ -895,7 +895,7 @@ class Field
      * @return HTML
      */
 
-    public function render($preview = false)
+    public function render($preview = false, $atts = array(), $labelAtts = array())
     {
         $widget = '';
         $num = $this->get('id');
@@ -927,7 +927,7 @@ class Field
         switch ($type) {
             case 'textInput':
                 $widget = \Txp::get('\Textpattern\UI\Input', $name, 'text', implode('', $thisContent))
-                    ->setAtts(array(
+                    ->setAtts($atts + array(
                         'size' => INPUT_REGULAR,
                         'id'   => $id,
                     ));
@@ -949,7 +949,9 @@ class Field
                 break;
             case 'checkbox':
                 $widget = \Txp::get('\Textpattern\UI\Checkbox', $name, implode('', $thisContent), (bool)$thisContent)
-                    ->setAtt('id', $id);
+                    ->setAtts($atts + array(
+                        'id'   => $id,
+                    ));
                 break;
             case 'checkboxSet':
                 $vals = array();
@@ -970,7 +972,9 @@ class Field
                 }
 
                 $widget = \Txp::get('\Textpattern\UI\Select', $name, $vals, $thisContent)
-                    ->setAtt('id', $id);
+                    ->setAtts($atts + array(
+                        'id'   => $id,
+                    ));
 
                 if ($type === 'multiSelect') {
                     $widget->setMultiple();
@@ -979,7 +983,9 @@ class Field
                 break;
             case 'textArea':
                 $widget = \Txp::get('\Textpattern\UI\Textarea', $name, implode('', $thisContent))
-                    ->setAtt('id', $id);
+                    ->setAtts($atts + array(
+                        'id'   => $id,
+                    ));
                 break;
             case 'date':
             case 'time':
@@ -988,7 +994,7 @@ class Field
             case 'range':
                 $type = ($type === 'dateTime') ? 'datetime-local' : $type;
                 $widget = \Txp::get('\Textpattern\UI\Input', $name, strtolower($type), implode('', $thisContent))
-                    ->setAtts(array(
+                    ->setAtts($atts + array(
                         'id'   => $id,
                     ));
                 break;
@@ -1003,6 +1009,6 @@ class Field
             'type'              => 'button',
         )) : '';
 
-        return inputLabel($id, $widget, array(txpspecialchars($labelRef), $textarea_options), array($help, $inlineHelp));
+        return inputLabel($id, $widget, array(txpspecialchars($labelRef), $textarea_options), array($help, $inlineHelp), $labelAtts);
     }
 }

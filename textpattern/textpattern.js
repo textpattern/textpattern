@@ -2029,22 +2029,39 @@ textpattern.Route.add('login', function () {
 // List panel.
 textpattern.Route.add('article, list', function () {
     document.addEventListener('change', function (e) {
-        if (e.target && e.target.id === 'entity-select') {
+        if (e.target.id === 'entity-select') {
             const select = e.target;
             const fieldsData = select.options[select.selectedIndex].dataset.fields;
             const fields = fieldsData ? fieldsData.toString().split(',') : [];
-
+            const typeInput = document.getElementById('meta-type');
             const metaSelect = document.getElementById('meta-select');
+
+            if (typeInput) {
+                typeInput.value = select.options[select.selectedIndex].value;
+            }
+
             Array.from(metaSelect.options).forEach(option => {
                 option.selected = fields.indexOf(option.value) !== -1;
             });
             metaSelect.disabled =  (select.value === '');
+            metaSelect.dispatchEvent(new Event("change"));
         }
     }, true);
 });
 
 // Write panel.
 textpattern.Route.add('article', function () {
+    document.addEventListener('change', function (e) {
+        if (e.target.id === 'meta-select') {
+            Array.from(e.target.options).forEach(option => {
+                let cf = document.getElementById('custom-'+option.value);
+                if (cf) {
+                    cf.disabled = !option.selected;
+                    cf.parentNode.parentNode.classList.toggle('hidden', !option.selected);
+                }
+            });
+        }
+    }, true);
     // Assume users would not change the timestamp if they wanted to
     // 'publish now'/'reset time'.
     $(document).on('change',

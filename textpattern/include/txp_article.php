@@ -1060,7 +1060,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'div', array('class' => 'txp-form-field')
         );
 
-        $custom .= '<p class="txp-actions"><button form="cform">'. gTxt('load') .'</button></p>';
+//        $custom .= '<p class="txp-actions"><button id="cform-button" form="cform">'. gTxt('load') .'</button></p>';
         echo wrapRegion('txp-custom-field-group', $custom, 'txp-custom-field-group-content', 'custom', 'article_custom_field');
     }
 
@@ -1089,12 +1089,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo //tInput().
         n . '</div>' . // End of .txp-layout.
         n . '</form>';
-    echo '<form id="cform" method="post" action="index.php#custom-fields" target="cframe">' .
+/*    echo '<form id="cform" method="post" action="index.php#custom-fields" target="cframe">' .
         eInput('article') .
         hInput('ID', $ID) .
         '</form>';
     echo '<iframe hidden name="cframe" onload="setTimeout(()=>document.querySelector(contentWindow.location.hash||null)?.replaceChildren(...contentDocument.querySelector(contentWindow.location.hash||null)?.childNodes))"></iframe>';
-}
+*/
+    }
 
 /**
  * Renders article extended column.
@@ -1527,8 +1528,9 @@ function article_partial_custom_field($rs, $cf, $meta_type = 1)
     if (!empty($cf)) {
         $table_id = 1;//Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($meta_type);
         $ref = $rs['ID'] ? array($rs['ID'], $table_id) : null;
-        $cf->loadContent($ref, true)->loadTitles();
-        $out = $cf->render(can_modify($rs));
+        $cf->loadContent($ref, true)->loadTitles();//dmp($cf);
+        $hidden = !in_array($cf->get('id'), $rs['$meta_type']);
+        $out = $cf->render(can_modify($rs), array('disabled' => $hidden), array('class' => $hidden ? 'hidden' : false));
     }
 
     return $out;
@@ -1705,12 +1707,13 @@ function article_partial_custom_fields($rs)
 {
     global $txpnow;
 
-    $cf = hInput('type', $rs['$type']);
+    $cf = fInput('hidden', array('id' => 'meta-type', 'name' => 'type'), $rs['$type']);
     $meta_type = isset($rs['$meta_type']) ?
         (is_array($rs['$meta_type']) ? $rs['$meta_type'] : (int)$rs['$meta_type']) :
         Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($rs['ID'], 1);
-    $cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ?: null)
-        ->filterCollectionAt($rs['sPosted'] ? $rs['sPosted'] : $txpnow) : array();
+    //$cfs = $meta_type ? Txp::get('\Textpattern\Meta\FieldSet', $meta_type, $rs['ID'] ?: null)
+    //    ->filterCollectionAt($rs['sPosted'] ?: $txpnow) : array();
+    $cfs = Txp::get('\Textpattern\Meta\FieldSet')->filterCollectionAt($rs['sPosted'] ?: $txpnow);
 
     foreach ($cfs as $v) {
         $cf .= article_partial_custom_field($rs, $v, $meta_type);
