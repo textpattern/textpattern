@@ -1049,10 +1049,18 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 //    echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 
     if ($options = selectCustom(1)) {
-        $custom = ($options ? selectInput(array('name' => 'type', 'form' => 'cform'), $options, $meta_type ?: '', true, '', 'entity-select') : '') .
-            selectInput(array('name' => 'meta', 'form' => 'cform', 'disabled' => empty($meta_type)), safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name'), $metas, false, '', 'meta-select');
+        $fields = safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name');
+        $custom = tag(selectInput(
+                array('name' => 'type', 'form' => 'cform'),
+                $options, $meta_type ?: '', true, '', 'entity-select').sLink('entity', '', gTxt('edit')),
+            'div', array('class' => 'txp-form-field')) . tag(($fields ?
+            selectInput(
+                array('name' => 'meta', 'form' => 'cform', 'disabled' => empty($meta_type)),
+                $fields, $metas, false, '', 'meta-select') : gTxt('none')).sLink('meta', '', gTxt('edit')),
+            'div', array('class' => 'txp-form-field')
+        );
 
-        $custom .= '<button form="cform">'. gTxt('load') .'</button>';
+        $custom .= '<p class="txp-actions"><button form="cform">'. gTxt('load') .'</button></p>';
         echo wrapRegion('txp-custom-field-group', $custom, 'txp-custom-field-group-content', 'custom', 'article_custom_field');
     }
 

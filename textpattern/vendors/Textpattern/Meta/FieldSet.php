@@ -271,7 +271,7 @@ class FieldSet implements \IteratorAggregate
         } elseif ($newType === true) {
             $this->insert($metaId);
         } else {
-            $newType = isset($newType) ? \Txp::get('\Textpattern\Meta\ContentType')->getEntity((int)$newType) : null;
+            $newType = isset($newType) ? \Txp::get('\Textpattern\Meta\ContentType')->getEntity((int)$newType) : $this->type;
 
             if ($newType != $this->type) {
                 // Change type.
