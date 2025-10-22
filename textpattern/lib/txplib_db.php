@@ -439,13 +439,22 @@ function safe_query($q = '', $debug = false, $unbuf = false)
         $trace->start("[SQL: $q ]", true);
     }
 
-    $result = mysqli_query($DB->link, $q, $method);
+    try {
+        $result = mysqli_query($DB->link, $q, $method);
+    } catch (mysqli_sql_exception $e) {
+        if ($debug or TXP_DEBUG === 1) {
+            dmp($e->getMessage());
+            trigger_error(mysqli_error($DB->link));
+        }
+
+        return false;
+    }
 
     if ($production_status !== 'live') {
         if (is_bool($result)) {
             $trace->stop();
         } else {
-            $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
+            $trace->stop("[Rows: ".intval(mysqli_num_rows($result))."]");
         }
     }
 
@@ -918,7 +927,7 @@ function safe_field($thing, $table, $where = '1', $debug = false)
     $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $r = safe_query($q, $debug);
 
-    if (mysqli_num_rows($r) > 0) {
+    if ($r && mysqli_num_rows($r) > 0) {
         $row = mysqli_fetch_row($r);
         mysqli_free_result($r);
 

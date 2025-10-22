@@ -508,9 +508,11 @@ function css_partial_name_value($rs)
 
 function css_partial_css($rs)
 {
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_css', 'css');
+
     $out = inputLabel(
         'css',
-        '<textarea class="code" id="css" name="css" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr">' . txpspecialchars($rs['css']) . '</textarea>',
+        '<textarea class="code" id="css" name="css" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr" maxlength="' . $fieldSizes['css'] . '">' . txpspecialchars($rs['css']) . '</textarea>',
         'css_code',
         array('', 'instructions_style_code'),
         array('class' => 'txp-form-field css')

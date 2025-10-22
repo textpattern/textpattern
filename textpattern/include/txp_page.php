@@ -331,6 +331,7 @@ function page_delete()
         if (safe_delete('txp_page', "name = '$safe_name' AND skin='$safe_skin'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('page_deleted', array('{list}' => $name));
+
             if ($name === get_pref('last_page_saved')) {
                 unset($prefs['last_page_saved']);
                 remove_pref('last_page_saved', 'page');
@@ -595,9 +596,11 @@ function page_partial_template($rs)
 {
     global $event;
 
+    $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_page', 'user_html');
+
     $out = inputLabel(
         'html',
-        '<textarea class="code" id="html" name="html" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr">' . txpspecialchars($rs['html']) . '</textarea>',
+        '<textarea class="code" id="html" name="html" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_LARGE . '" dir="ltr" maxlength="' . $fieldSizes['user_html'] . '">' . txpspecialchars($rs['html']) . '</textarea>',
         array(
             'page_code',
             n . span(

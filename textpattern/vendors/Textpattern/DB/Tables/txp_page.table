@@ -1,5 +1,5 @@
 name      VARCHAR(255) NOT NULL DEFAULT '',
-user_html TEXT         NOT NULL,
+user_html MEDIUMTEXT   NOT NULL,
 skin      VARCHAR(63)  NOT NULL DEFAULT 'default',
 lastmod   DATETIME         NULL DEFAULT NULL,
 

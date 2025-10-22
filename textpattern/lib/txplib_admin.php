@@ -1819,75 +1819,77 @@ function bouncer($step, $steps)
  * file statuses, checksums or the digest of the install. It can also return the
  * parsed contents of the checksum file.
  *
- * @param   int $flags Options are INTEGRITY_MD5 | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
+ * @param   int  $flags Options are INTEGRITY_HASH | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
+ * @param   bool $force Whether to rebuild the checksum array regardless if it exists
  * @return  array|bool Array of files and status, or FALSE on error
  * @since   4.6.0
  * @package Debug
  * @example
  * print_r(
- *     check_file_integrity(INTEGRITY_MD5 | INTEGRITY_REALPATH)
+ *     check_file_integrity(INTEGRITY_HASH | INTEGRITY_REALPATH)
  * );
  */
 
-function check_file_integrity($flags = INTEGRITY_STATUS)
+function check_file_integrity($flags = INTEGRITY_STATUS, $force = false)
 {
-    static $files = null, $files_md5 = array(), $checksum_table = array();
+    static $files = null, $files_hashed = array(), $checksum_table = array();
 
-    if ($files === null) {
-        $checksums = txpath.'/checksums.txt';
+    if ($files === null || $force) {
+        foreach (find_files_matching(txpath, '/checksums\.txt$/') as $matched) {
+            $checksums = $matched->getPathname();
 
-        if (is_readable($checksums) && ($cs = file($checksums))) {
-            $files = array();
+            if (is_readable($checksums) && ($cs = file($checksums))) {
+                foreach ($cs as $c) {
+                    if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{'.CHECKSUM_BYTES.'})\)?$@', trim($c), $m)) {
+                        list(, $relative, $r, $hash) = $m;
+                        $file = realpath(txpath.$relative);
 
-            foreach ($cs as $c) {
-                if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{32})\)?$@', trim($c), $m)) {
-                    list(, $relative, $r, $md5) = $m;
-                    $file = realpath(txpath.$relative);
-                    $checksum_table[$relative] = $md5;
+                        $checksum_table[$relative] = $hash;
 
-                    if ($file === false) {
-                        $files[$relative] = INTEGRITY_MISSING;
-                        $files_md5[$relative] = false;
-                        continue;
-                    }
+                        if ($file === false) {
+                            $files[$relative] = INTEGRITY_MISSING;
+                            $files_hashed[$relative] = false;
+                            continue;
+                        }
 
-                    if (!is_readable($file)) {
-                        $files[$relative] = INTEGRITY_NOT_READABLE;
-                        $files_md5[$relative] = false;
-                        continue;
-                    }
+                        if (!is_readable($file)) {
+                            $files[$relative] = INTEGRITY_NOT_READABLE;
+                            $files_hashed[$relative] = false;
+                            continue;
+                        }
 
-                    if (!is_file($file)) {
-                        $files[$relative] = INTEGRITY_NOT_FILE;
-                        $files_md5[$relative] = false;
-                        continue;
-                    }
+                        if (!is_file($file)) {
+                            $files[$relative] = INTEGRITY_NOT_FILE;
+                            $files_hashed[$relative] = false;
+                            continue;
+                        }
 
-                    $files_md5[$relative] = md5_file($file);
+                        $files_hashed[$relative] = hash_file(CHECKSUM_ALGORITHM, $file);
 
-                    if ($files_md5[$relative] !== $md5) {
-                        $files[$relative] = INTEGRITY_MODIFIED;
-                    } else {
-                        $files[$relative] = INTEGRITY_GOOD;
+                        if ($files_hashed[$relative] !== $hash) {
+                            $files[$relative] = INTEGRITY_MODIFIED;
+                        } else {
+                            $files[$relative] = INTEGRITY_GOOD;
+                        }
                     }
                 }
-            }
 
-            if (!get_pref('enable_xmlrpc_server', true)) {
-                unset(
-                    $files_md5['/../rpc/index.php'],
-                    $files_md5['/../rpc/TXP_RPCServer.php'],
-                    $files['/../rpc/index.php'],
-                    $files['/../rpc/TXP_RPCServer.php']
-                );
+                if (!get_pref('enable_xmlrpc_server', true)) {
+                    unset(
+                        $files_hashed['/../rpc/index.php'],
+                        $files_hashed['/../rpc/TXP_RPCServer.php'],
+                        $files['/../rpc/index.php'],
+                        $files['/../rpc/TXP_RPCServer.php']
+                    );
+                }
+            } else {
+                $files_hashed = $files = false;
             }
-        } else {
-            $files_md5 = $files = false;
         }
     }
 
     if ($flags & INTEGRITY_DIGEST) {
-        return $files_md5 ? md5(implode(n, $files_md5)) : false;
+        return $files_hashed ? hash(CHECKSUM_ALGORITHM, implode(n, $files_hashed)) : false;
     }
 
     if ($flags & INTEGRITY_TABLE) {
@@ -1896,8 +1898,8 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
 
     $return = $files;
 
-    if ($flags & INTEGRITY_MD5) {
-        $return = $files_md5;
+    if ($flags & INTEGRITY_HASH) {
+        $return = $files_hashed;
     }
 
     if ($return && $flags & INTEGRITY_REALPATH) {
@@ -1929,6 +1931,26 @@ function assert_system_requirements()
     if (!extension_loaded('simplexml')) {
         txp_die('This server does not have the required SimpleXML library installed (php-xml). Please install it.');
     }
+}
+
+/**
+ * Recursively find files matching the pattern from the given location
+ *
+ * @param  string $path Start directory
+ * @param  string $pat  Regular expression to find
+ * @return string       Matching file(s), one by one
+ */
+function find_files_matching($path, $pat)
+{
+    if (!is_dir($path)) {
+        throw new \RuntimeException("{$path} is not a directory ");
+    }
+
+    $it = new \RecursiveDirectoryIterator($path);
+    $it = new \RecursiveIteratorIterator($it);
+    $it = new \RegexIterator($it, $pat, \RegexIterator::MATCH);
+
+    yield from $it;
 }
 
 /**
