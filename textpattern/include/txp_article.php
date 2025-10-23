@@ -1050,14 +1050,22 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     if ($options = selectCustom(1)) {
         $fields = safe_column(array('id', 'name'), 'txp_meta', '1 ORDER BY name');
-        $custom = tag(selectInput(
+        $custom = inputLabel(
+            'entity',
+            selectInput(
                 array('name' => 'type', 'form' => 'cform'),
                 $options, $meta_type ?: '', true, '', 'entity-select').sLink('entity', '', gTxt('edit')),
-            'div', array('class' => 'txp-form-field')) . tag(($fields ?
-            selectInput(
-                array('name' => 'meta', 'form' => 'cform', 'disabled' => empty($meta_type)),
-                $fields, $metas, false, '', 'meta-select') : gTxt('none')).sLink('meta', '', gTxt('edit')),
-            'div', array('class' => 'txp-form-field')
+            'meta_entity',
+            array('entity', 'instructions_entity'),
+            array('class' => 'txp-form-field entity')
+        ) . inputLabel(
+            'meta',
+            ($fields ? selectInput(
+                    array('name' => 'meta', 'form' => 'cform', 'disabled' => empty($meta_type)),
+                    $fields, $metas, false, '', 'meta-select') : gTxt('none')).sLink('meta', '', gTxt('edit')),
+            'custom',
+            array('meta', 'instructions_meta'),
+            array('class' => 'txp-form-field meta')
         );
 
 //        $custom .= '<p class="txp-actions"><button id="cform-button" form="cform">'. gTxt('load') .'</button></p>';
