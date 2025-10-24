@@ -69,7 +69,7 @@ Note that targeted versions listed may change multiple times during the developm
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
 | PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.2, 8.3, 8.4 or 8.5) |
-| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.0 or 8.4) |
+| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.4) |
 | Apache | &mdash; | vendor supported<br />(2.4) |
 | Nginx  | &mdash; | mainline (1.28) or stable (1.29) |
 
