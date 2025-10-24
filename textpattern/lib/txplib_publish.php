@@ -881,7 +881,7 @@ function filterAtts($atts = null, $iscustom = null)
         'excerpted'     => '',
         'exclude'       => '',
         'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
-        'url_title'     => ''
+//        'url_title'     => ''
     );
 
     // For the txp:article tag, some attributes are taken from globals;
@@ -1174,7 +1174,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $excluded === true || isset($excluded['url_title']) ? 'NOT' : '';
     $url_title = isset($customPairs['url_title']) ?
-        ' AND $not('.buildWhereSql($customPairs['url_title'], 'url_title').')' :
+        " AND $not(".buildWhereSql($customPairs['url_title'], 'url_title').')' :
         '';
     unset($customPairs['url_title']);
 
@@ -1187,7 +1187,7 @@ function filterAtts($atts = null, $iscustom = null)
         $column_map = $date_fields + article_column_map();
         $reg_fields = implode('|', array_keys($column_map)).'|\*';
         $agg_reg = implode('|', array_keys($aggregate));
-        $regexp = $agg_reg.'|'.implode('|', array_keys($windowed)).'|date|day|month|year|week|quarter';
+        $regexp = $agg_reg.'|'.implode('|', array_keys($windowed)).'|date|day|month|year|week|quarter|string';
 
         preg_match_all("/(?<=,|^)\s*(?:($regexp)(?:\[([^\]]*)\])?\((?:\s*($agg_reg)\(\s*)?)?($reg_fields)(\s+asc|\s+desc)?\s*\){0,2}\s*(?:,|$)/", strtolower($fields), $matches, PREG_SET_ORDER);
         $aggFields = array_column($matches, 1, 4);
@@ -1238,9 +1238,13 @@ function filterAtts($atts = null, $iscustom = null)
                     $what[$field] = $custom;
                     $groupby[$column] = $custom;
                 } elseif (isset($aggregate[$match[1]])) {
-                    $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ? $format : ','));
+                    $what[$field] = strtr($aggregate[$match[1]], array('?' => $custom, ',' => $format ?: ','));
                     $parby = implode(', ', $groupby);
                     !$format or $match[1] == 'list' or $partition[$field] = $format == '*' ?  "(? OVER (PARTITION BY $parby))" : "(? OVER (PARTITION BY $format))";
+                } elseif ($match[1] == 'string') {
+                    $format and $format = doQuote($format);//trim(preg_replace('/[^\d\s\,]/', '', $format));
+                    $what[$field] = $format ? "REGEXP_SUBSTR($custom, $format)" : $custom;
+                    $groupby[$what[$field]] = $custom;
                 } else {
                     $what[$field] = "MIN($custom)";
                     $groupby[$format ? "DATE_FORMAT($custom, '$format')" : strtoupper($match[1]).'('.$custom.')'] = $custom;
