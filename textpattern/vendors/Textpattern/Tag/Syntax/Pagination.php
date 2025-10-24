@@ -207,7 +207,7 @@ class Pagination
                     $url = false;
                 }
             } else {
-                $url = isset($thing) ? parse($thing, false) : false;
+                $url = isset($thing) ? parse($thing, !empty($showalways)) : false;
             }
     
             empty($url) or $out[] = $url;
