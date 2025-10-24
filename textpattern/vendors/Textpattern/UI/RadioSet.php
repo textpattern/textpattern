@@ -35,7 +35,7 @@ class RadioSet extends TagCollection implements UICollectionInterface
     /**
      * Construct a set of radio buttons.
      *
-     * @param string $name    The RadioSet key (HTML name attribute)
+     * @param string $name    The RadioSet identifier (HTML name attribute)
      * @param array  $options Key => Label pairs
      * @param string $default The key from the $options array to set as selected
      */

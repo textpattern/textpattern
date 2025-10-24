@@ -50,12 +50,21 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
 
     /**
      * General constructor for the collection.
+     *
+     * @param object|array $item (optional) One or more tags to initialise the collection
+     * @param string $key  (optional) The key with which to associate each tag. Ignored if $item is array
      */
 
     public function __construct($item = null, $key = null)
     {
         if (!empty($item)) {
-            $this->add($item, $key);
+            if (is_array($item)) {
+                foreach ($item as $ref => $tag) {
+                    $this->add($tag, $ref);
+                }
+            } else {
+                $this->add($item, $key);
+            }
         }
     }
 

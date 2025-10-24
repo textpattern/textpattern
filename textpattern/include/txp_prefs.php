@@ -294,16 +294,17 @@ function prefs_list($message = '')
                 $last_sub_event = $subEvent;
             }
 
-            $out[] = inputLabel(
-                $a['name'],
-                pref_func($a['html'], $a['name'], $a['val'], $constraints),
-                $label,
-                array($help, 'instructions_' . $a['name']),
-                array(
+            $control = Txp::get('\Textpattern\UI\InputLabel',
+                    $a['name'],
+                    pref_func($a['html'], $a['name'], $a['val'], $constraints),
+                    $label)
+                ->setHelp(array($help, 'instructions_' . $a['name']))
+                ->setAtts(array(
                     'class' => 'txp-form-field' . (!empty($a['collection']) ? ' ' . $a['collection'] : ''),
                     'id'    => 'prefs-' . $a['name'],
-                )
-            );
+                ))
+                ->setWrap('label', null, array('id' => 'prefs-'.$a['name'].'-label'));
+            $out[] = $control->render();
         }
     }
 

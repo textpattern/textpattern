@@ -38,6 +38,6 @@ class Token extends Input implements UIInterface
 
     public function __construct()
     {
-        parent::__construct('_txp_token', 'hidden', form_token());
+        parent::__construct('_txp_token', 'hidden', \Txp::get('\Textpattern\Security\Token')->csrf());
     }
 }
