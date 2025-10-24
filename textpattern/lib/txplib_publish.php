@@ -1301,7 +1301,7 @@ function filterAtts($atts = null, $iscustom = null)
     $theAtts['form'] = $fname;
     $theAtts['sort'] = $sort ? $sort : ($getid ? "FIELD(ID, $ids)" : 'Posted DESC');
     $theAtts['%'] = empty($groupby) ? null : implode(', ', $groupby);
-    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keyquery.$url_title.$search.$custom;
+    $theAtts['$'] = '1'.$timeq.$id.$category.$section.$frontpage.$excerpted.$author.$statusq.$keyquery.$search.$custom;
     $theAtts['?'] = $theAtts['$'].(empty($groupby) ? '' : " GROUP BY ".implode(', ', array_keys($groupby)));
     $theAtts['#'] = safe_pfx_j('textpattern');
     $theAtts['*'] = $fields;

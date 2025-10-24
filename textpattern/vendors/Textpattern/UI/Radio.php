@@ -35,7 +35,7 @@ class Radio extends Tag implements UIInterface
     /**
      * Construct a single radio button.
      *
-     * @param string $name    The Radio key (HTML name attribute)
+     * @param string $name    The Radio identifier (HTML name attribute)
      * @param string $value   The Radio value
      * @param bool   $checked Whether the button is selected
      */

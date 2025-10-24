@@ -97,12 +97,25 @@ class InputLabel extends Tag implements UICollectionInterface
     protected $labelTags = null;
 
     /**
-     * Tags in which to wrap the content and label, respectively.
+     * Tags and attributes with which to wrap the input and label.
      *
      * @var array
      */
 
-    protected $wrapTags = array('div', 'div');
+    protected $wrapTags = array(
+        'field' => array(
+            'tag' => 'div',
+            'atts' => array(
+                'class' => 'txp-form-field-value',
+            ),
+        ),
+        'label' => array(
+            'tag' => 'div',
+            'atts' => array(
+                'class' => 'txp-form-field-label',
+            ),
+        )
+    );
 
     /**
      * Construct a combined input + label.
@@ -122,14 +135,10 @@ class InputLabel extends Tag implements UICollectionInterface
             $this->label = $name;
         }
 
-        $this->tags = new \Textpattern\UI\TagCollection();
+        $this->tags = new \Textpattern\UI\TagCollection($item);
         $this->labelTags = new \Textpattern\UI\TagCollection();
 
         parent::__construct('div');
-
-        if ($item !== null) {
-            $this->add($item);
-        }
     }
 
     /**
@@ -232,22 +241,28 @@ class InputLabel extends Tag implements UICollectionInterface
     /**
      * Set the associated wraptags for this field/label. Chainable.
      *
-     * @param string|array $wraptags The wrapper tag(s) to use.
+     * @param string $type    The flavour of wraptag to set ('field' or 'label')
+     * @param string $wraptag The wrapper tag to use. Use '' to not wrap, or null to leave it as-is (i.e. just to set $atts)
+     * @param array  $atts    The attributes to apply to the wraptag. Will replace any same-named default atts
      */
 
-    public function setWrap($wraptags)
+    public function setWrap($type, $wraptag, $atts = array())
     {
-        if (!is_array($wraptags)) {
-            $wraptags = array($wraptags, $wraptags);
-        }
+        if (array_key_exists($type, $this->wrapTags)) {
+            if ($wraptag !== null) {
+                $this->wrapTags[$type]['tag'] = $wraptag;
+            }
 
-        $this->wrapTags = $wraptags;
+            if (!empty($atts)) {
+                $this->wrapTags[$type]['atts'] = array_merge($this->wrapTags[$type]['atts'], $atts);
+            }
+        }
 
         return $this;
     }
 
     /**
-     * Remove an element from the tag content set. Chainable.
+     * Remove an element from the tag input set. Chainable.
      *
      * @param  string $key The reference to the object in the collection
      * @return this
@@ -272,7 +287,7 @@ class InputLabel extends Tag implements UICollectionInterface
     }
 
     /**
-     * Fetch an element from the tag content set.
+     * Fetch an element from the tag input set.
      *
      * @param  string $key The reference to the object in the collection
      * @return object
@@ -280,16 +295,19 @@ class InputLabel extends Tag implements UICollectionInterface
 
     public function get($key)
     {
-        $this->tags->get($key);
+        return $this->tags->get($key);
     }
 
     /**
-     * Fetch the list of keys in use in the inputLabel's tag content set.
+     * Fetch the list of keys in use in the inputLabel's tag input set.
+     *
+     * @param string $type The tag keys to fetch (either 'field' or 'label')
+     * @return TagCollection
      */
 
-    public function keys()
+    public function keys($type = 'field')
     {
-        return $this->tags->keys();
+        return ($type === 'field') ? $this->tags->keys() : $this->labelTags->keys();
     }
 
     /**
@@ -309,7 +327,7 @@ class InputLabel extends Tag implements UICollectionInterface
 
         $arguments = array(
             'name'        => $key,
-            'input'       => $this->tags,
+            'content'     => $this->tags,
             'label'       => $this->label,
             'help'        => array($this->help, $this->inlineHelp),
             'atts'        => $this->atts,
@@ -336,22 +354,22 @@ class InputLabel extends Tag implements UICollectionInterface
         $labelContent .= (empty($this->labelTags)) ? '' : $this->labelTags->render();
 
         // Content wraptag.
-        if (empty($this->wrapTags[0])) {
+        if (empty($this->wrapTags['field']['tag'])) {
             $input = $this->tags->render();
         } else {
-            $input = new \Textpattern\UI\Tag($this->wrapTags[0]);
+            $input = new \Textpattern\UI\Tag($this->wrapTags['field']['tag']);
             $input
-                ->setAtt('class', 'txp-form-field-value')
+                ->setAtts($this->wrapTags['field']['atts'])
                 ->setContent(n.$this->tags->render())
                 ->render();
         }
 
         // Label wraptag.
-        if (empty($this->wrapTags[1])) {
+        if (empty($this->wrapTags['label']['tag'])) {
             $label = $labelContent;
         } else {
-            $label = new \Textpattern\UI\Tag($this->wrapTags[1]);
-            $label->setAtt('class', 'txp-form-field-label')
+            $label = new \Textpattern\UI\Tag($this->wrapTags['label']['tag']);
+            $label->setAtts($this->wrapTags['label']['atts'])
                 ->setContent(n.$labelContent)
                 ->render();
         }

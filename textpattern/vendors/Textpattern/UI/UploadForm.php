@@ -81,12 +81,21 @@ class UploadForm extends Form
     protected $inlineHelp = null;
 
     /**
-     * Tags in which to wrap the file upload content and its label, respectively.
+     * Tags and attributes with which to wrap the file upload form and its label.
      *
      * @var array
      */
 
-    protected $wrapTags = array('div', 'div');
+    protected $wrapTags = array(
+        'field' => array(
+            'tag' => 'div',
+            'atts' => array(),
+        ),
+        'label' => array(
+            'tag' => 'div',
+            'atts' => array(),
+        )
+    );
 
     /**
      * Maximum accepted file size, in bytes.
@@ -188,16 +197,22 @@ class UploadForm extends Form
     /**
      * Set the associated wraptags for this field/label. Chainable.
      *
-     * @param string|array $wraptags The wrapper tag(s) to use.
+     * @param string $type    The flavour of wraptag to set ('field' or 'label')
+     * @param string $wraptag The wrapper tag to use. Use '' to not wrap, or null to leave it as-is (i.e. just to set $atts)
+     * @param array  $atts    The attributes to apply to the wraptag. Will replace any same-named default atts
      */
 
-    public function setWrap($wraptags)
+    public function setWrap($type, $wraptag, $atts = array())
     {
-        if (!is_array($wraptags)) {
-            $wraptags = array($wraptags, $wraptags);
-        }
+        if (array_key_exists($type, $this->wrapTags)) {
+            if ($wraptag !== null) {
+                $this->wrapTags[$type]['tag'] = $wraptag;
+            }
 
-        $this->wrapTags = $wraptags;
+            if (!empty($atts)) {
+                $this->wrapTags[$type]['atts'] = array_merge($this->wrapTags[$type]['atts'], $atts);
+            }
+        }
 
         return $this;
     }
@@ -287,13 +302,17 @@ class UploadForm extends Form
             ->add($buttons)
             ->setHelp(array($this->help, $this->inlineHelp))
             ->setAtt('class', $wraptagClass)
-            ->setWrap($this->wrapTags);
+            ->setWrap('field', $this->wrapTags['field']['tag'], $this->wrapTags['field']['atts'])
+            ->setWrap('label', $this->wrapTags['label']['tag'], $this->wrapTags['label']['atts']);
 
         $this->add($formContent)
             ->add($progressBar);
 
         $this->add(new \Textpattern\UI\AdminAction($this->event, $this->step, true));
-        $this->add(new \Textpattern\UI\Input('id', 'hidden', $this->resourceId));
+
+        if ($this->resourceId) {
+            $this->add(new \Textpattern\UI\Input('id', 'hidden', $this->resourceId));
+        }
 
         if ($this->maxFileSize) {
             $this->add(new \Textpattern\UI\Input('MAX_FILE_SIZE', 'hidden', $this->maxFileSize));
@@ -302,7 +321,7 @@ class UploadForm extends Form
         $arguments = array(
             'name'          => $name,
             'id'            => $this->getKey(),
-            'input'         => $this->tags,
+            'content'       => $this->tags,
             'postinput'     => $this->postInput,
             'label'         => $this->label,
             'help'          => array($this->help, $this->inlineHelp),
