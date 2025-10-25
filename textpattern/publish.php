@@ -947,7 +947,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $pg = empty($pretext['pg']) ? 1 : (int)$pretext['pg'];
     $custom_pg = $pgonly && $pgonly !== true && !is_numeric($pgonly);
-    $pgby = intval(empty($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
+    $pgby = intval(!isset($pageby) || $pageby === true ? ($custom_pg || !$limit ? 1 : $limit) : $pageby);
 
     if ($offset === true || !$iscustom && !$issticky) {
         $offset = $offset === true ? 0 : intval($offset);
@@ -991,10 +991,12 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } elseif ($pgonly) {
-        $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where, false, false);
-        $total -= $offset;
-
-        return $pgby ? ceil($total / $pgby) : $total;
+        if ($pgby) {
+            $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where, false, false);
+            return ceil(($total - $offset)/$pgby);
+        } else {
+            return getThing("SELECT EXISTS(SELECT 1 FROM $tables WHERE $where)");
+        }
     }
 
     $where = $theAtts['?'];
