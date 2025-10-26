@@ -965,11 +965,12 @@ function doArticles($atts, $iscustom, $thing = null)
     $columns = $theAtts['*'];
     $where = $theAtts['$'];
     $tables = $theAtts['#'];
+    $what = empty($groupby) ? '1' : "DISTINCT $groupby";
+    $limit = $pgoffset || $limit ? 'LIMIT '.intval($pgoffset) . ", " . ($limit ? intval($limit) : PHP_INT_MAX) : '';
 
     // Do not paginate if we are on a custom list.
     if ($pageby === true || !$iscustom && !$issticky) {
         if ($pageby === true || empty($thispage) && (!isset($pageby) || $pageby)) {
-            $what = !empty($groupby) ? "DISTINCT $groupby" : '*';
             $grand_total = getThing("SELECT COUNT($what) FROM $tables WHERE $where");
             $total = $grand_total - $offset;
             $numPages = $pgby ? ceil($total / $pgby) : 1;
@@ -992,17 +993,19 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     } elseif ($pgonly) {
         if ($pgby) {
-            $total = getCount(array($tables, !empty($groupby) ? "DISTINCT $groupby" : '*'), $where, false, false);
+            $total = getCount(array($tables, $what), $where, false, false);
+
             return ceil(($total - $offset)/$pgby);
-        } else {
-            return getThing("SELECT EXISTS(SELECT 1 FROM $tables WHERE $where)");
+        } else{
+            return $limit ?
+                getThing("SELECT COUNT(*) FROM (SELECT $what FROM $tables WHERE $where $limit) AS tmp") :
+                getThing("SELECT EXISTS(SELECT 1 FROM $tables WHERE $where)");
         }
     }
 
     $where = $theAtts['?'];
 
-    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort LIMIT " .
-        intval($pgoffset) . ", " . ($limit ? intval($limit) : PHP_INT_MAX));
+    $rs = safe_query("SELECT $columns FROM $tables WHERE $where ORDER BY $sort $limit");
 
     $articles = parseList($rs, $thisarticle, 'populateArticleData', compact('allowoverride', 'thing', 'form'));
 //    unset($GLOBALS['thisarticle']);
