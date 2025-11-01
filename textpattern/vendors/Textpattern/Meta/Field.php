@@ -255,7 +255,7 @@ class Field
             //       this so it's obvious the value is a default and not actually there until it's saved?
             //       Placeholder? Brackets?
             if (!$content) {
-                $content = do_list($this->default);
+                $content = isset($this->definition['delimiter']) ? do_list($this->default, $this->definition['delimiter']) : (array)$this->default;
             }
 
             $this->content = $content;
