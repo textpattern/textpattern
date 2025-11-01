@@ -4690,26 +4690,41 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                 $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
                 $idColumn = $custom['by_column'][$no];
+                $virtual = $custom['by_callback'][$no] == 'virtual';
 
                 if (isset($val)) {
-                    $not = $exclude === true || isset($exclude[$k]) ? 'NOT' : '';
+                    if ($virtual) {
+                        $query = getThing("SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = -1 LIMIT 1");
+                        $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $query);
+                        $field = '('.$query.')';
+                    } else {
+                        $field = 'value';
+                    }
+
+                    $not = $exclude === true || isset($exclude[$k]) ? 'NOT ' : '';
                     $val === true or (string)$dlm === '' or $val = do_list_unique($val, $dlm, TEXTPATTERN_STRIP_NONE);
-                    $parts = buildWhereSql($val, 'value');
+                    $parts = buildWhereSql($val, $field);
 
                     if ($parts) {
                         $mode = empty($modes[$k]) ? 'any' : $modes[$k];
 
                         if ($unique || $val === true || $mode == 'any') {
 //                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts))";
-                            $where[$k] = "$not $idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
+                            $where[$k] = $virtual ?
+                                "$not($parts)" :
+                                "$not$idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
                         } else {
                             $cmp = $mode == 'exact' ? '=' : '>=';
-                            $where[$k] = "$not (SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts)) $cmp ".count($val);
+                            $where[$k] = "$not(SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts)) $cmp ".count($val);
                         }
                     }
                 }
 
-                if ($unique) {
+                if ($virtual) {
+                    $query = getThing("SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = -1 LIMIT 1");
+                    $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $query);
+                    $columns[$k] = '('.$query.')';
+                } elseif ($unique) {
                     $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id LIMIT 1)";
                 } else {
                     if (!empty($custom['by_aggregate'][$k]) && isset($aggregate[$custom['by_aggregate'][$k]])) {
@@ -5296,7 +5311,7 @@ function permlinkurl($article_array, $hu = null)
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
-    if (filter_var(preg_replace('@^//@', PROTOCOL, $url_title), FILTER_VALIDATE_URL) !== false) {
+    if (filter_var(preg_replace('@^//@', PROTOCOL, (string)$url_title), FILTER_VALIDATE_URL) !== false) {
         return $url_title;
     }
 

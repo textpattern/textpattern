@@ -162,6 +162,14 @@ class DataType implements \IteratorAggregate
             'delimited'   => false,
             'constraints' => false,
         ),
+        'virtual' => array(
+            'type'        => 'varchar',
+            'size'        => 7500,
+            'textfilter'  => false,
+            'options'     => false,
+            'delimited'   => false,
+            'constraints' => false,
+        ),
     );
 
     /**

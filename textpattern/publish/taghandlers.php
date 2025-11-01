@@ -167,7 +167,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
-    ->register('if_custom_field')
+    ->register('custom_field', 'if_custom_field', true)
     ->register('site_url')
     ->register('error_message')
     ->register('error_status')
@@ -2754,19 +2754,24 @@ function txp_header($atts)
 
 // -------------------------------------------------------------
 
-function custom_field($atts = array(), $thing = null)
+function custom_field($atts = array(), $thing = null, $if = false)
 {
     global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor, $txp_item;
     static $customFields = array(), $delimited = null;
 
     extract(lAtts(array(
         'auto_detect' => true,
-        'escape'      => null,
         'form'        => null,
         'name'        => '',
         'title'       => 0,
         'type'        => null,
-    ), $atts));
+    ) + ($if ? array(
+        'value'     => null,
+        'match'     => '',
+        'separator' => '',
+    ) : array(
+        'escape'      => null,
+    )), $atts));
 
     // Find the current context by checking each one in a defined order (article last,
     // since the other content contexts are a subset of it).
@@ -2809,6 +2814,7 @@ function custom_field($atts = array(), $thing = null)
     }
 
     $context = 'this'.(string)$type;
+//    \Txp::get('\Textpattern\Meta\ContentType')->getBy('delimited')
 
     if (!isset($customFields[$type])) {
         $customFields[$type] = getCustomFields($type, null, null);
@@ -2820,15 +2826,18 @@ function custom_field($atts = array(), $thing = null)
 
     if ($title) {
         $lang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
-    
-        return empty($customFields[$type]['by_title'][$name][$lang]) ? '' : $customFields[$type]['by_title'][$name][$lang];
+        $title = empty($customFields[$type]['by_title'][$name][$lang]) ? '' : $customFields[$type]['by_title'][$name][$lang];
+
+        if (!$if) {
+            return $title;
+        }
     }
 
     if ($delimited === null) {
         $delimited = \Txp::get('\Textpattern\Meta\DataType')->getBy('delimited');
     }
 
-    if (!isset(${$context}[$name])) {
+    if (!array_key_exists($name, ${$context})) {
         if ($no === null) {
             trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
 
@@ -2836,18 +2845,43 @@ function custom_field($atts = array(), $thing = null)
         } else {
             // TODO: replace with a type-specific function.
             $id = ${$context}[$type === 'article' ? 'thisid' : 'id'];
+            $field = $type === 'article' ? 'ID' : 'id';
             $tableName = 'txp_meta_value_' . $customFields[$type]['by_type'][$no];
             $typeId = (int)$customFields[$type]['by_content_id'][$no];
             $table_id = Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($typeId);
-            $where = "meta_id = $no AND table_id = $table_id AND content_id IN ($id, -1) ORDER BY content_id DESC";
+            $table = Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap($table_id);
+            $table = isset($table['table']) ? $table['table'] : false;
             $unique = !in_array($customFields[$type]['by_callback'][$no], $delimited);
-            ${$context}[$name] = $unique ?
-                getThing('SELECT value FROM '.PFX.$tableName." WHERE $where") :
-                safe_column_num('value', $tableName, $where);
+            $virtual = $customFields[$type]['by_callback'][$no] == 'virtual';
+            $where = $virtual ?
+                "meta_id = $no AND content_id = -1 LIMIT 1" :
+                "meta_id = $no AND (table_id = $table_id AND content_id = $id OR content_id = -1) ORDER BY content_id DESC LIMIT 1";
+
+            if ($virtual) {
+                $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', safe_field('value', $tableName, $where));
+                ${$context}[$name] = getThing('SELECT ('.$query.') AS `'.$name.'` FROM '.safe_pfx_j($table)." WHERE $field = $id");
+            } else {
+                ${$context}[$name] = ($unique ?
+                    getThing('SELECT value FROM '.PFX.$tableName." WHERE $where") :
+                    safe_column_num('value', $tableName, $where)
+                );
+            }
         }
     }
-    
-    if (empty(${$context}[$name])) {
+
+    if ($if) {
+        $test = $title ?: (array_key_exists($name, ${$context}) ? ${$context}[$name] : false);
+
+        if ($value !== null) {
+            $cond = txp_match($atts, $test);
+        } else {
+            $cond = $test !== false;
+        }
+
+        return $cond && $form ?
+            parse_form($form) :
+            (isset($thing) ? parse($thing, !empty($cond)) : !empty($cond));
+    } elseif (empty(${$context}[$name])) {
         return '';
     }
     
@@ -2875,38 +2909,6 @@ function custom_field($atts = array(), $thing = null)
     $thing = is_array($out) ? doWrap($out, null, compact('escape')) : ($out ? $out : parse($thing, false));
 
     return $thing;
-}
-
-// -------------------------------------------------------------
-
-function if_custom_field($atts, $thing = null)
-{
-    global $thisarticle, $thisimage, $thisfile, $thislink, $thiscategory, $thisauthor;
-    static $customFields = null;
-
-    if ($customFields === null) {
-        $customFields = getCustomFields('article', null, 'name');
-    }
-
-    extract($atts = lAtts(array(
-        'name'      => get_pref('custom_1_set'),
-        'value'     => null,
-        'match'     => '',
-        'separator' => '',
-        'type'      => 'article',
-    ), $atts));
-
-    $name = strtolower($name);
-    $context = 'this'.(string)$type;
-    $test = isset(${$context}[$name]) ? ${$context}[$name] : '';
-
-    if ($value !== null) {
-        $cond = txp_match($atts, $test);
-    } else {
-        $cond = $test !== '';
-    }
-
-    return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);
 }
 
 // -------------------------------------------------------------

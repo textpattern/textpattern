@@ -107,9 +107,13 @@ function populateArticleData($rs, $all = true)
 {
     global $production_status, $thisarticle, $trace;
 
+    $custom = getCustomFields('article', null, 'name');
+
     foreach (article_column_map() as $key => $column) {
-        if (isset($rs[$column])) {
+        if (array_key_exists($column, $rs)) {
             $thisarticle[$key] = $rs[$column];
+        } elseif (isset($custom[$key])) {
+            unset($thisarticle[$key]);
         } elseif ($all) {
             $thisarticle[$key] = null;
         }
@@ -183,7 +187,7 @@ function article_column_map($full = true)
         );
 
         if ($full and $custom = getCustomFields()) {
-            foreach ($custom as $i => $name) {
+            foreach ($custom as $name) {
                 isset($column_map[$full][$name]) or $column_map[$full][$name] = $name;
             }
         }
@@ -1264,7 +1268,7 @@ function filterAtts($atts = null, $iscustom = null)
             }
 
             $what[$field] .= $alias[$field];
-        }//dmp($what);
+        }
 
         if (!empty($addFields)) {
             foreach (array_diff_key($column_map, $what) as $field => $column) {
@@ -1277,7 +1281,7 @@ function filterAtts($atts = null, $iscustom = null)
 
         if (!$sort) {
             foreach ($sortby as $key => $val) {
-                $sort .= ($sort ? ', ' : '').$key.$val;
+                $sort .= ($sort ? ', ' : '')."`$key`".$val;
             }
         }
     } elseif ($customData = buildCustomSql($customFields, $customPairs, $excluded, $modes)) {

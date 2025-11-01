@@ -454,10 +454,10 @@ class Field
                             // N.B. Data loss may ensue! Caveat utilitor.
 
                             $sql = "INSERT IGNORE INTO `" . safe_pfx($table_name) . "`
-                                    (table_id, meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
-                                    SELECT table_id, meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
-                                        FROM " . safe_pfx($table_name_orig) . "
-                                        WHERE meta_id = $id;";
+                                (table_id, meta_id, content_id, value_id, " . ($has_textfilter ? 'value_raw' : 'value') . ")
+                                SELECT table_id, meta_id, content_id, value_id, " . ($has_textfilter_orig ? 'value_raw' : 'value') . " 
+                                    FROM " . safe_pfx($table_name_orig) . "
+                                    WHERE meta_id = $id;";
                             safe_query($sql);
 
                             $sql = "DELETE FROM `" . safe_pfx($table_name_orig) . "` WHERE meta_id = $id";
@@ -982,9 +982,11 @@ class Field
 
                 break;
             case 'textArea':
+            case 'virtual':
                 $widget = \Txp::get('\Textpattern\UI\Textarea', $name, implode('', $thisContent))
                     ->setAtts($atts + array(
                         'id'   => $id,
+                        'readonly' => $type == 'virtual',
                     ));
                 break;
             case 'date':

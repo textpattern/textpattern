@@ -189,9 +189,22 @@ class FieldSet implements \IteratorAggregate
         $cfq = array();
         $out = array();
 
+        if ($showonly = (empty($contentId) || empty($contentType))) {
+            $type = !empty($varray['type']) ? (int)$varray['type'] : 0;
+            $table_id = $type ? \Txp::get('\Textpattern\Meta\ContentType')->getEntityTable($type) : 0;
+
+            if ($table_id and $tableData = \Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap($table_id)) {
+                $table = $tableData['table'];
+                $column = $tableData['column'];
+                $idx = str_replace($table.'.', '', $column);
+                $content_id = isset($varray[$idx]) ? $varray[$idx] : false;
+            }
+        }
+
         foreach ($this->filterCollection as $id => $def) {
             $cf_type = $def->get('data_type');
             $cf_name = $def->get('name');
+            $cf_delimiter = $def->get('delimiter');
             $custom_x = "custom_{$id}";
             $raw = array();
 
@@ -207,28 +220,32 @@ class FieldSet implements \IteratorAggregate
                 $raw[] = '';
             }
 
-            $cooked = null;
-
             $filter = $def->get('textfilter');
 
             foreach ($raw as $rawVal) {
-                if ($filter === null) {
-                    $cfq[$cf_type][$id][] = "value = " . ($rawVal === '' ? 'NULL' : "'" . doSlash($rawVal) . "'");
-                    $out[$cf_name] = $rawVal;
-                } else {
-                    $cooked = \Txp::get('Textpattern\Textfilter\Registry')->filter(
-                        $filter,
-                        $rawVal,
-                        array('field' => $custom_x, 'options' => array('lite' => false), 'data' => array())
-                    );
+                $cooked = $filter === null ? $rawVal : \Txp::get('Textpattern\Textfilter\Registry')->filter(
+                    $filter,
+                    $rawVal,
+                    array('field' => $custom_x, 'options' => array('lite' => false), 'data' => array())
+                );
 
-                    $cfq[$cf_type][$id][] = "value_raw = '" . doSlash($rawVal) . "', value = '" . doSlash($cooked) . "'";
-                    $out[$cf_name] = $cooked;
+                $out[$cf_name][] = $cooked;
+                $cfq[$cf_type][$id][] = "value_raw = '" . doSlash($rawVal) . "', value = '" . doSlash($cooked) . "'";
+            }
+
+            $out[$cf_name] = implode((string)$cf_delimiter, $out[$cf_name]);
+
+            if ($def->get('render') == 'virtual') {
+                unset($cfq[$cf_type][$id]);
+
+                if (!empty($content_id)) {
+                    $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $out[$cf_name]);
+                    $out[$cf_name] = $query ? getThing('SELECT ('.$query.') FROM '.safe_pfx_j($table)." WHERE $column = $content_id") : $query;
                 }
             }
         }
 
-        if (empty($contentType) || empty($contentId)) {
+        if ($showonly) {
             return $out;
         }
 

@@ -120,23 +120,23 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
             ),
         );
 
-        foreach (safe_column(array('name', 'id,label,table_id'), 'txp_meta_entity') as $name => $row) {
+        foreach (safe_column(array('id', 'name,label,table_id'), 'txp_meta_entity') as $id => $row) {
             if (!isset($this->tableColumnMap[$row['table_id']])) {
                 continue;
             }
 
-            $this->register($name, $row);
+            $this->register($id, $row);
         }
 
 
         callback_event_ref('txp.meta', 'content.types', 0, $this->contentTypeMap);
     }
 
-    private function register($name, $row) {
-        $this->contentTypeMap[$name] = array(
+    private function register($id, $row) {
+        $this->contentTypeMap[$id] = array(
             'tableId'     => $row['table_id'],
-            'id'     => $row['id'],
-            'key'    => $name,
+            'id'     => $id,
+            'key'    => $row['name'],
             'label'  => gTxt($row['label']),
 //                'table'  => $this->tableColumnMap[$row['table_id']]['table'],
             'column' => $this->tableColumnMap[$row['table_id']]['column'],
@@ -145,8 +145,14 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
 
     public function getTableColumnMap($id = null)
     {
-        return $id === null ? $this->tableColumnMap :
-            (isset($this->tableColumnMap[$id]) ? $this->tableColumnMap[$id] : null);
+        if ($id === null) {
+            return $this->tableColumnMap;
+        } elseif (is_string($id)) {
+            $table = array_column($this->tableColumnMap, 'id', 'key');
+            $id = isset($table[$id]) ? $table[$id] : 0;
+        }
+
+        return isset($this->tableColumnMap[$id]) ? $this->tableColumnMap[$id] : null;
     }
 
     /**
@@ -302,7 +308,7 @@ class ContentType implements \IteratorAggregate, \Textpattern\Container\Reusable
         if ($ok) {
             if (!$id) {
                 $id = $data['id'] = (int)$ok;
-                $this->register($data['name'], $data);
+                $this->register($id, $data);
             }
             
             \Txp::get('\Textpattern\Meta\FieldSet', $id)->update($meta);

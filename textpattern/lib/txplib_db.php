@@ -1464,20 +1464,11 @@ function get_tree($atts = array(), $tbl = 'txp_category')
         foreach ($cats as $cat) {
             extract($cat);
             $node = $children == $level ? $root : $name;
-
-            if (!isset($cache[$hash][$node])) {
-                $cache[$hash][$node] = array();
-            }
-
             $cache[$hash][$node][$name] = $cat;
 
             if ($children != $level) {
                 if ($multiple && in_array($name, $roots)) {
                     $cache[$hash][$root][$name] = $cat;
-                }
-
-                if (!isset($cache[$hash][$parent])) {
-                    $cache[$hash][$parent] = array();
                 }
 
                 $cache[$hash][''][$name] = false;
