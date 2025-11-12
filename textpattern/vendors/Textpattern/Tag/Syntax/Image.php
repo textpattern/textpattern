@@ -211,6 +211,8 @@ class Image
             'extension'   => '',
             'thumbnail'   => true,
             'size'        => '',
+            'month'       => '',
+            'time'        => null,
             'exclude'     => '',
             'auto_detect' => 'article, category, author',
             'break'       => 'br',
@@ -316,6 +318,10 @@ class Image
                 $not = $exclude === true || in_array('size', $exclude) ? 'NOT ' : '';
                 $where[] = $not.'('.join(' OR ', $sizes).')';
             }
+        }
+    
+        if ($time === null || $time || $month) {
+            $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'date');
         }
     
         // If no images are selected, try...
