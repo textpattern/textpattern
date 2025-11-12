@@ -321,7 +321,8 @@ class Image
         }
     
         if ($time === null || $time || $month) {
-            $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'date');
+            $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? ' NOT' : '';
+            $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'date').')';
         }
     
         // If no images are selected, try...
