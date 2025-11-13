@@ -441,7 +441,7 @@ class Image
             (isset($thing) ? parse($thing, false) : '') :
             doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
     }
-    
+
     // -------------------------------------------------------------
     
     public static function image_info($atts)
