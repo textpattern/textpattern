@@ -230,7 +230,17 @@ class Image
         $where = array();
         $has_content = isset($thing) || $form;
         ($has_content || $thumbnail) or $thumbnail = null;
-        $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || isset($atts['size']) || $thumbnail === '1' || $thumbnail === '0';
+        $filters = isset($atts['id'])
+            || isset($atts['name'])
+            || isset($atts['category'])
+            || isset($atts['author'])
+            || isset($atts['realname'])
+            || isset($atts['extension'])
+            || isset($atts['size'])
+            || isset($atts['month'])
+            || isset($atts['time'])
+            || $thumbnail === '1'
+            || $thumbnail === '0';
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
         $id !== true or $id = empty($thisarticle['article_image']) ? '' : $thisarticle['article_image'];
@@ -320,8 +330,8 @@ class Image
             }
         }
     
-        if ($time === null || $time || $month) {
-            $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? ' NOT' : '';
+        if ($time || $month) {
+            $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? 'NOT ' : '';
             $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'date').')';
         }
     
@@ -353,6 +363,10 @@ class Image
                     break;
                 }
             }
+        }
+
+        if ($time === null && !$month) {
+            $where[] = buildTimeSql($month, 'past', 'date');
         }
 
         if ($id) {
