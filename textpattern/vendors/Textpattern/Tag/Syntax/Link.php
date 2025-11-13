@@ -34,6 +34,8 @@ class Link
     public static function linklist($atts, $thing = null)
     {
         global $s, $c, $context, $thislink, $thispage, $pretext;
+
+        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['month']) || isset($atts['time']);
     
         extract(lAtts(array(
             'break'       => '',
@@ -41,7 +43,7 @@ class Link
             'author'      => '',
             'realname'    => '',
             'exclude'     => '',
-            'auto_detect' => 'category, author',
+            'auto_detect' => $filters ? '' : 'category, author',
             'class'       => 'linklist',
             'form'        => isset($thing) ? '' : 'plainlinks',
             'id'          => '',
@@ -55,12 +57,20 @@ class Link
         ), $atts));
     
         $where = array();
-        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['month']) || isset($atts['time']);
-        $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
+        $context_list = empty($auto_detect) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
     
-        if ($category and $category = do_list_unique($category)) {
+        if ($id) {
+            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
+            $where[] = "id {$not}IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
+        }
+    
+        $category = $category ?
+            do_list_unique($category) :
+            ($context == 'link' && !empty($c) && in_array('category', $context_list) ? array($c) : array());
+
+        if ($category) {
             $catquery = array();
 
             foreach ($category as $cat) {
@@ -71,10 +81,7 @@ class Link
             $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
-        if ($id) {
-            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
-            $where[] = "id {$not}IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
-        }
+        $author = $author ?: ($context == 'link' && !empty($pretext['author']) && in_array('author', $context_list) ? array($pretext['author']) : array());
     
         if ($author) {
             $not = $exclude === true || in_array('author', $exclude) ? 'NOT ' : '';
@@ -83,6 +90,7 @@ class Link
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+
             if ($authorlist) {
                 $not = $exclude === true || in_array('realname', $exclude) ? 'NOT ' : '';
                 $where[] = "author {$not}IN ('".join("','", doSlash($authorlist))."')";
@@ -94,46 +102,16 @@ class Link
             $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'date').')';
         }
     
-        // If no links are selected, try...
-        if (!$where && !$filters) {
-            foreach ($context_list as $ctxt) {
-                switch ($ctxt) {
-                    case 'category':
-                        // ...the global category in the URL.
-                        if ($context == 'link' && !empty($c)) {
-                            $where[] = "category = '".doSlash($c)."'";
-                        }
-                        break;
-                    case 'author':
-                        // ...the global author in the URL.
-                        if ($context == 'link' && !empty($pretext['author'])) {
-                            $where[] = "author = '".doSlash($pretext['author'])."'";
-                        }
-                        break;
-                }
-    
-                // Only one context can be processed.
-                if ($where) {
-                    break;
-                }
-            }
-        }
-    
         if (!$where && $filters) {
             // If nothing matches, output nothing.
-            return '';
+            return isset($thing) ? parse($thing, false) : '';
         }
-    
+
         if ($time === null && !$month) {
             $where[] = buildTimeSql($month, 'past', 'date');
         }
-    
-        if (!$where) {
-            // If nothing matches, start with all links.
-            $where[] = "1 = 1";
-        }
-    
-        $where = join(" AND ", $where);
+
+        $where = $where ? join(" AND ", $where) : '1';
     
         // Set up paging if required.
         if ($limit && $pageby) {

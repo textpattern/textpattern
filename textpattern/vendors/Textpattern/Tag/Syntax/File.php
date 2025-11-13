@@ -34,6 +34,8 @@ class File
     public static function file_download_list($atts, $thing = null)
     {
         global $s, $c, $context, $thisfile, $thispage, $pretext;
+
+        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']) || isset($atts['month']) || isset($atts['time']);
     
         extract(lAtts(array(
             'break'       => 'br',
@@ -41,7 +43,7 @@ class File
             'author'      => '',
             'realname'    => '',
             'exclude'     => '',
-            'auto_detect' => 'category, author',
+            'auto_detect' => $filters ? '' : 'category, author',
             'class'       => 'file_download_list',
             'form'        => isset($thing) ? '' : 'files',
             'id'          => '',
@@ -61,12 +63,22 @@ class File
     
         // Note: status treated slightly differently.
         $where = array();
-        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']) || isset($atts['month']) || isset($atts['time']);
-        $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
+        $context_list = empty($auto_detect) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
     
-        if ($category and $category = do_list_unique($category)) {
+        $ids = $id ? array_map('intval', do_list_unique($id, array(',', '-'))) : array();
+    
+        if ($ids) {
+            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
+            $where[] = "id {$not}IN ('".join("','", $ids)."')";
+        }
+    
+        $category = $category ?
+            do_list_unique($category) :
+            ($context == 'file' && !empty($c) && in_array('category', $context_list) ? array($c) : array());
+
+        if ($category) {
             $catquery = array();
 
             foreach ($category as $cat) {
@@ -77,13 +89,8 @@ class File
             $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
-        $ids = $id ? array_map('intval', do_list_unique($id, array(',', '-'))) : array();
-    
-        if ($ids) {
-            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
-            $where[] = "id {$not}IN ('".join("','", $ids)."')";
-        }
-    
+        $author = $author ?: ($context == 'file' && !empty($pretext['author']) && in_array('author', $context_list) ? array($pretext['author']) : array());
+
         if ($author) {
             $not = $exclude === true || in_array('author', $exclude) ? 'NOT ' : '';
             $where[] = "author {$not}IN ('".join("','", doSlash(do_list_unique($author)))."')";
@@ -91,6 +98,7 @@ class File
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+
             if ($authorlist) {
                 $not = $exclude === true || in_array('realname', $exclude) ? 'NOT ' : '';
                 $where[] = "author {$not}IN ('".join("','", doSlash($authorlist))."')";
@@ -102,43 +110,21 @@ class File
             $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'created').')';
         }
     
-        // If no files are selected, try...
-        if (!$where && !$filters) {
-            foreach ($context_list as $ctxt) {
-                switch ($ctxt) {
-                    case 'category':
-                        // ...the global category in the URL.
-                        if ($context == 'file' && !empty($c)) {
-                            $where[] = "category = '".doSlash($c)."'";
-                        }
-                        break;
-                    case 'author':
-                        // ...the global author in the URL.
-                        if ($context == 'file' && !empty($pretext['author'])) {
-                            $where[] = "author = '".doSlash($pretext['author'])."'";
-                        }
-                        break;
-                }
-    
-                // Only one context can be processed.
-                if ($where) {
-                    break;
-                }
-            }
-        }
-    
         if ($status) {
-            $where[] = "status = '".doSlash($status)."'";
-        } elseif (!$where && $filters) {
-            // If nothing matches, output nothing.
-            return '';
+            $not = $exclude === true || in_array('status', $exclude) ? '!' : '';
+            $where[] = "status {$not}= '".doSlash($status)."'";
         }
-    
+
+        if (!$where && $filters) {
+            // If nothing matches, output nothing.
+            return isset($thing) ? parse($thing, false) : '';
+        }
+
         if ($time === null && !$month) {
             $where[] = buildTimeSql($month, 'past', 'created');
         }
-    
-        $where = join(" AND ", $where);
+
+        $where = $where ? join(" AND ", $where) : '1';
     
         // Set up paging if required.
         if ($limit && $pageby) {

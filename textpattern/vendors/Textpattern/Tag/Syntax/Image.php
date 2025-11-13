@@ -197,11 +197,21 @@ class Image
     }
     
     // -------------------------------------------------------------
-    
+
     public static function images($atts, $thing = null)
     {
         global $s, $c, $context, $thisimage, $thisarticle, $thispage, $prefs, $pretext;
-    
+
+        $filters = isset($atts['id'])
+            || isset($atts['name'])
+            || isset($atts['category'])
+            || isset($atts['author'])
+            || isset($atts['realname'])
+            || isset($atts['extension'])
+            || isset($atts['size'])
+            || isset($atts['month'])
+            || isset($atts['time']);
+
         extract(lAtts(array(
             'name'        => '',
             'id'          => '',
@@ -214,7 +224,7 @@ class Image
             'month'       => '',
             'time'        => null,
             'exclude'     => '',
-            'auto_detect' => 'article, category, author',
+            'auto_detect' => $filters ? '' : 'article, category, author',
             'break'       => 'br',
             'wraptag'     => '',
             'class'       => __FUNCTION__,
@@ -225,25 +235,13 @@ class Image
             'offset'      => 0,
             'sort'        => 'name ASC',
         ), $atts));
-    
+
         $safe_sort = sanitizeForSort($sort);
         $where = array();
         $has_content = isset($thing) || $form;
         ($has_content || $thumbnail) or $thumbnail = null;
-        $filters = isset($atts['id'])
-            || isset($atts['name'])
-            || isset($atts['category'])
-            || isset($atts['author'])
-            || isset($atts['realname'])
-            || isset($atts['extension'])
-            || isset($atts['size'])
-            || isset($atts['month'])
-            || isset($atts['time'])
-            || $thumbnail === '1'
-            || $thumbnail === '0';
-        $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
+        $context_list = empty($auto_detect) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
-        $id !== true or $id = empty($thisarticle['article_image']) ? '' : $thisarticle['article_image'];
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
 
         if ($exclude && is_array($exclude) && $excluded = array_filter($exclude, function($e) {
@@ -256,13 +254,17 @@ class Image
 
             $exclude = array_diff($exclude, $excluded);
         }
-    
+
         if ($name) {
             $not = $exclude === true || in_array('name', $exclude) ? ' NOT' : '';
             $where[] = "name$not IN ('".join("','", doSlash(do_list_unique($name)))."')";
         }
 
-        if ($category and $category = do_list_unique($category)) {
+        $category = $category ?
+            do_list_unique($category) :
+            ($context == 'image' && !empty($c) && in_array('category', $context_list) ? array($c) : array());
+
+        if ($category) {
             $catquery = array();
 
             foreach ($category as $cat) {
@@ -272,12 +274,14 @@ class Image
             $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
             $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
-    
+
+        $author = $author ?: ($context == 'image' && !empty($pretext['author']) && in_array('author', $context_list) ? array($pretext['author']) : array());
+
         if ($author) {
             $not = $exclude === true || in_array('author', $exclude) ? ' NOT' : '';
             $where[] = "author$not IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
-    
+
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
             if ($authorlist) {
@@ -285,17 +289,17 @@ class Image
                 $where[] = "author$not IN ('".join("','", doSlash($authorlist))."')";
             }
         }
-    
+
         // Handle extensions, with or without the leading dot.
         if ($extension) {
             $not = $exclude === true || in_array('extension', $exclude) ? ' NOT' : '';
             $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique(preg_replace('/(?<!\.)\b(\w)/', '.$1', $extension))))."')";
         }
-    
+
         if ($thumbnail === '0' || $thumbnail === '1') {
             $where[] = "thumbnail = $thumbnail";
         }
-    
+
         // Handle aspect ratio filtering.
         if ($size) {
             $sizes = array();
@@ -313,7 +317,7 @@ class Image
                     $ratio = explode(':', $size);
                     $ratiow = $ratio[0];
                     $ratioh = !empty($ratio[1]) ? $ratio[1] : '';
-            
+
                     if (is_numeric($ratiow) && is_numeric($ratioh)) {
                         $sizes[] = "ROUND(w/h, 2) = ".round($ratiow/$ratioh, 2);
                     } elseif (is_numeric($ratiow)) {
@@ -329,45 +333,15 @@ class Image
                 $where[] = $not.'('.join(' OR ', $sizes).')';
             }
         }
-    
+
         if ($time || $month) {
             $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? 'NOT ' : '';
             $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'date').')';
         }
-    
-        // If no images are selected, try...
-        if (!$where && !$filters) {
-            foreach ($context_list as $ctxt) {
-                switch ($ctxt) {
-                    case 'article':
-                        // ...the article image field.
-                        if ($thisarticle && !empty($thisarticle['article_image'])) {
-                            $id = $thisarticle['article_image'];
-                        }
-                        break;
-                    case 'category':
-                        // ...the global category in the URL.
-                        if ($context == 'image' && !empty($c)) {
-                            $where[] = "category = '".doSlash($c)."'";
-                        }
-                        break;
-                    case 'author':
-                        // ...the global author in the URL.
-                        if ($context == 'image' && !empty($pretext['author'])) {
-                            $where[] = "author = '".doSlash($pretext['author'])."'";
-                        }
-                        break;
-                }
-                // Only one context can be processed.
-                if ($where) {
-                    break;
-                }
-            }
-        }
 
-        if ($time === null && !$month) {
-            $where[] = buildTimeSql($month, 'past', 'date');
-        }
+        $id = $id === true || empty($id) && in_array('article', $context_list) ?
+            (empty($thisarticle['article_image']) ? 0 : $thisarticle['article_image']) :
+            $id;
 
         if ($id) {
             $not = $exclude === true || in_array('id', $exclude) ? ' NOT' : '';
@@ -399,34 +373,35 @@ class Image
             $id = implode(',', $ids);
 
             // Note: This clause will squash duplicate ids.
-            $where[] = $numid ? "id$not IN ($numid)" : ($not ? '1' : '0');
+            $where[] = $numid ? "id{$not} IN ($numid)" : ($not ? '1' : '0');
         }
+
+        if (!$where && $filters) {
+            // If nothing matches from the filterable attributes, output nothing.
+            return isset($thing) ? parse($thing, false) : '';
+        }
+
+        if ($time === null && !$month) {
+            $where[] = buildTimeSql($month, 'past', 'date');
+        }
+
+        $where = $where ? join(" AND ", $where) : '1';
 
         // Order of ids in 'id' attribute overrides default 'sort' attribute.
         if (empty($atts['sort']) && $id) {
             $safe_sort = "FIELD(id, $id)";
         }
-    
-        if (!$where) {
-            if ($filters) {// If nothing matches from the filterable attributes, output nothing.
-                return isset($thing) ? parse($thing, false) : '';
-            } else {// If no images are filtered, start with all images.
-                $where[] = '1';
-            }
-        }
-    
-        $where = join(" AND ", $where);
-    
+
         // Set up paging if required.
         if ($limit && $pageby) {
             $pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
             $pgoffset = $offset + (($pg - 1) * $pageby);
-    
+
             if (empty($thispage)) {
                 $grand_total = safe_count('txp_image', $where) + (empty($extnum) ? 0 : (empty($extcount) ? $extnum : getThing($extcount)));
                 $total = $grand_total - $offset;
                 $numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
-    
+
                 // Send paging info to txp:newer and txp:older.
                 $pageout['pg']          = $pg;
                 $pageout['numPages']    = $numPages;
@@ -440,13 +415,13 @@ class Image
         } else {
             $pgoffset = $offset;
         }
-    
+
         $qparts = join(' ', array(
             $where ? $where : '',
             "ORDER BY ".$safe_sort,
             ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
         ));
-    
+
         $rs = empty($extid) ?
             safe_rows_start("*", 'txp_image', $qparts) :
             ($where ?
