@@ -40,6 +40,7 @@ class Link
             'category'    => '',
             'author'      => '',
             'realname'    => '',
+            'exclude'     => '',
             'auto_detect' => 'category, author',
             'class'       => 'linklist',
             'form'        => isset($thing) ? '' : 'plainlinks',
@@ -54,9 +55,10 @@ class Link
         ), $atts));
     
         $where = array();
-        $filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
+        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['month']) || isset($atts['time']);
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
+        $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
     
         if ($category and $category = do_list_unique($category)) {
             $catquery = array();
@@ -65,22 +67,31 @@ class Link
                 $catquery[] = "category LIKE '".strtr(doSlash($cat), array('_' => '\_', '*' => '_'))."'";
             }
 
-            $where[] = '('.implode(' OR ', $catquery).')';
+            $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
         if ($id) {
-            $where[] = "id IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
+            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
+            $where[] = "id {$not}IN ('".join("','", doSlash(do_list_unique($id, array(',', '-'))))."')";
         }
     
         if ($author) {
-            $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
+            $not = $exclude === true || in_array('author', $exclude) ? 'NOT ' : '';
+            $where[] = "author {$not}IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
             if ($authorlist) {
-                $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+                $not = $exclude === true || in_array('realname', $exclude) ? 'NOT ' : '';
+                $where[] = "author {$not}IN ('".join("','", doSlash($authorlist))."')";
             }
+        }
+    
+        if ($time || $month) {
+            $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'date').')';
         }
     
         // If no links are selected, try...
@@ -113,8 +124,8 @@ class Link
             return '';
         }
     
-        if ($time === null || $time || $month) {
-            $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'date');
+        if ($time === null && !$month) {
+            $where[] = buildTimeSql($month, 'past', 'date');
         }
     
         if (!$where) {

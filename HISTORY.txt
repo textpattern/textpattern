@@ -12,7 +12,8 @@ Changes in 4.9.0 (upcoming)
 * Added: <txp:if_article_status /> tag.
 * Added: Latest text translations. Thank you to all our translators.
 * Added: Filter articles by image.
-* Added: 'exclude' attribute to <txp:images />.
+* Added: 'exclude', 'month' and 'time' attributes to <txp:images />.
+* Added: 'exclude' attribute to <txp:file_download_list /> and <txp:linklist />.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Changed: Enhancements to SVG handling relating to non-px dimensions
   (thanks, jools-r).

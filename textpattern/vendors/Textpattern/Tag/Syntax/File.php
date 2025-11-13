@@ -40,6 +40,7 @@ class File
             'category'    => '',
             'author'      => '',
             'realname'    => '',
+            'exclude'     => '',
             'auto_detect' => 'category, author',
             'class'       => 'file_download_list',
             'form'        => isset($thing) ? '' : 'files',
@@ -60,9 +61,10 @@ class File
     
         // Note: status treated slightly differently.
         $where = array();
-        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
+        $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']) || isset($atts['month']) || isset($atts['time']);
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
+        $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
     
         if ($category and $category = do_list_unique($category)) {
             $catquery = array();
@@ -71,24 +73,33 @@ class File
                 $catquery[] = "category LIKE '".strtr(doSlash($cat), array('_' => '\_', '*' => '_'))."'";
             }
 
-            $where[] = '('.implode(' OR ', $catquery).')';
+            $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
     
         $ids = $id ? array_map('intval', do_list_unique($id, array(',', '-'))) : array();
     
         if ($ids) {
-            $where[] = "id IN ('".join("','", $ids)."')";
+            $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
+            $where[] = "id {$not}IN ('".join("','", $ids)."')";
         }
     
         if ($author) {
-            $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
+            $not = $exclude === true || in_array('author', $exclude) ? 'NOT ' : '';
+            $where[] = "author {$not}IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
     
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
             if ($authorlist) {
-                $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+                $not = $exclude === true || in_array('realname', $exclude) ? 'NOT ' : '';
+                $where[] = "author {$not}IN ('".join("','", doSlash($authorlist))."')";
             }
+        }
+    
+        if ($time || $month) {
+            $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? 'NOT ' : '';
+            $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'created').')';
         }
     
         // If no files are selected, try...
@@ -123,8 +134,8 @@ class File
             return '';
         }
     
-        if ($time === null || $time || $month) {
-            $where[] = buildTimeSql($month, $time === null ? 'past' : $time, 'created');
+        if ($time === null && !$month) {
+            $where[] = buildTimeSql($month, 'past', 'created');
         }
     
         $where = join(" AND ", $where);
