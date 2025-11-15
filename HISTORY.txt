@@ -10,15 +10,16 @@ Changes in 4.9.0 (upcoming)
 * Fixed: Remove 'br' tags from article image markup where >1 image is
   supplied (thanks, jools-r).
 * Added: <txp:if_article_status /> tag.
-* Added: Latest text translations. Thank you to all our translators.
 * Added: Filter articles by image.
 * Added: 'exclude', 'month' and 'time' attributes to <txp:images />.
-* Added: 'exclude' attribute to <txp:file_download_list /> and <txp:linklist />.
+* Added: 'exclude' attribute to <txp:file_download_list />
+  and <txp:linklist />.
+* Added: Latest text translations. Thank you to all our translators.
+* Changed: Theme page maximum size increased from 64KB to 16MB.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Changed: Enhancements to SVG handling relating to non-px dimensions
   (thanks, jools-r).
 * Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
-* Changed: Theme page maximum size increased from 64KB to 16MB.
 * Changed: Admin-theme checksums computed independently. Unused admin themes
   can be deleted and will no longer trigger Diagnostics alert.
 * Changed: Checksums use Tiger-192,3 instead of MD5. Fewer potential clashes.

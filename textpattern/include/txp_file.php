@@ -95,7 +95,7 @@ function file_list($message = '', $ids = array())
     if ($sort === '') {
         $sort = get_pref('file_sort_column', 'filename');
     } else {
-        if (!in_array($sort, array('id', 'category', 'title', 'date', 'downloads', 'author', 'size'))) {
+        if (!in_array($sort, array('id', 'category', 'title', 'date', 'modified', 'downloads', 'author', 'size'))) {
             $sort = 'filename';
         }
 
@@ -115,6 +115,9 @@ function file_list($message = '', $ids = array())
             break;
         case 'date':
             $sort_sql = "txp_file.created $dir, txp_file.id ASC";
+            break;
+        case 'modified':
+            $sort_sql = "txp_file.modified $dir, txp_file.id ASC";
             break;
         case 'category':
             $sort_sql = "txp_category.title $dir, txp_file.filename DESC";
@@ -171,6 +174,16 @@ function file_list($message = '', $ids = array())
             'author' => array(
                 'column' => array('txp_file.author', 'txp_users.RealName'),
                 'label'  => gTxt('author'),
+            ),
+            'created' => array(
+                'column'  => array('txp_file.created'),
+                'label'   => gTxt('date'),
+                'options' => array('case_sensitive' => true),
+            ),
+            'modified' => array(
+                'column'  => array('txp_file.modified'),
+                'label'   => gTxt('modified'),
+                'options' => array('case_sensitive' => true),
             ),
         )
     );
@@ -266,6 +279,7 @@ function file_list($message = '', $ids = array())
                 txp_file.category,
                 txp_file.description,
                 UNIX_TIMESTAMP(txp_file.created) AS uDate,
+                UNIX_TIMESTAMP(txp_file.modified) AS mDate,
                 txp_file.downloads,
                 txp_file.status,
                 txp_file.author,
@@ -312,6 +326,10 @@ function file_list($message = '', $ids = array())
                     column_head(
                         'date', 'date', 'file', true, $switch_dir, $crit, $search_method,
                         (('date' == $sort) ? "$dir " : '') . 'txp-list-col-created date'
+                    ) .
+                    column_head(
+                        'modified', 'modified', 'file', true, $switch_dir, $crit, $search_method,
+                        (('modified' == $sort) ? "$dir " : '') . 'txp-list-col-modified date'
                     ) .
                     column_head(
                         'category', 'category', 'file', true, $switch_dir, $crit, $search_method,
@@ -435,6 +453,9 @@ function file_list($message = '', $ids = array())
                     ) .
                     td(
                         gTime($uDate), '', 'txp-list-col-created date'
+                    ) .
+                    td(
+                        gTime($mDate), '', 'txp-list-col-modified date'
                     ) .
                     td(
                         $category, '', 'txp-list-col-category category' . $vc
