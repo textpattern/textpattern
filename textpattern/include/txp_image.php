@@ -160,6 +160,11 @@ function image_list($message = '')
                 'column' => array('txp_image.author', 'txp_users.RealName'),
                 'label'  => gTxt('author'),
             ),
+            'date' => array(
+                'column'  => array('txp_image.date'),
+                'label'   => gTxt('date'),
+                'options' => array('case_sensitive' => true),
+            ),
             'thumbnail' => array(
                 'column' => array('txp_image.thumbnail'),
                 'label'  => gTxt('thumbnail'),
@@ -613,6 +618,7 @@ function image_edit($message = '', $id = '')
             'dir',
             'crit',
             'search_method',
+            'publish_now',
         )));
 
         if ($ext != '.swf') {
@@ -730,6 +736,35 @@ function image_edit($message = '', $id = '')
             $rs
         );
 
+        $created =
+            inputLabel(
+                'year',
+                tsi('year', '%Y', $uDate, '', 'year') .
+                ' <span role="separator">/</span> ' .
+                tsi('month', '%m', $uDate, '', 'month') .
+                ' <span role="separator">/</span> ' .
+                tsi('day', '%d', $uDate, '', 'day'),
+                'publish_date',
+                array('timestamp_image', 'instructions_image_date'),
+                array('class' => 'txp-form-field date posted')
+            ) .
+            inputLabel(
+                'hour',
+                tsi('hour', '%H', $uDate, '', 'hour') .
+                ' <span role="separator">:</span> ' .
+                tsi('minute', '%M', $uDate, '', 'minute') .
+                ' <span role="separator">:</span> ' .
+                tsi('second', '%S', $uDate, '', 'second'),
+                'publish_time',
+                array('', 'instructions_image_time'),
+                array('class' => 'txp-form-field time posted')
+            ) .
+            n . tag(
+                checkbox('publish_now', '1', $publish_now, '', 'publish_now') .
+                n . tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
+                'div', array('class' => 'txp-form-field posted-now')
+            );
+
         echo n . '<div class="txp-layout">' .
             n . tag(
                 hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')),
@@ -779,6 +814,7 @@ function image_edit($message = '', $id = '')
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ) .
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs) .
+                        $created.
                         graf(
                             ($can_delete
                                 ? tag_void('input', array(
@@ -1015,7 +1051,20 @@ function image_save()
 {
     global $txp_user;
 
-    $varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt')));
+    $varray = array_map('assert_string', gpsa(array(
+        'id',
+        'name',
+        'category',
+        'caption',
+        'alt',
+        'publish_now',
+        'year',
+        'month',
+        'day',
+        'hour',
+        'minute',
+        'second',
+    )));
     extract(doSlash($varray));
     $id = $varray['id'] = assert_int($id);
     $author = fetch('author', 'txp_image', 'id', $id);
@@ -1024,6 +1073,16 @@ function image_save()
         require_privs('image.edit');
 
         return;
+    }
+
+    $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+
+    if ($publish_now) {
+        $created = "NOW()";
+    } elseif ($created_ts > 0) {
+        $created = "FROM_UNIXTIME('" . $created_ts . "')";
+    } else {
+        $created = '';
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
@@ -1035,7 +1094,8 @@ function image_save()
         "name    = '$name',
         category = '$category',
         alt      = '$alt',
-        caption  = '$caption'",
+        caption  = '$caption'"
+        . ($created ? ", date = $created" : ''),
         "id = '$id'"
     )
     ) {
