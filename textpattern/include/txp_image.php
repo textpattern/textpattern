@@ -60,8 +60,17 @@ if ($event == 'image') {
         'image_multi_edit'    => true,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
-        $step();
+    $plugin_steps = array();
+    callback_event_ref('image', 'steps', 0, $plugin_steps);
+
+    // Available steps overwrite custom ones to prevent plugins trampling
+    // core routines.
+    if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
+        if (array_key_exists($step, $available_steps)) {
+            $step();
+        } else {
+            callback_event($event, $step, 0);
+        }
     } else {
         image_list();
     }
@@ -77,6 +86,102 @@ function image_list($message = '')
 {
     global $app_mode, $file_max_upload_size, $txp_user, $event;
 
+    $show_authors = !has_single_author('txp_image');
+
+    $fields = array(
+        'id' => array(
+            'column' => 'txp_image.id',
+            'label' => 'id',
+        ),
+        'name' => array(
+            'column' => 'txp_image.name',
+            'label' => 'name',
+            'class' => 'name',
+        ),
+        'uDate' => array(
+            'column' => 'UNIX_TIMESTAMP(txp_image.date)',
+            'label' => 'date',
+            'class'  => 'date',
+        ),
+        'thumbnail' => array(
+            'column' => 'txp_image.thumbnail',
+            'label' => 'thumbnail',
+            'class' => 'thumbnail',
+        ),
+        'tags' => array(
+            'column' => '',
+            'label' => 'tags',
+            'class' => 'tag-build',
+            'visible' => has_privs('tag'),
+        ),
+        'category' => array(
+            'column' => 'txp_image.category',
+            'label' => 'category',
+            'class' => 'category',
+        ),
+        'author' => array(
+            'column' => 'txp_image.author',
+            'label' => 'author',
+            'class' => 'author name',
+            'visible' => $show_authors,
+        ),
+        'ext' => array(
+            'column' => 'txp_image.ext',
+            'visible' => false,
+        ),
+        'w' => array(
+            'column' => 'txp_image.w',
+            'visible' => false,
+        ),
+        'h' => array(
+            'column' => 'txp_image.h',
+            'visible' => false,
+        ),
+        'alt' => array(
+            'column' => 'txp_image.alt',
+            'visible' => false,
+        ),
+        'caption' => array(
+            'column' => 'txp_image.caption',
+            'visible' => false,
+        ),
+        'thumb_w' => array(
+            'column' => 'txp_image.thumb_w',
+            'visible' => false,
+        ),
+        'thumb_h' => array(
+            'column' => 'txp_image.thumb_h',
+            'visible' => false,
+        ),
+        'realname' => array(
+            'column' => 'txp_users.RealName',
+            'visible' => false,
+        ),
+        'category_title' => array(
+            'column' => 'txp_category.Title',
+            'visible' => false,
+        ),
+    );
+
+    $sql_from =
+        safe_pfx_j('txp_image') . "
+        LEFT JOIN " . safe_pfx_j('txp_category') . " ON txp_category.name = txp_image.category AND txp_category.type = 'image'
+        LEFT JOIN " . safe_pfx_j('txp_users') . " ON txp_users.name = txp_image.author";
+
+    callback_event_ref($event, 'fields', 'list', $fields);
+    callback_event_ref($event, 'from', 'list', $sql_from);
+
+    $fieldlist = array();
+
+    // Build field list, excluding empty columns.
+    foreach ($fields as $fld => $def) {
+        if (!isset($def['column'])) {
+            $fieldlist[] = $fld;
+        } elseif (!empty($def['column'])) {
+            $fieldlist[] = $def['column'] . ' AS ' . $fld;
+        }
+    }
+
     pagetop(gTxt('tab_image'), $message);
 
     extract(gpsa(array(
@@ -89,13 +194,16 @@ function image_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('image_sort_column', 'id');
-    } else {
-        if (!in_array($sort, array('name', 'thumbnail', 'category', 'date', 'author'))) {
-            $sort = 'id';
-        }
-
-        set_pref('image_sort_column', $sort, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
+
+    if (!in_array($sort, array_keys(array_filter($fields, function($value) {
+            return !isset($value['sortable']) || !empty($value['sortable']);
+        })))
+    ) {
+        $sort = 'id';
+    }
+
+    set_pref('image_sort_column', $sort, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
@@ -104,27 +212,7 @@ function image_list($message = '')
         set_pref('image_sort_dir', $dir, 'image', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    switch ($sort) {
-        case 'name':
-            $sort_sql = "txp_image.name $dir";
-            break;
-        case 'thumbnail':
-            $sort_sql = "txp_image.thumbnail $dir, txp_image.id ASC";
-            break;
-        case 'category':
-            $sort_sql = "txp_category.title $dir, txp_image.id ASC";
-            break;
-        case 'date':
-            $sort_sql = "txp_image.date $dir, txp_image.id ASC";
-            break;
-        case 'author':
-            $sort_sql = "txp_users.RealName $dir, txp_image.id ASC";
-            break;
-        default:
-            $sort = 'id';
-            $sort_sql = "txp_image.id $dir";
-            break;
-    }
+    $sort_sql = $sort . ' ' . $dir . ($sort == 'id' ? '' : ", txp_image.id $dir");
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -181,16 +269,7 @@ function image_list($message = '')
 
     $search_render_options = array('placeholder' => 'search_images');
 
-    $sql_from =
-        safe_pfx_j('txp_image') . "
-        LEFT JOIN " . safe_pfx_j('txp_category') . " ON txp_category.name = txp_image.category AND txp_category.type = 'image'
-        LEFT JOIN " . safe_pfx_j('txp_users') . " ON txp_users.name = txp_image.author";
-
-    if ($crit === '') {
-        $total = getCount('txp_image', $criteria);
-    } else {
-        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
-    }
+    $total = (int)getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
 
     $searchBlock =
         n . tag(
@@ -200,6 +279,14 @@ function image_list($message = '')
                 'id'    => $event . '_control',
             )
         );
+
+    $buttons = array();
+
+    if (has_privs('article.edit.own')) {
+        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
+    }
+
+    callback_event_ref($event, 'controls', 'panel', $buttons);
 
     $createBlock = array();
 
@@ -252,23 +339,9 @@ function image_list($message = '')
         );
     } else {
         $rs = safe_query(
-            "SELECT
-                txp_image.id,
-                txp_image.name,
-                txp_image.category,
-                txp_image.ext,
-                txp_image.w,
-                txp_image.h,
-                txp_image.alt,
-                txp_image.caption,
-                UNIX_TIMESTAMP(txp_image.date) AS uDate,
-                txp_image.author,
-                txp_image.thumbnail,
-                txp_image.thumb_w,
-                txp_image.thumb_h,
-                txp_users.RealName AS realname,
-                txp_category.Title AS category_title
-            FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+            "SELECT " . implode(', ', $fieldlist) .
+            " FROM $sql_from " .
+            " WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
         if ($app_mode == 'json') {
@@ -279,8 +352,6 @@ function image_list($message = '')
         $contentBlock .= pluggable_ui('image_ui', 'extend_controls', '', $rs);
 
         if ($rs && numRows($rs)) {
-            $show_authors = !has_single_author('txp_image');
-
             $contentBlock .= n . tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'images_form',
@@ -294,46 +365,42 @@ function image_list($message = '')
                     'aria-label' => gTxt('list'),
                 )) .
                 n . tag_start('table', array('class' => 'txp-list')) .
-                n . tag_start('thead') .
-                tr(
-                    hCell(
+                n . tag_start('thead');
+
+                $headings = array();
+                $headings[] = hCell(
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
                         '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                    ) .
-                    column_head(
-                        'ID', 'id', 'image', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '') . 'txp-list-col-id'
-                    ) .
-                    column_head(
-                        'name', 'name', 'image', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '') . 'txp-list-col-name'
-                    ) .
-                    column_head(
-                        'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '') . 'txp-list-col-created date'
-                    ) .
-                    column_head(
-                        'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
-                        (('thumbnail' == $sort) ? "$dir " : '') . 'txp-list-col-thumbnail'
-                    ) .
-                    (has_privs('tag')
-                        ? hCell(
-                            gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
-                        )
-                        : ''
-                    ) .
-                    column_head(
-                        'category', 'category', 'image', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '') . 'txp-list-col-category category'
-                    ) .
-                    (
-                        $show_authors
-                        ? column_head(
-                            'author', 'author', 'image', true, $switch_dir, $crit, $search_method,
-                            (('author' == $sort) ? "$dir " : '') . 'txp-list-col-author name'
-                        )
-                        : ''
-                    )
+                );
+
+                foreach ($fields as $col => $opts) {
+                    if (isset($opts['visible']) && empty($opts['visible'])) {
+                        continue;
+                    }
+
+                    $lbl = empty($opts['label']) ? $col : $opts['label'];
+                    $cls = empty($opts['class']) ? $col : $opts['class'];
+                    $clsSuffix = strtolower(str_replace('_', '-', $lbl));
+
+                    if (empty($opts['column'])) {
+                        $headings[] = hCell(gTxt($lbl), '', ' class="txp-list-col-' . $clsSuffix . ' ' . $cls . '" scope="col"');
+                    } else {
+                        $headings[] = column_head(
+                            $lbl,
+                            $col,
+                            'image',
+                            true,
+                            $switch_dir,
+                            '',
+                            '',
+                            (($col == $sort) ? "$dir " : '') .
+                                'txp-list-col-' . $clsSuffix . ' ' . $cls
+                        );
+                    }
+                }
+
+                $contentBlock .= tr(
+                    implode(n, $headings)
                 ) .
                 n . tag_end('thead') .
                 n . tag_start('tbody');
@@ -433,7 +500,8 @@ function image_list($message = '')
                         $show_authors
                         ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                         : ''
-                    )
+                    ) .
+                    pluggable_ui('image_ui', 'list.row', '', $a)
                 );
             }
 
