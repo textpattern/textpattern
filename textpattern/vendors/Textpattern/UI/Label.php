@@ -36,7 +36,7 @@ class Label extends Tag implements UIInterface
      * Construct a single label field.
      *
      * @param string $value The Label text
-     * @param string $name  The name of the input control for which the radio is a Label
+     * @param string $name  The id of the input control targeted by the Label
      */
 
     public function __construct($value, $name = null)

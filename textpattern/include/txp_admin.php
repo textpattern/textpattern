@@ -558,11 +558,11 @@ function author_list($message = '')
                     );
                 }
 
-                    $contentBlock .= tr(
-                        implode(n, $headings)
-                    ) .
-                    n . tag_end('thead') .
-                    n . tag_start('tbody');
+                $contentBlock .= tr(
+                    implode(n, $headings)
+                ) .
+                n . tag_end('thead') .
+                n . tag_start('tbody');
 
                 foreach ($rs as $a) {
                     extract(doSpecial($a));
@@ -617,7 +617,7 @@ function author_list($message = '')
         }
 
         $pageBlock = $paginator->render() .
-        nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+            nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
         $table = new \Textpattern\Admin\Table('users');
         echo $table->render(compact('total', 'crit') + array('heading' => 'tab_site_admin'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
