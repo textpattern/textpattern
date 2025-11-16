@@ -262,7 +262,7 @@ function image_list($message = '')
                 txp_image.h,
                 txp_image.alt,
                 txp_image.caption,
-                TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', txp_image.date) AS uDate,
+                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_image.date) AS uDate,
                 txp_image.author,
                 txp_image.thumbnail,
                 txp_image.thumb_w,
@@ -598,7 +598,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), date) AS uDate", 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1101,11 +1101,12 @@ function image_save()
     $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $id ? $id : null)
         ->filterCollectionAt(/*$uDate*/);
     $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+//    $created_ts -= tz_offset($created_ts);
 
     if ($publish_now) {
         $created = "NOW()";
     } elseif ($created_ts > 0) {
-        $created = "FROM_UNIXTIME('" . $created_ts . "')";
+        $created = "FROM_UNIXTIME($created_ts)";
     } else {
         $created = "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
     }
