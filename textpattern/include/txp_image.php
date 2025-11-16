@@ -262,7 +262,7 @@ function image_list($message = '')
                 txp_image.h,
                 txp_image.alt,
                 txp_image.caption,
-                UNIX_TIMESTAMP(txp_image.date) AS uDate,
+                TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', txp_image.date) AS uDate,
                 txp_image.author,
                 txp_image.thumbnail,
                 txp_image.thumb_w,
@@ -598,7 +598,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', date) AS uDate", 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1099,7 +1099,7 @@ function image_save()
     // ToDo: Run custom fields through validator.
     $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2);
     $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $id ? $id : null)
-        ->filterCollectionAt($uDate);
+        ->filterCollectionAt(/*$uDate*/);
     $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
 
     if ($publish_now) {
@@ -1107,7 +1107,7 @@ function image_save()
     } elseif ($created_ts > 0) {
         $created = "FROM_UNIXTIME('" . $created_ts . "')";
     } else {
-        $created = '';
+        $created = "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
