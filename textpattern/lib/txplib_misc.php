@@ -860,7 +860,7 @@ function image_format_info($image)
     global $txpnow;
     static $mimetypes;
 
-    if (($unix_ts = strtotime($image['date'])) > 0) {
+    if (($unix_ts = strtotime($image['date'])) !== false) {
         $image['date'] = $unix_ts;
     }
 
@@ -3234,11 +3234,7 @@ function fileDownloadFormatTime($params)
     ), $params));
 
     if (!empty($ftime)) {
-        if ($format) {
-            return safe_strftime($format, $ftime);
-        }
-
-        return safe_strftime(get_pref('archive_dateformat'), $ftime);
+        return safe_strftime($format ?: get_pref('archive_dateformat'), $ftime);
     }
 
     return '';
