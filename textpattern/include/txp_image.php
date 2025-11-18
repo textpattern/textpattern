@@ -99,7 +99,7 @@ function image_list($message = '')
             'class' => 'name',
         ),
         'uDate' => array(
-            'column' => 'UNIX_TIMESTAMP(txp_image.date)',
+            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_image.date)',
             'label' => 'date',
             'class'  => 'date',
         ),
