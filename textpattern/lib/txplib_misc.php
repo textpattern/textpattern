@@ -3724,7 +3724,8 @@ function fetch_form($name, $theme = null, &$fname = null)
 /**
  * Parses a form template.
  *
- * @param   string $name The form
+ * @param   string $name  The form
+ * @param   string $theme The theme with which the form is associated
  * @return  string The parsed contents
  * @package TagParser
  */
@@ -3740,6 +3741,7 @@ function parse_form($name, $theme = null)
 
     isset($theme) or $theme = $skin;
     $name = $fname = (string) $name;
+
     $f = fetch_form($name, $theme, $fname);
     $name = $fname;
 

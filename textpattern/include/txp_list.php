@@ -62,6 +62,8 @@ if ($event == 'list') {
         $all_sections[$name] = $title;
     }
 
+    // Available steps overwrite custom ones to prevent plugins trampling
+    // core routines.
     if ($step && bouncer($step, array_merge($plugin_steps, $available_steps))) {
         if (array_key_exists($step, $available_steps)) {
             $step();
