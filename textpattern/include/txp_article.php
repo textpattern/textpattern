@@ -131,7 +131,7 @@ function article_save($write = true)
 //    extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
-    $sqlnow = safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow);
+    $sqlnow = doQuote($write ? 'NOW()' : safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow));
     $is_clone = ps('copy');
 
     if ($is_clone) {
@@ -198,7 +198,7 @@ function article_save($write = true)
 
     // Set and validate article timestamp.
     if ($publish_now || $reset_time) {
-        $whenposted = "'".$sqlnow."'";
+        $whenposted = $sqlnow;
         $uPosted = $txpnow;
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -287,11 +287,11 @@ function article_save($write = true)
         $setnq = array(
             "Posted"          =>  $whenposted,
             "Expires"         =>  $whenexpires,
-            "LastMod"         =>  "'".$sqlnow."'",
+            "LastMod"         =>  $sqlnow,
             "Status"          =>  $Status,
             "Annotate"        =>  $Annotate,
         ) + (!empty($ID) ? array() : array(
-            "feed_time"       => 'NOW()'
+            "feed_time"       => $sqlnow
         )) + ($write ? array() :
             array(
                 'uPosted' => $uPosted,
