@@ -131,7 +131,7 @@ function article_save($write = true)
 //    extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
-    $sqlnow = doQuote($write ? 'NOW()' : safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow));
+    $sqlnow = $write ? 'NOW()' : doQuote(safe_strftime('%Y-%m-%d %H:%M:%S', $txpnow));
     $is_clone = ps('copy');
 
     if ($is_clone) {
