@@ -2721,7 +2721,7 @@ function tz_offset($timestamp = null)
 
 function intl_strftime($format, $time = null, $gmt = false, $override_locale = '')
 {
-    global $lang_ui;
+    global $lang_ui, $timezone_key;
     static $DateTime = null, $IntlDateFormatter = array(), $default = array(), $formats = array(
         '%a' => 'eee',
         '%A' => 'eeee',
@@ -2762,11 +2762,12 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         '%%' => '%',
     );
 
+    $formats['%s'] = $time;
+    $override_locale = $override_locale ?: (txpinterface == 'admin' ? $lang_ui : LANG);
+
     if ($DateTime === null) {
         $DateTime = new DateTime();
     }
-
-    $override_locale = $override_locale ?: (txpinterface == 'admin' ? $lang_ui : LANG);
 
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
@@ -2784,14 +2785,19 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
     }
 
-    $DateTime->setTimestamp($time);
+    if ($time < -12219292800) {// Gregorian reform UTC timestamp
+        $year = $gmt ? gmdate('Y', $time) : date('Y', $time);
+        $delta = floor($year/100) - floor($year/400) - 2;
+        $time += $delta * 24 * 3600;
+    }
 
-    $formats['%s'] = $time;
+    $timezone = $gmt ? 'GMT+0' : $timezone_key;
+//    $DateTime->setTimeZone(new \DateTimeZone($timezone));
+    $DateTime->setTimestamp($time);
     $format = strtr($format, $formats + $default[$override_locale]);
-    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone('GMT+0');
+    $IntlDateFormatter[$override_locale]->setTimeZone($timezone);
     $IntlDateFormatter[$override_locale]->setPattern($format);
     $str = $IntlDateFormatter[$override_locale]->format($DateTime);
-    !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone(null);
 
     return $str;
 }
