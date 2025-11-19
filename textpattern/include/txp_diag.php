@@ -310,7 +310,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if (!$txp_is_dev && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if ((!$txp_is_dev || gps('checksums')) && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $preflight['w'][] = array('modified_files', null, array('{list}' => n . t . implode(', ' . n . t, $modified_files)));
     }
 
