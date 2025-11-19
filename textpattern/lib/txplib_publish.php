@@ -165,9 +165,9 @@ function article_column_map($full = true)
     if (empty($column_map[$full])) {
         $column_map[$full] = array(
             'thisid'          => 'ID',
-            'posted'          => $full ? 'uPosted' :  'UNIX_TIMESTAMP(Posted) AS uPosted', // Calculated value!
-            'expires'         => $full ? 'uExpires' : 'UNIX_TIMESTAMP(Expires) AS uExpires', // Calculated value!
-            'modified'        => $full ? 'uLastMod' : 'UNIX_TIMESTAMP(LastMod) AS uLastMod', // Calculated value!
+            'posted'          => $full ? 'uPosted' :  'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted', // Calculated value!
+            'expires'         => $full ? 'uExpires' : 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires', // Calculated value!
+            'modified'        => $full ? 'uLastMod' : 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod', // Calculated value!
             'annotate'        => 'Annotate',
             'comments_invite' => 'AnnotateInvite',
             'authorid'        => 'AuthorID',
