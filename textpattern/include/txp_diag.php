@@ -310,7 +310,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if (!$txp_is_dev && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if ((!$txp_is_dev || gps('checksums')) && $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $preflight['w'][] = array('modified_files', null, array('{list}' => n . t . implode(', ' . n . t, $modified_files)));
     }
 
@@ -501,7 +501,7 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
     echo pagetop(gTxt('tab_diagnostics'), '');

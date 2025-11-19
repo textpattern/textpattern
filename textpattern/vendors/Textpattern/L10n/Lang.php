@@ -274,7 +274,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             // Need a value here for the language itself, not for each one of the rows.
             $ownClause = ($this->hasOwnerSupport() ? "owner = ''" : "1")." GROUP BY lang ORDER BY lastmod DESC";
             $this->dbLangs = safe_rows(
-                "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
+                "lang, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), MAX(lastmod)) AS lastmod",
                 'txp_lang',
                 $ownClause
             );

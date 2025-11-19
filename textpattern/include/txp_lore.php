@@ -174,7 +174,7 @@ function lore_list($message = '')
             );
     } else {
         $rs = safe_rows_start(
-            "*, UNIX_TIMESTAMP(time) AS uTime",
+            "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), time) AS uTime",
             'txp_log',
             "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );

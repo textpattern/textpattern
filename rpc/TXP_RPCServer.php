@@ -533,7 +533,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $rs = $txp->getArticleID($postid, 'ID, Body, AuthorId, unix_timestamp(Posted) as uPosted');
+        $rs = $txp->getArticleID($postid, 'ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted');
 
         if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
@@ -579,7 +579,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -610,7 +610,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $rs = $txp->getArticleID($postid, 'ID, Title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, url_title, unix_timestamp(Posted) as uPosted');
+        $rs = $txp->getArticleID($postid, 'ID, Title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, url_title, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted');
 
         if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
@@ -707,7 +707,7 @@ EOD;
         }
 
         $articles = $txp->getArticleList(
-            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted, Status',
+            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted, Status',
             "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false
         );
 
@@ -739,7 +739,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Title, AuthorID, unix_timestamp(Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Title, AuthorID, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));

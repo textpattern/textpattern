@@ -87,9 +87,9 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * @param bool  $all Rewrite all data
  * @example
  * if ($rs = safe_rows_start("*,
- *     UNIX_TIMESTAMP(Posted) AS uPosted,
- *     UNIX_TIMESTAMP(Expires) AS uExpires,
- *     UNIX_TIMESTAMP(LastMod) AS uLastMod",
+ *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted,
+ *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires,
+ *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
  *     'textpattern',
  *     "1 = 1"
  * ))
@@ -241,7 +241,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
     $tables = isset($atts['#']) ? $atts['#'] : safe_pfx_j('textpattern');
-    $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod';
+    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod';
 
     $q = array(
         "SELECT $columns FROM $tables",
@@ -311,13 +311,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['posted']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
                 break;
             case 'Expires':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['expires']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
                 break;
             case 'LastMod':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['modified']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -349,7 +349,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("UNIX_TIMESTAMP(val)", 'txp_prefs', "name = 'lastmod'");
+    $last = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), val)", 'txp_prefs', "name = 'lastmod'");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -684,7 +684,7 @@ function lookupByTitle($val, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
@@ -717,7 +717,7 @@ function lookupByTitleSection($val, $section, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -741,7 +741,7 @@ function lookupByIDSection($id, $section, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -764,7 +764,7 @@ function lookupByID($id, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     return safe_row(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
         'textpattern',
         "ID = ".intval($id)." LIMIT 1", $debug
     );
@@ -793,7 +793,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
         'textpattern',
         "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
@@ -1254,7 +1254,7 @@ function filterAtts($atts = null, $iscustom = null)
                 }
 
                 if (isset($date_fields[$field])) {
-                    $what['u'.$field] = 'UNIX_TIMESTAMP('.$what[$field].')';
+                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), '.$what[$field].')';
                     $alias['u'.$field] = " AS `u{$column}`";
                 }
             }

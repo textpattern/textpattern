@@ -1942,12 +1942,12 @@ function now($type, $update = false)
         if ($time > $now or $update) {
             $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
-            $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
+            $now = safe_field('TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), '.$type.') as utime', $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }
     }
 
-    return 'from_unixtime('.$now.')';
+    return "(FROM_UNIXTIME(0) + INTERVAL $now SECOND)";
 }
