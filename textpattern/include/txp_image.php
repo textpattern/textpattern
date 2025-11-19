@@ -1143,14 +1143,11 @@ function image_save()
         return;
     }
 
-    $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-
     if ($publish_now) {
         $created = "NOW()";
-    } elseif ($created_ts > 0) {
-        $created = "FROM_UNIXTIME('" . $created_ts . "')";
     } else {
-        $created = '';
+        $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+        $created = $created_ts === false ? false : "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
@@ -1162,8 +1159,8 @@ function image_save()
         "name    = '$name',
         category = '$category',
         alt      = '$alt',
-        caption  = '$caption'"
-        . ($created ? ", date = $created" : ''),
+        caption  = '$caption'" .
+        ($created ? ", date = $created" : ''),
         "id = '$id'"
     )
     ) {

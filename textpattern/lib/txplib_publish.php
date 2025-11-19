@@ -304,13 +304,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['posted']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
                 break;
             case 'Expires':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['expires']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
                 break;
             case 'LastMod':
-                $threshold = "FROM_UNIXTIME(".intval($thisarticle['modified']).")";
+                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.

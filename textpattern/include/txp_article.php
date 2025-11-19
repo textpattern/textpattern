@@ -211,14 +211,14 @@ function article_save($write = true)
             $ts = strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
         }
 
-        if ($ts === false || $ts < 0) {
+        if ($ts === false) {
             $uPosted = $oldArticle['sPosted'];
             $msg = array(gTxt('invalid_postdate'), E_ERROR);
         } else {
             $uPosted = $ts - tz_offset($ts);
         }
 
-        $whenposted = "FROM_UNIXTIME($uPosted)";
+        $whenposted = "FROM_UNIXTIME(0) + INTERVAL $uPosted SECOND";
     }
 
     // Set and validate expiry timestamp.
@@ -250,7 +250,7 @@ function article_save($write = true)
 
         $ts = strtotime($exp_year . '-' . $exp_month . '-' . $exp_day . ' ' . $exp_hour . ':' . $exp_minute . ':' . $exp_second);
 
-        if ($ts === false || $ts < 0) {
+        if ($ts === false) {
             $uExpires = $oldArticle['sExpires'];
             $msg = array(gTxt('invalid_expiredate'), E_ERROR);
         } else {
@@ -264,7 +264,7 @@ function article_save($write = true)
     }
 
     if ($uExpires) {
-        $whenexpires = "FROM_UNIXTIME($uExpires)";
+        $whenexpires = "FROM_UNIXTIME(0) + INTERVAL $uExpires SECOND";
     } else {
         $whenexpires = "NULL";
     }
@@ -1159,7 +1159,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir (FROM_UNIXTIME(0) + INTERVAL $sPosted SECOND) OR Posted = (FROM_UNIXTIME(0) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 

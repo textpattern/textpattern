@@ -1235,14 +1235,12 @@ function file_save()
         }
     }
 
-    $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
 
     if ($publish_now) {
         $created = "NOW()";
-    } elseif ($created_ts > 0) {
-        $created = "FROM_UNIXTIME('" . $created_ts . "')";
     } else {
-        $created = '';
+        $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+        $created = $created_ts === false ? false : "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
     }
 
     $size = file_exists($new_path) ? filesize($new_path) : $rs['size'];

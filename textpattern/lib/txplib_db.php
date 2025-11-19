@@ -1942,5 +1942,5 @@ function now($type, $update = false)
         }
     }
 
-    return 'from_unixtime('.$now.')';
+    return "(FROM_UNIXTIME(0) + INTERVAL $now SECOND)";
 }

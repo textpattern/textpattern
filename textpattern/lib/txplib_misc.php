@@ -4637,7 +4637,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "FROM_UNIXTIME($start)";
+            $from = "(FROM_UNIXTIME(0) + INTERVAL $start SECOND)";
         }
 
         if ($time === 'since') {
@@ -4652,8 +4652,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = FROM_UNIXTIME($start)" :
-                "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)"
+                "$safe_field = (FROM_UNIXTIME(0) + INTERVAL $start SECOND)" :
+                "$safe_field BETWEEN (FROM_UNIXTIME(0) + INTERVAL $start SECOND) AND (FROM_UNIXTIME(0) + INTERVAL $stop SECOND)"
             );
         }
     }
