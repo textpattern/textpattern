@@ -88,7 +88,8 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'selectAll': 'input[name=select_all][type=checkbox]',
         'rowClick': true,
         'altClick': true,
-        'confirmation': textpattern.gTxt('are_you_sure')
+        'confirmation': textpattern.gTxt('are_you_sure'),
+        'atElement': '#at_announce'
     };
 
     if (typeof(method) !== 'string') {
@@ -114,6 +115,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             form.opt = opt;
             form.selectAll = $this.find(opt.selectAll);
             form.button = $this.find(opt.submitButton);
+            form.ariaAnnounce = $this.find(opt.atElement);
         }
 
         form.boxes = $this.find(opt.checkbox);
@@ -218,12 +220,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             var checked = form.boxes.filter(':checked'),
                 count = checked.length,
                 option = form.editMethod.find('[value=""]');
-            checked.closest(opt.highlighted).addClass(opt.selectedClass);
-            form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
+            checked.closest(opt.highlighted).addClass(opt.selectedClass).attr('aria-selected', 'true');
+            form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass).attr('aria-selected', 'false');
 
             option.gTxt('with_selected_option', {
                 '{count}': count
             });
+            form.ariaAnnounce.innerHTML = '<p>' + textpattern.gTxt('items_selected', {'{count}': count}) + '</p>';
+
             form.selectAll.prop('checked', count && count === form.boxes.length).change();
             form.editMethod.prop('disabled', !count);
 

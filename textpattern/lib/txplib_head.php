@@ -102,6 +102,7 @@ function pagetop($pagetitle = '', $message = '')
         'form_submission_error',
         'found_unsafe',
         'help',
+        'items_selected',
         'list_options',
         'ok',
         'plugin_help',
