@@ -2730,6 +2730,7 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
     }
 
     $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
+    $formats['%s'] = $time;
 
     if (!isset($IntlDateFormatter[$override_locale])) {
         $IntlDateFormatter[$override_locale] = new IntlDateFormatter(
@@ -2747,9 +2748,13 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $default[$override_locale] = array('%c' => $pattern, '%x' => $xd, '%X' => $xt);
     }
 
-    $DateTime->setTimestamp($time);
+    if ($time < -12219292800) {// Gregorian reform UTC timestamp
+        $year = $gmt ? gmdate('Y', $time) : date('Y', $time);
+        $delta = floor($year/100) - floor($year/400) - 2;
+        $time += $delta * 24 * 3600;
+    }
 
-    $formats['%s'] = $time;
+    $DateTime->setTimestamp($time);
     $format = strtr($format, $formats + $default[$override_locale]);
     !$gmt or $IntlDateFormatter[$override_locale]->setTimeZone('GMT+0');
     $IntlDateFormatter[$override_locale]->setPattern($format);
