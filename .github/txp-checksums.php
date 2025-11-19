@@ -75,7 +75,7 @@ if ($locs === 'all' || $locs === 'admin-themes') {
     $themesInstalled = array();
 
     foreach ($iterator as $fileinfo) {
-        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+        if (($fileinfo->isDir() || $fileinfo->isLink()) && !$fileinfo->isDot()) {
             $themesInstalled[] = $fileinfo->getFilename();
         }
     }
@@ -129,7 +129,7 @@ function write_checksums($dir, $files)
  */
 function files_to_checksum($folder, $pattern)
 {
-    $dir = new RecursiveDirectoryIterator($folder, RecursiveDirectoryIterator::SKIP_DOTS);
+    $dir = new RecursiveDirectoryIterator($folder, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::FOLLOW_SYMLINKS);
     $iter = new RecursiveIteratorIterator($dir);
     $files = new RegexIterator($iter, $pattern, RegexIterator::GET_MATCH);
     $fileList = array();
