@@ -1168,14 +1168,12 @@ function image_save()
     $type = Txp::get('\Textpattern\Meta\ContentType')->getItemEntity($id, 2);
     $mfs = Txp::get('\Textpattern\Meta\FieldSet', $type, $id ? $id : null)
         ->filterCollectionAt(/*$uDate*/);
-    $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-//    $created_ts -= tz_offset($created_ts);
 
     if ($publish_now) {
-        $created = "NOW()";
-    } elseif ($created_ts > 0) {
-        $created = "FROM_UNIXTIME($created_ts)";
+        $created = 'NOW()';
     } else {
+        $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+        $created_ts -= tz_offset($created_ts);
         $created = "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
     }
 
@@ -1188,8 +1186,8 @@ function image_save()
         "name    = '$name',
         category = '$category',
         alt      = '$alt',
-        caption  = '$caption'"
-        . ($created ? ", date = $created" : ''),
+        caption  = '$caption',
+        date     = $created",
         "id = '$id'"
     )
     ) {
