@@ -501,7 +501,7 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
     echo pagetop(gTxt('tab_diagnostics'), '');

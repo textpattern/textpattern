@@ -42,7 +42,7 @@
 function fetchComments($id)
 {
     $rs = safe_rows(
-        "*, UNIX_TIMESTAMP(posted) AS time",
+        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), posted) AS time",
         'txp_discuss',
         "parentid = " . intval($id) . " AND visible = " . VISIBLE . " ORDER BY posted ASC"
     );
@@ -558,7 +558,7 @@ function checkCommentsAllowed($id)
     } else {
         extract(
             safe_row(
-                "Annotate, UNIX_TIMESTAMP(Posted) AS uPosted",
+                "Annotate, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted",
                 'textpattern',
                 "ID = $id"
             )

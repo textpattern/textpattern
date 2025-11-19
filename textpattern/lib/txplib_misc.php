@@ -4001,7 +4001,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("UNIX_TIMESTAMP(Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -5047,7 +5047,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS posted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS expires",
         'textpattern',
         "ID = $id"
     );

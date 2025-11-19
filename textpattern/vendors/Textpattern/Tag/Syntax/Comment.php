@@ -49,8 +49,8 @@ class Comment
         $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
         $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires IS NULL) ";
     
-        $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time, t.ID AS thisid,
-                UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.Category1, t.Category2, t.url_title
+        $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), d.Posted) AS time, t.ID AS thisid,
+                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), t.Posted) AS posted, t.Title AS title, t.Section AS section, t.Category1, t.Category2, t.url_title
             FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
             WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
             ORDER BY ".sanitizeForSort($sort)."
@@ -107,7 +107,7 @@ class Comment
         extract(lAtts(array('form' => 'comments_display'), $atts));
     
         $rs = safe_row(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
+            "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires",
             'textpattern',
             "ID=".intval(gps('parentid'))." AND Status >= 4"
         );
@@ -433,7 +433,7 @@ class Comment
             ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
         );
     
-        $rs = safe_rows_start("*, UNIX_TIMESTAMP(posted) AS time", 'txp_discuss', join(' ', $qparts));
+        $rs = safe_rows_start("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), posted) AS time", 'txp_discuss', join(' ', $qparts));
     
         $out = '';
     

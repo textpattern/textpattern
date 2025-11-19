@@ -465,7 +465,9 @@ function preText($store, $prefs = null)
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
-                            '*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod',
+                            '*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted,'.
+                                'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires,'.
+                                'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod',
                             'textpattern',
                             "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );

@@ -99,7 +99,7 @@ function image_list($message = '')
             'class' => 'name',
         ),
         'uDate' => array(
-            'column' => 'UNIX_TIMESTAMP(txp_image.date)',
+            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_image.date)',
             'label' => 'date',
             'class'  => 'date',
         ),
@@ -665,7 +665,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), date) AS uDate", 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
