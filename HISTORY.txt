@@ -15,6 +15,8 @@ Changes in 4.9.0 (upcoming)
 * Added: 'exclude' attribute to <txp:file_download_list />
   and <txp:linklist />.
 * Added: Latest text translations. Thank you to all our translators.
+* Added: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
+  Epochalypse/Year 2038 problem for info.
 * Changed: Theme page maximum size increased from 64KB to 16MB.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Changed: Enhancements to SVG handling relating to non-px dimensions
