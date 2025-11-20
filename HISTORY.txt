@@ -15,8 +15,6 @@ Changes in 4.9.0 (upcoming)
 * Added: 'exclude' attribute to <txp:file_download_list />
   and <txp:linklist />.
 * Added: Latest text translations. Thank you to all our translators.
-* Added: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
-  Epochalypse/Year 2038 problem for info.
 * Changed: Theme page maximum size increased from 64KB to 16MB.
 * Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
 * Changed: Enhancements to SVG handling relating to non-px dimensions
@@ -24,6 +22,8 @@ Changes in 4.9.0 (upcoming)
 * Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
 * Changed: Admin-theme checksums computed independently. Unused admin themes
   can be deleted and will no longer trigger Diagnostics alert.
+* Changed: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
+  Epochalypse/Year 2038 problem for info.
 * Changed: Checksums use Tiger-192,3 instead of MD5. Fewer potential clashes.
 * Developer: Permitted concurrent logins. See Advanced Prefs.
 * Developer: Removed duplicate pluggable_ui callback for
