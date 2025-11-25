@@ -171,7 +171,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $out[] = $atts ? '<option'.$atts.'>'.txpspecialchars($alabel).'</option>' : '<hr />';
     }
 
-    if ($value && $selected < count($value)) {
+    if (txpinterface === 'admin' && $selected < count($value)) {
         foreach (array_diff($value, $array) as $v) {
             $atts = join_atts(array('value' => $v, 'dir' => 'auto', 'selected' => true, 'disabled' => true), TEXTPATTERN_STRIP_NONE);
             $out[] = '<option'.$atts.'>'.txpspecialchars(gTxt('invalid_argument')).'</option>';

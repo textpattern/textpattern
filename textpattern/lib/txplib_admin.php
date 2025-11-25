@@ -1836,14 +1836,13 @@ function check_file_integrity($flags = INTEGRITY_STATUS, $force = false)
 
     if ($files === null || $force) {
         foreach (find_files_matching(txpath, '/checksums\.txt$/') as $matched) {
-            $checksums = $matched->getPathname();
+            $checksums = $matched->getRealPath();
 
             if (is_readable($checksums) && ($cs = file($checksums))) {
                 foreach ($cs as $c) {
                     if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{'.CHECKSUM_BYTES.'})\)?$@', trim($c), $m)) {
                         list(, $relative, $r, $hash) = $m;
                         $file = realpath(txpath.$relative);
-
                         $checksum_table[$relative] = $hash;
 
                         if ($file === false) {
@@ -1946,7 +1945,7 @@ function find_files_matching($path, $pat)
         throw new \RuntimeException("{$path} is not a directory ");
     }
 
-    $it = new \RecursiveDirectoryIterator($path);
+    $it = new \RecursiveDirectoryIterator($path, FilesystemIterator::FOLLOW_SYMLINKS);
     $it = new \RecursiveIteratorIterator($it);
     $it = new \RegexIterator($it, $pat, \RegexIterator::MATCH);
 
