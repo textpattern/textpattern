@@ -337,7 +337,6 @@ function list_list($message = '', $post = '')
 
             $headings = array();
             $headings[] = hCell(
-                '<div id="at_announce" aria-live="polite"></div>'.
                 '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
                 '', 'class="txp-list-col-multi-edit" scope="col"'
