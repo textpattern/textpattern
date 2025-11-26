@@ -88,8 +88,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'selectAll': 'input[name=select_all][type=checkbox]',
         'rowClick': true,
         'altClick': true,
-        'confirmation': textpattern.gTxt('are_you_sure'),
-        'atElement': '#at_announce'
+        'confirmation': textpattern.gTxt('are_you_sure')
     };
 
     if (typeof(method) !== 'string') {
@@ -115,7 +114,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             form.opt = opt;
             form.selectAll = $this.find(opt.selectAll);
             form.button = $this.find(opt.submitButton);
-            form.ariaAnnounce = $this.find(opt.atElement);
         }
 
         form.boxes = $this.find(opt.checkbox);
