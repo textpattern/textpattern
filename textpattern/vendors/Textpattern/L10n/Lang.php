@@ -571,8 +571,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Insert or update a language pack.
      *
-     * @param  array  $langpack The language pack to store
-     * @param  string $langpack The owner to use if not in the pack
+     * @param  array        $langpack  The language pack to store
+     * @param  string|array $owner_ref The owner to use if not in the pack, or array(owner, language)
+     * @param  bool         $reset     Whether to remove all the pack strings first
      * @return result set
      */
 

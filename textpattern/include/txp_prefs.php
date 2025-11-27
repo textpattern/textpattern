@@ -68,7 +68,7 @@ function prefs_save()
     set_pref('max_custom_fields', $max_custom_fields, 'publish', PREF_HIDDEN);
 
     $sql = array();
-    $sql[] = "event != '' AND type IN (" . PREF_CORE . ", " . PREF_PLUGIN . ", " . PREF_HIDDEN . ")";
+    $sql[] = "event != '' AND type IN (" . PREF_CORE . ", " . PREF_PLUGIN . ", " . PREF_THEME . ", " . PREF_HIDDEN . ")";
     $sql[] = "(user_name = '' OR (user_name = '" . doSlash($txp_user) . "' AND name NOT IN (
             SELECT name FROM " . safe_pfx('txp_prefs') . " WHERE user_name = ''
         )))";
@@ -194,7 +194,7 @@ function prefs_list($message = '')
         }
     }
 
-    $sql[] = 'event != "" AND type IN(' . PREF_CORE . ', ' . PREF_PLUGIN . ')';
+    $sql[] = 'event != "" AND type IN(' . PREF_CORE . ', ' . PREF_PLUGIN . ', ' . PREF_THEME . ')';
     $sql[] = "(user_name = '' OR (user_name = '" . doSlash($txp_user) . "' AND name NOT IN (
             SELECT name FROM " . safe_pfx('txp_prefs') . " WHERE user_name = ''
         )))";
@@ -288,6 +288,14 @@ function prefs_list($message = '')
             // @todo: Ready for constraints to be read from $a['constraints'].
             $constraints = array();
 
+            $prefPrefix = '';
+            $prefParts = explode(PREF_THEME_DELIMITER, $a['name']);
+
+            if (isset($prefParts[1])) {
+                $prefPrefix = $prefParts[0] . PREF_THEME_DELIMITER;
+                $a['name'] = $prefParts[1];
+            }
+
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
                 $collectionClass = (!empty($a['collection']) ? $a['collection'] : '');
                 $out[] = hed(gTxt($subEvent), 3, array('class' => $collectionClass));
@@ -298,7 +306,7 @@ function prefs_list($message = '')
                     $a['name'],
                     pref_func($a['html'], $a['name'], $a['val'], $constraints),
                     $label)
-                ->setHelp(array($help, 'instructions_' . $a['name']))
+                ->setHelp(array($help, $prefPrefix . 'instructions_' . $a['name']))
                 ->setAtts(array(
                     'class' => 'txp-form-field' . (!empty($a['collection']) ? ' ' . $a['collection'] : ''),
                     'id'    => 'prefs-' . $a['name'],
