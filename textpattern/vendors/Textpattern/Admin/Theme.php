@@ -105,6 +105,7 @@ abstract class Theme
         $this->message = '';
         $this->cssPath = 'assets'.DS.'css';
         $this->jsPath = 'assets'.DS.'js';
+        add_privs('prefs.admin_theme', '1,2');
     }
 
     /**
@@ -348,7 +349,6 @@ abstract class Theme
     public function prefs()
     {
         $prefs = $this->manifest('prefs');
-        add_privs('prefs.admin_theme', '1,2');
 
         if ($prefs) {
             foreach ($prefs as $pref => $def) {

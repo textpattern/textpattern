@@ -289,11 +289,12 @@ function prefs_list($message = '')
             $constraints = array();
 
             $prefPrefix = '';
+            $shortName = $a['name'];
             $prefParts = explode(PREF_THEME_DELIMITER, $a['name']);
 
             if (isset($prefParts[1])) {
                 $prefPrefix = $prefParts[0] . PREF_THEME_DELIMITER;
-                $a['name'] = $prefParts[1];
+                $shortName = $prefParts[1];
             }
 
             if ($subEvent !== '' && $last_sub_event !== $subEvent) {
@@ -306,7 +307,7 @@ function prefs_list($message = '')
                     $a['name'],
                     pref_func($a['html'], $a['name'], $a['val'], $constraints),
                     $label)
-                ->setHelp(array($help, $prefPrefix . 'instructions_' . $a['name']))
+                ->setHelp(array($help, $prefPrefix . 'instructions_' . $shortName))
                 ->setAtts(array(
                     'class' => 'txp-form-field' . (!empty($a['collection']) ? ' ' . $a['collection'] : ''),
                     'id'    => 'prefs-' . $a['name'],
