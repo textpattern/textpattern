@@ -366,6 +366,20 @@ abstract class Theme
     }
 
     /**
+     * Fetch a theme pref
+     *
+     * Theme name and delimiter will be automatically prefixed.
+     *
+     * @param string $name The preference name to fetch
+     *
+     * @return pref value, if it exists
+     */
+    public function get_pref($name)
+    {
+        return get_pref($this->name.PREF_THEME_DELIMITER.$name);
+    }
+
+    /**
      * Import theme Textpack strings
      *
      * @return [type] [description]
