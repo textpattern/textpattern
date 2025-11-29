@@ -502,7 +502,7 @@ class wet_thumb
 
             imagealphablending($this->_DST['image'], true);
             imagecopy($this->_DST['image'], $magnifier, $this->_DST['width'] - 15, $this->_DST['height'] - 14, 0, 0, 11, 11);
-            imagedestroy($magnifier);
+            $this->destroy($magnifier);
         }
 
         if ($verbose) {
@@ -530,14 +530,30 @@ class wet_thumb
                 $imagefn($this->_DST['image'], $this->_DST['file']);
         }
 
-        imagedestroy($this->_DST['image']);
-        imagedestroy($this->_SRC['image']);
+        $this->destroy($this->_DST['image']);
+        $this->destroy($this->_SRC['image']);
 
         if ($verbose) {
             echo $result ? "... image successfully saved ..." : "... failed to save image ...";
         }
 
         return $result;
+    }
+
+    /**
+     * imagedestroy() wrapper.
+     *
+     * @param  string $file  Image file name.
+     * @return bool TRUE on success
+     */
+
+    private function destroy($file)
+    {
+        if (version_compare(PHP_VERSION, '8.0.0') < 0) {
+            return imagedestroy($file);
+        }
+
+        return true;
     }
 
     /**
