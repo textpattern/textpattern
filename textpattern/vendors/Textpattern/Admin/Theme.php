@@ -105,6 +105,7 @@ abstract class Theme
         $this->message = '';
         $this->cssPath = 'assets'.DS.'css';
         $this->jsPath = 'assets'.DS.'js';
+        add_privs('prefs.admin_theme', '1,2');
     }
 
     /**
@@ -262,6 +263,8 @@ abstract class Theme
     {
         $this->is_popup = $is_popup;
         $this->message = $message;
+        $this->prefs();
+        $this->updateTextpack();
 
         if ($is_popup) {
             return $this;
@@ -343,21 +346,88 @@ abstract class Theme
     abstract public function html_head();
 
     /**
+     * Import theme preferences
+     *
+     * @return
+     */
+    public function prefs()
+    {
+        $prefs = $this->manifest('prefs');
+
+        if ($prefs) {
+            foreach ($prefs as $pref => $def) {
+                $prefID = $this->name . '|' . $pref;
+
+                if (get_pref($prefID, null) === null) {
+                    $val = isset($def['val']) ? $def['val'] : '';
+                    $html = (string) isset($def['html']) ? $def['html'] : 'text_input';
+                    $pos = (int) isset($def['position']) ? $def['position'] : 0;
+                    $is_private = isset($def['private']) ? PREF_PRIVATE : PREF_GLOBAL;
+                    set_pref($prefID, $val, array('admin_theme', $this->name), PREF_THEME, $html, $pos, $is_private);
+                }
+            }
+        }
+    }
+
+    /**
+     * Fetch a theme pref
+     *
+     * Theme name and delimiter will be automatically prefixed.
+     *
+     * @param string $name The preference name to fetch
+     *
+     * @return pref value, if it exists
+     */
+    public function get_pref($name)
+    {
+        return get_pref($this->name.PREF_THEME_DELIMITER.$name);
+    }
+
+    /**
+     * Import theme Textpack strings
+     *
+     * @return [type] [description]
+     */
+    public function updateTextpack()
+    {
+        $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+
+        $textpack = txp_get_contents($this->url.'textpack.txp');
+        $parser = new \Textpattern\Textpack\Parser();
+        $parser->setOwner($this->name);
+        $parser->setLanguage($lang);
+        $parser->parse($textpack);
+        $entries = $parser->getStrings($lang);
+
+        // Reindex the pack so it can be merged.
+        $langpack = array();
+
+        foreach ($entries as $translation) {
+            $translation['name'] = $this->name . PREF_THEME_DELIMITER . $translation['name'];
+            $langpack[$translation['name']] = $translation;
+        }
+
+        if  ($langpack) {
+            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, array($this->name, $lang));
+        }
+    }
+
+    /**
      * HTML &lt;head&gt; custom section.
      */
 
     public function html_head_custom()
     {
         $out = '';
-        $prefs = $this->manifest('prefs');
+        $custom = $this->manifest('custom');
 
-        if (!empty($prefs['textpattern'])) {
-            $content = json_encode($prefs['textpattern'], TEXTPATTERN_JSON);
+        if (!empty($custom['textpattern'])) {
+            $content = json_encode($custom['textpattern'], TEXTPATTERN_JSON);
             $out .= \Txp::get('\Textpattern\UI\Script', "textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
         }
 
-        if (!empty($prefs['style'])) {
-            $content = $prefs['style'];
+        if (!empty($custom['style'])) {
+            $content = $custom['style'];
             $out .= \Txp::get('\Textpattern\UI\Style', n.$content.n);
         }
 

@@ -292,6 +292,27 @@ define('PREF_PLUGIN', 1);
 define('PREF_HIDDEN', 2);
 
 /**
+ * Preference type is from a theme
+ *
+ * @package Pref
+ * @see     \Textpattern\Admin\Theme
+ */
+
+define('PREF_THEME', 3);
+
+/**
+ * The character to use between items in key/name fields
+ *
+ * NB: Don't use dot (.) because they are often stripped out of HTML
+ * form name= attributes during transmission to the server.
+ *
+ * @package Pref
+ * @see     \Textpattern\Admin\Theme
+ */
+
+define('PREF_THEME_DELIMITER', '|');
+
+/**
  * Plugin flag: has an options page.
  */
 

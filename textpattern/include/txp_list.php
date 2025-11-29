@@ -350,7 +350,6 @@ function list_list($message = '', $post = '')
 
             $headings = array();
             $headings[] = hCell(
-                '<div id="at_announce" aria-live="polite"></div>'.
                 '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                 fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
                 '', 'class="txp-list-col-multi-edit" scope="col"'
@@ -463,7 +462,7 @@ function list_list($message = '', $post = '')
                                 or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
                                 or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
                             )
-                        ? '<label for="bulk_select-' . $ID . '" class="txp-accessibility">' . gTxt('bulk_select_row') . '</label>'.
+                        ? '<label for="bulk_select-' . $ID . '" class="txp-accessibility">' . gTxt('bulk_select_row', array('{id}' => $ID)) . '</label>'.
                             fInput('checkbox', 'selected[]', $ID, 'checkbox', '', '', '', '', 'bulk_select-'.$ID)
                         : ''
                         ), '', 'txp-list-col-multi-edit'
