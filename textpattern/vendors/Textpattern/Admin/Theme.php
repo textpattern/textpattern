@@ -370,13 +370,14 @@ abstract class Theme
      *
      * Theme name and delimiter will be automatically prefixed.
      *
-     * @param string $name The preference name to fetch
+     * @param string $name    The preference name to fetch
+     * @param string $default The default value if the named pref isn't set
      *
      * @return pref value, if it exists
      */
-    public function get_pref($name)
+    public function get_pref($name, $default)
     {
-        return get_pref($this->name.PREF_THEME_DELIMITER.$name);
+        return get_pref($this->name.PREF_THEME_DELIMITER.$name, $default);
     }
 
     /**
