@@ -372,12 +372,13 @@ abstract class Theme
      *
      * @param string $name    The preference name to fetch
      * @param string $default The default value if the named pref isn't set
+     * @param bool   $from_db Force fetch value from database
      *
      * @return pref value, if it exists
      */
-    public function get_pref($name, $default)
+    public function get_pref($name, $default = '', $from_db = false)
     {
-        return get_pref($this->name.PREF_THEME_DELIMITER.$name, $default);
+        return get_pref($this->name.PREF_THEME_DELIMITER.$name, $default, $from_db);
     }
 
     /**
