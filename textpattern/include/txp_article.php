@@ -1095,7 +1095,9 @@ function article_partial_extended_column($rs)
                         break;
                 }
 
-                $rs += getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM " . safe_pfx('textpattern') . " WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=" . $ID);
+                if ($nbrs = getRow("SELECT prev_id, next_id FROM (SELECT ID, LAG(ID) OVER ordwin prev_id, LEAD(ID) OVER ordwin next_id FROM " . safe_pfx('textpattern') . " WINDOW ordwin AS (ORDER BY $sort_sql)) txp WHERE ID=" . $ID)) {
+                    $rs += $nbrs;
+                }
             } catch (Exception $e) {
                 // Previous record?
                 $rs['prev_id'] = empty($sPosted) ? 0 : checkIfNeighbour('prev', $sPosted, $ID);
