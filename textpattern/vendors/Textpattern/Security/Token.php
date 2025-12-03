@@ -166,7 +166,7 @@ class Token implements \Textpattern\Container\ReusableInterface
 
         // Remove any previous activation tokens and insert the new one.
         $safe_type = doSlash($type);
-        safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
+        $this->remove($safe_type, $ref);
         safe_insert("txp_token",
                 "reference_id = '$ref',
                 type = '$safe_type',
@@ -212,7 +212,7 @@ class Token implements \Textpattern\Container\ReusableInterface
     /**
      * Remove used/unnecessary/expired tokens. Chainable.
      *
-     * @param  string $type     Plugin type
+     * @param  string $type     Token type
      * @param  string $ref      Reference to a particular row
      * @param  string $interval Remove other rows that are outside this time range
      * @example
@@ -233,7 +233,7 @@ class Token implements \Textpattern\Container\ReusableInterface
 
         $whereStr = implode(' OR ', $where);
 
-        safe_delete("txp_token", "type = '".doSlash($type)."' AND (".$whereStr.")");
+        safe_delete("txp_token", "type = '".doSlash($type). "'" . ($whereStr ? " AND (".$whereStr.")" : ''));
 
         return $this;
     }
