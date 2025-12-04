@@ -63,7 +63,7 @@ class Token implements \Textpattern\Container\ReusableInterface
         }
 
         if (!isset($token[$salt])) {
-            $token[$salt] = md5($nonce.$salt);
+            $token[$salt] = sha1($nonce.$salt);
         }
 
         return $token[$salt];
