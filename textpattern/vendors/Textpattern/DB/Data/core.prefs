@@ -6,6 +6,13 @@
         "html": "text_input",
         "position": "20"
     },
+    "thumb_dir": {
+        "val": "txp_thumb",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "25"
+    },
     "skin_dir": {
         "val": "themes",
         "type": "0",

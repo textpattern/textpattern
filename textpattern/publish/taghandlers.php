@@ -126,7 +126,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_author'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_date'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'if_thumbnail'))
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'thumbnail'), array('thumbnail', array('thumbnail' => null)))
     ->register('if_first', 'if_first_image', 'image')
     ->register('if_last', 'if_last_image', 'image')
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
@@ -2107,7 +2107,7 @@ function article_image($atts)
                     $title = $caption;
                 }
 
-                $img = '<img src="' . imagesrcurl($id, $ext, !empty($atts['thumbnail'])) .
+                $img = '<img src="' . imageBuild() .
                 '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
                 ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
             } else {

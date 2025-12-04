@@ -1025,6 +1025,19 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     <li><strong>Yes</strong> - Always</li>
 </ul>
         ]]></item>
+        <item id="thumb_dir" title="Virtual thumbnail directory"><![CDATA[
+<h2>Virtual thumbnail directory</h2>
+<p>A <strong>virtual</strong> directory, that must not exist in the filesystem, to enable automatic thumbnail creation. Any images with their thumbnails set to 'Automatic' will be routed through this virtual directory to generate the thumbnails at the specified dimensions. Thumbnails will be cached and automatically regenerated from time to time based on usage.</p>
+<p><strong>Notes:</strong>
+<ul>
+    <li>Each virtual thumbnail request is protected by a security token to prevent external abuse of the thumbnail generation system. The tokens have a default validity of 30 seconds, after which they expire. You can alter the length of time thumbnail requests remain active by creating a <code>THUMB_VALIDITY_SECONDS</code> entry in your config.php file.</li>
+    <li>Thumbnail token validity does <em>not</em> affect how long the image is cached; it only governs how long the image generation token is valid. The time needs to be long enough between image generation (requested form the server) and image display (delivered to the browser), so don't reduce it too low on image-heavy sites or the tokens may expire before the page has fully loaded. Once the token has expired you will not even be able to save the thumbnail (right-click Save As). The image request will return 'nothing'.</li>
+    <li>Image sizing and cropping on the front-end website is set via attributes to the <code>&lt;txp:thumbnail /&gt;</code> and <code>&lt;txp:image_url thumbnail /&gt;</code> tags.</li>
+    <li>SVG images do not have thumbnails, as they auto-scale anyway so the full size vector is always used as a reference image. Any rescaled vector images will still be resized based on the width/height and are still governed by the validity token, they just do not have a physical thumbnail file.</li>
+    <li>There may be memory limits if dealing with very large source images, so if a thumbnail isn't being generated, check you're not exceeding server limits.</li>
+</ul>
+</p>
+        ]]></item>
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
 <h2>PHP functions enabled in txp:evaluate</h2>
 <p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified within this list can be utilized in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;</code> tag:</p>

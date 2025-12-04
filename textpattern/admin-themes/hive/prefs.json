@@ -1,0 +1,17 @@
+{
+    "thumb_width": {
+        "val": "240",
+        "html": "text_input",
+        "position": "10"
+    },
+    "thumb_height": {
+        "val": "240",
+        "html": "text_input",
+        "position": "20"
+    },
+    "thumb_cropping": {
+        "val": "1x1",
+        "html": "text_input",
+        "position": "30"
+    }
+}

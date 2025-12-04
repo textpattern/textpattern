@@ -1087,6 +1087,73 @@ if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
     define('TEXTPATTERN_THUMB_QUALITY', 80);
 }
 
+if (!defined('TEXTPATTERN_THUMB_WIDTH')) {
+    /**
+     * Thumbnail width (fallback dimension) in px
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_WIDTH', 160);
+}
+
+if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
+    /**
+     * Thumbnail height (fallback dimension) in px
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_HEIGHT', 160);
+}
+
+if (!defined('TEXTPATTERN_THUMB_CROPPING')) {
+    /**
+     * Thumbnail crop ratio (wxh)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_CROPPING', '1x1');
+}
+
+if (!defined('THUMB_VALIDITY_SECONDS')) {
+    /**
+     * Number of seconds that an auto-generated thumbnail token remains valid
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_VALIDITY_SECONDS', '30');
+}
+
+/**
+  * 'No thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_NONE')) {
+    define('THUMB_NONE', '0');
+}
+
+/**
+  * 'Custom thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_CUSTOM')) {
+    define('THUMB_CUSTOM', '1');
+}
+
+/**
+  * 'Auto thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_AUTO')) {
+    define('THUMB_AUTO', '2');
+}
+
 /**
   * Custom image type for SVG
   *

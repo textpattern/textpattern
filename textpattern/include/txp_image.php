@@ -30,6 +30,7 @@
 use Textpattern\Validator\CategoryConstraint;
 use Textpattern\Validator\Validator;
 use Textpattern\Search\Filter;
+use lencioni\SLIR\SLIR;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -84,7 +85,7 @@ if ($event == 'image') {
 
 function image_list($message = '')
 {
-    global $app_mode, $file_max_upload_size, $txp_user, $event;
+    global $app_mode, $file_max_upload_size, $txp_user, $event, $theme;
 
     $show_authors = !has_single_author('txp_image');
 
@@ -256,14 +257,15 @@ function image_list($message = '')
             'thumbnail' => array(
                 'column' => array('txp_image.thumbnail'),
                 'label'  => gTxt('thumbnail'),
-                'type'   => 'boolean',
+                'type'   => 'integer',
             ),
         )
     );
 
-    $alias_yes = '1, Yes';
-    $alias_no = '0, No';
-    $search->setAliases('thumbnail', array($alias_no, $alias_yes));
+    $alias_no = THUMB_NONE . ', No';
+    $alias_yes = THUMB_CUSTOM . ', Yes, Custom';
+    $alias_auto = THUMB_AUTO . ', Auto';
+    $search->setAliases('thumbnail', array($alias_no, $alias_yes, $alias_auto));
 
     list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
@@ -422,17 +424,22 @@ function image_list($message = '')
                 );
 
                 $name = empty($name) ? 'unnamed' : txpspecialchars($name);
+                $payload = array(
+                    'id' => $id,
+                    'ext' => $ext,
+                    'w' => $theme->get_pref('thumb_width', TEXTPATTERN_THUMB_WIDTH),
+                    'h' => $theme->get_pref('thumb_height', TEXTPATTERN_THUMB_HEIGHT),
+                    'c' => $theme->get_pref('thumb_cropping', TEXTPATTERN_THUMB_CROPPING),
+                );
 
-                if ($thumbnail) {
-                    if ($ext != '.swf') {
-                        $thumbnail = '<img class="content-image" loading="lazy" src="' . imagesrcurl($id, $ext, true) . "?$uDate" . '" alt="' . $id . $ext . '" title="' . $id . $ext . '" height="' . $thumb_h . '" width="' . $thumb_w . '" />';
-                        $thumbexists = 1;
-                    } else {
-                        $thumbnail = '';
-                        $thumbexists = '';
-                    }
+                $thumb_w = $thumbnail == THUMB_AUTO ? $payload['w'] : $thumb_w;
+                $thumb_h = $thumbnail == THUMB_AUTO ? $payload['h'] : $thumb_h;
+
+                if ($ext != '.swf') {
+                    $thumbnail = '<img class="content-image" loading="lazy" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail === THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $id . $ext . '" title="' . $id . $ext . '" height="' . $thumb_h . '" width="' . $thumb_w . '"/>';
+                    $thumbexists = 1;
                 } else {
-                    $thumbnail = gTxt('no');
+                    $thumbnail = '';
                     $thumbexists = '';
                 }
 
@@ -546,17 +553,22 @@ function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
     $categories = $all_image_cats ? treeSelectInput('category', $all_image_cats, '') : '';
     $authors = $all_image_authors ? selectInput('author', $all_image_authors, '', true) : '';
+    $thumbTypes = thumb_type_select('thumbtype', get_pref(''));
 
     $methods = array(
         'changecategory' => array(
             'label' => gTxt('changecategory'),
             'html'  => $categories,
         ),
-        'changeauthor'   => array(
+        'changeauthor' => array(
             'label' => gTxt('changeauthor'),
             'html'  => $authors,
         ),
-        'delete'         => gTxt('delete'),
+        'changethumb' => array(
+            'label' => gTxt('changethumb'),
+            'html'  => $thumbTypes,
+        ),
+        'delete' => gTxt('delete'),
     );
 
     if (!$categories) {
@@ -618,6 +630,12 @@ function image_multi_edit()
                 $key = 'author';
             }
             break;
+        case 'changethumb':
+            $val = ps('thumbtype');
+            if (has_privs('image.edit')) {
+                $key = 'thumbnail';
+            }
+            break;
         default:
             $key = '';
             $val = '';
@@ -658,7 +676,7 @@ function image_multi_edit()
 
 function image_edit($message = '', $id = '')
 {
-    global $file_max_upload_size, $txp_user, $event, $all_image_cats;
+    global $file_max_upload_size, $txp_user, $event, $all_image_cats, $theme;
 
     if (!$id) {
         $id = gps('id');
@@ -689,17 +707,33 @@ function image_edit($message = '', $id = '')
             'publish_now',
         )));
 
+        $payload = array(
+            'id' => $id,
+            'ext' => $ext,
+        );
+
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
             $img_info = $id . $ext . ' (' . $w . ' &#215; ' . $h . ')';
-            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imagesrcurl($id, $ext) . "?$uDate" . '" alt="' . $img_info . '" title="' . $img_info . '" /></div>';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $img_info . '" title="' . $img_info . '" /></div>';
         } else {
             $img = $aspect = '';
         }
 
-        if ($thumbnail and ($ext != '.swf')) {
-            $thumb_info = $id . 't' . $ext . ' (' . $thumb_w . ' &#215; ' . $thumb_h . ')';
-            $thumb = '<img class="content-image" src="' . imagesrcurl($id, $ext, true) . "?$uDate" . '" alt="' . $thumb_info . '" title="' . $thumb_info . '" />';
+        $payload['w'] = $theme->get_pref('thumb_width', TEXTPATTERN_THUMB_WIDTH);
+        $payload['h'] = $theme->get_pref('thumb_height', TEXTPATTERN_THUMB_HEIGHT);
+        $payload['c'] = $theme->get_pref('thumb_cropping', TEXTPATTERN_THUMB_CROPPING);
+
+        $canThumb = !in_array($ext, array('.swf', '.svg'));
+
+        if ($thumbnail && $canThumb) {
+            if ($thumbnail == THUMB_CUSTOM) {
+                $thumb_info = $id . 't' . $ext . ' (' . $thumb_w . ' &#215; ' . $thumb_h . ')';
+            } else {
+                $thumb_info = $id . $ext . ' (' . $payload['w'] . ' &#215; ' . $payload['h'] . ')';
+            }
+
+            $thumb = '<img class="content-image" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail == THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $thumb_info . '" title="' . $thumb_info . '" />';
         } else {
             $thumb = '';
 
@@ -745,64 +779,70 @@ function image_edit($message = '', $id = '')
             $rs
         );
 
-        $thumbBlock[] = ($can_upload
-            ? hed(gTxt('create_thumbnail') . popHelp('create_thumbnail'), 3)
-            : hed(gTxt('thumbnail'), 3)
-        );
+        if ($canThumb) {
+            $thumbBlock[] = Txp::get('\Textpattern\UI\Label', gTxt('thumbnail_type'), 'thumbnail_type').sp.thumb_type_select('thumbnail_type', $thumbnail);
+            $thumbBlock[] = '<div class="thumbtype_1'.($thumbnail != THUMB_CUSTOM ? " hidden" : "").'">';
+            $thumbBlock[] = ($can_upload
+                ? hed(gTxt('create_thumbnail') . popHelp('create_thumbnail'), 3)
+                : hed(gTxt('thumbnail'), 3)
+            );
 
-        $thumbBlock[] = ($can_upload
-            ? pluggable_ui(
-                'image_ui',
-                'thumbnail_edit',
-                upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '', $ext == '.jpg' ? '.jpg,.jpeg' : $ext),
-                $rs
-            )
-            : ''
-        );
-
-        $thumbBlock[] = (check_gd($ext))
-            ? ($can_upload
+            $thumbBlock[] = ($can_upload
                 ? pluggable_ui(
                     'image_ui',
-                    'thumbnail_create',
-                    form(
-                        graf(
-                            n . '<label for="width">' . gTxt('width') . '</label>' .
-                            fInput('text', 'width', $thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width') .
-                            n . '<a class="thumbnail-swap-size">' . gTxt('swap_values') . '</a>' .
-                            n . '<label for="height">' . gTxt('height') . '</label>' .
-                            fInput('text', 'height', $thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height') .
-                            n . '<label for="crop">' . gTxt('keep_square_pixels') . '</label>' .
-                            checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop') .
-                            fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
-                        ) .
-                        hInput('id', $id) .
-                        eInput('image') .
-                        sInput('thumbnail_create') .
-                        hInput('sort', $sort) .
-                        hInput('dir', $dir) .
-                        hInput('page', $page) .
-                        hInput('search_method', $search_method) .
-                        hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'
-                    ),
+                    'thumbnail_edit',
+                    upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload', array('div', 'div'), '', $ext == '.jpg' ? '.jpg,.jpeg' : $ext),
                     $rs
                 )
                 : ''
-            )
-            : '';
+            );
 
-        $thumbBlock[] = pluggable_ui(
-            'image_ui',
-            'thumbnail_image',
-            '<div id="thumbnail-image" class="thumbnail-image">' .
-            (($thumbnail)
-                ? $thumb . n . ($can_upload
-                    ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
-                    : '')
-                : gTxt('none')) .
-            '</div>',
-            $rs
-        );
+            $thumbBlock[] = (check_gd($ext))
+                ? ($can_upload
+                    ? pluggable_ui(
+                        'image_ui',
+                        'thumbnail_create',
+                        form(
+                            graf(
+                                n . '<label for="width">' . gTxt('width') . '</label>' .
+                                fInput('text', 'width', $thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width') .
+                                n . '<a class="thumbnail-swap-size">' . gTxt('swap_values') . '</a>' .
+                                n . '<label for="height">' . gTxt('height') . '</label>' .
+                                fInput('text', 'height', $thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height') .
+                                n . '<label for="crop">' . gTxt('keep_square_pixels') . '</label>' .
+                                checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop') .
+                                fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
+                            ) .
+                            hInput('id', $id) .
+                            eInput('image') .
+                            sInput('thumbnail_create') .
+                            hInput('sort', $sort) .
+                            hInput('dir', $dir) .
+                            hInput('page', $page) .
+                            hInput('search_method', $search_method) .
+                            hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'
+                        ),
+                        $rs
+                    )
+                    : ''
+                )
+                : '';
+            $thumbBlock[] = '</div>';
+            $thumbBlock[] = '<div class="thumbtype_1 thumbtype_2">';
+            $thumbBlock[] = pluggable_ui(
+                'image_ui',
+                'thumbnail_image',
+                '<div id="thumbnail-image" class="thumbnail-image">' .
+                (($thumbnail)
+                    ? $thumb . n . ($can_upload
+                        ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+                        : '')
+                    : gTxt('none')) .
+                '</div>',
+                $rs
+            );
+            $thumbBlock[] = '</div>';
+        }
 
         $created =
             inputLabel(
@@ -881,6 +921,7 @@ function image_edit($message = '', $id = '')
                             '<textarea id="image_caption" name="caption" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '"' . ($can_edit ? '' : ' readonly="readonly"') . '>' . htmlspecialchars($caption, ENT_NOQUOTES) . '</textarea>',
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ) .
+                        hInput('thumbnail', ($canThumb ? $thumbnail : THUMB_AUTO)) .
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs) .
                         $created.
                         graf(
@@ -924,8 +965,7 @@ function image_edit($message = '', $id = '')
             ) .
             n . tag(
                 n . implode(n, $imageBlock) .
-                n . '<hr />' .
-                n . tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
+                ($thumbBlock ? n . '<hr />' . n . tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')) : ''),
                 'div', array('class' => 'txp-layout-4col-3span')
             ) .
             n . '</div>'; // End of .txp-layout.
@@ -1095,10 +1135,11 @@ function thumbnail_insert()
             image_edit(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
-            safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = '$id'");
+            safe_update('txp_image', "thumbnail = " . THUMB_CUSTOM . ", thumb_w = $w, thumb_h = $h, date = NOW()", "id = '$id'");
 
             $message = gTxt('image_uploaded', array('{name}' => $name));
             update_lastmod('thumbnail_created', compact('id', 'w', 'h'));
+            set_thumb_type(THUMB_CUSTOM); // Uploads can only be of type 'custom thumbnail'
 
             image_edit($message, $id);
         }
@@ -1109,6 +1150,17 @@ function thumbnail_insert()
             image_edit(array(gTxt('only_graphic_files_allowed', array('{formats}' => join(', ', $extensions))), E_ERROR), $id);
         }
     }
+}
+
+/**
+ * Set the thumbnail flavour in the database
+ *
+ * @param int $type The type
+ */
+
+function set_thumb_type($type)
+{
+    set_pref('thumbnail_type', $type, 'image', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**
@@ -1132,7 +1184,9 @@ function image_save()
         'hour',
         'minute',
         'second',
+        'thumbnail',
     )));
+
     extract(doSlash($varray));
     $id = $varray['id'] = assert_int($id);
     $author = fetch('author', 'txp_image', 'id', $id);
@@ -1155,17 +1209,19 @@ function image_save()
     $validator = new Validator($constraints);
 
     if ($validator->validate() && safe_update(
-        'txp_image',
-        "name    = '$name',
-        category = '$category',
-        alt      = '$alt',
-        caption  = '$caption'" .
-        ($created ? ", date = $created" : ''),
-        "id = '$id'"
-    )
+            'txp_image',
+            "name     = '$name',
+            category  = '$category',
+            thumbnail = '" . (int) $thumbnail . "',
+            alt       = '$alt',
+            caption   = '$caption'" .
+            ($created ? ", date = $created" : ''),
+            "id = '$id'"
+        )
     ) {
         $message = gTxt('image_updated', array('{name}' => doStrip($name)));
-        update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
+        update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption', 'thumbnail'));
+        set_thumb_type($thumbnail);
     } else {
         $message = array(gTxt('image_save_failed'), E_ERROR);
     }
@@ -1181,7 +1237,7 @@ function image_save()
 
 function image_delete($ids = array())
 {
-    global $txp_user, $event;
+    global $txp_user, $event, $img_dir;
 
     $message = '';
 
@@ -1199,7 +1255,7 @@ function image_delete($ids = array())
 
     if (!empty($ids)) {
         $fail = array();
-        $rs   = safe_rows_start("id, ext", 'txp_image', "id IN (" . join(',', $ids) . ")");
+        $rs = safe_rows_start("id, ext", 'txp_image', "id IN (" . join(',', $ids) . ")");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -1210,6 +1266,9 @@ function image_delete($ids = array())
 
                 $rsd = safe_delete('txp_image', "id = '$id'");
                 $ul = false;
+
+                $slir = new SLIR('/'.$img_dir.'/'.$id.$ext);
+                $slir->uncache();
 
                 if (is_file(IMPATH . $id . $ext)) {
                     $ul = unlink(realpath(IMPATH . $id . $ext));
@@ -1316,7 +1375,7 @@ function thumbnail_create()
 
 function thumbnail_delete()
 {
-    global $txp_user;
+    global $txp_user, $img_dir;
 
     $id = assert_int(gps('id'));
     $author = fetch('author', 'txp_image', 'id', $id);
@@ -1327,13 +1386,38 @@ function thumbnail_delete()
         return;
     }
 
+    $rs = safe_row("id, ext", 'txp_image', "id = $id");
+    $slir = new SLIR('/'.$img_dir.'/'.$rs['id'].$rs['ext']);
+    $slir->uncache();
+
     $t = new txp_thumb($id);
 
-    if ($t->delete()) {
-        callback_event('thumbnail_deleted', '', false, $id);
-        update_lastmod('thumbnail_deleted', compact('id'));
-        image_edit(gTxt('thumbnail_deleted'), $id);
-    } else {
-        image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR), $id);
-    }
+    $t->delete();
+    safe_update('txp_image', 'thumbnail = 0', "id = $id");
+    update_lastmod('thumbnail_deleted', compact('id'));
+    callback_event('thumbnail_deleted', '', false, $id);
+    image_edit(gTxt('thumbnail_deleted'), $id);
 }
+
+/**
+ * Convenience function to return the thumbnail type options.
+ *
+ * @return array
+ */
+function thumb_types()
+{
+    return array(THUMB_NONE => gTxt('none'), THUMB_CUSTOM => gTxt('thumb_custom'), THUMB_AUTO => gTxt('thumb_auto'));
+}
+
+/**
+ * Select list of thumb types
+ *
+ * @param string $name    Selector name
+ * @param string $default Initially selected value
+ * @return HTML
+ */
+function thumb_type_select($name, $default = '')
+{
+    return Txp::get('\Textpattern\UI\Select', $name, thumb_types(), $default);
+}
+

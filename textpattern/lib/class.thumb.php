@@ -666,7 +666,9 @@ class txp_thumb extends wet_thumb
             return false;
         }
 
-        if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
+        $thumbFile = IMPATH.$this->m_id.'t'.$this->m_ext;
+
+        if (is_readable($thumbFile) && unlink($thumbFile)) {
             safe_update('txp_image', "thumbnail = 0", "id = ".$this->m_id);
 
             return true;

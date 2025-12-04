@@ -35,9 +35,9 @@ class Image
     {
         return self::image($atts + array('thumbnail' => null));
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function image($atts)
     {
         global $doctype, $txp_atts;
@@ -46,6 +46,7 @@ class Image
             'alt'       => null,
             'title'     => '',
             'class'     => '',
+            'crop'      => '',
             'html_id'   => '',
             'height'    => '',
             'id'        => '',
@@ -58,106 +59,115 @@ class Image
             'width'     => '',
             'thumbnail' => false,
         );
-    
+
         $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING|TEXTPATTERN_STRIP_TXP);
         $atts = array_intersect_key($atts, $tagAtts);
-    
+
         extract(lAtts($tagAtts, $atts));
-    
+
+        $thumb_type = $thumbnail; // Because $thumbnail is overwritten by imageFetchInfo();
+
         if (isset($atts['poplink'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
         }
-    
+
         if ($imageData = imageFetchInfo($id, $name)) {
-            $thumb_ = $thumbnail || !isset($thumbnail) ? 'thumb_' : '';
-    
+            $thumb_ = $thumbnail == THUMB_CUSTOM || !isset($thumbnail) ? 'thumb_' : '';
+
             if ($thumb_ && empty($imageData['thumbnail'])) {
                 $thumb_ = '';
-    
+
                 if (!isset($thumbnail)) {
                     return;
                 }
             }
-    
+
             if ($alt === true) {
                 $imageData['alt'] !== '' or $imageData['alt'] = $imageData['name'];
             } elseif (isset($alt)) {
                 $imageData['alt'] = $alt;
             }
-    
+
             extract($imageData);
-    
+
             if ($escape) {
                 $alt = txp_escape($escape, $alt);
             }
-    
+
             if ($title === true) {
                 $title = $caption;
             }
-    
-            if ($width == '' && ($thumb_ && $thumb_w || !$thumb_ && $w)) {
-                $width = ${$thumb_.'w'};
+
+            $payload = array(
+                'id' => $id,
+                'ext' => $ext,
+            );
+
+            if ($thumbnail == THUMB_AUTO) {
+                $payload['w'] = $width;
+                $payload['h'] = $height;
+                $payload['c'] = $crop;
             }
-    
-            if ($height == '' && ($thumb_ && $thumb_h || !$thumb_ && $h)) {
-                $height = ${$thumb_.'h'};
-            }
-    
-            $out = '<img src="'.imagesrcurl($id, $ext, !empty($thumb_)).
+
+            $width = $thumbnail == THUMB_AUTO ? $payload['w'] : ($width == '' && ($thumb_ && $thumb_w || !$thumb_ && $w) ? ${$thumb_.'w'} : $width);
+            $height =$thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($thumb_ && $thumb_h || !$thumb_ && $h) ? ${$thumb_.'h'} : $height);
+            $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
+
+            $out = '<img src="'.imageBuildURL($payload, $thumb_wanted).
                 '" alt="'.txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false).'"';
-    
+
             if ($title) {
                 $out .= ' title="'.txpspecialchars($title, ENT_QUOTES, 'UTF-8', false).'"';
             }
-    
+
             if ($html_id && !$wraptag) {
                 $out .= ' id="'.txpspecialchars($html_id).'"';
             }
-    
+
             if ($class && !$wraptag) {
                 $out .= ' class="'.txpspecialchars($class).'"';
             }
-    
+
             if ($width) {
                 $out .= ' width="'.(int) $width.'"';
             }
-    
+
             if ($height) {
                 $out .= ' height="'.(int) $height.'"';
             }
-    
+
             if ($loading && $doctype === 'html5' && in_array($loading, array('auto', 'eager', 'lazy'))) {
                 $out .= ' loading="'.$loading.'"';
             }
-    
+
             $out .= $extAtts.(get_pref('doctype') === 'html5' ? '>' : ' />');
-    
+
             if ($link && $thumb_) {
                 $attribs = '';
-    
+
                 if (!empty($link_rel)) {
                     $attribs .= " rel='".txpspecialchars($link_rel)."'";
                 }
-    
-                $out = href($out, imagesrcurl($id, $ext), $attribs);
+
+                $out = href($out, imageBuildURL($payload, $thumb_wanted), $attribs);
             } elseif ($poplink) {
-                $out = '<a href="'.imagesrcurl($id, $ext).'"'.
+                $out = '<a href="'.imageBuildURL($payload, $thumb_wanted).'"'.
                     ' onclick="window.open(this.href, \'popupwindow\', '.
                     '\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
             }
-    
+
             return $wraptag ? doTag($out, $wraptag, $class, '', $html_id) : $out;
         }
     }
 
     // -------------------------------------------------------------
-    
+
     public static function image_index($atts)
     {
         trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
         global $c;
-    
+
         lAtts(array(
             'break'    => 'br',
             'wraptag'  => '',
@@ -167,35 +177,35 @@ class Image
             'offset'   => 0,
             'sort'     => 'name ASC',
         ), $atts);
-    
+
         if (!isset($atts['category'])) {
             $atts['category'] = $c;
         }
-    
+
         if (!isset($atts['class'])) {
             $atts['class'] = __FUNCTION__;
         }
-    
+
         if ($atts['category']) {
             return self::images($atts);
         }
-    
+
         return '';
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function image_display($atts)
     {
         trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
         global $p;
-    
+
         if ($p) {
             return self::image(array('id' => $p, 'thumbnail' => false));
         }
     }
-    
+
     // -------------------------------------------------------------
 
     public static function images($atts, $thing = null)
@@ -296,7 +306,7 @@ class Image
             $where[] = "ext$not IN ('".join("','", doSlash(do_list_unique(preg_replace('/(?<!\.)\b(\w)/', '.$1', $extension))))."')";
         }
 
-        if ($thumbnail === '0' || $thumbnail === '1') {
+        if ($thumbnail === THUMB_NONE || $thumbnail === THUMB_CUSTOM || $thumbnail === THUMB_AUTO) {
             $where[] = "thumbnail = $thumbnail";
         }
 
@@ -428,22 +438,22 @@ class Image
                 safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts) :
                 safe_query("SELECT $extid $qparts")
             );
-    
+
         if (!$has_content) {
             $url = "<txp:page_url context='s, c, p' c='<txp:image_info type=\"category\" />' p='<txp:image_info type=\"id\" escape=\"\" />' />&amp;context=image";
             $thumb = !isset($thumbnail) ? 0 : ($thumbnail !== true ? 1 : '<txp:image_info type="thumbnail" escape="" />');
             $thing = '<a href="'.$url.'"><txp:image thumbnail=\''.$thumb.'\' /></a>';
         }
-    
+
         $out = parseList($rs, $thisimage, 'image_format_info', compact('form', 'thing'));
-    
+
         return empty($out) ?
             (isset($thing) ? parse($thing, false) : '') :
             doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
     }
 
     // -------------------------------------------------------------
-    
+
     public static function image_info($atts)
     {
         extract(lAtts(array(
@@ -455,19 +465,19 @@ class Image
             'class'      => '',
             'break'      => '',
         ), $atts));
-    
+
         $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date');
         $type = do_list($type);
-    
+
         $out = array();
-    
+
         if ($imageData = imageFetchInfo($id, $name)) {
             foreach ($type as $item) {
                 if (in_array($item, $validItems)) {
                     if ($item === 'category_title') {
                         $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
                     }
-    
+
                     if (isset($imageData[$item])) {
                         $out[] = $escape ? txp_escape($escape, $imageData[$item]) : $imageData[$item];
                     }
@@ -476,12 +486,12 @@ class Image
                 }
             }
         }
-    
+
         return doWrap($out, $wraptag, $break, $class);
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function image_url($atts, $thing = null)
     {
         extract(lAtts(array(
@@ -489,33 +499,48 @@ class Image
             'id'        => '',
             'thumbnail' => 0,
             'link'      => 'auto',
+            'width'     => '',
+            'height'    => '',
+            'crop'      => '',
         ), $atts));
-    
+
+        $thumbnail = !$thumbnail ? null : $thumbnail;
+
         if (($name || $id) && $thing) {
             global $thisimage;
             $stash = $thisimage;
         }
-    
+
         if ($thisimage = imageFetchInfo($id, $name)) {
-            $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
+            if ($thumbnail == THUMB_AUTO || $width || $height || $crop) {
+                $thisimage['w'] = $width;
+                $thisimage['h'] = $height;
+                $thisimage['c'] = $crop;
+            } elseif ($thumbnail == THUMB_CUSTOM) {
+                // Leave only thumb_w and thumb_h for the builder to use.
+                $thisimage['w'] = '';
+                $thisimage['h'] = '';
+            }
+
+            $url = imageBuildURL($thisimage, $thumbnail);
             $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
             $out = ($thing) ? parse($thing) : $url;
             $out = ($link) ? href($out, $url) : $out;
         }
-    
+
         if (isset($stash)) {
             $thisimage = $stash;
         }
-    
+
         return isset($out) ? $out : '';
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function image_author($atts)
     {
         global $s;
-    
+
         extract(lAtts(array(
             'name'         => '',
             'id'           => '',
@@ -524,13 +549,13 @@ class Image
             'section'      => '',
             'this_section' => '',
         ), $atts));
-    
+
         if ($imageData = imageFetchInfo($id, $name)) {
             $author_name = get_author_name($imageData['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
     
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-    
+
             $author = ($link)
                 ? href($display_name, pagelinkurl(array(
                     's'       => $section,
@@ -538,13 +563,13 @@ class Image
                     'context' => 'image',
                 )))
                 : $display_name;
-    
+
             return $author;
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function image_date($atts)
     {
         extract(lAtts(array(
@@ -552,26 +577,26 @@ class Image
             'id'     => '',
             'format' => '',
         ), $atts));
-    
+
         if ($imageData = imageFetchInfo($id, $name)) {
             // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
             $out = fileDownloadFormatTime(array(
                 'ftime'  => $imageData['date'],
                 'format' => $format,
             ));
-    
+
             return $out;
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function if_thumbnail($atts, $thing = null)
     {
         global $thisimage;
-    
+
         assert_image();
-    
+
         $x = ($thisimage['thumbnail'] == 1);
         return isset($thing) ? parse($thing, $x) : $x;
     }

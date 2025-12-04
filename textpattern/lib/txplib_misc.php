@@ -4194,7 +4194,7 @@ function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 't
  *
  * @param   string $thing   The named variable
  * @param   mixed  $default Used as a replacement if named pref isn't found
- * @param   bool   $from_db If TRUE checks database opposed $prefs variable in memory
+ * @param   bool   $from_db If TRUE checks database instead of $prefs variable in memory
  * @return  string Preference value or $default
  * @package Pref
  * @example
@@ -5294,6 +5294,97 @@ function imagesrcurl($id, $ext, $thumbnail = false)
     return preg_match('/^\d+$/', $id) ? ihu.$img_dir.'/'.$id.$thumbnail.$ext : $id;
 }
 
+
+/**
+ * Builds an image's absolute URL.
+ *
+ * @param   int    $img       The image data structure - $thisimage
+ * @param   int    $thumbnail Whether to fetch the full image URL (0) or a thumbnail flavour (>0)
+ * @return  string
+ * @package Image
+ */
+
+function imageBuildURL($img = array(), $thumbnail = null)
+{
+    global $img_dir, $thumb_dir, $thisimage, $permlink_mode;
+
+    if (empty($img)) {
+        $img = $thisimage;
+    }
+
+    $params = array();
+
+    if ($thumbnail == THUMB_AUTO) {
+        if (!empty($img['w'])) {
+            $params['w'] = $img['w'];
+        }
+
+        if (!empty($img['h'])) {
+            $params['h'] = $img['h'];
+        }
+
+        if (!empty($img['c'])) {
+            $params['c'] = $img['c'];
+        }
+
+        if (!empty($img['q'])) {
+            $params['q'] = $img['q'];
+        }
+
+        if (!empty($img['b'])) {
+            $params['b'] = $img['b'];
+        }
+    }
+
+    if ($thumbnail == THUMB_AUTO && $thumb_dir && $params) {
+        // Resized image.
+        $sec_mode = get_pref('thumb_security', 'always');
+
+        $paramlist = implode('-', array_map(function($k, $v){
+            return "$k$v";
+        }, array_keys($params), array_values($params)));
+
+        if ($sec_mode === 'always') {
+            session_start();
+            $sid = session_id();
+            session_write_close();
+
+            $hash_url = $sid.$img['id'].$paramlist.get_pref('blog_uid');
+            $hash = sha1($hash_url);
+
+            // The reference int can't just be the image id since they vary by resize/crop parameters.
+            $ref = substr(hexdec(hash('crc32c', $hash_url)), 0, 8);
+            $txpToken = \Txp::get('\Textpattern\Security\Token');
+
+            $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
+            $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
+        }
+
+        $pathParts = parse_url(ihu);
+
+        if ($permlink_mode === 'messy') {
+            $params['i'] = $pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'];
+
+            if (!empty($token)) {
+                $params['imgtoken'] = $token;
+            }
+
+            $base = ihu.'?'.$thumb_dir.'=/'.$thumb_dir.'&'.http_build_query($params);
+        } else {
+            $base = ihu.$thumb_dir.'/'.$paramlist.$pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'].(!empty($token) ? '?imgtoken='.$token : '');
+        }
+    } elseif ($thumbnail == THUMB_CUSTOM) {
+        $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];
+    } elseif ($thumbnail === THUMB_NONE) {
+        $base = '';
+    } else {
+        // Main image.
+        $base = ihu.$img_dir.'/'.$img['id'].$img['ext'];
+    }
+
+    return $base;
+}
+
 /**
  * Checks if a value exists in a list.
  *
@@ -6042,6 +6133,9 @@ function send_json_response($out = '')
 function janitor()
 {
     global $prefs, $auto_dst, $timezone_key, $is_dst;
+
+    // Garbage collect old image verification tokens.
+    Txp::get('\Textpattern\Security\Token')->remove('image_verify', null, '1 DAY');
 
     // Update DST setting.
     if ($auto_dst && $timezone_key) {

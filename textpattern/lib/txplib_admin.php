@@ -388,7 +388,19 @@ function txpgetimagesize($file)
     $content = file_get_contents($file);
 
     if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
-        return getimagesize($file);
+        $info = webpinfo($file);
+
+        if (isset($info['Animation']) && $info['Animation'] === true) {
+            return false;
+        }
+
+        $out = getimagesize($file, $extraInfo);
+
+        if (is_array($extraInfo) && isset($extraInfo['APP13'])) {
+            $out['iptc'] = iptcparse($extraInfo['APP13']);
+        }
+
+        return $out;
     }
     
     if (strpos($content, "<svg") === false) {
@@ -427,6 +439,7 @@ function txpgetimagesize($file)
     $data[0] = $width;
     $data[1] = $height;
     $data[2] = IMAGETYPE_SVG;
+    $data['mime'] = 'image/svg+xml';
 
     return $data;
 }
@@ -489,6 +502,80 @@ function txpimagesize($file, $create = false)
 }
 
 /**
+ * Get WebP file info to check for unsupported content.
+ *
+ * @link https://www.php.net/manual/en/function.pack.php unpack format reference.
+ * @link https://developers.google.com/speed/webp/docs/riff_container WebP document.
+ * @link https://stackoverflow.com/a/68491679/128761
+ * @param string $file
+ *
+ * @return array|false Return associative array if success, return `false` for otherwise.
+ */
+
+function webpinfo($file)
+{
+    if (!is_file($file)) {
+        return false;
+    } else {
+        $file = realpath($file);
+    }
+
+    $fp = fopen($file, 'rb');
+
+    if (!$fp) {
+        return false;
+    }
+
+    $data = fread($fp, 90);
+
+    fclose($fp);
+    unset($fp);
+
+    $header_format = 'A4Riff/' . // get n string
+        'I1Filesize/' . // get integer (file size but not actual size)
+        'A4Webp/' . // get n string
+        'A4Vp/' . // get n string
+        'A74Chunk';
+    $header = unpack($header_format, $data);
+    unset($data, $header_format);
+
+    if (!isset($header['Riff']) || strtoupper($header['Riff']) !== 'RIFF') {
+        return false;
+    }
+    if (!isset($header['Webp']) || strtoupper($header['Webp']) !== 'WEBP') {
+        return false;
+    }
+    if (!isset($header['Vp']) || strpos(strtoupper($header['Vp']), 'VP8') === false) {
+        return false;
+    }
+
+    if (
+        strpos(strtoupper($header['Chunk']), 'ANIM') !== false ||
+        strpos(strtoupper($header['Chunk']), 'ANMF') !== false
+    ) {
+        $header['Animation'] = true;
+    } else {
+        $header['Animation'] = false;
+    }
+
+    if (strpos(strtoupper($header['Chunk']), 'ALPH') !== false) {
+        $header['Alpha'] = true;
+    } else {
+        if (strpos(strtoupper($header['Vp']), 'VP8L') !== false) {
+            // If it's VP8L, assume that this image will have transparency, as described in
+            // https://developers.google.com/speed/webp/docs/riff_container#simple_file_format_lossless
+            $header['Alpha'] = true;
+        } else {
+            $header['Alpha'] = false;
+        }
+    }
+
+    unset($header['Chunk']);
+
+    return $header;
+}
+
+/**
  * Uploads an image.
  *
  * Can be used to upload a new image or replace an existing one.
@@ -496,6 +583,8 @@ function txpimagesize($file, $create = false)
  * $file can take a local file instead of HTTP file upload variable.
  *
  * All uploaded files will included on the Images panel.
+ *
+ * Thumbnails default to 'auto' if no other system is currently in force.
  *
  * @param   array        $file     HTTP file upload variables
  * @param   array        $meta     Image meta data, allowed keys 'caption', 'alt', 'category'
@@ -521,6 +610,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $name = $file['name'];
     $error = $file['error'];
     $file = $file['tmp_name'];
+    $thumbtype = (int) get_pref('thumbnail_type', THUMB_AUTO);
 
     if ($uploaded) {
         if ($error !== UPLOAD_ERR_OK) {
@@ -566,6 +656,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         caption = '$caption',
         category = '$category',
         date = NOW(),
+        thumbnail = '$thumbtype',
         author = '".doSlash($txp_user)."'
     ";
 
@@ -603,7 +694,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     // GD is supported
     if (check_gd($ext)) {
         // Auto-generate a thumbnail using the last settings
-        if (get_pref('thumb_w') > 0 || get_pref('thumb_h') > 0) {
+        if ($thumbtype == THUMB_CUSTOM && (get_pref('thumb_w') > 0 || get_pref('thumb_h') > 0)) {
             $t = new txp_thumb($id);
             $t->crop = (bool) get_pref('thumb_crop');
             $t->hint = '0';

@@ -2613,6 +2613,14 @@ textpattern.Route.add('lang', function () {
 
 // Images edit panel.
 textpattern.Route.add('image', function () {
+    $('[name=thumbnail_type]').on('change', function (ev) {
+        let me = $(this).val();
+
+        $('#image_details_form').find('input[name=thumbnail]').val(me);
+        $('.thumbtype_1, .thumbtype_2').hide();
+        $('.thumbtype_'+me).show();
+    });
+
     $('.thumbnail-swap-size').button({
         showLabel: false,
         icon: 'ui-icon-transfer-e-w'
