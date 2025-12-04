@@ -5345,6 +5345,8 @@ function imageBuildURL($img = array(), $thumbnail = null)
         }, array_keys($params), array_values($params)));
 
         if ($sec_mode === 'always') {
+            // Need to use some unique visitor identifier so two requests for the same resource
+            // don't overwrite each others' token.
             session_start();
             $sid = session_id();
             session_write_close();
@@ -6135,7 +6137,7 @@ function janitor()
     global $prefs, $auto_dst, $timezone_key, $is_dst;
 
     // Garbage collect old image verification tokens.
-    Txp::get('\Textpattern\Security\Token')->remove('image_verify', null, '1 DAY');
+    Txp::get('\Textpattern\Security\Token')->remove('image_verify', null, THUMB_VALIDITY_SECONDS . ' SECOND');
 
     // Update DST setting.
     if ($auto_dst && $timezone_key) {

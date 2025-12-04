@@ -848,18 +848,16 @@ function output_thumb($data = array())
                         $storedTokens[$imgToken] = $txpToken->fetch('image_verify', $selector);
                     }
 
-                    if (!empty($storedTokens[$imgToken]['expires']) && strtotime($storedTokens[$imgToken]['expires']) > time()) {
-                        session_start();
-                        $sid = session_id();
-                        session_write_close();
+                    session_start();
+                    $sid = session_id();
+                    session_write_close();
 
-                        $hash_url = $sid . filter_var($th_imgid, FILTER_SANITIZE_NUMBER_INT) . $u2 . get_pref('blog_uid');
-                        $hash = sha1($hash_url);
+                    $hash_url = $sid . filter_var($th_imgid, FILTER_SANITIZE_NUMBER_INT) . $u2 . get_pref('blog_uid');
+                    $hash = sha1($hash_url);
 
-                        if ($txpToken->constructHash($selector, $hash, $hash_url) === $storedTokens[$imgToken]['token']) {
-                            $slir = new SLIR();
-                            $slir->processRequestFromURL();
-                        }
+                    if ($txpToken->constructHash($selector, $hash, $hash_url) === $storedTokens[$imgToken]['token']) {
+                        $slir = new SLIR();
+                        $slir->processRequestFromURL();
                     }
                 }
             } else {

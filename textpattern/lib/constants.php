@@ -1121,10 +1121,12 @@ if (!defined('THUMB_VALIDITY_SECONDS')) {
     /**
      * Number of seconds that an auto-generated thumbnail token remains valid
      *
+     * Default: Around 2 days.
+     *
      * @since   4.9.0
      * @package Image
      */
-    define('THUMB_VALIDITY_SECONDS', '30');
+    define('THUMB_VALIDITY_SECONDS', '172800');
 }
 
 /**
