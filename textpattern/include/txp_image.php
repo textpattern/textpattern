@@ -775,12 +775,12 @@ function image_edit($message = '', $id = '')
         );
 
         if ($canThumb) {
-            $thumbBlock[] = tag(Txp::get('\Textpattern\UI\Label', gTxt('thumbnail_type'), 'thumbnail_type').sp.thumb_type_select('thumbnail_type', $thumbnail), 'div', array('class' => 'txp-thumb-type'));
-            $thumbBlock[] = '<div class="thumbtype_1'.($thumbnail != THUMB_CUSTOM ? " hidden" : "").'">';
             $thumbBlock[] = ($can_upload
                 ? hed(gTxt('create_thumbnail') . popHelp('create_thumbnail'), 3)
                 : hed(gTxt('thumbnail'), 3)
             );
+            $thumbBlock[] = tag(Txp::get('\Textpattern\UI\Label', gTxt('thumbnail_type'), 'thumbnail_type').sp.thumb_type_select('thumbnail_type', $thumbnail), 'div', array('class' => 'txp-thumb-type'));
+            $thumbBlock[] = '<div class="thumbtype_1'.($thumbnail != THUMB_CUSTOM ? " hidden" : "").'">';
 
             $thumbBlock[] = ($can_upload
                 ? pluggable_ui(

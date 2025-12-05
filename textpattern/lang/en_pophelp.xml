@@ -466,7 +466,8 @@
         <item id="create_thumbnail" title="Create thumbnail"><![CDATA[
 <h2>Create thumbnail</h2>
 <p>Allows you to (re)create a thumbnail of the specified dimensions from the full size image.</p>
-<p>The thumbnail will be scaled to fit the dimensions you choose, unless you select the ‘Crop’ checkbox. In that case, the thumbnail will be created from the centre of the image without any scaling.</p>
+<p>For custom sizing, the thumbnail will be scaled to fit the dimensions you choose, unless you select the ‘Crop’ checkbox. In that case, the thumbnail will be created from the centre of the image without any scaling.</p>
+<p>For automatic sizing, the thumbnail will be scaled to the dimensions and (optional) crop settings in the current admin theme.</p>
         ]]></item>
         <item id="replace_image_form" title="Replace image"><![CDATA[
 <h2>Replace image</h2>
