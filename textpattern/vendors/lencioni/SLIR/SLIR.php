@@ -1127,8 +1127,7 @@ class SLIR
     {
         $this->cacheFile(
                 $this->renderedCacheFilePath(),
-                $this->getRendered()->getData(),
-                true
+                $this->getRendered()->getData()
         );
 
         return true;
@@ -1167,8 +1166,17 @@ class SLIR
         $this->initializeCache();
 
         // Try to create just a symlink to minimize disk space
-        if ($symlinkToPath && function_exists('symlink') && (file_exists($cacheFilePath) || symlink($symlinkToPath, $cacheFilePath))) {
-            return true;
+        if ($symlinkToPath && function_exists('symlink')) {
+            if (file_exists($cacheFilePath) || is_link($cacheFilePath)) {
+                return true;
+            } elseif (file_exists($symlinkToPath)) {
+                $dir = dirname($cacheFilePath);
+
+                // Directory must exist and be writable
+                if (is_writable($dir) && is_executable($dir) && symlink($symlinkToPath, $cacheFilePath)) {
+                    return true;
+                }
+            }
         }
 
         // Create the file
