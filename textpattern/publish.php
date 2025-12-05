@@ -843,9 +843,12 @@ function output_thumb($data = array())
 
                     if (empty($storedTokens[$imgToken])) {
                         $selector = substr($imgToken, SALT_LENGTH);
-
                         $txpToken = \Txp::get('\Textpattern\Security\Token');
-                        $storedTokens[$imgToken] = $txpToken->fetch('image_verify', $selector);
+                        $fetched = $txpToken->fetch('image_verify', $selector);
+
+                        if ($fetched) {
+                            $storedTokens[$imgToken] = $fetched;
+                        }
                     }
 
                     session_start();
@@ -854,8 +857,9 @@ function output_thumb($data = array())
 
                     $hash_url = $sid . filter_var($th_imgid, FILTER_SANITIZE_NUMBER_INT) . $u2 . get_pref('blog_uid');
                     $hash = sha1($hash_url);
+                    $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
 
-                    if ($txpToken->constructHash($selector, $hash, $hash_url) === $storedTokens[$imgToken]['token']) {
+                    if (!empty($storedTokens[$computedToken.$selector]['token']) && $computedToken === $storedTokens[$computedToken.$selector]['token']) {
                         $slir = new SLIR();
                         $slir->processRequestFromURL();
                     }
