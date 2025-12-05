@@ -667,7 +667,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         } elseif ($this->isAVIF()) {
             return imageavif($this->image, $path, $this->getQuality());
         } elseif ($this->isPNG()) {
-            return imagepng($this->image, $path, (integer) round(10 - ($this->getQuality() / 10)));
+            return imagepng($this->image, $path, (int) round(10 - ($this->getQuality() / 10)));
         } elseif ($this->isGIF()) {
             return imagegif($this->image, $path);
         } elseif ($this->isBMP()) {

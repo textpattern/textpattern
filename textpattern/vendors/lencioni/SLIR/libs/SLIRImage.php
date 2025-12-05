@@ -418,7 +418,7 @@ abstract class SLIRImage
      */
     final public function getCropWidth()
     {
-        return (integer) $this->getInfo('cropWidth');
+        return (int) $this->getInfo('cropWidth');
     }
 
     /**
@@ -427,7 +427,7 @@ abstract class SLIRImage
      */
     final public function getCropHeight()
     {
-        return (integer) $this->getInfo('cropHeight');
+        return (int) $this->getInfo('cropHeight');
     }
 
     /**
@@ -459,7 +459,7 @@ abstract class SLIRImage
      */
     public function getWidth()
     {
-        return (integer) $this->getInfo('width');
+        return (int) $this->getInfo('width');
     }
 
     /**
@@ -469,7 +469,7 @@ abstract class SLIRImage
      */
     public function getHeight()
     {
-        return (integer) $this->getInfo('height');
+        return (int) $this->getInfo('height');
     }
 
     /**
