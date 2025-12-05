@@ -715,8 +715,7 @@ function image_edit($message = '', $id = '')
 
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
-            $img_info = $id . $ext . ' (' . $w . ' &#215; ' . $h . ')';
-            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $id . $ext . '" title="' . $img_info . '" /></div>';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $id . $ext . '" /></div>';
         } else {
             $img = $aspect = '';
         }
@@ -882,6 +881,11 @@ function image_edit($message = '', $id = '')
                             'id',
                             $id,
                             'id', '', array('class' => 'txp-form-field edit-image-id')
+                        ) .
+                        inputLabel(
+                            'dimensions',
+                            $w . 'px &#215; ' . $h . 'px',
+                            'dimensions', '', array('class' => 'txp-form-field edit-image-dimensions')
                         ) .
                         inputLabel(
                             'image_name',
