@@ -715,7 +715,8 @@ function image_edit($message = '', $id = '')
 
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
-            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $id . $ext . '" /></div>';
+            $img_info = $id . $ext . ' (' . $w . ' &#215; ' . $h . ')';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $id . $ext . '" title="' . $img_info . '" /></div>';
         } else {
             $img = $aspect = '';
         }
