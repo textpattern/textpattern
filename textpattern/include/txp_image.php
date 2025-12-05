@@ -436,7 +436,8 @@ function image_list($message = '')
                 $thumb_h = $thumbnail == THUMB_AUTO ? $payload['h'] : $thumb_h;
 
                 if ($ext != '.swf') {
-                    $thumbnail = '<img class="content-image" loading="lazy" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail === THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $id . $ext . '" title="' . $id . $ext . '" height="' . $thumb_h . '" width="' . $thumb_w . '"/>';
+                    $altinfo = !empty($alt) ? txpspecialchars($alt) : $id . $ext;
+                    $thumbnail = '<img class="content-image" loading="lazy" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail === THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $altinfo . '" height="' . $thumb_h . '" width="' . $thumb_w . '"/>';
                     $thumbexists = 1;
                 } else {
                     $thumbnail = '';
@@ -714,8 +715,7 @@ function image_edit($message = '', $id = '')
 
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
-            $img_info = $id . $ext . ' (' . $w . ' &#215; ' . $h . ')';
-            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $img_info . '" title="' . $img_info . '" /></div>';
+            $img = '<div id="fullsize-image" class="fullsize-image"><img class="content-image" src="' . imageBuildURL($payload) . "?$uDate" . '" alt="' . $id . $ext . '" /></div>';
         } else {
             $img = $aspect = '';
         }
@@ -727,13 +727,8 @@ function image_edit($message = '', $id = '')
         $canThumb = !in_array($ext, array('.swf', '.svg'));
 
         if ($thumbnail && $canThumb) {
-            if ($thumbnail == THUMB_CUSTOM) {
-                $thumb_info = $id . 't' . $ext . ' (' . $thumb_w . ' &#215; ' . $thumb_h . ')';
-            } else {
-                $thumb_info = $id . $ext . ' (' . $payload['w'] . ' &#215; ' . $payload['h'] . ')';
-            }
-
-            $thumb = '<img class="content-image" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail == THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $thumb_info . '" title="' . $thumb_info . '" />';
+            $thumb_info = $id . ($thumbnail == THUMB_CUSTOM ? 't' : '') . $ext;
+            $thumb = '<img class="content-image" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail == THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $thumb_info . '" />';
         } else {
             $thumb = '';
 
