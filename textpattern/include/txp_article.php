@@ -1069,11 +1069,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
 function article_partial_extended_column($rs)
 {
-
     if (has_handler('article_ui', 'extend_col_1')) {
-        extract($rs);
-
-        if ($ID) {
+        if (!empty($rs['ID']) && $ID = (int)$rs['ID']) {
             try {
                 $sort = get_pref('article_sort_column', 'posted');
 
@@ -1099,15 +1096,21 @@ function article_partial_extended_column($rs)
                     $rs += $nbrs;
                 }
             } catch (Exception $e) {
-                // Previous record?
-                $rs['prev_id'] = empty($sPosted) ? 0 : checkIfNeighbour('prev', $sPosted, $ID);
-
-                // Next record?
-                $rs['next_id'] = empty($sPosted) ? 0 : checkIfNeighbour('next', $sPosted, $ID);
+                unset($rs['prev_id'], $rs['next_id']);
             }
-        } else {
-            $rs['prev_id'] = $rs['next_id'] = 0;
+
+            if (!isset($rs['prev_id'])) {
+                // Previous record?
+                $rs['prev_id'] = empty($rs['sPosted']) ? 0 : checkIfNeighbour('prev', $rs['sPosted'], $ID);
+            }
+
+            if (!isset($rs['next_id'])) {
+                // Next record?
+                $rs['next_id'] = empty($rs['sPosted']) ? 0 : checkIfNeighbour('next', $rs['sPosted'], $ID);
+            }
         }
+
+        $rs += array('prev_id' => 0, 'next_id' => 0);
 
         // Custom menu entries.
         return tag(pluggable_ui('article_ui', 'extend_col_1', '', $rs), 'div', array('class' => 'txp-container'));
