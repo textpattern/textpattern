@@ -2037,6 +2037,8 @@ function article_image($atts)
         'loading'   => null,
     );
 
+    include_once txpath . '/lib/txplib_admin.php';
+
     $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
     $atts = array_intersect_key($atts, $tagAtts);
 
