@@ -340,7 +340,7 @@ function preText($store, $prefs = null)
     // Set messy variables.
     $mess = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'imgtoken');
 
-    if ($thumb_dir) {
+    if (!empty($thumb_dir)) {
         $mess[] = $thumb_dir;
     }
 
