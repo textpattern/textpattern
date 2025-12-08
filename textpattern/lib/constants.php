@@ -1162,7 +1162,7 @@ if (!defined('THUMB_AUTO')) {
   * @since   4.9.0
   */
 if (!defined('IMAGETYPE_SVG')) {
-    define('IMAGETYPE_SVG', 99);
+    define('IMAGETYPE_SVG', 21);
 }
 
 /**
