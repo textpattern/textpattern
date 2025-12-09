@@ -2106,14 +2106,17 @@ function article_image($atts)
                     'ext' => $ext,
                 );
 
-                if ($thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO) {
+                $isAuto = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO;
+                $isCustom = ($thumbnail == THUMB_CUSTOM && $thumb) || $thumb == THUMB_CUSTOM;
+
+                if ($isAuto) {
                     $payload['w'] = $width;
                     $payload['h'] = $height;
                     $payload['c'] = $crop;
                 }
 
-                $w = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO ? $payload['w'] : ($width == '' ? $thumb_w : $width);
-                $h = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO ? $payload['h'] : ($height == '' ? $thumb_h : $height);
+                $w = $isAuto ? $payload['w'] : ($width == '' ? ($isCustom && $thumb_w ? $thumb_w : $w) : $width);
+                $h = $isAuto ? $payload['h'] : ($height == '' ? ($thumbnail && $thumb_h ? $thumb_h : $h): $height);
                 $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
 
                 if ($title === true) {

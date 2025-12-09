@@ -103,14 +103,16 @@ class Image
                 'ext' => $ext,
             );
 
-            if ($thumbnail == THUMB_AUTO) {
+            $isAuto = $thumbnail == THUMB_AUTO || $thumb_type == THUMB_AUTO;
+
+            if ($isAuto) {
                 $payload['w'] = $width;
                 $payload['h'] = $height;
                 $payload['c'] = $crop;
             }
 
-            $width = $thumbnail == THUMB_AUTO ? $payload['w'] : ($width == '' && ($colPrefix && $thumb_w || !$colPrefix && $w) ? ${$colPrefix.'w'} : $width);
-            $height = $thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($colPrefix && $thumb_h || !$colPrefix && $h) ? ${$colPrefix.'h'} : $height);
+            $width = $isAuto ? $payload['w'] : ($width == '' ? (($colPrefix && $thumb_w) ? ${$colPrefix.'w'} : $w) : $width);
+            $height = $isAuto ? $payload['h'] : ($height == '' ? (($colPrefix && $thumb_h) ? ${$colPrefix.'h'} : $h) : $height);
             $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
 
             $out = '<img src="'.imageBuildURL($payload, $thumb_wanted).
