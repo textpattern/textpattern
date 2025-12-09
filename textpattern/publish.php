@@ -342,6 +342,8 @@ function preText($store, $prefs = null)
 
     if (!empty($thumb_dir)) {
         $mess[] = $thumb_dir;
+    } else {
+        $thumb_dir = null;
     }
 
     $out += makeOut($mess);
@@ -392,7 +394,7 @@ function preText($store, $prefs = null)
         }
     }
 
-    // These are deprecated as of Textpattern v1.0 - leaving them here for
+    // These two are deprecated as of Textpattern v1.0 - leaving them here for
     // plugin compatibility.
     $out['path_from_root'] = rhu;
     $out['pfr']            = rhu;
