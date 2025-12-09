@@ -87,6 +87,9 @@ function image_list($message = '')
 {
     global $app_mode, $file_max_upload_size, $txp_user, $event, $theme;
 
+    // Garbage collect old image verification tokens.
+    Txp::get('\Textpattern\Security\Token')->remove('image_verify', null, THUMB_VALIDITY_SECONDS . ' SECOND');
+
     $show_authors = !has_single_author('txp_image');
 
     $fields = array(

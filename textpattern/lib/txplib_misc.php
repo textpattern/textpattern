@@ -6135,9 +6135,6 @@ function janitor()
 {
     global $prefs, $auto_dst, $timezone_key, $is_dst;
 
-    // Garbage collect old image verification tokens.
-    Txp::get('\Textpattern\Security\Token')->remove('image_verify', null, THUMB_VALIDITY_SECONDS . ' SECOND');
-
     // Update DST setting.
     if ($auto_dst && $timezone_key) {
         $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
