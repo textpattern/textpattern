@@ -630,7 +630,7 @@ function preText($store, $prefs = null)
     }
 
     // Messy thumbs.
-    if ($thumb_dir && $out[$thumb_dir]) {
+    if (!empty($thumb_dir) && $out[$thumb_dir]) {
         parse_str($out['qs'], $parts);
         unset($parts[$thumb_dir], $parts['imgtoken']);
         $th_imgid = basename($parts['i']);
@@ -829,7 +829,7 @@ function output_thumb($data = array())
     global $thumb_dir, $permlink_mode;
 
     // Guard against $thumb_dir being empty in prefs.
-    if ($thumb_dir) {
+    if (!empty($thumb_dir)) {
         try {
             static $storedTokens = array();
             $sec_mode = get_pref('thumb_security', 'always');
