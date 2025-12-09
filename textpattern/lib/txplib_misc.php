@@ -5294,7 +5294,6 @@ function imagesrcurl($id, $ext, $thumbnail = false)
     return preg_match('/^\d+$/', $id) ? ihu.$img_dir.'/'.$id.$thumbnail.$ext : $id;
 }
 
-
 /**
  * Builds an image's absolute URL.
  *

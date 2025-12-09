@@ -2028,16 +2028,15 @@ function article_image($atts)
         'range'     => '1',
         'title'     => '',
         'class'     => '',
+        'crop'      => '',
         'html_id'   => '',
         'width'     => '',
         'height'    => '',
-        'thumbnail' => 0,
+        'thumbnail' => false,
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
     );
-
-    include_once txpath . '/lib/txplib_admin.php';
 
     $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
     $atts = array_intersect_key($atts, $tagAtts);
@@ -2100,16 +2099,28 @@ function article_image($atts)
                     continue;
                 }
 
-                $w = $width !== '' ? $width : $rs[$thumb ? 'thumb_w' : 'w'];
-                $h = $height !== '' ? $height : $rs[$thumb ? 'thumb_h' : 'h'];
-
                 extract($rs);
+
+                $payload = array(
+                    'id' => $id,
+                    'ext' => $ext,
+                );
+
+                if ($thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO) {
+                    $payload['w'] = $width;
+                    $payload['h'] = $height;
+                    $payload['c'] = $crop;
+                }
+
+                $w = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO ? $payload['w'] : ($width == '' ? $thumb_w : $width);
+                $h = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO ? $payload['h'] : ($height == '' ? $thumb_h : $height);
+                $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
 
                 if ($title === true) {
                     $title = $caption;
                 }
 
-                $img = '<img src="' . imageBuild() .
+                $img = '<img src="' . imageBuildURL($payload, $thumb_wanted) .
                 '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
                 ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
             } else {

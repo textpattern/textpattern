@@ -65,17 +65,17 @@ class Image
 
         extract(lAtts($tagAtts, $atts));
 
-        $thumb_type = $thumbnail; // Because $thumbnail is overwritten by imageFetchInfo();
+        $thumb_type = $thumbnail; // Because $thumbnail is overwritten by extracting imageFetchInfo();
 
         if (isset($atts['poplink'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
         }
 
         if ($imageData = imageFetchInfo($id, $name)) {
-            $thumb_ = $thumbnail == THUMB_CUSTOM || !isset($thumbnail) ? 'thumb_' : '';
+            $colPrefix = $thumbnail == THUMB_CUSTOM || !isset($thumbnail) ? 'thumb_' : '';
 
-            if ($thumb_ && empty($imageData['thumbnail'])) {
-                $thumb_ = '';
+            if ($colPrefix && empty($imageData['thumbnail'])) {
+                $colPrefix = '';
 
                 if (!isset($thumbnail)) {
                     return;
@@ -109,8 +109,8 @@ class Image
                 $payload['c'] = $crop;
             }
 
-            $width = $thumbnail == THUMB_AUTO ? $payload['w'] : ($width == '' && ($thumb_ && $thumb_w || !$thumb_ && $w) ? ${$thumb_.'w'} : $width);
-            $height =$thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($thumb_ && $thumb_h || !$thumb_ && $h) ? ${$thumb_.'h'} : $height);
+            $width = $thumbnail == THUMB_AUTO ? $payload['w'] : ($width == '' && ($colPrefix && $thumb_w || !$colPrefix && $w) ? ${$colPrefix.'w'} : $width);
+            $height =$thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($colPrefix && $thumb_h || !$colPrefix && $h) ? ${$colPrefix.'h'} : $height);
             $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
 
             $out = '<img src="'.imageBuildURL($payload, $thumb_wanted).
@@ -142,7 +142,7 @@ class Image
 
             $out .= $extAtts.(get_pref('doctype') === 'html5' ? '>' : ' />');
 
-            if ($link && $thumb_) {
+            if ($link && $colPrefix) {
                 $attribs = '';
 
                 if (!empty($link_rel)) {
