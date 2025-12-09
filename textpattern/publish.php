@@ -839,8 +839,6 @@ function output_thumb($data = array())
                 extract($data);
 
                 if ($imgToken) {
-                    include_once txpath . '/lib/txplib_admin.php';
-
                     if (empty($storedTokens[$imgToken])) {
                         $selector = substr($imgToken, SALT_LENGTH);
                         $txpToken = \Txp::get('\Textpattern\Security\Token');
@@ -865,7 +863,6 @@ function output_thumb($data = array())
                     }
                 }
             } else {
-                include_once txpath . '/lib/txplib_admin.php';
                 $slir = new SLIR();
                 $slir->processRequestFromURL();
             }

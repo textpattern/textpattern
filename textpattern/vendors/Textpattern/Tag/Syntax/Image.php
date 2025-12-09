@@ -110,7 +110,7 @@ class Image
             }
 
             $width = $thumbnail == THUMB_AUTO ? $payload['w'] : ($width == '' && ($colPrefix && $thumb_w || !$colPrefix && $w) ? ${$colPrefix.'w'} : $width);
-            $height =$thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($colPrefix && $thumb_h || !$colPrefix && $h) ? ${$colPrefix.'h'} : $height);
+            $height = $thumbnail == THUMB_AUTO ? $payload['h'] : ($height == '' && ($colPrefix && $thumb_h || !$colPrefix && $h) ? ${$colPrefix.'h'} : $height);
             $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
 
             $out = '<img src="'.imageBuildURL($payload, $thumb_wanted).
