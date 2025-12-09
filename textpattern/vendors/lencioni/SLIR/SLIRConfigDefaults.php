@@ -61,7 +61,7 @@ class SLIRConfigDefaults
    * @since 2.0
    * @var integer
    */
-  public static $defaultQuality = 80;
+  public static $defaultQuality = TEXTPATTERN_THUMB_QUALITY;
 
   /**
    * Default setting for whether JPEGs should be progressive JPEGs (interlaced) or not.
