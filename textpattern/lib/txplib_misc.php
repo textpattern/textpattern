@@ -5305,7 +5305,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
 
 function imageBuildURL($img = array(), $thumbnail = null)
 {
-    global $img_dir, $thumb_dir, $thisimage, $permlink_mode;
+    global $img_dir, $thisimage, $permlink_mode;
 
     if (empty($img)) {
         $img = $thisimage;
@@ -5335,7 +5335,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
         }
     }
 
-    if ($thumbnail == THUMB_AUTO && $thumb_dir && $params) {
+    if ($thumbnail == THUMB_AUTO && is_writable(IMPATH.TEXTPATTERN_THUMB_DIR) && $params) {
         // Resized image.
         $sec_mode = get_pref('thumb_security', 'always');
 
@@ -5367,12 +5367,12 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $params['i'] = $pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'];
 
             if (!empty($token)) {
-                $params['imgtoken'] = $token;
+                $params['token'] = $token;
             }
 
-            $base = ihu.'?'.$thumb_dir.'=/'.$thumb_dir.'&'.http_build_query($params);
+            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.TEXTPATTERN_THUMB_DIR.'?'.http_build_query($params);
         } else {
-            $base = ihu.$thumb_dir.'/'.$paramlist.$pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'].(!empty($token) ? '?imgtoken='.$token : '');
+            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.$pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
         }
     } elseif ($thumbnail == THUMB_CUSTOM) {
         $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];

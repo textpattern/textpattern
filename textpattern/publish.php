@@ -338,15 +338,7 @@ function preText($store, $prefs = null)
     extract($prefs);
 
     // Set messy variables.
-    $mess = array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'imgtoken');
-
-    if (!empty($thumb_dir)) {
-        $mess[] = $thumb_dir;
-    } else {
-        $thumb_dir = null;
-    }
-
-    $out += makeOut($mess);
+    $out += makeOut(array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'token', 'imgref'));
     $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
@@ -462,12 +454,23 @@ function preText($store, $prefs = null)
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
                     break;
 
-                case $thumb_dir:
-                    $th_imgid = basename($u0);
-                    $payload = compact('u2', 'th_imgid');
-                    output_thumb($payload);
-                    exit;
+                case $img_dir:
+                    if ($u2 === TEXTPATTERN_THUMB_DIR) {
+                        $out['imgref'] = TEXTPATTERN_THUMB_DIR;
 
+                        if ($permlink_mode === 'messy') {
+                            parse_str($out['qs'], $parts);
+                            unset($parts['token']);
+                            $u5 = basename($parts['i']);
+                            unset($parts['i']);
+                            $u3 = implode('-', array_map(function($k, $v){
+                                return "$k$v";
+                            }, array_keys($parts), array_values($parts)));
+                        }
+
+                        output_thumb(array('param' => $u3, 'img' => $u5));
+                        exit;
+                    }
                 default:
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
@@ -629,22 +632,6 @@ function preText($store, $prefs = null)
         } else {
             $thiscategory += array('is_first' => true, 'is_last' => true, 'section' => $out['s']);
         }
-    }
-
-    // Messy thumbs.
-    if (!empty($thumb_dir) && $out[$thumb_dir]) {
-        parse_str($out['qs'], $parts);
-        unset($parts[$thumb_dir], $parts['imgtoken']);
-        $th_imgid = basename($parts['i']);
-
-        unset($parts['i']);
-        $u2 = implode('-', array_map(function($k, $v){
-            return "$k$v";
-        }, array_keys($parts), array_values($parts)));
-
-        $payload = compact('u2', 'th_imgid');
-        output_thumb($payload);
-        exit;
     }
 
     // Prevent to get the id for file_downloads.
@@ -828,49 +815,46 @@ function output_component($n = '')
 // -------------------------------------------------------------
 function output_thumb($data = array())
 {
-    global $thumb_dir, $permlink_mode;
+    global $permlink_mode;
 
-    // Guard against $thumb_dir being empty in prefs.
-    if (!empty($thumb_dir)) {
-        try {
-            static $storedTokens = array();
-            $sec_mode = get_pref('thumb_security', 'always');
+    try {
+        static $storedTokens = array();
+        $sec_mode = get_pref('thumb_security', 'always');
 
-            if ($sec_mode === 'always') {
-                $imgToken = gps('imgtoken');
-                extract($data);
+        if ($sec_mode === 'always') {
+            $imgToken = gps('token');
+            extract($data);
 
-                if ($imgToken) {
-                    if (empty($storedTokens[$imgToken])) {
-                        $selector = substr($imgToken, SALT_LENGTH);
-                        $txpToken = \Txp::get('\Textpattern\Security\Token');
-                        $fetched = $txpToken->fetch('image_verify', $selector);
+            if ($imgToken) {
+                if (empty($storedTokens[$imgToken])) {
+                    $selector = substr($imgToken, SALT_LENGTH);
+                    $txpToken = \Txp::get('\Textpattern\Security\Token');
+                    $fetched = $txpToken->fetch('image_verify', $selector);
 
-                        if ($fetched) {
-                            $storedTokens[$imgToken] = $fetched;
-                        }
-                    }
-
-                    session_start();
-                    $sid = session_id();
-                    session_write_close();
-
-                    $hash_url = $sid . filter_var($th_imgid, FILTER_SANITIZE_NUMBER_INT) . $u2 . get_pref('blog_uid');
-                    $hash = sha1($hash_url);
-                    $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
-
-                    if (!empty($storedTokens[$computedToken.$selector]['token']) && $computedToken === $storedTokens[$computedToken.$selector]['token']) {
-                        $slir = new SLIR();
-                        $slir->processRequestFromURL();
+                    if ($fetched) {
+                        $storedTokens[$imgToken] = $fetched;
                     }
                 }
-            } else {
-                $slir = new SLIR();
-                $slir->processRequestFromURL();
+
+                session_start();
+                $sid = session_id();
+                session_write_close();
+
+                $hash_url = $sid . filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'] . get_pref('blog_uid');
+                $hash = sha1($hash_url);
+                $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
+
+                if (!empty($storedTokens[$computedToken.$selector]['token']) && $computedToken === $storedTokens[$computedToken.$selector]['token']) {
+                    $slir = new SLIR();
+                    $slir->processRequestFromURL();
+                }
             }
-        } catch (Exception $e) {
-            echo $e->getMessage();
+        } else {
+            $slir = new SLIR();
+            $slir->processRequestFromURL();
         }
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
 }
 

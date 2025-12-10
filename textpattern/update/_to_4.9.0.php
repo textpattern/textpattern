@@ -97,12 +97,6 @@ $new_prefs = array(
         'html'     => 'text_input',
         'position' => 350,
     ),
-    'thumb_dir' => array(
-        'val'      => 'txp_thumb',
-        'event'    => 'admin',
-        'html'     => 'text_input',
-        'position' => 25
-    ),
 );
 
 foreach ($smtp_prefs + $new_prefs as $prefname => $block) {

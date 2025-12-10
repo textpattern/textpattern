@@ -1047,7 +1047,7 @@ class SLIR
      */
     private function requestCacheFilename()
     {
-        return '/' . hash('md4', $this->getHTTPHost() . '/' . $this->requestURI(array('imgtoken')) . '/' . SLIRConfig::$defaultCropper);
+        return '/' . hash('md4', $this->getHTTPHost() . '/' . $this->requestURI(array('token')) . '/' . SLIRConfig::$defaultCropper);
     }
 
     /**

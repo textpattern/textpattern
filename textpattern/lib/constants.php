@@ -1117,6 +1117,16 @@ if (!defined('TEXTPATTERN_THUMB_CROPPING')) {
     define('TEXTPATTERN_THUMB_CROPPING', '1x1');
 }
 
+if (!defined('TEXTPATTERN_THUMB_DIR')) {
+    /**
+     * Thumbnail subdirectory name
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_DIR', 'thumb');
+}
+
 if (!defined('THUMB_VALIDITY_SECONDS')) {
     /**
      * Number of seconds that an auto-generated thumbnail token remains valid

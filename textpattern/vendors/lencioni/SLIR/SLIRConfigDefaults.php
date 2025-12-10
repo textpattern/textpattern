@@ -214,6 +214,8 @@ class SLIRConfigDefaults
    */
   public static function init()
   {
+    global $img_dir;
+
     if (!defined('__DIR__')) {
       define('__DIR__', dirname(__FILE__));
     }
@@ -223,11 +225,11 @@ class SLIRConfigDefaults
     }
 
     if (self::$pathToSLIR === null) {
-      self::$pathToSLIR = hu.get_pref('thumb_dir');
+      self::$pathToSLIR = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR;
     }
 
     if (self::$pathToCacheDir === null) {
-      self::$pathToCacheDir = IMPATH . 'cache';
+      self::$pathToCacheDir = IMPATH . TEXTPATTERN_THUMB_DIR . '/cache';
     }
 
     if (self::$pathToErrorLog === null) {
